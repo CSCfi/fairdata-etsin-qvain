@@ -4148,7 +4148,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
     }
   }
 >
-  <DescriptionField />
+  <Description />
 </ContextProvider>
 `;
 

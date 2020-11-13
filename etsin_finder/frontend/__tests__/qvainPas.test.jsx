@@ -8,15 +8,15 @@ import '../locale/translations'
 
 import { StoresProvider } from '../js/stores/stores'
 import etsinTheme from '../js/styles/theme'
-import PasState from '../js/components/qvain/editor/pasState'
-import DescriptionField from '../js/components/qvain/description/descriptionField'
-import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
-import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
-import KeywordsField from '../js/components/qvain/description/keywordsField'
-import License from '../js/components/qvain/licenses/licenses'
-import AccessType from '../js/components/qvain/licenses/accessType'
-import FileForm from '../js/components/qvain/files/ida/forms/fileForm'
-import DirectoryForm from '../js/components/qvain/files/ida/forms/directoryForm'
+import PasState from '../js/components/qvain/views/editor/pasState'
+import DescriptionField from '../js/components/qvain/fields/description/titleAndDescription'
+import OtherIdentifierField from '../js/components/qvain/fields/description/otherIdentifier'
+import FieldOfScienceField from '../js/components/qvain/fields/description/fieldOfScience'
+import KeywordsField from '../js/components/qvain/fields/description/keywords'
+import License from '../js/components/qvain/fields/licenses/licenses'
+import AccessType from '../js/components/qvain/fields/licenses/accessType'
+import FileForm from '../js/components/qvain/fields/files/ida/forms/fileForm'
+import DirectoryForm from '../js/components/qvain/fields/files/ida/forms/directoryForm'
 import { File, Directory, Project } from '../js/stores/view/common.files.items'
 import QvainStoreClass from '../js/stores/view/qvain'
 import LocaleStore from '../js/stores/view/language'
@@ -116,9 +116,6 @@ describe('Qvain.Description', () => {
     expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(true))
     wrapper.unmount()
-
-    // Keyword delete buttons should not be rendered
-    expect(wrapper.find('FontAwesomeIcon.delete-keyword').length).toBe(0)
   })
 
   it('allows editing of description fields', () => {
@@ -129,9 +126,6 @@ describe('Qvain.Description', () => {
     const inputs = wrapper.find('input').not('[type="hidden"]')
     expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(false))
-
-    // Keyword delete buttons should be rendered
-    expect(wrapper.find('FontAwesomeIcon.delete-keyword').length).toBe(2)
   })
 })
 

@@ -26,12 +26,12 @@ class ReferenceField {
   @action
   add = item => {
     this.changed = true
-    this.storage = [...this.storage, item]
+    this.storage.replace([...this.storage, item])
   }
 
   @action
   set = array => {
-    this.storage = array
+    this.storage.replace(array)
     this.Parent.setChanged(true)
   }
 
