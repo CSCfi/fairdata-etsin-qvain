@@ -1,4 +1,4 @@
-import { makeObservable, observable, action, computed } from 'mobx'
+import { makeObservable, observable, action, computed, toJS } from 'mobx'
 import axios from 'axios'
 import { ValidationError } from 'yup'
 import handleSubmitToBackend from '../../../components/qvain/utils/handleSubmit'
@@ -8,6 +8,7 @@ import {
 } from '../../../components/qvain/utils/formValidation'
 import { DATA_CATALOG_IDENTIFIER, DATASET_STATE } from '../../../utils/constants'
 import urls from '../../../components/qvain/utils/urls'
+import { getResponseError } from '../../../components/qvain/utils/responseError'
 
 // helper functions
 const isActionsEmpty = actions => actions.files.length === 0 && actions.directories.length === 0
@@ -116,6 +117,16 @@ class Submit {
       // kind of overrules the other validation errors.
       // Will be fixed in CSCFAIRMETA-542.
       await this.checkDoiCompability(dataset)
+    } catch (error) {
+      this.setError(error)
+      this.response = undefined
+      if (!(error instanceof ValidationError)) {
+        console.error(error)
+        throw error
+      }
+    }
+
+    try {
       this.setLoading(true)
       const { data } = await submitFunction(dataset)
       await this.updateFiles(data.identifier, fileActions, metadataActions)
@@ -132,12 +143,8 @@ class Submit {
       this.response = data
       this.error = undefined
     } catch (error) {
-      this.setError(error)
-      this.response = undefined
-      if (!(error instanceof ValidationError)) {
-        console.error(error)
-        throw error
-      }
+      this.error = getResponseError(error)
+      console.log(toJS(this.error))
     } finally {
       this.setLoading(false)
     }

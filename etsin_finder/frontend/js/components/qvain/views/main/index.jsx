@@ -206,10 +206,10 @@ export class Qvain extends Component {
 
   getStickyHeaderProps = () => {
     const { metaxApiV2 } = this.props.Stores.Env
-    const { error, response: responseV2 } = this.props.Stores.Qvain.Submit
+    const { error, response: responseV2, isLoading } = this.props.Stores.Qvain.Submit
     const { datasetLoading, datasetError, submitted, response } = this.state
     return {
-      datasetLoading,
+      datasetLoading: metaxApiV2 ? isLoading : datasetLoading,
       datasetError,
       submitted: metaxApiV2 ? !!error || !!responseV2 : submitted,
       response: metaxApiV2 ? error?.errors || responseV2 : response,

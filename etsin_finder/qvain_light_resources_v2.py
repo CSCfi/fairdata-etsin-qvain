@@ -20,7 +20,7 @@ from etsin_finder.utils import (
     datetime_to_header
 )
 from etsin_finder.qvain_light_dataset_schema_v2 import (
-    DatasetValidationSchema,
+    validate,
     FileActionsValidationSchema,
 )
 from etsin_finder.qvain_light_utils_v2 import (
@@ -124,7 +124,7 @@ class QvainDatasets(Resource):
 
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
-        self.validationSchema = DatasetValidationSchema()
+        # self.validationSchema = DatasetValidationSchema()
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('draft', type=bool, required=False)
 
@@ -192,7 +192,7 @@ class QvainDatasets(Resource):
             params['draft'] = 'true'
 
         try:
-            data = self.validationSchema.loads(request.data)
+            data = validate(request.data, params)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
@@ -219,7 +219,7 @@ class QvainDataset(Resource):
 
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
-        self.validationSchema = DatasetValidationSchema()
+        # self.validationSchema = DatasetValidationSchema()
 
     @log_request
     def get(self, cr_id):
@@ -253,7 +253,7 @@ class QvainDataset(Resource):
             return error
 
         try:
-            data = self.validationSchema.loads(request.data)
+            data = validate(request.data, params)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
