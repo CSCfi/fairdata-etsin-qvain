@@ -1,20 +1,28 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Description from './description'
 import Graphics from './graphics'
+import { useStores } from '../../utils/stores'
 
-const landingPage = () => (
-  <div className="container">
-    <Flex>
-      <Part>
-        <Description />
-      </Part>
-      <Part>
-        <Graphics />
-      </Part>
-    </Flex>
-  </div>
-)
+const LandingPage = () => {
+  const { Accessibility } = useStores()
+  useEffect(() => {
+    Accessibility.handleNavigation()
+  }, [Accessibility])
+
+  return (
+    <div className="container">
+      <Flex>
+        <Part>
+          <Description />
+        </Part>
+        <Part>
+          <Graphics />
+        </Part>
+      </Flex>
+    </div>
+  )
+}
 
 const Part = styled.div``
 
@@ -35,4 +43,4 @@ const Flex = styled.div`
   }
 `
 
-export default landingPage
+export default LandingPage
