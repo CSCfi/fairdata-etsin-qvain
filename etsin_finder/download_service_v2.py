@@ -67,9 +67,11 @@ class DownloadAPIService(FlaskService):
         params = {
             'dataset': dataset
         }
+        args = self._get_args()
         resp, status, success = make_request(requests.get,
                                              self.REQUESTS_URL,
                                              params=params,
+                                             **args,
                                              )
         if status == 404:
             return {}, 404
@@ -84,9 +86,11 @@ class DownloadAPIService(FlaskService):
         }
         if scope:
             params['scope'] = scope
+        args = self._get_args()
         resp, status, success = make_request(requests.post,
                                              self.REQUESTS_URL,
                                              json=params,
+                                             **args,
                                              )
         if status == 404:
             return {}, 404
@@ -103,10 +107,12 @@ class DownloadAPIService(FlaskService):
             params['file'] = file
         if package:
             params['package'] = package
+        args = self._get_args()
 
         resp, status, success = make_request(requests.post,
                                              self.AUTHORIZE_URL,
                                              json=params,
+                                             **args,
                                              )
         if status == 404:
             return {}, 404
