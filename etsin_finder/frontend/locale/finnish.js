@@ -247,15 +247,16 @@ const finnish = {
       changedLang: 'Kieli vaihdettu kieleen: %(lang)s',
       inactiveLogout: 'Istunto aikakatkaistu. Sinut kirjattiin ulos.',
     },
-    pageTitles: {
+    qvainPageTitle: 'Qvain | Tutkimusaineiston metatietotyökalu',
+    etsinPageTitles: {
       data: 'Data',
-      idnAndEvents: 'Tunnisteet ja tapahtumat',
+      events: 'Tunnisteet ja tapahtumat',
       maps: 'Kartat',
       dataset: 'Aineisto',
       datasets: 'Aineistot',
       home: 'Koti',
-      error: 'Virhe',
-      loginRequired: 'Kirjautuminen vaaditaan',
+      qvain: 'Qvain',
+      error: 'Virhe - Sivua ei löydy'
     },
     language: {
       toggleLabel: 'Vaihda kieltä: %(otherLang)s',
