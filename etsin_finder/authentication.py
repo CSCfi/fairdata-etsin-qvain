@@ -9,7 +9,6 @@
 
 from urllib.parse import urlparse
 from flask import session, request
-from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.utils import executing_travis
 from etsin_finder.constants import SAML_ATTRIBUTES

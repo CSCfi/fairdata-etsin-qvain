@@ -6,6 +6,7 @@ exports[`Qvain should render correctly 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -309,6 +310,7 @@ exports[`Qvain should render correctly 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -364,6 +366,7 @@ exports[`Qvain should render correctly 1`] = `
           "datasetIdentifier": null,
           "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
+          "getItemPath": [Function],
           "inEdit": undefined,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
@@ -1390,6 +1393,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -1693,6 +1697,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -1748,6 +1753,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
           "datasetIdentifier": null,
           "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
+          "getItemPath": [Function],
           "inEdit": undefined,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
@@ -2774,6 +2780,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -3077,6 +3084,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -3132,6 +3140,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "datasetIdentifier": null,
           "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
+          "getItemPath": [Function],
           "inEdit": undefined,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
@@ -4158,6 +4167,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -4461,6 +4471,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -4516,6 +4527,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "datasetIdentifier": null,
           "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
+          "getItemPath": [Function],
           "inEdit": undefined,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
@@ -5542,6 +5554,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -5845,6 +5858,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -5900,6 +5914,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "datasetIdentifier": null,
           "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
+          "getItemPath": [Function],
           "inEdit": undefined,
           "loadingMetadata": null,
           "loadingProjectInfo": null,
@@ -6926,6 +6941,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -7229,6 +7245,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -7284,6 +7301,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "datasetIdentifier": null,
           "fetchRootIdentifier": [Function],
           "getItemByPath": [Function],
+          "getItemPath": [Function],
           "inEdit": undefined,
           "loadingMetadata": null,
           "loadingProjectInfo": null,

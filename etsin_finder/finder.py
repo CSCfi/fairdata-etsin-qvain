@@ -9,6 +9,16 @@
 
 from flask_restful import Api
 from etsin_finder.app import app
+from etsin_finder.app_config import get_download_api_v2_config
+
+def add_download_v2_resources(api):
+    """Set download API v2 endpoints"""
+    from etsin_finder.download_resources_v2 import (
+        Requests,
+        Authorize,
+    )
+    api.add_resource(Requests, '/api/v2/dl/requests', endpoint="dl_requests")
+    api.add_resource(Authorize, '/api/v2/dl/authorize', endpoint="dl_download")
 
 
 def add_restful_resources(app):
@@ -65,6 +75,11 @@ def add_restful_resources(app):
         DatasetUserMetadata as V2DatasetUserMetadata,
         DatasetProjects as V2DatasetProjects,
     )
+
+    # Download API v2 endpoints
+    dl_api_config = get_download_api_v2_config(app.testing) or {}
+    if dl_api_config.get('ENABLED'):
+        add_download_v2_resources(api)
 
     # Common Qvain Light and Etsin endpoints for Metax v2
     api.add_resource(V2DatasetUserMetadata, '/api/v2/common/datasets/<id:cr_id>/user_metadata', endpoint='v2_dataset_user_metadata')

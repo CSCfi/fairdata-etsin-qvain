@@ -51,6 +51,9 @@ class MetaxQvainLightAPIService(FlaskService):
             self.user = metax_qvain_api_config.get('USER')
             self.pw = metax_qvain_api_config.get('PASSWORD')
             self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
+            self.proxies = None
+            if metax_qvain_api_config.get('HTTPS_PROXY'):
+                self.proxies = dict(https=metax_qvain_api_config.get('HTTPS_PROXY'))
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
@@ -59,7 +62,8 @@ class MetaxQvainLightAPIService(FlaskService):
         args = dict(headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
                     auth=(self.user, self.pw),
                     verify=self.verify_ssl,
-                    timeout=10)
+                    timeout=10,
+                    proxies=self.proxies)
         args.update(kwargs)
         return args
 
