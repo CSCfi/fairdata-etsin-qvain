@@ -95,6 +95,7 @@ const english = {
       download: 'Download',
       downloadFailed: 'Download failed',
       downloadAll: 'Download all',
+      downloadDisabledForDraft: 'Download disabled for draft',
       downloading: 'Downloading...',
       downloadItem: 'Download %(name)s',
       fileAmount: '%(amount)s objects',
@@ -103,6 +104,12 @@ const english = {
       info_header: 'Other info related to file',
       loading: 'Loading folder',
       loaded: 'Folder loaded',
+      packages: {
+        createForAll: 'Generate download package',
+        createForItem: 'Create download package for %(name)s',
+        pending: 'Generating download package',
+        loading: 'Loading',
+      },
       fileCount: {
         one: '1 file',
         other: '%(count)s files',
@@ -249,15 +256,16 @@ const english = {
       changedLang: 'Changed language to: %(lang)s',
       inactiveLogout: 'You have been logged out due to inactivity',
     },
-    pageTitles: {
+    qvainPageTitle: 'Qvain | Research Dataset Description Tool',
+    etsinPageTitles: {
       data: 'Data',
-      idnAndEvents: 'Identifiers and Events',
+      events: 'Identifiers and Events',
       maps: 'Maps',
       dataset: 'Dataset',
       datasets: 'Datasets',
       home: 'Home',
-      error: 'Error',
-      loginRequired: 'Login Required',
+      qvain: 'Qvain',
+      error: 'Error - The page could not be found'
     },
     language: {
       toggleLabel: 'Switch language to: %(otherLang)s',

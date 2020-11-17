@@ -37,6 +37,9 @@ class MetaxAPIService(FlaskService):
             self.user = metax_api_config.get('USER')
             self.pw = metax_api_config.get('PASSWORD')
             self.verify_ssl = metax_api_config.get('VERIFY_SSL', True)
+            self.proxies = None
+            if metax_api_config.get('HTTPS_PROXY'):
+                self.proxies = dict(https=metax_api_config.get('HTTPS_PROXY'))
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
@@ -66,6 +69,7 @@ class MetaxAPIService(FlaskService):
                                               params=params,
                                               auth=(self.user, self.pw),
                                               verify=self.verify_ssl,
+                                              proxies=self.proxies,
                                               timeout=10)
             metax_api_response.raise_for_status()
         except Exception as e:
@@ -103,6 +107,7 @@ class MetaxAPIService(FlaskService):
                                               headers={'Accept': 'application/json'},
                                               auth=(self.user, self.pw),
                                               verify=self.verify_ssl,
+                                              proxies=self.proxies,
                                               timeout=3)
             metax_api_response.raise_for_status()
         except Exception as e:
@@ -139,6 +144,7 @@ class MetaxAPIService(FlaskService):
                                               headers={'Accept': 'application/json'},
                                               auth=(self.user, self.pw),
                                               verify=self.verify_ssl,
+                                              proxies=self.proxies,
                                               timeout=3)
             metax_api_response.raise_for_status()
         except Exception as e:

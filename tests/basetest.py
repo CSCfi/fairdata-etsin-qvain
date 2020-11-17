@@ -20,12 +20,14 @@ class BaseTest():
     @pytest.fixture
     def app(self):
         """
-        App fixture where testing flag is set as True
+        App fixture that checks that app is in testing mode
+
+        To enable testing mode, set the TESTING environment variable.
 
         :return:
         """
-        os.environ['TESTING'] = 'True'
         from etsin_finder.finder import app
+        assert app.testing is True
         return app
 
     @pytest.fixture

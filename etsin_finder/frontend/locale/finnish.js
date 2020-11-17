@@ -95,6 +95,7 @@ const finnish = {
       download: 'Lataa',
       downloadFailed: 'Lataus epäonnistui',
       downloadAll: 'Lataa kaikki',
+      downloadDisabledForDraft: 'Lataus ei käytössä luonnoksille',
       downloadItem: 'Lataa %(name)s',
       downloading: 'Ladataan...',
       fileAmount: '%(amount)s objektia',
@@ -103,6 +104,12 @@ const finnish = {
       info_header: 'Tiedoston muut tiedot',
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
+      packages: {
+        createForAll: 'Luo latauspaketti',
+        createForItem: 'Luo latauspaketti kohteelle %(name)s',
+        pending: 'Luodaan latauspakettia',
+        loading: 'Ladataan',
+      },
       fileCount: {
         one: '1 tiedosto',
         other: '%(count)s tiedostoa',
@@ -247,15 +254,16 @@ const finnish = {
       changedLang: 'Kieli vaihdettu kieleen: %(lang)s',
       inactiveLogout: 'Istunto aikakatkaistu. Sinut kirjattiin ulos.',
     },
-    pageTitles: {
+    qvainPageTitle: 'Qvain | Tutkimusaineiston metatietotyökalu',
+    etsinPageTitles: {
       data: 'Data',
-      idnAndEvents: 'Tunnisteet ja tapahtumat',
+      events: 'Tunnisteet ja tapahtumat',
       maps: 'Kartat',
       dataset: 'Aineisto',
       datasets: 'Aineistot',
       home: 'Koti',
-      error: 'Virhe',
-      loginRequired: 'Kirjautuminen vaaditaan',
+      qvain: 'Qvain',
+      error: 'Virhe - Sivua ei löydy'
     },
     language: {
       toggleLabel: 'Vaihda kieltä: %(otherLang)s',
