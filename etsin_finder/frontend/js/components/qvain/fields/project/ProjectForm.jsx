@@ -21,7 +21,10 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
       component={Input}
       value={formData.titleEn || ''}
       onChange={event => onChange(event.target.id, event.target.value)}
-      attributes={{ placeholder: 'qvain.project.inputs.titleEn.placeholder' }}
+      attributes={{
+        placeholder: 'qvain.project.inputs.titleEn.placeholder',
+        'aria-label': 'qvain.project.inputs.titleEn.placeholder',
+      }}
       disabled={readonly}
       id="titleEn"
     />
@@ -30,7 +33,10 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
       component={Input}
       value={formData.titleFi || ''}
       onChange={event => onChange(event.target.id, event.target.value)}
-      attributes={{ placeholder: 'qvain.project.inputs.titleFi.placeholder' }}
+      attributes={{
+        placeholder: 'qvain.project.inputs.titleFi.placeholder',
+        'aria-label': 'qvain.project.inputs.titleFi.placeholder',
+      }}
       disabled={readonly}
       id="titleFi"
     />
@@ -63,7 +69,7 @@ const ProjectForm = ({ onChange, formData, readonly }) => (
       id="fundingIdentifier"
     />
     <ErrorMessages errors={formData.errors.fundingIdentifier} />
-    <ProjectLabel htmlFor="funderType" title="qvain.project.inputs.funderType.label" />
+    <ProjectLabel htmlFor="funder-type-select" title="qvain.project.inputs.funderType.label" />
     <Select
       name="funder-type"
       getter={formData.funderType || null}

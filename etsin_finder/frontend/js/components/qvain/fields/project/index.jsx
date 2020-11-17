@@ -294,9 +294,9 @@ const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
     <ButtonGroup tabIndex="0" key={project.id}>
       <ButtonLabel>{renderProjectTitle(project.details)}</ButtonLabel>
       <ProjectActions>
-        <EditButton aria-label="Edit" onClick={event => editProject(project.id, event)} />
+        <EditButton onClick={event => editProject(project.id, event)} />
         {!readonly && (
-          <DeleteButton aria-label="Remove" onClick={event => removeProject(project.id, event)} />
+          <DeleteButton onClick={event => removeProject(project.id, event)} />
         )}
       </ProjectActions>
     </ButtonGroup>

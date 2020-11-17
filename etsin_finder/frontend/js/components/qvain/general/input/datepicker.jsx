@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import ReactDatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -88,10 +89,14 @@ export const DatePicker = props => {
   // Replace default handler for clicking outside calendar, onBlur will handle closing the calendar instead
   const onCalendarClickOutside = () => false
 
+  // Pass ariaLabel prop to the input element
+  const ariaLabel = props.ariaLabel
+
   return (
     <div ref={ref} onFocus={onFocus} onBlur={onBlur}>
       <StyledCustomDatePicker
         open={open}
+        customInput={<input aria-label={ariaLabel} />}
         setOpen={setOpen}
         enableTabLoop={false}
         onKeyDown={onKeyDown}
@@ -101,6 +106,14 @@ export const DatePicker = props => {
       />
     </div>
   )
+}
+
+DatePicker.propTypes = {
+  ariaLabel: PropTypes.string,
+}
+
+DatePicker.defaultProps = {
+  ariaLabel: null,
 }
 
 export const getDateFormatLocale = lang => {

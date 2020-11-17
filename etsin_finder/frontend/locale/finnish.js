@@ -723,6 +723,11 @@ const finnish = {
             organization: 'Valitse organisaatio',
             department: 'Valitse osasto',
           },
+          levels: {
+            organization: 'Organisaatio',
+            department: 'Yksikkö',
+            subdepartment: 'Aliyksikkö'
+          },
           addButton: 'Lisää organisaatio',
           editButton: 'Muokkaa organisaatiota',
           validation: 'Vähintään yksi organisaatio tarvitaan',
