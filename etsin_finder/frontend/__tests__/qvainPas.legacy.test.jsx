@@ -7,22 +7,18 @@ import { runInAction } from 'mobx'
 import '../locale/translations'
 
 import etsinTheme from '../js/styles/theme'
-import PasState from '../js/components/qvain/editor/pasState'
-import DescriptionField from '../js/components/qvain/description/descriptionField'
-import OtherIdentifierField from '../js/components/qvain/description/otherIdentifierField'
-import FieldOfScienceField from '../js/components/qvain/description/fieldOfScienceField'
-import KeywordsField from '../js/components/qvain/description/keywordsField'
-import License from '../js/components/qvain/licenses/licenses'
-import AccessType from '../js/components/qvain/licenses/accessType'
-import Files from '../js/components/qvain/files'
-import FileForm from '../js/components/qvain/files/legacy/fileForm'
-import IDAFilePicker from '../js/components/qvain/files/legacy/idaFilePicker'
-import QvainStoreClass, {
-  Directory,
-  File,
-  AccessType as AccessTypeConstructor,
-  License as LicenseConstructor,
-} from '../js/stores/view/qvain'
+import PasState from '../js/components/qvain/views/editor/pasState'
+import DescriptionField from '../js/components/qvain/fields/description/titleAndDescription'
+import OtherIdentifierField from '../js/components/qvain/fields/description/otherIdentifier'
+import FieldOfScienceField from '../js/components/qvain/fields/description/fieldOfScience'
+import KeywordsField from '../js/components/qvain/fields/description/keywords'
+import License from '../js/components/qvain/fields/licenses/licenses'
+import AccessType from '../js/components/qvain/fields/licenses/accessType'
+import Files from '../js/components/qvain/fields/files'
+import FileForm from '../js/components/qvain/fields/files/legacy/fileForm'
+import IDAFilePicker from '../js/components/qvain/fields/files/legacy/idaFilePicker'
+import QvainStoreClass from '../js/stores/view/qvain'
+import { Directory, File } from '../js/stores/view/qvain/qvain.filesv1'
 import LocaleStore from '../js/stores/view/language'
 import EnvStore from '../js/stores/domain/env'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
@@ -380,7 +376,7 @@ describe('Qvain.PasState', () => {
 describe('Qvain.Description', () => {
   const render = preservationState => {
     const stores = getStores()
-    stores.Qvain.setKeywordsArray(['key', 'word'])
+    stores.Qvain.Keywords.set(['key', 'word'])
     stores.Qvain.setPreservationState(preservationState)
 
     const mockState = {
@@ -411,9 +407,6 @@ describe('Qvain.Description', () => {
     expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(true))
     wrapper.unmount()
-
-    // Keyword delete buttons should not be rendered
-    expect(wrapper.find('FontAwesomeIcon.delete-keyword').length).toBe(0)
   })
 
   it('allows editing of description fields', () => {
@@ -421,18 +414,17 @@ describe('Qvain.Description', () => {
     const inputs = wrapper.find('input').not('[type="hidden"]')
     expect(inputs.length).toBe(4)
     inputs.forEach(c => expect(c.props().disabled).toBe(false))
-
-    // Keyword delete buttons should be rendered
-    expect(wrapper.find('FontAwesomeIcon.delete-keyword').length).toBe(2)
   })
 })
 
 describe('Qvain.RightsAndLicenses', () => {
   const render = stores => {
-    stores.Qvain.setLicenseArray([
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'),
+    stores.Qvain.Licenses.set([
+      stores.Qvain.Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'),
     ])
-    stores.Qvain.setAccessType(AccessTypeConstructor({ en: 'Embargo' }, ACCESS_TYPE_URL.EMBARGO))
+    stores.Qvain.AccessType.set(
+      stores.Qvain.AccessType.Model({ en: 'Embargo' }, ACCESS_TYPE_URL.EMBARGO)
+    )
     return mount(
       <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
@@ -471,6 +463,10 @@ describe('Qvain.RightsAndLicenses', () => {
 })
 
 describe('Qvain.Files', () => {
+  beforeEach(() => {
+    useStores.mockReturnValue(getStores())
+  })
+
   const render = stores => {
     const testfile = File({
       description: 'File',

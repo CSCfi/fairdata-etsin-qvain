@@ -256,18 +256,19 @@ const english = {
       changedLang: 'Changed language to: %(lang)s',
       inactiveLogout: 'You have been logged out due to inactivity',
     },
-    pageTitles: {
+    qvainPageTitle: 'Qvain | Research Dataset Description Tool',
+    etsinPageTitles: {
       data: 'Data',
-      idnAndEvents: 'Identifiers and Events',
+      events: 'Identifiers and Events',
       maps: 'Maps',
       dataset: 'Dataset',
       datasets: 'Datasets',
       home: 'Home',
-      error: 'Error',
-      loginRequired: 'Login Required',
+      qvain: 'Qvain',
+      error: 'Error - The page could not be found'
     },
     language: {
-      toggleLabel: 'Toggle language',
+      toggleLabel: 'Switch language to: %(otherLang)s',
     },
     cookies: {
       accept: 'Accept all cookies',
@@ -360,7 +361,8 @@ const english = {
     },
     home: {
       brief: 'Research Dataset Description Tool',
-      description: 'Fairdata Qvain tool makes describing and publishing your research data effortless for you. It offers you a straightforward form in which to fill information about your data. Once you are happy with it, you can simply publish the dataset and make it visible to others. Qvain provides your dataset with a persistent identifier, landing page and distributes it to other relevant services.',
+      description:
+        'Fairdata Qvain tool makes describing and publishing your research data effortless for you. It offers you a straightforward form in which to fill information about your data. Once you are happy with it, you can simply publish the dataset and make it visible to others. Qvain provides your dataset with a persistent identifier, landing page and distributes it to other relevant services.',
       howTo: 'How to start using Qvain and user guides',
       dataInIda: 'Data stored in IDA',
       dataInExternal: 'Data stored outside of Fairdata',
@@ -445,6 +447,8 @@ const english = {
     titleLoadingFailed: 'Loading dataset failed',
 
     error: {
+      deprecated:
+        'Cannot publish dataset because it is deprecated. Please resolve deprecation first.',
       permission: 'Permission error loading dataset',
       missing: 'Dataset not found',
       default: 'Error loading dataset',
@@ -595,15 +599,15 @@ const english = {
           "If your dataset already has an identifier (usually a DOI) insert it here. The dataset still gets the permanent identifier which resolves to Etsin's Landing page.",
         instructions:
           'Identifier for the metadata will be created automatically but if there already is an EXISTING identifier please insert it here.',
-        addButton: 'Add identifiers',
         alreadyAdded: 'Identifier already added',
+        addButton: 'Add identifier',
+        placeholder: 'E.g. https://doi.org/...',
       },
       fieldOfScience: {
         title: 'Field of Science',
         infoText:
           'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
         placeholder: 'Select option',
-        addButton: 'Add field of science',
         help: 'You can add multiple fields of science.',
       },
       datasetLanguage: {
@@ -611,14 +615,14 @@ const english = {
         infoText: 'Select languages used in the dataset.',
         placeholder: 'Type to search language',
         noResults: 'No languages found',
-        addButton: 'Add language',
         help: 'You can add multiple languages.',
       },
       keywords: {
         title: 'Keywords',
         infoText: 'Set keywords that characterize the dataset.',
         placeholder: 'E.g. economy',
-        addButton: 'Add keywords',
+        alreadyAdded: 'Keyword already added',
+        addButton: 'Add keyword',
         help:
           'You can add multiple keywords by separating them with a comma (,). Dataset has to have at least one keyword.',
       },

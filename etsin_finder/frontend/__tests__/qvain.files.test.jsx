@@ -14,10 +14,10 @@ import {
 import urls from '../js/components/qvain/utils/urls'
 
 import { ShowMore } from '../js/components/general/files/tree'
-import SelectedItemsTree from '../js/components/qvain/files/ida/selectedItemsTree'
-import SelectedItemsTreeItem from '../js/components/qvain/files/ida/selectedItemsTreeItem'
-import AddItemsTree from '../js/components/qvain/files/ida/addItemsTree'
-import AddItemsTreeItem from '../js/components/qvain/files/ida/addItemsTreeItem'
+import SelectedItemsTree from '../js/components/qvain/fields/files/ida/selectedItemsTree'
+import SelectedItemsTreeItem from '../js/components/qvain/fields/files/ida/selectedItemsTreeItem'
+import AddItemsTree from '../js/components/qvain/fields/files/ida/addItemsTree'
+import AddItemsTreeItem from '../js/components/qvain/fields/files/ida/addItemsTreeItem'
 
 import handleSubmitToBackend from '../js/components/qvain/utils/handleSubmit'
 

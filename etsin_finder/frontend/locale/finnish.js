@@ -254,22 +254,24 @@ const finnish = {
       changedLang: 'Kieli vaihdettu kieleen: %(lang)s',
       inactiveLogout: 'Istunto aikakatkaistu. Sinut kirjattiin ulos.',
     },
-    pageTitles: {
+    qvainPageTitle: 'Qvain | Tutkimusaineiston metatietotyökalu',
+    etsinPageTitles: {
       data: 'Data',
-      idnAndEvents: 'Tunnisteet ja tapahtumat',
+      events: 'Tunnisteet ja tapahtumat',
       maps: 'Kartat',
       dataset: 'Aineisto',
       datasets: 'Aineistot',
       home: 'Koti',
-      error: 'Virhe',
-      loginRequired: 'Kirjautuminen vaaditaan',
+      qvain: 'Qvain',
+      error: 'Virhe - Sivua ei löydy'
     },
     language: {
-      toggleLabel: 'Vaihda kieltä',
+      toggleLabel: 'Vaihda kieltä: %(otherLang)s',
     },
     cookies: {
       accept: 'Hyväksy evästeet',
-      infoText: 'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
+      infoText:
+        'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
       link: 'Katso Fairdatan tietosuojakäytäntö',
     },
   },
@@ -360,7 +362,8 @@ const finnish = {
     home: {
       brief: 'Tutkimusaineiston metatietotyökalu',
       howTo: 'Käytön aloitus ja käyttöoppaat',
-      description: 'Fairdata Qvain -työkalu tekee datasi kuvailun ja julkaisemisen helpoksi. Qvain tarjoaa selkeän lomakkeen, johon tiedot datasta täytetään. Tietojen syöttämisen jälkeen voit julkaista datasi tutkimusaineistona ja saattaa sen avoimesti saataville. Qvain tarjoaa tutkimusaineistollesi pysyvän tunnisteen, laskeutumissivun ja jakaa tietoa eteenpäin muille relevanteille palveluille.',
+      description:
+        'Fairdata Qvain -työkalu tekee datasi kuvailun ja julkaisemisen helpoksi. Qvain tarjoaa selkeän lomakkeen, johon tiedot datasta täytetään. Tietojen syöttämisen jälkeen voit julkaista datasi tutkimusaineistona ja saattaa sen avoimesti saataville. Qvain tarjoaa tutkimusaineistollesi pysyvän tunnisteen, laskeutumissivun ja jakaa tietoa eteenpäin muille relevanteille palveluille.',
       dataInIda: 'Data tallennettuna IDA-palvelussa',
       dataInExternal: 'Data tallennettuna Fairdata-palveluiden ulkopuolella',
       qvainDataset: 'Kuvaile datasi, julkaise se tutkimusaineistona ja luo sille pysyvä tunniste.',
@@ -445,6 +448,8 @@ const finnish = {
     titleLoading: 'Ladataan aineistoa',
     titleLoadingFailed: 'Aineiston Lataus Epäonnistui',
     error: {
+      deprecated:
+        'Aineistoa ei voida julkaista, koska aineisto on vanhentunut. Korjaa vanhentunut aineisto ensin.',
       permission: 'Oikeusvirhe aineiston latauksessa',
       missing: 'Aineistoa ei löydy',
       default: 'Virhe ladattaessa aineistoa',
@@ -594,15 +599,15 @@ const finnish = {
           'Jos aineistollasi on jo tunniste (tai useita), yleensä esim. DOI, anna ne tässä. Olemassaolevien tunnisteiden lisäksi aineisto saa tallennusvaiheessa pysyvän tunnisteen, joka tulee resolvoitumaan Etsimen laskeutumissivulle.',
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
-        addButton: 'Lisää tunniste',
         alreadyAdded: 'Tunniste on jo lisätty',
+        addButton: 'Lisää tunniste',
+        placeholder: 'Esim. https://doi.org/...',
       },
       fieldOfScience: {
         title: 'Tieteenala',
         infoText:
           'Valitse tieteenala. Alasvetovalikkosa on Opetus- ja Kulttuuriministeriön mukainen luokitus tieteenaloille.',
         placeholder: 'Valitse vaihtoehto',
-        addButton: 'Lisää tieteenala',
         help: 'Voit lisätä useita tieteenaloja.',
       },
       datasetLanguage: {
@@ -610,7 +615,6 @@ const finnish = {
         infoText: 'Valitse aineistossa käytetyt kielet.',
         placeholder: 'Hae kieliä kirjoittamalla',
         noResults: 'Ei hakutuloksia',
-        addButton: 'Lisää kieli',
         help: 'Voit lisätä useita kieliä.',
       },
       keywords: {
@@ -618,7 +622,8 @@ const finnish = {
         infoText:
           'Vapaat hakusanat aineistollesi. Vaikuttaa aineistosi löytymiseen Etsimen haussa. Käytä mahdollisimman tarkkoja termejä. Tässä kentässä ei ole automaattista käännöstä eri kielille.',
         placeholder: 'Esim. taloustiede',
-        addButton: 'Lisää avainsanoja',
+        alreadyAdded: 'Avainsana on jo lisätty',
+        addButton: 'Lisää avainsana',
         help:
           'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.',
       },

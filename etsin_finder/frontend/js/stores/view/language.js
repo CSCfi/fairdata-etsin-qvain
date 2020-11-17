@@ -12,6 +12,7 @@ import { observable, action, computed, makeObservable } from 'mobx'
 import counterpart from 'counterpart'
 import moment from 'moment'
 import elasticquery from './elasticquery'
+import Accessibility from './accessibility'
 import env from '../domain/env'
 import { setCookieValue, getCookieValue } from '../../utils/cookies'
 
@@ -53,6 +54,8 @@ class Locale {
   toggleLang = () => {
     const current = counterpart.getLocale()
     this.setLang(current === 'fi' ? 'en' : 'fi')
+
+    Accessibility.handleNavigation()
 
     // TODO: this should probably not be here
     // other things to do when language changes
