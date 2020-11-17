@@ -38,6 +38,10 @@ function IdaResources(props) {
   const fileCount = (root && root.existingFileCount) || 0
   const totalSize = (root && root.existingByteSize) || 0
 
+  if (fileCount === 0) {
+    return null
+  }
+
   const lang = props.Stores.Locale.lang
 
   const translateLabel = label => label && (label[lang] || label.und)
