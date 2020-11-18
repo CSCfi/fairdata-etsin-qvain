@@ -97,7 +97,9 @@ const FundingOrganization = props => {
   const { readonly } = props.Stores.Qvain.Projects
   return (
     <Card>
-      <Translate component="h3" content="qvain.project.organization.title" />
+      <h3>
+        <Translate component="label" htmlFor="funding-organization" content="qvain.project.organization.title" />
+      </h3>
       <Translate component="p" content="qvain.project.organization.description" />
       <AddedOrganizations
         organizations={addedOrganizations}
@@ -109,8 +111,8 @@ const FundingOrganization = props => {
       <OrganizationSelect
         onChange={onOrganizationChange}
         value={formData}
-        name="organization"
-        inputId="organization"
+        name="funding-organization"
+        inputId="funding-organization"
       />
       <ErrorMessages errors={formData.errors} />
       <AddOrganizationContainer>

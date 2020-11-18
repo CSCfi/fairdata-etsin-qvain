@@ -16,12 +16,12 @@ const FieldOfScienceField = () => {
 
   return (
     <Card>
-      <LabelLarge htmlFor="fieldOfScienceSelect">
+      <LabelLarge htmlFor="fieldOfScience-select">
         <Translate content="qvain.description.fieldOfScience.title" />
       </LabelLarge>
       <Translate component="p" content="qvain.description.fieldOfScience.help" />
       <Translate
-        name="fieldOfScienceSelect"
+        name="fieldOfScience"
         metaxIdentifier="field_of_science"
         component={Select}
         attributes={{ placeholder: 'qvain.description.fieldOfScience.placeholder' }}

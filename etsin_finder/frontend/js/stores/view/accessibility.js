@@ -11,6 +11,7 @@
 import React from 'react'
 import { observable, action, makeObservable } from 'mobx'
 import translate from 'counterpart'
+import env from '../domain/env'
 
 class Accessibility {
   constructor() {
@@ -80,16 +81,50 @@ class Accessibility {
 
   @action
   handleNavigation(location, resetFocus = true) {
-    const pageName = translate(`general.pageTitles.${location}`)
+    if (env.isQvain) {
+      this.setQvainPageTitle(translate('general.qvainPageTitle'))
+      return
+    }
+
+    let loc = location;
+    loc = this.getLocation()
+
+    const pageName = translate(`general.etsinPageTitles.${loc}`)
     this.announce(pageName)
-    this.setPageTitle(pageName)
+    this.setEtsinPageTitle(pageName)
     if (resetFocus) {
       this.resetFocus()
     }
   }
 
-  setPageTitle(name) {
+  getLocation() {
+    const etsinLocationMatchers = [
+      ['datasets', new RegExp('^/datasets/?$')],
+      ['dataset', new RegExp('^/dataset/[^/]+?$')],
+      ['data', new RegExp('^/dataset/[^/]+/data/?$')],
+      ['events', new RegExp('^/dataset/[^/]+/events/?$')],
+      ['maps', new RegExp('^/dataset/[^/]+/maps/?$')],
+      ['qvain', new RegExp('^/qvain/?')],
+      ['home', new RegExp('^/$')],
+    ]
+
+    let location
+    const pathname = env.history.location.pathname
+    for (const [matchLocation, matcher] of etsinLocationMatchers) {
+      if (matcher.test(pathname)) {
+        location = matchLocation
+        break
+      }
+    }
+    return location || 'error'
+  }
+
+  setEtsinPageTitle(name) {
     document.title = `${name} - etsin.fairdata.fi`
+  }
+
+  setQvainPageTitle(name) {
+    document.title = name
   }
 
   resetFocus() {

@@ -172,9 +172,9 @@ def access_rights_to_metax(data):
     access_rights = {}
     access_rights["license"] = []
     license = data.get('license', [])
-    for l in license:
-        license_id = l.get('identifier')
-        license_name_en = l.get('name', {}).get('en') or ''
+    for lic in license:
+        license_id = lic.get('identifier')
+        license_name_en = lic.get('name', {}).get('en') or ''
         if license_id and not license_name_en.startswith('Other (URL)'):
             license_object = {}
             license_object["identifier"] = license_id

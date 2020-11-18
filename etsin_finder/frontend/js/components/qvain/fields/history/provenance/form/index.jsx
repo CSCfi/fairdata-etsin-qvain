@@ -22,7 +22,7 @@ const Form = props => {
         <TabInput {...props} datum="outcomeDescription" language={language} />
       </TranslationTab>
       <Separator />
-      <DurationPicker {...props} datum="periodOfTime" language={language} />
+      <DurationPicker {...props} datum="periodOfTime" language={language} id="provenance-period" />
       <LocationInput />
       <Separator />
       <ModalReferenceInput
