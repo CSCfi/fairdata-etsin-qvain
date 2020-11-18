@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import translate from 'counterpart'
 import { components } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
@@ -7,7 +7,6 @@ import CreatableSelect from 'react-select/creatable'
 import etsinTheme from '../js/styles/theme'
 import '../locale/translations'
 import { Qvain as QvainBase } from '../js/components/qvain/views/main'
-import Description from '../js/components/qvain/fields/description'
 import DescriptionField from '../js/components/qvain/fields/description'
 import OtherIdentifierField from '../js/components/qvain/fields/description/otherIdentifier'
 import FieldOfScienceField from '../js/components/qvain/fields/description/fieldOfScience'
@@ -39,30 +38,32 @@ import {
   groupDatasetsByVersionSet,
 } from '../js/components/qvain/views/datasets/filter'
 import DatePicker from '../js/components/qvain/general/input/datepicker'
-import { StoresProvider, useStores } from '../js/stores/stores'
+import { useStores } from '../js/stores/stores'
 
 jest.mock('uuid', original => {
   let id = 0
   return {
     ...original,
-    v4: () => id++,
+    v4: () => {
+      id += 1
+      return id
+    },
   }
 })
 
-jest.mock('moment', original => {
+jest.mock('moment', () => {
   return () => ({
     format: format => `moment formatted date: ${format}`,
   })
 })
+
 jest.mock('../js/stores/stores', () => {
-  const useStores = jest.fn()
+  const mockUseStores = jest.fn()
   return {
     ...jest.requireActual('../js/stores/stores'),
-    useStores,
+    useStores: mockUseStores,
   }
 })
-
-const QvainStore = new QvainStoreClass(Env)
 
 const getStores = () => {
   Env.setMetaxApiV2(true)
@@ -93,7 +94,7 @@ describe('Qvain', () => {
   })
 
   it('should open existing dataset when the identifier in the url changes', () => {
-    const stores = getStores()
+    stores = getStores()
 
     // Mock react router matches for identifier
     const identifierMatch = { params: { identifier: 'some_identifier' } }
@@ -201,10 +202,6 @@ describe('Qvain.Description', () => {
     useStores.mockReturnValue(stores)
   })
 
-  it('should render <Description />', () => {
-    const component = shallow(<Description />)
-    expect(component).toMatchSnapshot()
-  })
   it('should render <DescriptionField />', () => {
     const component = shallow(<DescriptionField />)
     expect(component).toMatchSnapshot()
@@ -300,10 +297,9 @@ describe('Qvain dataset list filtering', () => {
 
 describe('Qvain.RightsAndLicenses', () => {
   let stores
-  let Licenses
   const getRenderedLicenseUrls = shallowLicenseComponent => {
     const selectedOptions = shallowLicenseComponent
-      .findWhere(c => c.prop('component') == CreatableSelect)
+      .findWhere(c => c.prop('component') === CreatableSelect)
       .dive()
       .dive()
       .dive()
@@ -435,7 +431,7 @@ describe('Qvain.ExternalFiles', () => {
   })
 
   it('should render correctly', async () => {
-    let externalFiles = shallow(<ExternalFilesBase />)
+    const externalFiles = shallow(<ExternalFilesBase />)
     expect(externalFiles.find(SlidingContent).length).toBe(1)
     expect(externalFiles.find(ButtonGroup).length).toBe(0)
   })
@@ -450,7 +446,7 @@ describe('Qvain.ExternalFiles', () => {
         'https://en.wikipedia.org/wiki/Portal:Arts'
       )
     )
-    let externalFiles = shallow(<ExternalFilesBase />)
+    const externalFiles = shallow(<ExternalFilesBase />)
     expect(externalFiles.find(ButtonGroup).length).toBe(1)
   })
 })
