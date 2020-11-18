@@ -1,4 +1,4 @@
-import { makeObservable, observable, action, computed, toJS } from 'mobx'
+import { makeObservable, observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { ValidationError } from 'yup'
 import handleSubmitToBackend from '../../../components/qvain/utils/handleSubmit'
@@ -101,12 +101,14 @@ class Submit {
 
   @action exec = async (submitFunction, schema = qvainFormSchema) => {
     const {
-      OtherIdentifiers: { cleanupOtherIdentifiers },
+      OtherIdentifiers: { cleanupBeforeBackend },
       editDataset,
       setChanged,
     } = this.Qvain
-    if (!cleanupOtherIdentifiers()) return
-    if (!(await this.promptProvenancesAndCleanOtherIdentifiers())) return
+    this.response = undefined
+    this.error = undefined
+    if (!cleanupBeforeBackend()) return
+    if (!(await this.promptProvenances())) return
 
     this.closeUseDoiModal()
     const dataset = this.prepareDataset()
@@ -114,14 +116,17 @@ class Submit {
 
     try {
       await schema.validate(dataset)
-      // kind of overrules the other validation errors.
-      // Will be fixed in CSCFAIRMETA-542.
       await this.checkDoiCompability(dataset)
     } catch (error) {
-      this.setError(error)
-      this.response = undefined
+      if (error instanceof ValidationError) {
+        this.setLoading(false)
+        this.setError(error)
+        return
+      }
       if (!(error instanceof ValidationError)) {
         console.error(error)
+        this.setLoading(false)
+        this.setError(error)
         throw error
       }
     }
@@ -140,11 +145,11 @@ class Submit {
       } else {
         await editDataset(data)
       }
+
       this.response = data
-      this.error = undefined
     } catch (error) {
       this.error = getResponseError(error)
-      console.log(toJS(this.error))
+      throw error
     } finally {
       this.setLoading(false)
     }
@@ -214,7 +219,7 @@ class Submit {
     return res
   }
 
-  @action promptProvenancesAndCleanOtherIdentifiers = async () => {
+  @action promptProvenances = async () => {
     const isProvenanceActorsOk = await this.Qvain.Actors.checkProvenanceActors()
     if (!isProvenanceActorsOk) {
       return false

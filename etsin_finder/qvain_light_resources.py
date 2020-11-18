@@ -347,14 +347,18 @@ class QvainDatasets(Resource):
             if not check_if_data_in_user_IDA_project(data):
                 return {"IdaError":
                         "Error in IDA group user permission or in IDA user groups."}, 403
+
         if data.get("useDoi") is True:
             use_doi = True
+
         metax_ready_data = data_to_metax(data, metadata_provider_org,
                                          metadata_provider_user)
+        log.debug(f'in post: metax_ready_data: {metax_ready_data}')
         params = {
             "access_granter": get_encoded_access_granter()
         }
         metax_response = create_dataset(metax_ready_data, params, use_doi)
+        log.debug(f'metax_response: {metax_response}')
         return metax_response
 
 

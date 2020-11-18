@@ -189,6 +189,7 @@ export class Qvain extends Component {
 
   getDatasetProps = () => {
     const { datasetError, haveDataset, datasetErrorDetails, datasetErrorTitle } = this.state
+
     return {
       datasetError,
       haveDataset,
@@ -208,11 +209,12 @@ export class Qvain extends Component {
     const { metaxApiV2 } = this.props.Stores.Env
     const { error, response: responseV2, isLoading } = this.props.Stores.Qvain.Submit
     const { datasetLoading, datasetError, submitted, response } = this.state
+
     return {
       datasetLoading: metaxApiV2 ? isLoading : datasetLoading,
       datasetError,
       submitted: metaxApiV2 ? !!error || !!responseV2 : submitted,
-      response: metaxApiV2 ? error?.errors || responseV2 : response,
+      response: metaxApiV2 ? error || responseV2 : response,
       handleSubmitError: this.handleSubmitError,
       handleSubmitResponse: this.handleSubmitResponse,
       submitButtonsRef: this.submitButtonsRef,

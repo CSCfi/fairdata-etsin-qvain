@@ -24,6 +24,7 @@ class Qvain extends Resources {
 
   @action
   resetQvainStore = () => {
+    this.Submit = new Submit(this)
     this.original = undefined
     // Reset Files/Directories related data
     this.resetFilesV1()

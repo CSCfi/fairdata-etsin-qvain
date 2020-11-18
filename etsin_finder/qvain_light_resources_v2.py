@@ -209,6 +209,8 @@ class QvainDatasets(Resource):
 
         metax_ready_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
 
+        log.debug(f'metax ready data {metax_ready_data}')
+
         params["access_granter"] = get_encoded_access_granter()
         metax_response = create_dataset(metax_ready_data, params)
         return metax_response
@@ -248,6 +250,7 @@ class QvainDataset(Resource):
             The response from metax or if error an error message.
 
         """
+        params = {}
         error = check_dataset_creator(cr_id)
         if error is not None:
             return error
@@ -281,7 +284,11 @@ class QvainDataset(Resource):
         log.info('Converted datetime from metax: {0} to HTTP datetime: {1}'.format(last_edit, last_edit_converted))
         del data["original"]
 
+        log.debug(f'in patch: data: {data}')
+
         metax_ready_data = edited_data_to_metax(data, original)
+
+        log.debug(f'in patch: metax_ready_data.data_catalog: {metax_ready_data.get("data_catalog", "no catalog")}')
 
         params = {}
         params["access_granter"] = get_encoded_access_granter()

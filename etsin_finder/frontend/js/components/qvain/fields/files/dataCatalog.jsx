@@ -7,7 +7,7 @@ import translate from 'counterpart'
 import Card from '../../general/card'
 import { dataCatalogSchema } from '../../utils/formValidation'
 import ValidationError from '../../general/errors/validationError'
-import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
+import { DATA_CATALOG_IDENTIFIER, DATASET_STATE } from '../../../../utils/constants'
 import { LabelLarge } from '../../general/modal/form'
 import etsinTheme from '../../../../styles/theme'
 import DoiSelection from './doiSelection'
@@ -27,6 +27,7 @@ const DataCatalog = () => {
       setUseDoi,
     },
     Locale: { lang },
+    Env: { metaxApiV2 },
   } = useStores()
   const [error, SetError] = useState()
 
@@ -65,6 +66,11 @@ const DataCatalog = () => {
   // PAS catalog cannot be selected by the user
   const availableOptions = isPas ? pasOptions : options
   const catalogSelectValue = availableOptions.find(opt => opt.value === dataCatalog)
+  console.log(original?.data_catalog?.identifier)
+  const isDataCatalogNotDecided =
+    metaxApiV2 &&
+    (!original?.data_catalog || original?.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.DFT)
+  const isDisabled = selected.length > 0 || !isDataCatalogNotDecided || isPas
 
   return (
     <Card>
@@ -97,7 +103,7 @@ const DataCatalog = () => {
         styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
         onBlur={handleOnBlur}
         attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
-        isDisabled={selected.length > 0 || original !== undefined || isPas}
+        isDisabled={isDisabled}
       />
       <DoiSelection />
 

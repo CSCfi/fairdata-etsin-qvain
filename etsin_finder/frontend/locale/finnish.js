@@ -894,7 +894,6 @@ const finnish = {
             publisher:
               'Toimijat: Aineistolla on oltava ainakin yksi julkaisija. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
           },
-          publisherIfDOI: 'Toimijat: DOI-ainestoon on lisättävä julkaisija.',
         },
       },
       accessType: {

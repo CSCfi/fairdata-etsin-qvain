@@ -22,7 +22,7 @@ class DraftPersonValidationSchema(Schema):
     """Validation schema for person."""
 
     name = fields.Str(
-        required=True,
+        required=False,
         validate=Length(min=1)
     )
     email = fields.Email()
@@ -34,7 +34,7 @@ class DraftOrganizationValidationSchema(Schema):
 
     # At least one name translation is needed
     name = fields.Dict(
-        required=True,
+        required=False,
         validate=lambda names: len(names) > 0 and all(type(v) is str and len(v) > 0 for v in names.values())
     )
     email = fields.Email()
@@ -108,7 +108,7 @@ class DraftProjectDetailsValidationSchema(Schema):
 class DraftContributorTypeValidationSchema(Schema):
     """Validation schema for project funding agency contributor type."""
 
-    identifier = fields.Str(required=True)
+    identifier = fields.Str(required=False)
     label = fields.Dict(
         required=False,
         validate=lambda x: x.get('en') or x.get('fi')
@@ -137,7 +137,7 @@ class DraftProjectValidationSchema(Schema):
         fields.List(
             fields.Nested(DraftOrganizationValidationSchema)
         ),
-        required=True,
+        required=False,
         validate=Length(min=1)
     )
     fundingAgencies = fields.List(
@@ -154,7 +154,6 @@ class DraftDatasetValidationSchema(Schema):
     )
 
     description = fields.Dict(
-        validate=lambda x: len(x.get('en', [])) + len(x.get('fi', [])) > 0,
         required=False
     )
 
@@ -184,13 +183,11 @@ class DraftDatasetValidationSchema(Schema):
     keywords = fields.List(
         fields.Str(),
         required=False,
-        validate=lambda list: len(list) > 0
     )
 
     actors = fields.List(fields.Nested(
         DraftActorValidationSchema),
         required=False,
-        validate=lambda list: len(list) > 0
     )
 
     accessType = fields.Dict(

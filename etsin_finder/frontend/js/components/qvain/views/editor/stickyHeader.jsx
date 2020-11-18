@@ -43,6 +43,7 @@ const StickyHeader = ({
   if (datasetError) {
     return null
   }
+
   if (datasetLoading) {
     return (
       <StickySubHeaderWrapper>

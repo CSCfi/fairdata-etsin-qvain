@@ -803,7 +803,6 @@ const english = {
             publisher:
               'Actors: Publisher role is mandatory. Note: one actor can have multiple roles.',
           },
-          publisherIfDOI: 'Actors: For DOI datasets publisher must be defined.',
         },
       },
       accessType: {
