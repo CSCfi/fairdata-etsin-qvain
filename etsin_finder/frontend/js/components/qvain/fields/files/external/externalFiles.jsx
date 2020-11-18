@@ -62,12 +62,10 @@ export const ExternalFilesBase = () => {
             </ButtonLabel>
             <ButtonContainer>
               <EditButton
-                aria-label="Edit"
                 type="button"
                 onClick={handleEditExternalResource(addedExternalResource)}
               />
               <DeleteButton
-                aria-label="Remove"
                 type="button"
                 onClick={handleRemoveExternalResource(addedExternalResource.id)}
               />

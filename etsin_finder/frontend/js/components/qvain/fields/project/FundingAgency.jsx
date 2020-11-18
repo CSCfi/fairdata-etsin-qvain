@@ -164,7 +164,7 @@ const FundingAgencyForm = props => {
         onRemove={onRemove}
         lang={lang}
       />
-      <LabelLarge htmlFor="organization">
+      <LabelLarge htmlFor="project-funding-organization">
         <Translate content="qvain.project.inputs.fundingAgency.contributorType.organization.label" />{' '}
         *
       </LabelLarge>
@@ -172,7 +172,7 @@ const FundingAgencyForm = props => {
         onChange={onOrganizationChange}
         value={formData.organization}
         name="organization"
-        inputId="organization"
+        inputId="project-funding-organization"
       />
       <ErrorMessages errors={formData.errors.organization} />
       <Expand

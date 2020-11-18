@@ -66,7 +66,7 @@ def prepare_flask_request_for_saml(request, service):
 
     return {
         'https': 'on' if request.scheme == 'https' else 'off',
-        'http_host': get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME'),
+        'http_host': get_app_config(app.testing).get('SHARED_DOMAIN_NAME_FOR_PROXY'),
         'server_port': url_data.port,
         'script_name': request.path,
         'get_data': request.args.copy(),

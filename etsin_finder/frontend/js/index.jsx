@@ -27,7 +27,7 @@ Promise.config({
 if (process.env.NODE_ENV === 'development') {
   // REACT-AXE: Disabled for now, since it outputs a lot of error messages to the console
   // eslint-disable-next-line global-require
-  // const axe = require('react-axe')
+  // const axe = require('@axe-core/react')
   // axe(React, ReactDOM, 1000)
 }
 ReactDOM.render(<App />, document.getElementById('root'))

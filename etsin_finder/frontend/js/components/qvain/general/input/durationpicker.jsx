@@ -7,7 +7,7 @@ import { Label } from '../modal/form'
 import { DatePicker, handleDatePickerChange, getDateFormatLocale } from './datepicker'
 import { useStores } from '../../utils/stores'
 
-const DurationPicker = ({ Field, translationsRoot, datum }) => {
+const DurationPicker = ({ Field, translationsRoot, datum, id }) => {
   const translations = {
     label: `${translationsRoot}.modal.${datum}Input.label`,
     startPlaceholder: `${translationsRoot}.modal.${datum}Input.startPlaceholder`,
@@ -28,12 +28,12 @@ const DurationPicker = ({ Field, translationsRoot, datum }) => {
 
   return (
     <>
-      <Label htmlFor="period-of-time-input" style={{ width: '100%', marginBottom: 5 }}>
+      <Label style={{ width: '100%', marginBottom: 5 }}>
         <Translate content={translations.label} />
       </Label>
       <DatePickerContainer>
         <Translate
-          id="startTimeInput"
+          id={`${id}-start`}
           component={DatePicker}
           selectsStart
           maxDate={endDate && new Date(endDate)}
@@ -52,7 +52,7 @@ const DurationPicker = ({ Field, translationsRoot, datum }) => {
           disabled={readonly}
         />
         <Translate
-          id="endTimeInput"
+          id={`${id}-end`}
           component={DatePicker}
           selectsEnd
           minDate={startDate && new Date(startDate)}
@@ -79,6 +79,7 @@ DurationPicker.propTypes = {
   Field: PropTypes.object.isRequired,
   translationsRoot: PropTypes.string.isRequired,
   datum: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 }
 
 const DatePickerContainer = styled.div`

@@ -97,7 +97,7 @@ class Events extends Component {
       `Dataset: ${this.props.match.params.identifier} | Events`,
       this.props.location.pathname
     )
-    Accessibility.handleNavigation('idnAndEvents', false)
+    Accessibility.handleNavigation('events', false)
   }
 
   versions = set =>

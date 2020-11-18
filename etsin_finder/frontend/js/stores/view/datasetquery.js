@@ -8,12 +8,13 @@
  * @license   MIT
  */
 
-import { observable, action, makeObservable } from 'mobx'
+import { observable, computed, action, makeObservable } from 'mobx'
 import axios from 'axios'
 
 import access from './access'
 
 import Files from './files'
+import Packages from './packages'
 
 const QueryFields = {
   file: [
@@ -34,6 +35,7 @@ class DatasetQuery {
   constructor(Env) {
     this.Files = new Files()
     this.Env = Env
+    this.Packages = new Packages(Env)
     makeObservable(this)
   }
 
@@ -45,8 +47,27 @@ class DatasetQuery {
 
   @observable error = false
 
+  async fetchPackages() {
+    const { downloadApiV2 } = this.Env
+    if (!downloadApiV2 || !this.results) {
+      return
+    }
+
+    await this.Packages.fetch(this.results.identifier)
+  }
+
+  @computed get isDraft() {
+    if (this.results) {
+      if (this.results.draft_of || this.results.state === 'draft') {
+        return true
+      }
+    }
+    return false
+  }
+
   @action
   getData(id) {
+    this.Packages.clearPackages()
     const { metaxApiV2 } = this.Env
     const url = metaxApiV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
     return new Promise((resolve, reject) => {
