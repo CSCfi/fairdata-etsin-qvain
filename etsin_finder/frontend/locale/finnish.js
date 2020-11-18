@@ -95,6 +95,7 @@ const finnish = {
       download: 'Lataa',
       downloadFailed: 'Lataus epäonnistui',
       downloadAll: 'Lataa kaikki',
+      downloadDisabledForDraft: 'Lataus ei käytössä luonnoksille',
       downloadItem: 'Lataa %(name)s',
       downloading: 'Ladataan...',
       fileAmount: '%(amount)s objektia',
@@ -103,6 +104,12 @@ const finnish = {
       info_header: 'Tiedoston muut tiedot',
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
+      packages: {
+        createForAll: 'Luo latauspaketti',
+        createForItem: 'Luo latauspaketti kohteelle %(name)s',
+        pending: 'Luodaan latauspakettia',
+        loading: 'Ladataan',
+      },
       fileCount: {
         one: '1 tiedosto',
         other: '%(count)s tiedostoa',
@@ -247,15 +254,16 @@ const finnish = {
       changedLang: 'Kieli vaihdettu kieleen: %(lang)s',
       inactiveLogout: 'Istunto aikakatkaistu. Sinut kirjattiin ulos.',
     },
-    pageTitles: {
+    qvainPageTitle: 'Qvain | Tutkimusaineiston metatietotyökalu',
+    etsinPageTitles: {
       data: 'Data',
-      idnAndEvents: 'Tunnisteet ja tapahtumat',
+      events: 'Tunnisteet ja tapahtumat',
       maps: 'Kartat',
       dataset: 'Aineisto',
       datasets: 'Aineistot',
       home: 'Koti',
-      error: 'Virhe',
-      loginRequired: 'Kirjautuminen vaaditaan',
+      qvain: 'Qvain',
+      error: 'Virhe - Sivua ei löydy'
     },
     language: {
       toggleLabel: 'Vaihda kieltä: %(otherLang)s',
@@ -591,15 +599,15 @@ const finnish = {
           'Jos aineistollasi on jo tunniste (tai useita), yleensä esim. DOI, anna ne tässä. Olemassaolevien tunnisteiden lisäksi aineisto saa tallennusvaiheessa pysyvän tunnisteen, joka tulee resolvoitumaan Etsimen laskeutumissivulle.',
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
-        addButton: 'Lisää tunniste',
         alreadyAdded: 'Tunniste on jo lisätty',
+        addButton: 'Lisää tunniste',
+        placeholder: 'Esim. https://doi.org/...',
       },
       fieldOfScience: {
         title: 'Tieteenala',
         infoText:
           'Valitse tieteenala. Alasvetovalikkosa on Opetus- ja Kulttuuriministeriön mukainen luokitus tieteenaloille.',
         placeholder: 'Valitse vaihtoehto',
-        addButton: 'Lisää tieteenala',
         help: 'Voit lisätä useita tieteenaloja.',
       },
       datasetLanguage: {
@@ -607,7 +615,6 @@ const finnish = {
         infoText: 'Valitse aineistossa käytetyt kielet.',
         placeholder: 'Hae kieliä kirjoittamalla',
         noResults: 'Ei hakutuloksia',
-        addButton: 'Lisää kieli',
         help: 'Voit lisätä useita kieliä.',
       },
       keywords: {
@@ -615,7 +622,8 @@ const finnish = {
         infoText:
           'Vapaat hakusanat aineistollesi. Vaikuttaa aineistosi löytymiseen Etsimen haussa. Käytä mahdollisimman tarkkoja termejä. Tässä kentässä ei ole automaattista käännöstä eri kielille.',
         placeholder: 'Esim. taloustiede',
-        addButton: 'Lisää avainsanoja',
+        alreadyAdded: 'Avainsana on jo lisätty',
+        addButton: 'Lisää avainsana',
         help:
           'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.',
       },
@@ -714,6 +722,11 @@ const finnish = {
           placeholder: {
             organization: 'Valitse organisaatio',
             department: 'Valitse osasto',
+          },
+          levels: {
+            organization: 'Organisaatio',
+            department: 'Yksikkö',
+            subdepartment: 'Aliyksikkö'
           },
           addButton: 'Lisää organisaatio',
           editButton: 'Muokkaa organisaatiota',

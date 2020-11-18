@@ -34,6 +34,7 @@ const TemporalFieldContent = ({ Store, lang }) => {
         Field={Field}
         translationsRoot={translationsRoot}
         datum="duration"
+        id="temporal-period"
       />
       <Observer>
         {() => (

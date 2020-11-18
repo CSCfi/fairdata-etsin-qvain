@@ -157,7 +157,7 @@ class Auth {
         .get('/api/session')
         .then(() => resolve())
         .catch(err => {
-          if (err.response.status === 401) {
+          if (err.response && err.response.status === 401) {
             this.reset()
           }
           return reject(err)

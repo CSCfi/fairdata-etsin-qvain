@@ -9,8 +9,6 @@
 
 
 import json
-import logging
-logger = logging.getLogger()
 
 from .basetest import BaseTest
 

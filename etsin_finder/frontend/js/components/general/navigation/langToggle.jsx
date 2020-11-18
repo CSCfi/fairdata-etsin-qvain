@@ -19,7 +19,7 @@ import translate from 'counterpart'
 import { TransparentButton, InvertedButton } from '../button'
 import { useStores } from '../../../utils/stores'
 
-const LangToggle = ({ inverted, margin }) => {
+const LangToggle = ({ inverted, margin, mobile }) => {
   const { Locale } = useStores()
   const changeLang = () => {
     Locale.toggleLang()
@@ -33,9 +33,11 @@ const LangToggle = ({ inverted, margin }) => {
       return null
     })
 
+  const labelId = mobile ? 'sr-text-for-language-toggle-mobile' : 'sr-text-for-language-toggle'
+
   return (
     <>
-      <span className="sr-only" id="sr-text-for-language-toggle">
+      <span className="sr-only" id={labelId}>
         {translate('general.language.toggleLabel', {
           otherLang:
             Locale.currentLang === 'fi'
@@ -49,7 +51,7 @@ const LangToggle = ({ inverted, margin }) => {
           margin={margin}
           padding="0.3em 1em 0.4em"
           onClick={changeLang}
-          aria-labelledby="sr-text-for-language-toggle"
+          aria-labelledby={labelId}
         >
           {otherLang()}
         </InvertedButton>
@@ -57,7 +59,7 @@ const LangToggle = ({ inverted, margin }) => {
         <TransparentButton
           onClick={changeLang}
           margin={margin}
-          aria-labelledby="sr-text-for-language-toggle"
+          aria-labelledby={labelId}
         >
           {otherLang()}
         </TransparentButton>
@@ -77,11 +79,13 @@ const Lang = styled.span`
 LangToggle.propTypes = {
   inverted: PropTypes.bool,
   margin: PropTypes.string,
+  mobile: PropTypes.bool,
 }
 
 LangToggle.defaultProps = {
   inverted: false,
   margin: '0.3em 0.3em',
+  mobile: false,
 }
 
 export default observer(LangToggle)

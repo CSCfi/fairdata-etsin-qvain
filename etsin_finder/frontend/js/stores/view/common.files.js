@@ -306,6 +306,13 @@ class Files {
     return dir
   }
 
+  getItemPath = (item) => {
+    if (item.parent && item.parent.type === 'directory') {
+      return `${this.getItemPath(item.parent)}/${item.name}`
+    }
+    return `/${item.name}`
+  }
+
   @computed get isLoadingProject() {
     if (this.loadingProjectInfo && !this.loadingProjectInfo.done) {
       return true
