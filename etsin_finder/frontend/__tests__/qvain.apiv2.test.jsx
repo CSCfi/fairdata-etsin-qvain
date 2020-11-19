@@ -14,16 +14,15 @@
  **  for more info: https://wiki.eduuni.fi/pages/viewpage.action?pageId=162084194
  */
 
-import SubmitClass from '../js/stores/view/qvain/qvain.submit'
 import axios from 'axios'
-import handleSubmitToBackend from '../js/components/qvain/utils/handleSubmit'
 import moment from 'moment'
+import SubmitClass from '../js/stores/view/qvain/qvain.submit'
+import handleSubmitToBackend from '../js/components/qvain/utils/handleSubmit'
 import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER, ACCESS_TYPE_URL } from '../js/utils/constants'
 import '../locale/translations'
 import urls from '../js/components/qvain/utils/urls'
-
-// first half of the tests mocks qvainFormSchema but the rest of the tests uses actual module
 import { qvainFormSchema, qvainFormSchemaDraft } from '../js/components/qvain/utils/formValidation'
+// first half of the tests mocks qvainFormSchema but the rest of the tests uses actual module
 const realQvainFormSchema = jest.requireActual('../js/components/qvain/utils/formValidation')
   .qvainFormSchema
 const realQvainFormSchemaDraft = jest.requireActual('../js/components/qvain/utils/formValidation')
@@ -31,20 +30,16 @@ const realQvainFormSchemaDraft = jest.requireActual('../js/components/qvain/util
 
 jest.mock('axios')
 
-jest.mock('../js/components/qvain/utils/handleSubmit', () => {
-  return jest.fn()
-})
+jest.mock('../js/components/qvain/utils/handleSubmit', () => jest.fn())
 
-jest.mock('../js/components/qvain/utils/formValidation', () => {
-  return {
-    qvainFormSchema: {
-      validate: jest.fn(),
-    },
-    qvainFormSchemaDraft: {
-      validate: jest.fn(),
-    },
-  }
-})
+jest.mock('../js/components/qvain/utils/formValidation', () => ({
+  qvainFormSchema: {
+    validate: jest.fn(),
+  },
+  qvainFormSchemaDraft: {
+    validate: jest.fn(),
+  },
+}))
 
 const errors = {
   missingFileOrigin: 'File origin is required.',
@@ -100,23 +95,21 @@ const generateDefaultDatasetForDraft = settings => ({
   ...settings,
 })
 
-const createMockQvain = settings => {
-  return {
-    Files: {
-      actionsToMetax: jest.fn(() => ({ files: [], directories: [] })),
-      metadataToMetax: jest.fn(() => ({ files: [], directories: [] })),
-    },
-    Actors: { checkProvenanceActors: jest.fn(() => true) },
-    addUnsavedMultiValueFields: jest.fn(),
-    OtherIdentifiers: { cleanupBeforeBackend: jest.fn(() => true) },
-    updateFiles: jest.fn(),
-    editDataset: jest.fn(),
-    setChanged: jest.fn(),
-    canRemoveFiles: true,
-    canSelectFiles: true,
-    ...settings,
-  }
-}
+const createMockQvain = settings => ({
+  Files: {
+    actionsToMetax: jest.fn(() => ({ files: [], directories: [] })),
+    metadataToMetax: jest.fn(() => ({ files: [], directories: [] })),
+  },
+  Actors: { checkProvenanceActors: jest.fn(() => true) },
+  addUnsavedMultiValueFields: jest.fn(),
+  OtherIdentifiers: { cleanupBeforeBackend: jest.fn(() => true) },
+  updateFiles: jest.fn(),
+  editDataset: jest.fn(),
+  setChanged: jest.fn(),
+  canRemoveFiles: true,
+  canSelectFiles: true,
+  ...settings,
+})
 
 const generalPostResponse = {
   data: {
@@ -192,12 +185,12 @@ describe('Submit.exec()', () => {
     expect(mockQvain.setChanged).toHaveBeenCalledWith(false)
   })
 
-  test(`when no actions to update, calls editDataset with data`, async () => {
+  test('when no actions to update, calls editDataset with data', async () => {
     await exec()
     expect(mockQvain.editDataset).toHaveBeenCalledWith(generalPostResponse.data)
   })
 
-  test(`when fileActions to update, calls editDataset with data from backend`, async () => {
+  test('when fileActions to update, calls editDataset with data from backend', async () => {
     mockQvain.Files.actionsToMetax.mockReturnValue({
       files: [{ identifier: 'some file' }],
       directories: [],
@@ -207,7 +200,7 @@ describe('Submit.exec()', () => {
     expect(mockQvain.editDataset).toHaveBeenCalledWith(generalGetResponse.data)
   })
 
-  test(`when newCumulativeState, calls editDataset with data from backend`, async () => {
+  test('when newCumulativeState, calls editDataset with data from backend', async () => {
     mockQvain.newCumulativeState = 'new state'
     axios.get.mockReturnValue(generalGetResponse)
     await exec()
