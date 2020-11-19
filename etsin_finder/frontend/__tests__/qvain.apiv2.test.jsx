@@ -91,9 +91,9 @@ const createMockQvain = settings => {
       actionsToMetax: jest.fn(() => ({ files: [], directories: [] })),
       metadataToMetax: jest.fn(() => ({ files: [], directories: [] })),
     },
-    checkProvenanceActors: jest.fn(() => true),
+    Actors: { checkProvenanceActors: jest.fn(() => true) },
     addUnsavedMultiValueFields: jest.fn(),
-    cleanupOtherIdentifiers: jest.fn(() => true),
+    OtherIdentifiers: { cleanupBeforeBackend: jest.fn(() => true) },
     updateFiles: jest.fn(),
     editDataset: jest.fn(),
     setChanged: jest.fn(),
@@ -141,20 +141,15 @@ describe('Submit.exec()', () => {
   })
 
   test('false from checkProvenanceActors should cancel post', async () => {
-    await exec(() => mockQvain.checkProvenanceActors.mockReturnValue(false))
-    expect(mockQvain.checkProvenanceActors).toHaveBeenCalledTimes(1)
+    await exec(() => mockQvain.Actors.checkProvenanceActors.mockReturnValue(false))
+    expect(mockQvain.Actors.checkProvenanceActors).toHaveBeenCalledTimes(1)
     expect(submitFunction).not.toHaveBeenCalled()
   })
 
-  test('false from cleanupOtherIdentifiers should cancel post', async () => {
-    await exec(() => mockQvain.cleanupOtherIdentifiers.mockReturnValue(false))
-    expect(mockQvain.cleanupOtherIdentifiers).toHaveBeenCalledTimes(1)
+  test('false from cleanupBeforeBackend should cancel post', async () => {
+    await exec(() => mockQvain.OtherIdentifiers.cleanupBeforeBackend.mockReturnValue(false))
+    expect(mockQvain.OtherIdentifiers.cleanupBeforeBackend).toHaveBeenCalledTimes(1)
     expect(axios.post).not.toHaveBeenCalled()
-  })
-
-  test('should call addUnsavedMultiValueFields', async () => {
-    await exec()
-    expect(mockQvain.addUnsavedMultiValueFields).toHaveBeenCalledTimes(1)
   })
 
   test('should set useDoiModalIsOpen to false', async () => {

@@ -97,11 +97,12 @@ class Submit {
 
   @action exec = async (submitFunction, schema = qvainFormSchema) => {
     const {
-      OtherIdentifiers: { cleanupOtherIdentifiers },
+      OtherIdentifiers: { cleanupBeforeBackend },
       editDataset,
       setChanged,
     } = this.Qvain
-    if (!cleanupOtherIdentifiers()) return
+
+    if (!cleanupBeforeBackend()) return
     if (!(await this.promptProvenancesAndCleanOtherIdentifiers())) return
 
     this.closeUseDoiModal()
