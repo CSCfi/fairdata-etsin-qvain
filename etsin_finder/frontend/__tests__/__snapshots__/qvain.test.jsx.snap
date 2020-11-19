@@ -148,6 +148,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
   <FieldOfScienceField />
   <LanguageField />
   <KeywordsField />
+  <SubjectHeadingsField />
 </div>
 `;
 
@@ -178,6 +179,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
   <FieldOfScienceField />
   <LanguageField />
   <KeywordsField />
+  <SubjectHeadingsField />
 </div>
 `;
 
@@ -536,6 +538,36 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     translationsRoot="qvain.description.otherIdentifiers"
     validationError=""
     value={Array []}
+  />
+</Card>
+`;
+
+exports[`Qvain.Description should render <SubjectHeadingsField /> 1`] = `
+<Card
+  bottomContent={false}
+>
+  <form__LabelLarge
+    htmlFor="subjectHeading-select"
+  >
+    <Translate
+      component="span"
+      content="qvain.description.subjectHeadings.title"
+    />
+  </form__LabelLarge>
+  <Translate
+    component="p"
+    content="qvain.description.subjectHeadings.help"
+  />
+  <Select
+    getter={Array []}
+    inModal={false}
+    isClearable={false}
+    isMulti={true}
+    metaxIdentifier="keyword"
+    model={[Function]}
+    name="subjectHeading"
+    placeholder="qvain.description.subjectHeadings.placeholder"
+    setter={[Function]}
   />
 </Card>
 `;

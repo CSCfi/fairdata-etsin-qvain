@@ -68,7 +68,6 @@ class ActorValidationSchema(Schema):
         else:
             raise ValidationError('Invalid actor type.')
 
-
 class LicenseValidationSchema(Schema):
     """Validation schema for licenses."""
 
@@ -137,7 +136,6 @@ class DatasetValidationSchema(Schema):
 
     Arguments:
         Schema {library} -- Marshmallows Schema library.
-
     """
 
     relation = fields.List(
@@ -171,6 +169,12 @@ class DatasetValidationSchema(Schema):
         fields.Str(),
         required=True,
         validate=lambda list: len(list) > 0
+    )
+    theme = fields.List(
+        fields.URL(
+            validate=Length(min=1)
+        ),
+        required=False,
     )
     actors = fields.List(fields.Nested(
         ActorValidationSchema),

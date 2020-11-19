@@ -50,6 +50,8 @@ const handleSubmitToBackend = (Env, values) => {
 
   const description = values.Description.toBackend()
 
+  const theme = values.SubjectHeadings.toBackend()
+
   const actors = values.Actors.toBackend()
 
   const spatial = values.Spatials.toBackend()
@@ -81,6 +83,7 @@ const handleSubmitToBackend = (Env, values) => {
     description,
     identifiers: values.OtherIdentifiers.storage,
     keywords: values.Keywords.toBackend(),
+    theme,
     actors,
     infrastructure: values.Infrastructures.storage,
     restrictionGrounds,

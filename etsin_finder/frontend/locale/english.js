@@ -626,6 +626,13 @@ const english = {
         help:
           'You can add multiple keywords by separating them with a comma (,). Dataset has to have at least one keyword.',
       },
+      subjectHeadings: {
+        title: 'Subject Headings',
+        infoText: 'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
+        placeholder: 'Type to search for available options',
+        help:
+          'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
+      },
       error: {
         title: 'A title is required in at least one language.',
         description: 'A description is required in at least one language.',
