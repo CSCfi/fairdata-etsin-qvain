@@ -161,7 +161,7 @@ describe('Submit.exec()', () => {
     expect(submitFunction).not.toHaveBeenCalled()
   })
 
-  test('false from cleanupOtherIdentifiers should cancel post', async () => {
+  test('false from cleanupBeforeBackend should cancel post', async () => {
     await exec(() => mockQvain.OtherIdentifiers.cleanupBeforeBackend.mockReturnValue(false))
     expect(mockQvain.OtherIdentifiers.cleanupBeforeBackend).toHaveBeenCalledTimes(1)
     expect(axios.post).not.toHaveBeenCalled()

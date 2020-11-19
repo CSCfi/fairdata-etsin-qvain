@@ -107,6 +107,7 @@ class Submit {
     } = this.Qvain
     this.response = undefined
     this.error = undefined
+
     if (!cleanupBeforeBackend()) return
     if (!(await this.promptProvenances())) return
 

@@ -5,11 +5,12 @@ from etsin_finder.qvain_light_dataset_schema import (
     DatasetValidationSchema as DatasetValidationSchemaV1
 )
 
+
 def validate(data, params):
-    """
-        Controller function for validation. 
-        Selects between draft and publish validations.
-        Wrap this function call with try catch
+    """Controller function for validation.
+
+    Selects between draft and publish validations.
+    Wrap this function call with try catch.
     """
     isDraft = params.get("draft", 'false')
     schema = PublishDatasetValidationSchema()
@@ -17,6 +18,7 @@ def validate(data, params):
         schema = DraftDatasetValidationSchema()
 
     return schema.loads(data)
+
 
 class DraftPersonValidationSchema(Schema):
     """Validation schema for person."""
@@ -90,6 +92,7 @@ class DraftLicenseValidationSchema(Schema):
     identifier = fields.URL()
     name = fields.Dict()
 
+
 class DraftProjectDetailsValidationSchema(Schema):
     """Validation schema for project details."""
 
@@ -148,6 +151,7 @@ class DraftProjectValidationSchema(Schema):
 
 class DraftDatasetValidationSchema(Schema):
     """Validation schema for draft dataset."""
+
     title = fields.Dict(
         validate=lambda x: len(x.get('en', [])) + len(x.get('fi', [])) > 0,
         required=True
@@ -238,6 +242,7 @@ class FileActionSchema(Schema):
     identifier = fields.Str(required=True)
     exclude = fields.Boolean()
 
+
 class FileActionsValidationSchema(Schema):
     """Validation schema for file and directory additions/removals."""
 
@@ -263,6 +268,7 @@ class FileMetadataSchema(Schema):
                 if data.get(field) is None:
                     raise ValidationError('Missing required field', field_name=field)
 
+
 class DirectoryMetadataSchema(Schema):
     """Validation schema for directory metadata changes."""
 
@@ -279,6 +285,7 @@ class DirectoryMetadataSchema(Schema):
             for field in ['title', 'use_category']:
                 if data.get(field) is None:
                     raise ValidationError('Missing required field', field_name=field)
+
 
 class UserMetadataValidationSchema(Schema):
     """Validation schema for dataset-specific file and directory metadata changes."""
