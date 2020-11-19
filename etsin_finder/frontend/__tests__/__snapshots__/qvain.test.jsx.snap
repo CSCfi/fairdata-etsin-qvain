@@ -365,7 +365,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
     component="p"
     content="qvain.description.datasetLanguage.help"
   />
-  <Select
+  <SearchSelect
     getter={Array []}
     id="datasetLanguage"
     inModal={false}
@@ -558,7 +558,7 @@ exports[`Qvain.Description should render <SubjectHeadingsField /> 1`] = `
     component="p"
     content="qvain.description.subjectHeadings.help"
   />
-  <Select
+  <SearchSelect
     getter={Array []}
     inModal={false}
     isClearable={false}
