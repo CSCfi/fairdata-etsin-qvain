@@ -265,7 +265,7 @@ const english = {
       datasets: 'Datasets',
       home: 'Home',
       qvain: 'Qvain',
-      error: 'Error - The page could not be found'
+      error: 'Error - The page could not be found',
     },
     language: {
       toggleLabel: 'Switch language to: %(otherLang)s',
@@ -354,6 +354,11 @@ const english = {
     },
   },
   qvain: {
+    validation: {
+      draft: {
+        description: 'Draft cannot be saved until the following errors are fixed:',
+      },
+    },
     nav: {
       home: 'Home',
       createDataset: 'Create Dataset',
@@ -1475,7 +1480,7 @@ const english = {
           levels: {
             organization: 'Organization',
             department: 'Department',
-            subdepartment: 'Subdepartment'
+            subdepartment: 'Subdepartment',
           },
           addButton: 'Add organization',
           editButton: 'Edit organization',

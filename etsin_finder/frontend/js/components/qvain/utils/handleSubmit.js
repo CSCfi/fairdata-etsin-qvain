@@ -45,7 +45,7 @@ const filesToMetax = (selectedFiles, existingFiles) => {
   return parsedFileData
 }
 
-const handleSubmitToBackend = (Env, values) => {
+const handleSubmitToBackend = (Env, values, options) => {
   const title = values.Title.toBackend()
 
   const description = values.Description.toBackend()
@@ -76,11 +76,13 @@ const handleSubmitToBackend = (Env, values) => {
 
   const restrictionGrounds = values.RestrictionGrounds.toBackend()
 
+  const keywords = values.Keywords.toBackend(options.addUnsaved)
+
   const obj = {
     title,
     description,
     identifiers: values.OtherIdentifiers.storage,
-    keywords: values.Keywords.toBackend(),
+    keywords,
     actors,
     infrastructure: values.Infrastructures.storage,
     restrictionGrounds,

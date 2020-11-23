@@ -263,7 +263,7 @@ const finnish = {
       datasets: 'Aineistot',
       home: 'Koti',
       qvain: 'Qvain',
-      error: 'Virhe - Sivua ei löydy'
+      error: 'Virhe - Sivua ei löydy',
     },
     language: {
       toggleLabel: 'Vaihda kieltä: %(otherLang)s',
@@ -354,6 +354,11 @@ const finnish = {
     },
   },
   qvain: {
+    validation: {
+      draft: {
+        description: 'Luonnosta ei voi tallentaa ennen kuin seuraavat virheet on korjattu:',
+      },
+    },
     nav: {
       home: 'Koti',
       createDataset: 'Luo aineisto',
@@ -726,7 +731,7 @@ const finnish = {
           levels: {
             organization: 'Organisaatio',
             department: 'Yksikkö',
-            subdepartment: 'Aliyksikkö'
+            subdepartment: 'Aliyksikkö',
           },
           addButton: 'Lisää organisaatio',
           editButton: 'Muokkaa organisaatiota',

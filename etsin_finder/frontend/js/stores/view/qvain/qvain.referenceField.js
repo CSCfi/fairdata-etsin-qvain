@@ -50,6 +50,7 @@ class ReferenceField {
   @action
   setItemStr = str => {
     this.itemStr = str
+    this.Parent.setChanged(true)
   }
 
   @action

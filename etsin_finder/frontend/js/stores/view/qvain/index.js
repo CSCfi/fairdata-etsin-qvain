@@ -55,6 +55,10 @@ class Qvain extends Resources {
   @action
   setChanged = changed => {
     this.changed = changed
+    if (changed) {
+      this.Submit.hasValidated = false
+      this.Submit.prevalidate()
+    }
   }
 
   @action saveExternalResource = resource => {

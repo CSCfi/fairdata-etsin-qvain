@@ -23,9 +23,15 @@ class Submit {
 
   @observable error = undefined
 
+  @observable draftValidationError = []
+
+  @observable publishValidationError = []
+
   @observable response = null
 
   @observable useDoiModalIsOpen = false
+
+  @observable hasValidated = false
 
   @action setLoading = state => {
     this.isLoading = state
@@ -156,6 +162,28 @@ class Submit {
     }
   }
 
+  @action prevalidate = async () => {
+    this.publishValidationError = []
+    this.draftValidationError = []
+    const dataset = this.prepareDataset({ addUnsaved: false })
+
+    // this.Qvain.OtherIdentifiers.validateStr()
+
+    try {
+      await qvainFormSchema.validate(dataset, { abortEarly: false })
+    } catch (error) {
+      console.log(error)
+      this.publishValidationError = error
+    }
+
+    try {
+      await qvainFormSchemaDraft.validate(dataset, { abortEarly: false })
+    } catch (error) {
+      console.log(error)
+      this.draftValidationError = error
+    }
+  }
+
   createNewDraft = async dataset => {
     const datasetsUrl = urls.v2.datasets()
     const res = await axios.post(datasetsUrl, dataset, { params: { draft: true } })
@@ -228,8 +256,8 @@ class Submit {
     return true
   }
 
-  @action prepareDataset = () => {
-    const dataset = handleSubmitToBackend(this.Qvain.Env, this.Qvain)
+  @action prepareDataset = options => {
+    const dataset = handleSubmitToBackend(this.Qvain.Env, this.Qvain, options)
     delete dataset.directories
     delete dataset.files
     return dataset

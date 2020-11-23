@@ -24,8 +24,8 @@ class Keywords extends ReferenceField {
     this.storage = dataset.keyword || []
   }
 
-  toBackend = () => {
-    if (this.itemStr !== '') {
+  toBackend = (addUnsaved = true) => {
+    if (this.itemStr !== '' && addUnsaved) {
       this.addKeyword()
     }
     return this.storage
