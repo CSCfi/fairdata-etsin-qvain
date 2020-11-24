@@ -194,20 +194,21 @@ class Qvain extends Resources {
   }
 
   // Dataset related
-
-  // Dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
-  @action editDataset = async dataset => {
-    this.original = { ...dataset }
-    this.deprecated = dataset.deprecated
+  @action loadBasicFields = dataset => {
     const researchDataset = dataset.research_dataset
-
-    // Load description
     this.resources.forEach(r => r.fromBackend(researchDataset, this))
+  }
+
+  // load fields that won't be duplicated by template copy
+  @action loadStatusAndFileFields = async (dataset) => {
+    this.deprecated = dataset.deprecated
 
     // Load data catalog
     this.dataCatalog =
       dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
+
+    const researchDataset = dataset.research_dataset
 
     // Load preservation state
     this.preservationState = dataset.preservation_state
@@ -241,9 +242,9 @@ class Qvain extends Resources {
           r.download_url ? r.download_url.identifier : undefined,
           r.use_category
             ? {
-                label: r.use_category.pref_label.en,
-                value: r.use_category.identifier,
-              }
+              label: r.use_category.pref_label.en,
+              value: r.use_category.identifier,
+            }
             : undefined
         )
       )
@@ -253,8 +254,19 @@ class Qvain extends Resources {
     if (this.Env.metaxApiV2) {
       await this.Files.openDataset(dataset)
     }
+  }
 
+  @action editDataset = async dataset => {
+    this.original = { ...dataset }
+    this.loadBasicFields(dataset)
+    this.loadStatusAndFileFields(dataset)
     this.setChanged(false)
+  }
+
+  @action resetWithTemplate = async dataset => {
+    this.resetQvainStore()
+    this.loadBasicFields(dataset)
+    this.setChanged(true)
   }
 
   @action setOriginal = newOriginal => {

@@ -81,6 +81,7 @@ function Dataset({
   dataset,
   currentTimestamp,
   handleCreateNewVersion,
+  handleUseAsTemplate,
   handleEnterEdit,
   openRemoveModal,
   indent,
@@ -90,6 +91,13 @@ function Dataset({
     Env: { metaxApiV2, getEtsinUrl },
   } = useStores()
   const actions = []
+
+  actions.push({
+    text: 'qvain.datasets.useAsTemplate',
+    danger: false,
+    handler: () => handleUseAsTemplate(dataset),
+  })
+
   if (
     metaxApiV2 &&
     !dataset.next_draft &&
@@ -166,6 +174,7 @@ Dataset.propTypes = {
   dataset: PropTypes.object.isRequired,
   currentTimestamp: PropTypes.object.isRequired,
   handleEnterEdit: PropTypes.func.isRequired,
+  handleUseAsTemplate: PropTypes.func.isRequired,
   handleCreateNewVersion: PropTypes.func.isRequired,
   openRemoveModal: PropTypes.func.isRequired,
   indent: PropTypes.bool,
