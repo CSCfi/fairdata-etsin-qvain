@@ -13,7 +13,7 @@
 /**
  * This file contains functionality copied from qvain/general/form.jsx
  *
- * This is, until further notice, done to keep Etsin and Qvain Light separate, as two modules in the same app.
+ * This is, until further notice, done to keep Etsin and Qvain separate, as two modules in the same app.
  */
 
 import React from 'react'

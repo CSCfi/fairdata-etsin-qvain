@@ -227,7 +227,7 @@ class FilesV1 {
 
   @action updateFileMetadata = file => {
     // After editing file metadata, update the file in the hierarchy if possible.
-    // The input file comes from a Metax response so needs to be transformed into Qvain light format.
+    // The input file comes from a Metax response so needs to be transformed into Qvain format.
     const flat = getFiles(this.hierarchy)
     const hierarchyFile = flat.find(f => f.identifier === file.identifier)
     if (hierarchyFile) {
