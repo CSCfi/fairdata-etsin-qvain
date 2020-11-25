@@ -211,13 +211,13 @@ def get_metax_api_config(is_testing):
     return metax_api_conf
 
 def get_metax_qvain_api_config(is_testing):
-    """Get Metax API config for Qvain-Light.
+    """Get Metax API config for Qvain.
 
     Args:
         is_testing (bool): Testing.
 
     Returns:
-        dict: Metax api config for Qvain Light, or None.
+        dict: Metax api config for Qvain, or None.
 
     """
     if executing_travis() or is_testing:
