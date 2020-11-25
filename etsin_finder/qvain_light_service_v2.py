@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Used for performing operations related to Metax for Qvain Light"""
+"""Used for performing operations related to Metax for Qvain"""
 
 import requests
 import json
