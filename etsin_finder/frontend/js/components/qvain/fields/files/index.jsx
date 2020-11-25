@@ -45,10 +45,10 @@ const Files = () => {
     if (dataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
       return (
         <>
-          {metaxApiV2 ? <CumulativeStateV2 /> : <CumulativeState />}
           <ContainerSubsectionBottom>
             <FilePickerComponent />
           </ContainerSubsectionBottom>
+          {metaxApiV2 ? <CumulativeStateV2 /> : <CumulativeState />}
         </>
       )
     }
