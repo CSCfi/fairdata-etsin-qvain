@@ -1,4 +1,4 @@
-"""Utilities for transforming the data from Qvain Light form to METAX compatible format"""
+"""Utilities for transforming the data from Qvain form to METAX compatible format"""
 
 from etsin_finder import qvain_light_utils
 

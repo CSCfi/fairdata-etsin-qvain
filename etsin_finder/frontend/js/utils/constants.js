@@ -1,4 +1,4 @@
-// Constants used in Etsin and Qvain Light
+// Constants used in Etsin and Qvain
 
 export const DOWNLOAD_API_REQUEST_STATUS = {
   PENDING: 'PENDING',
