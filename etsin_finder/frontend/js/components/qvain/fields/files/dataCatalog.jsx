@@ -66,7 +66,6 @@ const DataCatalog = () => {
   // PAS catalog cannot be selected by the user
   const availableOptions = isPas ? pasOptions : options
   const catalogSelectValue = availableOptions.find(opt => opt.value === dataCatalog)
-  console.log(original?.data_catalog?.identifier)
   const isDataCatalogNotDecided =
     metaxApiV2 &&
     (!original?.data_catalog || original?.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.DFT)

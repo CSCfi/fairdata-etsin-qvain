@@ -354,11 +354,7 @@ const english = {
     },
   },
   qvain: {
-    validation: {
-      draft: {
-        description: 'Draft cannot be saved until the following errors are fixed:',
-      },
-    },
+    validation: {},
     nav: {
       home: 'Home',
       createDataset: 'Create Dataset',
@@ -750,6 +746,12 @@ const english = {
       },
     },
     validationMessages: {
+      draft: {
+        description: 'Draft cannot be saved until the following errors are fixed:',
+      },
+      publish: {
+        description: 'Dataset cannot be published before following errors are fixed:',
+      },
       title: {
         string: 'The title must be a string value.',
         max: 'The title is too long.',
@@ -839,6 +841,7 @@ const english = {
       files: {
         dataCatalog: {
           required: 'File origin is required.',
+          wrongType: 'File origin is wrong type or it is missing.',
         },
         file: {
           title: {

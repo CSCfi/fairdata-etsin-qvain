@@ -251,6 +251,10 @@ const actorOrganizationSchema = yup.object().shape({
 const dataCatalogSchema = yup
   .string()
   .required(translate('qvain.validationMessages.files.dataCatalog.required'))
+  .matches(
+    /urn:nbn:fi:att:data-catalog-(?!dft)/,
+    translate('qvain.validationMessages.files.dataCatalog.wrongType')
+  )
 
 // Data catalog for draft
 const dataCatalogSchemaDraft = yup.string()

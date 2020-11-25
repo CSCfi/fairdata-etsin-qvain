@@ -2,7 +2,7 @@
  **  Files v2 submit cases frontend tests
  **
  **  Files v2 has 144 theoretical test conditions. Almost half of these cases are inactive or not possible at all.
- **  The ultimate goal is to test out all the test cases that can be tested.
+ **  These tests will test all the cases that can be tested.
  **  Tests lean heavily on the documentation found in the link below.
  **  The cases are named after the theoretical number column.
  **  There's also bunch of typical tests that were made during the development of qvain.submit
@@ -90,8 +90,6 @@ const generateDefaultDatasetForDraft = settings => ({
   description: { fi: '', en: '' },
   cumulativeState: CUMULATIVE_STATE.NO,
   accessType: { url: ACCESS_TYPE_URL.OPEN },
-  useDoi: false,
-  dataCatalog: DATA_CATALOG_IDENTIFIER.IDA,
   ...settings,
 })
 
@@ -154,12 +152,6 @@ describe('Submit.exec()', () => {
     expect(submitFunction).not.toHaveBeenCalled()
   })
 
-  test('false from cleanupBeforeBackend should cancel post', async () => {
-    await exec(() => mockQvain.OtherIdentifiers.cleanupBeforeBackend.mockReturnValue(false))
-    expect(mockQvain.OtherIdentifiers.cleanupBeforeBackend).toHaveBeenCalledTimes(1)
-    expect(axios.post).not.toHaveBeenCalled()
-  })
-
   test('should set useDoiModalIsOpen to false', async () => {
     await exec(() => Submit.openUseDoiModal())
     expect(Submit.useDoiModalIsOpen).toBe(false)
@@ -205,6 +197,60 @@ describe('Submit.exec()', () => {
     axios.get.mockReturnValue(generalGetResponse)
     await exec()
     expect(mockQvain.editDataset).toHaveBeenCalledWith(generalGetResponse.data)
+  })
+})
+
+describe('prevalidate', () => {
+  let Submit, mockQvain
+  beforeEach(() => {
+    mockQvain = createMockQvain()
+    Submit = new SubmitClass(mockQvain)
+    handleSubmitToBackend.mockReturnValue(generateDefaultDatasetForPublish)
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  describe('when validation returns nothing', () => {
+    beforeEach(async () => {
+      await Submit.prevalidate()
+    })
+
+    test('should set Validation errors as empty array', () => {
+      expect(qvainFormSchema.validate).toHaveBeenCalled()
+      expect(qvainFormSchemaDraft.validate).toHaveBeenCalled()
+    })
+
+    test('should set isDraftButtonDisabled and isPublishButtonDisabled to false', () => {
+      expect(Submit.isDraftButtonDisabled).toBe(false)
+      expect(Submit.isPublishButtonDisabled).toBe(false)
+    })
+
+    test('should setValidationErrors as an empty array', () => {
+      expect(Submit.draftValidationError).toEqual([])
+      expect(Submit.publishValidationError).toEqual([])
+    })
+  })
+
+  describe('when validation excepts', () => {
+    const publishError = 'publish error'
+    const draftError = 'draft error'
+    beforeEach(async () => {
+      qvainFormSchema.validate.mockReturnValue(Promise.reject(publishError))
+      qvainFormSchemaDraft.validate.mockReturnValue(Promise.reject(draftError))
+      await Submit.prevalidate()
+    })
+
+    test('should setValidationErrors', () => {
+      expect(Submit.publishValidationError).toEqual(publishError)
+      expect(Submit.draftValidationError).toEqual(draftError)
+    })
+
+    test('should set isDraftButtonDisabled and isPublishButtonDisabled to true', () => {
+      expect(Submit.isDraftButtonDisabled).toBe(true)
+      expect(Submit.isPublishButtonDisabled).toBe(true)
+    })
   })
 })
 

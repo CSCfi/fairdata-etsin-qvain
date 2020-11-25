@@ -30,7 +30,7 @@ const TooltipHoverOnSave = ({ isOpen, children, errors, description }) => {
         <TooltipDownV2>
           <TooltipArrowDown />
           <TooltipTextBold>
-            <Translate constent={description} />
+            <Translate content={description} component={TooltipText} />
             <TooltipText>{errors}</TooltipText>
           </TooltipTextBold>
         </TooltipDownV2>
@@ -116,4 +116,5 @@ const TooltipTextBold = styled(TooltipText)`
   box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.3);
   padding: 10px 15px;
   border-radius: 5px;
+  min-width: 440px;
 `

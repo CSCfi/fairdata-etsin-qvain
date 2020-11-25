@@ -354,11 +354,7 @@ const finnish = {
     },
   },
   qvain: {
-    validation: {
-      draft: {
-        description: 'Luonnosta ei voi tallentaa ennen kuin seuraavat virheet on korjattu:',
-      },
-    },
+    validation: {},
     nav: {
       home: 'Koti',
       createDataset: 'Luo aineisto',
@@ -844,6 +840,12 @@ const finnish = {
       },
     },
     validationMessages: {
+      draft: {
+        description: 'Luonnosta ei voi tallentaa ennen kuin seuraavat virheet on korjattu:',
+      },
+      publish: {
+        description: 'Aineistoa ei voida julkaista ennen kuin seuraavat virheet on korjattu:',
+      },
       title: {
         string: 'Otsikon tulisi olla arvoltaan merkkijono.',
         max: 'Otsikko on liian pitkä.',
@@ -935,6 +937,7 @@ const finnish = {
       files: {
         dataCatalog: {
           required: 'Tiedoston lähde on pakollinen kenttä.',
+          wrongType: 'Tiedoston lähde on väärää tyyppiä tai se puuttuu kokonaan.',
         },
         file: {
           title: {

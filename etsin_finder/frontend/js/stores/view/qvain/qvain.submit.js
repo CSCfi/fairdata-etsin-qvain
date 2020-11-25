@@ -67,6 +67,18 @@ class Submit {
     return DATASET_STATE.PUBLISHED
   }
 
+  @computed get isDraftButtonDisabled() {
+    if (!this.draftValidationError) return false
+    if (this.draftValidationError.length === 0) return false
+    return true
+  }
+
+  @computed get isPublishButtonDisabled() {
+    if (!this.publishValidationError) return false
+    if (this.publishValidationError.length === 0) return false
+    return true
+  }
+
   @action submitDraft = async () => {
     switch (this.submitType) {
       case DATASET_STATE.NEW:
@@ -106,15 +118,10 @@ class Submit {
   }
 
   @action exec = async (submitFunction, schema = qvainFormSchema) => {
-    const {
-      OtherIdentifiers: { cleanupBeforeBackend },
-      editDataset,
-      setChanged,
-    } = this.Qvain
+    const { editDataset, setChanged } = this.Qvain
     this.response = undefined
     this.error = undefined
 
-    if (!cleanupBeforeBackend()) return
     if (!(await this.promptProvenances())) return
 
     this.closeUseDoiModal()
@@ -162,28 +169,6 @@ class Submit {
     }
   }
 
-  @action prevalidate = async () => {
-    this.publishValidationError = []
-    this.draftValidationError = []
-    const dataset = this.prepareDataset({ addUnsaved: false })
-
-    // this.Qvain.OtherIdentifiers.validateStr()
-
-    try {
-      await qvainFormSchema.validate(dataset, { abortEarly: false })
-    } catch (error) {
-      console.log(error)
-      this.publishValidationError = error
-    }
-
-    try {
-      await qvainFormSchemaDraft.validate(dataset, { abortEarly: false })
-    } catch (error) {
-      console.log(error)
-      this.draftValidationError = error
-    }
-  }
-
   createNewDraft = async dataset => {
     const datasetsUrl = urls.v2.datasets()
     const res = await axios.post(datasetsUrl, dataset, { params: { draft: true } })
@@ -216,8 +201,8 @@ class Submit {
     const res = await this.createNewDraft(dataset)
     // Publishes an unpublished draft dataset
     const url = urls.v2.rpc.publishDataset()
-    const resp = await axios.post(url, null, { params: { identifier: res.data.identifier } })
-    return resp
+    await axios.post(url, null, { params: { identifier: res.data.identifier } })
+    return res
   }
 
   publishDraft = async dataset => {
@@ -256,8 +241,8 @@ class Submit {
     return true
   }
 
-  @action prepareDataset = options => {
-    const dataset = handleSubmitToBackend(this.Qvain.Env, this.Qvain, options)
+  @action prepareDataset = () => {
+    const dataset = handleSubmitToBackend(this.Qvain.Env, this.Qvain)
     delete dataset.directories
     delete dataset.files
     return dataset
@@ -321,6 +306,35 @@ class Submit {
       }
       res()
     })
+
+  // validation
+  @action setDraftValidationError = error => {
+    this.draftValidationError = error
+  }
+
+  @action setPublishValidationError = error => {
+    this.publishValidationError = error
+  }
+
+  @action prevalidate = async () => {
+    this.setPublishValidationError([])
+    this.setDraftValidationError([])
+    const dataset = this.prepareDataset()
+
+    // this.Qvain.OtherIdentifiers.validateStr()
+
+    try {
+      await qvainFormSchema.validate(dataset, { abortEarly: false })
+    } catch (error) {
+      this.setPublishValidationError(error)
+    }
+
+    try {
+      await qvainFormSchemaDraft.validate(dataset, { abortEarly: false })
+    } catch (error) {
+      this.setDraftValidationError(error)
+    }
+  }
 }
 
 export default Submit

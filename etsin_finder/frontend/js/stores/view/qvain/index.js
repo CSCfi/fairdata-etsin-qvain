@@ -126,7 +126,7 @@ class Qvain extends Resources {
   @action
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
-    this.changed = true
+    this.setChanged(true)
 
     // Remove useDoi if dataCatalog is ATT
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {

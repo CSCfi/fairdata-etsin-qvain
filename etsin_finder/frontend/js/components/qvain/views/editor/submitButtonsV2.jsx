@@ -16,6 +16,8 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history 
         draftValidationError,
         publishValidationError,
         prevalidate,
+        isDraftButtonDisabled,
+        isPublishButtonDisabled,
       },
       original,
     },
@@ -42,7 +44,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history 
       <TooltipHoverOnSave
         isOpen={draftButtonHover}
         errors={draftValidationError?.errors || []}
-        description="qvain.validation.draft.description"
+        description="qvain.validationMessages.draft.description"
       >
         <WrapperDivForHovering
           onMouseOver={() => {
@@ -50,7 +52,11 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history 
           }}
           onMouseLeave={() => setDraftButtonHover(false)}
         >
-          <SubmitButton id="draft-btn" disabled={disabled} onClick={submitDraft}>
+          <SubmitButton
+            id="draft-btn"
+            disabled={disabled || isDraftButtonDisabled}
+            onClick={submitDraft}
+          >
             <Translate content="qvain.saveDraft" />
           </SubmitButton>
         </WrapperDivForHovering>
@@ -58,7 +64,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history 
       <TooltipHoverOnSave
         isOpen={publishButtonHover}
         errors={prepareErrors(publishValidationError)}
-        description="qvain.validation.draft.description"
+        description="qvain.validationMessages.publish.description"
       >
         <WrapperDivForHovering
           onMouseOver={() => {
@@ -66,10 +72,13 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history 
           }}
           onMouseLeave={() => {
             setPublishButtonHover(false)
-            console.log('moi')
           }}
         >
-          <SubmitButton id="publish-btn" disabled={disabled} onClick={submitPublish}>
+          <SubmitButton
+            id="publish-btn"
+            disabled={disabled || isPublishButtonDisabled}
+            onClick={submitPublish}
+          >
             <Translate content="qvain.submit" />
           </SubmitButton>
         </WrapperDivForHovering>
