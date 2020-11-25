@@ -86,7 +86,7 @@ const redirectToQvain = (isQvain, getQvainUrl) => props => {
   return ''
 }
 
-// Restrict access to Qvain Light
+// Restrict access to Qvain
 // Since I couldn't get Private Routes to work, here's a workaround
 
 const renderQvain = props => <Qvain {...props} />

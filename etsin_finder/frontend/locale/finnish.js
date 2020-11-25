@@ -400,7 +400,7 @@ const finnish = {
     unsavedChanges:
       'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
     consent:
-      'Käyttämällä Qvain Light -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain Light-työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
+      'Käyttämällä Qvain -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain -työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
       success: 'Aineisto julkaistu!',
       draftSuccess: 'Luonnos tallennettu!',
@@ -442,7 +442,7 @@ const finnish = {
       'virheilmoituksen, jos tilit eivät ole linkitetty. Linkityksen voi tehdä',
     notCSCUserLink: ' CSC asiakas porttaalissa',
     notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
-    notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
+    notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain -palvelua.',
     titleCreate: 'Lisää uusi aineisto',
     titleEdit: 'Muokkaa aineistoa',
     titleLoading: 'Ladataan aineistoa',
@@ -1235,7 +1235,7 @@ const finnish = {
       external: {
         title: 'Ulkoiset tiedostot (ATT)',
         infoText:
-          'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto / sen lisenssitieto löytyvät (sivun URL). Voit antaa myös suoran latauslinkin, jos sellainen on. Tiedostoa ei ladata Qvain Lightiin, vaan antamasi sivun URL toimii linkkinä sivulle, jossa tiedosto sijaitsee sekä tiedoston latauslinkin kauttaja pääsee suoraan aloittamaan tiedoston lataamisen omalle koneelleen.',
+          'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto / sen lisenssitieto löytyvät (sivun URL). Voit antaa myös suoran latauslinkin, jos sellainen on. Tiedostoa ei ladata Qvaimeen, vaan antamasi sivun URL toimii linkkinä sivulle, jossa tiedosto sijaitsee sekä tiedoston latauslinkin kauttaja pääsee suoraan aloittamaan tiedoston lataamisen omalle koneelleen.',
         help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
           label: 'Lisää linkki ulkoiseen tiedostoon',
@@ -1604,7 +1604,7 @@ const finnish = {
   userAuthenticationError: {
     header: 'Kirjautuminen epäonnistui.',
     content:
-      'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
+      'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
   },
   userHomeOrganizationErrror: {
     header: 'Kirjautuminen epäonnistui.',
