@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Used for performing operations related to Metax for Etsin and Qvain Light"""
+"""Used for performing operations related to Metax for Etsin and Qvain"""
 
 import requests
 
@@ -17,7 +17,7 @@ from etsin_finder.request_utils import make_request
 
 
 class MetaxCommonAPIService(FlaskService):
-    """Service for Metax API v2 requests used by both Etsin and Qvain Light."""
+    """Service for Metax API v2 requests used by both Etsin and Qvain."""
 
     def __init__(self, app):
         """
