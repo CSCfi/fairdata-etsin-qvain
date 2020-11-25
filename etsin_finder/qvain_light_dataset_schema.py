@@ -1,4 +1,4 @@
-"""Validation schemas for form data coming in from Qvain Light"""
+"""Validation schemas for form data coming in from Qvain"""
 from marshmallow import Schema, fields, validates_schema, ValidationError
 from marshmallow.validate import Length, OneOf
 
