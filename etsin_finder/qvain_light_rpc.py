@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""RPC API endpoints, meant to be used by Qvain Light form"""
+"""RPC API endpoints, meant to be used by the Qvain form"""
 
 from flask_restful import reqparse, Resource
 
