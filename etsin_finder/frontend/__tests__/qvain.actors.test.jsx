@@ -21,7 +21,7 @@ import { ButtonGroup, DeleteButton } from '../js/components/qvain/general/button
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
 import { Actor, Organization, Person, maybeReference } from '../js/stores/view/qvain/qvain.actors'
-import LocaleStore from '../js/stores/view/language'
+import LocaleStore from '../js/stores/view/locale'
 import organizationMockGet, {
   dataset,
   AaltoIdentifier,

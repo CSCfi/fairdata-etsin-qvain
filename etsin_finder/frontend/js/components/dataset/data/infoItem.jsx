@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
-import Locale from '../../../stores/view/language'
+import Locale from '../../../stores/view/locale'
 
 const InfoItem = props => (
   <tr>

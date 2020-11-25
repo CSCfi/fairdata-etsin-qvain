@@ -4,7 +4,7 @@ import { shallow } from 'enzyme'
 
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
-import LocaleStore from '../js/stores/view/language'
+import LocaleStore from '../js/stores/view/locale'
 import { sortFunc } from '../js/stores/view/common.files.utils'
 import {
   itemLoaderNew,
