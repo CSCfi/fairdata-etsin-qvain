@@ -90,10 +90,12 @@ function Dataset({
     Env: { metaxApiV2, getEtsinUrl },
   } = useStores()
   const actions = []
+
   if (
     metaxApiV2 &&
     !dataset.next_draft &&
     dataset.next_dataset_version === undefined &&
+    dataset.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.IDA &&
     dataset.state === 'published'
   ) {
     actions.push({
