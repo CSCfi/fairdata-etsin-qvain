@@ -5,7 +5,7 @@ import axios from 'axios'
 import '../locale/translations.js'
 import { RemoveModal as RemoveModalBase } from '../js/components/qvain/views/datasets/removeModal'
 import QvainStoreClass from '../js/stores/view/qvain'
-import LocaleStore from '../js/stores/view/language'
+import LocaleStore from '../js/stores/view/locale'
 import EnvStore from '../js/stores/domain/env'
 
 jest.mock('axios')

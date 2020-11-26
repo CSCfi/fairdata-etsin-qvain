@@ -121,7 +121,9 @@ const HideRemovedLabel = styled(Label)`
 
 const Controls = styled.div`
   display: flex;
-  margin-bottom: 1rem;
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
 `
 
 const Title = styled.h3`
