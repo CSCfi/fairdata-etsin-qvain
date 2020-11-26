@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import Locale from './view/language'
+import Locale from './view/locale'
 import Env from './domain/env'
 import Auth from './domain/auth'
 import ElasticQuery from './view/elasticquery'
