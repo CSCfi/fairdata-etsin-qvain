@@ -494,6 +494,7 @@ const english = {
       help: 'Choose a dataset to edit or create a new dataset',
       createButton: 'Create new dataset',
       createNewVersion: 'Create new version',
+      useAsTemplate: 'Use as template',
       state: {
         draft: 'Draft',
         published: 'Published',

@@ -212,6 +212,17 @@ class DatasetTable extends Component {
     this.props.history.push(getQvainUrl(`/dataset/${dataset.identifier}`))
   }
 
+  handleUseAsTemplate = dataset => {
+    const { getQvainUrl } = this.props.Stores.Env
+    this.props.history.push(getQvainUrl('/dataset'))
+
+    if (dataset.next_draft?.identifier) {
+      this.props.Stores.Qvain.resetWithTemplate(dataset.next_draft)
+    } else {
+      this.props.Stores.Qvain.resetWithTemplate(dataset)
+    }
+  }
+
   handleChangePage = pageNum => () => {
     const actualNum = pageNum - 1
     this.setState(state => ({
@@ -318,6 +329,7 @@ class DatasetTable extends Component {
                   key={group[0].identifier}
                   currentTimestamp={this.state.currentTimestamp}
                   handleEnterEdit={this.handleEnterEdit}
+                  handleUseAsTemplate={this.handleUseAsTemplate}
                   handleCreateNewVersion={this.handleCreateNewVersion}
                   openRemoveModal={this.openRemoveModal}
                   highlight={publishedDataset}
