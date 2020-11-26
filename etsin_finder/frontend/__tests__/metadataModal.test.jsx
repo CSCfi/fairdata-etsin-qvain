@@ -14,7 +14,7 @@ import MetadataModal from '../js/components/qvain/fields/files/metadataModal'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
 import { Project, File, Directory } from '../js/stores/view/common.files.items'
-import LocaleStore from '../js/stores/view/language'
+import LocaleStore from '../js/stores/view/locale'
 
 const getStores = () => {
   Env.setMetaxApiV2(true)
