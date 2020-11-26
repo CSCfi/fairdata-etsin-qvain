@@ -495,6 +495,7 @@ const finnish = {
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Lisää uusi aineisto',
       createNewVersion: 'Luo uusi versio',
+      useAsTemplate: 'Käytä mallina',
       state: {
         draft: 'Luonnos',
         published: 'Julkaistu',
