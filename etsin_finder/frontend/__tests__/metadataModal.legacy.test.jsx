@@ -13,7 +13,7 @@ import MetadataModal from '../js/components/qvain/fields/files/metadataModal'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
 import { DatasetFile, Directory } from '../js/stores/view/qvain/qvain.filesv1.js'
-import LocaleStore from '../js/stores/view/language'
+import LocaleStore from '../js/stores/view/locale'
 import { StoresProvider } from '../js/stores/stores.jsx'
 
 jest.mock('axios')

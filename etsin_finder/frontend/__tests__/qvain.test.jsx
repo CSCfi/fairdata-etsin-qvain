@@ -31,7 +31,7 @@ import {
 import { SlidingContent } from '../js/components/qvain/general/card'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass, { ExternalResource } from '../js/stores/view/qvain'
-import LocaleStore from '../js/stores/view/language'
+import LocaleStore from '../js/stores/view/locale'
 import TablePasState from '../js/components/qvain/views/datasets/tablePasState'
 import {
   filterByTitle,
