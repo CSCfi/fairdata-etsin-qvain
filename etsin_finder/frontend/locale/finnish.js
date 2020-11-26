@@ -628,6 +628,13 @@ const finnish = {
         help:
           'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.',
       },
+      subjectHeadings: {
+        title: 'Asiasanat',
+        infoText: 'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
+        placeholder: 'Hae vaihtoehtoja',
+        help:
+          'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
+      },
       error: {
         title: 'Otsikko on pakollinen ainakin yhdellä kielellä.',
         description: 'Kuvaus on pakollinen ainakin yhdellä kielellä.',

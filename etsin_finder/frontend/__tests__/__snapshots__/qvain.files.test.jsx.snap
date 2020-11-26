@@ -149,6 +149,7 @@ Object {
   "restrictionGrounds": undefined,
   "spatial": Array [],
   "temporal": Array [],
+  "theme": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -306,6 +307,7 @@ Object {
   "restrictionGrounds": undefined,
   "spatial": Array [],
   "temporal": Array [],
+  "theme": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -463,6 +465,7 @@ Object {
   "restrictionGrounds": undefined,
   "spatial": Array [],
   "temporal": Array [],
+  "theme": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -620,6 +623,7 @@ Object {
   "restrictionGrounds": undefined,
   "spatial": Array [],
   "temporal": Array [],
+  "theme": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
@@ -777,6 +781,7 @@ Object {
   "restrictionGrounds": undefined,
   "spatial": Array [],
   "temporal": Array [],
+  "theme": Array [],
   "title": Object {
     "en": "",
     "fi": "Title",
