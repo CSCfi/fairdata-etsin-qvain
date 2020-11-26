@@ -257,10 +257,10 @@ class Qvain extends Resources {
   }
 
   @action editDataset = async dataset => {
+    this.setChanged(false)
     this.original = { ...dataset }
     this.loadBasicFields(dataset)
-    this.loadStatusAndFileFields(dataset)
-    this.setChanged(false)
+    await this.loadStatusAndFileFields(dataset)
   }
 
   @action resetWithTemplate = async dataset => {
