@@ -25,7 +25,7 @@ import { DeleteButton } from '../js/components/qvain/general/buttons'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
 import { Directory } from '../js/stores/view/qvain/qvain.filesv1'
-import LocaleStore from '../js/stores/view/language'
+import LocaleStore from '../js/stores/view/locale'
 
 jest.mock('uuid', () => {
   let id = 0

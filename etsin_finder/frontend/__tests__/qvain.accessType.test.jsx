@@ -8,7 +8,7 @@ import { ACCESS_TYPE_URL } from '../js/utils/constants'
 import Auth from '../js/stores/domain/auth'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
-import LocaleStore from '../js/stores/view/language'
+import LocaleStore from '../js/stores/view/locale'
 import accessTypeResponse from './__testdata__/accessTypes.data'
 
 jest.mock('axios')

@@ -51,6 +51,22 @@ const Flex = styled.div`
   margin-bottom: 0.5em;
 `
 
+const Controls = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  margin: -0.25rem;
+  > * {
+    margin: 0.25rem;
+  }
+`
+
+const Spacer = styled.div`
+  flex-basis: 0;
+  flex-grow: 1;
+  margin: 0;
+`
+
 class Description extends Component {
   constructor(props) {
     super(props)
@@ -96,7 +112,7 @@ class Description extends Component {
     return (
       <div className="dsContent">
         <Labels>
-          <Flex>
+          <Controls>
             {this.props.dataset.data_catalog.catalog_json.dataset_versioning && isVersion && (
               <VersionChanger versionSet={versions} idn={datasetIdentifier} />
             )}
@@ -116,10 +132,9 @@ class Description extends Component {
                   : null
               }
             />
-          </Flex>
-          <FormatChangerPosition>
+            <Spacer />
             <FormatChanger idn={this.props.match.params.identifier} />
-          </FormatChangerPosition>
+          </Controls>
           <Flex>
             <ErrorBoundary>
               {this.checkEmails(this.props.emails) && !this.props.harvested && (
@@ -261,12 +276,6 @@ const PasInfo = styled.div`
   font-size: 0.9em;
   padding-top: 5px;
   padding-bottom: 5px;
-`
-
-const FormatChangerPosition = styled.div`
-  position: absolute;
-  top: -5px;
-  right: 0px;
 `
 
 const DatasetDescription = styled.div`

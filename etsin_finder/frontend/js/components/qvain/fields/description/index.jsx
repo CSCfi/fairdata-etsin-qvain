@@ -11,6 +11,7 @@ import { SectionTitle } from '../../general/section'
 import Tooltip from '../../general/section/tooltip'
 import { HelpIcon } from '../../general/modal/form'
 import DescriptionInfo from './descriptionInfo'
+import SubjectHeadings from './subjectHeadings'
 
 const Description = () => {
   const [tooltipOpen, setTooltipOpen] = useState(false)
@@ -42,6 +43,7 @@ const Description = () => {
         <FieldOfScienceField />
         <LanguageField />
         <KeywordsField />
+        <SubjectHeadings />
       </React.Fragment>
     </div>
   )

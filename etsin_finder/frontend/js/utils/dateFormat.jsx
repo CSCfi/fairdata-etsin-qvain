@@ -10,7 +10,7 @@
  */
 }
 
-import Locale from '../stores/view/language'
+import Locale from '../stores/view/locale'
 
 const formats = {
   datetime: {
