@@ -299,9 +299,10 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "contributor": alter_role_data(data.get("actors"), "contributor"),
             "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
             "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
-            "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
-            "language": _to_metax_field_of_science(data.get("datasetLanguage")),
+            "field_of_science": _to_identifier_objects(data.get("fieldOfScience")),
+            "language": _to_identifier_objects(data.get("datasetLanguage")),
             "keyword": data.get("keywords"),
+            "theme": _to_identifier_objects(data.get("theme")),
             "access_rights": access_rights_to_metax(data),
             "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('att') else "",
             "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
@@ -398,16 +399,8 @@ def remove_deleted_datasets_from_results(result):
     result['results'] = new_results
     return result
 
-def _to_metax_field_of_science(fieldOfScienceArray):
-    metax_fields_of_science = []
-    for element in fieldOfScienceArray:
-        metax_field_of_science_object = {'identifier': element }
-        metax_fields_of_science.append(metax_field_of_science_object)
-    return metax_fields_of_science
-
-
-def _to_metax_dataset_language(datasetLanguageArray):
-    return [{'identifier': language} for language in datasetLanguageArray]
+def _to_identifier_objects(array):
+    return [{'identifier': identifier} for identifier in array]
 
 def _to_metax_infrastructure(infrastructures):
     metax_infrastructures = []
@@ -447,9 +440,10 @@ def edited_data_to_metax(data, original):
         "contributor": alter_role_data(data.get("actors"), "contributor"),
         "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
         "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
-        "field_of_science": _to_metax_field_of_science(data.get("fieldOfScience")),
-        "language": _to_metax_dataset_language(data.get("datasetLanguage")),
+        "field_of_science": _to_identifier_objects(data.get("fieldOfScience")),
+        "language": _to_identifier_objects(data.get("datasetLanguage")),
         "keyword": data.get("keywords"),
+        "theme": _to_identifier_objects(data.get("theme")),
         "access_rights": access_rights_to_metax(data),
         "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data["dataCatalog"] == DATA_CATALOG_IDENTIFIERS.get('att') else "",
         "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",

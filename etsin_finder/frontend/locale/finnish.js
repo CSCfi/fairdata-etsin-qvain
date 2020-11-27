@@ -495,6 +495,7 @@ const finnish = {
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Lisää uusi aineisto',
       createNewVersion: 'Luo uusi versio',
+      useAsTemplate: 'Käytä mallina',
       state: {
         draft: 'Luonnos',
         published: 'Julkaistu',
@@ -626,6 +627,13 @@ const finnish = {
         addButton: 'Lisää avainsana',
         help:
           'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.',
+      },
+      subjectHeadings: {
+        title: 'Asiasanat',
+        infoText: 'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
+        placeholder: 'Hae vaihtoehtoja',
+        help:
+          'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
       },
       error: {
         title: 'Otsikko on pakollinen ainakin yhdellä kielellä.',

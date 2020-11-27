@@ -13,6 +13,7 @@ import FieldOfScienceField from '../js/components/qvain/fields/description/field
 import IssuedDateField from '../js/components/qvain/fields/description/issuedDate'
 import LanguageField from '../js/components/qvain/fields/description/language'
 import KeywordsField from '../js/components/qvain/fields/description/keywords'
+import SubjectHeadingsField from '../js/components/qvain/fields/description/subjectHeadings'
 import RightsAndLicenses from '../js/components/qvain/fields/licenses'
 import { License } from '../js/components/qvain/fields/licenses/licenses'
 import { AccessType } from '../js/components/qvain/fields/licenses/accessType'
@@ -30,7 +31,7 @@ import {
 import { SlidingContent } from '../js/components/qvain/general/card'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass, { ExternalResource } from '../js/stores/view/qvain'
-import LocaleStore from '../js/stores/view/language'
+import LocaleStore from '../js/stores/view/locale'
 import TablePasState from '../js/components/qvain/views/datasets/tablePasState'
 import {
   filterByTitle,
@@ -220,6 +221,10 @@ describe('Qvain.Description', () => {
   })
   it('should render <KeywordsField />', () => {
     const component = shallow(<KeywordsField />)
+    expect(component).toMatchSnapshot()
+  })
+  it('should render <SubjectHeadingsField />', () => {
+    const component = shallow(<SubjectHeadingsField Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
 })

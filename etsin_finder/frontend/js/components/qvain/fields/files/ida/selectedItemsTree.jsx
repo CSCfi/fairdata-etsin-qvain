@@ -31,7 +31,8 @@ export function SelectedItemsTree() {
     moreItemsLevel: 4.5,
   })
 
-  return renderTree()
+  const hasItems = root && SelectedItemsView.getItems(root).length > 0
+  return hasItems && renderTree()
 }
 
 export default observer(SelectedItemsTree)
