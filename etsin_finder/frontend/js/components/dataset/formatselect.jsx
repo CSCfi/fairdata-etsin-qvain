@@ -21,7 +21,6 @@ import Button from '../general/button'
 
 const SelectContainer = styled.div`
   width: ${props => props.width};
-  margin-right: 1em;
   position: relative;
 `
 

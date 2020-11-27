@@ -8,7 +8,8 @@ import { useRenderTree } from '../../../general/files/tree'
 import { withStores } from '../../../../stores/stores'
 
 export function FileTree(props) {
-  const { Files } = props.Stores.DatasetQuery
+  const { Files, Packages } = props.Stores.DatasetQuery
+  const { downloadApiV2 } = props.Stores.Env
   const { View } = Files
   const { allowDownload } = props
 
@@ -33,6 +34,8 @@ export function FileTree(props) {
     },
     {
       allowDownload,
+      Packages,
+      downloadApiV2
     }
   )
 

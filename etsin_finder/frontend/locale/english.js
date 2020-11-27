@@ -95,6 +95,7 @@ const english = {
       download: 'Download',
       downloadFailed: 'Download failed',
       downloadAll: 'Download all',
+      downloadDisabledForDraft: 'Download disabled for draft',
       downloading: 'Downloading...',
       downloadItem: 'Download %(name)s',
       fileAmount: '%(amount)s objects',
@@ -103,6 +104,12 @@ const english = {
       info_header: 'Other info related to file',
       loading: 'Loading folder',
       loaded: 'Folder loaded',
+      packages: {
+        createForAll: 'Generate download package',
+        createForItem: 'Create download package for %(name)s',
+        pending: 'Generating download package',
+        loading: 'Loading',
+      },
       fileCount: {
         one: '1 file',
         other: '%(count)s files',
@@ -249,18 +256,19 @@ const english = {
       changedLang: 'Changed language to: %(lang)s',
       inactiveLogout: 'You have been logged out due to inactivity',
     },
-    pageTitles: {
+    qvainPageTitle: 'Qvain | Research Dataset Description Tool',
+    etsinPageTitles: {
       data: 'Data',
-      idnAndEvents: 'Identifiers and Events',
+      events: 'Identifiers and Events',
       maps: 'Maps',
       dataset: 'Dataset',
       datasets: 'Datasets',
       home: 'Home',
-      error: 'Error',
-      loginRequired: 'Login Required',
+      qvain: 'Qvain',
+      error: 'Error - The page could not be found'
     },
     language: {
-      toggleLabel: 'Toggle language',
+      toggleLabel: 'Switch language to: %(otherLang)s',
     },
     cookies: {
       accept: 'Accept all cookies',
@@ -353,7 +361,8 @@ const english = {
     },
     home: {
       brief: 'Research Dataset Description Tool',
-      description: 'Fairdata Qvain tool makes describing and publishing your research data effortless for you. It offers you a straightforward form in which to fill information about your data. Once you are happy with it, you can simply publish the dataset and make it visible to others. Qvain provides your dataset with a persistent identifier, landing page and distributes it to other relevant services.',
+      description:
+        'Fairdata Qvain tool makes describing and publishing your research data effortless for you. It offers you a straightforward form in which to fill information about your data. Once you are happy with it, you can simply publish the dataset and make it visible to others. Qvain provides your dataset with a persistent identifier, landing page and distributes it to other relevant services.',
       howTo: 'How to start using Qvain and user guides',
       dataInIda: 'Data stored in IDA',
       dataInExternal: 'Data stored outside of Fairdata',
@@ -390,7 +399,7 @@ const english = {
     unsavedChanges:
       'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',
     consent:
-      'By using Qvain Light the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain Light the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
+      'By using Qvain the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
     submitStatus: {
       success: 'Dataset published!',
       draftSuccess: 'Draft saved!',
@@ -431,13 +440,15 @@ const english = {
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please do the registration in',
     notCSCUserLink: ' CSC Customer Portal',
     notCSCUser2: ' You can register with or without Haka account.',
-    notLoggedIn: 'Please login with your CSC account to use Qvain-light service.',
+    notLoggedIn: 'Please login with your CSC account to use Qvain.',
     titleCreate: 'Create new dataset',
     titleEdit: 'Edit dataset',
     titleLoading: 'Loading dataset',
     titleLoadingFailed: 'Loading dataset failed',
 
     error: {
+      deprecated:
+        'Cannot publish dataset because it is deprecated. Please resolve deprecation first.',
       permission: 'Permission error loading dataset',
       missing: 'Dataset not found',
       default: 'Error loading dataset',
@@ -483,6 +494,7 @@ const english = {
       help: 'Choose a dataset to edit or create a new dataset',
       createButton: 'Create new dataset',
       createNewVersion: 'Create new version',
+      useAsTemplate: 'Use as template',
       state: {
         draft: 'Draft',
         published: 'Published',
@@ -588,15 +600,15 @@ const english = {
           "If your dataset already has an identifier (usually a DOI) insert it here. The dataset still gets the permanent identifier which resolves to Etsin's Landing page.",
         instructions:
           'Identifier for the metadata will be created automatically but if there already is an EXISTING identifier please insert it here.',
-        addButton: 'Add identifiers',
         alreadyAdded: 'Identifier already added',
+        addButton: 'Add identifier',
+        placeholder: 'E.g. https://doi.org/...',
       },
       fieldOfScience: {
         title: 'Field of Science',
         infoText:
           'Select a value from the dropdown menu. The drop down uses the classification of the Ministry of Education and Culture.',
         placeholder: 'Select option',
-        addButton: 'Add field of science',
         help: 'You can add multiple fields of science.',
       },
       datasetLanguage: {
@@ -604,16 +616,23 @@ const english = {
         infoText: 'Select languages used in the dataset.',
         placeholder: 'Type to search language',
         noResults: 'No languages found',
-        addButton: 'Add language',
         help: 'You can add multiple languages.',
       },
       keywords: {
         title: 'Keywords',
         infoText: 'Set keywords that characterize the dataset.',
         placeholder: 'E.g. economy',
-        addButton: 'Add keywords',
+        alreadyAdded: 'Keyword already added',
+        addButton: 'Add keyword',
         help:
           'You can add multiple keywords by separating them with a comma (,). Dataset has to have at least one keyword.',
+      },
+      subjectHeadings: {
+        title: 'Subject Headings',
+        infoText: 'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
+        placeholder: 'Type to search for available options',
+        help:
+          'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
       },
       error: {
         title: 'A title is required in at least one language.',
@@ -1126,7 +1145,7 @@ const english = {
       external: {
         title: 'Remote resources (ATT)',
         infoText:
-          'Please insert Title, Use Category and URLs for the remote files. Qvain Light does not upload or store the files, but the URLs act as active links to the files. Access URL = link to the page where the link / license information is. Download URL = direct link to download the file.',
+          'Please insert Title, Use Category and URLs for the remote files. Qvain does not upload or store the files, but the URLs act as active links to the files. Access URL = link to the page where the link / license information is. Download URL = direct link to download the file.',
         help: 'Add link to remote files from here:',
         button: {
           label: 'Add link to remote files',
@@ -1461,6 +1480,11 @@ const english = {
           placeholder: {
             organization: 'Select an organization',
             department: 'Select a department',
+          },
+          levels: {
+            organization: 'Organization',
+            department: 'Department',
+            subdepartment: 'Subdepartment'
           },
           addButton: 'Add organization',
           editButton: 'Edit organization',

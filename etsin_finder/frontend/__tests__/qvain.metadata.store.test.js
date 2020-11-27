@@ -1,8 +1,8 @@
 import axios from 'axios'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
-import LocaleStore from '../js/stores/view/language'
-import Qvain, { Directory } from '../js/stores/view/qvain'
+import LocaleStore from '../js/stores/view/locale'
+import { Directory } from '../js/stores/view/qvain/qvain.filesv1'
 
 jest.mock('axios')
 

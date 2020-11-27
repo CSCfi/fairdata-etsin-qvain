@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
 import { tint } from 'polished'
@@ -8,17 +8,16 @@ import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons
 import Translate from 'react-translate-component'
 import { Spinner } from '../loader'
 
-export const isDirectory = (item) => item.type === 'directory'
-export const isFile = (item) => item.type === 'file'
+export const isDirectory = item => item.type === 'directory'
+export const isFile = item => item.type === 'file'
 
-
-const LoaderWrapper = (props) => (
+const LoaderWrapper = props => (
   <div {...props}>
     <Spinner active size="12px" spinnerSize="0.15em" />
   </div>
 )
 
-export const SmallLoader = styled(LoaderWrapper)`{
+export const SmallLoader = styled(LoaderWrapper)`
   width: 1.3rem;
   height: 1.3rem;
   display: flex;
@@ -26,7 +25,7 @@ export const SmallLoader = styled(LoaderWrapper)`{
   align-items: center;
   margin-left: 0.5em;
   opacity: 0.8;
-}`
+`
 
 const IconWrapper = ({ icon, color, disabledColor, disabledOpacity, ...props }) => (
   <div {...props}>
@@ -45,12 +44,12 @@ IconWrapper.propTypes = {
 IconWrapper.defaultProps = {
   color: '',
   disabledColor: 'gray',
-  disabledOpacity: 1
+  disabledOpacity: 1,
 }
 
-const ClickableIconButton = ({ icon, disabledColor, disabledOpacity, ...props }) => (
+const ClickableIconButton = ({ icon, disabledColor, disabledOpacity, spin, pulse, ...props }) => (
   <button type="button" {...props}>
-    <FontAwesomeIcon icon={icon} />
+    <FontAwesomeIcon icon={icon} spin={spin} pulse={pulse} />
   </button>
 )
 
@@ -61,16 +60,20 @@ ClickableIconButton.propTypes = {
   disabled: PropTypes.bool,
   disabledColor: PropTypes.string,
   disabledOpacity: PropTypes.number,
+  spin: PropTypes.bool,
+  pulse: PropTypes.bool,
 }
 
 ClickableIconButton.defaultProps = {
-  onClick: () => { },
+  onClick: () => {},
   disabled: false,
   disabledColor: '',
   disabledOpacity: 1,
+  spin: false,
+  pulse: false,
 }
 
-export const Icon = styled(IconWrapper)`{
+export const Icon = styled(IconWrapper)`
   width: 1.3rem;
   height: 1.3rem;
   font-size: 1.1rem;
@@ -80,11 +83,10 @@ export const Icon = styled(IconWrapper)`{
   position: relative;
   flex-shrink: 0;
 
-  ${props => (props.disabled ?
-    `color: ${props.theme.color[props.disabledColor]};` : '')}
+  ${props => (props.disabled ? `color: ${props.theme.color[props.disabledColor]};` : '')}
 
-  ${props => (props.disabled && props.disabledOpacity && `opacity: ${props.disabledOpacity}`)}
-}`
+  ${props => props.disabled && props.disabledOpacity && `opacity: ${props.disabledOpacity}`}
+`
 
 export const ClickableIcon = styled(ClickableIconButton)`
   background: none;
@@ -98,13 +100,15 @@ export const ClickableIcon = styled(ClickableIconButton)`
   justify-content: center;
   align-items: center;
 
-  ${props => (props.disabled ? `
+  ${props =>
+    (props.disabled
+      ? `
     color: ${props.theme.color[props.disabledColor]};
     opacity: ${props.disabledOpacity};
-    ` : `
+    `
+      : `
     cursor: pointer;
-    `)
-  }
+    `)}
 }
 `
 
@@ -135,89 +139,88 @@ const CheckboxWrapper = ({ className, ...props }) => (
 )
 
 CheckboxWrapper.propTypes = {
-  className: PropTypes.string.isRequired
+  className: PropTypes.string.isRequired,
 }
 
-
 export const ItemCheckbox = styled.input.attrs({
-  type: 'checkbox'
-})`{
+  type: 'checkbox',
+})`
   flex-shrink: 0;
   width: 1.1rem;
   height: 1.1rem;
   margin: 0;
-}`
+`
 
 // Placeholder that has the same size as an icon
-export const Checkbox = styled(CheckboxWrapper)`{
+export const Checkbox = styled(CheckboxWrapper)`
   flex-shrink: 0;
   width: 1.3rem;
   height: 1.3rem;
   display: flex;
   justify-content: center;
   align-items: center;
-}`
+`
 
 // Placeholder that has the same size as an icon
-export const NoIcon = styled.div`{
+export const NoIcon = styled.div`
   flex-shrink: 0;
   width: 1.3rem;
   height: 1.3rem;
-}`
+`
 
-export const ItemTitle = styled.div`{
+export const ItemTitle = styled.div`
   margin-left: 4px;
-  display:flex;
+  display: flex;
   align-items: center;
   flex-grow: 1;
-}`
+`
 
-export const FileCount = styled.span`{
+export const FileCount = styled.span`
   margin-left: 0.5em;
   margin-right: 0.5em;
   font-size: 90%;
   color: #606060;
   white-space: nowrap;
-}`
+`
 
-export const ItemRow = styled.li`{
+export const ItemRow = styled.li`
   display: flex;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
 
   ${props => (props.disabled ? 'color: #888' : '')}
-}`
+`
 
-export const ItemSpacer = styled.div`{
+export const ItemSpacer = styled.div`
   width: ${props => props.level * 1.3}em;
   margin: 0;
   padding: 0;
   flex-shrink: 0;
-}`
+`
 
-export const GrowSpacer = styled.div`{
+export const GrowSpacer = styled.div`
   flex-grow: 1;
-}`
+`
 
-export const Items = styled.div`{
+export const Items = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   flex-grow: 1;
   width: 100%;
   overflow: auto;
-}`
+`
 
-export const ChildrenItem = styled.li`{
+export const ChildrenItem = styled.li`
   width: 100%;
-}`
+`
 
-export const Children = styled.ul`{
+export const Children = styled.ul`
   width: 100%;
-}`
+`
 
-export const Tag = styled.div`{
+export const Tag = styled.div`
   font-size: 75%;
   font-weight: bold;
   background: ${p => (p.color && tint(0.8, p.theme.color[p.color])) || '#cdf'};
@@ -229,13 +232,13 @@ export const Tag = styled.div`{
   padding: 1px 4px;
   text-transform: uppercase;
   white-space: nowrap;
-}`
+`
 
-export const PlainTag = styled.div`{
+export const PlainTag = styled.div`
   font-size: 90%;
   border-radius: 4px;
   text-align: center;
   margin-left: 2px;
   padding: 1px 4px;
   white-space: nowrap;
-}`
+`

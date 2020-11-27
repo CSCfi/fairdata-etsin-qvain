@@ -2,14 +2,22 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 import { runInAction } from 'mobx'
 
-import Files from '../js/components/qvain/files'
-import IDAFilePicker, { IDAFilePickerBase } from '../js/components/qvain/files/legacy/idaFilePicker'
-import FileSelector, { FileSelectorBase } from '../js/components/qvain/files/legacy/fileSelector'
-import { SelectedFilesBase, FileLabel } from '../js/components/qvain/files/legacy/selectedFiles'
+import Files from '../js/components/qvain/fields/files'
+import IDAFilePicker, {
+  IDAFilePickerBase,
+} from '../js/components/qvain/fields/files/legacy/idaFilePicker'
+import FileSelector, {
+  FileSelectorBase,
+} from '../js/components/qvain/fields/files/legacy/fileSelector'
+import {
+  SelectedFilesBase,
+  FileLabel,
+} from '../js/components/qvain/fields/files/legacy/selectedFiles'
 import { DeleteButton } from '../js/components/qvain/general/buttons'
 import Env from '../js/stores/domain/env'
-import QvainStoreClass, { Directory } from '../js/stores/view/qvain'
-import LocaleStore from '../js/stores/view/language'
+import QvainStoreClass from '../js/stores/view/qvain'
+import { Directory } from '../js/stores/view/qvain/qvain.filesv1'
+import LocaleStore from '../js/stores/view/locale'
 import { DATA_CATALOG_IDENTIFIER } from '../js/utils/constants'
 import { useStores } from '../js/stores/stores'
 

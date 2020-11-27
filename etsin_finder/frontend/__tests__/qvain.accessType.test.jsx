@@ -3,12 +3,12 @@ import { shallow } from 'enzyme'
 import axios from 'axios'
 
 import '../locale/translations'
-import { AccessType } from '../js/components/qvain/licenses/accessType'
+import { AccessType } from '../js/components/qvain/fields/licenses/accessType'
 import { ACCESS_TYPE_URL } from '../js/utils/constants'
 import Auth from '../js/stores/domain/auth'
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
-import LocaleStore from '../js/stores/view/language'
+import LocaleStore from '../js/stores/view/locale'
 import accessTypeResponse from './__testdata__/accessTypes.data'
 
 jest.mock('axios')
@@ -50,7 +50,7 @@ describe('Qvain Access Type', () => {
 
   it('always allows the current access type', async () => {
     Auth.setUser({ ...Auth.user, isUsingRems: false })
-    QvainStore.setAccessType({ url: ACCESS_TYPE_URL.PERMIT })
+    QvainStore.AccessType.set({ url: ACCESS_TYPE_URL.PERMIT })
     const component = shallow(<AccessType Stores={getStores()} />)
     await Promise.resolve()
     const options = component.instance().state.options
