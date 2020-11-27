@@ -671,7 +671,7 @@ describe('publish existing draft dataset', () => {
   test('case 65: ida, doi, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForPublish({
       useDoi: true,
-      cumultaiveState: CUMULATIVE_STATE.YES,
+      cumulativeState: CUMULATIVE_STATE.YES,
     })
 
     await expectNoError(dataset)
