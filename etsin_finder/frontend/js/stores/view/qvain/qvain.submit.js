@@ -250,7 +250,7 @@ class Submit {
       values.fileActions = fileActions
     }
 
-    if (!isActionsEmpty(fileActions)) {
+    if (!isActionsEmpty(metadataActions)) {
       values.metadataActions = metadataActions
     }
 
