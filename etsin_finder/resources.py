@@ -496,5 +496,7 @@ class AppConfig(Resource):
         return {
             'SERVER_ETSIN_DOMAIN_NAME': app_config.get('SERVER_ETSIN_DOMAIN_NAME', ''),
             'SERVER_QVAIN_DOMAIN_NAME': app_config.get('SERVER_QVAIN_DOMAIN_NAME', ''),
-            'DOWNLOAD_API_V2_ENABLED': app_config.get('DOWNLOAD_API_V2', {}).get('ENABLED', False)
+            'DOWNLOAD_API_V2_ENABLED': app_config.get('DOWNLOAD_API_V2', {}).get('ENABLED', False),
+            'SSO_PREFIX': app_config.get('SSO_PREFIX', ''),
+            'SSO_COOKIE_DOMAIN': app_config.get('SSO_COOKIE_DOMAIN', ''),
         }

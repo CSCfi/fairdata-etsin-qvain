@@ -10,7 +10,7 @@
    */
 }
 
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Router } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
@@ -41,39 +41,54 @@ if (process.env.NODE_ENV === 'test') {
   console.log('Looks like we are in development mode!')
 }
 
-/* get language from localstorage */
-Stores.Locale.loadLang()
-
-// Load app config
-Stores.Env.fetchAppConfig()
-
 // Syncing history with store
 const browserHistory = createBrowserHistory()
 const history = syncHistoryWithStore(browserHistory, Stores.Env.history)
 
-export default class App extends Component {
-  constructor() {
-    super()
-    Stores.Auth.checkLogin()
-  }
-
-  render() {
-    return (
-      <div className="app">
-        <StoresProvider store={Stores}>
-          <Router history={history}>
-            <ThemeProvider theme={etsinTheme}>
-              <React.Fragment>
-                <GlobalStyle />
-                <Layout />
-              </React.Fragment>
-            </ThemeProvider>
-          </Router>
-        </StoresProvider>
-      </div>
-    )
+const hideSpinner = () => {
+  const spinner = document.getElementById('app-spinner')
+  if (spinner) {
+    spinner.hidden = true
   }
 }
+
+const App = () => {
+  const [initialized, setInitialized] = useState(false)
+
+  // Load runtime config
+  const configure = async () => {
+    await Stores.Env.fetchAppConfig()
+    Stores.Locale.loadLang()
+    hideSpinner()
+    setInitialized(true)
+  }
+
+  useEffect(() => {
+    Stores.Auth.checkLogin()
+    configure()
+  }, [])
+
+  if (!initialized) {
+    return null
+  }
+
+  return (
+    <div className="app">
+      <StoresProvider store={Stores}>
+        <Router history={history}>
+          <ThemeProvider theme={etsinTheme}>
+            <React.Fragment>
+              <GlobalStyle />
+              <Layout />
+            </React.Fragment>
+          </ThemeProvider>
+        </Router>
+      </StoresProvider>
+    </div>
+  )
+}
+
+export default App
 
 // setup tabbing
 Stores.Accessibility.initialLoad()

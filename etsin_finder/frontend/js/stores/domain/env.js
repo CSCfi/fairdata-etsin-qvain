@@ -30,11 +30,32 @@ class Env {
 
   @observable qvainHost = ''
 
+  @observable appConfigLoaded = false
+
+  @observable ssoCookieDomain = ''
+
+  @observable ssoPrefix = ''
+
   async fetchAppConfig() {
     const values = await importValuesAsync()
     this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
     this.setQvainHost(values.SERVER_QVAIN_DOMAIN_NAME)
     this.setDownloadApiV2(!!values.DOWNLOAD_API_V2_ENABLED)
+    this.setSSOCookieDomain(values.SSO_COOKIE_DOMAIN)
+    this.setSSOPrefix(values.SSO_PREFIX)
+    this.setAppConfigLoaded(true)
+  }
+
+  @action setSSOPrefix(prefix) {
+    this.ssoPrefix = prefix
+  }
+
+  @action setSSOCookieDomain(domain) {
+    this.ssoCookieDomain = domain
+  }
+
+  @action setAppConfigLoaded(value) {
+    this.appConfigLoaded = value
   }
 
   @action setEtsinHost(host) {

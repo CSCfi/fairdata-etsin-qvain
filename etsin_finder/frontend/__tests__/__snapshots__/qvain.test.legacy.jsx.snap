@@ -6,6 +6,7 @@ exports[`Qvain should render correctly 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "appConfigLoaded": false,
         "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
@@ -21,6 +22,8 @@ exports[`Qvain should render correctly 1`] = `
         },
         "metaxApiV2": false,
         "qvainHost": "",
+        "ssoCookieDomain": "",
+        "ssoPrefix": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -310,6 +313,7 @@ exports[`Qvain should render correctly 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "appConfigLoaded": false,
           "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
@@ -325,6 +329,8 @@ exports[`Qvain should render correctly 1`] = `
           },
           "metaxApiV2": false,
           "qvainHost": "",
+          "ssoCookieDomain": "",
+          "ssoPrefix": "",
         },
         "FieldOfSciences": FieldOfSciences {
           "Model": [Function],
@@ -1415,6 +1421,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "appConfigLoaded": false,
         "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
@@ -1430,6 +1437,8 @@ exports[`Qvain.Description should render <Description /> 1`] = `
         },
         "metaxApiV2": false,
         "qvainHost": "",
+        "ssoCookieDomain": "",
+        "ssoPrefix": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -1719,6 +1728,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "appConfigLoaded": false,
           "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
@@ -1734,6 +1744,8 @@ exports[`Qvain.Description should render <Description /> 1`] = `
           },
           "metaxApiV2": false,
           "qvainHost": "",
+          "ssoCookieDomain": "",
+          "ssoPrefix": "",
         },
         "FieldOfSciences": FieldOfSciences {
           "Model": [Function],
@@ -2824,6 +2836,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "appConfigLoaded": false,
         "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
@@ -2839,6 +2852,8 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         },
         "metaxApiV2": false,
         "qvainHost": "",
+        "ssoCookieDomain": "",
+        "ssoPrefix": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -3128,6 +3143,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "appConfigLoaded": false,
           "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
@@ -3143,6 +3159,8 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           },
           "metaxApiV2": false,
           "qvainHost": "",
+          "ssoCookieDomain": "",
+          "ssoPrefix": "",
         },
         "FieldOfSciences": FieldOfSciences {
           "Model": [Function],
@@ -4233,6 +4251,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "appConfigLoaded": false,
         "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
@@ -4248,6 +4267,8 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         },
         "metaxApiV2": false,
         "qvainHost": "",
+        "ssoCookieDomain": "",
+        "ssoPrefix": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -4537,6 +4558,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "appConfigLoaded": false,
           "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
@@ -4552,6 +4574,8 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           },
           "metaxApiV2": false,
           "qvainHost": "",
+          "ssoCookieDomain": "",
+          "ssoPrefix": "",
         },
         "FieldOfSciences": FieldOfSciences {
           "Model": [Function],
@@ -5642,6 +5666,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "appConfigLoaded": false,
         "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
@@ -5657,6 +5682,8 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         },
         "metaxApiV2": false,
         "qvainHost": "",
+        "ssoCookieDomain": "",
+        "ssoPrefix": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -5946,6 +5973,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "appConfigLoaded": false,
           "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
@@ -5961,6 +5989,8 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           },
           "metaxApiV2": false,
           "qvainHost": "",
+          "ssoCookieDomain": "",
+          "ssoPrefix": "",
         },
         "FieldOfSciences": FieldOfSciences {
           "Model": [Function],
@@ -7051,6 +7081,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     Object {
       "Env": Env {
         "app": undefined,
+        "appConfigLoaded": false,
         "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
@@ -7066,6 +7097,8 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         },
         "metaxApiV2": false,
         "qvainHost": "",
+        "ssoCookieDomain": "",
+        "ssoPrefix": "",
       },
       "Locale": Locale {
         "currentLang": "en",
@@ -7355,6 +7388,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         },
         "Env": Env {
           "app": undefined,
+          "appConfigLoaded": false,
           "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
@@ -7370,6 +7404,8 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           },
           "metaxApiV2": false,
           "qvainHost": "",
+          "ssoCookieDomain": "",
+          "ssoPrefix": "",
         },
         "FieldOfSciences": FieldOfSciences {
           "Model": [Function],

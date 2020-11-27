@@ -8,11 +8,10 @@ export const getCookieValue = key => {
   return undefined
 }
 
-export const setCookieValue = (key, value) => {
+export const setCookieValue = (domain, key, value) => {
   const parts = [`${key}=${value}`, 'path=/']
   parts.push(`expires=${moment().add(7, 'days').toISOString()}`)
 
-  const domain = process.env.REACT_APP_COOKIE_DOMAIN
   if (domain) {
     parts.push(`domain=${domain}`)
   }
