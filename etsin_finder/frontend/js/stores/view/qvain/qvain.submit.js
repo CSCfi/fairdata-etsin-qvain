@@ -31,6 +31,10 @@ class Submit {
     this.error = error
   }
 
+  @action setResponse = response => {
+    this.response = response
+  }
+
   @action clearResponse = () => {
     this.response = null
   }
@@ -127,11 +131,11 @@ class Submit {
       } else {
         await editDataset(data)
       }
-      this.response = data
-      this.error = undefined
+      this.setResponse(data)
+      this.setError(undefined)
     } catch (error) {
       this.setError(error)
-      this.response = undefined
+      this.setResponse(undefined)
       if (!(error instanceof ValidationError)) {
         console.error(error)
       }
