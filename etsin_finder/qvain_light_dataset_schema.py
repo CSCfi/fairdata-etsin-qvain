@@ -1,4 +1,4 @@
-"""Validation schemas for form data coming in from Qvain Light"""
+"""Validation schemas for form data coming in from Qvain"""
 from marshmallow import Schema, fields, validates_schema, ValidationError
 from marshmallow.validate import Length, OneOf
 
@@ -67,7 +67,6 @@ class ActorValidationSchema(Schema):
                     'Person not allowed for organization actor.')
         else:
             raise ValidationError('Invalid actor type.')
-
 
 class LicenseValidationSchema(Schema):
     """Validation schema for licenses."""
@@ -170,6 +169,12 @@ class DatasetValidationSchema(Schema):
         fields.Str(),
         required=True,
         validate=lambda list: len(list) > 0
+    )
+    theme = fields.List(
+        fields.URL(
+            validate=Length(min=1)
+        ),
+        required=False,
     )
     actors = fields.List(fields.Nested(
         ActorValidationSchema),

@@ -17,7 +17,7 @@ import PropTypes from 'prop-types'
 const TooltipHover = props => {
   const { position, children, ...restProps } = props
   return (
-    <Tip position={position.toLowerCase()} {...restProps} aria-hidden="true">
+    <Tip position={position.toLowerCase()} {...restProps}>
       {children}
     </Tip>
   )
@@ -28,10 +28,7 @@ TooltipHover.defaultProps = {
 }
 
 TooltipHover.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.array
-  ]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]).isRequired,
   position: PropTypes.oneOf(['top', 'right']),
 }
 
@@ -40,17 +37,16 @@ export default TooltipHover
 function getContainerPosition(position) {
   switch (position) {
     case 'top':
-      return (
-        'transform: translate(-50%, -6px);' +
-        'bottom: 100%;' +
-        'left: 50%;'
-        )
+      return `
+        transform: translate(-50%, -6px);
+        bottom: 100%;
+        left: 50%;`
     case 'right':
-      return (
-        'transform: translate(10px, 0);' +
-        'bottom: 0%;' +
-        'left: 100%;'
-      )
+      return `
+        transform: translate(10px, 0);
+        bottom: 0%;
+        left: 100%;
+        `
     default:
       return null
   }
@@ -59,23 +55,21 @@ function getContainerPosition(position) {
 function getTipPosition(position) {
   switch (position) {
     case 'right':
-      return (
-        'bottom: 50%;' +
-        'right: 0%;' +
-        'transform: translate(10px, 5px);'
-      )
+      return `
+        bottom: 50%;
+        right: 0%;
+        transform: translate(10px, 5px);`
     case 'top':
-      return (
-        'bottom: 100%;' +
-        'left: 50%;' +
-        'transform: translate(-50%, 6px);'
-      )
+      return `
+        bottom: 100%;
+        left: 50%;
+        transform: translate(-50%, 6px);`
     default:
       return null
   }
 }
 
-const Tip = styled.div.attrs(props => ({
+const Tip = styled.span.attrs(props => ({
   bg: props.theme.color.darkgray,
   fg: props.theme.color.white,
 }))`

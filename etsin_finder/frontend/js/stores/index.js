@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import Locale from './view/language'
+import Locale from './view/locale'
 import Env from './domain/env'
 import Auth from './domain/auth'
 import ElasticQuery from './view/elasticquery'
@@ -16,7 +16,7 @@ import DatasetQuery from './view/datasetquery'
 import Accessibility from './view/accessibility'
 import Map from './view/map'
 import Qvain from './view/qvain'
-import QvainDatasets from './view/qvain.datasets'
+import QvainDatasets from './view/qvain/qvain.datasets'
 import Access from './view/access'
 import SearchFilters from './view/searchfilters'
 

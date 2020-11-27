@@ -28,6 +28,12 @@ class Data extends Component {
       this.props.location.pathname
     )
     Accessibility.handleNavigation('data', false)
+
+    const { DatasetQuery } = this.props.Stores
+    const { downloadApiV2 } = this.props.Stores.Env
+    if (downloadApiV2 && !DatasetQuery.isDraft) {
+      DatasetQuery.fetchPackages()
+    }
   }
 
   render() {
@@ -35,7 +41,7 @@ class Data extends Component {
 
     return (
       <div>
-        {metaxApiV2 && <IdaResourcesV2 dataset={this.props.dataset} />}
+        {metaxApiV2 && !this.props.hasRemote && <IdaResourcesV2 dataset={this.props.dataset} />}
         {!metaxApiV2 && this.props.hasFiles && <IdaResources dataset={this.props.dataset} />}
         {this.props.hasRemote && <ExternalResources />}
       </div>

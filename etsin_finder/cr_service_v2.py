@@ -34,6 +34,9 @@ class MetaxAPIService(FlaskService):
             self.user = metax_api_config.get('USER')
             self.pw = metax_api_config.get('PASSWORD')
             self.verify_ssl = metax_api_config.get('VERIFY_SSL', True)
+            self.proxies = None
+            if metax_api_config.get('HTTPS_PROXY'):
+                self.proxies = dict(https=metax_api_config.get('HTTPS_PROXY'))
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
@@ -53,6 +56,7 @@ class MetaxAPIService(FlaskService):
                                         headers={'Accept': 'application/json'},
                                         auth=(self.user, self.pw),
                                         verify=self.verify_ssl,
+                                        proxies=self.proxies,
                                         timeout=3)
         if not success:
             log.warning("Failed to get catalog record {0} from Metax API".format(identifier))
@@ -77,6 +81,7 @@ class MetaxAPIService(FlaskService):
                                         headers={'Accept': 'application/json'},
                                         auth=(self.user, self.pw),
                                         verify=self.verify_ssl,
+                                        proxies=self.proxies,
                                         timeout=3)
         if not success:
             log.warning("Failed to get removed catalog record {0} from Metax API".format(identifier))

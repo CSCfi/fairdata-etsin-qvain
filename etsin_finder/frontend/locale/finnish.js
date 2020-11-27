@@ -95,6 +95,7 @@ const finnish = {
       download: 'Lataa',
       downloadFailed: 'Lataus epäonnistui',
       downloadAll: 'Lataa kaikki',
+      downloadDisabledForDraft: 'Lataus ei käytössä luonnoksille',
       downloadItem: 'Lataa %(name)s',
       downloading: 'Ladataan...',
       fileAmount: '%(amount)s objektia',
@@ -103,6 +104,12 @@ const finnish = {
       info_header: 'Tiedoston muut tiedot',
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
+      packages: {
+        createForAll: 'Luo latauspaketti',
+        createForItem: 'Luo latauspaketti kohteelle %(name)s',
+        pending: 'Luodaan latauspakettia',
+        loading: 'Ladataan',
+      },
       fileCount: {
         one: '1 tiedosto',
         other: '%(count)s tiedostoa',
@@ -247,22 +254,24 @@ const finnish = {
       changedLang: 'Kieli vaihdettu kieleen: %(lang)s',
       inactiveLogout: 'Istunto aikakatkaistu. Sinut kirjattiin ulos.',
     },
-    pageTitles: {
+    qvainPageTitle: 'Qvain | Tutkimusaineiston metatietotyökalu',
+    etsinPageTitles: {
       data: 'Data',
-      idnAndEvents: 'Tunnisteet ja tapahtumat',
+      events: 'Tunnisteet ja tapahtumat',
       maps: 'Kartat',
       dataset: 'Aineisto',
       datasets: 'Aineistot',
       home: 'Koti',
-      error: 'Virhe',
-      loginRequired: 'Kirjautuminen vaaditaan',
+      qvain: 'Qvain',
+      error: 'Virhe - Sivua ei löydy'
     },
     language: {
-      toggleLabel: 'Vaihda kieltä',
+      toggleLabel: 'Vaihda kieltä: %(otherLang)s',
     },
     cookies: {
       accept: 'Hyväksy evästeet',
-      infoText: 'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
+      infoText:
+        'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
       link: 'Katso Fairdatan tietosuojakäytäntö',
     },
   },
@@ -353,7 +362,8 @@ const finnish = {
     home: {
       brief: 'Tutkimusaineiston metatietotyökalu',
       howTo: 'Käytön aloitus ja käyttöoppaat',
-      description: 'Fairdata Qvain -työkalu tekee datasi kuvailun ja julkaisemisen helpoksi. Qvain tarjoaa selkeän lomakkeen, johon tiedot datasta täytetään. Tietojen syöttämisen jälkeen voit julkaista datasi tutkimusaineistona ja saattaa sen avoimesti saataville. Qvain tarjoaa tutkimusaineistollesi pysyvän tunnisteen, laskeutumissivun ja jakaa tietoa eteenpäin muille relevanteille palveluille.',
+      description:
+        'Fairdata Qvain -työkalu tekee datasi kuvailun ja julkaisemisen helpoksi. Qvain tarjoaa selkeän lomakkeen, johon tiedot datasta täytetään. Tietojen syöttämisen jälkeen voit julkaista datasi tutkimusaineistona ja saattaa sen avoimesti saataville. Qvain tarjoaa tutkimusaineistollesi pysyvän tunnisteen, laskeutumissivun ja jakaa tietoa eteenpäin muille relevanteille palveluille.',
       dataInIda: 'Data tallennettuna IDA-palvelussa',
       dataInExternal: 'Data tallennettuna Fairdata-palveluiden ulkopuolella',
       qvainDataset: 'Kuvaile datasi, julkaise se tutkimusaineistona ja luo sille pysyvä tunniste.',
@@ -390,7 +400,7 @@ const finnish = {
     unsavedChanges:
       'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
     consent:
-      'Käyttämällä Qvain Light -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain Light-työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
+      'Käyttämällä Qvain -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain -työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
     submitStatus: {
       success: 'Aineisto julkaistu!',
       draftSuccess: 'Luonnos tallennettu!',
@@ -432,12 +442,14 @@ const finnish = {
       'virheilmoituksen, jos tilit eivät ole linkitetty. Linkityksen voi tehdä',
     notCSCUserLink: ' CSC asiakas porttaalissa',
     notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
-    notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain-light palvelua.',
+    notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain -palvelua.',
     titleCreate: 'Lisää uusi aineisto',
     titleEdit: 'Muokkaa aineistoa',
     titleLoading: 'Ladataan aineistoa',
     titleLoadingFailed: 'Aineiston Lataus Epäonnistui',
     error: {
+      deprecated:
+        'Aineistoa ei voida julkaista, koska aineisto on vanhentunut. Korjaa vanhentunut aineisto ensin.',
       permission: 'Oikeusvirhe aineiston latauksessa',
       missing: 'Aineistoa ei löydy',
       default: 'Virhe ladattaessa aineistoa',
@@ -483,6 +495,7 @@ const finnish = {
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Lisää uusi aineisto',
       createNewVersion: 'Luo uusi versio',
+      useAsTemplate: 'Käytä mallina',
       state: {
         draft: 'Luonnos',
         published: 'Julkaistu',
@@ -587,15 +600,15 @@ const finnish = {
           'Jos aineistollasi on jo tunniste (tai useita), yleensä esim. DOI, anna ne tässä. Olemassaolevien tunnisteiden lisäksi aineisto saa tallennusvaiheessa pysyvän tunnisteen, joka tulee resolvoitumaan Etsimen laskeutumissivulle.',
         instructions:
           'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
-        addButton: 'Lisää tunniste',
         alreadyAdded: 'Tunniste on jo lisätty',
+        addButton: 'Lisää tunniste',
+        placeholder: 'Esim. https://doi.org/...',
       },
       fieldOfScience: {
         title: 'Tieteenala',
         infoText:
           'Valitse tieteenala. Alasvetovalikkosa on Opetus- ja Kulttuuriministeriön mukainen luokitus tieteenaloille.',
         placeholder: 'Valitse vaihtoehto',
-        addButton: 'Lisää tieteenala',
         help: 'Voit lisätä useita tieteenaloja.',
       },
       datasetLanguage: {
@@ -603,7 +616,6 @@ const finnish = {
         infoText: 'Valitse aineistossa käytetyt kielet.',
         placeholder: 'Hae kieliä kirjoittamalla',
         noResults: 'Ei hakutuloksia',
-        addButton: 'Lisää kieli',
         help: 'Voit lisätä useita kieliä.',
       },
       keywords: {
@@ -611,9 +623,17 @@ const finnish = {
         infoText:
           'Vapaat hakusanat aineistollesi. Vaikuttaa aineistosi löytymiseen Etsimen haussa. Käytä mahdollisimman tarkkoja termejä. Tässä kentässä ei ole automaattista käännöstä eri kielille.',
         placeholder: 'Esim. taloustiede',
-        addButton: 'Lisää avainsanoja',
+        alreadyAdded: 'Avainsana on jo lisätty',
+        addButton: 'Lisää avainsana',
         help:
           'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.',
+      },
+      subjectHeadings: {
+        title: 'Asiasanat',
+        infoText: 'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
+        placeholder: 'Hae vaihtoehtoja',
+        help:
+          'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
       },
       error: {
         title: 'Otsikko on pakollinen ainakin yhdellä kielellä.',
@@ -710,6 +730,11 @@ const finnish = {
           placeholder: {
             organization: 'Valitse organisaatio',
             department: 'Valitse osasto',
+          },
+          levels: {
+            organization: 'Organisaatio',
+            department: 'Yksikkö',
+            subdepartment: 'Aliyksikkö'
           },
           addButton: 'Lisää organisaatio',
           editButton: 'Muokkaa organisaatiota',
@@ -1218,7 +1243,7 @@ const finnish = {
       external: {
         title: 'Ulkoiset tiedostot (ATT)',
         infoText:
-          'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto / sen lisenssitieto löytyvät (sivun URL). Voit antaa myös suoran latauslinkin, jos sellainen on. Tiedostoa ei ladata Qvain Lightiin, vaan antamasi sivun URL toimii linkkinä sivulle, jossa tiedosto sijaitsee sekä tiedoston latauslinkin kauttaja pääsee suoraan aloittamaan tiedoston lataamisen omalle koneelleen.',
+          'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto / sen lisenssitieto löytyvät (sivun URL). Voit antaa myös suoran latauslinkin, jos sellainen on. Tiedostoa ei ladata Qvaimeen, vaan antamasi sivun URL toimii linkkinä sivulle, jossa tiedosto sijaitsee sekä tiedoston latauslinkin kauttaja pääsee suoraan aloittamaan tiedoston lataamisen omalle koneelleen.',
         help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
         button: {
           label: 'Lisää linkki ulkoiseen tiedostoon',
@@ -1587,7 +1612,7 @@ const finnish = {
   userAuthenticationError: {
     header: 'Kirjautuminen epäonnistui.',
     content:
-      'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen ja Qvain Lightin käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
+      'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
   },
   userHomeOrganizationErrror: {
     header: 'Kirjautuminen epäonnistui.',

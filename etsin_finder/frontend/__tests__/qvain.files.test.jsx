@@ -4,7 +4,7 @@ import { shallow } from 'enzyme'
 
 import Env from '../js/stores/domain/env'
 import QvainStoreClass from '../js/stores/view/qvain'
-import LocaleStore from '../js/stores/view/language'
+import LocaleStore from '../js/stores/view/locale'
 import { sortFunc } from '../js/stores/view/common.files.utils'
 import {
   itemLoaderNew,
@@ -14,10 +14,10 @@ import {
 import urls from '../js/components/qvain/utils/urls'
 
 import { ShowMore } from '../js/components/general/files/tree'
-import SelectedItemsTree from '../js/components/qvain/files/ida/selectedItemsTree'
-import SelectedItemsTreeItem from '../js/components/qvain/files/ida/selectedItemsTreeItem'
-import AddItemsTree from '../js/components/qvain/files/ida/addItemsTree'
-import AddItemsTreeItem from '../js/components/qvain/files/ida/addItemsTreeItem'
+import SelectedItemsTree from '../js/components/qvain/fields/files/ida/selectedItemsTree'
+import SelectedItemsTreeItem from '../js/components/qvain/fields/files/ida/selectedItemsTreeItem'
+import AddItemsTree from '../js/components/qvain/fields/files/ida/addItemsTree'
+import AddItemsTreeItem from '../js/components/qvain/fields/files/ida/addItemsTreeItem'
 
 import handleSubmitToBackend from '../js/components/qvain/utils/handleSubmit'
 

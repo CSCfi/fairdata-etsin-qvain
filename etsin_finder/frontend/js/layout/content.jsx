@@ -10,21 +10,27 @@
    */
 }
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
+import Accessibility from '../stores/view/accessibility'
 import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
 import ErrorPage from '../components/errorpage'
-import QvainLogin from '../components/qvain/main/qvainLogin'
-import QvainLandingPage from '../components/qvain/landingPage'
+
+import QvainLandingPage from '../components/qvain/views/landingPage'
 import { useStores } from '../utils/stores'
+import LoggedInRoute from './loggedInRoute'
 
 const Content = ({ contentRef }) => {
   const {
     Auth,
     Env: { isQvain, separateQvain, getQvainUrl },
   } = useStores()
+
+  useEffect(() => {
+    Accessibility.handleNavigation()
+  }, [])
 
   if (Auth.initializing) return null
 
@@ -45,16 +51,15 @@ const Content = ({ contentRef }) => {
           <Route exact path="/datasets/:query?" key="search" component={Search} />,
           <Route path="/dataset/:identifier" key="dataset" component={Dataset} />,
         ]}
-        <Route
-          path={qvainPath('/dataset/:identifier')}
-          render={renderIfLoggedIn(renderQvain, Auth)}
-        />
-        <Route exact path={qvainPath('/dataset')} render={renderIfLoggedIn(renderQvain, Auth)} />
-        <Route
-          exact
-          path={qvainPath('')}
-          render={renderIfLoggedIn(renderQvainDatasets, Auth, renderQvainLandingPage)}
-        />
+        <LoggedInRoute path={qvainPath('/dataset/:identifier')}>
+          <Qvain />
+        </LoggedInRoute>
+        <LoggedInRoute exact path={qvainPath('/dataset')}>
+          <Qvain />
+        </LoggedInRoute>
+        <LoggedInRoute exact path={qvainPath('')} notLoggedIn={<QvainLandingPage />}>
+          <QvainDatasets />
+        </LoggedInRoute>
         <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
       </Switch>
     </main>
@@ -79,33 +84,3 @@ const redirectToQvain = (isQvain, getQvainUrl) => props => {
   window.location.replace(url)
   return ''
 }
-
-// Restrict access to Qvain Light
-// Since I couldn't get Private Routes to work, here's a workaround
-
-const renderQvain = props => <Qvain {...props} />
-const renderQvainDatasets = props => <QvainDatasets {...props} />
-const renderQvainLandingPage = props => <QvainLandingPage {...props} />
-
-const renderIfLoggedIn = (renderFunc, Auth, redirect) => props => {
-  // Rendered components (login button view and the actual component we want to render)
-  const login = redirect ? redirect(props) : <QvainLogin redirectPath={props.location.pathname} />
-  const actual = renderFunc(props)
-
-  // render the actual if logged in
-  // if not, check from backend
-  // if backend tells that it has no logged in users, force user to travel to login site
-
-  if (!allowAccess(Auth)) {
-    Auth.checkLogin().then(() => {
-      if (!allowAccess(Auth)) {
-        return login
-      }
-      return actual
-    })
-    return login
-  }
-  return actual
-}
-
-const allowAccess = Auth => (Auth || {}).cscUserLogged

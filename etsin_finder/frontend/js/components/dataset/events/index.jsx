@@ -97,7 +97,7 @@ class Events extends Component {
       `Dataset: ${this.props.match.params.identifier} | Events`,
       this.props.location.pathname
     )
-    Accessibility.handleNavigation('idnAndEvents', false)
+    Accessibility.handleNavigation('events', false)
   }
 
   versions = set =>
@@ -161,14 +161,6 @@ class Events extends Component {
 
   relationIdentifierIsUrl(identifier) {
     return identifier.startsWith('http://') || identifier.startsWith('https://')
-  }
-
-  checkRelation(relation) {
-    if (relation[0]) {
-      relation[0].entity.identifier = relation[0].entity.identifier || ''
-      return true
-    }
-    return false
   }
 
   render() {
@@ -307,7 +299,7 @@ class Events extends Component {
             </ul>
           </Margin>
         )}
-        {this.checkRelation(this.props.relation) && (
+        {this.props.relation && this.props.relation.length > 0 && (
           <Margin>
             <h2>
               <Translate content="dataset.events_idn.relations.title" />
@@ -328,25 +320,25 @@ class Events extends Component {
               </thead>
               <tbody>
                 {this.props.relation.map(single => (
-                  <tr key={single.entity.identifier}>
+                  <tr key={single.entity.identifier || ''}>
                     <td lang={getDataLang(single.relation_type.pref_label)}>
                       {checkDataLang(single.relation_type.pref_label)}
                     </td>
                     <td lang={getDataLang(single.entity.title)}>
-                      {checkDataLang(single.entity.title)}.
+                      {checkDataLang(single.entity.title)}
                     </td>
                     <td>
                       <span className="sr-only">Identifier:</span>
-                      {this.relationIdentifierIsUrl(single.entity.identifier) ? (
+                      {this.relationIdentifierIsUrl(single.entity.identifier || '') ? (
                         <IDLink
-                          href={single.entity.identifier}
+                          href={single.entity.identifier || ''}
                           rel="noopener noreferrer"
                           target="_blank"
                         >
-                          {single.entity.identifier}
+                          {single.entity.identifier || ''}
                         </IDLink>
                       ) : (
-                        <ID>{single.entity.identifier}</ID>
+                        <ID>{single.entity.identifier || ''}</ID>
                       )}
                     </td>
                   </tr>

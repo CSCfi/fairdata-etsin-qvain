@@ -1,4 +1,9 @@
-// Constants used in Etsin and Qvain Light
+// Constants used in Etsin and Qvain
+
+export const DOWNLOAD_API_REQUEST_STATUS = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+}
 
 export const ACCESS_TYPE_URL = {
   EMBARGO: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
