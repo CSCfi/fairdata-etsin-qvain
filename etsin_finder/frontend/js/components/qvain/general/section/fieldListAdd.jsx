@@ -104,14 +104,14 @@ FieldListAdd.propTypes = {
 FieldListAdd.defaultProps = {
   language: '',
   contentLabel: '',
-  position: 'right',
+  position: 'left',
   formProps: {},
   hideButton: false,
 }
 
 const ButtonContainer = styled.div`
   text-align: ${props => props.position};
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
   margin-bottom: 0;
   > button {
     margin: 0;

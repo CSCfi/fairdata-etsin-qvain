@@ -43,7 +43,6 @@ const ButtonContainer = styled.div`
 
 const FixDeprecatedButton = styled(TableButton)`
   margin: 0;
-  margin-top: 11px;
   width: auto;
   padding-left: 1rem;
   padding-right: 1rem;
