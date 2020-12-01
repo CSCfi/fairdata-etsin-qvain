@@ -211,13 +211,17 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "render": [Function],
       }
     }
+    getRefGroups={[Function]}
     getter={Array []}
     isClearable={false}
     isMulti={true}
     metaxIdentifier="field_of_science"
     model={[Function]}
+    modifyGroupLabel={[Function]}
+    modifyOptionLabel={[Function]}
     name="fieldOfScience"
     setter={[Function]}
+    sortFunc={[Function]}
   />
 </Card>
 `;
