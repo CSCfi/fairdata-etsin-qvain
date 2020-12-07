@@ -17,7 +17,6 @@ from urllib.parse import urlparse, urlunparse, parse_qs, urlencode, urljoin
 from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.app_config import get_app_config
-from etsin_finder.saml_config import get_sso_key
 from etsin_finder.utils import executing_travis
 
 def get_sso_environment_prefix():
@@ -37,7 +36,7 @@ def get_decrypted_sso_session_details():
         decrypted_fd_sso_session(list): List of decrypted cookies
 
     """
-    key = get_sso_key()
+    key = get_app_config(app.testing).get('SSO_KEY')
     sso_environment_and_session = get_sso_environment_prefix() + '_fd_sso_session'
     if request.cookies.getlist(sso_environment_and_session):
         fd_sso_session = request.cookies.getlist(sso_environment_and_session)
