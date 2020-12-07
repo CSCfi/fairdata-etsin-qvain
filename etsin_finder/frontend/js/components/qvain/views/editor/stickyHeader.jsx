@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { instanceOf } from 'prop-types'
 import Translate from 'react-translate-component'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -89,7 +89,7 @@ StickyHeader.propTypes = {
   response: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
   handleSubmitError: PropTypes.func.isRequired,
   handleSubmitResponse: PropTypes.func.isRequired,
-  submitButtonsRef: PropTypes.object.isRequired,
+  submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }).isRequired,
 }
 
 StickyHeader.defaultProps = {

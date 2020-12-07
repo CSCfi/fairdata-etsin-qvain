@@ -2,6 +2,7 @@ import { observable, action, computed, makeObservable } from 'mobx'
 import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Resources from './qvain.resources'
 import Files from './qvain.files'
+import Submit from './qvain.submit'
 
 class Qvain extends Resources {
   constructor(Env) {
@@ -9,6 +10,7 @@ class Qvain extends Resources {
     this.Env = Env
     this.Files = new Files(this)
     this.resetQvainStore()
+    this.Submit = new Submit(this)
     makeObservable(this)
   }
 
