@@ -164,7 +164,7 @@ def frontend_app(path):
 
     """
     # Check if URL endpoint force enabling SSO has been visited
-    sso_enabled_through_url = request.args.get('sso_authentication', default = 'false', type = str)
+    sso_enabled_through_url = request.args.get('sso_authentication', default='false', type=str)
     resp = make_response(_render_index_template())
 
     if sso_enabled_through_url == 'true':
