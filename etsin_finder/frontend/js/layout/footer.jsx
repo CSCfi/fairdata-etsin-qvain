@@ -15,7 +15,7 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 const Footer = () => {
-  let accessibilityPath = 'fairdata'
+  const accessibilityPath = 'fairdata'
 
   return (
     <FooterDiv>
