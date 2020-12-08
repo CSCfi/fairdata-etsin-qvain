@@ -168,9 +168,10 @@ def frontend_app(path):
     resp = make_response(_render_index_template())
 
     if sso_enabled_through_url == 'true':
-        # Force enable SSO cookie for entire domain (Etsin + Qvain)
-        cookie_domain = get_app_config(app.testing).get('SHARED_DOMAIN_NAME')
-        resp.set_cookie('sso_authentication', 'true', domain=cookie_domain)
+        # Force enable SSO cookie for entire domain (Etsin + Qvain)...
+        shared_domain = get_app_config(app.testing).get('SHARED_DOMAIN_NAME')
+        formatted_shared_domain = '.' + shared_domain
+        resp.set_cookie('sso_authentication', 'true', domain=formatted_shared_domain)
 
     return resp
 
