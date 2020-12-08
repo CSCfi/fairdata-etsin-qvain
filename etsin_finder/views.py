@@ -42,12 +42,14 @@ def login_etsin():
     """
     # Check how to login, SSO, SSO (forced), or SAML
     sso_authentication_force = request.cookies.get('sso_authentication')
-    sso_is_enabled = get_app_config(app.testing).get('SSO_AUTHORIZATION') or sso_authentication_force
+    sso_is_enabled = get_app_config(app.testing).get('SSO').get('ENABLED') or sso_authentication_force
     redirect_url = quote(request.args.get('relay', '/'))
 
     if sso_is_enabled:
         log.info('SSO is enabled, logging in to Etsin using SSO')
-        login_url = get_app_config(app.testing).get('SSO_LOGIN_ETSIN')
+        login_host = get_app_config(app.testing).get('SSO').get('HOST')
+        sso_redirect_url = get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME')
+        login_url = login_host + '/login?service=ETSIN&redirect_url=https://' + sso_redirect_url
     elif not sso_is_enabled:
         log.info('SSO is disabled, logging in to Etsin using SAML auth')
         auth = get_saml_auth(request, '_ETSIN')
@@ -67,12 +69,14 @@ def login_qvain():
     """
     # Check how to login, SSO, SSO (forced), or SAML
     sso_authentication_force = request.cookies.get('sso_authentication')
-    sso_is_enabled = get_app_config(app.testing).get('SSO_AUTHORIZATION') or sso_authentication_force
+    sso_is_enabled = get_app_config(app.testing).get('SSO').get('ENABLED') or sso_authentication_force
     redirect_url = quote(request.args.get('relay', '/'))
 
     if sso_is_enabled:
         log.info('SSO is enabled, logging in to Qvain using SSO')
-        login_url = get_app_config(app.testing).get('SSO_LOGIN_QVAIN')
+        login_host = get_app_config(app.testing).get('SSO').get('HOST')
+        sso_redirect_url = get_app_config(app.testing).get('SERVER_QVAIN_DOMAIN_NAME', '')
+        login_url = login_host + '/login?service=QVAIN&redirect_url=https://' + sso_redirect_url
     elif not sso_is_enabled:
         log.info('SSO is disabled, logging in to Qvain using SAML auth')
         auth = get_saml_auth(request, '_QVAIN')
@@ -92,15 +96,20 @@ def logout_etsin():
     """
     # Check how to logout, SSO, SSO (forced), or SAML
     sso_authentication_force = request.cookies.get('sso_authentication')
-    sso_is_enabled = get_app_config(app.testing).get('SSO_AUTHORIZATION') or sso_authentication_force
+    sso_is_enabled = get_app_config(app.testing).get('SSO').get('ENABLED') or sso_authentication_force
 
     if sso_is_enabled:
         log.info('SSO is enabled, logging out from Etsin using SSO')
-        logout_url = get_app_config(app.testing).get('SSO_LOGOUT_ETSIN')
+        logout_host = get_app_config(app.testing).get('SSO').get('HOST')
+        sso_redirect_url = get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME')
+        logout_url = logout_host + '/logout?service=ETSIN&redirect_url=https://' + sso_redirect_url
+
         resp = make_response(redirect(logout_url))
 
         # Delete forced SSO cookie
-        resp.set_cookie('sso_authentication', '', expires=0)
+        shared_domain = get_app_config(app.testing).get('SESSION_COOKIE_DOMAIN')
+        formatted_shared_domain = '.' + shared_domain
+        resp.set_cookie('sso_authentication', '', expires=0, domain=formatted_shared_domain)
         return resp
 
     elif not sso_is_enabled:
@@ -126,15 +135,20 @@ def logout_qvain():
     """
     # Check how to logout, SSO, SSO (forced), or SAML
     sso_authentication_force = request.cookies.get('sso_authentication')
-    sso_is_enabled = get_app_config(app.testing).get('SSO_AUTHORIZATION') or sso_authentication_force
+    sso_is_enabled = get_app_config(app.testing).get('SSO').get('ENABLED') or sso_authentication_force
 
     if sso_is_enabled:
-        log.info('SSO is enabled..., logging out from Qvain using SSO')
-        logout_url = get_app_config(app.testing).get('SSO_LOGOUT_QVAIN')
+        log.info('SSO is enabled, logging out from Qvain using SSO')
+        logout_host = get_app_config(app.testing).get('SSO').get('HOST')
+        sso_redirect_url = get_app_config(app.testing).get('SERVER_QVAIN_DOMAIN_NAME', '')
+        logout_url = logout_host + '/logout?service=QVAIN&redirect_url=https://' + sso_redirect_url
+
         resp = make_response(redirect(logout_url))
 
         # Delete forced SSO cookie
-        resp.set_cookie('sso_authentication', '', expires=0)
+        shared_domain = get_app_config(app.testing).get('SESSION_COOKIE_DOMAIN')
+        formatted_shared_domain = '.' + shared_domain
+        resp.set_cookie('sso_authentication', '', expires=0, domain=formatted_shared_domain)
         return resp
 
     elif not sso_is_enabled:
@@ -168,8 +182,8 @@ def frontend_app(path):
     resp = make_response(_render_index_template())
 
     if sso_enabled_through_url == 'true':
-        # Force enable SSO cookie for entire domain (Etsin + Qvain)...
-        shared_domain = get_app_config(app.testing).get('SHARED_DOMAIN_NAME')
+        # Force enable SSO cookie for entire domain (Etsin + Qvain)
+        shared_domain = get_app_config(app.testing).get('SESSION_COOKIE_DOMAIN')
         formatted_shared_domain = '.' + shared_domain
         resp.set_cookie('sso_authentication', 'true', domain=formatted_shared_domain)
 
