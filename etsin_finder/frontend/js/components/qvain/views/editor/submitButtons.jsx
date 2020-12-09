@@ -62,7 +62,7 @@ export class SubmitButtons extends Component {
 
     this.closeUseDoiInformation()
     this.setLoading(true)
-    submitFunction()
+    await submitFunction()
     this.setLoading(false)
   }
 
