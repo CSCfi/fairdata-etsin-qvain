@@ -32,81 +32,137 @@ from etsin_finder.localization import get_language, translate
 
 # REACT APP RELATED
 
-@app.route('/sso/etsin')
+@app.route('/login/etsin')
 def login_etsin():
-    """Endpoint which frontend should call when wanting to perform a login as Etsin
+    """Endpoint which the frontend calls when wanting to perform a login as Etsin
 
     Returns:
         Redirect the login.
 
     """
-    auth = get_saml_auth(request, '_ETSIN')
+    # Check how to login, SSO, SSO (forced), or SAML
+    sso_authentication_force = request.cookies.get('sso_authentication')
+    sso_is_enabled = get_app_config(app.testing).get('SSO').get('ENABLED') or sso_authentication_force
     redirect_url = quote(request.args.get('relay', '/'))
-    login_url = auth.login(redirect_url)
-    login_url = join_redirect_url_path(login_url, redirect_url)
 
+    if sso_is_enabled:
+        log.info('SSO is enabled, logging in to Etsin using SSO')
+        login_host = get_app_config(app.testing).get('SSO').get('HOST')
+        sso_redirect_url = get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME')
+        login_url = login_host + '/login?service=ETSIN&redirect_url=https://' + sso_redirect_url
+    elif not sso_is_enabled:
+        log.info('SSO is disabled, logging in to Etsin using SAML auth')
+        auth = get_saml_auth(request, '_ETSIN')
+        login_url = auth.login(redirect_url)
+
+    login_url = join_redirect_url_path(login_url, redirect_url)
     session['logged_in_through'] = 'etsin'
     return redirect(login_url)
 
-@app.route('/sso/qvain')
+@app.route('/login/qvain')
 def login_qvain():
-    """Endpoint which frontend should call when wanting to perform a login as Qvain
+    """Endpoint which the frontend calls when wanting to perform a login as Qvain
 
     Returns:
-        Redirect the login.
+        Redirect the login
 
     """
-    auth = get_saml_auth(request, '_QVAIN')
+    # Check how to login, SSO, SSO (forced), or SAML
+    sso_authentication_force = request.cookies.get('sso_authentication')
+    sso_is_enabled = get_app_config(app.testing).get('SSO').get('ENABLED') or sso_authentication_force
     redirect_url = quote(request.args.get('relay', '/'))
-    login_url = auth.login(redirect_url)
-    login_url = join_redirect_url_path(login_url, redirect_url)
 
+    if sso_is_enabled:
+        log.info('SSO is enabled, logging in to Qvain using SSO')
+        login_host = get_app_config(app.testing).get('SSO').get('HOST')
+        sso_redirect_url = get_app_config(app.testing).get('SERVER_QVAIN_DOMAIN_NAME', '')
+        login_url = login_host + '/login?service=QVAIN&redirect_url=https://' + sso_redirect_url
+    elif not sso_is_enabled:
+        log.info('SSO is disabled, logging in to Qvain using SAML auth')
+        auth = get_saml_auth(request, '_QVAIN')
+        login_url = auth.login(redirect_url)
+
+    login_url = join_redirect_url_path(login_url, redirect_url)
     session['logged_in_through'] = 'qvain'
     return redirect(login_url)
 
-@app.route('/slo/etsin')
+@app.route('/logout/etsin')
 def logout_etsin():
-    """Endpoint which frontend should call when wanting to perform a logout from Etsin
-
-    Currently not working since Fairdata authentication service does not support SLO.
+    """Endpoint which frontend calls when wanting to perform a logout from Etsin
 
     Returns:
         Redirect the logout.
 
     """
-    auth = get_saml_auth(request, '_ETSIN')
-    name_id = None
-    session_index = None
-    if 'samlNameId' in session:
-        name_id = session.get('samlNameId')
-    if 'samlSessionIndex' in session:
-        session_index = session.get('samlSessionIndex')
-    log.debug("LOGOUT request to /slo/etsin")
-    # Clear the flask session here because the idp doesnt seem to call the sls route.
-    session.clear()
-    return redirect(auth.logout(name_id=name_id, session_index=session_index))
+    # Check how to logout, SSO, SSO (forced), or SAML
+    sso_authentication_force = request.cookies.get('sso_authentication')
+    sso_is_enabled = get_app_config(app.testing).get('SSO').get('ENABLED') or sso_authentication_force
 
-@app.route('/slo/qvain')
+    if sso_is_enabled:
+        log.info('SSO is enabled, logging out from Etsin using SSO')
+        logout_host = get_app_config(app.testing).get('SSO').get('HOST')
+        sso_redirect_url = get_app_config(app.testing).get('SERVER_ETSIN_DOMAIN_NAME')
+        logout_url = logout_host + '/logout?service=ETSIN&redirect_url=https://' + sso_redirect_url
+
+        resp = make_response(redirect(logout_url))
+
+        # Delete forced SSO cookie
+        shared_domain = get_app_config(app.testing).get('SESSION_COOKIE_DOMAIN')
+        formatted_shared_domain = '.' + shared_domain
+        resp.set_cookie('sso_authentication', '', expires=0, domain=formatted_shared_domain)
+        return resp
+
+    elif not sso_is_enabled:
+        log.info('SSO is disabled, logging out from Etsin using SAML auth')
+        auth = get_saml_auth(request, '_ETSIN')
+        name_id = None
+        session_index = None
+        if 'samlNameId' in session:
+            name_id = session.get('samlNameId')
+        if 'samlSessionIndex' in session:
+            session_index = session.get('samlSessionIndex')
+        # Clear the flask session here because the idp doesnt seem to call the sls route.
+        session.clear()
+        return redirect(auth.logout(name_id=name_id, session_index=session_index))
+
+@app.route('/logout/qvain')
 def logout_qvain():
-    """Endpoint which frontend should call when wanting to perform a logout from Qvain
-
-    Currently not working since Fairdata authentication service does not support SLO.
+    """Endpoint which the frontend calls when wanting to perform a logout from Qvain
 
     Returns:
         Redirect the logout.
 
     """
-    auth = get_saml_auth(request, '_QVAIN')
-    name_id = None
-    session_index = None
-    if 'samlNameId' in session:
-        name_id = session.get('samlNameId')
-    if 'samlSessionIndex' in session:
-        session_index = session.get('samlSessionIndex')
-    log.debug("LOGOUT request to /slo/qvain")
-    # Clear the flask session here because the idp doesnt seem to call the sls route.
-    session.clear()
-    return redirect(auth.logout(name_id=name_id, session_index=session_index))
+    # Check how to logout, SSO, SSO (forced), or SAML
+    sso_authentication_force = request.cookies.get('sso_authentication')
+    sso_is_enabled = get_app_config(app.testing).get('SSO').get('ENABLED') or sso_authentication_force
+
+    if sso_is_enabled:
+        log.info('SSO is enabled, logging out from Qvain using SSO')
+        logout_host = get_app_config(app.testing).get('SSO').get('HOST')
+        sso_redirect_url = get_app_config(app.testing).get('SERVER_QVAIN_DOMAIN_NAME', '')
+        logout_url = logout_host + '/logout?service=QVAIN&redirect_url=https://' + sso_redirect_url
+
+        resp = make_response(redirect(logout_url))
+
+        # Delete forced SSO cookie
+        shared_domain = get_app_config(app.testing).get('SESSION_COOKIE_DOMAIN')
+        formatted_shared_domain = '.' + shared_domain
+        resp.set_cookie('sso_authentication', '', expires=0, domain=formatted_shared_domain)
+        return resp
+
+    elif not sso_is_enabled:
+        log.info('SSO is disabled, logging out from Qvain using SAML auth')
+        auth = get_saml_auth(request, '_QVAIN')
+        name_id = None
+        session_index = None
+        if 'samlNameId' in session:
+            name_id = session.get('samlNameId')
+        if 'samlSessionIndex' in session:
+            session_index = session.get('samlSessionIndex')
+        # Clear the flask session here because the idp doesnt seem to call the sls route.
+        session.clear()
+        return redirect(auth.logout(name_id=name_id, session_index=session_index))
 
 
 @app.route('/', defaults={'path': ''})
@@ -121,7 +177,17 @@ def frontend_app(path):
         Render the frontend.
 
     """
-    return _render_index_template()
+    # Check if URL endpoint force enabling SSO has been visited
+    sso_enabled_through_url = request.args.get('sso_authentication', default='false', type=str)
+    resp = make_response(_render_index_template())
+
+    if sso_enabled_through_url == 'true':
+        # Force enable SSO cookie for entire domain (Etsin + Qvain)
+        shared_domain = get_app_config(app.testing).get('SESSION_COOKIE_DOMAIN')
+        formatted_shared_domain = '.' + shared_domain
+        resp.set_cookie('sso_authentication', 'true', domain=formatted_shared_domain)
+
+    return resp
 
 def _render_index_template(saml_errors=[], slo_success=False):
     """Load saml attributes if logged in through old proxy, and log values
@@ -152,7 +218,7 @@ def _render_index_template(saml_errors=[], slo_success=False):
     return render_template('index.html', lang=lang, app_title=app_title, app_description=app_description)
 
 
-# SAML AUTHENTICATION RELATED
+# SAML authentication functions (not relevant for SSO)
 
 @app.route('/saml_metadata/')
 def saml_metadata_legacy():
