@@ -87,6 +87,7 @@ exports[`Qvain should render correctly 1`] = `
     datasetLoading={false}
   />
   <StickyHeader
+    clearSubmitResponse={[Function]}
     datasetError={false}
     datasetLoading={false}
     handleSubmitError={[Function]}
