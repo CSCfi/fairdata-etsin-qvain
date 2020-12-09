@@ -11,12 +11,11 @@ import Loader from '../../../general/loader'
 import { LinkButtonDarkGray } from '../../../general/button'
 import { useStores } from '../../utils/stores'
 
-const SubmitResponse = ({ history, response }) => {
+const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
   const {
     Qvain: { original },
     Env: { getEtsinUrl, getQvainUrl },
   } = useStores()
-  const [clearSubmitResponse, setClearSubmitResponse] = useState(false)
 
   const getPreferredIdentifier = () => {
     let identifier
@@ -33,12 +32,7 @@ const SubmitResponse = ({ history, response }) => {
   }
 
   const closeSubmitResponse = () => {
-    setClearSubmitResponse(true)
-  }
-
-  // If the user wants to clear the submitResponse
-  if (clearSubmitResponse) {
-    return null
+    clearSubmitResponse()
   }
 
   let goToEtsin = <Translate content="qvain.datasets.goToEtsin" />
@@ -188,6 +182,7 @@ const SubmitResponse = ({ history, response }) => {
 
 SubmitResponse.propTypes = {
   history: PropTypes.object.isRequired,
+  clearSubmitResponse: PropTypes.func.isRequired,
   response: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
 }
 

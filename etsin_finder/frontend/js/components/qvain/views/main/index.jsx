@@ -155,6 +155,14 @@ export class Qvain extends Component {
     event.preventDefault()
   }
 
+  clearSubmitResponse = () => {
+    this.setState({
+      datasetLoading: false,
+      submitted: false,
+      response: null,
+    })
+  }
+
   handleSubmitResponse = response => {
     this.setState({
       datasetLoading: false,
@@ -215,6 +223,7 @@ export class Qvain extends Component {
       response: metaxApiV2 ? error?.errors || responseV2 : response,
       handleSubmitError: this.handleSubmitError,
       handleSubmitResponse: this.handleSubmitResponse,
+      clearSubmitResponse: this.clearSubmitResponse,
       submitButtonsRef: this.submitButtonsRef,
     }
   }

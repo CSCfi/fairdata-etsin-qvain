@@ -57,14 +57,8 @@ export class SubmitButtons extends Component {
 
   submit = async submitFunction => {
     const { Stores } = this.props
-    const { addUnsavedMultiValueFields } = Stores.Qvain
-    const isProvenanceActorsOk = await Stores.Qvain.checkProvenanceActors()
+    const isProvenanceActorsOk = await Stores.Qvain.Actors.checkProvenanceActors()
     if (!isProvenanceActorsOk) return
-
-    addUnsavedMultiValueFields()
-    if (!this.checkOtherIdentifiers()) {
-      return
-    }
 
     this.closeUseDoiInformation()
     this.setLoading(true)
@@ -89,7 +83,7 @@ export class SubmitButtons extends Component {
         axios
           .post(urls.v1.datasets(), obj)
           .then(res => {
-            this.setChanged(false)
+            this.props.Stores.Qvain.setChanged(false)
             const data = res.data
             if (data && data.identifier) {
               this.goToDatasets(data.identifier)
