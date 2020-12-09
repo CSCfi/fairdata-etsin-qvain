@@ -64,7 +64,7 @@ class Login extends Component {
         loading: true,
       },
       () => {
-        window.location = `/sso/${loginThroughService}?relay=${
+        window.location = `/login/${loginThroughService}?relay=${
           location.pathname
         }${encodeURIComponent(query)}`
       }
@@ -77,7 +77,7 @@ class Login extends Component {
         showNotice: true,
       },
       () => {
-        window.location = `/slo/${this.state.loggedInThroughService}`
+        window.location = `/logout/${this.state.loggedInThroughService}`
       }
     )
   }
