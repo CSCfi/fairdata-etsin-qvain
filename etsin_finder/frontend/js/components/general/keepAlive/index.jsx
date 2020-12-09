@@ -51,7 +51,7 @@ export default class KeepAlive extends Component {
     if (idle && Auth.userLogged) {
       this.timeout = setTimeout(() => {
         // Auth.logout()
-        window.location = `/slo/${this.state.loggedInThroughService}`
+        window.location = `/logout/${this.state.loggedInThroughService}`
         this.setState({
           showNotice: true,
         })
