@@ -91,6 +91,7 @@ export default class FormatSelect extends Component {
     this.state = {
       isOpen: false,
       isFocused: false,
+      openList: false,
       frontColor: props.frontColor ? props.frontColor : props.background,
       color: props.color,
       background: props.background,
@@ -131,14 +132,13 @@ export default class FormatSelect extends Component {
     }
   }
 
-  changeSelected = selected => {
+  changeSelected = selectedformat => {
     this.setState(
-      {
-        isOpen: false,
-        isFocused: false,
-      },
+      state => ({
+        openList: !state.openList
+      }),
       () => {
-        this.props.onChange(selected)
+        this.props.onChange(selectedformat)
       }
     )
   }
@@ -148,6 +148,7 @@ export default class FormatSelect extends Component {
       state => ({
         isOpen: !state.isOpen,
         isFocused: !state.isOpen,
+        openList: !state.openList
       }),
       () => {
         if (this.state.isOpen) {
@@ -170,8 +171,7 @@ export default class FormatSelect extends Component {
         >
           <Translate component={Text} content="dataset.datasetAsFile.open" />
         </Controller>
-        {this.state.isOpen &&
-          this.state.isFocused &&
+        {this.state.openList &&
           this.props.options.map((single, i) => (
             <ListItem
               noMargin

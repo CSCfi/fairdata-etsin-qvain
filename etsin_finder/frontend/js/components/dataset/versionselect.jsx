@@ -77,6 +77,7 @@ export default class VersionSelect extends Component {
     this.state = {
       isOpen: false,
       isFocused: false,
+      openList: false,
       selected: props.value,
       newestColor: props.newestColor ? props.newestColor : props.background,
       background: props.background,
@@ -117,11 +118,9 @@ export default class VersionSelect extends Component {
 
   changeSelected = selected => {
     this.setState(
-      {
-        selected,
-        isOpen: false,
-        isFocused: false,
-      },
+      state => ({
+        openList: !state.openList
+      }),
       () => {
         this.props.onChange(selected)
       }
@@ -133,6 +132,7 @@ export default class VersionSelect extends Component {
       state => ({
         isOpen: !state.isOpen,
         isFocused: !state.isOpen,
+        openList: !state.openList
       }),
       () => {
         if (this.state.isOpen) {
@@ -169,7 +169,7 @@ export default class VersionSelect extends Component {
           <span className="sr-only">Version selector (with current version) </span>
           {selected.label}
         </Controller>
-        {this.state.isOpen && this.state.isFocused && (
+        {this.state.openList && (
           <List width={this.props.width} background={this.props.background}>
             {this.props.options.map((single, i) => (
               <ListItem

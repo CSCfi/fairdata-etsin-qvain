@@ -25,7 +25,6 @@ class FormatChanger extends Component {
 
     this.state = {
       formats: [],
-      selected: '',
       url: '',
     }
   }
@@ -61,7 +60,6 @@ class FormatChanger extends Component {
     }
     this.setState({
       formats: fields,
-      selected: '',
     })
   }
 
@@ -69,7 +67,6 @@ class FormatChanger extends Component {
     if (this.state.formats.some(field => field.value === format.value)) {
       this.setState(
         {
-          selected: format,
           url: `/api/format?cr_id=${this.props.idn}&format=${format.value}`,
         },
         () => {
@@ -96,11 +93,8 @@ class FormatChanger extends Component {
         color={this.props.theme.color.primary}
         padding="0.5em 1em"
         width="fit-content"
-        value={this.state.selected}
         onChange={this.changeFormat}
-        onBlur={this.closeModal}
         options={this.state.formats}
-        notRemoved={this.state.notRemoved}
       />
     ) : null
   }
