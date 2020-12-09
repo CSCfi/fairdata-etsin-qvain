@@ -47,8 +47,10 @@ const Labels = styled.div`
 
 const Flex = styled.div`
   display: flex;
-  align-items: center;
-  margin-bottom: 0.5em;
+  align-items: stretch;
+  > * {
+    margin: 0.25rem;
+  }
 `
 
 const Controls = styled.div`
@@ -59,12 +61,12 @@ const Controls = styled.div`
   > * {
     margin: 0.25rem;
   }
-`
-
-const Spacer = styled.div`
-  flex-basis: 0;
-  flex-grow: 1;
-  margin: 0;
+  > ${Flex} {
+    margin: 0;
+  }
+  > *:first-child {
+    margin-right: auto;
+  }
 `
 
 class Description extends Component {
@@ -132,25 +134,24 @@ class Description extends Component {
                   : null
               }
             />
-            <Spacer />
             <FormatChanger idn={this.props.match.params.identifier} />
+            <Flex>
+              <ErrorBoundary>
+                {this.checkEmails(this.props.emails) && !this.props.harvested && (
+                  <Contact
+                    datasetID={datasetIdentifier}
+                    emails={this.props.emails}
+                    // TEMPORARY: rems check won't be needed in contact later.
+                    isRems={
+                      this.props.dataset.research_dataset.access_rights.access_type.identifier ===
+                      ACCESS_TYPE_URL.PERMIT
+                    }
+                  />
+                )}
+              </ErrorBoundary>
+              <AskForAccess cr_id={datasetIdentifier} />
+            </Flex>
           </Controls>
-          <Flex>
-            <ErrorBoundary>
-              {this.checkEmails(this.props.emails) && !this.props.harvested && (
-                <Contact
-                  datasetID={datasetIdentifier}
-                  emails={this.props.emails}
-                  // TEMPORARY: rems check won't be needed in contact later.
-                  isRems={
-                    this.props.dataset.research_dataset.access_rights.access_type.identifier ===
-                    ACCESS_TYPE_URL.PERMIT
-                  }
-                />
-              )}
-            </ErrorBoundary>
-            <AskForAccess cr_id={datasetIdentifier} />
-          </Flex>
         </Labels>
         <section>
           <div>
