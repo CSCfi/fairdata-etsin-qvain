@@ -28,12 +28,12 @@ export const METAX_FAIRDATA_ROOT_URL = 'https://metax.fairdata.fi'
 export const FAIRDATA_WEBSITE_URL = {
   ETSIN: {
     FI: 'https://www.fairdata.fi/etsin/',
-    EN: 'https://www.fairdata.fi/en/etsin/'
+    EN: 'https://www.fairdata.fi/en/etsin/',
   },
   QVAIN: {
     FI: 'https://www.fairdata.fi/qvain/',
-    EN: 'https://www.fairdata.fi/en/qvain/'
-  }
+    EN: 'https://www.fairdata.fi/en/qvain/',
+  },
 }
 
 export const LICENSE_URL = {
@@ -61,7 +61,7 @@ export const ROLE = {
   CURATOR: 'curator',
   RIGHTS_HOLDER: 'rights_holder',
   CONTRIBUTOR: 'contributor',
-  PROVENANCE: 'provenance'
+  PROVENANCE: 'provenance',
 }
 
 export const PRESERVATION_STATE_COLOR = {
@@ -174,4 +174,12 @@ export const PRESERVATION_STATE = {
     who: 'system',
     color: PRESERVATION_STATE_COLOR.DEFAULT,
   },
+}
+
+export const DATASET_STATE = {
+  NEW: 'NEW',
+  DRAFT: 'DRAFT',
+  UNPUBLISHED_DRAFT: 'UNPUBLISHED_DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  UNKNOWN: 'UNKNOWN',
 }

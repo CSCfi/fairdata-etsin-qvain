@@ -5,28 +5,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import Label from '../../../general/card/label'
 
-const TemporalList = ({ temporals, lang, remove, readonly }) => (
-  <>
-    {temporals.map(item => (
-      <Label color="primary" margin="0 0.5em 0.5em 0" key={item.uiid}>
-        <PaddedWord>
-          {`${new Date(item.startDate).toLocaleDateString(lang)} - ${new Date(
-            item.endDate
-          ).toLocaleDateString(lang)}`}
-        </PaddedWord>
-        {!readonly && (
-          <FontAwesomeIcon
-            onClick={() => {
-              remove(item.uiid)
-            }}
-            icon={faTimes}
-            size="xs"
-          />
-        )}
-      </Label>
-    ))}
-  </>
-)
+const dateToString = (date, lang) => (date ? new Date(date).toLocaleDateString(lang) : '')
+
+const TemporalList = ({ temporals, lang, remove, readonly }) =>
+  temporals.map(item => (
+    <Label color="primary" margin="0 0.5em 0.5em 0" key={item.uiid}>
+      <PaddedWord>
+        {`${dateToString(item.startDate, lang)} - ${dateToString(item.endDate, lang)}`}
+      </PaddedWord>
+      {!readonly && (
+        <FontAwesomeIcon
+          onClick={() => {
+            remove(item.uiid)
+          }}
+          icon={faTimes}
+          size="xs"
+        />
+      )}
+    </Label>
+  ))
 
 TemporalList.propTypes = {
   temporals: PropTypes.array.isRequired,
