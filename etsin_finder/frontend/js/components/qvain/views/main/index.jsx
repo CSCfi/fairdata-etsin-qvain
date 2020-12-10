@@ -156,9 +156,10 @@ export class Qvain extends Component {
   }
 
   clearSubmitResponse = () => {
+    const { clearResponse, setError } = this.props.Stores.Qvain.Submit
+    clearResponse()
+    setError(null)
     this.setState({
-      datasetLoading: false,
-      submitted: false,
       response: null,
     })
   }
