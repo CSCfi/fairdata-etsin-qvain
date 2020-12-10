@@ -77,6 +77,8 @@ def _get_test_app_config():
             'ENABLED': True,
             'HOST': 'mock-download',
             'PORT': 1,
+            'PUBLIC_HOST': 'mock-download-public',
+            'PUBLIC_PORT': 2,
         }
     }
 
@@ -101,6 +103,8 @@ def _get_app_config_for_travis():
             'ENABLED': True,
             'HOST': 'mock-download',
             'PORT': 1,
+            'PUBLIC_HOST': 'mock-download-public',
+            'PUBLIC_PORT': 2,
         }
     }
 
