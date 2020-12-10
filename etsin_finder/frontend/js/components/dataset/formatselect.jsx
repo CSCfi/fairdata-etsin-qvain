@@ -24,7 +24,6 @@ const SelectContainer = styled.div`
   position: relative;
 `
 
-/* prettier-ignore */
 const ListButton = styled(Button)`
   color: ${props => props.color};
   padding: ${props => props.padding};
@@ -86,37 +85,13 @@ export default class FormatSelect extends Component {
   constructor(props) {
     super(props)
 
-    this.timeoutID = undefined
-
     this.state = {
-      isOpen: false,
-      isFocused: false,
-      openList: false,
+      listOpen: false,
       frontColor: props.frontColor ? props.frontColor : props.background,
       color: props.color,
       background: props.background,
       padding: props.padding,
       tooltipOpen: false,
-    }
-  }
-
-  onBlur = () => {
-    this.timeoutID = setTimeout(() => {
-      if (this.state.isFocused) {
-        this.setState({
-          isFocused: false,
-          isOpen: false,
-        })
-      }
-    }, 0)
-  }
-
-  onFocus = () => {
-    clearTimeout(this.timeoutID)
-    if (!this.state.isFocused) {
-      this.setState({
-        isFocused: true,
-      })
     }
   }
 
@@ -135,7 +110,7 @@ export default class FormatSelect extends Component {
   changeSelected = selectedformat => {
     this.setState(
       state => ({
-        openList: !state.openList
+        listOpen: !state.listOpen
       }),
       () => {
         this.props.onChange(selectedformat)
@@ -146,12 +121,10 @@ export default class FormatSelect extends Component {
   toggleOpen = () => {
     this.setState(
       state => ({
-        isOpen: !state.isOpen,
-        isFocused: !state.isOpen,
-        openList: !state.openList
+        listOpen: !state.listOpen
       }),
       () => {
-        if (this.state.isOpen) {
+        if (this.state.listOpen) {
           this.focusFirstOption()
         }
       }
@@ -160,18 +133,18 @@ export default class FormatSelect extends Component {
 
   render() {
     return (
-      <SelectContainer width={this.props.width} onFocus={this.onFocus} onBlur={this.onBlur}>
+      <SelectContainer width={this.props.width}>
         <Controller
           noMargin
           color={this.state.color}
           padding={this.state.padding}
           background={this.state.background}
-          isOpen={this.state.isOpen}
+          listOpen={this.state.listOpen}
           onClick={this.toggleOpen}
         >
           <Translate component={Text} content="dataset.datasetAsFile.open" />
         </Controller>
-        {this.state.openList &&
+        {this.state.listOpen &&
           this.props.options.map((single, i) => (
             <ListItem
               noMargin
