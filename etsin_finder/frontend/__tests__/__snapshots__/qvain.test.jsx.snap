@@ -87,6 +87,7 @@ exports[`Qvain should render correctly 1`] = `
     datasetLoading={false}
   />
   <StickyHeader
+    clearSubmitResponse={[Function]}
     datasetError={false}
     datasetLoading={false}
     handleSubmitError={[Function]}
@@ -119,37 +120,6 @@ exports[`Qvain should render correctly 1`] = `
     when={false}
   />
 </card__QvainContainer>
-`;
-
-exports[`Qvain.Description should render <Description /> 1`] = `
-<div
-  className="container"
->
-  <title__SectionTitle>
-    <Translate
-      component="span"
-      content="qvain.description.title"
-    />
-    <Tooltip
-      align="Right"
-      close={[Function]}
-      isOpen={false}
-      text={<DescriptionInfo />}
-    >
-      <HelpIcon
-        aria-label="Description info"
-        onClick={[Function]}
-      />
-    </Tooltip>
-  </title__SectionTitle>
-  <DescriptionField />
-  <IssuedDateField />
-  <OtherIdentifierField />
-  <FieldOfScienceField />
-  <LanguageField />
-  <KeywordsField />
-  <SubjectHeadingsField />
-</div>
 `;
 
 exports[`Qvain.Description should render <DescriptionField /> 1`] = `

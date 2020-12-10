@@ -19,13 +19,3 @@ def get_etsin_saml_config_from_file():
     """
     with open('/home/etsin-user/etsin/settings.json') as saml_json_file:
         return json.load(saml_json_file)
-
-def get_sso_key():
-    """Get SSO key from saml config.
-
-    Returns:
-        saml_config
-
-    """
-    data = get_etsin_saml_config_from_file()
-    return data.get('sp').get('privateKey')

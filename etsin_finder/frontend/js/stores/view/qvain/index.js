@@ -2,12 +2,14 @@ import { observable, action, computed, makeObservable } from 'mobx'
 import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Resources from './qvain.resources'
 import Files from './qvain.files'
+import Submit from './qvain.submit'
 
 class Qvain extends Resources {
   constructor(Env) {
     super()
     this.Env = Env
     this.Files = new Files(this)
+    this.Submit = new Submit(this)
     this.resetQvainStore()
     makeObservable(this)
   }
@@ -47,6 +49,8 @@ class Qvain extends Resources {
 
     this.changed = false
     this.deprecated = false
+
+    this.Submit.reset()
   }
 
   @action
@@ -257,6 +261,7 @@ class Qvain extends Resources {
   }
 
   @action editDataset = async dataset => {
+    this.Submit.reset()
     this.setChanged(false)
     this.original = { ...dataset }
     this.loadBasicFields(dataset)
