@@ -23,6 +23,13 @@ class Submit {
 
   @observable useDoiModalIsOpen = false
 
+  @action reset = () => {
+    this.isLoading = false
+    this.error = undefined
+    this.response = null
+    this.useDoiModalIsOpen = false
+  }
+
   @action setLoading = state => {
     this.isLoading = state
   }
