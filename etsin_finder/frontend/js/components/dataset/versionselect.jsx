@@ -138,7 +138,7 @@ export default class VersionSelect extends Component {
           color={selected.old && !selected.removed ? etsinTheme.color.dark : this.props.color}
           padding={this.props.padding}
           background={this.selectColor(selected)}
-          listOpen={this.state.listOpen}
+          isOpen={this.state.listOpen}
           onClick={this.toggleOpen}
         >
           <span className="sr-only">Version selector (with current version) </span>

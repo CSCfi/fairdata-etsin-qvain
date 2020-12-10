@@ -37,6 +37,11 @@ const ListButton = styled(Button)`
     background: ${props => (darken(0.1, props.background))};
   }
 `
+const ListItems = styled.div`
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+`
 
 const ListItem = styled(ListButton)`
   &:first-of-type {
@@ -139,32 +144,37 @@ export default class FormatSelect extends Component {
           color={this.state.color}
           padding={this.state.padding}
           background={this.state.background}
-          listOpen={this.state.listOpen}
+          isOpen={this.state.listOpen}
           onClick={this.toggleOpen}
         >
           <Translate component={Text} content="dataset.datasetAsFile.open" />
         </Controller>
-        {this.state.listOpen &&
-          this.props.options.map((single, i) => (
-            <ListItem
-              noMargin
-              color={this.state.color}
-              padding={this.state.padding}
-              key={single.value}
-              onClick={() => this.changeSelected(single)}
-              value={single.value}
-              ref={e => this.setFirstOptionRef(e, i)}
-              background={this.state.frontColor}
-              removed={single.removed}
-            >
-              {this.props.options[0] === single ? (
-                <span className="sr-only">Current version: </span>
-              ) : (
-                ''
-              )}
-              {single.label}
-            </ListItem>
-          ))}
+
+        {this.state.listOpen && (
+          <ListItems>
+            {this.props.options.map((single, i) => (
+              <ListItem
+                noMargin
+                color={this.state.color}
+                padding={this.state.padding}
+                key={single.value}
+                onClick={() => this.changeSelected(single)}
+                value={single.value}
+                ref={e => this.setFirstOptionRef(e, i)}
+                background={this.state.frontColor}
+                removed={single.removed}
+              >
+                {this.props.options[0] === single ? (
+                  <span className="sr-only">Current version: </span>
+                ) : (
+                  ''
+                )}
+                {single.label}
+              </ListItem>
+            ))}
+          </ListItems>
+        )}
+
         {this.props.options.length > 1 && (
           <InfoPosition>
             <Tooltip
