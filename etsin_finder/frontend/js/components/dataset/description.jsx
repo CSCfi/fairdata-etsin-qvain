@@ -53,6 +53,11 @@ const Flex = styled.div`
   }
 `
 
+const MarginAfter = styled.div`
+  display: flex;
+  align-items: stretch;
+`
+
 const Controls = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -64,7 +69,7 @@ const Controls = styled.div`
   > ${Flex} {
     margin: 0;
   }
-  > *:first-child {
+  > ${MarginAfter} {
     margin-right: auto;
   }
 `
@@ -126,14 +131,21 @@ class Description extends Component {
                 data_catalog_identifier={this.props.dataset.data_catalog.catalog_json.identifier}
               />
             )}
-            <AccessRights
-              button
-              access_rights={
-                checkNested(this.props.dataset, 'research_dataset', 'access_rights', 'access_type')
-                  ? this.props.dataset.research_dataset.access_rights
-                  : null
-              }
-            />
+            <MarginAfter>
+              <AccessRights
+                button
+                access_rights={
+                  checkNested(
+                    this.props.dataset,
+                    'research_dataset',
+                    'access_rights',
+                    'access_type'
+                  )
+                    ? this.props.dataset.research_dataset.access_rights
+                    : null
+                }
+              />
+            </MarginAfter>
             <FormatChanger idn={this.props.match.params.identifier} />
             <Flex>
               <ErrorBoundary>
