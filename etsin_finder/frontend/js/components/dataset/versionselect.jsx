@@ -73,33 +73,11 @@ export default class VersionSelect extends Component {
   constructor(props) {
     super(props)
 
-    this.timeoutID = undefined
     this.state = {
-      isOpen: false,
-      isFocused: false,
+      listOpen: false,
       selected: props.value,
       newestColor: props.newestColor ? props.newestColor : props.background,
       background: props.background,
-    }
-  }
-
-  onBlur = () => {
-    this.timeoutID = setTimeout(() => {
-      if (this.state.isFocused) {
-        this.setState({
-          isFocused: false,
-          isOpen: false,
-        })
-      }
-    }, 0)
-  }
-
-  onFocus = () => {
-    clearTimeout(this.timeoutID)
-    if (!this.state.isFocused) {
-      this.setState({
-        isFocused: true,
-      })
     }
   }
 
@@ -117,11 +95,9 @@ export default class VersionSelect extends Component {
 
   changeSelected = selected => {
     this.setState(
-      {
-        selected,
-        isOpen: false,
-        isFocused: false,
-      },
+      state => ({
+        listOpen: !state.listOpen
+      }),
       () => {
         this.props.onChange(selected)
       }
@@ -131,11 +107,10 @@ export default class VersionSelect extends Component {
   toggleOpen = () => {
     this.setState(
       state => ({
-        isOpen: !state.isOpen,
-        isFocused: !state.isOpen,
+        listOpen: !state.listOpen
       }),
       () => {
-        if (this.state.isOpen) {
+        if (this.state.listOpen) {
           this.focusFirstOption()
         }
       }
@@ -157,19 +132,19 @@ export default class VersionSelect extends Component {
   render() {
     const { selected } = this.state
     return (
-      <SelectContainer width={this.props.width} onFocus={this.onFocus} onBlur={this.onBlur}>
+      <SelectContainer width={this.props.width}>
         <Controller
           noMargin
           color={selected.old && !selected.removed ? etsinTheme.color.dark : this.props.color}
           padding={this.props.padding}
           background={this.selectColor(selected)}
-          isOpen={this.state.isOpen}
+          listOpen={this.state.listOpen}
           onClick={this.toggleOpen}
         >
           <span className="sr-only">Version selector (with current version) </span>
           {selected.label}
         </Controller>
-        {this.state.isOpen && this.state.isFocused && (
+        {this.state.listOpen && (
           <List width={this.props.width} background={this.props.background}>
             {this.props.options.map((single, i) => (
               <ListItem
