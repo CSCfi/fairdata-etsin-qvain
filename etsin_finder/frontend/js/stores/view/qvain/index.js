@@ -205,7 +205,7 @@ class Qvain extends Resources {
   }
 
   // load fields that won't be duplicated by template copy
-  @action loadStatusAndFileFields = async (dataset) => {
+  @action loadStatusAndFileFields = async dataset => {
     this.deprecated = dataset.deprecated
 
     // Load data catalog
@@ -246,9 +246,9 @@ class Qvain extends Resources {
           r.download_url ? r.download_url.identifier : undefined,
           r.use_category
             ? {
-              label: r.use_category.pref_label.en,
-              value: r.use_category.identifier,
-            }
+                label: r.use_category.pref_label.en,
+                value: r.use_category.identifier,
+              }
             : undefined
         )
       )

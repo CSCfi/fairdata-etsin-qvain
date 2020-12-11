@@ -130,8 +130,19 @@ class Submit {
       await this.updateFiles(data.identifier, fileActions, metadataActions)
       setChanged(false)
 
-      if (fileActions || metadataActions || newCumulativeState) {
+      if (newCumulativeState != null) {
+        const obj = {
+          identifier: this.Qvain.original.identifier,
+          cumulative_state: this.Qvain.newCumulativeState,
+        }
+
+        const url = urls.v2.rpc.changeCumulativeState()
+        await axios.post(url, obj)
+      }
+
+      if (fileActions || metadataActions || newCumulativeState != null) {
         // Files changed, get updated dataset
+
         const url = urls.v2.dataset(data.identifier)
         const updatedResponse = await axios.get(url)
         await editDataset(updatedResponse.data)
@@ -145,6 +156,7 @@ class Submit {
       this.setResponse(undefined)
       if (!(error instanceof ValidationError)) {
         console.error(error)
+        this.setResponse(error)
       }
     } finally {
       this.setLoading(false)
