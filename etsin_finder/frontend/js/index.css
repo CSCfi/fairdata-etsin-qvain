@@ -1,0 +1,10 @@
+@font-face {
+  font-family: Lato;
+  src: local('Lato') url(../resources/fonts/lato/Lato-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: Lato;
+  src: local('Lato') url(../resources/fonts/lato/Lato-Bold.ttf);
+  font-weight: 700;
+}
