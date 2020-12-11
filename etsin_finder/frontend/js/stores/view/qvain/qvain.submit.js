@@ -145,6 +145,7 @@ class Submit {
 
         const url = urls.v2.dataset(data.identifier)
         const updatedResponse = await axios.get(url)
+        this.Qvain.setOriginal(updatedResponse)
         await editDataset(updatedResponse.data)
       } else {
         await editDataset(data)
