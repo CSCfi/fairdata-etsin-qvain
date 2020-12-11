@@ -80,12 +80,9 @@ const CumulativeState = () => {
           ? urls.v2.dataset(original.identifier)
           : urls.v1.dataset(original.identifier)
 
-        console.log(getUrl)
-
         axios.get(getUrl).then(getRes => {
           const { data: getData } = getRes
 
-          console.log(getData)
           setOriginal({ ...getData })
         })
       })
