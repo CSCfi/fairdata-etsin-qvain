@@ -70,6 +70,7 @@ const english = {
       snglr: 'Contributor',
     },
     copyToClipboard: 'Copy to clipboard',
+    copyToClipboardSuccess: 'Copied identifier to clipboard',
     creator: {
       plrl: 'Creators',
       snglr: 'Creator',
@@ -265,7 +266,7 @@ const english = {
       datasets: 'Datasets',
       home: 'Home',
       qvain: 'Qvain',
-      error: 'Error - The page could not be found'
+      error: 'Error - The page could not be found',
     },
     language: {
       toggleLabel: 'Switch language to: %(otherLang)s',
@@ -629,7 +630,8 @@ const english = {
       },
       subjectHeadings: {
         title: 'Subject Headings',
-        infoText: 'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
+        infoText:
+          'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
         placeholder: 'Type to search for available options',
         help:
           'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
@@ -1484,7 +1486,7 @@ const english = {
           levels: {
             organization: 'Organization',
             department: 'Department',
-            subdepartment: 'Subdepartment'
+            subdepartment: 'Subdepartment',
           },
           addButton: 'Add organization',
           editButton: 'Edit organization',

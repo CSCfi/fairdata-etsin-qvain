@@ -10,37 +10,24 @@
    */
 }
 
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-import ClipboardIcon from 'react-clipboard-icon'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClipboard, faCheck } from '@fortawesome/free-solid-svg-icons'
 import translate from 'counterpart'
 
 import { Link } from '../general/button'
 import idnToLink from '../../utils/idnToLink'
+import TooltipHover from '../general/tooltipHover'
+import { useStores } from '../../utils/stores'
 
-export default class Identifier extends Component {
-  cliboardStyle = {
-    verticalAlign: 'bottom',
-    marginLeft: '3px',
-    display: 'inline-block',
-    cursor: 'pointer',
-  }
-
-  constructor(props) {
-    super(props)
-    const url = idnToLink(this.props.idn)
-    const prefix = this.prefix(this.props.idn)
-    const text = prefix === 'doi' ? this.props.idn.substring(4) : this.props.idn
-    this.state = { url, prefix, text }
-  }
-
-  prefix(idn) {
-    let id = idn
+const Identifier = ({ idn }) => {
+  const setPrefix = idnText => {
+    let id = idnText
     const sub4 = id.substring(0, 4)
     if (sub4 === 'http') {
-      id = new URL(idn).pathname.slice(1)
+      id = new URL(idnText).pathname.slice(1)
     }
     const sub3 = id.substring(0, 3)
     if (sub3 === 'urn' || sub3 === 'doi') {
@@ -49,52 +36,76 @@ export default class Identifier extends Component {
     return ''
   }
 
-  render() {
-    // display as text if not of type doi or urn
-    if (!this.state.url) {
-      return this.props.idn
-    }
+  const Stores = useStores()
+  const { lang } = Stores.Locale
+  const { announce } = Stores.Accessibility
 
-    // return styled link
-    return (
-      <IdnSpan>
-        <IdnLink
-          noMargin
-          href={this.state.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          {...this.props}
-          title={this.state.url}
-        >
-          {this.state.prefix ? (
-            <Prefix>
-              <span aria-hidden>{this.state.prefix}</span>
-              <span className="sr-only">{`${this.state.prefix}: `}</span>
-            </Prefix>
-          ) : null}
-          <IDN>{this.state.text}</IDN>
-        </IdnLink>
-        <CopyToClipboard text={this.state.url} style={this.cliboardStyle}>
-          <ClipboardIcon title={translate('dataset.copyToClipboard')} size={18} />
-        </CopyToClipboard>
-      </IdnSpan>
-    )
+  const url = idnToLink(idn)
+  const prefix = setPrefix(idn)
+  const text = prefix === 'doi' ? idn.substring(4) : idn
+  const [tooltipText, setTooltipText] = useState(
+    translate('dataset.copyToClipboard', { locale: lang })
+  )
+  const [copiedStatus, setCopiedStatus] = useState(false)
+
+  // display as text if not of type doi or urn
+  if (!url) {
+    return idn
   }
+  // return styled link
+  return (
+    <IdnSpan>
+      <IdnLink noMargin href={url} target="_blank" rel="noopener noreferrer" {...idn} title={url}>
+        {prefix ? (
+          <Prefix>
+            <span aria-hidden>{prefix}</span>
+            <span className="sr-only">{`${prefix}: `}</span>
+          </Prefix>
+        ) : null}
+        <IDN id="idn-text">{text}</IDN>
+      </IdnLink>
+      <TooltipHover title={tooltipText}>
+        <IconButton
+          onClick={() => {
+            navigator.clipboard.writeText(url)
+            setCopiedStatus(true)
+            setTooltipText(translate('dataset.copyToClipboardSuccess', { locale: lang }))
+            announce(translate('dataset.copyToClipboardSuccess', { locale: lang }))
+            setTimeout(() => {
+              setCopiedStatus(false)
+              setTooltipText(translate('dataset.copyToClipboard', { locale: lang }))
+            }, 3000)
+          }}
+        >
+          <FontAwesomeIcon
+            icon={copiedStatus ? faCheck : faClipboard}
+            color={copiedStatus ? 'green' : 'white'}
+          />
+        </IconButton>
+      </TooltipHover>
+    </IdnSpan>
+  )
 }
 
 const IdnSpan = styled.div`
-  display: -webkit-box;
+  // display: -webkit-box;
+  display: flex;
   width: 100%;
+  background-color: ${props => props.theme.color.primary};
+  // border: ${props => props.theme.color.primary};
+  border-radius: 0.3em;
+  justify-content: space-between;
 `
 
 // prettier-ignore
 const IdnLink = styled(Link)`
-  background-color: ${props => props.theme.color.primary};
-  border: ${props => props.theme.color.primary};
-  width: max-content;
+  // background-color: ${props => props.theme.color.primary};
+  // border: ${props => props.theme.color.primary};
+  width: -webkit-fill-available;
   max-width: 100%;
   color: white;
-  border-radius: 0.3em;
+  // border-radius: 0.3em;
+  border: none;
   display: flex;
   padding: 0;
   align-items: center;
@@ -115,7 +126,7 @@ const Prefix = styled.div`
   border-top-left-radius: 0.3em;
   margin: 0;
   border-bottom-left-radius: 0.3em;
-  padding: 0.4em 0.5em 0.4em 0.7em;
+  padding: 0.5em 0.5em 0.4em 0.7em;
   align-self: stretch;
   display: flex;
   align-items: center;
@@ -132,6 +143,17 @@ const IDN = styled.div`
   text-align: left;
 `
 
+const IconButton = styled.button`
+  height: 100%;
+  background-color: #505050;
+  border-style: none;
+  border-top-right-radius: 0.3em;
+  border-bottom-right-radius: 0.3em;
+  width: 36px;
+`
+
 Identifier.propTypes = {
   idn: PropTypes.string.isRequired,
 }
+
+export default Identifier
