@@ -130,7 +130,7 @@ class Submit {
       await this.updateFiles(data.identifier, fileActions, metadataActions)
       setChanged(false)
 
-      if (newCumulativeState) {
+      if (newCumulativeState != null) {
         const obj = {
           identifier: this.Qvain.original.identifier,
           cumulative_state: this.Qvain.newCumulativeState,
@@ -140,7 +140,7 @@ class Submit {
         await axios.post(url, obj)
       }
 
-      if (fileActions || metadataActions || newCumulativeState) {
+      if (fileActions || metadataActions || newCumulativeState != null) {
         // Files changed, get updated dataset
 
         const url = urls.v2.dataset(data.identifier)
