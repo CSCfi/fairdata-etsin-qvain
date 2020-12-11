@@ -99,7 +99,7 @@ class Accessibility {
 
   getLocation() {
     const etsinLocationMatchers = [
-      ['datasets', new RegExp('^/datasets/[^/]+?$')],
+      ['datasets', new RegExp('^/datasets/?')],
       ['dataset', new RegExp('^/dataset/[^/]+?$')],
       ['data', new RegExp('^/dataset/[^/]+/data/?$')],
       ['events', new RegExp('^/dataset/[^/]+/events/?$')],
