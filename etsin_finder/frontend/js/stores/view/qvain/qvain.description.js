@@ -11,7 +11,7 @@ class Description extends MultiLanguageField {
 
   @action
   fromBackend = dataset => {
-    this.value = { en: dataset.description.en || '', fi: dataset.description.fi || '' }
+    this.value = { en: dataset.description?.en || '', fi: dataset.description?.fi || '' }
   }
 }
 

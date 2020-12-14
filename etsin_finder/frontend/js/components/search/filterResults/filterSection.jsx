@@ -319,7 +319,6 @@ export const FilterItems = styled.div`
     color: ${p => p.theme.color.dark};
     text-align: left;
     &:focus {
-      outline: none;
       color: ${p => p.theme.color.primary};
       text-decoration: underline;
     }

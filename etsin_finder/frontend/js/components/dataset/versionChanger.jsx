@@ -72,7 +72,6 @@ class VersionChanger extends Component {
         width="10em"
         value={this.state.selected}
         onChange={this.changeVersion}
-        onBlur={this.closeModal}
         options={this.state.versions.filter(single => !single.removed)}
         error={this.props.theme.color.error}
       />

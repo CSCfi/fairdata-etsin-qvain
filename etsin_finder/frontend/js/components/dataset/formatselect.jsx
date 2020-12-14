@@ -24,7 +24,6 @@ const SelectContainer = styled.div`
   position: relative;
 `
 
-/* prettier-ignore */
 const ListButton = styled(Button)`
   color: ${props => props.color};
   padding: ${props => props.padding};
@@ -37,6 +36,11 @@ const ListButton = styled(Button)`
   &:hover {
     background: ${props => (darken(0.1, props.background))};
   }
+`
+const ListItems = styled.div`
+  position: absolute;
+  width: 100%;
+  z-index: 1;
 `
 
 const ListItem = styled(ListButton)`
@@ -86,36 +90,13 @@ export default class FormatSelect extends Component {
   constructor(props) {
     super(props)
 
-    this.timeoutID = undefined
-
     this.state = {
-      isOpen: false,
-      isFocused: false,
+      listOpen: false,
       frontColor: props.frontColor ? props.frontColor : props.background,
       color: props.color,
       background: props.background,
       padding: props.padding,
       tooltipOpen: false,
-    }
-  }
-
-  onBlur = () => {
-    this.timeoutID = setTimeout(() => {
-      if (this.state.isFocused) {
-        this.setState({
-          isFocused: false,
-          isOpen: false,
-        })
-      }
-    }, 0)
-  }
-
-  onFocus = () => {
-    clearTimeout(this.timeoutID)
-    if (!this.state.isFocused) {
-      this.setState({
-        isFocused: true,
-      })
     }
   }
 
@@ -131,14 +112,13 @@ export default class FormatSelect extends Component {
     }
   }
 
-  changeSelected = selected => {
+  changeSelected = selectedformat => {
     this.setState(
-      {
-        isOpen: false,
-        isFocused: false,
-      },
+      state => ({
+        listOpen: !state.listOpen
+      }),
       () => {
-        this.props.onChange(selected)
+        this.props.onChange(selectedformat)
       }
     )
   }
@@ -146,11 +126,10 @@ export default class FormatSelect extends Component {
   toggleOpen = () => {
     this.setState(
       state => ({
-        isOpen: !state.isOpen,
-        isFocused: !state.isOpen,
+        listOpen: !state.listOpen
       }),
       () => {
-        if (this.state.isOpen) {
+        if (this.state.listOpen) {
           this.focusFirstOption()
         }
       }
@@ -159,39 +138,43 @@ export default class FormatSelect extends Component {
 
   render() {
     return (
-      <SelectContainer width={this.props.width} onFocus={this.onFocus} onBlur={this.onBlur}>
+      <SelectContainer width={this.props.width}>
         <Controller
           noMargin
           color={this.state.color}
           padding={this.state.padding}
           background={this.state.background}
-          isOpen={this.state.isOpen}
+          isOpen={this.state.listOpen}
           onClick={this.toggleOpen}
         >
           <Translate component={Text} content="dataset.datasetAsFile.open" />
         </Controller>
-        {this.state.isOpen &&
-          this.state.isFocused &&
-          this.props.options.map((single, i) => (
-            <ListItem
-              noMargin
-              color={this.state.color}
-              padding={this.state.padding}
-              key={single.value}
-              onClick={() => this.changeSelected(single)}
-              value={single.value}
-              ref={e => this.setFirstOptionRef(e, i)}
-              background={this.state.frontColor}
-              removed={single.removed}
-            >
-              {this.props.options[0] === single ? (
-                <span className="sr-only">Current version: </span>
-              ) : (
-                ''
-              )}
-              {single.label}
-            </ListItem>
-          ))}
+
+        {this.state.listOpen && (
+          <ListItems>
+            {this.props.options.map((single, i) => (
+              <ListItem
+                noMargin
+                color={this.state.color}
+                padding={this.state.padding}
+                key={single.value}
+                onClick={() => this.changeSelected(single)}
+                value={single.value}
+                ref={e => this.setFirstOptionRef(e, i)}
+                background={this.state.frontColor}
+                removed={single.removed}
+              >
+                {this.props.options[0] === single ? (
+                  <span className="sr-only">Current version: </span>
+                ) : (
+                  ''
+                )}
+                {single.label}
+              </ListItem>
+            ))}
+          </ListItems>
+        )}
+
         {this.props.options.length > 1 && (
           <InfoPosition>
             <Tooltip
