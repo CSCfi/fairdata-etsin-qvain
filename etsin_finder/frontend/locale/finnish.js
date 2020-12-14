@@ -269,6 +269,7 @@ const finnish = {
       toggleLabel: 'Vaihda kieltä: %(otherLang)s',
     },
     cookies: {
+      section: 'Evästeiden hyväksyminen',
       accept: 'Hyväksy evästeet',
       infoText:
         'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',

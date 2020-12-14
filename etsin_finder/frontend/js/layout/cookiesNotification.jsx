@@ -78,7 +78,11 @@ class CookiesNotification extends Component {
 
   render() {
     return (
-      <Notification visible={this.state.displayCookieNotification}>
+      <Translate
+        component={Notification}
+        visible={this.state.displayCookieNotification}
+        attributes={{ 'aria-label': 'general.cookies.section' }}
+      >
         <div className="container row no-gutters">
           <div className="col-12 col-md-9">
             <Translate component="p" content="general.cookies.infoText" />
@@ -96,12 +100,12 @@ class CookiesNotification extends Component {
             </Button>
           </Actions>
         </div>
-      </Notification>
+      </Translate>
     )
   }
 }
 
-const Notification = styled.div`
+const Notification = styled.section`
   display: ${props => (props.visible ? 'flex' : 'none')};
   position: fixed;
   justify-content: center;

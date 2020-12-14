@@ -7,13 +7,13 @@ import Translate from 'react-translate-component'
 
 import Label from '../../../general/card/label'
 
+const dateToString = (date, lang) => (date ? new Date(date).toLocaleDateString(lang) : '')
+
 const TemporalList = ({ temporals, lang, remove, readonly }) =>
   temporals.map(item => (
     <Label color="primary" margin="0 0.5em 0.5em 0" key={item.uiid}>
       <PaddedWord>
-        {`${new Date(item.startDate).toLocaleDateString(lang)} - ${new Date(
-          item.endDate
-        ).toLocaleDateString(lang)}`}
+        {`${dateToString(item.startDate, lang)} - ${dateToString(item.endDate, lang)}`}
       </PaddedWord>
       {!readonly && (
         <Translate
@@ -22,6 +22,8 @@ const TemporalList = ({ temporals, lang, remove, readonly }) =>
           onClick={() => {
             remove(item.uiid)
           }}
+          icon={faTimes}
+          size="xs"
         />
       )}
     </Label>
