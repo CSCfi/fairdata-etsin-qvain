@@ -39,6 +39,7 @@ import {
   groupDatasetsByVersionSet,
 } from '../js/components/qvain/views/datasets/filter'
 import DatePicker from '../js/components/qvain/general/input/datepicker'
+import TranslationTab from '../js/components/qvain/general/input/translationTab'
 import { useStores } from '../js/stores/stores'
 
 jest.mock('uuid', original => {
@@ -53,9 +54,12 @@ jest.mock('uuid', original => {
 })
 
 jest.mock('moment', () => {
-  return () => ({
-    format: format => `moment formatted date: ${format}`,
-  })
+  const actual = jest.requireActual('moment')
+  function momentMock(value) {
+    return actual(value || '2020-11-02T12:34Z')
+  }
+  momentMock.locale = actual.locale
+  return momentMock
 })
 
 jest.mock('../js/stores/stores', () => {
@@ -68,6 +72,7 @@ jest.mock('../js/stores/stores', () => {
 
 const getStores = () => {
   Env.setMetaxApiV2(true)
+  LocaleStore.setLang('en')
   return {
     Env,
     Qvain: new QvainStoreClass(Env),
@@ -226,6 +231,42 @@ describe('Qvain.Description', () => {
   it('should render <SubjectHeadingsField />', () => {
     const component = shallow(<SubjectHeadingsField Stores={getStores()} />)
     expect(component).toMatchSnapshot()
+  })
+})
+
+describe('Qvain translation tabs', () => {
+  let stores
+  beforeEach(() => {
+    stores = getStores()
+    useStores.mockReturnValue(stores)
+  })
+
+  const getTranslationTabProps = (localeLanguage, activeTabLanguage) => {
+    stores.Locale.setLang(localeLanguage, false)
+    const component = shallow(
+      <TranslationTab language={activeTabLanguage} setLanguage={() => {}} children="" />
+    )
+    const langButtons = component.find('[type="button"]').map(btn => btn.props())
+    return langButtons.map(({ language, active }) => ({ language, active }))
+  }
+
+  it('shows correct TranslationTab', () => {
+    expect(getTranslationTabProps('en', 'en')).toEqual([
+      { language: 'en', active: true },
+      { language: 'fi', active: false },
+    ])
+    expect(getTranslationTabProps('en', 'fi')).toEqual([
+      { language: 'en', active: false },
+      { language: 'fi', active: true },
+    ])
+    expect(getTranslationTabProps('fi', 'fi')).toEqual([
+      { language: 'fi', active: true },
+      { language: 'en', active: false },
+    ])
+    expect(getTranslationTabProps('fi', 'en')).toEqual([
+      { language: 'fi', active: false },
+      { language: 'en', active: true },
+    ])
   })
 })
 
