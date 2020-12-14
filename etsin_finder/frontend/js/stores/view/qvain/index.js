@@ -27,6 +27,7 @@ class Qvain extends Resources {
     this.original = undefined
     // Reset Files/Directories related data
     this.resetFilesV1()
+    this.Files.reset()
     this.dataCatalog = undefined
     this.preservationState = 0
     this.cumulativeState = CUMULATIVE_STATE.NO
@@ -246,17 +247,20 @@ class Qvain extends Resources {
           r.download_url ? r.download_url.identifier : undefined,
           r.use_category
             ? {
-                label: r.use_category.pref_label.en,
-                value: r.use_category.identifier,
-              }
+              label: r.use_category.pref_label.en,
+              value: r.use_category.identifier,
+            }
             : undefined
         )
       )
       this.extResFormOpen = true
     }
 
+    // Load v2 files
     if (this.Env.metaxApiV2) {
       await this.Files.openDataset(dataset)
+    } else {
+      this.Files.reset()
     }
   }
 
