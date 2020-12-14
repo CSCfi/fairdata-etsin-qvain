@@ -27,11 +27,6 @@ class Temporals extends Field {
     super.create()
   }
 
-  @action fromBackend(dataset, Qvain) {
-    super.fromBackend(dataset, Qvain)
-    super.create()
-  }
-
   @action addTemporal = () => {
     this.storage = [...this.storage, this.inEdit]
   }
@@ -47,8 +42,8 @@ class Temporals extends Field {
     }
 
     return this.storage.map(temporal => ({
-      start_date: new Date(temporal.startDate).toISOString(),
-      end_date: new Date(temporal.endDate).toISOString(),
+      start_date: temporal.startDate && new Date(temporal.startDate).toISOString(),
+      end_date: temporal.endDate && new Date(temporal.endDate).toISOString(),
     }))
   }
 

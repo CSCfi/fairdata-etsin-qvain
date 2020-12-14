@@ -47,12 +47,21 @@ export const QvainContainer = styled.div`
   background-color: #fafafa;
 `
 
-export const SubHeader = styled.div`
+export const SubHeader = styled.h1`
   height: 100px;
   background-color: #007fad;
   color: white;
   display: flex;
   align-items: center;
+  font-family: 'Lato', sans-serif;
+  font-size: 32px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 0.81;
+  letter-spacing: normal;
+  padding: 0.5rem 1rem 0.5rem 2rem;
+  white-space: nowrap;
 `
 
 export const Paragraph = styled.p`
@@ -92,7 +101,7 @@ export const SubHeaderText = styled.div`
   line-height: 0.81;
   letter-spacing: normal;
   color: #ffffff;
-  padding: .5rem 1rem .5rem 2rem
+  padding: 0.5rem 1rem 0.5rem 2rem;
 `
 
 export const FileContainer = styled(Container)`

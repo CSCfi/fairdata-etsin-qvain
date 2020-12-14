@@ -8,8 +8,10 @@ import {
   onChange,
   onChangeMulti,
   getCurrentOption,
+  getGroupLabel,
   getOptionLabel,
   getOptionValue,
+  sortGroups,
   sortOptions,
   autoSortOptions,
 } from '../../utils/select'
@@ -24,6 +26,10 @@ class Select extends Component {
     Stores: PropTypes.object.isRequired,
     metaxIdentifier: PropTypes.string.isRequired,
     getter: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    getRefGroups: PropTypes.func,
+    modifyOptionLabel: PropTypes.func,
+    modifyGroupLabel: PropTypes.func,
+    sortFunc: PropTypes.func,
     setter: PropTypes.func.isRequired,
     model: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
@@ -37,6 +43,10 @@ class Select extends Component {
     inModal: false,
     isClearable: true,
     isMulti: false,
+    getRefGroups: null,
+    modifyOptionLabel: translation => translation,
+    modifyGroupLabel: translation => translation,
+    sortFunc: null,
   }
 
   state = {
@@ -57,14 +67,23 @@ class Select extends Component {
 
   resolveRefData = res => {
     const list = res.data.hits.hits
-    const { model } = this.props
-    const options = list.map(ref => model(ref._source.label, ref._source.uri))
-    const { lang } = this.props.Stores.Locale
-    sortOptions(model, lang, options)
-    this.setState({
-      options,
-    })
-    autoSortOptions(this, this.props.Stores.Locale, model)
+    const { model, getRefGroups, Stores, sortFunc } = this.props
+    const { lang } = Stores.Locale
+
+    if (getRefGroups) {
+      const groups = getRefGroups(list)
+      sortGroups(model, lang, groups)
+      this.setState({
+        options: groups,
+      })
+    } else {
+      const options = list.map(ref => model(ref._source.label, ref._source.uri))
+      sortOptions(model, lang, options, sortFunc)
+      this.setState({
+        options,
+      })
+    }
+    autoSortOptions(this, this.props.Stores.Locale, model, sortFunc)
   }
 
   rejectRefData = error => {
@@ -84,9 +103,22 @@ class Select extends Component {
 
   render() {
     const { readonly } = this.props.Stores.Qvain
-    const { getter, setter, model, name, inModal, isClearable, isMulti } = this.props
+    const {
+      getter,
+      setter,
+      model,
+      name,
+      inModal,
+      isClearable,
+      isMulti,
+      modifyGroupLabel,
+      modifyOptionLabel,
+    } = this.props
     const { options } = this.state
     const { lang } = this.props.Stores.Locale
+
+    const groupLabelFunc = getGroupLabel(lang)
+    const optionLabelFunc = getOptionLabel(model, lang)
 
     const props = {
       ...this.props,
@@ -100,7 +132,8 @@ class Select extends Component {
       onChange: isMulti ? onChangeMulti(setter) : onChange(setter),
       isClearable,
       isMulti,
-      getOptionLabel: getOptionLabel(model, lang),
+      formatGroupLabel: group => modifyGroupLabel(groupLabelFunc(group), group),
+      getOptionLabel: option => modifyOptionLabel(optionLabelFunc(option), option),
       getOptionValue: getOptionValue(model),
       styles: { placeholder: () => ({ color: etsinTheme.color.gray }) },
     }
