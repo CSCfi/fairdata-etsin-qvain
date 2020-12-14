@@ -19,6 +19,7 @@ const components = {
 }
 
 const StringArray = ({
+  id,
   itemStr,
   addItemStr,
   setItemStr,
@@ -127,6 +128,7 @@ const StringArray = ({
         component={RefCreatableSelect}
         selectRef={selectRef}
         components={components}
+        inputId={id}
         inputValue={itemStr}
         isMulti
         isClearable={false}
@@ -151,6 +153,7 @@ const StringArray = ({
 }
 
 StringArray.propTypes = {
+  id: PropTypes.string,
   itemStr: PropTypes.string.isRequired,
   addItemStr: PropTypes.func.isRequired,
   setItemStr: PropTypes.func.isRequired,
@@ -166,6 +169,7 @@ StringArray.propTypes = {
 }
 
 StringArray.defaultProps = {
+  id: undefined,
   itemSchema: null,
   schema: null,
   addWithComma: false,
