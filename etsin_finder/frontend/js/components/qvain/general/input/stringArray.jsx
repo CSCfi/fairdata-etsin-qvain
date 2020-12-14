@@ -193,8 +193,8 @@ const ErrorAndButtonContainer = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
+  margin-top: 0.75rem;
   ${AddNewButton} {
-    margin-left: auto;
     flex-shrink: 0;
   }
 `

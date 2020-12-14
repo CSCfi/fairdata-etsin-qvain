@@ -151,8 +151,7 @@ const AddedOrganizations = ({ organizations = [], onRemove, onEdit, lang, readon
   ))
 
 const AddOrganizationContainer = styled.div`
-  text-align: right;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
 `
 
 const PaddedWord = styled.span`
