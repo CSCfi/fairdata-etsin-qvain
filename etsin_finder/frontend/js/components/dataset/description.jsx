@@ -47,8 +47,31 @@ const Labels = styled.div`
 
 const Flex = styled.div`
   display: flex;
-  align-items: center;
-  margin-bottom: 0.5em;
+  align-items: stretch;
+  > * {
+    margin: 0.25rem;
+  }
+`
+
+const MarginAfter = styled.div`
+  display: flex;
+  align-items: stretch;
+`
+
+const Controls = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  margin: -0.25rem;
+  > * {
+    margin: 0.25rem;
+  }
+  > ${Flex} {
+    margin: 0;
+  }
+  > ${MarginAfter} {
+    margin-right: auto;
+  }
 `
 
 class Description extends Component {
@@ -96,7 +119,7 @@ class Description extends Component {
     return (
       <div className="dsContent">
         <Labels>
-          <Flex>
+          <Controls>
             {this.props.dataset.data_catalog.catalog_json.dataset_versioning && isVersion && (
               <VersionChanger versionSet={versions} idn={datasetIdentifier} />
             )}
@@ -108,34 +131,39 @@ class Description extends Component {
                 data_catalog_identifier={this.props.dataset.data_catalog.catalog_json.identifier}
               />
             )}
-            <AccessRights
-              button
-              access_rights={
-                checkNested(this.props.dataset, 'research_dataset', 'access_rights', 'access_type')
-                  ? this.props.dataset.research_dataset.access_rights
-                  : null
-              }
-            />
-          </Flex>
-          <FormatChangerPosition>
+            <MarginAfter>
+              <AccessRights
+                button
+                access_rights={
+                  checkNested(
+                    this.props.dataset,
+                    'research_dataset',
+                    'access_rights',
+                    'access_type'
+                  )
+                    ? this.props.dataset.research_dataset.access_rights
+                    : null
+                }
+              />
+            </MarginAfter>
             <FormatChanger idn={this.props.match.params.identifier} />
-          </FormatChangerPosition>
-          <Flex>
-            <ErrorBoundary>
-              {this.checkEmails(this.props.emails) && !this.props.harvested && (
-                <Contact
-                  datasetID={datasetIdentifier}
-                  emails={this.props.emails}
-                  // TEMPORARY: rems check won't be needed in contact later.
-                  isRems={
-                    this.props.dataset.research_dataset.access_rights.access_type.identifier ===
-                    ACCESS_TYPE_URL.PERMIT
-                  }
-                />
-              )}
-            </ErrorBoundary>
-            <AskForAccess cr_id={datasetIdentifier} />
-          </Flex>
+            <Flex>
+              <ErrorBoundary>
+                {this.checkEmails(this.props.emails) && !this.props.harvested && (
+                  <Contact
+                    datasetID={datasetIdentifier}
+                    emails={this.props.emails}
+                    // TEMPORARY: rems check won't be needed in contact later.
+                    isRems={
+                      this.props.dataset.research_dataset.access_rights.access_type.identifier ===
+                      ACCESS_TYPE_URL.PERMIT
+                    }
+                  />
+                )}
+              </ErrorBoundary>
+              <AskForAccess cr_id={datasetIdentifier} />
+            </Flex>
+          </Controls>
         </Labels>
         <section>
           <div>
@@ -261,12 +289,6 @@ const PasInfo = styled.div`
   font-size: 0.9em;
   padding-top: 5px;
   padding-bottom: 5px;
-`
-
-const FormatChangerPosition = styled.div`
-  position: absolute;
-  top: -5px;
-  right: 0px;
 `
 
 const DatasetDescription = styled.div`

@@ -15,6 +15,7 @@ import Licenses from './qvain.license'
 import EmbargoExpDate from './qvain.embargoExpDate'
 import RestrictionGrounds from './qvain.restrictionGrounds'
 import Title from './qvain.title'
+import SubjectHeadings from './qvain.subjectHeadings'
 import Description from './qvain.description'
 import FilesV1 from './qvain.filesv1'
 
@@ -23,6 +24,7 @@ class Resources extends FilesV1 {
     super()
     this.Title = new Title(this)
     this.Description = new Description(this)
+    this.SubjectHeadings = new SubjectHeadings(this)
     this.Actors = new Actors(this)
     this.Spatials = new Spatials(this)
     this.Temporals = new Temporals(this)
@@ -42,6 +44,7 @@ class Resources extends FilesV1 {
     this.resources = [
       this.Title,
       this.Description,
+      this.SubjectHeadings,
       this.Actors,
       this.Spatials,
       this.Temporals,

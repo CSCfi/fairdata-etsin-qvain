@@ -9,6 +9,16 @@
 
 from flask_restful import Api
 from etsin_finder.app import app
+from etsin_finder.app_config import get_download_api_v2_config
+
+def add_download_v2_resources(api):
+    """Set download API v2 endpoints"""
+    from etsin_finder.download_resources_v2 import (
+        Requests,
+        Authorize,
+    )
+    api.add_resource(Requests, '/api/v2/dl/requests', endpoint="dl_requests")
+    api.add_resource(Authorize, '/api/v2/dl/authorize', endpoint="dl_download")
 
 
 def add_restful_resources(app):
@@ -66,19 +76,24 @@ def add_restful_resources(app):
         DatasetProjects as V2DatasetProjects,
     )
 
-    # Common Qvain Light and Etsin endpoints for Metax v2
+    # Download API v2 endpoints
+    dl_api_config = get_download_api_v2_config(app.testing) or {}
+    if dl_api_config.get('ENABLED'):
+        add_download_v2_resources(api)
+
+    # Common Qvain and Etsin endpoints for Metax v2
     api.add_resource(V2DatasetUserMetadata, '/api/v2/common/datasets/<id:cr_id>/user_metadata', endpoint='v2_dataset_user_metadata')
     api.add_resource(V2DatasetProjects, '/api/v2/common/datasets/<id:cr_id>/projects', endpoint='v2_dataset_projects')
     api.add_resource(V2ProjectFiles, '/api/v2/common/projects/<string:pid>/files', endpoint='v2_project_files')
     api.add_resource(V2DirectoryFiles, '/api/v2/common/directories/<string:dir_id>/files', endpoint='v2_directory_files')
 
-    # Qvain light API endpoints for Metax v2
+    # Qvain API endpoints for Metax v2
     api.add_resource(V2FileCharacteristics, '/api/v2/qvain/files/<string:file_id>/file_characteristics', endpoint='v2_file_characteristics')
     api.add_resource(V2QvainDatasets, '/api/v2/qvain/datasets', endpoint='v2_datasets')
     api.add_resource(V2QvainDataset, '/api/v2/qvain/datasets/<id:cr_id>', endpoint='v2_dataset_edit')
     api.add_resource(V2QvainDatasetFiles, '/api/v2/qvain/datasets/<id:cr_id>/files', endpoint='v2_dataset_files')
 
-    # Qvain light API RPC endpoints for Metax v2
+    # Qvain API RPC endpoints for Metax v2
     api.add_resource(V2QvainDatasetChangeCumulativeState, '/api/v2/rpc/datasets/change_cumulative_state', endpoint='v2_change_cumulative_state')
     api.add_resource(V2QvainDatasetCreateNewVersion, '/api/v2/rpc/datasets/create_new_version', endpoint='v2_create_new_version')
     api.add_resource(V2QvainDatasetCreateDraft, '/api/v2/rpc/datasets/create_draft', endpoint='v2_create_draft')
@@ -98,14 +113,14 @@ def add_restful_resources(app):
     api.add_resource(Download, '/api/dl')
     api.add_resource(AppConfig, '/api/app_config')
 
-    # Qvain light API endpoints
+    # Qvain API endpoints
     api.add_resource(ProjectFiles, '/api/qvain/projects/<string:pid>/files')
     api.add_resource(DirectoryFiles, '/api/qvain/directories/<string:dir_id>/files')
     api.add_resource(FileCharacteristics, '/api/qvain/files/<string:file_id>/file_characteristics')
     api.add_resource(QvainDatasets, '/api/qvain/datasets')
     api.add_resource(QvainDataset, '/api/qvain/datasets/<id:cr_id>')
 
-    # Qvain light API RPC endpoints
+    # Qvain API RPC endpoints
     api.add_resource(QvainDatasetChangeCumulativeState, '/api/rpc/datasets/change_cumulative_state')
     api.add_resource(QvainDatasetRefreshDirectoryContent, '/api/rpc/datasets/refresh_directory_content')
     api.add_resource(QvainDatasetFixDeprecated, '/api/rpc/datasets/fix_deprecated')

@@ -25,11 +25,12 @@ import {
   ClickableIcon,
   NoIcon,
 } from '../../../general/files/items'
+import getDownloadAction from './downloadActions'
 
 const download = (datasetIdentifier, item) => {
   const handle = window.open(
     `/api/dl?cr_id=${datasetIdentifier}${
-    item.type === 'directory' ? `&dir_id=${item.identifier}` : `&file_id=${item.identifier}`
+      item.type === 'directory' ? `&dir_id=${item.identifier}` : `&file_id=${item.identifier}`
     }`
   )
   if (handle == null) {
@@ -39,7 +40,7 @@ const download = (datasetIdentifier, item) => {
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const { Files, directoryView, extraProps } = treeProps
-  const { allowDownload } = extraProps
+  const { allowDownload, Packages, downloadApiV2 } = extraProps
   const { setInInfo, datasetIdentifier } = Files
   let content = null
   const name = item.name
@@ -74,6 +75,18 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const haveMetadata = hasMetadata(item)
   const infoColor = haveMetadata ? 'primary' : 'gray'
   const { type } = item
+  let downloadFunc = () => download(datasetIdentifier, item)
+  let downloadIcon = faDownload
+  let downloadIconSpin = false
+  let downloadAriaLabel = 'dataset.dl.downloadItem'
+
+  if (downloadApiV2) {
+    const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
+    downloadFunc = action.func
+    downloadIcon = action.icon
+    downloadIconSpin = action.spin
+    downloadAriaLabel = action.ariaLabel
+  }
 
   const infoButton = (
     <Translate
@@ -93,13 +106,14 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const downloadButton = (
     <Translate
       component={ClickableIcon}
-      icon={faDownload}
+      icon={downloadIcon}
+      spin={downloadIconSpin}
       color="primary"
       disabled={!allowDownload}
       disabledColor="gray"
       disabledOpacity={0.4}
-      onClick={() => download(datasetIdentifier, item)}
-      attributes={{ 'aria-label': 'dataset.dl.downloadItem' }}
+      onClick={downloadFunc}
+      attributes={{ 'aria-label': downloadAriaLabel }}
       with={{ name }}
     />
   )

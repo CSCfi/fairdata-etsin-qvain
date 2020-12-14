@@ -87,6 +87,7 @@ exports[`Qvain should render correctly 1`] = `
     datasetLoading={false}
   />
   <StickyHeader
+    clearSubmitResponse={[Function]}
     datasetError={false}
     datasetLoading={false}
     handleSubmitError={[Function]}
@@ -121,36 +122,6 @@ exports[`Qvain should render correctly 1`] = `
 </card__QvainContainer>
 `;
 
-exports[`Qvain.Description should render <Description /> 1`] = `
-<div
-  className="container"
->
-  <title__SectionTitle>
-    <Translate
-      component="span"
-      content="qvain.description.title"
-    />
-    <Tooltip
-      align="Right"
-      close={[Function]}
-      isOpen={false}
-      text={<DescriptionInfo />}
-    >
-      <HelpIcon
-        aria-label="Description info"
-        onClick={[Function]}
-      />
-    </Tooltip>
-  </title__SectionTitle>
-  <DescriptionField />
-  <IssuedDateField />
-  <OtherIdentifierField />
-  <FieldOfScienceField />
-  <LanguageField />
-  <KeywordsField />
-</div>
-`;
-
 exports[`Qvain.Description should render <DescriptionField /> 1`] = `
 <div
   className="container"
@@ -178,6 +149,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
   <FieldOfScienceField />
   <LanguageField />
   <KeywordsField />
+  <SubjectHeadingsField />
 </div>
 `;
 
@@ -363,7 +335,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
     component="p"
     content="qvain.description.datasetLanguage.help"
   />
-  <Select
+  <SearchSelect
     getter={Array []}
     id="datasetLanguage"
     inModal={false}
@@ -536,6 +508,36 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     translationsRoot="qvain.description.otherIdentifiers"
     validationError=""
     value={Array []}
+  />
+</Card>
+`;
+
+exports[`Qvain.Description should render <SubjectHeadingsField /> 1`] = `
+<Card
+  bottomContent={false}
+>
+  <form__LabelLarge
+    htmlFor="subjectHeading-select"
+  >
+    <Translate
+      component="span"
+      content="qvain.description.subjectHeadings.title"
+    />
+  </form__LabelLarge>
+  <Translate
+    component="p"
+    content="qvain.description.subjectHeadings.help"
+  />
+  <SearchSelect
+    getter={Array []}
+    inModal={false}
+    isClearable={false}
+    isMulti={true}
+    metaxIdentifier="keyword"
+    model={[Function]}
+    name="subjectHeading"
+    placeholder="qvain.description.subjectHeadings.placeholder"
+    setter={[Function]}
   />
 </Card>
 `;

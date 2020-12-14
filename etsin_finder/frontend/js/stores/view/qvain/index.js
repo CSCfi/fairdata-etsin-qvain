@@ -2,12 +2,14 @@ import { observable, action, computed, makeObservable } from 'mobx'
 import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Resources from './qvain.resources'
 import Files from './qvain.files'
+import Submit from './qvain.submit'
 
 class Qvain extends Resources {
   constructor(Env) {
     super()
     this.Env = Env
     this.Files = new Files(this)
+    this.Submit = new Submit(this)
     this.resetQvainStore()
     makeObservable(this)
   }
@@ -47,6 +49,8 @@ class Qvain extends Resources {
 
     this.changed = false
     this.deprecated = false
+
+    this.Submit.reset()
   }
 
   @action
@@ -194,20 +198,21 @@ class Qvain extends Resources {
   }
 
   // Dataset related
-
-  // Dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
-  @action editDataset = async dataset => {
-    this.original = { ...dataset }
-    this.deprecated = dataset.deprecated
+  @action loadBasicFields = dataset => {
     const researchDataset = dataset.research_dataset
-
-    // Load description
     this.resources.forEach(r => r.fromBackend(researchDataset, this))
+  }
+
+  // load fields that won't be duplicated by template copy
+  @action loadStatusAndFileFields = async dataset => {
+    this.deprecated = dataset.deprecated
 
     // Load data catalog
     this.dataCatalog =
       dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
+
+    const researchDataset = dataset.research_dataset
 
     // Load preservation state
     this.preservationState = dataset.preservation_state
@@ -253,8 +258,20 @@ class Qvain extends Resources {
     if (this.Env.metaxApiV2) {
       await this.Files.openDataset(dataset)
     }
+  }
 
+  @action editDataset = async dataset => {
+    this.Submit.reset()
     this.setChanged(false)
+    this.original = { ...dataset }
+    this.loadBasicFields(dataset)
+    await this.loadStatusAndFileFields(dataset)
+  }
+
+  @action resetWithTemplate = async dataset => {
+    this.resetQvainStore()
+    this.loadBasicFields(dataset)
+    this.setChanged(true)
   }
 
   @action setOriginal = newOriginal => {

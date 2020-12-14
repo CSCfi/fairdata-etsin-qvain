@@ -47,6 +47,9 @@ class RemsAPIService(FlaskService):
             self.REMS_GET_MY_APPLICATIONS = 'https://{0}'.format(self.HOST) + '/api/my-applications/'
             self.REMS_CATALOGUE_ITEMS = 'https://{0}'.format(self.HOST) + '/api/catalogue-items?resource={0}'
             self.REMS_CREATE_APPLICATION = 'https://{0}'.format(self.HOST) + '/api/applications/create'
+            self.proxies = None
+            if rems_api_config.get('HTTPS_PROXY'):
+                self.proxies = dict(https=rems_api_config.get('HTTPS_PROXY'))
         elif self.is_testing:
             self.ENABLED = False
         else:

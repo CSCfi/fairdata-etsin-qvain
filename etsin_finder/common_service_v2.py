@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Used for performing operations related to Metax for Etsin and Qvain Light"""
+"""Used for performing operations related to Metax for Etsin and Qvain"""
 
 import requests
 
@@ -17,7 +17,7 @@ from etsin_finder.request_utils import make_request
 
 
 class MetaxCommonAPIService(FlaskService):
-    """Service for Metax API v2 requests used by both Etsin and Qvain Light."""
+    """Service for Metax API v2 requests used by both Etsin and Qvain."""
 
     def __init__(self, app):
         """
@@ -42,6 +42,9 @@ class MetaxCommonAPIService(FlaskService):
             self.user = metax_qvain_api_config['USER']
             self.pw = metax_qvain_api_config['PASSWORD']
             self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
+            self.proxies = None
+            if metax_qvain_api_config.get('HTTPS_PROXY'):
+                self.proxies = dict(https=metax_qvain_api_config.get('HTTPS_PROXY'))
         elif not self.is_testing:
             log.error("Unable to initialize MetaxCommonAPIService due to missing config")
 
@@ -64,6 +67,7 @@ class MetaxCommonAPIService(FlaskService):
                                              headers={'Accept': 'application/json'},
                                              auth=(self.user, self.pw),
                                              verify=self.verify_ssl,
+                                             proxies=self.proxies,
                                              timeout=10)
         if not success:
             log.warning("Failed to get directory {}".format(dir_identifier))
@@ -89,6 +93,7 @@ class MetaxCommonAPIService(FlaskService):
                                              params=params,
                                              auth=(self.user, self.pw),
                                              verify=self.verify_ssl,
+                                             proxies=self.proxies,
                                              timeout=10)
         if not success:
             log.warning("Failed to get directory contents for project {}".format(project_identifier))
@@ -111,6 +116,7 @@ class MetaxCommonAPIService(FlaskService):
                                              headers={'Accept': 'application/json'},
                                              auth=(self.user, self.pw),
                                              verify=self.verify_ssl,
+                                             proxies=self.proxies,
                                              timeout=10)
         if not success:
             log.warning("Failed to get projects for dataset {}".format(cr_id))
@@ -133,6 +139,7 @@ class MetaxCommonAPIService(FlaskService):
                                              headers={'Accept': 'application/json'},
                                              auth=(self.user, self.pw),
                                              verify=self.verify_ssl,
+                                             proxies=self.proxies,
                                              timeout=10)
         if not success:
             log.warning("Failed to get user metadata for dataset {}".format(cr_id))
@@ -167,6 +174,7 @@ class MetaxCommonAPIService(FlaskService):
                                              json=data,
                                              auth=(self.user, self.pw),
                                              verify=self.verify_ssl,
+                                             proxies=self.proxies,
                                              timeout=10)
         if not success:
             log.warning("Failed to update user metadata for dataset {}".format(cr_id))
