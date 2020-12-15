@@ -29,7 +29,7 @@ const KeywordsField = () => {
 
   return (
     <Card>
-      <LabelLarge htmlFor="keywordsInput">
+      <LabelLarge htmlFor="keywords-input">
         <Tooltip
           title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', {
             locale: lang,
@@ -41,6 +41,7 @@ const KeywordsField = () => {
       </LabelLarge>
       <Translate component="p" content="qvain.description.keywords.help" />
       <StringArray
+        id="keywords-input"
         itemStr={itemStr}
         setItemStr={setItemStr}
         addItemStr={addKeyword}

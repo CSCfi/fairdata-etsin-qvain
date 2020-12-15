@@ -23,6 +23,13 @@ class Submit {
 
   @observable useDoiModalIsOpen = false
 
+  @action reset = () => {
+    this.isLoading = false
+    this.error = undefined
+    this.response = null
+    this.useDoiModalIsOpen = false
+  }
+
   @action setLoading = state => {
     this.isLoading = state
   }
@@ -123,10 +130,22 @@ class Submit {
       await this.updateFiles(data.identifier, fileActions, metadataActions)
       setChanged(false)
 
-      if (fileActions || metadataActions || newCumulativeState) {
+      if (newCumulativeState != null) {
+        const obj = {
+          identifier: this.Qvain.original.identifier,
+          cumulative_state: this.Qvain.newCumulativeState,
+        }
+
+        const url = urls.v2.rpc.changeCumulativeState()
+        await axios.post(url, obj)
+      }
+
+      if (fileActions || metadataActions || newCumulativeState != null) {
         // Files changed, get updated dataset
+
         const url = urls.v2.dataset(data.identifier)
         const updatedResponse = await axios.get(url)
+        this.Qvain.setOriginal(updatedResponse)
         await editDataset(updatedResponse.data)
       } else {
         await editDataset(data)
@@ -138,6 +157,7 @@ class Submit {
       this.setResponse(undefined)
       if (!(error instanceof ValidationError)) {
         console.error(error)
+        this.setResponse(error)
       }
     } finally {
       this.setLoading(false)

@@ -9,8 +9,8 @@ class Qvain extends Resources {
     super()
     this.Env = Env
     this.Files = new Files(this)
-    this.resetQvainStore()
     this.Submit = new Submit(this)
+    this.resetQvainStore()
     makeObservable(this)
   }
 
@@ -27,6 +27,7 @@ class Qvain extends Resources {
     this.original = undefined
     // Reset Files/Directories related data
     this.resetFilesV1()
+    this.Files.reset()
     this.dataCatalog = undefined
     this.preservationState = 0
     this.cumulativeState = CUMULATIVE_STATE.NO
@@ -49,6 +50,8 @@ class Qvain extends Resources {
 
     this.changed = false
     this.deprecated = false
+
+    this.Submit.reset()
   }
 
   @action
@@ -203,7 +206,7 @@ class Qvain extends Resources {
   }
 
   // load fields that won't be duplicated by template copy
-  @action loadStatusAndFileFields = async (dataset) => {
+  @action loadStatusAndFileFields = async dataset => {
     this.deprecated = dataset.deprecated
 
     // Load data catalog
@@ -253,12 +256,16 @@ class Qvain extends Resources {
       this.extResFormOpen = true
     }
 
+    // Load v2 files
     if (this.Env.metaxApiV2) {
       await this.Files.openDataset(dataset)
+    } else {
+      this.Files.reset()
     }
   }
 
   @action editDataset = async dataset => {
+    this.Submit.reset()
     this.setChanged(false)
     this.original = { ...dataset }
     this.loadBasicFields(dataset)

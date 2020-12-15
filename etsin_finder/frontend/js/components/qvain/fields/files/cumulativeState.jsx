@@ -27,6 +27,7 @@ const CumulativeState = () => {
       changed,
       setChanged,
       original,
+      setOriginal,
     },
     Env: { metaxApiV2 },
   } = useStores()
@@ -58,14 +59,14 @@ const CumulativeState = () => {
       cumulative_state: newState,
     }
 
-    let url
+    let postUrl
     if (metaxApiV2) {
-      url = urls.v2.rpc.changeCumulativeState()
+      postUrl = urls.v2.rpc.changeCumulativeState()
     } else {
-      url = urls.v1.rpc.changeCumulativeState()
+      postUrl = urls.v1.rpc.changeCumulativeState()
     }
     axios
-      .post(url, obj)
+      .post(postUrl, obj)
       .then(res => {
         const data = res.data || {}
         setResponse({ new_version_created: data.new_version_created })
@@ -74,6 +75,16 @@ const CumulativeState = () => {
           setCumulativeState(newState)
           setChanged(false)
         }
+
+        const getUrl = metaxApiV2
+          ? urls.v2.dataset(original.identifier)
+          : urls.v1.dataset(original.identifier)
+
+        axios.get(getUrl).then(getRes => {
+          const { data: getData } = getRes
+
+          setOriginal({ ...getData })
+        })
       })
       .catch(err => {
         setResponse({ error: getResponseError(err) })
