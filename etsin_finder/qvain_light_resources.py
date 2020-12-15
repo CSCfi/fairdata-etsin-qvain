@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""RESTful API endpoints, meant to be used by Qvain Light form"""
+"""RESTful API endpoints, meant to be used by the Qvain form"""
 
 from marshmallow import ValidationError
 from flask import request
@@ -264,7 +264,7 @@ class FileCharacteristics(Resource):
 
 
 class QvainDatasets(Resource):
-    """Listing and creating Metax datasets for logged in user in Qvain Light."""
+    """Listing and creating Metax datasets for logged in user in Qvain."""
 
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
@@ -279,9 +279,9 @@ class QvainDatasets(Resource):
     @log_request
     def get(self):
         """
-        Get datasets for current user. Used by qvain light dataset table. If request has query parameter no_pagination=true, fetches ALL datasets for user (warning: might result in performance issue).
+        Get datasets for current user. Used by the Qvain dataset table. If request has query parameter no_pagination=true, fetches ALL datasets for user (warning: might result in performance issue).
 
-        Used by qvain light dataset table. If request has query parameter no_pagination=true,
+        Used by the Qvain dataset table. If request has query parameter no_pagination=true,
         fetches ALL datasets for user (warning: might result in performance issue).
 
         Args:

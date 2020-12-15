@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Test Qvain Light dataset validation schema."""
+"""Test Qvain dataset validation schema."""
 
 
 import json
@@ -287,7 +287,7 @@ class TestQvainLightDatasetSchemaActor(BaseTest):
 
 
 class TestQvainLightDatasetAlterRoleData(BaseTest):
-    """Test converting roles from Qvain Light to Metax schema."""
+    """Test converting roles from Qvain to Metax schema."""
 
     def test_roles(self):
         """Test that roles are filtered correctly."""

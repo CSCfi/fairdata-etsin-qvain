@@ -1,4 +1,4 @@
-"""Utilities for transforming the data from Qvain Light form to METAX compatible format"""
+"""Utilities for transforming the data from the Qvain form to METAX compatible format"""
 
 from copy import deepcopy
 import json
@@ -198,7 +198,7 @@ def access_rights_to_metax(data):
 
 
 def remote_resources_data_to_metax(resources):
-    """Converts external resources from qvain light schema to metax schema.
+    """Converts external resources from Qvain schema to Metax schema.
 
     Arguments:
         data (dict): External resources.
