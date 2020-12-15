@@ -2,7 +2,6 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { SubmitButtonsV2 } from '../js/components/qvain/views/editor/submitButtonsV2'
 import { useStores } from '../js/stores/stores'
-import { fn } from 'moment'
 
 const mockSubmitDraft = jest.fn()
 const mockSubmitPublish = jest.fn()

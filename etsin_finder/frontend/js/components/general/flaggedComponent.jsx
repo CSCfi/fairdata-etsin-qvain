@@ -8,6 +8,7 @@ const FlaggedComponent = ({ flag, children, whenDisabled }) => {
       Flags: { flagEnabled },
     },
   } = useStores()
+
   if (flagEnabled(flag)) {
     return children
   }

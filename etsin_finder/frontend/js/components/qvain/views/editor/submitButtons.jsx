@@ -156,7 +156,10 @@ export class SubmitButtons extends Component {
     }
 
     return (
-      <FlaggedComponent flag="metaxApiV2" whenDisabled={<SubmitButtonsV1 {...propsV1} />}>
+      <FlaggedComponent
+        flag="METAX_API_V2.FRONTEND"
+        whenDisabled={<SubmitButtonsV1 {...propsV1} />}
+      >
         <SubmitButtonsV2 {...props} />
       </FlaggedComponent>
     )
