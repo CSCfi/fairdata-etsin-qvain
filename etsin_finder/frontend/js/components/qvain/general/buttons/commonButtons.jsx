@@ -97,5 +97,4 @@ export const RemoveButton = styled(Button)`
 
 export const AddNewButton = styled(Button)`
   margin: 0;
-  margin-top: 11px;
 `
