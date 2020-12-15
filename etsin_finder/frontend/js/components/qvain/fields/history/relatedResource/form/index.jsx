@@ -7,9 +7,13 @@ import ModalInput from '../../../../general/modal/modalInput'
 import ModalReferenceInput from '../../../../general/modal/modalReferenceInput'
 import { RelationType } from '../../../../../../stores/view/qvain/qvain.relatedResources'
 import ModalSeparator from '../../../../general/modal/modalSeparator'
+import { useStores } from '../../../../utils/stores'
 
 const Form = props => {
-  const [language, setLanguage] = useState('fi')
+  const {
+    Locale: { lang },
+  } = useStores()
+  const [language, setLanguage] = useState(lang)
 
   return (
     <FormContainer>

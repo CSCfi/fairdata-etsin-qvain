@@ -103,6 +103,7 @@ exports[`Qvain should render correctly 1`] = `
     datasetLoading={false}
   />
   <StickyHeader
+    clearSubmitResponse={[Function]}
     datasetError={false}
     datasetLoading={false}
     handleSubmitError={[Function]}
@@ -135,37 +136,6 @@ exports[`Qvain should render correctly 1`] = `
     when={false}
   />
 </card__QvainContainer>
-`;
-
-exports[`Qvain.Description should render <Description /> 1`] = `
-<div
-  className="container"
->
-  <title__SectionTitle>
-    <Translate
-      component="span"
-      content="qvain.description.title"
-    />
-    <Tooltip
-      align="Right"
-      close={[Function]}
-      isOpen={false}
-      text={<DescriptionInfo />}
-    >
-      <HelpIcon
-        aria-label="Description info"
-        onClick={[Function]}
-      />
-    </Tooltip>
-  </title__SectionTitle>
-  <DescriptionField />
-  <IssuedDateField />
-  <OtherIdentifierField />
-  <FieldOfScienceField />
-  <LanguageField />
-  <KeywordsField />
-  <SubjectHeadingsField />
-</div>
 `;
 
 exports[`Qvain.Description should render <DescriptionField /> 1`] = `
@@ -227,13 +197,17 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "render": [Function],
       }
     }
+    getRefGroups={[Function]}
     getter={Array []}
     isClearable={false}
     isMulti={true}
     metaxIdentifier="field_of_science"
     model={[Function]}
+    modifyGroupLabel={[Function]}
+    modifyOptionLabel={[Function]}
     name="fieldOfScience"
     setter={[Function]}
+    sortFunc={[Function]}
   />
 </Card>
 `;
@@ -243,7 +217,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
   bottomContent={false}
 >
   <form__LabelLarge
-    htmlFor="keywordsInput"
+    htmlFor="keywords-input"
   >
     <TooltipHover
       position="right"
@@ -263,6 +237,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
   <StringArray
     addItemStr={[Function]}
     addWithComma={true}
+    id="keywords-input"
     itemSchema={null}
     itemStr=""
     readonly={false}
@@ -403,7 +378,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
   bottomContent={true}
 >
   <form__LabelLarge
-    htmlFor="otherIdentifiersInput"
+    htmlFor="other-identifiers-input"
   >
     <Translate
       component="span"
@@ -417,6 +392,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
   <StringArray
     addItemStr={[Function]}
     addWithComma={true}
+    id="other-identifiers-input"
     itemSchema={
       StringSchema {
         "_blacklist": RefSet {
