@@ -31,6 +31,7 @@ exports[`Qvain should render correctly 1`] = `
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
@@ -1471,6 +1472,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
@@ -2911,6 +2913,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
@@ -4351,6 +4354,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
@@ -5791,6 +5795,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
@@ -7231,6 +7236,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
