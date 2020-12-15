@@ -69,6 +69,7 @@ const english = {
       plrl: 'Contributors',
       snglr: 'Contributor',
     },
+    copy: 'Copy',
     copyToClipboard: 'Copy to clipboard',
     copyToClipboardSuccess: 'Copied identifier to clipboard',
     creator: {

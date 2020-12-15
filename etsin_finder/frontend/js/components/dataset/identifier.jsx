@@ -16,8 +16,9 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClipboard, faCheck } from '@fortawesome/free-solid-svg-icons'
 import translate from 'counterpart'
+import Translate from 'react-translate-component'
 
-import { Link } from '../general/button'
+import { Link, Button } from '../general/button'
 import idnToLink from '../../utils/idnToLink'
 import TooltipHover from '../general/tooltipHover'
 import { useStores } from '../../utils/stores'
@@ -79,8 +80,9 @@ const Identifier = ({ idn }) => {
         >
           <FontAwesomeIcon
             icon={copiedStatus ? faCheck : faClipboard}
-            color={copiedStatus ? 'green' : 'white'}
+            size={copiedStatus ? '2x' : '1x'}
           />
+          <Translate content={copiedStatus ? '' : 'dataset.copy'} />
         </IconButton>
       </TooltipHover>
     </IdnSpan>
@@ -88,23 +90,19 @@ const Identifier = ({ idn }) => {
 }
 
 const IdnSpan = styled.div`
-  // display: -webkit-box;
   display: flex;
   width: 100%;
-  background-color: ${props => props.theme.color.primary};
-  // border: ${props => props.theme.color.primary};
-  border-radius: 0.3em;
   justify-content: space-between;
 `
 
 // prettier-ignore
 const IdnLink = styled(Link)`
-  // background-color: ${props => props.theme.color.primary};
-  // border: ${props => props.theme.color.primary};
+  background-color: ${props => props.theme.color.primary};
+  border: ${props => props.theme.color.primary};
   width: -webkit-fill-available;
   max-width: 100%;
   color: white;
-  // border-radius: 0.3em;
+  border-radius: 0.25em;
   border: none;
   display: flex;
   padding: 0;
@@ -123,9 +121,9 @@ const Prefix = styled.div`
   background-color: #4f4f4f;
   color: white;
   font-weight: 700;
-  border-top-left-radius: 0.3em;
+  border-top-left-radius: 0.25em;
   margin: 0;
-  border-bottom-left-radius: 0.3em;
+  border-bottom-left-radius: 0.25em;
   padding: 0.5em 0.5em 0.4em 0.7em;
   align-self: stretch;
   display: flex;
@@ -143,13 +141,15 @@ const IDN = styled.div`
   text-align: left;
 `
 
-const IconButton = styled.button`
+const IconButton = styled(Button)`
   height: 100%;
-  background-color: #505050;
+  width: 4em;
+  margin: 0;
   border-style: none;
-  border-top-right-radius: 0.3em;
-  border-bottom-right-radius: 0.3em;
-  width: 36px;
+  margin-left: 0.3em;
+  font-size: 0.7em;
+  word-break: initial;
+  display: inherit;
 `
 
 Identifier.propTypes = {
