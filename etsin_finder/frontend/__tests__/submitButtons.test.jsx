@@ -51,7 +51,7 @@ const getMockProps = () => ({
   handleSubmitError: jest.fn(),
 })
 
-Env.setMetaxApiV2(true)
+Env.Flags.setFlag('METAX_API_V2', true)
 const stores = {
   Env,
   Qvain,

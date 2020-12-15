@@ -33,7 +33,7 @@ const { PENDING, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
 // require some changes.
 jest.useFakeTimers('legacy')
 
-Env.setDownloadApiV2(true)
+Env.Flags.setFlag('DOWNLOAD_API_V2', true)
 const mockAdapter = new MockAdapter(axios)
 applyMockAdapter(mockAdapter)
 
