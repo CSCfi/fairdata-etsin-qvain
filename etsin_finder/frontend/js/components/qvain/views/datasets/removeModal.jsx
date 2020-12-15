@@ -19,6 +19,12 @@ export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, location, 
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
+  const clearAndClose = () => {
+    setError(null)
+    setLoading(null)
+    onClose()
+  }
+
   const getRemoveKey = () => {
     if (onlyChanges && dataset.next_draft) {
       return 'changes'
@@ -73,10 +79,10 @@ export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, location, 
   const removeKey = getRemoveKey()
 
   return (
-    <Modal isOpen onRequestClose={onClose} contentLabel="removeDatasetModal">
+    <Modal isOpen onRequestClose={clearAndClose} contentLabel="removeDatasetModal">
       <Translate component="p" content={`qvain.datasets.remove.confirm.${removeKey}.text`} />
       {error && <ErrorMessage>{error}</ErrorMessage>}
-      <TableButton id="cancel-remove-dataset" disabled={loading} onClick={onClose}>
+      <TableButton id="cancel-remove-dataset" disabled={loading} onClick={clearAndClose}>
         <Translate content="qvain.datasets.remove.confirm.cancel" />
       </TableButton>
       <DangerButton id="confirm-remove-dataset" disabled={loading} onClick={() => handleRemove()}>
