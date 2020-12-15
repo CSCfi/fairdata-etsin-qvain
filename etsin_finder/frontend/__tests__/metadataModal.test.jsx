@@ -17,7 +17,7 @@ import { Project, File, Directory } from '../js/stores/view/common.files.items'
 import LocaleStore from '../js/stores/view/locale'
 
 const getStores = () => {
-  Env.setMetaxApiV2(true)
+  Env.Flags.setFlag('METAX_API_V2', true)
   const QvainStore = new QvainStoreClass(Env)
   QvainStore.resetQvainStore()
   return {

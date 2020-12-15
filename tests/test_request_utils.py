@@ -7,7 +7,6 @@
 
 """Basic app tests"""
 
-import logging
 import pytest
 import requests
 from requests_mock import ANY
@@ -17,41 +16,6 @@ from etsin_finder.request_utils import get_request_url, make_request
 
 class TestMakeRequest(BaseTest):
     """Tests for request_utils functions"""
-
-    @pytest.fixture
-    def expect_log(self, caplog):
-        """
-        Expect specific warnings and errors to be logged
-
-        The number logged warnings and errors of must match
-        the length of the supplied warnings/errors lists, and
-        each log must contain the matching substring.
-
-        E.g. with warnings=['something happened'], there must be exactly
-        one warning and it must contain the substring 'something happened'.
-
-        Args:
-            warnings (list of str): Substrings expected in warnings
-            errors (list of str): Substrings expected in errors
-
-        """
-        def check(warnings=None, errors=None):
-            warnings = warnings or []
-            errors = errors or []
-
-            records = caplog.get_records('call')
-
-            log_warnings = [x.message for x in records if x.levelno == logging.WARNING]
-            assert len(warnings) == len(log_warnings)
-            for (expected, logged) in zip(warnings, log_warnings):
-                assert expected in logged
-
-            log_errors = [x.message for x in records if x.levelno == logging.ERROR]
-            for (expected, logged) in zip(errors, log_errors):
-                assert expected in logged
-            assert len(errors) == len(log_errors)
-
-        return check
 
     def test_ok_text(self, app, expect_log, requests_mock):
         """GET request with text response"""

@@ -4,9 +4,11 @@ import { useStores } from '../../stores/stores'
 
 const FlaggedComponent = ({ flag, children, whenDisabled }) => {
   const {
-    Env: { [flag]: flagValue },
+    Env: {
+      Flags: { flagEnabled },
+    },
   } = useStores()
-  if (flagValue) {
+  if (flagEnabled(flag)) {
     return children
   }
   return whenDisabled
@@ -15,7 +17,11 @@ const FlaggedComponent = ({ flag, children, whenDisabled }) => {
 FlaggedComponent.propTypes = {
   flag: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
-  whenDisabled: PropTypes.element.isRequired,
+  whenDisabled: PropTypes.element,
+}
+
+FlaggedComponent.defaultProps = {
+  whenDisabled: null,
 }
 
 export default observer(FlaggedComponent)

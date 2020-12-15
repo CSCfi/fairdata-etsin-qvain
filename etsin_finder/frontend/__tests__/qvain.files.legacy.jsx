@@ -25,7 +25,7 @@ global.Promise = require('bluebird')
 const QvainStore = new QvainStoreClass(Env)
 
 const getStores = () => {
-  Env.setMetaxApiV2(false)
+  Env.Flags.setFlag('METAX_API_V2', false)
   return {
     Env,
     Qvain: QvainStore,
@@ -42,7 +42,7 @@ jest.mock('../js/stores/stores', () => {
       dataCatalog: DATA_CATALOG_IDENTIFIER.IDA,
     },
     Env: {
-      metaxAPIv2: false,
+      metaxApiV2: false,
     },
   })
   return { ...jest.requireActual('../js/stores/stores'), useStores }

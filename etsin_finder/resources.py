@@ -7,7 +7,7 @@
 
 """RESTful API endpoints, meant to be used by the frontend"""
 
-from flask import session
+from flask import session, current_app
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
 
@@ -28,6 +28,7 @@ from etsin_finder.email_utils import \
     validate_send_message_request
 from etsin_finder.app import app
 from etsin_finder.log import log
+from etsin_finder.flags import get_supported_flags
 
 from etsin_finder.utils import \
     sort_array_of_obj_by_key, \
@@ -496,5 +497,21 @@ class AppConfig(Resource):
         return {
             'SERVER_ETSIN_DOMAIN_NAME': app_config.get('SERVER_ETSIN_DOMAIN_NAME', ''),
             'SERVER_QVAIN_DOMAIN_NAME': app_config.get('SERVER_QVAIN_DOMAIN_NAME', ''),
-            'DOWNLOAD_API_V2_ENABLED': app_config.get('DOWNLOAD_API_V2', {}).get('ENABLED', False)
+            'FLAGS': app_config.get('FLAGS', {})
         }
+
+
+class SupportedFlags(Resource):
+    """Supported flags endpoint"""
+
+    @log_request
+    def get(self):
+        """Return list of supported flags
+
+        Used for flag validation in the frontend.
+
+        Returns:
+            list of supported flags
+
+        """
+        return sorted(list(get_supported_flags(current_app)))
