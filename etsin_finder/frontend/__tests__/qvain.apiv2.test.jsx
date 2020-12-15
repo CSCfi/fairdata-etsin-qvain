@@ -97,6 +97,7 @@ const createMockQvain = settings => {
     updateFiles: jest.fn(),
     editDataset: jest.fn(),
     setChanged: jest.fn(),
+    setOriginal: jest.fn(),
     canRemoveFiles: true,
     canSelectFiles: true,
     ...settings,
