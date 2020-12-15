@@ -23,9 +23,6 @@ export const SkipToSubmitDataset = styled.button.attrs({
     max-height: 3em;
   }
 `
-export const SubHeaderTextContainer = styled.div`
-  white-space: nowrap;
-`
 
 export const ButtonContainer = styled.div`
   text-align: center;

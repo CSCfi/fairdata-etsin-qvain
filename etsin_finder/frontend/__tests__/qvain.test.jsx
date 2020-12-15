@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import translate from 'counterpart'
 import { components } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
@@ -7,7 +7,6 @@ import CreatableSelect from 'react-select/creatable'
 import etsinTheme from '../js/styles/theme'
 import '../locale/translations'
 import { Qvain as QvainBase } from '../js/components/qvain/views/main'
-import Description from '../js/components/qvain/fields/description'
 import DescriptionField from '../js/components/qvain/fields/description'
 import OtherIdentifierField from '../js/components/qvain/fields/description/otherIdentifier'
 import FieldOfScienceField from '../js/components/qvain/fields/description/fieldOfScience'
@@ -40,33 +39,40 @@ import {
   groupDatasetsByVersionSet,
 } from '../js/components/qvain/views/datasets/filter'
 import DatePicker from '../js/components/qvain/general/input/datepicker'
-import { StoresProvider, useStores } from '../js/stores/stores'
+import TranslationTab from '../js/components/qvain/general/input/translationTab'
+import { useStores } from '../js/stores/stores'
 
 jest.mock('uuid', original => {
   let id = 0
   return {
     ...original,
-    v4: () => id++,
+    v4: () => {
+      id += 1
+      return id
+    },
   }
 })
 
-jest.mock('moment', original => {
-  return () => ({
-    format: format => `moment formatted date: ${format}`,
-  })
+jest.mock('moment', () => {
+  const actual = jest.requireActual('moment')
+  function momentMock(value) {
+    return actual(value || '2020-11-02T12:34Z')
+  }
+  momentMock.locale = actual.locale
+  return momentMock
 })
+
 jest.mock('../js/stores/stores', () => {
-  const useStores = jest.fn()
+  const mockUseStores = jest.fn()
   return {
     ...jest.requireActual('../js/stores/stores'),
-    useStores,
+    useStores: mockUseStores,
   }
 })
-
-const QvainStore = new QvainStoreClass(Env)
 
 const getStores = () => {
   Env.setMetaxApiV2(true)
+  LocaleStore.setLang('en')
   return {
     Env,
     Qvain: new QvainStoreClass(Env),
@@ -94,7 +100,7 @@ describe('Qvain', () => {
   })
 
   it('should open existing dataset when the identifier in the url changes', () => {
-    const stores = getStores()
+    stores = getStores()
 
     // Mock react router matches for identifier
     const identifierMatch = { params: { identifier: 'some_identifier' } }
@@ -202,10 +208,6 @@ describe('Qvain.Description', () => {
     useStores.mockReturnValue(stores)
   })
 
-  it('should render <Description />', () => {
-    const component = shallow(<Description />)
-    expect(component).toMatchSnapshot()
-  })
   it('should render <DescriptionField />', () => {
     const component = shallow(<DescriptionField />)
     expect(component).toMatchSnapshot()
@@ -229,6 +231,42 @@ describe('Qvain.Description', () => {
   it('should render <SubjectHeadingsField />', () => {
     const component = shallow(<SubjectHeadingsField Stores={getStores()} />)
     expect(component).toMatchSnapshot()
+  })
+})
+
+describe('Qvain translation tabs', () => {
+  let stores
+  beforeEach(() => {
+    stores = getStores()
+    useStores.mockReturnValue(stores)
+  })
+
+  const getTranslationTabProps = (localeLanguage, activeTabLanguage) => {
+    stores.Locale.setLang(localeLanguage, false)
+    const component = shallow(
+      <TranslationTab language={activeTabLanguage} setLanguage={() => {}} children="" />
+    )
+    const langButtons = component.find('[type="button"]').map(btn => btn.props())
+    return langButtons.map(({ language, active }) => ({ language, active }))
+  }
+
+  it('shows correct TranslationTab', () => {
+    expect(getTranslationTabProps('en', 'en')).toEqual([
+      { language: 'en', active: true },
+      { language: 'fi', active: false },
+    ])
+    expect(getTranslationTabProps('en', 'fi')).toEqual([
+      { language: 'en', active: false },
+      { language: 'fi', active: true },
+    ])
+    expect(getTranslationTabProps('fi', 'fi')).toEqual([
+      { language: 'fi', active: true },
+      { language: 'en', active: false },
+    ])
+    expect(getTranslationTabProps('fi', 'en')).toEqual([
+      { language: 'fi', active: false },
+      { language: 'en', active: true },
+    ])
   })
 })
 
@@ -305,10 +343,9 @@ describe('Qvain dataset list filtering', () => {
 
 describe('Qvain.RightsAndLicenses', () => {
   let stores
-  let Licenses
   const getRenderedLicenseUrls = shallowLicenseComponent => {
     const selectedOptions = shallowLicenseComponent
-      .findWhere(c => c.prop('component') == CreatableSelect)
+      .findWhere(c => c.prop('component') === CreatableSelect)
       .dive()
       .dive()
       .dive()
@@ -440,7 +477,7 @@ describe('Qvain.ExternalFiles', () => {
   })
 
   it('should render correctly', async () => {
-    let externalFiles = shallow(<ExternalFilesBase />)
+    const externalFiles = shallow(<ExternalFilesBase />)
     expect(externalFiles.find(SlidingContent).length).toBe(1)
     expect(externalFiles.find(ButtonGroup).length).toBe(0)
   })
@@ -455,7 +492,7 @@ describe('Qvain.ExternalFiles', () => {
         'https://en.wikipedia.org/wiki/Portal:Arts'
       )
     )
-    let externalFiles = shallow(<ExternalFilesBase />)
+    const externalFiles = shallow(<ExternalFilesBase />)
     expect(externalFiles.find(ButtonGroup).length).toBe(1)
   })
 })

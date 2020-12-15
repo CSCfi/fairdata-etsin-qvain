@@ -45,7 +45,16 @@ class Projects {
     const projects = dataset.is_output_of
     if (projects !== undefined) {
       this.projects = projects.map(project => {
-        const { name, identifier } = project
+        const { identifier } = project
+
+        // If no English or Finnish name is found, fill in value from other translations if possible
+        let { name } = project
+        if (!name.en && !name.fi) {
+          const nameTranslation = name.und || Object.values(name).find(translation => translation)
+          if (nameTranslation) {
+            name = { ...name, en: nameTranslation }
+          }
+        }
         const params = [uuidv4(), name, identifier, project.has_funder_identifier]
 
         // We need to push null if no funder type found.
@@ -57,7 +66,7 @@ class Projects {
         } else params.push(null)
 
         // Organizations
-        const organizations = project.source_organization.map(organization => {
+        const organizations = (project.source_organization || []).map(organization => {
           const parsedOrganizations = parseOrganization(organization)
           parsedOrganizations.reverse()
           return Organization(uuidv4(), ...parsedOrganizations)
@@ -70,7 +79,7 @@ class Projects {
             const parsedOrganizations = parseOrganization(agency)
             parsedOrganizations.reverse()
             const organization = Organization(uuidv4(), ...parsedOrganizations)
-            const contributorTypes = agency.contributor_type.map(contributorType =>
+            const contributorTypes = (agency.contributor_type || []).map(contributorType =>
               ContributorType(
                 uuidv4(),
                 contributorType.identifier,
@@ -97,11 +106,11 @@ class Projects {
         details.funderType = { identifier: details.funderType.url }
       } else delete details.funderType
 
-      const organizations = projectObject.organizations.map(fullOrganization =>
+      const organizations = (projectObject.organizations || []).map(fullOrganization =>
         organizationToArray(fullOrganization)
       )
 
-      const fundingAgencies = projectObject.fundingAgencies.map(agency => {
+      const fundingAgencies = (projectObject.fundingAgencies || []).map(agency => {
         const { organization } = agency
         const contributorTypes = agency.contributorTypes.map(contributorType => {
           const { identifier, label, definition, inScheme } = contributorType
