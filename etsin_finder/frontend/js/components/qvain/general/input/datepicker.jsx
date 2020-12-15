@@ -51,7 +51,7 @@ export const StyledCustomDatePicker = styled(CustomDatePicker)`
   padding: 8px;
   font-size: 16px;
   box-sizing: border-box;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   min-width: 100%;
   max-width: 100%;
 `

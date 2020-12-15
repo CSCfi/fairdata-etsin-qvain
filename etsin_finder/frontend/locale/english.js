@@ -271,6 +271,7 @@ const english = {
       toggleLabel: 'Switch language to: %(otherLang)s',
     },
     cookies: {
+      section: 'Cookie notification',
       accept: 'Accept all cookies',
       infoText: 'The Fairdata services use cookies and tracking to ensure security and quality.',
       link: 'View the Fairdata Privacy Policy',
@@ -495,6 +496,7 @@ const english = {
       help: 'Choose a dataset to edit or create a new dataset',
       createButton: 'Create new dataset',
       createNewVersion: 'Create new version',
+      useAsTemplate: 'Use as template',
       state: {
         draft: 'Draft',
         published: 'Published',
@@ -626,6 +628,13 @@ const english = {
         addButton: 'Add keyword',
         help:
           'You can add multiple keywords by separating them with a comma (,). Dataset has to have at least one keyword.',
+      },
+      subjectHeadings: {
+        title: 'Subject Headings',
+        infoText: 'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
+        placeholder: 'Type to search for available options',
+        help:
+          'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
       },
       error: {
         title: 'A title is required in at least one language.',

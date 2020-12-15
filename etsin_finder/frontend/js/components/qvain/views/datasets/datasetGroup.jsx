@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
@@ -13,6 +13,7 @@ const DatasetGroup = ({
   datasets,
   currentTimestamp,
   handleEnterEdit,
+  handleUseAsTemplate,
   handleCreateNewVersion,
   openRemoveModal,
   highlight,
@@ -25,6 +26,7 @@ const DatasetGroup = ({
         dataset={datasets[0]}
         currentTimestamp={currentTimestamp}
         handleEnterEdit={handleEnterEdit}
+        handleUseAsTemplate={handleUseAsTemplate}
         handleCreateNewVersion={handleCreateNewVersion}
         openRemoveModal={openRemoveModal}
         highlight={datasets[0].identifier === highlight}
@@ -50,25 +52,22 @@ const DatasetGroup = ({
   }
 
   return (
-    <Observer>
-      {() => (
-        <>
-          {visibleDatasets.map((dataset, index) => (
-            <Dataset
-              key={dataset.identifier}
-              dataset={dataset}
-              currentTimestamp={currentTimestamp}
-              handleEnterEdit={handleEnterEdit}
-              handleCreateNewVersion={handleCreateNewVersion}
-              openRemoveModal={openRemoveModal}
-              indent={index !== 0}
-              highlight={dataset.identifier === highlight}
-            />
-          ))}
-          {more}
-        </>
-      )}
-    </Observer>
+    <>
+      {visibleDatasets.map((dataset, index) => (
+        <Dataset
+          key={dataset.identifier}
+          dataset={dataset}
+          currentTimestamp={currentTimestamp}
+          handleEnterEdit={handleEnterEdit}
+          handleUseAsTemplate={handleUseAsTemplate}
+          handleCreateNewVersion={handleCreateNewVersion}
+          openRemoveModal={openRemoveModal}
+          indent={index !== 0}
+          highlight={dataset.identifier === highlight}
+        />
+      ))}
+      {more}
+    </>
   )
 }
 
@@ -76,6 +75,7 @@ DatasetGroup.propTypes = {
   datasets: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentTimestamp: PropTypes.object.isRequired,
   handleEnterEdit: PropTypes.func.isRequired,
+  handleUseAsTemplate: PropTypes.func.isRequired,
   handleCreateNewVersion: PropTypes.func.isRequired,
   openRemoveModal: PropTypes.func.isRequired,
   highlight: PropTypes.string,
@@ -103,4 +103,4 @@ const MoreIcon = styled(FontAwesomeIcon)`
   margin: 0 0.5rem 0 0.5rem;
 `
 
-export default DatasetGroup
+export default observer(DatasetGroup)

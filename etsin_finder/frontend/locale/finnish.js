@@ -269,6 +269,7 @@ const finnish = {
       toggleLabel: 'Vaihda kieltä: %(otherLang)s',
     },
     cookies: {
+      section: 'Evästeiden hyväksyminen',
       accept: 'Hyväksy evästeet',
       infoText:
         'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
@@ -496,6 +497,7 @@ const finnish = {
       help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
       createButton: 'Lisää uusi aineisto',
       createNewVersion: 'Luo uusi versio',
+      useAsTemplate: 'Käytä mallina',
       state: {
         draft: 'Luonnos',
         published: 'Julkaistu',
@@ -627,6 +629,13 @@ const finnish = {
         addButton: 'Lisää avainsana',
         help:
           'Voit lisätä useamman avainsanan erottamalla ne pilkulla (,). Aineistolla on oltava vähintään yksi avainsana.',
+      },
+      subjectHeadings: {
+        title: 'Asiasanat',
+        infoText: 'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
+        placeholder: 'Hae vaihtoehtoja',
+        help:
+          'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
       },
       error: {
         title: 'Otsikko on pakollinen ainakin yhdellä kielellä.',

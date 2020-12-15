@@ -46,7 +46,7 @@ const getGoToEtsinButton = (dataset, getEtsinUrl) => {
   )
 }
 
-const getTitle = dataset => {
+const getTitle = (dataset, lang) => {
   let researchDataset = dataset.research_dataset
   if (
     dataset.next_draft &&
@@ -55,7 +55,7 @@ const getTitle = dataset => {
   ) {
     researchDataset = dataset.next_draft.research_dataset
   }
-  return researchDataset.title.en || researchDataset.title.fi
+  return researchDataset.title[lang] || researchDataset.title.en || researchDataset.title.fi
 }
 
 const getActionButton = action => {
@@ -81,6 +81,7 @@ function Dataset({
   dataset,
   currentTimestamp,
   handleCreateNewVersion,
+  handleUseAsTemplate,
   handleEnterEdit,
   openRemoveModal,
   indent,
@@ -88,12 +89,20 @@ function Dataset({
 }) {
   const {
     Env: { metaxApiV2, getEtsinUrl },
+    Locale: { lang },
   } = useStores()
   const actions = []
+
+  actions.push({
+    text: 'qvain.datasets.useAsTemplate',
+    danger: false,
+    handler: () => handleUseAsTemplate(dataset),
+  })
   if (
     metaxApiV2 &&
     !dataset.next_draft &&
     dataset.next_dataset_version === undefined &&
+    dataset.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.IDA &&
     dataset.state === 'published'
   ) {
     actions.push({
@@ -123,7 +132,7 @@ function Dataset({
     <DatasetRow key={dataset.identifier} tabIndex="0" highlight={highlight}>
       <BodyCellWordWrap style={titleCellStyle}>
         {indent && <Marker />}
-        {getTitle(dataset)}
+        {getTitle(dataset, lang)}
         {dataset.next_dataset_version !== undefined && (
           <Translate color="yellow" content="qvain.datasets.oldVersion" component={DatasetLabel} />
         )}
@@ -166,6 +175,7 @@ Dataset.propTypes = {
   dataset: PropTypes.object.isRequired,
   currentTimestamp: PropTypes.object.isRequired,
   handleEnterEdit: PropTypes.func.isRequired,
+  handleUseAsTemplate: PropTypes.func.isRequired,
   handleCreateNewVersion: PropTypes.func.isRequired,
   openRemoveModal: PropTypes.func.isRequired,
   indent: PropTypes.bool,

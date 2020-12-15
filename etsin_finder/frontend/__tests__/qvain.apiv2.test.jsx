@@ -30,7 +30,9 @@ const realQvainFormSchemaDraft = jest.requireActual('../js/components/qvain/util
 
 jest.mock('axios')
 
-jest.mock('../js/components/qvain/utils/handleSubmit', () => jest.fn())
+jest.mock('../js/components/qvain/utils/handleSubmit', () => {
+  return jest.fn()
+})
 
 jest.mock('../js/components/qvain/utils/formValidation', () => ({
   qvainFormSchema: {
@@ -104,6 +106,7 @@ const createMockQvain = settings => ({
   updateFiles: jest.fn(),
   editDataset: jest.fn(),
   setChanged: jest.fn(),
+  setOriginal: jest.fn(),
   canRemoveFiles: true,
   canSelectFiles: true,
   ...settings,
@@ -132,7 +135,11 @@ describe('Submit.exec()', () => {
   beforeEach(() => {
     handleSubmitToBackend.mockReturnValue(generateDefaultDatasetForPublish())
     submitFunction = jest.fn(() => generalPostResponse)
-    mockQvain = createMockQvain()
+    mockQvain = createMockQvain({
+      original: {
+        identifier: 'some identifier',
+      },
+    })
     Submit = new SubmitClass(mockQvain)
   })
 
@@ -150,6 +157,12 @@ describe('Submit.exec()', () => {
     await exec(() => mockQvain.Actors.checkProvenanceActors.mockReturnValue(false))
     expect(mockQvain.Actors.checkProvenanceActors).toHaveBeenCalledTimes(1)
     expect(submitFunction).not.toHaveBeenCalled()
+  })
+
+  test('false from cleanupBeforeBackend should cancel post', async () => {
+    await exec(() => mockQvain.OtherIdentifiers.cleanupBeforeBackend.mockReturnValue(false))
+    expect(mockQvain.OtherIdentifiers.cleanupBeforeBackend).toHaveBeenCalledTimes(1)
+    expect(axios.post).not.toHaveBeenCalled()
   })
 
   test('should set useDoiModalIsOpen to false', async () => {
@@ -192,11 +205,11 @@ describe('Submit.exec()', () => {
     expect(mockQvain.editDataset).toHaveBeenCalledWith(generalGetResponse.data)
   })
 
-  test('when newCumulativeState, calls editDataset with data from backend', async () => {
+  test(`when newCumulativeState, calls editDataset with data from backend`, async () => {
     mockQvain.newCumulativeState = 'new state'
-    axios.get.mockReturnValue(generalGetResponse)
+    axios.get.mockReturnValue(Promise.resolve(generalGetResponse))
     await exec()
-    expect(mockQvain.editDataset).toHaveBeenCalledWith(generalGetResponse.data)
+    await expect(mockQvain.editDataset).toHaveBeenCalledWith(generalGetResponse.data)
   })
 })
 
@@ -631,7 +644,7 @@ describe('edit existing draft dataset', () => {
   test('case 48: ida, doi, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForDraft({
       useDoi: true,
-      cumultaiveState: CUMULATIVE_STATE.CLOSED,
+      cumulativeState: CUMULATIVE_STATE.CLOSED,
     })
 
     await expectNoError(dataset)
@@ -746,7 +759,7 @@ describe('publish existing draft dataset', () => {
   test('case 65: ida, doi, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForPublish({
       useDoi: true,
-      cumultaiveState: CUMULATIVE_STATE.YES,
+      cumulativeState: CUMULATIVE_STATE.YES,
     })
 
     await expectNoError(dataset)

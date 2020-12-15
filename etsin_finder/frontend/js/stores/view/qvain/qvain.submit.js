@@ -31,7 +31,14 @@ class Submit {
 
   @observable useDoiModalIsOpen = false
 
-  @observable hasValidated = false
+  @action reset = () => {
+    this.isLoading = false
+    this.draftValidationError = []
+    this.publishValidationError = []
+    this.error = undefined
+    this.response = null
+    this.useDoiModalIsOpen = false
+  }
 
   @action setLoading = state => {
     this.isLoading = state
@@ -39,6 +46,10 @@ class Submit {
 
   @action setError = error => {
     this.error = error
+  }
+
+  @action setResponse = response => {
+    this.response = response
   }
 
   @action clearResponse = () => {
@@ -118,10 +129,15 @@ class Submit {
   }
 
   @action exec = async (submitFunction, schema = qvainFormSchema) => {
-    const { editDataset, setChanged } = this.Qvain
+    const {
+      OtherIdentifiers: { cleanupBeforeBackend },
+      editDataset,
+      setChanged,
+    } = this.Qvain
     this.response = undefined
     this.error = undefined
 
+    if (!cleanupBeforeBackend()) return
     if (!(await this.promptProvenances())) return
 
     this.closeUseDoiModal()
@@ -151,18 +167,30 @@ class Submit {
       await this.updateFiles(data.identifier, fileActions, metadataActions)
       setChanged(false)
 
-      if (fileActions || metadataActions || newCumulativeState) {
+      if (newCumulativeState != null) {
+        const obj = {
+          identifier: this.Qvain.original.identifier,
+          cumulative_state: this.Qvain.newCumulativeState,
+        }
+
+        const url = urls.v2.rpc.changeCumulativeState()
+        await axios.post(url, obj)
+      }
+
+      if (fileActions || metadataActions || newCumulativeState != null) {
         // Files changed, get updated dataset
+
         const url = urls.v2.dataset(data.identifier)
         const updatedResponse = await axios.get(url)
+        this.Qvain.setOriginal(updatedResponse)
         await editDataset(updatedResponse.data)
       } else {
         await editDataset(data)
       }
-
-      this.response = data
+      this.setResponse(data)
+      this.setError(undefined)
     } catch (error) {
-      this.error = getResponseError(error)
+      this.setError(getResponseError(error))
       throw error
     } finally {
       this.setLoading(false)
@@ -201,8 +229,8 @@ class Submit {
     const res = await this.createNewDraft(dataset)
     // Publishes an unpublished draft dataset
     const url = urls.v2.rpc.publishDataset()
-    await axios.post(url, null, { params: { identifier: res.data.identifier } })
-    return res
+    const resp = await axios.post(url, null, { params: { identifier: res.data.identifier } })
+    return resp
   }
 
   publishDraft = async dataset => {
@@ -279,7 +307,7 @@ class Submit {
       values.fileActions = fileActions
     }
 
-    if (!isActionsEmpty(fileActions)) {
+    if (!isActionsEmpty(metadataActions)) {
       values.metadataActions = metadataActions
     }
 

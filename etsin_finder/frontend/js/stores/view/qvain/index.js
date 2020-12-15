@@ -9,6 +9,7 @@ class Qvain extends Resources {
     super()
     this.Env = Env
     this.Files = new Files(this)
+    this.Submit = new Submit(this)
     this.resetQvainStore()
     this.Submit = new Submit(this)
     makeObservable(this)
@@ -28,6 +29,7 @@ class Qvain extends Resources {
     this.original = undefined
     // Reset Files/Directories related data
     this.resetFilesV1()
+    this.Files.reset()
     this.dataCatalog = undefined
     this.preservationState = 0
     this.cumulativeState = CUMULATIVE_STATE.NO
@@ -50,6 +52,8 @@ class Qvain extends Resources {
 
     this.changed = false
     this.deprecated = false
+
+    this.Submit.reset()
   }
 
   @action
@@ -201,20 +205,21 @@ class Qvain extends Resources {
   }
 
   // Dataset related
-
-  // Dataset - METAX dataset JSON
   // perform schema transformation METAX JSON -> etsin backend / internal schema
-  @action editDataset = async dataset => {
-    this.original = { ...dataset }
-    this.deprecated = dataset.deprecated
+  @action loadBasicFields = dataset => {
     const researchDataset = dataset.research_dataset
-
-    // Load description
     this.resources.forEach(r => r.fromBackend(researchDataset, this))
+  }
+
+  // load fields that won't be duplicated by template copy
+  @action loadStatusAndFileFields = async dataset => {
+    this.deprecated = dataset.deprecated
 
     // Load data catalog
     this.dataCatalog =
       dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
+
+    const researchDataset = dataset.research_dataset
 
     // Load preservation state
     this.preservationState = dataset.preservation_state
@@ -248,20 +253,35 @@ class Qvain extends Resources {
           r.download_url ? r.download_url.identifier : undefined,
           r.use_category
             ? {
-                label: r.use_category.pref_label.en,
-                value: r.use_category.identifier,
-              }
+              label: r.use_category.pref_label.en,
+              value: r.use_category.identifier,
+            }
             : undefined
         )
       )
       this.extResFormOpen = true
     }
 
+    // Load v2 files
     if (this.Env.metaxApiV2) {
       await this.Files.openDataset(dataset)
+    } else {
+      this.Files.reset()
     }
+  }
 
+  @action editDataset = async dataset => {
+    this.Submit.reset()
     this.setChanged(false)
+    this.original = { ...dataset }
+    this.loadBasicFields(dataset)
+    await this.loadStatusAndFileFields(dataset)
+  }
+
+  @action resetWithTemplate = async dataset => {
+    this.resetQvainStore()
+    this.loadBasicFields(dataset)
+    this.setChanged(true)
   }
 
   @action setOriginal = newOriginal => {

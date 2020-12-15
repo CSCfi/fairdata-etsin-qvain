@@ -87,6 +87,7 @@ exports[`Qvain should render correctly 1`] = `
     datasetLoading={false}
   />
   <StickyHeader
+    clearSubmitResponse={[Function]}
     datasetError={false}
     datasetLoading={false}
     handleSubmitError={[Function]}
@@ -148,6 +149,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
   <FieldOfScienceField />
   <LanguageField />
   <KeywordsField />
+  <SubjectHeadingsField />
 </div>
 `;
 
@@ -179,13 +181,17 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         "render": [Function],
       }
     }
+    getRefGroups={[Function]}
     getter={Array []}
     isClearable={false}
     isMulti={true}
     metaxIdentifier="field_of_science"
     model={[Function]}
+    modifyGroupLabel={[Function]}
+    modifyOptionLabel={[Function]}
     name="fieldOfScience"
     setter={[Function]}
+    sortFunc={[Function]}
   />
 </Card>
 `;
@@ -195,7 +201,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
   bottomContent={false}
 >
   <form__LabelLarge
-    htmlFor="keywordsInput"
+    htmlFor="keywords-input"
   >
     <TooltipHover
       position="right"
@@ -215,6 +221,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
   <StringArray
     addItemStr={[Function]}
     addWithComma={true}
+    id="keywords-input"
     itemSchema={null}
     itemStr=""
     readonly={false}
@@ -333,7 +340,7 @@ exports[`Qvain.Description should render <LanguageField /> 1`] = `
     component="p"
     content="qvain.description.datasetLanguage.help"
   />
-  <Select
+  <SearchSelect
     getter={Array []}
     id="datasetLanguage"
     inModal={false}
@@ -355,7 +362,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
   bottomContent={true}
 >
   <form__LabelLarge
-    htmlFor="otherIdentifiersInput"
+    htmlFor="other-identifiers-input"
   >
     <Translate
       component="span"
@@ -369,6 +376,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
   <StringArray
     addItemStr={[Function]}
     addWithComma={true}
+    id="other-identifiers-input"
     itemSchema={
       StringSchema {
         "_blacklist": RefSet {
@@ -506,6 +514,36 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     translationsRoot="qvain.description.otherIdentifiers"
     validationError=""
     value={Array []}
+  />
+</Card>
+`;
+
+exports[`Qvain.Description should render <SubjectHeadingsField /> 1`] = `
+<Card
+  bottomContent={false}
+>
+  <form__LabelLarge
+    htmlFor="subjectHeading-select"
+  >
+    <Translate
+      component="span"
+      content="qvain.description.subjectHeadings.title"
+    />
+  </form__LabelLarge>
+  <Translate
+    component="p"
+    content="qvain.description.subjectHeadings.help"
+  />
+  <SearchSelect
+    getter={Array []}
+    inModal={false}
+    isClearable={false}
+    isMulti={true}
+    metaxIdentifier="keyword"
+    model={[Function]}
+    name="subjectHeading"
+    placeholder="qvain.description.subjectHeadings.placeholder"
+    setter={[Function]}
   />
 </Card>
 `;
