@@ -50,6 +50,9 @@ export const onChangeMulti = (callback) => selection => {
 }
 
 // Get label for option, assumes that first key of model corresponds to label
+export const getGroupLabel = (lang) => group => group?.label[lang]
+
+// Get label for option, assumes that first key of model corresponds to label
 export const getOptionLabel = (model, lang) => {
   const [labelKey, urlKey] = Object.keys(model())
   return opt => {
@@ -87,22 +90,48 @@ const parseRefResponse = (res, model) => {
   return hits.map(hit => model(hit._source.label, hit._source.uri))
 }
 
+const getCollator = (lang) => new Intl.Collator(lang, { numeric: true, sensitivity: 'base' })
+
+// Sort groups array and their options in-place according to lang
+export const sortGroups = async (model, lang, groups, sortFunc = null) => {
+  groups.forEach(group => {
+    if (group.options.length > 0) {
+      sortOptions(model, lang, group.options, sortFunc)
+    }
+  })
+  if (sortFunc) {
+    groups.sort(sortFunc)
+  } else {
+    const collator = getCollator(lang)
+    groups.sort((a, b) => collator.compare(a.label[lang], b.label[lang]))
+  }
+}
+
 // Sort options array in-place according to lang
-export const sortOptions = async (model, lang, options) => {
+export const sortOptions = async (model, lang, options, sortFunc = null) => {
   const labelKey = Object.keys(model())[0]
-  const collator = new Intl.Collator(lang, { numeric: true, sensitivity: 'base' })
-  options.sort((a, b) => collator.compare(a[labelKey][lang], b[labelKey][lang]))
+  if (sortFunc) {
+    options.sort(sortFunc)
+  } else {
+    const collator = getCollator(lang)
+    options.sort((a, b) => collator.compare(a[labelKey][lang], b[labelKey][lang]))
+  }
 }
 
 // Sort state.options automatically on language change, disposes in componentWillUnmount
-export const autoSortOptions = (componentInstance, Locale, model) => {
+export const autoSortOptions = (componentInstance, Locale, model, sortFunc = null) => {
   disposeOnUnmount(
     componentInstance,
     autorun(() => {
       const { lang } = Locale
       componentInstance.setState(state => {
         const opts = [...state.options]
-        sortOptions(model, lang, opts)
+        const hasGroups = opts[0]?.options
+        if (hasGroups) {
+          sortGroups(model, lang, opts, sortFunc)
+        } else {
+          sortOptions(model, lang, opts, sortFunc)
+        }
         return {
           options: opts,
         }

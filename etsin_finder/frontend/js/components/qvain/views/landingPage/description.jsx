@@ -28,10 +28,11 @@ const Header = styled.h1`
   font-size: 36px;
 `
 
-const Brief = styled.h5`
+const Brief = styled.h2`
   font-size: 20px;
   font-weight: normal;
   margin-bottom: 1rem;
+  line-height: 1.5;
 `
 
 export default observer(Description)
