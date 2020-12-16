@@ -55,7 +55,7 @@ class Env {
   }
 
   @computed get downloadApiV2() {
-    return this.Flags.flagEnabled('DOWNLOAD_API_V2')
+    return this.Flags.flagEnabled('DOWNLOAD_API_V2.FRONTEND')
   }
 
   @observable app = getCookieValue('etsin_app')
