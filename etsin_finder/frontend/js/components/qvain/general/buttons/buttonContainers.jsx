@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 
+export const ButtonContainer = styled.div`
+  margin-top: 0.5rem;
+`
+
 export const ButtonGroup = styled.div`
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
   border: solid 1px #cccccc;
@@ -7,6 +11,11 @@ export const ButtonGroup = styled.div`
   background-color: #fff;
   margin-bottom: 12px;
   overflow: overlay;
+
+  > ${ButtonContainer} {
+    margin-top: 0;
+    text-align: right;
+  }
 `
 
 export const FileItem = styled(ButtonGroup)`
@@ -20,10 +29,6 @@ export const FileItem = styled(ButtonGroup)`
     }
     return ''
   }}
-`
-
-export const ButtonContainer = styled.div`
-  text-align: right;
 `
 
 export const ConfirmButtonContainer = styled.div`

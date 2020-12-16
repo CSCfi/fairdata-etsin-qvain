@@ -36,7 +36,7 @@ jest.mock('../js/stores/stores', () => {
 
 const Qvain = new QvainStoreClass(Env)
 
-Env.setMetaxApiV2(true)
+Env.Flags.setFlag('METAX_API_V2', true)
 const stores = {
   Env,
   Qvain,

@@ -43,8 +43,10 @@ class Layout extends Component {
       <ErrorBoundary>
         <KeepAlive loginThroughService={isQvain ? 'qvain' : 'etsin'} />
         <AnnounceAndReset />
-        <SkipToContent callback={this.focusContent} />
-        {isQvain ? <QvainHeader /> : <Header />}
+        <header>
+          <SkipToContent callback={this.focusContent} />
+          {isQvain ? <QvainHeader /> : <Header />}
+        </header>
         <Content contentRef={this.content} />
         <CookiesNotification />
         <Footer />

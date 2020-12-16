@@ -54,7 +54,7 @@ const INITIAL_STATE = {
       id: null,
       organization: {},
       contributorTypeForm: { errors: {} },
-      errors: {},
+      errors: [],
       contributorTypes: [],
     },
     addedFundingAgencies: [],
@@ -178,7 +178,7 @@ class Project extends Component {
       })
       .catch(validationErrors => {
         const parsedErrors = { details: {}, organizations: {}, fundingAgencies: {} }
-        console.log(validationErrors)
+        console.error(validationErrors)
         validationErrors.inner.forEach(error => {
           const { errors, path } = error
           const paths = path.split('.')

@@ -34,7 +34,7 @@ def user_can_view_dataset(cr_id):
         [type] -- [description]
 
     """
-    cr = cr_service.get_catalog_record(cr_id, False, False)
+    cr = cr_service.get_catalog_record(cr_id, True, False)
     if cr is None:
         return False
 
