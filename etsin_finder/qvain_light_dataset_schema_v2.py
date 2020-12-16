@@ -212,6 +212,11 @@ class DraftDatasetValidationSchema(Schema):
         required=False
     )
 
+    theme = fields.List(
+        fields.Str(),
+        required=False
+    )
+
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
     license = fields.List(fields.Nested(DraftLicenseValidationSchema))

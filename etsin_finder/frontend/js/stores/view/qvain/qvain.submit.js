@@ -1,6 +1,7 @@
 import { makeObservable, observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { ValidationError } from 'yup'
+import debounce from 'lodash.debounce'
 import handleSubmitToBackend from '../../../components/qvain/utils/handleSubmit'
 import {
   qvainFormSchema,
@@ -344,7 +345,7 @@ class Submit {
     this.publishValidationError = error
   }
 
-  @action prevalidate = async () => {
+  @action prevalidate = debounce(async () => {
     this.setPublishValidationError([])
     this.setDraftValidationError([])
     const dataset = this.prepareDataset()
@@ -362,7 +363,7 @@ class Submit {
     } catch (error) {
       this.setDraftValidationError(error)
     }
-  }
+  }, 500)
 }
 
 export default Submit

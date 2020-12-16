@@ -16,16 +16,18 @@ class OtherIdentifiers extends ReferenceField {
 
   @action validateStr = () => {
     const { itemStr, storage, setValidationError } = this
-    if (itemStr !== '') {
+    if (itemStr) {
       try {
         otherIdentifierSchema.validateSync(itemStr)
       } catch (err) {
         setValidationError(err.errors)
         return false
       }
+
       if (!storage.includes(itemStr)) {
         return true
       }
+
       const message = translate('qvain.description.otherIdentifiers.alreadyAdded')
       setValidationError(message)
       return false

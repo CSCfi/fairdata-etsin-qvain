@@ -48,6 +48,7 @@
     "leaflet": "^1.5.1",
     "leaflet-geosearch": "2.7.0",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.debounce": "^4.0.8",
     "mobx": "^6.0.3",
     "mobx-react": "^7.0.0",
     "mobx-react-router": "^4.0.7",
