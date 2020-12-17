@@ -224,7 +224,7 @@ class Files {
         }
         await this.loadingDraftOfProjects.promise
       } catch (err) {
-        runInAction(() => { this.loadingDraftOfProject.error = err })
+        runInAction(() => { this.loadingDraftOfProjects.error = err })
       } finally {
         runInAction(() => { this.loadingDraftOfProjects = null })
       }
