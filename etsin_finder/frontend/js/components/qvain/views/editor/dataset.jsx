@@ -4,7 +4,9 @@ import Translate from 'react-translate-component'
 
 import { SkipToSubmitDataset, Form, SubmitContainer, DisableImplicitSubmit } from './editor.styled'
 import { ErrorContainer, ErrorLabel, ErrorContent, ErrorButtons } from '../../general/errors'
+import FlaggedComponent from '../../../general/flaggedComponent'
 import { Button } from '../../../general/button'
+import SubmitButtons from './submitButtons'
 
 import RightsAndLicenses from '../../fields/licenses'
 import Description from '../../fields/description'
@@ -21,6 +23,8 @@ const Dataset = ({
   datasetErrorDetails,
   handleRetry,
   setFocusOnSubmitButton,
+  handleSubmitError,
+  handleSubmitResponse,
 }) => {
   if (datasetError) {
     return (
@@ -50,6 +54,12 @@ const Dataset = ({
       <Files />
       <SubmitContainer>
         <Translate component="p" content="qvain.consent" unsafe />
+        <FlaggedComponent flag="UI.BOTTOM_SUBMIT_BUTTONS">
+          <SubmitButtons
+            handleSubmitError={handleSubmitError}
+            handleSubmitResponse={handleSubmitResponse}
+          />
+        </FlaggedComponent>
       </SubmitContainer>
       <SkipToSubmitDataset onClick={setFocusOnSubmitButton}>
         <Translate content="stsd" />
@@ -64,6 +74,8 @@ Dataset.propTypes = {
   datasetErrorTitle: PropTypes.node,
   datasetErrorDetails: PropTypes.node,
   handleRetry: PropTypes.func.isRequired,
+  handleSubmitError: PropTypes.func.isRequired,
+  handleSubmitResponse: PropTypes.func.isRequired,
   setFocusOnSubmitButton: PropTypes.func.isRequired,
 }
 
