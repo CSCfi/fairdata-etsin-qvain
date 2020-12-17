@@ -14,9 +14,12 @@ import { useStores } from '../../../../utils/stores'
 
 const Form = props => {
   const {
-    Locale: { lang },
+    Locale: { getMatchingLang },
   } = useStores()
-  const [language, setLanguage] = useState(lang)
+  const { inEdit } = props.Field
+
+  const translations = [inEdit.name, inEdit.description, inEdit.outcomeDescription]
+  const [language, setLanguage] = useState(getMatchingLang(translations))
 
   return (
     <FormContainer>
