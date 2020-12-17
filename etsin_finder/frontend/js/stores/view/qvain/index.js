@@ -325,7 +325,7 @@ class Qvain extends Resources {
 
     if (this.Env.metaxApiV2) {
       if (this.hasBeenPublished) {
-        if (this.Files && !this.Files.projectLocked) {
+        if (this.Files && (!this.Files.projectLocked || this.Files.draftOfHasProject === false)) {
           return true // for published noncumulative datasets, allow adding files only if none exist yet
         }
         return this.isCumulative
