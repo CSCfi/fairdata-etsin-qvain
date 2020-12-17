@@ -5,8 +5,16 @@ exports[`Qvain should render correctly 1`] = `
   value={
     Object {
       "Env": Env {
+        "Flags": Flags {
+          "fetchingSupportedFlags": false,
+          "flagEnabled": [Function],
+          "flags": Object {
+            "METAX_API_V2": false,
+          },
+          "overrides": Object {},
+          "supportedFlags": null,
+        },
         "app": undefined,
-        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -19,11 +27,11 @@ exports[`Qvain should render correctly 1`] = `
           "push": [Function],
           "replace": [Function],
         },
-        "metaxApiV2": false,
         "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
@@ -309,8 +317,16 @@ exports[`Qvain should render correctly 1`] = `
           "value": undefined,
         },
         "Env": Env {
+          "Flags": Flags {
+            "fetchingSupportedFlags": false,
+            "flagEnabled": [Function],
+            "flags": Object {
+              "METAX_API_V2": false,
+            },
+            "overrides": Object {},
+            "supportedFlags": null,
+          },
           "app": undefined,
-          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -323,7 +339,6 @@ exports[`Qvain should render correctly 1`] = `
             "push": [Function],
             "replace": [Function],
           },
-          "metaxApiV2": false,
           "qvainHost": "",
         },
         "FieldOfSciences": FieldOfSciences {
@@ -1431,8 +1446,16 @@ exports[`Qvain.Description should render <Description /> 1`] = `
   value={
     Object {
       "Env": Env {
+        "Flags": Flags {
+          "fetchingSupportedFlags": false,
+          "flagEnabled": [Function],
+          "flags": Object {
+            "METAX_API_V2": false,
+          },
+          "overrides": Object {},
+          "supportedFlags": null,
+        },
         "app": undefined,
-        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -1445,11 +1468,11 @@ exports[`Qvain.Description should render <Description /> 1`] = `
           "push": [Function],
           "replace": [Function],
         },
-        "metaxApiV2": false,
         "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
@@ -1735,8 +1758,16 @@ exports[`Qvain.Description should render <Description /> 1`] = `
           "value": undefined,
         },
         "Env": Env {
+          "Flags": Flags {
+            "fetchingSupportedFlags": false,
+            "flagEnabled": [Function],
+            "flags": Object {
+              "METAX_API_V2": false,
+            },
+            "overrides": Object {},
+            "supportedFlags": null,
+          },
           "app": undefined,
-          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -1749,7 +1780,6 @@ exports[`Qvain.Description should render <Description /> 1`] = `
             "push": [Function],
             "replace": [Function],
           },
-          "metaxApiV2": false,
           "qvainHost": "",
         },
         "FieldOfSciences": FieldOfSciences {
@@ -2857,8 +2887,16 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
   value={
     Object {
       "Env": Env {
+        "Flags": Flags {
+          "fetchingSupportedFlags": false,
+          "flagEnabled": [Function],
+          "flags": Object {
+            "METAX_API_V2": false,
+          },
+          "overrides": Object {},
+          "supportedFlags": null,
+        },
         "app": undefined,
-        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -2871,11 +2909,11 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "push": [Function],
           "replace": [Function],
         },
-        "metaxApiV2": false,
         "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
@@ -3161,8 +3199,16 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "value": undefined,
         },
         "Env": Env {
+          "Flags": Flags {
+            "fetchingSupportedFlags": false,
+            "flagEnabled": [Function],
+            "flags": Object {
+              "METAX_API_V2": false,
+            },
+            "overrides": Object {},
+            "supportedFlags": null,
+          },
           "app": undefined,
-          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -3175,7 +3221,6 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
             "push": [Function],
             "replace": [Function],
           },
-          "metaxApiV2": false,
           "qvainHost": "",
         },
         "FieldOfSciences": FieldOfSciences {
@@ -4283,8 +4328,16 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
   value={
     Object {
       "Env": Env {
+        "Flags": Flags {
+          "fetchingSupportedFlags": false,
+          "flagEnabled": [Function],
+          "flags": Object {
+            "METAX_API_V2": false,
+          },
+          "overrides": Object {},
+          "supportedFlags": null,
+        },
         "app": undefined,
-        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -4297,11 +4350,11 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "push": [Function],
           "replace": [Function],
         },
-        "metaxApiV2": false,
         "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
@@ -4587,8 +4640,16 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "value": undefined,
         },
         "Env": Env {
+          "Flags": Flags {
+            "fetchingSupportedFlags": false,
+            "flagEnabled": [Function],
+            "flags": Object {
+              "METAX_API_V2": false,
+            },
+            "overrides": Object {},
+            "supportedFlags": null,
+          },
           "app": undefined,
-          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -4601,7 +4662,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
             "push": [Function],
             "replace": [Function],
           },
-          "metaxApiV2": false,
           "qvainHost": "",
         },
         "FieldOfSciences": FieldOfSciences {
@@ -5709,8 +5769,16 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
   value={
     Object {
       "Env": Env {
+        "Flags": Flags {
+          "fetchingSupportedFlags": false,
+          "flagEnabled": [Function],
+          "flags": Object {
+            "METAX_API_V2": false,
+          },
+          "overrides": Object {},
+          "supportedFlags": null,
+        },
         "app": undefined,
-        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -5723,11 +5791,11 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "push": [Function],
           "replace": [Function],
         },
-        "metaxApiV2": false,
         "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
@@ -6013,8 +6081,16 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "value": undefined,
         },
         "Env": Env {
+          "Flags": Flags {
+            "fetchingSupportedFlags": false,
+            "flagEnabled": [Function],
+            "flags": Object {
+              "METAX_API_V2": false,
+            },
+            "overrides": Object {},
+            "supportedFlags": null,
+          },
           "app": undefined,
-          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -6027,7 +6103,6 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
             "push": [Function],
             "replace": [Function],
           },
-          "metaxApiV2": false,
           "qvainHost": "",
         },
         "FieldOfSciences": FieldOfSciences {
@@ -7135,8 +7210,16 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
   value={
     Object {
       "Env": Env {
+        "Flags": Flags {
+          "fetchingSupportedFlags": false,
+          "flagEnabled": [Function],
+          "flags": Object {
+            "METAX_API_V2": false,
+          },
+          "overrides": Object {},
+          "supportedFlags": null,
+        },
         "app": undefined,
-        "downloadApiV2": false,
         "etsinHost": "",
         "getEtsinUrl": [Function],
         "getQvainUrl": [Function],
@@ -7149,11 +7232,11 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "push": [Function],
           "replace": [Function],
         },
-        "metaxApiV2": false,
         "qvainHost": "",
       },
       "Locale": Locale {
         "currentLang": "en",
+        "getMatchingLang": [Function],
         "languages": Array [
           "en",
           "fi",
@@ -7439,8 +7522,16 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "value": undefined,
         },
         "Env": Env {
+          "Flags": Flags {
+            "fetchingSupportedFlags": false,
+            "flagEnabled": [Function],
+            "flags": Object {
+              "METAX_API_V2": false,
+            },
+            "overrides": Object {},
+            "supportedFlags": null,
+          },
           "app": undefined,
-          "downloadApiV2": false,
           "etsinHost": "",
           "getEtsinUrl": [Function],
           "getQvainUrl": [Function],
@@ -7453,7 +7544,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
             "push": [Function],
             "replace": [Function],
           },
-          "metaxApiV2": false,
           "qvainHost": "",
         },
         "FieldOfSciences": FieldOfSciences {

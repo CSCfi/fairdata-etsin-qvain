@@ -74,12 +74,14 @@ def _get_test_app_config():
             'PREFIX': 'fd_test_csc_fi',
         },
         'DOWNLOAD_API_V2': {
-            'ENABLED': True,
             'HOST': 'mock-download',
             'PORT': 1,
             'PUBLIC_HOST': 'mock-download-public',
-            'PUBLIC_PORT': 2,
-        }
+            'PUBLIC_PORT': 2,       
+        },
+        'FLAGS': {
+            'DOWNLOAD_API_V2': True,
+        },
     }
 
 
@@ -100,12 +102,14 @@ def _get_app_config_for_travis():
             'PREFIX': 'fd_test_csc_fi',
         },
         'DOWNLOAD_API_V2': {
-            'ENABLED': True,
             'HOST': 'mock-download',
             'PORT': 1,
             'PUBLIC_HOST': 'mock-download-public',
             'PUBLIC_PORT': 2,
-        }
+        },
+        'FLAGS': {
+            'DOWNLOAD_API_V2': True,
+        },
     }
 
 
