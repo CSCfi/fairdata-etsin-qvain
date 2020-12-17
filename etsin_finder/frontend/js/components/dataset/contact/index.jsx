@@ -108,7 +108,7 @@ export default class Contact extends Component {
 
   render() {
     return (
-      <div>
+      <>
         <InvertedButton onClick={this.openModal}>
           <Translate content="dataset.contact.send" />
         </InvertedButton>
@@ -137,7 +137,7 @@ export default class Contact extends Component {
         <Splash visible={this.state.splash}>
           <Translate content="dataset.contact.success" component="h1" aria-live="assertive" />
         </Splash>
-      </div>
+      </>
     )
   }
 }

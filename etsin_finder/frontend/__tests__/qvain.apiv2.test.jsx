@@ -97,6 +97,7 @@ const createMockQvain = settings => {
     updateFiles: jest.fn(),
     editDataset: jest.fn(),
     setChanged: jest.fn(),
+    setOriginal: jest.fn(),
     canRemoveFiles: true,
     canSelectFiles: true,
     ...settings,
@@ -126,7 +127,11 @@ describe('Submit.exec()', () => {
   beforeEach(() => {
     handleSubmitToBackend.mockReturnValue(generateDefaultDatasetForPublish())
     submitFunction = jest.fn(() => generalPostResponse)
-    mockQvain = createMockQvain()
+    mockQvain = createMockQvain({
+      original: {
+        identifier: 'some identifier',
+      },
+    })
     Submit = new SubmitClass(mockQvain)
   })
 
@@ -189,9 +194,9 @@ describe('Submit.exec()', () => {
 
   test(`when newCumulativeState, calls editDataset with data from backend`, async () => {
     mockQvain.newCumulativeState = 'new state'
-    axios.get.mockReturnValue(generalGetResponse)
+    axios.get.mockReturnValue(Promise.resolve(generalGetResponse))
     await exec()
-    expect(mockQvain.editDataset).toHaveBeenCalledWith(generalGetResponse.data)
+    await expect(mockQvain.editDataset).toHaveBeenCalledWith(generalGetResponse.data)
   })
 })
 

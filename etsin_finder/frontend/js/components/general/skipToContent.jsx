@@ -28,6 +28,7 @@ export default class SkipToContent extends Component {
 const SkipToContentButton = styled.button.attrs({
   type: 'button',
 })`
+  display: block;
   background: ${p => p.theme.color.primary};
   color: white;
   max-height: 0;

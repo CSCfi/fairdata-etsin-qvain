@@ -69,7 +69,9 @@ const finnish = {
       plrl: 'Muut tekijät',
       snglr: 'Muu tekijä',
     },
+    copy: 'Kopioi',
     copyToClipboard: 'Kopioi leikepöydälle',
+    copyToClipboardSuccess: 'Tunniste kopioitu leikepöydälle',
     creator: {
       plrl: 'Tekijät',
       snglr: 'Tekijä',
@@ -264,12 +266,13 @@ const finnish = {
       datasets: 'Aineistot',
       home: 'Koti',
       qvain: 'Qvain',
-      error: 'Virhe - Sivua ei löydy'
+      error: 'Virhe - Sivua ei löydy',
     },
     language: {
       toggleLabel: 'Vaihda kieltä: %(otherLang)s',
     },
     cookies: {
+      section: 'Evästeiden hyväksyminen',
       accept: 'Hyväksy evästeet',
       infoText:
         'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
@@ -631,7 +634,8 @@ const finnish = {
       },
       subjectHeadings: {
         title: 'Asiasanat',
-        infoText: 'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
+        infoText:
+          'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
         placeholder: 'Hae vaihtoehtoja',
         help:
           'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
@@ -735,7 +739,7 @@ const finnish = {
           levels: {
             organization: 'Organisaatio',
             department: 'Yksikkö',
-            subdepartment: 'Aliyksikkö'
+            subdepartment: 'Aliyksikkö',
           },
           addButton: 'Lisää organisaatio',
           editButton: 'Muokkaa organisaatiota',
