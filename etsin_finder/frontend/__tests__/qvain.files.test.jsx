@@ -159,7 +159,7 @@ const loadDataset = async () => {
 
 beforeEach(async () => {
   Qvain.resetQvainStore()
-  Env.setMetaxApiV2(true)
+  Env.Flags.setFlag('METAX_API_V2', true)
   await loadDataset()
 })
 

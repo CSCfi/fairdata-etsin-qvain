@@ -10,7 +10,10 @@
 import os
 
 import pytest
+import logging
 
+from etsin_finder.flags import initialize_supported_flags
+from etsin_finder.app_config import get_app_config
 from .utils import get_test_catalog_record
 
 
@@ -28,6 +31,8 @@ class BaseTest():
         """
         from etsin_finder.finder import app
         assert app.testing is True
+        app.config.update(get_app_config(True))
+        initialize_supported_flags(app)
         return app
 
     @pytest.fixture
@@ -171,3 +176,39 @@ class BaseTest():
 
     if __name__ == '__main__':
         pytest.main()
+
+    @pytest.fixture
+    def expect_log(self, caplog):
+        """
+        Expect specific warnings and errors to be logged
+
+        The number logged warnings and errors of must match
+        the length of the supplied warnings/errors lists, and
+        each log must contain the matching substring.
+
+        E.g. with warnings=['something happened'], there must be exactly
+        one warning and it must contain the substring 'something happened'.
+        When called with no parameters, there must be no logged warnings or errors.
+
+        Args:
+            warnings (list of str): Substrings expected in warnings
+            errors (list of str): Substrings expected in errors
+
+        """
+        def check(warnings=None, errors=None):
+            warnings = warnings or []
+            errors = errors or []
+
+            records = caplog.get_records('call')
+
+            log_warnings = [x.message for x in records if x.levelno == logging.WARNING]
+            assert len(warnings) == len(log_warnings)
+            for (expected, logged) in zip(warnings, log_warnings):
+                assert expected in logged
+
+            log_errors = [x.message for x in records if x.levelno == logging.ERROR]
+            for (expected, logged) in zip(errors, log_errors):
+                assert expected in logged
+            assert len(errors) == len(log_errors)
+
+        return check
