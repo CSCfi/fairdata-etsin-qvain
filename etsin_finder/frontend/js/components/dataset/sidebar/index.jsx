@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+import translate from 'counterpart'
 
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import checkNested from '../../../utils/checkNested'
@@ -131,6 +132,8 @@ class Sidebar extends Component {
     const infrastructure = checkNested(researchDataset, 'infrastructure')
       ? researchDataset.infrastructure
       : false
+    const lang = getDataLang(catalogPublisher)
+    const title = catalogTitle[lang]
 
     return (
       <SidebarContainer>
@@ -141,7 +144,9 @@ class Sidebar extends Component {
               <SidebarItem>
                 <Logo
                   lang={getDataLang(catalogTitle)}
-                  alt={catalogPublisherHomepage}
+                  // alt={catalogPublisherHomepage}
+                  // alt={`Logo for ${catalogTitle[lang]}, link takes you to catalog publisher website`}
+                  alt={translate('dataset.catalog_alt_text', { title })}
                   file={logo}
                   url={catalogPublisherHomepage}
                 />

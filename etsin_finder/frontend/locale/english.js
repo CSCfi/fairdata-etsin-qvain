@@ -189,6 +189,7 @@ const english = {
     funder: 'Funder',
     goBack: 'Go back',
     identifier: 'Identifier',
+    catalog_alt_text: 'Logo for %(title)s, link takes you to catalog publisher website',
     infrastructure: 'Infrastructure',
     issued: 'Release date',
     modified: 'Dataset modification date',

@@ -189,6 +189,7 @@ const finnish = {
     funder: 'Rahoittaja',
     goBack: 'Palaa takaisin',
     identifier: 'Tunniste',
+    catalog_alt_text: '%(title)s logo, linkki vie katalogi julkaisian nettisivuille',
     infrastructure: 'Infrastruktuuri',
     issued: 'Julkaisupäivämäärä',
     modified: 'Aineiston muokkauspäivämäärä',
