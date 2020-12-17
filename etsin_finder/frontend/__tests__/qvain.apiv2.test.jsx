@@ -43,6 +43,10 @@ jest.mock('../js/components/qvain/utils/formValidation', () => ({
   },
 }))
 
+jest.mock('lodash.debounce', () => {
+  return func => () => func()
+})
+
 const errors = {
   missingFileOrigin: 'File origin is required.',
   wrongFileOrigin: 'Doi can be used only with Ida datasets.',
@@ -230,7 +234,7 @@ describe('prevalidate', () => {
       await Submit.prevalidate()
     })
 
-    test('should set Validation errors as empty array', () => {
+    test('should call validate functions', () => {
       expect(qvainFormSchema.validate).toHaveBeenCalled()
       expect(qvainFormSchemaDraft.validate).toHaveBeenCalled()
     })
