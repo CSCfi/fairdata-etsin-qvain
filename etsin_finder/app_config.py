@@ -77,7 +77,7 @@ def _get_test_app_config():
             'HOST': 'mock-download',
             'PORT': 1,
             'PUBLIC_HOST': 'mock-download-public',
-            'PUBLIC_PORT': 2,       
+            'PUBLIC_PORT': 2,
         },
         'FLAGS': {
             'DOWNLOAD_API_V2': True,
