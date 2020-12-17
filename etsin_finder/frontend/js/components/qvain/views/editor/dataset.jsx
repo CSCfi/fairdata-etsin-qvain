@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import styled from 'styled-components'
 
 import { SkipToSubmitDataset, Form, SubmitContainer, DisableImplicitSubmit } from './editor.styled'
 import { ErrorContainer, ErrorLabel, ErrorContent, ErrorButtons } from '../../general/errors'
@@ -55,10 +56,12 @@ const Dataset = ({
       <SubmitContainer>
         <Translate component="p" content="qvain.consent" unsafe />
         <FlaggedComponent flag="UI.BOTTOM_SUBMIT_BUTTONS">
-          <SubmitButtons
-            handleSubmitError={handleSubmitError}
-            handleSubmitResponse={handleSubmitResponse}
-          />
+          <Center>
+            <SubmitButtons
+              handleSubmitError={handleSubmitError}
+              handleSubmitResponse={handleSubmitResponse}
+            />
+          </Center>
         </FlaggedComponent>
       </SubmitContainer>
       <SkipToSubmitDataset onClick={setFocusOnSubmitButton}>
@@ -83,5 +86,10 @@ Dataset.defaultProps = {
   datasetErrorTitle: null,
   datasetErrorDetails: null,
 }
+
+const Center = styled.div`
+  display: flex;
+  justify-content: center;
+`
 
 export default Dataset
