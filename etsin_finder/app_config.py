@@ -76,6 +76,8 @@ def _get_test_app_config():
         'DOWNLOAD_API_V2': {
             'HOST': 'mock-download',
             'PORT': 1,
+            'PUBLIC_HOST': 'mock-download-public',
+            'PUBLIC_PORT': 2,
         },
         'FLAGS': {
             'DOWNLOAD_API_V2': True,
@@ -102,6 +104,8 @@ def _get_app_config_for_travis():
         'DOWNLOAD_API_V2': {
             'HOST': 'mock-download',
             'PORT': 1,
+            'PUBLIC_HOST': 'mock-download-public',
+            'PUBLIC_PORT': 2,
         },
         'FLAGS': {
             'DOWNLOAD_API_V2': True,
