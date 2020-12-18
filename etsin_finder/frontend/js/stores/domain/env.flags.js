@@ -153,9 +153,16 @@ class Flags {
 
   @action setOverride(path, value) {
     this.overrides[path] = value
-
-    // child items will use value from parent
     const pathPrefix = `${path}.`
+
+    // replace child override values with parent
+    for (const flagPath of Object.keys(this.overrides)) {
+      if (flagPath.startsWith(pathPrefix)) {
+        this.overrides[flagPath] = undefined
+      }
+    }
+
+    // replace child flag values with override
     for (const flagPath of Object.keys(this.flags)) {
       if (flagPath.startsWith(pathPrefix)) {
         this.overrides[flagPath] = undefined

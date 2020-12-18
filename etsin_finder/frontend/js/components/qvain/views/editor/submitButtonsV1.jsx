@@ -81,9 +81,13 @@ SubmitButtonsV1.propTypes = {
   goToDatasets: PropTypes.func.isRequired,
   showUseDoiInformation: PropTypes.func.isRequired,
   handleCreatePublished: PropTypes.func.isRequired,
-  submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }).isRequired,
+  submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }),
   doiModal: PropTypes.node.isRequired,
   disabled: PropTypes.bool.isRequired,
+}
+
+SubmitButtonsV1.defaultProps = {
+  submitButtonsRef: null,
 }
 
 export default observer(SubmitButtonsV1)
