@@ -15,6 +15,7 @@ default_supported_flags = {
     'DOWNLOAD_API_V2.FRONTEND',
     'METAX_API_V2.BACKEND',
     'METAX_API_V2.FRONTEND',
+    'UI.BOTTOM_SUBMIT_BUTTONS',
 }
 
 # Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'
