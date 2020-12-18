@@ -143,10 +143,10 @@ const StringArray = ({
         attributes={{ placeholder: `${translationsRoot}.placeholder` }}
       />
       <ErrorAndButtonContainer>
-        <ArrayValidationError>{validationError}</ArrayValidationError>
         <AddNewButton type="button" onClick={handleAddNew} disabled={readonly}>
           <Translate content={`${translationsRoot}.addButton`} />
         </AddNewButton>
+        <ArrayValidationError>{validationError}</ArrayValidationError>
       </ErrorAndButtonContainer>
     </>
   )
@@ -190,13 +190,7 @@ const ArrayValidationError = styled(ValidationError)`
 `
 
 const ErrorAndButtonContainer = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
   margin-top: 0.75rem;
-  ${AddNewButton} {
-    flex-shrink: 0;
-  }
 `
 
 export default observer(StringArray)
