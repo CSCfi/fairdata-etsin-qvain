@@ -205,6 +205,8 @@ export class Qvain extends Component {
       datasetErrorTitle,
       handleRetry: this.handleRetry,
       setFocusOnSubmitButton: this.setFocusOnSubmitButton,
+      handleSubmitError: this.handleSubmitError,
+      handleSubmitResponse: this.handleSubmitResponse,
     }
   }
 

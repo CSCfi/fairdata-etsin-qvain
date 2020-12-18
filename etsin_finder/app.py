@@ -11,21 +11,24 @@ from etsin_finder.app_config import get_app_config
 from etsin_finder.cache import CatalogRecordCache, RemsCache
 from etsin_finder.utils import executing_travis, get_log_config
 from etsin_finder.converters import IdentifierConverter
+from etsin_finder.flags import validate_flags, initialize_supported_flags
 
 
 def create_app():
     """Create flask app
 
     Returns:
-        objetc: The flask.Flask app instance object.
+        object: The flask.Flask app instance object.
 
     """
     is_testing = bool(os.environ.get('TESTING', False))
     app = Flask(__name__, template_folder="./frontend/build")
 
     app.config.update(get_app_config(is_testing))
+    initialize_supported_flags(app)
     if not app.testing and not executing_travis():
         _setup_app_logging(app)
+    validate_flags(app)
     if not executing_travis():
         app.config.update({'SAML_PATH': '/home/etsin-user'})
         app.config.update({'SAML_PATH_ETSIN': '/home/etsin-user/etsin'})

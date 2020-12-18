@@ -34,10 +34,14 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history 
 }
 
 SubmitButtonsV2.propTypes = {
-  submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }).isRequired,
+  submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }),
   disabled: PropTypes.bool.isRequired,
   doiModal: PropTypes.node.isRequired,
   history: PropTypes.object.isRequired,
+}
+
+SubmitButtonsV2.defaultProps = {
+  submitButtonsRef: null,
 }
 
 export default observer(SubmitButtonsV2)

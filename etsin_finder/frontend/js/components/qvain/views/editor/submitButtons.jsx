@@ -20,7 +20,11 @@ export class SubmitButtons extends Component {
     history: PropTypes.object.isRequired,
     handleSubmitError: PropTypes.func.isRequired,
     handleSubmitResponse: PropTypes.func.isRequired,
-    submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }).isRequired,
+    submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }),
+  }
+
+  static defaultProps = {
+    submitButtonsRef: null,
   }
 
   state = {

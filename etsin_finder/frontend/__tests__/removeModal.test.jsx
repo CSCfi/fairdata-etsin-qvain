@@ -17,7 +17,7 @@ const mockLocale = LocaleStore
 jest.mock('../js/stores/stores', () => {
   const getStores = () => {
     mockStores.resetQvainStore()
-    mockEnv.setMetaxApiV2(true)
+    mockEnv.Flags.setFlag('METAX_API_V2', true)
     return {
       Qvain: mockStores,
       Env: mockEnv,

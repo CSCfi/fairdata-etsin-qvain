@@ -8,17 +8,12 @@ import { useStores } from '../../utils/stores'
 
 const TranslationTab = ({ language, setLanguage, children }) => {
   const {
-    Locale: { lang: editorLanguage },
+    Locale: { langTabOrder: languages },
   } = useStores()
 
   const translations = {
     fi: 'qvain.general.langFi',
     en: 'qvain.general.langEn',
-  }
-
-  let languages = ['fi', 'en']
-  if (editorLanguage === 'en') {
-    languages = ['en', 'fi']
   }
 
   return (

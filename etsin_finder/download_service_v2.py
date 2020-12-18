@@ -37,11 +37,14 @@ class DownloadAPIService(FlaskService):
             port = dl_api_config.get('PORT')
             user = dl_api_config.get('USER')
             password = dl_api_config.get('PASSWORD')
+            public_host = dl_api_config.get('PUBLIC_HOST')
+            public_port = dl_api_config.get('PUBLIC_PORT')
 
             self.API_BASE_URL = f'https://{host}:{port}'
+            self.API_PUBLIC_BASE_URL = f'https://{public_host}:{public_port}'
             self.REQUESTS_URL = f'{self.API_BASE_URL}/requests'
             self.AUTHORIZE_URL = f'{self.API_BASE_URL}/authorize'
-            self.DOWNLOAD_URL = f'{self.API_BASE_URL}/download'
+            self.DOWNLOAD_URL = f'{self.API_PUBLIC_BASE_URL}/download'
             self.verify_ssl = True
             self.auth = None
             if user or password:
