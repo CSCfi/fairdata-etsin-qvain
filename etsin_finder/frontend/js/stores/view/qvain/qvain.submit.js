@@ -192,10 +192,13 @@ class Submit {
   }
 
   publishNewDataset = async dataset => {
+    // Publishes a new dataset by creating a draft and publishing it
     const res = await this.createNewDraft(dataset)
-    // Publishes an unpublished draft dataset
     const url = urls.v2.rpc.publishDataset()
-    await axios.post(url, null, { params: { identifier: res.data.identifier } })
+
+    // publish draft and update changed research_dataset fields (e.g. preferred_identifier)
+    const publishResponse = await axios.post(url, null, { params: { identifier: res.data.identifier } })
+    res.data.research_dataset = { ...res.data.research_dataset, ...publishResponse.data }
     return res
   }
 
