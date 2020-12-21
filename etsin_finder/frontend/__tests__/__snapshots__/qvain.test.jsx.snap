@@ -121,6 +121,8 @@ exports[`Qvain should render correctly 1`] = `
     datasetErrorDetails={null}
     datasetErrorTitle={null}
     handleRetry={[Function]}
+    handleSubmitError={[Function]}
+    handleSubmitResponse={[Function]}
     haveDataset={true}
     setFocusOnSubmitButton={[Function]}
   />
