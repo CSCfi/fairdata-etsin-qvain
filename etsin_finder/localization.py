@@ -7,8 +7,8 @@
 
 """Language and translation utilities"""
 
-from flask import request, session
-from etsin_finder.authentication_fairdata_sso import get_sso_environment_prefix
+from flask import request
+from etsin_finder.auth.authentication_fairdata_sso import get_sso_environment_prefix
 
 languages = ['en', 'fi']
 default_language = 'en'

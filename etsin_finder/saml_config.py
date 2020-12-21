@@ -8,7 +8,6 @@
 """Get saml configurations for authentication purposes"""
 
 import json
-from etsin_finder.log import log
 
 def get_etsin_saml_config_from_file():
     """Get Etsin saml config.

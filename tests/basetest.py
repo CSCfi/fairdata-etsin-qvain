@@ -44,7 +44,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import authentication
+        from etsin_finder.auth import authentication
         monkeypatch.setattr(authentication, 'is_authenticated', lambda: True)
         monkeypatch.setattr(authentication, 'is_authenticated_CSC_user', lambda: True)
 
@@ -68,7 +68,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import authentication
+        from etsin_finder.auth import authentication
         monkeypatch.setattr(authentication, 'is_authenticated', lambda: False)
         monkeypatch.setattr(authentication, 'is_authenticated_CSC_user', lambda: False)
 
@@ -83,7 +83,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: None)
 
     @pytest.fixture
@@ -94,7 +94,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('open'))
 
     @pytest.fixture
@@ -105,7 +105,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('login'))
 
     @pytest.fixture
@@ -116,7 +116,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('permit'))
 
     @pytest.fixture
@@ -127,7 +127,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('embargo', True))
 
     @pytest.fixture
@@ -138,7 +138,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('embargo', False))
 
     @pytest.fixture
@@ -149,7 +149,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('restricted'))
 
     @pytest.fixture
@@ -160,7 +160,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import rems_service
+        from etsin_finder.services import rems_service
         monkeypatch.setattr(rems_service, 'get_user_rems_permission_for_catalog_record', lambda x, y: True)
 
     @pytest.fixture
@@ -171,7 +171,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import rems_service
+        from etsin_finder.services import rems_service
         monkeypatch.setattr(rems_service, 'get_user_rems_permission_for_catalog_record', lambda x, y: False)
 
     if __name__ == '__main__':

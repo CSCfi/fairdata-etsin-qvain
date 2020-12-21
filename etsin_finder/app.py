@@ -9,7 +9,7 @@ from flask_mail import Mail
 
 from etsin_finder.app_config import get_app_config
 from etsin_finder.cache import CatalogRecordCache, RemsCache
-from etsin_finder.utils import executing_travis, get_log_config
+from etsin_finder.utils.utils import executing_travis, get_log_config
 from etsin_finder.converters import IdentifierConverter
 from etsin_finder.flags import validate_flags, initialize_supported_flags
 

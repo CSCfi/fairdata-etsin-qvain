@@ -13,7 +13,7 @@ from etsin_finder.flags import flag_enabled
 
 def add_download_v2_resources(api):
     """Set download API v2 endpoints"""
-    from etsin_finder.download_resources_v2 import (
+    from etsin_finder.resources.download_resources_v2 import (
         Requests,
         Authorize,
     )
@@ -29,7 +29,7 @@ def add_restful_resources(app):
 
     """
     api = Api(app)
-    from etsin_finder.resources import (
+    from etsin_finder.resources.etsin_resources import (
         REMSApplyForPermission,
         Contact,
         Dataset,
@@ -42,20 +42,20 @@ def add_restful_resources(app):
         AppConfig,
         SupportedFlags
     )
-    from etsin_finder.qvain_light_resources import (
+    from etsin_finder.resources.qvain_resources import (
         ProjectFiles,
         DirectoryFiles,
         FileCharacteristics,
         QvainDatasets,
         QvainDataset
     )
-    from etsin_finder.qvain_light_rpc import (
+    from etsin_finder.resources.qvain_rpc import (
         QvainDatasetChangeCumulativeState,
         QvainDatasetRefreshDirectoryContent,
         QvainDatasetFixDeprecated
     )
 
-    from etsin_finder.qvain_light_rpc_v2 import (
+    from etsin_finder.resources.qvain_rpc_v2 import (
         QvainDatasetChangeCumulativeState as V2QvainDatasetChangeCumulativeState,
         QvainDatasetCreateNewVersion as V2QvainDatasetCreateNewVersion,
         QvainDatasetPublishDataset as V2QvainDatasetPublishDataset,
@@ -63,14 +63,14 @@ def add_restful_resources(app):
         QvainDatasetCreateDraft as V2QvainDatasetCreateDraft
     )
 
-    from etsin_finder.qvain_light_resources_v2 import (
+    from etsin_finder.resources.qvain_resources_v2 import (
         QvainDataset as V2QvainDataset,
         QvainDatasets as V2QvainDatasets,
         QvainDatasetFiles as V2QvainDatasetFiles,
         FileCharacteristics as V2FileCharacteristics,
     )
 
-    from etsin_finder.common_resources_v2 import (
+    from etsin_finder.resources.common_resources_v2 import (
         ProjectFiles as V2ProjectFiles,
         DirectoryFiles as V2DirectoryFiles,
         DatasetUserMetadata as V2DatasetUserMetadata,
@@ -130,9 +130,21 @@ def add_restful_resources(app):
     # REMS API endpoints
     api.add_resource(REMSApplyForPermission, '/api/rems/<id:cr_id>')
 
+def add_views(app):
+    """Add views to app"""
+    from etsin_finder.views.index_views import index_views
+    from etsin_finder.views.auth_views import auth_views
+    from etsin_finder.views.dev_views import dev_views
+
+    app.register_blueprint(index_views)
+    app.register_blueprint(auth_views)
+
+    # add development helper views
+    if app.config.get('DEV_VIEWS'):
+        app.register_blueprint(dev_views)
 
 add_restful_resources(app)
-import etsin_finder.views
+add_views(app)
 
 if __name__ == "__main__":
     app.run()

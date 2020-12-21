@@ -10,7 +10,7 @@
 import yaml
 from flask import has_app_context, current_app
 
-from etsin_finder.utils import executing_travis
+from etsin_finder.utils.utils import executing_travis
 
 def _get_app_config_from_file():
     """Get app config from file
