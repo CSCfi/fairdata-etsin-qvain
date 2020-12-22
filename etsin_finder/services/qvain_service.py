@@ -8,60 +8,120 @@
 """Used for performing operations related to Metax for Qvain"""
 
 import requests
+import marshmallow
+from flask import current_app
 
-from etsin_finder.app import app
 from etsin_finder.log import log
 
 from etsin_finder.app_config import get_metax_qvain_api_config
-from etsin_finder.utils.utils import FlaskService, format_url
+from etsin_finder.utils.utils import format_url
 from etsin_finder.utils.request_utils import make_request
+from .base_service import BaseService, ConfigValidationMixin
+from etsin_finder.schemas.services import MetaxServiceConfigurationSchema
 
 
-class MetaxQvainLightAPIService(FlaskService):
+class MetaxQvainLightAPIService(BaseService, ConfigValidationMixin):
     """Metax API Service"""
 
-    def __init__(self, app):
+    schema = MetaxServiceConfigurationSchema(unknown=marshmallow.RAISE)
+
+    @property
+    def config(self):
+        """Get service configuration"""
+        return current_app.config.get('METAX_QVAIN_API', None)
+
+    @property
+    def proxies(self):
+        """Get service proxy configuration"""
+        if self.config.get('HTTPS_PROXY'):
+            return dict(https=self.config.get('HTTPS_PROXY'))
+        return None
+
+    def metax_url(self, url):
+        """Return a Metax API URL"""
+        return f'https://{self._HOST}{url}'
+
+    @property
+    def _HOST(self):
+        return self.config.get('HOST')
+
+    @property
+    def _USER(self):
+        return self.config.get('USER')
+
+    @property
+    def _PASSWORD(self):
+        return self.config.get('PASSWORD')
+
+    @property
+    def _VERIFY_SSL(self):
+        return self.config.get('VERIFY_SSL', True)
+
+    @property
+    def _METAX_GET_DIRECTORY_FOR_PROJECT_URL(self):
+        return self.metax_url('/rest/directories') + \
+            '/files?project={0}&path=%2F'
+
+    @property
+    def _METAX_GET_DIRECTORY(self):
+        return self.metax_url('/rest/directories') + \
+            '/{0}/files'
+
+    @property
+    def _METAX_GET_FILE(self):
+        return self.metax_url('/rest/files') + \
+            '/{0}'
+
+    @property
+    def _METAX_GET_DATASET(self):
+        return self.metax_url('/rest/datasets') + \
+            '/{0}?file_details'
+
+    @property
+    def _METAX_GET_DATASETS_FOR_USER(self):
+        return self.metax_url('/rest/datasets') + \
+            '?metadata_provider_user={0}&file_details&ordering=-date_created'
+
+    @property
+    def _METAX_GET_ALL_DATASETS_FOR_USER(self):
+        return self.metax_url('/rest/datasets') + \
+            '?metadata_provider_user={0}&file_details&ordering=-date_created&no_pagination=true'
+
+    @property
+    def _METAX_CREATE_DATASET(self):
+        return self.metax_url('/rest/datasets?file_details')
+
+    @property
+    def _METAX_PATCH_DATASET(self):
+        return self.metax_url('/rest/datasets') + \
+            '/{0}?file_details'
+
+    @property
+    def _METAX_DELETE_DATASET(self):
+        return self.metax_url('/rest/datasets') + \
+            '/{0}'
+
+    @property
+    def _METAX_CHANGE_CUMULATIVE_STATE(self):
+        return self.metax_url('/rpc/datasets/change_cumulative_state')
+
+    @property
+    def _METAX_REFRESH_DIRECTORY_CONTENT(self):
+        return self.metax_url('/rpc/datasets/refresh_directory_content')
+
+    @property
+    def _METAX_FIX_DEPRECATED(self):
+        return self.metax_url('/rpc/datasets/fix_deprecated')
+
+    def __init__(self):
         """Init Metax API Service."""
-        super().__init__(app)
-
-        metax_qvain_api_config = get_metax_qvain_api_config(app.testing)
-
-        if metax_qvain_api_config:
-
-            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/directories'.format(metax_qvain_api_config.get('HOST')) + \
-                                                       '/files?project={0}&path=%2F'
-            self.METAX_GET_DIRECTORY = 'https://{0}/rest/directories'.format(metax_qvain_api_config.get('HOST')) + \
-                                       '/{0}/files'
-            self.METAX_GET_FILE = 'https://{0}/rest/files'.format(metax_qvain_api_config.get('HOST')) + \
-                                  '/{0}'
-            self.METAX_GET_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
-                                     '/{0}?file_details'
-            self.METAX_GET_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST')) + \
-                                               '?metadata_provider_user={0}&file_details&ordering=-date_created'
-            self.METAX_GET_ALL_DATASETS_FOR_USER = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST')) + \
-                '?metadata_provider_user={0}&file_details&ordering=-date_created&no_pagination=true'
-            self.METAX_CREATE_DATASET = 'https://{0}/rest/datasets?file_details'.format(metax_qvain_api_config.get('HOST'))
-            self.METAX_PATCH_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
-                                       '/{0}?file_details'
-            self.METAX_DELETE_DATASET = 'https://{0}/rest/datasets'.format(metax_qvain_api_config.get('HOST'), ) + \
-                                        '/{0}'
-            self.METAX_CHANGE_CUMULATIVE_STATE = 'https://{0}/rpc/datasets/change_cumulative_state'.format(metax_qvain_api_config.get('HOST'))
-            self.METAX_REFRESH_DIRECTORY_CONTENT = 'https://{0}/rpc/datasets/refresh_directory_content'.format(metax_qvain_api_config.get('HOST'))
-            self.METAX_FIX_DEPRECATED = 'https://{0}/rpc/datasets/fix_deprecated'.format(metax_qvain_api_config.get('HOST'))
-            self.user = metax_qvain_api_config.get('USER')
-            self.pw = metax_qvain_api_config.get('PASSWORD')
-            self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
-            self.proxies = None
-            if metax_qvain_api_config.get('HTTPS_PROXY'):
-                self.proxies = dict(https=metax_qvain_api_config.get('HTTPS_PROXY'))
-        elif not self.is_testing:
-            log.error("Unable to initialize MetaxAPIService due to missing config")
+        super().__init__()
 
     def _get_args(self, **kwargs):
         """Get default args for request, allow overriding with kwargs."""
         args = dict(headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
-                    auth=(self.user, self.pw),
-                    verify=self.verify_ssl,
+                    auth=(self._USER, self._PASSWORD),
+                    verify=self._VERIFY_SSL,
                     timeout=10,
                     proxies=self.proxies)
         args.update(kwargs)
@@ -77,7 +137,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response
 
         """
-        req_url = format_url(self.METAX_GET_DIRECTORY_FOR_PROJECT_URL, project_identifier)
+        req_url = format_url(self._METAX_GET_DIRECTORY_FOR_PROJECT_URL, project_identifier)
         resp, _, success = make_request(requests.get,
                                         req_url,
                                         params=params,
@@ -99,7 +159,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response
 
         """
-        req_url = format_url(self.METAX_GET_DIRECTORY, dir_identifier)
+        req_url = format_url(self._METAX_GET_DIRECTORY, dir_identifier)
         resp, _, success = make_request(requests.get,
                                         req_url,
                                         params=params,
@@ -119,7 +179,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response
 
         """
-        req_url = format_url(self.METAX_GET_FILE, file_identifier)
+        req_url = format_url(self._METAX_GET_FILE, file_identifier)
         resp, _, success = make_request(requests.get,
                                         req_url,
                                         **self._get_args()
@@ -145,8 +205,7 @@ class MetaxQvainLightAPIService(FlaskService):
             The response from Metax.
 
         """
-        req_url = format_url(self.METAX_GET_FILE, file_identifier)
-
+        req_url = format_url(self._METAX_GET_FILE, file_identifier)
         resp, code, success = make_request(requests.patch,
                                            req_url,
                                            json=data,
@@ -171,9 +230,9 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = format_url(self.METAX_GET_DATASETS_FOR_USER, user_id)
+        req_url = format_url(self._METAX_GET_DATASETS_FOR_USER, user_id)
         if (no_pagination):
-            req_url = format_url(self.METAX_GET_ALL_DATASETS_FOR_USER, user_id)
+            req_url = format_url(self._METAX_GET_ALL_DATASETS_FOR_USER, user_id)
 
         params = {}
         if (limit):
@@ -203,7 +262,7 @@ class MetaxQvainLightAPIService(FlaskService):
         """
         if params is None:
             params = {}
-        req_url = self.METAX_CREATE_DATASET
+        req_url = self._METAX_CREATE_DATASET
         if use_doi is True:
             params['pid_type'] = 'doi'
         args = self._get_args(timeout=30)
@@ -232,7 +291,7 @@ class MetaxQvainLightAPIService(FlaskService):
             The response from Metax.
 
         """
-        req_url = format_url(self.METAX_PATCH_DATASET, cr_id)
+        req_url = format_url(self._METAX_PATCH_DATASET, cr_id)
         headers = {'Accept': 'application/json', 'If-Unmodified-Since': last_modified}
         log.debug('Request URL: {0}\nHeaders: {1}\nData: {2}'.format(req_url, headers, data))
 
@@ -266,7 +325,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = format_url(self.METAX_GET_DATASET, cr_id)
+        req_url = format_url(self._METAX_GET_DATASET, cr_id)
         resp, status, success = make_request(requests.get,
                                              req_url,
                                              **self._get_args())
@@ -284,7 +343,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = format_url(self.METAX_DELETE_DATASET, cr_id)
+        req_url = format_url(self._METAX_DELETE_DATASET, cr_id)
         resp, status, success = make_request(requests.delete,
                                              req_url,
                                              **self._get_args())
@@ -305,7 +364,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = self.METAX_CHANGE_CUMULATIVE_STATE
+        req_url = self._METAX_CHANGE_CUMULATIVE_STATE
         params = {
             "identifier": cr_id,
             "cumulative_state": cumulative_state
@@ -332,7 +391,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = self.METAX_REFRESH_DIRECTORY_CONTENT
+        req_url = self._METAX_REFRESH_DIRECTORY_CONTENT
         params = {
             "cr_identifier": cr_identifier,
             "dir_identifier": dir_identifier
@@ -358,7 +417,7 @@ class MetaxQvainLightAPIService(FlaskService):
             Metax response.
 
         """
-        req_url = self.METAX_FIX_DEPRECATED
+        req_url = self._METAX_FIX_DEPRECATED
         params = {
             "identifier": cr_identifier,
         }
@@ -373,7 +432,9 @@ class MetaxQvainLightAPIService(FlaskService):
             log.warning('Failed to fix deprecated dataset {}'.format(cr_identifier))
         return resp, status
 
-_metax_api = MetaxQvainLightAPIService(app)
+_metax_api = MetaxQvainLightAPIService()
+
+validate_config = _metax_api.validate_config
 
 def get_directory(dir_id, params=None):
     """Public function to get a specific directory with directory's id"""

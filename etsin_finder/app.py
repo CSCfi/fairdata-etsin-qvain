@@ -13,6 +13,9 @@ from etsin_finder.utils.utils import executing_travis, get_log_config
 from etsin_finder.converters import IdentifierConverter
 from etsin_finder.flags import validate_flags, initialize_supported_flags
 
+from etsin_finder.services import qvain_service
+from etsin_finder.services import qvain_service_v2
+
 
 def create_app():
     """Create flask app
@@ -28,7 +31,7 @@ def create_app():
     initialize_supported_flags(app)
     if not app.testing and not executing_travis():
         _setup_app_logging(app)
-    validate_flags(app)
+    validate_config(app)
     if not executing_travis():
         app.config.update({'SAML_PATH': '/home/etsin-user'})
         app.config.update({'SAML_PATH_ETSIN': '/home/etsin-user/etsin'})
@@ -40,6 +43,13 @@ def create_app():
 
     return app
 
+def validate_config(app):
+    """Validate required config options"""
+    app.logger.info("Validating configuration")
+    validate_flags(app)
+    with app.app_context():
+        qvain_service.validate_config(False)
+        qvain_service_v2.validate_config(False)
 
 def _setup_app_logging(app):
     """Setup app logging
