@@ -13,6 +13,7 @@ from etsin_finder.utils.utils import executing_travis, get_log_config
 from etsin_finder.converters import IdentifierConverter
 from etsin_finder.flags import validate_flags, initialize_supported_flags
 
+from etsin_finder.services import common_service_v2
 from etsin_finder.services import qvain_service
 from etsin_finder.services import qvain_service_v2
 
@@ -48,8 +49,9 @@ def validate_config(app):
     app.logger.info("Validating configuration")
     validate_flags(app)
     with app.app_context():
-        qvain_service.validate_config(False)
-        qvain_service_v2.validate_config(False)
+        qvain_service.validate_config(True)
+        qvain_service_v2.validate_config(True)
+        common_service_v2.validate_config(True)
 
 def _setup_app_logging(app):
     """Setup app logging

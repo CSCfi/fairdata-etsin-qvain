@@ -103,10 +103,6 @@ class MetaxQvainLightAPIServiceV2(MetaxQvainLightAPIServiceV1):
     def _METAX_CREATE_DRAFT(self):
         return 'https://{0}/rpc/v2/datasets/create_draft'.format(self._HOST)
 
-    def __init__(self):
-        """Init Metax API Service."""
-        super().__init__()
-
     def create_dataset(self, data, params=None):
         """Send the data from the frontend to Metax.
 

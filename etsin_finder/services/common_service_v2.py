@@ -8,45 +8,92 @@
 """Used for performing operations related to Metax for Etsin and Qvain"""
 
 import requests
+import marshmallow
+from flask import current_app
 
-from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.app_config import get_metax_qvain_api_config
 from etsin_finder.utils.utils import FlaskService, format_url
 from etsin_finder.utils.request_utils import make_request
+from etsin_finder.schemas.services import MetaxServiceConfigurationSchema
+from .base_service import BaseService, ConfigValidationMixin
 
 
-class MetaxCommonAPIService(FlaskService):
+class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
     """Service for Metax API v2 requests used by both Etsin and Qvain."""
 
-    def __init__(self, app):
-        """
-        Init Metax API Service.
+    schema = MetaxServiceConfigurationSchema(unknown=marshmallow.RAISE)
 
-        :param metax_api_config:
-        """
-        super().__init__(app)
+    @property
+    def config(self):
+        """Get service configuration"""
+        return current_app.config.get('METAX_QVAIN_API', None)
 
-        metax_qvain_api_config = get_metax_qvain_api_config(app.testing)
+    @property
+    def proxies(self):
+        """Get service proxy configuration"""
+        if self.config.get('HTTPS_PROXY'):
+            return dict(https=self.config.get('HTTPS_PROXY'))
+        return None
 
-        if metax_qvain_api_config:
-            self.METAX_GET_DIRECTORY_FOR_PROJECT_URL = 'https://{0}/rest/v2/directories'.format(metax_qvain_api_config['HOST']) + \
-                                                       '/files?project={0}&path=%2F&include_parent'
-            self.METAX_GET_DIRECTORY = 'https://{0}/rest/v2/directories'.format(metax_qvain_api_config['HOST']) + \
-                                       '/{0}/files'
-            self.METAX_GET_DATASET_USER_METADATA = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config['HOST'], ) + \
-                '/{0}/files/user_metadata'
-            self.METAX_PUT_DATASET_USER_METADATA = self.METAX_GET_DATASET_USER_METADATA
-            self.METAX_GET_DATASET_PROJECTS = 'https://{0}/rest/v2/datasets'.format(metax_qvain_api_config['HOST'], ) + \
-                '/{0}/projects'
-            self.user = metax_qvain_api_config['USER']
-            self.pw = metax_qvain_api_config['PASSWORD']
-            self.verify_ssl = metax_qvain_api_config.get('VERIFY_SSL', True)
-            self.proxies = None
-            if metax_qvain_api_config.get('HTTPS_PROXY'):
-                self.proxies = dict(https=metax_qvain_api_config.get('HTTPS_PROXY'))
-        elif not self.is_testing:
-            log.error("Unable to initialize MetaxCommonAPIService due to missing config")
+    @property
+    def auth(self):
+        """Get auth params"""
+        return (self._USER, self._PASSWORD)
+
+    def metax_url(self, url):
+        """Return a Metax API URL"""
+        return f'https://{self._HOST}{url}'
+
+    @property
+    def _HOST(self):
+        return self.config.get('HOST')
+
+    @property
+    def _USER(self):
+        return self.config.get('USER')
+
+    @property
+    def _PASSWORD(self):
+        return self.config.get('PASSWORD')
+
+    @property
+    def _VERIFY_SSL(self):
+        return self.config.get('VERIFY_SSL', True)
+
+    @property
+    def _METAX_GET_DIRECTORY_FOR_PROJECT_URL(self):
+        return self.metax_url('/rest/v2/directories') + \
+            '/files?project={0}&path=%2F&include_parent'
+
+    @property
+    def _METAX_GET_DIRECTORY(self):
+        return self.metax_url('/rest/v2/directories') + \
+            '/{0}/files'
+
+    @property
+    def _METAX_GET_DATASET_USER_METADATA(self):
+        return self.metax_url('/rest/v2/datasets') + \
+            '/{0}/files/user_metadata'
+
+    @property
+    def _METAX_PUT_DATASET_USER_METADATA(self):
+        return self._METAX_GET_DATASET_USER_METADATA
+
+    @property
+    def _METAX_GET_DATASET_PROJECTS(self):
+        return self.metax_url('/rest/v2/datasets') + \
+            '/{0}/projects'
+
+    def _get_args(self, **kwargs):
+        """Get default args for request, allow overriding with kwargs."""
+        args = dict(headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
+                    auth=(self._USER, self._PASSWORD),
+                    verify=self._VERIFY_SSL,
+                    timeout=10,
+                    proxies=self.proxies)
+        args.update(kwargs)
+        return args
 
     def get_directory(self, dir_identifier, params=None):
         """
@@ -60,15 +107,12 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = format_url(self.METAX_GET_DIRECTORY, dir_identifier)
+        req_url = format_url(self._METAX_GET_DIRECTORY, dir_identifier)
         resp, status, success = make_request(requests.get,
                                              req_url,
                                              params=params,
-                                             headers={'Accept': 'application/json'},
-                                             auth=(self.user, self.pw),
-                                             verify=self.verify_ssl,
-                                             proxies=self.proxies,
-                                             timeout=10)
+                                             **self._get_args()
+                                             )
         if not success:
             log.warning("Failed to get directory {}".format(dir_identifier))
             return resp, status
@@ -86,15 +130,12 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = format_url(self.METAX_GET_DIRECTORY_FOR_PROJECT_URL, project_identifier)
+        req_url = format_url(self._METAX_GET_DIRECTORY_FOR_PROJECT_URL, project_identifier)
         resp, status, success = make_request(requests.get,
                                              req_url,
-                                             headers={'Accept': 'application/json'},
                                              params=params,
-                                             auth=(self.user, self.pw),
-                                             verify=self.verify_ssl,
-                                             proxies=self.proxies,
-                                             timeout=10)
+                                             **self._get_args()
+                                             )
         if not success:
             log.warning("Failed to get directory contents for project {}".format(project_identifier))
         return resp, status
@@ -110,14 +151,10 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = format_url(self.METAX_GET_DATASET_PROJECTS, cr_id)
+        req_url = format_url(self._METAX_GET_DATASET_PROJECTS, cr_id)
         resp, status, success = make_request(requests.get,
                                              req_url,
-                                             headers={'Accept': 'application/json'},
-                                             auth=(self.user, self.pw),
-                                             verify=self.verify_ssl,
-                                             proxies=self.proxies,
-                                             timeout=10)
+                                             **self._get_args())
         if not success:
             log.warning("Failed to get projects for dataset {}".format(cr_id))
         return resp, status
@@ -133,14 +170,10 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = format_url(self.METAX_GET_DATASET_USER_METADATA, cr_id)
+        req_url = format_url(self._METAX_GET_DATASET_USER_METADATA, cr_id)
         resp, status, success = make_request(requests.get,
                                              req_url,
-                                             headers={'Accept': 'application/json'},
-                                             auth=(self.user, self.pw),
-                                             verify=self.verify_ssl,
-                                             proxies=self.proxies,
-                                             timeout=10)
+                                             **self._get_args())
         if not success:
             log.warning("Failed to get user metadata for dataset {}".format(cr_id))
         return resp, status
@@ -165,23 +198,18 @@ class MetaxCommonAPIService(FlaskService):
             [type] -- Metax response.
 
         """
-        req_url = format_url(self.METAX_PUT_DATASET_USER_METADATA, cr_id)
-        headers = {'Accept': 'application/json'}
-
+        req_url = format_url(self._METAX_PUT_DATASET_USER_METADATA, cr_id)
         resp, status, success = make_request(requests.put,
                                              req_url,
-                                             headers=headers,
                                              json=data,
-                                             auth=(self.user, self.pw),
-                                             verify=self.verify_ssl,
-                                             proxies=self.proxies,
-                                             timeout=10)
+                                             **self._get_args())
         if not success:
             log.warning("Failed to update user metadata for dataset {}".format(cr_id))
         return resp, status
 
 
-_service = MetaxCommonAPIService(app)
+_service = MetaxCommonAPIService()
+validate_config = _service.validate_config
 get_directory = _service.get_directory
 get_directory_for_project = _service.get_directory_for_project
 get_dataset_projects = _service.get_dataset_projects

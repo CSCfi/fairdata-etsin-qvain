@@ -16,8 +16,8 @@ from etsin_finder.log import log
 from etsin_finder.app_config import get_metax_qvain_api_config
 from etsin_finder.utils.utils import format_url
 from etsin_finder.utils.request_utils import make_request
-from .base_service import BaseService, ConfigValidationMixin
 from etsin_finder.schemas.services import MetaxServiceConfigurationSchema
+from .base_service import BaseService, ConfigValidationMixin
 
 
 class MetaxQvainLightAPIService(BaseService, ConfigValidationMixin):
@@ -112,10 +112,6 @@ class MetaxQvainLightAPIService(BaseService, ConfigValidationMixin):
     @property
     def _METAX_FIX_DEPRECATED(self):
         return self.metax_url('/rpc/datasets/fix_deprecated')
-
-    def __init__(self):
-        """Init Metax API Service."""
-        super().__init__()
 
     def _get_args(self, **kwargs):
         """Get default args for request, allow overriding with kwargs."""
