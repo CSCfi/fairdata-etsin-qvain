@@ -85,6 +85,7 @@ def flag_enabled(flag_path, app=None):
     and return the first matching not-None value, or False if no matches are found.
 
     Requesting a flag not in supported flags will cause a warning.
+
     """
     app = ensure_app(app)
 

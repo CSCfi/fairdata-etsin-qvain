@@ -26,4 +26,5 @@ class ConfigValidationMixin:
 
 class BaseService:
     """Use as base class for external dependency services"""
+
     pass
