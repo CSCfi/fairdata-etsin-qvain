@@ -11,7 +11,7 @@ import re
 
 from etsin_finder.log import log
 
-from etsin_finder.constants import AGENT_TYPE
+from etsin_finder.utils.constants import AGENT_TYPE
 
 
 def create_email_message_body(pref_id, user_email, user_subject, user_body):

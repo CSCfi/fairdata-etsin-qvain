@@ -17,7 +17,7 @@ from etsin_finder.auth.authentication_fairdata_sso import (
     log_sso_values
 )
 from etsin_finder.log import log
-from etsin_finder.localization import get_language, translate
+from etsin_finder.utils.localization import get_language, translate
 
 index_views = Blueprint('index_views', __name__)
 

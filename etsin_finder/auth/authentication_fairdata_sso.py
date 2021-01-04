@@ -8,12 +8,11 @@
 """Fairdata SSO authentication related functionalities"""
 
 import jwt
-from flask import request
+from flask import request, current_app
 from urllib.parse import urlparse, urlunparse, parse_qs, urlencode, urljoin
 
 from etsin_finder.app import app
 from etsin_finder.log import log
-from etsin_finder.app_config import get_app_config
 from etsin_finder.utils.utils import executing_travis
 
 def get_sso_environment_prefix():
@@ -23,7 +22,7 @@ def get_sso_environment_prefix():
         session_data (string): String that defines what the SSO environment is
 
     """
-    environment_string = get_app_config(app.testing).get('SSO').get('PREFIX')
+    environment_string = current_app.config.get('SSO').get('PREFIX')
     return environment_string
 
 def get_decrypted_sso_session_details():
@@ -33,7 +32,7 @@ def get_decrypted_sso_session_details():
         decrypted_fd_sso_session(list): List of decrypted cookies
 
     """
-    key = get_app_config(app.testing).get('SSO').get('KEY')
+    key = current_app.config.get('SSO').get('KEY')
     sso_environment_and_session = get_sso_environment_prefix() + '_fd_sso_session'
     if request.cookies.getlist(sso_environment_and_session):
         fd_sso_session = request.cookies.getlist(sso_environment_and_session)

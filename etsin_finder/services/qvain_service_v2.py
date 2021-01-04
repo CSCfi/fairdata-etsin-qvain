@@ -12,7 +12,6 @@ import json
 
 from etsin_finder.log import log
 
-from etsin_finder.app_config import get_metax_qvain_api_config
 from etsin_finder.utils.utils import format_url
 from etsin_finder.utils.request_utils import make_request
 from etsin_finder.services.qvain_service import (

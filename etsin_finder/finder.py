@@ -9,7 +9,7 @@
 
 from flask_restful import Api
 from etsin_finder.app import app
-from etsin_finder.flags import flag_enabled
+from etsin_finder.utils.flags import flag_enabled
 
 def add_download_v2_resources(api):
     """Set download API v2 endpoints"""

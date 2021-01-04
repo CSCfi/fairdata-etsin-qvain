@@ -10,7 +10,7 @@
 from flask import session
 from etsin_finder.log import log
 from etsin_finder.utils.utils import executing_travis
-from etsin_finder.constants import SAML_ATTRIBUTES
+from etsin_finder.utils.constants import SAML_ATTRIBUTES
 from etsin_finder.auth.authentication_fairdata_sso import (
     is_authenticated_through_fairdata_sso,
     get_decrypted_sso_session_details,

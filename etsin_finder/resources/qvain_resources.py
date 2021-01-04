@@ -19,7 +19,7 @@ from etsin_finder.utils.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit, \
     datetime_to_header
-from etsin_finder.constants import DATA_CATALOG_IDENTIFIERS
+from etsin_finder.utils.constants import DATA_CATALOG_IDENTIFIERS
 from etsin_finder.schemas.qvain_dataset_schema import DatasetValidationSchema
 from etsin_finder.utils.qvain_utils import (
     data_to_metax,

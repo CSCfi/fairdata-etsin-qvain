@@ -8,10 +8,9 @@
 """Direct authentication related functionalities"""
 
 from urllib.parse import urlparse
-from flask import session
+from flask import session, current_app
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from etsin_finder.app import app
-from etsin_finder.app_config import get_app_config
 
 def get_saml_auth(flask_request, service):
     """Get saml auth
@@ -63,7 +62,7 @@ def prepare_flask_request_for_saml(request, service):
 
     return {
         'https': 'on' if request.scheme == 'https' else 'off',
-        'http_host': get_app_config(app.testing).get('SHARED_DOMAIN_NAME_FOR_PROXY'),
+        'http_host': current_app.config.get('SHARED_DOMAIN_NAME_FOR_PROXY'),
         'server_port': url_data.port,
         'script_name': request.path,
         'get_data': request.args.copy(),

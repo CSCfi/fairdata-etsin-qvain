@@ -28,7 +28,7 @@ from etsin_finder.utils.email_utils import \
     validate_send_message_request
 from etsin_finder.app import app
 from etsin_finder.log import log
-from etsin_finder.flags import get_supported_flags
+from etsin_finder.utils.flags import get_supported_flags
 
 from etsin_finder.utils.utils import \
     sort_array_of_obj_by_key, \

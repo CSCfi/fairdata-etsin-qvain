@@ -20,7 +20,7 @@ from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.services import rems_service
 from etsin_finder.utils.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
-from etsin_finder.constants import ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS
+from etsin_finder.utils.constants import ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS
 from etsin_finder.auth.authentication import get_user_id, is_authenticated
 
 def user_can_view_dataset(cr_id):

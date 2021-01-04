@@ -5,7 +5,7 @@ import json
 from base64 import urlsafe_b64encode
 from datetime import date
 
-from etsin_finder.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
+from etsin_finder.utils.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 from etsin_finder.services.cr_service import (
     get_catalog_record,
 )

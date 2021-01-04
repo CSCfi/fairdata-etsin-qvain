@@ -10,7 +10,7 @@
 import json
 import os
 
-from etsin_finder.constants import ACCESS_TYPES
+from etsin_finder.utils.constants import ACCESS_TYPES
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 

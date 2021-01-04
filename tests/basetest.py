@@ -12,7 +12,7 @@ import os
 import pytest
 import logging
 
-from etsin_finder.flags import initialize_supported_flags
+from etsin_finder.utils.flags import initialize_supported_flags
 from etsin_finder.app_config import get_app_config
 from .utils import get_test_catalog_record
 
