@@ -1,8 +1,5 @@
 """Base class for services"""
 
-from flask import current_app
-
-from etsin_finder.utils.utils import executing_travis
 from etsin_finder.log import log
 
 class ConfigValidationMixin:

@@ -8,7 +8,6 @@
 """Feature flag utilities"""
 
 import re
-from flask import has_app_context, current_app
 
 from etsin_finder.utils.utils import ensure_app
 

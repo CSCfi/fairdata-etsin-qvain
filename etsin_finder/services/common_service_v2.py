@@ -12,7 +12,7 @@ import marshmallow
 from flask import current_app
 
 from etsin_finder.log import log
-from etsin_finder.utils.utils import FlaskService, format_url
+from etsin_finder.utils.utils import format_url
 from etsin_finder.utils.request_utils import make_request
 from etsin_finder.schemas.services import MetaxServiceConfigurationSchema
 from .base_service import BaseService, ConfigValidationMixin

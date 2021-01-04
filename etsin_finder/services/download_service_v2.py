@@ -8,7 +8,6 @@
 """Functionalities for download data from Download API v2"""
 
 import requests
-from flask import current_app
 
 from etsin_finder.utils.request_utils import make_request
 from etsin_finder.app_config import get_download_api_v2_config
