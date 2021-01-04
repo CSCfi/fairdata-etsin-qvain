@@ -1,3 +1,5 @@
+"""Base class for services"""
+
 from flask import current_app
 
 from etsin_finder.utils.utils import executing_travis
@@ -24,6 +26,7 @@ class BaseService:
 
     @property
     def is_testing(self):
+        """Returns true if running in a test"""
         if current_app.testing or executing_travis():
             return True
         return False
