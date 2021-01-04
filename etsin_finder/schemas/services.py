@@ -3,6 +3,7 @@ from marshmallow import Schema, fields
 from marshmallow.validate import Length
 
 class MetaxServiceConfigurationSchema(Schema):
+    """Schema for configuring Metax connection"""
     HOST = fields.Str(required=True, validate=Length(min=1))
     USER = fields.Str(
         required=True,
