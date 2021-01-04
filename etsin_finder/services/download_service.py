@@ -7,12 +7,11 @@
 
 """Functionalities for download data from Download API"""
 
-from flask import Response, stream_with_context
+from flask import Response, stream_with_context, current_app
 import requests
 from urllib import parse
 
 from etsin_finder.app_config import get_download_api_config
-from etsin_finder.app import app
 from etsin_finder.log import log
 
 from etsin_finder.utils.utils import FlaskService, format_url
@@ -30,7 +29,7 @@ class DownloadAPIService(FlaskService):
         """
         super().__init__(app)
 
-        dl_api_config = get_download_api_config(app.testing)
+        dl_api_config = get_download_api_config(app)
 
         if dl_api_config:
             self.API_BASE_URL = 'https://{0}:{1}/secure/api/v1/dataset'.format(
@@ -131,9 +130,7 @@ class DownloadAPIService(FlaskService):
         return url
 
 
-_dl_api = DownloadAPIService(app)
-
-
 def download_data(cr_id, file_ids, dir_ids):
     """Public method for downloading data from Download API."""
+    _dl_api = DownloadAPIService(current_app)
     return _dl_api.download(cr_id, file_ids, dir_ids)

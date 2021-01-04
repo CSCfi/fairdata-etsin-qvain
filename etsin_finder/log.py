@@ -1,7 +1,7 @@
 """Logger for flask current app context"""
 
 from flask import current_app
-
+import logging
 
 class CurrentAppLogger():
     """Convenience class for logger."""

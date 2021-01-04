@@ -11,7 +11,6 @@ import jwt
 from flask import request, current_app
 from urllib.parse import urlparse, urlunparse, parse_qs, urlencode, urljoin
 
-from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.utils.utils import executing_travis
 

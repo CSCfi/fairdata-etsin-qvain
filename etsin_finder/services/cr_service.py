@@ -8,8 +8,8 @@
 """Used for performing operations related to Metax"""
 
 import requests
+from flask import current_app
 
-from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.app_config import get_metax_api_config
 from etsin_finder.utils.utils import json_or_empty, FlaskService, format_url
@@ -23,7 +23,7 @@ class MetaxAPIService(FlaskService):
         """Init Metax API Service."""
         super().__init__(app)
 
-        metax_api_config = get_metax_api_config(app.testing)
+        metax_api_config = get_metax_api_config(app)
 
         if metax_api_config:
             METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/datasets'.format(metax_api_config.get('HOST')) + \
@@ -164,9 +164,6 @@ class MetaxAPIService(FlaskService):
         return metax_api_response.json()
 
 
-_metax_api = MetaxAPIService(app)
-
-
 def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
     """Get single catalog record.
 
@@ -182,12 +179,12 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
 
     """
     if refresh_cache:
-        return app.cr_cache.update_cache(cr_id, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
+        return current_app.cr_cache.update_cache(cr_id, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
 
-    cr = app.cr_cache.get_from_cache(cr_id)
+    cr = current_app.cr_cache.get_from_cache(cr_id)
     if cr is None:
         cr = _get_cr_from_metax(cr_id, check_removed_if_not_exist)
-        return app.cr_cache.update_cache(cr_id, cr)
+        return current_app.cr_cache.update_cache(cr_id, cr)
     else:
         return cr
 
@@ -205,6 +202,7 @@ def get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_
         dict: Return the responce from Metax as dict, else None.
 
     """
+    _metax_api = MetaxAPIService(current_app)
     return _metax_api.get_directory_for_catalog_record(cr_id, dir_id, file_fields, directory_fields)
 
 
@@ -342,6 +340,7 @@ def _get_cr_from_metax(cr_id, check_removed_if_not_exist):
         dict: Return the responce from Metax as dict, else None.
 
     """
+    _metax_api = MetaxAPIService(current_app)
     cr = _metax_api.get_catalog_record_with_file_details(cr_id)
     if not cr and check_removed_if_not_exist:
         cr = _metax_api.get_removed_catalog_record(cr_id)

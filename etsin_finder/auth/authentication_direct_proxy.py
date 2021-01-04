@@ -10,7 +10,6 @@
 from urllib.parse import urlparse
 from flask import session, current_app
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
-from etsin_finder.app import app
 
 def get_saml_auth(flask_request, service):
     """Get saml auth
@@ -22,7 +21,7 @@ def get_saml_auth(flask_request, service):
         object: SP SAML instance.
 
     """
-    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request, service), custom_base_path=app.config.get(('SAML_PATH' + service), None))
+    return OneLogin_Saml2_Auth(prepare_flask_request_for_saml(flask_request, service), custom_base_path=current_app.config.get(('SAML_PATH' + service), None))
 
 def init_saml_auth(saml_prepared_flask_request, service):
     """Init saml auth
@@ -34,7 +33,7 @@ def init_saml_auth(saml_prepared_flask_request, service):
         object: Initializes the SP SAML instance.
 
     """
-    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=app.config.get(('SAML_PATH' + service), None))
+    return OneLogin_Saml2_Auth(saml_prepared_flask_request, custom_base_path=current_app.config.get(('SAML_PATH' + service), None))
 
 def is_authenticated_through_direct_proxy():
     """Is user authenticated through the old proxy solution

@@ -8,10 +8,10 @@
 """Functionalities for download data from Download API v2"""
 
 import requests
+from flask import current_app
 
 from etsin_finder.utils.request_utils import make_request
 from etsin_finder.app_config import get_download_api_v2_config
-from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.utils.utils import FlaskService
 
@@ -28,7 +28,7 @@ class DownloadAPIService(FlaskService):
         """
         super().__init__(app)
 
-        dl_api_config = get_download_api_v2_config(app.testing)
+        dl_api_config = get_download_api_v2_config(app)
         if dl_api_config:
             host = dl_api_config.get('HOST')
             port = dl_api_config.get('PORT')
@@ -135,5 +135,3 @@ class DownloadAPIService(FlaskService):
 
         keyValues = '&'.join('='.join(item) for item in params.items())
         return f'{self.DOWNLOAD_URL}?{keyValues}'
-
-download_service = DownloadAPIService(app)

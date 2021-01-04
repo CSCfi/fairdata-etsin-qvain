@@ -10,7 +10,10 @@ class ConfigValidationMixin:
 
     def validate_config(self, verbose=False):
         """Validate self.config using self.schema"""
-        errors = self.schema.validate(self.config)
+        if self.config is None:
+            errors = ['No config found']
+        else:
+            errors = self.schema.validate(self.config)
         if len(errors) > 0:
             if verbose:
                 log.error(f'Error validating configuration for {self.__class__.__name__}: {errors}')
@@ -23,10 +26,4 @@ class ConfigValidationMixin:
 
 class BaseService:
     """Use as base class for external dependency services"""
-
-    @property
-    def is_testing(self):
-        """Returns true if running in a test"""
-        if current_app.testing or executing_travis():
-            return True
-        return False
+    pass

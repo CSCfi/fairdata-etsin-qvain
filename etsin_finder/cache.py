@@ -21,7 +21,7 @@ class BaseCache(FlaskService):
         """Setup cache"""
         super().__init__(app)
 
-        memcached_config = get_memcached_config(self.is_testing)
+        memcached_config = get_memcached_config(app)
 
         if memcached_config:
             self.cache = base.Client((memcached_config.get('HOST'), memcached_config.get('PORT')),

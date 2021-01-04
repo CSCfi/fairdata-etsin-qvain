@@ -13,9 +13,9 @@ import pytest
 import logging
 
 from etsin_finder.utils.flags import initialize_supported_flags
-from etsin_finder.app_config import get_app_config
-from .utils import get_test_catalog_record
+from etsin_finder.app import create_app
 
+from .utils import get_test_catalog_record
 
 class BaseTest():
     """Use as base class for any tests. Contains fixtures and monkeypatched methods"""
@@ -23,17 +23,12 @@ class BaseTest():
     @pytest.fixture
     def app(self):
         """
-        App fixture that checks that app is in testing mode
-
-        To enable testing mode, set the TESTING environment variable.
+        Create app in testing mode
 
         :return:
         """
-        from etsin_finder.finder import app
-        assert app.testing is True
-        app.config.update(get_app_config(True))
-        initialize_supported_flags(app)
-        return app
+        test_app = create_app(True)
+        return test_app
 
     @pytest.fixture
     def authd_client(self, app, monkeypatch):

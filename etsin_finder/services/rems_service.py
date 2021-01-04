@@ -8,7 +8,7 @@
 """Used for performing operations related to Fairdata Rems"""
 
 from requests import request, HTTPError
-from flask import session
+from flask import session, current_app
 from datetime import datetime
 
 from etsin_finder.services.cr_service import (
@@ -18,7 +18,6 @@ from etsin_finder.services.cr_service import (
 )
 from etsin_finder.app_config import get_fairdata_rems_api_config
 from etsin_finder.utils.utils import json_or_empty, FlaskService, format_url
-from etsin_finder.app import app
 from etsin_finder.log import log
 
 
@@ -29,7 +28,7 @@ class RemsAPIService(FlaskService):
         """Setup Rems API Service"""
         super().__init__(app)
 
-        rems_api_config = get_fairdata_rems_api_config(app.testing)
+        rems_api_config = get_fairdata_rems_api_config(app)
 
         if rems_api_config:
             self.ENABLED = rems_api_config.get('ENABLED', False)
@@ -224,7 +223,7 @@ def get_application_state_for_resource(cr, user_id):
         str: The application state or False.
 
     """
-    _rems_api = RemsAPIService(app, user_id)
+    _rems_api = RemsAPIService(current_app, user_id)
     if _rems_api.ENABLED:
         state = 'apply'
     else:
@@ -282,7 +281,7 @@ def get_user_rems_permission_for_catalog_record(cr_id, user_id):
         if not pref_id:
             log.error('Could not get cr_id: {0} preferred identifier.'.format(cr_id))
             return False
-        _rems_api = RemsAPIService(app, user_id)
+        _rems_api = RemsAPIService(current_app, user_id)
         return _rems_api.get_rems_permission(pref_id)
     log.warning('Invalid catalog record or not a REMS catalog record. cr_id: {0}'.format(cr_id))
     return False

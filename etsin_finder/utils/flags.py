@@ -10,6 +10,8 @@
 import re
 from flask import has_app_context, current_app
 
+from etsin_finder.utils.utils import ensure_app
+
 default_supported_flags = {
     'DOWNLOAD_API_V2.BACKEND',
     'DOWNLOAD_API_V2.FRONTEND',
@@ -33,14 +35,6 @@ def _get_partial_paths(paths, include_full=False):
             partials.add('.'.join(parts[0:i + 1]))
     return partials
 
-def _ensure_app(app):
-    """Use app context if no app parameter is supplied"""
-    if app:
-        return app
-    if has_app_context():
-        return current_app
-    raise ValueError('Missing app parameter and no app context available')
-
 def set_flags(value, app):
     """Set flags for app (useful for testing)"""
     app.config['FLAGS'] = value
@@ -59,7 +53,7 @@ def validate_flags(app=None):
     Logs warning if a flag in config is not in supported flags or
     is not a group containing supported flags.
     """
-    app = _ensure_app(app)
+    app = ensure_app(app)
     supported = _get_partial_paths(get_supported_flags(app), True)
     flags = app.config.get('FLAGS', {})
     for path, value in flags.items():
@@ -92,7 +86,7 @@ def flag_enabled(flag_path, app=None):
 
     Requesting a flag not in supported flags will cause a warning.
     """
-    app = _ensure_app(app)
+    app = ensure_app(app)
 
     if flag_path not in get_supported_flags(app):
         app.logger.warning(f'flag_enabled: requesting value for unsupported flag {flag_path}')

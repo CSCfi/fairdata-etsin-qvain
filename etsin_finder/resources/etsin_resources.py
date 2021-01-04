@@ -26,7 +26,6 @@ from etsin_finder.utils.email_utils import \
     get_email_recipient_addresses, \
     get_harvest_info, \
     validate_send_message_request
-from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.utils.flags import get_supported_flags
 
@@ -74,7 +73,7 @@ class Dataset(Resource):
 
         ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
-        if cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config(app.testing) is not None:
+        if cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config() is not None:
             user_id = authentication.get_user_id()
             state = rems_service.get_application_state_for_resource(cr, user_id)
             ret_obj['application_state'] = state
@@ -109,7 +108,7 @@ class V2Dataset(Resource):
 
         ret_obj = {'catalog_record': authorization.strip_information_from_catalog_record(cr, is_authd),
                    'email_info': get_email_info(cr)}
-        if cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config(app.testing) is not None:
+        if cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config() is not None:
             user_id = authentication.get_user_id()
             state = rems_service.get_application_state_for_resource(cr, user_id)
             ret_obj['application_state'] = state
@@ -309,7 +308,7 @@ class User(Resource):
         groups = authentication.get_user_ida_projects()
         user_info['user_ida_projects'] = groups
 
-        is_using_rems_response = get_fairdata_rems_api_config(current_app.testing)
+        is_using_rems_response = get_fairdata_rems_api_config()
         is_using_rems = False
 
         if is_using_rems_response is not None:
@@ -347,7 +346,7 @@ class REMSApplyForPermission(Resource):
 
         if not (user_id and (firstname or lastname) and email):
             return 'Unauthorized request', 401
-        _rems_api = rems_service.RemsAPIService(app, user_id)
+        _rems_api = rems_service.RemsAPIService(current_app, user_id)
         userdata = {
             'userid': user_id,
             'name': "{0} {1}".format(firstname, lastname),

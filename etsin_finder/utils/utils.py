@@ -7,12 +7,14 @@
 
 """Various utils"""
 
+from flask import current_app, has_app_context
 import json
 import os
 from datetime import datetime
 import pytz
 from dateutil import parser
 from urllib import parse
+
 def get_log_config(log_file_path, log_lvl):
     """Function to get the logging configuration from utils.py
 
@@ -243,6 +245,13 @@ def format_url(url, *args):
     quoted_args = [parse.quote(str(arg), safe='') for arg in args]
     return url.format(*quoted_args)
 
+def ensure_app(app):
+    """Use app context if no app parameter is supplied"""
+    if app:
+        return app
+    if has_app_context():
+        return current_app
+    raise ValueError('Missing app parameter and no app context available')
 
 class FlaskService:
     """Use as base class for external dependency services"""

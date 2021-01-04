@@ -7,11 +7,10 @@
 
 """Functionalities for download data from Download API"""
 
-from flask import Response, stream_with_context
+from flask import Response, stream_with_context, current_app
 import requests
 
 from etsin_finder.app_config import get_metax_api_config
-from etsin_finder.app import app
 from etsin_finder.log import log
 
 from etsin_finder.utils.utils import FlaskService, format_url
@@ -28,7 +27,7 @@ class DatasetMetadataService(FlaskService):
 
         """
         super().__init__(app)
-        metax_api_config = get_metax_api_config(app.testing)
+        metax_api_config = get_metax_api_config(app)
 
         if metax_api_config:
             self.HOST = 'https://{0}'.format(metax_api_config.get('HOST'))
@@ -109,9 +108,7 @@ class DatasetMetadataService(FlaskService):
             log.debug('Download URL: {0} Responded with HTTP status {1}'.format(url, response.status_code))
             return response
 
-metadata_api = DatasetMetadataService(app)
-
-
 def download_metadata(cr_id, metadata_format):
     """Stream metadata download of a dataset to frontend"""
+    metadata_api = DatasetMetadataService(current_app)
     return metadata_api.download_metadata(cr_id, metadata_format)

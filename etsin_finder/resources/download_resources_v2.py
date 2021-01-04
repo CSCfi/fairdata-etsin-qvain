@@ -8,11 +8,12 @@
 """Download API v2 endpoints"""
 
 from flask_restful import abort, reqparse, Resource
+from flask import current_app
 
 from etsin_finder.auth import authentication
 from etsin_finder.auth import authorization
 from etsin_finder.services import cr_service
-from etsin_finder.services.download_service_v2 import download_service
+from etsin_finder.services.download_service_v2 import DownloadAPIService
 
 from etsin_finder.utils.log_utils import log_request
 
@@ -51,6 +52,7 @@ class Requests(Resource):
         args = self.parser.parse_args(strict=True)
         cr_id = args.get('cr_id')
         check_download_permission(cr_id)
+        download_service = DownloadAPIService(current_app)
         return download_service.get_requests(cr_id)
 
     def post(self):
@@ -70,6 +72,7 @@ class Requests(Resource):
         check_download_permission(cr_id)
 
         scope = args.get('scope')
+        download_service = DownloadAPIService(current_app)
         return download_service.post_request(cr_id, scope)
 
 
@@ -109,6 +112,7 @@ class Authorize(Resource):
         cr_id = args.get('cr_id')
         check_download_permission(cr_id)
 
+        download_service = DownloadAPIService(current_app)
         resp, status = download_service.authorize(cr_id, file=file, package=package)
         if status != 200:
             return resp, status

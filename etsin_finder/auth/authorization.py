@@ -7,6 +7,8 @@
 
 """Functionalities related to authorization and what users are allowed to see."""
 
+from flask import current_app
+
 from etsin_finder.services import cr_service
 from etsin_finder.services.cr_service import (
     get_catalog_record_access_type,
@@ -16,7 +18,6 @@ from etsin_finder.services.cr_service import (
     is_catalog_record_owner
 )
 
-from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.services import rems_service
 from etsin_finder.utils.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
@@ -84,7 +85,7 @@ def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
     """
     # TODO: After testing with this is done and after test datas have proper ida data catalog identifiers, remove
     # TODO: 'not app.debug and' from below
-    if not app.debug and get_catalog_record_data_catalog_id(catalog_record) != DATA_CATALOG_IDENTIFIERS.get('ida'):
+    if not current_app.debug and get_catalog_record_data_catalog_id(catalog_record) != DATA_CATALOG_IDENTIFIERS.get('ida'):
         return False
 
     access_type_id = get_catalog_record_access_type(catalog_record)

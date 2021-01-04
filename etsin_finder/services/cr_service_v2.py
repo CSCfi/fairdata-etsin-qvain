@@ -8,8 +8,8 @@
 """Used for performing operations specific to Metax API v2"""
 
 import requests
+from flask import current_app
 
-from etsin_finder.app import app
 from etsin_finder.log import log
 from etsin_finder.app_config import get_metax_api_config
 from etsin_finder.utils.utils import FlaskService, format_url
@@ -23,7 +23,7 @@ class MetaxAPIService(FlaskService):
         """Init Metax API Service."""
         super().__init__(app)
 
-        metax_api_config = get_metax_api_config(app.testing)
+        metax_api_config = get_metax_api_config(app)
 
         if metax_api_config:
             self.METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/v2/datasets'.format(metax_api_config.get('HOST')) + \
@@ -88,10 +88,6 @@ class MetaxAPIService(FlaskService):
             return None
         return resp
 
-
-_metax_api = MetaxAPIService(app)
-
-
 def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
     """Get single catalog record from Metax API v2.
 
@@ -108,12 +104,12 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
     """
     cache_key = "v2_{}".format(cr_id)
     if refresh_cache:
-        return app.cr_cache.update_cache(cache_key, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
+        return current_app.cr_cache.update_cache(cache_key, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
 
-    cr = app.cr_cache.get_from_cache(cache_key)
+    cr = current_app.cr_cache.get_from_cache(cache_key)
     if cr is None:
         cr = _get_cr_from_metax(cr_id, check_removed_if_not_exist)
-        return app.cr_cache.update_cache(cr_id, cr)
+        return current_app.cr_cache.update_cache(cr_id, cr)
     else:
         return cr
 
@@ -129,6 +125,7 @@ def _get_cr_from_metax(cr_id, check_removed_if_not_exist):
         dict: Return the responce from Metax as dict, else None.
 
     """
+    _metax_api = MetaxAPIService(current_app)
     cr = _metax_api.get_catalog_record(cr_id)
     if not cr and check_removed_if_not_exist:
         cr = _metax_api.get_removed_catalog_record(cr_id)
