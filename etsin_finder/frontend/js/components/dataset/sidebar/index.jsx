@@ -132,8 +132,7 @@ class Sidebar extends Component {
     const infrastructure = checkNested(researchDataset, 'infrastructure')
       ? researchDataset.infrastructure
       : false
-    const lang = getDataLang(catalogPublisher)
-    const title = catalogTitle[lang]
+    const title = catalogTitle[getDataLang(catalogPublisher)]
 
     return (
       <SidebarContainer>
