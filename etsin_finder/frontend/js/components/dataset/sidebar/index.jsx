@@ -144,8 +144,6 @@ class Sidebar extends Component {
               <SidebarItem>
                 <Logo
                   lang={getDataLang(catalogTitle)}
-                  // alt={catalogPublisherHomepage}
-                  // alt={`Logo for ${catalogTitle[lang]}, link takes you to catalog publisher website`}
                   alt={translate('dataset.catalog_alt_text', { title })}
                   file={logo}
                   url={catalogPublisherHomepage}
