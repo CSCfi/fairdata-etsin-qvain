@@ -31,14 +31,7 @@ from etsin_finder.utils.qvain_utils import (
     check_authentication,
 )
 from etsin_finder.utils.log_utils import log_request
-from etsin_finder.services.qvain_service import (
-    create_dataset,
-    update_dataset,
-    get_dataset,
-    delete_dataset,
-    get_file,
-    patch_file
-)
+from etsin_finder.services.qvain_service import MetaxQvainAPIService
 
 
 TOTAL_ITEM_LIMIT = 1000
@@ -209,7 +202,8 @@ class FileCharacteristics(Resource):
         if request.content_type != 'application/json':
             return 'Expected content-type application/json', 403
 
-        file_obj = get_file(file_id)
+        service = MetaxQvainAPIService()
+        file_obj = service.get_file(file_id)
         project_identifier = file_obj.get('project_identifier')
         user_ida_projects = authentication.get_user_ida_projects() or []
 
@@ -248,7 +242,7 @@ class FileCharacteristics(Resource):
             'file_characteristics': characteristics
         }
 
-        return patch_file(file_id, data)
+        return service.patch_file(file_id, data)
 
     @log_request
     def put(self, file_id):
@@ -352,7 +346,8 @@ class QvainDatasets(Resource):
         params = {
             "access_granter": get_encoded_access_granter()
         }
-        metax_response = create_dataset(metax_ready_data, params, use_doi)
+        service = MetaxQvainAPIService()
+        metax_response = service.create_dataset(metax_ready_data, params, use_doi)
         return metax_response
 
 
@@ -379,7 +374,8 @@ class QvainDataset(Resource):
         if error is not None:
             return error
 
-        response, status = get_dataset(cr_id)
+        service = MetaxQvainAPIService()
+        response, status = service.get_dataset(cr_id)
         return response, status
 
     @log_request
@@ -428,7 +424,8 @@ class QvainDataset(Resource):
 
         params = {}
         params["access_granter"] = get_encoded_access_granter()
-        metax_response = update_dataset(metax_ready_data, cr_id, last_edit_converted, params)
+        service = MetaxQvainAPIService()
+        metax_response = service.update_dataset(metax_ready_data, cr_id, last_edit_converted, params)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
         return metax_response
 
@@ -448,5 +445,6 @@ class QvainDataset(Resource):
         if error is not None:
             return error
 
-        metax_response = delete_dataset(cr_id)
+        service = MetaxQvainAPIService()
+        metax_response = service.delete_dataset(cr_id)
         return metax_response

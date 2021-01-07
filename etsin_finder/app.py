@@ -174,9 +174,9 @@ def validate_config(app):
         download_service_v2.DownloadAPIService(app)
 
         # Services that use app context
-        common_service_v2.validate_config(False)
-        qvain_service.validate_config(False)
-        qvain_service_v2.validate_config(False)
+        common_service_v2.MetaxCommonAPIService().validate_config(False)
+        qvain_service.MetaxQvainAPIService().validate_config(False)
+        qvain_service_v2.MetaxQvainAPIServiceV2().validate_config(False)
 
 
 def _setup_app_logging(app):

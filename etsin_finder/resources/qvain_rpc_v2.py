@@ -9,13 +9,7 @@
 
 from flask_restful import reqparse, Resource
 
-from etsin_finder.services.qvain_service_v2 import (
-    change_cumulative_state,
-    create_new_version,
-    publish_dataset,
-    merge_draft,
-    create_draft
-)
+from etsin_finder.services.qvain_service_v2 import MetaxQvainAPIServiceV2
 from etsin_finder.utils.log_utils import log_request
 from etsin_finder.utils.qvain_utils_v2 import check_dataset_creator
 
@@ -47,7 +41,8 @@ class QvainDatasetChangeCumulativeState(Resource):
         error = check_dataset_creator(cr_id)
         if error is not None:
             return error
-        metax_response = change_cumulative_state(cr_id, cumulative_state)
+        service = MetaxQvainAPIServiceV2()
+        metax_response = service.change_cumulative_state(cr_id, cumulative_state)
         return metax_response
 
 
@@ -77,7 +72,8 @@ class QvainDatasetCreateNewVersion(Resource):
         err = check_dataset_creator(cr_id)
         if err is not None:
             return err
-        metax_response = create_new_version(cr_id)
+        service = MetaxQvainAPIServiceV2()
+        metax_response = service.create_new_version(cr_id)
         return metax_response
 
 
@@ -105,7 +101,8 @@ class QvainDatasetCreateDraft(Resource):
         err = check_dataset_creator(cr_id)
         if err is not None:
             return err
-        metax_response = create_draft(cr_id)
+        service = MetaxQvainAPIServiceV2()
+        metax_response = service.create_draft(cr_id)
         return metax_response
 
 
@@ -133,7 +130,8 @@ class QvainDatasetMergeDraft(Resource):
         err = check_dataset_creator(cr_id)
         if err is not None:
             return err
-        metax_response = merge_draft(cr_id)
+        service = MetaxQvainAPIServiceV2()
+        metax_response = service.merge_draft(cr_id)
         return metax_response
 
 
@@ -161,5 +159,6 @@ class QvainDatasetPublishDataset(Resource):
         err = check_dataset_creator(cr_id)
         if err is not None:
             return err
-        metax_response = publish_dataset(cr_id)
+        service = MetaxQvainAPIServiceV2()
+        metax_response = service.publish_dataset(cr_id)
         return metax_response

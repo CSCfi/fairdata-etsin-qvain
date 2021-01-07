@@ -9,11 +9,7 @@
 
 from flask_restful import reqparse, Resource
 
-from etsin_finder.services.qvain_service import (
-    change_cumulative_state,
-    refresh_directory_content,
-    fix_deprecated_dataset
-)
+from etsin_finder.services.qvain_service import MetaxQvainAPIService
 from etsin_finder.utils.qvain_utils import check_dataset_creator
 from etsin_finder.utils.log_utils import log_request
 
@@ -47,7 +43,8 @@ class QvainDatasetChangeCumulativeState(Resource):
         if error is not None:
             return error
 
-        metax_response = change_cumulative_state(cr_id, cumulative_state)
+        service = MetaxQvainAPIService()
+        metax_response = service.change_cumulative_state(cr_id, cumulative_state)
         return metax_response
 
 class QvainDatasetRefreshDirectoryContent(Resource):
@@ -81,7 +78,8 @@ class QvainDatasetRefreshDirectoryContent(Resource):
         if error is not None:
             return error
 
-        metax_response = refresh_directory_content(cr_identifier, dir_identifier)
+        service = MetaxQvainAPIService()
+        metax_response = service.refresh_directory_content(cr_identifier, dir_identifier)
         return metax_response
 
 
@@ -114,5 +112,6 @@ class QvainDatasetFixDeprecated(Resource):
         if error is not None:
             return error
 
-        metax_response = fix_deprecated_dataset(cr_id)
+        service = MetaxQvainAPIService()
+        metax_response = service.fix_deprecated_dataset(cr_id)
         return metax_response

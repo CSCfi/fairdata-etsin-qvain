@@ -19,7 +19,7 @@ from etsin_finder.schemas.services import MetaxServiceConfigurationSchema
 from .base_service import BaseService, ConfigValidationMixin
 
 
-class MetaxQvainLightAPIService(BaseService, ConfigValidationMixin):
+class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
     """Metax API Service"""
 
     schema = MetaxServiceConfigurationSchema(unknown=marshmallow.RAISE)
@@ -426,56 +426,3 @@ class MetaxQvainLightAPIService(BaseService, ConfigValidationMixin):
         else:
             log.warning('Failed to fix deprecated dataset {}'.format(cr_identifier))
         return resp, status
-
-_metax_api = MetaxQvainLightAPIService()
-
-validate_config = _metax_api.validate_config
-
-def get_directory(dir_id, params=None):
-    """Public function to get a specific directory with directory's id"""
-    return _metax_api.get_directory(dir_id, params)
-
-def get_directory_for_project(project_id, params=None):
-    """Public function to get directory contents for a specific project"""
-    return _metax_api.get_directory_for_project(project_id, params)
-
-def get_file(file_identifier):
-    """Public function to get a specific file with file's id"""
-    return _metax_api.get_file(file_identifier)
-
-def patch_file(file_identifier, data):
-    """Public function to patch metadata for a file with given data."""
-    return _metax_api.patch_file(file_identifier, data)
-
-def get_datasets_for_user(user_id, limit, offset, no_pagination):
-    """Public function to get datasets created by the specified user."""
-    return _metax_api.get_datasets_for_user(user_id, limit, offset, no_pagination)
-
-def create_dataset(form_data, params=None, use_doi=False):
-    """Public function to Send the data from the frontend to Metax."""
-    return _metax_api.create_dataset(form_data, params, use_doi)
-
-def update_dataset(form_data, cr_id, last_modified, params=None):
-    """Public function to Update a dataset with the data that the user has entered in Qvain-light."""
-    return _metax_api.update_dataset(form_data, cr_id, last_modified, params)
-
-def get_dataset(cr_id):
-    """Public function to get dataset"""
-    return _metax_api.get_dataset(cr_id)
-
-
-def delete_dataset(cr_id):
-    """Public function to delete dataset from Metax."""
-    return _metax_api.delete_dataset(cr_id)
-
-def change_cumulative_state(cr_id, cumulative_state):
-    """Public function to change cumulative_state of a dataset in Metax."""
-    return _metax_api.change_cumulative_state(cr_id, cumulative_state)
-
-def refresh_directory_content(cr_identifier, dir_identifier):
-    """Public function to call Metax refresh_directory_content RPC."""
-    return _metax_api.refresh_directory_content(cr_identifier, dir_identifier)
-
-def fix_deprecated_dataset(cr_id):
-    """Public function to call Metax fix_deprecated RPC."""
-    return _metax_api.fix_deprecated_dataset(cr_id)

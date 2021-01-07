@@ -208,7 +208,6 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
 
 _service = MetaxCommonAPIService()
-validate_config = _service.validate_config
 get_directory = _service.get_directory
 get_directory_for_project = _service.get_directory_for_project
 get_dataset_projects = _service.get_dataset_projects
