@@ -209,7 +209,16 @@ def get_user_ida_projects():
     # Authenticated through Fairdata SSO
     if is_authenticated_through_fairdata_sso():
         session_data = get_decrypted_sso_session_details()
-        user_ida_projects = session_data.get('services').get('IDA').get('projects')
+
+        if session_data.get('services').get('IDA'):
+            try:
+                user_ida_projects = session_data.get('services').get('IDA').get('projects')
+            except Exception as error_message:
+                log.info(error_message)
+                return None
+        else:
+            log.info('No IDA groups available for user.')
+            return None
         return user_ida_projects
 
     return not_found('ida_projects')
