@@ -1,10 +1,10 @@
 {
   "parser": "@babel/eslint-parser",
-  // "parserOptions": {
-  //   "babelOptions": {
-  //     "configFile": "../../babel.config.json"
-  //   },
-  // },
+  "parserOptions": {
+    "babelOptions": {
+      "configFile": "./.babelrc"
+    }
+  },
   "plugins": ["react", "import", "react-hooks", "@babel"],
   "env": {
     "browser": true,
