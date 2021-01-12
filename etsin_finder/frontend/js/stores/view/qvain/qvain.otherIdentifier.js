@@ -17,7 +17,7 @@ class OtherIdentifiers extends ReferenceField {
   // move this to qvain.otherIdentifier class when refactor ticket is merged
   @action cleanupBeforeBackend = () => {
     const { item, storage, addItemStr, setValidationError } = this
-    if (item !== '') {
+    if (item) {
       try {
         otherIdentifierSchema.validateSync(item)
       } catch (err) {

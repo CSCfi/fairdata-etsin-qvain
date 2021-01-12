@@ -3,8 +3,6 @@ import axios from 'axios'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../utils/constants'
 
-const getErrorText = err => (err.response && err.response.data) || err.message
-
 class Packages {
   // Download API package handling
 
@@ -91,8 +89,16 @@ class Packages {
     partial.forEach(pack => this.updatePackage(pack.scope[0], pack))
   }
 
+  @action setRequestingPackageCreation(path, value) {
+    this.packages[path] = { ...this.packages[path], requestingPackageCreation: value }
+  }
+
   createPackage = async (params) => {
+    const scope = params.scope || ['/']
     try {
+      scope.forEach(path => {
+        this.setRequestingPackageCreation(path, true)
+      })
       const resp = await axios.post('/api/v2/dl/requests', params)
       const { partial, ...full } = resp.data
       if (partial) {
@@ -101,9 +107,14 @@ class Packages {
       if (full && full.status) {
         this.updatePackage('/', full)
       }
+      this.clearError()
     } catch (err) {
       console.error(err)
-      this.setError(getErrorText(err))
+      this.setError(err)
+    } finally {
+      scope.forEach(path => {
+        this.setRequestingPackageCreation(path, false)
+      })
     }
     this.schedulePoll()
   }
@@ -125,8 +136,12 @@ class Packages {
     this.loadingDataset = val
   }
 
-  @action setError(msg) {
-    this.error = msg
+  @action setError = (error) => {
+    this.error = error
+  }
+
+  @action clearError = () => {
+    this.error = null
   }
 
   async fetch(datasetIdentifier) {
@@ -149,12 +164,11 @@ class Packages {
       try {
         const url = `/api/v2/dl/requests?cr_id=${datasetIdentifier}`
         response = await axios.get(url)
+        this.clearError()
       } catch (err) {
         this.clearPackages()
-        if (!(err.response && err.response.status === 404)) {
-          console.error(err)
-          this.setError(getErrorText(err))
-        }
+        console.error(err)
+        this.setError(err)
         return
       }
 

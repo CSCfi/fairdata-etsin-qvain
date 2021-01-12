@@ -146,7 +146,7 @@ describe('Packages', () => {
   it('on failed fetch, logs error', async () => {
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
     await packages.fetch(503)
-    expect(packages.error.code).toBe(503)
+    expect(packages.error.response.status).toBe(503)
     expect(console.error.mock.calls.length).toBe(1)
   })
 
@@ -156,7 +156,7 @@ describe('Packages', () => {
       packages.datasetIdentifier = 500
     })
     await packages.createPackageFromFolder('/')
-    expect(packages.error.code).toBe(500)
+    expect(packages.error.response.status).toBe(500)
     expect(console.error.mock.calls.length).toBe(1)
   })
 
@@ -177,6 +177,7 @@ describe('Download button actions', () => {
   // Mock Files class used for getting paths
   const files = {
     getItemPath: item => item.path,
+    getEquivalentItemScope: item => item.path,
   }
 
   const packages = new Packages(Env)
