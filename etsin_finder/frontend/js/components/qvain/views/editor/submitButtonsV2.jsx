@@ -5,7 +5,7 @@ import Translate from 'react-translate-component'
 import { useStores } from '../../utils/stores'
 import SubmitButton from './submitButton.styled'
 
-export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history }) => {
+export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history, idSuffix }) => {
   const {
     Qvain: {
       Submit: { submitDraft, submitPublish },
@@ -22,10 +22,10 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history 
 
   return (
     <div ref={submitButtonsRef}>
-      <SubmitButton id="draft-btn" disabled={disabled} onClick={submitDraft}>
+      <SubmitButton id={`draft-btn${idSuffix}`} disabled={disabled} onClick={submitDraft}>
         <Translate content="qvain.saveDraft" />
       </SubmitButton>
-      <SubmitButton id="publish-btn" disabled={disabled} onClick={submitPublish}>
+      <SubmitButton id={`publish-btn${idSuffix}`} disabled={disabled} onClick={submitPublish}>
         <Translate content="qvain.submit" />
       </SubmitButton>
       {doiModal}
@@ -38,10 +38,12 @@ SubmitButtonsV2.propTypes = {
   disabled: PropTypes.bool.isRequired,
   doiModal: PropTypes.node.isRequired,
   history: PropTypes.object.isRequired,
+  idSuffix: PropTypes.string,
 }
 
 SubmitButtonsV2.defaultProps = {
   submitButtonsRef: null,
+  idSuffix: '',
 }
 
 export default observer(SubmitButtonsV2)
