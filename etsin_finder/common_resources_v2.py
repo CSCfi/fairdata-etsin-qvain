@@ -20,7 +20,7 @@ from etsin_finder.utils import \
 from etsin_finder.qvain_light_dataset_schema_v2 import (
     UserMetadataValidationSchema
 )
-from etsin_finder.qvain_light_utils_v2 import check_dataset_creator
+from etsin_finder.qvain_light_utils_v2 import check_dataset_edit_permission
 from etsin_finder.authentication import get_user_ida_projects
 
 from etsin_finder.common_service_v2 import (
@@ -281,7 +281,7 @@ class DatasetUserMetadata(Resource):
         except Exception as e:
             return str(e), 400
 
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 

@@ -14,7 +14,7 @@ from etsin_finder.qvain_light_service import (
     refresh_directory_content,
     fix_deprecated_dataset
 )
-from etsin_finder.qvain_light_utils import check_dataset_creator
+from etsin_finder.qvain_light_utils import check_dataset_edit_permission
 from etsin_finder.log_utils import log_request
 
 
@@ -43,7 +43,7 @@ class QvainDatasetChangeCumulativeState(Resource):
         cr_id = args.get('identifier')
         cumulative_state = args.get('cumulative_state')
 
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -77,7 +77,7 @@ class QvainDatasetRefreshDirectoryContent(Resource):
         cr_identifier = args.get('cr_identifier')
         dir_identifier = args.get('dir_identifier')
 
-        error = check_dataset_creator(cr_identifier)
+        error = check_dataset_edit_permission(cr_identifier)
         if error is not None:
             return error
 
@@ -110,7 +110,7 @@ class QvainDatasetFixDeprecated(Resource):
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
 
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 

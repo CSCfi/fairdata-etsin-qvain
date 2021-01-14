@@ -19,6 +19,7 @@ from etsin_finder.request_utils import make_request
 from etsin_finder.qvain_light_service import (
     MetaxQvainLightAPIService as MetaxQvainLightAPIServiceV1
 )
+from etsin_finder.qvain_light_dataset_schema import data_catalog_matcher
 
 
 class MetaxQvainLightAPIService(MetaxQvainLightAPIServiceV1):

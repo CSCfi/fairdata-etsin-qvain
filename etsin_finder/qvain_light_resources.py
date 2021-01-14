@@ -21,14 +21,14 @@ from etsin_finder.utils import \
     slice_array_on_limit, \
     datetime_to_header
 from etsin_finder.constants import DATA_CATALOG_IDENTIFIERS
-from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema
+from etsin_finder.qvain_light_dataset_schema import DatasetValidationSchema, data_catalog_matcher
 from etsin_finder.qvain_light_utils import (
     data_to_metax,
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
     check_if_data_in_user_IDA_project,
     get_encoded_access_granter,
-    check_dataset_creator,
+    check_dataset_edit_permission,
     check_authentication,
 )
 from etsin_finder.authentication import get_user_ida_projects
@@ -302,7 +302,7 @@ class QvainDatasets(Resource):
         no_pagination = args.get('no_pagination', None)
 
         user_id = authentication.get_user_csc_name()
-        result = qvain_light_service.get_datasets_for_user(user_id, limit, offset, no_pagination)
+        result = qvain_light_service.get_datasets_for_user(user_id, limit, offset, no_pagination, data_catalog_matcher=data_catalog_matcher)
         if result:
             # Limit the amount of items to be sent to the frontend
             if 'results' in result:
@@ -377,7 +377,7 @@ class QvainDataset(Resource):
             [type] -- Metax response.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -392,7 +392,7 @@ class QvainDataset(Resource):
             The response from metax or if error an error message.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -446,7 +446,7 @@ class QvainDataset(Resource):
             [type] -- Metax response.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 

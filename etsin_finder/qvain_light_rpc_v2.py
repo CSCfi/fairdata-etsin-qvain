@@ -17,7 +17,7 @@ from etsin_finder.qvain_light_service_v2 import (
     create_draft
 )
 from etsin_finder.log_utils import log_request
-from etsin_finder.qvain_light_utils_v2 import check_dataset_creator
+from etsin_finder.qvain_light_utils_v2 import check_dataset_edit_permission
 
 
 class QvainDatasetChangeCumulativeState(Resource):
@@ -44,7 +44,7 @@ class QvainDatasetChangeCumulativeState(Resource):
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
         cumulative_state = args.get('cumulative_state')
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
         metax_response = change_cumulative_state(cr_id, cumulative_state)
@@ -74,7 +74,7 @@ class QvainDatasetCreateNewVersion(Resource):
         """
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
-        err = check_dataset_creator(cr_id)
+        err = check_dataset_edit_permission(cr_id)
         if err is not None:
             return err
         metax_response = create_new_version(cr_id)
@@ -102,7 +102,7 @@ class QvainDatasetCreateDraft(Resource):
         """
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
-        err = check_dataset_creator(cr_id)
+        err = check_dataset_edit_permission(cr_id)
         if err is not None:
             return err
         metax_response = create_draft(cr_id)
@@ -130,7 +130,7 @@ class QvainDatasetMergeDraft(Resource):
         """
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
-        err = check_dataset_creator(cr_id)
+        err = check_dataset_edit_permission(cr_id)
         if err is not None:
             return err
         metax_response = merge_draft(cr_id)
@@ -158,7 +158,7 @@ class QvainDatasetPublishDataset(Resource):
         """
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
-        err = check_dataset_creator(cr_id)
+        err = check_dataset_edit_permission(cr_id)
         if err is not None:
             return err
         metax_response = publish_dataset(cr_id)

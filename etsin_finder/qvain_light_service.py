@@ -156,7 +156,7 @@ class MetaxQvainLightAPIService(FlaskService):
             log.warning("Failed to patch file {}".format(file_identifier))
         return resp, code
 
-    def get_datasets_for_user(self, user_id, limit, offset, no_pagination):
+    def get_datasets_for_user(self, user_id, limit, offset, no_pagination, data_catalog_matcher=None):
         """Get datasets created by the specified user.
 
         Uses pagination, so offset and limit are used as well.
@@ -180,9 +180,12 @@ class MetaxQvainLightAPIService(FlaskService):
             params['limit'] = limit
         if (offset):
             params['offset'] = offset
+        if data_catalog_matcher:
+            params['data_catalog'] = data_catalog_matcher
 
         resp, _, success = make_request(requests.get,
                                         req_url,
+                                        params=params,
                                         **self._get_args()
                                         )
         if not success or len(resp) == 0:

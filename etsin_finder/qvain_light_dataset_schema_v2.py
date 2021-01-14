@@ -1,9 +1,11 @@
 """Validation schemas for form data coming in from Qvain"""
 from marshmallow import Schema, fields, validates_schema, ValidationError
 from etsin_finder.qvain_light_dataset_schema import (
-    DatasetValidationSchema as DatasetValidationSchemaV1
+    DatasetValidationSchema as DatasetValidationSchemaV1,
+    data_catalog_matcher as data_catalog_matcher_v1
 )
 
+data_catalog_matcher = data_catalog_matcher_v1
 
 class DatasetValidationSchema(DatasetValidationSchemaV1):
     """Validation schema for the whole dataset."""
