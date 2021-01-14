@@ -60,6 +60,7 @@ const Dataset = ({
             <SubmitButtons
               handleSubmitError={handleSubmitError}
               handleSubmitResponse={handleSubmitResponse}
+              idSuffix="-bottom"
             />
           </Center>
         </FlaggedComponent>

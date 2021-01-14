@@ -12,9 +12,9 @@ import json
 
 from .basetest import BaseTest
 
-from etsin_finder.qvain_light_utils import alter_role_data
+from etsin_finder.utils.qvain_utils import alter_role_data
 
-from etsin_finder.qvain_light_dataset_schema import (
+from etsin_finder.schemas.qvain_dataset_schema import (
     PersonValidationSchema,
     OrganizationValidationSchema,
     ActorValidationSchema
@@ -303,8 +303,8 @@ class TestQvainLightDatasetAlterRoleData(BaseTest):
 
     def test_organization_actor(self):
         """Test organization actor."""
-        qvain_light_actors = [getOrganizationActor()]
-        creators = alter_role_data(qvain_light_actors, 'creator')
+        qvain_actors = [getOrganizationActor()]
+        creators = alter_role_data(qvain_actors, 'creator')
         actor = creators[0]
         assert actor == {
             '@type': 'Organization',
@@ -321,8 +321,8 @@ class TestQvainLightDatasetAlterRoleData(BaseTest):
 
     def test_person_actor(self):
         """Test person actor."""
-        qvain_light_actors = [getPersonActor()]
-        creators = alter_role_data(qvain_light_actors, 'creator')
+        qvain_actors = [getPersonActor()]
+        creators = alter_role_data(qvain_actors, 'creator')
         actor = creators[0]
         assert actor == {
             '@type': 'Person',

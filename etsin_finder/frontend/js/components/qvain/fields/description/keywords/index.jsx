@@ -53,6 +53,7 @@ const KeywordsField = () => {
         translationsRoot="qvain.description.keywords"
         validationError={validationError || ''}
         setValidationError={setValidationError}
+        required
       />
     </Card>
   )

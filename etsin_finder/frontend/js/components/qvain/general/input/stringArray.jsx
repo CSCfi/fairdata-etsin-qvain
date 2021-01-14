@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import CreatableSelect from 'react-select/creatable'
+import { components } from 'react-select'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import translate from 'counterpart'
@@ -14,8 +15,18 @@ const createOption = label => ({
   value: label,
 })
 
-const components = {
+const Input = props => {
+  const required = props?.selectProps?.required
+  return <components.Input aria-required={required} {...props} />
+}
+
+Input.propTypes = {
+  selectProps: PropTypes.object.isRequired,
+}
+
+const customComponents = {
   DropdownIndicator: null,
+  Input,
 }
 
 const StringArray = ({
@@ -32,6 +43,7 @@ const StringArray = ({
   readonly,
   validationError,
   setValidationError,
+  required,
 }) => {
   const [changed, setChanged] = useState()
   const selectRef = useRef()
@@ -127,7 +139,7 @@ const StringArray = ({
       <Translate
         component={RefCreatableSelect}
         selectRef={selectRef}
-        components={components}
+        components={customComponents}
         inputId={id}
         inputValue={itemStr}
         isMulti
@@ -141,6 +153,7 @@ const StringArray = ({
         getValue={v => v}
         value={options}
         attributes={{ placeholder: `${translationsRoot}.placeholder` }}
+        required={required}
       />
       <ErrorAndButtonContainer>
         <AddNewButton type="button" onClick={handleAddNew} disabled={readonly}>
@@ -166,6 +179,7 @@ StringArray.propTypes = {
   translationsRoot: PropTypes.string.isRequired,
   validationError: PropTypes.string.isRequired,
   setValidationError: PropTypes.func.isRequired,
+  required: PropTypes.bool,
 }
 
 StringArray.defaultProps = {
@@ -174,6 +188,7 @@ StringArray.defaultProps = {
   schema: null,
   addWithComma: false,
   readonly: false,
+  required: false,
 }
 
 const RefCreatableSelect = ({ selectRef, ...props }) => (
