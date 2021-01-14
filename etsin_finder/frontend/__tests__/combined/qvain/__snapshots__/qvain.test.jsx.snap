@@ -243,6 +243,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     itemSchema={null}
     itemStr=""
     readonly={false}
+    required={true}
     schema={
       ArraySchema {
         "_blacklist": RefSet {
@@ -432,6 +433,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     }
     itemStr=""
     readonly={false}
+    required={false}
     schema={
       ArraySchema {
         "_blacklist": RefSet {

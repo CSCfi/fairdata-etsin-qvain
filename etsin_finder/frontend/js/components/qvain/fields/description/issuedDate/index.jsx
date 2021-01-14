@@ -61,6 +61,7 @@ const IssuedDateField = () => {
           placeholderText={translate('qvain.description.issuedDate.placeholder')}
           dateFormat={getDateFormatLocale(lang)}
           disabled={readonly || publishedWithDoi}
+          required
         />
         <Fragment>{error && <ValidationError>{error}</ValidationError>}</Fragment>
       </>
