@@ -19,6 +19,7 @@ const components = {
 }
 
 const StringArray = ({
+  id,
   itemStr,
   addItemStr,
   setItemStr,
@@ -127,6 +128,7 @@ const StringArray = ({
         component={RefCreatableSelect}
         selectRef={selectRef}
         components={components}
+        inputId={id}
         inputValue={itemStr}
         isMulti
         isClearable={false}
@@ -141,16 +143,17 @@ const StringArray = ({
         attributes={{ placeholder: `${translationsRoot}.placeholder` }}
       />
       <ErrorAndButtonContainer>
-        <ArrayValidationError>{validationError}</ArrayValidationError>
         <AddNewButton type="button" onClick={handleAddNew} disabled={readonly}>
           <Translate content={`${translationsRoot}.addButton`} />
         </AddNewButton>
+        <ArrayValidationError>{validationError}</ArrayValidationError>
       </ErrorAndButtonContainer>
     </>
   )
 }
 
 StringArray.propTypes = {
+  id: PropTypes.string,
   itemStr: PropTypes.string.isRequired,
   addItemStr: PropTypes.func.isRequired,
   setItemStr: PropTypes.func.isRequired,
@@ -166,6 +169,7 @@ StringArray.propTypes = {
 }
 
 StringArray.defaultProps = {
+  id: undefined,
   itemSchema: null,
   schema: null,
   addWithComma: false,
@@ -186,13 +190,7 @@ const ArrayValidationError = styled(ValidationError)`
 `
 
 const ErrorAndButtonContainer = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  ${AddNewButton} {
-    margin-left: auto;
-    flex-shrink: 0;
-  }
+  margin-top: 0.75rem;
 `
 
 export default observer(StringArray)

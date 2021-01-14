@@ -1,15 +1,24 @@
 import React, { useState } from 'react'
 import Translate from 'react-translate-component'
 
-import TranslationsTab from '../../../general/input/translationTab'
+import TranslationTab from '../../../general/input/translationTab'
 import DescriptionFieldInput from './descriptionFieldInput'
 import DescriptionFieldTextField from './descriptionFieldTextField'
+import { useStores } from '../../../utils/stores'
 
 const DescriptionField = () => {
-  const [activeLang, setActiveLang] = useState('fi')
+  const {
+    Locale: { getMatchingLang },
+    Qvain: {
+      Title: { value: titleValue },
+      Description: { value: descriptionValue },
+    },
+  } = useStores()
+
+  const [activeLang, setActiveLang] = useState(getMatchingLang([titleValue, descriptionValue]))
 
   return (
-    <TranslationsTab language={activeLang} setLanguage={setActiveLang}>
+    <TranslationTab language={activeLang} setLanguage={setActiveLang}>
       <DescriptionFieldInput propName="title" fieldName="Title" activeLang={activeLang} />
       <DescriptionFieldTextField
         propName="description"
@@ -17,7 +26,7 @@ const DescriptionField = () => {
         activeLang={activeLang}
       />
       <Translate component="div" content="qvain.description.description.instructions" />
-    </TranslationsTab>
+    </TranslationTab>
   )
 }
 
