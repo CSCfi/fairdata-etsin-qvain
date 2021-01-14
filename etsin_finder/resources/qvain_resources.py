@@ -12,7 +12,6 @@ from flask import request
 from flask_restful import reqparse, Resource
 
 from etsin_finder.auth import authentication
-from etsin_finder.services import qvain_service
 from etsin_finder.log import log
 
 from etsin_finder.utils.utils import \
@@ -58,7 +57,8 @@ class ProjectFiles(Resource):
         # Return data only if user is a member of the project
         user_ida_projects = authentication.get_user_ida_projects() or []
         if pid in user_ida_projects:
-            project_dir_obj = qvain_service.get_directory_for_project(pid)
+            service = MetaxQvainAPIService()
+            project_dir_obj = service.get_directory_for_project(pid)
         else:
             project_dir_obj = None
 
@@ -162,7 +162,8 @@ class DirectoryFiles(Resource):
         if file_fields:
             params['file_fields'] = file_fields
 
-        dir_obj = qvain_service.get_directory(dir_id, params)
+        service = MetaxQvainAPIService()
+        dir_obj = service.get_directory(dir_id, params)
 
         # Return data only if user has access to project
         user_ida_projects = authentication.get_user_ida_projects() or []
@@ -294,7 +295,8 @@ class QvainDatasets(Resource):
         no_pagination = args.get('no_pagination', None)
 
         user_id = authentication.get_user_csc_name()
-        result = qvain_service.get_datasets_for_user(user_id, limit, offset, no_pagination)
+        service = MetaxQvainAPIService()
+        result = service.get_datasets_for_user(user_id, limit, offset, no_pagination)
         if result:
             # Limit the amount of items to be sent to the frontend
             if 'results' in result:
