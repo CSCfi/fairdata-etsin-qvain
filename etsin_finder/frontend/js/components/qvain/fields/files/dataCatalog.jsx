@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import Select from 'react-select'
+import Select, { components } from 'react-select'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
@@ -13,6 +13,12 @@ import etsinTheme from '../../../../styles/theme'
 import DoiSelection from './doiSelection'
 import Tooltip from '../../../general/tooltipHover'
 import { useStores } from '../../utils/stores'
+
+const RequiredInput = props => <components.Input required {...props} />
+
+const customComponents = {
+  Input: RequiredInput,
+}
 
 const DataCatalog = () => {
   const {
@@ -81,6 +87,7 @@ const DataCatalog = () => {
       <Translate component="p" content="qvain.files.dataCatalog.explanation" />
       <Translate
         component={Select}
+        components={customComponents}
         inputId="dataCatalogSelect"
         name="dataCatalog"
         value={catalogSelectValue}

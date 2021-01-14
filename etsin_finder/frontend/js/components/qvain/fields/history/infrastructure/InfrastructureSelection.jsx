@@ -12,6 +12,7 @@ const InfrastructureSelection = () => {
   } = useStores()
   return (
     <Select
+      inputId="infrastructure-select"
       name="infrastructure"
       getter={storage}
       setter={set}

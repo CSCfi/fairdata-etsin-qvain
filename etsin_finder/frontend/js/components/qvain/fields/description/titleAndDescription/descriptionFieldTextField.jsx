@@ -61,6 +61,7 @@ const DescriptionFieldTextField = ({ propName, fieldName, activeLang }) => {
         onChange={handleChange}
         onBlur={handleBlur}
         attributes={{ placeholder: getPlaceholder() }}
+        required
       />
       {error && (
         <Translate component={ValidationError} content={`qvain.description.error.${propName}`} />
