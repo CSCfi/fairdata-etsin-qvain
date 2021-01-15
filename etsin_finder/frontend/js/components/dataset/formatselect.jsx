@@ -169,7 +169,7 @@ export default class FormatSelect extends Component {
                 ) : (
                   ''
                 )}
-                {single.label}
+                <Translate content={`dataset.datasetAsFile.${single.value}`} />
               </ListItem>
             ))}
           </ListItems>
