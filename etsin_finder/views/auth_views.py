@@ -24,7 +24,7 @@ from etsin_finder.views.index_views import _render_index_template
 
 auth_views = Blueprint('auth_views', __name__)
 
-@auth_views.route('/sso/etsin')
+@auth_views.route('/login/etsin')
 def login_etsin():
     """Endpoint which the frontend calls when wanting to perform a login as Etsin
 
