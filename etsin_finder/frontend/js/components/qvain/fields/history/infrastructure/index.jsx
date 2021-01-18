@@ -8,7 +8,7 @@ const brief = {
 }
 
 export default () => (
-  <Field brief={brief}>
+  <Field brief={brief} labelFor="infrastructure-select">
     <InfrastructureSelection />
   </Field>
 )
