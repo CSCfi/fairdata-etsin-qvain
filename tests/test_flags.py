@@ -11,7 +11,7 @@ import json
 import pytest
 import requests
 
-from etsin_finder.flags import set_flags, set_supported_flags, validate_flags, flag_enabled
+from etsin_finder.utils.flags import set_flags, set_supported_flags, validate_flags, flag_enabled
 from .basetest import BaseTest
 
 supported_flags = {
