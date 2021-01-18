@@ -1,3 +1,4 @@
+import axios from 'axios'
 import Access from '../../../js/stores/view/access'
 import auth from '../../../js/stores/domain/auth'
 import { ACCESS_TYPE_URL } from '../../../js/utils/constants'

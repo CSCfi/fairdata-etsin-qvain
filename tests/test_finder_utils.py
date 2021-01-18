@@ -8,7 +8,7 @@
 """Basic app tests"""
 
 from .basetest import BaseTest
-from etsin_finder.utils import datetime_to_header
+from etsin_finder.utils.utils import datetime_to_header
 
 
 class TestFinderUtils(BaseTest):
