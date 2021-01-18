@@ -12,7 +12,7 @@ import requests
 from requests_mock import ANY
 
 from .basetest import BaseTest
-from etsin_finder.request_utils import get_request_url, make_request
+from etsin_finder.utils.request_utils import get_request_url, make_request
 
 class TestMakeRequest(BaseTest):
     """Tests for request_utils functions"""

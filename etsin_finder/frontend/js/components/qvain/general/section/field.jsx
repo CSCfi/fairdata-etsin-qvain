@@ -5,14 +5,14 @@ import Translate from 'react-translate-component'
 import Card from '../card'
 import { ExpandCollapse } from './expand'
 
-const Field = ({ brief, children }) => {
+const Field = ({ brief, labelFor, children }) => {
   const [expanded, setExpanded] = useState(false)
 
   return expanded ? (
     <FieldContainerExpanded>
       <FieldHeaderExpanded onClick={() => setExpanded(false)}>
         <ExpandCollapse isExpanded={expanded} />
-        <Translate tabIndex="0" content={brief.title} />
+        <Translate tabIndex="0" component="label" content={brief.title} htmlFor={labelFor} />
       </FieldHeaderExpanded>
       <Translate component="p" content={brief.description} />
       {children}
@@ -47,6 +47,7 @@ const FieldContainerExpanded = styled(Card)``
 Field.propTypes = {
   children: PropTypes.object.isRequired,
   brief: PropTypes.object,
+  labelFor: PropTypes.string,
 }
 
 Field.defaultProps = {
@@ -54,6 +55,7 @@ Field.defaultProps = {
     title: '',
     description: '',
   },
+  labelFor: undefined,
 }
 
 export default Field

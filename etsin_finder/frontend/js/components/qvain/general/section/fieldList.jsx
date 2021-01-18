@@ -4,17 +4,22 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import { ButtonGroup, ButtonLabel, EditButton, DeleteButton, ButtonContainer } from '../buttons'
+import { useStores } from '../../utils/stores'
 
 const FieldList = ({ Field, lang, translationsRoot, disableNoItemsText }) => {
+  const {
+    Locale: { getValueTranslation },
+  } = useStores()
   const { remove, edit, storage, readonly } = Field
 
   if (!storage.length) {
     if (disableNoItemsText) return null
     return <Translate component="div" content={`${translationsRoot}.noItems`} />
   }
+
   const Elements = storage.map(item => (
     <FieldListContainer key={item.uiid}>
-      <Label>{item.name[lang] || item.name.und || item.name}</Label>
+      <Label>{getValueTranslation(item.name, lang)}</Label>
       <ButtonContainer>
         <Translate
           component={EditButton}
