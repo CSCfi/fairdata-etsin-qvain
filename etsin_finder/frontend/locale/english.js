@@ -69,7 +69,9 @@ const english = {
       plrl: 'Contributors',
       snglr: 'Contributor',
     },
+    copy: 'Copy',
     copyToClipboard: 'Copy to clipboard',
+    copyToClipboardSuccess: 'Copied identifier to clipboard',
     creator: {
       plrl: 'Creators',
       snglr: 'Creator',
@@ -80,6 +82,9 @@ const english = {
       open: 'Download dataset metadata',
       infoText:
         'Datacite without validation: The dataset is shown in Datacite Format but without validation; mandatory fields might be missing. Dataset does not necessarily meet all Datacite requirements.',
+      datacite: 'In Datacite datamodel (XML)',
+      fairdata_datacite: 'In Datacite datamodel without validation (XML)',
+      metax: 'In Metax datamodel (JSON)'
     },
     draftInfo: {
       draft: 'This dataset is a draft. Only the creator of the dataset can view it.',
@@ -631,7 +636,8 @@ const english = {
       },
       subjectHeadings: {
         title: 'Subject Headings',
-        infoText: 'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
+        infoText:
+          'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
         placeholder: 'Type to search for available options',
         help:
           'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',

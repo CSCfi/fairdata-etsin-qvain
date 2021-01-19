@@ -9,7 +9,7 @@
  */
 
 import axios from 'axios'
-import { action, makeObservable, observable, extendObservable, computed, toJS, runInAction, when } from 'mobx'
+import { action, makeObservable, observable, extendObservable, computed, runInAction, when } from 'mobx'
 
 
 //  Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'
@@ -42,13 +42,16 @@ class Flags {
       })
 
       // Apply existing overrides starting from shortest paths
-      const overridesList = Object.entries(JSON.parse(localStorage.getItem('flagOverrides')) || {})
-      overridesList.sort(([pathA], [pathB]) => pathA.split('.').length - pathB.split('.').length)
-      overridesList.forEach(([path, value]) => this.setOverride(path, value))
+      window.applyOverrides = () => {
+        const overridesList = Object.entries(JSON.parse(localStorage.getItem('flagOverrides')) || {})
+        overridesList.sort(([pathA], [pathB]) => pathA.split('.').length - pathB.split('.').length)
+        overridesList.forEach(([path, value]) => this.setOverride(path, value))
+      }
+      window.applyOverrides()
 
       window.flagEnabled = this.flagEnabled
 
-      window.getFlags = () => toJS(this.activeFlags)
+      window.getFlags = () => JSON.parse(JSON.stringify(this.activeFlags))
 
       window.setFlag = action((flagPath, value) => {
         if (this.supportedFlags && !this.validateFlagPath(flagPath)) {
@@ -143,13 +146,23 @@ class Flags {
 
   @action setFlags(flags) {
     this.flags = flags
+    if (process.env.NODE_ENV !== 'production' && this.overrides && window.applyOverrides) {
+      window.applyOverrides()
+    }
   }
 
   @action setOverride(path, value) {
     this.overrides[path] = value
-
-    // child items will use value from parent
     const pathPrefix = `${path}.`
+
+    // replace child override values with parent
+    for (const flagPath of Object.keys(this.overrides)) {
+      if (flagPath.startsWith(pathPrefix)) {
+        this.overrides[flagPath] = undefined
+      }
+    }
+
+    // replace child flag values with override
     for (const flagPath of Object.keys(this.flags)) {
       if (flagPath.startsWith(pathPrefix)) {
         this.overrides[flagPath] = undefined

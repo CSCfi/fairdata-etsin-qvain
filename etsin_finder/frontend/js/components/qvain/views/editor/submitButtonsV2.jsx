@@ -7,7 +7,7 @@ import { useStores } from '../../utils/stores'
 import SubmitButton from './submitButton.styled'
 import TooltipHoverOnSave from '../../general/header/tooltipHoverOnSave'
 
-export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history }) => {
+export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history, idSuffix }) => {
   const {
     Qvain: {
       Submit: {
@@ -53,7 +53,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history 
           onMouseLeave={() => setDraftButtonHover(false)}
         >
           <SubmitButton
-            id="draft-btn"
+            id={`draft-btn${idSuffix}`}
             disabled={disabled || isDraftButtonDisabled}
             onClick={submitDraft}
           >
@@ -75,7 +75,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history 
           }}
         >
           <SubmitButton
-            id="publish-btn"
+            id={`publish-btn${idSuffix}`}
             disabled={disabled || isPublishButtonDisabled}
             onClick={submitPublish}
           >
@@ -89,10 +89,16 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history 
 }
 
 SubmitButtonsV2.propTypes = {
-  submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }).isRequired,
+  submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }),
   disabled: PropTypes.bool.isRequired,
   doiModal: PropTypes.node.isRequired,
   history: PropTypes.object.isRequired,
+  idSuffix: PropTypes.string,
+}
+
+SubmitButtonsV2.defaultProps = {
+  submitButtonsRef: null,
+  idSuffix: '',
 }
 
 const WrapperDivForHovering = styled.div`

@@ -21,7 +21,13 @@ export class SubmitButtons extends Component {
     history: PropTypes.object.isRequired,
     handleSubmitError: PropTypes.func.isRequired,
     handleSubmitResponse: PropTypes.func.isRequired,
-    submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }).isRequired,
+    submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }),
+    idSuffix: PropTypes.string,
+  }
+
+  static defaultProps = {
+    submitButtonsRef: null,
+    idSuffix: '',
   }
 
   state = {
@@ -125,7 +131,7 @@ export class SubmitButtons extends Component {
   }
 
   render() {
-    const { Stores, submitButtonsRef } = this.props
+    const { Stores, submitButtonsRef, idSuffix } = this.props
     const { readonly } = Stores.Qvain
     const disabled = readonly || this.state.datasetLoading
     const doiModal = (
@@ -153,6 +159,7 @@ export class SubmitButtons extends Component {
     const props = {
       ...propsBase,
       history: this.props.history,
+      idSuffix,
     }
 
     return (

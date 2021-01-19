@@ -69,7 +69,9 @@ const finnish = {
       plrl: 'Muut tekijät',
       snglr: 'Muu tekijä',
     },
+    copy: 'Kopioi',
     copyToClipboard: 'Kopioi leikepöydälle',
+    copyToClipboardSuccess: 'Tunniste kopioitu leikepöydälle',
     creator: {
       plrl: 'Tekijät',
       snglr: 'Tekijä',
@@ -77,10 +79,13 @@ const finnish = {
     curator: 'Kuraattori',
     data_location: 'Mene haravoituun sijaintiin',
     datasetAsFile: {
-      open: 'Lataa aineiston metatieto',
+      open: 'Lataa aineiston metatiedot',
       infoText:
         'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
-    },
+      datacite: 'Datacite tietomallissa (XML)',
+      fairdata_datacite: 'Ei validoituna Datacite tietomallissa (XML)',
+      metax: 'Metax tietomallissa (JSON)'
+      },
     draftInfo: {
       draft: 'Tämä aineisto on luonnos ja näkyy ainoastaan aineiston luojalle.',
       changes:
@@ -632,7 +637,8 @@ const finnish = {
       },
       subjectHeadings: {
         title: 'Asiasanat',
-        infoText: 'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
+        infoText:
+          'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
         placeholder: 'Hae vaihtoehtoja',
         help:
           'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',

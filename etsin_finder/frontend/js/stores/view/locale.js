@@ -84,6 +84,43 @@ class Locale {
       this.setLang(getInitialLanguage(), false)
     }
   }
+
+  getMatchingLang = (values) => {
+    const defaultLang = this.lang
+    for (const value of values.filter(v => v)) {
+      if (value[defaultLang]) {
+        return defaultLang
+      }
+      for (const lang of this.languages) {
+        if (value[lang]) {
+          return lang
+        }
+      }
+    }
+    return defaultLang
+  }
+
+  getValueTranslation = (value, lang) => {
+    // Get a translation from a multi-language string object, use supplied language by default
+    if (value[lang]) {
+      return value[lang]
+    }
+    for (const l of this.languages) {
+      if (value[l]) {
+        return value[l]
+      }
+    }
+    for (const translation of Object.values(value)) {
+      if (translation) {
+        return translation
+      }
+    }
+    return ''
+  }
+
+  @computed get langTabOrder() {
+    return [this.lang, ...this.languages.filter(l => l !== this.lang)]
+  }
 }
 
 export default new Locale()

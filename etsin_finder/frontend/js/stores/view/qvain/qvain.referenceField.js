@@ -25,7 +25,7 @@ class ReferenceField {
 
   @action
   add = item => {
-    this.changed = true
+    this.Parent.setChanged(true)
     this.storage.replace([...this.storage, item])
   }
 
