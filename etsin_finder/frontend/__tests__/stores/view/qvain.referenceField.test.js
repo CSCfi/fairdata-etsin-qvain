@@ -93,8 +93,8 @@ describe('ReferenceField', () => {
         referenceField.itemStr.should.be.string(testStr)
       })
 
-      test('setChanged should not be called', () => {
-        expect(mockStores.setChanged).not.toHaveBeenCalled()
+      test('setChanged should be called with true', () => {
+        expect(mockStores.setChanged).toHaveBeenCalledWith(true)
       })
     })
 
@@ -106,10 +106,6 @@ describe('ReferenceField', () => {
 
       test('itemStr should set to empty string', () => {
         referenceField.itemStr.should.be.string('')
-      })
-
-      test('setChanged should not be called', () => {
-        expect(mockStores.setChanged).not.toHaveBeenCalled()
       })
     })
 

@@ -33,8 +33,9 @@ import {
 } from '../../../js/components/qvain/utils/formValidation'
 const realQvainFormSchema = jest.requireActual('../../../js/components/qvain/utils/formValidation')
   .qvainFormSchema
-const realQvainFormSchemaDraft = jest.requireActual('../js/components/qvain/utils/formValidation')
-  .qvainFormSchemaDraft
+const realQvainFormSchemaDraft = jest.requireActual(
+  '../../../js/components/qvain/utils/formValidation'
+).qvainFormSchemaDraft
 
 jest.mock('axios')
 
