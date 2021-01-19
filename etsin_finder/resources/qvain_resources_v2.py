@@ -18,9 +18,8 @@ from etsin_finder.utils.utils import (
     slice_array_on_limit,
     datetime_to_header
 )
-
 from etsin_finder.schemas.qvain_dataset_schema_v2 import (
-    DatasetValidationSchema,
+    validate,
     FileActionsValidationSchema,
 )
 from etsin_finder.utils.qvain_utils_v2 import (
