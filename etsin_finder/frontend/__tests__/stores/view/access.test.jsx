@@ -3,11 +3,10 @@ import Access from '../../../js/stores/view/access'
 import auth from '../../../js/stores/domain/auth'
 import { ACCESS_TYPE_URL } from '../../../js/utils/constants'
 
-// Replaces getting from metax test:
-// axios.get('https://metax-test.csc.fi/rest/datasets/13').then(response => {
-//   accessRights = response.data.research_dataset.access_rights
-//   done()
-// })
+jest.mock('../../../js/stores/domain/auth', () => ({
+  userLogged: false,
+}))
+
 const accessRights = {
   license: [
     {
