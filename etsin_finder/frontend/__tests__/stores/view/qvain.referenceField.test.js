@@ -12,6 +12,7 @@ const expectedToBackendList = [testStr, testStr2]
 describe('ReferenceField', () => {
   let referenceField
   let mockStores
+
   describe('default setup & reset', () => {
     beforeEach(() => {
       mockStores = { setChanged: jest.fn(), readonly: readonlyValue }
