@@ -54,21 +54,11 @@ export class SubmitButtons extends Component {
     history.push('/qvain')
   }
 
-  goToDatasets = identifier => {
-    // go to datasets view and highlight published dataset
-    const { history } = this.props
-    const { setPublishedDataset } = this.props.Stores.QvainDatasets
-    setPublishedDataset(identifier)
-    history.push('/qvain')
-  }
-
   submit = async submitFunction => {
     const { Stores } = this.props
-    const { addUnsavedMultiValueFields } = Stores.Qvain
-    const isProvenanceActorsOk = await Stores.Qvain.checkProvenanceActors()
+    const isProvenanceActorsOk = await Stores.Qvain.Actors.checkProvenanceActors()
     if (!isProvenanceActorsOk) return
 
-    addUnsavedMultiValueFields()
     if (!this.checkOtherIdentifiers()) {
       return
     }

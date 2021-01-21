@@ -49,25 +49,6 @@ export default TooltipHoverOnSave
 const Wrapper = styled.span`
   position: relative;
 `
-/*
-To do: CSS magic
-const TooltipDown = styled.div`
-  z-index: 10;
-  text-align: left;
-  text-align: start;
-  text-transform: none;
-  white-space: normal;
-  word-break: normal;
-  word-spacing: normal;
-  word-wrap: normal;
-  position: absolute;
-  color: ${props => props.theme.color.white}
-  border-radius: 5px;
-  display: inline-block;
-  margin-top: -5px;
-  left: -160px;
-  top: 0px;
-` */
 
 const TooltipDownV2 = styled.div`
   z-index: 10;

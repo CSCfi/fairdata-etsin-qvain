@@ -116,7 +116,6 @@ const createMockQvain = settings => ({
     metadataToMetax: jest.fn(() => ({ files: [], directories: [] })),
   },
   Actors: { checkProvenanceActors: jest.fn(() => true) },
-  addUnsavedMultiValueFields: jest.fn(),
   OtherIdentifiers: { cleanupBeforeBackend: jest.fn(() => true) },
   updateFiles: jest.fn(),
   editDataset: jest.fn(),

@@ -30,7 +30,10 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
   useEffect(() => {
     prevalidate()
     if (original?.identifier) {
-      history.replace(getQvainUrl(`/dataset/${original.identifier}`))
+      const path = `/dataset/${original.identifier}`
+      if (history.location.pathname !== path) {
+        history.replace(getQvainUrl(path))
+      }
     }
   }, [original, getQvainUrl, history, prevalidate])
 
@@ -47,7 +50,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
         description="qvain.validationMessages.draft.description"
       >
         <WrapperDivForHovering
-          onMouseOver={() => {
+          onMouseEnter={() => {
             setDraftButtonHover(true)
           }}
           onMouseLeave={() => setDraftButtonHover(false)}
@@ -67,7 +70,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
         description="qvain.validationMessages.publish.description"
       >
         <WrapperDivForHovering
-          onMouseOver={() => {
+          onMouseEnter={() => {
             setPublishButtonHover(true)
           }}
           onMouseLeave={() => {

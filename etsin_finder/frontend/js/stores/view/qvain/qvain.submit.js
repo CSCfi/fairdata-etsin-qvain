@@ -350,8 +350,6 @@ class Submit {
     this.setDraftValidationError([])
     const dataset = this.prepareDataset()
 
-    // this.Qvain.OtherIdentifiers.validateStr()
-
     try {
       await qvainFormSchema.validate(dataset, { abortEarly: false })
     } catch (error) {

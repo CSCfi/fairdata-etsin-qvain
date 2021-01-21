@@ -113,7 +113,6 @@ class QvainDatasets(Resource):
 
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
-        # self.validationSchema = DatasetValidationSchema()
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('draft', type=bool, required=False)
 
@@ -210,10 +209,6 @@ class QvainDatasets(Resource):
 
 class QvainDataset(Resource):
     """Single Qvain dataset."""
-
-    def __init__(self):
-        """Setup required utils for dataset metadata handling"""
-        # self.validationSchema = DatasetValidationSchema()
 
     @log_request
     def get(self, cr_id):

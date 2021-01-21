@@ -43,8 +43,10 @@ class ReferenceField {
 
   @action
   addItemStr = () => {
-    this.add(this.itemStr)
-    this.removeItemStr()
+    if (this.itemStr) {
+      this.add(this.itemStr)
+      this.removeItemStr()
+    }
   }
 
   @action

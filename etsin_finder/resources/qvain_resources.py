@@ -347,7 +347,6 @@ class QvainDatasets(Resource):
 
         metax_ready_data = data_to_metax(data, metadata_provider_org,
                                          metadata_provider_user)
-        log.debug(f'in post: metax_ready_data: {metax_ready_data}')
         params = {
             "access_granter": get_encoded_access_granter()
         }

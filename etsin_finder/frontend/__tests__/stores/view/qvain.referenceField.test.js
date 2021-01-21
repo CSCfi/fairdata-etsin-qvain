@@ -110,6 +110,29 @@ describe('ReferenceField', () => {
       })
     })
 
+    describe('given non-empty string, when calling addItemStr', () => {
+      const testStr = 'test'
+      beforeEach(() => {
+        referenceField.setItemStr(testStr)
+        referenceField.addItemStr()
+      })
+
+      test('should add string to storage', () => {
+        referenceField.storage.should.include(testStr)
+      })
+    })
+
+    describe('given empty string, when calling addItemStr', () => {
+      beforeEach(() => {
+        referenceField.setItemStr('')
+        referenceField.addItemStr()
+      })
+
+      test('should add string to storage', () => {
+        referenceField.storage.should.eql([])
+      })
+    })
+
     describe('when calling remove', () => {
       beforeEach(() => {
         referenceField.set([testStr, testStr2])
