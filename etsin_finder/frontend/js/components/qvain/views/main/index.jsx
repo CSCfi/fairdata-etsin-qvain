@@ -161,6 +161,11 @@ export class Qvain extends Component {
     setError(null)
     this.setState({
       response: null,
+      submitted: false,
+      datasetLoading: false,
+      datasetError: false,
+      datasetErrorTitle: null,
+      datasetErrorDetails: null,
     })
   }
 
@@ -176,6 +181,7 @@ export class Qvain extends Component {
     if (err.errors) {
       // Validation error
       this.setState({
+        datasetLoading: false,
         submitted: true,
         response: err.errors,
       })
