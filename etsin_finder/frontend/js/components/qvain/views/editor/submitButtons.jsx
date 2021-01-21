@@ -59,10 +59,6 @@ export class SubmitButtons extends Component {
     const isProvenanceActorsOk = await Stores.Qvain.Actors.checkProvenanceActors()
     if (!isProvenanceActorsOk) return
 
-    if (!this.checkOtherIdentifiers()) {
-      return
-    }
-
     this.closeUseDoiInformation()
     this.setLoading(true)
     submitFunction()
