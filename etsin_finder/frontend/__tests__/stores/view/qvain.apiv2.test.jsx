@@ -440,12 +440,12 @@ describe('publish new dataset', () => {
     Submit = new SubmitClass(mockQvain)
   })
 
-  const expectNoError = async dataset => {
+  const expectNoError = async (dataset, cb) => {
     handleSubmitToBackend.mockReturnValue(dataset)
     qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
 
     try {
-      await Submit.submitPublish()
+      await Submit.submitPublish(cb)
     } finally {
       expect(Submit.error).toBe(undefined)
     }
@@ -460,6 +460,13 @@ describe('publish new dataset', () => {
 
   afterEach(async () => {
     jest.resetAllMocks()
+  })
+
+  test('should call given callback', async () => {
+    const dataset = generateDefaultDatasetForPublish()
+    const mockCallback = jest.fn()
+    await expectNoError(dataset, mockCallback)
+    expect(mockCallback).toHaveBeenCalledTimes(1)
   })
 
   test('should call axios.post twice', async () => {

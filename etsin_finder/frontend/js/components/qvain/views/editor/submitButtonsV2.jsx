@@ -22,6 +22,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
       original,
     },
     Env: { getQvainUrl },
+    QvainDatasets: { setPublishedDataset },
   } = useStores()
 
   const [draftButtonHover, setDraftButtonHover] = useState(false)
@@ -40,6 +41,12 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
   const prepareErrors = (error = {}) => {
     const { errors = [] } = error
     return errors.map(err => `${err}\n`)
+  }
+
+  const goToDatasetsCallBack = identifier => {
+    // go to datasets view and highlight published dataset
+    setPublishedDataset(identifier)
+    history.push('/qvain')
   }
 
   return (
@@ -80,7 +87,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
           <SubmitButton
             id={`publish-btn${idSuffix}`}
             disabled={disabled || isPublishButtonDisabled}
-            onClick={submitPublish}
+            onClick={() => submitPublish(goToDatasetsCallBack)}
           >
             <Translate content="qvain.submit" />
           </SubmitButton>

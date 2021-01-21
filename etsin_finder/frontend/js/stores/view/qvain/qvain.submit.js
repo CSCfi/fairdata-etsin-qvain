@@ -109,24 +109,25 @@ class Submit {
     }
   }
 
-  @action submitPublish = async () => {
+  @action submitPublish = async cb => {
     switch (this.submitType) {
       case DATASET_STATE.NEW:
         await this.exec(this.publishNewDataset)
-        return
+        break
       case DATASET_STATE.DRAFT:
         await this.exec(this.publishDraft)
-        return
+        break
       case DATASET_STATE.UNPUBLISHED_DRAFT:
         await this.exec(this.mergeDraft)
-        return
+        break
       case DATASET_STATE.PUBLISHED:
         await this.exec(this.republish)
-        return
+        break
       default:
         console.error('Unknown submit status')
         throw new Error('Unknown submit status')
     }
+    if (this.response?.identifier && cb) cb(this.response.identifier)
   }
 
   @action exec = async (submitFunction, schema = qvainFormSchema) => {
@@ -230,8 +231,8 @@ class Submit {
     const res = await this.createNewDraft(dataset)
     // Publishes an unpublished draft dataset
     const url = urls.v2.rpc.publishDataset()
-    const resp = await axios.post(url, null, { params: { identifier: res.data.identifier } })
-    return resp
+    await axios.post(url, null, { params: { identifier: res.data.identifier } })
+    return res
   }
 
   publishDraft = async dataset => {
@@ -361,7 +362,7 @@ class Submit {
     } catch (error) {
       this.setDraftValidationError(error)
     }
-  }, 500)
+  }, 200)
 }
 
 export default Submit
