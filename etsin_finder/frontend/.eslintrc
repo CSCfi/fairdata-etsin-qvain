@@ -1,6 +1,11 @@
 {
-  "parser": "babel-eslint",
-  "plugins": ["react", "import", "react-hooks"],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "babelOptions": {
+      "configFile": "./.babelrc"
+    }
+  },
+  "plugins": ["react", "import", "react-hooks", "@babel"],
   "env": {
     "browser": true,
     "jest": true

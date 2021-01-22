@@ -12,10 +12,10 @@ import os
 import pytest
 import logging
 
-from etsin_finder.flags import initialize_supported_flags
-from etsin_finder.app_config import get_app_config
-from .utils import get_test_catalog_record
+from etsin_finder.utils.flags import initialize_supported_flags
+from etsin_finder.app import create_app
 
+from .utils import get_test_catalog_record
 
 class BaseTest():
     """Use as base class for any tests. Contains fixtures and monkeypatched methods"""
@@ -23,17 +23,12 @@ class BaseTest():
     @pytest.fixture
     def app(self):
         """
-        App fixture that checks that app is in testing mode
-
-        To enable testing mode, set the TESTING environment variable.
+        Create app in testing mode
 
         :return:
         """
-        from etsin_finder.finder import app
-        assert app.testing is True
-        app.config.update(get_app_config(True))
-        initialize_supported_flags(app)
-        return app
+        test_app = create_app(True)
+        return test_app
 
     @pytest.fixture
     def authd_client(self, app, monkeypatch):
@@ -44,7 +39,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import authentication
+        from etsin_finder.auth import authentication
         monkeypatch.setattr(authentication, 'is_authenticated', lambda: True)
         monkeypatch.setattr(authentication, 'is_authenticated_CSC_user', lambda: True)
 
@@ -68,7 +63,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import authentication
+        from etsin_finder.auth import authentication
         monkeypatch.setattr(authentication, 'is_authenticated', lambda: False)
         monkeypatch.setattr(authentication, 'is_authenticated_CSC_user', lambda: False)
 
@@ -83,7 +78,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: None)
 
     @pytest.fixture
@@ -94,7 +89,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('open'))
 
     @pytest.fixture
@@ -105,7 +100,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('login'))
 
     @pytest.fixture
@@ -116,7 +111,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('permit'))
 
     @pytest.fixture
@@ -127,7 +122,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('embargo', True))
 
     @pytest.fixture
@@ -138,7 +133,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('embargo', False))
 
     @pytest.fixture
@@ -149,7 +144,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('restricted'))
 
     @pytest.fixture
@@ -160,7 +155,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import rems_service
+        from etsin_finder.services import rems_service
         monkeypatch.setattr(rems_service, 'get_user_rems_permission_for_catalog_record', lambda x, y: True)
 
     @pytest.fixture
@@ -171,7 +166,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import rems_service
+        from etsin_finder.services import rems_service
         monkeypatch.setattr(rems_service, 'get_user_rems_permission_for_catalog_record', lambda x, y: False)
 
     if __name__ == '__main__':
