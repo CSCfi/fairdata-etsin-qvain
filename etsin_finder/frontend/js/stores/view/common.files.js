@@ -17,6 +17,8 @@ class Files {
 
   @observable datasetIdentifier = null
 
+  @observable draftOfHasProject = null
+
   @observable root = null
 
   @observable selectedProject = undefined
@@ -29,12 +31,15 @@ class Files {
 
   @observable loadingMetadata = null
 
+  @observable loadingDraftOfProjects = null
+
   cache = {} // used for storing data for items that haven't been fully loaded yet
 
   @observable originalMetadata = {}
 
   @action reset() {
     this.datasetIdentifier = null
+    this.draftOfHasProject = null
     this.root = null
     this.selectedProject = undefined
     this.refreshModalDirectory = null
@@ -42,21 +47,26 @@ class Files {
     this.originalMetadata = {}
     this.projectLocked = false
 
-    if (this.loadingProjectInfo && this.loadingProjectInfo.promise) {
+    if (this.loadingProjectInfo?.promise) {
       this.loadingProjectInfo.promise.cancel()
     }
     this.loadingProjectInfo = null
 
-    if (this.loadingMetadata && this.loadingMetadata.promise) {
+    if (this.loadingMetadata?.promise) {
       this.loadingMetadata.promise.cancel()
     }
     this.loadingMetadata = null
 
-    if (this.loadingProjectRoot && this.loadingProjectRoot.promise) {
+    if (this.loadingProjectRoot?.promise) {
       this.loadingProjectRoot.promise.cancel()
     }
     this.loadingProjectRoot = null
     this.promiseManager.reset()
+
+    if (this.loadingDraftOfProjects?.promise) {
+      this.loadingDraftOfProjects.promise.cancel()
+    }
+    this.loadingDraftOfProjects = null
   }
 
   @action loadProjectInfo = async () => {
@@ -192,10 +202,39 @@ class Files {
     }
   }
 
+  @action checkDraftOfProjects = async dataset => {
+    const draftOf = dataset.draft_of?.identifier
+    if (draftOf) {
+      if (this.loadingDraftOfProjects?.promise) {
+        this.loadingDraftOfProjects.promise.cancel()
+      }
+
+      const run = async () => {
+        const { data } = await axios.get(urls.v2.datasetProjects(draftOf))
+        runInAction(() => {
+          this.draftOfHasProject = !!(data && data.length > 0)
+        })
+      }
+      try {
+        this.loadingDraftOfProjects = {
+          identifier: draftOf,
+          promise: run(),
+          error: null,
+          done: false,
+        }
+        await this.loadingDraftOfProjects.promise
+      } catch (err) {
+        runInAction(() => { this.loadingDraftOfProjects.error = err })
+      } finally {
+        runInAction(() => { this.loadingDraftOfProjects = null })
+      }
+    }
+  }
+
   @action openDataset = async dataset => {
     this.reset()
     this.datasetIdentifier = dataset.identifier
-    await Promise.all([this.loadProjectInfo(), this.loadMetadata()])
+    await Promise.all([this.loadProjectInfo(), this.loadMetadata(), this.checkDraftOfProjects(dataset)])
     return this.loadProjectRoot()
   }
 

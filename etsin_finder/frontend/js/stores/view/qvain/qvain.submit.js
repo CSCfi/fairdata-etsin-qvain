@@ -169,7 +169,7 @@ class Submit {
       await this.updateFiles(data.identifier, fileActions, metadataActions)
       setChanged(false)
 
-      if (newCumulativeState != null) {
+      if (newCumulativeState != null && this.Qvain.original) {
         const obj = {
           identifier: this.Qvain.original.identifier,
           cumulative_state: this.Qvain.newCumulativeState,
@@ -181,10 +181,9 @@ class Submit {
 
       if (fileActions || metadataActions || newCumulativeState != null) {
         // Files changed, get updated dataset
-
         const url = urls.v2.dataset(data.identifier)
         const updatedResponse = await axios.get(url)
-        this.Qvain.setOriginal(updatedResponse)
+        this.Qvain.setOriginal(updatedResponse.data)
         await editDataset(updatedResponse.data)
       } else {
         await editDataset(data)
@@ -228,8 +227,8 @@ class Submit {
   }
 
   publishNewDataset = async dataset => {
+    // Publishes a new dataset by creating a draft and publishing it
     const res = await this.createNewDraft(dataset)
-    // Publishes an unpublished draft dataset
     const url = urls.v2.rpc.publishDataset()
     await axios.post(url, null, { params: { identifier: res.data.identifier } })
     return res
