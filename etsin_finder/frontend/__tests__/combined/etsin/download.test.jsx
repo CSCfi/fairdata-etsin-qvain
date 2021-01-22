@@ -213,7 +213,7 @@ describe('Download button actions', () => {
     expect(action.available).toBe(true)
     downloadFile.mockImplementationOnce(() => {})
     action.func()
-    expect(downloadFile.mock.calls).toEqual([[1, '/file']])
+    expect(downloadFile.mock.calls).toEqual([[1, '/file', packages]])
   })
 
   it('allows package download', async () => {
@@ -223,7 +223,7 @@ describe('Download button actions', () => {
     expect(action.available).toBe(true)
     downloadPackage.mockImplementationOnce(() => {})
     action.func()
-    expect(downloadPackage.mock.calls).toEqual([[1, 'success.zip']])
+    expect(downloadPackage.mock.calls).toEqual([[1, 'success.zip', packages]])
   })
 
   it('shows spinner for pending package', async () => {
@@ -256,31 +256,37 @@ describe('Download button actions', () => {
 })
 
 describe('Download functions', () => {
+  const mockPackages = { setError: jest.fn(), clearError: jest.fn() }
+
+  beforeEach(() => {
+    mockPackages.setError.mockReset()
+  })
+
   afterEach(() => {
     document.body.innerHTML = ''
   })
 
   it('downloads file', async () => {
-    await downloadFile(123, '/some/file/path.txt')
+    await downloadFile(123, '/some/file/path.txt', mockPackages)
     const iframes = document.getElementsByTagName('iframe')
     expect(iframes.length).toBe(1)
     expect(iframes[0].getAttribute('src')).toBe('file_dl_url?cr_id=123&file=/some/file/path.txt')
   })
 
   it('downloads package', async () => {
-    await downloadPackage(123, 'package-id')
+    await downloadPackage(123, 'package-id', mockPackages)
     const iframes = document.getElementsByTagName('iframe')
     expect(iframes.length).toBe(1)
     expect(iframes[0].getAttribute('src')).toBe('package_dl_url?cr_id=123&package=package-id')
   })
 
   it('reuses iframe', async () => {
-    await downloadPackage(123, 'package-id')
+    await downloadPackage(123, 'package-id', mockPackages)
     let iframes = document.getElementsByTagName('iframe')
     expect(iframes.length).toBe(1)
     expect(iframes[0].getAttribute('src')).toBe('package_dl_url?cr_id=123&package=package-id')
 
-    await downloadPackage(123, 'package-id-2')
+    await downloadPackage(123, 'package-id-2', mockPackages)
     iframes = document.getElementsByTagName('iframe')
     expect(iframes.length).toBe(1)
     expect(iframes[0].getAttribute('src')).toBe('package_dl_url?cr_id=123&package=package-id-2')
@@ -288,7 +294,8 @@ describe('Download functions', () => {
 
   it('logs error', async () => {
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
-    await downloadPackage(500, 'package-id')
+    await downloadPackage(500, 'package-id', mockPackages)
+    expect(mockPackages.setError.mock.calls.length).toBe(1)
     expect(console.error.mock.calls.length).toBe(1)
   })
 })
