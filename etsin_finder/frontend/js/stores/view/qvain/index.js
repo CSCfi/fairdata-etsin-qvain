@@ -249,14 +249,14 @@ class Qvain extends Resources {
           // Iterate over existing elements from MobX, to assign them a local externalResourceUIId
           remoteResources.indexOf(r),
           r.title,
-          r.access_url ? r.access_url.identifier : undefined,
-          r.download_url ? r.download_url.identifier : undefined,
+          r.access_url ? r.access_url.identifier : '',
+          r.download_url ? r.download_url.identifier : '',
           r.use_category
             ? {
               label: r.use_category.pref_label.en,
               value: r.use_category.identifier,
             }
-            : undefined
+            : null
         )
       )
       this.extResFormOpen = true
