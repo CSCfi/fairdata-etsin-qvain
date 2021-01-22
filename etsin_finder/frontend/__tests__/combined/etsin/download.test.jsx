@@ -161,7 +161,7 @@ describe('Packages', () => {
   })
 
   it('updates package', async () => {
-    const pack = { scope: ['/moro'] }
+    const pack = { scope: ['/moro'], status: 'status' }
     packages.updatePackage('/moro', pack)
     expect(packages.packages['/moro']).toEqual(pack)
   })
