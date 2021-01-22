@@ -12,6 +12,7 @@ const expectedToBackendList = [testStr, testStr2]
 describe('ReferenceField', () => {
   let referenceField
   let mockStores
+
   describe('default setup & reset', () => {
     beforeEach(() => {
       mockStores = { setChanged: jest.fn(), readonly: readonlyValue }
@@ -93,8 +94,8 @@ describe('ReferenceField', () => {
         referenceField.itemStr.should.be.string(testStr)
       })
 
-      test('setChanged should not be called', () => {
-        expect(mockStores.setChanged).not.toHaveBeenCalled()
+      test('setChanged should be called with true', () => {
+        expect(mockStores.setChanged).toHaveBeenCalledWith(true)
       })
     })
 
@@ -107,9 +108,28 @@ describe('ReferenceField', () => {
       test('itemStr should set to empty string', () => {
         referenceField.itemStr.should.be.string('')
       })
+    })
 
-      test('setChanged should not be called', () => {
-        expect(mockStores.setChanged).not.toHaveBeenCalled()
+    describe('given non-empty string, when calling addItemStr', () => {
+      const testStr = 'test'
+      beforeEach(() => {
+        referenceField.setItemStr(testStr)
+        referenceField.addItemStr()
+      })
+
+      test('should add string to storage', () => {
+        referenceField.storage.should.include(testStr)
+      })
+    })
+
+    describe('given empty string, when calling addItemStr', () => {
+      beforeEach(() => {
+        referenceField.setItemStr('')
+        referenceField.addItemStr()
+      })
+
+      test('should add string to storage', () => {
+        referenceField.storage.should.eql([])
       })
     })
 
