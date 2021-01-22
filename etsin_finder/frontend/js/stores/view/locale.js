@@ -20,8 +20,6 @@ const languages = ['en', 'fi']
 
 const getInitialLanguage = () => languages.find(lang => lang === document.documentElement.lang) || languages[0]
 
-const cookieName = process.env.REACT_APP_COOKIE_PREFIX ? `${process.env.REACT_APP_COOKIE_PREFIX}_fd_language` : 'fd_language'
-
 class Locale {
   constructor() {
     makeObservable(this)
@@ -32,6 +30,18 @@ class Locale {
   // get current computed (state changes are tracked) language. Convenience function.
   @computed get lang() {
     return this.currentLang
+  }
+
+  @computed get cookieDomain() {
+    return env.ssoCookieDomain
+  }
+
+  @computed get cookieName() {
+    const prefix = env.ssoPrefix
+    if (prefix) {
+      return `${prefix}_fd_language`
+    }
+    return 'fd_language'
   }
 
   @observable languages = languages
@@ -46,7 +56,7 @@ class Locale {
     moment.locale(lang)
     document.documentElement.lang = this.currentLang
     if (save) {
-      setCookieValue(cookieName, this.currentLang)
+      setCookieValue(this.cookieDomain, this.cookieName, this.currentLang)
     }
   }
 
@@ -77,7 +87,7 @@ class Locale {
   @action
   loadLang = () => {
     /* get language setting from cookie */
-    const storedLang = getCookieValue(cookieName)
+    const storedLang = getCookieValue(this.cookieName)
     if (storedLang) {
       this.setLang(storedLang, false)
     } else {
