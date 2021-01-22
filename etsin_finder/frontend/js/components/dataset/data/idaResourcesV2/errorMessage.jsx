@@ -16,10 +16,9 @@ const ErrorMessage = ({ error, clear }) => {
     return null
   }
 
-  let summaryTranslation = 'dataset.dl.errors.unknownError'
-  if (error.response?.status === 503) {
-    summaryTranslation = 'dataset.dl.errors.serviceUnavailable'
-  }
+  const summaryTranslation = `dataset.dl.errors.${
+    error.response?.status === 503 ? 'unknownError' : 'serviceUnavailable'
+  }`
   const message = `${error.name}: ${error.message}`
   const response = error.request?.responseText
 
