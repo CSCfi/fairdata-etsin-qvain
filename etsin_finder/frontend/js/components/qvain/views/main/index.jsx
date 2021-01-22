@@ -161,6 +161,11 @@ export class Qvain extends Component {
     setError(null)
     this.setState({
       response: null,
+      submitted: false,
+      datasetLoading: false,
+      datasetError: false,
+      datasetErrorTitle: null,
+      datasetErrorDetails: null,
     })
   }
 
@@ -176,6 +181,7 @@ export class Qvain extends Component {
     if (err.errors) {
       // Validation error
       this.setState({
+        datasetLoading: false,
         submitted: true,
         response: err.errors,
       })
@@ -198,6 +204,7 @@ export class Qvain extends Component {
 
   getDatasetProps = () => {
     const { datasetError, haveDataset, datasetErrorDetails, datasetErrorTitle } = this.state
+
     return {
       datasetError,
       haveDataset,
@@ -217,13 +224,14 @@ export class Qvain extends Component {
 
   getStickyHeaderProps = () => {
     const { metaxApiV2 } = this.props.Stores.Env
-    const { error, response: responseV2 } = this.props.Stores.Qvain.Submit
+    const { error, response: responseV2, isLoading } = this.props.Stores.Qvain.Submit
     const { datasetLoading, datasetError, submitted, response } = this.state
+
     return {
-      datasetLoading,
+      datasetLoading: metaxApiV2 ? isLoading : datasetLoading,
       datasetError,
       submitted: metaxApiV2 ? !!error || !!responseV2 : submitted,
-      response: metaxApiV2 ? error?.errors || responseV2 : response,
+      response: metaxApiV2 ? error || responseV2 : response,
       handleSubmitError: this.handleSubmitError,
       handleSubmitResponse: this.handleSubmitResponse,
       clearSubmitResponse: this.clearSubmitResponse,

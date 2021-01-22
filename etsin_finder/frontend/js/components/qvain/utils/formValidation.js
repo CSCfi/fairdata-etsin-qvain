@@ -42,6 +42,25 @@ const descriptionSchema = yup.object().shape({
     .max(50000, translate('qvain.validationMessages.description.max')),
 })
 
+// Validation for draft datasets: description is not .required()
+const descriptionSchemaDraft = yup
+  .object()
+  .shape({
+    fi: yup.mixed().when('en', {
+      is: val => val.length > 0,
+      then: yup
+        .string(translate('qvain.validationMessages.description.string'))
+        .max(50000, translate('qvain.validationMessages.description.max')),
+      otherwise: yup
+        .string(translate('qvain.validationMessages.description.string'))
+        .max(50000, translate('qvain.validationMessages.description.max')),
+    }),
+    en: yup
+      .string(translate('qvain.validationMessages.description.string'))
+      .max(50000, translate('qvain.validationMessages.description.max')),
+  })
+  .nullable()
+
 const keywordsSchema = yup
   .array()
   .of(
@@ -50,6 +69,16 @@ const keywordsSchema = yup
       .max(1000, translate('qvain.validationMessages.keywords.max'))
   )
   .required(translate('qvain.validationMessages.keywords.required'))
+
+// Validation for draft datasets: keywords are not .required()
+const keywordsSchemaDraft = yup
+  .array()
+  .nullable()
+  .of(
+    yup
+      .string(translate('qvain.validationMessages.keywords.string'))
+      .max(1000, translate('qvain.validationMessages.keywords.max'))
+  )
 
 const fieldsOfScienceSchema = yup.array().of(yup.string())
 
@@ -111,6 +140,14 @@ const actorType = yup
   )
   .required(translate('qvain.validationMessages.actors.type.required'))
 
+// Draft actor
+const actorTypeDraft = yup
+  .mixed()
+  .oneOf(
+    [ENTITY_TYPE.PERSON, ENTITY_TYPE.ORGANIZATION],
+    translate('qvain.validationMessages.actors.type.oneOf')
+  )
+
 const actorRolesSchema = yup
   .array()
   .of(
@@ -130,10 +167,32 @@ const actorRolesSchema = yup
   )
   .required(translate('qvain.validationMessages.actors.roles.required'))
 
+const actorRolesSchemaDraft = yup
+  .array()
+  .of(
+    yup
+      .mixed()
+      .oneOf(
+        [
+          ROLE.CREATOR,
+          ROLE.CURATOR,
+          ROLE.PUBLISHER,
+          ROLE.RIGHTS_HOLDER,
+          ROLE.CONTRIBUTOR,
+          ROLE.PROVENANCE,
+        ],
+        translate('qvain.validationMessages.actors.roles.oneOf')
+      )
+  )
+
 const personNameSchema = yup
   .string(translate('qvain.validationMessages.actors.name.string'))
   .max(1000, translate('qvain.validationMessages.actors.name.max'))
   .required(translate('qvain.validationMessages.actors.name.required'))
+
+const personNameSchemaDraft = yup
+  .string(translate('qvain.validationMessages.actors.name.string'))
+  .max(1000, translate('qvain.validationMessages.actors.name.max'))
 
 const personEmailSchema = yup
   .string(translate('qvain.validationMessages.actors.email.string'))
@@ -195,10 +254,17 @@ const actorOrganizationSchema = yup.object().shape({
   }),
 })
 
-// DATA CATALOG
+// Data catalog
 const dataCatalogSchema = yup
   .string()
   .required(translate('qvain.validationMessages.files.dataCatalog.required'))
+  .matches(
+    /urn:nbn:fi:att:data-catalog-(?!dft)/,
+    translate('qvain.validationMessages.files.dataCatalog.wrongType')
+  )
+
+// Data catalog for draft
+const dataCatalogSchemaDraft = yup.string()
 
 // CUMULATIVE STATE
 const cumulativeStateSchema = yup
@@ -345,6 +411,12 @@ const personSchema = yup.object().shape({
   identifier: personIdentifierSchema,
 })
 
+const personSchemaDraft = yup.object().shape({
+  name: personNameSchemaDraft,
+  email: personEmailSchema,
+  identifier: personIdentifierSchema,
+})
+
 const organizationSchema = yup.object().shape({
   name: organizationNameTranslationsSchema,
   identifier: organizationIdentifierSchema,
@@ -363,6 +435,17 @@ const actorSchema = yup.object().shape({
     .min(1, translate('qvain.validationMessages.actors.organization.required'))
     .of(organizationSchema)
     .required(translate('qvain.validationMessages.actors.organization.required')),
+})
+
+const actorSchemaDraft = yup.object().shape({
+  type: actorTypeDraft,
+  roles: actorRolesSchemaDraft,
+  person: yup.object().when('type', {
+    is: ENTITY_TYPE.PERSON,
+    then: personSchemaDraft,
+    otherwise: yup.object().nullable(),
+  }),
+  organizations: yup.array().of(organizationSchema),
 })
 
 const actorsSchema = yup
@@ -389,7 +472,7 @@ const actorsSchema = yup
     }
   )
   .test(
-    'contains-publisher',
+    'is-doi-and-contains-publisher',
     translate('qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher'),
     value => {
       let foundPublisher = false
@@ -406,6 +489,10 @@ const actorsSchema = yup
       return false
     }
   )
+  .required(translate('qvain.validationMessages.actors.requiredActors.atLeastOneActor'))
+
+// Actors schema for draft
+const actorsSchemaDraft = yup.array().of(actorSchemaDraft)
 
 // SPATIAL VALIDATION
 const spatialNameSchema = yup
@@ -456,8 +543,7 @@ const provenanceStartDateSchema = yup
 
 const provenanceEndDateSchema = yup.date().required('qvain.history.provenance.error.endDateMissing')
 
-// ENTIRE FORM VALIDATION
-
+// Entire form validation for normal dataset
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
@@ -481,6 +567,28 @@ const qvainFormSchema = yup.object().shape({
   }),
   actors: actorsSchema,
   dataCatalog: dataCatalogSchema,
+  cumulativeState: cumulativeStateSchema,
+  files: filesSchema,
+  directories: directoriesSchema,
+  useDoi: useDoiSchema,
+})
+
+// Entire form validation for draft
+const qvainFormSchemaDraft = yup.object().shape({
+  title: titleSchema,
+  description: descriptionSchemaDraft,
+  issuedDate: yup.date().nullable(),
+  fieldOfScience: fieldsOfScienceSchema,
+  keywords: keywordsSchemaDraft,
+  otherIdentifiers: otherIdentifiersArraySchema,
+  accessType: accessTypeSchema,
+  license: licenseArraySchema,
+  restrictionGrounds: yup.mixed().when('accessType.url', {
+    is: url => url !== ACCESS_TYPE_URL.OPEN,
+    then: restrictionGroundsSchema,
+  }),
+  actors: actorsSchemaDraft,
+  dataCatalog: dataCatalogSchemaDraft,
   cumulativeState: cumulativeStateSchema,
   files: filesSchema,
   directories: directoriesSchema,
@@ -539,4 +647,11 @@ export {
   provenanceEndDateSchema,
   temporalDateSchema,
   organizationObjectSchema,
+  // Schemas specific to draft datasets
+  qvainFormSchemaDraft,
+  descriptionSchemaDraft,
+  keywordsSchemaDraft,
+  dataCatalogSchemaDraft,
+  actorsSchemaDraft,
+  actorSchemaDraft,
 }
