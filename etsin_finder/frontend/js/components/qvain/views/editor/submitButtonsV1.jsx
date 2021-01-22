@@ -40,7 +40,14 @@ const SubmitButtonsV1 = ({
             setChanged(false)
             editDataset(res.data)
             success(res.data)
-            goToDatasets(res.data.identifier)
+
+            const nextVersion = res.data?.new_version_created?.identifier
+            if (nextVersion) {
+              goToDatasets(nextVersion)
+            } else {
+              goToDatasets(res.data.identifier)
+            }
+
             return true
           })
           .catch(failure)

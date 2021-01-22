@@ -32,6 +32,12 @@ class Env {
 
   @observable qvainHost = ''
 
+  @observable appConfigLoaded = false
+
+  @observable ssoCookieDomain = ''
+
+  @observable ssoPrefix = ''
+
   async fetchAppConfig() {
     const values = await importValuesAsync()
     this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
@@ -40,6 +46,21 @@ class Env {
     if (process.env.NODE_ENV !== 'production') {
       await this.Flags.validateFlags()
     }
+    this.setSSOCookieDomain(values.SSO_COOKIE_DOMAIN)
+    this.setSSOPrefix(values.SSO_PREFIX)
+    this.setAppConfigLoaded(true)
+  }
+
+  @action setSSOPrefix(prefix) {
+    this.ssoPrefix = prefix
+  }
+
+  @action setSSOCookieDomain(domain) {
+    this.ssoCookieDomain = domain
+  }
+
+  @action setAppConfigLoaded(value) {
+    this.appConfigLoaded = value
   }
 
   @action setEtsinHost(host) {

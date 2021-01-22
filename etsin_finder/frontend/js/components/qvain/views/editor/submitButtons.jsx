@@ -11,6 +11,7 @@ import { withStores } from '../../../../stores/stores'
 import SubmitButtonsV1 from './submitButtonsV1'
 import SubmitButtonsV2 from './submitButtonsV2'
 import handleSubmitToBackend from '../../utils/handleSubmit'
+import FlaggedComponent from '../../../general/flaggedComponent'
 
 export class SubmitButtons extends Component {
   promises = []
@@ -21,10 +22,12 @@ export class SubmitButtons extends Component {
     handleSubmitError: PropTypes.func.isRequired,
     handleSubmitResponse: PropTypes.func.isRequired,
     submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }),
+    idSuffix: PropTypes.string,
   }
 
   static defaultProps = {
     submitButtonsRef: null,
+    idSuffix: '',
   }
 
   state = {
@@ -51,14 +54,6 @@ export class SubmitButtons extends Component {
     history.push('/qvain')
   }
 
-  goToDatasets = identifier => {
-    // go to datasets view and highlight published dataset
-    const { history } = this.props
-    const { setPublishedDataset } = this.props.Stores.QvainDatasets
-    setPublishedDataset(identifier)
-    history.push('/qvain')
-  }
-
   submit = async submitFunction => {
     const { Stores } = this.props
     const isProvenanceActorsOk = await Stores.Qvain.Actors.checkProvenanceActors()
@@ -66,7 +61,7 @@ export class SubmitButtons extends Component {
 
     this.closeUseDoiInformation()
     this.setLoading(true)
-    await submitFunction()
+    submitFunction()
     this.setLoading(false)
   }
 
@@ -122,9 +117,8 @@ export class SubmitButtons extends Component {
   }
 
   render() {
-    const { Stores, submitButtonsRef } = this.props
+    const { Stores, submitButtonsRef, idSuffix } = this.props
     const { readonly } = Stores.Qvain
-    const { metaxApiV2 } = Stores.Env
     const disabled = readonly || this.state.datasetLoading
     const doiModal = (
       <DoiModal
@@ -143,22 +137,25 @@ export class SubmitButtons extends Component {
       doiModal,
       disabled,
     }
-
-    // Metax API v1
-    if (!metaxApiV2) {
-      const props = {
-        ...propsBase,
-        showUseDoiInformation: this.showUseDoiInformation,
-        handleCreatePublished: this.handleCreatePublished,
-      }
-
-      return <SubmitButtonsV1 {...props} />
+    const propsV1 = {
+      ...propsBase,
+      showUseDoiInformation: this.showUseDoiInformation,
+      handleCreatePublished: this.handleCreatePublished,
     }
     const props = {
       ...propsBase,
       history: this.props.history,
+      idSuffix,
     }
-    return <SubmitButtonsV2 {...props} />
+
+    return (
+      <FlaggedComponent
+        flag="METAX_API_V2.FRONTEND"
+        whenDisabled={<SubmitButtonsV1 {...propsV1} />}
+      >
+        <SubmitButtonsV2 {...props} />
+      </FlaggedComponent>
+    )
   }
 }
 

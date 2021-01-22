@@ -91,7 +91,8 @@ const Identifier = ({ idn }) => {
 
 const IdnSpan = styled.div`
   display: flex;
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
   justify-content: space-between;
 `
 
@@ -99,7 +100,7 @@ const IdnSpan = styled.div`
 const IdnLink = styled(Link)`
   background-color: ${props => props.theme.color.primary};
   border: ${props => props.theme.color.primary};
-  width: -webkit-fill-available;
+  width: fit-content;
   max-width: 100%;
   color: white;
   border-radius: 0.25em;
