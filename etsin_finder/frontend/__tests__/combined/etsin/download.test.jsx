@@ -171,6 +171,11 @@ describe('Packages', () => {
     packages.updatePackage('/moro', pack)
     expect(packages.packages['/moro']).toEqual(undefined)
   })
+
+  it('sets requestingPackage', async () => {
+    packages.setRequestingPackageCreation('/moro', true)
+    expect(packages.packages['/moro'].requestingPackageCreation).toEqual(true)
+  })
 })
 
 describe('Download button actions', () => {
