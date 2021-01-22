@@ -33,6 +33,7 @@ const DataCatalog = () => {
       setUseDoi,
     },
     Locale: { lang },
+    Env: { metaxApiV2 },
   } = useStores()
   const [error, SetError] = useState()
 
@@ -71,6 +72,12 @@ const DataCatalog = () => {
   // PAS catalog cannot be selected by the user
   const availableOptions = isPas ? pasOptions : options
   const catalogSelectValue = availableOptions.find(opt => opt.value === dataCatalog)
+  const isDataCatalogNotDecided =
+    !metaxApiV2 ||
+    (metaxApiV2 &&
+      (!original?.data_catalog ||
+        original?.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.DFT))
+  const isDisabled = selected.length > 0 || !isDataCatalogNotDecided || isPas
 
   return (
     <Card>
@@ -104,7 +111,7 @@ const DataCatalog = () => {
         styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
         onBlur={handleOnBlur}
         attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
-        isDisabled={selected.length > 0 || original !== undefined || isPas}
+        isDisabled={isDisabled}
       />
       <DoiSelection />
 

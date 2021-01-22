@@ -14,26 +14,34 @@ class OtherIdentifiers extends ReferenceField {
     this.storage = dataset.other_identifier ? dataset.other_identifier.map(oid => oid.notation) : []
   }
 
-  // move this to qvain.otherIdentifier class when refactor ticket is merged
-  @action cleanupBeforeBackend = () => {
-    const { item, storage, addItemStr, setValidationError } = this
-    if (item !== '') {
+  @action validateStr = () => {
+    const { itemStr, storage, setValidationError } = this
+    if (itemStr) {
       try {
-        otherIdentifierSchema.validateSync(item)
+        otherIdentifierSchema.validateSync(itemStr)
       } catch (err) {
-        this.Parent.Submit.setError(err)
         setValidationError(err.errors)
         return false
       }
-      if (!storage.includes(item)) {
-        addItemStr()
-        this.Parent.Submit.clearResponse()
+
+      if (!storage.includes(itemStr)) {
         return true
       }
+
       const message = translate('qvain.description.otherIdentifiers.alreadyAdded')
       setValidationError(message)
       return false
     }
+    return true
+  }
+
+  // move this to qvain.otherIdentifier class when refactor ticket is merged
+  @action cleanupBeforeBackend = () => {
+    const { validateStr, addItemStr } = this
+    if (!validateStr()) {
+      return false
+    }
+    addItemStr()
     return true
   }
 }

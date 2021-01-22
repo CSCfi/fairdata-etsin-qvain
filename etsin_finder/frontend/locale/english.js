@@ -360,6 +360,7 @@ const english = {
     },
   },
   qvain: {
+    validation: {},
     nav: {
       home: 'Home',
       createDataset: 'Create Dataset',
@@ -760,6 +761,12 @@ const english = {
       },
     },
     validationMessages: {
+      draft: {
+        description: 'Draft cannot be saved until the following errors are fixed:',
+      },
+      publish: {
+        description: 'Dataset cannot be published before following errors are fixed:',
+      },
       title: {
         string: 'The title must be a string value.',
         max: 'The title is too long.',
@@ -826,7 +833,6 @@ const english = {
             publisher:
               'Actors: Publisher role is mandatory. Note: one actor can have multiple roles.',
           },
-          publisherIfDOI: 'Actors: For DOI datasets publisher must be defined.',
         },
       },
       accessType: {
@@ -850,6 +856,7 @@ const english = {
       files: {
         dataCatalog: {
           required: 'File origin is required.',
+          wrongType: 'File origin is wrong type or it is missing.',
         },
         file: {
           title: {

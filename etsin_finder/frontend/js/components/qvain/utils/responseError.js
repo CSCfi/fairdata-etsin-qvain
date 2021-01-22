@@ -1,4 +1,4 @@
-const stringify = (value) => {
+const stringify = value => {
   // Make the output cleaner by unpacking single-item arrays.
   let val = value
   if (Array.isArray(val) && val.length === 1) {

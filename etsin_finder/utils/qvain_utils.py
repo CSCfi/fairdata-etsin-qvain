@@ -453,14 +453,16 @@ def edited_data_to_metax(data, original):
         "is_output_of": alter_projects_to_metax(data.get("projects")),
         "relation": data.get("relation"),
         "provenance": provenances,
-        "temporal": data.get("temporal")
+        "temporal": data.get("temporal"),
     })
     log.info(research_dataset)
     edited_data = {
+        "data_catalog": data.get("dataCatalog", None),
         "research_dataset": research_dataset,
         "use_doi_for_published": data.get("useDoi")
     }
     return clean_empty_keyvalues_from_dict(edited_data)
+
 
 def check_if_data_in_user_IDA_project(data):
     """Check if the user creating a dataset belongs to the project that the files/folders belongs to.
