@@ -173,7 +173,14 @@ const actorRolesSchemaDraft = yup
     yup
       .mixed()
       .oneOf(
-        [ROLE.CREATOR, ROLE.CURATOR, ROLE.PUBLISHER, ROLE.RIGHTS_HOLDER, ROLE.CONTRIBUTOR],
+        [
+          ROLE.CREATOR,
+          ROLE.CURATOR,
+          ROLE.PUBLISHER,
+          ROLE.RIGHTS_HOLDER,
+          ROLE.CONTRIBUTOR,
+          ROLE.PROVENANCE,
+        ],
         translate('qvain.validationMessages.actors.roles.oneOf')
       )
   )
