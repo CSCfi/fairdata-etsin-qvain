@@ -109,6 +109,12 @@ const english = {
       info_header: 'Other info related to file',
       loading: 'Loading folder',
       loaded: 'Folder loaded',
+      errors: {
+        showDetails: 'Show details',
+        hideDetails: 'Hide details',
+        serviceUnavailable: 'The download service is currently unavailable. Please try again later.',
+        unknownError: 'There was an error using the download service.',
+      },
       packages: {
         createForAll: 'Generate download package',
         createForItem: 'Create download package for %(name)s',

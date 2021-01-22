@@ -18,12 +18,12 @@ const actionDefaults = {
   type: 'default',
 }
 
-const actionDownload = (datasetIdentifier, item, path, pack) => {
+const actionDownload = (datasetIdentifier, item, path, pack, Packages) => {
   let func
   if (item && item.type === 'file') {
-    func = () => downloadFile(datasetIdentifier, path)
+    func = () => downloadFile(datasetIdentifier, path, Packages)
   } else {
-    func = () => downloadPackage(datasetIdentifier, pack.package)
+    func = () => downloadPackage(datasetIdentifier, pack.package, Packages)
   }
   return {
     ...actionDefaults,
@@ -58,14 +58,17 @@ const actionCreatePackage = (Packages, path) => ({
 })
 
 const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
-  const path = item ? Files.getItemPath(item) : '/'
+  const isFile = item && item.type === 'file'
+  let path = '/'
+  if (item) {
+    path = isFile ? Files.getItemPath(item) : Files.getEquivalentItemScope(item)
+  }
   const pack = Packages.get(path)
 
-  const isFile = item && item.type === 'file'
   let action
   if (isFile || (pack && pack.status === DOWNLOAD_API_REQUEST_STATUS.SUCCESS)) {
-    action = actionDownload(datasetIdentifier, item, path, pack)
-  } else if (pack && pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING) {
+    action = actionDownload(datasetIdentifier, item, path, pack, Packages)
+  } else if (pack && (pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING || pack.requestingPackageCreation)) {
     action = actionPending()
   } else if (Packages.loadingDataset) {
     action = actionLoading()

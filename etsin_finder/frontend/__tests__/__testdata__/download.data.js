@@ -112,7 +112,7 @@ const formatPackageResponse = packages => {
   //   ]
   // }
   if (!packages) {
-    return [404, {}]
+    return [200, {}]
   }
   const obj = {}
   Object.entries(packages).forEach(([path, pack]) => {
