@@ -11,7 +11,7 @@ from flask_restful import reqparse, Resource
 
 from etsin_finder.services.qvain_service_v2 import MetaxQvainAPIServiceV2
 from etsin_finder.utils.log_utils import log_request
-from etsin_finder.utils.qvain_utils_v2 import check_dataset_creator
+from etsin_finder.utils.qvain_utils_v2 import check_dataset_edit_permission
 
 
 class QvainDatasetChangeCumulativeState(Resource):
@@ -38,7 +38,7 @@ class QvainDatasetChangeCumulativeState(Resource):
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
         cumulative_state = args.get('cumulative_state')
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
         service = MetaxQvainAPIServiceV2()
@@ -69,7 +69,7 @@ class QvainDatasetCreateNewVersion(Resource):
         """
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
-        err = check_dataset_creator(cr_id)
+        err = check_dataset_edit_permission(cr_id)
         if err is not None:
             return err
         service = MetaxQvainAPIServiceV2()
@@ -98,7 +98,7 @@ class QvainDatasetCreateDraft(Resource):
         """
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
-        err = check_dataset_creator(cr_id)
+        err = check_dataset_edit_permission(cr_id)
         if err is not None:
             return err
         service = MetaxQvainAPIServiceV2()
@@ -127,7 +127,7 @@ class QvainDatasetMergeDraft(Resource):
         """
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
-        err = check_dataset_creator(cr_id)
+        err = check_dataset_edit_permission(cr_id)
         if err is not None:
             return err
         service = MetaxQvainAPIServiceV2()
@@ -156,7 +156,7 @@ class QvainDatasetPublishDataset(Resource):
         """
         args = self.parser.parse_args()
         cr_id = args.get('identifier')
-        err = check_dataset_creator(cr_id)
+        err = check_dataset_edit_permission(cr_id)
         if err is not None:
             return err
         service = MetaxQvainAPIServiceV2()
