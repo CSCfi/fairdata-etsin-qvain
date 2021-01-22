@@ -12,6 +12,7 @@ import Info from './info'
 import sizeParse from '../../../../utils/sizeParse'
 import { withStores } from '../../../../stores/stores'
 import getDownloadAction from './downloadActions'
+import ErrorMessage from './errorMessage'
 
 const downloadAll = identifier => {
   const handle = window.open(`/api/dl?cr_id=${identifier}`)
@@ -97,6 +98,8 @@ function IdaResources(props) {
         </HeaderButton>
       </Header>
 
+      <ErrorMessage error={Packages.error} clear={Packages.clearError} />
+
       <Tree allowDownload={allowDownload} />
       {inInfo && <Info {...infoProps} />}
     </>
@@ -133,8 +136,8 @@ const HeaderButton = styled(Button)`
   margin: 0;
 `
 
-const DownloadIcon = styled(FontAwesomeIcon).attrs(() => ({
-  icon: faDownload,
+const DownloadIcon = styled(FontAwesomeIcon).attrs(props => ({
+  icon: props.icon || faDownload,
 }))`
   margin-left: 0.5em;
 `

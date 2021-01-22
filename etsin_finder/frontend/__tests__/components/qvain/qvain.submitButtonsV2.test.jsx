@@ -21,6 +21,9 @@ useStores.mockReturnValue({
     },
   },
   Env: { getQvainUrl: mockGetQvainUrl },
+  QvainDatasets: {
+    setPublishedDataset: jest.fn(),
+  },
 })
 
 const mockHistory = { replace: jest.fn() }

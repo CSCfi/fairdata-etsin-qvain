@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-
 import { useStores } from '../../stores/stores'
 
 const FlaggedComponent = ({ flag, children, whenDisabled }) => {
@@ -9,6 +8,7 @@ const FlaggedComponent = ({ flag, children, whenDisabled }) => {
       Flags: { flagEnabled },
     },
   } = useStores()
+
   if (flagEnabled(flag)) {
     return children
   }

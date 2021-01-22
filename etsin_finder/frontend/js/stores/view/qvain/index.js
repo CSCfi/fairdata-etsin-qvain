@@ -11,6 +11,7 @@ class Qvain extends Resources {
     this.Files = new Files(this)
     this.Submit = new Submit(this)
     this.resetQvainStore()
+    this.Submit = new Submit(this)
     makeObservable(this)
   }
 
@@ -24,6 +25,7 @@ class Qvain extends Resources {
 
   @action
   resetQvainStore = () => {
+    this.Submit = new Submit(this)
     this.original = undefined
     // Reset Files/Directories related data
     this.resetFilesV1()
@@ -57,6 +59,10 @@ class Qvain extends Resources {
   @action
   setChanged = changed => {
     this.changed = changed
+    if (changed) {
+      this.Submit.hasValidated = false
+      this.Submit.prevalidate()
+    }
   }
 
   @action saveExternalResource = resource => {
@@ -124,7 +130,7 @@ class Qvain extends Resources {
   @action
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
-    this.changed = true
+    this.setChanged(true)
 
     // Remove useDoi if dataCatalog is ATT
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
@@ -325,7 +331,7 @@ class Qvain extends Resources {
 
     if (this.Env.metaxApiV2) {
       if (this.hasBeenPublished) {
-        if (this.Files && !this.Files.projectLocked) {
+        if (this.Files && (!this.Files.projectLocked || this.Files.draftOfHasProject === false)) {
           return true // for published noncumulative datasets, allow adding files only if none exist yet
         }
         return this.isCumulative

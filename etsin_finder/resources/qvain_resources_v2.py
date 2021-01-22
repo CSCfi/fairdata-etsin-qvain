@@ -19,7 +19,7 @@ from etsin_finder.utils.utils import (
     datetime_to_header
 )
 from etsin_finder.schemas.qvain_dataset_schema_v2 import (
-    DatasetValidationSchema,
+    validate,
     FileActionsValidationSchema,
 )
 from etsin_finder.utils.qvain_utils_v2 import (
@@ -113,7 +113,6 @@ class QvainDatasets(Resource):
 
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
-        self.validationSchema = DatasetValidationSchema()
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('draft', type=bool, required=False)
 
@@ -182,7 +181,7 @@ class QvainDatasets(Resource):
             params['draft'] = 'true'
 
         try:
-            data = self.validationSchema.loads(request.data)
+            data = validate(request.data, params)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
@@ -199,6 +198,8 @@ class QvainDatasets(Resource):
 
         metax_ready_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
 
+        log.debug(f'metax ready data {metax_ready_data}')
+
         params["access_granter"] = get_encoded_access_granter()
 
         service = MetaxQvainAPIServiceV2()
@@ -208,10 +209,6 @@ class QvainDatasets(Resource):
 
 class QvainDataset(Resource):
     """Single Qvain dataset."""
-
-    def __init__(self):
-        """Setup required utils for dataset metadata handling"""
-        self.validationSchema = DatasetValidationSchema()
 
     @log_request
     def get(self, cr_id):
@@ -241,12 +238,13 @@ class QvainDataset(Resource):
             The response from metax or if error an error message.
 
         """
+        params = {}
         error = check_dataset_creator(cr_id)
         if error is not None:
             return error
 
         try:
-            data = self.validationSchema.loads(request.data)
+            data = validate(request.data, params)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
@@ -274,7 +272,11 @@ class QvainDataset(Resource):
         log.info('Converted datetime from metax: {0} to HTTP datetime: {1}'.format(last_edit, last_edit_converted))
         del data["original"]
 
+        log.debug(f'in patch: data: {data}')
+
         metax_ready_data = edited_data_to_metax(data, original)
+
+        log.debug(f'in patch: metax_ready_data.data_catalog: {metax_ready_data.get("data_catalog", "no catalog")}')
 
         params = {}
         params["access_granter"] = get_encoded_access_granter()
