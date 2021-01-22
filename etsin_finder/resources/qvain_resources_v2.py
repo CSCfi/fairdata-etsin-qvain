@@ -21,10 +21,11 @@ from etsin_finder.utils.utils import (
 from etsin_finder.schemas.qvain_dataset_schema_v2 import (
     validate,
     FileActionsValidationSchema,
+    data_catalog_matcher,
 )
 from etsin_finder.utils.qvain_utils_v2 import (
     data_to_metax,
-    check_dataset_creator,
+    check_dataset_edit_permission,
     check_authentication,
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
@@ -148,7 +149,7 @@ class QvainDatasets(Resource):
 
         user_id = authentication.get_user_csc_name()
         service = MetaxQvainAPIServiceV2()
-        result = service.get_datasets_for_user(user_id, limit, offset, no_pagination)
+        result = service.get_datasets_for_user(user_id, limit, offset, no_pagination, data_catalog_matcher=data_catalog_matcher)
         if result:
             # Limit the amount of items to be sent to the frontend
             if 'results' in result:
@@ -222,7 +223,7 @@ class QvainDataset(Resource):
             [type] -- Metax response.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -239,7 +240,7 @@ class QvainDataset(Resource):
 
         """
         params = {}
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -298,7 +299,7 @@ class QvainDataset(Resource):
 
         """
         # only creator of the dataset is allowed to delete it
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -325,7 +326,7 @@ class QvainDatasetFiles(Resource):
             Metax response.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
