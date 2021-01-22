@@ -177,7 +177,7 @@ StringArray.propTypes = {
   addWithComma: PropTypes.bool,
   readonly: PropTypes.bool,
   translationsRoot: PropTypes.string.isRequired,
-  validationError: PropTypes.string.isRequired,
+  validationError: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
   setValidationError: PropTypes.func.isRequired,
   required: PropTypes.bool,
 }

@@ -12,7 +12,6 @@ from flask import request
 from flask_restful import reqparse, Resource
 
 from etsin_finder.auth import authentication
-from etsin_finder.services import qvain_service
 from etsin_finder.log import log
 
 from etsin_finder.utils.utils import \
@@ -58,7 +57,8 @@ class ProjectFiles(Resource):
         # Return data only if user is a member of the project
         user_ida_projects = authentication.get_user_ida_projects() or []
         if pid in user_ida_projects:
-            project_dir_obj = qvain_service.get_directory_for_project(pid)
+            service = MetaxQvainAPIService()
+            project_dir_obj = service.get_directory_for_project(pid)
         else:
             project_dir_obj = None
 
@@ -162,7 +162,8 @@ class DirectoryFiles(Resource):
         if file_fields:
             params['file_fields'] = file_fields
 
-        dir_obj = qvain_service.get_directory(dir_id, params)
+        service = MetaxQvainAPIService()
+        dir_obj = service.get_directory(dir_id, params)
 
         # Return data only if user has access to project
         user_ida_projects = authentication.get_user_ida_projects() or []
@@ -340,8 +341,10 @@ class QvainDatasets(Resource):
             if not check_if_data_in_user_IDA_project(data):
                 return {"IdaError":
                         "Error in IDA group user permission or in IDA user groups."}, 403
+
         if data.get("useDoi") is True:
             use_doi = True
+
         metax_ready_data = data_to_metax(data, metadata_provider_org,
                                          metadata_provider_user)
         params = {
