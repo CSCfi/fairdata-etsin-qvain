@@ -109,6 +109,12 @@ const finnish = {
       info_header: 'Tiedoston muut tiedot',
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
+      errors: {
+        showDetails: 'Näytä tiedot',
+        hideDetails: 'Piilota tiedot',
+        serviceUnavailable: 'Latauspalvelu ei ole tällä hetkellä tavoitettavissa. Yritä myöhemmin uudelleen.',
+        unknownError: 'Latauspalvelun käytössä tapahtui virhe.',
+      },
       packages: {
         createForAll: 'Luo latauspaketti',
         createForItem: 'Luo latauspaketti kohteelle %(name)s',

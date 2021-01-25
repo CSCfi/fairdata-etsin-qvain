@@ -352,6 +352,17 @@ class Files {
     return `/${item.name}`
   }
 
+  getEquivalentItemScope = (item) => {
+    // Return topmost path that contains the same files as current item
+    if (!item.parent) {
+      return '/'
+    }
+    if (item.parent.directChildCount === 1) {
+      return this.getEquivalentItemScope(item.parent)
+    }
+    return this.getItemPath(item)
+  }
+
   @computed get isLoadingProject() {
     if (this.loadingProjectInfo && !this.loadingProjectInfo.done) {
       return true
