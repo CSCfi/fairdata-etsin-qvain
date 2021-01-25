@@ -23,6 +23,14 @@ fakePackage = {
     'status': 'SUCCESS',
 }
 
+fakeNoActiveTasks = {
+    'error': 'no active package generation tasks',
+}
+
+fakeNoDataset = {
+    'error': 'dataset not found in metax',
+}
+
 fakeToken = {
     'token': 'abcdf00f',
 }
@@ -75,12 +83,19 @@ class TestDownloadResourcesRequests(BaseTest):
         r = authd_client.get('/api/v2/dl/requests?cr_id=1')
         assert r.status_code == 200
 
-    def test_requests_get_not_found(self, unauthd_client, open_catalog_record, requests_mock):
+    def test_requests_get_requests_not_found(self, unauthd_client, open_catalog_record, requests_mock):
         """Failed GET, no packages exist for dataset"""
-        requests_mock.get('https://mock-download:1/requests?dataset=1', status_code=404)
+        requests_mock.get('https://mock-download:1/requests?dataset=1', json=fakeNoActiveTasks, status_code=404)
+        r = unauthd_client.get('/api/v2/dl/requests?cr_id=1')
+        assert r.status_code == 200
+        assert r.json == {}
+
+    def test_requests_get_dataset_not_found(self, unauthd_client, open_catalog_record, requests_mock):
+        """Failed GET, no packages exist for dataset"""
+        requests_mock.get('https://mock-download:1/requests?dataset=1', json=fakeNoDataset, status_code=404)
         r = unauthd_client.get('/api/v2/dl/requests?cr_id=1')
         assert r.status_code == 404
-        assert r.json == {}
+        assert r.json == fakeNoDataset
 
     def test_requests_get_error(self, unauthd_client, open_catalog_record, requests_mock):
         """Failed GET, connection timeout"""
@@ -125,7 +140,6 @@ class TestDownloadResourcesRequests(BaseTest):
         requests_mock.post('https://mock-download:1/requests', status_code=404)
         r = unauthd_client.post('/api/v2/dl/requests', json={ 'cr_id': 1})
         assert r.status_code == 404
-        assert r.json == {}
 
     def test_requests_post_error(self, unauthd_client, open_catalog_record, requests_mock):
         """Failed POST, connection timeout"""

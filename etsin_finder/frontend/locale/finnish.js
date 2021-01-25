@@ -109,6 +109,12 @@ const finnish = {
       info_header: 'Tiedoston muut tiedot',
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
+      errors: {
+        showDetails: 'Näytä tiedot',
+        hideDetails: 'Piilota tiedot',
+        serviceUnavailable: 'Latauspalvelu ei ole tällä hetkellä tavoitettavissa. Yritä myöhemmin uudelleen.',
+        unknownError: 'Latauspalvelun käytössä tapahtui virhe.',
+      },
       packages: {
         createForAll: 'Luo latauspaketti',
         createForItem: 'Luo latauspaketti kohteelle %(name)s',
@@ -360,6 +366,7 @@ const finnish = {
     },
   },
   qvain: {
+    validation: {},
     nav: {
       home: 'Koti',
       createDataset: 'Luo aineisto',
@@ -854,6 +861,12 @@ const finnish = {
       },
     },
     validationMessages: {
+      draft: {
+        description: 'Luonnosta ei voi tallentaa ennen kuin seuraavat virheet on korjattu:',
+      },
+      publish: {
+        description: 'Aineistoa ei voida julkaista ennen kuin seuraavat virheet on korjattu:',
+      },
       title: {
         string: 'Otsikon tulisi olla arvoltaan merkkijono.',
         max: 'Otsikko on liian pitkä.',
@@ -922,7 +935,6 @@ const finnish = {
             publisher:
               'Toimijat: Aineistolla on oltava ainakin yksi julkaisija. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
           },
-          publisherIfDOI: 'Toimijat: DOI-ainestoon on lisättävä julkaisija.',
         },
       },
       accessType: {
@@ -946,6 +958,7 @@ const finnish = {
       files: {
         dataCatalog: {
           required: 'Tiedoston lähde on pakollinen kenttä.',
+          wrongType: 'Tiedoston lähde on väärää tyyppiä tai se puuttuu kokonaan.',
         },
         file: {
           title: {

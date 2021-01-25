@@ -1,7 +1,9 @@
 """Validation schemas for form data coming in from Qvain"""
-from marshmallow import Schema, fields, validates_schema, ValidationError
+from marshmallow import Schema, fields, validates_schema, ValidationError, validate
 from marshmallow.validate import Length, OneOf
 
+
+data_catalog_matcher = '^urn:nbn:fi:att:data-catalog-(ida|att|pas|dft)$'
 
 class PersonValidationSchema(Schema):
     """Validation schema for person."""
@@ -199,7 +201,7 @@ class DatasetValidationSchema(Schema):
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()
     license = fields.List(fields.Nested(LicenseValidationSchema))
-    dataCatalog = fields.Str()
+    dataCatalog = fields.Str(validate=validate.Regexp(data_catalog_matcher))
     cumulativeState = fields.Int(OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())
     directories = fields.List(fields.Dict())

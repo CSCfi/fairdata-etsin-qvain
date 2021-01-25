@@ -1,5 +1,6 @@
 """Utilities for transforming the data from the Qvain form to METAX compatible format"""
 
+import re
 from copy import deepcopy
 import json
 from base64 import urlsafe_b64encode
@@ -18,7 +19,7 @@ from etsin_finder.auth.authentication import (
     get_user_lastname,
     is_authenticated
 )
-
+from etsin_finder.schemas.qvain_dataset_schema import data_catalog_matcher
 
 def clean_empty_keyvalues_from_dict(d):
     """Cleans all key value pairs from the object that have empty values, like [], {} and ''.
@@ -364,8 +365,8 @@ def check_authentication():
 
     return None
 
-def check_dataset_creator(cr_id):
-    """Verify that current user is authenticated and can edit the dataset.
+def check_dataset_edit_permission(cr_id):
+    """Verify that current user is authenticated and can edit the dataset in Qvain.
 
     Arguments:
         cr_id (str): Identifier of dataset.
@@ -378,11 +379,17 @@ def check_dataset_creator(cr_id):
     if error:
         return error
 
+    cr = get_catalog_record(cr_id, False)
     csc_username = get_user_csc_name()
-    creator = get_dataset_creator(cr_id)
+    creator = cr.get('metadata_provider_user')
     if csc_username != creator:
-        log.warning('User: \"{0}\" is not the creator of the dataset. Editing not allowed.'.format(csc_username))
+        log.warning(f'User: "{csc_username}" is not the creator of the dataset. Editing not allowed.')
         return {"PermissionError": "User is not allowed to edit the dataset."}, 403
+
+    catalog_identifier = cr.get('data_catalog', {}).get('catalog_json', {}).get('identifier')
+    if not re.match(data_catalog_matcher, catalog_identifier):
+        log.warning(f'Catalog {catalog_identifier} is not supported by Qvain. Editing not allowed.')
+        return {"PermissionError": f"Editing datasets from catalog {catalog_identifier} is not supported by Qvain."}, 403
     return None
 
 def remove_deleted_datasets_from_results(result):
@@ -453,14 +460,16 @@ def edited_data_to_metax(data, original):
         "is_output_of": alter_projects_to_metax(data.get("projects")),
         "relation": data.get("relation"),
         "provenance": provenances,
-        "temporal": data.get("temporal")
+        "temporal": data.get("temporal"),
     })
     log.info(research_dataset)
     edited_data = {
+        "data_catalog": data.get("dataCatalog", None),
         "research_dataset": research_dataset,
         "use_doi_for_published": data.get("useDoi")
     }
     return clean_empty_keyvalues_from_dict(edited_data)
+
 
 def check_if_data_in_user_IDA_project(data):
     """Check if the user creating a dataset belongs to the project that the files/folders belongs to.

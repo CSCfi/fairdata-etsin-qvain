@@ -19,12 +19,13 @@ from etsin_finder.utils.utils import (
     datetime_to_header
 )
 from etsin_finder.schemas.qvain_dataset_schema_v2 import (
-    DatasetValidationSchema,
+    validate,
     FileActionsValidationSchema,
+    data_catalog_matcher,
 )
 from etsin_finder.utils.qvain_utils_v2 import (
     data_to_metax,
-    check_dataset_creator,
+    check_dataset_edit_permission,
     check_authentication,
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
@@ -113,7 +114,6 @@ class QvainDatasets(Resource):
 
     def __init__(self):
         """Setup required utils for dataset metadata handling"""
-        self.validationSchema = DatasetValidationSchema()
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('draft', type=bool, required=False)
 
@@ -149,7 +149,7 @@ class QvainDatasets(Resource):
 
         user_id = authentication.get_user_csc_name()
         service = MetaxQvainAPIServiceV2()
-        result = service.get_datasets_for_user(user_id, limit, offset, no_pagination)
+        result = service.get_datasets_for_user(user_id, limit, offset, no_pagination, data_catalog_matcher=data_catalog_matcher)
         if result:
             # Limit the amount of items to be sent to the frontend
             if 'results' in result:
@@ -182,7 +182,7 @@ class QvainDatasets(Resource):
             params['draft'] = 'true'
 
         try:
-            data = self.validationSchema.loads(request.data)
+            data = validate(request.data, params)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
@@ -199,6 +199,8 @@ class QvainDatasets(Resource):
 
         metax_ready_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
 
+        log.debug(f'metax ready data {metax_ready_data}')
+
         params["access_granter"] = get_encoded_access_granter()
 
         service = MetaxQvainAPIServiceV2()
@@ -208,10 +210,6 @@ class QvainDatasets(Resource):
 
 class QvainDataset(Resource):
     """Single Qvain dataset."""
-
-    def __init__(self):
-        """Setup required utils for dataset metadata handling"""
-        self.validationSchema = DatasetValidationSchema()
 
     @log_request
     def get(self, cr_id):
@@ -225,7 +223,7 @@ class QvainDataset(Resource):
             [type] -- Metax response.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -241,12 +239,13 @@ class QvainDataset(Resource):
             The response from metax or if error an error message.
 
         """
-        error = check_dataset_creator(cr_id)
+        params = {}
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
         try:
-            data = self.validationSchema.loads(request.data)
+            data = validate(request.data, params)
         except ValidationError as err:
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
@@ -274,7 +273,11 @@ class QvainDataset(Resource):
         log.info('Converted datetime from metax: {0} to HTTP datetime: {1}'.format(last_edit, last_edit_converted))
         del data["original"]
 
+        log.debug(f'in patch: data: {data}')
+
         metax_ready_data = edited_data_to_metax(data, original)
+
+        log.debug(f'in patch: metax_ready_data.data_catalog: {metax_ready_data.get("data_catalog", "no catalog")}')
 
         params = {}
         params["access_granter"] = get_encoded_access_granter()
@@ -296,7 +299,7 @@ class QvainDataset(Resource):
 
         """
         # only creator of the dataset is allowed to delete it
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -323,7 +326,7 @@ class QvainDatasetFiles(Resource):
             Metax response.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 

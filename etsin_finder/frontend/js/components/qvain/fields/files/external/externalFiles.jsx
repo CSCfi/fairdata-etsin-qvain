@@ -34,7 +34,7 @@ export const ExternalFilesBase = () => {
   const parseUrl = resource =>
     // Disable lint rule because this syntax is more readable using concatenation
     /* eslint-disable prefer-template */
-    typeof resource !== 'undefined' &&
+    resource != null &&
     ' / ' + (' / ' + resource.length > 40 ? resource.substring(0, 40).concat('... ') : resource)
 
   return (

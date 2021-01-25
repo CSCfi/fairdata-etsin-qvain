@@ -17,7 +17,8 @@ from etsin_finder.utils.qvain_utils import alter_role_data
 from etsin_finder.schemas.qvain_dataset_schema import (
     PersonValidationSchema,
     OrganizationValidationSchema,
-    ActorValidationSchema
+    ActorValidationSchema,
+    DatasetValidationSchema,
 )
 
 
@@ -336,3 +337,33 @@ class TestQvainLightDatasetAlterRoleData(BaseTest):
                 'identifier': 'organization_identifier'
             },
         }
+
+class TestQvainDatasetDataCatalog(BaseTest):
+    """Test allowed data catalogs"""
+
+    schema = DatasetValidationSchema(partial=True)
+
+    def test_ida(self):
+        """IDA catalog is allowed"""
+        errors = self.schema.validate({'dataCatalog': 'urn:nbn:fi:att:data-catalog-ida'})
+        assert not errors
+
+    def test_att(self):
+        """ATT catalog is allowed"""
+        errors = self.schema.validate({'dataCatalog': 'urn:nbn:fi:att:data-catalog-att'})
+        assert not errors
+
+    def test_pas(self):
+        """PAS catalog is allowed"""
+        errors = self.schema.validate({'dataCatalog': 'urn:nbn:fi:att:data-catalog-pas'})
+        assert not errors
+
+    def test_dft(self):
+        """DFT catalog is allowed"""
+        errors = self.schema.validate({'dataCatalog': 'urn:nbn:fi:att:data-catalog-dft'})
+        assert not errors
+
+    def test_invalid_catalog(self):
+        """Unknown catalog is not allowed"""
+        errors = self.schema.validate({'dataCatalog': 'urn:nbn:fi:att:data-catalog-attenborough'})
+        assert errors
