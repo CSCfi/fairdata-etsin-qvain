@@ -7,7 +7,7 @@
 
 """Development helper routes."""
 
-from flask import Blueprint, session, redirect
+from flask import Blueprint, session, redirect, request
 
 from etsin_finder.auth.authentication_direct_proxy import reset_flask_session_on_login
 
@@ -39,4 +39,5 @@ def fakelogin():
 def login_teppo():
     """Create login session without needing authentication"""
     fakelogin()
-    return redirect('/')
+    host = request.headers.get('X-Forwarded-Host')
+    return redirect(f'https://{host}/')

@@ -12,7 +12,9 @@ class Packages {
     makeObservable(this)
   }
 
-  initialPollInterval = 1.5e3
+  initialPollInterval = 1e3
+
+  pollMultiplier = 1.2
 
   pollInterval = this.initialPollInterval
 
@@ -26,6 +28,19 @@ class Packages {
 
   @observable packages = {}
 
+  @observable confirmModalCallback = null
+
+  @action confirm = (callback) => {
+    this.confirmModalCallback = () => {
+      callback()
+      this.closeConfirmModal()
+    }
+  }
+
+  @action closeConfirmModal = () => {
+    this.confirmModalCallback = null
+  }
+
   @action clearPackages() {
     this.packages = {}
     this.error = null
@@ -34,13 +49,14 @@ class Packages {
   @action reset() {
     this.datasetIdentifier = null
     this.clearPackages()
-    this.setPollInterval(1.5e3)
+    this.setPollInterval(1e3, 1.2)
     this.clearPollTimeout()
   }
 
-  setPollInterval(interval) {
+  setPollInterval(interval, multiplier) {
     this.initialPollInterval = interval
     this.pollInterval = interval
+    this.pollMultiplier = multiplier
   }
 
   get(path) {
@@ -69,7 +85,7 @@ class Packages {
       })
       runInAction(() => {
         const maxInterval = 10e3
-        this.pollInterval = Math.min(this.pollInterval * 2, maxInterval)
+        this.pollInterval = Math.min(this.pollInterval * this.pollMultiplier, maxInterval)
       })
     } else {
       this.pollInterval = this.initialPollInterval
@@ -116,6 +132,7 @@ class Packages {
         this.setRequestingPackageCreation(path, false)
       })
     }
+    this.pollInterval = this.initialPollInterval
     this.schedulePoll()
   }
 

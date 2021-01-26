@@ -3,16 +3,16 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFile, faFolder, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons'
 
 import Tree from './fileTree'
-import { Button } from '../../../general/button'
+import IconButton from './iconButton'
 import Info from './info'
 import sizeParse from '../../../../utils/sizeParse'
 import { withStores } from '../../../../stores/stores'
 import getDownloadAction from './downloadActions'
 import ErrorMessage from './errorMessage'
+import ConfirmPackageModal from './confirmPackageModal'
 
 const downloadAll = identifier => {
   const handle = window.open(`/api/dl?cr_id=${identifier}`)
@@ -63,15 +63,19 @@ function IdaResources(props) {
   }
 
   let downloadFunc = () => downloadAll(props.dataset.identifier)
-  const iconProps = {}
+  const buttonProps = {}
   let downloadAllText = 'dataset.dl.downloadAll'
 
   // Download full dataset package
   if (downloadApiV2) {
     const action = getDownloadAction(props.dataset.identifier, null, Packages, Files)
     downloadFunc = action.func
-    iconProps.icon = action.icon
-    iconProps.spin = action.spin
+    buttonProps.icon = action.icon
+    buttonProps.spin = action.spin
+    buttonProps.color = action.color
+    buttonProps.attributes = {
+      tooltip: action.tooltip,
+    }
     if (DatasetQuery.isDraft) {
       allowDownload = false
       downloadAllText = 'dataset.dl.downloadDisabledForDraft'
@@ -91,17 +95,22 @@ function IdaResources(props) {
           {totalSize ? ` (${sizeParse(totalSize)})` : null}
         </HeaderStats>
 
-        <HeaderButton disabled={!allowDownload} onClick={downloadFunc}>
+        <Translate
+          component={HeaderButton}
+          disabled={!allowDownload}
+          onClick={downloadFunc}
+          {...buttonProps}
+        >
           <Translate content={downloadAllText} />
           <Translate className="sr-only" content="dataset.dl.file_types.both" />
-          <DownloadIcon {...iconProps} />
-        </HeaderButton>
+        </Translate>
       </Header>
 
       <ErrorMessage error={Packages.error} clear={Packages.clearError} />
 
       <Tree allowDownload={allowDownload} />
       {inInfo && <Info {...infoProps} />}
+      <ConfirmPackageModal Packages={Packages} />
     </>
   )
 }
@@ -129,17 +138,16 @@ const HeaderStats = styled.span`
   grid-row: 2;
   grid-column: 1;
 `
-
-const HeaderButton = styled(Button)`
+const HeaderButtonWrapper = styled.div`
   grid-row: 1/3;
   grid-column: 2;
-  margin: 0;
 `
 
-const DownloadIcon = styled(FontAwesomeIcon).attrs(props => ({
-  icon: props.icon || faDownload,
-}))`
-  margin-left: 0.5em;
+const HeaderButton = styled(IconButton).attrs({
+  Wrapper: HeaderButtonWrapper,
+})`
+  padding: 0.5rem 0.75rem;
+  margin: 0;
 `
 
 export default withStores(observer(IdaResources))
