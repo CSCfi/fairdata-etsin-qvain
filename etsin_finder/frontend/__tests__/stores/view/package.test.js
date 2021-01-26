@@ -30,8 +30,8 @@ describe('Packages', () => {
     packages.pollInterval.should.eql(packages.initialPollInterval)
   })
 
-  test('pollMultiplier should be 1.5', () => {
-    packages.pollMultiplier.should.eql(1.5)
+  test('pollMultiplier should be 1.2', () => {
+    packages.pollMultiplier.should.eql(1.2)
   })
 
   test('loadingDataset should be set to false', () => {
@@ -96,8 +96,8 @@ describe('Packages', () => {
       packages.initialPollInterval.should.eql(1e3)
     })
 
-    test('should set pollMultiplier to 1.5', () => {
-      packages.pollMultiplier.should.eql(1.5)
+    test('should set pollMultiplier to 1.2', () => {
+      packages.pollMultiplier.should.eql(1.2)
     })
 
     test('should set pollTimeout to null', () => {
