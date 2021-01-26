@@ -33,8 +33,8 @@ const QueryFields = {
 
 class DatasetQuery {
   constructor(Env) {
-    this.Files = new Files()
     this.Env = Env
+    this.Files = new Files()
     this.Packages = new Packages(Env)
     makeObservable(this)
   }
@@ -73,24 +73,28 @@ class DatasetQuery {
     return new Promise((resolve, reject) => {
       axios
         .get(url)
-        .then(action(async res => {
-          this.results = res.data.catalog_record
-          this.emailInfo = res.data.email_info
-          access.updateAccess(
-            res.data.catalog_record.research_dataset.access_rights,
-            res.data.has_permit ? res.data.has_permit : false,
-            res.data.application_state ? res.data.application_state : undefined
-          )
+        .then(
+          action(async res => {
+            this.results = res.data.catalog_record
+            this.emailInfo = res.data.email_info
+            access.updateAccess(
+              res.data.catalog_record.research_dataset.access_rights,
+              res.data.has_permit ? res.data.has_permit : false,
+              res.data.application_state ? res.data.application_state : undefined
+            )
 
-          resolve(res.data)
-        }))
-        .catch(action(error => {
-          this.error = error
-          this.results = []
-          this.emailInfo = []
-          this.directories = []
-          reject(error)
-        }))
+            resolve(res.data)
+          })
+        )
+        .catch(
+          action(error => {
+            this.error = error
+            this.results = []
+            this.emailInfo = []
+            this.directories = []
+            reject(error)
+          })
+        )
     })
   }
 

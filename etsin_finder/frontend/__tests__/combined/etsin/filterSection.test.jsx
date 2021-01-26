@@ -7,13 +7,15 @@ import {
   FilterItems,
 } from '../../../js/components/search/filterResults/filterSection'
 import { PasCheckBox } from '../../../js/components/search/filterResults/PasCheckBox'
-import ElasticQuery from '../../../js/stores/view/elasticquery'
+import EnvClass from '../../../js/stores/domain/env'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+
+const Env = new EnvClass()
+const mockElasticQuery = new ElasticQueryClass(Env)
 
 const getStores = () => ({
-  ElasticQuery: ElasticQuery,
+  ElasticQuery: mockElasticQuery,
 })
-
-const mockElasticQuery = ElasticQuery
 
 jest.mock('../../../js/stores/stores', () => {
   return {

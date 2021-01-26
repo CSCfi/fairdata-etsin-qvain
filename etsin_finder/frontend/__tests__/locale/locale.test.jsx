@@ -1,6 +1,14 @@
-import Locale from '../../js/stores/view/locale'
+import EnvClass from '../../js/stores/domain/env'
+import AccessibilityClass from '../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../js/stores/view/elasticquery'
+import LocaleClass from '../../js/stores/view/locale'
 import counterpart from 'counterpart'
 import moment from 'moment'
+
+const Env = new EnvClass()
+const Accessibility = new AccessibilityClass(Env)
+const ElasticQuery = new ElasticQueryClass(Env)
+const Locale = new LocaleClass(Accessibility, ElasticQuery)
 
 describe('Locale store', () => {
   describe('setLang', () => {

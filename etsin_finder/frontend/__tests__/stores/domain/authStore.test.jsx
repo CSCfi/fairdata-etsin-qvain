@@ -1,7 +1,9 @@
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
 
-import Auth from '../../../js/stores/domain/auth'
+import AuthClass from '../../../js/stores/domain/auth'
+
+const Auth = new AuthClass()
 
 global.Promise = require('bluebird')
 Promise.config({

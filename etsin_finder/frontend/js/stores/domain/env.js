@@ -119,4 +119,4 @@ class Env {
   history = routingStore
 }
 
-export default new Env()
+export default Env

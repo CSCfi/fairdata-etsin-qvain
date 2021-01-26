@@ -20,18 +20,30 @@ import QvainDatasets from './view/qvain/qvain.datasets'
 import Access from './view/access'
 import SearchFilters from './view/searchfilters'
 
+const env = new Env()
+const qvain = new Qvain(env)
+const accessibility = new Accessibility(env)
+const elasticQuery = new ElasticQuery(env)
+const locale = new Locale(accessibility, elasticQuery)
+const datasetQuery = new DatasetQuery(env)
+const auth = new Auth()
+const access = new Access(auth)
+const map = new Map()
+const qvainDatasets = new QvainDatasets()
+const searchFilters = new SearchFilters()
+
 const Stores = {
-  Env,
-  Auth,
-  Locale,
-  ElasticQuery,
-  DatasetQuery: new DatasetQuery(Env),
-  Accessibility,
-  Map,
-  Qvain: new Qvain(Env),
-  QvainDatasets,
-  Access,
-  SearchFilters,
+  Env: env,
+  Qvain: qvain,
+  Accessibility: accessibility,
+  Locale: locale,
+  ElasticQuery: elasticQuery,
+  DatasetQuery: datasetQuery,
+  Auth: auth,
+  Access: access,
+  Map: map,
+  QvainDatasets: qvainDatasets,
+  SearchFilters: searchFilters,
 }
 
 export default Stores

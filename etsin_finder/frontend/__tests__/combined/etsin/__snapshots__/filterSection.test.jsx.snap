@@ -46,7 +46,7 @@ exports[`FilterSection should render <FilterSection /> 1`] = `
     <ul
       aria-label="Data Catalog"
     >
-      <FilterItem
+      <ForwardRef
         aggregationName="data_catalog_en"
         item={
           Object {

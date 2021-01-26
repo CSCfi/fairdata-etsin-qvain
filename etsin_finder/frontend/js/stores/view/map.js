@@ -20,7 +20,10 @@ class Map {
     const maxY = minmax[2]
     const maxX = minmax[3]
     // X and Y might be the wrong way around here
-    return [[minX, minY], [maxX, maxY]]
+    return [
+      [minX, minY],
+      [maxX, maxY],
+    ]
   }
 
   makeGeometry(geometry, placeUri) {
@@ -58,4 +61,4 @@ class Map {
   }
 }
 
-export default new Map()
+export default Map
