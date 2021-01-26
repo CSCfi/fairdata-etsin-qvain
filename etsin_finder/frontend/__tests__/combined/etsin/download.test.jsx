@@ -61,21 +61,6 @@ describe('Packages', () => {
     }
   })
 
-  it('fetches package list', async () => {
-    fakeDownload.createPackage(1, '/')
-    fakeDownload.createPackage(1, '/files/jee')
-
-    await packages.fetch(1)
-    expect(mockAdapter.history.get).toEqual([
-      expect.objectContaining({
-        url: '/api/v2/dl/requests?cr_id=1',
-      }),
-    ])
-
-    expect(packages.get('/').status).toBe(SUCCESS)
-    expect(packages.get('/files/jee').status).toBe(SUCCESS)
-  })
-
   it('clears package list when dataset changes', async () => {
     fakeDownload.createPackage(1, '/firstdataset')
     fakeDownload.createPackage(2, '/otherdataset')
@@ -121,7 +106,7 @@ describe('Packages', () => {
     //   t=3000: Poll, Package ready
     fakeDownload.setProcessingDelay(1500)
     fakeDownload.createPackage(1, '/files/jee')
-    packages.setPollInterval(1000)
+    packages.setPollInterval(1000, 2)
 
     // pending items trigger polling
     await packages.fetch(1)
@@ -256,6 +241,7 @@ describe('Download button actions', () => {
     expect(action.type).toBe('create')
     jest.spyOn(packages, 'createPackageFromFolder')
     action.func()
+    packages.confirmModalCallback()
     expect(packages.createPackageFromFolder.mock.calls).toEqual([['/no_package']])
   })
 })

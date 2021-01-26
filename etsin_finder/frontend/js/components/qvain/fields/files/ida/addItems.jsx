@@ -50,7 +50,9 @@ export const AddFilesModal = ({ isOpen, onRequestClose }) => {
         <Translate component={Title} content="qvain.files.addItemsModal.title" />
         <ProjectSelector disabled={projectChosen} />
       </Header>
-      <AddItemsTree onRequestClose={onRequestClose} />
+      <TreeWrapper>
+        <AddItemsTree onRequestClose={onRequestClose} />
+      </TreeWrapper>
       {isPublished && !isCumulative && (
         <Translate component={HelpField} content="qvain.files.addItemsModal.versionInfo" />
       )}
@@ -94,6 +96,10 @@ const modalStyle = {
     flexDirection: 'column',
   },
 }
+
+const TreeWrapper = styled.div`
+  flex-grow: 1;
+`
 
 const Buttons = styled.div`
   display: flex;

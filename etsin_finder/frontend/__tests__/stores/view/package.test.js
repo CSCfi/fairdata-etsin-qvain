@@ -22,12 +22,16 @@ describe('Packages', () => {
     jest.resetAllMocks()
   })
 
-  test('initialPollInterval should be 1.5e3', () => {
-    packages.initialPollInterval.should.eql(1.5e3)
+  test('initialPollInterval should be 1e3', () => {
+    packages.initialPollInterval.should.eql(1e3)
   })
 
   test('pollInterval should be set to same as intialPollInterval', () => {
     packages.pollInterval.should.eql(packages.initialPollInterval)
+  })
+
+  test('pollMultiplier should be 1.2', () => {
+    packages.pollMultiplier.should.eql(1.2)
   })
 
   test('loadingDataset should be set to false', () => {
@@ -65,9 +69,10 @@ describe('Packages', () => {
   describe('when calling reset', () => {
     beforeEach(() => {
       packages.datasetIdentifier = 'identifier'
-      packages.initialPollInterval = 1
-      packages.pollInterval = 1
+      packages.initialPollInterval = 2
+      packages.pollInterval = 10
       packages.pollTimeout = 2
+      packages.pollMultiplier = 3
       packages.reset()
     })
 
@@ -83,12 +88,16 @@ describe('Packages', () => {
       expect(packages.error).toBe(null)
     })
 
-    test('should set pollInterval to 1.5e3', () => {
-      packages.pollInterval.should.eql(1.5e3)
+    test('should set pollInterval to 1', () => {
+      packages.pollInterval.should.eql(1e3)
     })
 
-    test('should set initialPollInterval to 1.5e3', () => {
-      packages.initialPollInterval.should.eql(1.5e3)
+    test('should set initialPollInterval to 1', () => {
+      packages.initialPollInterval.should.eql(1e3)
+    })
+
+    test('should set pollMultiplier to 1.2', () => {
+      packages.pollMultiplier.should.eql(1.2)
     })
 
     test('should set pollTimeout to null', () => {
@@ -142,7 +151,7 @@ describe('Packages', () => {
   })
 
   describe('when calling setPollTimeout', () => {
-    const timeoutFunction = () => {}
+    const timeoutFunction = () => { }
     const pollInterval = 1
 
     beforeEach(() => {
@@ -290,6 +299,10 @@ describe('Packages', () => {
     beforeEach(async () => {
       axios.get.mockReturnValueOnce(response)
       await packages.fetch(datasetIdentifier)
+    })
+
+    test('should call axios.get', () => {
+      expect(axios.get).toHaveBeenCalledWith('/api/v2/dl/requests?cr_id=identifier')
     })
 
     test('should set datasetIdentifier', () => {
