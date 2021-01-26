@@ -10,13 +10,13 @@
    */
 }
 
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-import ElasticQuery from '../../../stores/view/elasticquery'
 import { InvertedButton } from '../../general/button'
+import { useStores } from '../../../stores/stores'
 
 const Filter = styled.div`
   float: left;
@@ -58,32 +58,27 @@ const Children = styled.span`
   padding: 0.5em 1em;
 `
 
-export default class FilterToggle extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-
-  render() {
-    return (
-      <Filter>
-        <FilterOpen {...this.props} noPadding>
-          {ElasticQuery.filter.length > 0 && (
-            <Amount>
-              {ElasticQuery.filter.length}
-              <span className="sr-only">
-                {' '}
-                <Translate content="search.filter.SRactive" />
-              </span>
-            </Amount>
-          )}
-          <Children>{this.props.children}</Children>
-        </FilterOpen>
-      </Filter>
-    )
-  }
+const FilterToggle = props => {
+  const { ElasticQuery } = useStores()
+  return (
+    <Filter>
+      <FilterOpen {...props} noPadding>
+        {ElasticQuery.filter.length > 0 && (
+          <Amount>
+            {ElasticQuery.filter.length}
+            <span className="sr-only">
+              <Translate content="search.filter.SRactive" />
+            </span>
+          </Amount>
+        )}
+        <Children>{props.children}</Children>
+      </FilterOpen>
+    </Filter>
+  )
 }
 
 FilterToggle.propTypes = {
   children: PropTypes.node.isRequired,
 }
+
+export default FilterToggle

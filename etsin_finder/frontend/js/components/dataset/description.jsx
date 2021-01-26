@@ -16,10 +16,8 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Link } from 'react-router-dom'
-
 import AccessRights from './accessRights'
 import FairdataPasDatasetIcon from './fairdataPasDatasetIcon'
-import Accessiblity from '../../stores/view/accessibility'
 import AskForAccess from './askForAccess'
 import Contact from './contact'
 import ErrorBoundary from '../general/errorBoundary'
@@ -96,7 +94,8 @@ class Description extends Component {
   }
 
   componentDidMount() {
-    Accessiblity.handleNavigation('dataset', false)
+    const { Accessibility } = this.props.Stores
+    Accessibility.handleNavigation('dataset', false)
     Tracking.newPageView(
       `Dataset: ${this.props.match.params.identifier} | Description`,
       this.props.location.pathname
@@ -252,6 +251,7 @@ class Description extends Component {
 export default withStores(observer(Description))
 
 Description.propTypes = {
+  Stores: PropTypes.object.isRequired,
   dataset: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,

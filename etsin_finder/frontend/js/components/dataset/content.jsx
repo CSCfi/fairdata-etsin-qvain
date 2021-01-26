@@ -14,13 +14,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Route, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
+import { observer } from 'mobx-react'
 
-import access from '../../stores/view/access'
 import Description from './description'
 import Data from './data'
 import Events from './events'
 import Tabs from './tabs'
 import Maps from './maps'
+import { withStores } from '../../stores/stores'
 
 const MarginAfter = styled.div`
   margin-bottom: 3em;
@@ -28,13 +29,15 @@ const MarginAfter = styled.div`
 
 class Content extends Component {
   deletedVersionsExists = () => {
-    let deletedVersion = false;
+    let deletedVersion = false
 
-    if (this.props.dataset.dataset_version_set !== undefined
-      && this.props.dataset.dataset_version_set.length > 0) {
+    if (
+      this.props.dataset.dataset_version_set !== undefined &&
+      this.props.dataset.dataset_version_set.length > 0
+    ) {
       for (let i = 0; i < this.props.dataset.dataset_version_set.length; i += 1) {
         if (this.props.dataset.dataset_version_set[i].date_removed !== undefined) {
-          deletedVersion = true;
+          deletedVersion = true
         }
       }
     }
@@ -43,18 +46,14 @@ class Content extends Component {
 
   showEvents() {
     return (
-      this.deletedVersionsExists()
-      ||
-      (this.props.dataset.research_dataset.provenance !== undefined
-        && this.props.dataset.research_dataset.provenance.length > 0)
-
-      || (this.props.dataset.research_dataset.other_identifier !== undefined
-        && this.props.dataset.research_dataset.other_identifier.length > 0)
-
-      || (this.props.dataset.research_dataset.relation !== undefined
-        && this.props.dataset.research_dataset.relation.length > 0)
-
-      || (this.props.dataset.preservation_dataset_origin_version !== undefined)
+      this.deletedVersionsExists() ||
+      (this.props.dataset.research_dataset.provenance !== undefined &&
+        this.props.dataset.research_dataset.provenance.length > 0) ||
+      (this.props.dataset.research_dataset.other_identifier !== undefined &&
+        this.props.dataset.research_dataset.other_identifier.length > 0) ||
+      (this.props.dataset.research_dataset.relation !== undefined &&
+        this.props.dataset.research_dataset.relation.length > 0) ||
+      this.props.dataset.preservation_dataset_origin_version !== undefined
     )
   }
 
@@ -65,18 +64,20 @@ class Content extends Component {
     // - the access_rights allow it
     // - the dataset in removed or deprecated
 
+    const { Access } = this.props.Stores
     if (
-      (!this.props.hasFiles && !this.props.hasRemote)
-      || this.props.harvested
-      || this.props.isRemoved
-      || this.props.isDeprecated
+      (!this.props.hasFiles && !this.props.hasRemote) ||
+      this.props.harvested ||
+      this.props.isRemoved ||
+      this.props.isDeprecated
     ) {
       return false
     }
     if (this.props.hasFiles) {
-      return access.restrictions.allowDataIda
-    } if (this.props.hasRemote) {
-      return access.restrictions.allowDataRemote
+      return Access.restrictions.allowDataIda
+    }
+    if (this.props.hasRemote) {
+      return Access.restrictions.allowDataRemote
     }
     return false
   }
@@ -148,7 +149,9 @@ class Content extends Component {
                 role="tabpanel"
                 provenance={this.props.dataset.research_dataset.provenance}
                 other_identifier={this.props.dataset.research_dataset.other_identifier}
-                preservation_dataset_origin_version_identifier={this.props.dataset.preservation_dataset_origin_version}
+                preservation_dataset_origin_version_identifier={
+                  this.props.dataset.preservation_dataset_origin_version
+                }
                 relation={this.props.dataset.research_dataset.relation}
                 dataset_version_set={this.props.dataset.dataset_version_set}
                 {...props}
@@ -178,7 +181,7 @@ class Content extends Component {
   }
 }
 
-export default withRouter(Content)
+export default withStores(withRouter(observer(Content)))
 
 Content.defaultProps = {
   harvested: false,
@@ -186,6 +189,7 @@ Content.defaultProps = {
 }
 
 Content.propTypes = {
+  Stores: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   dataset: PropTypes.object.isRequired,
   emails: PropTypes.shape({

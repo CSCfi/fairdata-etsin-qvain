@@ -13,4 +13,4 @@ class QvainDatasets {
   }
 }
 
-export default new QvainDatasets()
+export default QvainDatasets

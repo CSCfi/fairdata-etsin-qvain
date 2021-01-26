@@ -27,7 +27,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
-import Stores from './stores'
+import Stores, { Env, Locale, Auth, Accessibility } from './stores'
 import { StoresProvider } from './stores/stores'
 
 registerLocale('fi', fi)
@@ -43,7 +43,7 @@ if (process.env.NODE_ENV === 'test') {
 
 // Syncing history with store
 const browserHistory = createBrowserHistory()
-const history = syncHistoryWithStore(browserHistory, Stores.Env.history)
+const history = syncHistoryWithStore(browserHistory, Env.history)
 
 const hideSpinner = () => {
   const spinner = document.getElementById('app-spinner')
@@ -57,14 +57,14 @@ const App = () => {
 
   // Load runtime config
   const configure = async () => {
-    await Stores.Env.fetchAppConfig()
-    Stores.Locale.loadLang()
+    await Env.fetchAppConfig()
+    Locale.loadLang()
     hideSpinner()
     setInitialized(true)
   }
 
   useEffect(() => {
-    Stores.Auth.checkLogin()
+    Auth.checkLogin()
     configure()
   }, [])
 
@@ -91,4 +91,4 @@ const App = () => {
 export default App
 
 // setup tabbing
-Stores.Accessibility.initialLoad()
+Accessibility.initialLoad()

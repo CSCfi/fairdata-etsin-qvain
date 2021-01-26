@@ -8,29 +8,42 @@
  * @license   MIT
  */
 
-import Locale from './view/locale'
-import Env from './domain/env'
-import Auth from './domain/auth'
-import ElasticQuery from './view/elasticquery'
-import DatasetQuery from './view/datasetquery'
-import Accessibility from './view/accessibility'
-import Map from './view/map'
-import Qvain from './view/qvain'
-import QvainDatasets from './view/qvain/qvain.datasets'
-import Access from './view/access'
-import SearchFilters from './view/searchfilters'
+import LocaleClass from './view/locale'
+import EnvClass from './domain/env'
+import AuthClass from './domain/auth'
+import ElasticQueryClass from './view/elasticquery'
+import DatasetQueryClass from './view/datasetquery'
+import AccessibilityClass from './view/accessibility'
+import MapClass from './view/map'
+import QvainClass from './view/qvain'
+import QvainDatasetsClass from './view/qvain/qvain.datasets'
+import AccessClass from './view/access'
+import SearchFiltersClass from './view/searchfilters'
+
+// named exports fo the instances for non-React functions and classes
+export const Env = new EnvClass()
+export const Auth = new AuthClass()
+export const QvainDatasets = new QvainDatasetsClass()
+export const SearchFilters = new SearchFiltersClass()
+export const Access = new AccessClass(Auth)
+export const Qvain = new QvainClass(Env)
+export const Accessibility = new AccessibilityClass(Env)
+export const ElasticQuery = new ElasticQueryClass(Env)
+export const Locale = new LocaleClass(Accessibility, ElasticQuery)
+export const DatasetQuery = new DatasetQueryClass(Env, Access)
+export const Map = new MapClass(Locale)
 
 const Stores = {
   Env,
-  Auth,
+  Qvain,
+  Accessibility,
   Locale,
   ElasticQuery,
-  DatasetQuery: new DatasetQuery(Env),
-  Accessibility,
-  Map,
-  Qvain: new Qvain(Env),
-  QvainDatasets,
+  DatasetQuery,
+  Auth,
   Access,
+  Map,
+  QvainDatasets,
   SearchFilters,
 }
 

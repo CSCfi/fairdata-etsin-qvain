@@ -3,14 +3,17 @@ import { shallow } from 'enzyme'
 import { runInAction } from 'mobx'
 
 import { AskForAccess } from '../../../js/components/dataset/askForAccess'
-import Access from '../../../js/stores/view/access'
-import Auth from '../../../js/stores/domain/auth'
+import AccessClass from '../../../js/stores/view/access'
+import AuthClass from '../../../js/stores/domain/auth'
 import REMSButton from '../../../js/components/dataset/REMSButton'
 import Loader from '../../../js/components/general/loader'
 
+const Access = new AccessClass()
+const Auth = new AuthClass()
+
 const getStores = () => ({
-  Access: Access,
-  Auth: Auth,
+  Access,
+  Auth,
 })
 
 const access = {

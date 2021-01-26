@@ -14,7 +14,6 @@ import translate from 'counterpart'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
-import Accessibility from '../../../stores/view/accessibility'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import dateFormat from '../../../utils/dateFormat'
 import Tracking from '../../../utils/tracking'
@@ -88,6 +87,7 @@ class Events extends Component {
   }
 
   componentDidMount() {
+    const { Accessibility } = this.props.Stores
     // Error handling for dataset_version_set
     if (this.props.dataset_version_set) {
       this.versions(this.props.dataset_version_set)
@@ -413,6 +413,7 @@ Events.defaultProps = {
 }
 
 Events.propTypes = {
+  Stores: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }).isRequired,

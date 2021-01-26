@@ -4,9 +4,10 @@ import styled, { withTheme } from 'styled-components'
 import leaflet from 'leaflet'
 import PropTypes from 'prop-types'
 
-import MapStore from '../../../stores/view/map'
 import mapStyle from './mapStyle'
 import mapIcon from '../../../../static/images/map_icon.svg'
+
+import { withStores } from '../../../stores/stores'
 
 const MarkerIcon = leaflet.icon({
   iconUrl: mapIcon,
@@ -27,6 +28,7 @@ const MarkerIcon = leaflet.icon({
 
 class MyMap extends Component {
   static propTypes = {
+    Stores: PropTypes.object.isRequired,
     geometry: PropTypes.arrayOf(PropTypes.string),
     place_uri: PropTypes.objectOf(PropTypes.string),
     children: PropTypes.element,
@@ -66,6 +68,7 @@ class MyMap extends Component {
   }
 
   initMap = () => {
+    const { Map: MapStore } = this.props.Stores
     MapStore.makeGeometry(this.props.geometry, this.props.place_uri).then(geometry => {
       // TODO: use all geometries to calculate bounds
       const bounds = geometry[0].bounds
@@ -78,7 +81,8 @@ class MyMap extends Component {
     })
   }
 
-  makeLayers = geometry => geometry.map(geo => {
+  makeLayers = geometry =>
+    geometry.map(geo => {
       switch (geo.type) {
         case 'LineString':
         case 'MultiLineString':
@@ -142,7 +146,7 @@ class MyMap extends Component {
         <CustomMap {...this.getMapOptions()}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           />
           {this.state.layers}
         </CustomMap>
@@ -161,4 +165,4 @@ const MapStyleContainer = styled.div`
   ${mapStyle};
 `
 
-export default withTheme(MyMap)
+export default withStores(withTheme(MyMap))

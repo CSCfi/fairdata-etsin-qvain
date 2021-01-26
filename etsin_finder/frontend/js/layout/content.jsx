@@ -14,7 +14,6 @@ import React, { useEffect } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import Accessibility from '../stores/view/accessibility'
 import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
 import ErrorPage from '../components/errorpage'
 
@@ -26,11 +25,12 @@ const Content = ({ contentRef }) => {
   const {
     Auth,
     Env: { isQvain, separateQvain, getQvainUrl },
+    Accessibility,
   } = useStores()
 
   useEffect(() => {
     Accessibility.handleNavigation()
-  }, [])
+  }, [Accessibility])
 
   if (Auth.initializing) return null
 

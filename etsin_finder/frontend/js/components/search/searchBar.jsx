@@ -16,15 +16,16 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { observer } from 'mobx-react'
 
 import { Search } from '../../routes'
-import ElasticQuery from '../../stores/view/elasticquery'
 import ErrorBoundary from '../general/errorBoundary'
+import { withStores } from '../../stores/stores'
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
   // Handle possible empty initial query
   state = {
-    query: ElasticQuery.search || '',
+    query: this.props.Stores.ElasticQuery.search || '',
     placeholder: counterpart('search.placeholder'),
   }
 
@@ -42,13 +43,14 @@ export default class SearchBar extends Component {
     })
   }
 
-  handleChange = (event) => {
+  handleChange = event => {
     Search.preload()
     this.setState({ query: event.target.value })
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = e => {
     e.preventDefault()
+    const { ElasticQuery } = this.props.Stores
     ElasticQuery.updateSearch(this.state.query)
     ElasticQuery.queryES(false)
   }
@@ -89,6 +91,7 @@ SearchBar.defaultProps = {
 }
 
 SearchBar.propTypes = {
+  Stores: PropTypes.object.isRequired,
   inputRef: PropTypes.func,
 }
 
@@ -131,3 +134,4 @@ const SearchInner = styled.div`
     }
   }
 `
+export default withStores(observer(SearchBar))
