@@ -75,13 +75,13 @@ class Locale {
     const isSearch = this.Env.history.location.pathname === '/datasets/'
     if (isSearch) {
       // update url true
-      const filtersChanged = this.Elasticquery.clearFilters(true)
+      const filtersChanged = this.ElasticQuery.clearFilters(true)
       if (filtersChanged) {
-        this.Elasticquery.queryES()
+        this.ElasticQuery.queryES()
       }
     } else {
       // update url false
-      this.Elasticquery.clearFilters(false)
+      this.ElasticQuery.clearFilters(false)
     }
   }
 

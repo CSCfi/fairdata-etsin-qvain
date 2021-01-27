@@ -11,8 +11,6 @@
 import { observable, computed, action, makeObservable } from 'mobx'
 import axios from 'axios'
 
-import access from './access'
-
 import Files from './files'
 import Packages from './packages'
 
@@ -32,10 +30,11 @@ const QueryFields = {
 }
 
 class DatasetQuery {
-  constructor(Env) {
+  constructor(Env, Access) {
     this.Env = Env
     this.Files = new Files()
     this.Packages = new Packages(Env)
+    this.Access = Access
     makeObservable(this)
   }
 
@@ -77,7 +76,7 @@ class DatasetQuery {
           action(async res => {
             this.results = res.data.catalog_record
             this.emailInfo = res.data.email_info
-            access.updateAccess(
+            this.Access.updateAccess(
               res.data.catalog_record.research_dataset.access_rights,
               res.data.has_permit ? res.data.has_permit : false,
               res.data.application_state ? res.data.application_state : undefined

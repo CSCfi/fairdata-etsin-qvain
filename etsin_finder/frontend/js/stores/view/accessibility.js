@@ -81,7 +81,7 @@ class Accessibility {
 
   @action
   handleNavigation(location, resetFocus = true) {
-    if (this.env.isQvain) {
+    if (this.Env.isQvain) {
       this.setQvainPageTitle(translate('general.qvainPageTitle'))
       return
     }
@@ -109,7 +109,7 @@ class Accessibility {
     ]
 
     let location
-    const pathname = this.env.history.location.pathname
+    const pathname = this.Env.history.location.pathname
     for (const [matchLocation, matcher] of etsinLocationMatchers) {
       if (matcher.test(pathname)) {
         location = matchLocation

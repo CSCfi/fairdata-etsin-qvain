@@ -10,7 +10,6 @@
 
 import WKT from 'terraformer-wkt-parser'
 import { OpenStreetMapProvider } from 'leaflet-geosearch'
-import checkDataLang from '../../utils/checkDataLang'
 
 // functions for map component
 class Map {

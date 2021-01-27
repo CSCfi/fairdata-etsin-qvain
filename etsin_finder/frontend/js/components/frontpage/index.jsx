@@ -19,12 +19,12 @@ import { Search } from '../../routes'
 import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
 import KeyValues from './keyValues'
-import Accessibility from '../../stores/view/accessibility'
 import Tracking from '../../utils/tracking'
 import Modal from '../general/modal'
-import Auth from '../../stores/domain/auth'
 
 import Stores from '../../stores'
+
+import { withStores } from '../../utils/stores'
 
 const customStyles = {
   content: {
@@ -34,22 +34,26 @@ const customStyles = {
   },
 }
 
-export default class FrontPage extends Component {
+class FrontPage extends Component {
+  state = {
+    userPermissionErrorModalIsOpen: false,
+    userHomeOrganizationErrorModalIsOpen: false,
+  }
+
   constructor(props) {
     super(props)
-
-    this.state = {
-      userPermissionErrorModalIsOpen: false,
-      userHomeOrganizationErrorModalIsOpen: false,
-    }
-
     this.closeUserPermissionErrorModal = this.closeUserPermissionErrorModal.bind(this)
     this.closeUserHomeOrganizationErrorModal = this.closeUserHomeOrganizationErrorModal.bind(this)
   }
 
   componentDidMount() {
+    const {
+      Stores: { Accessibility },
+      location,
+    } = this.props
+
     Accessibility.handleNavigation('home')
-    Tracking.newPageView('Etsin | Tutkimusaineistojen hakupalvelu', this.props.location.pathname)
+    Tracking.newPageView('Etsin | Tutkimusaineistojen hakupalvelu', location.pathname)
     // preload search page
     Search.preload()
 
@@ -58,21 +62,18 @@ export default class FrontPage extends Component {
   }
 
   checkUserLoginStatus() {
-    Stores.Auth.checkLogin()
+    const { Auth } = this.props.Stores
+    Auth.checkLogin()
       .then(() => {
         // If the user was logged in but does not have a user.name,
         // it means they were verified through HAKA, but do not have a CSC account.
-        if (
-          Stores.Auth.user.loggedIn &&
-          Stores.Auth.user.name === undefined) {
+        if (Auth.user.loggedIn && Auth.user.name === undefined) {
           this.setState({
             userPermissionErrorModalIsOpen: true,
           })
-        // If the user has a user.name, but not a user.homeOrganizationName,
-        // it means they have a CSC account, but no home organization set.
-        } else if (
-          Stores.Auth.user.name !== undefined &&
-          Stores.Auth.user.homeOrganizationName === undefined) {
+          // If the user has a user.name, but not a user.homeOrganizationName,
+          // it means they have a CSC account, but no home organization set.
+        } else if (Auth.user.name !== undefined && Auth.user.homeOrganizationName === undefined) {
           this.setState({
             userHomeOrganizationErrorModalIsOpen: true,
           })
@@ -85,6 +86,7 @@ export default class FrontPage extends Component {
   }
 
   closeUserPermissionErrorModal() {
+    const { Auth } = this.props.Stores
     this.setState({
       userPermissionErrorModalIsOpen: false,
     })
@@ -94,6 +96,7 @@ export default class FrontPage extends Component {
   }
 
   closeUserHomeOrganizationErrorModal() {
+    const { Auth } = this.props.Stores
     this.setState({
       userHomeOrganizationErrorModalIsOpen: false,
     })
@@ -156,6 +159,7 @@ export default class FrontPage extends Component {
 }
 
 FrontPage.propTypes = {
+  Stores: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }).isRequired,
@@ -168,3 +172,5 @@ const TextHolder = styled.div`
     white-space: pre-line;
   }
 `
+
+export default withStores(FrontPage)
