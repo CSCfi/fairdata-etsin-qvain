@@ -108,6 +108,7 @@ exports[`Qvain should render correctly 1`] = `
     datasetLoading={false}
     handleSubmitError={[Function]}
     handleSubmitResponse={[Function]}
+    hideSubmitButtons={false}
     response={null}
     submitButtonsRef={
       Object {
@@ -116,16 +117,60 @@ exports[`Qvain should render correctly 1`] = `
     }
     submitted={false}
   />
-  <Dataset
-    datasetError={false}
-    datasetErrorDetails={null}
-    datasetErrorTitle={null}
-    handleRetry={[Function]}
-    handleSubmitError={[Function]}
-    handleSubmitResponse={[Function]}
-    haveDataset={true}
-    setFocusOnSubmitButton={[Function]}
-  />
+  <ErrorBoundary
+    ContainerComponent={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "attrs": Array [
+          Object {
+            "className": "error",
+          },
+        ],
+        "componentStyle": e {
+          "baseHash": -342646166,
+          "baseStyle": undefined,
+          "componentId": "errorBoundary__ErrorContainer-kebdqo-0",
+          "isStatic": false,
+          "rules": Array [
+            "
+  && {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+",
+          ],
+          "staticRulesId": "",
+        },
+        "displayName": "errorBoundary__ErrorContainer",
+        "foldedComponentIds": Array [],
+        "render": [Function],
+        "shouldForwardProp": undefined,
+        "styledComponentId": "errorBoundary__ErrorContainer-kebdqo-0",
+        "target": "div",
+        "toString": [Function],
+        "warnTooManyClasses": [Function],
+        "withComponent": [Function],
+      }
+    }
+    callback={[Function]}
+    title={
+      <Translate
+        component="h2"
+        content="qvain.error.render"
+      />
+    }
+  >
+    <Dataset
+      datasetError={false}
+      datasetErrorDetails={null}
+      datasetErrorTitle={null}
+      handleRetry={[Function]}
+      handleSubmitError={[Function]}
+      handleSubmitResponse={[Function]}
+      haveDataset={true}
+      setFocusOnSubmitButton={[Function]}
+    />
+  </ErrorBoundary>
   <LooseActorsDialog />
   <LooseProvenanceDialog />
   <Translate
@@ -161,13 +206,13 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
       />
     </Tooltip>
   </title__SectionTitle>
-  <DescriptionField />
-  <IssuedDateField />
-  <OtherIdentifierField />
-  <FieldOfScienceField />
-  <LanguageField />
-  <KeywordsField />
-  <SubjectHeadingsField />
+  <withFieldErrorBoundary(DescriptionField) />
+  <withFieldErrorBoundary(IssuedDateField) />
+  <withFieldErrorBoundary(OtherIdentifierField) />
+  <withFieldErrorBoundary(FieldOfScienceField) />
+  <withFieldErrorBoundary(LanguageField) />
+  <withFieldErrorBoundary(KeywordsField) />
+  <withFieldErrorBoundary(SubjectHeadingsField) />
 </div>
 `;
 
@@ -685,7 +730,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
       />
     </Tooltip>
   </title__SectionTitle>
-  <WithTheme(Component) />
-  <ForwardRef />
+  <withFieldErrorBoundary(WithTheme(Component)) />
+  <withFieldErrorBoundary(Component) />
 </div>
 `;

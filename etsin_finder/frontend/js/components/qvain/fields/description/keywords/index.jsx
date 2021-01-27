@@ -3,6 +3,7 @@ import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import counterpart from 'counterpart'
 
+import { withFieldErrorBoundary } from '../../../general/errors/fieldErrorBoundary'
 import Tooltip from '../../../../general/tooltipHover'
 import Card from '../../../general/card'
 import { LabelLarge } from '../../../general/modal/form'
@@ -59,4 +60,4 @@ const KeywordsField = () => {
   )
 }
 
-export default observer(KeywordsField)
+export default withFieldErrorBoundary(observer(KeywordsField), 'qvain.description.keywords.title')

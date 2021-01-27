@@ -9,6 +9,7 @@ import { Prompt } from 'react-router'
 import Translate from 'react-translate-component'
 
 import { QvainContainer } from '../../general/card'
+import ErrorBoundary from '../../../general/errorBoundary'
 import { getResponseError } from '../../utils/responseError'
 import urls from '../../utils/urls'
 import Tracking from '../../../../utils/tracking'
@@ -55,6 +56,7 @@ export class Qvain extends Component {
     datasetError: false,
     datasetErrorTitle: null,
     datasetErrorDetails: null,
+    renderFailed: false,
   }
 
   componentDidMount() {
@@ -225,7 +227,7 @@ export class Qvain extends Component {
   getStickyHeaderProps = () => {
     const { metaxApiV2 } = this.props.Stores.Env
     const { error, response: responseV2, isLoading } = this.props.Stores.Qvain.Submit
-    const { datasetLoading, datasetError, submitted, response } = this.state
+    const { datasetLoading, datasetError, submitted, response, renderFailed } = this.state
 
     return {
       datasetLoading: metaxApiV2 ? isLoading : datasetLoading,
@@ -236,7 +238,12 @@ export class Qvain extends Component {
       handleSubmitResponse: this.handleSubmitResponse,
       clearSubmitResponse: this.clearSubmitResponse,
       submitButtonsRef: this.submitButtonsRef,
+      hideSubmitButtons: renderFailed,
     }
+  }
+
+  getErrorTitle() {
+    return <Translate component="h2" content="qvain.error.render" />
   }
 
   handleIdentifierChanged() {
@@ -258,13 +265,19 @@ export class Qvain extends Component {
     }
   }
 
+  enableRenderFailed = () => {
+    this.setState({ renderFailed: true })
+  }
+
   render() {
     const { changed } = this.props.Stores.Qvain
     return (
       <QvainContainer>
         <Header {...this.getHeaderProps()} />
         <StickyHeader {...this.getStickyHeaderProps()} />
-        <Dataset {...this.getDatasetProps()} />
+        <ErrorBoundary title={this.getErrorTitle()} callback={this.enableRenderFailed}>
+          <Dataset {...this.getDatasetProps()} />
+        </ErrorBoundary>
         <LooseActorDialog />
         <LooseProvenanceDialog />
         <Translate

@@ -22,7 +22,7 @@ const ErrorMessage = ({ error, clear }) => {
   const message = `${error.name}: ${error.message}`
   const response = error.request?.responseText
 
-  const detailAction = `dataset.dl.errors.${showDetails ? 'hideDetails' : 'showDetails'}`
+  const detailAction = `error.details.${showDetails ? 'hideDetails' : 'showDetails'}`
 
   return (
     <ErrorDiv>

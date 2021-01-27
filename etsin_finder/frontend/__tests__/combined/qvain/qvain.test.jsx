@@ -213,23 +213,23 @@ describe('Qvain.Description', () => {
     expect(component).toMatchSnapshot()
   })
   it('should render <OtherIdentifierField />', () => {
-    const component = shallow(<OtherIdentifierField />)
+    const component = shallow(<OtherIdentifierField.wrappedComponent />)
     expect(component).toMatchSnapshot()
   })
   it('should render <FieldOfScienceField />', () => {
-    const component = shallow(<FieldOfScienceField />)
+    const component = shallow(<FieldOfScienceField.wrappedComponent />)
     expect(component).toMatchSnapshot()
   })
   it('should render <LanguageField />', () => {
-    const component = shallow(<LanguageField />)
+    const component = shallow(<LanguageField.wrappedComponent />)
     expect(component).toMatchSnapshot()
   })
   it('should render <KeywordsField />', () => {
-    const component = shallow(<KeywordsField />)
+    const component = shallow(<KeywordsField.wrappedComponent />)
     expect(component).toMatchSnapshot()
   })
   it('should render <SubjectHeadingsField />', () => {
-    const component = shallow(<SubjectHeadingsField Stores={getStores()} />)
+    const component = shallow(<SubjectHeadingsField.wrappedComponent Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
 })
@@ -508,21 +508,23 @@ describe('Qvain issued date', () => {
     Qvain.resetQvainStore()
   })
 
+  const IssuedDateFieldBase = IssuedDateField.wrappedComponent
+
   it('is enabled', () => {
-    const component = shallow(<IssuedDateField />)
+    const component = shallow(<IssuedDateFieldBase />)
     expect(component.find(DatePicker).prop('disabled')).toEqual(false)
   })
 
   it('is enabled for unpublished DOI dataset', () => {
     Qvain.setUseDoi(true)
-    const component = shallow(<IssuedDateField />)
+    const component = shallow(<IssuedDateFieldBase />)
     expect(component.find(DatePicker).prop('disabled')).toEqual(false)
   })
 
   it('is disabled for published DOI dataset', () => {
     Qvain.setUseDoi(true)
     Qvain.setOriginal({ identifier: 'test' })
-    const component = shallow(<IssuedDateField />)
+    const component = shallow(<IssuedDateFieldBase />)
     expect(component.find(DatePicker).prop('disabled')).toEqual(true)
   })
 })
