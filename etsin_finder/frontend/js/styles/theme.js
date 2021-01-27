@@ -38,7 +38,8 @@ const etsinTheme = {
     success: '#0E8632',
     insetDark: 'rgba(0, 0, 0, 0.3)',
     linkColor: 'rgb(0, 98, 134)',
-    redText: '#ce0000'
+    redText: '#ce0000',
+    itemBackgroundLight: '#eef2f8',
   },
   breakpoints: {
     xs: '410px',

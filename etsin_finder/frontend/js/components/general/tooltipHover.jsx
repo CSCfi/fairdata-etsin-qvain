@@ -10,14 +10,42 @@
    */
 }
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 const TooltipHover = props => {
-  const { position, children, ...restProps } = props
+  const { position, children, showOnClick, ...restProps } = props
+  const [clicked, setClicked] = useState(false)
+
+  useEffect(() => {
+    setClicked(false)
+  }, [props.title])
+
+  const hide = e => {
+    setClicked(false)
+    document.removeEventListener('click', hide)
+    e.preventDefault()
+  }
+
+  const toggle = e => {
+    if (clicked) {
+      document.removeEventListener('click', hide)
+      setClicked(false)
+    } else {
+      document.addEventListener('click', hide)
+      setClicked(true)
+    }
+    e.preventDefault()
+  }
+
   return (
-    <Tip position={position.toLowerCase()} {...restProps}>
+    <Tip
+      forceShow={clicked && showOnClick}
+      onClick={toggle}
+      position={position.toLowerCase()}
+      {...restProps}
+    >
       {children}
     </Tip>
   )
@@ -25,11 +53,17 @@ const TooltipHover = props => {
 
 TooltipHover.defaultProps = {
   position: 'top',
+  title: '',
+  showOnHover: true,
+  showOnClick: false,
 }
 
 TooltipHover.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]).isRequired,
   position: PropTypes.oneOf(['top', 'right']),
+  title: PropTypes.string,
+  showOnHover: PropTypes.bool,
+  showOnClick: PropTypes.bool,
 }
 
 export default TooltipHover
@@ -78,6 +112,8 @@ const Tip = styled.span.attrs(props => ({
   color: inherit;
   background-color: transparent;
   &:before {
+    ${props => !props.title && 'display: none;'}
+    pointer-events: none;
     font-size: 0.8em;
     transition: all 0.3s ease;
     opacity: 0;
@@ -85,12 +121,15 @@ const Tip = styled.span.attrs(props => ({
     padding: 0.1em 0.7em;
     position: absolute;
     ${props => getContainerPosition(props.position)}
-    white-space: nowrap;
+    max-width: 12rem;
+    width: max-content;
+    text-align: center;
     color: ${props => props.fg};
     background-color: ${props => props.bg};
     border-radius: 5px;
   }
   &:after {
+    ${props => !props.title && 'display: none;'}
     transition: all 0.3s ease;
     opacity: 0;
     position: absolute;
@@ -99,10 +138,22 @@ const Tip = styled.span.attrs(props => ({
     border: 6px solid transparent;
     border-${props => props.position}-color: ${props => props.bg};
   }
+  ${props =>
+    props.showOnHover &&
+    `
   &:hover {
     &:before,
     &:after {
       opacity: 1;
     }
   }
+  `}
+
+  ${props =>
+    props.forceShow &&
+    `
+  &:before,
+  &:after {
+    opacity: 1;
+  }`}
 `

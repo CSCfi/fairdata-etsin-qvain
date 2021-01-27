@@ -85,7 +85,7 @@ const finnish = {
       datacite: 'Datacite tietomallissa (XML)',
       fairdata_datacite: 'Ei validoituna Datacite tietomallissa (XML)',
       metax: 'Metax tietomallissa (JSON)'
-      },
+    },
     draftInfo: {
       draft: 'Tämä aineisto on luonnos ja näkyy ainoastaan aineiston luojalle.',
       changes:
@@ -101,7 +101,6 @@ const finnish = {
       downloadFailed: 'Lataus epäonnistui',
       downloadAll: 'Lataa kaikki',
       downloadDisabledForDraft: 'Lataus ei käytössä luonnoksille',
-      downloadItem: 'Lataa %(name)s',
       downloading: 'Ladataan...',
       fileAmount: '%(amount)s objektia',
       close_modal: 'Sulje info',
@@ -116,10 +115,20 @@ const finnish = {
         unknownError: 'Latauspalvelun käytössä tapahtui virhe.',
       },
       packages: {
-        createForAll: 'Luo latauspaketti',
-        createForItem: 'Luo latauspaketti kohteelle %(name)s',
-        pending: 'Luodaan latauspakettia',
+        createForAll: 'Lataa kaikki',
+        create: 'Lataa',
+        pending: 'Luodaan',
+        pendingTooltip: 'Latauspakettia luodaan. Kun painike muuttuu vihreäksi, lataus voidaan aloittaa.',
         loading: 'Ladataan',
+        modal: {
+          header: 'Luo latauspaketti?',
+          main: `Aloittaaksesi latauksen Etsimen täytyy luoda latauspaketti.
+          Jos dataa on paljon, paketin luomisessa voi kestää minuutteja tai tunteja.
+          Kun lataus voidaan aloittaa, lataa-painike muuttuu vihreäksi.`,
+          additional: 'Latauspaketin luonti ei keskeydy, vaikka poistuisit Etsimestä.',
+          ok: 'Luo latauspaketti',
+          cancel: 'Peruuta',
+        },
       },
       fileCount: {
         one: '1 tiedosto',
