@@ -33,5 +33,5 @@ const DescriptionField = () => {
 
 export default withFieldErrorBoundary(
   observer(DescriptionField),
-  'qvain.description.description.title'
+  'qvain.description.description.description.label'
 )

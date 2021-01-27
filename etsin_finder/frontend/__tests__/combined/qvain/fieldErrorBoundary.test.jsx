@@ -56,7 +56,7 @@ describe('withFieldErrorBoundary', () => {
 
   it('should use correct translations', () => {
     withFieldErrorBoundaryTranslationList.forEach(key => {
-      translate(key)
+      translate(key).should.be.a('string')
     })
     errors.should.be.empty
   })
