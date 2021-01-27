@@ -20,10 +20,9 @@ import QvainDatasetsClass from './view/qvain/qvain.datasets'
 import AccessClass from './view/access'
 import SearchFiltersClass from './view/searchfilters'
 
-// to prevent cyclic imports you can use these separate imports intead of main Stores
+// named exports fo the instances for non-React functions and classes
 export const Env = new EnvClass()
 export const Auth = new AuthClass()
-export const Map = new MapClass()
 export const QvainDatasets = new QvainDatasetsClass()
 export const SearchFilters = new SearchFiltersClass()
 export const Access = new AccessClass(Auth)
@@ -32,6 +31,7 @@ export const Accessibility = new AccessibilityClass(Env)
 export const ElasticQuery = new ElasticQueryClass(Env)
 export const Locale = new LocaleClass(Accessibility, ElasticQuery)
 export const DatasetQuery = new DatasetQueryClass(Env, Access)
+export const Map = new MapClass(Locale)
 
 const Stores = {
   Env,

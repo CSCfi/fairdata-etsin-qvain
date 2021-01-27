@@ -22,8 +22,6 @@ import KeyValues from './keyValues'
 import Tracking from '../../utils/tracking'
 import Modal from '../general/modal'
 
-import Stores from '../../stores'
-
 import { withStores } from '../../utils/stores'
 
 const customStyles = {

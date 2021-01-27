@@ -14,6 +14,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Route, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
+import { observer } from 'mobx-react'
 
 import Description from './description'
 import Data from './data'
@@ -21,7 +22,6 @@ import Events from './events'
 import Tabs from './tabs'
 import Maps from './maps'
 import { withStores } from '../../stores/stores'
-import { observer } from 'mobx-react'
 
 const MarginAfter = styled.div`
   margin-bottom: 3em;

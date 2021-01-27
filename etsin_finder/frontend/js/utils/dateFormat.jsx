@@ -10,7 +10,7 @@
    */
 }
 
-import Stores from '../stores'
+import { Locale } from '../stores'
 
 const formats = {
   datetime: {
@@ -58,7 +58,6 @@ const formats = {
 }
 
 const dateFormat = date => {
-  const { Locale } = Stores
   if (!date) {
     return ''
   }
