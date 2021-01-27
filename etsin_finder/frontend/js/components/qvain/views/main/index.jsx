@@ -157,6 +157,10 @@ export class Qvain extends Component {
     event.preventDefault()
   }
 
+  getErrorTitle() {
+    return <Translate component="h2" content="qvain.error.render" />
+  }
+
   clearSubmitResponse = () => {
     const { clearResponse, setError } = this.props.Stores.Qvain.Submit
     clearResponse()
@@ -242,8 +246,8 @@ export class Qvain extends Component {
     }
   }
 
-  getErrorTitle() {
-    return <Translate component="h2" content="qvain.error.render" />
+  enableRenderFailed = () => {
+    this.setState({ renderFailed: true })
   }
 
   handleIdentifierChanged() {
@@ -263,10 +267,6 @@ export class Qvain extends Component {
     } else {
       this.setState({ datasetLoading: false, haveDataset: true })
     }
-  }
-
-  enableRenderFailed = () => {
-    this.setState({ renderFailed: true })
   }
 
   render() {
