@@ -22,10 +22,10 @@ import {
   ToggleOpenButton,
   ItemTitle,
   Icon,
-  ClickableIcon,
   NoIcon,
 } from '../../../general/files/items'
 import getDownloadAction from './downloadActions'
+import IconButton from './iconButton'
 
 const download = (datasetIdentifier, item) => {
   const handle = window.open(
@@ -48,10 +48,10 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const fileCount = item.existingFileCount && `${item.existingFileCount} files`
   const size = sizeParse(item.byteSize || item.existingByteSize)
   const tagText = [fileCount, size].filter(v => v).join(', ')
-  const sizeTag = tagText ? <PlainTag>{tagText}</PlainTag> : null
+  const sizeTag = tagText ? <PlainTag width="10em">{tagText}</PlainTag> : null
 
+  const isOpen = isDirectory(item) && directoryView.isOpen(item)
   if (isDirectory(item)) {
-    const isOpen = directoryView.isOpen(item)
     content = (
       <>
         <ToggleOpenButton item={item} directoryView={directoryView} />
@@ -73,28 +73,32 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   }
 
   const haveMetadata = hasMetadata(item)
-  const infoColor = haveMetadata ? 'primary' : 'gray'
   const { type } = item
   let downloadFunc = () => download(datasetIdentifier, item)
   let downloadIcon = faDownload
   let downloadIconSpin = false
-  let downloadAriaLabel = 'dataset.dl.downloadItem'
+  let downloadButtonText = 'dataset.dl.download'
+  let downloadButtonColor = null
+  let downloadTooltip = null
 
   if (downloadApiV2) {
     const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
     downloadFunc = action.func
     downloadIcon = action.icon
     downloadIconSpin = action.spin
-    downloadAriaLabel = action.ariaLabel
+    downloadButtonText = action.buttonLabel
+    downloadButtonColor = action.color
+    downloadTooltip = action.tooltip
   }
 
   const infoButton = (
     <Translate
-      component={ClickableIcon}
+      component={IconButton}
+      fontSize="11pt"
+      content="dataset.dl.info"
+      color="darkgray"
       icon={faInfoCircle}
-      color={infoColor}
-      disabledColor="gray"
-      disabledOpacity={0.4}
+      invert
       onClick={() => setInInfo(item)}
       attributes={{
         'aria-label': `dataset.dl.infoModalButton.${type}.${haveMetadata ? 'custom' : 'general'}`,
@@ -105,28 +109,31 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
 
   const downloadButton = (
     <Translate
-      component={ClickableIcon}
+      component={IconButton}
+      fontSize="11pt"
+      width="7.5em"
+      content={downloadButtonText}
+      color={downloadButtonColor}
       icon={downloadIcon}
       spin={downloadIconSpin}
-      color="primary"
+      attributes={{
+        tooltip: downloadTooltip,
+      }}
       disabled={!allowDownload}
-      disabledColor="gray"
-      disabledOpacity={0.4}
       onClick={downloadFunc}
-      attributes={{ 'aria-label': downloadAriaLabel }}
       with={{ name }}
     />
   )
 
   return (
-    <ItemRow style={{ flexWrap: 'wrap' }}>
+    <ItemRow isOpen={isOpen} style={{ flexWrap: 'wrap' }}>
+      <ItemSpacer level={level} />
+      <Group>{content}</Group>
       <Group>
+        {sizeTag}
         {infoButton}
         {downloadButton}
-        <ItemSpacer level={level + 0.5} />
-        {content}
       </Group>
-      <Group>{sizeTag}</Group>
     </ItemRow>
   )
 }
@@ -139,6 +146,7 @@ const ItemTitleBreaking = styled(ItemTitle)`
 
 const Group = styled.div`
   display: flex;
+  align-items: center;
 
   &:last-child {
     margin-left: auto;

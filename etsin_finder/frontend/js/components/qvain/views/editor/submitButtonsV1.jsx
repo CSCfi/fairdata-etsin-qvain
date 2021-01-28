@@ -40,7 +40,14 @@ const SubmitButtonsV1 = ({
             setChanged(false)
             editDataset(res.data)
             success(res.data)
-            goToDatasets(res.data.identifier)
+
+            const nextVersion = res.data?.new_version_created?.identifier
+            if (nextVersion) {
+              goToDatasets(nextVersion)
+            } else {
+              goToDatasets(res.data.identifier)
+            }
+
             return true
           })
           .catch(failure)
@@ -81,9 +88,13 @@ SubmitButtonsV1.propTypes = {
   goToDatasets: PropTypes.func.isRequired,
   showUseDoiInformation: PropTypes.func.isRequired,
   handleCreatePublished: PropTypes.func.isRequired,
-  submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }).isRequired,
+  submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }),
   doiModal: PropTypes.node.isRequired,
   disabled: PropTypes.bool.isRequired,
+}
+
+SubmitButtonsV1.defaultProps = {
+  submitButtonsRef: null,
 }
 
 export default observer(SubmitButtonsV1)

@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import CreatableSelect from 'react-select/creatable'
+import { components } from 'react-select'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import translate from 'counterpart'
@@ -14,11 +15,22 @@ const createOption = label => ({
   value: label,
 })
 
-const components = {
+const Input = props => {
+  const required = props?.selectProps?.required
+  return <components.Input aria-required={required} {...props} />
+}
+
+Input.propTypes = {
+  selectProps: PropTypes.object.isRequired,
+}
+
+const customComponents = {
   DropdownIndicator: null,
+  Input,
 }
 
 const StringArray = ({
+  id,
   itemStr,
   addItemStr,
   setItemStr,
@@ -31,6 +43,7 @@ const StringArray = ({
   readonly,
   validationError,
   setValidationError,
+  required,
 }) => {
   const [changed, setChanged] = useState()
   const selectRef = useRef()
@@ -126,7 +139,8 @@ const StringArray = ({
       <Translate
         component={RefCreatableSelect}
         selectRef={selectRef}
-        components={components}
+        components={customComponents}
+        inputId={id}
         inputValue={itemStr}
         isMulti
         isClearable={false}
@@ -139,18 +153,20 @@ const StringArray = ({
         getValue={v => v}
         value={options}
         attributes={{ placeholder: `${translationsRoot}.placeholder` }}
+        required={required}
       />
       <ErrorAndButtonContainer>
-        <ArrayValidationError>{validationError}</ArrayValidationError>
         <AddNewButton type="button" onClick={handleAddNew} disabled={readonly}>
           <Translate content={`${translationsRoot}.addButton`} />
         </AddNewButton>
+        <ArrayValidationError>{validationError}</ArrayValidationError>
       </ErrorAndButtonContainer>
     </>
   )
 }
 
 StringArray.propTypes = {
+  id: PropTypes.string,
   itemStr: PropTypes.string.isRequired,
   addItemStr: PropTypes.func.isRequired,
   setItemStr: PropTypes.func.isRequired,
@@ -161,15 +177,18 @@ StringArray.propTypes = {
   addWithComma: PropTypes.bool,
   readonly: PropTypes.bool,
   translationsRoot: PropTypes.string.isRequired,
-  validationError: PropTypes.string.isRequired,
+  validationError: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
   setValidationError: PropTypes.func.isRequired,
+  required: PropTypes.bool,
 }
 
 StringArray.defaultProps = {
+  id: undefined,
   itemSchema: null,
   schema: null,
   addWithComma: false,
   readonly: false,
+  required: false,
 }
 
 const RefCreatableSelect = ({ selectRef, ...props }) => (
@@ -186,13 +205,7 @@ const ArrayValidationError = styled(ValidationError)`
 `
 
 const ErrorAndButtonContainer = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  ${AddNewButton} {
-    margin-left: auto;
-    flex-shrink: 0;
-  }
+  margin-top: 0.75rem;
 `
 
 export default observer(StringArray)

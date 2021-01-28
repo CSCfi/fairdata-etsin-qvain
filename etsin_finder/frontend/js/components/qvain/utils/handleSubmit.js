@@ -78,11 +78,13 @@ const handleSubmitToBackend = (Env, values) => {
 
   const restrictionGrounds = values.RestrictionGrounds.toBackend()
 
+  const keywords = values.Keywords.toBackend()
+
   const obj = {
     title,
     description,
     identifiers: values.OtherIdentifiers.storage,
-    keywords: values.Keywords.toBackend(),
+    keywords,
     theme,
     actors,
     infrastructure: values.Infrastructures.storage,

@@ -2,34 +2,51 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import { observer } from 'mobx-react'
+
+import { useStores } from '../../utils/stores'
 
 const TranslationTab = ({ language, setLanguage, children }) => {
+  const {
+    Locale: { langTabOrder: languages },
+  } = useStores()
+
   const translations = {
-    langButtonFi: 'qvain.general.langFi',
-    langButtonEn: 'qvain.general.langEn',
+    fi: 'qvain.general.langFi',
+    en: 'qvain.general.langEn',
   }
 
   return (
-    <React.Fragment>
+    <>
       <LangButtonContainer>
-        <LangButton type="button" active={language === 'fi'} onClick={() => setLanguage('fi')}>
-          <Translate content={translations.langButtonFi} />
+        <LangButton
+          type="button"
+          active={language === languages[0]}
+          onClick={() => setLanguage(languages[0])}
+          language={languages[0]}
+        >
+          <Translate content={translations[languages[0]]} />
         </LangButton>
         <EmptyBlock width="2%" />
-        <LangButton type="button" active={language === 'en'} onClick={() => setLanguage('en')}>
-          <Translate content={translations.langButtonEn} />
+        <LangButton
+          type="button"
+          active={language === languages[1]}
+          onClick={() => setLanguage(languages[1])}
+          language={languages[1]}
+        >
+          <Translate content={translations[languages[1]]} />
         </LangButton>
-        <EmptyBlock width="48%" />
+        <EmptyBlock width="50%" />
       </LangButtonContainer>
       <ContentCard>{children}</ContentCard>
-    </React.Fragment>
+    </>
   )
 }
 
 TranslationTab.propTypes = {
   language: PropTypes.string.isRequired,
   setLanguage: PropTypes.func.isRequired,
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+  children: PropTypes.node.isRequired,
 }
 
 const ContentCard = styled.div`
@@ -61,4 +78,4 @@ const EmptyBlock = styled.div`
   border-bottom: 1px solid #007fad;
 `
 
-export default TranslationTab
+export default observer(TranslationTab)

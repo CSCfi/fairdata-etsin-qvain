@@ -69,7 +69,9 @@ const finnish = {
       plrl: 'Muut tekijät',
       snglr: 'Muu tekijä',
     },
+    copy: 'Kopioi',
     copyToClipboard: 'Kopioi leikepöydälle',
+    copyToClipboardSuccess: 'Tunniste kopioitu leikepöydälle',
     creator: {
       plrl: 'Tekijät',
       snglr: 'Tekijä',
@@ -77,9 +79,12 @@ const finnish = {
     curator: 'Kuraattori',
     data_location: 'Mene haravoituun sijaintiin',
     datasetAsFile: {
-      open: 'Lataa aineiston metatieto',
+      open: 'Lataa aineiston metatiedot',
       infoText:
         'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
+      datacite: 'Datacite tietomallissa (XML)',
+      fairdata_datacite: 'Ei validoituna Datacite tietomallissa (XML)',
+      metax: 'Metax tietomallissa (JSON)'
     },
     draftInfo: {
       draft: 'Tämä aineisto on luonnos ja näkyy ainoastaan aineiston luojalle.',
@@ -96,7 +101,6 @@ const finnish = {
       downloadFailed: 'Lataus epäonnistui',
       downloadAll: 'Lataa kaikki',
       downloadDisabledForDraft: 'Lataus ei käytössä luonnoksille',
-      downloadItem: 'Lataa %(name)s',
       downloading: 'Ladataan...',
       fileAmount: '%(amount)s objektia',
       close_modal: 'Sulje info',
@@ -104,11 +108,27 @@ const finnish = {
       info_header: 'Tiedoston muut tiedot',
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
+      errors: {
+        showDetails: 'Näytä tiedot',
+        hideDetails: 'Piilota tiedot',
+        serviceUnavailable: 'Latauspalvelu ei ole tällä hetkellä tavoitettavissa. Yritä myöhemmin uudelleen.',
+        unknownError: 'Latauspalvelun käytössä tapahtui virhe.',
+      },
       packages: {
-        createForAll: 'Luo latauspaketti',
-        createForItem: 'Luo latauspaketti kohteelle %(name)s',
-        pending: 'Luodaan latauspakettia',
+        createForAll: 'Lataa kaikki',
+        create: 'Lataa',
+        pending: 'Luodaan',
+        pendingTooltip: 'Latauspakettia luodaan. Kun painike muuttuu vihreäksi, lataus voidaan aloittaa.',
         loading: 'Ladataan',
+        modal: {
+          header: 'Luo latauspaketti?',
+          main: `Aloittaaksesi latauksen Etsimen täytyy luoda latauspaketti.
+          Jos dataa on paljon, paketin luomisessa voi kestää minuutteja tai tunteja.
+          Kun lataus voidaan aloittaa, lataa-painike muuttuu vihreäksi.`,
+          additional: 'Latauspaketin luonti ei keskeydy, vaikka poistuisit Etsimestä.',
+          ok: 'Luo latauspaketti',
+          cancel: 'Peruuta',
+        },
       },
       fileCount: {
         one: '1 tiedosto',
@@ -263,12 +283,13 @@ const finnish = {
       datasets: 'Aineistot',
       home: 'Koti',
       qvain: 'Qvain',
-      error: 'Virhe - Sivua ei löydy'
+      error: 'Virhe - Sivua ei löydy',
     },
     language: {
       toggleLabel: 'Vaihda kieltä: %(otherLang)s',
     },
     cookies: {
+      section: 'Evästeiden hyväksyminen',
       accept: 'Hyväksy evästeet',
       infoText:
         'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
@@ -354,6 +375,7 @@ const finnish = {
     },
   },
   qvain: {
+    validation: {},
     nav: {
       home: 'Koti',
       createDataset: 'Luo aineisto',
@@ -630,7 +652,8 @@ const finnish = {
       },
       subjectHeadings: {
         title: 'Asiasanat',
-        infoText: 'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
+        infoText:
+          'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
         placeholder: 'Hae vaihtoehtoja',
         help:
           'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
@@ -734,7 +757,7 @@ const finnish = {
           levels: {
             organization: 'Organisaatio',
             department: 'Yksikkö',
-            subdepartment: 'Aliyksikkö'
+            subdepartment: 'Aliyksikkö',
           },
           addButton: 'Lisää organisaatio',
           editButton: 'Muokkaa organisaatiota',
@@ -847,6 +870,12 @@ const finnish = {
       },
     },
     validationMessages: {
+      draft: {
+        description: 'Luonnosta ei voi tallentaa ennen kuin seuraavat virheet on korjattu:',
+      },
+      publish: {
+        description: 'Aineistoa ei voida julkaista ennen kuin seuraavat virheet on korjattu:',
+      },
       title: {
         string: 'Otsikon tulisi olla arvoltaan merkkijono.',
         max: 'Otsikko on liian pitkä.',
@@ -915,7 +944,6 @@ const finnish = {
             publisher:
               'Toimijat: Aineistolla on oltava ainakin yksi julkaisija. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
           },
-          publisherIfDOI: 'Toimijat: DOI-ainestoon on lisättävä julkaisija.',
         },
       },
       accessType: {
@@ -939,6 +967,7 @@ const finnish = {
       files: {
         dataCatalog: {
           required: 'Tiedoston lähde on pakollinen kenttä.',
+          wrongType: 'Tiedoston lähde on väärää tyyppiä tai se puuttuu kokonaan.',
         },
         file: {
           title: {

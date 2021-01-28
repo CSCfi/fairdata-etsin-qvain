@@ -11,17 +11,12 @@
 }
 
 import React from 'react'
-import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import { useStores } from '../utils/stores'
 
 const Footer = () => {
-  const { Env } = useStores()
-  let accessibilityPath = 'fairdata'
-  if (Env.separateQvain) {
-    accessibilityPath = Env.isQvain ? 'qvain' : 'etsin'
-  }
+  const accessibilityPath = 'fairdata'
+
   return (
     <FooterDiv>
       <div className="container">
@@ -100,4 +95,4 @@ const FooterDiv = styled.footer.attrs({
   padding-bottom: 1rem !important;
 `
 
-export default observer(Footer)
+export default Footer

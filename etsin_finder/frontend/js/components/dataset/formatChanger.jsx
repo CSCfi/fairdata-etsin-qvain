@@ -19,7 +19,7 @@ import { observer } from 'mobx-react'
 import FormatSelect from './formatselect'
 import { withStores } from '../../stores/stores'
 
-class FormatChanger extends Component {
+export class FormatChanger extends Component {
   constructor(props) {
     super(props)
 
@@ -37,6 +37,7 @@ class FormatChanger extends Component {
     const { DatasetQuery } = this.props.Stores
     const data = DatasetQuery.results
     const rd = data.research_dataset
+    const prefId = rd.preferred_identifier
     let dataciteExists = false
     let fields = {}
 
@@ -44,20 +45,27 @@ class FormatChanger extends Component {
     if (
       (typeof data.preservation_identifier !== 'undefined' &&
         data.preservation_identifier.includes('doi')) ||
-      (typeof rd.preferred_identifier !== 'undefined' && rd.preferred_identifier.includes('doi'))
+      (typeof prefId !== 'undefined' && prefId.includes('doi'))
     ) {
       dataciteExists = true
     }
 
     if (dataciteExists) {
       fields = [
-        { label: 'Metax JSON', value: 'metax' },
-        { label: 'Datacite without validation', value: 'fairdata_datacite' },
-        { label: 'Datacite format', value: 'datacite' },
+        { value: 'metax' },
+        { value: 'datacite' },
+      ]
+    } else if (prefId.startsWith('urn:nbn:fi:att:') || prefId.startsWith('urn:nbn:fi:csc')) {
+      fields = [
+        { value: 'metax' },
+        { value: 'fairdata_datacite' },
       ]
     } else {
-      fields = [{ label: 'Metax JSON', value: 'metax' }]
+      fields = [
+        { value: 'metax' },
+      ]
     }
+
     this.setState({
       formats: fields,
     })

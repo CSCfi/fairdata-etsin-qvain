@@ -10,9 +10,12 @@
 import os
 
 import pytest
+import logging
+
+from etsin_finder.utils.flags import initialize_supported_flags
+from etsin_finder.app import create_app
 
 from .utils import get_test_catalog_record
-
 
 class BaseTest():
     """Use as base class for any tests. Contains fixtures and monkeypatched methods"""
@@ -20,15 +23,12 @@ class BaseTest():
     @pytest.fixture
     def app(self):
         """
-        App fixture that checks that app is in testing mode
-
-        To enable testing mode, set the TESTING environment variable.
+        Create app in testing mode
 
         :return:
         """
-        from etsin_finder.finder import app
-        assert app.testing is True
-        return app
+        test_app = create_app(True)
+        return test_app
 
     @pytest.fixture
     def authd_client(self, app, monkeypatch):
@@ -39,7 +39,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import authentication
+        from etsin_finder.auth import authentication
         monkeypatch.setattr(authentication, 'is_authenticated', lambda: True)
         monkeypatch.setattr(authentication, 'is_authenticated_CSC_user', lambda: True)
 
@@ -63,7 +63,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import authentication
+        from etsin_finder.auth import authentication
         monkeypatch.setattr(authentication, 'is_authenticated', lambda: False)
         monkeypatch.setattr(authentication, 'is_authenticated_CSC_user', lambda: False)
 
@@ -78,7 +78,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: None)
 
     @pytest.fixture
@@ -89,7 +89,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('open'))
 
     @pytest.fixture
@@ -100,7 +100,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('login'))
 
     @pytest.fixture
@@ -111,7 +111,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('permit'))
 
     @pytest.fixture
@@ -122,7 +122,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('embargo', True))
 
     @pytest.fixture
@@ -133,7 +133,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('embargo', False))
 
     @pytest.fixture
@@ -144,7 +144,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import cr_service
+        from etsin_finder.services import cr_service
         monkeypatch.setattr(cr_service, 'get_catalog_record', lambda x, y, z: get_test_catalog_record('restricted'))
 
     @pytest.fixture
@@ -155,7 +155,7 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import rems_service
+        from etsin_finder.services import rems_service
         monkeypatch.setattr(rems_service, 'get_user_rems_permission_for_catalog_record', lambda x, y: True)
 
     @pytest.fixture
@@ -166,8 +166,44 @@ class BaseTest():
         :param monkeypatch:
         :return:
         """
-        from etsin_finder import rems_service
+        from etsin_finder.services import rems_service
         monkeypatch.setattr(rems_service, 'get_user_rems_permission_for_catalog_record', lambda x, y: False)
 
     if __name__ == '__main__':
         pytest.main()
+
+    @pytest.fixture
+    def expect_log(self, caplog):
+        """
+        Expect specific warnings and errors to be logged
+
+        The number logged warnings and errors of must match
+        the length of the supplied warnings/errors lists, and
+        each log must contain the matching substring.
+
+        E.g. with warnings=['something happened'], there must be exactly
+        one warning and it must contain the substring 'something happened'.
+        When called with no parameters, there must be no logged warnings or errors.
+
+        Args:
+            warnings (list of str): Substrings expected in warnings
+            errors (list of str): Substrings expected in errors
+
+        """
+        def check(warnings=None, errors=None):
+            warnings = warnings or []
+            errors = errors or []
+
+            records = caplog.get_records('call')
+
+            log_warnings = [x.message for x in records if x.levelno == logging.WARNING]
+            assert len(warnings) == len(log_warnings)
+            for (expected, logged) in zip(warnings, log_warnings):
+                assert expected in logged
+
+            log_errors = [x.message for x in records if x.levelno == logging.ERROR]
+            for (expected, logged) in zip(errors, log_errors):
+                assert expected in logged
+            assert len(errors) == len(log_errors)
+
+        return check
