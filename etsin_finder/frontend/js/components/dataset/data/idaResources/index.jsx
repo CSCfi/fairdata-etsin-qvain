@@ -8,15 +8,13 @@ import createTree from '../../../../utils/createTree'
 import TableHeader from '../tableHeader'
 import Table from '../table'
 import Breadcrumbs from '../breadcrumbs'
-import access from '../../../../stores/view/access'
-import Accessibility from '../../../../stores/view/accessibility'
 import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
 import { withStores } from '../../../../utils/stores'
 
 class IdaResources extends Component {
   constructor(props) {
     super(props)
-    const { DatasetQuery } = this.props.Stores
+    const { DatasetQuery, Access } = this.props.Stores
     const results = DatasetQuery.results
     const files = results.research_dataset.files
     const folders = results.research_dataset.directories
@@ -28,7 +26,7 @@ class IdaResources extends Component {
       this.state = {
         results,
         described: parsed,
-        allowDownload: access.restrictions.allowDataIdaDownloadButton,
+        allowDownload: Access.restrictions.allowDataIdaDownloadButton,
         fileDirTree,
         currentFolder: fileDirTree,
         currentPath: [],
@@ -193,7 +191,7 @@ class IdaResources extends Component {
   }
 
   query(id, newPath, newIDs) {
-    const { DatasetQuery } = this.props.Stores
+    const { DatasetQuery, Accessibility } = this.props.Stores
     Accessibility.announcePolite(translate('dataset.dl.loading'))
     DatasetQuery.getFolderData(id, this.state.results.identifier)
       .then(res => {

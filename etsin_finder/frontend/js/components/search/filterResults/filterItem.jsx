@@ -13,19 +13,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import ElasticQuery from '../../../stores/view/elasticquery'
+import { withStores } from '../../../utils/stores'
 
-export default class FilterItem extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      term: this.props.term,
-      key: this.props.item.key,
-      doc_count: this.props.item.doc_count,
-    }
-    this.updateFilter = this.updateFilter.bind(this)
+class FilterItem extends Component {
+  state = {
+    term: this.props.term,
+    key: this.props.item.key,
+    doc_count: this.props.item.doc_count,
   }
+
+  updateFilter = this.updateFilter.bind(this)
 
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(newProps) {
@@ -36,13 +33,13 @@ export default class FilterItem extends Component {
   }
 
   updateFilter() {
-    ElasticQuery.updateFilter(this.state.term, this.state.key)
-    ElasticQuery.queryES()
+    this.props.Stores.ElasticQuery.updateFilter(this.state.term, this.state.key)
+    this.props.Stores.ElasticQuery.queryES()
   }
 
   isActive() {
     if (
-      ElasticQuery.filter.filter(
+      this.props.Stores.ElasticQuery.filter.filter(
         item => item.term === this.props.term && item.key === this.props.item.key
       ).length > 0
     ) {
@@ -72,6 +69,7 @@ export default class FilterItem extends Component {
 }
 
 FilterItem.propTypes = {
+  Stores: PropTypes.object.isRequired,
   term: PropTypes.string.isRequired,
   item: PropTypes.shape({
     key: PropTypes.string.isRequired,
@@ -79,3 +77,5 @@ FilterItem.propTypes = {
   }).isRequired,
   tabIndex: PropTypes.string.isRequired,
 }
+
+export default withStores(FilterItem)

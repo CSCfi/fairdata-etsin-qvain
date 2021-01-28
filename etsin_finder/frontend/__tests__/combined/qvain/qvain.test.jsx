@@ -29,9 +29,11 @@ import {
   ValidationErrorItem,
 } from '../../../js/components/qvain/general/errors/validationError'
 import { SlidingContent } from '../../../js/components/qvain/general/card'
-import Env from '../../../js/stores/domain/env'
-import QvainStoreClass, { ExternalResource } from '../../../js/stores/view/qvain'
-import LocaleStore from '../../../js/stores/view/locale'
+import EnvClass from '../../../js/stores/domain/env'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import QvainClass, { ExternalResource } from '../../../js/stores/view/qvain'
+import LocaleClass from '../../../js/stores/view/locale'
 import TablePasState from '../../../js/components/qvain/views/datasets/tablePasState'
 import {
   filterByTitle,
@@ -70,13 +72,19 @@ jest.mock('../../../js/stores/stores', () => {
   }
 })
 
+const Env = new EnvClass()
+const Accessibility = new AccessibilityClass(Env)
+const ElasticQuery = new ElasticQueryClass(Env)
+const Locale = new LocaleClass(Accessibility, ElasticQuery)
+const Qvain = new QvainClass(Env)
+
 const getStores = () => {
   Env.Flags.setFlag('METAX_API_V2', true)
-  LocaleStore.setLang('en')
+  Locale.setLang('en')
   return {
     Env,
-    Qvain: new QvainStoreClass(Env),
-    Locale: LocaleStore,
+    Qvain,
+    Locale,
   }
 }
 

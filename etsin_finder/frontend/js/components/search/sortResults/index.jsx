@@ -11,28 +11,28 @@
 }
 
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSort, faSortAmountUp, faSortAmountDown } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
-
-import ElasticQuery from '../../../stores/view/elasticquery'
-import Accessibility from '../../../stores/view/accessibility'
 import { InvertedButton } from '../../general/button'
+
+import { withStores } from '../../../stores/stores'
 
 // available options, they are also checked in ElasticQuery store
 const options = ['best', 'dateD', 'dateA']
 
-export default class SortResults extends Component {
+class SortResults extends Component {
+  state = {
+    listToggle: '',
+    sortIcon: this.getSortIcon(this.props.Stores.ElasticQuery.sorting),
+    value: this.props.Stores.ElasticQuery.sorting,
+  }
+
   constructor(props) {
     super(props)
-
-    this.state = {
-      listToggle: '',
-      sortIcon: this.getSortIcon(ElasticQuery.sorting),
-      value: ElasticQuery.sorting,
-    }
-
     this.toggleList = this.toggleList.bind(this)
     this.updateValue = this.updateValue.bind(this)
 
@@ -78,6 +78,7 @@ export default class SortResults extends Component {
   }
 
   toggleList = () => {
+    const { Accessibility } = this.props.Stores
     if (this.state.listToggle) {
       this.setState({
         listToggle: '',
@@ -110,6 +111,7 @@ export default class SortResults extends Component {
   }
 
   updateValue(event, value) {
+    const { ElasticQuery } = this.props.Stores
     this.setState(
       {
         value,
@@ -239,3 +241,9 @@ const SelectButton = styled.div`
 const SortResultsContainer = styled.div`
   float: right;
 `
+
+SortResults.propTypes = {
+  Stores: PropTypes.object.isRequired,
+}
+
+export default withStores(observer(SortResults))

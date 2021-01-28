@@ -13,7 +13,6 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 
-import ElasticQuery from '../../../stores/view/elasticquery'
 import Loader from '../../general/loader'
 import ListItem from './listItem'
 import { useStores } from '../../../utils/stores'
@@ -21,6 +20,7 @@ import { useStores } from '../../../utils/stores'
 const ResultsList = () => {
   const {
     Locale: { currentLang },
+    ElasticQuery,
   } = useStores()
 
   const renderList = lang => {

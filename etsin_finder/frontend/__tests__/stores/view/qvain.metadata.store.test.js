@@ -1,7 +1,8 @@
-import axios from 'axios'
-import Env from '../../../js/stores/domain/env'
-import QvainStoreClass from '../../../js/stores/view/qvain'
-import LocaleStore from '../../../js/stores/view/locale'
+import EnvClass from '../../../js/stores/domain/env'
+import QvainClass from '../../../js/stores/view/qvain'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import LocaleClass from '../../../js/stores/view/locale'
 import { Directory } from '../../../js/stores/view/qvain/qvain.filesv1'
 
 jest.mock('axios')
@@ -97,11 +98,15 @@ const testFile4 = {
 }
 
 const getStores = () => {
-  const QvainStore = new QvainStoreClass(Env)
+  const Env = new EnvClass()
+  const Accessibility = new AccessibilityClass(Env)
+  const ElasticQuery = new ElasticQueryClass(Env)
+  const Locale = new LocaleClass(Accessibility, ElasticQuery)
+  const Qvain = new QvainClass(Env)
   Env.Flags.setFlag('METAX_API_V2', true)
-  QvainStore.resetQvainStore()
+  Qvain.resetQvainStore()
 
-  QvainStore.hierarchy = Directory(
+  Qvain.hierarchy = Directory(
     {
       id: 'test',
       identifier: 'test-ident-1',
@@ -131,8 +136,8 @@ const getStores = () => {
 
   return {
     Env,
-    Qvain: QvainStore,
-    Locale: LocaleStore,
+    Qvain,
+    Locale,
   }
 }
 

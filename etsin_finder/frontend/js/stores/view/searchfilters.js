@@ -40,4 +40,4 @@ class SearchFilters {
   }
 }
 
-export default new SearchFilters()
+export default SearchFilters
