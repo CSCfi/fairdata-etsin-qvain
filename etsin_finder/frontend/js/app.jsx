@@ -27,8 +27,10 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
-import Stores, { Env, Locale, Auth, Accessibility } from './stores'
+import Stores from './stores'
 import { StoresProvider } from './stores/stores'
+
+const { Env, Locale, Auth, Accessibility } = Stores
 
 registerLocale('fi', fi)
 registerLocale('en', en)

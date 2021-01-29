@@ -20,31 +20,32 @@ import QvainDatasetsClass from './view/qvain/qvain.datasets'
 import AccessClass from './view/access'
 import SearchFiltersClass from './view/searchfilters'
 
-// named exports fo the instances for non-React functions and classes
-export const Env = new EnvClass()
-export const Auth = new AuthClass()
-export const QvainDatasets = new QvainDatasetsClass()
-export const SearchFilters = new SearchFiltersClass()
-export const Access = new AccessClass(Auth)
-export const Qvain = new QvainClass(Env)
-export const Accessibility = new AccessibilityClass(Env)
-export const ElasticQuery = new ElasticQueryClass(Env)
-export const Locale = new LocaleClass(Accessibility, ElasticQuery)
-export const DatasetQuery = new DatasetQueryClass(Env, Access)
-export const Map = new MapClass(Locale)
+export const buildStores = () => {
+  const Env = new EnvClass()
+  const Auth = new AuthClass()
+  const QvainDatasets = new QvainDatasetsClass()
+  const SearchFilters = new SearchFiltersClass()
+  const Access = new AccessClass(Auth)
+  const Qvain = new QvainClass(Env)
+  const Accessibility = new AccessibilityClass(Env)
+  const ElasticQuery = new ElasticQueryClass(Env)
+  const Locale = new LocaleClass(Accessibility, ElasticQuery)
+  const DatasetQuery = new DatasetQueryClass(Env, Access)
+  const Map = new MapClass(Locale)
 
-const Stores = {
-  Env,
-  Qvain,
-  Accessibility,
-  Locale,
-  ElasticQuery,
-  DatasetQuery,
-  Auth,
-  Access,
-  Map,
-  QvainDatasets,
-  SearchFilters,
+  return {
+    Env,
+    Qvain,
+    Accessibility,
+    Locale,
+    ElasticQuery,
+    DatasetQuery,
+    Auth,
+    Access,
+    Map,
+    QvainDatasets,
+    SearchFilters,
+  }
 }
 
-export default Stores
+export default buildStores()

@@ -10,7 +10,9 @@
    */
 }
 
-import { Locale } from '../stores'
+import Stores from '../stores'
+
+const { Locale } = Stores
 
 const formats = {
   datetime: {
