@@ -13,7 +13,9 @@
 // checks if there is a translation available for specific language.
 // if no language is specified, uses current language.
 
-import { Locale } from '../stores'
+import Stores from '../stores'
+
+const { Locale } = Stores
 
 const checkDataLang = (object, lang) => {
   let language = lang

@@ -10,17 +10,11 @@ import Card from '../../general/card'
 import RestrictionGrounds from './restrictionGrounds'
 import ValidationError from '../../general/errors/validationError'
 import EmbargoExpires from './embargoExpires'
-import {
-  onChange,
-  getCurrentOption,
-  getOptionLabel,
-  getOptionValue,
-  sortOptions,
-  autoSortOptions,
-} from '../../utils/select'
-import { LabelLarge, HelpField } from '../../general/modal/form'
+import { onChange, getCurrentOption, getOptionLabel, getOptionValue } from '../../utils/select'
 import { ACCESS_TYPE_URL } from '../../../../utils/constants'
+import { LabelLarge, HelpField } from '../../general/modal/form'
 import { withStores } from '../../utils/stores'
+import { handleAccessTypeReferenceDataResponse } from './componentHelpers'
 
 export class AccessType extends Component {
   promises = []
@@ -34,26 +28,10 @@ export class AccessType extends Component {
   }
 
   componentDidMount = () => {
-    const { Model, value: accessType } = this.props.Stores.Qvain.AccessType
     this.promises.push(
       getReferenceData('access_type')
         .then(res => {
-          const list = res.data.hits.hits
-          let options = list.map(ref => Model(ref._source.label, ref._source.uri))
-
-          const user = this.props.Stores.Auth.user
-
-          if (!user.isUsingRems && !(accessType && accessType.url === ACCESS_TYPE_URL.PERMIT)) {
-            options = options.filter(ref => ref.url !== ACCESS_TYPE_URL.PERMIT)
-          }
-
-          const { lang } = this.props.Stores.Locale
-          sortOptions(Model, lang, options)
-          this.setState({
-            options,
-          })
-
-          autoSortOptions(this, this.props.Stores.Locale, Model)
+          handleAccessTypeReferenceDataResponse(res, this.props.Stores, this)
         })
         .catch(error => {
           if (error.response) {
@@ -82,11 +60,9 @@ export class AccessType extends Component {
     setValidationError(null)
   }
 
-  handleBlur = () => this.props.Stores.Qvain.AccessType.validate
-
   render() {
     const { lang } = this.props.Stores.Locale
-    const { value, Model, validationError, readonly } = this.props.Stores.Qvain.AccessType
+    const { value, Model, validationError, readonly, validate } = this.props.Stores.Qvain.AccessType
     const { options } = this.state
 
     let permitInfo = null
@@ -117,14 +93,14 @@ export class AccessType extends Component {
           onChange={this.handleChange}
           getOptionLabel={getOptionLabel(Model, lang)}
           getOptionValue={getOptionValue(Model)}
-          onBlur={this.handleBlur}
+          onBlur={validate}
           attributes={{
             placeholder: 'qvain.rightsAndLicenses.accessType.placeholder',
           }}
         />
         {permitInfo}
         <ValidationError>{validationError}</ValidationError>
-        {value !== undefined && value.url === ACCESS_TYPE_URL.EMBARGO && <EmbargoExpires />}
+        {value?.url === ACCESS_TYPE_URL.EMBARGO && <EmbargoExpires />}
         {value.url !== ACCESS_TYPE_URL.OPEN ? <RestrictionGrounds /> : null}
       </Card>
     )
