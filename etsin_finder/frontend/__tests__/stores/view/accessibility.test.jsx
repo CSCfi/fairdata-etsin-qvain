@@ -60,4 +60,44 @@ describe('Accessibility Store', () => {
       expect(Accessibility.userIsTabbing).toEqual(false)
     })
   })
+
+  describe('when calling initialLoad', () => {
+    beforeEach(() => {
+      jest.spyOn(window, 'addEventListener')
+      Accessibility.initialLoad()
+    })
+
+    it("should call AddEventListener with 'keydown' and handleTab function", () => {
+      expect(window.addEventListener).toHaveBeenCalledWith('keydown', Accessibility.handleTab)
+    })
+  })
+
+  describe('when calling handleTab with event of keyCode 9', () => {
+    beforeEach(() => {
+      jest.spyOn(document.body.classList, 'add')
+      jest.spyOn(window, 'removeEventListener')
+      jest.spyOn(window, 'addEventListener')
+      const event = { keyCode: 9 }
+      Accessibility.handleTab(event)
+    })
+
+    it("should add 'user-is-tabbing' to document.body's classList", () => {
+      expect(document.body.classList.add).toHaveBeenCalledWith('user-is-tabbing')
+    })
+
+    it('should set userIsTabbing to true', () => {
+      Accessibility.userIsTabbing.should.be.true
+    })
+
+    it("should remove 'keydown' event listener", () => {
+      expect(window.removeEventListener).toHaveBeenCalledWith('keydown', Accessibility.handleTab)
+    })
+
+    it("should add 'mousedown' event listener", () => {
+      expect(window.addEventListener).toHaveBeenCalledWith(
+        'mousedown',
+        Accessibility.handleMouseDownOnce
+      )
+    })
+  })
 })
