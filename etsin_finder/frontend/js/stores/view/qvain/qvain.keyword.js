@@ -22,14 +22,10 @@ class Keywords extends ReferenceField {
 
   fromBackend = dataset => {
     this.storage = dataset.keyword || []
+    this.removeItemStr()
   }
 
-  toBackend = () => {
-    if (this.itemStr !== '') {
-      this.addKeyword()
-    }
-    return this.storage
-  }
+  toBackend = () => this.storage
 }
 
 export default Keywords

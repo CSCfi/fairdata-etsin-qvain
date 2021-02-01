@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import Select from 'react-select'
+import Select, { components } from 'react-select'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
@@ -13,6 +13,12 @@ import etsinTheme from '../../../../styles/theme'
 import DoiSelection from './doiSelection'
 import Tooltip from '../../../general/tooltipHover'
 import { useStores } from '../../utils/stores'
+
+const RequiredInput = props => <components.Input required {...props} />
+
+const customComponents = {
+  Input: RequiredInput,
+}
 
 const DataCatalog = () => {
   const {
@@ -27,6 +33,7 @@ const DataCatalog = () => {
       setUseDoi,
     },
     Locale: { lang },
+    Env: { metaxApiV2 },
   } = useStores()
   const [error, SetError] = useState()
 
@@ -65,6 +72,12 @@ const DataCatalog = () => {
   // PAS catalog cannot be selected by the user
   const availableOptions = isPas ? pasOptions : options
   const catalogSelectValue = availableOptions.find(opt => opt.value === dataCatalog)
+  const isDataCatalogNotDecided =
+    !metaxApiV2 ||
+    (metaxApiV2 &&
+      (!original?.data_catalog ||
+        original?.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.DFT))
+  const isDisabled = selected.length > 0 || !isDataCatalogNotDecided || isPas
 
   return (
     <Card>
@@ -81,6 +94,7 @@ const DataCatalog = () => {
       <Translate component="p" content="qvain.files.dataCatalog.explanation" />
       <Translate
         component={Select}
+        components={customComponents}
         inputId="dataCatalogSelect"
         name="dataCatalog"
         value={catalogSelectValue}
@@ -97,7 +111,7 @@ const DataCatalog = () => {
         styles={{ placeholder: () => ({ color: etsinTheme.color.gray }) }}
         onBlur={handleOnBlur}
         attributes={{ placeholder: 'qvain.files.dataCatalog.placeholder' }}
-        isDisabled={selected.length > 0 || original !== undefined || isPas}
+        isDisabled={isDisabled}
       />
       <DoiSelection />
 

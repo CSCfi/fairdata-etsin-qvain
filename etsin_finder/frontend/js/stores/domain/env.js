@@ -11,6 +11,7 @@
 import axios from 'axios'
 import { action, computed, makeObservable, observable } from 'mobx'
 import { RouterStore } from 'mobx-react-router'
+import Flags from './env.flags'
 
 import { getCookieValue } from '../../utils/cookies'
 
@@ -24,17 +25,42 @@ async function importValuesAsync() {
 class Env {
   constructor() {
     makeObservable(this)
+    this.Flags = new Flags()
   }
 
   @observable etsinHost = ''
 
   @observable qvainHost = ''
 
+  @observable appConfigLoaded = false
+
+  @observable ssoCookieDomain = ''
+
+  @observable ssoPrefix = ''
+
   async fetchAppConfig() {
     const values = await importValuesAsync()
     this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
     this.setQvainHost(values.SERVER_QVAIN_DOMAIN_NAME)
-    this.setDownloadApiV2(!!values.DOWNLOAD_API_V2_ENABLED)
+    this.Flags.setFlags(values.FLAGS)
+    if (process.env.NODE_ENV !== 'production') {
+      await this.Flags.validateFlags()
+    }
+    this.setSSOCookieDomain(values.SSO_COOKIE_DOMAIN)
+    this.setSSOPrefix(values.SSO_PREFIX)
+    this.setAppConfigLoaded(true)
+  }
+
+  @action setSSOPrefix(prefix) {
+    this.ssoPrefix = prefix
+  }
+
+  @action setSSOCookieDomain(domain) {
+    this.ssoCookieDomain = domain
+  }
+
+  @action setAppConfigLoaded(value) {
+    this.appConfigLoaded = value
   }
 
   @action setEtsinHost(host) {
@@ -45,14 +71,13 @@ class Env {
     this.qvainHost = host
   }
 
-  @action setDownloadApiV2(enabled) {
-    this.downloadApiV2 = enabled
+  @computed get metaxApiV2() {
+    return this.Flags.flagEnabled('METAX_API_V2.FRONTEND')
   }
 
-  @observable metaxApiV2 =
-    process.env.NODE_ENV !== 'production' && localStorage.getItem('metax_api_v2') === '1'
-
-  @observable downloadApiV2 = false
+  @computed get downloadApiV2() {
+    return this.Flags.flagEnabled('DOWNLOAD_API_V2.FRONTEND')
+  }
 
   @observable app = getCookieValue('etsin_app')
 
@@ -69,10 +94,6 @@ class Env {
   @computed
   get separateQvain() {
     return this.qvainHost !== this.etsinHost
-  }
-
-  @action setMetaxApiV2 = value => {
-    this.metaxApiV2 = value
   }
 
   getEtsinUrl = path => {

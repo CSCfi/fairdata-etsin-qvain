@@ -1,7 +1,7 @@
 import {
   faDownload,
   faSpinner,
-  faFileArchive,
+  faCog,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../../utils/constants'
@@ -9,7 +9,9 @@ import { downloadFile, downloadPackage } from './download'
 
 // Download button information for file/package
 const actionDefaults = {
-  ariaLabel: 'dataset.dl.downloadItem',
+  buttonLabel: 'dataset.dl.download',
+  tooltip: null,
+  color: null,
   available: false, // is file/package ready for download
   func: null, // action when button is clicked
   icon: faDownload,
@@ -18,17 +20,17 @@ const actionDefaults = {
   type: 'default',
 }
 
-const actionDownload = (datasetIdentifier, item, path, pack) => {
+const actionDownload = (datasetIdentifier, item, path, pack, Packages) => {
   let func
   if (item && item.type === 'file') {
-    func = () => downloadFile(datasetIdentifier, path)
+    func = () => downloadFile(datasetIdentifier, path, Packages)
   } else {
-    func = () => downloadPackage(datasetIdentifier, pack.package)
+    func = () => downloadPackage(datasetIdentifier, pack.package, Packages)
   }
   return {
     ...actionDefaults,
-    ariaLabel: 'dataset.dl.downloadItem',
     func,
+    color: 'success',
     type: 'download',
     available: true,
   }
@@ -36,36 +38,44 @@ const actionDownload = (datasetIdentifier, item, path, pack) => {
 
 const actionPending = () => ({
   ...actionDefaults,
-  ariaLabel: 'dataset.dl.packages.pending',
+  buttonLabel: 'dataset.dl.packages.pending',
+  tooltip: 'dataset.dl.packages.pendingTooltip',
+  color: 'darkgray',
   icon: faSpinner,
-  pending: false,
+  pending: true,
   spin: true,
   type: 'pending',
 })
 
 const actionLoading = () => ({
   ...actionPending(),
-  ariaLabel: 'dataset.dl.packages.loading',
+  buttonLabel: 'dataset.dl.packages.loading',
+  tooltip: null,
+  pending: false,
   type: 'loading',
 })
 
 const actionCreatePackage = (Packages, path) => ({
   ...actionDefaults,
-  ariaLabel: 'dataset.dl.packages.createForItem',
-  func: () => Packages.createPackageFromFolder(path),
-  icon: faFileArchive,
+  buttonLabel: 'dataset.dl.packages.create',
+  func: () => Packages.confirm(() => Packages.createPackageFromFolder(path)),
+  icon: faCog,
+  spin: false,
   type: 'create',
 })
 
 const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
-  const path = item ? Files.getItemPath(item) : '/'
+  const isFile = item && item.type === 'file'
+  let path = '/'
+  if (item) {
+    path = isFile ? Files.getItemPath(item) : Files.getEquivalentItemScope(item)
+  }
   const pack = Packages.get(path)
 
-  const isFile = item && item.type === 'file'
   let action
   if (isFile || (pack && pack.status === DOWNLOAD_API_REQUEST_STATUS.SUCCESS)) {
-    action = actionDownload(datasetIdentifier, item, path, pack)
-  } else if (pack && pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING) {
+    action = actionDownload(datasetIdentifier, item, path, pack, Packages)
+  } else if (pack && (pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING || pack.requestingPackageCreation)) {
     action = actionPending()
   } else if (Packages.loadingDataset) {
     action = actionLoading()

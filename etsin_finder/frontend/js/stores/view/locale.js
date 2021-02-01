@@ -20,8 +20,6 @@ const languages = ['en', 'fi']
 
 const getInitialLanguage = () => languages.find(lang => lang === document.documentElement.lang) || languages[0]
 
-const cookieName = process.env.REACT_APP_COOKIE_PREFIX ? `${process.env.REACT_APP_COOKIE_PREFIX}_fd_language` : 'fd_language'
-
 class Locale {
   constructor() {
     makeObservable(this)
@@ -32,6 +30,18 @@ class Locale {
   // get current computed (state changes are tracked) language. Convenience function.
   @computed get lang() {
     return this.currentLang
+  }
+
+  @computed get cookieDomain() {
+    return env.ssoCookieDomain
+  }
+
+  @computed get cookieName() {
+    const prefix = env.ssoPrefix
+    if (prefix) {
+      return `${prefix}_fd_language`
+    }
+    return 'fd_language'
   }
 
   @observable languages = languages
@@ -46,7 +56,7 @@ class Locale {
     moment.locale(lang)
     document.documentElement.lang = this.currentLang
     if (save) {
-      setCookieValue(cookieName, this.currentLang)
+      setCookieValue(this.cookieDomain, this.cookieName, this.currentLang)
     }
   }
 
@@ -77,12 +87,52 @@ class Locale {
   @action
   loadLang = () => {
     /* get language setting from cookie */
-    const storedLang = getCookieValue(cookieName)
+    const storedLang = getCookieValue(this.cookieName)
     if (storedLang) {
       this.setLang(storedLang, false)
     } else {
       this.setLang(getInitialLanguage(), false)
     }
+  }
+
+  getMatchingLang = (values) => {
+    const defaultLang = this.lang
+    for (const value of values.filter(v => v)) {
+      if (value[defaultLang]) {
+        return defaultLang
+      }
+      for (const lang of this.languages) {
+        if (value[lang]) {
+          return lang
+        }
+      }
+    }
+    return defaultLang
+  }
+
+  getValueTranslation = (value, lang) => {
+    // Get a translation from a multi-language string object, use supplied language by default
+    if (typeof value === 'string') {
+      return value
+    }
+    if (value[lang]) {
+      return value[lang]
+    }
+    for (const l of this.languages) {
+      if (value[l]) {
+        return value[l]
+      }
+    }
+    for (const translation of Object.values(value)) {
+      if (translation) {
+        return translation
+      }
+    }
+    return ''
+  }
+
+  @computed get langTabOrder() {
+    return [this.lang, ...this.languages.filter(l => l !== this.lang)]
   }
 }
 

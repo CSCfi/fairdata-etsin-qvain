@@ -17,6 +17,7 @@ export const DATA_CATALOG_IDENTIFIER = {
   IDA: 'urn:nbn:fi:att:data-catalog-ida',
   ATT: 'urn:nbn:fi:att:data-catalog-att',
   PAS: 'urn:nbn:fi:att:data-catalog-pas',
+  DFT: 'urn:nbn:fi:att:data-catalog-dft',
 }
 
 export const REMS_URL = 'https://vm1446.kaj.pouta.csc.fi'

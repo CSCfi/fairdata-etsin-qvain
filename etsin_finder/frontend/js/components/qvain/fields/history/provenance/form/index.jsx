@@ -10,9 +10,16 @@ import Separator from '../../../../general/modal/modalSeparator'
 import UsedEntityInput from './usedEntityInput'
 import ActorsInput from './actorsInput'
 import DurationPicker from '../../../../general/input/durationpicker'
+import { useStores } from '../../../../utils/stores'
 
 const Form = props => {
-  const [language, setLanguage] = useState('fi')
+  const {
+    Locale: { getMatchingLang },
+  } = useStores()
+  const { inEdit } = props.Field
+
+  const translations = [inEdit.name, inEdit.description, inEdit.outcomeDescription]
+  const [language, setLanguage] = useState(getMatchingLang(translations))
 
   return (
     <FormContainer>

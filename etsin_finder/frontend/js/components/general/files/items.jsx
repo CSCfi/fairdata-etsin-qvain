@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
 import { tint } from 'polished'
 import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-
 import Translate from 'react-translate-component'
+
 import { Spinner } from '../loader'
 
 export const isDirectory = item => item.type === 'directory'
@@ -101,14 +101,13 @@ export const ClickableIcon = styled(ClickableIconButton)`
   align-items: center;
 
   ${props =>
-    (props.disabled
-      ? `
-    color: ${props.theme.color[props.disabledColor]};
-    opacity: ${props.disabledOpacity};
+    props.disabled &&
     `
-      : `
-    cursor: pointer;
-    `)}
+  color: ${props.theme.color[props.disabledColor]};
+  opacity: ${props.disabledOpacity};
+  `}
+
+  ${props => !props.disabled && 'cursor: pointer;'}
 }
 `
 
@@ -188,7 +187,12 @@ export const ItemRow = styled.li`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-
+  background: ${props => (props.isOpen ? props.theme.color.itemBackgroundLight : 'none')};
+  border-radius: 4px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
   ${props => (props.disabled ? 'color: #888' : '')}
 `
 
@@ -203,21 +207,14 @@ export const GrowSpacer = styled.div`
   flex-grow: 1;
 `
 
-export const Items = styled.div`
+export const Items = styled.ul`
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: flex-start;
   flex-grow: 1;
   width: 100%;
-  overflow: auto;
-`
-
-export const ChildrenItem = styled.li`
-  width: 100%;
-`
-
-export const Children = styled.ul`
-  width: 100%;
+  overflow: visible;
 `
 
 export const Tag = styled.div`
@@ -237,8 +234,9 @@ export const Tag = styled.div`
 export const PlainTag = styled.div`
   font-size: 90%;
   border-radius: 4px;
-  text-align: center;
-  margin-left: 2px;
+  text-align: left;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   padding: 1px 4px;
-  white-space: nowrap;
+  width: ${p => p.width || 'auto'};
 `

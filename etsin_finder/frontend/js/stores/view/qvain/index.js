@@ -11,6 +11,7 @@ class Qvain extends Resources {
     this.Files = new Files(this)
     this.Submit = new Submit(this)
     this.resetQvainStore()
+    this.Submit = new Submit(this)
     makeObservable(this)
   }
 
@@ -24,9 +25,11 @@ class Qvain extends Resources {
 
   @action
   resetQvainStore = () => {
+    this.Submit = new Submit(this)
     this.original = undefined
     // Reset Files/Directories related data
     this.resetFilesV1()
+    this.Files.reset()
     this.dataCatalog = undefined
     this.preservationState = 0
     this.cumulativeState = CUMULATIVE_STATE.NO
@@ -56,6 +59,10 @@ class Qvain extends Resources {
   @action
   setChanged = changed => {
     this.changed = changed
+    if (changed) {
+      this.Submit.hasValidated = false
+      this.Submit.prevalidate()
+    }
   }
 
   @action saveExternalResource = resource => {
@@ -123,7 +130,7 @@ class Qvain extends Resources {
   @action
   setDataCatalog = selectedDataCatalog => {
     this.dataCatalog = selectedDataCatalog
-    this.changed = true
+    this.setChanged(true)
 
     // Remove useDoi if dataCatalog is ATT
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
@@ -242,21 +249,24 @@ class Qvain extends Resources {
           // Iterate over existing elements from MobX, to assign them a local externalResourceUIId
           remoteResources.indexOf(r),
           r.title,
-          r.access_url ? r.access_url.identifier : undefined,
-          r.download_url ? r.download_url.identifier : undefined,
+          r.access_url ? r.access_url.identifier : '',
+          r.download_url ? r.download_url.identifier : '',
           r.use_category
             ? {
-                label: r.use_category.pref_label.en,
-                value: r.use_category.identifier,
-              }
-            : undefined
+              label: r.use_category.pref_label.en,
+              value: r.use_category.identifier,
+            }
+            : null
         )
       )
       this.extResFormOpen = true
     }
 
+    // Load v2 files
     if (this.Env.metaxApiV2) {
       await this.Files.openDataset(dataset)
+    } else {
+      this.Files.reset()
     }
   }
 
@@ -321,7 +331,7 @@ class Qvain extends Resources {
 
     if (this.Env.metaxApiV2) {
       if (this.hasBeenPublished) {
-        if (this.Files && !this.Files.projectLocked) {
+        if (this.Files && (!this.Files.projectLocked || this.Files.draftOfHasProject === false)) {
           return true // for published noncumulative datasets, allow adding files only if none exist yet
         }
         return this.isCumulative
