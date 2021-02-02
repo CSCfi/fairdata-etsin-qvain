@@ -490,10 +490,14 @@ class AppConfig(Resource):
 
         """
         app_config = current_app.config
+        sso_config = app_config.get('SSO', {})
+        sso_cookie_domain = sso_config.get('COOKIE_DOMAIN') or app_config.get('SESSION_COOKIE_DOMAIN', '')
         return {
             'SERVER_ETSIN_DOMAIN_NAME': app_config.get('SERVER_ETSIN_DOMAIN_NAME', ''),
             'SERVER_QVAIN_DOMAIN_NAME': app_config.get('SERVER_QVAIN_DOMAIN_NAME', ''),
-            'FLAGS': app_config.get('FLAGS', {})
+            'FLAGS': app_config.get('FLAGS', {}),
+            'SSO_PREFIX': sso_config.get('PREFIX', ''),
+            'SSO_COOKIE_DOMAIN': sso_cookie_domain,
         }
 
 
