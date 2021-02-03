@@ -237,8 +237,7 @@ class Submit {
     const draft = draftResponse.data
 
     const data = await this.updateDataset({ ...dataset, original: draft })
-    data.is_draft = true
-    return data
+    return { ...data, is_draft: true }
   }
 
   publishWithoutUpdating = async dataset => {
