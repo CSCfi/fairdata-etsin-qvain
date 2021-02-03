@@ -38,6 +38,8 @@ class Env {
 
   @observable ssoPrefix = ''
 
+  @observable app = getCookieValue('etsin_app')
+
   async fetchAppConfig() {
     const values = await importValuesAsync()
     this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
@@ -78,8 +80,6 @@ class Env {
   @computed get downloadApiV2() {
     return this.Flags.flagEnabled('DOWNLOAD_API_V2.FRONTEND')
   }
-
-  @observable app = getCookieValue('etsin_app')
 
   @computed
   get isQvain() {
