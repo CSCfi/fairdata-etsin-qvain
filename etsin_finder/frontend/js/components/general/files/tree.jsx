@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import { LinkButton } from '../button'
-import { Children, ChildrenItem, ItemRow, Items, ItemSpacer, isDirectory } from './items'
+import { ItemRow, Items, ItemSpacer, isDirectory } from './items'
 import Loader from '../loader'
 
 // propagate properties from parent directories
@@ -38,31 +38,34 @@ const drawChildren = (treeProps, parent, level = 0, parentArgs = {}) => {
   const hasMore = directoryView.hasMore(parent)
 
   return (
-    <Children>
+    <>
       {items.map(item => (
         <Fragment key={item.key}>
           <Item treeProps={treeProps} item={item} level={level} parentArgs={newParentArgs} />
-          {isDirectory(item) && directoryView.isOpen(item) && (
-            <ChildrenItem>{drawChildren(treeProps, item, level + 1, newParentArgs)}</ChildrenItem>
-          )}
+          {isDirectory(item) &&
+            directoryView.isOpen(item) &&
+            drawChildren(treeProps, item, level + 1, newParentArgs)}
         </Fragment>
       ))}
       {hasMore && (
         <ShowMore directoryView={directoryView} parent={parent} level={level + moreItemsLevel} />
       )}
       {items.length === 0 && level === 0 && <EmptyHelp />}
-    </Children>
+    </>
   )
 }
 
 // returns a function for rendering a file hierarchy
-export const useRenderTree = ({
-  Files,
-  directoryView,
-  Item, // component used for rendering a single item
-  EmptyHelp = () => null, // component shown when there are no visible items
-  moreItemsLevel = 0, // indentation for the "Show All Items" button to account for space taken by buttons
-}, extraProps) => {
+export const useRenderTree = (
+  {
+    Files,
+    directoryView,
+    Item, // component used for rendering a single item
+    EmptyHelp = () => null, // component shown when there are no visible items
+    moreItemsLevel = 0, // indentation for the "Show All Items" button to account for space taken by buttons
+  },
+  extraProps
+) => {
   const renderTree = () => {
     const { root, loadingProject } = Files
     const loading = loadingProject && !loadingProject.error

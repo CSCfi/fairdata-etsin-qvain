@@ -67,21 +67,19 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   )
   const name = item.name
 
-  const getDirectoryContent = () => {
-    const isOpen = directoryView.isOpen(item)
-    return (
-      <>
-        <ToggleOpenButton item={item} directoryView={directoryView} />
-        <Icon icon={isOpen ? faFolderOpen : faFolder} />
-        <ItemTitle>
-          {name}
-          {item.loading && <SmallLoader />}
-        </ItemTitle>
-        {newTag}
-        {removedTag}
-      </>
-    )
-  }
+  const isOpen = isDirectory(item) && directoryView.isOpen(item)
+  const getDirectoryContent = () => (
+    <>
+      <ToggleOpenButton item={item} directoryView={directoryView} />
+      <Icon icon={isOpen ? faFolderOpen : faFolder} />
+      <ItemTitle>
+        {name}
+        {item.loading && <SmallLoader />}
+      </ItemTitle>
+      {newTag}
+      {removedTag}
+    </>
+  )
 
   const getFileContent = () => (
     <>
@@ -155,26 +153,24 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   )
 
   return (
-    <>
-      <ItemRow>
-        {editDropdown}
-        {canRemove || canUndoRemove ? (
-          <Translate
-            component={ClickableIcon}
-            icon={faTimes}
-            color={removeColor}
-            onClick={removeAction}
-            attributes={{ 'aria-label': `qvain.files.selected.buttons.${removeAriaLabel}` }}
-            with={{ name }}
-          />
-        ) : (
-          <NoIcon />
-        )}
+    <ItemRow isOpen={isOpen}>
+      {editDropdown}
+      {canRemove || canUndoRemove ? (
+        <Translate
+          component={ClickableIcon}
+          icon={faTimes}
+          color={removeColor}
+          onClick={removeAction}
+          attributes={{ 'aria-label': `qvain.files.selected.buttons.${removeAriaLabel}` }}
+          with={{ name }}
+        />
+      ) : (
+        <NoIcon />
+      )}
 
-        <ItemSpacer level={level + 0.5} />
-        {content}
-      </ItemRow>
-    </>
+      <ItemSpacer level={level + 0.5} />
+      {content}
+    </ItemRow>
   )
 }
 

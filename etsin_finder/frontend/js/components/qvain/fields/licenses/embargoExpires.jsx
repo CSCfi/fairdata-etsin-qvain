@@ -14,7 +14,7 @@ import { useStores } from '../../utils/stores'
 const EmbargoExpires = () => {
   const {
     Qvain: {
-      EmbargoExpDate: { embargoExpDate, setEmbargoExpDate, readonly, Schema },
+      EmbargoExpDate: { value: embargoExpDate, set: setEmbargoExpDate, readonly, Schema },
     },
     Locale: { lang },
   } = useStores()
