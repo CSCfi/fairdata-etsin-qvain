@@ -1,44 +1,38 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-class Loader extends Component {
-  spinner = () => <Spinner color={this.props.color} size={this.props.size} />
+const Loader = ({ color, size, margin, spinnerSize, active, left }) => {
+  const spinner = <Spinner color={color} size={size} />
 
-  render() {
-    if (this.props.left) {
-      return (
-        <HolderLeft
-          size={this.props.size}
-          margin={this.props.margin}
-          className={`${this.props.active ? 'loader-active' : ''}`}
-        >
-          {this.spinner()}
-        </HolderLeft>
-      )
-    }
+  if (left) {
     return (
-      <Holder
-        spinnerSize={this.props.spinnerSize}
-        margin={this.props.margin}
-        className={`${this.props.active ? 'loader-active' : ''}`}
-      >
-        {this.spinner()}
-      </Holder>
+      <HolderLeft size={size} margin={margin} className={`${active ? 'loader-active' : ''}`}>
+        {spinner}
+      </HolderLeft>
     )
   }
+  return (
+    <Holder
+      spinnerSize={spinnerSize}
+      margin={margin}
+      className={`${active ? 'loader-active' : ''}`}
+    >
+      {spinner}
+    </Holder>
+  )
 }
 
 export default Loader
@@ -49,7 +43,6 @@ const Holder = styled.div`
   align-items: center;
   flex-grow: 1;
   max-height: 0em;
-  transition: all 0.2s ease;
   overflow: hidden;
   margin: 0;
   &.loader-active {
@@ -69,7 +62,6 @@ export const Spinner = styled.div`
   border: ${p => p.spinnerSize} solid ${p => (p.color ? p.color : p.theme.color.primary)};
   border-right-color: transparent;
   border-radius: 50%;
-  transition: all 0.3s ease;
   @keyframes spinner {
     0% {
       transform: rotate(0deg);
