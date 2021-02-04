@@ -2,6 +2,8 @@ dist: xenial
 
 language: python
 python: 3.6
+node_js:
+  - 12
 
 git:
   depth: false
@@ -30,7 +32,7 @@ jobs:
       - sudo apt-get install npm libxml2-dev libxmlsec1-dev libxmlsec1-openssl
     install:
       - cd $TRAVIS_BUILD_DIR/etsin_finder/frontend
-      - echo "Using node version $(node --version)"
+      - node --version
       - npm install
       - npm run build -- --define process.env.NODE_ENV=\"'travis'\"
     before_script:
