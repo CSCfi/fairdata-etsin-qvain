@@ -99,6 +99,7 @@ const modalStyle = {
 
 const TreeWrapper = styled.div`
   flex-grow: 1;
+  overflow: auto;
 `
 
 const Buttons = styled.div`
