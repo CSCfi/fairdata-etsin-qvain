@@ -320,6 +320,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
 
 
 def get_access_granter():
+    """Return access granter object for current user."""
     metadata_provider_user = get_user_csc_name()
     email = get_user_email()
     name = "{} {}".format(get_user_firstname(), get_user_lastname())
