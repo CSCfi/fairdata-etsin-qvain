@@ -223,6 +223,8 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
   >
     <TooltipHover
       position="right"
+      showOnClick={false}
+      showOnHover={true}
       title="Required to save and publish"
     >
       <Translate

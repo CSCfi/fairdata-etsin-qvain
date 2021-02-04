@@ -1,7 +1,7 @@
 import {
   faDownload,
   faSpinner,
-  faFileArchive,
+  faCog,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../../utils/constants'
@@ -9,7 +9,9 @@ import { downloadFile, downloadPackage } from './download'
 
 // Download button information for file/package
 const actionDefaults = {
-  ariaLabel: 'dataset.dl.downloadItem',
+  buttonLabel: 'dataset.dl.download',
+  tooltip: null,
+  color: null,
   available: false, // is file/package ready for download
   func: null, // action when button is clicked
   icon: faDownload,
@@ -27,8 +29,8 @@ const actionDownload = (datasetIdentifier, item, path, pack, Packages) => {
   }
   return {
     ...actionDefaults,
-    ariaLabel: 'dataset.dl.downloadItem',
     func,
+    color: 'success',
     type: 'download',
     available: true,
   }
@@ -36,24 +38,29 @@ const actionDownload = (datasetIdentifier, item, path, pack, Packages) => {
 
 const actionPending = () => ({
   ...actionDefaults,
-  ariaLabel: 'dataset.dl.packages.pending',
+  buttonLabel: 'dataset.dl.packages.pending',
+  tooltip: 'dataset.dl.packages.pendingTooltip',
+  color: 'darkgray',
   icon: faSpinner,
-  pending: false,
+  pending: true,
   spin: true,
   type: 'pending',
 })
 
 const actionLoading = () => ({
   ...actionPending(),
-  ariaLabel: 'dataset.dl.packages.loading',
+  buttonLabel: 'dataset.dl.packages.loading',
+  tooltip: null,
+  pending: false,
   type: 'loading',
 })
 
 const actionCreatePackage = (Packages, path) => ({
   ...actionDefaults,
-  ariaLabel: 'dataset.dl.packages.createForItem',
-  func: () => Packages.createPackageFromFolder(path),
-  icon: faFileArchive,
+  buttonLabel: 'dataset.dl.packages.create',
+  func: () => Packages.confirm(() => Packages.createPackageFromFolder(path)),
+  icon: faCog,
+  spin: false,
   type: 'create',
 })
 
