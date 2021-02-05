@@ -502,10 +502,6 @@ const finnish = {
         email: 'Sähköposti',
         identifier: 'esim. http://orcid.org',
       },
-      validation: {
-        name: 'Nimi täytyy täyttää',
-        email: 'Sähköpostiosoite ei kelpaa',
-      },
     },
     datasets: {
       title: 'Aineistot',
@@ -721,10 +717,6 @@ const finnish = {
         title: {
           label: 'Lisää projektin otsikko',
           description: 'Projektin nimi, lisää vähintään yksi kieli.',
-          validation: {
-            required: 'Lisää vähintään yksi kieli',
-            string: 'Nimen täytyy olla merkkijono.',
-          },
         },
         titleEn: {
           placeholder: 'Nimi (Engalnti)',
@@ -761,7 +753,6 @@ const finnish = {
           },
           addButton: 'Lisää organisaatio',
           editButton: 'Muokkaa organisaatiota',
-          validation: 'Vähintään yksi organisaatio tarvitaan',
         },
         fundingAgency: {
           contributorType: {
@@ -773,7 +764,6 @@ const finnish = {
             },
             identifier: {
               label: 'Rooli',
-              validation: 'Valitse rooli',
             },
             definition: {
               label: 'Selite',
@@ -1003,6 +993,44 @@ const finnish = {
           validFormat: 'Ulkoisen aineiston latauslinkin URL pitää olla oikeassa URL-formaatissa.',
         },
       },
+      projects: {
+        title: {
+          required: 'Lisää vähintään yksi kieli',
+          string: 'Nimen täytyy olla merkkijono.',
+        },
+        organization: {
+            name: 'Nimi täytyy täyttää',
+            email: 'Sähköpostiosoite ei kelpaa',
+            min: 'Vähintään yksi organisaatio tarvitaan',
+        },
+        fundingAgency: {
+          contributorType: {
+            identifier: 'Rooli on pakollinen kenttä.',
+          },
+        },   
+      },
+      temporalAndSpatial: {
+        spatial: {
+          nameRequired: 'Nimi on pakollinen kenttä.',
+          altitudeNan: 'Korkeuden täytyy olla numero.',  
+        },
+        temporal: {
+          startDateMissing: 'Alkamisajankohta puuttuu.',
+          endDateMissing: 'Loppuajankohta puuttuu.',  
+        },
+      },
+      history: {
+        relatedResource: {
+          nameRequired: 'Nimi kenttä on pakollinen ainakin yhdellä kielellä.',
+          typeRequired: 'Viitteen tyyppi on pakollinen kenttä.',  
+        },
+        provenance: {
+          nameRequired: 'Nimi vaaditaan vähintään yhdellä kielellä.',
+          startDateMissing: 'Alkamispäivämäärä puuttuu',
+          endDateMissing: 'Loppumispäivämäärä puuttuu',  
+        },
+      },
+
     },
     files: {
       title: 'Tiedostot',
@@ -1343,10 +1371,6 @@ const finnish = {
         description:
           'Viittaukset aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.',
         noItems: 'Viittauksia toisiin resursseihin ei ole lisätty.',
-        error: {
-          nameRequired: 'Nimi kenttä on pakollinen ainakin yhdellä kielellä.',
-          typeRequired: 'Viitteen tyyppi on pakollinen kenttä.',
-        },
         modal: {
           addButton: 'Lisää viittaus toiseen resurssiin',
           title: {
@@ -1396,11 +1420,6 @@ const finnish = {
         title: 'Historiatiedot (provenienssi)',
         description: 'Tapahtuma tai toiminta, jonka kohteena oli tämä aineisto.',
         noItems: 'Historiatietoja ei ole lisätty.',
-        error: {
-          nameRequired: 'Nimi vaaditaan vähintään yhdellä kielellä.',
-          startDateMissing: 'Alkamispäivämäärä puuttuu',
-          endDateMissing: 'Loppumispäivämäärä puuttuu',
-        },
         modal: {
           addButton: 'Lisää historiatieto',
           title: {
@@ -1570,10 +1589,6 @@ const finnish = {
         title: 'Maantieteellinen kattavuus',
         description: 'Alue jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja. ',
         noItems: 'Maantieteellistä kattavuutta ei ole lisätty.',
-        error: {
-          nameRequired: 'Nimi on pakollinen kenttä.',
-          altitudeNan: 'Korkeuden täytyy olla numero',
-        },
         modal: {
           addButton: 'Lisää maantieteellinen kattavuus',
           title: {
@@ -1613,10 +1628,6 @@ const finnish = {
         description:
           'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
         addButton: 'Lisää ajallinen kattavuus',
-        error: {
-          startDateMissing: 'Alkamisajankohta puuttuu.',
-          endDateMissing: 'Loppuajankohta puuttuu.',
-        },
         modal: {
           durationInput: {
             label: 'Ajanjakso',

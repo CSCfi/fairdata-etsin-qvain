@@ -59,7 +59,7 @@ jest.mock('lodash.debounce', () => {
 })
 
 const errors = {
-  missingFileOrigin: 'File origin is required.',
+  missingFileOrigin: 'qvain.validationMessages.files.dataCatalog.required',
   wrongFileOrigin: 'Doi can be used only with Ida datasets.',
 }
 
