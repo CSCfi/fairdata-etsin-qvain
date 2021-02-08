@@ -157,6 +157,8 @@ class BaseTest():
         """
         from etsin_finder.services import rems_service
         monkeypatch.setattr(rems_service, 'get_user_rems_permission_for_catalog_record', lambda x, y: True)
+        from etsin_finder.auth import authorization
+        monkeypatch.setattr(authorization, 'user_has_rems_permission_for_catalog_record', lambda x: True)
 
     @pytest.fixture
     def no_rems_permit(self, monkeypatch):
@@ -168,6 +170,8 @@ class BaseTest():
         """
         from etsin_finder.services import rems_service
         monkeypatch.setattr(rems_service, 'get_user_rems_permission_for_catalog_record', lambda x, y: False)
+        from etsin_finder.auth import authorization
+        monkeypatch.setattr(authorization, 'user_has_rems_permission_for_catalog_record', lambda x: False)
 
     if __name__ == '__main__':
         pytest.main()

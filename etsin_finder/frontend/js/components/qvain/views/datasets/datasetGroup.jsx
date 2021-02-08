@@ -89,7 +89,7 @@ const MoreButtonCell = styled(BodyCell)`
   padding: 0;
 `
 
-const MoreButton = styled.button.attrs(() => ({ type: 'button' }))`
+export const MoreButton = styled.button.attrs(() => ({ type: 'button' }))`
   background: none;
   border: none;
   display: flex;

@@ -181,6 +181,10 @@ describe('Qvain.MetadataModal', () => {
     stores.Qvain.Files.root.directories.push(dir)
   })
 
+  afterEach(() => {
+    wrapper?.unmount?.()
+  })
+
   it('opens file on click and validates the metadata', async () => {
     await setFile('/test/test.csv')
     expect(instance.state.fileIdentifier).toBe('test_file')
