@@ -114,11 +114,13 @@
       "Components/(.*)$": "<rootDir>/js/components/$1",
       "Stores/(.*)$": "<rootDir>/js/stores/$1",
       "Utils/(.*)$": "<rootDir>/js/utils/$1",
-      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
+      "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/__mocks__/imageMock.js"
     },
     "testPathIgnorePatterns": [
       "./__tests__/test-setup.js",
-      "./__tests__/__testdata__"
+      "./__tests__/__testdata__",
+      "./__tests__/__utils__"
     ],
     "testURL": "http://localhost"
   },
