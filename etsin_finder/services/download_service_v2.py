@@ -8,6 +8,7 @@
 """Functionalities for download data from Download API v2"""
 
 import requests
+import re
 
 from etsin_finder.utils.request_utils import make_request
 from etsin_finder.app_config import get_download_api_v2_config
@@ -57,9 +58,16 @@ class DownloadAPIService(FlaskService):
                     auth=self.auth,
                     verify=self.verify_ssl,
                     timeout=10,
-                    proxies=self.proxies)
+                    proxies=self.proxies,
+                    error_to_response=self._error_to_response)
         args.update(kwargs)
         return args
+
+    @staticmethod
+    def _error_to_response(error, code):
+        if code == 503:
+            return 'Unable to connect to the download service'
+        return 'Server error connecting to the download service'
 
     def get_requests(self, dataset):
         """Get package generation requests for dataset"""
@@ -73,7 +81,12 @@ class DownloadAPIService(FlaskService):
                                              **args,
                                              )
         if status == 404:
-            return {}, 404
+            try:
+                # Not finding active tasks should not be considered an error here
+                if re.match("no active .*tasks", resp.get("error"), re.IGNORECASE):
+                    return {}, 200
+            except Exception:
+                pass
         if not success:
             log.warning(f"Failed to get requests for dataset {dataset}")
         return resp, status
@@ -91,14 +104,12 @@ class DownloadAPIService(FlaskService):
                                              json=params,
                                              **args,
                                              )
-        if status == 404:
-            return {}, 404
         if not success:
             log.warning(f"Failed to create package for dataset {dataset} with scope {scope}")
         return resp, status
 
     def authorize(self, dataset, file=None, package=None):
-        """Get package generation requests for dataset"""
+        """Authorize package or file download"""
         params = {
             'dataset': dataset
         }
@@ -113,9 +124,6 @@ class DownloadAPIService(FlaskService):
                                              json=params,
                                              **args,
                                              )
-        if status == 404:
-            return {}, 404
-
         if not success:
             log.warning(f"Failed to get requests for dataset {dataset}")
 

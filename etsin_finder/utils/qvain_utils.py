@@ -1,5 +1,6 @@
 """Utilities for transforming the data from the Qvain form to METAX compatible format"""
 
+import re
 from copy import deepcopy
 import json
 from base64 import urlsafe_b64encode
@@ -18,7 +19,7 @@ from etsin_finder.auth.authentication import (
     get_user_lastname,
     is_authenticated
 )
-
+from etsin_finder.schemas.qvain_dataset_schema import data_catalog_matcher
 
 def clean_empty_keyvalues_from_dict(d):
     """Cleans all key value pairs from the object that have empty values, like [], {} and ''.
@@ -318,8 +319,8 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     return clean_empty_keyvalues_from_dict(dataset_data)
 
 
-def get_encoded_access_granter():
-    """Add REMS metadata as base64 encoded json. Uses data from user session."""
+def get_access_granter():
+    """Return access granter object for current user."""
     metadata_provider_user = get_user_csc_name()
     email = get_user_email()
     name = "{} {}".format(get_user_firstname(), get_user_lastname())
@@ -328,8 +329,7 @@ def get_encoded_access_granter():
         "email": email,
         "name": name
     }
-    access_granter_json = json.dumps(access_granter)
-    return urlsafe_b64encode(access_granter_json.encode('utf-8'))
+    return access_granter
 
 def get_dataset_creator(cr_id):
     """Get creator of dataset.
@@ -364,8 +364,8 @@ def check_authentication():
 
     return None
 
-def check_dataset_creator(cr_id):
-    """Verify that current user is authenticated and can edit the dataset.
+def check_dataset_edit_permission(cr_id):
+    """Verify that current user is authenticated and can edit the dataset in Qvain.
 
     Arguments:
         cr_id (str): Identifier of dataset.
@@ -378,11 +378,21 @@ def check_dataset_creator(cr_id):
     if error:
         return error
 
+    cr = get_catalog_record(cr_id, False)
+    if cr is None:
+        log.warning(f'Dataset "{cr_id}" not found. Editing not allowed.')
+        return {"PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."}, 403
+
     csc_username = get_user_csc_name()
-    creator = get_dataset_creator(cr_id)
+    creator = cr.get('metadata_provider_user')
     if csc_username != creator:
-        log.warning('User: \"{0}\" is not the creator of the dataset. Editing not allowed.'.format(csc_username))
-        return {"PermissionError": "User is not allowed to edit the dataset."}, 403
+        log.warning(f'User: "{csc_username}" is not the creator of the dataset. Editing not allowed.')
+        return {"PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."}, 403
+
+    catalog_identifier = cr.get('data_catalog', {}).get('catalog_json', {}).get('identifier')
+    if not re.match(data_catalog_matcher, catalog_identifier):
+        log.warning(f'Catalog {catalog_identifier} is not supported by Qvain. Editing not allowed.')
+        return {"PermissionError": f"Editing datasets from catalog {catalog_identifier} is not supported by Qvain."}, 403
     return None
 
 def remove_deleted_datasets_from_results(result):

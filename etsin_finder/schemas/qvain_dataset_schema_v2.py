@@ -2,9 +2,11 @@
 from marshmallow import Schema, fields, validates_schema, ValidationError
 from marshmallow.validate import Length, OneOf
 from etsin_finder.schemas.qvain_dataset_schema import (
-    DatasetValidationSchema as DatasetValidationSchemaV1
+    DatasetValidationSchema as DatasetValidationSchemaV1,
+    data_catalog_matcher as data_catalog_matcher_v1
 )
 
+data_catalog_matcher = data_catalog_matcher_v1
 
 def validate(data, params):
     """Controller function for validation.

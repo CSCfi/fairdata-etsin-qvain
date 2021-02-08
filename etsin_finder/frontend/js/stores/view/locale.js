@@ -112,6 +112,9 @@ class Locale {
 
   getValueTranslation = (value, lang) => {
     // Get a translation from a multi-language string object, use supplied language by default
+    if (typeof value === 'string') {
+      return value
+    }
     if (value[lang]) {
       return value[lang]
     }

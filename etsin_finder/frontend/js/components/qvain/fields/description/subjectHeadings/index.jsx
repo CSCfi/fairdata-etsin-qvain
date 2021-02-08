@@ -1,6 +1,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+
+import { withFieldErrorBoundary } from '../../../general/errors/fieldErrorBoundary'
 import SearchSelect from '../../../general/input/searchSelect'
 import Card from '../../../general/card'
 import { LabelLarge } from '../../../general/modal/form'
@@ -12,7 +14,6 @@ const SubjectHeadingsField = () => {
       SubjectHeadings: { storage, set, Model },
     },
   } = useStores()
-
   return (
     <Card>
       <LabelLarge htmlFor="subjectHeading-select">
@@ -34,4 +35,7 @@ const SubjectHeadingsField = () => {
   )
 }
 
-export default observer(SubjectHeadingsField)
+export default withFieldErrorBoundary(
+  observer(SubjectHeadingsField),
+  'qvain.description.subjectHeadings.title'
+)

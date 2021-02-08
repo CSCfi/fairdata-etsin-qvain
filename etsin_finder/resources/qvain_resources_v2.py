@@ -21,14 +21,15 @@ from etsin_finder.utils.utils import (
 from etsin_finder.schemas.qvain_dataset_schema_v2 import (
     validate,
     FileActionsValidationSchema,
+    data_catalog_matcher,
 )
 from etsin_finder.utils.qvain_utils_v2 import (
     data_to_metax,
-    check_dataset_creator,
+    check_dataset_edit_permission,
     check_authentication,
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
-    get_encoded_access_granter,
+    get_access_granter,
 )
 
 from etsin_finder.services.qvain_service_v2 import MetaxQvainAPIServiceV2
@@ -148,7 +149,7 @@ class QvainDatasets(Resource):
 
         user_id = authentication.get_user_csc_name()
         service = MetaxQvainAPIServiceV2()
-        result = service.get_datasets_for_user(user_id, limit, offset, no_pagination)
+        result = service.get_datasets_for_user(user_id, limit, offset, no_pagination, data_catalog_matcher=data_catalog_matcher)
         if result:
             # Limit the amount of items to be sent to the frontend
             if 'results' in result:
@@ -197,11 +198,7 @@ class QvainDatasets(Resource):
             params["pid_type"] = 'doi'
 
         metax_ready_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
-
-        log.debug(f'metax ready data {metax_ready_data}')
-
-        params["access_granter"] = get_encoded_access_granter()
-
+        metax_ready_data["access_granter"] = get_access_granter()
         service = MetaxQvainAPIServiceV2()
         metax_response = service.create_dataset(metax_ready_data, params)
         return metax_response
@@ -222,7 +219,7 @@ class QvainDataset(Resource):
             [type] -- Metax response.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -239,7 +236,7 @@ class QvainDataset(Resource):
 
         """
         params = {}
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -275,11 +272,8 @@ class QvainDataset(Resource):
         log.debug(f'in patch: data: {data}')
 
         metax_ready_data = edited_data_to_metax(data, original)
-
-        log.debug(f'in patch: metax_ready_data.data_catalog: {metax_ready_data.get("data_catalog", "no catalog")}')
-
+        metax_ready_data["access_granter"] = get_access_granter()
         params = {}
-        params["access_granter"] = get_encoded_access_granter()
         service = MetaxQvainAPIServiceV2()
         metax_response = service.update_dataset(metax_ready_data, cr_id, last_edit_converted, params)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
@@ -298,7 +292,7 @@ class QvainDataset(Resource):
 
         """
         # only creator of the dataset is allowed to delete it
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -325,7 +319,7 @@ class QvainDatasetFiles(Resource):
             Metax response.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 

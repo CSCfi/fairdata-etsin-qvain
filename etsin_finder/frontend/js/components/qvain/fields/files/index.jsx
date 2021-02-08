@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 import { observer } from 'mobx-react'
+
+import { withFieldErrorBoundary } from '../../general/errors/fieldErrorBoundary'
 import { SectionTitle } from '../../general/section'
 import { ContainerLight, ContainerSubsectionBottom } from '../../general/card'
 import { HelpIcon } from '../../general/modal/form'
@@ -86,4 +88,4 @@ const Files = () => {
   )
 }
 
-export default observer(Files)
+export default withFieldErrorBoundary(observer(Files), 'qvain.files.title')

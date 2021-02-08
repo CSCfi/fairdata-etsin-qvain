@@ -4,8 +4,6 @@ import urls from '../../components/qvain/utils/urls'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../utils/constants'
 
-const getErrorText = err => (err.response && err.response.data) || err.message
-
 class Packages {
   // Download API package handling
 
@@ -14,7 +12,9 @@ class Packages {
     makeObservable(this)
   }
 
-  initialPollInterval = 1.5e3
+  initialPollInterval = 1e3
+
+  pollMultiplier = 1.2
 
   pollInterval = this.initialPollInterval
 
@@ -28,6 +28,19 @@ class Packages {
 
   @observable packages = {}
 
+  @observable confirmModalCallback = null
+
+  @action confirm = (callback) => {
+    this.confirmModalCallback = () => {
+      callback()
+      this.closeConfirmModal()
+    }
+  }
+
+  @action closeConfirmModal = () => {
+    this.confirmModalCallback = null
+  }
+
   @action clearPackages() {
     this.packages = {}
     this.error = null
@@ -36,13 +49,14 @@ class Packages {
   @action reset() {
     this.datasetIdentifier = null
     this.clearPackages()
-    this.setPollInterval(1.5e3)
+    this.setPollInterval(1e3, 1.2)
     this.clearPollTimeout()
   }
 
-  setPollInterval(interval) {
+  setPollInterval(interval, multiplier) {
     this.initialPollInterval = interval
     this.pollInterval = interval
+    this.pollMultiplier = multiplier
   }
 
   get(path) {
@@ -71,7 +85,7 @@ class Packages {
       })
       runInAction(() => {
         const maxInterval = 10e3
-        this.pollInterval = Math.min(this.pollInterval * 2, maxInterval)
+        this.pollInterval = Math.min(this.pollInterval * this.pollMultiplier, maxInterval)
       })
     } else {
       this.pollInterval = this.initialPollInterval
@@ -94,17 +108,31 @@ class Packages {
     partial.forEach(pack => this.updatePackage(pack.scope[0], pack))
   }
 
+  @action setRequestingPackageCreation(path, value) {
+    this.packages[path] = { ...this.packages[path], requestingPackageCreation: value }
+  }
+
   createPackage = async params => {
+    const scope = params.scope || ['/']
     try {
+      scope.forEach(path => {
+        this.setRequestingPackageCreation(path, true)
+      })
       const resp = await axios.post(urls.v2.packages(), params)
       const { partial, ...full } = resp.data
 
       this.updatePartials(partial)
       this.updatePackage('/', full)
+      this.clearError()
     } catch (err) {
       console.error(err)
-      this.setError(getErrorText(err))
+      this.setError(err)
+    } finally {
+      scope.forEach(path => {
+        this.setRequestingPackageCreation(path, false)
+      })
     }
+    this.pollInterval = this.initialPollInterval
     this.schedulePoll()
   }
 
@@ -125,8 +153,12 @@ class Packages {
     this.loadingDataset = val
   }
 
-  @action setError(msg) {
-    this.error = msg
+  @action setError = (error) => {
+    this.error = error
+  }
+
+  @action clearError = () => {
+    this.error = null
   }
 
   async fetch(datasetIdentifier) {
@@ -149,12 +181,11 @@ class Packages {
       try {
         const url = `${urls.v2.packages()}?cr_id=${datasetIdentifier}`
         response = await axios.get(url)
+        this.clearError()
       } catch (err) {
         this.clearPackages()
-        if (!(err.response && err.response.status === 404)) {
-          console.error(err)
-          this.setError(getErrorText(err))
-        }
+        console.error(err)
+        this.setError(err)
         return
       }
 

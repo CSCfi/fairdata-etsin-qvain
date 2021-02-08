@@ -18,15 +18,15 @@ from etsin_finder.utils.utils import \
     sort_array_of_obj_by_key, \
     slice_array_on_limit, \
     datetime_to_header
+from etsin_finder.schemas.qvain_dataset_schema import DatasetValidationSchema, data_catalog_matcher
 from etsin_finder.utils.constants import DATA_CATALOG_IDENTIFIERS
-from etsin_finder.schemas.qvain_dataset_schema import DatasetValidationSchema
 from etsin_finder.utils.qvain_utils import (
     data_to_metax,
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
     check_if_data_in_user_IDA_project,
-    get_encoded_access_granter,
-    check_dataset_creator,
+    get_access_granter,
+    check_dataset_edit_permission,
     check_authentication,
 )
 from etsin_finder.utils.log_utils import log_request
@@ -296,7 +296,7 @@ class QvainDatasets(Resource):
 
         user_id = authentication.get_user_csc_name()
         service = MetaxQvainAPIService()
-        result = service.get_datasets_for_user(user_id, limit, offset, no_pagination)
+        result = service.get_datasets_for_user(user_id, limit, offset, no_pagination, data_catalog_matcher=data_catalog_matcher)
         if result:
             # Limit the amount of items to be sent to the frontend
             if 'results' in result:
@@ -347,9 +347,8 @@ class QvainDatasets(Resource):
 
         metax_ready_data = data_to_metax(data, metadata_provider_org,
                                          metadata_provider_user)
-        params = {
-            "access_granter": get_encoded_access_granter()
-        }
+        metax_ready_data["access_granter"] = get_access_granter()
+        params = {}
         service = MetaxQvainAPIService()
         metax_response = service.create_dataset(metax_ready_data, params, use_doi)
         return metax_response
@@ -374,7 +373,7 @@ class QvainDataset(Resource):
             [type] -- Metax response.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -390,7 +389,7 @@ class QvainDataset(Resource):
             The response from metax or if error an error message.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 
@@ -425,9 +424,8 @@ class QvainDataset(Resource):
         del data["original"]
 
         metax_ready_data = edited_data_to_metax(data, original)
-
+        metax_ready_data["access_granter"] = get_access_granter()
         params = {}
-        params["access_granter"] = get_encoded_access_granter()
         service = MetaxQvainAPIService()
         metax_response = service.update_dataset(metax_ready_data, cr_id, last_edit_converted, params)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
@@ -445,7 +443,7 @@ class QvainDataset(Resource):
             [type] -- Metax response.
 
         """
-        error = check_dataset_creator(cr_id)
+        error = check_dataset_edit_permission(cr_id)
         if error is not None:
             return error
 

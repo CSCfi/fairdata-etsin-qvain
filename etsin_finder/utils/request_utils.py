@@ -17,8 +17,10 @@ def get_request_url(url, *args, **kwargs):
     """Returns url parameter that request will use"""
     return url
 
+def _error_response_text(error, code):
+    return str(error)
 
-def make_request(request_func, *args, **kwargs):
+def make_request(request_func, *args, error_to_response=None, **kwargs):
     """
     Helper for handling and logging errors from requests.
 
@@ -32,6 +34,8 @@ def make_request(request_func, *args, **kwargs):
       success (bool): True if no exceptions occurred
 
     """
+    if not error_to_response:
+        error_to_response = _error_response_text
     response = None
     success = False
     url = get_request_url(*args, **kwargs)
@@ -41,10 +45,10 @@ def make_request(request_func, *args, **kwargs):
         success = True
     except requests.Timeout as e:
         log.error(f'Request to {url} timed out\n{e}')
-        return str(e), 503, False
+        return error_to_response(e, 503), 503, False
     except requests.ConnectionError as e:
         log.error(f'Unable to connect to {url}\n{e}')
-        return str(e), 503, False
+        return error_to_response(e, 503), 503, False
     except requests.HTTPError:
         log.warning(
             "\nResponse status code: {0}\nResponse text: {1}".format(
@@ -53,5 +57,5 @@ def make_request(request_func, *args, **kwargs):
             ))
     except Exception as e:
         log.error(f'Error {type(e)} at {url}\n{e}')
-        return str(e), 500, False
+        return error_to_response(e, 500), 500, False
     return json_or_text(response), response.status_code, success
