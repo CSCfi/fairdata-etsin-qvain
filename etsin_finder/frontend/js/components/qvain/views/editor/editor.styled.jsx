@@ -52,7 +52,6 @@ export const SubmitContainer = styled(Container)`
 export const LinkBackContainer = styled.div`
   text-align: ${props => props.position};
   white-space: nowrap;
-  margin-bottom: 0.5rem;
 `
 
 export const LinkBack = styled(Link)`
