@@ -1,29 +1,61 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const Tooltip = ({ isOpen, close, align, text, children }) => {
+  const [currentAlign, setCurrentAlign] = useState(align)
+
   const wrapperTooltipButtonRef = useRef(null)
   const wrapperTooltipCardRef = useRef(null)
 
-  const handleClickOutside = event => {
-    if (wrapperTooltipCardRef.current) {
-      // If the tooltip card is clicked, tooltip should not be closed. Otherwise, close.
-      if (!wrapperTooltipCardRef.current.contains(event.target)) {
-        close()
+  const updatePosition = useCallback(() => {
+    // Move tooltip to opposite side if it doesn't fit to window
+    setCurrentAlign(activeCurrentAlign => {
+      const wrapper = wrapperTooltipCardRef?.current
+      const tooltip = wrapper?.firstChild
+      if (!tooltip) {
+        return activeCurrentAlign
       }
-    }
-  }
+
+      // hide tooltip until its position is determined
+      const rect = tooltip.getBoundingClientRect()
+      wrapper.style.visibility = 'visible'
+
+      if (rect.right > window.innerWidth && align === 'Right') {
+        return 'Left'
+      }
+      if (rect.left < 0 && align === 'Left') {
+        return 'Right'
+      }
+      return activeCurrentAlign
+    })
+  }, [align])
 
   useEffect(() => {
+    setCurrentAlign(align)
+    updatePosition()
+
+    const handleClickOutside = event => {
+      if (wrapperTooltipCardRef.current) {
+        // If the tooltip card is clicked, tooltip should not be closed. Otherwise, close.
+        if (!wrapperTooltipCardRef.current.contains(event.target)) {
+          close()
+        }
+      }
+    }
+
+    window.addEventListener('scroll', updatePosition)
+    window.addEventListener('resize', updatePosition)
     document.addEventListener('mousedown', handleClickOutside)
     return () => {
+      window.removeEventListener('scroll', updatePosition)
+      window.removeEventListener('resize', updatePosition)
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  })
+  }, [align, close, updatePosition])
 
   let tooltip
-  switch (align) {
+  switch (currentAlign) {
     case 'Right':
       tooltip = (
         <>
@@ -104,6 +136,7 @@ export default Tooltip
 
 const Wrapper = styled.span`
   position: relative;
+  visibility: hidden;
 `
 
 const TooltipStyle = styled.div`
@@ -198,7 +231,7 @@ const TooltipText = styled.div`
   font-weight: initial;
   text-align: inherit;
   background-color: ${p => p.theme.color.white};
-  @media (max-width: ${p => p.theme.breakpoints.sm}) {
+  @media (max-width: ${p => p.theme.breakpoints.md}) {
     max-width: 200px;
   }
 `

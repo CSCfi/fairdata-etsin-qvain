@@ -5,6 +5,13 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
+const ACCESS_DENIED_MESSAGES = {
+  EMBARGO: 'dataset.access_rights_description.embargo',
+  NEED_LOGIN: 'dataset.access_rights_description.login',
+  NEED_REMS_PERMISSION: 'dataset.access_rights_description.permit',
+  RESTRICTED: 'dataset.access_rights_description.restricted',
+}
+
 const ErrorMessage = ({ error, clear }) => {
   const [showDetails, setShowDetails] = useState(false)
 
@@ -16,28 +23,41 @@ const ErrorMessage = ({ error, clear }) => {
     return null
   }
 
-  const summaryTranslation = `dataset.dl.errors.${
+  let errorColor = null
+  let allowDetails = true
+  let summaryTranslation = `dataset.dl.errors.${
     error.response?.status === 503 ? 'unknownError' : 'serviceUnavailable'
   }`
+
+  const reason = error?.response?.data?.reason
+  if (reason in ACCESS_DENIED_MESSAGES) {
+    summaryTranslation = ACCESS_DENIED_MESSAGES[reason]
+    allowDetails = false
+    errorColor = 'primary'
+  }
+
+  const detailAction = `error.details.${showDetails ? 'hideDetails' : 'showDetails'}`
+
   const message = `${error.name}: ${error.message}`
   const response = error.request?.responseText
-
-  const detailAction = `dataset.dl.errors.${showDetails ? 'hideDetails' : 'showDetails'}`
-
   return (
-    <ErrorDiv>
+    <ErrorDiv errorColor={errorColor}>
       <Message style={{ flexGrow: 1 }}>
         <Translate component={MessagePart} content={summaryTranslation} />
-        {showDetails && message && <MessagePart>{message}</MessagePart>}
-        {showDetails && response && <MessagePart>{response}</MessagePart>}
-        <Translate
-          component={DetailsButton}
-          content={detailAction}
-          onClick={() => setShowDetails(!showDetails)}
-        />
+        {allowDetails && (
+          <>
+            {showDetails && message && <MessagePart>{message}</MessagePart>}
+            {showDetails && response && <MessagePart>{response}</MessagePart>}
+            <Translate
+              component={DetailsButton}
+              content={detailAction}
+              onClick={() => setShowDetails(!showDetails)}
+            />
+          </>
+        )}
       </Message>
-      <CloseButton>
-        <FontAwesomeIcon icon={faTimes} onClick={clear} />
+      <CloseButton onClick={clear}>
+        <FontAwesomeIcon icon={faTimes} />
       </CloseButton>
     </ErrorDiv>
   )
@@ -94,6 +114,7 @@ const ErrorDiv = styled.div.attrs({
   display: flex;
   padding: 0;
   margin-bottom: 1rem;
+  ${p => p.errorColor && `background: ${p.theme.color[p.errorColor]};`}
 `
 
 export default ErrorMessage

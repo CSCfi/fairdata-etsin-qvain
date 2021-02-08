@@ -468,14 +468,15 @@ class Download(Resource):
         if not cr:
             abort(400, message="Unable to get catalog record")
 
-        if authorization.user_is_allowed_to_download_from_ida(cr, authentication.is_authenticated()):
+        allowed, reason = authorization.user_is_allowed_to_download_from_ida(cr, authentication.is_authenticated())
+        if allowed:
             # Retrieving file_id and dir_id from IDA, if empty, use empty list as value
             log.info(args)
             file_ids = args.get('file_id') or []
             dir_ids = args.get('dir_id') or []
             return download_data(cr_id, file_ids, dir_ids)
         else:
-            abort(403, message="Not authorized")
+            abort(403, message="Not authorized", reason=reason)
 
 
 class AppConfig(Resource):
@@ -490,10 +491,14 @@ class AppConfig(Resource):
 
         """
         app_config = current_app.config
+        sso_config = app_config.get('SSO', {})
+        sso_cookie_domain = sso_config.get('COOKIE_DOMAIN') or app_config.get('SESSION_COOKIE_DOMAIN', '')
         return {
             'SERVER_ETSIN_DOMAIN_NAME': app_config.get('SERVER_ETSIN_DOMAIN_NAME', ''),
             'SERVER_QVAIN_DOMAIN_NAME': app_config.get('SERVER_QVAIN_DOMAIN_NAME', ''),
-            'FLAGS': app_config.get('FLAGS', {})
+            'FLAGS': app_config.get('FLAGS', {}),
+            'SSO_PREFIX': sso_config.get('PREFIX', ''),
+            'SSO_COOKIE_DOMAIN': sso_cookie_domain,
         }
 
 

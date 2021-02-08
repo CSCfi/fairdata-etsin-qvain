@@ -1,6 +1,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
+
+import { withFieldErrorBoundary } from '../../../general/errors/fieldErrorBoundary'
 import Card from '../../../general/card'
 import { otherIdentifiersArraySchema, otherIdentifierSchema } from '../../../utils/formValidation'
 import { LabelLarge } from '../../../general/modal/form'
@@ -48,4 +50,7 @@ const OtherIdentifierField = () => {
   )
 }
 
-export default observer(OtherIdentifierField)
+export default withFieldErrorBoundary(
+  observer(OtherIdentifierField),
+  'qvain.description.otherIdentifiers.title'
+)
