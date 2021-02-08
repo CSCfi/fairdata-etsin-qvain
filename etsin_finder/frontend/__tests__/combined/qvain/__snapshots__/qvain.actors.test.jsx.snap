@@ -16,7 +16,7 @@ exports[`Qvain.Actors should render correctly 1`] = `
   }
 >
   <ActorModalBase />
-  <ActorsField />
+  <withFieldErrorBoundary(ActorsField) />
 </Section>
 `;
 

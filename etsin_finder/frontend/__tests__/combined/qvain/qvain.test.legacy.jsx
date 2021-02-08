@@ -267,7 +267,7 @@ describe('Qvain.Files', () => {
     const store = getStores()
     store.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     store.Qvain.idaPickerOpen = true
-    const component = shallow(<Files />)
+    const component = shallow(<Files.wrappedComponent />)
     expect(component.find(IDAFilePicker).length).toBe(1)
   })
 

@@ -548,19 +548,19 @@ describe('Qvain.Files', () => {
     store.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
     store.Qvain.setPreservationState(0)
     store.Qvain.idaPickerOpen = true
-    wrapper = shallow(<Files Stores={store} />)
+    wrapper = shallow(<Files.wrappedComponent Stores={store} />)
     expect(wrapper.dive().find(IDAFilePicker).length).toBe(1)
     wrapper.unmount()
 
     store.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
     store.Qvain.setPreservationState(80)
-    wrapper = shallow(<Files Stores={store} />)
+    wrapper = shallow(<Files.wrappedComponent Stores={store} />)
     expect(wrapper.dive().find(IDAFilePicker).length).toBe(0)
     wrapper.unmount()
 
     store.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.PAS)
     store.Qvain.setPreservationState(0)
-    wrapper = shallow(<Files Stores={store} />)
+    wrapper = shallow(<Files.wrappedComponent Stores={store} />)
     expect(wrapper.dive().find(IDAFilePicker).length).toBe(0)
   })
 })

@@ -30,6 +30,7 @@ const StickyHeader = ({
   submitted,
   response,
   clearSubmitResponse,
+  hideSubmitButtons,
 }) => {
   const createLinkBack = position => (
     <LinkBackContainer position={position}>
@@ -66,11 +67,13 @@ const StickyHeader = ({
       <CustomSubHeader>
         {createLinkBack('left')}
         <ButtonContainer>
-          <SubmitButtons
-            handleSubmitError={handleSubmitError}
-            handleSubmitResponse={handleSubmitResponse}
-            submitButtonsRef={submitButtonsRef}
-          />
+          {!hideSubmitButtons && (
+            <SubmitButtons
+              handleSubmitError={handleSubmitError}
+              handleSubmitResponse={handleSubmitResponse}
+              submitButtonsRef={submitButtonsRef}
+            />
+          )}
         </ButtonContainer>
       </CustomSubHeader>
       <PasState />
@@ -85,6 +88,7 @@ const StickyHeader = ({
 }
 
 StickyHeader.propTypes = {
+  hideSubmitButtons: PropTypes.bool,
   datasetError: PropTypes.bool.isRequired,
   datasetLoading: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,
@@ -97,6 +101,7 @@ StickyHeader.propTypes = {
 
 StickyHeader.defaultProps = {
   response: null,
+  hideSubmitButtons: false,
 }
 
 export default StickyHeader

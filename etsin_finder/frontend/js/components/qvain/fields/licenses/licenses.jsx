@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import CreatableSelect from 'react-select/creatable'
 
+import { withFieldErrorBoundary } from '../../general/errors/fieldErrorBoundary'
 import getReferenceData from '../../utils/getReferenceData'
 import Card from '../../general/card'
 import { LabelLarge } from '../../general/modal/form'
@@ -156,4 +157,7 @@ export class License extends Component {
   }
 }
 
-export default withTheme(withStores(observer(License)))
+export default withFieldErrorBoundary(
+  withTheme(withStores(observer(License))),
+  'qvain.rightsAndLicenses.license.title'
+)
