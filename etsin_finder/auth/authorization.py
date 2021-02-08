@@ -21,7 +21,7 @@ from etsin_finder.services.cr_service import (
 from etsin_finder.log import log
 from etsin_finder.services import rems_service
 from etsin_finder.utils.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
-from etsin_finder.utils.constants import ACCESS_TYPES, DATA_CATALOG_IDENTIFIERS
+from etsin_finder.utils.constants import ACCESS_TYPES, ACCESS_DENIED_REASON, DATA_CATALOG_IDENTIFIERS
 from etsin_finder.auth.authentication import get_user_id, is_authenticated
 
 def user_can_view_dataset(cr_id):
@@ -76,35 +76,41 @@ def user_is_allowed_to_download_from_ida(catalog_record, is_authd):
     decide whether user is allowed to download from Fairdata download service
 
     Args:
-        catalog_record (str): Catalog record identifier.
+        catalog_record (dict): Catalog record.
         is_authd (bool): Is the user authenticated.
 
-    Returns:
-        bool: True if user is allowed to download, False if not.
+    Returns tuple:
+        allowed (bool): True if user is allowed to download, False if not.
+        reason (str): Reason identifier why user was not allowed. None if user is allowed or reason is unspecified.
 
     """
-    # TODO: After testing with this is done and after test datas have proper ida data catalog identifiers, remove
-    # TODO: 'not app.debug and' from below
-    if not current_app.debug and get_catalog_record_data_catalog_id(catalog_record) != DATA_CATALOG_IDENTIFIERS.get('ida'):
-        return False
+    if get_catalog_record_data_catalog_id(catalog_record) != DATA_CATALOG_IDENTIFIERS.get('ida'):
+        return False, None
 
     access_type_id = get_catalog_record_access_type(catalog_record)
     if not access_type_id:
-        return False
+        return False, None
 
     if access_type_id == ACCESS_TYPES.get('open'):
-        return True
+        return True, None
     elif access_type_id == ACCESS_TYPES.get('embargo'):
         if _embargo_time_passed(catalog_record):
-            return True
+            return True, None
+        else:
+            return False, ACCESS_DENIED_REASON['EMBARGO']
     elif access_type_id == ACCESS_TYPES.get('restricted'):
-        return False
+        return False, ACCESS_DENIED_REASON['RESTRICTED']
     elif access_type_id == ACCESS_TYPES.get('permit'):
-        return user_has_rems_permission_for_catalog_record(catalog_record.get('identifier'))
+        if user_has_rems_permission_for_catalog_record(catalog_record.get('identifier')):
+            return True, None
+        else:
+            return False, ACCESS_DENIED_REASON['NEED_REMS_PERMISSION']
     elif access_type_id == ACCESS_TYPES.get('login'):
         if is_authd:
-            return True
-    return False
+            return True, None
+        else:
+            return False, ACCESS_DENIED_REASON['NEED_LOGIN']
+    return False, None
 
 
 def strip_dir_api_object(dir_api_obj, is_authd, catalog_record):
@@ -151,7 +157,7 @@ def strip_information_from_catalog_record(catalog_record, is_authd):
     information.
 
     Args:
-        catalog_record (str): Catalog record identifier.
+        catalog_record (dict): Catalog record.
         is_authd (bool): Is the user authenticated.
 
     Returns:

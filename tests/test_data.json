@@ -2,7 +2,9 @@
   "identifier": "123",
   "data_catalog": {
     "id": 1,
-    "identifier": "urn:nbn:fi:att:2955e904-e3dd-4d7e-99f1-3fed446f96d1"
+    "catalog_json": {
+      "identifier": "urn:nbn:fi:att:data-catalog-ida"
+    }
   },
   "dataset_version_set": [
     {
