@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
+
 import DescriptionField from './titleAndDescription'
 import IssuedDateField from './issuedDate'
 import OtherIdentifierField from './otherIdentifier'
@@ -35,16 +36,14 @@ const Description = () => {
 
   return (
     <div className="container">
-      <React.Fragment>
-        {title}
-        <DescriptionField />
-        <IssuedDateField />
-        <OtherIdentifierField />
-        <FieldOfScienceField />
-        <LanguageField />
-        <KeywordsField />
-        <SubjectHeadings />
-      </React.Fragment>
+      {title}
+      <DescriptionField />
+      <IssuedDateField />
+      <OtherIdentifierField />
+      <FieldOfScienceField />
+      <LanguageField />
+      <KeywordsField />
+      <SubjectHeadings />
     </div>
   )
 }

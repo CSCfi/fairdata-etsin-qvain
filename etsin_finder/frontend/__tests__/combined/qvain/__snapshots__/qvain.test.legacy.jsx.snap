@@ -623,11 +623,25 @@ exports[`Qvain should render correctly 1`] = `
           "draftValidationError": Array [],
           "error": undefined,
           "isLoading": false,
-          "mergeDraft": [Function],
-          "publishDraft": [Function],
-          "publishNewDataset": [Function],
+          "mergeDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "mergeDraftWithoutUpdating": [Function],
+          "publishDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "publishNewDataset": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "publishValidationError": Array [],
-          "republish": [Function],
+          "publishWithoutUpdating": [Function],
+          "republish": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "response": null,
           "savePublishedAsDraft": [Function],
           "updateDataset": [Function],
@@ -2076,11 +2090,25 @@ exports[`Qvain.Description should render <Description /> 1`] = `
           "draftValidationError": Array [],
           "error": undefined,
           "isLoading": false,
-          "mergeDraft": [Function],
-          "publishDraft": [Function],
-          "publishNewDataset": [Function],
+          "mergeDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "mergeDraftWithoutUpdating": [Function],
+          "publishDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "publishNewDataset": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "publishValidationError": Array [],
-          "republish": [Function],
+          "publishWithoutUpdating": [Function],
+          "republish": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "response": null,
           "savePublishedAsDraft": [Function],
           "updateDataset": [Function],
@@ -3529,11 +3557,25 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           "draftValidationError": Array [],
           "error": undefined,
           "isLoading": false,
-          "mergeDraft": [Function],
-          "publishDraft": [Function],
-          "publishNewDataset": [Function],
+          "mergeDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "mergeDraftWithoutUpdating": [Function],
+          "publishDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "publishNewDataset": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "publishValidationError": Array [],
-          "republish": [Function],
+          "publishWithoutUpdating": [Function],
+          "republish": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "response": null,
           "savePublishedAsDraft": [Function],
           "updateDataset": [Function],
@@ -4982,11 +5024,25 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           "draftValidationError": Array [],
           "error": undefined,
           "isLoading": false,
-          "mergeDraft": [Function],
-          "publishDraft": [Function],
-          "publishNewDataset": [Function],
+          "mergeDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "mergeDraftWithoutUpdating": [Function],
+          "publishDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "publishNewDataset": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "publishValidationError": Array [],
-          "republish": [Function],
+          "publishWithoutUpdating": [Function],
+          "republish": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "response": null,
           "savePublishedAsDraft": [Function],
           "updateDataset": [Function],
@@ -5808,7 +5864,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
     }
   }
 >
-  <FieldOfScienceField />
+  <withFieldErrorBoundary(FieldOfScienceField) />
 </ContextProvider>
 `;
 
@@ -6435,11 +6491,25 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           "draftValidationError": Array [],
           "error": undefined,
           "isLoading": false,
-          "mergeDraft": [Function],
-          "publishDraft": [Function],
-          "publishNewDataset": [Function],
+          "mergeDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "mergeDraftWithoutUpdating": [Function],
+          "publishDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "publishNewDataset": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "publishValidationError": Array [],
-          "republish": [Function],
+          "publishWithoutUpdating": [Function],
+          "republish": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "response": null,
           "savePublishedAsDraft": [Function],
           "updateDataset": [Function],
@@ -7261,7 +7331,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     }
   }
 >
-  <KeywordsField />
+  <withFieldErrorBoundary(KeywordsField) />
 </ContextProvider>
 `;
 
@@ -7888,11 +7958,25 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           "draftValidationError": Array [],
           "error": undefined,
           "isLoading": false,
-          "mergeDraft": [Function],
-          "publishDraft": [Function],
-          "publishNewDataset": [Function],
+          "mergeDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "mergeDraftWithoutUpdating": [Function],
+          "publishDraft": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
+          "publishNewDataset": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "publishValidationError": Array [],
-          "republish": [Function],
+          "publishWithoutUpdating": [Function],
+          "republish": Object {
+            "draftFunction": [Function],
+            "publishFunction": [Function],
+          },
           "response": null,
           "savePublishedAsDraft": [Function],
           "updateDataset": [Function],
@@ -8714,7 +8798,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     }
   }
 >
-  <OtherIdentifierField />
+  <withFieldErrorBoundary(OtherIdentifierField) />
 </ContextProvider>
 `;
 
@@ -8833,7 +8917,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
       />
     </Tooltip>
   </title__SectionTitle>
-  <WithTheme(Component) />
-  <ForwardRef />
+  <withFieldErrorBoundary(WithTheme(Component)) />
+  <withFieldErrorBoundary(Component) />
 </div>
 `;

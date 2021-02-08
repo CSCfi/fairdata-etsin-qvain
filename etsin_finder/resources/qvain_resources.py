@@ -25,7 +25,7 @@ from etsin_finder.utils.qvain_utils import (
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
     check_if_data_in_user_IDA_project,
-    get_encoded_access_granter,
+    get_access_granter,
     check_dataset_edit_permission,
     check_authentication,
 )
@@ -347,9 +347,8 @@ class QvainDatasets(Resource):
 
         metax_ready_data = data_to_metax(data, metadata_provider_org,
                                          metadata_provider_user)
-        params = {
-            "access_granter": get_encoded_access_granter()
-        }
+        metax_ready_data["access_granter"] = get_access_granter()
+        params = {}
         service = MetaxQvainAPIService()
         metax_response = service.create_dataset(metax_ready_data, params, use_doi)
         return metax_response
@@ -425,9 +424,8 @@ class QvainDataset(Resource):
         del data["original"]
 
         metax_ready_data = edited_data_to_metax(data, original)
-
+        metax_ready_data["access_granter"] = get_access_granter()
         params = {}
-        params["access_granter"] = get_encoded_access_granter()
         service = MetaxQvainAPIService()
         metax_response = service.update_dataset(metax_ready_data, cr_id, last_edit_converted, params)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
