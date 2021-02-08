@@ -26,7 +26,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     dataset_data = qvain_utils.data_to_metax(data, metadata_provider_org, metadata_provider_user)
     return dataset_data
 
-get_encoded_access_granter = qvain_utils.get_encoded_access_granter
+get_access_granter = qvain_utils.get_access_granter
 get_dataset_creator = qvain_utils.get_dataset_creator
 check_dataset_edit_permission = qvain_utils.check_dataset_edit_permission
 check_authentication = qvain_utils.check_authentication

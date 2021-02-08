@@ -319,8 +319,8 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     return clean_empty_keyvalues_from_dict(dataset_data)
 
 
-def get_encoded_access_granter():
-    """Add REMS metadata as base64 encoded json. Uses data from user session."""
+def get_access_granter():
+    """Return access granter object for current user."""
     metadata_provider_user = get_user_csc_name()
     email = get_user_email()
     name = "{} {}".format(get_user_firstname(), get_user_lastname())
@@ -329,8 +329,7 @@ def get_encoded_access_granter():
         "email": email,
         "name": name
     }
-    access_granter_json = json.dumps(access_granter)
-    return urlsafe_b64encode(access_granter_json.encode('utf-8'))
+    return access_granter
 
 def get_dataset_creator(cr_id):
     """Get creator of dataset.
