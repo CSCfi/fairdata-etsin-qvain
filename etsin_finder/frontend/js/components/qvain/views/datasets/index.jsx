@@ -7,15 +7,8 @@ import styled from 'styled-components'
 import { useStores } from '../../utils/stores'
 
 import DatasetTable from './table'
-import {
-  ContainerLight,
-  ContainerSubsection,
-  QvainContainer,
-  SubHeader,
-  SubHeaderText,
-} from '../../general/card'
+import { ContainerLight, ContainerSubsection, QvainContainer, PageTitle } from '../../general/card'
 import { SaveButton } from '../../general/buttons'
-import Title from '../../general/card/title'
 import Tracking from '../../../../utils/tracking'
 import NoticeBar from '../../../general/noticeBar'
 
@@ -32,11 +25,7 @@ const Datasets = ({ history, location }) => {
 
   return (
     <QvainContainer>
-      <SubHeader>
-        <SubHeaderText>
-          <Translate component={Title} content="qvain.datasets.title" />
-        </SubHeaderText>
-      </SubHeader>
+      <Translate component={PageTitle} content="qvain.datasets.title" />
       {publishedDataset && (
         <PublishSuccess onClose={() => setPublishedDataset(null)}>
           <Translate content="qvain.submitStatus.success" />
