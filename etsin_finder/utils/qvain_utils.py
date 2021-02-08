@@ -379,11 +379,15 @@ def check_dataset_edit_permission(cr_id):
         return error
 
     cr = get_catalog_record(cr_id, False)
+    if cr is None:
+        log.warning(f'Dataset "{cr_id}" not found. Editing not allowed.')
+        return {"PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."}, 403
+
     csc_username = get_user_csc_name()
     creator = cr.get('metadata_provider_user')
     if csc_username != creator:
         log.warning(f'User: "{csc_username}" is not the creator of the dataset. Editing not allowed.')
-        return {"PermissionError": "User is not allowed to edit the dataset."}, 403
+        return {"PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."}, 403
 
     catalog_identifier = cr.get('data_catalog', {}).get('catalog_json', {}).get('identifier')
     if not re.match(data_catalog_matcher, catalog_identifier):
