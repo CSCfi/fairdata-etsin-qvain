@@ -32,17 +32,15 @@ const TemporalFieldContent = ({ Store, lang }) => {
         datum="duration"
         id="temporal-period"
       />
-      <>
-        {Field.validationError && <ValidationError>{Field.validationError}</ValidationError>}
-        <ButtonContainer>
-          <Translate
-            component={AddNewButton}
-            content={`${translationsRoot}.addButton`}
-            onClick={handleClick}
-            disabled={Field.readonly}
-          />
-        </ButtonContainer>
-      </>
+      {Field.validationError && <ValidationError>{Field.validationError}</ValidationError>}
+      <ButtonContainer>
+        <Translate
+          component={AddNewButton}
+          content={`${translationsRoot}.addButton`}
+          onClick={handleClick}
+          disabled={Field.readonly}
+        />
+      </ButtonContainer>
     </>
   )
 }
