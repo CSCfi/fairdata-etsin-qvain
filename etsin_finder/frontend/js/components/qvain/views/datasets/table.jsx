@@ -19,8 +19,6 @@ import etsinTheme from '../../../../styles/theme'
 import { withStores } from '../../../../stores/stores'
 
 class DatasetTable extends Component {
-  minOfDataSetsForSearchTool = 5
-
   promises = []
 
   static propTypes = {
@@ -36,7 +34,6 @@ class DatasetTable extends Component {
     datasetGroups: [], // datasets grouped by version set
     filteredGroups: [], // narrowed datasets based on searchTerm
     count: 0, // how many there are, used to calculate page count
-    limit: 20, // how many on one page, used to slice filtered into onPage content
     onPage: [], // what we see on the page
     page: 1, // current page
     loading: true, // used to display loading notification in the table
@@ -224,69 +221,65 @@ class DatasetTable extends Component {
   }
 
   handleChangePage = pageNum => () => {
+    const { datasetsPerPage } = this.props.Stores.QvainDatasets
+
     const actualNum = pageNum - 1
     this.setState(state => ({
       onPage: state.filteredGroups.slice(
-        actualNum * state.limit,
-        actualNum * state.limit + state.limit
+        actualNum * datasetsPerPage,
+        (actualNum + 1) * datasetsPerPage
       ),
       page: pageNum,
     }))
   }
 
   render() {
-    const {
-      onPage,
-      loading,
-      error,
-      errorMessage,
-      page,
-      searchTerm,
-      datasets,
-      count,
-      limit,
-    } = this.state
+    const { onPage, loading, error, errorMessage, page, searchTerm, datasets, count } = this.state
 
     const { metaxApiV2 } = this.props.Stores.Env
-    const { publishedDataset } = this.props.Stores.QvainDatasets
+    const {
+      publishedDataset,
+      datasetsPerPage,
+      minDatasetsForSearchTool,
+    } = this.props.Stores.QvainDatasets
 
     const noOfDatasets = datasets.length
-    const searchInput =
-      noOfDatasets > this.minOfDataSetsForSearchTool ? (
-        <>
-          <Translate component={SearchLabel} content="qvain.datasets.search.searchTitle" />
-          <SearchField>
-            <Translate
-              className="visuallyhidden"
-              htmlFor="datasetSearchInput"
-              component={inputLabel}
-              content="qvain.datasets.search.hidden"
-            />
-            <Translate
-              component={SearchInput}
-              id="datasetSearchInput"
-              attributes={{ placeholder: 'qvain.datasets.search.placeholder' }}
-              value={searchTerm}
-              onChange={event => {
-                const searchStr = event.target.value
-                this.setState(
-                  state => ({
-                    searchTerm: searchStr,
-                    // if we have a search term, look through all the titles of all the datasets and return the matching datasets
-                    filteredGroups: filterGroupsByTitle(searchStr, state.datasetGroups),
-                  }),
-                  () => {
-                    // as the callback, set count to reflect the new filtered datasets
-                    this.setState(state => ({ count: state.filteredGroups.length }))
-                    // reload
-                    this.handleChangePage(page)()
-                  }
-                )
-              }}
-            />
-          </SearchField>
-        </>
-      ) : null
+    const searchInput = noOfDatasets > minDatasetsForSearchTool && (
+      <>
+        <Translate component={SearchLabel} content="qvain.datasets.search.searchTitle" />
+        <SearchField>
+          <Translate
+            className="visuallyhidden"
+            htmlFor="datasetSearchInput"
+            component={inputLabel}
+            content="qvain.datasets.search.hidden"
+          />
+          <Translate
+            component={SearchInput}
+            id="datasetSearchInput"
+            attributes={{ placeholder: 'qvain.datasets.search.placeholder' }}
+            value={searchTerm}
+            onChange={event => {
+              const searchStr = event.target.value
+              this.setState(
+                state => ({
+                  searchTerm: searchStr,
+                  // if we have a search term, look through all the titles of all the datasets and return the matching datasets
+                  filteredGroups: filterGroupsByTitle(searchStr, state.datasetGroups),
+                }),
+                () => {
+                  // as the callback, set count to reflect the new filtered datasets
+                  this.setState(state => ({ count: state.filteredGroups.length }))
+                  // reload
+                  this.handleChangePage(page)()
+                }
+              )
+            }}
+          />
+        </SearchField>
+      </>
+    )
+
     return (
       <Fragment>
         {searchInput}
@@ -341,7 +334,7 @@ class DatasetTable extends Component {
           id="pagination-bottom"
           page={page}
           count={count}
-          limit={limit}
+          limit={datasetsPerPage}
           onChangePage={this.handleChangePage}
         />
         <RemoveModal
