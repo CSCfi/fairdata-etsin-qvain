@@ -5864,7 +5864,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
     }
   }
 >
-  <FieldOfScienceField />
+  <withFieldErrorBoundary(FieldOfScienceField) />
 </ContextProvider>
 `;
 
@@ -7331,7 +7331,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     }
   }
 >
-  <KeywordsField />
+  <withFieldErrorBoundary(KeywordsField) />
 </ContextProvider>
 `;
 
@@ -8798,7 +8798,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     }
   }
 >
-  <OtherIdentifierField />
+  <withFieldErrorBoundary(OtherIdentifierField) />
 </ContextProvider>
 `;
 
@@ -8917,7 +8917,7 @@ exports[`Qvain.RightsAndLicenses should render <RightsAndLicenses /> 1`] = `
       />
     </Tooltip>
   </title__SectionTitle>
-  <WithTheme(Component) />
-  <ForwardRef />
+  <withFieldErrorBoundary(WithTheme(Component)) />
+  <withFieldErrorBoundary(Component) />
 </div>
 `;
