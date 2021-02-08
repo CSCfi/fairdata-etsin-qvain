@@ -109,8 +109,6 @@ const finnish = {
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
       errors: {
-        showDetails: 'Näytä tiedot',
-        hideDetails: 'Piilota tiedot',
         serviceUnavailable: 'Latauspalvelu ei ole tällä hetkellä tavoitettavissa. Yritä myöhemmin uudelleen.',
         unknownError: 'Latauspalvelun käytössä tapahtui virhe.',
       },
@@ -262,6 +260,10 @@ const finnish = {
       'Olemme pahoillamme, nyt sattui häiriötilanne. Ole hyvä ja yritä hetken päästä uudelleen.',
     notLoaded: 'Hups! Sivua ei löytynyt.',
     undefined: 'Hups! Tapahtui virhe.',
+    details: {
+      showDetails: 'Näytä tiedot',
+      hideDetails: 'Piilota tiedot',
+    }
   },
   general: {
     showMore: 'Näytä lisää',
@@ -475,6 +477,8 @@ const finnish = {
       permission: 'Oikeusvirhe aineiston latauksessa',
       missing: 'Aineistoa ei löydy',
       default: 'Virhe ladattaessa aineistoa',
+      render: 'Aineiston renderöinnissä tapahtui virhe',
+      component: 'Kentän %(field)s renderöinnissä tapahtui virhe',
     },
     backLink: ' Takaisin aineistolistaan',
     common: {

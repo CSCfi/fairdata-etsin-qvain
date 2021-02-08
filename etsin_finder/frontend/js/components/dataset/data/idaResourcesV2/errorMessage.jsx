@@ -36,7 +36,7 @@ const ErrorMessage = ({ error, clear }) => {
     errorColor = 'primary'
   }
 
-  const detailAction = `dataset.dl.errors.${showDetails ? 'hideDetails' : 'showDetails'}`
+  const detailAction = `error.details.${showDetails ? 'hideDetails' : 'showDetails'}`
 
   const message = `${error.name}: ${error.message}`
   const response = error.request?.responseText

@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import { Project as ProjectObject } from '../../../../stores/view/qvain/qvain.project'
 import { projectSchema } from '../../utils/formValidation'
 
+import { withFieldErrorBoundary } from '../../general/errors/fieldErrorBoundary'
 import { Section } from '../../general/section'
 import Card from '../../general/card'
 import {
@@ -295,9 +296,7 @@ const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
       <ButtonLabel>{renderProjectTitle(project.details)}</ButtonLabel>
       <ProjectActions>
         <EditButton onClick={event => editProject(project.id, event)} />
-        {!readonly && (
-          <DeleteButton onClick={event => removeProject(project.id, event)} />
-        )}
+        {!readonly && <DeleteButton onClick={event => removeProject(project.id, event)} />}
       </ProjectActions>
     </ButtonGroup>
   ))
@@ -320,4 +319,4 @@ const Actions = styled.div`
 
 const ProjectActions = styled(ButtonContainer)``
 
-export default withStores(observer(Project))
+export default withFieldErrorBoundary(withStores(observer(Project)), 'qvain.project.title')
