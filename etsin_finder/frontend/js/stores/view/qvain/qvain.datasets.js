@@ -5,7 +5,16 @@ class QvainDatasets {
     makeObservable(this)
   }
 
+  @observable datasetsPerPage = 20
+
+  @observable minDatasetsForSearchTool = 5
+
   @observable publishedDataset = null
+
+  @action
+  setDatasetsPerPage = (datasetsPerPage) => {
+    this.datasetsPerPage = datasetsPerPage
+  }
 
   @action
   setPublishedDataset = identifier => {

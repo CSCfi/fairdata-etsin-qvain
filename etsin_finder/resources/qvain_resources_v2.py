@@ -29,7 +29,7 @@ from etsin_finder.utils.qvain_utils_v2 import (
     check_authentication,
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
-    get_encoded_access_granter,
+    get_access_granter,
 )
 
 from etsin_finder.services.qvain_service_v2 import MetaxQvainAPIServiceV2
@@ -198,11 +198,7 @@ class QvainDatasets(Resource):
             params["pid_type"] = 'doi'
 
         metax_ready_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
-
-        log.debug(f'metax ready data {metax_ready_data}')
-
-        params["access_granter"] = get_encoded_access_granter()
-
+        metax_ready_data["access_granter"] = get_access_granter()
         service = MetaxQvainAPIServiceV2()
         metax_response = service.create_dataset(metax_ready_data, params)
         return metax_response
@@ -276,11 +272,8 @@ class QvainDataset(Resource):
         log.debug(f'in patch: data: {data}')
 
         metax_ready_data = edited_data_to_metax(data, original)
-
-        log.debug(f'in patch: metax_ready_data.data_catalog: {metax_ready_data.get("data_catalog", "no catalog")}')
-
+        metax_ready_data["access_granter"] = get_access_granter()
         params = {}
-        params["access_granter"] = get_encoded_access_granter()
         service = MetaxQvainAPIServiceV2()
         metax_response = service.update_dataset(metax_ready_data, cr_id, last_edit_converted, params)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))

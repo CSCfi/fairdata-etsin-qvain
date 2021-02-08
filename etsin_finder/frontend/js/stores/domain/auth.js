@@ -26,7 +26,7 @@ class Auth {
 
   @observable user = {
     name: undefined,
-    firsName: undefined,
+    firstName: undefined,
     lastName: undefined,
     loggedIn: false,
     homeOrganizationName: undefined,
@@ -38,7 +38,7 @@ class Auth {
   resetUser = () => {
     this.user = {
       name: undefined,
-      firsName: undefined,
+      firstName: undefined,
       lastName: undefined,
       loggedIn: false,
       homeOrganizationName: undefined,
