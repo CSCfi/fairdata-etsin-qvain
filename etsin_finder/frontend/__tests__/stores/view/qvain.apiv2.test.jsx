@@ -148,7 +148,7 @@ describe('Submit.exec()', () => {
 
   beforeEach(() => {
     handleSubmitToBackend.mockReturnValue(generateDefaultDatasetForPublish())
-    submitFunction = jest.fn(() => generalPostResponse)
+    submitFunction = jest.fn(() => generalPostResponse.data)
     mockQvain = createMockQvain({
       original: {
         identifier: 'some identifier',
@@ -165,6 +165,34 @@ describe('Submit.exec()', () => {
     await exec()
     expect(submitFunction).toHaveBeenCalled()
     expect(Submit.isLoading).toBe(false)
+  })
+
+  test('exec should perform actions in correct order', async () => {
+    const callOrder = []
+    const logCallOrder = (name, returnValue) => {
+      return () => {
+        callOrder.push(name)
+        return returnValue
+      }
+    }
+    mockQvain.Files.actionsToMetax.mockReturnValue({
+      files: [{ identifier: 'some file' }],
+      directories: [],
+    })
+    submitFunction = {
+      draftFunction: jest.fn(logCallOrder('save draft', generalPostResponse.data)),
+      publishFunction: jest.fn(logCallOrder('publish dataset', generalPostResponse.data)),
+    }
+    axios.get.mockImplementation(logCallOrder('get updated dataset', generalGetResponse.data))
+
+    Submit.updateFiles = logCallOrder('update files')
+    await exec()
+    expect(callOrder).toEqual([
+      'save draft',
+      'update files',
+      'publish dataset',
+      'get updated dataset',
+    ])
   })
 
   test('false from checkProvenanceActors should cancel post', async () => {
@@ -867,7 +895,9 @@ describe('save published dataset as draft', () => {
       params: { identifier: 'some identifier' },
     })
     expect(axios.get).toHaveBeenCalledWith(urls.v2.dataset('some identifier'))
-    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('fresh id'), preparedDataset)
+    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('fresh id'), {
+      original: { identifier: 'fresh id' },
+    })
   })
 
   test('cases 73-75: no file origin, urn, cumulative state any', async () => {

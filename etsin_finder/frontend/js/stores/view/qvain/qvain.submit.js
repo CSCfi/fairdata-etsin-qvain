@@ -139,34 +139,45 @@ class Submit {
     this.response = undefined
     this.error = undefined
 
+    let draftFunction
+    let publishFunction
+    if (submitFunction.draftFunction || submitFunction.publishFunction) {
+      draftFunction = submitFunction.draftFunction
+      publishFunction = submitFunction.publishFunction
+    } else {
+      draftFunction = submitFunction
+    }
+
     if (!cleanupBeforeBackend()) return
     if (!(await this.promptProvenances())) return
 
     this.closeUseDoiModal()
-    const dataset = this.prepareDataset()
+    let dataset = this.prepareDataset()
     const { fileActions, metadataActions, newCumulativeState } = this.prepareActions()
 
     try {
       await schema.validate(dataset)
       await this.checkDoiCompability(dataset)
     } catch (error) {
+      this.setLoading(false)
+      this.setError(error)
       if (error instanceof ValidationError) {
-        this.setLoading(false)
-        this.setError(error)
         return
       }
-      if (!(error instanceof ValidationError)) {
-        console.error(error)
-        this.setLoading(false)
-        this.setError(error)
-        throw error
-      }
+      console.error(error)
+      throw error
     }
 
     try {
       this.setLoading(true)
-      const { data } = await submitFunction(dataset)
-      await this.updateFiles(data.identifier, fileActions, metadataActions)
+      if (draftFunction) {
+        const updatedOriginal = await draftFunction(dataset)
+        dataset = {
+          ...dataset,
+          original: updatedOriginal
+        }
+      }
+      await this.updateFiles(dataset.original.identifier, fileActions, metadataActions)
       setChanged(false)
 
       if (newCumulativeState != null && this.Qvain.original) {
@@ -179,16 +190,22 @@ class Submit {
         await axios.post(url, obj)
       }
 
+      if (publishFunction) {
+        const updatedOriginal = await publishFunction(dataset)
+        dataset = {
+          ...dataset,
+          original: updatedOriginal
+        }
+      }
       if (fileActions || metadataActions || newCumulativeState != null) {
         // Files changed, get updated dataset
-        const url = urls.v2.dataset(data.identifier)
+        const url = urls.v2.dataset(dataset.original.identifier)
         const updatedResponse = await axios.get(url)
-        this.Qvain.setOriginal(updatedResponse.data)
-        await editDataset(updatedResponse.data)
-      } else {
-        await editDataset(data)
+        dataset.original = updatedResponse.data
       }
-      this.setResponse(data)
+      this.Qvain.setOriginal(dataset.original)
+      await editDataset(dataset.original)
+      this.setResponse(dataset.original)
       this.setError(undefined)
     } catch (error) {
       this.setError(getResponseError(error))
@@ -200,14 +217,14 @@ class Submit {
 
   createNewDraft = async dataset => {
     const datasetsUrl = urls.v2.datasets()
-    const res = await axios.post(datasetsUrl, dataset, { params: { draft: true } })
-    return res
+    const { data } = await axios.post(datasetsUrl, dataset, { params: { draft: true } })
+    return data
   }
 
   updateDataset = async dataset => {
     const url = urls.v2.dataset(dataset.original.identifier)
-    const res = await axios.patch(url, dataset)
-    return res
+    const { data } = await axios.patch(url, dataset)
+    return data
   }
 
   savePublishedAsDraft = async dataset => {
@@ -218,48 +235,52 @@ class Submit {
     const draftUrl = await urls.v2.dataset(newIdentifier)
     const draftResponse = await axios.get(draftUrl)
     const draft = draftResponse.data
-    dataset.original = draft
 
-    const resp = await this.updateDataset(dataset)
-    resp.data.is_draft = true
-
-    return resp
+    const data = await this.updateDataset({ ...dataset, original: draft })
+    return { ...data, is_draft: true }
   }
 
-  publishNewDataset = async dataset => {
-    // Publishes a new dataset by creating a draft and publishing it
-    const res = await this.createNewDraft(dataset)
+  publishWithoutUpdating = async dataset => {
     const url = urls.v2.rpc.publishDataset()
-    await axios.post(url, null, { params: { identifier: res.data.identifier } })
-    return res
-  }
-
-  publishDraft = async dataset => {
     const { identifier } = dataset.original
-    const res = await this.updateDataset(dataset)
-    const url = urls.v2.rpc.publishDataset()
-    await axios.post(url, null, { params: { identifier } })
-    return res
+    const { data } = await axios.post(url, null, { params: { identifier } })
+    return { ...dataset.original, ...data }
   }
 
-  republish = async dataset => {
-    const res = await this.updateDataset(dataset)
-    return res
-  }
-
-  mergeDraft = async dataset => {
+  mergeDraftWithoutUpdating = async dataset => {
     const { original } = dataset
-    const identifier = original && original.identifier
-    const draftOf = original && original.draft_of && original.draft_of.identifier
-
-    await this.updateDataset(dataset)
-
+    const identifier = original?.identifier
     const url = urls.v2.rpc.mergeDraft()
     await axios.post(url, null, { params: { identifier } })
 
+    const draftOf = original?.draft_of?.identifier
     const editUrl = urls.v2.dataset(draftOf)
-    const res = await axios.get(editUrl)
-    return res
+    const { data } = await axios.get(editUrl)
+    return data
+  }
+
+  publishNewDataset = {
+    // Publishes a new dataset by creating a draft and publishing it
+    draftFunction: this.createNewDraft,
+    publishFunction: this.publishWithoutUpdating
+  }
+
+  publishDraft = {
+    // Updates and publishes a draft
+    draftFunction: this.updateDataset,
+    publishFunction: this.publishWithoutUpdating
+  }
+
+  mergeDraft = {
+    // Updates draft and merges it to the published dataset
+    draftFunction: this.updateDataset,
+    publishFunction: this.mergeDraftWithoutUpdating
+  }
+
+  republish = {
+    // Saves changes as a draft and merges it to the published dataset
+    draftFunction: this.savePublishedAsDraft,
+    publishFunction: this.mergeDraftWithoutUpdating
   }
 
   @action promptProvenances = async () => {
