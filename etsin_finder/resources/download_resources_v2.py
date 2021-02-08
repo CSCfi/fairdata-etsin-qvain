@@ -27,8 +27,9 @@ def check_download_permission(cr_id):
     if not cr:
         abort(400, message="Unable to get catalog record")
 
-    if not authorization.user_is_allowed_to_download_from_ida(cr, authentication.is_authenticated()):
-        abort(403, message="Not authorized")
+    allowed, reason = authorization.user_is_allowed_to_download_from_ida(cr, authentication.is_authenticated())
+    if not allowed:
+        abort(403, message="Not authorized", reason=reason)
     return True
 
 class Requests(Resource):
@@ -39,6 +40,7 @@ class Requests(Resource):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True, nullable=False)
 
+    @log_request
     def get(self):
         """Get download package requests.
 
@@ -55,6 +57,7 @@ class Requests(Resource):
         download_service = DownloadAPIService(current_app)
         return download_service.get_requests(cr_id)
 
+    @log_request
     def post(self):
         """Create download package request.
 
