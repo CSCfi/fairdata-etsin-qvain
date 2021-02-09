@@ -1,9 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import Translate from 'react-translate-component'
 
-export const ValidationError = styled.p`
-  color: ${(props) => props.theme.color.redText};
+export const ValidationError = ({ children }) => (
+  <Translate content={children} component={ValidationErrorText} />
+)
+
+ValidationError.propTypes = {
+  children: PropTypes.node,
+}
+
+ValidationError.defaultProps = {
+  children: null,
+}
+
+export const ValidationErrorText = styled.p`
+  color: ${props => props.theme.color.redText};
   :empty {
     display: none;
   }
@@ -25,7 +38,7 @@ export const ValidationErrors = ({ errors }) => {
   return (
     <ValidationErrorList>
       {errors.map(err => (
-        <ValidationErrorItem key={err}>{err}</ValidationErrorItem>
+        <Translate key={err} content={err} component={ValidationErrorItem} />
       ))}
     </ValidationErrorList>
   )

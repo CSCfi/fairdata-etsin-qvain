@@ -38,11 +38,6 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
     }
   }, [original, getQvainUrl, history, prevalidate])
 
-  const prepareErrors = (error = {}) => {
-    const { errors = [] } = error
-    return errors.map(err => `${err}\n`)
-  }
-
   const goToDatasetsCallBack = identifier => {
     // go to datasets view and highlight published dataset
     setPublishedDataset(identifier)
@@ -73,7 +68,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
       </TooltipHoverOnSave>
       <TooltipHoverOnSave
         isOpen={publishButtonHover}
-        errors={prepareErrors(publishValidationError)}
+        errors={publishValidationError?.errors || []}
         description="qvain.validationMessages.publish.description"
       >
         <WrapperDivForHovering

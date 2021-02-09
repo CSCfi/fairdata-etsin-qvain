@@ -650,7 +650,7 @@ exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
       }
     }
   />
-  <validationError__ValidationError />
+  <ValidationError />
 </Card>
 `;
 
