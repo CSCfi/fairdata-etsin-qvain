@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
+import { LabelLarge } from '../../general/modal/form'
 import Select from '../../general/input/select'
 import ValidationError from '../../general/errors/validationError'
 import { useStores } from '../../utils/stores'
@@ -16,7 +17,7 @@ const RestrictionGrounds = () => {
   const [error, setError] = useState()
 
   const handleBlur = () => {
-    const { identifier = '' } = restrictionGrounds
+    const { identifier = '' } = restrictionGrounds || {}
     Schema.validate(identifier)
       .then(() => {
         setError(null)
@@ -28,7 +29,11 @@ const RestrictionGrounds = () => {
 
   return (
     <RestrictionGroundsContainer>
-      <Translate component="h3" content="qvain.rightsAndLicenses.restrictionGrounds.title" />
+      <Translate
+        component={LabelLarge}
+        htmlFor="restrictionGrounds-select"
+        content="qvain.rightsAndLicenses.restrictionGrounds.title"
+      />
       <Translate
         name="restrictionGrounds"
         metaxIdentifier="restriction_grounds"

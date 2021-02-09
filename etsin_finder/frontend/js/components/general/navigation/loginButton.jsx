@@ -55,6 +55,16 @@ class Login extends Component {
     this.setState({
       loggedInThroughService: this.props.loginThroughService,
     })
+
+    window.addEventListener('pageshow', this.pageShowHandler)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('pageshow', this.pageShowHandler)
+  }
+
+  pageShowHandler = () => {
+    this.setState({ loading: false })
   }
 
   redirectToLogin = (location, loginThroughService) => {

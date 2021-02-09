@@ -19,9 +19,15 @@ import { HelpIcon } from '../qvain/general/modal/form'
 import Tooltip from '../qvain/general/section/tooltip'
 import Button from '../general/button'
 
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
 const SelectContainer = styled.div`
   width: ${props => props.width};
   position: relative;
+  height: 100%;
 `
 
 const ListButton = styled(Button)`
@@ -34,7 +40,7 @@ const ListButton = styled(Button)`
   border: 0;
   background: ${props => props.background};
   &:hover {
-    background: ${props => (darken(0.1, props.background))};
+    background: ${props => darken(0.1, props.background)};
   }
 `
 const ListItems = styled.div`
@@ -56,6 +62,7 @@ const ListItem = styled(ListButton)`
 `
 
 const Controller = styled(ListButton)`
+  height: 100%;
   transition: 0.3s ease;
   border-radius: ${props => (props.isOpen ? '5px 5px 0 0' : '5px 5px 5px 5px')};
   display: flex;
@@ -72,18 +79,8 @@ const Controller = styled(ListButton)`
   }
 `
 
-const InfoPosition = styled.div`
-   {
-    position: absolute;
-    top: 8px;
-    right: -25px;
-  }
-`
-
 const Text = styled.span`
-   {
-    padding-right: 10px;
-  }
+  padding-right: 10px;
 `
 
 export default class FormatSelect extends Component {
@@ -115,7 +112,7 @@ export default class FormatSelect extends Component {
   changeSelected = selectedformat => {
     this.setState(
       state => ({
-        listOpen: !state.listOpen
+        listOpen: !state.listOpen,
       }),
       () => {
         this.props.onChange(selectedformat)
@@ -126,7 +123,7 @@ export default class FormatSelect extends Component {
   toggleOpen = () => {
     this.setState(
       state => ({
-        listOpen: !state.listOpen
+        listOpen: !state.listOpen,
       }),
       () => {
         if (this.state.listOpen) {
@@ -138,45 +135,46 @@ export default class FormatSelect extends Component {
 
   render() {
     return (
-      <SelectContainer width={this.props.width}>
-        <Controller
-          noMargin
-          color={this.state.color}
-          padding={this.state.padding}
-          background={this.state.background}
-          isOpen={this.state.listOpen}
-          onClick={this.toggleOpen}
-        >
-          <Translate component={Text} content="dataset.datasetAsFile.open" />
-        </Controller>
+      <Wrapper>
+        <SelectContainer width={this.props.width}>
+          <Controller
+            noMargin
+            color={this.state.color}
+            padding={this.state.padding}
+            background={this.state.background}
+            isOpen={this.state.listOpen}
+            onClick={this.toggleOpen}
+          >
+            <Translate component={Text} content="dataset.datasetAsFile.open" />
+          </Controller>
 
-        {this.state.listOpen && (
-          <ListItems>
-            {this.props.options.map((single, i) => (
-              <ListItem
-                noMargin
-                color={this.state.color}
-                padding={this.state.padding}
-                key={single.value}
-                onClick={() => this.changeSelected(single)}
-                value={single.value}
-                ref={e => this.setFirstOptionRef(e, i)}
-                background={this.state.frontColor}
-                removed={single.removed}
-              >
-                {this.props.options[0] === single ? (
-                  <span className="sr-only">Current version: </span>
-                ) : (
-                  ''
-                )}
-                <Translate content={`dataset.datasetAsFile.${single.value}`} />
-              </ListItem>
-            ))}
-          </ListItems>
-        )}
-
-        {this.props.options.length > 1 && (
-          <InfoPosition>
+          {this.state.listOpen && (
+            <ListItems>
+              {this.props.options.map((single, i) => (
+                <ListItem
+                  noMargin
+                  color={this.state.color}
+                  padding={this.state.padding}
+                  key={single.value}
+                  onClick={() => this.changeSelected(single)}
+                  value={single.value}
+                  ref={e => this.setFirstOptionRef(e, i)}
+                  background={this.state.frontColor}
+                  removed={single.removed}
+                >
+                  {this.props.options[0] === single ? (
+                    <span className="sr-only">Current version: </span>
+                  ) : (
+                    ''
+                  )}
+                  <Translate content={`dataset.datasetAsFile.${single.value}`} />
+                </ListItem>
+              ))}
+            </ListItems>
+          )}
+        </SelectContainer>
+        <div>
+          {this.props.options.length > 1 && (
             <Tooltip
               isOpen={this.state.tooltipOpen}
               close={() => this.setState(prev => ({ tooltipOpen: !prev.tooltipOpen }))}
@@ -188,9 +186,9 @@ export default class FormatSelect extends Component {
                 align="Left"
               />
             </Tooltip>
-          </InfoPosition>
-        )}
-      </SelectContainer>
+          )}
+        </div>
+      </Wrapper>
     )
   }
 }

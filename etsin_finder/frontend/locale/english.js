@@ -109,8 +109,6 @@ const english = {
       loading: 'Loading folder',
       loaded: 'Folder loaded',
       errors: {
-        showDetails: 'Show details',
-        hideDetails: 'Hide details',
         serviceUnavailable: 'The download service is currently unavailable. Please try again later.',
         unknownError: 'There was an error using the download service.',
       },
@@ -264,6 +262,10 @@ const english = {
       'Sorry, we are having some technical difficulties at the moment. Please, try again later.',
     notLoaded: "Sorry! The page couldn't be found.",
     undefined: 'Sorry! An error occured.',
+    details: {
+      showDetails: 'Show details',
+      hideDetails: 'Hide details',
+    }
   },
   general: {
     showMore: 'Show more',
@@ -474,6 +476,8 @@ const english = {
       permission: 'Permission error loading dataset',
       missing: 'Dataset not found',
       default: 'Error loading dataset',
+      render: 'There was an error displaying the dataset',
+      component: 'There was an error rendering %(field)s',
     },
     backLink: ' Back to datasets',
     common: {

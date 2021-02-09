@@ -1,5 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react'
+
+import { withFieldErrorBoundary } from '../../../general/errors/fieldErrorBoundary'
 import Field from '../../../general/section/field'
 import SpatialFieldContent from './SpatialFieldContent'
 import { useStores } from '../../../utils/stores'
@@ -21,4 +23,4 @@ const Spatial = () => {
   )
 }
 
-export default observer(Spatial)
+export default withFieldErrorBoundary(observer(Spatial), brief.title)
