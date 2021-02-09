@@ -8,9 +8,7 @@ import ValidationError from '../errors/validationError'
 
 const ModalButtons = ({ Field, handleRequestClose, translations, readonly, handleSave }) => (
   <ButtonAndErrorContainer>
-    <Observer>
-      {() => <Translate component={ValidationError} content={Field.validationError} />}
-    </Observer>
+    <Observer>{() => <ValidationError>{Field.validationError}</ValidationError>}</Observer>
     <div>
       <Translate
         component={CancelButton}

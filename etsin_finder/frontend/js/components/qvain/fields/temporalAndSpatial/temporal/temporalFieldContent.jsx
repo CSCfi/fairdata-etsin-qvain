@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import DurationPicker from '../../../general/input/durationpicker'
 import ValidationError from '../../../general/errors/validationError'
 import { ButtonContainer, AddNewButton } from '../../../general/buttons'
@@ -19,16 +19,12 @@ const TemporalFieldContent = ({ Store, lang }) => {
 
   return (
     <>
-      <Observer>
-        {() => (
-          <TemporalList
-            lang={lang}
-            temporals={Field.storage}
-            remove={uiid => Field.removeTemporal(uiid)}
-            readonly={Field.readonly}
-          />
-        )}
-      </Observer>
+      <TemporalList
+        lang={lang}
+        temporals={Field.storage}
+        remove={uiid => Field.removeTemporal(uiid)}
+        readonly={Field.readonly}
+      />
       <DurationPicker
         Store={Store}
         Field={Field}
@@ -36,21 +32,15 @@ const TemporalFieldContent = ({ Store, lang }) => {
         datum="duration"
         id="temporal-period"
       />
-      <Observer>
-        {() => (
-          <>
-            <Translate component={ValidationError} content={Field.validationError} />
-            <ButtonContainer>
-              <Translate
-                component={AddNewButton}
-                content={`${translationsRoot}.addButton`}
-                onClick={handleClick}
-                disabled={Field.readonly}
-              />
-            </ButtonContainer>
-          </>
-        )}
-      </Observer>
+      {Field.validationError && <ValidationError>{Field.validationError}</ValidationError>}
+      <ButtonContainer>
+        <Translate
+          component={AddNewButton}
+          content={`${translationsRoot}.addButton`}
+          onClick={handleClick}
+          disabled={Field.readonly}
+        />
+      </ButtonContainer>
     </>
   )
 }
@@ -60,4 +50,4 @@ TemporalFieldContent.propTypes = {
   lang: PropTypes.string.isRequired,
 }
 
-export default TemporalFieldContent
+export default observer(TemporalFieldContent)

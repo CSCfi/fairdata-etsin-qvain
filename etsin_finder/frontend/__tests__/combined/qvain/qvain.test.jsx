@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import translate from 'counterpart'
+import Translate from 'react-translate-component'
 import { components } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 
@@ -26,7 +26,6 @@ import DoiSelection, { DoiCheckbox } from '../../../js/components/qvain/fields/f
 import { ButtonGroup } from '../../../js/components/qvain/general/buttons'
 import {
   ValidationErrors,
-  ValidationErrorItem,
 } from '../../../js/components/qvain/general/errors/validationError'
 import { SlidingContent } from '../../../js/components/qvain/general/card'
 import Env from '../../../js/stores/domain/env'
@@ -431,8 +430,9 @@ describe('Qvain.RightsAndLicenses', () => {
     const errors = component
       .find(ValidationErrors)
       .dive()
-      .find(ValidationErrorItem)
+      .find(Translate) // ValidationErrorItem
       .map(item => item.text())
+
     expect(errors.length).toBe(2)
     expect(errors[0].startsWith('httpöötest.url'))
     expect(errors[1].startsWith('httppp:/fail.url'))
@@ -659,8 +659,8 @@ describe('Qvain validation', () => {
       expect(e.errors.length).toBe(2)
       expect(e.errors).toEqual(
         expect.arrayContaining([
-          translate('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
-          translate('qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher'),
+          'qvain.validationMessages.issuedDate.requiredIfUseDoi',
+          'qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher',
         ])
       )
     }
