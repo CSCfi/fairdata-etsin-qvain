@@ -96,7 +96,7 @@ class Provenances extends Field {
   @action
   fromBackend = (dataset, Qvain) => {
     this.provenancesWithNonExistingActors = []
-    this.fromBackendBase(dataset.provenances, Qvain)
+    this.fromBackendBase(dataset.provenance, Qvain)
   }
 
   @action checkActorFromRefs = actor => {
