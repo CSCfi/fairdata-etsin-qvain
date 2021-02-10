@@ -80,11 +80,12 @@ const english = {
     data_location: 'Go to harvested location',
     datasetAsFile: {
       open: 'Download dataset metadata',
+      infoLabel: 'Format information',
       infoText:
         'Datacite without validation: The dataset is shown in Datacite Format but without validation; mandatory fields might be missing. Dataset does not necessarily meet all Datacite requirements.',
       datacite: 'In Datacite datamodel (XML)',
       fairdata_datacite: 'In Datacite datamodel without validation (XML)',
-      metax: 'In Metax datamodel (JSON)'
+      metax: 'In Metax datamodel (JSON)',
     },
     draftInfo: {
       draft: 'This dataset is a draft. Only the creator of the dataset can view it.',
@@ -921,7 +922,7 @@ const english = {
           contributorType: {
             identifier: 'Valitse rooli',
           }
-        } 
+        }
       },
       temporalAndSpatial: {
         spatial: {

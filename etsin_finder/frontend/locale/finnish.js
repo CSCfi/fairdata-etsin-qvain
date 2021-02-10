@@ -80,6 +80,7 @@ const finnish = {
     data_location: 'Mene haravoituun sijaintiin',
     datasetAsFile: {
       open: 'Lataa aineiston metatiedot',
+      infoLabel: 'Formaatin tiedot',
       infoText:
         'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
       datacite: 'Datacite tietomallissa (XML)',
@@ -1011,27 +1012,27 @@ const finnish = {
           contributorType: {
             identifier: 'Rooli on pakollinen kenttä.',
           },
-        },   
+        },
       },
       temporalAndSpatial: {
         spatial: {
           nameRequired: 'Nimi on pakollinen kenttä.',
-          altitudeNan: 'Korkeuden täytyy olla numero.',  
+          altitudeNan: 'Korkeuden täytyy olla numero.',
         },
         temporal: {
           startDateMissing: 'Alkamisajankohta puuttuu.',
-          endDateMissing: 'Loppuajankohta puuttuu.',  
+          endDateMissing: 'Loppuajankohta puuttuu.',
         },
       },
       history: {
         relatedResource: {
           nameRequired: 'Nimi kenttä on pakollinen ainakin yhdellä kielellä.',
-          typeRequired: 'Viitteen tyyppi on pakollinen kenttä.',  
+          typeRequired: 'Viitteen tyyppi on pakollinen kenttä.',
         },
         provenance: {
           nameRequired: 'Nimi vaaditaan vähintään yhdellä kielellä.',
           startDateMissing: 'Alkamispäivämäärä puuttuu',
-          endDateMissing: 'Loppumispäivämäärä puuttuu',  
+          endDateMissing: 'Loppumispäivämäärä puuttuu',
         },
       },
 
