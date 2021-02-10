@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
-import { toJS } from 'mobx'
 import styled from 'styled-components'
 
 import { Project as ProjectObject } from '../../../../stores/view/qvain/qvain.project'
 import { projectSchema } from '../../utils/formValidation'
 
+import { withFieldErrorBoundary } from '../../general/errors/fieldErrorBoundary'
 import { Section } from '../../general/section'
 import Card from '../../general/card'
 import {
@@ -198,7 +198,7 @@ class Project extends Component {
 
   editProject = (id, event) => {
     if (event) event.preventDefault()
-    const project = toJS(this.props.Stores.Qvain.Projects.projects.find(proj => proj.id === id))
+    const project = this.props.Stores.Qvain.Projects.projects.find(proj => proj.id === id)
     if (!project) return
 
     const { details, organizations, fundingAgencies } = project
@@ -295,9 +295,7 @@ const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
       <ButtonLabel>{renderProjectTitle(project.details)}</ButtonLabel>
       <ProjectActions>
         <EditButton onClick={event => editProject(project.id, event)} />
-        {!readonly && (
-          <DeleteButton onClick={event => removeProject(project.id, event)} />
-        )}
+        {!readonly && <DeleteButton onClick={event => removeProject(project.id, event)} />}
       </ProjectActions>
     </ButtonGroup>
   ))
@@ -320,4 +318,4 @@ const Actions = styled.div`
 
 const ProjectActions = styled(ButtonContainer)``
 
-export default withStores(observer(Project))
+export default withFieldErrorBoundary(withStores(observer(Project)), 'qvain.project.title')

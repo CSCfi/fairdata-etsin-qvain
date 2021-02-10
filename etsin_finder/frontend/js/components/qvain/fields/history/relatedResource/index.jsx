@@ -1,4 +1,6 @@
 import React from 'react'
+
+import { withFieldErrorBoundary } from '../../../general/errors/fieldErrorBoundary'
 import { Field } from '../../../general/section'
 import RelatedResourceContent from './relatedResourceContent'
 
@@ -13,4 +15,4 @@ export const RelatedResource = () => (
   </Field>
 )
 
-export default RelatedResource
+export default withFieldErrorBoundary(RelatedResource, brief.title)
