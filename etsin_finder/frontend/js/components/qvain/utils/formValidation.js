@@ -522,19 +522,19 @@ const relatedResourceTypeSchema = yup
 const provenanceNameSchema = yup.object().shape({
   fi: yup.mixed().when('en', {
     is: val => val.length > 0,
-    then: yup.string('qvain.validationMessages.history.provenance.error.nameRequired'),
+    then: yup.string('qvain.validationMessages.history.provenance.nameRequired'),
     otherwise: yup
-      .string('qvain.validationMessages.history.provenance.error.nameRequired')
-      .required('qvain.validationMessages.history.provenance.error.nameRequired'),
+      .string('qvain.validationMessages.history.provenance.nameRequired')
+      .required('qvain.validationMessages.history.provenance.nameRequired'),
   }),
-  en: yup.string('qvain.validationMessages.history.provenance.error.nameRequired'),
+  en: yup.string('qvain.validationMessages.history.provenance.nameRequired'),
 })
 
 const provenanceStartDateSchema = yup
   .date()
-  .required('qvain.validationMessages.history.provenance.error.startDateMissing')
+  .required('qvain.validationMessages.history.provenance.startDateMissing')
 
-const provenanceEndDateSchema = yup.date().required('qvain.validationMessages.history.provenance.error.endDateMissing')
+const provenanceEndDateSchema = yup.date().required('qvain.validationMessages.history.provenance.endDateMissing')
 
 // Entire form validation for normal dataset
 const qvainFormSchema = yup.object().shape({
