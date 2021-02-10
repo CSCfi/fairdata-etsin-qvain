@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
@@ -10,10 +10,9 @@ import ValidationError from '../../../general/errors/validationError'
 import { useStores } from '../../../utils/stores'
 
 const DescriptionFieldTextField = ({ propName, fieldName, activeLang }) => {
-  const [error, setError] = useState(null)
   const {
     Qvain: {
-      [fieldName]: { value, set, Schema },
+      [fieldName]: { value, set, validate, validationError },
       readonly,
     },
     Locale: { lang },
@@ -21,17 +20,6 @@ const DescriptionFieldTextField = ({ propName, fieldName, activeLang }) => {
 
   const handleChange = e => {
     set(e.target.value, activeLang)
-    setError(null)
-  }
-
-  const handleBlur = () => {
-    Schema.validate(value)
-      .then(() => {
-        setError(null)
-      })
-      .catch(err => {
-        setError(err.errors)
-      })
   }
 
   const getPlaceholder = () => {
@@ -59,13 +47,11 @@ const DescriptionFieldTextField = ({ propName, fieldName, activeLang }) => {
         disabled={readonly}
         value={value[activeLang]}
         onChange={handleChange}
-        onBlur={handleBlur}
+        onBlur={validate}
         attributes={{ placeholder: getPlaceholder() }}
         required
       />
-      {error && (
-        <Translate component={ValidationError} content={`qvain.description.error.${propName}`} />
-      )}
+      {validationError && <ValidationError>{validationError}</ValidationError>}
     </>
   )
 }
