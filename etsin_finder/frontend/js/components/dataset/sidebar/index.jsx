@@ -90,6 +90,28 @@ class Sidebar extends Component {
     return <Identifier idn={pid} />
   }
 
+  accessRights() {
+    const researchDataset = this.props.dataset.research_dataset
+    const accessRights = checkNested(researchDataset, 'access_rights')
+      ? researchDataset.access_rights
+      : false
+
+    if (accessRights.restriction_grounds?.length > 0) {
+      return accessRights.restriction_grounds.map(rg => (
+        <ListItem key={`rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
+          {checkDataLang(rg.pref_label)}
+        </ListItem>
+      ))
+    }
+    return (
+      checkNested(accessRights, 'access_type', 'pref_label') && (
+        <ListItem lang={getDataLang(accessRights.access_type.pref_label)}>
+          {checkDataLang(accessRights.access_type.pref_label)}
+        </ListItem>
+      )
+    )
+  }
+
   render() {
     const dataCatalog = this.props.dataset.data_catalog
     const researchDataset = this.props.dataset.research_dataset
@@ -258,19 +280,7 @@ class Sidebar extends Component {
 
             {accessRights && (
               <SidebarItem trans="dataset.access_rights" hideEmpty="true">
-                <List>
-                  {accessRights.restriction_grounds && accessRights.restriction_grounds.length > 0
-                    ? accessRights.restriction_grounds.map(rg => (
-                        <ListItem key={`rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
-                          {checkDataLang(rg.pref_label)}
-                        </ListItem>
-                      ))
-                    : checkNested(accessRights, 'access_type', 'pref_label') && (
-                        <ListItem lang={getDataLang(accessRights.access_type.pref_label)}>
-                          {checkDataLang(accessRights.access_type.pref_label)}
-                        </ListItem>
-                      )}
-                </List>
+                <List>{this.accessRights()}</List>
               </SidebarItem>
             )}
 
