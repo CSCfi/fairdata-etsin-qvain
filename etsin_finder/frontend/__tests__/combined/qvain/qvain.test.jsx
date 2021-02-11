@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import translate from 'counterpart'
+import Translate from 'react-translate-component'
 import { components } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 
@@ -26,7 +26,6 @@ import DoiSelection, { DoiCheckbox } from '../../../js/components/qvain/fields/f
 import { ButtonGroup } from '../../../js/components/qvain/general/buttons'
 import {
   ValidationErrors,
-  ValidationErrorItem,
 } from '../../../js/components/qvain/general/errors/validationError'
 import { SlidingContent } from '../../../js/components/qvain/general/card'
 import Env from '../../../js/stores/domain/env'
@@ -213,23 +212,23 @@ describe('Qvain.Description', () => {
     expect(component).toMatchSnapshot()
   })
   it('should render <OtherIdentifierField />', () => {
-    const component = shallow(<OtherIdentifierField />)
+    const component = shallow(<OtherIdentifierField.wrappedComponent />)
     expect(component).toMatchSnapshot()
   })
   it('should render <FieldOfScienceField />', () => {
-    const component = shallow(<FieldOfScienceField />)
+    const component = shallow(<FieldOfScienceField.wrappedComponent />)
     expect(component).toMatchSnapshot()
   })
   it('should render <LanguageField />', () => {
-    const component = shallow(<LanguageField />)
+    const component = shallow(<LanguageField.wrappedComponent />)
     expect(component).toMatchSnapshot()
   })
   it('should render <KeywordsField />', () => {
-    const component = shallow(<KeywordsField />)
+    const component = shallow(<KeywordsField.wrappedComponent />)
     expect(component).toMatchSnapshot()
   })
   it('should render <SubjectHeadingsField />', () => {
-    const component = shallow(<SubjectHeadingsField Stores={getStores()} />)
+    const component = shallow(<SubjectHeadingsField.wrappedComponent Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
 })
@@ -431,8 +430,9 @@ describe('Qvain.RightsAndLicenses', () => {
     const errors = component
       .find(ValidationErrors)
       .dive()
-      .find(ValidationErrorItem)
+      .find(Translate) // ValidationErrorItem
       .map(item => item.text())
+
     expect(errors.length).toBe(2)
     expect(errors[0].startsWith('httpöötest.url'))
     expect(errors[1].startsWith('httppp:/fail.url'))
@@ -508,21 +508,23 @@ describe('Qvain issued date', () => {
     Qvain.resetQvainStore()
   })
 
+  const IssuedDateFieldBase = IssuedDateField.wrappedComponent
+
   it('is enabled', () => {
-    const component = shallow(<IssuedDateField />)
+    const component = shallow(<IssuedDateFieldBase />)
     expect(component.find(DatePicker).prop('disabled')).toEqual(false)
   })
 
   it('is enabled for unpublished DOI dataset', () => {
     Qvain.setUseDoi(true)
-    const component = shallow(<IssuedDateField />)
+    const component = shallow(<IssuedDateFieldBase />)
     expect(component.find(DatePicker).prop('disabled')).toEqual(false)
   })
 
   it('is disabled for published DOI dataset', () => {
     Qvain.setUseDoi(true)
     Qvain.setOriginal({ identifier: 'test' })
-    const component = shallow(<IssuedDateField />)
+    const component = shallow(<IssuedDateFieldBase />)
     expect(component.find(DatePicker).prop('disabled')).toEqual(true)
   })
 })
@@ -657,8 +659,8 @@ describe('Qvain validation', () => {
       expect(e.errors.length).toBe(2)
       expect(e.errors).toEqual(
         expect.arrayContaining([
-          translate('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
-          translate('qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher'),
+          'qvain.validationMessages.issuedDate.requiredIfUseDoi',
+          'qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher',
         ])
       )
     }

@@ -8,6 +8,13 @@ ACCESS_TYPES = {
     'restricted': 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted'
 }
 
+ACCESS_DENIED_REASON = {
+    'EMBARGO': 'EMBARGO',
+    'NEED_LOGIN': 'NEED_LOGIN',
+    'NEED_REMS_PERMISSION': 'NEED_REMS_PERMISSION',
+    'RESTRICTED': 'RESTRICTED',
+}
+
 SAML_ATTRIBUTES = {
     'first_name': 'urn:oid:2.5.4.42',
     'last_name': 'urn:oid:2.5.4.4',

@@ -70,7 +70,7 @@ class CookiesNotification extends Component {
     const expires = `; expires=${expiryDate.toUTCString()}`
     document.cookie = `${cookieName}=${
       value || ''
-    }${expires}; path=/; domain=.${this.fdSSOGetDomainName()}`
+    }${expires}; path=/; domain=.${this.fdSSOGetDomainName()}; secure`
     this.setState({
       displayCookieNotification: false,
     })

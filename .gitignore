@@ -8,6 +8,7 @@ __pycache__
 *.egg-info
 .eggs
 .coverage
+etsin_finder/frontend/coverage
 etsin_finder/frontend/node_modules
 etsin_finder/frontend/npm-debug.log
 *.DS_Store

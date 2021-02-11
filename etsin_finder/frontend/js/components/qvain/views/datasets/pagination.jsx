@@ -5,7 +5,7 @@ import { PaginationItem, PaginationButton, PaginationContainer } from '../editor
 
 const DatasetPagination = ({ id, page, count, limit, onChangePage }) => {
   const pageCount = Math.ceil(count / limit)
-  const completeRange = Array.from(Array(pageCount).keys()).map(n => n + 1)
+  const completeRange = [...Array(pageCount).keys()].map(n => n + 1)
   let lowerRange = completeRange.slice(0, page - 1)
   if (page > 3) {
     lowerRange = completeRange.slice(page - 4, page - 1)
