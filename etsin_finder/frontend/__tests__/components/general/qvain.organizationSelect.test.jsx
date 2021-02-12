@@ -5,12 +5,16 @@ import axios from 'axios'
 
 import OrganizationSelect from '../../../js/components/qvain/general/input/organizationSelect'
 import { withStores } from '../../../js/stores/stores'
+import { validate } from '../../../js/components/qvain/fields/project/utils'
+import { organizationSelectSchema } from '../../../js/components/qvain/utils/formValidation'
 
 jest.mock('../../../js/stores/stores', () => ({
   withStores: jest.fn(c => c),
 }))
 
 jest.mock('axios')
+
+jest.mock('../../../js/components/qvain/fields/project/utils')
 
 describe('OrganizationSelect', () => {
   let wrapper
@@ -99,7 +103,7 @@ describe('OrganizationSelect', () => {
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    jest.resetAllMocks()
     wrapper.unmount()
   })
 
@@ -136,6 +140,63 @@ describe('OrganizationSelect', () => {
 
       test('should exist', () => {
         organizationSelect.exists().should.be.true
+      })
+
+      test('name should be props.name', () => {
+        organizationSelect.prop('name').should.eql(props.name)
+      })
+
+      test('inputId should be props.inputId', () => {
+        organizationSelect.prop('inputId').should.eql(props.inputId)
+      })
+
+      test('value should be null', () => {
+        expect(organizationSelect.prop('value')).toBe(null)
+      })
+
+      test('options should be fetched and parsed from backend', () => {
+        organizationSelect = wrapper.find('#org-select') // updates state changes
+        organizationSelect.prop('options').should.eql([
+          {
+            value: 'value',
+            label: 'fi_label',
+            name: { fi: 'fi_label', en: 'en_label', und: 'und_label' },
+          },
+        ])
+      })
+
+      test('placeholder should be props.placeholder.organization', () => {
+        organizationSelect.prop('placeholder').should.eql(props.placeholder.organization)
+      })
+
+      test('creatable should be props.creatable', () => {
+        organizationSelect.prop('creatable').should.eql(props.creatable)
+      })
+
+      test('allowReset should be false', () => {
+        organizationSelect.prop('allowReset').should.be.false
+      })
+    })
+
+    describe('DepartmentSelect', () => {
+      beforeEach(() => {
+        setupState()
+        departmentSelect = wrapper.find('#department-select')
+      })
+
+      test('should NOT exist', () => {
+        departmentSelect.exists().should.be.false
+      })
+    })
+
+    describe('SubDepartmentSelect', () => {
+      beforeEach(() => {
+        setupState()
+        subDepartmentSelect = wrapper.find('#subdepartment-select')
+      })
+
+      test('should NOT exist', () => {
+        subDepartmentSelect.exists().should.be.false
       })
     })
   })
@@ -177,39 +238,61 @@ describe('OrganizationSelect', () => {
         organizationSelect.exists().should.be.true
       })
 
-      test('name should be props.name', () => {
-        organizationSelect.prop('name').should.eql(props.name)
-      })
-
-      test('inputId should be props.inputId', () => {
-        organizationSelect.prop('inputId').should.eql(props.inputId)
-      })
-
       test('value should be props.value.organization', () => {
         organizationSelect.prop('value').should.eql(props.value.organization)
       })
 
-      test('options should be fetched and parsed from backend', () => {
-        organizationSelect = wrapper.find('#org-select') // updates state changes
-        organizationSelect.prop('options').should.eql([
-          {
-            value: 'value',
-            label: 'fi_label',
-            name: { fi: 'fi_label', en: 'en_label', und: 'und_label' },
-          },
-        ])
+      test('allowReset should be true', () => {
+        organizationSelect.prop('allowReset').should.be.true
+      })
+    })
+
+    describe('DepartmentSelect', () => {
+      beforeEach(() => {
+        setupState()
+        departmentSelect = wrapper.find('#department-select')
       })
 
-      test('placeholder should be props.placeholder.organization', () => {
-        organizationSelect.prop('placeholder').should.eql(props.placeholder.organization)
+      test('it exists', () => {
+        departmentSelect.exists().should.be.true
+      })
+
+      test('name should be props.name', () => {
+        departmentSelect.prop('name').should.eql(props.name)
+      })
+
+      test('inputId should be props.inputId', () => {
+        departmentSelect.prop('inputId').should.eql(`${props.inputId}-department`)
+      })
+
+      test('value should be null', () => {
+        expect(departmentSelect.prop('value')).toBe(null)
+      })
+
+      test('options should be predetermined department option', () => {
+        departmentSelect.prop('options').should.eql(departmentOption)
+      })
+
+      test('placeholder should equal props.placeholder.department', () => {
+        departmentSelect.prop('placeholder').should.eql(placeholder.department)
       })
 
       test('creatable should be props.creatable', () => {
-        organizationSelect.prop('creatable').should.eql(props.creatable)
+        departmentSelect.prop('creatable').should.eql(props.creatable)
       })
 
-      test('allowReset should be true', () => {
-        organizationSelect.prop('allowReset').should.be.true
+      test('allowReset should be false', () => {
+        departmentSelect.prop('allowReset').should.be.false
+      })
+    })
+
+    describe('SubDepartmentSelect', () => {
+      beforeEach(() => {
+        subDepartmentSelect = wrapper.find('#subdepartment-select')
+      })
+
+      test('should NOT exist', () => {
+        subDepartmentSelect.exists().should.be.false
       })
     })
   })
@@ -237,6 +320,8 @@ describe('OrganizationSelect', () => {
           },
         },
       })
+
+      wrapper.update()
     }
 
     describe('DepartmentSelect', () => {
@@ -249,28 +334,8 @@ describe('OrganizationSelect', () => {
         departmentSelect.exists().should.be.true
       })
 
-      test('name should be props.name', () => {
-        departmentSelect.prop('name').should.eql(props.name)
-      })
-
-      test('inputId should be props.inputId', () => {
-        departmentSelect.prop('inputId').should.eql(`${props.inputId}-department`)
-      })
-
       test('value should equal props.value.department', () => {
         expect(departmentSelect.prop('value')).toBe(props.value.department)
-      })
-
-      test('options should be predetermined department option', () => {
-        departmentSelect.prop('options').should.eql(departmentOption)
-      })
-
-      test('placeholder should equal props.placeholder.department', () => {
-        departmentSelect.prop('placeholder').should.eql(placeholder.department)
-      })
-
-      test('creatable should be props.creatable', () => {
-        departmentSelect.prop('creatable').should.eql(props.creatable)
       })
 
       test('allowReset should be true', () => {
@@ -288,8 +353,20 @@ describe('OrganizationSelect', () => {
         subDepartmentSelect.exists().should.be.true
       })
 
+      test('name should equal props.name', () => {
+        subDepartmentSelect.prop('name').should.eql(name)
+      })
+
+      test('inputId should be props.inputId-subdepartment', () => {
+        subDepartmentSelect.prop('inputId').should.be.string(`${inputId}-subdepartment`)
+      })
+
       test('value should be null', () => {
         expect(subDepartmentSelect.prop('value')).toBe(null)
+      })
+
+      test('placeholder should equal props.placeholder.department', () => {
+        subDepartmentSelect.prop('placeholder').should.eql(placeholder.department)
       })
 
       test('allowReset should be false', () => {
@@ -301,7 +378,7 @@ describe('OrganizationSelect', () => {
   describe('given fully populated value (organization, department, subDepartment)', () => {
     beforeEach(() => {
       props.value = {
-        organization: 'organization',
+        organization: { formIsOpen: false, name: 'name', email: 'email', value: 'value' },
         department: 'department',
         subDepartment: 'subDepartment',
       }
@@ -324,6 +401,70 @@ describe('OrganizationSelect', () => {
             en: subDepartmentOption,
           },
         },
+      })
+    })
+
+    describe('OrganizationSelect', () => {
+      beforeEach(() => {
+        organizationSelect = wrapper.find('#org-select')
+      })
+
+      describe('when triggering onChange with empty string', () => {
+        const eventValue = ''
+        const expectedValue = { organization: null, department: null, subDepartment: null }
+        beforeEach(() => {
+          organizationSelect.simulate('change', eventValue)
+        })
+
+        test('should call props.onChange with expectedValue', () => {
+          expect(props.onChange).toHaveBeenCalledWith(expectedValue)
+        })
+      })
+
+      describe('when triggering onChange with {formIsOpen: false}', () => {
+        const eventValue = { formIsOpen: false }
+        const expectedValue = { organization: eventValue, department: null, subDepartment: null }
+        beforeEach(() => {
+          organizationSelect.simulate('change', eventValue)
+        })
+
+        test('should call props.onChange with expectedValue', () => {
+          // sets organization with evantValue and clears department and subDepartment
+          expect(props.onChange).toHaveBeenCalledWith(expectedValue)
+        })
+
+        test('should clear state.options.department', () => {
+          wrapper.state().options.department.should.eql({})
+        })
+
+        test('should clear state.options.subDepartment', () => {
+          wrapper.state().options.subDepartment.should.eql({})
+        })
+      })
+
+      describe('when calling onBlur', () => {
+        let expectedValue
+        beforeEach(async () => {
+          expectedValue = {
+            ...props.value,
+            organization: { ...props.value.organization },
+          }
+
+          validate.mockReturnValue(Promise.resolve(undefined))
+          organizationSelect = wrapper.find('#org-select')
+          organizationSelect.simulate('blur')
+          await Promise.resolve()
+        })
+
+        test('should call props.onChange with expectedValue', () => {
+          expect(props.onChange).toHaveBeenCalledWith(expectedValue)
+        })
+
+        test('should call validate with correct args', () => {
+          const { name, email, value } = props.value.organization
+          const expectedArgs = [organizationSelectSchema, { name, email, identifier: value }]
+          expect(validate).toHaveBeenCalledWith(...expectedArgs)
+        })
       })
     })
 
@@ -353,6 +494,63 @@ describe('OrganizationSelect', () => {
       test('allowReset should be false', () => {
         departmentSelect.prop('allowReset').should.be.false
       })
+
+      describe('when triggering onChange with empty string', () => {
+        const eventValue = ''
+        let expectedValue
+
+        beforeEach(() => {
+          expectedValue = {
+            ...props.value,
+            department: null,
+            subDepartment: null,
+          }
+          departmentSelect.simulate('change', eventValue)
+        })
+
+        test('should call props.onChange with expectedValue', () => {
+          // clears department and subDepartment
+          expect(props.onChange).toHaveBeenCalledWith(expectedValue)
+        })
+      })
+
+      describe('when triggering onChange with {formIsOpen: false}', () => {
+        const eventValue = { formIsOpen: false }
+        let expectedValue
+
+        beforeEach(() => {
+          expectedValue = {
+            ...props.value,
+            department: eventValue,
+            subDepartment: null,
+          }
+          departmentSelect.simulate('change', eventValue)
+        })
+
+        test('should call props.onChange with expectedValue', () => {
+          // clears subDepartment and sets department
+          expect(props.onChange).toHaveBeenCalledWith(expectedValue)
+        })
+      })
+
+      describe('when triggering onChange with {formIsOpen: true}', () => {
+        const eventValue = { formIsOpen: true }
+        let expectedValue
+
+        beforeEach(() => {
+          expectedValue = {
+            ...props.value,
+            department: eventValue,
+            subDepartment: 'subDepartment',
+          }
+          departmentSelect.simulate('change', eventValue)
+        })
+
+        test('should call props.onChange with expectedValue', () => {
+          // does NOT clear subDepartment and sets department
+          expect(props.onChange).toHaveBeenCalledWith(expectedValue)
+        })
+      })
     })
 
     describe('SubDepartmentSelect', () => {
@@ -382,28 +580,50 @@ describe('OrganizationSelect', () => {
         subDepartmentSelect.exists().should.be.true
       })
 
-      test('name should equal props.name', () => {
-        subDepartmentSelect.prop('name').should.eql(name)
-      })
-
-      test('inputId should be props.inputId-subdepartment', () => {
-        subDepartmentSelect.prop('inputId').should.be.string(`${inputId}-subdepartment`)
+      test('options should be predetermined subDepartmentOption', () => {
+        subDepartmentSelect.prop('options').should.eql(subDepartmentOption)
       })
 
       test('value should eql props.value.subDepartment', () => {
         subDepartmentSelect.prop('value').should.eql(props.value.subDepartment)
       })
 
-      test('options should be predetermined subDepartmentOption', () => {
-        subDepartmentSelect.prop('options').should.eql(subDepartmentOption)
-      })
-
-      test('placeholder should equal props.placeholder.department', () => {
-        subDepartmentSelect.prop('placeholder').should.eql(placeholder.department)
-      })
-
       test('allowReset should be true', () => {
         subDepartmentSelect.prop('allowReset').should.be.true
+      })
+
+      describe('when triggering onChange with empty string', () => {
+        const eventValue = ''
+        let expectedValue
+
+        beforeEach(() => {
+          expectedValue = {
+            ...props.value,
+            subDepartment: '',
+          }
+          subDepartmentSelect.simulate('change', eventValue)
+        })
+
+        test('should call props.onChange with expectedValue', () => {
+          expect(props.onChange).toHaveBeenCalledWith(expectedValue)
+        })
+      })
+
+      describe('when triggering onChange with any other value', () => {
+        const eventValue = { formIsOpen: false }
+        let expectedValue
+
+        beforeEach(() => {
+          expectedValue = {
+            ...props.value,
+            subDepartment: eventValue,
+          }
+          subDepartmentSelect.simulate('change', eventValue)
+        })
+
+        test('should call props.onChange with expectedValue', () => {
+          expect(props.onChange).toHaveBeenCalledWith(expectedValue)
+        })
       })
     })
   })

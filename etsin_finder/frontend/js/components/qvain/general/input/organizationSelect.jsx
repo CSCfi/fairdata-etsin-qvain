@@ -213,7 +213,7 @@ class OrganizationSelect extends Component {
           options={options.organization[lang] || []}
           placeholder={placeholder.organization}
           creatable={creatable}
-          allowReset={value.organization && !value.department}
+          allowReset={Boolean(value.organization && !value.department)}
           attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.organization' }}
         />
         <Department>
