@@ -24,12 +24,6 @@ jest.mock('axios')
 
 const datasetsCalls = observable.array([])
 
-axios.post.mockReturnValue(
-  Promise.resolve({
-    data: searchResults,
-  })
-)
-
 import Env from '../../../../js/stores/domain/env'
 Env.history = {
   location: {
