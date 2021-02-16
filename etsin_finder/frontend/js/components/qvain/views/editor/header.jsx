@@ -2,7 +2,7 @@ import React from 'react'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import { SubHeader } from '../../general/card'
+import { PageTitle } from '../../general/card'
 import { useStores } from '../../utils/stores'
 
 const Header = ({ datasetLoading, datasetError }) => {
@@ -20,7 +20,7 @@ const Header = ({ datasetLoading, datasetError }) => {
     return 'qvain.titleCreate'
   }
 
-  return <Translate component={SubHeader} content={getTitleKey()} />
+  return <Translate component={PageTitle} content={getTitleKey()} />
 }
 
 Header.propTypes = {

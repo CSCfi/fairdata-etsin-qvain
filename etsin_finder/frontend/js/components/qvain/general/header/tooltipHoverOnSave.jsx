@@ -23,6 +23,10 @@ const TooltipHoverOnSave = ({ isOpen, children, errors, description }) => {
     return children
   }
 
+  const TranslatedErrors = errors.map(error => (
+    <Translate key={error} content={error} component={TooltipText} />
+  ))
+
   return (
     <>
       <span ref={wrapperTooltipButtonRef}>{children}</span>
@@ -31,7 +35,7 @@ const TooltipHoverOnSave = ({ isOpen, children, errors, description }) => {
           <TooltipArrowDown />
           <TooltipTextBold>
             <Translate content={description} component={TooltipText} />
-            <TooltipText>{errors}</TooltipText>
+            {TranslatedErrors}
           </TooltipTextBold>
         </TooltipDownV2>
       </Wrapper>

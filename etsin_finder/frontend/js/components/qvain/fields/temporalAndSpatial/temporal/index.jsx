@@ -1,5 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react'
+
+import { withFieldErrorBoundary } from '../../../general/errors/fieldErrorBoundary'
 import Field from '../../../general/section/field'
 import TemporalFieldContent from './temporalFieldContent'
 import { useStores } from '../../../utils/stores'
@@ -21,4 +23,4 @@ const Temporal = () => {
   )
 }
 
-export default observer(Temporal)
+export default withFieldErrorBoundary(observer(Temporal), brief.title)

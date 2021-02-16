@@ -27,8 +27,11 @@ jobs:
   include:
   - stage: tests
     before_install:
-      - sudo apt-get install npm libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+      - sudo apt-get install libxml2-dev libxmlsec1-dev libxmlsec1-openssl
     install:
+      - nvm install 12
+      - nvm use 12
+      - node --version
       - cd $TRAVIS_BUILD_DIR/etsin_finder/frontend
       - npm install
       - npm run build -- --define process.env.NODE_ENV=\"'travis'\"

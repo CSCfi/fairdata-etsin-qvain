@@ -4,6 +4,7 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
+import { withFieldErrorBoundary } from '../../../general/errors/fieldErrorBoundary'
 import Select from '../../../general/input/searchSelect'
 import Card from '../../../general/card'
 import { LabelLarge } from '../../../general/modal/form'
@@ -41,4 +42,7 @@ const LanguageField = () => {
   )
 }
 
-export default observer(LanguageField)
+export default withFieldErrorBoundary(
+  observer(LanguageField),
+  'qvain.description.datasetLanguage.title'
+)

@@ -109,8 +109,6 @@ const english = {
       loading: 'Loading folder',
       loaded: 'Folder loaded',
       errors: {
-        showDetails: 'Show details',
-        hideDetails: 'Hide details',
         serviceUnavailable: 'The download service is currently unavailable. Please try again later.',
         unknownError: 'There was an error using the download service.',
       },
@@ -264,6 +262,10 @@ const english = {
       'Sorry, we are having some technical difficulties at the moment. Please, try again later.',
     notLoaded: "Sorry! The page couldn't be found.",
     undefined: 'Sorry! An error occured.',
+    details: {
+      showDetails: 'Show details',
+      hideDetails: 'Hide details',
+    }
   },
   general: {
     showMore: 'Show more',
@@ -474,6 +476,8 @@ const english = {
       permission: 'Permission error loading dataset',
       missing: 'Dataset not found',
       default: 'Error loading dataset',
+      render: 'There was an error displaying the dataset',
+      component: 'There was an error rendering %(field)s',
     },
     backLink: ' Back to datasets',
     common: {
@@ -500,10 +504,6 @@ const english = {
         name: 'Name',
         email: 'Email',
         identifier: 'e.g http://orcid.org',
-      },
-      validation: {
-        name: 'A name is required',
-        email: 'A valid email address is required',
       },
     },
     datasets: {
@@ -907,6 +907,43 @@ const english = {
           validFormat: 'Download URL needs to be of valid URL format.',
         },
       },
+      projects: {
+        title: {
+          required: 'At least one language is required.',
+          string: 'The title must be a string value.',
+        },
+        organization: {
+          name: 'A name is required',
+          email: 'A valid email address is required',
+          min: 'At least one producer organization is required',
+        },
+        fundingAgency: {
+          contributorType: {
+            identifier: 'Valitse rooli',
+          }
+        } 
+      },
+      temporalAndSpatial: {
+        spatial: {
+          nameRequired: 'Name is required',
+          altitudeNan: 'Altitude must be a number',
+        },
+        temporal: {
+          startDateMissing: 'Start date is missing.',
+          endDateMissing: 'End date is missing',
+        },
+      },
+      history: {
+        relatedResource: {
+          nameRequired: 'Name is required in at least one language.',
+          typeRequired: 'Relation type is required.',
+        },
+        provenance: {
+          nameRequired: 'Name required at least in one language.',
+          startDateMissing: 'Start date missing',
+          endDateMissing: 'End date missing',
+        },
+      },
     },
     files: {
       title: 'Files',
@@ -1237,10 +1274,6 @@ const english = {
         description:
           'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. ',
         noItems: 'No references to a related resources have been added.',
-        error: {
-          nameRequired: 'Name is required in at least one language.',
-          typeRequired: 'Relation type is required.',
-        },
         modal: {
           addButton: 'Add reference to a related resource',
           title: {
@@ -1296,11 +1329,6 @@ const english = {
         title: 'Provenance',
         description: 'An action or event that the dataset was the subject of.',
         noItems: 'No provenances have been added.',
-        error: {
-          nameRequired: 'Name required at least in one language.',
-          startDateMissing: 'Start date missing',
-          endDateMissing: 'End date missing',
-        },
         modal: {
           title: {
             add: 'Add Provenance',
@@ -1477,10 +1505,6 @@ const english = {
         title: {
           label: 'Add title for project',
           description: 'Name of the project, at least one language is required.',
-          validation: {
-            required: 'At least one language is required.',
-            string: 'The title must be a string value.',
-          },
         },
         titleEn: {
           placeholder: 'Title (English)',
@@ -1517,7 +1541,6 @@ const english = {
           },
           addButton: 'Add organization',
           editButton: 'Edit organization',
-          validation: 'At least one producer organization is required',
         },
         fundingAgency: {
           contributorType: {
@@ -1530,7 +1553,6 @@ const english = {
             },
             identifier: {
               label: 'Contributor role',
-              validation: 'Contributor role is required',
             },
             definition: {
               label: 'Definition',
@@ -1563,10 +1585,6 @@ const english = {
         title: 'Spatial coverage',
         description: 'Area covered by the dataset, e.g. places of observations.',
         noItems: 'No spatial coverage have been added.',
-        error: {
-          nameRequired: 'Name is required',
-          altitudeNan: 'Altitude must be a number',
-        },
         modal: {
           addButton: 'Add Spatial coverage',
           title: {
@@ -1605,10 +1623,6 @@ const english = {
         title: 'Temporal coverage',
         description: 'Time span that is covered by the dataset, e.g. period of observations. ',
         addButton: 'Add temporal coverage',
-        error: {
-          startDateMissing: 'Start date is missing.',
-          endDateMissing: 'End date is missing',
-        },
         modal: {
           durationInput: {
             label: 'Period of time',

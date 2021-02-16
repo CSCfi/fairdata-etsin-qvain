@@ -5,6 +5,7 @@ import Select from 'react-select'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
+import { withFieldErrorBoundary } from '../../general/errors/fieldErrorBoundary'
 import getReferenceData from '../../utils/getReferenceData'
 import Card from '../../general/card'
 import RestrictionGrounds from './restrictionGrounds'
@@ -135,4 +136,7 @@ const PermitHelp = styled.div`
   margin-top: 0.5rem;
 `
 
-export default withStores(observer(AccessType))
+export default withFieldErrorBoundary(
+  withStores(observer(AccessType)),
+  'qvain.rightsAndLicenses.accessType.title'
+)

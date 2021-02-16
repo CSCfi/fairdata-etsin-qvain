@@ -1,5 +1,7 @@
 import React from 'react'
 import InfrastructureSelection from './InfrastructureSelection'
+
+import { withFieldErrorBoundary } from '../../../general/errors/fieldErrorBoundary'
 import { Field } from '../../../general/section'
 
 const brief = {
@@ -7,8 +9,10 @@ const brief = {
   description: 'qvain.history.infrastructure.description',
 }
 
-export default () => (
+const Infrastructure = () => (
   <Field brief={brief} labelFor="infrastructure-select">
     <InfrastructureSelection />
   </Field>
 )
+
+export default withFieldErrorBoundary(Infrastructure, brief.title)

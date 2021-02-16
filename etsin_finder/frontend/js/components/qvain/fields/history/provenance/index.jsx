@@ -1,5 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react'
+
+import { withFieldErrorBoundary } from '../../../general/errors/fieldErrorBoundary'
 import { Field } from '../../../general/section'
 import ProvenanceFieldContent from './ProvenanceFieldContent'
 import { useStores } from '../../../utils/stores'
@@ -21,4 +23,4 @@ const Provenance = () => {
   )
 }
 
-export default observer(Provenance)
+export default withFieldErrorBoundary(observer(Provenance), brief.title)
