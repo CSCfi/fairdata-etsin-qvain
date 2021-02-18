@@ -57,11 +57,18 @@ const StyledIconButton = styled(Button).attrs(p => ({
   :last-child {
     margin-right: 0;
   }
+  font-size: 11pt;
 `
 
 const StyledIconButtonIcon = styled(FontAwesomeIcon)`
   margin-right: 0.25rem;
   width: 0.5rem;
 `
+
+export const DownloadButton = styled(IconButton)`
+  width: 7.5em;
+`
+
+export const InfoButton = styled(IconButton)``
 
 export default IconButton

@@ -25,7 +25,7 @@ import {
   NoIcon,
 } from '../../../general/files/items'
 import getDownloadAction from './downloadActions'
-import IconButton from './iconButton'
+import { DownloadButton, InfoButton } from './iconButton'
 
 const download = (datasetIdentifier, item) => {
   const handle = window.open(
@@ -93,7 +93,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
 
   const infoButton = (
     <Translate
-      component={IconButton}
+      component={InfoButton}
       fontSize="11pt"
       content="dataset.dl.info"
       color="darkgray"
@@ -109,7 +109,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
 
   const downloadButton = (
     <Translate
-      component={IconButton}
+      component={DownloadButton}
       fontSize="11pt"
       width="7.5em"
       content={downloadButtonText}
