@@ -385,6 +385,92 @@ const dataset = {
         "notation": "https://doi.org/another_identifier"
       }
     ],
+    "provenance": [
+      {
+        "title": {
+          "en": "Provenance name",
+          "fi": "Provenanssin nimi",
+          "und": "Provenanssin nimi"
+        },
+        "spatial": {
+          "as_wkt": [
+            "POINT(18.923 50.347)"
+          ],
+          "place_uri": {
+            "in_scheme": "http://www.yso.fi/onto/yso/places",
+            "identifier": "http://www.yso.fi/onto/yso/p112355",
+            "pref_label": {
+              "en": "Bytom",
+              "fi": "Bytom",
+              "sv": "Bytom",
+              "und": "Bytom"
+            }
+          },
+          "geographic_name": "Provenanssipaikka"
+        },
+        "temporal": {
+          "end_date": "2021-02-23T00:00:00.000Z",
+          "start_date": "2021-02-03T00:00:00.000Z"
+        },
+        "description": {
+          "en": "Provenance description",
+          "fi": "Provenanssin kuvaus",
+          "und": "Provenanssin kuvaus"
+        },
+        "used_entity": [
+          {
+            "type": {
+              "identifier": "http://uri.suomi.fi/codelist/fairdata/resource_type/code/instrument"
+            },
+            "title": {
+              "en": "Title of entity used by provenance",
+              "und": "Title of entity used by provenance"
+            },
+            "identifier": "https://example.com/provenance/entity",
+            "description": {
+              "en": "Description of entity used by provenance",
+              "und": "Description of entity used by provenance"
+            }
+          }
+        ],
+        "event_outcome": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/event_outcome",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/event_outcome/code/unknown",
+          "pref_label": {
+            "en": "Unknown",
+            "fi": "Tuntematon",
+            "sv": "Okänt",
+            "und": "Tuntematon"
+          }
+        },
+        "lifecycle_event": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event/code/checked",
+          "pref_label": {
+            "en": "Checked",
+            "fi": "Tarkistettu",
+            "und": "Tarkistettu"
+          }
+        },
+        "outcome_description": {
+          "en": "Outcome description",
+          "fi": "Tuloksen kuvaus",
+          "und": "Tuloksen kuvaus"
+        },
+        "was_associated_with": [
+          {
+            "name": {
+              "en": "Aalto University",
+              "fi": "Aalto yliopisto",
+              "sv": "Aalto universitetet",
+              "und": "Aalto yliopisto"
+            },
+            "@type": "Organization",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076"
+          }
+        ]
+      }
+    ],
     "remote_resources": [
       {
         "title": "Remote resource",
