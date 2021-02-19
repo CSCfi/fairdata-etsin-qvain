@@ -47,13 +47,14 @@ const SearchSelect = props => {
 
   return inModal ? (
     <Translate
+      id="select-in-modal"
       {..._props}
       menuPlacement="auto"
       menuPosition="fixed"
       menuShouldScrollIntoView={false}
     />
   ) : (
-    <Translate {..._props} />
+    <Translate id="select" {..._props} />
   )
 }
 
