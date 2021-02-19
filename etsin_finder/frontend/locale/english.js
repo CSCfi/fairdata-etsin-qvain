@@ -294,7 +294,7 @@ const english = {
     },
     cookies: {
       section: 'Cookie notification',
-      accept: 'Accept all cookies',
+      close: 'Close',
       infoText: 'The Fairdata services use cookies and tracking to ensure security and quality.',
       link: 'View the Fairdata Privacy Policy',
     },
@@ -921,7 +921,7 @@ const english = {
           contributorType: {
             identifier: 'Valitse rooli',
           }
-        } 
+        }
       },
       temporalAndSpatial: {
         spatial: {
