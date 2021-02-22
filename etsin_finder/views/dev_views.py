@@ -21,6 +21,7 @@ def fakelogin():
             "IDA01:research_project_112",
             "IDA01:string",
             "IDA01:project_x",
+            "IDA01:nonexistent_project",
         ],
         'urn:oid:2.5.4.42': ["teppå"], # firstname
         'urn:oid:2.5.4.4': ["testaaja"], # lastname

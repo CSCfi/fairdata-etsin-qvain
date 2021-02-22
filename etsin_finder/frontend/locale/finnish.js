@@ -1011,27 +1011,27 @@ const finnish = {
           contributorType: {
             identifier: 'Rooli on pakollinen kenttä.',
           },
-        },   
+        },
       },
       temporalAndSpatial: {
         spatial: {
           nameRequired: 'Nimi on pakollinen kenttä.',
-          altitudeNan: 'Korkeuden täytyy olla numero.',  
+          altitudeNan: 'Korkeuden täytyy olla numero.',
         },
         temporal: {
           startDateMissing: 'Alkamisajankohta puuttuu.',
-          endDateMissing: 'Loppuajankohta puuttuu.',  
+          endDateMissing: 'Loppuajankohta puuttuu.',
         },
       },
       history: {
         relatedResource: {
           nameRequired: 'Nimi kenttä on pakollinen ainakin yhdellä kielellä.',
-          typeRequired: 'Viitteen tyyppi on pakollinen kenttä.',  
+          typeRequired: 'Viitteen tyyppi on pakollinen kenttä.',
         },
         provenance: {
           nameRequired: 'Nimi vaaditaan vähintään yhdellä kielellä.',
           startDateMissing: 'Alkamispäivämäärä puuttuu',
-          endDateMissing: 'Loppumispäivämäärä puuttuu',  
+          endDateMissing: 'Loppumispäivämäärä puuttuu',
         },
       },
 
@@ -1133,6 +1133,7 @@ const finnish = {
       },
       addItemsModal: {
         allSelected: 'Kaikki projektin tiedostot ja hakemistot ovat jo aineistossa.',
+        noProject: 'Projekti puuttuu tai siinä ei ole tiedostoja.',
         title: 'Lisää tiedostoja projektista',
         buttons: {
           save: 'Lisää tiedostot',
