@@ -17,9 +17,8 @@ import { observer } from 'mobx-react'
 
 import QvainLogin from '../components/qvain/views/main/qvainLogin'
 import { useStores } from '../utils/stores'
-import { changeScope } from '../utils/tracking'
 
-const LoggedInRoute = ({ notLoggedIn, children, component, render, computedMatch, ...props }) => {
+const LoggedInRoute = ({ notLoggedIn, children, component, render, ...props }) => {
   const location = useLocation()
   const { Auth } = useStores()
 
@@ -27,10 +26,7 @@ const LoggedInRoute = ({ notLoggedIn, children, component, render, computedMatch
     if (!Auth.cscUserLogged) {
       Auth.checkLogin() // trigger login check
     }
-    if (computedMatch?.params?.identifier) {
-      changeScope(`DATASET / ${computedMatch.params.identifier}`)
-    } else changeScope('DATASET')
-  }, [Auth, location, computedMatch.params.identifier])
+  }, [Auth, location])
 
   if (component) {
     console.warn('LoggedInRoute: "component" prop not supported')

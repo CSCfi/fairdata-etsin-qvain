@@ -92,7 +92,6 @@ class Events extends Component {
       this.versions(this.props.dataset_version_set)
     }
 
-    )
     Accessibility.handleNavigation('events', false)
   }
 

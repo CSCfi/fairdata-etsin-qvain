@@ -55,10 +55,9 @@ const Content = ({ contentRef }) => {
         {!isQvain && [
           <Route exact path="/" key="home" component={Home} />,
           <Route exact path="/datasets/:query?" key="search" component={Search} />,
-          <Route path="/dataset/:identifier" key="dataset" render={Dataset} />,
+          <Route path="/dataset/:identifier" key="dataset" component={Dataset} />,
         ]}
         <LoggedInRoute path={qvainPath('/dataset/:identifier')}>
-          {}
           <Qvain />
         </LoggedInRoute>
         <LoggedInRoute exact path={qvainPath('/dataset')}>
