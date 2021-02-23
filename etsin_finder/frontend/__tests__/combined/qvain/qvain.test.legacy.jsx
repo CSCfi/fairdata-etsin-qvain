@@ -34,6 +34,8 @@ import QvainStoreClass from '../../../js/stores/view/qvain'
 import { Directory } from '../../../js/stores/view/qvain/qvain.filesv1'
 import LocaleStore from '../../../js/stores/view/locale'
 
+global.fdweRecordEvent = () => {}
+
 jest.mock('uuid', () => {
   let id = 0
   return {

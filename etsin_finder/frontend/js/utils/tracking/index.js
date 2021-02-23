@@ -7,14 +7,11 @@ export const changeService = service => {
 }
 
 export const changeScope = scope => {
-  const metaTag = document.querySelector('meta[name="fdwe-scope"]')
-  metaTag.setAttribute('content', scope)
-  console.log('scope', metaTag)
   if (!isMatomoLoaded) {
     loadMatomo()
   } else {
     // eslint-disable-next-line
-    fdweRecordEvent()
+    fdweRecordEvent(null, scope)
   }
 }
 
