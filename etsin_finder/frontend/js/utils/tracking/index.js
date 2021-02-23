@@ -13,6 +13,7 @@ export const changeScope = scope => {
   if (!isMatomoLoaded) {
     loadMatomo()
   } else {
+    // eslint-disable-next-line
     fdweRecordEvent()
   }
 }

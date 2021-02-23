@@ -11,7 +11,7 @@ import { TableButton, DangerButton } from '../../general/buttons'
 import { getResponseError } from '../../utils/responseError'
 import { useStores } from '../../../../utils/stores'
 
-export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, location, onClose }) => {
+export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, onClose }) => {
   const {
     Env: { metaxApiV2 },
   } = useStores()
@@ -95,9 +95,6 @@ RemoveModal.propTypes = {
   onlyChanges: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   postRemoveUpdate: PropTypes.func.isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-  }).isRequired,
 }
 
 RemoveModal.defaultProps = {
