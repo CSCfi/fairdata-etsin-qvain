@@ -14,7 +14,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 
-import Tracking from '../../../utils/tracking'
 import Accessibility from '../../../stores/view/accessibility'
 import ExternalResources from './externalResources'
 import IdaResources from './idaResources'
@@ -23,14 +22,11 @@ import { withStores } from '../../../stores/stores'
 
 class Data extends Component {
   componentDidMount() {
-    Tracking.newPageView(
-      `Dataset: ${this.props.match.params.identifier} | Data`,
-      this.props.location.pathname
-    )
-    Accessibility.handleNavigation('data', false)
-
     const { DatasetQuery } = this.props.Stores
     const { downloadApiV2 } = this.props.Stores.Env
+
+    Accessibility.handleNavigation('data', false)
+
     if (downloadApiV2 && !DatasetQuery.isDraft) {
       DatasetQuery.fetchPackages()
     }

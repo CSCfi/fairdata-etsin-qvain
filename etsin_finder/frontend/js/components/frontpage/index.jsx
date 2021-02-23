@@ -20,7 +20,6 @@ import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
 import KeyValues from './keyValues'
 import Accessibility from '../../stores/view/accessibility'
-import Tracking from '../../utils/tracking'
 import Modal from '../general/modal'
 import Auth from '../../stores/domain/auth'
 
@@ -49,7 +48,6 @@ export default class FrontPage extends Component {
 
   componentDidMount() {
     Accessibility.handleNavigation('home')
-    Tracking.newPageView('Etsin | Tutkimusaineistojen hakupalvelu', this.props.location.pathname)
     // preload search page
     Search.preload()
 
@@ -62,17 +60,16 @@ export default class FrontPage extends Component {
       .then(() => {
         // If the user was logged in but does not have a user.name,
         // it means they were verified through HAKA, but do not have a CSC account.
-        if (
-          Stores.Auth.user.loggedIn &&
-          Stores.Auth.user.name === undefined) {
+        if (Stores.Auth.user.loggedIn && Stores.Auth.user.name === undefined) {
           this.setState({
             userPermissionErrorModalIsOpen: true,
           })
-        // If the user has a user.name, but not a user.homeOrganizationName,
-        // it means they have a CSC account, but no home organization set.
+          // If the user has a user.name, but not a user.homeOrganizationName,
+          // it means they have a CSC account, but no home organization set.
         } else if (
           Stores.Auth.user.name !== undefined &&
-          Stores.Auth.user.homeOrganizationName === undefined) {
+          Stores.Auth.user.homeOrganizationName === undefined
+        ) {
           this.setState({
             userHomeOrganizationErrorModalIsOpen: true,
           })

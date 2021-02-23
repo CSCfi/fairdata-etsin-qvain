@@ -1,32 +1,16 @@
-/* eslint-disable no-undef */
-class Tracking {
-  isActive() {
-    // check if Matomo is active, will return false in development
-    return typeof _paq === 'object'
-  }
-
-  newPageView(title, location) {
-    if (this.isActive()) {
-      _paq.push(['setCustomUrl', location])
-      _paq.push(['setDocumentTitle', title])
-      _paq.push(['disableCookies'])
-      _paq.push(['trackPageView'])
-      _paq.push(['enableLinkTracking'])
-    }
-  }
-
-  trackEvent(category, action, location) {
-    if (!this.isActive()) return
-
-    _paq.push(['setCustomUrl', location])
-    _paq.push(['trackEvent', category, action])
-  }
-
-  newSearch(keyword, category, resultsAmount) {
-    if (this.isActive()) {
-      _paq.push(['trackSiteSearch', keyword, false, resultsAmount])
-    }
-  }
+export const changeService = service => {
+  const metaTag = document.querySelector('meta[name="fdwe-service"]')
+  metaTag.setAttribute('content', service)
+  console.log('service', metaTag)
 }
 
-export default new Tracking()
+export const changeScope = scope => {
+  const metaTag = document.querySelector('meta[name="fdwe-scope"]')
+  metaTag.setAttribute('content', scope)
+  console.log('scope', metaTag)
+}
+
+export default {
+  changeScope,
+  changeService,
+}

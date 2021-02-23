@@ -9,10 +9,10 @@ import { useStores } from '../../utils/stores'
 import DatasetTable from './table'
 import { ContainerLight, ContainerSubsection, QvainContainer, PageTitle } from '../../general/card'
 import { SaveButton } from '../../general/buttons'
-import Tracking from '../../../../utils/tracking'
 import NoticeBar from '../../../general/noticeBar'
+import { changeScope } from '../../../../utils/tracking'
 
-const Datasets = ({ history, location }) => {
+const Datasets = ({ history }) => {
   const {
     Qvain: { resetQvainStore },
     QvainDatasets: { publishedDataset, setPublishedDataset },
@@ -20,7 +20,7 @@ const Datasets = ({ history, location }) => {
   } = useStores()
 
   useEffect(() => {
-    Tracking.newPageView('Qvain View Datasets', location.pathname)
+    changeScope('DATASETS')
   })
 
   return (
