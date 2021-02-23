@@ -1,32 +1,31 @@
-/* eslint-disable no-undef */
-class Tracking {
-  isActive() {
-    // check if Matomo is active, will return false in development
-    return typeof _paq === 'object'
-  }
+let isMatomoLoaded = false
 
-  newPageView(title, location) {
-    if (this.isActive()) {
-      _paq.push(['setCustomUrl', location])
-      _paq.push(['setDocumentTitle', title])
-      _paq.push(['disableCookies'])
-      _paq.push(['trackPageView'])
-      _paq.push(['enableLinkTracking'])
-    }
-  }
+export const changeService = service => {
+  const metaTag = document.querySelector('meta[name="fdwe-service"]')
+  metaTag.setAttribute('content', service)
+  console.log('service', metaTag)
+}
 
-  trackEvent(category, action, location) {
-    if (!this.isActive()) return
-
-    _paq.push(['setCustomUrl', location])
-    _paq.push(['trackEvent', category, action])
-  }
-
-  newSearch(keyword, category, resultsAmount) {
-    if (this.isActive()) {
-      _paq.push(['trackSiteSearch', keyword, false, resultsAmount])
-    }
+export const changeScope = scope => {
+  const metaTag = document.querySelector('meta[name="fdwe-scope"]')
+  metaTag.setAttribute('content', scope)
+  console.log('scope', metaTag)
+  if (!isMatomoLoaded) {
+    loadMatomo()
+  } else {
+    // eslint-disable-next-line
+    fdweRecordEvent()
   }
 }
 
-export default new Tracking()
+export const loadMatomo = () => {
+  const script = document.createElement('script')
+  script.setAttribute('src', 'https://matomo.fd-test.csc.fi/fdwe.js')
+  document.head.appendChild(script)
+  isMatomoLoaded = true
+}
+
+export default {
+  changeScope,
+  changeService,
+}

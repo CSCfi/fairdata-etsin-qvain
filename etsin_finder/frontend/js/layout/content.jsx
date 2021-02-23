@@ -21,6 +21,7 @@ import ErrorPage from '../components/errorpage'
 import QvainLandingPage from '../components/qvain/views/landingPage'
 import { useStores } from '../utils/stores'
 import LoggedInRoute from './loggedInRoute'
+import { changeService } from '../utils/tracking'
 
 const Content = ({ contentRef }) => {
   const {
@@ -30,7 +31,12 @@ const Content = ({ contentRef }) => {
 
   useEffect(() => {
     Accessibility.handleNavigation()
-  }, [])
+    if (isQvain) {
+      changeService('QVAIN')
+    } else {
+      changeService('ETSIN')
+    }
+  }, [isQvain])
 
   if (Auth.initializing) return null
 

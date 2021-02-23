@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom'
 
 import AccessRights from './accessRights'
 import FairdataPasDatasetIcon from './fairdataPasDatasetIcon'
-import Accessiblity from '../../stores/view/accessibility'
+import Accessibility from '../../stores/view/accessibility'
 import AskForAccess from './askForAccess'
 import Contact from './contact'
 import ErrorBoundary from '../general/errorBoundary'
@@ -31,7 +31,6 @@ import FormatChanger from './formatChanger'
 import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
-import Tracking from '../../utils/tracking'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
 import { withStores } from '../../utils/stores'
 
@@ -96,11 +95,7 @@ class Description extends Component {
   }
 
   componentDidMount() {
-    Accessiblity.handleNavigation('dataset', false)
-    Tracking.newPageView(
-      `Dataset: ${this.props.match.params.identifier} | Description`,
-      this.props.location.pathname
-    )
+    Accessibility.handleNavigation('dataset', false)
   }
 
   checkEmails(obj) {

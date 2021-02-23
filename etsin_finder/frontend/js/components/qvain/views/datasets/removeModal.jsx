@@ -9,10 +9,9 @@ import urls from '../../utils/urls'
 import Modal from '../../../general/modal'
 import { TableButton, DangerButton } from '../../general/buttons'
 import { getResponseError } from '../../utils/responseError'
-import Tracking from '../../../../utils/tracking'
 import { useStores } from '../../../../utils/stores'
 
-export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, location, onClose }) => {
+export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, onClose }) => {
   const {
     Env: { metaxApiV2 },
   } = useStores()
@@ -60,7 +59,6 @@ export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, location, 
           url = urls.v2.dataset(identifier)
         }
         await axios.delete(url)
-        Tracking.trackEvent('Dataset', ' Removed', location.pathname)
       }
       postRemoveUpdate(dataset, onlyChanges)
       onClose()
@@ -97,9 +95,6 @@ RemoveModal.propTypes = {
   onlyChanges: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   postRemoveUpdate: PropTypes.func.isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-  }).isRequired,
 }
 
 RemoveModal.defaultProps = {

@@ -9,7 +9,6 @@ import { Popup } from 'react-leaflet'
 import { TypeLocation } from '../../../utils/propTypes'
 import MyMap from './map'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
-import Tracking from '../../../utils/tracking'
 import Accessibility from '../../../stores/view/accessibility'
 
 const Table = styled.table`
@@ -57,51 +56,57 @@ class Maps extends Component {
   }
 
   componentDidMount() {
-    Tracking.newPageView(
-      `Dataset: ${this.props.match.params.identifier} | Maps`,
-      this.props.location.pathname
-    )
     Accessibility.handleNavigation('maps', false)
   }
 
   render() {
     return (
       <div>
-        { /* Map details in a table list (this is not the actual map) */ }
+        {/* Map details in a table list (this is not the actual map) */}
         <Table>
-
-          { /* Table header */ }
+          {/* Table header */}
           <thead>
             <tr>
-              <th className="rowIcon" scope="col"><Translate content="dataset.map.geographic_name" /></th>
-              <th className="rowIcon" scope="col"><Translate content="dataset.map.full_address" /></th>
-              <th className="rowIcon" scope="col"><Translate content="dataset.map.alt" /></th>
+              <th className="rowIcon" scope="col">
+                <Translate content="dataset.map.geographic_name" />
+              </th>
+              <th className="rowIcon" scope="col">
+                <Translate content="dataset.map.full_address" />
+              </th>
+              <th className="rowIcon" scope="col">
+                <Translate content="dataset.map.alt" />
+              </th>
             </tr>
           </thead>
 
-          { /* Table body */ }
+          {/* Table body */}
           <tbody>
             {this.props.spatial.map(spatial => (
               <tr key={spatial.geographic_name}>
                 <td>
-                  { // Display if geographic_name exists, otherwise display '-'
-                  (spatial.geographic_name !== undefined) ?
-                    (<span>{spatial.geographic_name}</span>) :
-                    <span>-</span>
+                  {
+                    // Display if geographic_name exists, otherwise display '-'
+                    spatial.geographic_name !== undefined ? (
+                      <span>{spatial.geographic_name}</span>
+                    ) : (
+                      <span>-</span>
+                    )
                   }
                 </td>
                 <td>
-                  { // Display if full_address exists, otherwise display '-'
-                  (spatial.full_address !== undefined) ?
-                    (<span>{spatial.full_address}</span>) :
-                    <span>-</span>
+                  {
+                    // Display if full_address exists, otherwise display '-'
+                    spatial.full_address !== undefined ? (
+                      <span>{spatial.full_address}</span>
+                    ) : (
+                      <span>-</span>
+                    )
                   }
                 </td>
                 <td>
-                  { // Display if alt exists, otherwise display '-'
-                  (spatial.alt !== undefined) ?
-                    (<span>{spatial.alt}</span>) :
-                    <span>-</span>
+                  {
+                    // Display if alt exists, otherwise display '-'
+                    spatial.alt !== undefined ? <span>{spatial.alt}</span> : <span>-</span>
                   }
                 </td>
               </tr>
@@ -109,14 +114,15 @@ class Maps extends Component {
           </tbody>
         </Table>
 
-        { /* The actual map */ }
-        { this.props.spatial.map(spatial => {
+        {/* The actual map */}
+        {this.props.spatial.map(spatial => {
           // Map shown only if either map coordinate(s) or map location is defined
           if (spatial.as_wkt !== undefined || spatial.place_uri !== undefined) {
             return (
               <MyMap
-                key={`${spatial.as_wkt && spatial.as_wkt[0]}-${spatial.place_uri &&
-                  spatial.place_uri.identifier}`}
+                key={`${spatial.as_wkt && spatial.as_wkt[0]}-${
+                  spatial.place_uri && spatial.place_uri.identifier
+                }`}
                 geometry={spatial.as_wkt}
                 place_uri={spatial.place_uri && spatial.place_uri.pref_label}
               >

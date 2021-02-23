@@ -17,7 +17,6 @@ import styled from 'styled-components'
 import Accessibility from '../../../stores/view/accessibility'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import dateFormat from '../../../utils/dateFormat'
-import Tracking from '../../../utils/tracking'
 import Agent from '../agent'
 import { withStores } from '../../../stores/stores'
 
@@ -93,10 +92,6 @@ class Events extends Component {
       this.versions(this.props.dataset_version_set)
     }
 
-    Tracking.newPageView(
-      `Dataset: ${this.props.match.params.identifier} | Events`,
-      this.props.location.pathname
-    )
     Accessibility.handleNavigation('events', false)
   }
 
