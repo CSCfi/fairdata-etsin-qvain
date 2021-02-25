@@ -1041,6 +1041,7 @@ const english = {
       addItemsModal: {
         title: 'Select files from project',
         allSelected: 'All the files and folders in the project are already in the dataset.',
+        noProject: 'The selected project does not exist or has no files.',
         buttons: {
           save: 'Add files',
           close: 'Close',

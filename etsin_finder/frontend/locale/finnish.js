@@ -1133,6 +1133,7 @@ const finnish = {
       },
       addItemsModal: {
         allSelected: 'Kaikki projektin tiedostot ja hakemistot ovat jo aineistossa.',
+        noProject: 'Projekti puuttuu tai siinä ei ole tiedostoja.',
         title: 'Lisää tiedostoja projektista',
         buttons: {
           save: 'Lisää tiedostot',
