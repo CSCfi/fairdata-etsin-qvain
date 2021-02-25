@@ -109,8 +109,8 @@ const finnish = {
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
       errors: {
-        serviceUnavailable: 'Latauspalvelu ei ole tällä hetkellä tavoitettavissa. Yritä myöhemmin uudelleen.',
-        unknownError: 'Latauspalvelun käytössä tapahtui virhe.',
+        serviceUnavailable: 'Latauspalvelu ei ole juuri nyt käytettävissä. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
+        unknownError: 'Latauspalvelun käytössä tapahtui virhe. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
       },
       packages: {
         createForAll: 'Lataa kaikki',
