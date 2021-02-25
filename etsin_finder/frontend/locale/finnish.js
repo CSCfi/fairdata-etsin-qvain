@@ -292,7 +292,7 @@ const finnish = {
     },
     cookies: {
       section: 'Evästeiden hyväksyminen',
-      accept: 'Hyväksy evästeet',
+      close: 'Sulje',
       infoText:
         'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
       link: 'Katso Fairdatan tietosuojakäytäntö',
