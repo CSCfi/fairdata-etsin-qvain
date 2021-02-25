@@ -109,8 +109,8 @@ const english = {
       loading: 'Loading folder',
       loaded: 'Folder loaded',
       errors: {
-        serviceUnavailable: 'The download service is currently unavailable. Please try again later.',
-        unknownError: 'There was an error using the download service.',
+        serviceUnavailable: 'The download service is currently unavailable. If the problem persists check our <a href="https://www.fairdata.fi/en/maintenance/">maintenance page</a> for more information.',
+        unknownError: 'There was an error using the download service. If the problem persists check our <a href="https://www.fairdata.fi/en/maintenance/">maintenance page</a> for more information.',
       },
       packages: {
         createForAll: 'Download all',
@@ -921,7 +921,7 @@ const english = {
           contributorType: {
             identifier: 'Valitse rooli',
           }
-        } 
+        }
       },
       temporalAndSpatial: {
         spatial: {
