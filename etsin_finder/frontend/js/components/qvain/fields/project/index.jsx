@@ -201,10 +201,9 @@ class Project extends Component {
     const project = this.props.Stores.Qvain.Projects.projects.find(proj => proj.id === id)
     if (!project) return
 
-    const { details, organizations, fundingAgencies } = project
-
-    details.titleEn = details.title.en
-    details.titleFi = details.title.fi
+    const { details, organizations, fundingAgencies } = JSON.parse(JSON.stringify(project))
+    details.titleEn = (details.title || {}).en
+    details.titleFi = (details.title || {}).fi
     delete details.title
 
     this.setState({
@@ -285,7 +284,7 @@ const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
   const { projects, readonly } = Stores.Qvain.Projects
 
   const renderProjectTitle = details => {
-    const { fi, en } = details.title
+    const { fi, en } = details.title || {}
     if (lang === 'fi' && fi) return [fi, en].filter(title => title).join(', ')
     return [en, fi].filter(title => title).join(', ')
   }
