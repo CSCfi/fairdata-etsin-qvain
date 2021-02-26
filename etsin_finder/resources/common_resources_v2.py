@@ -47,7 +47,7 @@ class ProjectFiles(Resource):
     @log_request
     def get(self, pid):
         """
-        Get dataset projects from Metax.
+        Get project files from Metax.
 
         Arguments:
             pid {string} -- The identifier of the project.

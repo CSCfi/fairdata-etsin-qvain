@@ -195,6 +195,11 @@ const GlobalStyle = createGlobalStyle`
     text-align: center;
     background-color: ${etsinTheme.color.error};
     padding: 20px 0;
+
+    a {
+      color: white;
+      font-weight: 700;
+    }
   }
 
   .skip-to-content {
