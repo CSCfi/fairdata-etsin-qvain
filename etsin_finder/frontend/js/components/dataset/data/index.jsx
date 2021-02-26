@@ -22,14 +22,19 @@ import { withStores } from '../../../stores/stores'
 
 class Data extends Component {
   componentDidMount() {
-    const { DatasetQuery } = this.props.Stores
-    const { downloadApiV2 } = this.props.Stores.Env
+    const {
+      DatasetQuery,
+      Matomo: { changeScope },
+      Env: { downloadApiV2 },
+    } = this.props.Stores
 
     Accessibility.handleNavigation('data', false)
 
     if (downloadApiV2 && !DatasetQuery.isDraft) {
       DatasetQuery.fetchPackages()
     }
+
+    changeScope(`DATA / ${this.props.match?.params?.identifier}`)
   }
 
   render() {

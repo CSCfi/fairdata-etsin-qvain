@@ -10,13 +10,13 @@ import DatasetTable from './table'
 import { ContainerLight, ContainerSubsection, QvainContainer, PageTitle } from '../../general/card'
 import { SaveButton } from '../../general/buttons'
 import NoticeBar from '../../../general/noticeBar'
-import { changeScope } from '../../../../utils/tracking'
 
 const Datasets = ({ history }) => {
   const {
     Qvain: { resetQvainStore },
     QvainDatasets: { publishedDataset, setPublishedDataset },
     Env: { getQvainUrl },
+    Matomo: { changeScope },
   } = useStores()
 
   useEffect(() => {

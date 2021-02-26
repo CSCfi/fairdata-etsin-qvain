@@ -19,11 +19,9 @@ import { Search } from '../../routes'
 import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
 import KeyValues from './keyValues'
-import Accessibility from '../../stores/view/accessibility'
 import Modal from '../general/modal'
-import Auth from '../../stores/domain/auth'
-
-import Stores from '../../stores'
+import Accessibility from '../../stores/view/accessibility'
+import { withStores } from '../../stores/stores'
 
 const customStyles = {
   content: {
@@ -33,7 +31,7 @@ const customStyles = {
   },
 }
 
-export default class FrontPage extends Component {
+class FrontPage extends Component {
   constructor(props) {
     super(props)
 
@@ -47,15 +45,22 @@ export default class FrontPage extends Component {
   }
 
   componentDidMount() {
+    const {
+      Matomo: { changeScope },
+    } = this.props.Stores
+
     Accessibility.handleNavigation('home')
     // preload search page
     Search.preload()
 
     // Check the user status, and display modal message if user is not authenticated
     this.checkUserLoginStatus()
+
+    changeScope('HOME')
   }
 
   checkUserLoginStatus() {
+    const { Stores } = this.props
     Stores.Auth.checkLogin()
       .then(() => {
         // If the user was logged in but does not have a user.name,
@@ -82,6 +87,7 @@ export default class FrontPage extends Component {
   }
 
   closeUserPermissionErrorModal() {
+    const { Auth } = this.props.Stores
     this.setState({
       userPermissionErrorModalIsOpen: false,
     })
@@ -91,6 +97,7 @@ export default class FrontPage extends Component {
   }
 
   closeUserHomeOrganizationErrorModal() {
+    const { Auth } = this.props.Stores
     this.setState({
       userHomeOrganizationErrorModalIsOpen: false,
     })
@@ -153,6 +160,7 @@ export default class FrontPage extends Component {
 }
 
 FrontPage.propTypes = {
+  Stores: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }).isRequired,
@@ -165,3 +173,4 @@ const TextHolder = styled.div`
     white-space: pre-line;
   }
 `
+export default withStores(FrontPage)

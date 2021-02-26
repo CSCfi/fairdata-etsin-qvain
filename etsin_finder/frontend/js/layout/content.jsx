@@ -21,12 +21,12 @@ import ErrorPage from '../components/errorpage'
 import QvainLandingPage from '../components/qvain/views/landingPage'
 import { useStores } from '../utils/stores'
 import LoggedInRoute from './loggedInRoute'
-import { changeService } from '../utils/tracking'
 
 const Content = ({ contentRef }) => {
   const {
     Auth,
     Env: { isQvain, separateQvain, getQvainUrl },
+    Matomo: { changeService },
   } = useStores()
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const Content = ({ contentRef }) => {
     } else {
       changeService('ETSIN')
     }
-  }, [isQvain])
+  }, [isQvain, changeService])
 
   if (Auth.initializing) return null
 

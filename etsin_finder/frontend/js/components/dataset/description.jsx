@@ -95,7 +95,11 @@ class Description extends Component {
   }
 
   componentDidMount() {
+    const {
+      Matomo: { changeScope },
+    } = this.props.Stores
     Accessibility.handleNavigation('dataset', false)
+    changeScope(`DETAILS / ${this.props.dataset.identifier}`)
   }
 
   checkEmails(obj) {
@@ -247,6 +251,7 @@ class Description extends Component {
 export default withStores(observer(Description))
 
 Description.propTypes = {
+  Stores: PropTypes.object.isRequired,
   dataset: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,

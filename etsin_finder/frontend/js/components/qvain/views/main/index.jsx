@@ -18,7 +18,6 @@ import Dataset from '../editor/dataset'
 import LooseActorDialog from '../editor/looseActorDialog'
 import LooseProvenanceDialog from '../editor/looseProvenanceDialog'
 import { withStores } from '../../utils/stores'
-import { changeScope } from '../../../../utils/tracking'
 
 // Event handler to prevent page reload
 const confirmReload = e => {
@@ -256,6 +255,9 @@ export class Qvain extends Component {
     }
     const identifier = this.props.match.params.identifier
     const { original } = this.props.Stores.Qvain
+    const {
+      Matomo: { changeScope },
+    } = this.props.Stores
 
     if (identifier) {
       changeScope('DATASET')

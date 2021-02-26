@@ -93,6 +93,7 @@ class Events extends Component {
     }
 
     Accessibility.handleNavigation('events', false)
+    this.props.Stores.Matomo.changeScope(`EVENTS / ${this.props.match.params.identifier}`)
   }
 
   versions = set =>
@@ -408,6 +409,7 @@ Events.defaultProps = {
 }
 
 Events.propTypes = {
+  Stores: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }).isRequired,

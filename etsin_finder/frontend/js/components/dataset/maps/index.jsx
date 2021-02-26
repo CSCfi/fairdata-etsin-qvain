@@ -10,6 +10,7 @@ import { TypeLocation } from '../../../utils/propTypes'
 import MyMap from './map'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import Accessibility from '../../../stores/view/accessibility'
+import { withStores } from '../../../stores/stores'
 
 const Table = styled.table`
   overflow-x: scroll;
@@ -44,6 +45,7 @@ const Table = styled.table`
 
 class Maps extends Component {
   static propTypes = {
+    Stores: PropTypes.object.isRequired,
     location: PropTypes.shape({
       pathname: PropTypes.string,
     }).isRequired,
@@ -57,6 +59,7 @@ class Maps extends Component {
 
   componentDidMount() {
     Accessibility.handleNavigation('maps', false)
+    this.props.Stores.Matomo.changeScope(`MAPS / ${this.props.match.params.identifier}`)
   }
 
   render() {
@@ -182,4 +185,4 @@ const CustomPopup = styled(Popup)`
   }
 `
 
-export default Maps
+export default withStores(Maps)
