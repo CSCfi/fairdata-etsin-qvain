@@ -1,0 +1,20 @@
+# Note the following repository https://github.com/CSCfi/ansible-elasticsearch
+
+# This file and the following values functions as configuration
+node.name: "node1"
+cluster.name: etsin-es-cluster
+node.data: "true"
+node.master: "true"
+http.cors.enabled : true
+http.cors.allow-origin : "*"
+http.cors.allow-methods : "OPTIONS, HEAD, GET, POST, PUT, DELETE"
+http.cors.allow-headers : "X-Requested-With,X-Auth-Token,Content-Type,Content-Length"
+bootstrap.memory_lock: true
+network.host: 0.0.0.0
+network.bind_host: 0.0.0.0
+http.port: 9200
+discovery.zen.ping.unicast.hosts: 0.0.0.0
+transport.tcp.port: 9300
+discovery.zen.minimum_master_nodes: 1
+indices.query.bool.max_clause_count: 10000
+xpack.security.enabled: false

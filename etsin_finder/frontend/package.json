@@ -13,7 +13,7 @@
     "build": "webpack --mode production --config webpack.prod.js --node-env production",
     "dev-build": "webpack --config webpack.config.js --node-env development",
     "lint": "eslint js --ext .jsx,.js",
-    "start": "webpack --progress --config webpack.config.js --watch --node-env development",
+    "start": "webpack --progress -d --config webpack.config.js --watch --node-env development --host 0.0.0.0",
     "test": "jest",
     "coverage": "jest --collect-coverage --collect-coverage-from=\"js/**\"",
     "watch": "webpack --config webpack.config.js --watch --node-env development",

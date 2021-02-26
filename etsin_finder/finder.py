@@ -7,10 +7,12 @@
 
 """Main finder initialization file"""
 
-
+import os
 from etsin_finder.app import create_app
 
 app = create_app()
 
-if __name__ == "__main__":
+if os.environ['FLASK_ENV'] == 'development':
+    app.run(host='0.0.0.0')
+else:
     app.run()
