@@ -42,7 +42,6 @@ class Dataset extends React.Component {
 
     this.state = {
       error: false,
-      identifier: props.match.params.identifier,
       versionInfo: {},
       loaded: false,
     }
@@ -173,6 +172,7 @@ class Dataset extends React.Component {
     const { metaxApiV2 } = Env
     const { cscUserLogged } = Auth
     const { location } = this.props
+    const { identifier } = this.props.match.params
 
     // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
@@ -260,7 +260,7 @@ class Dataset extends React.Component {
               </div>
             )}
             <Content
-              identifier={this.state.identifier}
+              identifier={identifier}
               dataset={dataset}
               harvested={harvested}
               cumulative={cumulative}
