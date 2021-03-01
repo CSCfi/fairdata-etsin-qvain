@@ -48,10 +48,12 @@ const StringArray = ({
   const [changed, setChanged] = useState()
   const selectRef = useRef()
 
-  const validateArray = () => {
-    if (!changed) {
-      setValidationError(null)
-      return true
+  const validateArray = (justChangedTo = null) => {
+    if (!justChangedTo) {
+      if (justChangedTo === false || !changed) {
+        setValidationError(null)
+        return true
+      }
     }
 
     try {
@@ -129,7 +131,7 @@ const StringArray = ({
   const handleArrayChange = updatedOptions => {
     set((updatedOptions || []).map(opt => opt.value))
     setChanged(true)
-    validateArray()
+    validateArray(true)
   }
 
   const options = value.map(createOption)
@@ -137,6 +139,7 @@ const StringArray = ({
   return (
     <>
       <Translate
+        id={`string-array-${id}`}
         component={RefCreatableSelect}
         selectRef={selectRef}
         components={customComponents}
