@@ -45,8 +45,10 @@ export const IDAFilePickerBase = () => {
     console.error(loadingProjectError)
   }
 
+  let error
+
   if (original && loadingProjectError) {
-    return (
+    error = (
       <div className="container">
         <ErrorContainer>
           <ErrorLabel>
@@ -76,17 +78,18 @@ export const IDAFilePickerBase = () => {
     return <Translate component={Title} content="qvain.files.selected.none" />
   }
 
-  return (
+  const title = canSelectFiles ? (
+    <Translate component={Title} content="qvain.files.selected.title" />
+  ) : (
+    <Translate
+      component={Title}
+      content="qvain.files.selected.readonlyTitle"
+      with={{ project: selectedProject }}
+    />
+  )
+
+  const content = (
     <>
-      {canSelectFiles ? (
-        <Translate component={Title} content="qvain.files.selected.title" />
-      ) : (
-        <Translate
-          component={Title}
-          content="qvain.files.selected.readonlyTitle"
-          with={{ project: selectedProject }}
-        />
-      )}
       {canSelectFiles && (
         <Controls>
           <AddItems>
@@ -96,7 +99,7 @@ export const IDAFilePickerBase = () => {
               attributes={{ 'aria-label': 'qvain.files.addItemsModal.title' }}
             />
             <ProjectInfo>
-              {haveItems ? selectedProject : <Translate content="qvain.files.selected.none" />}
+              {selectedProject || <Translate content="qvain.files.selected.none" />}
             </ProjectInfo>
           </AddItems>
           <HideRemovedLabel>
@@ -106,8 +109,16 @@ export const IDAFilePickerBase = () => {
         </Controls>
       )}
 
+      {isLoadingProject ? <Loader active /> : <SelectedItems />}
+    </>
+  )
+
+  return (
+    <>
+      {title}
+      {content}
       <AddItemsModal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} />
-      <SelectedItems />
+      {error}
       <FixDeprecatedModal />
       <FormModal />
     </>
