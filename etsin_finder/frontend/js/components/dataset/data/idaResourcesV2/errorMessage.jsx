@@ -43,7 +43,7 @@ const ErrorMessage = ({ error, clear }) => {
   return (
     <ErrorDiv errorColor={errorColor}>
       <Message style={{ flexGrow: 1 }}>
-        <Translate component={MessagePart} content={summaryTranslation} />
+        <Translate component={MessagePart} content={summaryTranslation} unsafe />
         {allowDetails && (
           <>
             {showDetails && message && <MessagePart>{message}</MessagePart>}

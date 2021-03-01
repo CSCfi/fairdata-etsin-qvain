@@ -12,7 +12,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Route, withRouter } from 'react-router-dom'
+import { Route, Redirect, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 
@@ -73,6 +73,7 @@ class Content extends Component {
     ) {
       return false
     }
+
     if (this.props.hasFiles) {
       return Access.restrictions.allowDataIda
     }
@@ -90,6 +91,12 @@ class Content extends Component {
   }
 
   render() {
+    let query = ''
+    const params = new URLSearchParams(this.props.location.search)
+    if (params.get('preview') === '1') {
+      query = '?preview=1'
+    }
+
     return (
       <MarginAfter className="col-lg-8">
         <Tabs
@@ -99,10 +106,9 @@ class Content extends Component {
           showEvents={this.showEvents()}
           showMaps={this.showMaps()}
         />
-
         {/* Initial route */}
         <Route
-          exact={this.showData() || this.showEvents() || this.showMaps()}
+          exact
           path="/dataset/:identifier"
           render={props => (
             <Description
@@ -176,6 +182,10 @@ class Content extends Component {
             )}
           />
         )}
+
+        <Route>
+          <Redirect to={`/dataset/${this.props.identifier}${query}`} />
+        </Route>
       </MarginAfter>
     )
   }
