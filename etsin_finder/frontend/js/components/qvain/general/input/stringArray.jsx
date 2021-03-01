@@ -139,7 +139,7 @@ const StringArray = ({
   return (
     <>
       <Translate
-        id="string-array"
+        id={`string-array-${id}`}
         component={RefCreatableSelect}
         selectRef={selectRef}
         components={customComponents}

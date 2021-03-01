@@ -8,6 +8,7 @@ import StringArray from '../../../js/components/qvain/general/input/stringArray'
 describe('StringArray', () => {
   let wrapper, stringArray
   const props = {
+    id: 'some-id',
     itemStr: 'itemStr',
     addItemStr: jest.fn(),
     setItemStr: jest.fn(),
@@ -21,7 +22,7 @@ describe('StringArray', () => {
   const render = (extraProps = {}) => {
     const combinedProps = { ...props, ...extraProps }
     wrapper = shallow(<StringArray {...combinedProps} />)
-    stringArray = wrapper.find('#string-array')
+    stringArray = wrapper.find(`#string-array-${combinedProps.id}`)
   }
 
   beforeEach(() => {
@@ -39,7 +40,6 @@ describe('StringArray', () => {
 
     test('props should include expectedProps', () => {
       const expectedProps = {
-        inputId: undefined,
         inputValue: props.itemStr,
         isMulti: true,
         isClearable: false,
@@ -167,7 +167,7 @@ describe('StringArray', () => {
         })
 
         test.skip('itemSchema.validateSync should have been called with itemStr', () => {
-          // but it doesn't issues with enzyme not being able to update state hook in time.
+          // but it doesn't. Issues with enzyme not being able to update state hook in time.
           // in order to fix this component needs refactoring so that everything state related is moved to mobx Field based class
           expect(optionalProps.itemSchema.validateSync).to.have.beenCalled()
         })
@@ -178,8 +178,4 @@ describe('StringArray', () => {
       })
     })
   })
-
-  //onKeyDown
-  //getValue
-  //value
 })

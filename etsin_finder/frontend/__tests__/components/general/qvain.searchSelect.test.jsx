@@ -40,11 +40,11 @@ describe('SearchSelect', () => {
     useStores.mockReturnValue(Stores)
     const parsedProps = { ...props, ...customProps }
     wrapper = shallow(<SearchSelect {...parsedProps} />)
+    select = wrapper.find(`#select-${props.name}`)
   }
 
   beforeEach(() => {
     createWrapperWithProps()
-    select = wrapper.find('#select')
   })
 
   afterEach(() => {

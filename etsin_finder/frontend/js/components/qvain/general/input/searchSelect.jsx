@@ -54,7 +54,7 @@ const SearchSelect = props => {
       menuShouldScrollIntoView={false}
     />
   ) : (
-    <Translate id="select" {..._props} />
+    <Translate id={`select-${props.name}`} {..._props} />
   )
 }
 
