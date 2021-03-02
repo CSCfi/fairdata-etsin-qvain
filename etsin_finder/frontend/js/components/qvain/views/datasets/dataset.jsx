@@ -24,7 +24,7 @@ const datasetStateTranslation = dataset => {
   return 'qvain.datasets.state.draft'
 }
 
-const getGoToEtsinButton = (dataset, getEtsinUrl) => {
+const getGoToEtsinButton = (dataset, getEtsinUrl, Matomo) => {
   let identifier = dataset.identifier
   let goToEtsinKey = 'goToEtsin'
   let query = ''
@@ -40,7 +40,10 @@ const getGoToEtsinButton = (dataset, getEtsinUrl) => {
   return (
     <Translate
       component={TableButton}
-      onClick={() => window.open(getEtsinUrl(`/dataset/${identifier}${query}`), '_blank')}
+      onClick={() => {
+        Matomo.changeScope(`PREVIEW / ${identifier}`)
+        window.open(getEtsinUrl(`/dataset/${identifier}${query}`), '_blank')
+      }}
       content={`qvain.datasets.${goToEtsinKey}`}
     />
   )
@@ -90,6 +93,7 @@ function Dataset({
   const {
     Env: { metaxApiV2, getEtsinUrl },
     Locale: { lang },
+    Matomo,
   } = useStores()
   const actions = []
 
@@ -158,7 +162,7 @@ function Dataset({
             dataset.next_draft ? 'qvain.datasets.editDraftButton' : 'qvain.datasets.editButton'
           }
         />
-        {getGoToEtsinButton(dataset, getEtsinUrl)}
+        {getGoToEtsinButton(dataset, getEtsinUrl, Matomo)}
         {actions.length === 1 ? (
           getActionButton(actions[0])
         ) : (
