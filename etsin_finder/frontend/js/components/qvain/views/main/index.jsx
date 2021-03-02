@@ -260,9 +260,9 @@ export class Qvain extends Component {
     } = this.props.Stores
 
     if (identifier) {
-      changeScope('DATASET')
-    } else {
       changeScope(`DATASET / ${identifier}`)
+    } else {
+      changeScope('DATASET')
     }
 
     // Test if we need to load a dataset or do we use the one currently in store
