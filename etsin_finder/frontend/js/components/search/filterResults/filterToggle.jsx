@@ -59,11 +59,6 @@ const Children = styled.span`
 `
 
 export default class FilterToggle extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-
   render() {
     return (
       <Filter>

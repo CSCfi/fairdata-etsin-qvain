@@ -9,29 +9,30 @@
    * @license   MIT
    */
 }
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
-import ElasticQuery from '../../../stores/view/elasticquery'
 import { InvertedButton } from '../../general/button'
 import Accessibility from '../../../stores/view/accessibility'
+import { useStores } from '../../../stores/stores'
 
-export default class ClearFilters extends Component {
-  clear = () => {
+const ClearFilters = () => {
+  const { ElasticQuery, Matomo } = useStores()
+
+  const clear = () => {
+    Matomo.changeScope('CLEAR_FILTERS')
     ElasticQuery.clearFilters()
     ElasticQuery.queryES()
     Accessibility.announce(translate('search.filter.filtersCleared'))
   }
 
-  render() {
-    return (
-      <CustomButton onClick={this.clear} color="primary" open={ElasticQuery.filter.length > 0}>
-        <Translate content="search.filter.clearFilter" />
-      </CustomButton>
-    )
-  }
+  return (
+    <CustomButton onClick={clear} color="primary" open={ElasticQuery.filter.length > 0}>
+      <Translate content="search.filter.clearFilter" />
+    </CustomButton>
+  )
 }
 
 const CustomButton = styled(InvertedButton)`
@@ -41,3 +42,5 @@ const CustomButton = styled(InvertedButton)`
   margin: 0;
   margin-bottom: 0.5em;
 `
+
+export default ClearFilters

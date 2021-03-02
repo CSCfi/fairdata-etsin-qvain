@@ -13,9 +13,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import ElasticQuery from '../../../stores/view/elasticquery'
+import { withStores } from '../../../stores/stores'
 
-export default class FilterItem extends Component {
+class FilterItem extends Component {
   constructor(props) {
     super(props)
 
@@ -36,11 +36,21 @@ export default class FilterItem extends Component {
   }
 
   updateFilter() {
+    const { ElasticQuery, Matomo } = this.props.Stores
+
+    if (this.isActive()) {
+      // will toggle to not active
+      Matomo.changeScope(`UNFILTER / ${this.props.sectionTitleEn} / ${this.state.key}`)
+    } else {
+      Matomo.changeScope(`FILTER / ${this.props.sectionTitleEn} / ${this.state.key}`)
+    }
+
     ElasticQuery.updateFilter(this.state.term, this.state.key)
     ElasticQuery.queryES()
   }
 
   isActive() {
+    const { ElasticQuery } = this.props.Stores
     if (
       ElasticQuery.filter.filter(
         item => item.term === this.props.term && item.key === this.props.item.key
@@ -72,10 +82,14 @@ export default class FilterItem extends Component {
 }
 
 FilterItem.propTypes = {
+  Stores: PropTypes.object.isRequired,
   term: PropTypes.string.isRequired,
   item: PropTypes.shape({
     key: PropTypes.string.isRequired,
     doc_count: PropTypes.number.isRequired,
   }).isRequired,
   tabIndex: PropTypes.string.isRequired,
+  sectionTitleEn: PropTypes.string.isRequired,
 }
+
+export default withStores(FilterItem)
