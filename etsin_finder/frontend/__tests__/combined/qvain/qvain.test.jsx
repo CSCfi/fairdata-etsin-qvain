@@ -76,6 +76,9 @@ const getStores = () => {
     Env,
     Qvain: new QvainStoreClass(Env),
     Locale: LocaleStore,
+    Matomo: {
+      changeScope: jest.fn(),
+    },
   }
 }
 

@@ -60,6 +60,9 @@ jest.mock('../../../js/stores/stores', () => {
     Env: {
       metaxApiV2: false,
     },
+    Matomo: {
+      changeScope: jest.fn(),
+    },
   })
 
   return {
@@ -75,6 +78,9 @@ const getStores = () => {
     Env,
     Qvain: QvainStore,
     Locale: LocaleStore,
+    Matomo: {
+      changeScope: jest.fn(),
+    },
   }
 }
 
