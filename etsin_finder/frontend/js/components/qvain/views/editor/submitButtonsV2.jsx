@@ -23,6 +23,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
     },
     Env: { getQvainUrl },
     QvainDatasets: { setPublishedDataset },
+    Matomo,
   } = useStores()
 
   const [draftButtonHover, setDraftButtonHover] = useState(false)
@@ -44,6 +45,26 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
     history.push('/qvain')
   }
 
+  const handleDraftClick = () => {
+    submitDraft()
+
+    if (original?.identifier) {
+      Matomo.changeScope(`DRAFT / ${original.identifier}`)
+    } else {
+      Matomo.changeScope('DRAFT')
+    }
+  }
+
+  const handlePublishClick = () => {
+    submitPublish(goToDatasetsCallBack)
+
+    if (original?.identifier) {
+      Matomo.changeScope(`PUBLISH / ${original.identifier}`)
+    } else {
+      Matomo.changeScope('PUBLISH')
+    }
+  }
+
   return (
     <div ref={submitButtonsRef}>
       <TooltipHoverOnSave
@@ -60,7 +81,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
           <SubmitButton
             id={`draft-btn${idSuffix}`}
             disabled={disabled || isDraftButtonDisabled}
-            onClick={submitDraft}
+            onClick={handleDraftClick}
           >
             <Translate content="qvain.saveDraft" />
           </SubmitButton>
@@ -82,7 +103,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
           <SubmitButton
             id={`publish-btn${idSuffix}`}
             disabled={disabled || isPublishButtonDisabled}
-            onClick={() => submitPublish(goToDatasetsCallBack)}
+            onClick={handlePublishClick}
           >
             <Translate content="qvain.submit" />
           </SubmitButton>

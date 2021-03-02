@@ -143,7 +143,13 @@ class DatasetTable extends Component {
   }
 
   handleCreateNewVersion = async identifier => {
-    const { metaxApiV2, getQvainUrl } = this.props.Stores.Env
+    const {
+      Env: { metaxApiV2, getQvainUrl },
+      Matomo: { changeScope },
+    } = this.props.Stores
+
+    changeScope(`NEW_VERSION / ${identifier}`)
+
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for creating a new version')
       return
@@ -158,6 +164,7 @@ class DatasetTable extends Component {
   }
 
   postRemoveUpdate = (dataset, onlyChanges) => {
+    const { Matomo } = this.props.Stores
     // update dataset list after dataset removal
     let datasets = [...this.state.datasets]
     const identifier = dataset.identifier
@@ -168,8 +175,10 @@ class DatasetTable extends Component {
         delete datasetCopy.next_draft
         datasets[datasetIndex] = datasetCopy
       }
+      Matomo.changeScope(`REVERT / ${identifier}`)
     } else {
       datasets = datasets.filter(d => d.identifier !== identifier)
+      Matomo.changeScope(`DELETE / ${identifier}`)
     }
     const datasetGroups = groupDatasetsByVersionSet(datasets)
     this.setState(state => ({
@@ -200,7 +209,10 @@ class DatasetTable extends Component {
   }
 
   handleEnterEdit = dataset => () => {
-    const { getQvainUrl } = this.props.Stores.Env
+    const {
+      Env: { getQvainUrl },
+    } = this.props.Stores
+
     if (dataset.next_draft) {
       this.props.history.push(getQvainUrl(`/dataset/${dataset.next_draft.identifier}`))
       return
@@ -210,13 +222,18 @@ class DatasetTable extends Component {
   }
 
   handleUseAsTemplate = dataset => {
-    const { getQvainUrl } = this.props.Stores.Env
+    const {
+      Env: { getQvainUrl },
+      Qvain: { resetWithTemplate },
+      Matomo: { changeScope },
+    } = this.props.Stores
     this.props.history.push(getQvainUrl('/dataset'))
+    changeScope(`TEMPLATE / ${dataset.identifier}`)
 
     if (dataset.next_draft?.identifier) {
-      this.props.Stores.Qvain.resetWithTemplate(dataset.next_draft)
+      resetWithTemplate(dataset.next_draft)
     } else {
-      this.props.Stores.Qvain.resetWithTemplate(dataset)
+      resetWithTemplate(dataset)
     }
   }
 
