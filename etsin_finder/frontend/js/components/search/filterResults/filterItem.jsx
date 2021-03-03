@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
 
 import { withStores } from '../../../stores/stores'
 
-class FilterItem extends Component {
+export class FilterItem extends Component {
   constructor(props) {
     super(props)
 
