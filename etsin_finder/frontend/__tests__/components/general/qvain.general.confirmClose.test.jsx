@@ -17,7 +17,6 @@ import { ResponseOverlay } from '../../../js/components/qvain/general/modal/moda
 
 describe('ConfirmDialog', () => {
   let wrapper
-
   const props = {
     show: true,
     onCancel: jest.fn(),
@@ -37,6 +36,10 @@ describe('ConfirmDialog', () => {
   describe('given show is false', () => {
     beforeEach(() => {
       render({ show: false })
+    })
+
+    afterEach(() => {
+      jest.clearAllMocks()
     })
 
     test('should not render', () => {
@@ -64,20 +67,84 @@ describe('ConfirmDialog', () => {
         responsiveOverlay.prop('children').should.include(props.content.warning)
       })
 
-      describe.skip('DangerCancelButton', () => {
-        test('should not be disabled', () => {})
-        test('should have content of content.cancel', () => {})
+      describe('CancelButton', () => {
+        let cancelButton
+
+        beforeEach(() => {
+          cancelButton = wrapper.find(DangerCancelButton)
+        })
+
+        test('should not be disabled', () => {
+          cancelButton.prop('disabled').should.be.false
+        })
+
+        test('should have content of content.cancel', () => {
+          cancelButton.prop('children').should.include(props.content.cancel)
+        })
+
         describe('when triggering onClick', () => {
-          test('should call onCancel function', () => {})
+          beforeEach(() => {
+            cancelButton.simulate('click')
+          })
+
+          test('should call onCancel function', () => {
+            expect(props.onCancel).to.have.beenCalledTimes(1)
+          })
         })
       })
 
-      describe.skip('DangerButton', () => {
-        test('should not be disabled', () => {})
-        test('should have content of content.confirm', () => {})
-        describe('when triggering onClick', () => {
-          test('should call onConfirm function', () => {})
+      describe('ConfirmButton', () => {
+        let confirmButton
+
+        beforeEach(() => {
+          confirmButton = wrapper.find(DangerButton)
         })
+
+        test('should not be disabled', () => {
+          confirmButton.prop('disabled').should.be.false
+        })
+
+        test('should have content of content.confirm', () => {
+          confirmButton.prop('children').should.include(props.content.confirm)
+        })
+
+        describe('when triggering onClick', () => {
+          beforeEach(() => {
+            confirmButton.simulate('click')
+          })
+
+          test('should call onConfirm function', () => {
+            expect(props.onConfirm).to.have.beenCalledTimes(1)
+          })
+        })
+      })
+    })
+  })
+})
+
+describe('ConfirmClose', () => {
+  let wrapper
+
+  describe('given minimal props', () => {
+    beforeEach(() => {
+      const props = {
+        show: true,
+        onCancel: jest.fn(),
+        onConfirm: jest.fn(),
+      }
+
+      wrapper = shallow(<ConfirmClose {...props} />)
+    })
+
+    describe('ConfirmDialog', () => {
+      let dialog
+
+      beforeEach(() => {
+        dialog = wrapper.find(ConfirmDialog)
+      })
+
+      test('should render ConfirmDialog', () => {
+        dialog.exists().should.be.true
       })
     })
   })
