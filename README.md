@@ -9,6 +9,8 @@
     - `docker.com/get-started`
 2. If not installed, install docker-compose
     - `docs.docker.com/compose/install`
+3. Git clone this repository
+4. Git clone the repository etsin-finder-search and place it in the same root folder as etsin-finder
 
 ## 2. Development setup
 
@@ -30,9 +32,10 @@
 2. Edit your local /etc/hosts file to include the following two lines:
     - `0.0.0.0        etsin.fd-dev.csc.fi`
     - `0.0.0.0        qvain.fd-dev.csc.fi`
-3. Pull the two (2) custom Docker images from Artifactory (webpack, flask):
+3. Pull the three (3) custom Docker images from Artifactory (webpack, flask, rabbitmq):
     - `docker pull fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack`
     - `docker pull fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask` 
+    - `docker pull fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-search-rabbitmq` 
 4. To setup the frontend, run:
     - `cd etsin_finder/frontend && docker run --rm -v $PWD:/etsin_finder/frontend -it etsin-qvain-webpack npm install`
     - This will navigate you to the frontend folder and build the `node_modules` folder inside the Docker container, even if npm is not installed on the host machine. This may take a few minutes.
@@ -40,19 +43,13 @@
     - `docker run --rm -v $PWD:/etsin_finder/frontend -it etsin-qvain-webpack npm start`
     - This will build the `build` folder inside the Docker container, even if npm is not installed on the host machine
     - When the command is done, exit the process (`CTRL + C` or `CMD + C`), the build folder will be left in place
-6. Create a network so that external calls are available using the Python script in etsin-finder-search (step 7, below)
+6. Initiate swarm
     - `cd ../..`
     - `docker swarm init`
-    - `docker network create -d overlay --attachable elastic-network`
 7. Finally, run the app:
-    - `docker stack deploy -c docker-compose.yml etsin-qvain`
+    - ` docker stack deploy --compose-file etsin-finder/docker-compose.yml --compose-file etsin-finder-search/docker-compose.yml etsin-qvain`
     - This will start the app etsin-finder, which should then be available at the DNS addresses specified above in step 2.1, with hot reload enabled, and all dependencies installed inside Docker containers
-    - The backend (flask) and nginx will start first, followed by the frontend (webpack)
-8. Setup `etsin-finder-search` and load test datasets from Metax:
-    - Open new terminal window, go to etsin-finder-search (`git clone` the repository if not done already)
-    - `cd ../etsin-finder-search`
-    - `docker build -f python.dockerfile  -t etsin-search-python ./`
-    - `docker run --network=elastic-network etsin-search-python python load_test_data.py amount_of_datasets=199`
+    - The backend (flask), rabbitmq-consumer and nginx will start first, followed by the frontend (webpack)
 
 # Build status
 
