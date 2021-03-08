@@ -26,7 +26,6 @@ export const SkipToSubmitDataset = styled.button.attrs({
 
 export const ButtonContainer = styled.div`
   text-align: center;
-  padding-top: 2px;
   margin-left: auto;
   margin-right: auto;
 `
@@ -67,7 +66,6 @@ export const LinkText = styled.span`
   color: ${props => props.theme.color.linkColor};
   font-size: 18px;
   padding-left: 5px;
-  padding-top: 2px;
   line-height: 1;
   &:hover {
     color: ${props => darken(0.1, props.theme.color.linkColor)};

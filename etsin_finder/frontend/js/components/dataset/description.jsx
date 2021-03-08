@@ -109,6 +109,7 @@ class Description extends Component {
   }
 
   render() {
+    const { id } = this.props
     const versions = this.props.dataset.dataset_version_set
     const datasetIdentifier = this.props.dataset.identifier
     const isVersion =
@@ -117,7 +118,7 @@ class Description extends Component {
       versions.some(version => version.identifier === datasetIdentifier)
 
     return (
-      <div className="dsContent">
+      <div className="dsContent" id={id}>
         <Labels>
           <Controls>
             {this.props.dataset.data_catalog.catalog_json.dataset_versioning && isVersion && (
@@ -270,6 +271,7 @@ Description.propTypes = {
   }).isRequired,
   harvested: PropTypes.bool.isRequired,
   cumulative: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
 }
 
 const Title = styled.h1`

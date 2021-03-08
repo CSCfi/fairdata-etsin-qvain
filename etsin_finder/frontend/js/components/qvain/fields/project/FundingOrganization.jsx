@@ -5,7 +5,6 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import t from 'counterpart'
 
 import Card from '../../general/card'
 import OrganizationSelect from '../../general/input/organizationSelect'
@@ -67,7 +66,7 @@ const FundingOrganization = props => {
     if (!isEmptyObject(validationErrors)) {
       props.onChange({
         ...formData,
-        errors: [t('qvain.project.inputs.fundingAgency.contributorType.organization.validation')],
+        errors: ['qvain.project.inputs.fundingAgency.contributorType.organization.validation'],
       })
       return false
     }
@@ -98,7 +97,11 @@ const FundingOrganization = props => {
   return (
     <Card>
       <h3>
-        <Translate component="label" htmlFor="funding-organization" content="qvain.project.organization.title" />
+        <Translate
+          component="label"
+          htmlFor="funding-organization"
+          content="qvain.project.organization.title"
+        />
       </h3>
       <Translate component="p" content="qvain.project.organization.description" />
       <AddedOrganizations
