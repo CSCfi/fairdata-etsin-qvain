@@ -48,7 +48,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const fileCount = item.existingFileCount && `${item.existingFileCount} files`
   const size = sizeParse(item.byteSize || item.existingByteSize)
   const tagText = [fileCount, size].filter(v => v).join(', ')
-  const sizeTag = tagText ? <PlainTag width="10em">{tagText}</PlainTag> : null
+  const sizeTag = tagText ? <PlainTag nowrap>{tagText}</PlainTag> : null
 
   const isOpen = isDirectory(item) && directoryView.isOpen(item)
   if (isDirectory(item)) {
@@ -56,10 +56,10 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       <>
         <ToggleOpenButton item={item} directoryView={directoryView} />
         <Icon icon={isOpen ? faFolderOpen : faFolder} />
-        <ItemTitleBreaking>
-          {name}
+        <OverflowItemTitle title={name}>
+          <Name>{name}</Name>
           {item.loading && <SmallLoader />}
-        </ItemTitleBreaking>
+        </OverflowItemTitle>
       </>
     )
   } else {
@@ -67,7 +67,9 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       <>
         <NoIcon />
         <Icon icon={faFile} />
-        <ItemTitleBreaking>{name}</ItemTitleBreaking>
+        <OverflowItemTitle title={name}>
+          <Name>{name}</Name>
+        </OverflowItemTitle>
       </>
     )
   }
@@ -126,27 +128,32 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   )
 
   return (
-    <ItemRow isOpen={isOpen} style={{ flexWrap: 'wrap' }}>
+    <ItemRow isOpen={isOpen}>
       <ItemSpacer level={level} />
       <Group>{content}</Group>
-      <Group>
-        {sizeTag}
-        {infoButton}
-        {downloadButton}
-      </Group>
+      {sizeTag}
+      {infoButton}
+      {downloadButton}
     </ItemRow>
   )
 }
 
-const ItemTitleBreaking = styled(ItemTitle)`
-  word-break: normal;
-  overflow-wrap: anywhere;
-  min-width: 4em;
+const Name = styled.span`
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+`
+
+const OverflowItemTitle = styled(ItemTitle)`
+  overflow: hidden;
 `
 
 const Group = styled.div`
   display: flex;
   align-items: center;
+  flex-grow: 1;
+  min-width: 5em;
 
   &:last-child {
     margin-left: auto;

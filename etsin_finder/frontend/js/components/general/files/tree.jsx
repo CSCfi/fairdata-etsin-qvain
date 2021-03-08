@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { LinkButton } from '../button'
 import { ItemRow, Items, ItemSpacer, isDirectory } from './items'
-import Loader from '../loader'
+import DefaultLoader from '../loader'
 
 // propagate properties from parent directories
 const getParentArgs = (directoryView, parent, parentArgs) => ({
@@ -60,22 +60,28 @@ export const useRenderTree = (
   {
     Files,
     directoryView,
+    Loader = null,
     Item, // component used for rendering a single item
     EmptyHelp = () => null, // component shown when there are no visible items
+    NoProjectHelp = () => null, // component shown when project root fails to load
     moreItemsLevel = 0, // indentation for the "Show All Items" button to account for space taken by buttons
   },
   extraProps
 ) => {
   const renderTree = () => {
-    const { root, loadingProject } = Files
-    const loading = loadingProject && !loadingProject.error
+    const { root, isLoadingProject, selectedProject } = Files
     const treeProps = { Files, Item, directoryView, moreItemsLevel, EmptyHelp, extraProps }
-    return (
-      <>
-        {loading && <Loader active />}
-        <Items>{root && drawChildren(treeProps, root)}</Items>
-      </>
-    )
+    const LoaderComponent = Loader || DefaultLoader
+
+    if (isLoadingProject) {
+      return <LoaderComponent active />
+    }
+
+    if (selectedProject && !root) {
+      return <NoProjectHelp />
+    }
+
+    return <Items>{root && drawChildren(treeProps, root)}</Items>
   }
 
   return { renderTree }

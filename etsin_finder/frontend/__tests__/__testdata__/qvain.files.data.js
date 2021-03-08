@@ -29,6 +29,7 @@
 //   info.csv *
 //   stuff.csv *
 
+import { getReferenceData } from './referenceData.data'
 
 // /datasets/edit/[identifier]
 export const dataset = {
@@ -1903,6 +1904,10 @@ export const get = (rawURL) => {
   const crIdentifier = searchParams.get('cr_identifier')
   const notCRIdentifier = searchParams.get('not_cr_identifier')
   const dirID = searchParams.get('dir_id')
+
+  if (getReferenceData(path)) {
+    return Promise.resolve({ data: getReferenceData(path) })
+  }
 
   const matchDatasetProjects = reDatasetProjects.exec(path)
   if (matchDatasetProjects) {

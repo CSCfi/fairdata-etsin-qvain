@@ -143,7 +143,7 @@ export class DirectoryFormBase extends Component {
     const { titleError, descriptionError, directoryError, useCategoryError } = this.state
     return (
       <DirectoryContainer className={this.props.className}>
-        <Label>
+        <Label htmlFor="directory-form-title">
           <Translate content="qvain.files.selected.form.title.label" /> *
         </Label>
         <Translate
@@ -157,9 +157,10 @@ export class DirectoryFormBase extends Component {
           }
           onBlur={this.handleTitleBlur}
           attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
+          id="directory-form-title"
         />
         {titleError !== undefined && <ValidationError>{titleError}</ValidationError>}
-        <Label>
+        <Label htmlFor="directory-form-description">
           <Translate content="qvain.files.selected.form.description.label" />
         </Label>
         <Translate
@@ -173,9 +174,10 @@ export class DirectoryFormBase extends Component {
           }
           onBlur={this.handleDescriptionBlur}
           attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
+          id="directory-form-description"
         />
         {descriptionError !== undefined && <ValidationError>{descriptionError}</ValidationError>}
-        <Label>
+        <Label htmlFor="directory-form-use-category">
           <Translate content="qvain.files.selected.form.use.label" /> *
         </Label>
         <Translate
@@ -193,6 +195,7 @@ export class DirectoryFormBase extends Component {
           menuPosition="fixed"
           menuShouldScrollIntoView={false}
           attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
+          inputId="directory-form-use-category"
         />
         {useCategoryError !== undefined && <ValidationError>{useCategoryError}</ValidationError>}
         {directoryError !== undefined && <ValidationError>{directoryError}</ValidationError>}

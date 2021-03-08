@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import ReactSelect from 'react-select'
-import t from 'counterpart'
 
 import Card from '../../general/card'
 import OrganizationSelect from '../../general/input/organizationSelect'
@@ -124,7 +123,7 @@ const FundingAgencyForm = props => {
         errors: {
           ...errors,
           organization: [
-            t('qvain.project.inputs.fundingAgency.contributorType.organization.validation'),
+            'qvain.project.inputs.fundingAgency.contributorType.organization.validation',
           ],
         },
       })
