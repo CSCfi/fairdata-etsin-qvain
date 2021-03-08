@@ -1,11 +1,11 @@
 const dataCatalog = {
-  "id": 10,
+  "id": 9,
   "catalog_json": {
     "logo": "fairdata_tree_logo.svg",
     "title": {
-      "en": "Fairdata general register",
-      "fi": "Fairdata yleiskatalogi",
-      "sv": "Fairdata allmänt register"
+      "en": "Fairdata IDA datasets",
+      "fi": "Fairdata IDA-aineistot",
+      "sv": "Fairdata forskningsdata"
     },
     "language": [
       {
@@ -43,7 +43,7 @@ const dataCatalog = {
         }
       ]
     },
-    "identifier": "urn:nbn:fi:att:data-catalog-att",
+    "identifier": "urn:nbn:fi:att:data-catalog-ida",
     "access_rights": {
       "license": [
         {
@@ -67,18 +67,18 @@ const dataCatalog = {
         }
       ],
       "description": {
-        "en": "Contains datasets that are not stored in the Finnish Fairdata services.",
-        "fi": "Sisältää esimerkiksi verkkoaineistot, rajapinnat ja muut muualla kuin fairdata-palveluissa säilytettävät aineistot."
+        "en": "Datasets stored in the IDA service",
+        "fi": "IDA-palvelussa säilytettävät aineistot"
       }
     },
-    "dataset_versioning": false,
-    "research_dataset_schema": "att"
+    "dataset_versioning": true,
+    "research_dataset_schema": "ida"
   },
   "catalog_record_services_edit": "ida,metax,qvain,qvain-light,tpas",
   "catalog_record_services_create": "ida,metax,qvain,qvain-light,tpas",
   "catalog_record_services_read": "ida,metax,qvain,qvain-light,etsin,tpas,download",
   "date_modified": "2020-12-16T12:23:48+02:00",
-  "date_created": "2019-09-25T16:38:35+03:00",
+  "date_created": "2019-09-25T16:38:34+03:00",
   "service_modified": "metax",
   "service_created": "metax",
   "removed": false
@@ -86,10 +86,9 @@ const dataCatalog = {
 
 const dataset = {
   "id": 1929,
-  "identifier": "162e04c5-857b-477c-a452-cd063ee3c44d",
+  "identifier": "6d2cb5f5-4867-47f7-9874-09357f2901a3",
   "data_catalog": dataCatalog,
   "deprecated": false,
-  "metadata_owner_org": "test.csc.fi",
   "metadata_provider_org": "test.csc.fi",
   "metadata_provider_user": "teppo",
   "research_dataset": {
@@ -265,92 +264,6 @@ const dataset = {
       },
       "identifier": "https://orcid.org/person"
     },
-    "provenance": [
-      {
-        "title": {
-          "en": "Provenance name",
-          "fi": "Provenanssin nimi",
-          "und": "Provenanssin nimi"
-        },
-        "spatial": {
-          "as_wkt": [
-            "POINT(18.923 50.347)"
-          ],
-          "place_uri": {
-            "in_scheme": "http://www.yso.fi/onto/yso/places",
-            "identifier": "http://www.yso.fi/onto/yso/p112355",
-            "pref_label": {
-              "en": "Bytom",
-              "fi": "Bytom",
-              "sv": "Bytom",
-              "und": "Bytom"
-            }
-          },
-          "geographic_name": "Provenanssipaikka"
-        },
-        "temporal": {
-          "end_date": "2021-02-23T00:00:00.000Z",
-          "start_date": "2021-02-03T00:00:00.000Z"
-        },
-        "description": {
-          "en": "Provenance description",
-          "fi": "Provenanssin kuvaus",
-          "und": "Provenanssin kuvaus"
-        },
-        "used_entity": [
-          {
-            "type": {
-              "identifier": "http://uri.suomi.fi/codelist/fairdata/resource_type/code/instrument"
-            },
-            "title": {
-              "en": "Title of entity used by provenance",
-              "und": "Title of entity used by provenance"
-            },
-            "identifier": "https://example.com/provenance/entity",
-            "description": {
-              "en": "Description of entity used by provenance",
-              "und": "Description of entity used by provenance"
-            }
-          }
-        ],
-        "event_outcome": {
-          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/event_outcome",
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/event_outcome/code/unknown",
-          "pref_label": {
-            "en": "Unknown",
-            "fi": "Tuntematon",
-            "sv": "Ok\u00e4nt",
-            "und": "Tuntematon"
-          }
-        },
-        "lifecycle_event": {
-          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event",
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event/code/checked",
-          "pref_label": {
-            "en": "Checked",
-            "fi": "Tarkistettu",
-            "und": "Tarkistettu"
-          }
-        },
-        "outcome_description": {
-          "en": "Outcome description",
-          "fi": "Tuloksen kuvaus",
-          "und": "Tuloksen kuvaus"
-        },
-        "was_associated_with": [
-          {
-            "name": {
-              "en": "Aalto University",
-              "fi": "Aalto yliopisto",
-              "sv": "Aalto universitetet",
-              "und": "Aalto yliopisto"
-            },
-            "@type": "Organization",
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076"
-          }
-        ]
-      }
-    ],
     "contributor": [
       {
         "name": "Human Person",
@@ -555,131 +468,20 @@ const dataset = {
         "notation": "https://doi.org/another_identifier"
       }
     ],
-    "provenance": [
-      {
-        "title": {
-          "en": "Provenance name",
-          "fi": "Provenanssin nimi",
-          "und": "Provenanssin nimi"
-        },
-        "spatial": {
-          "as_wkt": [
-            "POINT(18.923 50.347)"
-          ],
-          "place_uri": {
-            "in_scheme": "http://www.yso.fi/onto/yso/places",
-            "identifier": "http://www.yso.fi/onto/yso/p112355",
-            "pref_label": {
-              "en": "Bytom",
-              "fi": "Bytom",
-              "sv": "Bytom",
-              "und": "Bytom"
-            }
-          },
-          "geographic_name": "Provenanssipaikka"
-        },
-        "temporal": {
-          "end_date": "2021-02-23T00:00:00.000Z",
-          "start_date": "2021-02-03T00:00:00.000Z"
-        },
-        "description": {
-          "en": "Provenance description",
-          "fi": "Provenanssin kuvaus",
-          "und": "Provenanssin kuvaus"
-        },
-        "used_entity": [
-          {
-            "type": {
-              "identifier": "http://uri.suomi.fi/codelist/fairdata/resource_type/code/instrument"
-            },
-            "title": {
-              "en": "Title of entity used by provenance",
-              "und": "Title of entity used by provenance"
-            },
-            "identifier": "https://example.com/provenance/entity",
-            "description": {
-              "en": "Description of entity used by provenance",
-              "und": "Description of entity used by provenance"
-            }
-          }
-        ],
-        "event_outcome": {
-          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/event_outcome",
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/event_outcome/code/unknown",
-          "pref_label": {
-            "en": "Unknown",
-            "fi": "Tuntematon",
-            "sv": "Okänt",
-            "und": "Tuntematon"
-          }
-        },
-        "lifecycle_event": {
-          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event",
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event/code/checked",
-          "pref_label": {
-            "en": "Checked",
-            "fi": "Tarkistettu",
-            "und": "Tarkistettu"
-          }
-        },
-        "outcome_description": {
-          "en": "Outcome description",
-          "fi": "Tuloksen kuvaus",
-          "und": "Tuloksen kuvaus"
-        },
-        "was_associated_with": [
-          {
-            "name": {
-              "en": "Aalto University",
-              "fi": "Aalto yliopisto",
-              "sv": "Aalto universitetet",
-              "und": "Aalto yliopisto"
-            },
-            "@type": "Organization",
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076"
-          }
-        ]
-      }
-    ],
-    "remote_resources": [
-      {
-        "title": "A Resource",
-        "access_url": {
-          "identifier": "https://access.url"
-        },
-        "download_url": {
-          "identifier": "https://download.url"
-        },
-        "use_category": {
-          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/use_category",
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/documentation",
-          "pref_label": {
-            "en": "Documentation",
-            "fi": "Dokumentaatio",
-            "und": "Dokumentaatio"
-          }
-        }
-      }
-    ],
-    "preferred_identifier": "urn:nbn:fi:att:be05442c-1cb6-4fb3-999b-d076d12c7842",
-    "metadata_version_identifier": "746e5452-f281-4b51-be23-23709985c4b1",
-    "total_remote_resources_byte_size": 0
+    "preferred_identifier": "draft:162e04c5-857b-477c-a452-cd063ee3c44d",
+    "metadata_version_identifier": "2037942d-a9d1-44d8-bd6c-818a0278db83"
   },
   "preservation_state": 0,
-  "state": "published",
+  "state": "draft",
+  "use_doi_for_published": false,
   "cumulative_state": 0,
-  "access_granter": {
-    "name": "tepp\u00e5 testaaja",
-    "email": "teponemail@example.com",
-    "userid": "teppo"
-  },
   "api_meta": {
     "version": 2
   },
-  "date_modified": "2021-02-10T12:03:42+02:00",
-  "date_created": "2021-02-10T11:44:51+02:00",
-  "service_modified": "qvain",
-  "service_created": "qvain",
+  "date_modified": "2021-01-28T10:26:12+02:00",
+  "date_created": "2021-01-28T10:06:32+02:00",
+  "service_modified": "qvain-light",
+  "service_created": "qvain-light",
   "removed": false
 }
 
