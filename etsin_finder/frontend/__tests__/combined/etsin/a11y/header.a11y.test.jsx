@@ -8,24 +8,21 @@ import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
 import stores from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
-import LandingPage from '../../../../js/components/qvain/views/landingPage/index.jsx'
-import Accessibility from '../../../../js/stores/view/accessibility'
+import EtsinHeader from '../../../../js/components/header'
 
-jest.mock('../../../../js/stores/view/accessibility')
 expect.extend(toHaveNoViolations)
 
-describe('Qvain landing page', () => {
+describe('Etsin header', () => {
   let wrapper
 
   beforeAll(async () => {
-    Accessibility.handleNavigation = jest.fn()
     wrapper = mount(
       <StoresProvider store={stores}>
         <BrowserRouter>
           <ThemeProvider theme={etsinTheme}>
-            <main>
-              <LandingPage />
-            </main>
+            <header>
+              <EtsinHeader />
+            </header>
           </ThemeProvider>
         </BrowserRouter>
       </StoresProvider>
@@ -40,9 +37,5 @@ describe('Qvain landing page', () => {
   it('should be accessible', async () => {
     const results = await axe(wrapper.getDOMNode())
     expect(results).toHaveNoViolations()
-  })
-
-  it('should call Accessibility.handleNavigation', async () => {
-    expect(Accessibility.handleNavigation.mock.calls).toEqual([[]])
   })
 })
