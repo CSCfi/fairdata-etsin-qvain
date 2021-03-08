@@ -6,6 +6,7 @@ import { useStores } from '../../utils/stores'
 
 const LandingPage = () => {
   const { Accessibility } = useStores()
+
   useEffect(() => {
     Accessibility.handleNavigation()
   }, [Accessibility])
