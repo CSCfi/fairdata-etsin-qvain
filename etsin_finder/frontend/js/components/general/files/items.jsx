@@ -239,4 +239,5 @@ export const PlainTag = styled.div`
   margin-right: 0.5rem;
   padding: 1px 4px;
   width: ${p => p.width || 'auto'};
+  ${p => p.nowrap && 'white-space: nowrap'};
 `
