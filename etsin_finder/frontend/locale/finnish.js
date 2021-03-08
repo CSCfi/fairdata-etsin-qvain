@@ -110,8 +110,8 @@ const finnish = {
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
       errors: {
-        serviceUnavailable: 'Latauspalvelu ei ole tällä hetkellä tavoitettavissa. Yritä myöhemmin uudelleen.',
-        unknownError: 'Latauspalvelun käytössä tapahtui virhe.',
+        serviceUnavailable: 'Latauspalvelu ei ole juuri nyt käytettävissä. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
+        unknownError: 'Latauspalvelun käytössä tapahtui virhe. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
       },
       packages: {
         createForAll: 'Lataa kaikki',
@@ -293,7 +293,7 @@ const finnish = {
     },
     cookies: {
       section: 'Evästeiden hyväksyminen',
-      accept: 'Hyväksy evästeet',
+      close: 'Sulje',
       infoText:
         'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
       link: 'Katso Fairdatan tietosuojakäytäntö',
@@ -1004,9 +1004,9 @@ const finnish = {
           string: 'Nimen täytyy olla merkkijono.',
         },
         organization: {
-            name: 'Nimi täytyy täyttää',
-            email: 'Sähköpostiosoite ei kelpaa',
-            min: 'Vähintään yksi organisaatio tarvitaan',
+          name: 'Nimi täytyy täyttää',
+          email: 'Sähköpostiosoite ei kelpaa',
+          min: 'Vähintään yksi organisaatio tarvitaan',
         },
         fundingAgency: {
           contributorType: {
@@ -1134,6 +1134,7 @@ const finnish = {
       },
       addItemsModal: {
         allSelected: 'Kaikki projektin tiedostot ja hakemistot ovat jo aineistossa.',
+        noProject: 'Projekti puuttuu tai siinä ei ole tiedostoja.',
         title: 'Lisää tiedostoja projektista',
         buttons: {
           save: 'Lisää tiedostot',
