@@ -1905,7 +1905,7 @@ export const get = (rawURL) => {
   const notCRIdentifier = searchParams.get('not_cr_identifier')
   const dirID = searchParams.get('dir_id')
 
-  if (getReferenceData(path)) {
+  if (path.startsWith('/es/')) {
     return Promise.resolve({ data: getReferenceData(path) })
   }
 
