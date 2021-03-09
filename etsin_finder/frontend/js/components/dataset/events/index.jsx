@@ -161,7 +161,7 @@ class Events extends Component {
 
   render() {
     return (
-      <Margin>
+      <Margin id={this.props.id}>
         {
           // Display events table header if provenance exists of if deleted versions exist
           (this.checkProvenance(this.props.provenance) || this.checkDeleted()) && (
@@ -423,6 +423,7 @@ Events.propTypes = {
   other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   preservation_dataset_origin_version_identifier: PropTypes.object,
   dataset_version_set: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  id: PropTypes.string.isRequired,
 }
 
 const InlineUl = styled.ul`

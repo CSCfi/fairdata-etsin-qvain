@@ -55,6 +55,7 @@ class Maps extends Component {
       }),
     }).isRequired,
     spatial: TypeLocation.isRequired,
+    id: PropTypes.string.isRequired,
   }
 
   componentDidMount() {
@@ -64,7 +65,7 @@ class Maps extends Component {
 
   render() {
     return (
-      <div>
+      <div id={this.props.id}>
         {/* Map details in a table list (this is not the actual map) */}
         <Table>
           {/* Table header */}

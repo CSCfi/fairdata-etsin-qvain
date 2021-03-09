@@ -41,7 +41,7 @@ class Data extends Component {
     const { metaxApiV2 } = this.props.Stores.Env
 
     return (
-      <div>
+      <div id={this.props.id}>
         {metaxApiV2 && !this.props.hasRemote && <IdaResourcesV2 dataset={this.props.dataset} />}
         {!metaxApiV2 && this.props.hasFiles && <IdaResources dataset={this.props.dataset} />}
         {this.props.hasRemote && <ExternalResources />}
@@ -63,6 +63,7 @@ Data.propTypes = {
   }).isRequired,
   hasFiles: PropTypes.bool.isRequired,
   hasRemote: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
 }
 
 export default withStores(observer(Data))
