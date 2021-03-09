@@ -47,9 +47,15 @@
     - `cd ../..`
     - `docker swarm init`
 7. Finally, run the app:
+    - `cd ../`
     - ` docker stack deploy --compose-file etsin-finder/docker-compose.yml --compose-file etsin-finder-search/docker-compose.yml etsin-qvain`
     - This will start the app etsin-finder, which should then be available at the DNS addresses specified above in step 2.1, with hot reload enabled, and all dependencies installed inside Docker containers
     - The backend (flask), rabbitmq-consumer and nginx will start first, followed by the frontend (webpack)
+
+## 3. Exit development
+
+How to exit development mode
+    - `docker stack rm etsin-qvain`
 
 # Build status
 
