@@ -17,6 +17,7 @@ import DatasetGroup from './datasetGroup'
 import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
 import etsinTheme from '../../../../styles/theme'
 import { withStores } from '../../../../stores/stores'
+import Matomo from '../../../../stores/tracking'
 
 class DatasetTable extends Component {
   promises = []
@@ -214,9 +215,12 @@ class DatasetTable extends Component {
     } = this.props.Stores
 
     if (dataset.next_draft) {
+      Matomo.changeScope(`EDIT / ${dataset.next_draft.identifier}`)
       this.props.history.push(getQvainUrl(`/dataset/${dataset.next_draft.identifier}`))
       return
     }
+
+    Matomo.changeScope(`EDIT / ${dataset.identifier}`)
     this.props.Stores.Qvain.editDataset(dataset)
     this.props.history.push(getQvainUrl(`/dataset/${dataset.identifier}`))
   }
