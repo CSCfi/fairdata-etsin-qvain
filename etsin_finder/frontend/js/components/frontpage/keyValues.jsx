@@ -92,8 +92,8 @@ class KeyValues extends Component {
   render() {
     const SearchFilters = this.props.Stores.SearchFilters
     return this.state.error ? null : (
-      <aside>
-        <CustomBox>
+      <CustomBox>
+        <ValueList>
           <Value>
             {this.state.loaded ? (
               <div>
@@ -177,8 +177,8 @@ class KeyValues extends Component {
               </div>
             )}
           </Value>
-        </CustomBox>
-      </aside>
+        </ValueList>
+      </CustomBox>
     )
   }
 }
@@ -191,9 +191,6 @@ export default withStores(observer(KeyValues))
 
 const CustomBox = styled(ContentBox)`
   margin-bottom: 2em;
-  display: inline-flex;
-  justify-content: space-around;
-  width: 100%;
 `
 
 const H1Skeleton = styled.div`
@@ -218,7 +215,13 @@ const PSkeleton = styled.div`
   border-radius: 3px;
 `
 
-const Value = styled.div`
+const ValueList = styled.ul`
+  display: inline-flex;
+  justify-content: space-around;
+  width: 100%;
+`
+
+const Value = styled.li`
   text-align: center;
   h1 {
     margin-bottom: 0;

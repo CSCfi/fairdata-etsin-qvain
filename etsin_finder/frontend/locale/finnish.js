@@ -80,6 +80,7 @@ const finnish = {
     data_location: 'Mene haravoituun sijaintiin',
     datasetAsFile: {
       open: 'Lataa aineiston metatiedot',
+      infoLabel: 'Formaatin tiedot',
       infoText:
         'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
       datacite: 'Datacite tietomallissa (XML)',
