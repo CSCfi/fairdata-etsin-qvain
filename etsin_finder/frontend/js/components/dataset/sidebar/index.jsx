@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import translate from 'counterpart'
 
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import checkNested from '../../../utils/checkNested'
@@ -160,9 +159,16 @@ class Sidebar extends Component {
             {/* DATA CATALOG LOGO */}
             {logo && (
               <SidebarItem>
-                <Logo
+                {/* <Logo
                   lang={getDataLang(catalogTitle)}
                   alt={translate('dataset.catalog_alt_text', { title })}
+                  file={logo}
+                  url={catalogPublisherHomepage}
+                /> */}
+                <Translate
+                  component={Logo}
+                  attributes={{ alt: 'dataset.catalog_alt_text' }}
+                  with={{ title }}
                   file={logo}
                   url={catalogPublisherHomepage}
                 />
