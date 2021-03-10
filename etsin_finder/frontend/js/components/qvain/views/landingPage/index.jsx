@@ -8,7 +8,8 @@ const LandingPage = () => {
   const { Accessibility, Matomo } = useStores()
   useEffect(() => {
     Accessibility.handleNavigation()
-    Matomo.changeScope('HOME')
+    Matomo.changeService('QVAIN')
+    Matomo.recordEvent('HOME')
   }, [Accessibility, Matomo])
 
   return (

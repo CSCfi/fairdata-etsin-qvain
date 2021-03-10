@@ -42,7 +42,7 @@ exports[`Qvain should render correctly 1`] = `
         ],
       },
       "Matomo": Object {
-        "changeScope": [MockFunction],
+        "recordEvent": [MockFunction],
       },
       "Qvain": Qvain {
         "AccessType": AccessType {
@@ -1512,7 +1512,7 @@ exports[`Qvain.Description should render <Description /> 1`] = `
         ],
       },
       "Matomo": Object {
-        "changeScope": [MockFunction],
+        "recordEvent": [MockFunction],
       },
       "Qvain": Qvain {
         "AccessType": AccessType {
@@ -2982,7 +2982,7 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
         ],
       },
       "Matomo": Object {
-        "changeScope": [MockFunction],
+        "recordEvent": [MockFunction],
       },
       "Qvain": Qvain {
         "AccessType": AccessType {
@@ -4452,7 +4452,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
         ],
       },
       "Matomo": Object {
-        "changeScope": [MockFunction],
+        "recordEvent": [MockFunction],
       },
       "Qvain": Qvain {
         "AccessType": AccessType {
@@ -5922,7 +5922,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
         ],
       },
       "Matomo": Object {
-        "changeScope": [MockFunction],
+        "recordEvent": [MockFunction],
       },
       "Qvain": Qvain {
         "AccessType": AccessType {
@@ -7392,7 +7392,7 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
         ],
       },
       "Matomo": Object {
-        "changeScope": [MockFunction],
+        "recordEvent": [MockFunction],
       },
       "Qvain": Qvain {
         "AccessType": AccessType {

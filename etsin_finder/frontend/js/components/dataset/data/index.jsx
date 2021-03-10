@@ -24,7 +24,7 @@ class Data extends Component {
   componentDidMount() {
     const {
       DatasetQuery,
-      Matomo: { changeScope },
+      Matomo: { recordEvent },
       Env: { downloadApiV2 },
     } = this.props.Stores
 
@@ -34,7 +34,7 @@ class Data extends Component {
       DatasetQuery.fetchPackages()
     }
 
-    changeScope(`DATA / ${this.props.match?.params?.identifier}`)
+    recordEvent(`DATA / ${this.props.match?.params?.identifier}`)
   }
 
   render() {

@@ -25,7 +25,7 @@ useStores.mockReturnValue({
     setPublishedDataset: jest.fn(),
   },
   Matomo: {
-    changeScope: jest.fn(),
+    recordEvent: jest.fn(),
   },
 })
 

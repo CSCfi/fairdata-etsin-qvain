@@ -41,7 +41,7 @@ const getGoToEtsinButton = (dataset, getEtsinUrl, Matomo) => {
     <Translate
       component={TableButton}
       onClick={() => {
-        Matomo.changeScope(`PREVIEW / ${identifier}`)
+        Matomo.recordEvent(`PREVIEW / ${identifier}`)
         window.open(getEtsinUrl(`/dataset/${identifier}${query}`), '_blank')
       }}
       content={`qvain.datasets.${goToEtsinKey}`}

@@ -51,7 +51,7 @@ class SearchBar extends Component {
     e.preventDefault()
     const { ElasticQuery, Matomo } = this.props.Stores
 
-    Matomo.changeScope(`SEARCH / ${this.state.query}`)
+    Matomo.recordEvent(`SEARCH / ${this.state.query}`)
     ElasticQuery.updateSearch(this.state.query)
     ElasticQuery.queryES(false)
   }

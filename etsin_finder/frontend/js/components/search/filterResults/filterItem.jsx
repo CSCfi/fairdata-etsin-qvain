@@ -40,9 +40,9 @@ export class FilterItem extends Component {
 
     if (this.isActive()) {
       // will toggle to not active
-      Matomo.changeScope(`UNFILTER / ${this.props.sectionTitleEn} / ${this.state.key}`)
+      Matomo.recordEvent(`UNFILTER / ${this.props.sectionTitleEn} / ${this.state.key}`)
     } else {
-      Matomo.changeScope(`FILTER / ${this.props.sectionTitleEn} / ${this.state.key}`)
+      Matomo.recordEvent(`FILTER / ${this.props.sectionTitleEn} / ${this.state.key}`)
     }
 
     ElasticQuery.updateFilter(this.state.term, this.state.key)

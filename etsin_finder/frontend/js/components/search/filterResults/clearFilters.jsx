@@ -22,7 +22,7 @@ const ClearFilters = () => {
   const { ElasticQuery, Matomo } = useStores()
 
   const clear = () => {
-    Matomo.changeScope('CLEAR_FILTERS')
+    Matomo.recordEvent('CLEAR_FILTERS')
     ElasticQuery.clearFilters()
     ElasticQuery.queryES()
     Accessibility.announce(translate('search.filter.filtersCleared'))

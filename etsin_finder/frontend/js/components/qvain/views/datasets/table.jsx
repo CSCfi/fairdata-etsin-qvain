@@ -17,7 +17,6 @@ import DatasetGroup from './datasetGroup'
 import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
 import etsinTheme from '../../../../styles/theme'
 import { withStores } from '../../../../stores/stores'
-import Matomo from '../../../../stores/tracking'
 
 class DatasetTable extends Component {
   promises = []
@@ -146,10 +145,10 @@ class DatasetTable extends Component {
   handleCreateNewVersion = async identifier => {
     const {
       Env: { metaxApiV2, getQvainUrl },
-      Matomo: { changeScope },
+      Matomo: { recordEvent },
     } = this.props.Stores
 
-    changeScope(`NEW_VERSION / ${identifier}`)
+    recordEvent(`NEW_VERSION / ${identifier}`)
 
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for creating a new version')
@@ -176,10 +175,10 @@ class DatasetTable extends Component {
         delete datasetCopy.next_draft
         datasets[datasetIndex] = datasetCopy
       }
-      Matomo.changeScope(`REVERT / ${identifier}`)
+      Matomo.recordEvent(`REVERT / ${identifier}`)
     } else {
       datasets = datasets.filter(d => d.identifier !== identifier)
-      Matomo.changeScope(`DELETE / ${identifier}`)
+      Matomo.recordEvent(`DELETE / ${identifier}`)
     }
     const datasetGroups = groupDatasetsByVersionSet(datasets)
     this.setState(state => ({
@@ -212,15 +211,16 @@ class DatasetTable extends Component {
   handleEnterEdit = dataset => () => {
     const {
       Env: { getQvainUrl },
+      Matomo,
     } = this.props.Stores
 
     if (dataset.next_draft) {
-      Matomo.changeScope(`EDIT / ${dataset.next_draft.identifier}`)
+      Matomo.recordEvent(`EDIT / ${dataset.next_draft.identifier}`)
       this.props.history.push(getQvainUrl(`/dataset/${dataset.next_draft.identifier}`))
       return
     }
 
-    Matomo.changeScope(`EDIT / ${dataset.identifier}`)
+    Matomo.recordEvent(`EDIT / ${dataset.identifier}`)
     this.props.Stores.Qvain.editDataset(dataset)
     this.props.history.push(getQvainUrl(`/dataset/${dataset.identifier}`))
   }
@@ -229,10 +229,10 @@ class DatasetTable extends Component {
     const {
       Env: { getQvainUrl },
       Qvain: { resetWithTemplate },
-      Matomo: { changeScope },
+      Matomo: { recordEvent },
     } = this.props.Stores
     this.props.history.push(getQvainUrl('/dataset'))
-    changeScope(`TEMPLATE / ${dataset.identifier}`)
+    recordEvent(`TEMPLATE / ${dataset.identifier}`)
 
     if (dataset.next_draft?.identifier) {
       resetWithTemplate(dataset.next_draft)

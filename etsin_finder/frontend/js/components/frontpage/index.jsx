@@ -46,7 +46,7 @@ class FrontPage extends Component {
 
   componentDidMount() {
     const {
-      Matomo: { changeScope },
+      Matomo: { recordEvent },
     } = this.props.Stores
 
     Accessibility.handleNavigation('home')
@@ -56,7 +56,7 @@ class FrontPage extends Component {
     // Check the user status, and display modal message if user is not authenticated
     this.checkUserLoginStatus()
 
-    changeScope('HOME')
+    recordEvent('HOME')
   }
 
   checkUserLoginStatus() {

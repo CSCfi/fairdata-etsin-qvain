@@ -256,13 +256,13 @@ export class Qvain extends Component {
     const identifier = this.props.match.params.identifier
     const { original } = this.props.Stores.Qvain
     const {
-      Matomo: { changeScope },
+      Matomo: { recordEvent },
     } = this.props.Stores
 
     if (identifier) {
-      changeScope(`DATASET / ${identifier}`)
+      recordEvent(`DATASET / ${identifier}`)
     } else {
-      changeScope('DATASET')
+      recordEvent('DATASET')
     }
 
     // Test if we need to load a dataset or do we use the one currently in store

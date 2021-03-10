@@ -96,10 +96,10 @@ class Description extends Component {
 
   componentDidMount() {
     const {
-      Matomo: { changeScope },
+      Matomo: { recordEvent },
     } = this.props.Stores
     Accessibility.handleNavigation('dataset', false)
-    changeScope(`DETAILS / ${this.props.dataset.identifier}`)
+    recordEvent(`DETAILS / ${this.props.dataset.identifier}`)
   }
 
   checkEmails(obj) {

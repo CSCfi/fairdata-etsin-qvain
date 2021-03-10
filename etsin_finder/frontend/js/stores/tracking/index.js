@@ -1,10 +1,11 @@
 class Matomo {
   constructor(Env) {
     this.Env = Env
+    this.serviceMetaTag = document.querySelector('meta[name="fdwe-service"]')
+    this.scopeMetaTag = document.querySelector('meta[name="fdwe-scope"]')
   }
 
-  isMatomoLoaded = false
-
+  /*
   loadMatomoWithScope = scope => {
     const scopeMetaTag = document.createElement('meta')
     scopeMetaTag.setAttribute('name', 'fdwe-scope')
@@ -16,25 +17,18 @@ class Matomo {
     document.head.appendChild(script)
     this.isMatomoLoaded = true
   }
-
+*/
   changeService = service => {
     if (this.Env?.Flags?.flagEnabled('MATOMO_TRACKING')) {
-      const metaTag = document.querySelector('meta[name="fdwe-service"]')
-      metaTag.setAttribute('content', service)
-      console.log('service', metaTag)
+      this.serviceMetaTag.setAttribute('content', service)
     }
   }
 
-  changeScope = scope => {
+  recordEvent = scope => {
     if (this.Env?.Flags?.flagEnabled('MATOMO_TRACKING')) {
-      if (!this.isMatomoLoaded) {
-        this.loadMatomoWithScope(scope)
-      } else {
-        const scopeMetaTag = document.querySelector('meta[name="fdwe-scope"]')
-        scopeMetaTag.setAttribute('content', scope)
-        // eslint-disable-next-line
-        fdweRecordEvent()
-      }
+      this.scopeMetaTag.setAttribute('content', scope)
+      // eslint-disable-next-line
+      fdweRecordEvent()
     }
   }
 }

@@ -49,9 +49,9 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
     submitDraft()
 
     if (original?.identifier) {
-      Matomo.changeScope(`DRAFT / ${original.identifier}`)
+      Matomo.recordEvent(`DRAFT / ${original.identifier}`)
     } else {
-      Matomo.changeScope('DRAFT')
+      Matomo.recordEvent('DRAFT')
     }
   }
 
@@ -59,9 +59,9 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
     submitPublish(goToDatasetsCallBack)
 
     if (original?.identifier) {
-      Matomo.changeScope(`PUBLISH / ${original.identifier}`)
+      Matomo.recordEvent(`PUBLISH / ${original.identifier}`)
     } else {
-      Matomo.changeScope('PUBLISH')
+      Matomo.recordEvent('PUBLISH')
     }
   }
 

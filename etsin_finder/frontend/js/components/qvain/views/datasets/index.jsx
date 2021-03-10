@@ -16,11 +16,11 @@ const Datasets = ({ history }) => {
     Qvain: { resetQvainStore },
     QvainDatasets: { publishedDataset, setPublishedDataset },
     Env: { getQvainUrl },
-    Matomo: { changeScope },
+    Matomo: { recordEvent },
   } = useStores()
 
   useEffect(() => {
-    changeScope('DATASETS')
+    recordEvent('DATASETS')
   })
 
   return (

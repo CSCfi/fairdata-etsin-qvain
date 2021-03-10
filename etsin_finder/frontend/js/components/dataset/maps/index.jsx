@@ -60,7 +60,7 @@ class Maps extends Component {
 
   componentDidMount() {
     Accessibility.handleNavigation('maps', false)
-    this.props.Stores.Matomo.changeScope(`MAPS / ${this.props.match.params.identifier}`)
+    this.props.Stores.Matomo.recordEvent(`MAPS / ${this.props.match.params.identifier}`)
   }
 
   render() {

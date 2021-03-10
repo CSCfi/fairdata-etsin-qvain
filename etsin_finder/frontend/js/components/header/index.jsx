@@ -61,7 +61,7 @@ const EtsinHeader = props => {
   )
 
   const registerMatomo = () => {
-    Matomo.changeScope('CREATE_EDIT')
+    Matomo.recordEvent('CREATE_EDIT')
   }
 
   return (
