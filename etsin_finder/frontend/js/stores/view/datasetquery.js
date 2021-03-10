@@ -47,6 +47,12 @@ class DatasetQuery {
 
   @observable error = false
 
+  @observable showCitationModal = false
+
+  @action setShowCitationModal = (value) => {
+    this.showCitationModal = value
+  }
+
   async fetchPackages() {
     const { downloadApiV2 } = this.Env
     if (!downloadApiV2 || !this.results) {

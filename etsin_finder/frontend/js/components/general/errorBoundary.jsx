@@ -19,6 +19,7 @@ export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
     this.state = { error: null, info: null, showDetails: false }
+    this.clearError = this.clearError.bind(this)
   }
 
   componentDidCatch(error, info) {
@@ -52,6 +53,16 @@ export default class ErrorBoundary extends Component {
 
   clearError() {
     this.setState({ error: null, info: null, showDetails: false })
+    if (this.props.callback) {
+      this.props.callback(null, null, null)
+    }
+  }
+
+  componentDidCatch(error, info) {
+    this.setState({ error, info })
+    if (this.props.callback) {
+      this.props.callback(error, info, this.clearError)
+    }
   }
 
   render() {
@@ -103,6 +114,7 @@ ErrorBoundary.defaultProps = {
 const ErrorDetails = styled.p`
   white-space: pre-wrap;
   text-align: left;
+  word-break: break-all;
 `
 
 const DetailsButton = styled.button.attrs({
