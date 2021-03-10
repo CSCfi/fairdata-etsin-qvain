@@ -1,5 +1,3 @@
-import { useEffect } from 'react'
-import { autorun } from 'mobx'
 import { observer } from 'mobx-react'
 
 import SelectedItemsTreeItem from './selectedItemsTreeItem'
@@ -11,18 +9,6 @@ export function SelectedItemsTree() {
     Files: { SelectedItemsView, root },
   } = useStores().Qvain
   const { Files } = useStores().Qvain
-
-  // Open top level directory
-  useEffect(
-    () =>
-      autorun(() => {
-        if (root) {
-          root.directories.forEach(dir => SelectedItemsView.open(dir))
-        }
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  )
 
   const { renderTree } = useRenderTree({
     Files,

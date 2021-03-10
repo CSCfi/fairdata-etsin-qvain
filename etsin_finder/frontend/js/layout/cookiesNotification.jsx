@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import counterpart from 'counterpart'
-
-import Button from '../components/general/button'
+import closeCookiesNotification from '../../static/images/closeCookiesNotification.svg'
+import closeCookiesNotificationHover from '../../static/images/closeCookiesNotificationHover.svg'
 
 class CookiesNotification extends Component {
   state = {
@@ -83,8 +83,8 @@ class CookiesNotification extends Component {
         visible={this.state.displayCookieNotification}
         attributes={{ 'aria-label': 'general.cookies.section' }}
       >
-        <div className="container row no-gutters">
-          <div className="col-12 col-md-9">
+        <Content className="container">
+          <Text>
             <Translate component="p" content="general.cookies.infoText" />
             <Translate
               component={StyledLink}
@@ -93,55 +93,84 @@ class CookiesNotification extends Component {
               rel="noopener noreferrer"
               content="general.cookies.link"
             />
-          </div>
-          <Actions className="col-12 col-md-3">
-            <Button onClick={this.fdSSODismissNotification}>
-              <Translate content="general.cookies.accept" />
-            </Button>
-          </Actions>
-        </div>
+          </Text>
+          <Translate
+            component={CloseNotificationButton}
+            onClick={this.fdSSODismissNotification}
+            attributes={{ 'aria-label': 'general.cookies.close' }}
+          />
+        </Content>
       </Translate>
     )
   }
 }
 
 const Notification = styled.section`
-  display: ${props => (props.visible ? 'flex' : 'none')};
   position: fixed;
-  justify-content: center;
-  align-items: center;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #f3f2f1;
-  padding: 2rem 3rem;
+  display: ${props => (props.visible ? 'flex' : 'none')};
+  justify-content: center;
   z-index: 1;
+  background-color: #f3f2f1;
+`
 
+const Content = styled.div.attrs(() => ({ className: 'container' }))`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 3rem;
+`
+
+const Text = styled.div`
+  max-width: 40em;
+  flex-grow: 1;
   p {
     margin: 0;
   }
-`
-
-const Actions = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-
-  @media only screen and (max-width: 992px) {
-    padding-top: 1.5rem;
-  }
-
-  @media only screen and (max-width: 576px) {
-    padding: 0.5rem;
-    flex-direction: column;
-    align-items: initial;
-  }
+  color: #000;
 `
 
 const StyledLink = styled.a`
   // Set color with contrast ratio 4.61
   color: #0075a3;
+  text-decoration: underline;
+`
+
+const CloseNotificationButtonBase = styled.img.attrs(() => ({
+  src: closeCookiesNotification,
+}))``
+
+const CloseNotificationButtonHover = styled.img.attrs(() => ({
+  src: closeCookiesNotificationHover,
+}))`
+  opacity: 0;
+  transition: opacity 0.15s linear;
+  position: absolute;
+  left: 0;
+  top: 0;
+`
+
+const CloseNotificationButton = props => (
+  <StyledCloseNotificationButton type="button" {...props}>
+    <CloseNotificationButtonBase alt="" />
+    <CloseNotificationButtonHover alt="" />
+  </StyledCloseNotificationButton>
+)
+
+const StyledCloseNotificationButton = styled.button`
+  flex-grow: 0;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  border: none;
+  background: none;
+  line-height: 0;
+
+  :hover ${CloseNotificationButtonHover} {
+    opacity: 1;
+  }
 `
 
 export default CookiesNotification
