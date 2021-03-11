@@ -1,4 +1,4 @@
-import { action, makeObservable } from 'mobx'
+import { makeObservable, override } from 'mobx'
 import SingleValueField from './qvain.singleValueField'
 
 class MultiLanguageField extends SingleValueField {
@@ -8,13 +8,13 @@ class MultiLanguageField extends SingleValueField {
     makeObservable(this)
   }
 
-  @action set(value, lang) {
+  @override set(value, lang) {
     this.value[lang] = value
     this.setValidationError(null)
     this.Parent.setChanged(true)
   }
 
-  @action toBackend = () => this.value
+  toBackend = () => this.value
 }
 
 export default MultiLanguageField
