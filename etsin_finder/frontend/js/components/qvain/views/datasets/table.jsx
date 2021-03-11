@@ -123,7 +123,7 @@ class DatasetTable extends Component {
 
         this.setState(
           {
-            count: datasets.length,
+            count: datasetGroups.length,
             datasets,
             datasetGroups,
             filteredGroups: datasetGroups,
@@ -234,7 +234,16 @@ class DatasetTable extends Component {
   }
 
   render() {
-    const { onPage, loading, error, errorMessage, page, searchTerm, datasets, count } = this.state
+    const {
+      onPage,
+      loading,
+      error,
+      errorMessage,
+      page,
+      searchTerm,
+      datasetGroups,
+      count,
+    } = this.state
 
     const { metaxApiV2 } = this.props.Stores.Env
     const {
@@ -243,8 +252,8 @@ class DatasetTable extends Component {
       minDatasetsForSearchTool,
     } = this.props.Stores.QvainDatasets
 
-    const noOfDatasets = datasets.length
-    const searchInput = noOfDatasets > minDatasetsForSearchTool && (
+    const noOfDatasetGroups = datasetGroups.length
+    const searchInput = noOfDatasetGroups > minDatasetsForSearchTool && (
       <>
         <Translate component={SearchLabel} content="qvain.datasets.search.searchTitle" />
         <SearchField>
