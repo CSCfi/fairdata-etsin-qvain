@@ -150,6 +150,7 @@ class Sidebar extends Component {
     const infrastructure = checkNested(researchDataset, 'infrastructure')
       ? researchDataset.infrastructure
       : false
+    const title = catalogTitle[getDataLang(catalogPublisher)]
 
     return (
       <SidebarContainer>
@@ -158,9 +159,16 @@ class Sidebar extends Component {
             {/* DATA CATALOG LOGO */}
             {logo && (
               <SidebarItem>
-                <Logo
+                {/* <Logo
                   lang={getDataLang(catalogTitle)}
-                  alt={catalogPublisherHomepage}
+                  alt={translate('dataset.catalog_alt_text', { title })}
+                  file={logo}
+                  url={catalogPublisherHomepage}
+                /> */}
+                <Translate
+                  component={Logo}
+                  attributes={{ alt: 'dataset.catalog_alt_text' }}
+                  with={{ title }}
                   file={logo}
                   url={catalogPublisherHomepage}
                 />
