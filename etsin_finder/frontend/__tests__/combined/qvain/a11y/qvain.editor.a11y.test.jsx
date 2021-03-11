@@ -15,6 +15,8 @@ import Section from '../../../../js/components/qvain/general/section/section'
 import Field from '../../../../js/components/qvain/general/section/field'
 import { ExpandCollapse } from '../../../../js/components/qvain/general/section/expand'
 
+global.fdweRecordEvent = () => {}
+
 expect.extend(toHaveNoViolations)
 
 describe('Qvain editor', () => {

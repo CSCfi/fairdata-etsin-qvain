@@ -160,6 +160,7 @@ export class FilterSection extends Component {
       this.titleName = checkDataLang(title)
       this.aggregationName = checkDataLang(aggregation)
       this.termName = checkDataLang(term)
+      this.titleNameEn = title.en
     }
 
     this.state.aggregateItems = this.props.Stores.ElasticQuery.results.aggregations[
@@ -194,7 +195,7 @@ export class FilterSection extends Component {
               <FilterItem
                 key={item.key}
                 item={item}
-                aggregationName={this.aggregationName}
+                sectionTitleEn={this.titleNameEn}
                 term={this.termName}
                 tabIndex={this.state.open ? '0' : '-1'}
               />

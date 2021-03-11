@@ -34,18 +34,10 @@
       }
     </style>
 
-    <% if(!!(htmlWebpackPlugin.options.MATOMO_URL && htmlWebpackPlugin.options.MATOMO_SITE_ID)) { %>
-    <script type="text/javascript">
-      var _paq = window._paq || [];
-      (function() {
-        var u="<%= htmlWebpackPlugin.options.MATOMO_URL %>";
-        _paq.push(['setTrackerUrl', u+'matomo.php']);
-        _paq.push(['setSiteId', '<%= htmlWebpackPlugin.options.MATOMO_SITE_ID %>']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-      })();
-    </script>
-    <% } %>
+    <meta name="fdwe-auto-disabled" content="true" />
+    <meta name="fdwe-service" content="ETSIN" />
+    <meta name="fdwe-scope" content="HOME" />
+    <script src='https://matomo.fd-test.csc.fi/fdwe.js'></script>
   </head>
 
   <body>

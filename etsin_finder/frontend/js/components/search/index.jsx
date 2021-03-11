@@ -20,7 +20,6 @@ import { Dataset } from '../../routes'
 import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
-import Tracking from '../../utils/tracking'
 
 export default class Search extends Component {
   constructor() {
@@ -33,11 +32,6 @@ export default class Search extends Component {
   componentDidMount() {
     Accessibility.handleNavigation('datasets')
     this.initialQuery()
-    if (this.props.match.params.query) {
-      Tracking.newPageView(`Search: ${this.props.match.params.query}`, this.props.location.pathname)
-    } else {
-      Tracking.newPageView('Search', this.props.location.pathname)
-    }
   }
 
   initialQuery = () => {

@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
 import { syncHistoryWithStore } from 'mobx-react-router'
 
-import FilterItem from '../../../js/components/search/filterResults/filterItem'
+import { FilterItem } from '../../../js/components/search/filterResults/filterItem'
 import ElasticQuery from '../../../js/stores/view/elasticquery'
 import env from '../../../js/stores/domain/env'
 
@@ -15,20 +15,25 @@ const history = syncHistoryWithStore(browserHistory, env.history)
 
 describe('FilterItem', () => {
   ElasticQuery.updateSearch('Helsinki')
+  const Stores = { ElasticQuery, Matomo: jest.fn() }
+
   const facet = {
     item: { key: 'Pirkko Suihkonen', doc_count: 92 },
     aggregationName: 'Creator',
     termName: 'creator_name.keyword',
+    title: { en: 'Actor', fi: 'Toimija' },
   }
   describe('Filter not active', () => {
     const filterItem = mount(
       <MemoryRouter>
         <FilterItem
+          Stores={Stores}
           key={facet.item.key}
           item={facet.item}
           aggregationName={facet.aggregationName}
           term={facet.termName}
           tabIndex="1"
+          sectionTitleEn={facet.title.en}
         />
       </MemoryRouter>
     )
@@ -49,11 +54,13 @@ describe('FilterItem', () => {
     const filterItem = mount(
       <MemoryRouter>
         <FilterItem
+          Stores={Stores}
           key={facet.item.key}
           item={facet.item}
           aggregationName={facet.aggregationName}
           term={facet.termName}
           tabIndex="1"
+          sectionTitleEn={facet.title.en}
         />
       </MemoryRouter>
     )

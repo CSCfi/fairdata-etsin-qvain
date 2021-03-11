@@ -12,7 +12,6 @@ import { QvainContainer } from '../../general/card'
 import ErrorBoundary from '../../../general/errorBoundary'
 import { getResponseError } from '../../utils/responseError'
 import urls from '../../utils/urls'
-import Tracking from '../../../../utils/tracking'
 import Header from '../editor/header'
 import StickyHeader from '../editor/stickyHeader'
 import Dataset from '../editor/dataset'
@@ -256,10 +255,15 @@ export class Qvain extends Component {
     }
     const identifier = this.props.match.params.identifier
     const { original } = this.props.Stores.Qvain
-    Tracking.newPageView(
-      !original ? 'Qvain Create Dataset' : 'Qvain Edit Dataset',
-      this.props.location.pathname
-    )
+    const {
+      Matomo: { recordEvent },
+    } = this.props.Stores
+
+    if (identifier) {
+      recordEvent(`DATASET / ${identifier}`)
+    } else {
+      recordEvent('DATASET')
+    }
 
     // Test if we need to load a dataset or do we use the one currently in store
     if (identifier && !(original && original.identifier === identifier)) {

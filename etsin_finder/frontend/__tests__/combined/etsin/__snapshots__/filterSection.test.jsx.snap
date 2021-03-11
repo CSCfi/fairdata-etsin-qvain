@@ -46,8 +46,7 @@ exports[`FilterSection should render <FilterSection /> 1`] = `
     <ul
       aria-label="Data Catalog"
     >
-      <FilterItem
-        aggregationName="data_catalog_en"
+      <ForwardRef
         item={
           Object {
             "doc_count": 1,
@@ -55,6 +54,7 @@ exports[`FilterSection should render <FilterSection /> 1`] = `
           }
         }
         key="Fairdata IDA datasets"
+        sectionTitleEn="Data Catalog"
         tabIndex="-1"
         term="data_catalog.en"
       />

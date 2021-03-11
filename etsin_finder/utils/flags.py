@@ -17,6 +17,7 @@ default_supported_flags = {
     'METAX_API_V2.BACKEND',
     'METAX_API_V2.FRONTEND',
     'UI.BOTTOM_SUBMIT_BUTTONS',
+    "MATOMO_TRACKING"
 }
 
 # Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'

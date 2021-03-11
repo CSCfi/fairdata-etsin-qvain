@@ -9,18 +9,18 @@ import { useStores } from '../../utils/stores'
 import DatasetTable from './table'
 import { ContainerLight, ContainerSubsection, QvainContainer, PageTitle } from '../../general/card'
 import { SaveButton } from '../../general/buttons'
-import Tracking from '../../../../utils/tracking'
 import NoticeBar from '../../../general/noticeBar'
 
-const Datasets = ({ history, location }) => {
+const Datasets = ({ history }) => {
   const {
     Qvain: { resetQvainStore },
     QvainDatasets: { publishedDataset, setPublishedDataset },
     Env: { getQvainUrl },
+    Matomo: { recordEvent },
   } = useStores()
 
   useEffect(() => {
-    Tracking.newPageView('Qvain View Datasets', location.pathname)
+    recordEvent('DATASETS')
   })
 
   return (
