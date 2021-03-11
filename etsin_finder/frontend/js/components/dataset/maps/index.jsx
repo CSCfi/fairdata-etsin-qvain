@@ -9,8 +9,8 @@ import { Popup } from 'react-leaflet'
 import { TypeLocation } from '../../../utils/propTypes'
 import MyMap from './map'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
-import Tracking from '../../../utils/tracking'
 import Accessibility from '../../../stores/view/accessibility'
+import { withStores } from '../../../stores/stores'
 
 const Table = styled.table`
   overflow-x: scroll;
@@ -45,6 +45,7 @@ const Table = styled.table`
 
 class Maps extends Component {
   static propTypes = {
+    Stores: PropTypes.object.isRequired,
     location: PropTypes.shape({
       pathname: PropTypes.string,
     }).isRequired,
@@ -58,11 +59,8 @@ class Maps extends Component {
   }
 
   componentDidMount() {
-    Tracking.newPageView(
-      `Dataset: ${this.props.match.params.identifier} | Maps`,
-      this.props.location.pathname
-    )
     Accessibility.handleNavigation('maps', false)
+    this.props.Stores.Matomo.recordEvent(`MAPS / ${this.props.match.params.identifier}`)
   }
 
   render() {
@@ -188,4 +186,4 @@ const CustomPopup = styled(Popup)`
   }
 `
 
-export default Maps
+export default withStores(Maps)

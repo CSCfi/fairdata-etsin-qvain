@@ -34,6 +34,8 @@ import QvainStoreClass from '../../../js/stores/view/qvain'
 import { Directory } from '../../../js/stores/view/qvain/qvain.filesv1'
 import LocaleStore from '../../../js/stores/view/locale'
 
+global.fdweRecordEvent = () => {}
+
 jest.mock('uuid', () => {
   let id = 0
   return {
@@ -58,6 +60,9 @@ jest.mock('../../../js/stores/stores', () => {
     Env: {
       metaxApiV2: false,
     },
+    Matomo: {
+      recordEvent: jest.fn(),
+    },
   })
 
   return {
@@ -73,6 +78,9 @@ const getStores = () => {
     Env,
     Qvain: QvainStore,
     Locale: LocaleStore,
+    Matomo: {
+      recordEvent: jest.fn(),
+    },
   }
 }
 
