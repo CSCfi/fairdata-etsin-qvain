@@ -647,7 +647,9 @@ exports[`Qvain should render correctly 1`] = `
           },
           "response": null,
           "savePublishedAsDraft": [Function],
+          "updateCumulativeState": [Function],
           "updateDataset": [Function],
+          "updateFiles": [Function],
           "useDoiModalIsOpen": false,
         },
         "Temporals": Temporals {
@@ -2117,7 +2119,9 @@ exports[`Qvain.Description should render <Description /> 1`] = `
           },
           "response": null,
           "savePublishedAsDraft": [Function],
+          "updateCumulativeState": [Function],
           "updateDataset": [Function],
+          "updateFiles": [Function],
           "useDoiModalIsOpen": false,
         },
         "Temporals": Temporals {
@@ -3587,7 +3591,9 @@ exports[`Qvain.Description should render <DescriptionField /> 1`] = `
           },
           "response": null,
           "savePublishedAsDraft": [Function],
+          "updateCumulativeState": [Function],
           "updateDataset": [Function],
+          "updateFiles": [Function],
           "useDoiModalIsOpen": false,
         },
         "Temporals": Temporals {
@@ -5057,7 +5063,9 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
           },
           "response": null,
           "savePublishedAsDraft": [Function],
+          "updateCumulativeState": [Function],
           "updateDataset": [Function],
+          "updateFiles": [Function],
           "useDoiModalIsOpen": false,
         },
         "Temporals": Temporals {
@@ -6527,7 +6535,9 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
           },
           "response": null,
           "savePublishedAsDraft": [Function],
+          "updateCumulativeState": [Function],
           "updateDataset": [Function],
+          "updateFiles": [Function],
           "useDoiModalIsOpen": false,
         },
         "Temporals": Temporals {
@@ -7997,7 +8007,9 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
           },
           "response": null,
           "savePublishedAsDraft": [Function],
+          "updateCumulativeState": [Function],
           "updateDataset": [Function],
+          "updateFiles": [Function],
           "useDoiModalIsOpen": false,
         },
         "Temporals": Temporals {
