@@ -302,7 +302,7 @@ class DatasetTable extends Component {
     )
 
     return (
-      <Fragment>
+      <>
         {searchInput}
         <TablePadded className="table">
           <TableHeader>
@@ -318,7 +318,7 @@ class DatasetTable extends Component {
           <TableBody striped>
             {loading && <Translate component={TableNote} content="qvain.datasets.loading" />}
             {error && (
-              <Fragment>
+              <>
                 <TableNote style={{ color: etsinTheme.color.redText }}>
                   <Translate content="qvain.datasets.errorOccurred" />:
                   <ErrorMessage>{errorMessage}</ErrorMessage>
@@ -331,7 +331,7 @@ class DatasetTable extends Component {
                     content="qvain.datasets.reload"
                   />
                 </TableNote>
-              </Fragment>
+              </>
             )}
             {this.noDatasets() && (
               <Translate component={TableNote} content="qvain.datasets.noDatasets" />
@@ -364,7 +364,7 @@ class DatasetTable extends Component {
           onClose={this.closeRemoveModal}
           postRemoveUpdate={this.postRemoveUpdate}
         />
-      </Fragment>
+      </>
     )
   }
 }

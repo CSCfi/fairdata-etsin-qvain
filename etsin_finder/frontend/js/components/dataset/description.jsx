@@ -227,7 +227,7 @@ class Description extends Component {
             </Label>
           )}
           {this.props.harvested && (
-            <React.Fragment>
+            <>
               <GoToOriginal idn={this.props.dataset.research_dataset.preferred_identifier} />
               <label htmlFor="dataset-tags">
                 <Translate
@@ -241,7 +241,7 @@ class Description extends Component {
                   <Translate content="dataset.harvested" />
                 </Label>
               </label>
-            </React.Fragment>
+            </>
           )}
         </section>
       </div>

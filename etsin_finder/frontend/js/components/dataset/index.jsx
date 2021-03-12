@@ -55,6 +55,20 @@ class Dataset extends React.Component {
     this.query()
   }
 
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
+    if (this.props.match.params.identifier !== newProps.match.params.identifier) {
+      this.setState(
+        {
+          loaded: false,
+        },
+        () => {
+          this.query(newProps.match.params.identifier)
+        }
+      )
+    }
+  }
+
   async getAllVersions(data) {
     const datasetVersionSet = data.dataset_version_set
     let stateInfo = ''
@@ -151,20 +165,6 @@ class Dataset extends React.Component {
         console.log(error)
         this.setState({ error })
       })
-  }
-
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(newProps) {
-    if (this.props.match.params.identifier !== newProps.match.params.identifier) {
-      this.setState(
-        {
-          loaded: false,
-        },
-        () => {
-          this.query(newProps.match.params.identifier)
-        }
-      )
-    }
   }
 
   render() {

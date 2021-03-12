@@ -52,7 +52,7 @@ const Icon = (type, def) => {
 const FileIcon = props => {
   if (props.type !== 'dir' && props.type && props.type.pref_label) {
     return (
-      <React.Fragment>
+      <>
         <div className="sr-only" lang={getDataLang(props.type.pref_label)}>
           {checkDataLang(props.type.pref_label)}
         </div>
@@ -69,12 +69,12 @@ const FileIcon = props => {
             title={checkDataLang(props.type.pref_label)}
           />
         </TooltipHover>
-      </React.Fragment>
+      </>
     )
   }
   if (props.type === 'dir') {
     return (
-      <React.Fragment>
+      <>
         <div className="sr-only">{translate('dataset.dl.file_types.directory')}</div>
         <FontAwesomeIcon
           icon={Icon('dir', props.default)}
@@ -82,11 +82,11 @@ const FileIcon = props => {
           transform="shrink-4"
           {...props}
         />
-      </React.Fragment>
+      </>
     )
   }
   return (
-    <React.Fragment>
+    <>
       <div className="sr-only">{translate('dataset.dl.file_types.file')}</div>
       <FontAwesomeIcon
         icon={Icon(false, props.default)}
@@ -94,7 +94,7 @@ const FileIcon = props => {
         transform="shrink-4"
         {...props}
       />
-    </React.Fragment>
+    </>
   )
 }
 
