@@ -52,7 +52,7 @@ services:
           target: /etc/nginx/ssl_certs/dhparam.pem
       ports:
         - "80:80"
-        - "444:444"
+        - "443:443"
       environment:
       - CHOKIDAR_USEPOLLING=true
       volumes:
@@ -63,9 +63,9 @@ services:
         - elasticsearch
 
 configs:
-  etsin-qvain-app-config:
+  etsin-qvain-app-config-standalone:
     external: True
-  etsin-qvain-nginx-config:
+  etsin-qvain-nginx-config-standalone:
     external: True
   fairdata-ssl-certificate:
     external: True
