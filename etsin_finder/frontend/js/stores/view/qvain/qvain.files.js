@@ -1,4 +1,4 @@
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action, makeObservable, override } from 'mobx'
 import axios from 'axios'
 
 import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from '../common.files.items'
@@ -30,14 +30,16 @@ class Files extends FilesBase {
 
   cancelOnReset = promise => this.promiseManager.add(promise)
 
-  @action loadDirectory = async dir => itemLoaderAny.loadDirectory(this, dir, 100)
+  @override async loadDirectory(dir) {
+    return itemLoaderAny.loadDirectory(this, dir, 100)
+  }
 
   fetchRootIdentifier = async projectIdentifier => {
     const { data } = await axios.get(urls.v2.projectFiles(projectIdentifier))
     return data.identifier
   }
 
-  @action reset() {
+  @override reset() {
     super.reset.call(this)
     this.SelectedItemsView.reset()
     this.AddItemsView.reset()

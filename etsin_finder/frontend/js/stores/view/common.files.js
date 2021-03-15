@@ -42,7 +42,6 @@ class Files {
     this.draftOfHasProject = null
     this.root = null
     this.selectedProject = undefined
-    this.refreshModalDirectory = null
     this.cache = {}
     this.originalMetadata = {}
     this.projectLocked = false
@@ -249,7 +248,9 @@ class Files {
     await loadChildren(this.root)
   }
 
-  @action loadDirectory = async dir => itemLoaderPublic.loadDirectory(this, dir, 100)
+  @action.bound async loadDirectory(dir) {
+    return itemLoaderPublic.loadDirectory(this, dir, 100)
+  }
 
   @action changeProject = projectId => {
     Files.prototype.reset.call(this)

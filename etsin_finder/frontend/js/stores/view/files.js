@@ -1,4 +1,4 @@
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action, makeObservable, override } from 'mobx'
 
 import { dirIdentifierKey, fileIdentifierKey } from './common.files.items'
 import { PromiseManager } from './common.files.utils'
@@ -21,7 +21,7 @@ class Files extends FilesBase {
 
   cancelOnReset = promise => this.promiseManager.add(promise)
 
-  @action reset() {
+  @override reset() {
     super.reset.call(this)
     this.View.reset()
     this.promiseManager.reset()
