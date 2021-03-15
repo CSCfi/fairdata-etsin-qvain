@@ -165,7 +165,7 @@ class FileForm extends Component {
     const { fileError, titleError, descriptionError, useCategoryError } = this.state
     const { readonly, inEdit } = this.props.Stores.Qvain
     return (
-      <Fragment>
+      <>
         <FileContainer className={this.props.className}>
           <Label>
             <Translate content="qvain.files.selected.form.title.label" /> *
@@ -261,7 +261,7 @@ class FileForm extends Component {
             />
           </Buttons>
         </FileContainer>
-      </Fragment>
+      </>
     )
   }
 }

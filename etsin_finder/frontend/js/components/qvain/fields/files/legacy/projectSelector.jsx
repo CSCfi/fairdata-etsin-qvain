@@ -52,7 +52,7 @@ export class ProjectSelectorBase extends Component {
     }
     const { error } = this.state
     return (
-      <Fragment>
+      <>
         <Translate
           aria-label="Select project"
           options={options}
@@ -73,7 +73,7 @@ export class ProjectSelectorBase extends Component {
             {error}
           </ErrorMessage>
         )}
-      </Fragment>
+      </>
     )
   }
 }

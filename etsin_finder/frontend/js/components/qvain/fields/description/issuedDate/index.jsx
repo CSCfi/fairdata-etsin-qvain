@@ -64,7 +64,7 @@ const IssuedDateField = () => {
         disabled={readonly || publishedWithDoi}
         required
       />
-      <Fragment>{error && <ValidationError>{error}</ValidationError>}</Fragment>
+      <>{error && <ValidationError>{error}</ValidationError>}</>
     </Card>
   )
 }

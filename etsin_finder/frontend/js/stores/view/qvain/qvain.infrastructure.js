@@ -7,7 +7,6 @@ class Infrastructures extends ReferenceField {
     makeObservable(this)
   }
 
-
   @action
   fromBackend = dataset => {
     // infrastructures

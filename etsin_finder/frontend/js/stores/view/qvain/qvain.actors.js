@@ -278,6 +278,7 @@ class Actors {
       return this.loadingReferenceOrganizations[parentId]
     }
     delete this.referenceOrganizationErrors[parentId]
+    // eslint-disable-next-line no-async-promise-executor
     this.loadingReferenceOrganizations[parentId] = new Promise(async (resolve, reject) => {
       const url = getOrganizationSearchUrl(parentId)
       let orgs

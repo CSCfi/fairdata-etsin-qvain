@@ -87,6 +87,38 @@ export class Qvain extends Component {
     }
   }
 
+  handleIdentifierChanged() {
+    if (this.datasetLoading) {
+      return
+    }
+    const identifier = this.props.match.params.identifier
+    const { original } = this.props.Stores.Qvain
+    const {
+      Matomo: { recordEvent },
+    } = this.props.Stores
+
+    if (identifier) {
+      recordEvent(`DATASET / ${identifier}`)
+    } else {
+      recordEvent('DATASET')
+    }
+
+    // Test if we need to load a dataset or do we use the one currently in store
+    if (identifier && !(original && original.identifier === identifier)) {
+      this.getDataset(identifier)
+    } else {
+      this.setState({ datasetLoading: false, haveDataset: true })
+    }
+  }
+
+  setFocusOnSubmitButton(event) {
+    const buttons = this.submitButtonsRef.current
+    if (buttons && buttons.firstElementChild) {
+      buttons.firstElementChild.focus()
+    }
+    event.preventDefault()
+  }
+
   getDataset(identifier) {
     this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
     const { resetQvainStore, editDataset } = this.props.Stores.Qvain
@@ -146,14 +178,6 @@ export class Qvain extends Component {
       })
     this.promises.push(promise)
     return promise
-  }
-
-  setFocusOnSubmitButton(event) {
-    const buttons = this.submitButtonsRef.current
-    if (buttons && buttons.firstElementChild) {
-      buttons.firstElementChild.focus()
-    }
-    event.preventDefault()
   }
 
   getErrorTitle() {
@@ -247,30 +271,6 @@ export class Qvain extends Component {
 
   enableRenderFailed = () => {
     this.setState({ renderFailed: true })
-  }
-
-  handleIdentifierChanged() {
-    if (this.datasetLoading) {
-      return
-    }
-    const identifier = this.props.match.params.identifier
-    const { original } = this.props.Stores.Qvain
-    const {
-      Matomo: { recordEvent },
-    } = this.props.Stores
-
-    if (identifier) {
-      recordEvent(`DATASET / ${identifier}`)
-    } else {
-      recordEvent('DATASET')
-    }
-
-    // Test if we need to load a dataset or do we use the one currently in store
-    if (identifier && !(original && original.identifier === identifier)) {
-      this.getDataset(identifier)
-    } else {
-      this.setState({ datasetLoading: false, haveDataset: true })
-    }
   }
 
   render() {

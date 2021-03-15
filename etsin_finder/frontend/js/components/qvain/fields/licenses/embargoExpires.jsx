@@ -39,7 +39,7 @@ const EmbargoExpires = () => {
   }, [focused, embargoExpDate, Schema])
 
   return (
-    <Fragment>
+    <>
       <Translate component={Label} content="qvain.rightsAndLicenses.embargoDate.label" />
       <DatePicker
         strictParsing
@@ -55,7 +55,7 @@ const EmbargoExpires = () => {
       />
       {error && <ValidationError>{error}</ValidationError>}
       <Translate component="p" content="qvain.rightsAndLicenses.embargoDate.help" />
-    </Fragment>
+    </>
   )
 }
 
