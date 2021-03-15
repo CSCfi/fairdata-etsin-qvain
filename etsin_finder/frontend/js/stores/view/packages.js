@@ -78,7 +78,8 @@ class Packages {
   @action schedulePoll() {
     // Poll status periodically if there are pending packages
     if (
-      Object.values(this.packages).some(pack => pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING)
+      Object.values(this.packages).some(pack =>
+        pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING || pack.status === DOWNLOAD_API_REQUEST_STATUS.STARTED)
     ) {
       this.setPollTimeout(async () => {
         await this.fetch(this.datasetIdentifier)
