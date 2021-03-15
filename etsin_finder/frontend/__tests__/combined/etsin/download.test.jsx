@@ -26,7 +26,7 @@ Promise.config({
   cancellation: true,
 })
 
-const { PENDING, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
+const { PENDING, STARTED, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
 
 // Enable fake timers. Use 'legacy' explicitly because
 // jest 27 will change the default to 'modern' which will
@@ -104,7 +104,7 @@ describe('Packages', () => {
     //   t=1000: Poll, package still pending
     //   t=1500: Package ready in service but not polled yet
     //   t=3000: Poll, Package ready
-    fakeDownload.setProcessingDelay(1500)
+    fakeDownload.setProcessingDelay(500, 1000)
     fakeDownload.createPackage(1, '/files/jee')
     packages.setPollInterval(1000, 2)
 
@@ -113,9 +113,9 @@ describe('Packages', () => {
     expect(packages.get('/files/jee').status).toBe(PENDING)
     expect(mockAdapter.history.get.length).toBe(1)
 
-    // first poll
+    // first poll, generation started
     await wait(1000)
-    expect(packages.get('/files/jee').status).toBe(PENDING)
+    expect(packages.get('/files/jee').status).toBe(STARTED)
     expect(mockAdapter.history.get.length).toBe(2)
 
     // second poll should be 2*initialPollInterval after first has finished
@@ -178,6 +178,10 @@ describe('Download button actions', () => {
         status: SUCCESS,
         package: 'success.zip',
       },
+      '/started': {
+        status: STARTED,
+        package: 'started.zip',
+      },
       '/pending': {
         status: PENDING,
         package: 'pending.zip',
@@ -219,6 +223,14 @@ describe('Download button actions', () => {
   it('shows spinner for pending package', async () => {
     const pendingDirectoryItem = { type: 'directory', path: '/pending' }
     const action = getDownloadAction(1, pendingDirectoryItem, packages, files)
+    expect(action.type).toBe('pending')
+    expect(action.func).toBe(null)
+    expect(action.spin).toBe(true)
+  })
+
+  it('shows spinner for started package', async () => {
+    const startedDirectoryItem = { type: 'directory', path: '/started' }
+    const action = getDownloadAction(1, startedDirectoryItem, packages, files)
     expect(action.type).toBe('pending')
     expect(action.func).toBe(null)
     expect(action.spin).toBe(true)

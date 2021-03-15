@@ -143,7 +143,13 @@ class DatasetTable extends Component {
   }
 
   handleCreateNewVersion = async identifier => {
-    const { metaxApiV2, getQvainUrl } = this.props.Stores.Env
+    const {
+      Env: { metaxApiV2, getQvainUrl },
+      Matomo: { recordEvent },
+    } = this.props.Stores
+
+    recordEvent(`NEW_VERSION / ${identifier}`)
+
     if (!metaxApiV2) {
       console.error('Metax API V2 is required for creating a new version')
       return
@@ -158,6 +164,7 @@ class DatasetTable extends Component {
   }
 
   postRemoveUpdate = (dataset, onlyChanges) => {
+    const { Matomo } = this.props.Stores
     // update dataset list after dataset removal
     let datasets = [...this.state.datasets]
     const identifier = dataset.identifier
@@ -168,8 +175,10 @@ class DatasetTable extends Component {
         delete datasetCopy.next_draft
         datasets[datasetIndex] = datasetCopy
       }
+      Matomo.recordEvent(`REVERT / ${identifier}`)
     } else {
       datasets = datasets.filter(d => d.identifier !== identifier)
+      Matomo.recordEvent(`DELETE / ${identifier}`)
     }
     const datasetGroups = groupDatasetsByVersionSet(datasets)
     this.setState(state => ({
@@ -200,23 +209,35 @@ class DatasetTable extends Component {
   }
 
   handleEnterEdit = dataset => () => {
-    const { getQvainUrl } = this.props.Stores.Env
+    const {
+      Env: { getQvainUrl },
+      Matomo,
+    } = this.props.Stores
+
     if (dataset.next_draft) {
+      Matomo.recordEvent(`EDIT / ${dataset.next_draft.identifier}`)
       this.props.history.push(getQvainUrl(`/dataset/${dataset.next_draft.identifier}`))
       return
     }
+
+    Matomo.recordEvent(`EDIT / ${dataset.identifier}`)
     this.props.Stores.Qvain.editDataset(dataset)
     this.props.history.push(getQvainUrl(`/dataset/${dataset.identifier}`))
   }
 
   handleUseAsTemplate = dataset => {
-    const { getQvainUrl } = this.props.Stores.Env
+    const {
+      Env: { getQvainUrl },
+      Qvain: { resetWithTemplate },
+      Matomo: { recordEvent },
+    } = this.props.Stores
     this.props.history.push(getQvainUrl('/dataset'))
+    recordEvent(`TEMPLATE / ${dataset.identifier}`)
 
     if (dataset.next_draft?.identifier) {
-      this.props.Stores.Qvain.resetWithTemplate(dataset.next_draft)
+      resetWithTemplate(dataset.next_draft)
     } else {
-      this.props.Stores.Qvain.resetWithTemplate(dataset)
+      resetWithTemplate(dataset)
     }
   }
 
@@ -290,7 +311,7 @@ class DatasetTable extends Component {
     )
 
     return (
-      <Fragment>
+      <>
         {searchInput}
         <TablePadded className="table">
           <TableHeader>
@@ -306,7 +327,7 @@ class DatasetTable extends Component {
           <TableBody striped>
             {loading && <Translate component={TableNote} content="qvain.datasets.loading" />}
             {error && (
-              <Fragment>
+              <>
                 <TableNote style={{ color: etsinTheme.color.redText }}>
                   <Translate content="qvain.datasets.errorOccurred" />:
                   <ErrorMessage>{errorMessage}</ErrorMessage>
@@ -319,7 +340,7 @@ class DatasetTable extends Component {
                     content="qvain.datasets.reload"
                   />
                 </TableNote>
-              </Fragment>
+              </>
             )}
             {this.noDatasets() && (
               <Translate component={TableNote} content="qvain.datasets.noDatasets" />
@@ -352,7 +373,7 @@ class DatasetTable extends Component {
           onClose={this.closeRemoveModal}
           postRemoveUpdate={this.postRemoveUpdate}
         />
-      </Fragment>
+      </>
     )
   }
 }

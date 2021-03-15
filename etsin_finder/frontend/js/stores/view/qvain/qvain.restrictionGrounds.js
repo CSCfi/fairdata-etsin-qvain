@@ -1,4 +1,4 @@
-import { action, makeObservable } from 'mobx'
+import { makeObservable, override } from 'mobx'
 import SingleValueField from './qvain.singleValueField'
 import { restrictionGroundsSchema } from '../../../components/qvain/utils/formValidation'
 
@@ -17,7 +17,7 @@ class RestrictionGrounds extends SingleValueField {
 
   toBackend = () => (this.value ? this.value.identifier : undefined)
 
-  @action validate = () => {
+  @override validate() {
     if (!this.Schema) return
     this.Schema.validate(this.value.identifier || '')
       .then(() => {

@@ -38,7 +38,7 @@ export const ExternalFilesBase = () => {
     ' / ' + (' / ' + resource.length > 40 ? resource.substring(0, 40).concat('... ') : resource)
 
   return (
-    <Fragment>
+    <>
       <Translate component="p" content="qvain.files.external.help" />
       <SlidingContent open>
         <Translate
@@ -74,7 +74,7 @@ export const ExternalFilesBase = () => {
         ))}
         <ExternalFileForm />
       </SlidingContent>
-    </Fragment>
+    </>
   )
 }
 

@@ -15,7 +15,6 @@ import counterpart from 'counterpart'
 import isUrnQuery, { transformQuery } from '../../utils/transformQuery'
 import UrlParse from '../../utils/urlParse'
 import Helpers from '../../utils/helpers'
-import Tracking from '../../utils/tracking'
 import Env from '../domain/env'
 
 const fields = [
@@ -461,14 +460,11 @@ class ElasticQuery {
           ) {
             resolve()
           } else {
-            // track queries, categories, and hits
-            // category tracking turned off because filter contains a lot of different fields
             const aggr = `data_catalog_${currentLang}`
             const bucketLengths = res.data.aggregations[aggr].buckets.map(
               bucket => bucket.doc_count
             )
             const totalHits = bucketLengths.reduce((partialSum, a) => partialSum + a, 0)
-            if (!initial) Tracking.newSearch(currentSearch, false, res.data.hits.hits.length)
             runInAction(() => {
               this.results = {
                 hits: res.data.hits.hits,

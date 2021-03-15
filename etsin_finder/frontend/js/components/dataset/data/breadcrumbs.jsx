@@ -104,7 +104,7 @@ export default class Breadcrumbs extends Component {
   renderPath() {
     const modified = this.slicePath(this.props)
     return (
-      <React.Fragment>
+      <>
         {this.pathItems()}
         {modified.sliced ? (
           <Rest>
@@ -121,7 +121,7 @@ export default class Breadcrumbs extends Component {
           ''
         )}
         {modified.path.map((single, index) => this.pathItems(single, index, modified.ids[index]))}
-      </React.Fragment>
+      </>
     )
   }
 

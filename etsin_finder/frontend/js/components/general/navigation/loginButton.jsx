@@ -95,7 +95,7 @@ class Login extends Component {
   render() {
     if (!Stores.Auth[this.props.isLoggedInKey]) {
       return (
-        <React.Fragment>
+        <>
           <Cont width={this.props.width} margin={this.props.margin}>
             <LoaderCont active={this.state.loading}>
               <Loader active color="white" size="1.1em" spinnerSize="3px" />
@@ -126,7 +126,7 @@ class Login extends Component {
               <Translate content="nav.logoutNotice" />
             </NoticeBar>
           )}
-        </React.Fragment>
+        </>
       )
     }
     return (

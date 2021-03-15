@@ -19,6 +19,7 @@ import Qvain from './view/qvain'
 import QvainDatasets from './view/qvain/qvain.datasets'
 import Access from './view/access'
 import SearchFilters from './view/searchfilters'
+import Matomo from './tracking'
 
 const Stores = {
   Env,
@@ -32,6 +33,7 @@ const Stores = {
   QvainDatasets,
   Access,
   SearchFilters,
+  Matomo: new Matomo(Env),
 }
 
 export default Stores
