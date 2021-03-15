@@ -17,6 +17,7 @@ default_supported_flags = {
     'METAX_API_V2.BACKEND',
     'METAX_API_V2.FRONTEND',
     'UI.BOTTOM_SUBMIT_BUTTONS',
+    'UI.CITATION_MODAL',
     "MATOMO_TRACKING"
 }
 

@@ -17,6 +17,8 @@ import Agent from '../agent'
 import Project from './special/project'
 import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
 import { withStores } from '../../../stores/stores'
+import Button from '../../general/button'
+import FlaggedComponent from '../../general/flaggedComponent'
 
 class Sidebar extends Component {
   dateSeparator(start, end) {
@@ -113,6 +115,7 @@ class Sidebar extends Component {
   }
 
   render() {
+    const { setShowCitationModal } = this.props.Stores.DatasetQuery
     const dataCatalog = this.props.dataset.data_catalog
     const researchDataset = this.props.dataset.research_dataset
 
@@ -386,8 +389,16 @@ class Sidebar extends Component {
 
             {/* CITATION */}
 
-            <SidebarItem trans="dataset.citation" hideEmpty="false">
-              {!harvested && <Citation />}
+            <SidebarItem trans="dataset.citation.sidebar" hideEmpty="false">
+              {!harvested && (
+                <FlaggedComponent flag="UI.CITATION_MODAL" whenDisabled={<Citation />}>
+                  <Translate
+                    content="dataset.citation.title"
+                    component={CitationButton}
+                    onClick={() => setShowCitationModal(true)}
+                  />
+                </FlaggedComponent>
+              )}
             </SidebarItem>
           </dl>
         </ErrorBoundary>
@@ -398,7 +409,12 @@ class Sidebar extends Component {
 
 Sidebar.propTypes = {
   dataset: PropTypes.object.isRequired,
+  Stores: PropTypes.object.isRequired,
 }
+
+const CitationButton = styled(Button)`
+  margin: 0;
+`
 
 const SidebarContainer = styled.div`
   border: 2px solid rgb(231, 233, 237);
