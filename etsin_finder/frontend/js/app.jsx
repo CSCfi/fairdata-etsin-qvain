@@ -77,10 +77,10 @@ const App = () => {
       <StoresProvider store={Stores}>
         <Router history={history}>
           <ThemeProvider theme={etsinTheme}>
-            <React.Fragment>
+            <>
               <GlobalStyle />
               <Layout />
-            </React.Fragment>
+            </>
           </ThemeProvider>
         </Router>
       </StoresProvider>

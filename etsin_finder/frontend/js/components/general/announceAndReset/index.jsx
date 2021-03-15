@@ -15,7 +15,7 @@ import Accessibility from '../../../stores/view/accessibility'
 import TextToAnnounce from './textToAnnounce'
 
 const AnnounceAndReset = () => (
-  <React.Fragment>
+  <>
     <div className="sr-only" aria-live="polite">
       <TextToAnnounce location="politeAnnouncement" />
     </div>
@@ -27,7 +27,7 @@ const AnnounceAndReset = () => (
     >
       <TextToAnnounce location="assertiveAnnouncement" />
     </div>
-  </React.Fragment>
+  </>
 )
 
 export default AnnounceAndReset

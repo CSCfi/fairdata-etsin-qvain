@@ -62,7 +62,7 @@ export const ExternalFileFormBase = () => {
   }
 
   return (
-    <Fragment>
+    <>
       <Label htmlFor="externalResourceTitleInput">
         <Translate content="qvain.files.external.form.title.label" /> *
       </Label>
@@ -128,7 +128,7 @@ export const ExternalFileFormBase = () => {
         onClick={handleSaveExternalResource}
         content={'qvain.files.external.form.save.label'}
       />
-    </Fragment>
+    </>
   )
 }
 

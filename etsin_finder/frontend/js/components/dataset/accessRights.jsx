@@ -113,7 +113,7 @@ class AccessRights extends Component {
     // display button on dataset page
     if (this.props.button) {
       return (
-        <React.Fragment>
+        <>
           <CustomButton
             onClick={this.openModal}
             color="lightgray"
@@ -174,7 +174,7 @@ class AccessRights extends Component {
                 ))}
             </ModalInner>
           </Modal>
-        </React.Fragment>
+        </>
       )
     }
     // display only main info on results list
