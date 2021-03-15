@@ -169,10 +169,11 @@ export const getVersion = (dataset, getTranslation) => {
     return undefined
   }
   const identifier = dataset.identifier
-  const version = dataset.dataset_version_set.findIndex(v => v.identifier === identifier) + 1
-  if (version <= 0) {
+  const versionIndex = dataset.dataset_version_set.findIndex(v => v.identifier === identifier)
+  if (versionIndex < 0) {
     return undefined
   }
+  const version = dataset.dataset_version_set.length - versionIndex
   return getTranslation({ en: `Version ${version}`, fi: `versio ${version}` })
 }
 
