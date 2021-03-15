@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -18,6 +18,7 @@ import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
+import ErrorBoundary from './errorBoundary'
 import { TransparentButton } from './button'
 
 const customStyles = {
@@ -67,13 +68,29 @@ export default class Modal extends Component {
     onRequestClose: () => {},
   }
 
-  constructor(props) {
-    super(props)
-    const overlayStyle = { ...customStyles.overlay, ...props.customStyles.overlay }
-    const contentStyle = { ...customStyles.content, ...props.customStyles.content }
-    this.state = {
-      styles: { overlay: overlayStyle, content: contentStyle },
+  state = {
+    clearError: null,
+  }
+
+  getStyles() {
+    if (this.state.clearError) {
+      return customStyles
     }
+
+    const overlayStyle = { ...customStyles.overlay, ...this.props.customStyles.overlay }
+    const contentStyle = { ...customStyles.content, ...this.props.customStyles.content }
+    return { overlay: overlayStyle, content: contentStyle }
+  }
+
+  errorCallback = (_error, _info, clearError) => {
+    this.setState({ clearError })
+  }
+
+  requestClose = () => {
+    if (this.state.clearError) {
+      this.state.clearError()
+    }
+    this.props.onRequestClose()
   }
 
   render() {
@@ -81,15 +98,15 @@ export default class Modal extends Component {
       <ReactModal
         isOpen={this.props.isOpen}
         onAfterOpen={this.props.onAfterOpen}
-        onRequestClose={this.props.onRequestClose}
-        style={this.state.styles}
+        onRequestClose={this.requestClose}
+        style={this.getStyles()}
         contentLabel={this.props.contentLabel}
       >
         <CloseButton onClick={this.props.onRequestClose} noMargin>
           <Translate className="sr-only" content="dataset.dl.close_modal" />
           <FontAwesomeIcon aria-hidden icon={faTimes} />
         </CloseButton>
-        {this.props.children}
+        <ErrorBoundary callback={this.errorCallback}>{this.props.children}</ErrorBoundary>
       </ReactModal>
     )
   }

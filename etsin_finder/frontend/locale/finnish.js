@@ -31,8 +31,14 @@ const finnish = {
     access_open: 'Avoin',
     access_rights: 'Saatavuus',
     catalog_publisher: 'Katalogin julkaisija',
-    citation: 'Sitaatti / Lähdeviite',
-    citation_formats: 'Näytä lisää sitaattiehdotuksia',
+    citation: {
+      sidebar: 'Sitaatti / Lähdeviite',
+      title: 'Viittaa aineistoon',
+      copyButton: 'Kopioi',
+      copyButtonTooltip: 'Kopioi leikepöydälle',
+      copyButtonTooltipSuccess: 'Viittaus kopioitu leikepöydälle',
+      warning: 'Automaattisesti luotujen viitteiden tiedoissa voi esiintyä virheitä. Tarkista aina viitteen tiedot.'
+    },
     citationNoDateIssued: 'Julkaisupäivämäärää ei määritelty',
     contact: {
       access: 'Aineiston käyttöoikeuteen liittyvissä kyselyissä ota yhteyttä kuraattoriin.',
