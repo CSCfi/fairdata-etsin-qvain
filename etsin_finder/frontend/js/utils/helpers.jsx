@@ -10,13 +10,14 @@
    */
 }
 
+// test recursively if a component has children
 export const hasChildren = children => {
   // component has no children
   if (!children) {
     return false
   }
   // component has an empty array of children
-  if (Array.isArray(children) && !children.find(single => single !== undefined)) {
+  if (Array.isArray(children) && !children.find(single => hasChildren(single))) {
     return false
   }
   // component has a child that has props.children
