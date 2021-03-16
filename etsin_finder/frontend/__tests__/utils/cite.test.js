@@ -76,12 +76,12 @@ const manyCreatorsDataset = {
 
 const firstVersionDataset = {
   ...organizationDataset,
-  dataset_version_set: [{ identifier: organizationDataset.identifier }, { identifier: "metax_identifier_for_first" }]
+  dataset_version_set: [{ identifier: "metax_identifier_for_second" }, { identifier: organizationDataset.identifier }]
 }
 
 const secondVersionDataset = {
   ...organizationDataset,
-  dataset_version_set: [{ identifier: "metax_identifier_for_first" }, { identifier: organizationDataset.identifier }]
+  dataset_version_set: [{ identifier: organizationDataset.identifier }, { identifier: "metax_identifier_for_first" }]
 }
 
 beforeEach(() => {

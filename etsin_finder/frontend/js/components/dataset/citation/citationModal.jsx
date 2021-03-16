@@ -82,10 +82,14 @@ const CitationModal = () => {
         <Citation title="MLA" text={mla} />
       </Grid>
       <hr />
-      <Translate component="p" content="dataset.citation.warning" />
+      <Translate component={Warning} content="dataset.citation.warning" />
     </Modal>
   )
 }
+
+const Warning = styled.p`
+  margin-bottom: 0;
+`
 
 const Grid = styled.div`
   display: grid;
