@@ -11,8 +11,17 @@
 }
 
 export const hasChildren = children => {
-  if (!children || (Array.isArray(children) && !children.find(single => single !== undefined))) {
+  // component has no children
+  if (!children) {
     return false
+  }
+  // component has an empty array of children
+  if (Array.isArray(children) && !children.find(single => single !== undefined)) {
+    return false
+  }
+  // component has a child that has props.children
+  if ('children' in (children?.props || {})) {
+    return hasChildren(children.props.children)
   }
   return true
 }
