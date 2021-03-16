@@ -1038,4 +1038,24 @@ describe('Qvain.Actors store', () => {
     stores.Qvain.editDataset(dataset)
     expect(stores.Qvain.Actors.toBackend()).toMatchSnapshot()
   })
+
+  it('maintains order of creators', () => {
+    const first = { '@type': 'Person', name: 'First' }
+    const second = { '@type': 'Person', name: 'Second' }
+    const third = { '@type': 'Person', name: 'Third' }
+    const nonCreator = { '@type': 'Person', name: 'Not Creator' }
+
+    const dataset = {
+      creator: [first, second, third],
+      publisher: third,
+      contributor: [nonCreator, third],
+      rights_holder: [third],
+      curator: [third],
+    }
+
+    stores.Qvain.Actors.editDataset(dataset)
+    expect(stores.Qvain.Actors.actors.length).toBe(4)
+    const creators = stores.Qvain.Actors.actors.filter(actor => actor.roles.includes('creator'))
+    expect(creators.map(actor => actor.person.name)).toEqual([first.name, second.name, third.name])
+  })
 })
