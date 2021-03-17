@@ -68,13 +68,19 @@ beforeEach(() => {
 })
 
 describe('Qvain.Actors', () => {
+  let addedActors
+
+  afterEach(() => {
+    addedActors?.unmount?.()
+  })
+
   it('should render correctly', () => {
     const component = shallow(<ActorsBase />)
     expect(component).toMatchSnapshot()
   })
 
   it('should list all added actors', () => {
-    const addedActors = mount(
+    addedActors = mount(
       <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
           <AddedActors />
