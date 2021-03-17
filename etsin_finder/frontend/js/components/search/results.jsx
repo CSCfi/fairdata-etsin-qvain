@@ -61,7 +61,7 @@ const Results = () => {
                         onClick={toggleFilter}
                         active={filterOpen}
                       >
-                        <FontAwesomeIcon icon={faFilter} />
+                        <FontAwesomeIcon icon={faFilter} />{' '}
                         <Translate content="search.filter.filter" />
                       </FilterToggle>
                       <SortResults />
@@ -69,12 +69,16 @@ const Results = () => {
                   </ResultsHeader>
                 </Header>
                 <Flex>
-                  <Sidebar>
+                  <Translate
+                    component={Sidebar}
+                    role="search"
+                    attributes={{ 'aria-label': 'search.filter.filters' }}
+                  >
                     <HeightTransition in={filterOpen} duration={300} onlyMobile>
                       <ClearFilters />
                       <FilterResults open={filterOpen} />
                     </HeightTransition>
-                  </Sidebar>
+                  </Translate>
                   <ResultsCont>
                     <ResultsList />
                   </ResultsCont>
@@ -130,7 +134,7 @@ const QueryCont = styled.div`
   }
 `
 
-const Sidebar = styled.aside`
+const Sidebar = styled.div`
   display: block;
   overflow: hidden;
   width: 100%;

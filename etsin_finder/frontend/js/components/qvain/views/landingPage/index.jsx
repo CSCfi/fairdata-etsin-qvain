@@ -5,11 +5,12 @@ import Graphics from './graphics'
 import { useStores } from '../../utils/stores'
 
 const LandingPage = () => {
-  const { Accessibility } = useStores()
-
+  const { Accessibility, Matomo } = useStores()
   useEffect(() => {
     Accessibility.handleNavigation()
-  }, [Accessibility])
+    Matomo.changeService('QVAIN')
+    Matomo.recordEvent('HOME')
+  }, [Accessibility, Matomo])
 
   return (
     <div className="container">

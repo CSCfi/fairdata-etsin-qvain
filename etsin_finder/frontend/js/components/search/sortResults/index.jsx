@@ -53,8 +53,17 @@ class SortResults extends Component {
     document.removeEventListener('mousedown', this.handleClickOutside)
   }
 
-  setWrapperRef(node) {
-    this.wrapperRef = node
+  // Close sort dropdown if clicked on outside of wrapper node
+  handleClickOutside(event) {
+    if (
+      this.state.listToggle === 'open' &&
+      this.wrapperRef &&
+      !this.wrapperRef.contains(event.target)
+    ) {
+      this.setState({
+        listToggle: '',
+      })
+    }
   }
 
   getSortIcon(value) {
@@ -65,6 +74,10 @@ class SortResults extends Component {
       sortIcon = faSortAmountUp
     }
     return sortIcon
+  }
+
+  setWrapperRef(node) {
+    this.wrapperRef = node
   }
 
   getSortTitleTranslationPath(value) {
@@ -94,19 +107,6 @@ class SortResults extends Component {
           }
         }
       )
-    }
-  }
-
-  // Close sort dropdown if clicked on outside of wrapper node
-  handleClickOutside(event) {
-    if (
-      this.state.listToggle === 'open' &&
-      this.wrapperRef &&
-      !this.wrapperRef.contains(event.target)
-    ) {
-      this.setState({
-        listToggle: '',
-      })
     }
   }
 

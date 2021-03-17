@@ -51,7 +51,7 @@ const QvainLink = styled(MaybeExternalLink)`
 
 const EtsinHeader = props => {
   const { lang, currentLang } = props.Stores.Locale
-  const { Env } = props.Stores
+  const { Env, Matomo } = props.Stores
   const helpUrl = lang === 'fi' ? FAIRDATA_WEBSITE_URL.ETSIN.FI : FAIRDATA_WEBSITE_URL.ETSIN.EN
 
   const mobileSettingsExtra = (
@@ -59,6 +59,10 @@ const EtsinHeader = props => {
       <Translate content="nav.addDataset" />
     </QvainLink>
   )
+
+  const registerMatomo = () => {
+    Matomo.recordEvent('CREATE_EDIT')
+  }
 
   return (
     <Header>
@@ -68,7 +72,7 @@ const EtsinHeader = props => {
       </NaviContainer>
       <Right>
         <Settings helpUrl={helpUrl} loginThroughService="etsin">
-          <MaybeExternalLink to={Env.getQvainUrl('')}>
+          <MaybeExternalLink to={Env.getQvainUrl('')} onClick={registerMatomo}>
             <Translate content="nav.addDataset" />
           </MaybeExternalLink>
         </Settings>

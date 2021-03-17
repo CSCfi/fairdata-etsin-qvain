@@ -17,15 +17,14 @@ import Agent from '../agent'
 import Project from './special/project'
 import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
 import { withStores } from '../../../stores/stores'
+import Button from '../../general/button'
+import FlaggedComponent from '../../general/flaggedComponent'
 
 class Sidebar extends Component {
   dateSeparator(start, end) {
     return (
-      (start || end) && (
-        <ListItem key={start}>
-          {start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`}
-        </ListItem>
-      )
+      (start || end) &&
+      (start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`)
     )
   }
 
@@ -93,7 +92,30 @@ class Sidebar extends Component {
     return <Identifier idn={pid} />
   }
 
+  accessRights() {
+    const researchDataset = this.props.dataset.research_dataset
+    const accessRights = checkNested(researchDataset, 'access_rights')
+      ? researchDataset.access_rights
+      : false
+
+    if (accessRights.restriction_grounds?.length > 0) {
+      return accessRights.restriction_grounds.map(rg => (
+        <ListItem key={`rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
+          {checkDataLang(rg.pref_label)}
+        </ListItem>
+      ))
+    }
+    return (
+      checkNested(accessRights, 'access_type', 'pref_label') && (
+        <ListItem lang={getDataLang(accessRights.access_type.pref_label)}>
+          {checkDataLang(accessRights.access_type.pref_label)}
+        </ListItem>
+      )
+    )
+  }
+
   render() {
+    const { setShowCitationModal } = this.props.Stores.DatasetQuery
     const dataCatalog = this.props.dataset.data_catalog
     const researchDataset = this.props.dataset.research_dataset
 
@@ -131,6 +153,7 @@ class Sidebar extends Component {
     const infrastructure = checkNested(researchDataset, 'infrastructure')
       ? researchDataset.infrastructure
       : false
+    const title = catalogTitle[getDataLang(catalogPublisher)]
 
     return (
       <SidebarContainer>
@@ -139,9 +162,16 @@ class Sidebar extends Component {
             {/* DATA CATALOG LOGO */}
             {logo && (
               <SidebarItem>
-                <Logo
+                {/* <Logo
                   lang={getDataLang(catalogTitle)}
-                  alt={catalogPublisherHomepage}
+                  alt={translate('dataset.catalog_alt_text', { title })}
+                  file={logo}
+                  url={catalogPublisherHomepage}
+                /> */}
+                <Translate
+                  component={Logo}
+                  attributes={{ alt: 'dataset.catalog_alt_text' }}
+                  with={{ title }}
                   file={logo}
                   url={catalogPublisherHomepage}
                 />
@@ -154,14 +184,14 @@ class Sidebar extends Component {
               component="dd"
               trans="dataset.catalog_publisher"
               lang={getDataLang(catalogPublisher)}
+              lineAfter
             >
               {catalogPublisher && checkDataLang(catalogPublisher)}
             </SidebarItem>
-            <HorizontalLine aria-hidden />
 
             {/* PREFERRED IDENTIFIER */}
 
-            <SidebarItem component="dd" trans="dataset.identifier">
+            <SidebarItem component="dd" trans="dataset.identifier" lineAfter>
               {this.identifier()}
 
               {
@@ -173,7 +203,7 @@ class Sidebar extends Component {
                 )
               }
             </SidebarItem>
-            <HorizontalLine aria-hidden />
+
             {/* FIELD OF SCIENCE */}
 
             <SidebarItem
@@ -181,43 +211,47 @@ class Sidebar extends Component {
               fallback="Field of Science"
               hideEmpty="true"
             >
-              {field &&
-                field.map(f => (
-                  <ListItem key={f.identifier} lang={getDataLang(f.pref_label)}>
-                    {checkDataLang(f.pref_label)}
-                  </ListItem>
-                ))}
+              <List>
+                {field &&
+                  field.map(f => (
+                    <ListItem key={f.identifier} lang={getDataLang(f.pref_label)}>
+                      {checkDataLang(f.pref_label)}
+                    </ListItem>
+                  ))}
+              </List>
             </SidebarItem>
 
             {/* KEYWORDS */}
 
-            <SidebarItem component="dd" trans="dataset.keywords" hideEmpty="true">
+            <SidebarItem trans="dataset.keywords" hideEmpty="true">
               {this.keywords()}
             </SidebarItem>
 
             {/* SUBJECT HEADING */}
 
-            <SidebarItem component="dd" trans="dataset.subjectHeading" hideEmpty="true">
+            <SidebarItem trans="dataset.subjectHeading" hideEmpty="true">
               {this.subjectHeading()}
             </SidebarItem>
 
             {/* LANGUAGE */}
 
             <SidebarItem trans="dataset.language" hideEmpty="true">
-              {language &&
-                language.map((languages, i) => {
-                  let lang = checkDataLang(languages.title)
-                  if (lang === '') {
-                    lang = languages.title
-                  }
-                  return (
-                    /* eslint-disable react/no-array-index-key */
-                    <ListItem key={`${lang}-${i}`} lang={getDataLang(languages.title)}>
-                      {lang}
-                    </ListItem>
-                    /* eslint-enable react/no-array-index-key */
-                  )
-                })}
+              <List>
+                {language &&
+                  language.map((languages, i) => {
+                    let lang = checkDataLang(languages.title)
+                    if (lang === '') {
+                      lang = languages.title
+                    }
+                    return (
+                      /* eslint-disable react/no-array-index-key */
+                      <ListItem key={`${lang}-${i}`} lang={getDataLang(languages.title)}>
+                        {lang}
+                      </ListItem>
+                      /* eslint-enable react/no-array-index-key */
+                    )
+                  })}
+              </List>
             </SidebarItem>
 
             {/* SPATIAL COVERAGE */}
@@ -227,7 +261,7 @@ class Sidebar extends Component {
               fallback="Spatial Coverage"
               hideEmpty="true"
             >
-              {geographicName && geographicName.map(single => this.spatial(single))}
+              <List>{geographicName && geographicName.map(single => this.spatial(single))}</List>
             </SidebarItem>
 
             {/* TEMPORAL COVERAGE */}
@@ -243,126 +277,128 @@ class Sidebar extends Component {
 
             {/* LICENSE */}
             <SidebarItem trans="dataset.license" hideEmpty="true">
-              {license &&
-                license.map(rights => (
-                  <ListItem key={rights.identifier}>
-                    <License data={rights} />
-                  </ListItem>
-                ))}
+              <List>
+                {license &&
+                  license.map(rights => (
+                    <ListItem key={rights.identifier}>
+                      <License data={rights} />
+                    </ListItem>
+                  ))}
+              </List>
             </SidebarItem>
 
             {/* ACCESS RIGHTS RESTRICTION_GROUNDS */}
 
             {accessRights && (
               <SidebarItem trans="dataset.access_rights" hideEmpty="true">
-                {accessRights.restriction_grounds && accessRights.restriction_grounds.length > 0
-                  ? accessRights.restriction_grounds.map(rg => (
-                    <ListItem key={`rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
-                      {checkDataLang(rg.pref_label)}
-                    </ListItem>
-                  ))
-                  : checkNested(accessRights, 'access_type', 'pref_label') && (
-                    <ListItem lang={getDataLang(accessRights.access_type.pref_label)}>
-                      {checkDataLang(accessRights.access_type.pref_label)}
-                    </ListItem>
-                  )}
+                <List>{this.accessRights()}</List>
               </SidebarItem>
             )}
 
             {/* PROJECTS */}
 
             <SidebarItem trans="dataset.project.project" hideEmpty="true">
-              {isOutputOf &&
-                isOutputOf.map(item => {
-                  const projectName = checkDataLang(item.name)
-                  return (
-                    <ListItem key={`li-${projectName}`} lang={getDataLang(item.name)}>
-                      <Project project={item} />
-                    </ListItem>
-                  )
-                })}
+              <List>
+                {isOutputOf &&
+                  isOutputOf.map(item => {
+                    const projectName = checkDataLang(item.name)
+                    return (
+                      <ListItem key={`li-${projectName}`} lang={getDataLang(item.name)}>
+                        <Project project={item} />
+                      </ListItem>
+                    )
+                  })}
+              </List>
             </SidebarItem>
 
             {/* PUBLISHER */}
 
-            <SidebarItem
-              component="dd"
-              trans="dataset.publisher"
-              hideEmpty="true"
-              lang={publisher && getDataLang(publisher)}
-            >
+            <SidebarItem trans="dataset.publisher" hideEmpty="true">
               {publisher && (
-                <Agent
-                  lang={getDataLang(publisher)}
-                  key={checkDataLang(publisher) || publisher.name}
-                  first
-                  agent={publisher}
-                  popupAlign="sidebar"
-                />
+                <List>
+                  <Agent
+                    lang={getDataLang(publisher.name)}
+                    key={checkDataLang(publisher) || publisher.name}
+                    first
+                    agent={publisher}
+                    popupAlign="sidebar"
+                  />
+                </List>
               )}
             </SidebarItem>
 
             {/* CURATOR */}
 
             <SidebarItem trans="dataset.curator" hideEmpty="true">
-              {curator &&
-                curator.map(actor => {
-                  let curatorName = checkDataLang(actor.name)
-                  if (curatorName === '') {
-                    curatorName = actor.name
-                  }
-                  return (
-                    <ListItem key={`li-${curatorName}`} lang={getDataLang(actor)}>
+              <List>
+                {curator &&
+                  curator.map(actor => {
+                    let curatorName = checkDataLang(actor.name)
+                    if (curatorName === '') {
+                      curatorName = actor.name
+                    }
+                    return (
                       <Agent
-                        lang={getDataLang(actor)}
-                        key={curatorName}
+                        key={`li-${curatorName}`}
+                        lang={getDataLang(actor.name)}
                         first
                         agent={actor}
                         popupAlign="sidebar"
                       />
-                    </ListItem>
-                  )
-                })}
+                    )
+                  })}
+              </List>
             </SidebarItem>
 
             {/* RIGHTS HOLDER */}
 
             <SidebarItem trans="dataset.rights_holder" hideEmpty="true">
-              {rightsHolder &&
-                rightsHolder.map(actor => {
-                  let rightsHolderName = checkDataLang(actor.name)
-                  if (rightsHolderName === '') {
-                    rightsHolderName = actor.name
-                  }
-                  return (
-                    <ListItem key={`li-${rightsHolderName}`} lang={getDataLang(actor)}>
+              {rightsHolder && (
+                <List>
+                  {rightsHolder.map(actor => {
+                    let rightsHolderName = checkDataLang(actor.name)
+                    if (rightsHolderName === '') {
+                      rightsHolderName = actor.name
+                    }
+                    return (
                       <Agent
-                        lang={getDataLang(actor)}
-                        key={rightsHolderName}
+                        key={`li-${rightsHolderName}`}
+                        lang={getDataLang(actor.name)}
                         first
                         agent={actor}
                         popupAlign="sidebar"
                       />
-                    </ListItem>
-                  )
-                })}
+                    )
+                  })}
+                </List>
+              )}
             </SidebarItem>
 
             {/* INFRASTRUCTURE */}
 
             <SidebarItem trans="dataset.infrastructure" hideEmpty="true">
-              {infrastructure &&
-                infrastructure.map(entity => (
-                  <ListItem key={entity.identifier} lang={getDataLang(entity.pref_label)}>
-                    {checkDataLang(entity.pref_label)}
-                  </ListItem>
-                ))}
+              <List>
+                {infrastructure &&
+                  infrastructure.map(entity => (
+                    <ListItem key={entity.identifier} lang={getDataLang(entity.pref_label)}>
+                      {checkDataLang(entity.pref_label)}
+                    </ListItem>
+                  ))}
+              </List>
             </SidebarItem>
 
             {/* CITATION */}
 
-            <SidebarItem component="dd" trans="dataset.citation" hideEmpty="false">
-              {!harvested && <Citation />}
+            <SidebarItem trans="dataset.citation.sidebar" hideEmpty="false">
+              {!harvested && (
+                <FlaggedComponent flag="UI.CITATION_MODAL" whenDisabled={<Citation />}>
+                  <Translate
+                    content="dataset.citation.title"
+                    component={CitationButton}
+                    onClick={() => setShowCitationModal(true)}
+                  />
+                </FlaggedComponent>
+              )}
             </SidebarItem>
           </dl>
         </ErrorBoundary>
@@ -373,9 +409,14 @@ class Sidebar extends Component {
 
 Sidebar.propTypes = {
   dataset: PropTypes.object.isRequired,
+  Stores: PropTypes.object.isRequired,
 }
 
-const SidebarContainer = styled.aside`
+const CitationButton = styled(Button)`
+  margin: 0;
+`
+
+const SidebarContainer = styled.div`
   border: 2px solid rgb(231, 233, 237);
   word-wrap: break-word;
   word-break: break-word;
@@ -383,23 +424,21 @@ const SidebarContainer = styled.aside`
   -moz-hyphens: auto;
   -ms-hyphens: auto;
   hyphens: auto;
-  padding: 20px 0;
+  padding: 20px 0 0 0;
 `
 
 const SidebarContainerForCumulativeInfo = styled.div`
   padding: 0.5em 0em 0em 0em;
 `
 
-const HorizontalLine = styled.hr`
-  border-style: solid;
-  border-color: ${props => props.theme.color.lightgray};
-  margin: 20px 0;
-`
-
 const SubjectHeaderLink = styled.a`
   display: block;
 `
 
-const ListItem = styled.dd``
+const List = styled.ul`
+  list-style: none;
+`
+
+const ListItem = styled.li``
 
 export default withStores(observer(Sidebar))

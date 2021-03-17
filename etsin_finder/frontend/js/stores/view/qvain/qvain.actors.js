@@ -73,10 +73,10 @@ const actorToBackend = actor => ({
   person:
     actor.type === ENTITY_TYPE.PERSON
       ? {
-          name: actor.person.name,
-          email: actor.person.email || undefined,
-          identifier: actor.person.identifier || undefined,
-        }
+        name: actor.person.name,
+        email: actor.person.email || undefined,
+        identifier: actor.person.identifier || undefined,
+      }
       : undefined,
   organizations: actor.organizations.map(org => ({
     name: org.name,
@@ -158,10 +158,6 @@ class Actors {
     makeObservable(this)
     this.reset()
   }
-
-  @observable actors
-
-  @observable actorInEdit
 
   // Reference organizations by parent
   @observable referenceOrganizations = {}
@@ -278,6 +274,7 @@ class Actors {
       return this.loadingReferenceOrganizations[parentId]
     }
     delete this.referenceOrganizationErrors[parentId]
+    // eslint-disable-next-line no-async-promise-executor
     this.loadingReferenceOrganizations[parentId] = new Promise(async (resolve, reject) => {
       const url = getOrganizationSearchUrl(parentId)
       let orgs
@@ -563,10 +560,10 @@ class Actors {
       person:
         actor.type === ENTITY_TYPE.PERSON
           ? {
-              name: actor.person.name,
-              email: actor.person.email || undefined,
-              identifier: actor.person.identifier || undefined,
-            }
+            name: actor.person.name,
+            email: actor.person.email || undefined,
+            identifier: actor.person.identifier || undefined,
+          }
           : undefined,
       organizations: actor.organizations.map(org => ({
         name: org.name,

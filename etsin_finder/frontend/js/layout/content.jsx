@@ -25,12 +25,18 @@ const Content = ({ contentRef }) => {
   const {
     Auth,
     Env: { isQvain, separateQvain, getQvainUrl },
+    Matomo: { changeService },
     Accessibility,
   } = useStores()
 
   useEffect(() => {
     Accessibility.handleNavigation()
-  }, [Accessibility])
+    if (isQvain) {
+      changeService('QVAIN')
+    } else {
+      changeService('ETSIN')
+    }
+  }, [Accessibility, isQvain, changeService])
 
   if (Auth.initializing) return null
 

@@ -19,7 +19,6 @@ import { Dataset } from '../../routes'
 import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
-import Tracking from '../../utils/tracking'
 
 import { withStores } from '../../stores/stores'
 
@@ -34,18 +33,10 @@ class Search extends Component {
   componentDidMount() {
     const {
       Stores: { Accessibility },
-      match,
-      location,
     } = this.props
 
     Accessibility.handleNavigation('datasets')
     this.initialQuery()
-
-    if (match.params.query) {
-      Tracking.newPageView(`Search: ${match.params.query}`, location.pathname)
-    } else {
-      Tracking.newPageView('Search', location.pathname)
-    }
   }
 
   initialQuery = () => {

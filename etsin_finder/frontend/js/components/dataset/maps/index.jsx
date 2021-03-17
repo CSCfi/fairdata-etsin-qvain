@@ -10,7 +10,6 @@ import { observer } from 'mobx-react'
 import { TypeLocation } from '../../../utils/propTypes'
 import MyMap from './map'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
-import Tracking from '../../../utils/tracking'
 import { withStores } from '../../../stores/stores'
 
 const Table = styled.table`
@@ -56,22 +55,19 @@ class Maps extends Component {
       }),
     }).isRequired,
     spatial: TypeLocation.isRequired,
+    id: PropTypes.string.isRequired,
   }
 
   componentDidMount() {
-    const {
-      Stores: { Accessibility },
-      match,
-      location,
-    } = this.props
+    const { Accessibility, Matomo } = this.props.Stores
 
-    Tracking.newPageView(`Dataset: ${match.params.identifier} | Maps`, location.pathname)
     Accessibility.handleNavigation('maps', false)
+    Matomo.recordEvent(`MAPS / ${this.props.match.params.identifier}`)
   }
 
   render() {
     return (
-      <div>
+      <div id={this.props.id}>
         {/* Map details in a table list (this is not the actual map) */}
         <Table>
           {/* Table header */}

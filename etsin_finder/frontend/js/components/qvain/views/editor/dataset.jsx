@@ -40,9 +40,11 @@ const Dataset = ({
       </div>
     )
   }
+
   if (!haveDataset) {
     return null
   }
+
   return (
     <Form className="container">
       <DisableImplicitSubmit />

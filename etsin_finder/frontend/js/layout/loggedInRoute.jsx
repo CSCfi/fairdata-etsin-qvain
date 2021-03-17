@@ -49,12 +49,14 @@ const LoggedInRoute = ({ notLoggedIn, children, component, render, ...props }) =
 
 LoggedInRoute.propTypes = {
   children: PropTypes.node.isRequired,
+  computedMatch: PropTypes.object,
   notLoggedIn: PropTypes.node, // render this if not logged in
   component: PropTypes.node,
   render: PropTypes.func,
 }
 
 LoggedInRoute.defaultProps = {
+  computedMatch: undefined,
   notLoggedIn: null,
   component: null,
   render: null,

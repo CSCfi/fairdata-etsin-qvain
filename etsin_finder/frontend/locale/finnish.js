@@ -31,8 +31,14 @@ const finnish = {
     access_open: 'Avoin',
     access_rights: 'Saatavuus',
     catalog_publisher: 'Katalogin julkaisija',
-    citation: 'Sitaatti / Lähdeviite',
-    citation_formats: 'Näytä lisää sitaattiehdotuksia',
+    citation: {
+      sidebar: 'Sitaatti / Lähdeviite',
+      title: 'Viittaa aineistoon',
+      copyButton: 'Kopioi',
+      copyButtonTooltip: 'Kopioi leikepöydälle',
+      copyButtonTooltipSuccess: 'Viittaus kopioitu leikepöydälle',
+      warning: 'Automaattisesti luotujen viitteiden tiedoissa voi esiintyä virheitä. Tarkista aina viitteen tiedot.'
+    },
     citationNoDateIssued: 'Julkaisupäivämäärää ei määritelty',
     contact: {
       access: 'Aineiston käyttöoikeuteen liittyvissä kyselyissä ota yhteyttä kuraattoriin.',
@@ -80,6 +86,7 @@ const finnish = {
     data_location: 'Mene haravoituun sijaintiin',
     datasetAsFile: {
       open: 'Lataa aineiston metatiedot',
+      infoLabel: 'Formaatin tiedot',
       infoText:
         'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
       datacite: 'Datacite tietomallissa (XML)',
@@ -207,6 +214,7 @@ const finnish = {
     funder: 'Rahoittaja',
     goBack: 'Palaa takaisin',
     identifier: 'Tunniste',
+    catalog_alt_text: '%(title)s logo, linkki vie katalogin julkaisijan verkkosivuille',
     infrastructure: 'Infrastruktuuri',
     issued: 'Julkaisupäivämäärä',
     modified: 'Aineiston muokkauspäivämäärä',

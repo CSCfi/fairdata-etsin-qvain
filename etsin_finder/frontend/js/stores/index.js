@@ -19,6 +19,7 @@ import QvainClass from './view/qvain'
 import QvainDatasetsClass from './view/qvain/qvain.datasets'
 import AccessClass from './view/access'
 import SearchFiltersClass from './view/searchfilters'
+import MatomoClass from './tracking'
 
 export const buildStores = () => {
   const Env = new EnvClass()
@@ -32,6 +33,7 @@ export const buildStores = () => {
   const Locale = new LocaleClass(Accessibility, ElasticQuery)
   const DatasetQuery = new DatasetQueryClass(Env, Access)
   const Map = new MapClass(Locale)
+  const Matomo = new MatomoClass(Env)
 
   return {
     Env,
@@ -45,6 +47,7 @@ export const buildStores = () => {
     Map,
     QvainDatasets,
     SearchFilters,
+    Matomo,
   }
 }
 

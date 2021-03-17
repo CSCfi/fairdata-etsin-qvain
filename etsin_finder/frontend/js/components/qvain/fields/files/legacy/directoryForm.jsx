@@ -137,7 +137,7 @@ export class DirectoryFormBase extends Component {
     const { readonly } = this.props.Stores.Qvain
     const { titleError, descriptionError, directoryError, useCategoryError } = this.state
     return (
-      <Fragment>
+      <>
         <FileContainer className={this.props.className}>
           <Label>
             <Translate content="qvain.files.selected.form.title.label" /> *
@@ -199,7 +199,7 @@ export class DirectoryFormBase extends Component {
             />
           </Buttons>
         </FileContainer>
-      </Fragment>
+      </>
     )
   }
 }

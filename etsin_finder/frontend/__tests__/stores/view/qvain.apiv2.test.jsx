@@ -25,6 +25,7 @@ import {
 } from '../../../js/utils/constants'
 import '../../../locale/translations'
 import urls from '../../../js/components/qvain/utils/urls'
+import { configure } from 'mobx'
 
 // first half of the tests mocks qvainFormSchema but the rest of the tests uses actual module
 import {
@@ -117,7 +118,6 @@ const createMockQvain = settings => ({
   },
   Actors: { checkProvenanceActors: jest.fn(() => true) },
   OtherIdentifiers: { cleanupBeforeBackend: jest.fn(() => true) },
-  updateFiles: jest.fn(),
   editDataset: jest.fn(),
   setChanged: jest.fn(),
   setOriginal: jest.fn(),
@@ -154,10 +154,12 @@ describe('Submit.exec()', () => {
         identifier: 'some identifier',
       },
     })
+    configure({ safeDescriptors: false })
     Submit = new SubmitClass(mockQvain)
   })
 
   afterEach(() => {
+    configure({ safeDescriptors: true })
     jest.resetAllMocks()
   })
 

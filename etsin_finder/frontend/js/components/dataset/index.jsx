@@ -28,7 +28,9 @@ import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
 import Loader from '../general/loader'
+import FlaggedComponent from '../general/flaggedComponent'
 import { withStores } from '../../stores/stores'
+import CitationModal from './citation/citationModal'
 
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
@@ -53,6 +55,20 @@ class Dataset extends React.Component {
   componentDidMount() {
     this.props.Stores.Accessibility.resetFocus()
     this.query()
+  }
+
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
+    if (this.props.match.params.identifier !== newProps.match.params.identifier) {
+      this.setState(
+        {
+          loaded: false,
+        },
+        () => {
+          this.query(newProps.match.params.identifier)
+        }
+      )
+    }
   }
 
   async getAllVersions(data) {
@@ -153,20 +169,6 @@ class Dataset extends React.Component {
       })
   }
 
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(newProps) {
-    if (this.props.match.params.identifier !== newProps.match.params.identifier) {
-      this.setState(
-        {
-          loaded: false,
-        },
-        () => {
-          this.query(newProps.match.params.identifier)
-        }
-      )
-    }
-  }
-
   render() {
     const { Accessibility, DatasetQuery, Env, Auth } = this.props.Stores
     const { metaxApiV2 } = Env
@@ -219,6 +221,9 @@ class Dataset extends React.Component {
     // CASE 2: Business as usual
     return (
       <div>
+        <FlaggedComponent flag="UI.CITATION_MODAL">
+          <CitationModal />
+        </FlaggedComponent>
         <article className="container regular-row">
           <div className="row">
             <div className="col-12">

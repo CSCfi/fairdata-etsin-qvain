@@ -24,9 +24,7 @@ import { qvainFormSchema } from '../../../js/components/qvain/utils/formValidati
 import { ExternalFilesBase } from '../../../js/components/qvain/fields/files/external/externalFiles'
 import DoiSelection, { DoiCheckbox } from '../../../js/components/qvain/fields/files/doiSelection'
 import { ButtonGroup } from '../../../js/components/qvain/general/buttons'
-import {
-  ValidationErrors,
-} from '../../../js/components/qvain/general/errors/validationError'
+import { ValidationErrors } from '../../../js/components/qvain/general/errors/validationError'
 import { SlidingContent } from '../../../js/components/qvain/general/card'
 import EnvClass from '../../../js/stores/domain/env'
 import AccessibilityClass from '../../../js/stores/view/accessibility'
@@ -42,6 +40,8 @@ import {
 import DatePicker from '../../../js/components/qvain/general/input/datepicker'
 import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
 import { useStores } from '../../../js/stores/stores'
+
+global.fdweRecordEvent = () => {}
 
 jest.mock('uuid', original => {
   let id = 0
@@ -84,6 +84,9 @@ const getStores = () => {
     Env,
     Qvain,
     Locale,
+    Matomo: {
+      recordEvent: jest.fn(),
+    },
   }
 }
 

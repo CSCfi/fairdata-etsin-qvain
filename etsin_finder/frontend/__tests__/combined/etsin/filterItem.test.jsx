@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
 import { syncHistoryWithStore } from 'mobx-react-router'
 
-import FilterItem from '../../../js/components/search/filterResults/filterItem'
+import { FilterItem } from '../../../js/components/search/filterResults/filterItem'
 import ElasticQueryClass from '../../../js/stores/view/elasticquery'
 import EnvClass from '../../../js/stores/domain/env'
 
@@ -25,32 +25,29 @@ jest.mock('../../../js/stores/stores', () => ({
 }))
 
 describe('FilterItem', () => {
-  let facet
-  beforeEach(() => {
-    ElasticQuery.updateSearch('Helsinki')
-    facet = {
-      item: { key: 'Pirkko Suihkonen', doc_count: 92 },
-      aggregationName: 'Creator',
-      termName: 'creator_name.keyword',
-    }
-  })
+  ElasticQuery.updateSearch('Helsinki')
+  const Stores = { ElasticQuery, Matomo: jest.fn() }
 
+  const facet = {
+    item: { key: 'Pirkko Suihkonen', doc_count: 92 },
+    aggregationName: 'Creator',
+    termName: 'creator_name.keyword',
+    title: { en: 'Actor', fi: 'Toimija' },
+  }
   describe('Filter not active', () => {
-    let filterItem
-    beforeEach(() => {
-      filterItem = mount(
-        <MemoryRouter>
-          <FilterItem
-            key={facet.item.key}
-            item={facet.item}
-            aggregationName={facet.aggregationName}
-            term={facet.termName}
-            tabIndex="1"
-          />
-        </MemoryRouter>
-      )
-    })
-
+    const filterItem = mount(
+      <MemoryRouter>
+        <FilterItem
+          Stores={Stores}
+          key={facet.item.key}
+          item={facet.item}
+          aggregationName={facet.aggregationName}
+          term={facet.termName}
+          tabIndex="1"
+          sectionTitleEn={facet.title.en}
+        />
+      </MemoryRouter>
+    )
     it('should contain button', () => {
       expect(filterItem.children().children().children().children().children().type()).toEqual(
         'button'
@@ -67,19 +64,23 @@ describe('FilterItem', () => {
   })
 
   describe('Filter currently active', () => {
-    let filterItem
-    beforeEach(() => {
-      ElasticQuery.updateFilter(facet.termName, facet.item.key)
-      filterItem = mount(
-        <MemoryRouter>
-          <FilterItem
-            key={facet.item.key}
-            item={facet.item}
-            aggregationName={facet.aggregationName}
-            term={facet.termName}
-            tabIndex="1"
-          />
-        </MemoryRouter>
+    ElasticQuery.updateFilter(facet.termName, facet.item.key)
+    const filterItem = mount(
+      <MemoryRouter>
+        <FilterItem
+          Stores={Stores}
+          key={facet.item.key}
+          item={facet.item}
+          aggregationName={facet.aggregationName}
+          term={facet.termName}
+          tabIndex="1"
+          sectionTitleEn={facet.title.en}
+        />
+      </MemoryRouter>
+    )
+    it('should be active', () => {
+      expect(filterItem.children().children().children().children().props().className).toEqual(
+        'active'
       )
     })
 

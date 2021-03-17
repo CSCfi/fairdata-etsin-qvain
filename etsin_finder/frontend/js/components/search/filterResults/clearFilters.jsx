@@ -18,9 +18,10 @@ import { InvertedButton } from '../../general/button'
 import { useStores } from '../../../stores/stores'
 
 const ClearFilters = () => {
-  const { ElasticQuery, Accessibility } = useStores()
+  const { ElasticQuery, Matomo, Accessibility } = useStores()
 
   const clear = () => {
+    Matomo.recordEvent('CLEAR_FILTERS')
     ElasticQuery.clearFilters()
     ElasticQuery.queryES()
     Accessibility.announce(translate('search.filter.filtersCleared'))
@@ -40,4 +41,5 @@ const CustomButton = styled(InvertedButton)`
   margin: 0;
   margin-bottom: 0.5em;
 `
+
 export default ClearFilters

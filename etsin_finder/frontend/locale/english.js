@@ -31,8 +31,14 @@ const english = {
     access_open: 'Open Access',
     access_rights: 'Access',
     catalog_publisher: 'Catalog publisher',
-    citation: 'Citation / Reference',
-    citation_formats: 'Show more citation formats',
+    citation: {
+      sidebar: 'Citation / Reference',
+      title: 'Cite dataset',
+      copyButton: 'Copy',
+      copyButtonTooltip: 'Copy to clipboard',
+      copyButtonTooltipSuccess: 'Citation copied to clipboard',
+      warning: 'Automatically generated citations may contain errors. Always check the provided citations.',
+    },
     citationNoDateIssued: 'Issued date not defined',
     contact: {
       access: 'Contact the curator on issues related to dataset access',
@@ -80,11 +86,12 @@ const english = {
     data_location: 'Go to harvested location',
     datasetAsFile: {
       open: 'Download dataset metadata',
+      infoLabel: 'Format information',
       infoText:
         'Datacite without validation: The dataset is shown in Datacite Format but without validation; mandatory fields might be missing. Dataset does not necessarily meet all Datacite requirements.',
       datacite: 'In Datacite datamodel (XML)',
       fairdata_datacite: 'In Datacite datamodel without validation (XML)',
-      metax: 'In Metax datamodel (JSON)'
+      metax: 'In Metax datamodel (JSON)',
     },
     draftInfo: {
       draft: 'This dataset is a draft. Only the creator of the dataset can view it.',
@@ -207,6 +214,7 @@ const english = {
     funder: 'Funder',
     goBack: 'Go back',
     identifier: 'Identifier',
+    catalog_alt_text: 'Logo for %(title)s, link takes you to catalog publisher website',
     infrastructure: 'Infrastructure',
     issued: 'Release date',
     modified: 'Dataset modification date',

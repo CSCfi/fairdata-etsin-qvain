@@ -19,10 +19,8 @@ import { Search } from '../../routes'
 import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
 import KeyValues from './keyValues'
-import Tracking from '../../utils/tracking'
 import Modal from '../general/modal'
-
-import { withStores } from '../../utils/stores'
+import { withStores } from '../../stores/stores'
 
 const customStyles = {
   content: {
@@ -46,17 +44,18 @@ class FrontPage extends Component {
 
   componentDidMount() {
     const {
-      Stores: { Accessibility },
-      location,
-    } = this.props
+      Accessibility,
+      Matomo: { recordEvent },
+    } = this.props.Stores
 
     Accessibility.handleNavigation('home')
-    Tracking.newPageView('Etsin | Tutkimusaineistojen hakupalvelu', location.pathname)
     // preload search page
     Search.preload()
 
     // Check the user status, and display modal message if user is not authenticated
     this.checkUserLoginStatus()
+
+    recordEvent('HOME')
   }
 
   checkUserLoginStatus() {
@@ -170,5 +169,4 @@ const TextHolder = styled.div`
     white-space: pre-line;
   }
 `
-
 export default withStores(FrontPage)

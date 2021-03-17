@@ -50,7 +50,9 @@ class SearchBar extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    const { ElasticQuery } = this.props.Stores
+    const { ElasticQuery, Matomo } = this.props.Stores
+
+    Matomo.recordEvent(`SEARCH / ${this.state.query}`)
     ElasticQuery.updateSearch(this.state.query)
     ElasticQuery.queryES(false)
   }

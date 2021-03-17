@@ -2,16 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
+import importImages from './importImages'
 import Image from '../../../general/image'
-
-function importAll(r) {
-  const images = {}
-  r.keys().map(item => {
-    images[item.replace('./', '')] = r(item)
-    return true
-  })
-  return images
-}
 
 export default class Logo extends Component {
   static propTypes = {
@@ -24,9 +16,7 @@ export default class Logo extends Component {
     super(props)
 
     this.state = {
-      images: importAll(
-        require.context('../../../../../static/images/catalog_logos', false, /\.(png|jpe?g|svg)$/)
-      ),
+      images: importImages(),
     }
   }
 
