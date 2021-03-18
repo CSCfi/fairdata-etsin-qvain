@@ -2,6 +2,7 @@ import { spatialNameSchema, spatialAltitudeSchema } from '../../../utils/formVal
 
 export default async Field => {
   const { inEdit, save, clearInEdit, setValidationError } = Field
+
   try {
     await spatialNameSchema.validate(inEdit.name)
     await spatialAltitudeSchema.validate(inEdit.altitude)
@@ -9,6 +10,7 @@ export default async Field => {
     setValidationError(e.message)
     return
   }
+
   await save()
   clearInEdit()
 }

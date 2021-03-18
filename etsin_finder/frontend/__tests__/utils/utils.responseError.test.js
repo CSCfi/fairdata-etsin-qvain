@@ -1,6 +1,3 @@
-import 'chai/register-expect'
-import axios from 'axios'
-
 import getResponseError from '../../js/components/qvain/utils/responseError'
 
 describe('when calling getResponseError with responseError including response', () => {
@@ -51,7 +48,7 @@ describe('when calling getResponseError with responseError without response', ()
   })
 
   test('should paste error to Array', () => {
-    const expectedError = [ResponseError.message]
+    const expectedError = ['Error: ' + ResponseError.message]
     returnValue.should.eql(expectedError)
   })
 })

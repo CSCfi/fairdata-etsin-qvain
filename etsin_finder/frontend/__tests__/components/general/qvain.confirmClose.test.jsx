@@ -1,6 +1,5 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import 'chai/register-should'
 import 'chai/register-expect'
 
 import {
@@ -8,11 +7,7 @@ import {
   ConfirmDialog,
 } from '../../../js/components/qvain/general/modal/confirmClose'
 
-import {
-  DangerCancelButton,
-  DangerButton,
-  ConfirmButtonContainer,
-} from '../../../js/components/qvain/general/buttons'
+import { DangerCancelButton, DangerButton } from '../../../js/components/qvain/general/buttons'
 import { ResponseOverlay } from '../../../js/components/qvain/general/modal/modalOverlay'
 
 describe('ConfirmDialog', () => {

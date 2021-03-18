@@ -20,7 +20,7 @@ describe('utils: Auth', () => {
       })
 
       test('should return Auth.checkLogin()', () => {
-        returnValue.should.eql(props.Stores.Auth.checkLogin())
+        returnValue.should.eql('checkLogin')
       })
     })
   })
@@ -33,12 +33,12 @@ describe('utils: Auth', () => {
     }
 
     describe('when calling checkLogin', () => {
-      beforeEach(() => {
-        checkLogin(props)
+      beforeEach(async () => {
+        returnValue = await checkLogin(props)
       })
 
       test('should return resolved promise', () => {
-        returnValue.should.eql(Promise.resolve())
+        expect(returnValue).to.be.undefined
       })
     })
   })
@@ -80,7 +80,7 @@ describe('when calling getUsername', () => {
           },
           Auth: {
             user: {
-              commonName: testUser,
+              commonName: 'Teppo Testikäyttäjä',
             },
           },
         },
@@ -89,7 +89,7 @@ describe('when calling getUsername', () => {
       returnValue = getUsername(props)
     })
 
-    test.todo('should return "abc-user-123"', () => {
+    test('should return "abc-user-123"', () => {
       returnValue.should.eql(testUser)
     })
   })

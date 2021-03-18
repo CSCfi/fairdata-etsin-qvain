@@ -1,6 +1,5 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import 'chai/register-should'
 import 'chai/register-expect'
 import ReactSelect from 'react-select'
 
@@ -11,7 +10,6 @@ import {
   getOptionValue,
   getGroupLabel,
   onChange,
-  onChangeMulti,
 } from '../../../js/components/qvain/utils/select'
 import getReferenceData from '../../../js/components/qvain/utils/getReferenceData'
 import etsinTheme from '../../../js/styles/theme'

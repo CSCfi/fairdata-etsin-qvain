@@ -12,3 +12,10 @@ chai.use(chaiJestMocks)
 configure({
   adapter: new Adapter(),
 })
+
+global.jestExpect = global.expect
+global.chaiExpect = chai.expect
+
+global.setExpect = framework => {
+  global.expect = global[`${framework}Expect`]
+}

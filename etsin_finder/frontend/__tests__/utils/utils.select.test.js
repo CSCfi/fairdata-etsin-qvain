@@ -1,4 +1,3 @@
-import 'chai/register-expect'
 import {
   getCurrentOption,
   onChange,
@@ -8,9 +7,9 @@ import {
   getOptionValue,
   getOptions,
   sortGroups,
-  autoSortOptions,
 } from '../../js/components/qvain/utils/select'
 import axios from 'axios'
+import 'chai/register-expect'
 
 import { METAX_FAIRDATA_ROOT_URL } from '../../js/utils/constants'
 
@@ -23,6 +22,7 @@ const model = (label, uri) => ({
 
 describe('when calling getCurrentOption with getter as object', () => {
   let returnValue
+
   const model = (labeli, uri) => ({
     labeli,
     uri,

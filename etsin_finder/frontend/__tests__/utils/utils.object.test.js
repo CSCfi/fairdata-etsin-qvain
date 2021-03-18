@@ -1,4 +1,3 @@
-import 'chai/register-expect'
 import getPath from '../../js/components/qvain/utils/object'
 
 describe('when calling getPath with existing path', () => {

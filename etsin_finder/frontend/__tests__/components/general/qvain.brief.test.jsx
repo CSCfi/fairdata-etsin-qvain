@@ -3,7 +3,6 @@ import { shallow } from 'enzyme'
 import 'chai/register-expect'
 
 import Brief from '../../../js/components/qvain/general/section/brief'
-import { element } from 'prop-types'
 
 describe('Brief', () => {})
 let brief

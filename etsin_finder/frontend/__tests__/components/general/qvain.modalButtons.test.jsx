@@ -1,6 +1,5 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import 'chai/register-should'
 import 'chai/register-expect'
 
 import ModalButtons from '../../../js/components/qvain/general/modal/modalButtons'

@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import 'chai/register-expect'
 
 const setEventListeners = (updatePosition, handleClickOutside) => {
   window.addEventListener('scroll', updatePosition)
