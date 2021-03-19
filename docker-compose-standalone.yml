@@ -29,10 +29,10 @@ services:
     etsin-qvain-elasticsearch:
       image: docker.elastic.co/elasticsearch/elasticsearch:6.5.2
       ports:
-        - "9200:9200"
-        - "9300:9300"
+        - "9201:9201"
+        - "9301:9301"
       environment:
-        - base_url=0.0.0.0:9200
+        - base_url=0.0.0.0:9201
         - http.host=0.0.0.0
         - transport.host=0.0.0.0
         - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
