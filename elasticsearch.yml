@@ -12,9 +12,9 @@ http.cors.allow-headers : "X-Requested-With,X-Auth-Token,Content-Type,Content-Le
 bootstrap.memory_lock: true
 network.host: 0.0.0.0
 network.bind_host: 0.0.0.0
-http.port: 9200
+http.port: 9201
 discovery.zen.ping.unicast.hosts: 0.0.0.0
-transport.tcp.port: 9300
+transport.tcp.port: 9301
 discovery.zen.minimum_master_nodes: 1
 indices.query.bool.max_clause_count: 10000
 xpack.security.enabled: false
