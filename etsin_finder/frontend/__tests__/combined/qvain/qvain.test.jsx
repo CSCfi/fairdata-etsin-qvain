@@ -13,7 +13,6 @@ import FieldOfScienceField from '../../../js/components/qvain/fields/description
 import IssuedDateField from '../../../js/components/qvain/fields/description/issuedDate'
 import LanguageField from '../../../js/components/qvain/fields/description/language'
 import KeywordsField from '../../../js/components/qvain/fields/description/keywords'
-import SubjectHeadingsField from '../../../js/components/qvain/fields/description/subjectHeadings'
 import RightsAndLicenses from '../../../js/components/qvain/fields/licenses'
 import { License } from '../../../js/components/qvain/fields/licenses/licenses'
 import { AccessType } from '../../../js/components/qvain/fields/licenses/accessType'
@@ -236,10 +235,6 @@ describe('Qvain.Description', () => {
   })
   it('should render <KeywordsField />', () => {
     const component = shallow(<KeywordsField.wrappedComponent />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <SubjectHeadingsField />', () => {
-    const component = shallow(<SubjectHeadingsField.wrappedComponent Stores={getStores()} />)
     expect(component).toMatchSnapshot()
   })
 })
