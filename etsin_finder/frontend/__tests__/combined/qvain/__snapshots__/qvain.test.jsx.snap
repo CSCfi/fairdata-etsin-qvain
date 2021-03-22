@@ -267,6 +267,7 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     htmlFor="keywords-input"
   >
     <TooltipHover
+      flexGrow={0}
       position="right"
       showOnClick={false}
       showOnHover={true}

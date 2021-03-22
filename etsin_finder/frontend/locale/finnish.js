@@ -37,7 +37,8 @@ const finnish = {
       copyButton: 'Kopioi',
       copyButtonTooltip: 'Kopioi leikepöydälle',
       copyButtonTooltipSuccess: 'Viittaus kopioitu leikepöydälle',
-      warning: 'Automaattisesti luotujen viitteiden tiedoissa voi esiintyä virheitä. Tarkista aina viitteen tiedot.'
+      warning:
+        'Automaattisesti luotujen viitteiden tiedoissa voi esiintyä virheitä. Tarkista aina viitteen tiedot.',
     },
     citationNoDateIssued: 'Julkaisupäivämäärää ei määritelty',
     contact: {
@@ -91,7 +92,7 @@ const finnish = {
         'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
       datacite: 'Datacite tietomallissa (XML)',
       fairdata_datacite: 'Ei validoituna Datacite tietomallissa (XML)',
-      metax: 'Metax tietomallissa (JSON)'
+      metax: 'Metax tietomallissa (JSON)',
     },
     draftInfo: {
       draft: 'Tämä aineisto on luonnos ja näkyy ainoastaan aineiston luojalle.',
@@ -109,6 +110,8 @@ const finnish = {
       downloadAll: 'Lataa kaikki',
       downloadDisabledForDraft: 'Lataus ei käytössä luonnoksille',
       downloading: 'Ladataan...',
+      source: 'Lähde',
+      commonSource: 'Avaa alkuperäinen lähde',
       fileAmount: '%(amount)s objektia',
       close_modal: 'Sulje info',
       customMetadata: 'Metatiedot',
@@ -116,14 +119,17 @@ const finnish = {
       loading: 'Ladataan kansiota',
       loaded: 'Kansio latautunut',
       errors: {
-        serviceUnavailable: 'Latauspalvelu ei ole juuri nyt käytettävissä. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
-        unknownError: 'Latauspalvelun käytössä tapahtui virhe. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
+        serviceUnavailable:
+          'Latauspalvelu ei ole juuri nyt käytettävissä. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
+        unknownError:
+          'Latauspalvelun käytössä tapahtui virhe. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
       },
       packages: {
         createForAll: 'Lataa kaikki',
         create: 'Lataa',
         pending: 'Luodaan',
-        pendingTooltip: 'Latauspakettia luodaan. Kun painike muuttuu vihreäksi, lataus voidaan aloittaa.',
+        pendingTooltip:
+          'Latauspakettia luodaan. Kun painike muuttuu vihreäksi, lataus voidaan aloittaa.',
         loading: 'Ladataan',
         modal: {
           header: 'Luo latauspaketti?',
@@ -134,6 +140,10 @@ const finnish = {
           ok: 'Luo latauspaketti',
           cancel: 'Peruuta',
         },
+      },
+      objectCount: {
+        one: '1 object',
+        other: '%(count)s objects',
       },
       fileCount: {
         one: '1 tiedosto',
@@ -271,7 +281,7 @@ const finnish = {
     details: {
       showDetails: 'Näytä tiedot',
       hideDetails: 'Piilota tiedot',
-    }
+    },
   },
   general: {
     showMore: 'Näytä lisää',
@@ -1042,7 +1052,6 @@ const finnish = {
           endDateMissing: 'Loppumispäivämäärä puuttuu',
         },
       },
-
     },
     files: {
       title: 'Tiedostot',

@@ -109,6 +109,8 @@ const english = {
       downloadAll: 'Download all',
       downloadDisabledForDraft: 'Download disabled for draft',
       downloading: 'Downloading...',
+      source: 'Source',
+      commonSource: 'Go to the original source',
       fileAmount: '%(amount)s objects',
       close_modal: 'Close info modal',
       customMetadata: 'Metadata',
@@ -134,6 +136,10 @@ const english = {
           ok: 'Generate',
           cancel: 'Cancel',
         }
+      },
+      objectCount: {
+        one: '1 object',
+        other: '%(count)s objects',
       },
       fileCount: {
         one: '1 file',
