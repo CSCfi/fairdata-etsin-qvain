@@ -18,7 +18,7 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
 import buildColumns from '../../../../utils/buildColumns'
 import { useStores } from '../../../../stores/stores'
-import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
+import { Header, HeaderTitle, HeaderButton } from '../common/dataHeader'
 import ResourceItem from './resourceItem'
 
 const ExternalResources = () => {
@@ -34,7 +34,6 @@ const ExternalResources = () => {
     return null
   }
 
-  const totalCount = remote.length
   const accessUrls = new Set(
     remote.map(resource => resource.access_url?.identifier).filter(v => v)
   )
@@ -46,9 +45,6 @@ const ExternalResources = () => {
     <DataTable>
       <Header>
         <Translate component={HeaderTitle} content="dataset.dl.remote" />
-        <HeaderStats>
-          <Translate content="dataset.dl.objectCount" with={{ count: totalCount }} />
-        </HeaderStats>
 
         {hasCommonAccess && (
           <Translate component={HeaderButton} icon={faExternalLinkAlt} invert color="darkgray">
@@ -93,7 +89,7 @@ export const Grid = styled.ul`
   grid-auto-rows: 1.5rem;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 `
 
 const DataTable = styled.div`

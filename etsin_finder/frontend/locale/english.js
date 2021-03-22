@@ -137,10 +137,6 @@ const english = {
           cancel: 'Cancel',
         }
       },
-      objectCount: {
-        one: '1 object',
-        other: '%(count)s objects',
-      },
       fileCount: {
         one: '1 file',
         other: '%(count)s files',

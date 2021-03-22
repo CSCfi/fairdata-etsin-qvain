@@ -141,10 +141,6 @@ const finnish = {
           cancel: 'Peruuta',
         },
       },
-      objectCount: {
-        one: '1 object',
-        other: '%(count)s objects',
-      },
       fileCount: {
         one: '1 tiedosto',
         other: '%(count)s tiedostoa',
