@@ -10,11 +10,13 @@ export default class ComponentTestHarness {
   constructor(Component, requiredProps) {
     this.Component = Component
     this.requiredProps = requiredProps
+    this.wrappers = {}
   }
 
   shallow = extraProps => {
     const parsedProps = this.parseProps(extraProps)
     this.wrapper = shallow(<this.Component {...parsedProps} />)
+    return this
   }
 
   mount = extraProps => {
@@ -24,22 +26,41 @@ export default class ComponentTestHarness {
         <this.Component {...parsedProps} />
       </ThemeProvider>
     )
+    return this
   }
 
   unmount = async () => {
     this.wrapper.unmount()
+    return this
+  }
+
+  storeWrapper = wrapperLabel => {
+    this.wrappers[wrapperLabel] = this.wrapper
+  }
+
+  getWrapper = label => {
+    if (!label) return this.wrapper
+    return this.wrappers[label]
   }
 
   find = findTerm => {
     this.wrapper = this.wrapper.find(findTerm)
+    return this
   }
 
   findWithProp = (prop, value) => {
     this.wrapper = this.wrapper.findWhere(elem => elem.prop(prop) === value)
+    return this
   }
 
   diveInto = findTerm => {
     this.wrapper = this.wrapper.find(findTerm).dive()
+    return this
+  }
+
+  originalAsNewHarness = () => {
+    const harness = new ComponentTestHarness(this.Component, this.requiredProps)
+    return harness
   }
 
   parseProps = extraProps => {
