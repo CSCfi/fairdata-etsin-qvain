@@ -28,9 +28,6 @@ services:
         - FLASK_DEBUG=1
     etsin-qvain-elasticsearch:
       image: docker.elastic.co/elasticsearch/elasticsearch:6.5.2
-      ports:
-        - "9201:9200"
-        - "9301:9300"
       environment:
         - base_url=0.0.0.0:9201
         - http.host=0.0.0.0
