@@ -14,6 +14,7 @@ from etsin_finder.utils.utils import ensure_app
 default_supported_flags = {
     'DOWNLOAD_API_V2.BACKEND',
     'DOWNLOAD_API_V2.FRONTEND',
+    'DOWNLOAD_API_V2.EMAIL.FRONTEND',
     'METAX_API_V2.BACKEND',
     'METAX_API_V2.FRONTEND',
     'UI.BOTTOM_SUBMIT_BUTTONS',
