@@ -2,7 +2,7 @@ const env = require('dotenv').config()
 const path = require('path')
 const DotenvPlugin = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const { insertBeforeStyled } = require('./helpers')
 
@@ -28,14 +28,11 @@ const config = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf|svg|jpg|png)$/,
-        use: 'file-loader',
+        type: 'asset/resource',
       },
       {
         test: /\.css$/i,
-        use: [
-          { loader: 'style-loader', options: { insert: insertBeforeStyled }, },
-          'css-loader'
-        ],
+        use: [{ loader: 'style-loader', options: { insert: insertBeforeStyled } }, 'css-loader'],
       },
     ],
   },
@@ -56,14 +53,10 @@ const config = {
     minimize: true,
     minimizer: [
       new TerserPlugin({
-        // Enable file caching. Default path to cache directory: node_modules/.cache/terser-webpack-plugin.
-        cache: true,
         // Use multi-process parallel running to improve the build speed.
         // Default number of concurrent runs: os.cpus().length - 1.
         parallel: true,
         terserOptions: {
-          // Support Internet Explorer 8.
-          ie8: true,
           // Support Safari 10 with work around for Safari 10/11 bugs in loop scoping and await
           safari10: true,
         },
