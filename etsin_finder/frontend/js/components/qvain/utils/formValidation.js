@@ -1,4 +1,6 @@
 import * as yup from 'yup'
+import parseDate from 'date-fns/parse'
+
 import {
   ACCESS_TYPE_URL,
   ENTITY_TYPE,
@@ -7,21 +9,41 @@ import {
   DATA_CATALOG_IDENTIFIER,
 } from '../../../utils/constants'
 
+function validateStringDate() {
+  // eslint-disable-next-line func-names
+  return this.test('is a date string', undefined, function (value) {
+    const { path, createError } = this
+    if (!value) {
+      return true
+    }
+    const parsed = parseDate(value, 'yyyy-MM-dd', new Date())
+    if (!parsed || Number.isNaN(parsed.getTime())) {
+      return createError({ path, message: 'qvain.validationMessages.types.string.date' })
+    }
+    return true
+  })
+}
+
+yup.addMethod(yup.string, 'date', validateStringDate)
+
 // DATASET DESCRIPTION VALIDATION
 
 const titleSchema = yup.object().shape({
   fi: yup.mixed().when('en', {
     is: val => val.length > 0,
     then: yup
-      .string('qvain.validationMessages.title.string')
+      .string()
+      .typeError('qvain.validationMessages.title.string')
       .max(500, 'qvain.validationMessages.title.max'),
     otherwise: yup
-      .string('qvain.validationMessages.title.string')
+      .string()
+      .typeError('qvain.validationMessages.title.string')
       .max(500, 'qvain.validationMessages.title.max')
       .required('qvain.validationMessages.title.required'),
   }),
   en: yup
-    .string('qvain.validationMessages.title.string')
+    .string()
+    .typeError('qvain.validationMessages.title.string')
     .max(500, 'qvain.validationMessages.title.max'),
 })
 
@@ -29,15 +51,18 @@ const descriptionSchema = yup.object().shape({
   fi: yup.mixed().when('en', {
     is: val => val.length > 0,
     then: yup
-      .string('qvain.validationMessages.description.string')
+      .string()
+      .typeError('qvain.validationMessages.description.string')
       .max(50000, 'qvain.validationMessages.description.max'),
     otherwise: yup
-      .string('qvain.validationMessages.description.string')
+      .string()
+      .typeError('qvain.validationMessages.description.string')
       .max(50000, 'qvain.validationMessages.description.max')
       .required('qvain.validationMessages.description.required'),
   }),
   en: yup
-    .string('qvain.validationMessages.description.string')
+    .string()
+    .typeError('qvain.validationMessages.description.string')
     .max(50000, 'qvain.validationMessages.description.max'),
 })
 
@@ -48,14 +73,17 @@ const descriptionSchemaDraft = yup
     fi: yup.mixed().when('en', {
       is: val => val.length > 0,
       then: yup
-        .string('qvain.validationMessages.description.string')
+        .string()
+        .typeError('qvain.validationMessages.description.string')
         .max(50000, 'qvain.validationMessages.description.max'),
       otherwise: yup
-        .string('qvain.validationMessages.description.string')
+        .string()
+        .typeError('qvain.validationMessages.description.string')
         .max(50000, 'qvain.validationMessages.description.max'),
     }),
     en: yup
-      .string('qvain.validationMessages.description.string')
+      .string()
+      .typeError('qvain.validationMessages.description.string')
       .max(50000, 'qvain.validationMessages.description.max'),
   })
   .nullable()
@@ -64,7 +92,8 @@ const keywordsSchema = yup
   .array()
   .of(
     yup
-      .string('qvain.validationMessages.keywords.string')
+      .string()
+      .typeError('qvain.validationMessages.keywords.string')
       .max(1000, 'qvain.validationMessages.keywords.max')
   )
   .required('qvain.validationMessages.keywords.required')
@@ -75,16 +104,18 @@ const keywordsSchemaDraft = yup
   .nullable()
   .of(
     yup
-      .string('qvain.validationMessages.keywords.string')
+      .string()
+      .typeError('qvain.validationMessages.keywords.string')
       .max(1000, 'qvain.validationMessages.keywords.max')
   )
 
 const fieldsOfScienceSchema = yup.array().of(yup.string())
 
-const issuedDateSchema = yup.date().nullable()
+const issuedDateSchema = yup.string().date().nullable()
 
 const otherIdentifierSchema = yup
-  .string('qvain.validationMessages.otherIdentifiers.string')
+  .string()
+  .typeError('qvain.validationMessages.otherIdentifiers.string')
   .min(10, 'qvain.validationMessages.otherIdentifiers.min')
   .url('qvain.validationMessages.otherIdentifiers.url')
   .max(1000, 'qvain.validationMessages.otherIdentifiers.max')
@@ -98,7 +129,8 @@ const licenseSchema = yup.object().shape({
   name: yup.object().nullable(),
   identifier: yup.string().required(),
   otherLicenseUrl: yup
-    .string('qvain.validationMessages.license.otherUrl.string')
+    .string()
+    .typeError('qvain.validationMessages.license.otherUrl.string')
     .url('qvain.validationMessages.license.otherUrl.url')
     .required('qvain.validationMessages.license.otherUrl.required')
     .nullable(),
@@ -107,7 +139,8 @@ const licenseSchema = yup.object().shape({
 const licenseArrayObject = yup.object().shape({
   name: yup.object().nullable(),
   identifier: yup
-    .string('qvain.validationMessages.license.otherUrl.string')
+    .string()
+    .typeError('qvain.validationMessages.license.otherUrl.string')
     .url('qvain.validationMessages.license.otherUrl.url')
     .required('qvain.validationMessages.license.otherUrl.required'),
 })
@@ -115,17 +148,19 @@ const licenseArrayObject = yup.object().shape({
 const licenseArraySchema = yup.array().of(licenseArrayObject).nullable()
 
 const accessTypeSchema = yup.object().shape({
-  name: yup.string(),
+  name: yup.object().nullable(),
   url: yup
-    .string('qvain.validationMessages.accessType.string')
+    .string()
+    .typeError('qvain.validationMessages.accessType.string')
     .url('qvain.validationMessages.accessType.url')
     .required('qvain.validationMessages.accessType.required'),
 })
 
-const embargoExpDateSchema = yup.date().nullable()
+const embargoExpDateSchema = yup.string().date().nullable()
 
 const restrictionGroundsSchema = yup
-  .string('qvain.validationMessages.restrictionGrounds.string')
+  .string()
+  .typeError('qvain.validationMessages.restrictionGrounds.string')
   .url('qvain.validationMessages.restrictionGrounds.url')
   .required('qvain.validationMessages.restrictionGrounds.required')
 
@@ -185,16 +220,19 @@ const actorRolesSchemaDraft = yup
   )
 
 const personNameSchema = yup
-  .string('qvain.validationMessages.actors.name.string')
+  .string()
+  .typeError('qvain.validationMessages.actors.name.string')
   .max(1000, 'qvain.validationMessages.actors.name.max')
   .required('qvain.validationMessages.actors.name.required')
 
 const personNameSchemaDraft = yup
-  .string('qvain.validationMessages.actors.name.string')
+  .string()
+  .typeError('qvain.validationMessages.actors.name.string')
   .max(1000, 'qvain.validationMessages.actors.name.max')
 
 const personEmailSchema = yup
-  .string('qvain.validationMessages.actors.email.string')
+  .string()
+  .typeError('qvain.validationMessages.actors.email.string')
   .max(1000, 'qvain.validationMessages.actors.email.max')
   .email('qvain.validationMessages.actors.email.email')
   .nullable()
@@ -205,13 +243,15 @@ const personIdentifierSchema = yup
   .nullable()
 
 const organizationNameSchema = yup
-  .string('qvain.validationMessages.actors.organization.name')
+  .string()
+  .typeError('qvain.validationMessages.actors.organization.name')
   .min(1, 'qvain.validationMessages.actors.organization.name')
   .max(1000, 'qvain.validationMessages.actors.name.max')
   .required('qvain.validationMessages.actors.organization.name')
 
 const organizationEmailSchema = yup
-  .string('qvain.validationMessages.actors.email.string')
+  .string()
+  .typeError('qvain.validationMessages.actors.email.string')
   .max(1000, 'qvain.validationMessages.actors.email.max')
   .email('qvain.validationMessages.actors.email.email')
   .nullable()
@@ -246,7 +286,10 @@ const actorOrganizationSchema = yup.object().shape({
     is: ENTITY_TYPE.PERSON,
     then: yup.object().required('qvain.validationMessages.actors.organization.required'),
     otherwise: yup.object('qvain.validationMessages.actors.organization.object').shape({
-      value: yup.string('qvain.validationMessages.actors.organization.string').nullable(),
+      value: yup
+        .string()
+        .typeError('qvain.validationMessages.actors.organization.string')
+        .nullable(),
     }),
   }),
 })
@@ -356,12 +399,13 @@ const projectSchema = yup.object().shape({
   details: yup.object().shape({
     titleFi: yup.mixed().when('titleEn', {
       is: val => Boolean(val),
-      then: yup.string('qvain.validationMessages.projects.title.string'),
+      then: yup.string().typeError('qvain.validationMessages.projects.title.string'),
       otherwise: yup
-        .string('qvain.validationMessages.projects.title.string')
+        .string()
+        .typeError('qvain.validationMessages.projects.title.string')
         .required('qvain.validationMessages.projects.title.required'),
     }),
-    titleEn: yup.string('qvain.vaidationMessages.projects.title.string'),
+    titleEn: yup.string().typeError('qvain.vaidationMessages.projects.title.string'),
     identifier: yup.string(),
     fundingIdentifier: yup.string(),
     funderType: yup.object().nullable(),
@@ -377,9 +421,9 @@ const externalResourceTitleSchema = yup
   .required('qvain.validationMessages.externalResources.title.required')
 
 // Use category is one of preset 7 options (all strings)
-const externalResourceUseCategorySchema = yup
-  .string()
-  .required('qvain.validationMessages.externalResources.useCategory.required')
+const externalResourceUseCategorySchema = yup.object().shape({
+  value: yup.string().required('qvain.validationMessages.externalResources.useCategory.required'),
+})
 
 const externalResourceAccessUrlSchema = yup
   .string()
@@ -489,7 +533,8 @@ const actorsSchemaDraft = yup.array().of(actorSchemaDraft)
 
 // SPATIAL VALIDATION
 const spatialNameSchema = yup
-  .string('qvain.validationMessages.temporalAndSpatial.spatial.nameRequired')
+  .string()
+  .typeError('qvain.validationMessages.temporalAndSpatial.spatial.nameRequired')
   .required('qvain.validationMessages.temporalAndSpatial.spatial.nameRequired')
 
 const spatialAltitudeSchema = yup
@@ -498,20 +543,27 @@ const spatialAltitudeSchema = yup
 
 // TEMPORAL VALIDATION
 const temporalDateSchema = yup.object().shape({
-  startDate: yup.date().required('qvain.validationMessages.temporalAndSpatial.temporal.startDateMissing'),
-  endDate: yup.date().required('qvain.validationMessages.temporalAndSpatial.temporal.endDateMissing'),
+  startDate: yup
+    .string()
+    .date()
+    .required('qvain.validationMessages.temporalAndSpatial.temporal.startDateMissing'),
+  endDate: yup
+    .string()
+    .date()
+    .required('qvain.validationMessages.temporalAndSpatial.temporal.endDateMissing'),
 })
 
 // RELATED RESOURCE
 const relatedResourceNameSchema = yup.object().shape({
   fi: yup.mixed().when('en', {
     is: val => val.length > 0,
-    then: yup.string('qvain.validationMessages.history.relatedResource.nameRequired'),
+    then: yup.string().typeError('qvain.validationMessages.history.relatedResource.nameRequired'),
     otherwise: yup
-      .string('qvain.validationMessages.history.relatedResource.nameRequired')
+      .string()
+      .typeError('qvain.validationMessages.history.relatedResource.nameRequired')
       .required('qvain.validationMessages.history.relatedResource.nameRequired'),
   }),
-  en: yup.string('qvain.validationMessages.history.relatedResource.nameRequired'),
+  en: yup.string().typeError('qvain.validationMessages.history.relatedResource.nameRequired'),
 })
 
 const relatedResourceTypeSchema = yup
@@ -522,19 +574,24 @@ const relatedResourceTypeSchema = yup
 const provenanceNameSchema = yup.object().shape({
   fi: yup.mixed().when('en', {
     is: val => val.length > 0,
-    then: yup.string('qvain.validationMessages.history.provenance.nameRequired'),
+    then: yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
     otherwise: yup
-      .string('qvain.validationMessages.history.provenance.nameRequired')
+      .string()
+      .typeError('qvain.validationMessages.history.provenance.nameRequired')
       .required('qvain.validationMessages.history.provenance.nameRequired'),
   }),
-  en: yup.string('qvain.validationMessages.history.provenance.nameRequired'),
+  en: yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
 })
 
 const provenanceStartDateSchema = yup
+  .string()
   .date()
   .required('qvain.validationMessages.history.provenance.startDateMissing')
 
-const provenanceEndDateSchema = yup.date().required('qvain.validationMessages.history.provenance.endDateMissing')
+const provenanceEndDateSchema = yup
+  .string()
+  .date()
+  .required('qvain.validationMessages.history.provenance.endDateMissing')
 
 // Entire form validation for normal dataset
 const qvainFormSchema = yup.object().shape({
@@ -542,8 +599,8 @@ const qvainFormSchema = yup.object().shape({
   description: descriptionSchema,
   issuedDate: yup.mixed().when('useDoi', {
     is: true,
-    then: yup.date().required('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
-    otherwise: yup.date().nullable(),
+    then: yup.string().date().required('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
+    otherwise: yup.string().date().nullable(),
   }),
   fieldOfScience: fieldsOfScienceSchema,
   keywords: keywordsSchema,
@@ -570,7 +627,7 @@ const qvainFormSchema = yup.object().shape({
 const qvainFormSchemaDraft = yup.object().shape({
   title: titleSchema,
   description: descriptionSchemaDraft,
-  issuedDate: yup.date().nullable(),
+  issuedDate: yup.string().date().nullable(),
   fieldOfScience: fieldsOfScienceSchema,
   keywords: keywordsSchemaDraft,
   otherIdentifiers: otherIdentifiersArraySchema,

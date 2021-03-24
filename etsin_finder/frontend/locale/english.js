@@ -784,6 +784,11 @@ const english = {
       },
     },
     validationMessages: {
+      types: {
+        string: {
+          date: 'The value must be a date string.'
+        }
+      },
       draft: {
         description: 'Draft cannot be saved until the following errors are fixed:',
       },
