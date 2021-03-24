@@ -25,10 +25,10 @@ jest.mock('../../../js/components/qvain/utils/formValidation', () => {
 
 jest.mock('../../../js/components/qvain/fields/temporalAndSpatial/spatial/handleSave')
 
-describe('Spatials', () => {
+describe('given required props', () => {
   const harness = new Harness(Spatials)
 
-  describe('given required props', () => {
+  describe('Spatials', () => {
     beforeEach(() => {
       harness.shallow()
       harness.diveInto('Spatial')
@@ -38,33 +38,25 @@ describe('Spatials', () => {
       harness.shouldExist()
     })
 
-    describe('Field', () => {
-      let field
+    test('should include children with properties', () => {
+      const children = [{ label: 'Field', findArgs: Field }]
 
-      beforeEach(() => {
-        field = harness.wrapper.find(Field)
-      })
-
-      test('should exist', () => {
-        harness.shouldExist('Field')
-      })
-
-      test('should have expected props', () => {
-        const expectedProps = {
+      const props = {
+        Field: {
           brief: {
             title: 'qvain.temporalAndSpatial.spatial.title',
             description: 'qvain.temporalAndSpatial.spatial.description',
           },
           labelFor: 'spatial-coverage',
-        }
+        },
+      }
 
-        field.props().should.deep.include(expectedProps)
-      })
+      harness.shouldIncludeChildren(children, props)
     })
   })
 })
 
-describe('SpatialFieldContent', () => {
+describe('given mockStore in useStores', () => {
   const harness = new Harness(SpatialFieldContent)
   const mockStores = {
     Qvain: { Spatials: {} },
@@ -74,7 +66,7 @@ describe('SpatialFieldContent', () => {
   }
   const translationsRoot = 'qvain.temporalAndSpatial.spatial'
 
-  describe('given mockStore in useStores', () => {
+  describe('SpatialFieldContent', () => {
     beforeEach(() => {
       useStores.mockReturnValue(mockStores)
       harness.shallow()
@@ -84,55 +76,79 @@ describe('SpatialFieldContent', () => {
       harness.shouldExist()
     })
 
-    describe('FieldList', () => {
-      beforeEach(() => {
-        harness.find(FieldList)
-      })
+    test('should include children with properties', () => {
+      const children = [
+        { label: 'FieldList', findArgs: FieldList },
+        { label: 'FieldListAdd', findArgs: FieldListAdd },
+      ]
 
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-
-      test('should have expectedProps', () => {
-        const expectedProps = {
+      const props = {
+        FieldList: {
           Field: mockStores.Qvain.Spatials,
           lang: mockStores.Locale.lang,
           translationsRoot,
           disableNoItemsText: false,
-        }
-
-        harness.shouldIncludeProps(expectedProps)
-      })
-    })
-
-    describe('FieldListAdd', () => {
-      beforeEach(() => {
-        harness.find(FieldListAdd)
-      })
-
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-
-      test('should have expectedProps', () => {
-        const expectedProps = {
+        },
+        FieldListAdd: {
           Store: mockStores.Qvain,
           Field: mockStores.Qvain.Spatials,
           Form: Form,
-        }
+        },
+      }
 
-        harness.shouldIncludeProps(expectedProps)
+      harness.shouldIncludeChildren(children, props)
+    })
+
+    describe('when calling props.handleSave', () => {
+      beforeEach(() => {
+        harness.restoreWrapper('FieldListAdd')
+        harness.props.handleSave()
       })
 
-      describe('when calling props.handleSave', () => {
-        beforeEach(() => {
-          harness.props.handleSave()
-        })
-
-        test('should call handleSave with Qvain.Spatials & translationsRoot', () => {
-          expect(handleSave).to.have.beenCalledWith(mockStores.Qvain.Spatials, translationsRoot)
-        })
+      test('should call handleSave with Qvain.Spatials & translationsRoot', () => {
+        expect(handleSave).to.have.beenCalledWith(mockStores.Qvain.Spatials, translationsRoot)
       })
+    })
+  })
+})
+
+describe('given required props', () => {
+  const props = {
+    Store: { value: 'some value' },
+    Field: { value: 'some value' },
+    translationsRoot: 'translationsRoot',
+  }
+
+  const harness = new Harness(Form, props)
+
+  describe('Spatial Form', () => {
+    beforeEach(() => {
+      harness.shallow()
+    })
+
+    test('should exist', () => {
+      harness.shouldExist()
+    })
+
+    test('should include children with properties', () => {
+      const children = [
+        { label: 'InputName', findType: 'prop', findArgs: ['datum', 'name'] },
+        { label: 'InputAltitude', findType: 'prop', findArgs: ['datum', 'altitude'] },
+        { label: 'InputAddress', findType: 'prop', findArgs: ['datum', 'address'] },
+        { label: 'InputGeometry', findType: 'prop', findArgs: ['datum', 'geometry'] },
+        { label: 'InputLocation', findType: 'prop', findArgs: ['datum', 'location'] },
+      ]
+
+      const props = {
+        InputLocation: {
+          ...props,
+          model: Location,
+          metaxIdentifier: 'location',
+          search: true,
+        },
+      }
+
+      harness.shouldIncludeChildren(children, props)
     })
   })
 })
@@ -199,85 +215,5 @@ describe('when calling Spatial handleSave and validation fails', () => {
 
   test('should call validationError with error.message', () => {
     expect(field.setValidationError).to.have.beenCalledWith(message)
-  })
-})
-
-describe('Spatial Form', () => {
-  const props = {
-    Store: { value: 'some value' },
-    Field: { value: 'some value' },
-    translationsRoot: 'transltaionsRoot',
-  }
-
-  const harness = new Harness(Form, props)
-
-  describe('given required props', () => {
-    beforeEach(() => {
-      harness.shallow()
-    })
-
-    test('should exist', () => {
-      harness.shouldExist()
-    })
-
-    describe('ModalInput datum=name', () => {
-      beforeEach(() => {
-        harness.findWithProp('datum', 'name')
-      })
-
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-    })
-
-    describe('ModalInput datum=altitude', () => {
-      beforeEach(() => {
-        harness.findWithProp('datum', 'altitude')
-      })
-
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-    })
-
-    describe('ModalInput datum=address', () => {
-      beforeEach(() => {
-        harness.findWithProp('datum', 'address')
-      })
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-    })
-
-    describe('SpatialArrayInput datum=geometry', () => {
-      beforeEach(() => {
-        harness.findWithProp('datum', 'geometry')
-      })
-
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-    })
-
-    describe('ModalReferenceInput datum=location', () => {
-      beforeEach(() => {
-        harness.findWithProp('datum', 'location')
-      })
-
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-
-      test('should include expectedProps', () => {
-        const expectedProps = {
-          ...props,
-          model: Location,
-          metaxIdentifier: 'location',
-          search: true,
-        }
-
-        harness.shouldIncludeProps(expectedProps)
-      })
-    })
   })
 })

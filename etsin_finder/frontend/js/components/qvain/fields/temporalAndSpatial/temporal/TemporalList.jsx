@@ -48,7 +48,7 @@ const RemoveButtonStyles = styled.button.attrs({
   color: inherit;
 `
 
-const RemoveButton = props => (
+export const RemoveButton = props => (
   <RemoveButtonStyles {...props}>
     <RemoveIcon />
   </RemoveButtonStyles>
