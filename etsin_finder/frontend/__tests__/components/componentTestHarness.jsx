@@ -48,6 +48,10 @@ export default class ComponentTestHarness {
     return this
   }
 
+  findWithName = name => {
+    this.wrapper = this.wrapper.findWhere(elem => elem.name()?.includes(name))
+  }
+
   findWithProp = (prop, value) => {
     this.wrapper = this.wrapper.findWhere(elem => elem.prop(prop) === value)
     return this
@@ -69,6 +73,10 @@ export default class ComponentTestHarness {
 
   get props() {
     return this.wrapper.props()
+  }
+
+  trigger = (eventType, event) => {
+    this.wrapper.simulate(eventType, event)
   }
 
   shouldIncludeProps = expectedProps => {
