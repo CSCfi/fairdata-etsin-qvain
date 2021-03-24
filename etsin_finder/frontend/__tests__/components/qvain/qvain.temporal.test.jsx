@@ -6,7 +6,6 @@ import TemporalFieldContent from '../../../js/components/qvain/fields/temporalAn
 import handleSave from '../../../js/components/qvain/fields/temporalAndSpatial/temporal/handleSave'
 import { useStores } from '../../../js/stores/stores'
 import Field from '../../../js/components/qvain/general/section/field'
-import temporalFieldContent from '../../../js/components/qvain/fields/temporalAndSpatial/temporal/temporalFieldContent'
 import TemporalList, {
   RemoveButton,
 } from '../../../js/components/qvain/fields/temporalAndSpatial/temporal/TemporalList'
@@ -20,7 +19,7 @@ jest.mock('../../../js/components/qvain/fields/temporalAndSpatial/temporal/handl
 
 jest.mock('../../../js/components/qvain/utils/formValidation')
 
-describe('given mocked Stores', () => {
+describe('given mocked stores', () => {
   const mockStores = {
     Qvain: { some: 'data' },
     Locale: {
@@ -41,37 +40,23 @@ describe('given mocked Stores', () => {
       harness.shouldExist()
     })
 
-    describe('Field', () => {
-      beforeEach(() => {
-        harness.find(Field)
-      })
+    test('should find children with props', () => {
+      const children = [
+        { label: 'Field', findArgs: Field },
+        { label: 'FieldContent', findArgs: TemporalFieldContent },
+      ]
 
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-
-      test('should have brief:brief', () => {
-        harness.props.brief.should.eql(brief)
-      })
-    })
-
-    describe('TemporalFieldContent', () => {
-      beforeEach(() => {
-        harness.find(temporalFieldContent)
-      })
-
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-
-      test('should have props Store: Qvain and lang: Locale.lang', () => {
-        const expectedProps = {
+      const props = {
+        Field: {
+          brief,
+        },
+        FieldContent: {
           Store: mockStores.Qvain,
           lang: mockStores.Locale.lang,
-        }
+        },
+      }
 
-        harness.shouldIncludeProps(expectedProps)
-      })
+      harness.shouldIncludeChildren(children, props)
     })
   })
 })
@@ -87,8 +72,7 @@ describe('given required props', () => {
 
   const lang = 'en'
 
-  const harness = new Harness(TemporalFieldContent, { Store, lang })
-  beforeEach(() => {})
+  const harness = new Harness(TemporalFieldContent, { Store, lang }, 'TemporalFieldContent')
 
   describe('TemporalFieldContent', () => {
     beforeEach(() => {
@@ -99,65 +83,43 @@ describe('given required props', () => {
       harness.shouldExist()
     })
 
-    describe('TemporalList', () => {
-      beforeEach(() => {
-        harness.find(TemporalList)
-      })
+    test('should include children with properties', () => {
+      const children = [
+        { label: 'TemporalList', findArgs: TemporalList },
+        { label: 'DurationPicker', findArgs: DurationPicker },
+        {
+          label: 'AddNewButton',
+          findType: 'prop',
+          findArgs: ['component', AddNewButton],
+        },
+      ]
 
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-
-      test('should have expectedProps', () => {
-        const expectedProps = {
+      const props = {
+        TemporalList: {
           lang,
           temporals: Store.Temporals.storage,
           remove: Store.Temporals.removeTemporal,
           readonly: Store.Temporals.readonly,
-        }
-
-        harness.shouldIncludeProps(expectedProps)
-      })
-    })
-
-    describe('DurationPicker', () => {
-      beforeEach(() => {
-        harness.find(DurationPicker)
-      })
-
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-
-      test('should have expectedProps', () => {
-        const expectedProps = {
+        },
+        DurationPicker: {
           Store,
           Field: Store.Temporals,
           translationsRoot: 'qvain.temporalAndSpatial.temporal',
           datum: 'duration',
           id: 'temporal-period',
-        }
-
-        harness.shouldIncludeProps(expectedProps)
-      })
-    })
-
-    describe('Translate component=AddNewButton', () => {
-      beforeEach(() => {
-        harness.findWithProp('component', AddNewButton)
-      })
-
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-
-      test('should have expectedProps', () => {
-        const expectedProps = {
+        },
+        AddNewButton: {
           content: 'qvain.temporalAndSpatial.temporal.addButton',
           disabled: Store.Temporals.readonly,
-        }
+        },
+      }
 
-        harness.shouldIncludeProps(expectedProps)
+      harness.shouldIncludeChildren(children, props)
+    })
+
+    describe('AddNewButton', () => {
+      beforeEach(() => {
+        harness.restoreWrapper('AddNewButton')
       })
 
       describe('when calling onClick', () => {
@@ -180,7 +142,7 @@ describe('given required props', () => {
     })
   })
 
-  describe('given Field.validationError', () => {
+  describe('given additional prop Store.Temporals.validationError', () => {
     beforeEach(() => {
       harness.shallow({
         Store: {
@@ -192,18 +154,12 @@ describe('given required props', () => {
       })
     })
 
-    describe('ValidationError', () => {
-      beforeEach(() => {
-        harness.find(ValidationError)
+    test('should have child ValidationError with text', () => {
+      harness.shouldIncludeChild({
+        label: 'ValidationError',
+        findArgs: ValidationError,
       })
-
-      test('should exist', () => {
-        harness.shouldExist()
-      })
-
-      test('should have text:validationError', () => {
-        harness.wrapper.children().text().should.include('validationError')
-      })
+      harness.children.text().should.eql('validationError')
     })
   })
 })

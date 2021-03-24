@@ -123,7 +123,8 @@
     "testPathIgnorePatterns": [
       "./__tests__/test-setup.js",
       "./__tests__/__testdata__",
-      "./__tests__/__utils__"
+      "./__tests__/__utils__",
+      "./__tests__/components/componentTestHarness.jsx"
     ],
     "testURL": "http://localhost"
   },
