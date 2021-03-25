@@ -26,13 +26,13 @@ Then, the service specific images can be pushed (see below)
 ## Updating etsin-qvain-flask
 
 1 Build image:
-- `docker build -f flask.dockerfile -t etsin-qvain-webpack .`
+- `docker build -f flask.dockerfile -t etsin-qvain-flask .`
 
 2 Tag image:
-- `docker tag etsin-qvain-webpack fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack`
+- `docker tag etsin-qvain-flask fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask`
 
 3 Push image:
-- `docker push fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack`
+- `docker push fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask`
 
 # Build status
 
