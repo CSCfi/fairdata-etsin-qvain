@@ -15,7 +15,7 @@ services:
     etsin-qvain-flask:
       image: fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask
       configs:
-        - source: etsin-qvain-app-config
+        - source: etsin-qvain-app-config-dev
           target: /home/etsin-user/app_config
       ports:
         - "5000:5000"
@@ -60,7 +60,7 @@ services:
         - elasticsearch
 
 configs:
-  etsin-qvain-app-config:
+  etsin-qvain-app-config-dev:
     external: True
   etsin-qvain-nginx-config:
     external: True
