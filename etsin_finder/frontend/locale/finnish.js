@@ -879,6 +879,7 @@ const finnish = {
       types: {
         string: {
           date: 'Arvon on oltava päivämäärämerkkijono.',
+          number: 'Arvon on oltava numeromerkkijono.',
         },
       },
       draft: {
