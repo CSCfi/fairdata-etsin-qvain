@@ -333,7 +333,7 @@ const cumulativeStateSchema = yup
 // FILE AND DIRECTORY (IDA RESOURCES) VALIDATION
 
 const fileUseCategorySchema = yup
-  .string()
+  .object()
   .required('qvain.validationMessages.files.file.useCategory.required')
 
 const fileTitleSchema = yup.string().required('qvain.validationMessages.files.file.title.required')
@@ -358,7 +358,7 @@ const directoryTitleSchema = yup
 const directoryDescriptionSchema = yup.string()
 
 const directoryUseCategorySchema = yup
-  .string()
+  .object()
   .required('qvain.validationMessages.files.directory.useCategory.required')
 
 const directorySchema = yup.object().shape({
@@ -404,8 +404,7 @@ const organizationObjectSchema = yup.object().shape({
 
 const fundingAgencySchema = yup.object().shape({
   identifier: yup
-    .string()
-    .nullable()
+    .mixed()
     .required('qvain.validationMessages.projects.fundingAgency.contributorType.identifier'),
   labelFi: yup.string(),
   labelEn: yup.string(),
