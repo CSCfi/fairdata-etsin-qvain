@@ -100,7 +100,7 @@ class FileForm extends Component {
       fileType,
     }
     fileSchema
-      .validate(validationObj)
+      .validate(validationObj, { strict: true })
       .then(() => {
         this.setState({
           fileError: undefined,
@@ -129,7 +129,7 @@ class FileForm extends Component {
 
   handleOnBlur = (validator, value, errorSet) => {
     validator
-      .validate(value)
+      .validate(value, { strict: true })
       .then(() => errorSet(undefined))
       .catch(err => errorSet(err.errors))
   }

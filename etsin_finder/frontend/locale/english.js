@@ -37,7 +37,8 @@ const english = {
       copyButton: 'Copy',
       copyButtonTooltip: 'Copy to clipboard',
       copyButtonTooltipSuccess: 'Citation copied to clipboard',
-      warning: 'Automatically generated citations may contain errors. Always check the provided citations.',
+      warning:
+        'Automatically generated citations may contain errors. Always check the provided citations.',
     },
     citationNoDateIssued: 'Issued date not defined',
     contact: {
@@ -118,14 +119,17 @@ const english = {
       loading: 'Loading folder',
       loaded: 'Folder loaded',
       errors: {
-        serviceUnavailable: 'The download service is currently unavailable. If the problem persists check our <a href="https://www.fairdata.fi/en/maintenance/">maintenance page</a> for more information.',
-        unknownError: 'There was an error using the download service. If the problem persists check our <a href="https://www.fairdata.fi/en/maintenance/">maintenance page</a> for more information.',
+        serviceUnavailable:
+          'The download service is currently unavailable. If the problem persists check our <a href="https://www.fairdata.fi/en/maintenance/">maintenance page</a> for more information.',
+        unknownError:
+          'There was an error using the download service. If the problem persists check our <a href="https://www.fairdata.fi/en/maintenance/">maintenance page</a> for more information.',
       },
       packages: {
         createForAll: 'Download all',
         create: 'Download',
         pending: 'Generating',
-        pendingTooltip: 'Download package is being generated. When the button turns green the download can be started.',
+        pendingTooltip:
+          'Download package is being generated. When the button turns green the download can be started.',
         loading: 'Loading',
         modal: {
           header: 'Generate download?',
@@ -135,7 +139,7 @@ const english = {
           additional: "You may leave Etsin. It won't interrupt the generation process.",
           ok: 'Generate',
           cancel: 'Cancel',
-        }
+        },
       },
       fileCount: {
         one: '1 file',
@@ -275,7 +279,7 @@ const english = {
     details: {
       showDetails: 'Show details',
       hideDetails: 'Hide details',
-    }
+    },
   },
   general: {
     showMore: 'Show more',
@@ -786,6 +790,12 @@ const english = {
       },
     },
     validationMessages: {
+      types: {
+        string: {
+          date: 'The value must be a date string.',
+          number: 'The value must be a number string.',
+        },
+      },
       draft: {
         description: 'Draft cannot be saved until the following errors are fixed:',
       },
@@ -930,8 +940,8 @@ const english = {
         fundingAgency: {
           contributorType: {
             identifier: 'Valitse rooli',
-          }
-        }
+          },
+        },
       },
       temporalAndSpatial: {
         spatial: {

@@ -878,6 +878,12 @@ const finnish = {
       },
     },
     validationMessages: {
+      types: {
+        string: {
+          date: 'Arvon on oltava päivämäärämerkkijono.',
+          number: 'Arvon on oltava numeromerkkijono.',
+        },
+      },
       draft: {
         description: 'Luonnosta ei voi tallentaa ennen kuin seuraavat virheet on korjattu:',
       },

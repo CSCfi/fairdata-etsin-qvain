@@ -43,7 +43,7 @@ export const ActorModalBase = () => {
 
   const handleSaveActor = () => {
     actorSchema
-      .validate(actorInEdit)
+      .validate(actorInEdit, { strict: true })
       .then(() => {
         saveActor(actorInEdit)
         editActor(null)

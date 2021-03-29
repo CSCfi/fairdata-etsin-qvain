@@ -46,7 +46,7 @@ export function parseOrganization(organization) {
  */
 export async function validate(schema, data) {
   try {
-    await schema.validate(data, { abortEarly: false })
+    await schema.validate(data, { abortEarly: false, strict: true })
     return {}
   } catch (validationErrors) {
     return parseValidationErrors(validationErrors)

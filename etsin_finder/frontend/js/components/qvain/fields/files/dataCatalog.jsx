@@ -57,7 +57,7 @@ const DataCatalog = () => {
 
   const handleOnBlur = () => {
     dataCatalogSchema
-      .validate(dataCatalog)
+      .validate(dataCatalog, { strict: true })
       .then(() => {
         SetError(null)
       })
