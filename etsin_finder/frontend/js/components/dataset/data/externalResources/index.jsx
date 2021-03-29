@@ -35,9 +35,7 @@ const ExternalResources = () => {
   }
 
   const totalCount = remote.length
-  const accessUrls = new Set(
-    remote.map(resource => resource.access_url?.identifier).filter(v => v)
-  )
+  const accessUrls = new Set(remote.map(resource => resource.access_url?.identifier).filter(v => v))
   const hasAccess = accessUrls.size > 0
   const hasCommonAccess = accessUrls.size === 1
   const hasDownload = !!remote.find(resource => resource.download_url?.identifier)
@@ -51,7 +49,14 @@ const ExternalResources = () => {
         </HeaderStats>
 
         {hasCommonAccess && (
-          <Translate component={HeaderButton} icon={faExternalLinkAlt} invert color="darkgray">
+          <Translate
+            component={HeaderButton}
+            link
+            href={Array.from(accessUrls)[0]}
+            icon={faExternalLinkAlt}
+            invert
+            color="darkgray"
+          >
             <Translate content="dataset.dl.commonSource" />
             <Translate className="sr-only" content="dataset.dl.file_types.both" />
           </Translate>
