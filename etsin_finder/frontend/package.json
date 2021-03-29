@@ -11,11 +11,9 @@
   "license": "ISC",
   "scripts": {
     "build": "webpack --mode production --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
-    "build-storybook": "build-storybook",
     "dev-build": "webpack -d --config webpack.config.js --define process.env.NODE_ENV=\"'development'\"",
     "lint": "eslint js --ext .jsx,.js",
     "start": "webpack --progress -d --config webpack.config.js --watch --define process.env.NODE_ENV=\"'development'\"",
-    "storybook": "start-storybook -p 6006",
     "test": "jest",
     "coverage": "jest --collect-coverage --collect-coverage-from=\"js/**\"",
     "watch": "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\""
@@ -82,8 +80,6 @@
     "@axe-core/react": "^4.1.0",
     "@babel/eslint-parser": "^7.12.1",
     "@babel/eslint-plugin": "^7.12.1",
-    "@storybook/addon-viewport": "^5.1.1",
-    "@storybook/react": "^5.1.1",
     "axios-mock-adapter": "^1.17.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-styled-components": "^1.10.7",
