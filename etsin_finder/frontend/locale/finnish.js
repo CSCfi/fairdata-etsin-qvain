@@ -137,6 +137,9 @@ const finnish = {
           Jos dataa on paljon, paketin luomisessa voi kestää minuutteja tai tunteja.
           Kun lataus voidaan aloittaa, lataa-painike muuttuu vihreäksi.`,
           additional: 'Latauspaketin luonti ei keskeydy, vaikka poistuisit Etsimestä.',
+          additionalEmail:
+            'Latauspaketin luonti ei keskeydy, vaikka poistuisit Etsimestä. Jos haluat ilmoituksen kun paketti on ladattavissa, kirjoita sähköpostiosoitteesi tähän.',
+          emailPlaceholder: 'Sähköposti',
           ok: 'Luo latauspaketti',
           cancel: 'Peruuta',
         },
