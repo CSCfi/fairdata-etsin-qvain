@@ -16,7 +16,7 @@
     "start": "webpack --progress -d --config webpack.config.js --watch --define process.env.NODE_ENV=\"'development'\"",
     "test": "jest",
     "coverage": "jest --collect-coverage --collect-coverage-from=\"js/**\"",
-    "watch": "npm update; webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\""
+    "watch": "webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\""
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
