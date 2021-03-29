@@ -34,30 +34,6 @@ Array [
           "und": "Aalto yliopisto",
         },
       },
-    ],
-    "person": Object {
-      "email": "asdasd@test.com",
-      "identifier": undefined,
-      "name": "Asdasd J. Qwerty",
-    },
-    "roles": Array [
-      "publisher",
-      "creator",
-    ],
-    "type": "person",
-  },
-  Object {
-    "organizations": Array [
-      Object {
-        "email": undefined,
-        "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
-        "name": Object {
-          "en": "Aalto University",
-          "fi": "Aalto yliopisto",
-          "sv": "Aalto universitetet",
-          "und": "Aalto yliopisto",
-        },
-      },
       Object {
         "email": undefined,
         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A802",
@@ -70,8 +46,8 @@ Array [
     ],
     "person": undefined,
     "roles": Array [
-      "curator",
       "creator",
+      "curator",
     ],
     "type": "organization",
   },
@@ -94,6 +70,30 @@ Array [
       "creator",
       "rights_holder",
       "contributor",
+    ],
+    "type": "person",
+  },
+  Object {
+    "organizations": Array [
+      Object {
+        "email": undefined,
+        "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
+        "name": Object {
+          "en": "Aalto University",
+          "fi": "Aalto yliopisto",
+          "sv": "Aalto universitetet",
+          "und": "Aalto yliopisto",
+        },
+      },
+    ],
+    "person": Object {
+      "email": "asdasd@test.com",
+      "identifier": undefined,
+      "name": "Asdasd J. Qwerty",
+    },
+    "roles": Array [
+      "creator",
+      "publisher",
     ],
     "type": "person",
   },
