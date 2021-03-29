@@ -10,94 +10,90 @@
    */
 }
 
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
+import Translate from 'react-translate-component'
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
-import TableHeader from '../tableHeader'
-import Table from '../table'
-import { withStores } from '../../../../utils/stores'
+import buildColumns from '../../../../utils/buildColumns'
+import { useStores } from '../../../../stores/stores'
+import { Header, HeaderTitle, HeaderButton } from '../common/dataHeader'
+import ResourceItem from './resourceItem'
 
-class ExternalResources extends Component {
-  constructor(props) {
-    super(props)
-    let results
-    // this is only for testing and storybook
-    const { DatasetQuery } = props.Stores
-    if (!props.testData) {
-      results = DatasetQuery.results
-    } else {
-      results = props.testData
-    }
-    const remote = results.research_dataset.remote_resources
-    if (remote) {
-      // createTree converts combined to object with nested hierarchy
-      const parsed = remote.map(single => this.parseExt(single))
-      const totalCount = parsed.length
-      this.state = {
-        results,
-        currentFolder: parsed,
-        totalCount,
-      }
-    }
+const ExternalResources = () => {
+  const {
+    DatasetQuery: { results },
+  } = useStores()
+  if (!results) {
+    return null
   }
 
-  parseExt = ext => {
-    const parsed = {
-      name: ext.title,
-      description: ext.description,
-      use_category: ext.use_category,
-      identifier: ext.identifier,
-      type: ext.file_type,
-      byte_size: ext.byte_size,
-      remote: {
-        resource_type: ext.resource_type,
-        mediatype: ext.mediatype,
-        download_url: ext.download_url,
-        access_url: ext.access_url,
-        object_characteristics: ext.object_characteristics,
-        checksum: ext.checksum,
-      },
-    }
-    return parsed
+  const remote = results.research_dataset.remote_resources
+  if (!remote) {
+    return null
   }
 
-  render() {
-    if (!this.state.results) {
-      return ''
-    }
-    return (
-      <DataTable>
-        <TableHeader
-          objectCount={this.state.totalCount}
-          title={'remote'}
-          allowDownload={false}
-          downloadAll={false}
-        />
-        <Table
-          cr_id={this.state.results.identifier}
-          data={this.state.currentFolder}
-          allowDownload
-          isRemote
-          fields={{ size: false, category: true, name: true, downloadBtn: true, infoBtn: true }}
-        />
-      </DataTable>
-    )
-  }
+  const accessUrls = new Set(
+    remote.map(resource => resource.access_url?.identifier).filter(v => v)
+  )
+  const hasAccess = accessUrls.size > 0
+  const hasCommonAccess = accessUrls.size === 1
+  const hasDownload = !!remote.find(resource => resource.download_url?.identifier)
+
+  return (
+    <DataTable>
+      <Header>
+        <Translate component={HeaderTitle} content="dataset.dl.remote" />
+
+        {hasCommonAccess && (
+          <Translate component={HeaderButton} icon={faExternalLinkAlt} invert color="darkgray">
+            <Translate content="dataset.dl.commonSource" />
+            <Translate className="sr-only" content="dataset.dl.file_types.both" />
+          </Translate>
+        )}
+      </Header>
+
+      <Grid hasAccess={hasAccess} hasDownload={hasDownload}>
+        {remote.map(resource => (
+          <ResourceItem
+            key={`resource-${resource.identifier}-${resource.title}`}
+            resource={resource}
+          />
+        ))}
+      </Grid>
+    </DataTable>
+  )
 }
+
+const gridColumns = ({ hasAccess, hasDownload, mobile }) => {
+  const columns = [['name', '1fr']]
+  if (!mobile) {
+    columns.push(['category', 'minmax(max-content, 0.75fr)'])
+  }
+  if (hasAccess) {
+    columns.push(['access', '5.5rem'])
+  }
+  if (hasDownload) {
+    columns.push(['download', '7rem'])
+  }
+  return buildColumns(columns)
+}
+
+export const Grid = styled.ul`
+  display: grid;
+  grid-template-columns: ${p => gridColumns({ ...p, mobile: false })};
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    grid-template-columns: ${p => gridColumns({ ...p, mobile: true })};
+  }
+  grid-auto-rows: 1.5rem;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+`
 
 const DataTable = styled.div`
   margin-top: 1em;
 `
 
-ExternalResources.defaultProps = {
-  testData: null,
-}
-
-ExternalResources.propTypes = {
-  testData: PropTypes.object,
-  Stores: PropTypes.object.isRequired,
-}
-
-export default withStores(observer(ExternalResources))
+export default observer(ExternalResources)

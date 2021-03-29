@@ -554,6 +554,16 @@ class Actors {
     return this.createLooseActorPromise()
   }
 
+  otherActorsHaveRole = (actor, role) => {
+    const existingRoles = new Set(
+      this.actors
+        .filter(a => a.uiid !== actor.uiid)
+        .map(a => a.roles)
+        .flat()
+    )
+    return existingRoles.has(role)
+  }
+
   toBackend = () =>
     this.actors.map(actor => ({
       type: actor.type,
