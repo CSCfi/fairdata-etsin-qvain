@@ -56,18 +56,27 @@ const CopyToClipboard = ({
       position={tooltipPosition}
     >
       <IconButton horizontal={horizontal} onClick={onClick}>
-        <Hide status={copiedStatus}>
+        <IconContent horizontal={horizontal} hide={copiedStatus}>
           <FontAwesomeIcon icon={faClipboard} />
           <Translate content={label} />
-        </Hide>
+        </IconContent>
         {copiedStatus && <Check icon={faCheck} size={!horizontal ? '2x' : '1x'} />}
       </IconButton>
     </Translate>
   )
 }
 
-const Hide = styled.div`
-  ${p => p.status && 'visibility: hidden;'}
+const IconContent = styled.div`
+  ${p =>
+    !p.horizontal &&
+    `
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25em;
+  `}
+  ${p => p.hide && 'visibility: hidden;'}
 `
 
 const Check = styled(FontAwesomeIcon).attrs({ icon: faCheck })`
@@ -82,6 +91,7 @@ const Check = styled(FontAwesomeIcon).attrs({ icon: faCheck })`
 const IconButton = styled(Button)`
   height: 100%;
   width: 4em;
+  padding: 0.5em 0.5em;
   margin: 0;
   border-style: none;
   font-size: 0.7em;
