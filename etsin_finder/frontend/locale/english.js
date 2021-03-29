@@ -110,6 +110,8 @@ const english = {
       downloadAll: 'Download all',
       downloadDisabledForDraft: 'Download disabled for draft',
       downloading: 'Downloading...',
+      source: 'Source',
+      commonSource: 'Go to the original source',
       fileAmount: '%(amount)s objects',
       close_modal: 'Close info modal',
       customMetadata: 'Metadata',
@@ -135,6 +137,9 @@ const english = {
           downloads it may take minutes or even hours. The download button will turn green when
           download can be started.`,
           additional: "You may leave Etsin. It won't interrupt the generation process.",
+          additionalEmail:
+            'You may leave Etsin while the package is being generated. If you want to be notified when the package is ready, please enter your email address here.',
+          emailPlaceholder: 'Email',
           ok: 'Generate',
           cancel: 'Cancel',
         },
