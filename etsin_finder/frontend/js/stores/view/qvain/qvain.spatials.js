@@ -2,17 +2,24 @@ import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 
+const numberToString = number => {
+  if (typeof number === 'number') {
+    return number.toString()
+  }
+  return number
+}
+
 const Spatial = (
   uiid = uuidv4(),
   name = '',
-  altitude = 0,
+  altitude = '',
   address = '',
   geometry = [],
   location = undefined
 ) => ({
   uiid,
   name,
-  altitude,
+  altitude: numberToString(altitude),
   address,
   geometry,
   location,
