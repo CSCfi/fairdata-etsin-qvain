@@ -3,8 +3,6 @@ services:
     etsin-qvain-webpack:
       image: fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack
       command: npm start
-      ports:
-        - "8080:8080"
       volumes:
         - ./etsin_finder/:/etsin_finder/
       depends_on:
@@ -48,7 +46,6 @@ services:
         - source: etsin-qvain-nginx-dhparam
           target: /etc/nginx/ssl_certs/dhparam.pem
       ports:
-        - "80:80"
         - "444:444"
       environment:
       - CHOKIDAR_USEPOLLING=true
