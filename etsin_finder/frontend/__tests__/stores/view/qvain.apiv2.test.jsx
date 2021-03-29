@@ -546,13 +546,13 @@ describe('publish new dataset', () => {
   test('case 26: ida, urn, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
 
-    expectNoError(dataset)
+    await expectNoError(dataset)
   })
 
   test('case 27: ida, urn, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
 
-    expectNoError(dataset)
+    await expectNoError(dataset)
   })
 
   test('case 28: ida, doi, cumulative state no', async () => {
