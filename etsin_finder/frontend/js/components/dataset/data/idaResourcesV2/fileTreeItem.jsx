@@ -25,7 +25,13 @@ import {
   NoIcon,
 } from '../../../general/files/items'
 import getDownloadAction from './downloadActions'
-import { DownloadButton, InfoButton } from './iconButton'
+import IconButton from '../common/iconButton'
+
+export const DownloadButton = styled(IconButton)`
+  width: 7.5em;
+`
+
+export const InfoButton = styled(IconButton)``
 
 const download = (datasetIdentifier, item) => {
   const handle = window.open(
