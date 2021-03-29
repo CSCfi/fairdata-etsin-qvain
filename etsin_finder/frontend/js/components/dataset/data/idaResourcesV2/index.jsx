@@ -1,18 +1,17 @@
 import React from 'react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons'
 
 import Tree from './fileTree'
-import IconButton from './iconButton'
 import Info from './info'
 import sizeParse from '../../../../utils/sizeParse'
 import { withStores } from '../../../../stores/stores'
 import getDownloadAction from './downloadActions'
 import ErrorMessage from './errorMessage'
 import ConfirmPackageModal from './confirmPackageModal'
+import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
 
 const downloadAll = identifier => {
   const handle = window.open(`/api/dl?cr_id=${identifier}`)
@@ -119,35 +118,5 @@ IdaResources.propTypes = {
   dataset: PropTypes.object.isRequired,
   Stores: PropTypes.object.isRequired,
 }
-
-const Header = styled.div`
-  display: grid;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  grid-template-columns: 1fr auto;
-`
-
-const HeaderTitle = styled.h2`
-  grid-row: 1;
-  grid-column: 1;
-  line-height: 1.5;
-  margin-bottom: 0;
-`
-
-const HeaderStats = styled.span`
-  grid-row: 2;
-  grid-column: 1;
-`
-const HeaderButtonWrapper = styled.div`
-  grid-row: 1/3;
-  grid-column: 2;
-`
-
-const HeaderButton = styled(IconButton).attrs({
-  Wrapper: HeaderButtonWrapper,
-})`
-  padding: 0.5rem 0.75rem;
-  margin: 0;
-`
 
 export default withStores(observer(IdaResources))
