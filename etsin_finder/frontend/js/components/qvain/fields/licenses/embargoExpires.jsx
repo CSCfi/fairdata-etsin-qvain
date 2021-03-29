@@ -24,7 +24,7 @@ const EmbargoExpires = () => {
 
   useEffect(() => {
     const validate = () => {
-      Schema.validate(embargoExpDate)
+      Schema.validate(embargoExpDate, { strict: true })
         .then(() => {
           setError(null)
         })

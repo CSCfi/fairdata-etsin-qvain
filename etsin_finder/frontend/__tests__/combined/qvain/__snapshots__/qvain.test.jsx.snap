@@ -293,75 +293,47 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
     required={true}
     schema={
       ArraySchema {
-        "_blacklist": RefSet {
+        "_blacklist": ReferenceSet {
           "list": Set {},
           "refs": Map {},
         },
-        "_conditions": Array [],
-        "_deps": Array [],
-        "_exclusive": Object {
+        "_blacklistError": undefined,
+        "_mutate": undefined,
+        "_typeError": [Function],
+        "_whitelist": ReferenceSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "_whitelistError": undefined,
+        "conditions": Array [],
+        "deps": Array [],
+        "exclusiveTests": Object {
           "required": true,
         },
-        "_mutate": undefined,
-        "_options": Object {
-          "abortEarly": true,
-          "recursive": true,
-        },
-        "_subType": StringSchema {
-          "_blacklist": RefSet {
-            "list": Set {},
-            "refs": Map {},
-          },
-          "_conditions": Array [],
-          "_deps": Array [],
-          "_exclusive": Object {
-            "max": true,
-          },
-          "_mutate": undefined,
-          "_options": Object {
-            "abortEarly": true,
-            "recursive": true,
-          },
-          "_type": "string",
-          "_typeError": [Function],
-          "_whitelist": RefSet {
-            "list": Set {},
-            "refs": Map {},
-          },
-          "tests": Array [
-            [Function],
-          ],
-          "transforms": Array [
-            [Function],
-          ],
-          "type": "string",
-        },
-        "_type": "array",
-        "_typeError": [Function],
-        "_whitelist": RefSet {
-          "list": Set {},
-          "refs": Map {},
-        },
         "innerType": StringSchema {
-          "_blacklist": RefSet {
+          "_blacklist": ReferenceSet {
             "list": Set {},
             "refs": Map {},
           },
-          "_conditions": Array [],
-          "_deps": Array [],
-          "_exclusive": Object {
+          "_blacklistError": undefined,
+          "_typeError": [Function],
+          "_whitelist": ReferenceSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "_whitelistError": undefined,
+          "conditions": Array [],
+          "deps": Array [],
+          "exclusiveTests": Object {
             "max": true,
           },
-          "_mutate": undefined,
-          "_options": Object {
+          "spec": Object {
             "abortEarly": true,
+            "nullable": false,
+            "presence": "optional",
             "recursive": true,
-          },
-          "_type": "string",
-          "_typeError": [Function],
-          "_whitelist": RefSet {
-            "list": Set {},
-            "refs": Map {},
+            "strict": false,
+            "strip": false,
           },
           "tests": Array [
             [Function],
@@ -370,6 +342,14 @@ exports[`Qvain.Description should render <KeywordsField /> 1`] = `
             [Function],
           ],
           "type": "string",
+        },
+        "spec": Object {
+          "abortEarly": true,
+          "nullable": false,
+          "presence": "required",
+          "recursive": true,
+          "strict": false,
+          "strip": false,
         },
         "tests": Array [
           [Function],
@@ -445,27 +425,31 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     id="other-identifiers-input"
     itemSchema={
       StringSchema {
-        "_blacklist": RefSet {
+        "_blacklist": ReferenceSet {
           "list": Set {},
           "refs": Map {},
         },
-        "_conditions": Array [],
-        "_deps": Array [],
-        "_exclusive": Object {
+        "_blacklistError": undefined,
+        "_typeError": [Function],
+        "_whitelist": ReferenceSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "_whitelistError": undefined,
+        "conditions": Array [],
+        "deps": Array [],
+        "exclusiveTests": Object {
           "max": true,
           "min": true,
           "url": false,
         },
-        "_mutate": undefined,
-        "_options": Object {
+        "spec": Object {
           "abortEarly": true,
+          "nullable": false,
+          "presence": "optional",
           "recursive": true,
-        },
-        "_type": "string",
-        "_typeError": [Function],
-        "_whitelist": RefSet {
-          "list": Set {},
-          "refs": Map {},
+          "strict": false,
+          "strip": false,
         },
         "tests": Array [
           [Function],
@@ -483,80 +467,46 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     required={false}
     schema={
       ArraySchema {
-        "_blacklist": RefSet {
+        "_blacklist": ReferenceSet {
           "list": Set {},
           "refs": Map {},
         },
-        "_conditions": Array [],
-        "_deps": Array [],
-        "_exclusive": Object {},
-        "_mutate": undefined,
-        "_nullable": true,
-        "_options": Object {
-          "abortEarly": true,
-          "recursive": true,
-        },
-        "_subType": StringSchema {
-          "_blacklist": RefSet {
-            "list": Set {},
-            "refs": Map {},
-          },
-          "_conditions": Array [],
-          "_deps": Array [],
-          "_exclusive": Object {
-            "max": true,
-            "min": true,
-            "url": false,
-          },
-          "_mutate": undefined,
-          "_options": Object {
-            "abortEarly": true,
-            "recursive": true,
-          },
-          "_type": "string",
-          "_typeError": [Function],
-          "_whitelist": RefSet {
-            "list": Set {},
-            "refs": Map {},
-          },
-          "tests": Array [
-            [Function],
-            [Function],
-            [Function],
-          ],
-          "transforms": Array [
-            [Function],
-          ],
-          "type": "string",
-        },
-        "_type": "array",
+        "_blacklistError": undefined,
         "_typeError": [Function],
-        "_whitelist": RefSet {
+        "_whitelist": ReferenceSet {
           "list": Set {},
           "refs": Map {},
         },
+        "_whitelistError": undefined,
+        "conditions": Array [],
+        "deps": Array [],
+        "exclusiveTests": Object {},
         "innerType": StringSchema {
-          "_blacklist": RefSet {
+          "_blacklist": ReferenceSet {
             "list": Set {},
             "refs": Map {},
           },
-          "_conditions": Array [],
-          "_deps": Array [],
-          "_exclusive": Object {
+          "_blacklistError": undefined,
+          "_typeError": [Function],
+          "_whitelist": ReferenceSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "_whitelistError": undefined,
+          "conditions": Array [],
+          "deps": Array [],
+          "exclusiveTests": Object {
             "max": true,
             "min": true,
             "url": false,
           },
-          "_mutate": undefined,
-          "_options": Object {
+          "spec": Object {
             "abortEarly": true,
+            "nullable": false,
+            "presence": "optional",
             "recursive": true,
-          },
-          "_type": "string",
-          "_typeError": [Function],
-          "_whitelist": RefSet {
-            "list": Set {},
-            "refs": Map {},
+            "strict": false,
+            "strip": false,
           },
           "tests": Array [
             [Function],
@@ -567,6 +517,14 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
             [Function],
           ],
           "type": "string",
+        },
+        "spec": Object {
+          "abortEarly": true,
+          "nullable": true,
+          "presence": "optional",
+          "recursive": true,
+          "strict": false,
+          "strip": false,
         },
         "tests": Array [],
         "transforms": Array [
