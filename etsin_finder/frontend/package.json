@@ -11,11 +11,9 @@
   "license": "ISC",
   "scripts": {
     "build": "webpack --mode production --config webpack.prod.js --define process.env.NODE_ENV=\"'production'\"",
-    "build-storybook": "build-storybook",
     "dev-build": "webpack -d --config webpack.config.js --define process.env.NODE_ENV=\"'development'\"",
     "lint": "eslint js --ext .jsx,.js",
     "start": "webpack --progress -d --config webpack.config.js --watch --define process.env.NODE_ENV=\"'development'\"",
-    "storybook": "start-storybook -p 6006",
     "test": "jest",
     "coverage": "jest --collect-coverage --collect-coverage-from=\"js/**\"",
     "watch": "webpack --progress -d --config webpack.config.js --watch  --define process.env.NODE_ENV=\"'development'\""
@@ -46,7 +44,7 @@
     "file-loader": "^3.0.1",
     "formik": "^1.5.8",
     "html-webpack-plugin": "^3.2.0",
-    "leaflet": "^1.5.1",
+    "leaflet": "^1.7.1",
     "leaflet-geosearch": "2.7.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
@@ -62,7 +60,7 @@
     "react-dates": "^20.2.2",
     "react-dom": "^16.8.6",
     "react-interpolate-component": "^0.12.0",
-    "react-leaflet": "2.1.2",
+    "react-leaflet": "^2.8.0",
     "react-markdown": "^4.1.0",
     "react-modal": "^3.12.1",
     "react-router-dom": "^5.0.1",
@@ -76,14 +74,12 @@
     "uuid": "^8.3.0",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7",
-    "yup": "^0.29.1"
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@axe-core/react": "^4.1.0",
     "@babel/eslint-parser": "^7.12.1",
     "@babel/eslint-plugin": "^7.12.1",
-    "@storybook/addon-viewport": "^5.1.1",
-    "@storybook/react": "^5.1.1",
     "axios-mock-adapter": "^1.17.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-styled-components": "^1.10.7",
