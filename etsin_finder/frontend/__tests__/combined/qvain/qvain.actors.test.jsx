@@ -68,13 +68,19 @@ beforeEach(() => {
 })
 
 describe('Qvain.Actors', () => {
+  let addedActors
+
+  afterEach(() => {
+    addedActors?.unmount?.()
+  })
+
   it('should render correctly', () => {
     const component = shallow(<ActorsBase />)
     expect(component).toMatchSnapshot()
   })
 
   it('should list all added actors', () => {
-    const addedActors = mount(
+    addedActors = mount(
       <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
           <AddedActors />
@@ -1037,5 +1043,43 @@ describe('Qvain.Actors store', () => {
   it('converts dataset for backend', async () => {
     stores.Qvain.editDataset(dataset)
     expect(stores.Qvain.Actors.toBackend()).toMatchSnapshot()
+  })
+
+  describe('otherActorsHaveRole', () => {
+    let Actors
+    beforeEach(() => {
+      Actors = stores.Qvain.Actors
+      Actors.reset()
+      Actors.setActors([
+        {
+          uiid: 1,
+          roles: ['creator'],
+        },
+        {
+          uiid: 2,
+          roles: ['publisher', 'creator'],
+        },
+        {
+          uiid: 3,
+          roles: ['curator'],
+        },
+      ])
+    })
+
+    it('should return true when another actor has role', () => {
+      expect(Actors.otherActorsHaveRole({ uiid: 3 }, 'publisher')).toBe(true)
+    })
+
+    it('should return false when only current actor has role', () => {
+      expect(Actors.otherActorsHaveRole({ uiid: 2 }, 'publisher')).toBe(false)
+    })
+
+    it('should return true when current and another actor have role', () => {
+      expect(Actors.otherActorsHaveRole({ uiid: 1 }, 'creator')).toBe(true)
+    })
+
+    it('should return false when no actors have role', () => {
+      expect(Actors.otherActorsHaveRole({ uiid: 2 }, 'somerole')).toBe(false)
+    })
   })
 })

@@ -23,7 +23,7 @@ import dataset from '../../../__testdata__/dataset.ida'
 import { StoresProvider, useStores } from '../../../../js/stores/stores'
 import FilesClass from '../../../../js/stores/view/files'
 import Modal from '../../../../js/components/general/modal'
-import { DownloadButton } from '../../../../js/components/dataset/data/idaResourcesV2/iconButton'
+import { DownloadButton } from '../../../../js/components/dataset/data/idaResourcesV2/fileTreeItem'
 
 global.Promise = require('bluebird')
 
