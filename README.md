@@ -34,6 +34,11 @@ Then, the service specific images can be pushed (see below)
 3 Push image:
 - `docker push fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask`
 
+## Running syntax checks
+
+1 Running tox:
+- `docker exec $(docker ps -q -f name=metax-etsin-qvain-dev_etsin-qvain-flask) tox`
+
 # Build status
 
 ## Test branch
