@@ -33,7 +33,7 @@ const IconButton = ({
         title={tooltip}
         component={TooltipHover}
         showOnHover={false}
-        showOnClick
+        showOnClick={!!tooltip}
         flexGrow={flexGrow}
       >
         <StyledIconButton fill="white" as={as} href={href} {...props}>

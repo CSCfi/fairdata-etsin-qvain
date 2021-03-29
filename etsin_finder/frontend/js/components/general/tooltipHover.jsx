@@ -38,11 +38,10 @@ const TooltipHover = props => {
     }
     e.preventDefault()
   }
-
   return (
     <Tip
       forceShow={clicked && showOnClick}
-      onClick={toggle}
+      onClick={showOnClick ? toggle : undefined}
       position={position.toLowerCase()}
       {...restProps}
     >
