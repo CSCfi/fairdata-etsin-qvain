@@ -21,7 +21,7 @@ const IconButton = ({
   ...props
 }) => {
   let as = null
-  let target = undefined
+  let target
   if (link) {
     as = invert ? InvertedLink : Link
     target = '_blank'
