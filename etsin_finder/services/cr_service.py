@@ -29,11 +29,11 @@ class MetaxAPIService(FlaskService):
             # HTTPS as a default protocol for Metax URLs...
             if metax_api_config.get('VERIFY_SSL') is True:
                 METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/datasets'.format(metax_api_config.get('HOST')) + \
-                                            '/{0}?expand_relation=data_catalog'
+                    '/{0}?expand_relation=data_catalog'
             # ... but use HTTP if Metax is running in Docker
             if metax_api_config.get('VERIFY_SSL') is False:
                 METAX_GET_CATALOG_RECORD_URL = 'http://{0}/rest/datasets'.format(metax_api_config.get('HOST')) + \
-                                            '/{0}?expand_relation=data_catalog'
+                    '/{0}?expand_relation=data_catalog'
 
             self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL = METAX_GET_CATALOG_RECORD_URL + '&file_details'
             self.METAX_GET_REMOVED_CATALOG_RECORD_URL = METAX_GET_CATALOG_RECORD_URL + '&removed=true'
@@ -41,12 +41,12 @@ class MetaxAPIService(FlaskService):
             # HTTPS as a default protocol for Metax URLs...
             if metax_api_config.get('VERIFY_SSL') is True:
                 self.METAX_GET_DIRECTORY_FOR_CR_URL = 'https://{0}/rest/directories'.format(metax_api_config.get('HOST')) + \
-                                                    '/{0}/files?cr_identifier={1}'
+                    '/{0}/files?cr_identifier={1}'
 
             # ... but use HTTP if Metax is running in Docker
             if metax_api_config.get('VERIFY_SSL') is False:
                 self.METAX_GET_DIRECTORY_FOR_CR_URL = 'http://{0}/rest/directories'.format(metax_api_config.get('HOST')) + \
-                                                  '/{0}/files?cr_identifier={1}'
+                    '/{0}/files?cr_identifier={1}'
 
             self.user = metax_api_config.get('USER')
             self.pw = metax_api_config.get('PASSWORD')
