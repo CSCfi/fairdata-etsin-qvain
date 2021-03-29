@@ -337,7 +337,9 @@ describe('create new draft', () => {
 
   const expectNoError = async dataset => {
     handleSubmitToBackend.mockReturnValue(dataset)
-    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(
+      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    )
 
     try {
       await Submit.submitDraft()
@@ -350,7 +352,9 @@ describe('create new draft', () => {
 
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue(dataset)
-    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(
+      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    )
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
   }
@@ -472,7 +476,9 @@ describe('publish new dataset', () => {
 
   const expectNoError = async (dataset, cb) => {
     handleSubmitToBackend.mockReturnValue(dataset)
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchema.validate.mockReturnValue(
+      realQvainFormSchema.validate(dataset, { strict: true })
+    )
 
     try {
       await Submit.submitPublish(cb)
@@ -483,7 +489,9 @@ describe('publish new dataset', () => {
 
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue(dataset)
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchema.validate.mockReturnValue(
+      realQvainFormSchema.validate(dataset, { strict: true })
+    )
     await Submit.submitPublish()
     expect(Submit.error?.message).toEqual(error)
   }
@@ -538,13 +546,13 @@ describe('publish new dataset', () => {
   test('case 26: ida, urn, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
 
-    expectNoError(dataset)
+    await expectNoError(dataset)
   })
 
   test('case 27: ida, urn, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
 
-    expectNoError(dataset)
+    await expectNoError(dataset)
   })
 
   test('case 28: ida, doi, cumulative state no', async () => {
@@ -620,7 +628,9 @@ describe('edit existing draft dataset', () => {
 
   const expectNoError = async dataset => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
-    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(
+      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    )
 
     try {
       await Submit.submitDraft()
@@ -631,7 +641,9 @@ describe('edit existing draft dataset', () => {
 
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
-    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(
+      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    )
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
   }
@@ -737,7 +749,9 @@ describe('publish existing draft dataset', () => {
 
   const expectNoError = async dataset => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchema.validate.mockReturnValue(
+      realQvainFormSchema.validate(dataset, { strict: true })
+    )
 
     try {
       await Submit.submitPublish()
@@ -748,7 +762,9 @@ describe('publish existing draft dataset', () => {
 
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchema.validate.mockReturnValue(
+      realQvainFormSchema.validate(dataset, { strict: true })
+    )
     await Submit.submitPublish()
     expect(Submit.error?.message).toEqual(error)
   }
@@ -866,7 +882,9 @@ describe('save published dataset as draft', () => {
       ...dataset,
       original: { ...dataset.original, ...preparedDataset.original },
     })
-    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(
+      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    )
 
     try {
       await Submit.submitDraft()
@@ -880,7 +898,9 @@ describe('save published dataset as draft', () => {
       ...dataset,
       original: { ...dataset.original, ...preparedDataset.original },
     })
-    qvainFormSchemaDraft.validate.mockReturnValue(realQvainFormSchemaDraft.validate(dataset))
+    qvainFormSchemaDraft.validate.mockReturnValue(
+      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    )
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
   }
@@ -1000,7 +1020,9 @@ describe('republish dataset', () => {
       ...dataset,
       original: { ...dataset.original, ...preparedDataset.original },
     })
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchema.validate.mockReturnValue(
+      realQvainFormSchema.validate(dataset, { strict: true })
+    )
 
     try {
       await Submit.submitPublish()
@@ -1014,7 +1036,9 @@ describe('republish dataset', () => {
       ...dataset,
       original: { ...dataset.original, ...preparedDataset.original },
     })
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchema.validate.mockReturnValue(
+      realQvainFormSchema.validate(dataset, { strict: true })
+    )
     await Submit.submitPublish()
     expect(Submit.error?.message).toEqual(error)
   }
@@ -1143,7 +1167,9 @@ describe('publish unpublished dataset', () => {
       ...dataset,
       original: { ...dataset.original, ...preparedDataset.original },
     })
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchema.validate.mockReturnValue(
+      realQvainFormSchema.validate(dataset, { strict: true })
+    )
 
     try {
       await Submit.submitPublish()
@@ -1157,7 +1183,9 @@ describe('publish unpublished dataset', () => {
       ...dataset,
       original: { ...dataset.original, ...preparedDataset.original },
     })
-    qvainFormSchema.validate.mockReturnValue(realQvainFormSchema.validate(dataset))
+    qvainFormSchema.validate.mockReturnValue(
+      realQvainFormSchema.validate(dataset, { strict: true })
+    )
     await Submit.submitPublish()
     expect(Submit.error?.message).toEqual(error)
   }

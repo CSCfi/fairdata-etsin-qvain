@@ -18,7 +18,7 @@ const RestrictionGrounds = () => {
 
   const handleBlur = () => {
     const { identifier = '' } = restrictionGrounds || {}
-    Schema.validate(identifier)
+    Schema.validate(identifier, { strict: true })
       .then(() => {
         setError(null)
       })
