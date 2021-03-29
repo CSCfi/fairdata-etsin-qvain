@@ -43,7 +43,7 @@ export const OrgFormBase = ({ organization, updateOrganization }) => {
     const value = lang ? organization[propTag][lang] : organization[propTag]
     const validator = schemas[propTag]
     validator
-      .validate(value)
+      .validate(value, { strict: true })
       .then(() => onError(propTag))
       .catch(err => onError(propTag, err.errors))
   }

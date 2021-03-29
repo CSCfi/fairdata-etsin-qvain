@@ -21,7 +21,7 @@ const PersonInput = ({ propName, schema, includeType, required }) => {
     const value = actor.person[propName]
     const onError = err => setError(err)
     validator
-      .validate(value)
+      .validate(value, { strict: true })
       .then(() => onError(undefined))
       .catch(err => onError(err.errors))
   }

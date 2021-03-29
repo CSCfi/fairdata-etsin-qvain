@@ -38,7 +38,7 @@ export const ExternalFileFormBase = () => {
     event.preventDefault()
     const externalResourceJs = toJS(externalResource)
     externalResourceSchema
-      .validate(externalResourceJs)
+      .validate(externalResourceJs, { strict: true })
       .then(() => {
         saveExternalResource(externalResource)
         editExternalResource(EmptyExternalResource)
