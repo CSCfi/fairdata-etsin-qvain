@@ -83,7 +83,7 @@ export class DirectoryFormBase extends Component {
       useCategory,
     }
     directorySchema
-      .validate(validationObj)
+      .validate(validationObj, { strict: true })
       .then(() => {
         this.setState({
           directoryError: undefined,
@@ -104,7 +104,7 @@ export class DirectoryFormBase extends Component {
 
   handleOnBlur = (validator, value, errorSet) => {
     validator
-      .validate(value)
+      .validate(value, { strict: true })
       .then(() => errorSet(undefined))
       .catch(err => errorSet(err.errors))
   }
@@ -124,7 +124,7 @@ export class DirectoryFormBase extends Component {
   handleOnUseCategoryBlur = () => {
     const { useCategory } = this.state
     directoryUseCategorySchema
-      .validate(useCategory)
+      .validate(useCategory, { strict: true })
       .then(() => {
         this.setState({
           useCategoryError: undefined,

@@ -642,7 +642,7 @@ describe('Qvain validation', () => {
   it('should validate dataset', async () => {
     actors[0].roles.push('publisher')
     try {
-      expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
+      expect(await qvainFormSchema.validate(dataset, { abortEarly: false, strict: true }))
     } catch (e) {
       if (e.errors) {
         fail(e.errors)
@@ -656,7 +656,7 @@ describe('Qvain validation', () => {
     dataset.useDoi = true // missing publisher role and issuedDate
 
     try {
-      expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
+      expect(await qvainFormSchema.validate(dataset, { abortEarly: false, strict: true }))
       fail('should have thrown error')
     } catch (e) {
       expect(e.errors.length).toBe(2)
@@ -675,7 +675,7 @@ describe('Qvain validation', () => {
     actors[0].roles.push('publisher')
 
     try {
-      expect(await qvainFormSchema.validate(dataset, { abortEarly: false }))
+      expect(await qvainFormSchema.validate(dataset, { abortEarly: false, strict: true }))
     } catch (e) {
       if (e.errors) {
         fail(e.errors)

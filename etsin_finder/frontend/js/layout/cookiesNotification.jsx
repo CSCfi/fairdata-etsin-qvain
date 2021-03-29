@@ -112,7 +112,7 @@ const Notification = styled.section`
   width: 100%;
   display: ${props => (props.visible ? 'flex' : 'none')};
   justify-content: center;
-  z-index: 1;
+  z-index: 1000;
   background-color: #f3f2f1;
 `
 

@@ -3,9 +3,19 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-export const ValidationError = ({ children }) => (
-  <Translate content={children} component={ValidationErrorText} />
-)
+export const ValidationError = ({ children }) => {
+  if (!children) return null
+  let isAlreadyTranslated = false
+  if (Array.isArray(children)) {
+    isAlreadyTranslated = children[0]?.includes(' ')
+  } else if (typeof children === 'string') {
+    isAlreadyTranslated = children.includes(' ')
+  }
+  if (isAlreadyTranslated) {
+    return <ValidationErrorText>{children}</ValidationErrorText>
+  }
+  return <Translate content={children} component={ValidationErrorText} />
+}
 
 ValidationError.propTypes = {
   children: PropTypes.node,
