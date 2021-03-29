@@ -31,7 +31,7 @@ const SubmitButtonsV1 = ({
     obj.original = original
 
     return qvainFormSchema
-      .validate(obj, { abortEarly: false })
+      .validate(obj, { abortEarly: false, strict: true })
       .then(() =>
         axios
           .patch(datasetUrl, obj)
