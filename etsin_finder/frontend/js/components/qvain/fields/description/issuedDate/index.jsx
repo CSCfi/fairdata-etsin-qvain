@@ -28,7 +28,7 @@ const IssuedDateField = () => {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    Schema.validate(issuedDate)
+    Schema.validate(issuedDate, { strict: true })
       .then(() => {
         setError('')
       })

@@ -159,7 +159,7 @@ class Project extends Component {
           organizations: organizations.addedOrganizations,
           fundingAgencies: fundingAgencies.addedFundingAgencies,
         },
-        { abortEarly: false }
+        { abortEarly: false, strict: true }
       )
       .then(() => {
         const { titleEn, titleFi, identifier, fundingIdentifier, funderType } = details
