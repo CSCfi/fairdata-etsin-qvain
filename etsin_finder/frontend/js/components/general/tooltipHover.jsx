@@ -38,11 +38,10 @@ const TooltipHover = props => {
     }
     e.preventDefault()
   }
-
   return (
     <Tip
       forceShow={clicked && showOnClick}
-      onClick={toggle}
+      onClick={showOnClick ? toggle : undefined}
       position={position.toLowerCase()}
       {...restProps}
     >
@@ -56,14 +55,16 @@ TooltipHover.defaultProps = {
   title: '',
   showOnHover: true,
   showOnClick: false,
+  flexGrow: 0,
 }
 
 TooltipHover.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]).isRequired,
+  children: PropTypes.node.isRequired,
   position: PropTypes.oneOf(['top', 'right', 'left']),
   title: PropTypes.string,
   showOnHover: PropTypes.bool,
   showOnClick: PropTypes.bool,
+  flexGrow: PropTypes.number,
 }
 
 export default TooltipHover
@@ -116,6 +117,7 @@ const Tip = styled.span.attrs(props => ({
   bg: props.theme.color.darkgray,
   fg: props.theme.color.white,
 }))`
+  flex-grow: ${props => props.flexGrow};
   display: inline-block;
   position: relative;
   color: inherit;

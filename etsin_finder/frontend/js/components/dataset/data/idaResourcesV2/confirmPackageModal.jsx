@@ -6,6 +6,8 @@ import Translate from 'react-translate-component'
 
 import Modal from '../../../general/modal'
 import Button, { InvertedButton } from '../../../general/button'
+import { Input } from '../../common/formItems'
+import FlaggedComponent from '../../../general/flaggedComponent'
 
 const ConfirmPackageModal = ({ Packages }) => (
   <Modal
@@ -16,7 +18,20 @@ const ConfirmPackageModal = ({ Packages }) => (
   >
     <Translate component={Header} content="dataset.dl.packages.modal.header" />
     <Translate component="p" content="dataset.dl.packages.modal.main" />
-    <Translate component="p" content="dataset.dl.packages.modal.additional" />
+    <FlaggedComponent
+      flag="DOWNLOAD_API_V2.EMAIL.FRONTEND"
+      whenDisabled={<Translate component="p" content="dataset.dl.packages.modal.additional" />}
+    >
+      <p>
+        <Translate component={EmailText} content="dataset.dl.packages.modal.additionalEmail" />
+        <Translate
+          component={EmailInput}
+          type="text"
+          attributes={{ placeholder: 'dataset.dl.packages.modal.emailPlaceholder' }}
+        />
+      </p>
+    </FlaggedComponent>
+
     <Buttons>
       <Translate
         component={InvertedButton}
@@ -37,6 +52,15 @@ const ConfirmPackageModal = ({ Packages }) => (
 ConfirmPackageModal.propTypes = {
   Packages: PropTypes.object.isRequired,
 }
+
+const EmailInput = styled(Input)`
+  height: 2em;
+  padding: 0.5em;
+`
+
+const EmailText = styled.span`
+  margin-right: 0.5em;
+`
 
 const Header = styled.h2`
   text-align: center;

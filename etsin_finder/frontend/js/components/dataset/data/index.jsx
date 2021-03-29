@@ -30,7 +30,7 @@ class Data extends Component {
 
     Accessibility.handleNavigation('data', false)
 
-    if (downloadApiV2 && !DatasetQuery.isDraft) {
+    if (downloadApiV2 && !DatasetQuery.isDraft && !this.props.hasRemote) {
       DatasetQuery.fetchPackages()
     }
 
