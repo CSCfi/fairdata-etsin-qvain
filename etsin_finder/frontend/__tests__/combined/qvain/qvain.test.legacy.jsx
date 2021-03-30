@@ -6,8 +6,6 @@ import { StoresProvider } from '../../../js/stores/stores'
 import '../../../locale/translations'
 import etsinTheme from '../../../js/styles/theme'
 import QvainComponent, { Qvain as QvainBase } from '../../../js/components/qvain/views/main'
-import Description from '../../../js/components/qvain/fields/description'
-import DescriptionField from '../../../js/components/qvain/fields/description'
 import OtherIdentifierField from '../../../js/components/qvain/fields/description/otherIdentifier'
 import FieldOfScienceField from '../../../js/components/qvain/fields/description/fieldOfScience'
 import KeywordsField from '../../../js/components/qvain/fields/description/keywords'
@@ -189,22 +187,6 @@ describe('Qvain', () => {
 })
 
 describe('Qvain.Description', () => {
-  it('should render <Description />', () => {
-    const component = shallow(
-      <StoresProvider store={getStores()}>
-        <Description />
-      </StoresProvider>
-    )
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <DescriptionField />', () => {
-    const component = shallow(
-      <StoresProvider store={getStores()}>
-        <DescriptionField />
-      </StoresProvider>
-    )
-    expect(component).toMatchSnapshot()
-  })
   it('should render <OtherIdentifierField />', () => {
     const component = shallow(
       <StoresProvider store={getStores()}>

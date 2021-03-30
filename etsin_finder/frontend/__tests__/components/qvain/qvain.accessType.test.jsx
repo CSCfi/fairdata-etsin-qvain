@@ -1,6 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import axios from 'axios'
+import { configure } from 'mobx'
 
 import '../../../locale/translations'
 import { AccessType } from '../../../js/components/qvain/fields/licenses/accessType'
@@ -8,6 +9,10 @@ import { ACCESS_TYPE_URL } from '../../../js/utils/constants'
 import { buildStores } from '../../../js/stores'
 import accessTypeResponse from '../../__testdata__/accessTypes.data'
 import { onChange } from '../../../js/components/qvain/utils/select'
+
+configure({
+  safeDescriptors: false,
+})
 
 jest.mock('axios')
 
