@@ -57,7 +57,7 @@ services:
         - elasticsearch
 
 configs:
-  etsin-qvain-app-config-dev:
+  etsin-qvain-app-config:
     external: True
   etsin-qvain-nginx-config:
     external: True
