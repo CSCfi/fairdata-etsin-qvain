@@ -7,7 +7,6 @@ import CreatableSelect from 'react-select/creatable'
 import etsinTheme from '../../../js/styles/theme'
 import '../../../locale/translations'
 import { Qvain as QvainBase } from '../../../js/components/qvain/views/main'
-import DescriptionField from '../../../js/components/qvain/fields/description'
 import OtherIdentifierField from '../../../js/components/qvain/fields/description/otherIdentifier'
 import FieldOfScienceField from '../../../js/components/qvain/fields/description/fieldOfScience'
 import IssuedDateField from '../../../js/components/qvain/fields/description/issuedDate'
@@ -217,10 +216,6 @@ describe('Qvain.Description', () => {
     useStores.mockReturnValue(stores)
   })
 
-  it('should render <DescriptionField />', () => {
-    const component = shallow(<DescriptionField />)
-    expect(component).toMatchSnapshot()
-  })
   it('should render <OtherIdentifierField />', () => {
     const component = shallow(<OtherIdentifierField.wrappedComponent />)
     expect(component).toMatchSnapshot()

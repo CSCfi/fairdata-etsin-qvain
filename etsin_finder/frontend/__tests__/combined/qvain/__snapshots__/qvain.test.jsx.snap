@@ -185,37 +185,6 @@ exports[`Qvain should render correctly 1`] = `
 </card__QvainContainer>
 `;
 
-exports[`Qvain.Description should render <DescriptionField /> 1`] = `
-<div
-  className="container"
->
-  <title__SectionTitle>
-    <Translate
-      component="span"
-      content="qvain.description.title"
-    />
-    <Tooltip
-      align="Right"
-      close={[Function]}
-      isOpen={false}
-      text={<DescriptionInfo />}
-    >
-      <HelpIcon
-        aria-label="Description info"
-        onClick={[Function]}
-      />
-    </Tooltip>
-  </title__SectionTitle>
-  <withFieldErrorBoundary(DescriptionField) />
-  <withFieldErrorBoundary(IssuedDateField) />
-  <withFieldErrorBoundary(OtherIdentifierField) />
-  <withFieldErrorBoundary(FieldOfScienceField) />
-  <withFieldErrorBoundary(LanguageField) />
-  <withFieldErrorBoundary(KeywordsField) />
-  <withFieldErrorBoundary(SubjectHeadingsField) />
-</div>
-`;
-
 exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
 <Card
   bottomContent={false}
