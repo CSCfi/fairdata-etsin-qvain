@@ -13,7 +13,7 @@ services:
     etsin-qvain-flask:
       image: fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask
       configs:
-        - source: etsin-qvain-app-config-dev
+        - source: etsin-qvain-app-config
           target: /home/etsin-user/app_config
       ports:
         - "5000:5000"
