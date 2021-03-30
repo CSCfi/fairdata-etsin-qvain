@@ -585,36 +585,6 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
 </Card>
 `;
 
-exports[`Qvain.Description should render <SubjectHeadingsField /> 1`] = `
-<Card
-  bottomContent={false}
->
-  <form__LabelLarge
-    htmlFor="subjectHeading-select"
-  >
-    <Translate
-      component="span"
-      content="qvain.description.subjectHeadings.title"
-    />
-  </form__LabelLarge>
-  <Translate
-    component="p"
-    content="qvain.description.subjectHeadings.help"
-  />
-  <SearchSelect
-    getter={Array []}
-    inModal={false}
-    isClearable={false}
-    isMulti={true}
-    metaxIdentifier="keyword"
-    model={[Function]}
-    name="subjectHeading"
-    placeholder="qvain.description.subjectHeadings.placeholder"
-    setter={[Function]}
-  />
-</Card>
-`;
-
 exports[`Qvain.RightsAndLicenses should render <AccessType /> 1`] = `
 <Card
   bottomContent={false}

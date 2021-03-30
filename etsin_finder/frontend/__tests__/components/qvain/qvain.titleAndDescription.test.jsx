@@ -78,6 +78,7 @@ describe('given Stores with required data', () => {
       }
 
       harness.shouldIncludeChildren(children, props)
+      harness.restoreWrapper('Instructions')
     })
   })
 })
