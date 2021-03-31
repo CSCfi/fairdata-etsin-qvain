@@ -47,7 +47,7 @@ services:
           target: /etc/nginx/sites-enabled/etsin-qvain
 
       ports:
-        - "444:444"
+        - "443:443"
       environment:
       - CHOKIDAR_USEPOLLING=true
       volumes:
@@ -68,4 +68,3 @@ configs:
     external: True
   fairdata-ssl-certificate-key:
     external: True
-
