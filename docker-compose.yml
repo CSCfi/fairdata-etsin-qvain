@@ -43,8 +43,6 @@ services:
           target: /etc/nginx/ssl_certs/ssl.crt.pem
         - source: fairdata-ssl-certificate-key
           target: /etc/nginx/ssl_certs/ssl.key.pem
-        - source: etsin-qvain-nginx-dhparam
-          target: /etc/nginx/ssl_certs/dhparam.pem
         - source: etsin-qvain-nginx-config
           target: /etc/nginx/sites-enabled/etsin-qvain
 
@@ -70,5 +68,4 @@ configs:
     external: True
   fairdata-ssl-certificate-key:
     external: True
-  etsin-qvain-nginx-dhparam:
-    external: True
+
