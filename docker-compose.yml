@@ -40,9 +40,9 @@ services:
         - source: fairdata-nginx
           target: /etc/nginx/nginx.conf
         - source: fairdata-ssl-certificate
-          target: /etc/nginx/ssl_certs/ssl.crt.pem
+          target: /etc/pki/tls/certs/ssl.crt.pem
         - source: fairdata-ssl-certificate-key
-          target: /etc/nginx/ssl_certs/ssl.key.pem
+          target: /etc/pki/tls/private/ssl.key.pem
         - source: etsin-qvain-nginx-config
           target: /etc/nginx/sites-enabled/etsin-qvain
 
@@ -60,7 +60,7 @@ services:
 configs:
   etsin-qvain-app-config:
     external: True
-  fairdata-nginx-config:
+  fairdata-nginx:
     external: True
   etsin-qvain-nginx-config:
     external: True
