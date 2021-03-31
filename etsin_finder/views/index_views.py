@@ -7,7 +7,7 @@
 
 """Used for routing traffic from Flask to frontend."""
 
-from flask import Blueprint, make_response, render_template, request, session, current_app
+from flask import Blueprint, make_response, render_template, render_template_string, request, session, current_app
 import requests
 
 from etsin_finder.auth.authentication import is_authenticated
@@ -30,9 +30,11 @@ def webpack_dev_proxy(host, path):
         for name, value in response.raw.headers.items()
         if name.lower() not in excluded_headers
     }
-    # if dev server responds with html, return the rendered index template instead
-    if headers.get('Content-Type') == 'text/html; charset=UTF-8':
-        return _render_index_template()
+    # if dev server responds with html, assume it's a html template
+    ok = response.status_code == 200
+    is_html = headers.get('Content-Type') == 'text/html; charset=UTF-8'
+    if ok and is_html:
+        return _render_index_template(template_string=response.text)
     return (response.content, response.status_code, headers)
 
 @index_views.route('/', defaults={'path': ''})
@@ -63,7 +65,7 @@ def frontend_app(path):
 
     return resp
 
-def _render_index_template(saml_errors=[], slo_success=False):
+def _render_index_template(saml_errors=[], slo_success=False, template_string=None):
     """Load saml attributes if logged in through old proxy, and log values
 
     Args:
@@ -89,4 +91,7 @@ def _render_index_template(saml_errors=[], slo_success=False):
         app_title = translate(lang, 'etsin.title')
         app_description = translate(lang, 'etsin.description')
 
-    return render_template('index.html', lang=lang, app_title=app_title, app_description=app_description)
+    if template_string:
+        return render_template_string(template_string, lang=lang, app_title=app_title, app_description=app_description)
+    else:
+        return render_template('index.html', lang=lang, app_title=app_title, app_description=app_description)
