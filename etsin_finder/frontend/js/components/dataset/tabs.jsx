@@ -25,7 +25,7 @@ class Tabs extends Component {
     }
 
     return (
-      <Fragment>
+      <>
         <EtsinTabs className="nav nav-tabs" role="tablist">
           <li className="nav-item" role="presentation">
             <NavLink
@@ -99,7 +99,7 @@ class Tabs extends Component {
             </li>
           )}
         </EtsinTabs>
-      </Fragment>
+      </>
     )
   }
 }

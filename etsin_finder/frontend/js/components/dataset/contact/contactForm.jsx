@@ -18,7 +18,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import Select from '../../general/select'
 
-import Input, { InputArea } from './formItems'
+import Input, { InputArea } from '../common/formItems'
 import { InvertedButton } from '../../general/button'
 import ErrorBoundary from '../../general/errorBoundary'
 

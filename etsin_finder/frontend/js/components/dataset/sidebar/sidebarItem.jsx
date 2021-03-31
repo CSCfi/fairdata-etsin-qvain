@@ -5,57 +5,50 @@ import PropTypes from 'prop-types'
 import { hasChildren } from '../../../utils/helpers'
 
 const SidebarItem = props => {
-  if (props.hideEmpty && !hasChildren(props.children)) {
+  if (!hasChildren(props.children)) {
     return null
   }
   return (
-    <Spacer>
+    <>
       {props.trans && (
         <DT className="heading4">
           <Translate content={props.trans} fallback={props.fallback} />
         </DT>
       )}
-      {props.component ? (
-        React.createElement(props.component, null, props.children)
-      ) : (
-        <React.Fragment>{props.children}</React.Fragment>
-      )}
-    </Spacer>
+      <DD lineAfter={props.lineAfter}>{props.children}</DD>
+    </>
   )
 }
 
 export default SidebarItem
 
 SidebarItem.defaultProps = {
-  component: '',
-  hideEmpty: undefined,
   fallback: undefined,
   children: undefined,
   trans: undefined,
+  lineAfter: false,
 }
 
 SidebarItem.propTypes = {
-  component: PropTypes.string,
-  hideEmpty: PropTypes.string,
   children: PropTypes.node,
   trans: PropTypes.string,
   fallback: PropTypes.string,
+  lineAfter: PropTypes.bool,
 }
 
 const DT = styled.dt`
   margin-bottom: 0;
+  padding: 0 1.5rem;
 `
 
-const Spacer = styled.section`
-  padding: 0 1.4em;
-  @media screen and (min-width: ${p => p.theme.breakpoints.md}) {
-    padding: 0 1.6em;
-  }
+const DD = styled.dd`
   margin-bottom: 1rem;
-  & > div {
-    font-size: 0.92em;
-  }
-  &:last-of-type {
-    margin-bottom: 0;
-  }
+  padding: 0 1.5rem;
+  ${p =>
+    p.lineAfter &&
+    `
+    border-bottom: 1px solid ${p.theme.color.lightgray};
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+  `}
 `

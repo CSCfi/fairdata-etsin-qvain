@@ -181,7 +181,9 @@ export default class FormatSelect extends Component {
               align="Right"
               text={<Translate component="p" content="dataset.datasetAsFile.infoText" />}
             >
-              <HelpIcon
+              <Translate
+                component={HelpIcon}
+                attributes={{ 'aria-label': 'dataset.datasetAsFile.infoLabel' }}
                 onClick={() => this.setState(prev => ({ tooltipOpen: !prev.tooltipOpen }))}
                 align="Left"
               />

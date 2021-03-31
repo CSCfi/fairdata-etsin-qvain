@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action, makeObservable, override } from 'mobx'
 import Spatials from './qvain.spatials'
 import UsedEntities from './qvain.usedEntities'
 import Field from './qvain.field'
@@ -47,21 +47,17 @@ class Provenances extends Field {
 
   @observable provenancesWithNonExistingActors = []
 
-  @action reset = () => {
-    this.selectedActor = undefined
-    this.provenancesWithNonExistingActors = []
-  }
-
   @action saveAndClearSpatials = () => {
     this.selectedActor = undefined
   }
 
-  @action reset() {
+  @override reset() {
     super.reset()
     this.selectedActor = undefined
+    this.provenancesWithNonExistingActors = []
   }
 
-  @action create() {
+  @override create() {
     this.setChanged(false)
     this.editMode = false
     this.inEdit = new Provenance({
@@ -82,9 +78,9 @@ class Provenances extends Field {
       temporal:
         p.startDate || p.endDate
           ? {
-              start_date: new Date(p.startDate).toISOString(),
-              end_date: new Date(p.endDate).toISOString(),
-            }
+            start_date: new Date(p.startDate).toISOString(),
+            end_date: new Date(p.endDate).toISOString(),
+          }
           : undefined, // TODO: move this conversion to Temporal when it's implemented
       spatial: p.spatials.toBackend()[0],
       event_outcome: { identifier: (p.outcome || {}).url },
@@ -142,9 +138,9 @@ export const ProvenanceModel = (provenanceData, Qvain) => ({
   }),
   lifecycle: provenanceData.lifecycle_event
     ? Lifecycle(
-        provenanceData.lifecycle_event.pref_label,
-        provenanceData.lifecycle_event.identifier
-      )
+      provenanceData.lifecycle_event.pref_label,
+      provenanceData.lifecycle_event.identifier
+    )
     : undefined,
 })
 

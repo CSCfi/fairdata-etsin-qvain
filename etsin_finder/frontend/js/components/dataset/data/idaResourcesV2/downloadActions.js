@@ -75,7 +75,10 @@ const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
   let action
   if (isFile || (pack && pack.status === DOWNLOAD_API_REQUEST_STATUS.SUCCESS)) {
     action = actionDownload(datasetIdentifier, item, path, pack, Packages)
-  } else if (pack && (pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING || pack.requestingPackageCreation)) {
+  } else if (pack && (
+    pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING ||
+    pack.status === DOWNLOAD_API_REQUEST_STATUS.STARTED ||
+    pack.requestingPackageCreation)) {
     action = actionPending()
   } else if (Packages.loadingDataset) {
     action = actionLoading()

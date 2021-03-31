@@ -19,7 +19,7 @@ import { Link } from '../button'
 import LangToggle from './langToggle'
 
 const Settings = props => (
-  <React.Fragment>
+  <>
     <Positioner>
       <Link width="max-content" href={props.helpUrl} rel="noopener noreferrer" target="_blank">
         <Translate content="nav.help" />
@@ -27,7 +27,7 @@ const Settings = props => (
       {props.children}
       <LangToggle />
     </Positioner>
-  </React.Fragment>
+  </>
 )
 
 export default Settings

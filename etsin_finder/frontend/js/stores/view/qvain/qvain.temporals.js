@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { computed, action, makeObservable } from 'mobx'
+import { computed, action, makeObservable, override } from 'mobx'
 import Field from './qvain.field'
 
 const Temporal = (uiid = uuidv4(), startDate = undefined, endDate = undefined) => ({
@@ -22,7 +22,7 @@ class Temporals extends Field {
     }))
   }
 
-  @action reset() {
+  @override reset() {
     super.reset()
     super.create()
   }

@@ -108,10 +108,10 @@ export class SelectedFilesBase extends Component {
           </FileButtonsContainer>
         </SelectedFilesItem>
         {isInEdit(inEdit, s.identifier, existing) && (
-          <Fragment>
+          <>
             {isDirectory(inEdit) && <DirectoryForm />}
             {!isDirectory(inEdit) && <FileForm />}
-          </Fragment>
+          </>
         )}
       </Fragment>
     ))
@@ -140,7 +140,7 @@ export class SelectedFilesBase extends Component {
     }
 
     return (
-      <Fragment>
+      <>
         {canSelectFiles && (
           <>
             <Translate
@@ -189,7 +189,7 @@ export class SelectedFilesBase extends Component {
         />
 
         <FixDeprecatedModal />
-      </Fragment>
+      </>
     )
   }
 }

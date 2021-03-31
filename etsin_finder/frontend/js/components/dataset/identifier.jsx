@@ -10,18 +10,13 @@
    */
 }
 
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClipboard, faCheck } from '@fortawesome/free-solid-svg-icons'
-import translate from 'counterpart'
-import Translate from 'react-translate-component'
 
-import { Link, Button } from '../general/button'
+import { Link } from '../general/button'
 import idnToLink from '../../utils/idnToLink'
-import TooltipHover from '../general/tooltipHover'
-import { useStores } from '../../utils/stores'
+import CopyToClipboard from './copyToClipboard'
 
 const Identifier = ({ idn }) => {
   const setPrefix = idnText => {
@@ -37,17 +32,9 @@ const Identifier = ({ idn }) => {
     return ''
   }
 
-  const Stores = useStores()
-  const { lang } = Stores.Locale
-  const { announce } = Stores.Accessibility
-
   const url = idnToLink(idn)
   const prefix = setPrefix(idn)
   const text = prefix === 'doi' ? idn.substring(4) : idn
-  const [tooltipText, setTooltipText] = useState(
-    translate('dataset.copyToClipboard', { locale: lang })
-  )
-  const [copiedStatus, setCopiedStatus] = useState(false)
 
   // display as text if not of type doi or urn
   if (!url) {
@@ -65,26 +52,12 @@ const Identifier = ({ idn }) => {
         ) : null}
         <IDN id="idn-text">{text}</IDN>
       </IdnLink>
-      <TooltipHover title={tooltipText}>
-        <IconButton
-          onClick={() => {
-            navigator.clipboard.writeText(url)
-            setCopiedStatus(true)
-            setTooltipText(translate('dataset.copyToClipboardSuccess', { locale: lang }))
-            announce(translate('dataset.copyToClipboardSuccess', { locale: lang }))
-            setTimeout(() => {
-              setCopiedStatus(false)
-              setTooltipText(translate('dataset.copyToClipboard', { locale: lang }))
-            }, 3000)
-          }}
-        >
-          <FontAwesomeIcon
-            icon={copiedStatus ? faCheck : faClipboard}
-            size={copiedStatus ? '2x' : '1x'}
-          />
-          <Translate content={copiedStatus ? '' : 'dataset.copy'} />
-        </IconButton>
-      </TooltipHover>
+      <CopyToClipboard
+        content={idn}
+        label="dataset.copy"
+        tooltip="dataset.copyToClipboard"
+        tooltipSuccess="dataset.copyToClipboardSuccess"
+      />
     </IdnSpan>
   )
 }
@@ -98,6 +71,7 @@ const IdnSpan = styled.div`
 
 // prettier-ignore
 const IdnLink = styled(Link)`
+  margin-right: 0.25rem;
   background-color: ${props => props.theme.color.primary};
   border: ${props => props.theme.color.primary};
   width: fit-content;
@@ -140,17 +114,7 @@ const IDN = styled.div`
   font-size: 0.9em;
   padding: 0.4em 1em 0.4em 0.5em;
   text-align: left;
-`
-
-const IconButton = styled(Button)`
-  height: 100%;
-  width: 4em;
-  margin: 0;
-  border-style: none;
-  margin-left: 0.3em;
-  font-size: 0.7em;
-  word-break: initial;
-  display: inherit;
+  word-break: break-all;
 `
 
 Identifier.propTypes = {

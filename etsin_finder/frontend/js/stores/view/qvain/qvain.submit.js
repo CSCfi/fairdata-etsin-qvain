@@ -156,7 +156,7 @@ class Submit {
     const { fileActions, metadataActions, newCumulativeState } = this.prepareActions()
 
     try {
-      await schema.validate(dataset)
+      await schema.validate(dataset, { strict: true })
       await this.checkDoiCompability(dataset)
     } catch (error) {
       this.setLoading(false)
@@ -174,27 +174,21 @@ class Submit {
         const updatedOriginal = await draftFunction(dataset)
         dataset = {
           ...dataset,
-          original: updatedOriginal
+          original: updatedOriginal,
         }
       }
       await this.updateFiles(dataset.original.identifier, fileActions, metadataActions)
-      setChanged(false)
 
-      if (newCumulativeState != null && this.Qvain.original) {
-        const obj = {
-          identifier: this.Qvain.original.identifier,
-          cumulative_state: this.Qvain.newCumulativeState,
-        }
-
-        const url = urls.v2.rpc.changeCumulativeState()
-        await axios.post(url, obj)
+      if (this.Qvain.original) {
+        await this.updateCumulativeState(dataset.original.identifier, newCumulativeState)
       }
+      setChanged(false)
 
       if (publishFunction) {
         const updatedOriginal = await publishFunction(dataset)
         dataset = {
           ...dataset,
-          original: updatedOriginal
+          original: updatedOriginal,
         }
       }
       if (fileActions || metadataActions || newCumulativeState != null) {
@@ -262,25 +256,25 @@ class Submit {
   publishNewDataset = {
     // Publishes a new dataset by creating a draft and publishing it
     draftFunction: this.createNewDraft,
-    publishFunction: this.publishWithoutUpdating
+    publishFunction: this.publishWithoutUpdating,
   }
 
   publishDraft = {
     // Updates and publishes a draft
     draftFunction: this.updateDataset,
-    publishFunction: this.publishWithoutUpdating
+    publishFunction: this.publishWithoutUpdating,
   }
 
   mergeDraft = {
     // Updates draft and merges it to the published dataset
     draftFunction: this.updateDataset,
-    publishFunction: this.mergeDraftWithoutUpdating
+    publishFunction: this.mergeDraftWithoutUpdating,
   }
 
   republish = {
     // Saves changes as a draft and merges it to the published dataset
     draftFunction: this.savePublishedAsDraft,
-    publishFunction: this.mergeDraftWithoutUpdating
+    publishFunction: this.mergeDraftWithoutUpdating,
   }
 
   @action promptProvenances = async () => {
@@ -339,12 +333,23 @@ class Submit {
     return values
   }
 
-  @action updateFiles = async (identifier, fileActions, metadataActions) => {
+  updateFiles = async (identifier, fileActions, metadataActions) => {
     if (fileActions) {
       await axios.post(urls.v2.datasetFiles(identifier), fileActions)
     }
     if (metadataActions) {
       await axios.put(urls.v2.datasetUserMetadata(identifier), metadataActions)
+    }
+  }
+
+  updateCumulativeState = async (identifier, newCumulativeState) => {
+    if (newCumulativeState != null) {
+      const obj = {
+        identifier,
+        cumulative_state: newCumulativeState,
+      }
+      const url = urls.v2.rpc.changeCumulativeState()
+      await axios.post(url, obj)
     }
   }
 
@@ -372,13 +377,13 @@ class Submit {
     const dataset = this.prepareDataset()
 
     try {
-      await qvainFormSchema.validate(dataset, { abortEarly: false })
+      await qvainFormSchema.validate(dataset, { abortEarly: false, strict: true })
     } catch (error) {
       this.setPublishValidationError(error)
     }
 
     try {
-      await qvainFormSchemaDraft.validate(dataset, { abortEarly: false })
+      await qvainFormSchemaDraft.validate(dataset, { abortEarly: false, strict: true })
     } catch (error) {
       this.setDraftValidationError(error)
     }

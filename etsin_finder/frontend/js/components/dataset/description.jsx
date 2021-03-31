@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom'
 
 import AccessRights from './accessRights'
 import FairdataPasDatasetIcon from './fairdataPasDatasetIcon'
-import Accessiblity from '../../stores/view/accessibility'
+import Accessibility from '../../stores/view/accessibility'
 import AskForAccess from './askForAccess'
 import Contact from './contact'
 import ErrorBoundary from '../general/errorBoundary'
@@ -31,7 +31,6 @@ import FormatChanger from './formatChanger'
 import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
-import Tracking from '../../utils/tracking'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
 import { withStores } from '../../utils/stores'
 
@@ -96,11 +95,11 @@ class Description extends Component {
   }
 
   componentDidMount() {
-    Accessiblity.handleNavigation('dataset', false)
-    Tracking.newPageView(
-      `Dataset: ${this.props.match.params.identifier} | Description`,
-      this.props.location.pathname
-    )
+    const {
+      Matomo: { recordEvent },
+    } = this.props.Stores
+    Accessibility.handleNavigation('dataset', false)
+    recordEvent(`DETAILS / ${this.props.dataset.identifier}`)
   }
 
   checkEmails(obj) {
@@ -109,6 +108,7 @@ class Description extends Component {
   }
 
   render() {
+    const { id } = this.props
     const versions = this.props.dataset.dataset_version_set
     const datasetIdentifier = this.props.dataset.identifier
     const isVersion =
@@ -117,7 +117,7 @@ class Description extends Component {
       versions.some(version => version.identifier === datasetIdentifier)
 
     return (
-      <div className="dsContent">
+      <div className="dsContent" id={id}>
         <Labels>
           <Controls>
             {this.props.dataset.data_catalog.catalog_json.dataset_versioning && isVersion && (
@@ -227,7 +227,7 @@ class Description extends Component {
             </Label>
           )}
           {this.props.harvested && (
-            <React.Fragment>
+            <>
               <GoToOriginal idn={this.props.dataset.research_dataset.preferred_identifier} />
               <label htmlFor="dataset-tags">
                 <Translate
@@ -241,7 +241,7 @@ class Description extends Component {
                   <Translate content="dataset.harvested" />
                 </Label>
               </label>
-            </React.Fragment>
+            </>
           )}
         </section>
       </div>
@@ -252,6 +252,7 @@ class Description extends Component {
 export default withStores(observer(Description))
 
 Description.propTypes = {
+  Stores: PropTypes.object.isRequired,
   dataset: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
@@ -270,6 +271,7 @@ Description.propTypes = {
   }).isRequired,
   harvested: PropTypes.bool.isRequired,
   cumulative: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
 }
 
 const Title = styled.h1`

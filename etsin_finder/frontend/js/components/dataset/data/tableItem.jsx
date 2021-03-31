@@ -86,7 +86,7 @@ class TableItem extends Component {
           {this.state.loader ? (
             <Loader active size="2em" />
           ) : (
-            <React.Fragment>
+            <>
               {this.props.item.directory ? (
                 <TransparentButton
                   noPadding
@@ -105,7 +105,7 @@ class TableItem extends Component {
                   default={this.props.item.remote ? 'cloud' : 'file'}
                 />
                 )}
-            </React.Fragment>
+            </>
             )}
         </FileType>
         {this.props.fields.name && this.props.item.directory ? (
@@ -146,7 +146,7 @@ class TableItem extends Component {
         }
         <FileButtons>
           {this.props.fields.infoBtn && (
-            <React.Fragment>
+            <>
               <InvertedButton
                 thin
                 color={this.props.theme.color.darkgray}
@@ -183,7 +183,7 @@ class TableItem extends Component {
                 open={this.state.modalIsOpen}
                 closeModal={this.closeModal}
               />
-            </React.Fragment>
+            </>
           )}
           {this.props.isRemote
             && (this.props.item.remote.download_url || this.props.item.remote.access_url) && (

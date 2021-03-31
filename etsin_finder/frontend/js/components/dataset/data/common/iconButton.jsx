@@ -5,14 +5,40 @@ import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
 import TooltipHover from '../../../general/tooltipHover'
-import Button, { InvertedButton } from '../../../general/button'
+import Button, { InvertedButton, Link, InvertedLink } from '../../../general/button'
 
-const IconButton = ({ icon, spin, children, invert, tooltip, fontSize, Wrapper, ...props }) => {
-  const as = invert ? InvertedButton : null
+const IconButton = ({
+  icon,
+  spin,
+  link,
+  href,
+  children,
+  invert,
+  tooltip,
+  fontSize,
+  Wrapper,
+  flexGrow,
+  ...props
+}) => {
+  let as = null
+  let target
+  if (link) {
+    as = invert ? InvertedLink : Link
+    target = '_blank'
+  } else if (invert) {
+    as = InvertedButton
+  }
+
   return (
     <Wrapper>
-      <Translate title={tooltip} component={TooltipHover} showOnHover={false} showOnClick>
-        <StyledIconButton fill="white" as={as} {...props}>
+      <Translate
+        title={tooltip}
+        component={TooltipHover}
+        showOnHover={false}
+        showOnClick={!!tooltip}
+        flexGrow={flexGrow}
+      >
+        <StyledIconButton fill="white" target={target} as={as} href={href} {...props}>
           <StyledIconButtonIcon icon={icon} spin={spin} fixedWidth />
           <IconButtonText fontSize={fontSize}>{children}</IconButtonText>
         </StyledIconButton>
@@ -26,17 +52,23 @@ IconButton.propTypes = {
   icon: PropTypes.object.isRequired,
   spin: PropTypes.bool,
   invert: PropTypes.bool,
+  link: PropTypes.bool,
+  href: PropTypes.string,
   tooltip: PropTypes.string,
   fontSize: PropTypes.string,
   Wrapper: PropTypes.elementType,
+  flexGrow: PropTypes.number,
 }
 
 IconButton.defaultProps = {
   spin: false,
   invert: false,
+  link: false,
+  href: undefined,
   tooltip: null,
   fontSize: null,
   Wrapper: React.Fragment,
+  flexGrow: 0,
 }
 
 const IconButtonText = styled.span`
@@ -57,6 +89,7 @@ const StyledIconButton = styled(Button).attrs(p => ({
   :last-child {
     margin-right: 0;
   }
+  font-size: 11pt;
 `
 
 const StyledIconButtonIcon = styled(FontAwesomeIcon)`

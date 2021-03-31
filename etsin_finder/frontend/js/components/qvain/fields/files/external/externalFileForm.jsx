@@ -38,7 +38,7 @@ export const ExternalFileFormBase = () => {
     event.preventDefault()
     const externalResourceJs = toJS(externalResource)
     externalResourceSchema
-      .validate(externalResourceJs)
+      .validate(externalResourceJs, { strict: true })
       .then(() => {
         saveExternalResource(externalResource)
         editExternalResource(EmptyExternalResource)
@@ -62,7 +62,7 @@ export const ExternalFileFormBase = () => {
   }
 
   return (
-    <Fragment>
+    <>
       <Label htmlFor="externalResourceTitleInput">
         <Translate content="qvain.files.external.form.title.label" /> *
       </Label>
@@ -128,7 +128,7 @@ export const ExternalFileFormBase = () => {
         onClick={handleSaveExternalResource}
         content={'qvain.files.external.form.save.label'}
       />
-    </Fragment>
+    </>
   )
 }
 
