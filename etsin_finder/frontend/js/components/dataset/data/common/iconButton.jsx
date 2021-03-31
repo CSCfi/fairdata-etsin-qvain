@@ -21,8 +21,10 @@ const IconButton = ({
   ...props
 }) => {
   let as = null
+  let target
   if (link) {
     as = invert ? InvertedLink : Link
+    target = '_blank'
   } else if (invert) {
     as = InvertedButton
   }
@@ -36,7 +38,7 @@ const IconButton = ({
         showOnClick={!!tooltip}
         flexGrow={flexGrow}
       >
-        <StyledIconButton fill="white" as={as} href={href} {...props}>
+        <StyledIconButton fill="white" target={target} as={as} href={href} {...props}>
           <StyledIconButtonIcon icon={icon} spin={spin} fixedWidth />
           <IconButtonText fontSize={fontSize}>{children}</IconButtonText>
         </StyledIconButton>
