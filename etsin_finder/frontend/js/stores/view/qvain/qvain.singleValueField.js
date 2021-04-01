@@ -27,9 +27,10 @@ class SingleValueField {
     this.validationError = error
   }
 
-  @action validate = () => {
+  @action.bound
+  validate() {
     if (!this.Schema) return
-    this.Schema.validate(this.value)
+    this.Schema.validate(this.value, { strict: true })
       .then(() => {
         this.setValidationError(null)
       })

@@ -28,7 +28,7 @@ const IssuedDateField = () => {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    Schema.validate(issuedDate)
+    Schema.validate(issuedDate, { strict: true })
       .then(() => {
         setError('')
       })
@@ -64,7 +64,7 @@ const IssuedDateField = () => {
         disabled={readonly || publishedWithDoi}
         required
       />
-      <Fragment>{error && <ValidationError>{error}</ValidationError>}</Fragment>
+      <>{error && <ValidationError>{error}</ValidationError>}</>
     </Card>
   )
 }

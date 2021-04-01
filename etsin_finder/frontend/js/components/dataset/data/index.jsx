@@ -14,7 +14,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 
-import Tracking from '../../../utils/tracking'
 import Accessibility from '../../../stores/view/accessibility'
 import ExternalResources from './externalResources'
 import IdaResources from './idaResources'
@@ -23,24 +22,26 @@ import { withStores } from '../../../stores/stores'
 
 class Data extends Component {
   componentDidMount() {
-    Tracking.newPageView(
-      `Dataset: ${this.props.match.params.identifier} | Data`,
-      this.props.location.pathname
-    )
+    const {
+      DatasetQuery,
+      Matomo: { recordEvent },
+      Env: { downloadApiV2 },
+    } = this.props.Stores
+
     Accessibility.handleNavigation('data', false)
 
-    const { DatasetQuery } = this.props.Stores
-    const { downloadApiV2 } = this.props.Stores.Env
-    if (downloadApiV2 && !DatasetQuery.isDraft) {
+    if (downloadApiV2 && !DatasetQuery.isDraft && !this.props.hasRemote) {
       DatasetQuery.fetchPackages()
     }
+
+    recordEvent(`DATA / ${this.props.match?.params?.identifier}`)
   }
 
   render() {
     const { metaxApiV2 } = this.props.Stores.Env
 
     return (
-      <div>
+      <div id={this.props.id}>
         {metaxApiV2 && !this.props.hasRemote && <IdaResourcesV2 dataset={this.props.dataset} />}
         {!metaxApiV2 && this.props.hasFiles && <IdaResources dataset={this.props.dataset} />}
         {this.props.hasRemote && <ExternalResources />}
@@ -62,6 +63,7 @@ Data.propTypes = {
   }).isRequired,
   hasFiles: PropTypes.bool.isRequired,
   hasRemote: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
 }
 
 export default withStores(observer(Data))

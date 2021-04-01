@@ -24,6 +24,9 @@ useStores.mockReturnValue({
   QvainDatasets: {
     setPublishedDataset: jest.fn(),
   },
+  Matomo: {
+    recordEvent: jest.fn(),
+  },
 })
 
 const mockHistory = { replace: jest.fn() }

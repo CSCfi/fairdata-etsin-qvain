@@ -65,12 +65,6 @@ export default class Idle extends Component {
     clearTimeout(this.timeout)
   }
 
-  setTimeout() {
-    this.timeout = setTimeout(() => {
-      this.handleChange(true)
-    }, this.props.timeout)
-  }
-
   handleEvent = () => {
     if (this.state.idle) {
       this.handleChange(false)
@@ -89,14 +83,20 @@ export default class Idle extends Component {
     this.setState({ idle })
   }
 
+  setTimeout() {
+    this.timeout = setTimeout(() => {
+      this.handleChange(true)
+    }, this.props.timeout)
+  }
+
   removeEvents() {
-    this.props.events.forEach((event) => {
+    this.props.events.forEach(event => {
       window.removeEventListener(event, this.handleEvent, true)
     })
   }
 
   attachEvents() {
-    this.props.events.forEach((event) => {
+    this.props.events.forEach(event => {
       window.addEventListener(event, this.handleEvent, true)
     })
   }

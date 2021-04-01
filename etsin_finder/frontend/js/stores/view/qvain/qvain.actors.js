@@ -73,10 +73,10 @@ const actorToBackend = actor => ({
   person:
     actor.type === ENTITY_TYPE.PERSON
       ? {
-          name: actor.person.name,
-          email: actor.person.email || undefined,
-          identifier: actor.person.identifier || undefined,
-        }
+        name: actor.person.name,
+        email: actor.person.email || undefined,
+        identifier: actor.person.identifier || undefined,
+      }
       : undefined,
   organizations: actor.organizations.map(org => ({
     name: org.name,
@@ -158,10 +158,6 @@ class Actors {
     makeObservable(this)
     this.reset()
   }
-
-  @observable actors
-
-  @observable actorInEdit
 
   // Reference organizations by parent
   @observable referenceOrganizations = {}
@@ -278,6 +274,7 @@ class Actors {
       return this.loadingReferenceOrganizations[parentId]
     }
     delete this.referenceOrganizationErrors[parentId]
+    // eslint-disable-next-line no-async-promise-executor
     this.loadingReferenceOrganizations[parentId] = new Promise(async (resolve, reject) => {
       const url = getOrganizationSearchUrl(parentId)
       let orgs
@@ -317,17 +314,18 @@ class Actors {
     this.onSuccessfulCreationCallbacks = []
   }
 
+  @action
   editDataset = researchDataset => {
     // Load actors
     const actors = []
+    if ('creator' in researchDataset) {
+      researchDataset.creator.forEach(creator => actors.push(createActor(creator, [ROLE.CREATOR])))
+    }
     if ('publisher' in researchDataset) {
       actors.push(createActor(researchDataset.publisher, [ROLE.PUBLISHER]))
     }
     if ('curator' in researchDataset) {
       researchDataset.curator.forEach(curator => actors.push(createActor(curator, [ROLE.CURATOR])))
-    }
-    if ('creator' in researchDataset) {
-      researchDataset.creator.forEach(creator => actors.push(createActor(creator, [ROLE.CREATOR])))
     }
     if ('rights_holder' in researchDataset) {
       researchDataset.rights_holder.forEach(rightsHolder =>
@@ -556,6 +554,16 @@ class Actors {
     return this.createLooseActorPromise()
   }
 
+  otherActorsHaveRole = (actor, role) => {
+    const existingRoles = new Set(
+      this.actors
+        .filter(a => a.uiid !== actor.uiid)
+        .map(a => a.roles)
+        .flat()
+    )
+    return existingRoles.has(role)
+  }
+
   toBackend = () =>
     this.actors.map(actor => ({
       type: actor.type,
@@ -563,10 +571,10 @@ class Actors {
       person:
         actor.type === ENTITY_TYPE.PERSON
           ? {
-              name: actor.person.name,
-              email: actor.person.email || undefined,
-              identifier: actor.person.identifier || undefined,
-            }
+            name: actor.person.name,
+            email: actor.person.email || undefined,
+            identifier: actor.person.identifier || undefined,
+          }
           : undefined,
       organizations: actor.organizations.map(org => ({
         name: org.name,

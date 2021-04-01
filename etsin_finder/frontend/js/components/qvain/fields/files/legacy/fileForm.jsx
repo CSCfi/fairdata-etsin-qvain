@@ -109,7 +109,7 @@ class FileForm extends Component {
       fileType,
     }
     fileSchema
-      .validate(validationObj)
+      .validate(validationObj, { strict: true })
       .then(() => {
         this.setState({
           fileError: undefined,
@@ -136,7 +136,7 @@ class FileForm extends Component {
 
   handleOnBlur = (validator, value, errorSet) => {
     validator
-      .validate(value)
+      .validate(value, { strict: true })
       .then(() => errorSet(undefined))
       .catch(err => errorSet(err.errors))
   }
@@ -165,7 +165,7 @@ class FileForm extends Component {
     const { fileError, titleError, descriptionError, useCategoryError } = this.state
     const { readonly, inEdit } = this.props.Stores.Qvain
     return (
-      <Fragment>
+      <>
         <FileContainer className={this.props.className}>
           <Label>
             <Translate content="qvain.files.selected.form.title.label" /> *
@@ -261,7 +261,7 @@ class FileForm extends Component {
             />
           </Buttons>
         </FileContainer>
-      </Fragment>
+      </>
     )
   }
 }

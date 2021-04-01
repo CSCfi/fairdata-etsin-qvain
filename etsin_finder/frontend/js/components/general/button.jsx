@@ -20,7 +20,7 @@ import checkColor from '../../styles/styledUtils'
 export const Button = styled.button.attrs(props => ({
   padding: props.padding ? props.padding : '0.3em 0.6em 0.4em',
   margin: props.margin ? props.margin : '0.25em 0.25em',
-  type: 'button'
+  type: 'button',
 }))`
   cursor: pointer;
   width: ${props => (props.width ? props.width : '')};
@@ -35,7 +35,7 @@ export const Button = styled.button.attrs(props => ({
   }};
   border-radius: ${p => (p.br ? p.br : '0.25em')};
   line-height: 1.25;
-  transition: 0.3s ease;
+  transition: 0.15s ease;
   &:hover {
     background-color: ${props => darken(0.1, (props.color ? checkColor(props.color) : props.theme.color.primary))};
     border-color: ${props => darken(0.1, (props.color ? checkColor(props.color) : props.theme.color.primary))};
@@ -132,7 +132,7 @@ export const Link = styled.a.attrs(props => ({
   color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
   border-radius: 0.25em;
   line-height: 1.25;
-  transition: 0.3s ease;
+  transition: 0.15s ease;
   text-align: center;
   display: block;
   &:hover {

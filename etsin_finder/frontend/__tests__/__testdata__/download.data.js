@@ -1,5 +1,5 @@
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../js/utils/constants'
-const { PENDING, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
+const { PENDING, STARTED, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
 
 // Generate errors for matching dataset identifiers
 const errors = {
@@ -19,7 +19,8 @@ class FakeDownload {
 
   reset() {
     this.packageCounter = 0
-    this.processingDelay = 0
+    this.pendingDelay = 0
+    this.startedDelay = 0
     this.packagesByDataset = {}
   }
 
@@ -29,8 +30,9 @@ class FakeDownload {
     return id
   }
 
-  setProcessingDelay(delay) {
-    this.processingDelay = delay
+  setProcessingDelay(pending, started) {
+    this.pendingDelay = pending || 0
+    this.startedDelay = started || 0
   }
 
   getPackage(dataset, path) {
@@ -70,13 +72,28 @@ class FakeDownload {
     }
     this.packagesByDataset[dataset][path] = newPackage
 
-    if (this.processingDelay > 0) {
-      window.setTimeout(() => {
+    const processStarted = () => {
+      if (this.startedDelay > 0) {
+        newPackage.status = STARTED
+        window.setTimeout(() => {
+          newPackage.status = SUCCESS
+        }, this.startedDelay)
+      } else {
         newPackage.status = SUCCESS
-      }, this.processingDelay)
-    } else {
-      newPackage.status = SUCCESS
+      }
     }
+
+    const processPending = () => {
+      if (this.pendingDelay > 0) {
+        window.setTimeout(() => {
+          processStarted()
+        }, this.pendingDelay)
+      } else {
+        processStarted()
+      }
+    }
+
+    processPending()
     return newPackage
   }
 }

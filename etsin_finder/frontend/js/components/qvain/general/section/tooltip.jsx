@@ -234,4 +234,7 @@ const TooltipText = styled.div`
   @media (max-width: ${p => p.theme.breakpoints.md}) {
     max-width: 200px;
   }
+  & > p:last-child {
+    margin-bottom: 0;
+  }
 `

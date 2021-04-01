@@ -77,7 +77,7 @@ export class SubmitButtons extends Component {
   handleCreatePublished = async e => {
     const obj = handleSubmitToBackend(this.props.Stores.Env, this.props.Stores.Qvain)
     return qvainFormSchema
-      .validate(obj, { abortEarly: false })
+      .validate(obj, { abortEarly: false, strict: true })
       .then(() =>
         axios
           .post(urls.v1.datasets(), obj)

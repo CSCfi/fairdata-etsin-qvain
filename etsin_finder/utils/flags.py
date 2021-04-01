@@ -14,9 +14,12 @@ from etsin_finder.utils.utils import ensure_app
 default_supported_flags = {
     'DOWNLOAD_API_V2.BACKEND',
     'DOWNLOAD_API_V2.FRONTEND',
+    'DOWNLOAD_API_V2.EMAIL.FRONTEND',
     'METAX_API_V2.BACKEND',
     'METAX_API_V2.FRONTEND',
     'UI.BOTTOM_SUBMIT_BUTTONS',
+    'UI.CITATION_MODAL',
+    "MATOMO_TRACKING"
 }
 
 # Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'

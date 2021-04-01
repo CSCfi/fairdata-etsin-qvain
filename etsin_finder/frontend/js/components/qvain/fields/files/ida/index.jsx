@@ -94,6 +94,7 @@ export const IDAFilePickerBase = () => {
         <Controls>
           <AddItems>
             <Translate
+              id="show-add-items"
               component={PlusButton}
               onClick={() => setModalOpen(true)}
               attributes={{ 'aria-label': 'qvain.files.addItemsModal.title' }}

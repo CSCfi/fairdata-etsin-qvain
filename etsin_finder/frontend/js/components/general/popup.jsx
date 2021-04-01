@@ -79,7 +79,7 @@ export default class PopUp extends Component {
     return (
       <Relative>
         {this.props.isOpen && (
-          <React.Fragment>
+          <>
             <PopContainer>
               <Pop
                 ref={this.popRef}
@@ -112,7 +112,7 @@ export default class PopUp extends Component {
                 />
               </Svg>
             </PopContainer>
-          </React.Fragment>
+          </>
         )}
         {this.props.children}
       </Relative>

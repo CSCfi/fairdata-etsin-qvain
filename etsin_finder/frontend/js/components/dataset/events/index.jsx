@@ -17,7 +17,6 @@ import styled from 'styled-components'
 import Accessibility from '../../../stores/view/accessibility'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import dateFormat from '../../../utils/dateFormat'
-import Tracking from '../../../utils/tracking'
 import Agent from '../agent'
 import { withStores } from '../../../stores/stores'
 
@@ -93,11 +92,8 @@ class Events extends Component {
       this.versions(this.props.dataset_version_set)
     }
 
-    Tracking.newPageView(
-      `Dataset: ${this.props.match.params.identifier} | Events`,
-      this.props.location.pathname
-    )
     Accessibility.handleNavigation('events', false)
+    this.props.Stores.Matomo.recordEvent(`EVENTS / ${this.props.match.params.identifier}`)
   }
 
   versions = set =>
@@ -165,7 +161,7 @@ class Events extends Component {
 
   render() {
     return (
-      <Margin>
+      <Margin id={this.props.id}>
         {
           // Display events table header if provenance exists of if deleted versions exist
           (this.checkProvenance(this.props.provenance) || this.checkDeleted()) && (
@@ -413,6 +409,7 @@ Events.defaultProps = {
 }
 
 Events.propTypes = {
+  Stores: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }).isRequired,
@@ -426,6 +423,7 @@ Events.propTypes = {
   other_identifier: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   preservation_dataset_origin_version_identifier: PropTypes.object,
   dataset_version_set: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  id: PropTypes.string.isRequired,
 }
 
 const InlineUl = styled.ul`

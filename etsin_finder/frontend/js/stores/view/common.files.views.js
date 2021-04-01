@@ -1,4 +1,4 @@
-import { observable, action, runInAction, makeObservable } from 'mobx'
+import { observable, action, runInAction, makeObservable, override } from 'mobx'
 import {
   itemLoaderNew,
   itemLoaderExisting,
@@ -264,7 +264,7 @@ export class SelectedItemsView extends DirectoryView {
     this.hideRemoved = val
   }
 
-  @action reset() {
+  @override reset() {
     super.reset()
     this.hideRemoved = false
   }

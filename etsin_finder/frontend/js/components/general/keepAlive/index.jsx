@@ -81,7 +81,7 @@ export default class KeepAlive extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <Idle
           timeout={540000}
           onChange={({ idle }) => this.handleIdle(idle)}
@@ -100,7 +100,7 @@ export default class KeepAlive extends Component {
             <Translation content="general.state.inactiveLogout" />
           </NoticeBar>
         )}
-      </React.Fragment>
+      </>
     )
   }
 }

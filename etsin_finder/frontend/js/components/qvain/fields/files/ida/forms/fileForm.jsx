@@ -100,7 +100,7 @@ class FileForm extends Component {
       fileType,
     }
     fileSchema
-      .validate(validationObj)
+      .validate(validationObj, { strict: true })
       .then(() => {
         this.setState({
           fileError: undefined,
@@ -129,7 +129,7 @@ class FileForm extends Component {
 
   handleOnBlur = (validator, value, errorSet) => {
     validator
-      .validate(value)
+      .validate(value, { strict: true })
       .then(() => errorSet(undefined))
       .catch(err => errorSet(err.errors))
   }
@@ -168,7 +168,7 @@ class FileForm extends Component {
         />
         <p style={{ marginLeft: '10px' }}>{inEdit.identifier}</p>
 
-        <Label>
+        <Label htmlFor="file-form-description">
           <Translate content="qvain.files.selected.form.title.label" /> *
         </Label>
         <Translate
@@ -182,9 +182,10 @@ class FileForm extends Component {
           }
           onBlur={this.handleTitleBlur}
           attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
+          id="file-form-title"
         />
         {titleError !== undefined && <ValidationError>{titleError}</ValidationError>}
-        <Label>
+        <Label htmlFor="file-form-description">
           <Translate content="qvain.files.selected.form.description.label" /> *
         </Label>
         <Translate
@@ -198,11 +199,12 @@ class FileForm extends Component {
           }
           onBlur={this.handleDescriptionBlur}
           attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
+          id="file-form-description"
         />
         {descriptionError !== undefined && <ValidationError>{descriptionError}</ValidationError>}
         <Row>
           <div>
-            <Label>
+            <Label htmlFor="file-form-use-category">
               <Translate content="qvain.files.selected.form.use.label" /> *
             </Label>
             <Translate
@@ -220,13 +222,14 @@ class FileForm extends Component {
               menuPosition="fixed"
               menuShouldScrollIntoView={false}
               attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
+              inputId="file-form-use-category"
             />
             {useCategoryError !== undefined && (
               <ValidationError>{useCategoryError}</ValidationError>
             )}
           </div>
           <div>
-            <Label>
+            <Label htmlFor="file-form-file-type">
               <Translate component={Label} content="qvain.files.selected.form.fileType.label" />
             </Label>
             <Translate
@@ -243,6 +246,7 @@ class FileForm extends Component {
               menuPosition="fixed"
               menuShouldScrollIntoView={false}
               attributes={{ placeholder: 'qvain.files.selected.form.fileType.placeholder' }}
+              inputId="file-form-file-type"
             />
           </div>
         </Row>

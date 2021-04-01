@@ -25,14 +25,12 @@ export class IDAFilePickerBase extends Component {
 
   render() {
     return (
-      <Fragment>
+      <>
         <Translate component="p" content="qvain.files.ida.help" />
-        <Fragment>
-          <ProjectSelector />
-          <FileSelector />
-          <SelectedFiles />
-        </Fragment>
-      </Fragment>
+        <ProjectSelector />
+        <FileSelector />
+        <SelectedFiles />
+      </>
     )
   }
 }
