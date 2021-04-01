@@ -27,12 +27,12 @@ class MetaxAPIService(FlaskService):
 
         if metax_api_config:
             METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/datasets'.format(metax_api_config.get('HOST')) + \
-                '/{0}?expand_relation=data_catalog'
+                                           '/{0}?expand_relation=data_catalog'
 
             self.METAX_GET_CATALOG_RECORD_WITH_FILE_DETAILS_URL = METAX_GET_CATALOG_RECORD_URL + '&file_details'
             self.METAX_GET_REMOVED_CATALOG_RECORD_URL = METAX_GET_CATALOG_RECORD_URL + '&removed=true'
             self.METAX_GET_DIRECTORY_FOR_CR_URL = 'https://{0}/rest/directories'.format(metax_api_config.get('HOST')) + \
-                '/{0}/files?cr_identifier={1}'
+                                                  '/{0}/files?cr_identifier={1}'
 
             self.user = metax_api_config.get('USER')
             self.pw = metax_api_config.get('PASSWORD')
