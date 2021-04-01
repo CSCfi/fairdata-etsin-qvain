@@ -42,12 +42,7 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
     def metax_url(self, url):
         """Return a Metax API URL"""
-        # HTTPS as a default protocol for Metax URLs...
-        if self.config.get('VERIFY_SSL') is True:
-            return f'https://{self._HOST}{url}'
-        # ... but use HTTP if Metax is running in Docker
-        if self.config.get('VERIFY_SSL') is False:
-            return f'http://{self._HOST}{url}'
+        return f'https://{self._HOST}{url}'
 
     @property
     def _HOST(self):

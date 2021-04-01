@@ -26,14 +26,8 @@ class MetaxAPIService(FlaskService):
         metax_api_config = get_metax_api_config(app)
 
         if metax_api_config:
-            # HTTPS as a default protocol for Metax URLs...
-            if metax_api_config.get('VERIFY_SSL') is True:
-                self.METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/v2/datasets'.format(metax_api_config.get('HOST')) + \
-                    '/{0}?expand_relation=data_catalog'
-            # ... but use HTTP if Metax is running in Docker
-            if metax_api_config.get('VERIFY_SSL') is False:
-                self.METAX_GET_CATALOG_RECORD_URL = 'http://{0}/rest/v2/datasets'.format(metax_api_config.get('HOST')) + \
-                    '/{0}?expand_relation=data_catalog'
+            self.METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/v2/datasets'.format(metax_api_config.get('HOST')) + \
+                '/{0}?expand_relation=data_catalog'
 
             self.METAX_GET_REMOVED_CATALOG_RECORD_URL = self.METAX_GET_CATALOG_RECORD_URL + '&removed=true'
 
