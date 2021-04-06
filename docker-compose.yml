@@ -17,7 +17,7 @@ services:
           target: /home/etsin-user/app_config
       ports:
         - "5000:5000"
-      extra_hosts:
+      # extra_hosts:
         # - "metax.fd-dev.csc.fi:<INTERNAL_IP_OF_FAIRDATA_NGINX°" 
       volumes:
         - ./etsin_finder/:/etsin_finder/
