@@ -10,7 +10,7 @@ jest.mock('mobx', () => {
   return {
     ...jest.requireActual('mobx'),
     override: func => func,
-    makObservable: jest.mock(),
+    makeObservable: jest.mock(),
   }
 })
 
