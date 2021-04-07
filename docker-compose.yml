@@ -17,8 +17,12 @@ services:
           target: /home/etsin-user/app_config
       ports:
         - "5000:5000"
+      extra_hosts:
+        - "metax.fd-dev.csc.fi:172.17.0.1"
       volumes:
         - ./etsin_finder/:/etsin_finder/
+      depends_on:
+        - fairdata-nginx
       environment:
         - base_url=0.0.0.0:5000
         - FLASK_ENV=development
