@@ -8,7 +8,6 @@ import etsinTheme from '../../../js/styles/theme'
 import '../../../locale/translations'
 import { Qvain as QvainBase } from '../../../js/components/qvain/views/main'
 import OtherIdentifierField from '../../../js/components/qvain/fields/description/otherIdentifier'
-import IssuedDateField from '../../../js/components/qvain/fields/description/issuedDate'
 import LanguageField from '../../../js/components/qvain/fields/description/language'
 import KeywordsField from '../../../js/components/qvain/fields/description/keywords'
 import RightsAndLicenses from '../../../js/components/qvain/fields/licenses'
@@ -34,7 +33,6 @@ import {
   filterGroupsByTitle,
   groupDatasetsByVersionSet,
 } from '../../../js/components/qvain/views/datasets/filter'
-import DatePicker from '../../../js/components/qvain/general/input/datepicker'
 import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
 import { useStores } from '../../../js/stores/stores'
 
@@ -490,38 +488,6 @@ describe('Qvain.ExternalFiles', () => {
     )
     const externalFiles = shallow(<ExternalFilesBase />)
     expect(externalFiles.find(ButtonGroup).length).toBe(1)
-  })
-})
-
-describe('Qvain issued date', () => {
-  let Qvain
-  let stores
-
-  beforeEach(() => {
-    stores = getStores()
-    useStores.mockReturnValue(stores)
-    Qvain = stores.Qvain
-    Qvain.resetQvainStore()
-  })
-
-  const IssuedDateFieldBase = IssuedDateField.wrappedComponent
-
-  it('is enabled', () => {
-    const component = shallow(<IssuedDateFieldBase />)
-    expect(component.find(DatePicker).prop('disabled')).toEqual(false)
-  })
-
-  it('is enabled for unpublished DOI dataset', () => {
-    Qvain.setUseDoi(true)
-    const component = shallow(<IssuedDateFieldBase />)
-    expect(component.find(DatePicker).prop('disabled')).toEqual(false)
-  })
-
-  it('is disabled for published DOI dataset', () => {
-    Qvain.setUseDoi(true)
-    Qvain.setOriginal({ identifier: 'test' })
-    const component = shallow(<IssuedDateFieldBase />)
-    expect(component.find(DatePicker).prop('disabled')).toEqual(true)
   })
 })
 
