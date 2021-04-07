@@ -1,7 +1,6 @@
 import React from 'react'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
-import counterpart from 'counterpart'
 
 import { withFieldErrorBoundary } from '../../../general/errors/fieldErrorBoundary'
 import Tooltip from '../../../../general/tooltipHover'
@@ -25,20 +24,20 @@ const KeywordsField = () => {
         setValidationError,
       },
     },
-    Locale: { lang },
   } = useStores()
 
   return (
     <Card>
       <LabelLarge htmlFor="keywords-input">
-        <Tooltip
-          title={counterpart('qvain.description.fieldHelpTexts.requiredToPublish', {
-            locale: lang,
-          })}
+        <Translate
+          component={Tooltip}
+          attributes={{
+            title: 'qvain.description.fieldHelpTexts.requiredToPublish',
+          }}
           position="right"
         >
           <Translate content="qvain.description.keywords.title" /> *
-        </Tooltip>
+        </Translate>
       </LabelLarge>
       <Translate component="p" content="qvain.description.keywords.help" />
       <StringArray
