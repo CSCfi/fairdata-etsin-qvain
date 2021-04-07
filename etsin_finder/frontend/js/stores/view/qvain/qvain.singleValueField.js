@@ -30,7 +30,6 @@ class SingleValueField {
   @action.bound
   validate() {
     if (!this.Schema) return
-    console.log(this.value)
     this.Schema.validate(this.value)
       .then(() => {
         this.setValidationError(null)
