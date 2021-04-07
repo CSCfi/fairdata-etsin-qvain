@@ -8,7 +8,6 @@ import etsinTheme from '../../../js/styles/theme'
 import '../../../locale/translations'
 import { Qvain as QvainBase } from '../../../js/components/qvain/views/main'
 import OtherIdentifierField from '../../../js/components/qvain/fields/description/otherIdentifier'
-import FieldOfScienceField from '../../../js/components/qvain/fields/description/fieldOfScience'
 import IssuedDateField from '../../../js/components/qvain/fields/description/issuedDate'
 import LanguageField from '../../../js/components/qvain/fields/description/language'
 import KeywordsField from '../../../js/components/qvain/fields/description/keywords'
@@ -218,10 +217,6 @@ describe('Qvain.Description', () => {
 
   it('should render <OtherIdentifierField />', () => {
     const component = shallow(<OtherIdentifierField.wrappedComponent />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <FieldOfScienceField />', () => {
-    const component = shallow(<FieldOfScienceField.wrappedComponent />)
     expect(component).toMatchSnapshot()
   })
   it('should render <LanguageField />', () => {
