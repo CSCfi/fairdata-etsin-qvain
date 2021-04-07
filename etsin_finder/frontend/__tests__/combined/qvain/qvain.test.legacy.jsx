@@ -7,13 +7,11 @@ import '../../../locale/translations'
 import etsinTheme from '../../../js/styles/theme'
 import QvainComponent, { Qvain as QvainBase } from '../../../js/components/qvain/views/main'
 import OtherIdentifierField from '../../../js/components/qvain/fields/description/otherIdentifier'
-import FieldOfScienceField from '../../../js/components/qvain/fields/description/fieldOfScience'
 import KeywordsField from '../../../js/components/qvain/fields/description/keywords'
 import RightsAndLicenses from '../../../js/components/qvain/fields/licenses'
 import { License } from '../../../js/components/qvain/fields/licenses/licenses'
 import { AccessType } from '../../../js/components/qvain/fields/licenses/accessType'
 import RestrictionGrounds from '../../../js/components/qvain/fields/licenses/restrictionGrounds'
-import EmbargoExpires from '../../../js/components/qvain/fields/licenses/embargoExpires'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../../js/utils/constants'
 import Files from '../../../js/components/qvain/fields/files'
 import IDAFilePicker, {
@@ -195,14 +193,6 @@ describe('Qvain.Description', () => {
     )
     expect(component).toMatchSnapshot()
   })
-  it('should render <FieldOfScienceField />', () => {
-    const component = shallow(
-      <StoresProvider store={getStores()}>
-        <FieldOfScienceField />
-      </StoresProvider>
-    )
-    expect(component).toMatchSnapshot()
-  })
   it('should render <KeywordsField />', () => {
     const component = shallow(
       <StoresProvider store={getStores()}>
@@ -246,16 +236,6 @@ describe('Qvain.RightsAndLicenses', () => {
     AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.OPEN))
     const component = shallow(<AccessType Stores={stores} />)
     expect(component.find(RestrictionGrounds).length).toBe(0)
-  })
-  it('should render <EmbargoExpires />', () => {
-    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.EMBARGO))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(EmbargoExpires).length).toBe(1)
-  })
-  it('should NOT render <EmbargoExpires />', () => {
-    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.OPEN))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(EmbargoExpires).length).toBe(0)
   })
 })
 

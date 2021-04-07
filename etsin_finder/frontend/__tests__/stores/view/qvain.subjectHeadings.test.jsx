@@ -3,7 +3,6 @@ import { makeObservable } from 'mobx'
 import SubjectHeadings, {
   SubjectHeadingModel,
 } from '../../../js/stores/view/qvain/qvain.subjectHeadings'
-import ReferenceField from '../../../js/stores/view/qvain/qvain.referenceField'
 
 jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
   class mockReferenceField {
