@@ -80,6 +80,16 @@ export default class ComponentTestHarness {
   }
 
   get props() {
+    if (this.wrapper.length !== 1) {
+      fail(
+        `Wrapper has more than one component, wrapper includes following components: \n${this.wrapper
+          .children()
+          .map(child => child.name())
+          .join('\n')}`
+      )
+      return
+    }
+
     return this.wrapper.props()
   }
 
