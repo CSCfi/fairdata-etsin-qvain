@@ -1,18 +1,12 @@
 import 'chai/register-expect'
-import { makeObservable } from 'mobx'
+import { override } from 'mobx'
 import Temporals, {
   TemporalModel,
   TemporalTemplate,
 } from '../../../js/stores/view/qvain/qvain.temporals'
-import Field from '../../../js/stores/view/qvain/qvain.field'
 
-jest.mock('mobx', () => {
-  return {
-    ...jest.requireActual('mobx'),
-    override: func => func,
-    makeObservable: jest.mock(),
-  }
-})
+jest.mock('mobx')
+override.mockImplementation(func => func)
 
 jest.mock('../../../js/stores/view/qvain/qvain.field', () => {
   class Field {

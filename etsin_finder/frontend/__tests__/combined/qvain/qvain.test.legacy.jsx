@@ -7,7 +7,6 @@ import '../../../locale/translations'
 import etsinTheme from '../../../js/styles/theme'
 import QvainComponent, { Qvain as QvainBase } from '../../../js/components/qvain/views/main'
 import OtherIdentifierField from '../../../js/components/qvain/fields/description/otherIdentifier'
-import KeywordsField from '../../../js/components/qvain/fields/description/keywords'
 import RightsAndLicenses from '../../../js/components/qvain/fields/licenses'
 import { License } from '../../../js/components/qvain/fields/licenses/licenses'
 import { AccessType } from '../../../js/components/qvain/fields/licenses/accessType'
@@ -189,14 +188,6 @@ describe('Qvain.Description', () => {
     const component = shallow(
       <StoresProvider store={getStores()}>
         <OtherIdentifierField />
-      </StoresProvider>
-    )
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <KeywordsField />', () => {
-    const component = shallow(
-      <StoresProvider store={getStores()}>
-        <KeywordsField />
       </StoresProvider>
     )
     expect(component).toMatchSnapshot()

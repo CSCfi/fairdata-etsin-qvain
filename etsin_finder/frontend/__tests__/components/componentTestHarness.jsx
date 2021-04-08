@@ -17,7 +17,7 @@ export default class ComponentTestHarness {
   shallow = extraProps => {
     const parsedProps = this.parseProps(extraProps)
     this.wrapper = shallow(<this.Component {...parsedProps} />)
-
+    this.wrappers.root = this.wrapper
     return this
   }
 
@@ -34,6 +34,10 @@ export default class ComponentTestHarness {
   unmount = async () => {
     this.wrapper.unmount()
     return this
+  }
+
+  update = () => {
+    this.wrappers.root.update()
   }
 
   storeWrapper = wrapperLabel => {
@@ -68,6 +72,10 @@ export default class ComponentTestHarness {
   diveInto = findTerm => {
     this.wrapper = this.wrapper.find(findTerm).dive()
     return this
+  }
+
+  getOriginalWrapper = () => {
+    return this.wrappers.root
   }
 
   originalAsNewHarness = () => {
