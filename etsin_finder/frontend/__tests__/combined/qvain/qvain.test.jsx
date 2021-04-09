@@ -3,7 +3,6 @@ import { shallow } from 'enzyme'
 
 import '../../../locale/translations'
 import { Qvain as QvainBase } from '../../../js/components/qvain/views/main'
-import OtherIdentifierField from '../../../js/components/qvain/fields/description/otherIdentifier'
 import LanguageField from '../../../js/components/qvain/fields/description/language'
 import { DATA_CATALOG_IDENTIFIER } from '../../../js/utils/constants'
 import { qvainFormSchema } from '../../../js/components/qvain/utils/formValidation'
@@ -202,10 +201,6 @@ describe('Qvain.Description', () => {
     useStores.mockReturnValue(stores)
   })
 
-  it('should render <OtherIdentifierField />', () => {
-    const component = shallow(<OtherIdentifierField.wrappedComponent />)
-    expect(component).toMatchSnapshot()
-  })
   it('should render <LanguageField />', () => {
     const component = shallow(<LanguageField.wrappedComponent />)
     expect(component).toMatchSnapshot()
