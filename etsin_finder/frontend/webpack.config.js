@@ -3,7 +3,7 @@ const env = require('dotenv').config()
 const path = require('path')
 const DotenvPlugin = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { insertBeforeStyled } = require('./helpers')
 
 const config = {
@@ -30,16 +30,11 @@ const config = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf|svg|jpg|png)$/,
-        use: {
-          loader: 'file-loader',
-        },
+        type: 'asset/resource',
       },
       {
         test: /\.css$/i,
-        use: [
-          { loader: 'style-loader', options: { insert: insertBeforeStyled }, },
-          'css-loader'
-        ],
+        use: [{ loader: 'style-loader', options: { insert: insertBeforeStyled } }, 'css-loader'],
       },
     ],
   },
