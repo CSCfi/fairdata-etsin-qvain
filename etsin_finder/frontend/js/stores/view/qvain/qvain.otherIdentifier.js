@@ -1,5 +1,4 @@
 import { action, makeObservable } from 'mobx'
-import translate from 'counterpart'
 import ReferenceField from './qvain.referenceField'
 import { otherIdentifierSchema } from '../../../components/qvain/utils/formValidation'
 
@@ -28,14 +27,13 @@ class OtherIdentifiers extends ReferenceField {
         return true
       }
 
-      const message = translate('qvain.description.otherIdentifiers.alreadyAdded')
+      const message = 'qvain.description.otherIdentifiers.alreadyAdded'
       setValidationError(message)
       return false
     }
     return true
   }
 
-  // move this to qvain.otherIdentifier class when refactor ticket is merged
   @action cleanupBeforeBackend = () => {
     const { validateStr, addItemStr } = this
     if (!validateStr()) {
