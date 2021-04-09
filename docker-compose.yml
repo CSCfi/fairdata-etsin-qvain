@@ -15,8 +15,6 @@ services:
       configs:
         - source: etsin-qvain-app-config
           target: /home/etsin-user/app_config
-      ports:
-        - "5000:5000"
       extra_hosts:
         - "metax.fd-dev.csc.fi:172.17.0.1"
       volumes:
