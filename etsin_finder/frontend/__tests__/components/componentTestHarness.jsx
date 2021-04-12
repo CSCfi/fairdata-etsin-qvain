@@ -69,6 +69,11 @@ export default class ComponentTestHarness {
     return this
   }
 
+  dive = () => {
+    this.wrapper = this.wrapper.dive()
+    return this.wrapper
+  }
+
   diveInto = findTerm => {
     this.wrapper = this.wrapper.find(findTerm).dive()
     return this
