@@ -1,7 +1,7 @@
 # etsin-finder
 
 - This repository, etsin-finder, contains code for the Fairdata platforms Etsin and Qvain
-- For a complete development setup of Etsin and Qvain, see `github.com/CSCfi/fairdata-docker`
+- For a complete development setup of Etsin and Qvain, see repository `fairdata-secrets`
 
 # Updating docker images
 
