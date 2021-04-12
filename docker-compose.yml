@@ -12,6 +12,7 @@ services:
         - base_url=0.0.0.0:8080
     etsin-qvain-flask:
       image: fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask
+      hostname: 'etsin-qvain-flask'
       configs:
         - source: etsin-qvain-app-config
           target: /home/etsin-user/app_config
@@ -28,6 +29,7 @@ services:
         - FLASK_DEBUG=1
     etsin-qvain-elasticsearch:
       image: docker.elastic.co/elasticsearch/elasticsearch:6.5.2
+      hostname: 'etsin-qvain-elasticsearch'
       environment:
         - base_url=0.0.0.0:9201
         - http.host=0.0.0.0
