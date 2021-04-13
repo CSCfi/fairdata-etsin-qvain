@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
@@ -11,21 +11,15 @@ import { useStores } from '../../utils/stores'
 const RestrictionGrounds = () => {
   const {
     Qvain: {
-      RestrictionGrounds: { value: restrictionGrounds, set: setRestrictionGrounds, Schema, Model },
+      RestrictionGrounds: {
+        value: restrictionGrounds,
+        set: setRestrictionGrounds,
+        Model,
+        validate,
+        validationError,
+      },
     },
   } = useStores()
-  const [error, setError] = useState()
-
-  const handleBlur = () => {
-    const { identifier = '' } = restrictionGrounds || {}
-    Schema.validate(identifier)
-      .then(() => {
-        setError(null)
-      })
-      .catch(err => {
-        setError(err.errors)
-      })
-  }
 
   return (
     <RestrictionGroundsContainer>
@@ -42,9 +36,9 @@ const RestrictionGrounds = () => {
         model={Model}
         getter={restrictionGrounds}
         setter={setRestrictionGrounds}
-        onBlur={handleBlur}
+        onBlur={validate}
       />
-      {error && <ValidationError>{error}</ValidationError>}
+      {validationError && <ValidationError>{validationError}</ValidationError>}
       <Text>
         <Translate content="qvain.rightsAndLicenses.restrictionGrounds.text" />
       </Text>
