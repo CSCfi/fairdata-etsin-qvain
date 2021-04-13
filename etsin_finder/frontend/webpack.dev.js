@@ -12,16 +12,17 @@ const config = {
     // path of output
     path: path.resolve(__dirname, './build'),
     // publicPath is used in dynamic chunk loading
-    publicPath: '/',
-    filename: 'bundle.[contenthash].js',
+    publicPath: './build/',
+    filename: 'bundle.[chunkhash].js',
     chunkFilename: '[name].[chunkhash].js',
   },
   devtool: 'source-map',
   devServer: {
     host: '0.0.0.0',
+    inline: true,
     publicPath: '/',
-    contentBase: './static',
-    public: 'etsin-local.fd-test.csc.fi/',
+    contentBase: './static/',
+    public: '0.0.0.0:8080',
     disableHostCheck: true,
     hot: true,
     historyApiFallback: true,
