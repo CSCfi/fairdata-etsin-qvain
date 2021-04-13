@@ -132,21 +132,38 @@ const finnish = {
           'Latauspakettia luodaan. Kun painike muuttuu vihreäksi, lataus voidaan aloittaa.',
         loading: 'Ladataan',
         modal: {
-          header: 'Luo latauspaketti?',
-          main: `Aloittaaksesi latauksen Etsimen täytyy luoda latauspaketti.
-          Jos dataa on paljon, paketin luomisessa voi kestää minuutteja tai tunteja.
-          Kun lataus voidaan aloittaa, lataa-painike muuttuu vihreäksi.`,
-          additional: 'Latauspaketin luonti ei keskeydy, vaikka poistuisit Etsimestä.',
+          generate: {
+            header: 'Luo latauspaketti?',
+            main: `Aloittaaksesi latauksen Etsimen täytyy luoda latauspaketti.
+            Jos dataa on paljon, paketin luomisessa voi kestää minuutteja tai tunteja.
+            Kun lataus voidaan aloittaa, lataa-painike muuttuu vihreäksi.`,
+            additional: 'Latauspaketin luonti ei keskeydy, vaikka poistuisit Etsimestä.',
+          },
+          pending: {
+            header: 'Latauspaketin luonti käynnissä',
+            main:
+              `Etsin luo parhaillaan latauspakettia.
+              Jos dataa on paljon, paketin luomisessa voi kestää minuutteja tai tunteja.
+              Kun lataus voidaan aloittaa, lataa-painike muuttuu vihreäksi.`,
+          },
+          success: {
+            header: 'Latauspaketti luotu',
+            main: 'Paketti on nyt valmis ladattavaksi.',
+          },
           additionalEmail:
-            'Latauspaketin luonti ei keskeydy, vaikka poistuisit Etsimestä. Jos haluat ilmoituksen kun paketti on ladattavissa, kirjoita sähköpostiosoitteesi tähän.',
+            'Jos haluat että sinulle ilmoitetaan kun lataus on mahdollista aloittaa, ilmoitathan sähköpostisi.',
           emailPlaceholder: 'Sähköposti',
-          ok: 'Luo latauspaketti',
-          cancel: 'Peruuta',
+          buttons: {
+            ok: 'Luo latauspaketti',
+            cancel: 'Peruuta',
+            close: 'Sulje',
+            submitEmail: 'Tilaa ilmoitus',
+          },
         },
       },
       objectCount: {
-        one: '1 object',
-        other: '%(count)s objects',
+        one: '1 objekti',
+        other: '%(count)s objektia',
       },
       fileCount: {
         one: '1 tiedosto',

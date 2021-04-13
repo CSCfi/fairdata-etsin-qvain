@@ -1,5 +1,7 @@
+import React from 'react'
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
+import { shallow } from 'enzyme'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../js/utils/constants'
 import Env from '../../../js/stores/domain/env'
@@ -11,6 +13,7 @@ import {
   downloadFile,
   downloadPackage,
 } from '../../../js/components/dataset/data/idaResourcesV2/download'
+import ErrorMessage from '../../../js/components/dataset/data/idaResourcesV2/errorMessage'
 
 jest.mock('../../../js/components/dataset/data/idaResourcesV2/download', () => {
   const actual = jest.requireActual('../../../js/components/dataset/data/idaResourcesV2/download')
@@ -82,14 +85,14 @@ describe('Packages', () => {
   it('creates package for dataset', async () => {
     fakeDownload.setProcessingDelay(100)
     await packages.fetch(1) // no packages exist yet
-    await packages.createPackageFromFolder('/')
+    await packages.createPackageFromPath('/')
     expect(packages.packages['/']).toEqual(expect.objectContaining({ status: PENDING }))
   })
 
   it('uses existing package instead of creating new', async () => {
     const original = fakeDownload.createPackage(1, '/')
     await packages.fetch(1)
-    await packages.createPackageFromFolder('/') // already exists
+    await packages.createPackageFromPath('/') // already exists
     expect(packages.packages['/']).toEqual(
       expect.objectContaining({
         status: SUCCESS,
@@ -140,7 +143,7 @@ describe('Packages', () => {
     runInAction(() => {
       packages.datasetIdentifier = 500
     })
-    await packages.createPackageFromFolder('/')
+    await packages.createPackageFromPath('/')
     expect(packages.error.response.status).toBe(500)
     expect(console.error.mock.calls.length).toBe(1)
   })
@@ -160,6 +163,49 @@ describe('Packages', () => {
   it('sets requestingPackage', async () => {
     packages.setRequestingPackageCreation('/moro', true)
     expect(packages.packages['/moro'].requestingPackageCreation).toEqual(true)
+  })
+
+  describe('Notifications', () => {
+    it('sets email', () => {
+      const { Notifications } = packages
+      Notifications.setEmail('email@example.org')
+      expect(Notifications.email).toBe('email@example.org')
+    })
+
+    it('validates email', () => {
+      const { Notifications } = packages
+      Notifications.setEmail('email@example.org')
+      Notifications.validateEmail()
+      expect(Notifications.emailError).toBe(null)
+    })
+
+    it('fails to validate email', () => {
+      const { Notifications } = packages
+      Notifications.setEmail('emailasfokpexample.org')
+      Notifications.validateEmail()
+      expect(Notifications.emailError).not.toBe(null)
+    })
+
+    it('allows empty email', () => {
+      const { Notifications } = packages
+      Notifications.setEmail('')
+      Notifications.validateEmail(false)
+      expect(Notifications.emailError).toBe(null)
+    })
+
+    it('disallows empty email', () => {
+      const { Notifications } = packages
+      Notifications.setEmail('')
+      Notifications.validateEmail(true)
+      expect(Notifications.emailError).not.toBe(null)
+    })
+
+    it('resets email', () => {
+      const { Notifications } = packages
+      Notifications.setEmail('email@example.org')
+      packages.Notifications.reset()
+      expect(packages.Notifications.email).toBe('')
+    })
   })
 })
 
@@ -224,7 +270,7 @@ describe('Download button actions', () => {
     const pendingDirectoryItem = { type: 'directory', path: '/pending' }
     const action = getDownloadAction(1, pendingDirectoryItem, packages, files)
     expect(action.type).toBe('pending')
-    expect(action.func).toBe(null)
+    expect(action.func).not.toBe(null)
     expect(action.spin).toBe(true)
   })
 
@@ -232,7 +278,7 @@ describe('Download button actions', () => {
     const startedDirectoryItem = { type: 'directory', path: '/started' }
     const action = getDownloadAction(1, startedDirectoryItem, packages, files)
     expect(action.type).toBe('pending')
-    expect(action.func).toBe(null)
+    expect(action.func).not.toBe(null)
     expect(action.spin).toBe(true)
   })
 
@@ -251,10 +297,8 @@ describe('Download button actions', () => {
     const noPackageDirectoryItem = { type: 'directory', path: '/no_package' }
     const action = getDownloadAction(1, noPackageDirectoryItem, packages, files)
     expect(action.type).toBe('create')
-    jest.spyOn(packages, 'createPackageFromFolder')
     action.func()
-    packages.confirmModalCallback()
-    expect(packages.createPackageFromFolder.mock.calls).toEqual([['/no_package']])
+    expect(packages.packageModalPath).toBe('/no_package')
   })
 })
 
@@ -300,5 +344,52 @@ describe('Download functions', () => {
     await downloadPackage(500, 'package-id', mockPackages)
     expect(mockPackages.setError.mock.calls.length).toBe(1)
     expect(console.error.mock.calls.length).toBe(1)
+  })
+})
+
+describe('ErrorMessage', () => {
+  const baseError = {
+    name: 'errortype',
+    message: 'things went wrong',
+  }
+
+  const translationShouldExist = (wrapper, translation) => {
+    expect(wrapper.findWhere(c => c.prop('content') === translation).length).toBe(1)
+  }
+
+  it('shows "service unavailable" message', () => {
+    const wrapper = shallow(<ErrorMessage error={baseError} clear={() => {}} />)
+    translationShouldExist(wrapper, 'dataset.dl.errors.serviceUnavailable')
+  })
+
+  it('shows "unknown error" message', () => {
+    const error = {
+      ...baseError,
+      response: {
+        status: 503,
+      },
+    }
+    const wrapper = shallow(<ErrorMessage error={error} clear={() => {}} />)
+    translationShouldExist(wrapper, 'dataset.dl.errors.unknownError')
+  })
+
+  it('shows embargo message', () => {
+    const error = {
+      ...baseError,
+      response: {
+        data: {
+          reason: 'EMBARGO',
+        },
+      },
+    }
+    const wrapper = shallow(<ErrorMessage error={error} clear={() => {}} />)
+    translationShouldExist(wrapper, 'dataset.access_rights_description.embargo')
+  })
+
+  it('shows error details', () => {
+    const wrapper = shallow(<ErrorMessage error={baseError} clear={() => {}} />)
+    const button = wrapper.findWhere(c => c.prop('content') === 'error.details.showDetails')
+    button.simulate('click')
+    expect(wrapper.contains('errortype: things went wrong')).toBe(true)
   })
 })

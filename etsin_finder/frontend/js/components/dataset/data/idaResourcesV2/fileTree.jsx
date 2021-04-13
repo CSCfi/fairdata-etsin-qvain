@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
+import { withRouter } from 'react-router-dom'
 
 import FileTreeItem from './fileTreeItem'
 import { useRenderTree } from '../../../general/files/tree'
@@ -11,6 +13,16 @@ export function FileTree(props) {
   const { View } = Files
   const { allowDownload } = props
 
+  // Open directories so items specified by query parameters are visible,
+  // e.g. ?show=/path/subpath will open /path.
+  // Supports multiple paths, e.g. ?show=/path1/item&show=/path2/item.
+  useEffect(() => {
+    const params = new URLSearchParams(props.location.search)
+    const paths = params.getAll('show')
+    Files.View.openPaths(paths, true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.location.search])
+
   const { renderTree } = useRenderTree(
     {
       Files,
@@ -21,7 +33,7 @@ export function FileTree(props) {
     {
       allowDownload,
       Packages,
-      downloadApiV2
+      downloadApiV2,
     }
   )
 
@@ -31,6 +43,9 @@ export function FileTree(props) {
 FileTree.propTypes = {
   Stores: PropTypes.object.isRequired,
   allowDownload: PropTypes.bool.isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string,
+  }).isRequired,
 }
 
-export default withStores(observer(FileTree))
+export default withRouter(withStores(observer(FileTree)))

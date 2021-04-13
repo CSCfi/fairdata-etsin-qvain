@@ -3,12 +3,14 @@ import axios from 'axios'
 import urls from '../../components/qvain/utils/urls'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../utils/constants'
+import Notifications from './packages.notifications'
 
 class Packages {
   // Download API package handling
 
   constructor(Env) {
     this.Env = Env
+    this.Notifications = new Notifications(this)
     makeObservable(this)
   }
 
@@ -28,17 +30,15 @@ class Packages {
 
   @observable packages = {}
 
-  @observable confirmModalCallback = null
+  @observable packageModalPath = null
 
-  @action confirm = (callback) => {
-    this.confirmModalCallback = () => {
-      callback()
-      this.closeConfirmModal()
-    }
+  @action.bound openPackageModal(path) {
+    this.packageModalPath = path
+    this.Notifications.setEmailError(null)
   }
 
-  @action closeConfirmModal = () => {
-    this.confirmModalCallback = null
+  @action.bound closePackageModal() {
+    this.packageModalPath = null
   }
 
   @action clearPackages() {
@@ -51,6 +51,7 @@ class Packages {
     this.clearPackages()
     this.setPollInterval(1e3, 1.2)
     this.clearPollTimeout()
+    this.Notifications.reset()
   }
 
   setPollInterval(interval, multiplier) {
@@ -78,8 +79,11 @@ class Packages {
   @action schedulePoll() {
     // Poll status periodically if there are pending packages
     if (
-      Object.values(this.packages).some(pack =>
-        pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING || pack.status === DOWNLOAD_API_REQUEST_STATUS.STARTED)
+      Object.values(this.packages).some(
+        pack =>
+          pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING ||
+          pack.status === DOWNLOAD_API_REQUEST_STATUS.STARTED
+      )
     ) {
       this.setPollTimeout(async () => {
         await this.fetch(this.datasetIdentifier)
@@ -122,6 +126,8 @@ class Packages {
       const resp = await axios.post(urls.v2.packages(), params)
       const { partial, ...full } = resp.data
 
+      this.Notifications.subscribe(params)
+
       this.updatePartials(partial)
       this.updatePackage('/', full)
       this.clearError()
@@ -137,24 +143,26 @@ class Packages {
     this.schedulePoll()
   }
 
-  createPackageFromFolder = async path => {
-    if (path === '/') {
-      return this.createPackage({
-        cr_id: this.datasetIdentifier,
-      })
-    }
-
-    return this.createPackage({
+  getParamsForPath(path) {
+    const params = {
       cr_id: this.datasetIdentifier,
-      scope: [path],
-    })
+    }
+    if (path !== '/') {
+      params.scope = [path]
+    }
+    return params
+  }
+
+  createPackageFromPath = async path => {
+    const params = this.getParamsForPath(path)
+    return this.createPackage(params)
   }
 
   @action setLoadingDataset(val) {
     this.loadingDataset = val
   }
 
-  @action setError = (error) => {
+  @action setError = error => {
     this.error = error
   }
 

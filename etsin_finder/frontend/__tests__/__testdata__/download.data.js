@@ -17,11 +17,14 @@ class FakeDownload {
 
   packagesByDataset = {}
 
+  subscriptionsByDataset = {}
+
   reset() {
     this.packageCounter = 0
     this.pendingDelay = 0
     this.startedDelay = 0
     this.packagesByDataset = {}
+    this.subscriptionsByDataset = {}
   }
 
   genPackageName = path => {
@@ -53,6 +56,16 @@ class FakeDownload {
       return null
     }
     return datasetPackages
+  }
+
+  addSubscription(dataset, path, email) {
+    if (!this.subscriptionsByDataset[dataset]) {
+      this.subscriptionsByDataset[dataset] = {}
+    }
+    if (!this.subscriptionsByDataset[dataset][path]) {
+      this.subscriptionsByDataset[dataset][path] = []
+    }
+    this.subscriptionsByDataset[dataset][path].push(email)
   }
 
   createPackage(dataset, path) {
@@ -117,7 +130,7 @@ const formatPackageResponse = packages => {
   // Other packages are listed in the partial array.
   //
   // This converts the mock package object from
-  // { 
+  // {
   //   '/' : { scope: ['/'], package: 'x.zip' },
   //   '/path': { scope: ['/path'], package: 'y.zip' }
   // }
@@ -146,7 +159,7 @@ const formatPackageResponse = packages => {
   return [200, JSON.parse(JSON.stringify(obj))]
 }
 
-export const applyMockAdapter = (mockAdapter) => {
+export const applyMockAdapter = mockAdapter => {
   // Use mockAdapter to mock axios responses for the Download API.
 
   mockAdapter.onGet(RegExp('^/api/v2/dl/requests')).reply(({ url, data }) => {
@@ -184,5 +197,21 @@ export const applyMockAdapter = (mockAdapter) => {
       return [200, { url: `file_dl_url?cr_id=${cr_id}&file=${file}` }]
     }
     return [200, { url: `package_dl_url?cr_id=${cr_id}&package=${pack}` }]
+  })
+
+  mockAdapter.onPost(RegExp('^/api/v2/dl/subscriptions')).reply(({ url, data }) => {
+    const params = getParams(url, data)
+    if (errors[params.cr_id]) {
+      return errors[params.cr_id]
+    }
+    let path = '/'
+    if (params.scope) {
+      path = params.scope[0]
+    }
+    const createdPackages = {
+      [path]: fakeDownload.createPackage(params.cr_id, path),
+    }
+    fakeDownload.addSubscription(params.cr_id, path, params.email)
+    return [200, '']
   })
 }
