@@ -3,7 +3,7 @@ services:
     etsin-qvain-webpack:
       image: fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack
       hostname: 'etsin-qvain-webpack'
-      command: npm start
+      command: npm run dev
       volumes:
         - ./etsin_finder/:/etsin_finder/
       depends_on:
