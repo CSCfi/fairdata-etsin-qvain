@@ -21,12 +21,12 @@ const config = {
     // inline: true,
     publicPath: '/', // This needs to be set for devServer
     contentBase: '/static/',
-    public: '0.0.0.0:8080',
+    public: '0.0.0.0', // Needs to be specified without port, for connection from sockjs-node (nginx)
     disableHostCheck: true, // Should be enabled when running inside a container
     hot: true,
     historyApiFallback: true,
     clientLogLevel: 'silent',
-    port: 8080, // This is the port where webpack is aavailable
+    port: 8080, // This is the port where webpack is available
     writeToDisk: true, // This enables updates in the Docker container
     watchOptions: {
       aggregateTimeout: 300,
