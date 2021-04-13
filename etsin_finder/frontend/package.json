@@ -13,11 +13,11 @@
     "build": "webpack --mode production --config webpack.prod.js --node-env production",
     "dev-build": "webpack --config webpack.config.js --node-env development",
     "lint": "eslint js --ext .jsx,.js",
-    "start": "webpack --progress -d --config webpack.config.js --watch --node-env development --host 0.0.0.0",
+    "start": "webpack --progress --config webpack.config.js --watch --node-env development",
     "test": "jest",
     "coverage": "jest --collect-coverage --collect-coverage-from=\"js/**\"",
     "watch": "webpack --config webpack.config.js --watch --node-env development",
-    "dev": "webpack serve --config webpack.dev.js --inline --node-env development"
+    "dev": "webpack serve --config webpack.dev.js --inline --node-env development --host 0.0.0.0"
   },
   "dependencies": {
     "@babel/core": "^7.13.10",
