@@ -10,25 +10,24 @@ const config = {
   entry: './js/index.jsx',
   output: {
     // path of output
-    path: path.resolve(__dirname, './build'),
-    // publicPath is used in dynamic chunk loading
-    publicPath: './build/',
+    path: path.join(__dirname, '/build'),
+    publicPath: '/build/', // Needed in order to access frontend from nginx
     filename: 'bundle.[chunkhash].js',
     chunkFilename: '[name].[chunkhash].js',
   },
   devtool: 'source-map',
   devServer: {
-    host: '0.0.0.0',
-    inline: true,
-    publicPath: '/',
-    contentBase: './static/',
+    host: '0.0.0.0', // Default IP (Docker)
+    // inline: true,
+    publicPath: '/', // This needs to be set for devServer
+    contentBase: '/static/',
     public: '0.0.0.0:8080',
-    disableHostCheck: true,
+    disableHostCheck: true, // Should be enabled when running inside a container
     hot: true,
     historyApiFallback: true,
     clientLogLevel: 'silent',
-    port: 8080,
-    writeToDisk: true,
+    port: 8080, // This is the port where webpack is aavailable
+    writeToDisk: true, // This enables updates in the Docker container
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1500,
