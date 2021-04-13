@@ -18,6 +18,7 @@ const config = {
   },
   devtool: 'source-map',
   devServer: {
+    host: '0.0.0.0',
     publicPath: '/',
     contentBase: './static',
     public: 'etsin-local.fd-test.csc.fi/',
@@ -26,7 +27,7 @@ const config = {
     historyApiFallback: true,
     clientLogLevel: 'silent',
     port: 8080,
-    writeToDisk: false,
+    writeToDisk: true,
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1500,
