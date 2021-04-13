@@ -3,6 +3,8 @@ services:
     etsin-qvain-webpack:
       image: fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack
       hostname: 'etsin-qvain-webpack'
+      ports:
+        - 8080:8081
       command: npm run dev
       volumes:
         - ./etsin_finder/:/etsin_finder/
@@ -10,7 +12,7 @@ services:
         - backend
       environment:
         - CHOKIDAR_USEPOLLING=true
-        - base_url=0.0.0.0:8080
+        - base_url=0.0.0.0:8081
     etsin-qvain-flask:
       image: fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask
       hostname: 'etsin-qvain-flask'
