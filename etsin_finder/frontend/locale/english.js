@@ -341,7 +341,7 @@ const english = {
   },
   home: {
     title: 'Search datasets',
-    title1: 'What is E333tsin?',
+    title1: 'What is Etsin?',
     title2: 'How can I get access to the datasets?',
     para1:
       'Etsin enables you to find research datasets from all fields of science. Etsin contains information about the datasets and metadata in the national Finnish Fairdata services. We also currently harvest information from the Language Bank of Finland, the Finnish Social Science Data archive and the Finnish Environmental Institute, and new sources will be included.',
