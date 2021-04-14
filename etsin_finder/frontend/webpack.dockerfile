@@ -17,4 +17,4 @@ VOLUME ["/build"]
 EXPOSE 8080
 
 # Start development-configured app (see the command scripts.start inside the file ./package.json for details)
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
