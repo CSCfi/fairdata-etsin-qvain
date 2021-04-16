@@ -11,8 +11,8 @@ const config = {
   output: {
     // path of output
     path: path.join(__dirname, '/build'),
-    publicPath: '/build/', // Needed in order to access frontend from nginx
-    filename: 'bundle.[chunkhash].js',
+    publicPath: '/', // Needed in order to access frontend from nginx
+    filename: 'bundle.[contenthash].js',
     chunkFilename: '[name].[chunkhash].js',
   },
   devtool: 'source-map',
@@ -27,7 +27,7 @@ const config = {
     historyApiFallback: true,
     clientLogLevel: 'silent',
     port: 8080, // This is the port where webpack is available
-    writeToDisk: true, // This enables updates in the Docker container
+    writeToDisk: false,
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1500,
