@@ -650,7 +650,7 @@ const english = {
         instructions: 'Only one language selection is mandatory',
       },
       issuedDate: {
-        title: 'Issued d33ate',
+        title: 'Issued date',
         infoText:
           'Date of formal issuance (publication) of the resource. This value does not affect or reflect the visibility of the dataset itself. If this is left empty, current date is used as default value.',
         instructions: '',
