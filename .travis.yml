@@ -38,7 +38,7 @@ jobs:
     before_script:
       - cd $TRAVIS_BUILD_DIR
       - pip --version
-      - pip install --upgrade pip
+      - pip install --upgrade pip virtualenv
       - pip install tox-travis
       - sudo mkdir /var/log/etsin_finder
       - sudo chown -R $USER:$USER /var/log/etsin_finder
