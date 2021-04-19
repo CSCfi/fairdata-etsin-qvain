@@ -47,6 +47,7 @@ def add_restful_resources(app):
         V2Dataset,
         DatasetMetadata,
         User,
+        Language,
         Session,
         Files,
         Download,
@@ -121,6 +122,7 @@ def add_restful_resources(app):
     api.add_resource(Files, '/api/files/<id:cr_id>')
     api.add_resource(Contact, '/api/email/<id:cr_id>')
     api.add_resource(User, '/api/user')
+    api.add_resource(Language, '/api/language')
     api.add_resource(Session, '/api/session')
     api.add_resource(Download, '/api/dl')
     api.add_resource(AppConfig, '/api/app_config')

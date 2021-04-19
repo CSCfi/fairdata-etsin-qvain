@@ -8,17 +8,19 @@
  * @license   MIT
  */
 
+import axios from 'axios'
 import { observable, action, computed, makeObservable } from 'mobx'
 import counterpart from 'counterpart'
 import moment from 'moment'
+
 import elasticquery from './elasticquery'
 import Accessibility from './accessibility'
 import env from '../domain/env'
-import { setCookieValue, getCookieValue } from '../../utils/cookies'
 
 const languages = ['en', 'fi']
 
-const getInitialLanguage = () => languages.find(lang => lang === document.documentElement.lang) || languages[0]
+const getInitialLanguage = () =>
+  languages.find(lang => lang === document.documentElement.lang) || languages[0]
 
 class Locale {
   constructor() {
@@ -46,6 +48,10 @@ class Locale {
 
   @observable languages = languages
 
+  @action.bound saveLanguage() {
+    return axios.post('/api/language', { language: this.currentLang })
+  }
+
   @action
   setLang = (lang, save = true) => {
     if (!languages.includes(lang)) {
@@ -56,7 +62,7 @@ class Locale {
     moment.locale(lang)
     document.documentElement.lang = this.currentLang
     if (save) {
-      setCookieValue(this.cookieDomain, this.cookieName, this.currentLang)
+      this.saveLanguage()
     }
   }
 
@@ -86,16 +92,11 @@ class Locale {
 
   @action
   loadLang = () => {
-    /* get language setting from cookie */
-    const storedLang = getCookieValue(this.cookieName)
-    if (storedLang) {
-      this.setLang(storedLang, false)
-    } else {
-      this.setLang(getInitialLanguage(), false)
-    }
+    // get initial language from document head
+    this.setLang(getInitialLanguage(), false)
   }
 
-  getMatchingLang = (values) => {
+  getMatchingLang = values => {
     const defaultLang = this.lang
     for (const value of values.filter(v => v)) {
       if (value[defaultLang]) {
