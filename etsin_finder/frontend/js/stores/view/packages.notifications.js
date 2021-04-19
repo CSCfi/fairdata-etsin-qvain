@@ -4,12 +4,11 @@ import { observable, action, makeObservable } from 'mobx'
 import axios from 'axios'
 import urls from '../../components/qvain/utils/urls'
 
-// TODO: Error messages
 const emailSchema = yup
   .string()
-  .typeError('qvain.validationMessages.actors.email.string')
-  .max(1000, 'qvain.validationMessages.actors.email.max')
-  .email('qvain.validationMessages.actors.email.email')
+  .typeError('dataset.validationMessages.email.string')
+  .max(1000, 'dataset.validationMessages.email.max')
+  .email('dataset.validationMessages.email.email')
   .nullable()
 
 const requiredEmailSchema = emailSchema.required()

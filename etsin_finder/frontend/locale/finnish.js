@@ -141,8 +141,7 @@ const finnish = {
           },
           pending: {
             header: 'Latauspaketin luonti käynnissä',
-            main:
-              `Etsin luo parhaillaan latauspakettia.
+            main: `Etsin luo parhaillaan latauspakettia.
               Jos dataa on paljon, paketin luomisessa voi kestää minuutteja tai tunteja.
               Kun lataus voidaan aloittaa, lataa-painike muuttuu vihreäksi.`,
           },
@@ -291,6 +290,13 @@ const finnish = {
     linkToOriginalDataset: 'Käyttökopioon pääset tästä',
     enteringPas: 'Menemässä PAS:iin',
     dataInPasDatasetsCanNotBeDownloaded: 'PAS-aineistojen dataa ei voida ladata',
+    validationMessages: {
+      email: {
+        string: 'Sähköpostin pitää olla arvoltaan merkkijono.',
+        max: 'Sähköpostiosoite on liian pikä.',
+        email: 'Lisää validi sähköpostiosoite.',
+      },
+    },
   },
   error: {
     cscLoginRequired: 'Tämä sivu vaatii kirjautumisen CSC-tunnuksella.',

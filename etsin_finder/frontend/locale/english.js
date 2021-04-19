@@ -141,8 +141,7 @@ const english = {
           },
           pending: {
             header: 'Download generation ongoing',
-            main:
-              `Etsin is currently generating a download package.
+            main: `Etsin is currently generating a download package.
               For larger downloads it may take minutes or even hours.
               The download button will turn green when download can be started.`,
           },
@@ -293,6 +292,13 @@ const english = {
     linkToOriginalDataset: 'You can open the use copy by clicking here',
     enteringPas: 'Entering DPS',
     dataInPasDatasetsCanNotBeDownloaded: 'DPS dataset data cannot be downloaded',
+    validationMessages: {
+      email: {
+        string: 'The email must be a string value.',
+        max: 'The email address is too long.',
+        email: 'Please insert a valid email address.',
+      },
+    },
   },
   error: {
     cscLoginRequired: 'This page requires you to be logged in with a CSC account.',
