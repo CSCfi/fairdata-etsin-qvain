@@ -34,9 +34,9 @@
     <meta name="fdwe-auto-disabled" content="true" />
     <meta name="fdwe-service" content="ETSIN" />
     <meta name="fdwe-scope" content="HOME" />
-    <script src="https://matomo.fd-test.csc.fi/fdwe.js"></script>
+    <script defer src="https://matomo.fd-test.csc.fi/fdwe.js"></script>
     {% if sso_host -%}
-    <script src="{{ sso_host }}/notification.js"></script>
+    <script defer src="{{ sso_host }}/notification.js"></script>
     {% endif %}
   </head>
 
