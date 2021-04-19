@@ -175,11 +175,13 @@ describe('when calling Spatial handleSave and validations are successful', () =>
   })
 
   test('should call spatialNameSchema.validate with inEdit.name', () => {
-    expect(spatialNameSchema.validate).to.have.beenCalledWith(field.inEdit.name)
+    expect(spatialNameSchema.validate).to.have.beenCalledWith(field.inEdit.name, { strict: true })
   })
 
   test('should call spatialAltitudeSchema.validate with inEdit.altitude', () => {
-    expect(spatialAltitudeSchema.validate).to.have.beenCalledWith(field.inEdit.altitude)
+    expect(spatialAltitudeSchema.validate).to.have.beenCalledWith(field.inEdit.altitude, {
+      strict: true,
+    })
   })
 
   test('should call field.save', () => {

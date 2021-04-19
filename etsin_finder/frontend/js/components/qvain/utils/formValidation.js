@@ -622,7 +622,7 @@ const qvainFormSchema = yup.object().shape({
     otherwise: yup.string().date().nullable(),
   }),
   fieldOfScience: fieldsOfScienceSchema,
-  keywords: keywordsSchema,
+  keywords: keywordsArraySchema,
   otherIdentifiers: otherIdentifiersArraySchema,
   accessType: accessTypeSchema,
   license: yup.mixed().when('dataCatalog', {

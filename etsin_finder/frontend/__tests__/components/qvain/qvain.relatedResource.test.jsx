@@ -175,12 +175,20 @@ describe('given mockStores', () => {
       handleSave(Field, {})
     })
 
+    afterEach(() => {
+      jest.clearAllMocks()
+    })
+
     test('should call relatedResourceNameSchema.validate with inEdit.name', () => {
-      expect(relatedResourceNameSchema.validate).to.have.beenCalledWith(Field.inEdit.name)
+      expect(relatedResourceNameSchema.validate).to.have.beenCalledWith(Field.inEdit.name, {
+        strict: true,
+      })
     })
 
     test('should call relatedResourceTypeSchema', () => {
-      expect(relatedResourceTypeSchema.validate).to.have.beenCalledWith(Field.inEdit.relationType)
+      expect(relatedResourceTypeSchema.validate).to.have.beenCalledWith(Field.inEdit.relationType, {
+        strict: true,
+      })
     })
 
     test('should populate name.und with name.en', () => {

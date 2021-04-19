@@ -111,7 +111,7 @@ describe('RestrictionGrounds', () => {
       })
 
       test('should call Schema.validate', () => {
-        expect(Schema.validate).to.have.beenCalledWith('identifier')
+        expect(Schema.validate).to.have.beenCalledWith('identifier', { strict: true })
       })
 
       test('should call setValidationError with null', () => {

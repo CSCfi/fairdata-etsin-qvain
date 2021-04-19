@@ -17,6 +17,10 @@ jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
     addItemStr = jest.fn()
 
     setValidationError = jest.fn()
+
+    validate = jest.fn()
+
+    validateStr = jest.fn()
   }
 
   return mockReferenceField
@@ -82,22 +86,7 @@ describe('OtherIdentifiers', () => {
 
     describe('when validation passes', () => {
       beforeEach(() => {
-        otherIdentifierSchema.validateSync.mockReturnValue(undefined)
-      })
-
-      describe('when calling validateStr', () => {
-        let returnValue
-        beforeEach(() => {
-          returnValue = otherIdentifiers.validateStr(itemStr)
-        })
-
-        test('should call otherIdentifierSchema.validateSync with itemStr', () => {
-          expect(otherIdentifierSchema.validateSync).to.have.beenCalledWith(itemStr)
-        })
-
-        test('should return true', () => {
-          returnValue.should.be.true
-        })
+        otherIdentifiers.validateStr.mockReturnValue(true)
       })
 
       describe('when calling cleanupBeforeBackend', () => {
@@ -118,66 +107,20 @@ describe('OtherIdentifiers', () => {
     })
 
     describe('when validation fails', () => {
-      const error = new Error('error')
-
       beforeEach(() => {
-        otherIdentifierSchema.validateSync.mockImplementation(() => {
-          throw error
-        })
+        otherIdentifiers.validateStr.mockReturnValue(false)
       })
 
-      describe('when calling validateStr', () => {
+      describe('when calling cleanupBeforeBackend', () => {
         let returnValue
-        beforeEach(() => {
-          returnValue = otherIdentifiers.validateStr()
-        })
 
-        test('should call setValidationError', () => {
-          expect(otherIdentifiers.setValidationError).to.have.beenCalledWith(error.errors)
+        beforeEach(() => {
+          returnValue = otherIdentifiers.cleanupBeforeBackend()
         })
 
         test('should return false', () => {
           returnValue.should.be.false
         })
-
-        describe('when calling cleanupBeforeBackend', () => {
-          let returnValue
-
-          beforeEach(() => {
-            returnValue = otherIdentifiers.cleanupBeforeBackend()
-          })
-
-          test('should return false', () => {
-            returnValue.should.be.false
-          })
-        })
-      })
-    })
-  })
-
-  describe('given itemStr that is in storage', () => {
-    const storage = ['first']
-    const itemStr = 'first'
-
-    beforeEach(() => {
-      otherIdentifiers.storage = storage
-      otherIdentifiers.itemStr = itemStr
-    })
-
-    describe('when calling validateStr', () => {
-      let returnValue
-      beforeEach(() => {
-        otherIdentifierSchema.validateSync.mockImplementation(() => undefined)
-        returnValue = otherIdentifiers.validateStr()
-      })
-
-      test('should call setValidationError with alreadyAdded', () => {
-        expect(otherIdentifiers.setValidationError).to.have.beenCalledWith(
-          'qvain.description.otherIdentifiers.alreadyAdded'
-        )
-      })
-      test('should return false', () => {
-        returnValue.should.be.false
       })
     })
   })

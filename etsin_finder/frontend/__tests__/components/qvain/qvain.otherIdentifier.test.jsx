@@ -5,10 +5,6 @@ import OtherIdentifier from '../../../js/components/qvain/fields/description/oth
 import { useStores } from '../../../js/utils/stores'
 import { LabelLarge } from '../../../js/components/qvain/general/modal/form'
 import StringArray from '../../../js/components/qvain/general/input/stringArray'
-import {
-  otherIdentifiersArraySchema,
-  otherIdentifierSchema,
-} from '../../../js/components/qvain/utils/formValidation'
 
 jest.mock('../../../js/stores/stores')
 
@@ -24,6 +20,8 @@ describe('given mockStores', () => {
         readonly: false,
         validationError: '',
         setValidationError: jest.fn(),
+        validate: jest.fn(),
+        validateStr: jest.fn(),
       },
     },
   }
@@ -69,18 +67,8 @@ describe('given mockStores', () => {
         },
         OtherIdentifiersList: {
           id: 'other-identifiers-input',
-          itemStr: '',
-          setItemStr: mockStores.Qvain.OtherIdentifiers.setItemStr,
-          addItemStr: mockStores.Qvain.OtherIdentifiers.addItemStr,
-          itemSchema: otherIdentifierSchema,
-          value: mockStores.Qvain.OtherIdentifiers.storage,
-          set: mockStores.Qvain.OtherIdentifiers.set,
-          schema: otherIdentifiersArraySchema,
+          fieldName: 'OtherIdentifiers',
           addWithComma: true,
-          readonly: false,
-          translationsRoot: 'qvain.description.otherIdentifiers',
-          validationError: '',
-          setValidationError: mockStores.Qvain.OtherIdentifiers.setValidationError,
         },
       }
 

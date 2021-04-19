@@ -183,7 +183,7 @@ describe('when calling handleSave, on successful validation', () => {
   })
 
   test('should call temporalDateSchema with Field.inEdit', () => {
-    expect(temporalDateSchema.validate).to.have.beenCalledWith(field.inEdit)
+    expect(temporalDateSchema.validate).to.have.beenCalledWith(field.inEdit, { strict: true })
   })
 
   test('should call field.addTemporal', () => {

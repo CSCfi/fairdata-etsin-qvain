@@ -1,5 +1,5 @@
 import 'chai/register-expect'
-import { makeObservable } from 'mobx'
+import { action, makeObservable } from 'mobx'
 
 import Keywords from '../../../js/stores/view/qvain/qvain.keyword'
 
@@ -10,6 +10,8 @@ jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
     }
 
     constructorFunc = jest.fn()
+
+    reset = () => {}
 
     set = jest.fn()
 
@@ -26,6 +28,7 @@ jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
 jest.mock('mobx', () => {
   return {
     ...jest.requireActual('mobx'),
+    override: func => func,
     makeObservable: jest.fn(),
   }
 })
@@ -81,10 +84,10 @@ describe('Keywords with args', () => {
   })
 
   describe('given itemStr "some, keywords"', () => {
-    describe('when calling addKeyword', () => {
+    describe('when calling addItemStr', () => {
       beforeEach(() => {
         keywords.storage = ['data']
-        keywords.addKeyword()
+        keywords.addItemStr()
       })
 
       test('should call set', () => {
