@@ -426,7 +426,7 @@ class Session(Resource):
         if authentication.is_authenticated():
             session.modified = True
             return '', 200
-        return '', 401
+        return 'No session or session expired', 401
 
     @log_request
     def delete(self):
