@@ -16,7 +16,8 @@
     "start": "webpack --progress --config webpack.config.js --watch --node-env development",
     "test": "jest",
     "coverage": "jest --collect-coverage --collect-coverage-from=\"js/**\"",
-    "watch": "webpack --config webpack.config.js --watch --node-env development"
+    "watch": "webpack --config webpack.config.js --watch --node-env development",
+    "dev": "webpack serve --config webpack.dev.js --inline --node-env development"
   },
   "dependencies": {
     "@babel/core": "^7.13.10",
@@ -79,6 +80,7 @@
     "@axe-core/react": "^4.1.0",
     "@babel/eslint-parser": "^7.12.1",
     "@babel/eslint-plugin": "^7.12.1",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@types/react": "^16.14.5",
     "axios-mock-adapter": "^1.17.0",
     "babel-loader": "^8.2.2",
@@ -100,6 +102,7 @@
     "jest-cli": "^24.8.0",
     "postcss": "^8.2.8",
     "react-element-to-jsx-string": "^14.0.2",
+    "react-refresh": "^0.10.0",
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.11.2"
   },
