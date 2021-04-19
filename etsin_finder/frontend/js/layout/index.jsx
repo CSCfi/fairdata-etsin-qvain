@@ -21,7 +21,6 @@ import SkipToContent from '../components/general/skipToContent'
 import Header from '../components/header'
 import Footer from './footer'
 import Content from './content'
-import CookiesNotification from './cookiesNotification'
 import QvainHeader from '../components/qvain/general/header'
 import { withStores } from '../stores/stores'
 
@@ -48,7 +47,6 @@ class Layout extends Component {
           {isQvain ? <QvainHeader /> : <Header />}
         </header>
         <Content contentRef={this.content} />
-        <CookiesNotification />
         <Footer />
       </ErrorBoundary>
     )
