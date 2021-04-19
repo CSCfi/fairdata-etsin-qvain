@@ -37,6 +37,8 @@ class Files {
 
   @observable originalMetadata = {}
 
+  @observable initialLoadCount = 200
+
   @action reset() {
     this.datasetIdentifier = null
     this.draftOfHasProject = null
@@ -249,7 +251,7 @@ class Files {
   }
 
   @action.bound async loadDirectory(dir) {
-    return itemLoaderPublic.loadDirectory(this, dir, 100)
+    return itemLoaderPublic.loadDirectory(this, dir, this.initialLoadCount)
   }
 
   @action changeProject = projectId => {
@@ -318,7 +320,8 @@ class Files {
 
   getItemByPath = async (path, skipFinalLoad) => {
     // Get file or directory by path. Loads all parent directories in the path
-    // automatically if needed. Useful for tests.
+    // automatically if needed. Fails to find item if it's not found within the first
+    // initialLoadCount items of a directory.
     const parts = path.split('/')
     if (parts.length === 1) {
       return undefined

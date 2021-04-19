@@ -70,6 +70,26 @@ export class DirectoryView {
     }
   }
 
+  @action openPaths = async (paths, onlyParents) => {
+    // get items from paths
+    const promises = paths.map(path => this.Files.getItemByPath(path))
+    const items = await Promise.all(promises)
+
+    // open parent items of items
+    const dirsToOpen = []
+    for (const item of items.filter(d => d)) {
+      if (!onlyParents && item.type === 'directory') {
+        dirsToOpen.push(item)
+      }
+      let parent = item.parent
+      while (parent && parent.type === 'directory') {
+        dirsToOpen.push(parent)
+        parent = parent.parent
+      }
+    }
+    await Promise.all(dirsToOpen.map(dir => this.open(dir)))
+  }
+
   @action setAllOpen = async newState => {
     const setChildrenOpen = async dir =>
       Promise.all(

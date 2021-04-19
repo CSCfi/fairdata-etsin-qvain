@@ -12,6 +12,7 @@ describe('Packages', () => {
   let packages
   const mockEnv = {
     downloadApiV2: true,
+    Flags: { flagEnabled: () => true },
   }
 
   beforeEach(() => {
@@ -151,7 +152,7 @@ describe('Packages', () => {
   })
 
   describe('when calling setPollTimeout', () => {
-    const timeoutFunction = () => { }
+    const timeoutFunction = () => {}
     const pollInterval = 1
 
     beforeEach(() => {
@@ -230,14 +231,14 @@ describe('Packages', () => {
     })
   })
 
-  describe("given path '/', when calling createPackageFromFolder", () => {
+  describe("given path '/', when calling createPackageFromPath", () => {
     const path = '/'
     const datasetIdentifier = 'identifier'
     const expectedParams = { cr_id: datasetIdentifier }
     beforeEach(() => {
       axios.post.mockReturnValueOnce({ data: {} })
       packages.datasetIdentifier = datasetIdentifier
-      packages.createPackageFromFolder(path)
+      packages.createPackageFromPath(path)
     })
 
     test('should eventially call axios.post with expectedParams', () => {
@@ -245,14 +246,14 @@ describe('Packages', () => {
     })
   })
 
-  describe("given path 'test', when calling createPackageFromFolder", () => {
+  describe("given path 'test', when calling createPackageFromPath", () => {
     const path = 'test'
     const datasetIdentifier = 'identifier'
     const expectedParams = { cr_id: datasetIdentifier, scope: [path] }
     beforeEach(() => {
       axios.post.mockReturnValueOnce({ data: {} })
       packages.datasetIdentifier = datasetIdentifier
-      packages.createPackageFromFolder(path)
+      packages.createPackageFromPath(path)
     })
 
     test('should eventially call axios.post with expectedParams', () => {

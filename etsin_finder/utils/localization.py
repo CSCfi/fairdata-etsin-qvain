@@ -48,6 +48,8 @@ def get_language():
 
 translations = {
     'fi': {
+        'etsin.download.notification.subject': 'Paketti on ladattavissa Etsimestä',
+        'etsin.download.notification.body': 'Paketti kansiolle {folder} aineistossa {pref_id} on valmis ladattavaksi.\n\n{data_url}\n',
         'etsin.title': 'Etsin | Tutkimusaineistojen hakupalvelu',
         'etsin.description': ('Kuvailutietojen perusteella käyttäjät voivat etsiä aineistoja ja arvioida'
                               'löytämiensä aineistojen käyttökelpoisuutta tarpeisiinsa.'),
@@ -56,6 +58,8 @@ translations = {
                               'kuvailun ja julkaisemisen helpoksi.')
     },
     'en': {
+        'etsin.download.notification.subject': 'Package is ready for download in Etsin',
+        'etsin.download.notification.body': 'Package for {folder} in dataset {pref_id} is ready for download.\n\n{data_url}\n',
         'etsin.title': 'Etsin | Research Dataset Finder ',
         'etsin.description': 'Etsin enables you to find research datasets from all fields of science.',
         'qvain.title': 'Qvain | Research Dataset Description Tool',
@@ -63,12 +67,14 @@ translations = {
     }
 }
 
-def translate(lang, key):
+def translate(lang, key, context=None):
     """Return translation from the translations dict for a given language."""
+    if context is None:
+        context = {}
     lang_translations = translations.get(lang)
     if not lang_translations:
         return f'invalid language: {lang}' % lang
     translation = lang_translations.get(key)
     if not translation:
         return f'missing translation: {lang}.{key}'
-    return translation
+    return translation.format(**context)

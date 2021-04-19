@@ -13,7 +13,6 @@
 import React, { useState, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Router } from 'react-router-dom'
-import createBrowserHistory from 'history/createBrowserHistory'
 import { syncHistoryWithStore } from 'mobx-react-router'
 
 import '../locale/translations'
@@ -21,6 +20,7 @@ import { registerLocale } from 'react-datepicker'
 import fi from 'date-fns/locale/fi'
 import en from 'date-fns/locale/en-GB'
 import Layout from './layout'
+import browserHistory from './browserHistory'
 
 import '../fairdata-ui/footer.css'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -42,7 +42,6 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 // Syncing history with store
-const browserHistory = createBrowserHistory()
 const history = syncHistoryWithStore(browserHistory, Stores.Env.history)
 
 const hideSpinner = () => {

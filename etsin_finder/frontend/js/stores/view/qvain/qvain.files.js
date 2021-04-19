@@ -31,7 +31,7 @@ class Files extends FilesBase {
   cancelOnReset = promise => this.promiseManager.add(promise)
 
   @override async loadDirectory(dir) {
-    return itemLoaderAny.loadDirectory(this, dir, 100)
+    return itemLoaderAny.loadDirectory(this, dir, this.initialLoadCount)
   }
 
   fetchRootIdentifier = async projectIdentifier => {
