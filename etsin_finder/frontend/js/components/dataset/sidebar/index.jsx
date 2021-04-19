@@ -162,12 +162,6 @@ class Sidebar extends Component {
             {/* DATA CATALOG LOGO */}
             {logo && (
               <SidebarItem>
-                {/* <Logo
-                  lang={getDataLang(catalogTitle)}
-                  alt={translate('dataset.catalog_alt_text', { title })}
-                  file={logo}
-                  url={catalogPublisherHomepage}
-                /> */}
                 <Translate
                   component={Logo}
                   attributes={{ alt: 'dataset.catalog_alt_text' }}
@@ -206,11 +200,7 @@ class Sidebar extends Component {
 
             {/* FIELD OF SCIENCE */}
 
-            <SidebarItem
-              trans="dataset.field_of_science"
-              fallback="Field of Science"
-              hideEmpty="true"
-            >
+            <SidebarItem trans="dataset.field_of_science" fallback="Field of Science">
               <List>
                 {field &&
                   field.map(f => (
@@ -223,19 +213,15 @@ class Sidebar extends Component {
 
             {/* KEYWORDS */}
 
-            <SidebarItem trans="dataset.keywords" hideEmpty="true">
-              {this.keywords()}
-            </SidebarItem>
+            <SidebarItem trans="dataset.keywords">{this.keywords()}</SidebarItem>
 
             {/* SUBJECT HEADING */}
 
-            <SidebarItem trans="dataset.subjectHeading" hideEmpty="true">
-              {this.subjectHeading()}
-            </SidebarItem>
+            <SidebarItem trans="dataset.subjectHeading">{this.subjectHeading()}</SidebarItem>
 
             {/* LANGUAGE */}
 
-            <SidebarItem trans="dataset.language" hideEmpty="true">
+            <SidebarItem trans="dataset.language">
               <List>
                 {language &&
                   language.map((languages, i) => {
@@ -256,27 +242,19 @@ class Sidebar extends Component {
 
             {/* SPATIAL COVERAGE */}
 
-            <SidebarItem
-              trans="dataset.spatial_coverage"
-              fallback="Spatial Coverage"
-              hideEmpty="true"
-            >
+            <SidebarItem trans="dataset.spatial_coverage" fallback="Spatial Coverage">
               <List>{geographicName && geographicName.map(single => this.spatial(single))}</List>
             </SidebarItem>
 
             {/* TEMPORAL COVERAGE */}
 
-            <SidebarItem
-              trans="dataset.temporal_coverage"
-              fallback="Temporal Coverage"
-              hideEmpty="true"
-            >
+            <SidebarItem trans="dataset.temporal_coverage" fallback="Temporal Coverage">
               {temporal &&
                 temporal.map(dates => this.dateSeparator(dates.start_date, dates.end_date))}
             </SidebarItem>
 
             {/* LICENSE */}
-            <SidebarItem trans="dataset.license" hideEmpty="true">
+            <SidebarItem trans="dataset.license">
               <List>
                 {license &&
                   license.map(rights => (
@@ -290,14 +268,14 @@ class Sidebar extends Component {
             {/* ACCESS RIGHTS RESTRICTION_GROUNDS */}
 
             {accessRights && (
-              <SidebarItem trans="dataset.access_rights" hideEmpty="true">
+              <SidebarItem trans="dataset.access_rights">
                 <List>{this.accessRights()}</List>
               </SidebarItem>
             )}
 
             {/* PROJECTS */}
 
-            <SidebarItem trans="dataset.project.project" hideEmpty="true">
+            <SidebarItem trans="dataset.project.project">
               <List>
                 {isOutputOf &&
                   isOutputOf.map(item => {
@@ -313,7 +291,7 @@ class Sidebar extends Component {
 
             {/* PUBLISHER */}
 
-            <SidebarItem trans="dataset.publisher" hideEmpty="true">
+            <SidebarItem trans="dataset.publisher">
               {publisher && (
                 <List>
                   <Agent
@@ -329,7 +307,7 @@ class Sidebar extends Component {
 
             {/* CURATOR */}
 
-            <SidebarItem trans="dataset.curator" hideEmpty="true">
+            <SidebarItem trans="dataset.curator">
               <List>
                 {curator &&
                   curator.map(actor => {
@@ -352,7 +330,7 @@ class Sidebar extends Component {
 
             {/* RIGHTS HOLDER */}
 
-            <SidebarItem trans="dataset.rights_holder" hideEmpty="true">
+            <SidebarItem trans="dataset.rights_holder">
               {rightsHolder && (
                 <List>
                   {rightsHolder.map(actor => {
@@ -376,7 +354,7 @@ class Sidebar extends Component {
 
             {/* INFRASTRUCTURE */}
 
-            <SidebarItem trans="dataset.infrastructure" hideEmpty="true">
+            <SidebarItem trans="dataset.infrastructure">
               <List>
                 {infrastructure &&
                   infrastructure.map(entity => (
@@ -389,7 +367,7 @@ class Sidebar extends Component {
 
             {/* CITATION */}
 
-            <SidebarItem trans="dataset.citation.sidebar" hideEmpty="false">
+            <SidebarItem trans="dataset.citation.sidebar">
               {!harvested && (
                 <FlaggedComponent flag="UI.CITATION_MODAL" whenDisabled={<Citation />}>
                   <Translate

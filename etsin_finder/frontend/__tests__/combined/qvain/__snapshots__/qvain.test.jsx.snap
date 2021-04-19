@@ -185,6 +185,192 @@ exports[`Qvain should render correctly 1`] = `
 </card__QvainContainer>
 `;
 
+exports[`Qvain.Description should render <DescriptionField /> 1`] = `
+<div
+  className="container"
+>
+  <title__SectionTitle>
+    <Translate
+      component="span"
+      content="qvain.description.title"
+    />
+    <Tooltip
+      align="Right"
+      close={[Function]}
+      isOpen={false}
+      text={<DescriptionInfo />}
+    >
+      <HelpIcon
+        aria-label="Description info"
+        onClick={[Function]}
+      />
+    </Tooltip>
+  </title__SectionTitle>
+  <withFieldErrorBoundary(DescriptionField) />
+  <withFieldErrorBoundary(IssuedDateField) />
+  <withFieldErrorBoundary(OtherIdentifierField) />
+  <withFieldErrorBoundary(FieldOfScienceField) />
+  <withFieldErrorBoundary(LanguageField) />
+  <withFieldErrorBoundary(KeywordsField) />
+  <withFieldErrorBoundary(SubjectHeadingsField) />
+</div>
+`;
+
+exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
+<Card
+  bottomContent={false}
+>
+  <form__LabelLarge
+    htmlFor="fieldOfScience-select"
+  >
+    <Translate
+      component="span"
+      content="qvain.description.fieldOfScience.title"
+    />
+  </form__LabelLarge>
+  <Translate
+    component="p"
+    content="qvain.description.fieldOfScience.help"
+  />
+  <Translate
+    attributes={
+      Object {
+        "placeholder": "qvain.description.fieldOfScience.placeholder",
+      }
+    }
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    getRefGroups={[Function]}
+    getter={Array []}
+    isClearable={false}
+    isMulti={true}
+    metaxIdentifier="field_of_science"
+    model={[Function]}
+    modifyGroupLabel={[Function]}
+    modifyOptionLabel={[Function]}
+    name="fieldOfScience"
+    setter={[Function]}
+    sortFunc={[Function]}
+  />
+</Card>
+`;
+
+exports[`Qvain.Description should render <KeywordsField /> 1`] = `
+<Card
+  bottomContent={false}
+>
+  <form__LabelLarge
+    htmlFor="keywords-input"
+  >
+    <TooltipHover
+      flexGrow={0}
+      position="right"
+      showOnClick={false}
+      showOnHover={true}
+      title="Required to save and publish"
+    >
+      <Translate
+        component="span"
+        content="qvain.description.keywords.title"
+      />
+       *
+    </TooltipHover>
+  </form__LabelLarge>
+  <Translate
+    component="p"
+    content="qvain.description.keywords.help"
+  />
+  <StringArray
+    addItemStr={[Function]}
+    addWithComma={true}
+    id="keywords-input"
+    itemSchema={null}
+    itemStr=""
+    readonly={false}
+    required={true}
+    schema={
+      ArraySchema {
+        "_blacklist": ReferenceSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "_blacklistError": undefined,
+        "_mutate": undefined,
+        "_typeError": [Function],
+        "_whitelist": ReferenceSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "_whitelistError": undefined,
+        "conditions": Array [],
+        "deps": Array [],
+        "exclusiveTests": Object {
+          "required": true,
+        },
+        "innerType": StringSchema {
+          "_blacklist": ReferenceSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "_blacklistError": undefined,
+          "_typeError": [Function],
+          "_whitelist": ReferenceSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "_whitelistError": undefined,
+          "conditions": Array [],
+          "deps": Array [],
+          "exclusiveTests": Object {
+            "max": true,
+          },
+          "spec": Object {
+            "abortEarly": true,
+            "nullable": false,
+            "presence": "optional",
+            "recursive": true,
+            "strict": false,
+            "strip": false,
+          },
+          "tests": Array [
+            [Function],
+          ],
+          "transforms": Array [
+            [Function],
+          ],
+          "type": "string",
+        },
+        "spec": Object {
+          "abortEarly": true,
+          "nullable": false,
+          "presence": "required",
+          "recursive": true,
+          "strict": false,
+          "strip": false,
+        },
+        "tests": Array [
+          [Function],
+        ],
+        "transforms": Array [
+          [Function],
+        ],
+        "type": "array",
+      }
+    }
+    set={[Function]}
+    setItemStr={[Function]}
+    setValidationError={[Function]}
+    translationsRoot="qvain.description.keywords"
+    validationError=""
+    value={Array []}
+  />
+</Card>
+`;
+
 exports[`Qvain.Description should render <LanguageField /> 1`] = `
 <Card
   bottomContent={false}
@@ -240,27 +426,31 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     id="other-identifiers-input"
     itemSchema={
       StringSchema {
-        "_blacklist": RefSet {
+        "_blacklist": ReferenceSet {
           "list": Set {},
           "refs": Map {},
         },
-        "_conditions": Array [],
-        "_deps": Array [],
-        "_exclusive": Object {
+        "_blacklistError": undefined,
+        "_typeError": [Function],
+        "_whitelist": ReferenceSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "_whitelistError": undefined,
+        "conditions": Array [],
+        "deps": Array [],
+        "exclusiveTests": Object {
           "max": true,
           "min": true,
           "url": false,
         },
-        "_mutate": undefined,
-        "_options": Object {
+        "spec": Object {
           "abortEarly": true,
+          "nullable": false,
+          "presence": "optional",
           "recursive": true,
-        },
-        "_type": "string",
-        "_typeError": [Function],
-        "_whitelist": RefSet {
-          "list": Set {},
-          "refs": Map {},
+          "strict": false,
+          "strip": false,
         },
         "tests": Array [
           [Function],
@@ -278,80 +468,46 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
     required={false}
     schema={
       ArraySchema {
-        "_blacklist": RefSet {
+        "_blacklist": ReferenceSet {
           "list": Set {},
           "refs": Map {},
         },
-        "_conditions": Array [],
-        "_deps": Array [],
-        "_exclusive": Object {},
-        "_mutate": undefined,
-        "_nullable": true,
-        "_options": Object {
-          "abortEarly": true,
-          "recursive": true,
-        },
-        "_subType": StringSchema {
-          "_blacklist": RefSet {
-            "list": Set {},
-            "refs": Map {},
-          },
-          "_conditions": Array [],
-          "_deps": Array [],
-          "_exclusive": Object {
-            "max": true,
-            "min": true,
-            "url": false,
-          },
-          "_mutate": undefined,
-          "_options": Object {
-            "abortEarly": true,
-            "recursive": true,
-          },
-          "_type": "string",
-          "_typeError": [Function],
-          "_whitelist": RefSet {
-            "list": Set {},
-            "refs": Map {},
-          },
-          "tests": Array [
-            [Function],
-            [Function],
-            [Function],
-          ],
-          "transforms": Array [
-            [Function],
-          ],
-          "type": "string",
-        },
-        "_type": "array",
+        "_blacklistError": undefined,
         "_typeError": [Function],
-        "_whitelist": RefSet {
+        "_whitelist": ReferenceSet {
           "list": Set {},
           "refs": Map {},
         },
+        "_whitelistError": undefined,
+        "conditions": Array [],
+        "deps": Array [],
+        "exclusiveTests": Object {},
         "innerType": StringSchema {
-          "_blacklist": RefSet {
+          "_blacklist": ReferenceSet {
             "list": Set {},
             "refs": Map {},
           },
-          "_conditions": Array [],
-          "_deps": Array [],
-          "_exclusive": Object {
+          "_blacklistError": undefined,
+          "_typeError": [Function],
+          "_whitelist": ReferenceSet {
+            "list": Set {},
+            "refs": Map {},
+          },
+          "_whitelistError": undefined,
+          "conditions": Array [],
+          "deps": Array [],
+          "exclusiveTests": Object {
             "max": true,
             "min": true,
             "url": false,
           },
-          "_mutate": undefined,
-          "_options": Object {
+          "spec": Object {
             "abortEarly": true,
+            "nullable": false,
+            "presence": "optional",
             "recursive": true,
-          },
-          "_type": "string",
-          "_typeError": [Function],
-          "_whitelist": RefSet {
-            "list": Set {},
-            "refs": Map {},
+            "strict": false,
+            "strip": false,
           },
           "tests": Array [
             [Function],
@@ -362,6 +518,14 @@ exports[`Qvain.Description should render <OtherIdentifierField /> 1`] = `
             [Function],
           ],
           "type": "string",
+        },
+        "spec": Object {
+          "abortEarly": true,
+          "nullable": true,
+          "presence": "optional",
+          "recursive": true,
+          "strict": false,
+          "strip": false,
         },
         "tests": Array [],
         "transforms": Array [

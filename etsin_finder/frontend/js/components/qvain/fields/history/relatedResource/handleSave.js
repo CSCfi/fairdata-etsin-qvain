@@ -4,9 +4,9 @@ export default async (Field, options = {}) => {
   const { inEdit, save, clearInEdit, setValidationError } = Field
 
   try {
-    await relatedResourceNameSchema.validate(inEdit.name)
+    await relatedResourceNameSchema.validate(inEdit.name, { strict: true })
     if (!options.noRelationType) {
-      await relatedResourceTypeSchema.validate(inEdit.relationType)
+      await relatedResourceTypeSchema.validate(inEdit.relationType, { strict: true })
     }
 
     if ((inEdit.name.fi || inEdit.name.en) && !inEdit.name.und) {

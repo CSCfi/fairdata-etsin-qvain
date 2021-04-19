@@ -12,7 +12,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Route, Redirect, withRouter } from 'react-router-dom'
+import { Route, Redirect, Switch, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 
@@ -106,86 +106,89 @@ class Content extends Component {
           showEvents={this.showEvents()}
           showMaps={this.showMaps()}
         />
-        {/* Initial route */}
-        <Route
-          exact
-          path="/dataset/:identifier"
-          render={props => (
-            <Description
-              id="tab-description"
-              aria-labelledby="tab-for-description"
-              role="tabpanel"
-              dataset={this.props.dataset}
-              emails={this.props.emails}
-              harvested={this.props.harvested}
-              cumulative={this.props.cumulative}
-              {...props}
-            />
-          )}
-        />
 
-        {/* Route to downloads */}
-        {this.showData() && (
+        <Switch>
+          {/* Initial route */}
           <Route
             exact
-            path="/dataset/:identifier/data"
+            path="/dataset/:identifier"
             render={props => (
-              <Data
-                id="tab-data"
-                aria-labelledby="tab-for-data"
+              <Description
+                id="tab-description"
+                aria-labelledby="tab-for-description"
                 role="tabpanel"
                 dataset={this.props.dataset}
-                hasRemote={this.props.hasRemote}
-                hasFiles={this.props.hasFiles}
+                emails={this.props.emails}
+                harvested={this.props.harvested}
+                cumulative={this.props.cumulative}
                 {...props}
               />
             )}
           />
-        )}
 
-        {/* Route to Events */}
-        {this.showEvents() && (
-          <Route
-            exact
-            path="/dataset/:identifier/events"
-            render={props => (
-              <Events
-                id="tab-events"
-                aria-labelledby="tab-for-events"
-                role="tabpanel"
-                provenance={this.props.dataset.research_dataset.provenance}
-                other_identifier={this.props.dataset.research_dataset.other_identifier}
-                preservation_dataset_origin_version_identifier={
-                  this.props.dataset.preservation_dataset_origin_version
-                }
-                relation={this.props.dataset.research_dataset.relation}
-                dataset_version_set={this.props.dataset.dataset_version_set}
-                {...props}
-              />
-            )}
-          />
-        )}
+          {/* Route to downloads */}
+          {this.showData() && (
+            <Route
+              exact
+              path="/dataset/:identifier/data"
+              render={props => (
+                <Data
+                  id="tab-data"
+                  aria-labelledby="tab-for-data"
+                  role="tabpanel"
+                  dataset={this.props.dataset}
+                  hasRemote={this.props.hasRemote}
+                  hasFiles={this.props.hasFiles}
+                  {...props}
+                />
+              )}
+            />
+          )}
 
-        {/* Route to Maps */}
-        {this.showMaps() && (
-          <Route
-            exact
-            path="/dataset/:identifier/maps"
-            render={props => (
-              <Maps
-                id="tab-maps"
-                aria-labelledby="tab-for-maps"
-                role="tabpanel"
-                spatial={this.props.dataset.research_dataset.spatial}
-                {...props}
-              />
-            )}
-          />
-        )}
+          {/* Route to Events */}
+          {this.showEvents() && (
+            <Route
+              exact
+              path="/dataset/:identifier/events"
+              render={props => (
+                <Events
+                  id="tab-events"
+                  aria-labelledby="tab-for-events"
+                  role="tabpanel"
+                  provenance={this.props.dataset.research_dataset.provenance}
+                  other_identifier={this.props.dataset.research_dataset.other_identifier}
+                  preservation_dataset_origin_version_identifier={
+                    this.props.dataset.preservation_dataset_origin_version
+                  }
+                  relation={this.props.dataset.research_dataset.relation}
+                  dataset_version_set={this.props.dataset.dataset_version_set}
+                  {...props}
+                />
+              )}
+            />
+          )}
 
-        <Route>
-          <Redirect to={`/dataset/${this.props.identifier}${query}`} />
-        </Route>
+          {/* Route to Maps */}
+          {this.showMaps() && (
+            <Route
+              exact
+              path="/dataset/:identifier/maps"
+              render={props => (
+                <Maps
+                  id="tab-maps"
+                  aria-labelledby="tab-for-maps"
+                  role="tabpanel"
+                  spatial={this.props.dataset.research_dataset.spatial}
+                  {...props}
+                />
+              )}
+            />
+          )}
+
+          <Route>
+            <Redirect to={`/dataset/${this.props.identifier}${query}`} />
+          </Route>
+        </Switch>
       </MarginAfter>
     )
   }

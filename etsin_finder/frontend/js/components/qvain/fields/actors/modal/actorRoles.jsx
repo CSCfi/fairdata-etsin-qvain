@@ -10,21 +10,9 @@ import { useStores } from '../../../utils/stores'
 export const ActorRolesBase = () => {
   const {
     Qvain: {
-      Actors: { actors, actorInEdit: actor },
+      Actors: { actorInEdit: actor, otherActorsHaveRole },
     },
   } = useStores()
-
-  const checkIfActorRoleExists = role => {
-    if (actors.map(p => p.uiid).includes(actor.uiid)) {
-      // we are editing a previously added actor, allow changing roles
-      return false
-    }
-    const actorMatchList = actors.map(addedActor => addedActor.roles.includes(role))
-    if (actorMatchList.includes(true)) {
-      return true
-    }
-    return false
-  }
 
   return (
     <Fieldset>
@@ -32,7 +20,7 @@ export const ActorRolesBase = () => {
       <List>
         <RoleCheckbox role={ROLE.CREATOR} help={'(min 1)'} />
         <RoleCheckbox
-          disabled={checkIfActorRoleExists(ROLE.PUBLISHER)}
+          disabled={otherActorsHaveRole(actor, ROLE.PUBLISHER)}
           role={ROLE.PUBLISHER}
           help="(max 1)"
           required

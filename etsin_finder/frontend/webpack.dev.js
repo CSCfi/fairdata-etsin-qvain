@@ -3,16 +3,35 @@ const path = require('path')
 const DotenvPlugin = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const { insertBeforeStyled } = require('./helpers')
 
 const config = {
-  entry: [path.join(__dirname, '/js/index.jsx')],
+  entry: './js/index.jsx',
   output: {
-    path: path.join(__dirname, '/build'),
-    publicPath: '/build/',
-    filename: 'bundle.[chunkhash].js',
+    // path of output
+    path: path.resolve(__dirname, './build'),
+    // publicPath is used in dynamic chunk loading
+    publicPath: '/',
+    filename: 'bundle.[contenthash].js',
     chunkFilename: '[name].[chunkhash].js',
+  },
+  devtool: 'source-map',
+  devServer: {
+    publicPath: '/',
+    contentBase: './static',
+    public: 'etsin-local.fd-test.csc.fi/',
+    disableHostCheck: true,
+    hot: true,
+    historyApiFallback: true,
+    clientLogLevel: 'silent',
+    port: 8080,
+    writeToDisk: false,
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: 1500,
+      ignored: /node_modules/,
+    },
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -24,6 +43,9 @@ const config = {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+          },
         },
       },
       {
@@ -37,6 +59,7 @@ const config = {
     ],
   },
   plugins: [
+    new ReactRefreshWebpackPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       // TODO: add manifest to new html
@@ -44,24 +67,16 @@ const config = {
       filename: 'index.html',
       template: 'static/index.template.ejs',
       favicon: 'static/images/favicon.png',
+      /* scriptLoading: 'defer', */
       MATOMO_URL: env.parsed ? env.parsed.MATOMO_URL : undefined,
       MATOMO_SITE_ID: env.parsed ? env.parsed.MATOMO_SITE_ID : undefined,
     }),
     new DotenvPlugin(),
   ],
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        // Use multi-process parallel running to improve the build speed.
-        // Default number of concurrent runs: os.cpus().length - 1.
-        parallel: true,
-        terserOptions: {
-          // Support Safari 10 with work around for Safari 10/11 bugs in loop scoping and await
-          safari10: true,
-        },
-      }),
-    ],
+  watchOptions: {
+    aggregateTimeout: 300,
+    poll: 1500,
+    ignored: /node_modules/,
   },
 }
 module.exports = config

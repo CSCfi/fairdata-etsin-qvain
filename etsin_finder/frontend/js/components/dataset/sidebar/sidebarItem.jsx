@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { hasChildren } from '../../../utils/helpers'
 
 const SidebarItem = props => {
-  if (props.hideEmpty && !hasChildren(props.children)) {
+  if (!hasChildren(props.children)) {
     return null
   }
   return (
@@ -23,7 +23,6 @@ const SidebarItem = props => {
 export default SidebarItem
 
 SidebarItem.defaultProps = {
-  hideEmpty: undefined,
   fallback: undefined,
   children: undefined,
   trans: undefined,
@@ -31,7 +30,6 @@ SidebarItem.defaultProps = {
 }
 
 SidebarItem.propTypes = {
-  hideEmpty: PropTypes.string,
   children: PropTypes.node,
   trans: PropTypes.string,
   fallback: PropTypes.string,

@@ -34,7 +34,7 @@ jobs:
       - node --version
       - cd $TRAVIS_BUILD_DIR/etsin_finder/frontend
       - npm install
-      - npm run build -- --define process.env.NODE_ENV=\"'travis'\"
+      - npm run build -- --node-env travis
     before_script:
       - cd $TRAVIS_BUILD_DIR
       - pip install tox-travis
