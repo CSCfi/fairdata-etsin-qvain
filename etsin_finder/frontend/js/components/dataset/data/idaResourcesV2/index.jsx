@@ -10,7 +10,7 @@ import sizeParse from '../../../../utils/sizeParse'
 import { withStores } from '../../../../stores/stores'
 import getDownloadAction from './downloadActions'
 import ErrorMessage from './errorMessage'
-import ConfirmPackageModal from './confirmPackageModal'
+import PackageModal from './packageModal'
 import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
 
 const downloadAll = identifier => {
@@ -109,7 +109,7 @@ function IdaResources(props) {
 
       <Tree allowDownload={allowDownload} />
       {inInfo && <Info {...infoProps} />}
-      <ConfirmPackageModal Packages={Packages} />
+      <PackageModal Packages={Packages} />
     </>
   )
 }

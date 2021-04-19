@@ -19,7 +19,7 @@ from etsin_finder.services import cr_service_v2
 from etsin_finder.services.download_metadata_service import download_metadata
 from etsin_finder.services.download_service import download_data
 from etsin_finder.services import rems_service
-from etsin_finder.utils.email_utils import \
+from etsin_finder.utils.contact_utils import \
     create_email_message_body, \
     get_email_info, \
     get_email_message_subject, \

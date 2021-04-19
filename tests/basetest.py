@@ -11,11 +11,20 @@ import os
 
 import pytest
 import logging
+import jinja2
 
 from etsin_finder.utils.flags import initialize_supported_flags
 from etsin_finder.app import create_app
 
 from .utils import get_test_catalog_record
+
+class FakeLoader(jinja2.BaseLoader):
+    """Fake loader to avoid depending on index.html in tests"""
+
+    def get_source(self, environment, template):
+        """Return dummy template"""
+        return 'hello test', None, lambda: False
+
 
 class BaseTest():
     """Use as base class for any tests. Contains fixtures and monkeypatched methods"""
@@ -28,6 +37,7 @@ class BaseTest():
         :return:
         """
         test_app = create_app(True)
+        test_app.jinja_loader = FakeLoader()
         return test_app
 
     @pytest.fixture
