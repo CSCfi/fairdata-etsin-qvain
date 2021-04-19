@@ -108,13 +108,13 @@ const descriptionSchemaDraft = yup
   .nullable()
 
 const keywordsSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.keywords.string')
+  .max(1000, 'qvain.validationMessages.keywords.max')
+
+const keywordsArraySchema = yup
   .array()
-  .of(
-    yup
-      .string()
-      .typeError('qvain.validationMessages.keywords.string')
-      .max(1000, 'qvain.validationMessages.keywords.max')
-  )
+  .of(keywordsSchema)
   .required('qvain.validationMessages.keywords.required')
 
 // Validation for draft datasets: keywords are not .required()
@@ -672,6 +672,7 @@ export {
   otherIdentifierSchema,
   otherIdentifiersArraySchema,
   keywordsSchema,
+  keywordsArraySchema,
   accessTypeSchema,
   licenseSchema,
   embargoExpDateSchema,
