@@ -14,6 +14,8 @@ Then, the service specific images can be pushed (see below)
 
 ## Updating etsin-qvain-webpack
 
+When there are updates to npm packages, you will need to build, tag, and push the image again.
+
 1 Build image:
 - `docker build -f etsin_finder/frontend/webpack.dockerfile -t etsin-qvain-webpack etsin_finder/frontend`
 
@@ -24,6 +26,8 @@ Then, the service specific images can be pushed (see below)
 - `docker push fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack`
 
 ## Updating etsin-qvain-flask
+
+When there are updates to python packages, you will need to build, tag, and push the image again.
 
 1 Build image:
 - `docker build -f flask.dockerfile -t etsin-qvain-flask .`
