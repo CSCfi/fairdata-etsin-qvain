@@ -38,6 +38,7 @@ const ExternalResources = () => {
   const accessUrls = new Set(remote.map(resource => resource.access_url?.identifier).filter(v => v))
   const hasAccess = accessUrls.size > 0
   const hasCommonAccess = accessUrls.size === 1
+  const showAccess = hasAccess && !hasCommonAccess
   const hasDownload = !!remote.find(resource => resource.download_url?.identifier)
 
   return (
@@ -63,11 +64,13 @@ const ExternalResources = () => {
         )}
       </Header>
 
-      <Grid hasAccess={hasAccess} hasDownload={hasDownload}>
+      <Grid showAccess={showAccess} hasDownload={hasDownload}>
         {remote.map(resource => (
           <ResourceItem
             key={`resource-${resource.identifier}-${resource.title}`}
             resource={resource}
+            hideAccess={!showAccess}
+            noButtons={!showAccess && !hasDownload}
           />
         ))}
       </Grid>
@@ -75,12 +78,12 @@ const ExternalResources = () => {
   )
 }
 
-const gridColumns = ({ hasAccess, hasDownload, mobile }) => {
+const gridColumns = ({ showAccess, hasDownload, mobile }) => {
   const columns = [['name', '1fr']]
   if (!mobile) {
     columns.push(['category', 'minmax(max-content, 0.75fr)'])
   }
-  if (hasAccess) {
+  if (showAccess) {
     columns.push(['access', '5.5rem'])
   }
   if (hasDownload) {
