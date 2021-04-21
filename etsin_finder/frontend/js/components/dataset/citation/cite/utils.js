@@ -1,4 +1,5 @@
 import moment from 'moment'
+import idnToLink from '../../../../utils/idnToLink'
 
 const topOrg = org => {
   if (org.is_part_of) {
@@ -163,16 +164,14 @@ export const getVersion = (dataset, getTranslation) => {
   return getTranslation({ en: `Version ${version}`, fi: `versio ${version}` })
 }
 
-export const getIdentifier = (dataset) => {
+export const getIdentifier = dataset => {
   const identifier = dataset.research_dataset.preferred_identifier
   if (!identifier) {
     return undefined
   }
-  if (identifier.startsWith('doi:')) {
-    return identifier.replace('doi:', 'https://doi.org/')
-  }
-  if (identifier.toLowerCase().startsWith('urn:nbn:fi:')) {
-    return `http://urn.fi/${identifier}`
+  const url = idnToLink(identifier)
+  if (url) {
+    return url
   }
   if (dataset.draft_of) {
     return dataset.draft_of.preferred_identifier
