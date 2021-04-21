@@ -128,7 +128,7 @@ describe('Citation styles', () => {
 
     it('should use URL also for capitalized URN:NBN:fi dataset', () => {
       c(capitalizedUrnDataset).should.eq(
-        'Top organization. (2021). Publication title. Publisher. http://urn.fi/URN:NBN:fi:att:d00d'
+        'Top organization. (2021). Publication title. Publisher. http://urn.fi/urn:nbn:fi:att:d00d'
       )
     })
 
@@ -188,7 +188,7 @@ describe('Citation styles', () => {
 
     it('should use URL also for capitalized URN:NBN:fi dataset', () => {
       c(capitalizedUrnDataset).should.eq(
-        'Top organization. 2021. ”Publication title”. Publisher. http://urn.fi/URN:NBN:fi:att:d00d'
+        'Top organization. 2021. ”Publication title”. Publisher. http://urn.fi/urn:nbn:fi:att:d00d'
       )
     })
 
@@ -245,7 +245,7 @@ describe('Citation styles', () => {
 
     it('should use URL also for capitalized URN:NBN:fi dataset', () => {
       c(capitalizedUrnDataset).should.eq(
-        'Top organization. ”Publication title”. Publisher, 2021. http://urn.fi/URN:NBN:fi:att:d00d'
+        'Top organization. ”Publication title”. Publisher, 2021. http://urn.fi/urn:nbn:fi:att:d00d'
       )
     })
 
