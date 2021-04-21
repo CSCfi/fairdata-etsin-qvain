@@ -196,6 +196,30 @@ export const TransparentLink = styled(InvertedLink)`
   }
 `
 
+export const Prefix = styled.div`
+  background-color: ${p => p.theme.color.dark};
+  color: white;
+  font-weight: 700;
+  border-top-left-radius: 0.25em;
+  margin: 0;
+  border-bottom-left-radius: 0.25em;
+  padding: 0.5em 0.5em 0.4em 0.7em;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  min-width: 3rem;
+  min-height: 2.5rem;
+  button:hover &,
+  a:hover &,
+  &:hover {
+    background-color: ${props => props.theme.color.darker};
+  }
+
+  transition: 0.15s ease;
+`
+
 export default Button
 
 // PROPS
