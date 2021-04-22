@@ -110,6 +110,14 @@ export default class ComponentTestHarness {
     return this.wrapper.children()
   }
 
+  get state() {
+    return this.wrappers.root.state()
+  }
+
+  setState = newState => {
+    this.wrappers.root.setState(newState)
+  }
+
   trigger = (eventType, event) => {
     this.wrapper.simulate(eventType, event)
   }
