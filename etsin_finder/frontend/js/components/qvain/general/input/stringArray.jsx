@@ -1,14 +1,14 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef } from 'react'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import CreatableSelect from 'react-select/creatable'
 import { components } from 'react-select'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import translate from 'counterpart'
 import { AddNewButton } from '../buttons'
 
 import ValidationError from '../errors/validationError'
+import { useStores } from '../../../../stores/stores'
 
 const createOption = label => ({
   label,
@@ -29,76 +29,28 @@ const customComponents = {
   Input,
 }
 
-const StringArray = ({
-  id,
-  itemStr,
-  addItemStr,
-  setItemStr,
-  itemSchema,
-  value,
-  set,
-  schema,
-  addWithComma,
-  translationsRoot,
-  readonly,
-  validationError,
-  setValidationError,
-  required,
-}) => {
-  const [changed, setChanged] = useState()
+const StringArray = ({ id, fieldName, addWithComma, required }) => {
+  const {
+    Qvain: { [fieldName]: Field },
+  } = useStores()
+
+  const {
+    itemStr,
+    addItemStr,
+    setItemStr,
+    validateStr,
+    storage: value,
+    set,
+    translationsRoot,
+    validate,
+    validationError,
+    readonly,
+  } = Field
+
   const selectRef = useRef()
 
-  const validateArray = (justChangedTo = null) => {
-    if (!justChangedTo) {
-      if (justChangedTo === false || !changed) {
-        setValidationError(null)
-        return true
-      }
-    }
-
-    try {
-      if (schema) {
-        schema.validateSync(value)
-      }
-      setValidationError(null)
-      return true
-    } catch (err) {
-      setValidationError(err.message)
-      return false
-    }
-  }
-
-  const validateItemStr = () => {
-    if (!changed || !itemStr) {
-      setValidationError(null)
-      return true
-    }
-
-    try {
-      if (value.includes(itemStr)) {
-        throw new Error(translate(`${translationsRoot}.alreadyAdded`))
-      }
-      if (itemSchema) {
-        itemSchema.validateSync(itemStr)
-      }
-      return true
-    } catch (err) {
-      setValidationError(err.message)
-      return false
-    }
-  }
-
   const validateAndAdd = () => {
-    if (changed && itemStr && validateItemStr()) {
-      addItemStr()
-      validateArray()
-    }
-  }
-
-  const validate = () => {
-    if (validateItemStr()) {
-      validateArray()
-    }
+    if (validateStr()) addItemStr()
   }
 
   const focusInput = () => {
@@ -117,7 +69,6 @@ const StringArray = ({
     // prevent blur from clearing the input
     if (meta.action !== 'input-blur' && meta.action !== 'menu-close') {
       setItemStr(str)
-      setChanged(true)
     }
   }
 
@@ -130,8 +81,8 @@ const StringArray = ({
 
   const handleArrayChange = updatedOptions => {
     set((updatedOptions || []).map(opt => opt.value))
-    setChanged(true)
-    validateArray(true)
+
+    validate()
   }
 
   const options = value.map(createOption)
@@ -170,27 +121,14 @@ const StringArray = ({
 
 StringArray.propTypes = {
   id: PropTypes.string,
-  itemStr: PropTypes.string.isRequired,
-  addItemStr: PropTypes.func.isRequired,
-  setItemStr: PropTypes.func.isRequired,
-  itemSchema: PropTypes.object,
-  value: PropTypes.arrayOf(PropTypes.string).isRequired,
-  set: PropTypes.func.isRequired,
-  schema: PropTypes.object,
+  fieldName: PropTypes.string.isRequired,
   addWithComma: PropTypes.bool,
-  readonly: PropTypes.bool,
-  translationsRoot: PropTypes.string.isRequired,
-  validationError: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
-  setValidationError: PropTypes.func.isRequired,
   required: PropTypes.bool,
 }
 
 StringArray.defaultProps = {
   id: undefined,
-  itemSchema: null,
-  schema: null,
   addWithComma: false,
-  readonly: false,
   required: false,
 }
 

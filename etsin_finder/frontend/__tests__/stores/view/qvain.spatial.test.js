@@ -98,7 +98,7 @@ describe('Spatials store', () => {
           const expectedArray = [
             {
               geographic_name: '',
-              alt: 0,
+              alt: '',
               full_address: '',
               as_wkt: ['value'],
               place_uri: { identifier: 'url' },

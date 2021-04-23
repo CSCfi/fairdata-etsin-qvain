@@ -1,4 +1,5 @@
 import ReferenceField from '../../../js/stores/view/qvain/qvain.referenceField'
+import 'chai/register-expect'
 import 'chai/register-should'
 
 const testStr = 'testStr'
@@ -18,6 +19,9 @@ describe('ReferenceField', () => {
       mockStores = { setChanged: jest.fn(), readonly: readonlyValue }
       referenceField = new ReferenceField(mockStores)
       referenceField.reset()
+      referenceField.Schema = {
+        validate: () => Promise.resolve(),
+      }
     })
 
     afterEach(() => {
@@ -30,7 +34,7 @@ describe('ReferenceField', () => {
     })
 
     test('item should be undefined', () => {
-      expect(referenceField.item).toEqual(undefined)
+      expect(referenceField.item).to.be.undefined
     })
 
     test('itemStr should be empty string', () => {
@@ -52,7 +56,7 @@ describe('ReferenceField', () => {
       })
 
       test('should set changed to true', () => {
-        expect(mockStores.setChanged).toHaveBeenCalledWith(true)
+        expect(mockStores.setChanged).to.have.beenCalledWith(true)
       })
     })
 
@@ -67,7 +71,7 @@ describe('ReferenceField', () => {
       })
 
       test('should set changed to true', () => {
-        expect(mockStores.setChanged).toHaveBeenCalledWith(true)
+        expect(mockStores.setChanged).to.have.beenCalledWith(true)
       })
     })
 
@@ -81,7 +85,7 @@ describe('ReferenceField', () => {
       })
 
       test('setChanged should be called with true', () => {
-        expect(mockStores.setChanged).toHaveBeenCalledWith(true)
+        expect(mockStores.setChanged).to.have.beenCalledWith(true)
       })
     })
 
@@ -95,7 +99,7 @@ describe('ReferenceField', () => {
       })
 
       test('setChanged should be called with true', () => {
-        expect(mockStores.setChanged).toHaveBeenCalledWith(true)
+        expect(mockStores.setChanged).to.have.beenCalledWith(true)
       })
     })
 
@@ -145,7 +149,7 @@ describe('ReferenceField', () => {
       })
 
       test('setChanged should be called twice', () => {
-        expect(mockStores.setChanged).toHaveBeenCalledTimes(2)
+        expect(mockStores.setChanged).to.have.beenCalledTimes(2)
       })
     })
 
@@ -167,6 +171,86 @@ describe('ReferenceField', () => {
       test('should return mapped storage', () => {
         const expectedList = referenceField.toBackend()
         expectedList.should.have.members(expectedToBackendList)
+      })
+    })
+  })
+
+  describe('given itemStr that is not in storage', () => {
+    const storage = ['first']
+    const itemStr = 'second'
+
+    beforeEach(() => {
+      referenceField.storage = storage
+      referenceField.itemStr = itemStr
+    })
+
+    describe('when validation passes', () => {
+      describe('when calling validateStr', () => {
+        let returnValue
+        beforeEach(() => {
+          returnValue = referenceField.validateStr(itemStr)
+        })
+
+        test('should return true', () => {
+          returnValue.should.be.true
+        })
+      })
+
+      describe('when validation fails', () => {
+        const error = new Error('error')
+
+        beforeEach(() => {
+          referenceField.itemSchema = {
+            validate: () => {
+              throw error
+            },
+          }
+        })
+
+        describe('when calling validateStr', () => {
+          let returnValue
+          beforeEach(() => {
+            returnValue = referenceField.validateStr()
+          })
+
+          test('should set validationError error', () => {
+            //referenceField.validationError.should.eql(error.errors)
+          })
+
+          test('should return false', () => {
+            returnValue.should.be.false
+          })
+        })
+      })
+    })
+
+    describe('given itemStr that is in storage', () => {
+      const storage = ['first']
+      const itemStr = 'first'
+
+      beforeEach(() => {
+        referenceField.translationsRoot = 'field'
+        referenceField.itemSchema = {
+          validateSync: () => {},
+        }
+
+        referenceField.storage = storage
+        referenceField.itemStr = itemStr
+      })
+
+      describe('when calling validateStr', () => {
+        let returnValue
+        beforeEach(() => {
+          returnValue = referenceField.validateStr()
+        })
+
+        test('should set validationError with field.alreadyAdded', () => {
+          referenceField.validationError.should.eql('field.alreadyAdded')
+        })
+
+        test('should return false', () => {
+          returnValue.should.be.false
+        })
       })
     })
   })

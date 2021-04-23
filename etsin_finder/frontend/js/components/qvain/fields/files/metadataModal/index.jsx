@@ -183,7 +183,7 @@ export class MetadataModal extends Component {
   }
 
   validateMetadata = () => {
-    fileMetadataSchema.validate(this.state)
+    fileMetadataSchema.validate(this.state, { strict: true })
 
     // Additional validation for formatVersion
     const versions = this.state.formatVersionsMap[this.state.fileFormat] || []

@@ -314,17 +314,18 @@ class Actors {
     this.onSuccessfulCreationCallbacks = []
   }
 
+  @action
   editDataset = researchDataset => {
     // Load actors
     const actors = []
+    if ('creator' in researchDataset) {
+      researchDataset.creator.forEach(creator => actors.push(createActor(creator, [ROLE.CREATOR])))
+    }
     if ('publisher' in researchDataset) {
       actors.push(createActor(researchDataset.publisher, [ROLE.PUBLISHER]))
     }
     if ('curator' in researchDataset) {
       researchDataset.curator.forEach(curator => actors.push(createActor(curator, [ROLE.CURATOR])))
-    }
-    if ('creator' in researchDataset) {
-      researchDataset.creator.forEach(creator => actors.push(createActor(creator, [ROLE.CREATOR])))
     }
     if ('rights_holder' in researchDataset) {
       researchDataset.rights_holder.forEach(rightsHolder =>
@@ -551,6 +552,16 @@ class Actors {
     this.orphanActors = orphanActors
 
     return this.createLooseActorPromise()
+  }
+
+  otherActorsHaveRole = (actor, role) => {
+    const existingRoles = new Set(
+      this.actors
+        .filter(a => a.uiid !== actor.uiid)
+        .map(a => a.roles)
+        .flat()
+    )
+    return existingRoles.has(role)
   }
 
   toBackend = () =>

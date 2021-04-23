@@ -4,8 +4,8 @@ export default async Field => {
   const { inEdit, save, clearInEdit, setValidationError } = Field
 
   try {
-    await spatialNameSchema.validate(inEdit.name)
-    await spatialAltitudeSchema.validate(inEdit.altitude)
+    await spatialNameSchema.validate(inEdit.name, { strict: true })
+    await spatialAltitudeSchema.validate(inEdit.altitude, { strict: true })
   } catch (e) {
     setValidationError(e.message)
     return

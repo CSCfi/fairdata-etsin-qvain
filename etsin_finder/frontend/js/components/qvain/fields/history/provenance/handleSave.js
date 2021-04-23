@@ -8,10 +8,10 @@ export default async Field => {
   const { inEdit, save, clearInEdit, setValidationError } = Field
 
   try {
-    await provenanceNameSchema.validate(inEdit.name)
+    await provenanceNameSchema.validate(inEdit.name, { strict: true })
     if (inEdit.startDate || inEdit.endDate) {
-      await provenanceStartDateSchema.validate(inEdit.startDate)
-      await provenanceEndDateSchema.validate(inEdit.endDate)
+      await provenanceStartDateSchema.validate(inEdit.startDate, { strict: true })
+      await provenanceEndDateSchema.validate(inEdit.endDate, { strict: true })
     }
 
     if ((inEdit.name.fi || inEdit.name.en) && !inEdit.name.und) {
