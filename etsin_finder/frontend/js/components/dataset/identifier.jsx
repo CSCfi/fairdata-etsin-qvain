@@ -53,7 +53,7 @@ const Identifier = ({ idn }) => {
         <IDN id="idn-text">{text}</IDN>
       </IdnLink>
       <CopyToClipboard
-        content={idn}
+        content={url || idn}
         label="dataset.copy"
         tooltip="dataset.copyToClipboard"
         tooltipSuccess="dataset.copyToClipboardSuccess"
