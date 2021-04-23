@@ -34,6 +34,8 @@ const english = {
     citation: {
       sidebar: 'Citation / Reference',
       title: 'Cite dataset',
+      titleShort: 'Cite',
+      buttonTitle: 'Copy Citation/References',
       copyButton: 'Copy',
       copyButtonTooltip: 'Copy to clipboard',
       copyButtonTooltipSuccess: 'Citation copied to clipboard',
