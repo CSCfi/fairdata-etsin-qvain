@@ -8,7 +8,7 @@
 Two of the four Docker images are built (and can thus be edited) manually: webpack (frontend) and flask (backend)
 
 First, login:
-`docker login fairdata-docker.artifactory.ci.csc.fi`
+`docker login ci.fd-staging.csc.fi:5000`
 
 Then, the service specific images can be pushed (see below)
 
@@ -20,10 +20,10 @@ When there are updates to npm packages, you will need to build, tag, and push th
 - `docker build -f etsin_finder/frontend/webpack.dockerfile -t etsin-qvain-webpack etsin_finder/frontend`
 
 2 Tag image:
-- `docker tag etsin-qvain-webpack fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack`
+- `docker tag etsin-qvain-webpack ci.fd-staging.csc.fi:5000/fairdata-etsin-qvain-webpack`
 
 3 Push image:
-- `docker push fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack`
+- `docker push ci.fd-staging.csc.fi:5000/fairdata-etsin-qvain-webpack`
 
 ## Updating etsin-qvain-flask
 
@@ -33,10 +33,10 @@ When there are updates to python packages, you will need to build, tag, and push
 - `docker build -f flask.dockerfile -t etsin-qvain-flask .`
 
 2 Tag image:
-- `docker tag etsin-qvain-flask fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask`
+- `docker tag etsin-qvain-flask ci.fd-staging.csc.fi:5000/fairdata-etsin-qvain-flask`
 
 3 Push image:
-- `docker push fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask`
+- `docker push ci.fd-staging.csc.fi:5000/fairdata-etsin-qvain-flask`
 
 ## Running syntax checks
 
