@@ -9,7 +9,7 @@ import { observer } from 'mobx-react'
 import { useStores } from '../../../../stores/stores'
 import IconButton from '../common/iconButton'
 
-const ResourceItem = ({ resource }) => {
+const ResourceItem = ({ resource, hideAccess, noButtons }) => {
   const {
     Locale: { getValueTranslation },
   } = useStores()
@@ -20,9 +20,11 @@ const ResourceItem = ({ resource }) => {
         <ResourceIcon resource={resource} />
         {getValueTranslation(resource.title)}
       </Name>
-      <Category>{getValueTranslation(resource.use_category?.pref_label)}</Category>
+      <Category noButtons={noButtons}>
+        {getValueTranslation(resource.use_category?.pref_label)}
+      </Category>
 
-      {resource.access_url && (
+      {resource.access_url && !hideAccess && (
         <LinkButtonColumn>
           <Translate
             component={LinkButton}
@@ -47,6 +49,13 @@ const ResourceItem = ({ resource }) => {
 
 ResourceItem.propTypes = {
   resource: PropTypes.object.isRequired,
+  hideAccess: PropTypes.bool,
+  noButtons: PropTypes.bool,
+}
+
+ResourceItem.defaultProps = {
+  hideAccess: false,
+  noButtons: false,
 }
 
 export const Name = styled.span`
@@ -61,9 +70,14 @@ export const Category = styled.div`
   grid-column: 2/3;
   width: max-content;
 
-  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+  ${p => p.noButtons && 'justify-self: end; '}
+
+  ${p =>
+    !p.noButtons &&
+    `
+  @media (max-width: ${p.theme.breakpoints.sm}) {
     display: none;
-  }
+  }`}
 `
 
 const ResourceIcon = styled(FontAwesomeIcon).attrs({

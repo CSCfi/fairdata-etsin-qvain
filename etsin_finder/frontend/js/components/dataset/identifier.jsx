@@ -14,7 +14,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Link } from '../general/button'
+import { Link, Prefix } from '../general/button'
 import idnToLink from '../../utils/idnToLink'
 import CopyToClipboard from './copyToClipboard'
 
@@ -53,7 +53,7 @@ const Identifier = ({ idn }) => {
         <IDN id="idn-text">{text}</IDN>
       </IdnLink>
       <CopyToClipboard
-        content={idn}
+        content={url || idn}
         label="dataset.copy"
         tooltip="dataset.copyToClipboard"
         tooltipSuccess="dataset.copyToClipboardSuccess"
@@ -89,24 +89,6 @@ const IdnLink = styled(Link)`
   &:active {
     transition: 0.1s ease;
     box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.7) inset;
-  }
-`
-
-const Prefix = styled.div`
-  background-color: #4f4f4f;
-  color: white;
-  font-weight: 700;
-  border-top-left-radius: 0.25em;
-  margin: 0;
-  border-bottom-left-radius: 0.25em;
-  padding: 0.5em 0.5em 0.4em 0.7em;
-  align-self: stretch;
-  display: flex;
-  align-items: center;
-  text-transform: uppercase;
-  min-width: max-content;
-  &:hover {
-    background-color: ${props => props.theme.color.dark};
   }
 `
 

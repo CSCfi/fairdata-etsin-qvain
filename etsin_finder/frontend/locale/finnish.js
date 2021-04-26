@@ -33,7 +33,9 @@ const finnish = {
     catalog_publisher: 'Katalogin julkaisija',
     citation: {
       sidebar: 'Sitaatti / Lähdeviite',
+      buttonTitle: 'Kopioi Sitaatti/Lähdeviite',
       title: 'Viittaa aineistoon',
+      titleShort: 'Viittaa',
       copyButton: 'Kopioi',
       copyButtonTooltip: 'Kopioi leikepöydälle',
       copyButtonTooltipSuccess: 'Viittaus kopioitu leikepöydälle',
