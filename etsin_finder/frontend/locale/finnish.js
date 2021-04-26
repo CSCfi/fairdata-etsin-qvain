@@ -336,13 +336,6 @@ const finnish = {
     language: {
       toggleLabel: 'Vaihda kieltä: %(otherLang)s',
     },
-    cookies: {
-      section: 'Evästeiden hyväksyminen',
-      close: 'Sulje',
-      infoText:
-        'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
-      link: 'Katso Fairdatan tietosuojakäytäntö',
-    },
   },
   home: {
     title: 'Etsi aineistoa',

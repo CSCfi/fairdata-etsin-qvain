@@ -338,12 +338,6 @@ const english = {
     language: {
       toggleLabel: 'Switch language to: %(otherLang)s',
     },
-    cookies: {
-      section: 'Cookie notification',
-      close: 'Close',
-      infoText: 'The Fairdata services use cookies and tracking to ensure security and quality.',
-      link: 'View the Fairdata Privacy Policy',
-    },
   },
   home: {
     title: 'Search datasets',
