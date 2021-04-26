@@ -14,5 +14,5 @@ app = create_app()
 
 if os.environ['FLASK_ENV'] == 'development':
     app.run(host='0.0.0.0')
-else:
+elif __name__ == "__main__":
     app.run()
