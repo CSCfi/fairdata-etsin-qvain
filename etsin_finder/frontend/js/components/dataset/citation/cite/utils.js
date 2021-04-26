@@ -1,6 +1,7 @@
 import moment from 'moment'
+import idnToLink from '../../../../utils/idnToLink'
 
-const topOrg = (org) => {
+const topOrg = org => {
   if (org.is_part_of) {
     return topOrg(org.is_part_of)
   }
@@ -20,7 +21,7 @@ const romanNumeralMatch = /^(((IX|IV|V)I{0,3})|I{1,3})$/
 
 const toInitial = name => `${name[0]}.`
 
-export const getNameParts = (name) => {
+export const getNameParts = name => {
   const parts = name.split(' ')
   if (parts.length === 1) {
     return { first: [], last: [parts[0]], suffixes: [] }
@@ -38,7 +39,7 @@ export const getNameParts = (name) => {
 
   let isFirst = true
   parts.forEach((part, idx) => {
-    if ((idx === parts.length - 1) || startsWithLowerCase(part) || lastnameParts.includes(part)) {
+    if (idx === parts.length - 1 || startsWithLowerCase(part) || lastnameParts.includes(part)) {
       isFirst = false
     }
     if (isFirst) {
@@ -51,37 +52,23 @@ export const getNameParts = (name) => {
   return {
     first,
     last,
-    suffixes
+    suffixes,
   }
 }
 
-export const getNameInitials = (name) => {
-  const {
-    first,
-    last,
-    suffixes
-  } = getNameParts(name)
+export const getNameInitials = name => {
+  const { first, last, suffixes } = getNameParts(name)
 
-  const components = [
-    last.join(' '),
-    first.map(toInitial).join(' '),
-    suffixes.join(' '),
-  ].filter(v => v)
+  const components = [last.join(' '), first.map(toInitial).join(' '), suffixes.join(' ')].filter(
+    v => v
+  )
   return components.join(', ')
 }
 
-export const getLastnameFirst = (name) => {
-  const {
-    first,
-    last,
-    suffixes
-  } = getNameParts(name)
+export const getLastnameFirst = name => {
+  const { first, last, suffixes } = getNameParts(name)
 
-  const components = [
-    last.join(' '),
-    first.join(' '),
-    suffixes.join(' '),
-  ].filter(v => v)
+  const components = [last.join(' '), first.join(' '), suffixes.join(' ')].filter(v => v)
   return components.join(', ')
 }
 
@@ -120,35 +107,35 @@ export const getAuthorsFull = (dataset, getTranslation, etAlThreshold, etAlCount
   return authors
 }
 
-export const addParens = (string) => {
+export const addParens = string => {
   if (string === undefined) {
     return undefined
   }
   return `(${string})`
 }
 
-export const addQuotes = (string) => {
+export const addQuotes = string => {
   if (string === undefined) {
     return undefined
   }
   return `”${string}”`
 }
 
-export const capitalizeFirst = (string) => {
+export const capitalizeFirst = string => {
   if (string === undefined) {
     return undefined
   }
   return `${string.charAt(0).toUpperCase()}${string.slice(1)}`
 }
 
-export const getInitial = (string) => {
+export const getInitial = string => {
   if (string === undefined) {
     return undefined
   }
   return `${string.charAt(0).toUpperCase()}.`
 }
 
-export const getYear = (dataset) => {
+export const getYear = dataset => {
   const issued = dataset.research_dataset.issued
   if (!issued) {
     return undefined
@@ -177,13 +164,14 @@ export const getVersion = (dataset, getTranslation) => {
   return getTranslation({ en: `Version ${version}`, fi: `versio ${version}` })
 }
 
-export const getIdentifier = (dataset, useDoiUrls) => {
+export const getIdentifier = dataset => {
   const identifier = dataset.research_dataset.preferred_identifier
   if (!identifier) {
     return undefined
   }
-  if (useDoiUrls && identifier.startsWith('doi:')) {
-    return identifier.replace('doi:', 'https://doi.org/')
+  const url = idnToLink(identifier)
+  if (url) {
+    return url
   }
   if (dataset.draft_of) {
     return dataset.draft_of.preferred_identifier
@@ -194,4 +182,5 @@ export const getIdentifier = (dataset, useDoiUrls) => {
   return identifier
 }
 
-export const getPublisher = (dataset, getTranslation) => getTranslation(dataset.research_dataset.publisher?.name)
+export const getPublisher = (dataset, getTranslation) =>
+  getTranslation(dataset.research_dataset.publisher?.name)
