@@ -34,11 +34,11 @@ import { StoresProvider } from './stores/stores'
 registerLocale('fi', fi)
 registerLocale('en', en)
 
-if (process.env.NODE_ENV === 'test') {
+if (BUILD === 'test') {
   console.log('We are in test')
-} else if (process.env.NODE_ENV === 'development') {
+} else if (BUILD === 'development') {
   console.log('We are in development')
-} else if (process.env.NODE_ENV !== 'production') {
+} else if (BUILD !== 'production') {
   console.log('Looks like we are in development mode!')
 }
 

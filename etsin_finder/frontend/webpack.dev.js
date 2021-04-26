@@ -1,12 +1,13 @@
-const env = require('dotenv').config()
+const dotenv = require('dotenv').config()
 const path = require('path')
+const { DefinePlugin } = require('webpack')
 const DotenvPlugin = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const { insertBeforeStyled } = require('./helpers')
 
-const config = {
+const config = env => ({
   entry: './js/index.jsx',
   output: {
     // path of output
@@ -68,15 +69,18 @@ const config = {
       template: 'static/index.template.ejs',
       favicon: 'static/images/favicon.png',
       /* scriptLoading: 'defer', */
-      MATOMO_URL: env.parsed ? env.parsed.MATOMO_URL : undefined,
-      MATOMO_SITE_ID: env.parsed ? env.parsed.MATOMO_SITE_ID : undefined,
+      MATOMO_URL: dotenv.parsed ? dotenv.parsed.MATOMO_URL : undefined,
+      MATOMO_SITE_ID: dotenv.parsed ? dotenv.parsed.MATOMO_SITE_ID : undefined,
     }),
     new DotenvPlugin(),
+    new DefinePlugin({
+      BUILD: JSON.stringify(env.BUILD || process.env.NODE_ENV || 'production'),
+    }),
   ],
   watchOptions: {
     aggregateTimeout: 300,
     poll: 1500,
     ignored: /node_modules/,
   },
-}
+})
 module.exports = config

@@ -148,7 +148,7 @@ class Dataset extends React.Component {
     if (customId !== undefined) {
       identifier = customId
     }
-    if (process.env.NODE_ENV === 'production' && /^\d+$/.test(identifier)) {
+    if (BUILD === 'production' && /^\d+$/.test(identifier)) {
       console.log('Using integer as identifier not permitted')
       this.setState({ error: 'wrong identifier', loaded: true })
       return
