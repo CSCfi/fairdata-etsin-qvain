@@ -1,7 +1,7 @@
 version: '3.8'
 services:
     etsin-qvain-webpack:
-      image: ci.fd-staging.csc.fi:5000/fairdata-etsin-qvain-webpack
+      image: fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack
       hostname: 'etsin-qvain-webpack'
       ports:
         - 8080:8080
@@ -12,7 +12,7 @@ services:
         - CHOKIDAR_USEPOLLING=true
         - base_url=0.0.0.0:8080
     etsin-qvain-flask:
-      image: ci.fd-staging.csc.fi:5000/fairdata-etsin-qvain-flask
+      image: fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask
       hostname: 'etsin-qvain-flask'
       configs:
         - source: etsin-qvain-app-config
