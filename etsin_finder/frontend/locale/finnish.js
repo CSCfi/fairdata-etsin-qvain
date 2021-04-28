@@ -33,7 +33,9 @@ const finnish = {
     catalog_publisher: 'Katalogin julkaisija',
     citation: {
       sidebar: 'Sitaatti / Lähdeviite',
+      buttonTitle: 'Kopioi Sitaatti/Lähdeviite',
       title: 'Viittaa aineistoon',
+      titleShort: 'Viittaa',
       copyButton: 'Kopioi',
       copyButtonTooltip: 'Kopioi leikepöydälle',
       copyButtonTooltipSuccess: 'Viittaus kopioitu leikepöydälle',
@@ -333,13 +335,6 @@ const finnish = {
     },
     language: {
       toggleLabel: 'Vaihda kieltä: %(otherLang)s',
-    },
-    cookies: {
-      section: 'Evästeiden hyväksyminen',
-      close: 'Sulje',
-      infoText:
-        'Fairdata-palvelut käyttävät evästeitä ja seurantaa turvallisuuden ja laadun varmistamiseksi.',
-      link: 'Katso Fairdatan tietosuojakäytäntö',
     },
   },
   home: {

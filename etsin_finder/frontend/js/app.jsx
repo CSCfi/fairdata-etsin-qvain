@@ -23,6 +23,7 @@ import Layout from './layout'
 import browserHistory from './browserHistory'
 
 import '../fairdata-ui/footer.css'
+import '../fairdata-ui/notification.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import etsinTheme from './styles/theme'
@@ -33,11 +34,11 @@ import { StoresProvider } from './stores/stores'
 registerLocale('fi', fi)
 registerLocale('en', en)
 
-if (process.env.NODE_ENV === 'test') {
+if (BUILD === 'test') {
   console.log('We are in test')
-} else if (process.env.NODE_ENV === 'development') {
+} else if (BUILD === 'development') {
   console.log('We are in development')
-} else if (process.env.NODE_ENV !== 'production') {
+} else if (BUILD !== 'production') {
   console.log('Looks like we are in development mode!')
 }
 

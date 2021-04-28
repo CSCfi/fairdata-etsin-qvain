@@ -17,7 +17,7 @@ import Agent from '../agent'
 import Project from './special/project'
 import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
 import { withStores } from '../../../stores/stores'
-import Button from '../../general/button'
+import CitationButton from '../citation/citationButton'
 import FlaggedComponent from '../../general/flaggedComponent'
 
 class Sidebar extends Component {
@@ -198,6 +198,12 @@ class Sidebar extends Component {
               }
             </SidebarItem>
 
+            <FlaggedComponent flag="UI.CITATION">
+              <SidebarItem trans="dataset.citation.titleShort" lineAfter>
+                <CitationButton setShowCitationModal={setShowCitationModal} />
+              </SidebarItem>
+            </FlaggedComponent>
+
             {/* FIELD OF SCIENCE */}
 
             <SidebarItem trans="dataset.field_of_science" fallback="Field of Science">
@@ -367,17 +373,16 @@ class Sidebar extends Component {
 
             {/* CITATION */}
 
-            <SidebarItem trans="dataset.citation.sidebar">
-              {!harvested && (
-                <FlaggedComponent flag="UI.CITATION_MODAL" whenDisabled={<Citation />}>
-                  <Translate
-                    content="dataset.citation.title"
-                    component={CitationButton}
-                    onClick={() => setShowCitationModal(true)}
-                  />
-                </FlaggedComponent>
-              )}
-            </SidebarItem>
+            {!harvested && (
+              <FlaggedComponent
+                flag="UI.CITATION"
+                whenDisabled={
+                  <SidebarItem trans="dataset.citation.sidebar">
+                    <Citation />
+                  </SidebarItem>
+                }
+              />
+            )}
           </dl>
         </ErrorBoundary>
       </SidebarContainer>
@@ -389,10 +394,6 @@ Sidebar.propTypes = {
   dataset: PropTypes.object.isRequired,
   Stores: PropTypes.object.isRequired,
 }
-
-const CitationButton = styled(Button)`
-  margin: 0;
-`
 
 const SidebarContainer = styled.div`
   border: 2px solid rgb(231, 233, 237);
