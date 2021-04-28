@@ -9,6 +9,7 @@
 
 from flask import Blueprint, make_response, render_template, render_template_string, request, session, current_app
 import requests
+import os
 
 from etsin_finder.auth.authentication import is_authenticated
 from etsin_finder.auth.authentication_direct_proxy import is_authenticated_through_direct_proxy
@@ -50,8 +51,9 @@ def frontend_app(path):
 
     """
     # If using webpack dev server, proxy requests through it
-    if current_app.config.get('WEBPACK_DEV_PROXY'):
-        return webpack_dev_proxy("http://localhost:8080", request.path)
+    webpack_proxy_url = current_app.config.get('WEBPACK_DEV_PROXY')
+    if webpack_proxy_url:
+        return webpack_dev_proxy(webpack_proxy_url, request.path)
 
     # Check if URL endpoint force enabling SSO has been visited
     sso_enabled_through_url = request.args.get('sso_authentication', default='false', type=str)
