@@ -349,6 +349,10 @@ const GlobalStyle = createGlobalStyle`
     clip: rect(0 0 0 0);
     overflow: hidden;
   }
+
+  .notification-banner {
+    visibility: visible;
+  }
 `
 
 export default GlobalStyle

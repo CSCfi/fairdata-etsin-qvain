@@ -17,11 +17,12 @@ const FlaggedComponent = ({ flag, children, whenDisabled }) => {
 
 FlaggedComponent.propTypes = {
   flag: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   whenDisabled: PropTypes.element,
 }
 
 FlaggedComponent.defaultProps = {
+  children: null,
   whenDisabled: null,
 }
 

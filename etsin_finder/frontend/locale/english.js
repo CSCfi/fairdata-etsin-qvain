@@ -34,6 +34,8 @@ const english = {
     citation: {
       sidebar: 'Citation / Reference',
       title: 'Cite dataset',
+      titleShort: 'Cite',
+      buttonTitle: 'Copy Citation/References',
       copyButton: 'Copy',
       copyButtonTooltip: 'Copy to clipboard',
       copyButtonTooltipSuccess: 'Citation copied to clipboard',
@@ -335,12 +337,6 @@ const english = {
     },
     language: {
       toggleLabel: 'Switch language to: %(otherLang)s',
-    },
-    cookies: {
-      section: 'Cookie notification',
-      close: 'Close',
-      infoText: 'The Fairdata services use cookies and tracking to ensure security and quality.',
-      link: 'View the Fairdata Privacy Policy',
     },
   },
   home: {
