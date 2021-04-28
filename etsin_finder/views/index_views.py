@@ -51,11 +51,9 @@ def frontend_app(path):
 
     """
     # If using webpack dev server, proxy requests through it
-    if current_app.config.get('WEBPACK_DEV_PROXY'):
-        if os.environ.get('FLASK_ENV') == 'development':
-            return webpack_dev_proxy("http://etsin-qvain-webpack:8080", request.path)
-        else:
-            return webpack_dev_proxy("http://localhost:8080", request.path)
+    webpack_proxy_url = current_app.config.get('WEBPACK_DEV_PROXY')
+    if webpack_proxy_url:
+        return webpack_dev_proxy(webpack_proxy_url, request.path)
 
     # Check if URL endpoint force enabling SSO has been visited
     sso_enabled_through_url = request.args.get('sso_authentication', default='false', type=str)
