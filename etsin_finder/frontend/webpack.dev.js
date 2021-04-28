@@ -11,22 +11,23 @@ const config = env => ({
   entry: './js/index.jsx',
   output: {
     // path of output
-    path: path.resolve(__dirname, './build'),
-    // publicPath is used in dynamic chunk loading
-    publicPath: '/',
+    path: path.join(__dirname, '/build'),
+    publicPath: '/', // Needed in order to access frontend from nginx
     filename: 'bundle.[contenthash].js',
     chunkFilename: '[name].[chunkhash].js',
   },
   devtool: 'source-map',
   devServer: {
-    publicPath: '/',
-    contentBase: './static',
-    public: 'etsin-local.fd-test.csc.fi/',
-    disableHostCheck: true,
+    host: '0.0.0.0', // Default IP (Docker)
+    // inline: true,
+    publicPath: '/', // This needs to be set for devServer
+    contentBase: '/static/',
+    public: '0.0.0.0', // Needs to be specified without port, for connection from sockjs-node (nginx)
+    disableHostCheck: true, // Should be enabled when running inside a container
     hot: true,
     historyApiFallback: true,
     clientLogLevel: 'silent',
-    port: 8080,
+    port: 8080, // This is the port where webpack is available
     writeToDisk: false,
     watchOptions: {
       aggregateTimeout: 300,
