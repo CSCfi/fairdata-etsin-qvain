@@ -7,7 +7,7 @@
 
 """Handles authentication related routes."""
 
-from urllib.parse import quote, unquote, urljoin
+from urllib.parse import quote, unquote, urljoin, urlencode
 
 from flask import Blueprint, current_app, make_response, redirect, request, session
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
@@ -21,8 +21,35 @@ from etsin_finder.auth.authentication_fairdata_sso import \
     join_redirect_url_path
 from etsin_finder.log import log
 from etsin_finder.views.index_views import _render_index_template
+from etsin_finder.utils.localization import get_language
 
 auth_views = Blueprint('auth_views', __name__)
+
+def sso_login_url(service):
+    """Get SSO login url for service"""
+    app_config = current_app.config
+    login_host = app_config.get('SSO').get('HOST')
+    sso_redirect_url = app_config.get(f'SERVER_{service}_DOMAIN_NAME')
+    query = urlencode({
+        'service': service,
+        'redirect_url': f'https://{sso_redirect_url}',
+        'language': get_language(),
+    })
+    login_url = f'{login_host}/login?{query}'
+    return login_url
+
+def sso_logout_url(service):
+    """Get SSO logout url for service"""
+    app_config = current_app.config
+    logout_host = app_config.get('SSO').get('HOST')
+    sso_redirect_url = app_config.get(f'SERVER_{service}_DOMAIN_NAME')
+    query = urlencode({
+        'service': service,
+        'redirect_url': f'https://{sso_redirect_url}',
+        'language': get_language(),
+    })
+    logout_url = f'{logout_host}/logout?{query}'
+    return logout_url
 
 @auth_views.route('/login/etsin')
 def login_etsin():
@@ -40,9 +67,7 @@ def login_etsin():
 
     if sso_is_enabled:
         log.info('SSO is enabled, logging in to Etsin using SSO')
-        login_host = app_config.get('SSO').get('HOST')
-        sso_redirect_url = app_config.get('SERVER_ETSIN_DOMAIN_NAME')
-        login_url = login_host + '/login?service=ETSIN&redirect_url=https://' + sso_redirect_url
+        login_url = sso_login_url('ETSIN')
     elif not sso_is_enabled:
         log.info('SSO is disabled, logging in to Etsin using SAML auth')
         auth = get_saml_auth(request, '_ETSIN')
@@ -68,9 +93,7 @@ def login_qvain():
 
     if sso_is_enabled:
         log.info('SSO is enabled, logging in to Qvain using SSO')
-        login_host = app_config.get('SSO').get('HOST')
-        sso_redirect_url = app_config.get('SERVER_QVAIN_DOMAIN_NAME', '')
-        login_url = login_host + '/login?service=QVAIN&redirect_url=https://' + sso_redirect_url
+        login_url = sso_login_url('QVAIN')
     elif not sso_is_enabled:
         log.info('SSO is disabled, logging in to Qvain using SAML auth')
         auth = get_saml_auth(request, '_QVAIN')
@@ -95,10 +118,7 @@ def logout_etsin():
 
     if sso_is_enabled:
         log.info('SSO is enabled, logging out from Etsin using SSO')
-        logout_host = app_config.get('SSO').get('HOST')
-        sso_redirect_url = app_config.get('SERVER_ETSIN_DOMAIN_NAME')
-        logout_url = logout_host + '/logout?service=ETSIN&redirect_url=https://' + sso_redirect_url
-
+        logout_url = sso_logout_url('ETSIN')
         resp = make_response(redirect(logout_url))
 
         # Delete forced SSO cookie
@@ -135,10 +155,7 @@ def logout_qvain():
 
     if sso_is_enabled:
         log.info('SSO is enabled, logging out from Qvain using SSO')
-        logout_host = app_config.get('SSO').get('HOST')
-        sso_redirect_url = app_config.get('SERVER_QVAIN_DOMAIN_NAME', '')
-        logout_url = logout_host + '/logout?service=QVAIN&redirect_url=https://' + sso_redirect_url
-
+        logout_url = sso_logout_url('QVAIN')
         resp = make_response(redirect(logout_url))
 
         # Delete forced SSO cookie

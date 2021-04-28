@@ -28,6 +28,7 @@ from etsin_finder.utils.contact_utils import \
     validate_send_message_request
 from etsin_finder.log import log
 from etsin_finder.utils.flags import get_supported_flags
+from etsin_finder.utils.localization import get_language, set_language
 
 from etsin_finder.utils.utils import \
     sort_array_of_obj_by_key, \
@@ -438,6 +439,26 @@ class Session(Resource):
         """
         authentication_direct_proxy.reset_flask_session_on_logout()
         return not authentication.is_authenticated(), 200
+
+
+class Language(Resource):
+    """Language setting endpoints"""
+
+    @log_request
+    def get(self):
+        """Get current language"""
+        return {'language': get_language() }
+
+    @log_request
+    def post(self):
+        """Set language for current session"""
+        parser = reqparse.RequestParser()
+        parser.add_argument('language', type=str, required=True)
+        args = parser.parse_args()
+        language = args.get('language')
+        if set_language(language):
+            return '', 200
+        return 'Unsupported language', 404
 
 
 class Download(Resource):
