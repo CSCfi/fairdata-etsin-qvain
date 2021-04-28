@@ -127,7 +127,10 @@
       "./__tests__/__testdata__",
       "./__tests__/__utils__"
     ],
-    "testURL": "http://localhost"
+    "testURL": "http://localhost",
+    "globals": {
+      "BUILD": "test"
+    }
   },
   "prettier": {
     "function-paren-newline": false,
