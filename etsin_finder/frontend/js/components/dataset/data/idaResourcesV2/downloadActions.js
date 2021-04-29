@@ -1,8 +1,4 @@
-import {
-  faDownload,
-  faSpinner,
-  faCog,
-} from '@fortawesome/free-solid-svg-icons'
+import { faDownload, faSpinner, faCog } from '@fortawesome/free-solid-svg-icons'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../../utils/constants'
 import { downloadFile, downloadPackage } from './download'
@@ -36,10 +32,10 @@ const actionDownload = (datasetIdentifier, item, path, pack, Packages) => {
   }
 }
 
-const actionPending = () => ({
+const actionPending = (Packages, path) => ({
   ...actionDefaults,
   buttonLabel: 'dataset.dl.packages.pending',
-  tooltip: 'dataset.dl.packages.pendingTooltip',
+  func: () => Packages.openPackageModal(path),
   color: 'darkgray',
   icon: faSpinner,
   pending: true,
@@ -50,6 +46,7 @@ const actionPending = () => ({
 const actionLoading = () => ({
   ...actionPending(),
   buttonLabel: 'dataset.dl.packages.loading',
+  func: null,
   tooltip: null,
   pending: false,
   type: 'loading',
@@ -58,7 +55,7 @@ const actionLoading = () => ({
 const actionCreatePackage = (Packages, path) => ({
   ...actionDefaults,
   buttonLabel: 'dataset.dl.packages.create',
-  func: () => Packages.confirm(() => Packages.createPackageFromFolder(path)),
+  func: () => Packages.openPackageModal(path),
   icon: faCog,
   spin: false,
   type: 'create',
@@ -75,11 +72,13 @@ const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
   let action
   if (isFile || (pack && pack.status === DOWNLOAD_API_REQUEST_STATUS.SUCCESS)) {
     action = actionDownload(datasetIdentifier, item, path, pack, Packages)
-  } else if (pack && (
-    pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING ||
-    pack.status === DOWNLOAD_API_REQUEST_STATUS.STARTED ||
-    pack.requestingPackageCreation)) {
-    action = actionPending()
+  } else if (
+    pack &&
+    (pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING ||
+      pack.status === DOWNLOAD_API_REQUEST_STATUS.STARTED ||
+      pack.requestingPackageCreation)
+  ) {
+    action = actionPending(Packages, path)
   } else if (Packages.loadingDataset) {
     action = actionLoading()
   } else {

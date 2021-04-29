@@ -1,6 +1,6 @@
 # This file is part of the Etsin service
 #
-# Copyright 2017-2018 Ministry of Education and Culture, Finland
+# Copyright 2017-2021 Ministry of Education and Culture, Finland
 #
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
@@ -15,6 +15,7 @@ library for mocking the Download API endpoints.
 import json
 import pytest
 import requests
+from flask_mail import email_dispatched
 
 from .basetest import BaseTest
 
@@ -195,3 +196,73 @@ class TestDownloadResourcesAuthorize(BaseTest):
         requests_mock.post('https://mock-download:1/authorize', exc=requests.exceptions.ConnectTimeout)
         r = unauthd_client.post('/api/v2/dl/authorize', json={ 'cr_id': 1, 'package': 'x.zip'})
         assert r.status_code == 503
+
+
+class TestDownloadResourcesSubscriptions(BaseTest):
+    """Test Download API v2 /subscriptions endpoint"""
+
+    @pytest.fixture
+    def subscribe_mock(self, requests_mock):
+        """Helper fixture for mocking subscribe endpoint"""
+        return requests_mock.post('https://mock-download:1/subscribe', status_code=200)
+
+    def test_subscribe(self, authd_client, login_catalog_record, subscribe_mock):
+        """Subscribe to email notification"""
+        r = authd_client.post('/api/v2/dl/subscriptions', json={ 'email': 'email@example.com', 'cr_id': 1 })
+        assert r.status_code == 200
+        assert subscribe_mock.called
+
+    def test_subscribe_scope(self, authd_client, login_catalog_record, subscribe_mock):
+        """Subscribe to email notification with scope"""
+        r = authd_client.post('/api/v2/dl/subscriptions', json={ 'email': 'email@example.com', 'cr_id': 1, 'scope': ['/path'] })
+        assert r.status_code == 200
+        assert subscribe_mock.called
+
+    def test_subscribe_no_email(self, authd_client, login_catalog_record, subscribe_mock):
+        """Fail to subscribe to email notification, missing email"""
+        r = authd_client.post('/api/v2/dl/subscriptions', json={ 'cr_id': 1 })
+        assert r.status_code == 400
+
+    def test_subscribe_no_cr(self, authd_client, login_catalog_record, subscribe_mock):
+        """Fail to subscribe to email notification, missing dataset"""
+        r = authd_client.post('/api/v2/dl/subscriptions', json={ 'email': 'email@example.com' })
+        assert r.status_code == 400
+
+class TestDownloadResourcesNotifications(BaseTest):
+    """Test Download API v2 /notifications endpoint"""
+
+    @pytest.fixture
+    def subscribe_mock(self, requests_mock):
+        """Helper fixture for mocking subscribe endpoint"""
+        return requests_mock.post('https://mock-download:1/subscribe', status_code=200)
+
+    @pytest.fixture
+    def capture_mail(self, app):
+        """Keep track of sent emails"""
+        messages = []
+
+        def sent(message, app):
+            messages.append(message)
+        email_dispatched.connect(sent, weak=True)
+        yield messages # yield instead of return to keep signal alive until teardown
+
+    def test_notify(self, app, authd_client, login_catalog_record, subscribe_mock, capture_mail):
+        """Send email notification"""
+        authd_client.post('/api/v2/dl/subscriptions', json={ 'email': 'email@example.com', 'cr_id': 1 })
+        req_json = subscribe_mock.request_history[0].json()
+        notification = {'subscriptionData': req_json['subscriptionData']}
+
+        r = authd_client.post('/api/v2/dl/notifications', json=notification)
+        assert r.status_code == 200
+        assert len(capture_mail) == 1
+
+    def test_notify_fail(self, app, authd_client, login_catalog_record, subscribe_mock, capture_mail):
+        """Fail to send email notification, invalid subscriptionData"""
+        authd_client.post('/api/v2/dl/subscriptions', json={ 'email': 'email@example.com', 'cr_id': 1 })
+        req_json = subscribe_mock.request_history[0].json()
+
+        assert len(capture_mail) == 0
+        notification = {'subscriptionData': 'foof' + req_json['subscriptionData'][4:] }
+        r = authd_client.post('/api/v2/dl/notifications', json=notification)
+        assert r.status_code == 400
+        assert len(capture_mail) == 0

@@ -4,10 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="{{ app_description }}"
-    />
+    <meta name="description" content="{{ app_description }}" />
     <meta name="theme-color" content="#007FAD" />
     <link rel="manifest" href="/static/manifest.json" />
     <title>{{ app_title }}</title>
@@ -32,12 +29,19 @@
           transform: rotate(360deg);
         }
       }
+
+      .notification-banner {
+        visibility: hidden;
+      }
     </style>
 
     <meta name="fdwe-auto-disabled" content="true" />
     <meta name="fdwe-service" content="ETSIN" />
     <meta name="fdwe-scope" content="HOME" />
-    <script src='https://matomo.fd-test.csc.fi/fdwe.js'></script>
+    <script defer src="https://matomo.fd-test.csc.fi/fdwe.js"></script>
+    {% if sso_host -%}
+    <script defer src="{{ sso_host }}/notification.js"></script>
+    {% endif %}
   </head>
 
   <body>

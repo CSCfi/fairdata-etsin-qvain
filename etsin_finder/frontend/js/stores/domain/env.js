@@ -43,7 +43,7 @@ class Env {
     this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
     this.setQvainHost(values.SERVER_QVAIN_DOMAIN_NAME)
     this.Flags.setFlags(values.FLAGS)
-    if (process.env.NODE_ENV !== 'production') {
+    if (BUILD !== 'production') {
       await this.Flags.validateFlags()
     }
     this.setSSOCookieDomain(values.SSO_COOKIE_DOMAIN)

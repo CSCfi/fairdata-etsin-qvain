@@ -74,6 +74,12 @@ def _get_test_app_config():
             'PUBLIC_HOST': 'mock-download-public',
             'PUBLIC_PORT': 2,
         },
+        'METAX_API': {
+            'HOST': 'mock-metax',
+            'USER': 'etsin',
+            'PASSWORD': 'test-etsin',
+            'VERIFY_SSL': True,
+        },
         'METAX_QVAIN_API': {
             'HOST': 'mock-metax',
             'USER': 'qvain',
@@ -193,9 +199,6 @@ def get_metax_api_config(app=None):
         dict: Metax api configuration or None.
 
     """
-    if executing_travis():
-        return None
-
     app = ensure_app(app)
     metax_api_conf = app.config.get('METAX_API')
     if not metax_api_conf or not isinstance(metax_api_conf, dict):

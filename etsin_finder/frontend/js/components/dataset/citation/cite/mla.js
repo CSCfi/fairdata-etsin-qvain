@@ -18,7 +18,7 @@ const getCitation = (dataset, getTranslation) => {
         sep: ',',
         parts: [getPublisher(dataset, getTranslation), getYear(dataset)]
       },
-      getIdentifier(dataset, false),
+      getIdentifier(dataset),
     ]
   })
   return citation.get()

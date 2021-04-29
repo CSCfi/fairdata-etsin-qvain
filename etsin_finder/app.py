@@ -21,9 +21,15 @@ def add_download_v2_resources(api):
     from etsin_finder.resources.download_resources_v2 import (
         Requests,
         Authorize,
+        Subscriptions,
+        Notifications
     )
     api.add_resource(Requests, '/api/v2/dl/requests', endpoint="dl_requests")
     api.add_resource(Authorize, '/api/v2/dl/authorize', endpoint="dl_download")
+
+    if flag_enabled('DOWNLOAD_API_V2.EMAIL.BACKEND', api.app):
+        api.add_resource(Subscriptions, '/api/v2/dl/subscriptions', endpoint="dl_subscriptions")
+        api.add_resource(Notifications, '/api/v2/dl/notifications', endpoint="dl_notifications")
 
 
 def add_restful_resources(app):
@@ -41,6 +47,7 @@ def add_restful_resources(app):
         V2Dataset,
         DatasetMetadata,
         User,
+        Language,
         Session,
         Files,
         Download,
@@ -115,6 +122,7 @@ def add_restful_resources(app):
     api.add_resource(Files, '/api/files/<id:cr_id>')
     api.add_resource(Contact, '/api/email/<id:cr_id>')
     api.add_resource(User, '/api/user')
+    api.add_resource(Language, '/api/language')
     api.add_resource(Session, '/api/session')
     api.add_resource(Download, '/api/dl')
     api.add_resource(AppConfig, '/api/app_config')
@@ -171,12 +179,13 @@ def validate_config(app):
         cr_service_v2.MetaxAPIService(app)
         download_metadata_service.DatasetMetadataService(app)
         download_service.DownloadAPIService(app)
-        download_service_v2.DownloadAPIService(app)
+        download_service_v2.DownloadAPIService(app).validate_config(False)
 
         # Services that use app context
         common_service_v2.MetaxCommonAPIService().validate_config(False)
         qvain_service.MetaxQvainAPIService().validate_config(False)
         qvain_service_v2.MetaxQvainAPIServiceV2().validate_config(False)
+    app.logger.info("Done validating")
 
 
 def _setup_app_logging(app):

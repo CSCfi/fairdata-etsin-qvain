@@ -11,7 +11,7 @@ const getCitation = (dataset, getTranslation) => {
       addQuotes(getTitle(dataset, getTranslation)),
       capitalizeFirst(getVersion(dataset, getTranslation)),
       getPublisher(dataset, getTranslation),
-      getIdentifier(dataset, true),
+      getIdentifier(dataset),
     ]
   })
   return citation.get()
