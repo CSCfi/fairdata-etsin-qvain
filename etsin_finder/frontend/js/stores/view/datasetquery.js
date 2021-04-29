@@ -54,7 +54,7 @@ class DatasetQuery {
 
   async fetchPackages() {
     const { downloadApiV2 } = this.Env
-    if (!downloadApiV2 || !this.results) {
+    if (!downloadApiV2 || !this.results || !access.restrictions?.allowDataIdaDownloadButton) {
       return
     }
 

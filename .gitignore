@@ -8,13 +8,26 @@ __pycache__
 *.egg-info
 .eggs
 .coverage
+.env
+
+# VSCode settings
+*.vscode
+
+# MacOS-related
+*.DS_Store
+
+# NPM/Node-related
 etsin_finder/frontend/coverage
 etsin_finder/frontend/node_modules
 etsin_finder/frontend/npm-debug.log
-*.DS_Store
-node_modules/
-package-lock.json
 etsin_finder/frontend/jsconfig.json
 etsin_finder/frontend/build/
-*.vscode
-.env
+node_modules/
+package-lock.json
+
+# Docker-related
+app_config
+etsin_finder.log
+
+# Nginx
+nginx/certs/

@@ -8,10 +8,10 @@
  * @license   MIT
  */
 
+import axios from 'axios'
 import { observable, action, computed, makeObservable } from 'mobx'
 import counterpart from 'counterpart'
 import moment from 'moment'
-import { setCookieValue, getCookieValue } from '../../utils/cookies'
 
 const languages = ['en', 'fi']
 
@@ -47,6 +47,10 @@ class Locale {
 
   @observable languages = languages
 
+  @action.bound saveLanguage() {
+    return axios.post('/api/language', { language: this.currentLang })
+  }
+
   @action
   setLang = (lang, save = true) => {
     if (!languages.includes(lang)) {
@@ -57,7 +61,7 @@ class Locale {
     moment.locale(lang)
     document.documentElement.lang = this.currentLang
     if (save) {
-      setCookieValue(this.cookieDomain, this.cookieName, this.currentLang)
+      this.saveLanguage()
     }
   }
 
@@ -87,13 +91,8 @@ class Locale {
 
   @action
   loadLang = () => {
-    /* get language setting from cookie */
-    const storedLang = getCookieValue(this.cookieName)
-    if (storedLang) {
-      this.setLang(storedLang, false)
-    } else {
-      this.setLang(getInitialLanguage(), false)
-    }
+    // get initial language from document head
+    this.setLang(getInitialLanguage(), false)
   }
 
   getMatchingLang = values => {

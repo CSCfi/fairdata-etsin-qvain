@@ -5,6 +5,10 @@ class CitationBuilder {
 
   constructor(parts) {
     this.parts = parts
+    this.addPart = this.addPart.bind(this)
+    this.joinStrings = this.joinStrings.bind(this)
+    this.renderPart = this.renderPart.bind(this)
+    this.get = this.get.bind(this)
   }
 
   addPart(part, format = val => val) {

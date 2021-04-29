@@ -499,6 +499,30 @@ describe('Qvain.Files.DirectoryView', () => {
 
     expect(Qvain.changed).toBe(false)
   })
+
+  it('opens paths', async () => {
+    const view = Files.SelectedItemsView
+    const data = await Files.getItemByPath('/data')
+    const set1 = await Files.getItemByPath('/data/set1')
+    const subset = await Files.getItemByPath('/data/set1/subset')
+    const set2 = await Files.getItemByPath('/data/set2')
+    await view.openPaths(['/data/set1/subset', '/data/set2'], false)
+    expect(view.isOpen(data)).toBe(true)
+    expect(view.isOpen(set1)).toBe(true)
+    expect(view.isOpen(subset)).toBe(true)
+    expect(view.isOpen(set2)).toBe(true)
+  })
+
+  it('opens parents of paths', async () => {
+    const view = Files.SelectedItemsView
+    const data = await Files.getItemByPath('/data')
+    const set1 = await Files.getItemByPath('/data/set1')
+    const subset = await Files.getItemByPath('/data/set1/subset')
+    await view.openPaths(['/data/set1/subset'], true)
+    expect(view.isOpen(data)).toBe(true)
+    expect(view.isOpen(set1)).toBe(true)
+    expect(view.isOpen(subset)).toBe(false)
+  })
 })
 
 describe('Qvain.Files tree', () => {

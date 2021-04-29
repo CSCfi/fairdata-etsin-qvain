@@ -188,7 +188,6 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
     else:
         return cr
 
-
 def get_directory_data_for_catalog_record(cr_id, dir_id, file_fields, directory_fields):
     """Get data related to file/directory browsing view in the frontend.
 

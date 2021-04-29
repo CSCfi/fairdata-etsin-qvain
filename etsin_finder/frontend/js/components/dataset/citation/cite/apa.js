@@ -22,7 +22,7 @@ const getCitation = (dataset, getTranslation) => {
         }]
       },
       getPublisher(dataset, getTranslation),
-      getIdentifier(dataset, true),
+      getIdentifier(dataset),
     ]
   })
   return citation.get()

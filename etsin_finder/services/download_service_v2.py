@@ -9,15 +9,21 @@
 
 import requests
 import re
+import json
+import marshmallow
 
 from etsin_finder.utils.request_utils import make_request
+from etsin_finder.utils.crypto_utils import generate_fernet_key, dict_encrypt, dict_decrypt
 from etsin_finder.app_config import get_download_api_v2_config
 from etsin_finder.log import log
 from etsin_finder.utils.utils import FlaskService
+from .base_service import BaseService, ConfigValidationMixin
+from etsin_finder.schemas.services import DownloadServiceConfigurationSchema
 
-
-class DownloadAPIService(FlaskService):
+class DownloadAPIService(FlaskService, ConfigValidationMixin):
     """Download API Service"""
+
+    schema = DownloadServiceConfigurationSchema(unknown=marshmallow.RAISE)
 
     def __init__(self, app):
         """Setup Download API Service.
@@ -29,6 +35,7 @@ class DownloadAPIService(FlaskService):
         super().__init__(app)
 
         dl_api_config = get_download_api_v2_config(app)
+        self.config = dl_api_config
         if dl_api_config:
             host = dl_api_config.get('HOST')
             port = dl_api_config.get('PORT')
@@ -36,13 +43,19 @@ class DownloadAPIService(FlaskService):
             password = dl_api_config.get('PASSWORD')
             public_host = dl_api_config.get('PUBLIC_HOST')
             public_port = dl_api_config.get('PUBLIC_PORT')
+            verify_ssl = dl_api_config.get('VERIFY_SSL', True)
+            self_domain = app.config.get('SERVER_ETSIN_DOMAIN_NAME')
 
             self.API_BASE_URL = f'https://{host}:{port}'
             self.API_PUBLIC_BASE_URL = f'https://{public_host}:{public_port}'
             self.REQUESTS_URL = f'{self.API_BASE_URL}/requests'
             self.AUTHORIZE_URL = f'{self.API_BASE_URL}/authorize'
+            self.SUBSCRIBE_URL = f'{self.API_BASE_URL}/subscribe'
             self.DOWNLOAD_URL = f'{self.API_PUBLIC_BASE_URL}/download'
-            self.verify_ssl = True
+            self.NOTIFICATION_CALLBACK_URL = f'https://{self_domain}/api/v2/dl/notifications'
+            self.NOTIFICATION_SECRET = generate_fernet_key(app.config['SECRET_KEY'])
+
+            self.verify_ssl = verify_ssl
             self.auth = None
             if user or password:
                 self.auth = (user, password)
@@ -108,6 +121,25 @@ class DownloadAPIService(FlaskService):
             log.warning(f"Failed to create package for dataset {dataset} with scope {scope}")
         return resp, status
 
+    def subscribe(self, dataset, scope, payload):
+        """Subscribe to package generation notification"""
+        params = {
+            'dataset': dataset,
+            'subscriptionData': payload,
+            'notifyURL': self.NOTIFICATION_CALLBACK_URL
+        }
+        if scope:
+            params['scope'] = scope
+        args = self._get_args()
+        resp, status, success = make_request(requests.post,
+                                             self.SUBSCRIBE_URL,
+                                             json=params,
+                                             **args,
+                                             )
+        if not success:
+            log.warning(f"Failed to subscribe to package generation for {dataset} with scope {scope}")
+        return resp, status
+
     def authorize(self, dataset, file=None, package=None):
         """Authorize package or file download"""
         params = {
@@ -142,3 +174,11 @@ class DownloadAPIService(FlaskService):
 
         keyValues = '&'.join('='.join(item) for item in params.items())
         return f'{self.DOWNLOAD_URL}?{keyValues}'
+
+    def encode_notification(self, payload):
+        """Encode payload dictionary as json and encrypt it"""
+        return dict_encrypt(payload, self.NOTIFICATION_SECRET)
+
+    def decode_notification(self, encoded_payload):
+        """Decrypt payload and return it as dict"""
+        return dict_decrypt(encoded_payload, self.NOTIFICATION_SECRET)

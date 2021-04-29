@@ -13,7 +13,7 @@ import { buildStores } from '../../../../js/stores'
 import IdaResources from '../../../../js/components/dataset/data/idaResourcesV2/index'
 import FileTreeItem from '../../../../js/components/dataset/data/idaResourcesV2/fileTreeItem'
 import '../../../../locale/translations'
-import ConfirmPackageModal from '../../../../js/components/dataset/data/idaResourcesV2/confirmPackageModal.jsx'
+import PackageModal from '../../../../js/components/dataset/data/idaResourcesV2/packageModal'
 import etsinTheme from '../../../../js/styles/theme'
 import { get } from '../../../__testdata__/qvain.files.data'
 import dataset from '../../../__testdata__/dataset.ida'
@@ -55,13 +55,19 @@ class MockPackages {
 
   get = () => ({})
 
-  confirm = callback => {
-    this.confirmModalCallback = callback
+  packageModalPath = null
+
+  openPackageModal = path => {
+    this.packageModalPath = path
   }
 
   confirmModalCallback = null
 
   closeConfirmModal = () => {}
+
+  Notifications = {
+    email: 'email@example.com'
+  }
 }
 
 const getStores = () => {
@@ -104,7 +110,6 @@ describe('Qvain filepicker', () => {
 
   const render = async () => {
     cleanup()
-    // await loadDataset()
     await Files.loadAllDirectories()
 
     helper = document.createElement('div')
@@ -154,7 +159,7 @@ describe('Qvain filepicker', () => {
 
       const data = await getItem('data')
       data.find(DownloadButton).find('button').simulate('click')
-      modal = wrapper.find(ConfirmPackageModal).find(Modal)
+      modal = wrapper.find(PackageModal).find(Modal)
     })
 
     it('is open', async () => {
