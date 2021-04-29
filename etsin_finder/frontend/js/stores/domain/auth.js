@@ -151,18 +151,14 @@ class Auth {
 
   /* keepAlive component calls renewsession if user is active */
   @action
-  renewSession() {
-    return new Promise((resolve, reject) => {
-      axios
-        .get('/api/session')
-        .then(() => resolve())
-        .catch(err => {
-          if (err.response && err.response.status === 401) {
-            this.reset()
-          }
-          return reject(err)
-        })
-    })
+  async renewSession() {
+    try {
+      await axios.get('/api/session')
+    } catch (err) {
+      if (err?.response?.status === 401) {
+        this.reset()
+      }
+    }
   }
 }
 

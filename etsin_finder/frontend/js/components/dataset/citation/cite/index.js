@@ -5,6 +5,9 @@ import getMlaCitation from './mla'
 class Cite {
   constructor(getTranslation) {
     this.getTranslation = getTranslation
+    this.apa = this.apa.bind(this)
+    this.chicago = this.chicago.bind(this)
+    this.mla = this.mla.bind(this)
   }
 
   apa(dataset) {

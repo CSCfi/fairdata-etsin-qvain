@@ -21,6 +21,7 @@ export default {
     projectFiles: project => `/api/v2/common/projects/${project}/files`,
     fileCharacteristics: file => `/api/v2/qvain/files/${file}/file_characteristics`,
     packages: () => '/api/v2/dl/requests',
+    subscriptions: () => '/api/v2/dl/subscriptions',
     rpc: {
       changeCumulativeState: () => '/api/v2/rpc/datasets/change_cumulative_state',
       createNewVersion: () => '/api/v2/rpc/datasets/create_new_version',

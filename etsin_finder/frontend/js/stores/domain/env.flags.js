@@ -9,8 +9,15 @@
  */
 
 import axios from 'axios'
-import { action, makeObservable, observable, extendObservable, computed, runInAction, when } from 'mobx'
-
+import {
+  action,
+  makeObservable,
+  observable,
+  extendObservable,
+  computed,
+  runInAction,
+  when,
+} from 'mobx'
 
 //  Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'
 const lastPartRegex = /\.?[^.]*$/
@@ -22,13 +29,13 @@ const lastPartRegex = /\.?[^.]*$/
 const FLAG_SUPPORT = {
   FULL: 'full',
   PARTIAL: 'partial',
-  NO: undefined
+  NO: undefined,
 }
 
 class Flags {
   constructor() {
     makeObservable(this)
-    if (process.env.NODE_ENV !== 'production') {
+    if (BUILD !== 'production') {
       // Global flag helpers for front-end development. The functions do not modify
       // flags directly but instead the values are kept in the overrides object.
       // The values are stored in localStorage.
@@ -38,12 +45,14 @@ class Flags {
       //   resetFlags: reset flags to original values (clears overrides)
       //   cleanupFlags: reset flags that aren't supported
       extendObservable(this, {
-        overrides: {}
+        overrides: {},
       })
 
       // Apply existing overrides starting from shortest paths
       window.applyOverrides = () => {
-        const overridesList = Object.entries(JSON.parse(localStorage.getItem('flagOverrides')) || {})
+        const overridesList = Object.entries(
+          JSON.parse(localStorage.getItem('flagOverrides')) || {}
+        )
         overridesList.sort(([pathA], [pathB]) => pathA.split('.').length - pathB.split('.').length)
         overridesList.forEach(([path, value]) => this.setOverride(path, value))
       }
@@ -146,7 +155,7 @@ class Flags {
 
   @action setFlags(flags) {
     this.flags = flags
-    if (process.env.NODE_ENV !== 'production' && this.overrides && window.applyOverrides) {
+    if (BUILD !== 'production' && this.overrides && window.applyOverrides) {
       window.applyOverrides()
     }
   }
@@ -183,13 +192,13 @@ class Flags {
   }
 
   @computed get activeFlags() {
-    if (process.env.NODE_ENV !== 'production' && this.overrides) {
+    if (BUILD !== 'production' && this.overrides) {
       return { ...this.flags, ...this.overrides }
     }
     return this.flags
   }
 
-  flagEnabled = (flagPath) => {
+  flagEnabled = flagPath => {
     if (this.supportedFlags && this.validateFlagPath(flagPath) !== FLAG_SUPPORT.FULL) {
       console.warn(`flagEnabled called with unsupported flag: ${flagPath}`)
     }

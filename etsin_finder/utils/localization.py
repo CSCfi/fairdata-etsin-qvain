@@ -7,8 +7,8 @@
 
 """Language and translation utilities"""
 
-from flask import request
-from etsin_finder.auth.authentication_fairdata_sso import get_sso_environment_prefix
+from flask import request, session
+from etsin_finder.auth.authentication_fairdata_sso import get_sso_environment_prefix, get_decrypted_sso_session_details
 
 languages = ['en', 'fi']
 default_language = 'en'
@@ -22,24 +22,35 @@ locale_mapping = {
     'fi': 'fi',
 }
 
-def get_language_cookie():
-    """Get value of language cookie."""
-    env_prefix = get_sso_environment_prefix()
-    if env_prefix:
-        return request.cookies.get(f'{env_prefix}_fd_language')
-    else:
-        return request.cookies.get('fd_language')
+def set_language(language):
+    """
+    Set session language
+
+    Returns True if language is supported, otherwise False.
+    """
+    if language in languages:
+        session['language'] = language
+        return True
+    return False
 
 def get_language():
     """
     Get language for request.
 
-    Use value lang cookie if it is set. Otherwise determine
-    language from the accept-languages header.
+    Returns first found language in the following order
+    * Session language setting
+    * SSO language setting
+    * Accept-Languages request header
+    * Default language
     """
-    cookie_lang = get_language_cookie()
-    if cookie_lang in languages:
-        return cookie_lang
+    session_lang = session.get('language')
+    if session_lang in languages:
+        return session_lang
+
+    sso_session = get_decrypted_sso_session_details() or {}
+    sso_lang = sso_session.get('language')
+    if sso_lang in languages:
+        return sso_lang
 
     supported_locales = locale_mapping.keys()
     locale = request.accept_languages.best_match(supported_locales)
@@ -48,6 +59,8 @@ def get_language():
 
 translations = {
     'fi': {
+        'etsin.download.notification.subject': 'Paketti on ladattavissa Etsimestä',
+        'etsin.download.notification.body': 'Paketti kansiolle {folder} aineistossa {pref_id} on valmis ladattavaksi.\n\n{data_url}\n',
         'etsin.title': 'Etsin | Tutkimusaineistojen hakupalvelu',
         'etsin.description': ('Kuvailutietojen perusteella käyttäjät voivat etsiä aineistoja ja arvioida'
                               'löytämiensä aineistojen käyttökelpoisuutta tarpeisiinsa.'),
@@ -56,6 +69,8 @@ translations = {
                               'kuvailun ja julkaisemisen helpoksi.')
     },
     'en': {
+        'etsin.download.notification.subject': 'Package is ready for download in Etsin',
+        'etsin.download.notification.body': 'Package for {folder} in dataset {pref_id} is ready for download.\n\n{data_url}\n',
         'etsin.title': 'Etsin | Research Dataset Finder ',
         'etsin.description': 'Etsin enables you to find research datasets from all fields of science.',
         'qvain.title': 'Qvain | Research Dataset Description Tool',
@@ -63,12 +78,14 @@ translations = {
     }
 }
 
-def translate(lang, key):
+def translate(lang, key, context=None):
     """Return translation from the translations dict for a given language."""
+    if context is None:
+        context = {}
     lang_translations = translations.get(lang)
     if not lang_translations:
         return f'invalid language: {lang}' % lang
     translation = lang_translations.get(key)
     if not translation:
         return f'missing translation: {lang}.{key}'
-    return translation
+    return translation.format(**context)

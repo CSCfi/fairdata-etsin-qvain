@@ -7,8 +7,9 @@
 
 """Used for routing traffic from Flask to frontend."""
 
-from flask import Blueprint, make_response, render_template, request, session, current_app
+from flask import Blueprint, make_response, render_template, render_template_string, request, session, current_app
 import requests
+import os
 
 from etsin_finder.auth.authentication import is_authenticated
 from etsin_finder.auth.authentication_direct_proxy import is_authenticated_through_direct_proxy
@@ -30,9 +31,11 @@ def webpack_dev_proxy(host, path):
         for name, value in response.raw.headers.items()
         if name.lower() not in excluded_headers
     }
-    # if dev server responds with html, return the rendered index template instead
-    if headers.get('Content-Type') == 'text/html; charset=UTF-8':
-        return _render_index_template()
+    # if dev server responds with html, assume it's a html template
+    ok = response.status_code == 200
+    is_html = headers.get('Content-Type') == 'text/html; charset=UTF-8'
+    if ok and is_html:
+        return _render_index_template(template_string=response.text)
     return (response.content, response.status_code, headers)
 
 @index_views.route('/', defaults={'path': ''})
@@ -48,8 +51,9 @@ def frontend_app(path):
 
     """
     # If using webpack dev server, proxy requests through it
-    if current_app.config.get('WEBPACK_DEV_PROXY'):
-        return webpack_dev_proxy("http://localhost:8080", request.path)
+    webpack_proxy_url = current_app.config.get('WEBPACK_DEV_PROXY')
+    if webpack_proxy_url:
+        return webpack_dev_proxy(webpack_proxy_url, request.path)
 
     # Check if URL endpoint force enabling SSO has been visited
     sso_enabled_through_url = request.args.get('sso_authentication', default='false', type=str)
@@ -63,7 +67,7 @@ def frontend_app(path):
 
     return resp
 
-def _render_index_template(saml_errors=[], slo_success=False):
+def _render_index_template(saml_errors=[], slo_success=False, template_string=None):
     """Load saml attributes if logged in through old proxy, and log values
 
     Args:
@@ -89,4 +93,14 @@ def _render_index_template(saml_errors=[], slo_success=False):
         app_title = translate(lang, 'etsin.title')
         app_description = translate(lang, 'etsin.description')
 
-    return render_template('index.html', lang=lang, app_title=app_title, app_description=app_description)
+    sso_host = current_app.config.get('SSO', {}).get('HOST')
+    context = {
+        'lang': lang,
+        'app_title': app_title,
+        'app_description': app_description,
+        'sso_host': sso_host,
+    }
+    if template_string:
+        return render_template_string(template_string, **context)
+    else:
+        return render_template('index.html', **context)
