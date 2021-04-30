@@ -42,6 +42,24 @@ const organizationDataset = {
   identifier: 'metax_identifier_for_this_dataset',
 }
 
+const publisherSuborganizationDataset = {
+  research_dataset: {
+    creator: [{ name: { en: 'Creator', fi: 'Creator' } }],
+    publisher: {
+      name: { en: 'Suborganization', fi: 'Joku aliorganisaatio' },
+      '@type': 'Organization',
+      is_part_of: {
+        name: { en: 'Top organization', fi: 'Pääorganisaatio' },
+        '@type': 'Organization',
+      },
+    },
+    issued: '2021-02-23',
+    title: { fi: 'Julkaisun nimi', en: 'Publication title' },
+    preferred_identifier: 'urn:nbn:fi:att:feedc0de',
+  },
+  identifier: 'metax_identifier_for_this_dataset',
+}
+
 const doiDataset = {
   research_dataset: {
     ...organizationDataset.research_dataset,
@@ -165,6 +183,12 @@ describe('Citation styles', () => {
           '(2021). Publication title. Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
+
+    it('should render citation for dataset published by a suborganization', () => {
+      c(publisherSuborganizationDataset).should.eq(
+        'Creator. (2021). Publication title. Top organization, Suborganization. http://urn.fi/urn:nbn:fi:att:feedc0de'
+      )
+    })
   })
 
   describe('Chicago', () => {
@@ -220,6 +244,12 @@ describe('Citation styles', () => {
     it('should use et al for more than 10 creators', () => {
       c(manyCreatorsDataset).should.eq(
         'Eka, Tyyppi, Tyyppi Toka, Tyyppi Kolmas, Tyyppi Neljäs, Tyyppi Viides, Tyyppi Kuudes, Tyyppi Seitsemäs, et al. 2021. ”Publication title”. Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
+      )
+    })
+
+    it('should render citation for dataset published by a suborganization', () => {
+      c(publisherSuborganizationDataset).should.eq(
+        'Creator. 2021. ”Publication title”. Top organization, Suborganization. http://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
   })
@@ -279,6 +309,12 @@ describe('Citation styles', () => {
         'Eka, Tyyppi, et al. ”Publication title”. Publisher, 2021. http://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
+
+    it('should render citation for dataset published by a suborganization', () => {
+      c(publisherSuborganizationDataset).should.eq(
+        'Creator. ”Publication title”. Top organization, Suborganization, 2021. http://urn.fi/urn:nbn:fi:att:feedc0de'
+      )
+    })
   })
 })
 
@@ -290,6 +326,10 @@ describe('Utils', () => {
 
     it('should use initials for first names', () => {
       getNameInitials('Mauri Antero Numminen').should.eq('Numminen, M. A.')
+    })
+
+    it('should ignore whitespace around name', () => {
+      getNameInitials('   Mauri Antero Numminen   ').should.eq('Numminen, M. A.')
     })
 
     it('should leave multi-part last name unchanged', () => {
