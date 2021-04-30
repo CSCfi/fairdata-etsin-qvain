@@ -22,7 +22,7 @@ const romanNumeralMatch = /^(((IX|IV|V)I{0,3})|I{1,3})$/
 const toInitial = name => `${name[0]}.`
 
 export const getNameParts = name => {
-  const parts = name.split(' ')
+  const parts = name.trim().split(' ')
   if (parts.length === 1) {
     return { first: [], last: [parts[0]], suffixes: [] }
   }
@@ -182,5 +182,14 @@ export const getIdentifier = dataset => {
   return identifier
 }
 
-export const getPublisher = (dataset, getTranslation) =>
-  getTranslation(dataset.research_dataset.publisher?.name)
+export const getPublisher = (dataset, getTranslation) => {
+  const pub = dataset.research_dataset.publisher
+  if (pub) {
+    const top = topOrg(pub)
+    if (top !== pub) {
+      return `${getTranslation(top.name)}, ${getTranslation(pub.name)}`
+    }
+    return getTranslation(pub.name)
+  }
+  return undefined
+}
