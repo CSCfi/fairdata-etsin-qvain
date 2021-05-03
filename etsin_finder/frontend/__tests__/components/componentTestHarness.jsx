@@ -114,6 +114,10 @@ export default class ComponentTestHarness {
     return this.wrappers.root.state()
   }
 
+  get instance() {
+    return this.wrapper.instance()
+  }
+
   setState = newState => {
     this.wrappers.root.setState(newState)
   }
