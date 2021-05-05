@@ -16,7 +16,7 @@ const config = env => ({
     filename: 'bundle.[contenthash].js',
     chunkFilename: '[name].[chunkhash].js',
   },
-  devtool: 'source-map',
+  devtool: 'eval-source-map',
   devServer: {
     host: '0.0.0.0', // Default IP (Docker)
     // inline: true,
