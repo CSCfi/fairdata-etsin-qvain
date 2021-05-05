@@ -1,10 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
-import TooltipHover from '../../../general/tooltipHover'
 import Button, { InvertedButton, Link, InvertedLink } from '../../../general/button'
 
 const IconButton = ({
@@ -14,7 +12,6 @@ const IconButton = ({
   href,
   children,
   invert,
-  tooltip,
   fontSize,
   Wrapper,
   flexGrow,
@@ -30,42 +27,31 @@ const IconButton = ({
   }
 
   return (
-    <Wrapper>
-      <Translate
-        title={tooltip}
-        component={TooltipHover}
-        showOnHover={false}
-        showOnClick={!!tooltip}
-        flexGrow={flexGrow}
-      >
-        <StyledIconButton fill="white" target={target} as={as} href={href} {...props}>
-          <StyledIconButtonIcon icon={icon} spin={spin} fixedWidth />
-          <IconButtonText fontSize={fontSize}>{children}</IconButtonText>
-        </StyledIconButton>
-      </Translate>
-    </Wrapper>
+    <StyledIconButton fill="white" target={target} as={as} href={href} {...props}>
+      <StyledIconButtonIcon icon={icon} spin={spin} fixedWidth $iconOnly={!children} />
+      {children && <IconButtonText fontSize={fontSize}>{children}</IconButtonText>}
+    </StyledIconButton>
   )
 }
 
 IconButton.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   icon: PropTypes.object.isRequired,
   spin: PropTypes.bool,
   invert: PropTypes.bool,
   link: PropTypes.bool,
   href: PropTypes.string,
-  tooltip: PropTypes.string,
   fontSize: PropTypes.string,
   Wrapper: PropTypes.elementType,
   flexGrow: PropTypes.number,
 }
 
 IconButton.defaultProps = {
+  children: null,
   spin: false,
   invert: false,
   link: false,
   href: undefined,
-  tooltip: null,
   fontSize: null,
   Wrapper: React.Fragment,
   flexGrow: 0,
@@ -93,7 +79,13 @@ const StyledIconButton = styled(Button).attrs(p => ({
 `
 
 const StyledIconButtonIcon = styled(FontAwesomeIcon)`
-  margin-right: 0.25rem;
+  ${p =>
+    p.$iconOnly
+      ? `
+    margin-left: auto;
+    margin-right: auto;
+  `
+      : 'margin-right: 0.25rem;'}
   width: 0.5rem;
 `
 
