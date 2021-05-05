@@ -13,8 +13,8 @@ const config = env => ({
     // path of output
     path: path.join(__dirname, '/build'),
     publicPath: '/', // Needed in order to access frontend from nginx
-    filename: 'bundle.[contenthash].js',
-    chunkFilename: '[name].[chunkhash].js',
+    filename: '[name].js',
+    chunkFilename: '[name].chunk.js',
   },
   devtool: 'eval-source-map',
   devServer: {
