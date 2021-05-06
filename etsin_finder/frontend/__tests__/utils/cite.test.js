@@ -151,7 +151,7 @@ describe('Citation styles', () => {
     })
 
     it('should use Finnish titles', () => {
-      Locale.setLang('fi', true)
+      stores.Locale.setLang('fi', true)
       c(organizationDataset).should.eq(
         'Pääorganisaatio. (2021). Julkaisun nimi. Julkaisija. http://urn.fi/urn:nbn:fi:att:feedc0de'
       )
@@ -211,7 +211,7 @@ describe('Citation styles', () => {
     })
 
     it('should use Finnish titles', () => {
-      Locale.setLang('fi', true)
+      stores.Locale.setLang('fi', true)
       c(organizationDataset).should.eq(
         'Pääorganisaatio. 2021. ”Julkaisun nimi”. Julkaisija. http://urn.fi/urn:nbn:fi:att:feedc0de'
       )
@@ -268,7 +268,7 @@ describe('Citation styles', () => {
     })
 
     it('should use Finnish titles', () => {
-      Locale.setLang('fi', true)
+      stores.Locale.setLang('fi', true)
       c(organizationDataset).should.eq(
         'Pääorganisaatio. ”Julkaisun nimi”. Julkaisija, 2021. http://urn.fi/urn:nbn:fi:att:feedc0de'
       )
