@@ -6,8 +6,8 @@ describe('ActorsRef', () => {
     let actorsRef
     const actors = {
       actors: [
-        { uiid: 1, roles: ['mother', 'Ph.D. in Math'] },
-        { uiid: 2, roles: ['father', 'cleaner'] },
+        { uiid: 1, roles: ['mother', 'Ph.D. in Math'], isReference: false },
+        { uiid: 2, roles: ['father', 'cleaner'], isReference: false },
       ],
     }
     const actorsFromBackend = []
@@ -46,24 +46,24 @@ describe('ActorsRef', () => {
 
       test('should set actorsRef', () => {
         const expectedActorsRef = {
-          1: { uiid: 1, roles: ['mother', 'Ph.D. in Math'] },
-          2: { uiid: 2, roles: ['father', 'cleaner'] },
+          1: { uiid: 1, roles: ['mother', 'Ph.D. in Math'], isReference: false },
+          2: { uiid: 2, roles: ['father', 'cleaner'], isReference: false },
         }
         actorsRef.actorsRef.should.deep.eql(expectedActorsRef)
       })
     })
 
     describe('when calling addRefsOnlyToActors with actors that are not in actors', () => {
-      const actorsRefRef = [{}, actors.actors[0]]
+      const actorsRefRef = [{ uiid: 3, roles: ['role'], isReference: true }, actors.actors[0]]
 
       beforeEach(() => {
         actorsRef.addRefsOnlyToActors(actorsRefRef)
       })
 
-      test.skip("should add actors, that aren't in the actors", () => {
+      test.skip('should add actors, that are not in the actors', () => {
         // but it doesn't
         // isActorEqual says that empty object is equal with {uiid:1, roles: ["mother", "Ph.D. in Math"]}
-        actorsRef.actors.actors.should.include(actorsRefRef[0])
+        actorsRef.actors.actors.should.deep.include(actorsRefRef[0])
       })
     })
 
@@ -90,7 +90,7 @@ describe('ActorsRef', () => {
 
       test('should add matching actor to actorsRef', () => {
         actorsRef.actorsRef.should.deep.include({
-          2: { uiid: 2, roles: ['father', 'cleaner', 'citizen'] },
+          2: { uiid: 2, roles: ['father', 'cleaner', 'citizen'], isReference: false },
         })
       })
     })

@@ -73,6 +73,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
         description="qvain.validationMessages.draft.description"
       >
         <WrapperDivForHovering
+          id="draft-button-wrapper"
           onMouseEnter={() => {
             setDraftButtonHover(true)
           }}
@@ -93,6 +94,7 @@ export const SubmitButtonsV2 = ({ submitButtonsRef, disabled, doiModal, history,
         description="qvain.validationMessages.publish.description"
       >
         <WrapperDivForHovering
+          id="publish-button-wrapper"
           onMouseEnter={() => {
             setPublishButtonHover(true)
           }}
