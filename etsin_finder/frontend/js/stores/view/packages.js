@@ -32,6 +32,17 @@ class Packages {
 
   @observable packageModalPath = null
 
+  @observable manualDownloadUrlGetter = null
+
+  @action.bound openManualDownloadModal(item) {
+    this.manualDownloadUrlGetter = item
+    this.Notifications.setEmailError(null)
+  }
+
+  @action.bound closeManualDownloadModal() {
+    this.manualDownloadUrlGetter = null
+  }
+
   @action.bound openPackageModal(path) {
     this.packageModalPath = path
     this.Notifications.setEmailError(null)
