@@ -126,6 +126,16 @@ const finnish = {
         unknownError:
           'Latauspalvelun käytössä tapahtui virhe. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
       },
+      manualDownload: {
+        title: 'Muut latausvaihtoehdot',
+        ariaLabel: 'Näytä muut latausvaihtoehdot',
+        description: `Etsimen lataukset voi käynnistää myös seuraavin komennoin.
+        Huomioi että komennot ovat <em>kertakäyttöisiä</em> koska jokainen lataus tulee todentaa erikseen.`,
+        error: 'Latauksen valtuuttamisessa tapahtui virhe.',
+        copyButton: 'Kopioi',
+        copyButtonTooltip: 'Kopioi leikepöydälle',
+        copyButtonTooltipSuccess: 'Kopioitu leikepöydälle',
+      },
       packages: {
         createForAll: 'Lataa kaikki',
         create: 'Lataa',
