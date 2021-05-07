@@ -233,11 +233,6 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
     content="qvain.description.fieldOfScience.help"
   />
   <Translate
-    attributes={
-      Object {
-        "placeholder": "qvain.description.fieldOfScience.placeholder",
-      }
-    }
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
@@ -253,6 +248,7 @@ exports[`Qvain.Description should render <FieldOfScienceField /> 1`] = `
     modifyGroupLabel={[Function]}
     modifyOptionLabel={[Function]}
     name="fieldOfScience"
+    placeholder="qvain.description.fieldOfScience.placeholder"
     setter={[Function]}
     sortFunc={[Function]}
   />

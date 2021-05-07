@@ -38,7 +38,7 @@ const RestrictionGrounds = () => {
         name="restrictionGrounds"
         metaxIdentifier="restriction_grounds"
         component={Select}
-        attributes={{ placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder' }}
+        placeholder="qvain.rightsAndLicenses.restrictionGrounds.placeholder"
         model={Model}
         getter={restrictionGrounds}
         setter={setRestrictionGrounds}

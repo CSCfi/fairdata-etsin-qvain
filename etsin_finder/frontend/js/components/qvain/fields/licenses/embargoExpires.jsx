@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
@@ -40,7 +41,7 @@ const EmbargoExpires = () => {
 
   return (
     <>
-      <Translate component={Label} content="qvain.rightsAndLicenses.embargoDate.label" />
+      <Translate component={ExpirationLabel} content="qvain.rightsAndLicenses.embargoDate.label" />
       <DatePicker
         strictParsing
         selected={embargoExpDate ? new Date(embargoExpDate) : null}
@@ -58,5 +59,10 @@ const EmbargoExpires = () => {
     </>
   )
 }
+
+const ExpirationLabel = styled(Label)`
+  margin-top: 1rem;
+  padding: 0;
+`
 
 export default observer(EmbargoExpires)

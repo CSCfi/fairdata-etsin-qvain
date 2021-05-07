@@ -38,8 +38,8 @@ class OrganizationSelect extends Component {
 
   static defaultProps = {
     placeholder: {
-      organization: 'qvain.select.placeholder',
-      department: 'qvain.select.placeholder',
+      organization: 'qvain.actors.add.organization.placeholder',
+      department: 'qvain.actors.add.organization.placeholderChild',
     },
     creatable: true,
     value: undefined,
@@ -329,7 +329,7 @@ const CreatableSelectComponent = ({
         options: [{ value: 'create', label: t('qvain.organizationSelect.label.addNew') }],
       },
       {
-        label: t(placeholder),
+        label: t('qvain.actors.add.organization.options.presets'),
         options,
       },
     ]

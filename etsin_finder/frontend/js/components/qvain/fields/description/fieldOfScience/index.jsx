@@ -49,7 +49,7 @@ const FieldOfScienceField = () => {
         name="fieldOfScience"
         metaxIdentifier="field_of_science"
         component={Select}
-        attributes={{ placeholder: 'qvain.description.fieldOfScience.placeholder' }}
+        placeholder="qvain.description.fieldOfScience.placeholder"
         isMulti
         isClearable={false}
         model={Model}

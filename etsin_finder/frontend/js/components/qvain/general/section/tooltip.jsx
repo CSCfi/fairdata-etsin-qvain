@@ -222,7 +222,7 @@ const TooltipArrowUp = styled(TooltipArrow)`
 
 const TooltipText = styled.div`
   box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.3);
-  max-width: 400px;
+  max-width: 450px;
   width: max-content;
   padding: 10px 15px;
   color: ${p => p.theme.color.dark};
@@ -232,7 +232,7 @@ const TooltipText = styled.div`
   text-align: inherit;
   background-color: ${p => p.theme.color.white};
   @media (max-width: ${p => p.theme.breakpoints.md}) {
-    max-width: 200px;
+    max-width: 250px;
   }
   & > p:last-child {
     margin-bottom: 0;

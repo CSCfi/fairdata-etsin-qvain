@@ -175,12 +175,12 @@ const FundingAgencyForm = props => {
       />
       <ErrorMessages errors={formData.errors.organization} />
       <Expand
-        title={(
+        title={
           <Translate
             component="h3"
             content="qvain.project.inputs.fundingAgency.contributorType.title"
           />
-        )}
+        }
       >
         <ContributorTypeForm
           formData={formData.contributorTypeForm}
@@ -364,6 +364,10 @@ class ContributorTypeFormComponent extends Component {
           className="basic-single"
           classNamePrefix="select"
           options={options[lang]}
+          attributes={{
+            placeholder:
+              'qvain.project.inputs.fundingAgency.contributorType.identifier.placeholder',
+          }}
         />
         <ErrorMessages errors={formData.errors.identifier} />
         <LabelLarge htmlFor="definitionEn">

@@ -36,6 +36,7 @@ class Select extends Component {
     inModal: PropTypes.bool,
     isClearable: PropTypes.bool,
     isMulti: PropTypes.bool,
+    placeholder: PropTypes.string,
   }
 
   static defaultProps = {
@@ -47,6 +48,7 @@ class Select extends Component {
     modifyOptionLabel: translation => translation,
     modifyGroupLabel: translation => translation,
     sortFunc: null,
+    placeholder: 'qvain.select.placeholder',
   }
 
   state = {
@@ -113,6 +115,7 @@ class Select extends Component {
       isMulti,
       modifyGroupLabel,
       modifyOptionLabel,
+      placeholder,
     } = this.props
     const { options } = this.state
     const { lang } = this.props.Stores.Locale
@@ -124,7 +127,7 @@ class Select extends Component {
       ...this.props,
       inputId: `${name}-select`,
       component: ReactSelect,
-      attributes: { placeholder: 'qvain.select.placeholder' },
+      attributes: { placeholder },
       isDisabled: readonly,
       value: getCurrentOption(model, options, getter),
       classNamePrefix: 'select',
@@ -145,7 +148,7 @@ class Select extends Component {
     }
 
     if (!(props.attributes && props.attributes.placeholder)) {
-      props.attributes = { ...props.attributes, placeholder: 'qvain.select.placeholder' }
+      props.attributes = { ...props.attributes, placeholder }
     }
 
     return <Translate component={ReactSelect} {...props} />

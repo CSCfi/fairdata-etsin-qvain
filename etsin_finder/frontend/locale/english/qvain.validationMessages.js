@@ -6,10 +6,10 @@ const validationMessages = {
     },
   },
   draft: {
-    description: 'Draft cannot be saved until the following errors are fixed:',
+    description: 'Please solve the following errors before saving the draft:',
   },
   publish: {
-    description: 'Dataset cannot be published before following errors are fixed:',
+    description: 'Please solve the following errors before publishing the dataset:',
   },
   title: {
     string: 'The title must be a string value.',
@@ -45,13 +45,13 @@ const validationMessages = {
     roles: {
       mixed: '',
       oneOf:
-        'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder", "Contributor" or "Provenance.',
-      required: 'You must specify the role of the actor. The creator role is mandatory.',
+        'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder" or "Contributor"',
+      required: 'Please specify the role of the actor. The creator role is mandatory.',
     },
     name: {
       string: 'The name must be a string value.',
       max: 'The name is too long.',
-      required: 'Name is a required field.',
+      required: 'Name is required.',
     },
     email: {
       string: '',
@@ -67,14 +67,14 @@ const validationMessages = {
     organization: {
       mixed: '',
       object: 'The selected organization should be an object.',
-      name: 'The organization name must be a string.',
+      name: 'Organization name is required.',
       required: 'Organization is required.',
     },
     requiredActors: {
-      atLeastOneActor: 'You must add at least one actor to your dataset.',
+      atLeastOneActor: 'At least one actor is required for the dataset.',
       mandatoryActors: {
-        creator: 'Actors: Creator role is mandatory. Note: one actor can have multiple roles.',
-        publisher: 'Actors: Publisher role is mandatory. Note: one actor can have multiple roles.',
+        creator: 'Actors: Creator role is required. Note: one actor can have multiple roles.',
+        publisher: 'Actors: Publisher role is required. Note: one actor can have multiple roles.',
       },
     },
   },
@@ -85,21 +85,21 @@ const validationMessages = {
   },
   restrictionGrounds: {
     string: 'Restriction grounds must be string value.',
-    url: 'Reference value error.',
+    url: 'Reference value error in Restriction grounds.',
     required: 'Restriction grounds are required if access type is not "Open".',
   },
   license: {
-    requiredIfIDA: 'License is mandatory for datasets where File origin is set to IDA.',
+    requiredIfIDA: 'License is required for datasets where File origin is set to IDA.',
     otherUrl: {
       string: 'The license URL must be a valid string of text',
       url: 'The license URL must be a valid URL',
-      required: 'License URL is a required field.',
+      required: 'License URL is required.',
     },
   },
   files: {
     dataCatalog: {
       required: 'File origin is required.',
-      wrongType: 'File origin is wrong type or it is missing.',
+      wrongType: 'The file origin is the wrong type or it is missing.',
     },
     file: {
       title: {
@@ -137,17 +137,17 @@ const validationMessages = {
   },
   projects: {
     title: {
-      required: 'At least one language is required.',
+      required: 'Title is required in at least one language.',
       string: 'The title must be a string value.',
     },
     organization: {
-      name: 'A name is required',
-      email: 'A valid email address is required',
-      min: 'At least one producer organization is required',
+      name: 'A name is required.',
+      email: 'A valid email address is required.',
+      min: 'At least one producer organization is required.',
     },
     fundingAgency: {
       contributorType: {
-        identifier: 'Valitse rooli',
+        identifier: 'The role is required.',
       },
     },
   },
@@ -157,8 +157,8 @@ const validationMessages = {
       altitudeNan: 'Altitude must be a number',
     },
     temporal: {
-      startDateMissing: 'Start date is missing.',
-      endDateMissing: 'End date is missing',
+      startDateMissing: 'Please enter the start date.',
+      endDateMissing: 'Please enter the end date.',
     },
   },
   history: {
@@ -167,9 +167,9 @@ const validationMessages = {
       typeRequired: 'Relation type is required.',
     },
     provenance: {
-      nameRequired: 'Name required at least in one language.',
-      startDateMissing: 'Start date missing',
-      endDateMissing: 'End date missing',
+      nameRequired: 'Name is required at least in one language.',
+      startDateMissing: 'Start date missing.',
+      endDateMissing: 'End date missing.',
     },
   },
 }

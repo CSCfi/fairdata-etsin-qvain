@@ -6,7 +6,7 @@ const validationMessages = {
     },
   },
   draft: {
-    description: 'Luonnosta ei voi tallentaa ennen kuin seuraavat virheet on korjattu:',
+    description: 'Luonnosta ei voida tallentaa ennen kuin seuraavat virheet on korjattu:',
   },
   publish: {
     description: 'Aineistoa ei voida julkaista ennen kuin seuraavat virheet on korjattu:',
@@ -22,12 +22,11 @@ const validationMessages = {
     required: 'Kuvaus on pakollinen vähintään yhdellä kielellä.',
   },
   issuedDate: {
-    requiredIfUseDoi:
-      'Julkaisupäivämäärä on pakollinen kenttä jos haluat käyttää DOI -tunnistetta.',
+    requiredIfUseDoi: 'Julkaisupäivämäärä on pakollinen tieto jos haluat käyttää DOI -tunnistetta.',
   },
   otherIdentifiers: {
     string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
-    url: 'Tunnisteet täytyy olla valideja URL:eja',
+    url: 'Tunniste pitää olla URL-formaatissa',
     max: 'Tunniste on liian pitkä.',
     min: 'Tunnisteen pitää olla vähintään 10 merkkiä pitkä.',
   },
@@ -40,19 +39,19 @@ const validationMessages = {
   actors: {
     type: {
       mixed: '',
-      oneOf: 'Toimijan tyyppi pitää olla joko "Luonnollinen henkilö" tai "Organisaatio".',
+      oneOf: 'Toimijan tyyppi pitää olla joko "Henkilö" tai "Organisaatio".',
       required: 'Toimijan tyyppi on pakollinen.',
     },
     roles: {
       mixed: '',
       oneOf:
-        'Roolin kuuluisi olla "Tekijä", "Julkasija", "Kuraattori", "Oikeuksienhaltija", "Muut tekijät" tai "Provenienssi.',
+        'Roolin kuuluisi olla "Tekijä", "Julkaisija", "Kuraattori", "Oikeuksienhaltija" tai "Muu tekijä".',
       required: 'Tekijän rooli on pakollinen.',
     },
     name: {
       string: 'Nimi pitää olla arvoltaan merkkijono.',
       max: 'Nimi on liian pitkä.',
-      required: 'Nimi on pakollinen kenttä.',
+      required: 'Nimi on pakollinen tieto.',
     },
     email: {
       string: 'Sähköposti pitää olla arvoltaan merkkijono.',
@@ -68,8 +67,8 @@ const validationMessages = {
     organization: {
       mixed: '',
       object: 'Valitun organisaation tulee olla olio.',
-      name: 'Organisaation nimen tulee olla merkkijono.',
-      required: 'Organisaatio on pakollinen kenttä.',
+      name: 'Organisaation nimi on pakollinen tieto.',
+      required: 'Organisaatio on pakollinen tieto.',
     },
     requiredActors: {
       atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
@@ -77,62 +76,62 @@ const validationMessages = {
         creator:
           'Toimijat: Aineistolla on oltava ainakin yksi tekijä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
         publisher:
-          'Toimijat: Aineistolla on oltava ainakin yksi julkaisija. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+          'Toimijat: Aineistolla on oltava ainakin yksi julkaisija. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
       },
     },
   },
   accessType: {
     string: 'Pääsyoikeus tulisi olla arvoltaan merkkijono.',
     url: 'Virhe pääsyoikeuden referenssiarvossa.',
-    required: 'Pääsyoikeus on pakollimen kenttä.',
+    required: 'Pääsyoikeus on pakollimen tieto.',
   },
   restrictionGrounds: {
     string: 'Kentän arvo tulisi olla merkkijono.',
-    url: 'Virhe satavuutta rajoitettu-kentän referenssiarvossa.',
-    required: 'Saatavuutta rajoitettu on pakollinen kenttä jos pääsyoikeus ei ole "Avoin".',
+    url: 'Virhe rajoituksen peruste -kentän referenssiarvossa.',
+    required: 'Rajoituksen peruste on pakollinen tieto jos pääsyoikeus ei ole "Avoin".',
   },
   license: {
-    requiredIfIDA: 'Lisenssi on pakollinen kenttä kun tiedoston lähde on IDA.',
+    requiredIfIDA: 'Lisenssi on pakollinen tieto kun tiedoston lähde on IDA.',
     otherUrl: {
       string: 'Lisenssin URL pitää olla merkkijono.',
       url: 'Lisenssin URL pitää olla oikeanlainen URL.',
-      required: 'Lisenssin URL on pakollinen kenttä.',
+      required: 'Lisenssin URL on pakollinen tieto.',
     },
   },
   files: {
     dataCatalog: {
-      required: 'Tiedoston lähde on pakollinen kenttä.',
+      required: 'Tiedoston lähde on pakollinen tieto.',
       wrongType: 'Tiedoston lähde on väärää tyyppiä tai se puuttuu kokonaan.',
     },
     file: {
       title: {
-        required: 'Tiedoston otsikko on pakollinen kenttä.',
+        required: 'Tiedoston otsikko on pakollinen tieto.',
       },
       description: {
-        required: 'Tiedoston kuvaus on pakollinen kenttä.',
+        required: 'Tiedoston kuvaus on pakollinen tieto.',
       },
       useCategory: {
-        required: 'Tiedoston käyttökategoria on pakollinen kenttä.',
+        required: 'Tiedoston käyttökategoria on pakollinen tieto.',
       },
     },
     directory: {
       title: {
-        required: 'Hakemiston otsikko on pakollinen kenttä.',
+        required: 'Hakemiston otsikko on pakollinen tieto.',
       },
       useCategory: {
-        required: 'Hakemiston käyttökategoria on pakollinen kenttä.',
+        required: 'Hakemiston käyttökategoria on pakollinen tieto.',
       },
     },
   },
   externalResources: {
     title: {
-      required: 'Ulkoisen aineiston otsikko on pakollinen kenttä.',
+      required: 'Ulkoisen aineiston otsikko on pakollinen tieto.',
     },
     useCategory: {
-      required: 'Ulkoisen aineiston käyttökategoria on pakollinen kenttä.',
+      required: 'Ulkoisen aineiston käyttökategoria on pakollinen tieto.',
     },
     accessUrl: {
-      validFormat: 'Ulkoisen aineiston sivun URL pitää olla oikeassa URL-formaatissa.',
+      validFormat: 'Ulkoisen aineiston pitää olla oikeassa URL-formaatissa.',
     },
     downloadUrl: {
       validFormat: 'Ulkoisen aineiston latauslinkin URL pitää olla oikeassa URL-formaatissa.',
@@ -140,23 +139,23 @@ const validationMessages = {
   },
   projects: {
     title: {
-      required: 'Lisää vähintään yksi kieli',
+      required: 'Projektin nimi on pakollinen vähintään yhdellä kielellä.',
       string: 'Nimen täytyy olla merkkijono.',
     },
     organization: {
-      name: 'Nimi täytyy täyttää',
-      email: 'Sähköpostiosoite ei kelpaa',
-      min: 'Vähintään yksi organisaatio tarvitaan',
+      name: 'Nimi on pakollinen tieto.',
+      email: 'Sähköpostiosoite ei kelpaa.',
+      min: 'Vähintään yksi organisaatio on pakollinen.',
     },
     fundingAgency: {
       contributorType: {
-        identifier: 'Rooli on pakollinen kenttä.',
+        identifier: 'Organisaation rooli on pakollinen tieto.',
       },
     },
   },
   temporalAndSpatial: {
     spatial: {
-      nameRequired: 'Nimi on pakollinen kenttä.',
+      nameRequired: 'Nimi on pakollinen.',
       altitudeNan: 'Korkeuden täytyy olla numero.',
     },
     temporal: {
@@ -166,11 +165,11 @@ const validationMessages = {
   },
   history: {
     relatedResource: {
-      nameRequired: 'Nimi kenttä on pakollinen ainakin yhdellä kielellä.',
-      typeRequired: 'Viitteen tyyppi on pakollinen kenttä.',
+      nameRequired: 'Nimitieto on pakollinen vähintään yhdellä kielellä.',
+      typeRequired: 'Viitteen tyyppi on pakollinen tieto.',
     },
     provenance: {
-      nameRequired: 'Nimi vaaditaan vähintään yhdellä kielellä.',
+      nameRequired: 'Nimitieto on pakollinen vähintään yhdellä kielellä.',
       startDateMissing: 'Alkamispäivämäärä puuttuu',
       endDateMissing: 'Loppumispäivämäärä puuttuu',
     },
