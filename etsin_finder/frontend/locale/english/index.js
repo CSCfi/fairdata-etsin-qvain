@@ -128,6 +128,16 @@ const english = {
         unknownError:
           'There was an error using the download service. If the problem persists check our <a href="https://www.fairdata.fi/en/maintenance/">maintenance page</a> for more information.',
       },
+      manualDownload: {
+        title: 'Other download options',
+        ariaLabel: 'Show other download options',
+        description: `Etsin download can be initiated via the following commands.
+        Please note that these are <em>only single use</em>, as every download needs to be authorized separately.`,
+        error: 'There was an error authorizing download.',
+        copyButton: 'Copy',
+        copyButtonTooltip: 'Copy to clipboard',
+        copyButtonTooltipSuccess: 'Copied to clipboard',
+      },
       packages: {
         createForAll: 'Download all',
         create: 'Download',

@@ -1,4 +1,5 @@
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { axe, toHaveNoViolations } from 'jest-axe'
@@ -9,7 +10,7 @@ import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
 import stores from '../../../../js/stores'
 import dataset from '../../../__testdata__/dataset.att'
-import CitationModal from '../../../../js/components/dataset/citation/citationModal'
+import ManualDownloadModal from '../../../../js/components/dataset/data/idaResourcesV2/manualDownloadModal'
 import Modal from '../../../../js/components/general/modal'
 import { useStores } from '../../../../js/stores/stores'
 
@@ -38,26 +39,32 @@ const flushPromises = () => new Promise(setImmediate)
 
 stores.DatasetQuery.getData()
 
-describe('Etsin citation modal', () => {
+describe('Etsin manual download options modal', () => {
   let wrapper, helper
 
   beforeAll(async () => {
     // wait for async tasks to finish
     await stores.DatasetQuery.getData(dataset.identifier)
     await flushPromises()
-    stores.DatasetQuery.setShowCitationModal(true)
+    const { Packages } = stores.DatasetQuery
+    Packages.openManualDownloadModal(async () => {
+      return { url: 'https://example.com/download' }
+    })
 
     helper = document.createElement('div')
     document.body.appendChild(helper)
     ReactModal.setAppElement(helper)
-    wrapper = mount(
-      <ThemeProvider theme={etsinTheme}>
-        <main>
-          <CitationModal />
-        </main>
-      </ThemeProvider>,
-      { attachTo: helper }
-    )
+    await act(async () => {
+      wrapper = mount(
+        <ThemeProvider theme={etsinTheme}>
+          <main>
+            <ManualDownloadModal Packages={Packages} />
+          </main>
+        </ThemeProvider>,
+        { attachTo: helper }
+      )
+    })
+    wrapper.update()
   })
 
   afterAll(() => {
