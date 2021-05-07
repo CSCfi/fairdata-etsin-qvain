@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import qvain from './qvain.finnish'
+import qvain from './qvain'
 
 const finnish = {
   changepage: 'Siirryit sivulle: %(page)s',

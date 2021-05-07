@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import qvain from './qvain.english'
+import qvain from './qvain'
 
 const english = {
   changepage: 'Navigated to page: %(page)s',
