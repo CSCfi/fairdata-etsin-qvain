@@ -11,7 +11,7 @@ import rightsAndLicenses from './qvain.rightsAndLicenses'
 import temporalAndSpatial from './qvain.temporalAndSpatial'
 import validationMessages from './qvain.validationMessages'
 
-const qvainFinnish = {
+const qvainEnglish = {
   saveDraft: 'Save Draft',
   submit: 'Save and Publish',
   edit: 'Update Dataset',
@@ -114,4 +114,4 @@ const qvainFinnish = {
   validationMessages,
 }
 
-export default qvainFinnish
+export default qvainEnglish
