@@ -48,13 +48,13 @@ class DatasetQuery {
 
   @observable showCitationModal = false
 
-  @action setShowCitationModal = (value) => {
+  @action setShowCitationModal = value => {
     this.showCitationModal = value
   }
 
   async fetchPackages() {
     const { downloadApiV2 } = this.Env
-    if (!downloadApiV2 || !this.results || !access.restrictions?.allowDataIdaDownloadButton) {
+    if (!downloadApiV2 || !this.results || !this.Access.restrictions?.allowDataIdaDownloadButton) {
       return
     }
 
