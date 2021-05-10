@@ -1,12 +1,11 @@
 import { faDownload, faSpinner, faCog } from '@fortawesome/free-solid-svg-icons'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../../utils/constants'
-import { downloadFile, downloadPackage } from './download'
+import { downloadFile, downloadPackage, authorizeFile, authorizePackage } from './download'
 
 // Download button information for file/package
 const actionDefaults = {
   buttonLabel: 'dataset.dl.download',
-  tooltip: null,
   color: null,
   available: false, // is file/package ready for download
   func: null, // action when button is clicked
@@ -17,15 +16,19 @@ const actionDefaults = {
 }
 
 const actionDownload = (datasetIdentifier, item, path, pack, Packages) => {
-  let func
+  let func, authorizeFunc
   if (item && item.type === 'file') {
     func = () => downloadFile(datasetIdentifier, path, Packages)
+    authorizeFunc = () => authorizeFile(datasetIdentifier, path, Packages)
   } else {
     func = () => downloadPackage(datasetIdentifier, pack.package, Packages)
+    authorizeFunc = () => authorizePackage(datasetIdentifier, pack.package, Packages)
   }
   return {
     ...actionDefaults,
     func,
+    moreAriaLabel: 'dataset.dl.manualDownload.ariaLabel',
+    moreFunc: () => Packages.openManualDownloadModal(authorizeFunc),
     color: 'success',
     type: 'download',
     available: true,
@@ -47,7 +50,6 @@ const actionLoading = () => ({
   ...actionPending(),
   buttonLabel: 'dataset.dl.packages.loading',
   func: null,
-  tooltip: null,
   pending: false,
   type: 'loading',
 })
