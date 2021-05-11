@@ -42,7 +42,7 @@ const download = (datasetIdentifier, item) => {
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const { Files, directoryView, extraProps } = treeProps
-  const { allowDownload, Packages, downloadApiV2 } = extraProps
+  const { allowDownload, Packages } = extraProps
   const { setInInfo, datasetIdentifier } = Files
   let content = null
   const name = item.name
@@ -86,16 +86,14 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   let downloadButtonText = 'dataset.dl.download'
   let downloadButtonColor = null
 
-  if (downloadApiV2) {
-    const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
-    downloadFunc = action.func
-    moreFunc = action.moreFunc
-    moreAriaLabel = action.moreAriaLabel
-    downloadIcon = action.icon
-    downloadIconSpin = action.spin
-    downloadButtonText = action.buttonLabel
-    downloadButtonColor = action.color
-  }
+  const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
+  downloadFunc = action.func
+  moreFunc = action.moreFunc
+  moreAriaLabel = action.moreAriaLabel
+  downloadIcon = action.icon
+  downloadIconSpin = action.spin
+  downloadButtonText = action.buttonLabel
+  downloadButtonColor = action.color
 
   const infoButton = (
     <Translate
@@ -128,20 +126,18 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   )
 
   const downloadButtonParts = (
-    <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
-      <SplitContainer split={moreFunc}>
-        {downloadButton}
-        {moreFunc && (
-          <Translate
-            component={MoreButton}
-            color={downloadButtonColor}
-            disabled={!allowDownload}
-            onClick={moreFunc}
-            attributes={{ 'aria-label': moreAriaLabel }}
-          />
-        )}
-      </SplitContainer>
-    </FlaggedComponent>
+    <SplitContainer split={moreFunc}>
+      {downloadButton}
+      {moreFunc && (
+        <Translate
+          component={MoreButton}
+          color={downloadButtonColor}
+          disabled={!allowDownload}
+          onClick={moreFunc}
+          attributes={{ 'aria-label': moreAriaLabel }}
+        />
+      )}
+    </SplitContainer>
   )
 
   return (

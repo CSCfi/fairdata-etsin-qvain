@@ -25,12 +25,11 @@ class Data extends Component {
     const {
       DatasetQuery,
       Matomo: { recordEvent },
-      Env: { downloadApiV2 },
     } = this.props.Stores
 
     Accessibility.handleNavigation('data', false)
 
-    if (downloadApiV2 && !DatasetQuery.isDraft && !this.props.hasRemote) {
+    if (!DatasetQuery.isDraft && !this.props.hasRemote) {
       DatasetQuery.fetchPackages()
     }
 

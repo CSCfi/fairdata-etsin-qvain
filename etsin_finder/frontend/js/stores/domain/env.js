@@ -75,10 +75,6 @@ class Env {
     return this.Flags.flagEnabled('METAX_API_V2.FRONTEND')
   }
 
-  @computed get downloadApiV2() {
-    return this.Flags.flagEnabled('DOWNLOAD_API_V2.FRONTEND')
-  }
-
   @observable app = getCookieValue('etsin_app')
 
   @computed

@@ -184,10 +184,6 @@ class Packages {
   async fetch(datasetIdentifier) {
     try {
       // Fetch list of available downloadable packages
-      const { downloadApiV2 } = this.Env
-      if (!downloadApiV2) {
-        return
-      }
 
       runInAction(() => {
         if (this.datasetIdentifier !== datasetIdentifier) {

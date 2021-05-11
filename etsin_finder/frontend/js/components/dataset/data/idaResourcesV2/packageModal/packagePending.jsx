@@ -5,7 +5,6 @@ import Translate from 'react-translate-component'
 
 import NotificationEmail from './notificationEmail'
 import { Header, Buttons, CloseButton, SubmitEmailButton } from './common'
-import FlaggedComponent from '../../../../general/flaggedComponent'
 
 const PackageCreate = ({ Packages }) => (
   <>
@@ -14,9 +13,7 @@ const PackageCreate = ({ Packages }) => (
     <NotificationEmail Packages={Packages} />
     <Buttons>
       <CloseButton Packages={Packages} />
-      <FlaggedComponent flag="DOWNLOAD_API_V2.EMAIL.FRONTEND">
-        <SubmitEmailButton Packages={Packages} />
-      </FlaggedComponent>
+      <SubmitEmailButton Packages={Packages} />
     </Buttons>
   </>
 )
