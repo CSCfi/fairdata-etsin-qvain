@@ -218,6 +218,7 @@ const actorRolesSchema = yup
         'qvain.validationMessages.actors.roles.oneOf'
       )
   )
+  .min(1, 'qvain.validationMessages.actors.roles.min')
   .required('qvain.validationMessages.actors.roles.required')
 
 const actorRolesSchemaDraft = yup
@@ -237,6 +238,7 @@ const actorRolesSchemaDraft = yup
         'qvain.validationMessages.actors.roles.oneOf'
       )
   )
+  .min(1, 'qvain.validationMessages.actors.roles.min')
 
 const personNameSchema = yup
   .string()

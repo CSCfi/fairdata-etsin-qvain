@@ -56,6 +56,7 @@ export const ActorModalBase = () => {
 
   const close = () => {
     setConfirmClose(false)
+    setActorError(null)
     cancelActor()
   }
 
