@@ -182,42 +182,6 @@ describe('Qvain', () => {
   })
 })
 
-describe('Qvain.RightsAndLicenses', () => {
-  let stores
-  let Licenses
-  let AccessTypeStore
-
-  beforeEach(() => {
-    stores = getStores()
-    stores.Qvain.resetQvainStore()
-    Licenses = stores.Qvain.Licenses
-    AccessTypeStore = stores.Qvain.AccessType
-  })
-
-  it('should render <RightsAndLicenses />', () => {
-    const component = shallow(<RightsAndLicenses />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <Licenses />', () => {
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <AccessType />', () => {
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <RestrictionGrounds />', () => {
-    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.EMBARGO))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(RestrictionGrounds).length).toBe(1)
-  })
-  it('should NOT render <RestrictionGrounds />', () => {
-    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.OPEN))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(RestrictionGrounds).length).toBe(0)
-  })
-})
-
 describe('Qvain.Files', () => {
   it('should render file picker', () => {
     const store = getStores()

@@ -184,36 +184,3 @@ exports[`Qvain should render correctly 1`] = `
   />
 </card__QvainContainer>
 `;
-
-exports[`Qvain.Description should render <LanguageField /> 1`] = `
-<Card
-  bottomContent={false}
->
-  <form__LabelLarge
-    htmlFor="dataset-language-select"
-  >
-    <Translate
-      component="span"
-      content="qvain.description.datasetLanguage.title"
-    />
-  </form__LabelLarge>
-  <Translate
-    component="p"
-    content="qvain.description.datasetLanguage.help"
-  />
-  <SearchSelect
-    getter={Array []}
-    id="datasetLanguage"
-    inModal={false}
-    isClearable={false}
-    isMulti={true}
-    metaxIdentifier="language"
-    model={[Function]}
-    name="dataset-language"
-    noOptionsMessage={[Function]}
-    placeholder="qvain.description.datasetLanguage.placeholder"
-    search={true}
-    setter={[Function]}
-  />
-</Card>
-`;

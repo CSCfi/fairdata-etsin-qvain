@@ -192,21 +192,6 @@ describe('Qvain dataset list PreservationStates', () => {
   })
 })
 
-describe('Qvain.Description', () => {
-  let stores
-
-  beforeEach(() => {
-    stores = getStores()
-    stores.Qvain.resetQvainStore()
-    useStores.mockReturnValue(stores)
-  })
-
-  it('should render <LanguageField />', () => {
-    const component = shallow(<LanguageField.wrappedComponent />)
-    expect(component).toMatchSnapshot()
-  })
-})
-
 describe('Qvain translation tabs', () => {
   let stores
   beforeEach(() => {
