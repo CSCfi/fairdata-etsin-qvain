@@ -19,7 +19,6 @@ const ClearMetadataModal = () => {
       setClearMetadataModalFile,
       Files: { applyClearPASMeta },
     },
-    Env: { metaxApiV2 },
   } = useStores()
   const [loading, setLoading] = useState(false)
 

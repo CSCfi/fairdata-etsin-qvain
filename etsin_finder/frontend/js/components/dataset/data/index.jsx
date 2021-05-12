@@ -56,7 +56,6 @@ Data.propTypes = {
       identifier: PropTypes.string,
     }),
   }).isRequired,
-  hasFiles: PropTypes.bool.isRequired,
   hasRemote: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
 }

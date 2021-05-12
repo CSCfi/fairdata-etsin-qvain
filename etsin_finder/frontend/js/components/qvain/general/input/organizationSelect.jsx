@@ -209,7 +209,7 @@ class OrganizationSelect extends Component {
           name={name}
           inputId={inputId}
           value={value.organization === undefined ? null : value.organization}
-          options={options.organization[lang] || []}
+          options={options?.organization?.[lang] || []}
           placeholder={placeholder.organization}
           creatable={creatable}
           allowReset={value.organization && !value.department}
@@ -224,7 +224,7 @@ class OrganizationSelect extends Component {
               name={name}
               inputId={`${inputId}-department`}
               value={value.department === undefined ? null : value.department}
-              options={options.department ? options.department[lang] : []}
+              options={options?.department ? options.department[lang] : []}
               placeholder={placeholder.department}
               creatable={creatable}
               allowReset={value.department && !value.subDepartment}
@@ -240,7 +240,7 @@ class OrganizationSelect extends Component {
                 name={name}
                 inputId={`${inputId}-subdepartment`}
                 value={value.subDepartment === undefined ? null : value.subDepartment}
-                options={options.subDepartment ? options.subDepartment[lang] : []}
+                options={options?.subDepartment ? options.subDepartment[lang] : []}
                 placeholder={placeholder.department}
                 creatable={creatable}
                 allowReset={Boolean(value.subDepartment)}

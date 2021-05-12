@@ -9,10 +9,8 @@ import urls from '../../utils/urls'
 import Modal from '../../../general/modal'
 import { TableButton, DangerButton } from '../../general/buttons'
 import { getResponseError } from '../../utils/responseError'
-import { useStores } from '../../../../utils/stores'
 
 export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, onClose }) => {
-  const {} = useStores()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -49,7 +47,7 @@ export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, onClose })
 
       // Delete the actual dataset
       if (!onlyChanges) {
-        url = urls.v2.dataset(identifier)
+        const url = urls.v2.dataset(identifier)
         await axios.delete(url)
       }
 

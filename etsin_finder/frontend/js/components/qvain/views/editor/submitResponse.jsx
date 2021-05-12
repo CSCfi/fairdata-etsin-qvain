@@ -11,10 +11,10 @@ import Loader from '../../../general/loader'
 import { LinkButtonDarkGray } from '../../../general/button'
 import { useStores } from '../../utils/stores'
 
-const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
+const SubmitResponse = ({ response, clearSubmitResponse }) => {
   const {
     Qvain: { original },
-    Env: { getEtsinUrl, getQvainUrl },
+    Env: { getEtsinUrl },
   } = useStores()
 
   const getPreferredIdentifier = () => {
@@ -24,15 +24,6 @@ const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
     }
     identifier = identifier || response.identifier
     return identifier
-  }
-
-  const handleOpenNewVersion = identifier => {
-    history.push(getQvainUrl(`/dataset/${identifier}`))
-    closeSubmitResponse()
-  }
-
-  const closeSubmitResponse = () => {
-    clearSubmitResponse()
   }
 
   let goToEtsin = <Translate content="qvain.datasets.goToEtsin" />
@@ -70,7 +61,7 @@ const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
           <p>Identifier: {getPreferredIdentifier()}</p>
         </ResponseContainerContent>
         <ResponseContainerCloseButtonContainer>
-          <LinkButtonDarkGray type="button" onClick={closeSubmitResponse}>
+          <LinkButtonDarkGray type="button" onClick={clearSubmitResponse}>
             <FontAwesomeIcon icon={faTimes} aria-hidden />
           </LinkButtonDarkGray>
         </ResponseContainerCloseButtonContainer>
@@ -112,7 +103,7 @@ const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
           <p>Identifier: {getPreferredIdentifier()}</p>
         </ResponseContainerContent>
         <ResponseContainerCloseButtonContainer>
-          <LinkButtonDarkGray type="button" onClick={closeSubmitResponse}>
+          <LinkButtonDarkGray type="button" onClick={clearSubmitResponse}>
             <FontAwesomeIcon icon={faTimes} aria-hidden />
           </LinkButtonDarkGray>
         </ResponseContainerCloseButtonContainer>
@@ -131,7 +122,7 @@ const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
           <p>{response.toString().replace(/,/g, '\n')}</p>
         </ResponseContainerContent>
         <ResponseContainerCloseButtonContainer>
-          <LinkButtonDarkGray type="button" onClick={closeSubmitResponse}>
+          <LinkButtonDarkGray type="button" onClick={clearSubmitResponse}>
             <FontAwesomeIcon icon={faTimes} aria-hidden />
           </LinkButtonDarkGray>
         </ResponseContainerCloseButtonContainer>
@@ -147,7 +138,6 @@ const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
 }
 
 SubmitResponse.propTypes = {
-  history: PropTypes.object.isRequired,
   clearSubmitResponse: PropTypes.func.isRequired,
   response: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
 }

@@ -10,7 +10,6 @@ import Translate from 'react-translate-component'
 
 import { QvainContainer } from '../../general/card'
 import ErrorBoundary from '../../../general/errorBoundary'
-import { getResponseError } from '../../utils/responseError'
 import urls from '../../utils/urls'
 import Header from '../editor/header'
 import StickyHeader from '../editor/stickyHeader'
@@ -48,8 +47,6 @@ export class Qvain extends Component {
   }
 
   state = {
-    response: null,
-    submitted: false,
     haveDataset: false,
     datasetLoading: false,
     datasetError: false,
@@ -120,7 +117,7 @@ export class Qvain extends Component {
   }
 
   getDataset(identifier) {
-    this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
+    this.setState({ datasetLoading: true, datasetError: false })
     const { resetQvainStore, editDataset } = this.props.Stores.Qvain
     const { getQvainUrl } = this.props.Stores.Env
 
@@ -187,8 +184,6 @@ export class Qvain extends Component {
     clearResponse()
     setError(null)
     this.setState({
-      response: null,
-      submitted: false,
       datasetLoading: false,
       datasetError: false,
       datasetErrorTitle: null,
@@ -196,11 +191,9 @@ export class Qvain extends Component {
     })
   }
 
-  handleSubmitResponse = response => {
+  handleSubmitResponse = () => {
     this.setState({
       datasetLoading: false,
-      submitted: true,
-      response,
     })
   }
 
@@ -209,8 +202,6 @@ export class Qvain extends Component {
       // Validation error
       this.setState({
         datasetLoading: false,
-        submitted: true,
-        response: err.errors,
       })
       return
     }
@@ -219,8 +210,6 @@ export class Qvain extends Component {
     }
     this.setState({
       datasetLoading: false,
-      submitted: true,
-      response: getResponseError(err),
     })
   }
 

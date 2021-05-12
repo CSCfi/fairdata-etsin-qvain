@@ -30,7 +30,7 @@ const Files = () => {
     if (isPas) {
       return (
         <>
-          {metaxApiV2 && <FormModal />}
+          <FormModal />
           <ContainerSubsectionBottom>
             <SelectedItems />
           </ContainerSubsectionBottom>
