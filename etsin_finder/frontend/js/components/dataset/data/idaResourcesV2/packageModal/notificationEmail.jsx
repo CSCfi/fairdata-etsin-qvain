@@ -5,22 +5,25 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
 import { Input } from '../../../common/formItems'
+import FlaggedComponent from '../../../../general/flaggedComponent'
 
 const NotificationEmail = ({ Packages }) => (
-  <p>
-    <Translate component={EmailText} content="dataset.dl.packages.modal.additionalEmail" />
-    <Translate
-      component={EmailInput}
-      type="text"
-      attributes={{ placeholder: 'dataset.dl.packages.modal.emailPlaceholder' }}
-      onChange={e => Packages.Notifications.setEmail(e.target.value)}
-      onBlur={() => Packages.Notifications.validateEmail()}
-      value={Packages.Notifications.email}
-    />
-    {Packages.Notifications.emailError && (
-      <Translate content={Packages.Notifications.emailError} component={ErrorText} />
-    )}
-  </p>
+  <FlaggedComponent flag="DOWNLOAD_API_V2.EMAIL.FRONTEND">
+    <p>
+      <Translate component={EmailText} content="dataset.dl.packages.modal.additionalEmail" />
+      <Translate
+        component={EmailInput}
+        type="text"
+        attributes={{ placeholder: 'dataset.dl.packages.modal.emailPlaceholder' }}
+        onChange={e => Packages.Notifications.setEmail(e.target.value)}
+        onBlur={() => Packages.Notifications.validateEmail()}
+        value={Packages.Notifications.email}
+      />
+      {Packages.Notifications.emailError && (
+        <Translate content={Packages.Notifications.emailError} component={ErrorText} />
+      )}
+    </p>
+  </FlaggedComponent>
 )
 
 NotificationEmail.propTypes = {

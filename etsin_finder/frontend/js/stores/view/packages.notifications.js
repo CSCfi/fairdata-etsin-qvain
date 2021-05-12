@@ -57,6 +57,10 @@ class Notifications {
   }
 
   subscribe = async params => {
+    if (!this.Packages.Env.Flags.flagEnabled('DOWNLOAD_API_V2.EMAIL.FRONTEND')) {
+      return
+    }
+
     if (!this.email) {
       return
     }

@@ -126,18 +126,20 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   )
 
   const downloadButtonParts = (
-    <SplitContainer split={moreFunc}>
-      {downloadButton}
-      {moreFunc && (
-        <Translate
-          component={MoreButton}
-          color={downloadButtonColor}
-          disabled={!allowDownload}
-          onClick={moreFunc}
-          attributes={{ 'aria-label': moreAriaLabel }}
-        />
-      )}
-    </SplitContainer>
+    <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
+      <SplitContainer split={moreFunc}>
+        {downloadButton}
+        {moreFunc && (
+          <Translate
+            component={MoreButton}
+            color={downloadButtonColor}
+            disabled={!allowDownload}
+            onClick={moreFunc}
+            attributes={{ 'aria-label': moreAriaLabel }}
+          />
+        )}
+      </SplitContainer>
+    </FlaggedComponent>
   )
 
   return (

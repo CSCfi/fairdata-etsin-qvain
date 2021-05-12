@@ -27,8 +27,9 @@ def add_download_v2_resources(api):
     api.add_resource(Requests, '/api/v2/dl/requests', endpoint="dl_requests")
     api.add_resource(Authorize, '/api/v2/dl/authorize', endpoint="dl_download")
 
-    api.add_resource(Subscriptions, '/api/v2/dl/subscriptions', endpoint="dl_subscriptions")
-    api.add_resource(Notifications, '/api/v2/dl/notifications', endpoint="dl_notifications")
+    if flag_enabled('DOWNLOAD_API_V2.EMAIL.BACKEND', api.app):
+        api.add_resource(Subscriptions, '/api/v2/dl/subscriptions', endpoint="dl_subscriptions")
+        api.add_resource(Notifications, '/api/v2/dl/notifications', endpoint="dl_notifications")
 
 
 def add_restful_resources(app):
