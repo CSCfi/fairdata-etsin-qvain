@@ -119,41 +119,7 @@ const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
       </ResponseContainerSuccess>
     )
   }
-  // Only in Metax V1:
-  // If an existing datasets files or directorys have changed and the update automatically
-  // creates a new version of the dataset with its own identifiers.
-  if (response && typeof response === 'object' && 'new_version_created' in response) {
-    const identifier = response.dataset_version_set
-      ? response.dataset_version_set[0].identifier
-      : response.identifier
-    return (
-      <ResponseContainerSuccess>
-        <ResponseContainerContent>
-          <ResponseLabel success>
-            <Translate content="qvain.submitStatus.editFilesSuccess" />
-          </ResponseLabel>
-          <LinkToEtsin
-            onClick={() => handleOpenNewVersion(response.new_version_created.identifier)}
-          >
-            <Translate content="qvain.datasets.openNewVersion" />
-          </LinkToEtsin>
-          <LinkToEtsin
-            onClick={() =>
-              window.open(getEtsinUrl(`/dataset/${identifier}${goToEtsinQuery}`), '_blank')
-            }
-          >
-            {goToEtsin}
-          </LinkToEtsin>
-          <p>Identifier: {identifier}</p>
-        </ResponseContainerContent>
-        <ResponseContainerCloseButtonContainer>
-          <LinkButtonDarkGray type="button" onClick={closeSubmitResponse}>
-            <FontAwesomeIcon icon={faTimes} aria-hidden />
-          </LinkButtonDarkGray>
-        </ResponseContainerCloseButtonContainer>
-      </ResponseContainerSuccess>
-    )
-  }
+
   // If something went wrong.
   if (response) {
     return (

@@ -27,9 +27,6 @@ import { DownloadButton } from '../../../../js/components/dataset/data/idaResour
 
 global.Promise = require('bluebird')
 
-Env.Flags.setFlag('METAX_API_V2', true)
-Env.Flags.setFlag('DOWNLOAD_API_V2', true)
-
 Promise.config({
   cancellation: true,
 })
@@ -74,7 +71,7 @@ class MockPackages {
   closeConfirmModal = () => {}
 
   Notifications = {
-    email: 'email@example.com'
+    email: 'email@example.com',
   }
 }
 

@@ -53,7 +53,7 @@ const ClearMetadataModal = () => {
   }
 
   // Only supported with metaxApiV2
-  if (!clearMetadataModalFile || !metaxApiV2) {
+  if (!clearMetadataModalFile) {
     return null
   }
 

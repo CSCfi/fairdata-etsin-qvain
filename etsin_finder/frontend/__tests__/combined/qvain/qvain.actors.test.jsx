@@ -54,7 +54,6 @@ jest.mock('../../../js/stores/stores', () => {
 })
 
 const QvainStore = new QvainStoreClass(Env)
-Env.Flags.setFlag('METAX_API_V2', true)
 const stores = {
   Env,
   Qvain: QvainStore,
@@ -559,11 +558,8 @@ describe('Qvain.Actors reference organizations', () => {
     const err = new Error('Oops. Fail.')
     axios.get.mockImplementation(() => Promise.reject(err))
 
-    const {
-      referenceOrganizations,
-      referenceOrganizationErrors,
-      fetchReferenceOrganizations,
-    } = stores.Qvain.Actors
+    const { referenceOrganizations, referenceOrganizationErrors, fetchReferenceOrganizations } =
+      stores.Qvain.Actors
 
     expect.assertions(3)
     try {
@@ -580,11 +576,8 @@ describe('Qvain.Actors reference organizations', () => {
     axios.get.mockImplementation(organizationMockGet)
     axios.get.mockImplementationOnce(() => Promise.reject(err))
 
-    const {
-      referenceOrganizations,
-      referenceOrganizationErrors,
-      fetchReferenceOrganizations,
-    } = stores.Qvain.Actors
+    const { referenceOrganizations, referenceOrganizationErrors, fetchReferenceOrganizations } =
+      stores.Qvain.Actors
 
     expect.assertions(3)
     try {

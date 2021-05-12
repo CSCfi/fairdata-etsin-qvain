@@ -70,7 +70,6 @@ jest.mock('../../../js/stores/stores', () => {
 })
 
 const getStores = () => {
-  Env.Flags.setFlag('METAX_API_V2', true)
   LocaleStore.setLang('en')
   return {
     Env,

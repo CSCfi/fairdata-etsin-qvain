@@ -122,12 +122,10 @@ export class Qvain extends Component {
   getDataset(identifier) {
     this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
     const { resetQvainStore, editDataset } = this.props.Stores.Qvain
-    const { metaxApiV2, getQvainUrl } = this.props.Stores.Env
+    const { getQvainUrl } = this.props.Stores.Env
 
-    let url = urls.v1.dataset(identifier)
-    if (metaxApiV2) {
-      url = urls.v2.dataset(identifier)
-    }
+    const url = urls.v2.dataset(identifier)
+
     const promise = axios
       .get(url)
       .then(result => {
@@ -252,15 +250,14 @@ export class Qvain extends Component {
   }
 
   getStickyHeaderProps = () => {
-    const { metaxApiV2 } = this.props.Stores.Env
     const { error, response: responseV2, isLoading } = this.props.Stores.Qvain.Submit
-    const { datasetLoading, datasetError, submitted, response, renderFailed } = this.state
+    const { datasetError, renderFailed } = this.state
 
     return {
-      datasetLoading: metaxApiV2 ? isLoading : datasetLoading,
+      datasetLoading: isLoading,
       datasetError,
-      submitted: metaxApiV2 ? !!error || !!responseV2 : submitted,
-      response: metaxApiV2 ? error || responseV2 : response,
+      submitted: !!error || !!responseV2,
+      response: error || responseV2,
       handleSubmitError: this.handleSubmitError,
       handleSubmitResponse: this.handleSubmitResponse,
       clearSubmitResponse: this.clearSubmitResponse,

@@ -71,10 +71,6 @@ class Env {
     this.qvainHost = host
   }
 
-  @computed get metaxApiV2() {
-    return this.Flags.flagEnabled('METAX_API_V2.FRONTEND')
-  }
-
   @observable app = getCookieValue('etsin_app')
 
   @computed

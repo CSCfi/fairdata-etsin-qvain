@@ -34,7 +34,6 @@ const QvainStore = new QvainStoreClass(EnvStore)
 
 const getStores = () => {
   QvainStore.resetQvainStore()
-  EnvStore.Flags.setFlag('METAX_API_V2', true)
   return {
     Qvain: QvainStore,
     Locale: LocaleStore,

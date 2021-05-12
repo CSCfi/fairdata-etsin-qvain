@@ -12,9 +12,7 @@ import { getResponseError } from '../../utils/responseError'
 import { useStores } from '../../../../utils/stores'
 
 export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, onClose }) => {
-  const {
-    Env: { metaxApiV2 },
-  } = useStores()
+  const {} = useStores()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -45,21 +43,16 @@ export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, onClose })
 
       // Delete unpublished changes first
       if (dataset.next_draft) {
-        let draftUrl = urls.v1.dataset(dataset.next_draft.identifier)
-        if (metaxApiV2) {
-          draftUrl = urls.v2.dataset(dataset.next_draft.identifier)
-        }
+        const draftUrl = urls.v2.dataset(dataset.next_draft.identifier)
         await axios.delete(draftUrl)
       }
 
       // Delete the actual dataset
       if (!onlyChanges) {
-        let url = urls.v1.dataset(identifier)
-        if (metaxApiV2) {
-          url = urls.v2.dataset(identifier)
-        }
+        url = urls.v2.dataset(identifier)
         await axios.delete(url)
       }
+
       postRemoveUpdate(dataset, onlyChanges)
       onClose()
       setError(null)

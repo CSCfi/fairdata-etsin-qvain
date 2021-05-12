@@ -27,8 +27,6 @@ import SelectedItemsTreeItem from '../../../../js/components/qvain/fields/files/
 
 global.Promise = require('bluebird')
 
-Env.Flags.setFlag('METAX_API_V2', true)
-
 Promise.config({
   cancellation: true,
 })

@@ -17,7 +17,6 @@ from etsin_finder.auth import authorization
 from etsin_finder.services import cr_service
 from etsin_finder.services import cr_service_v2
 from etsin_finder.services.download_metadata_service import download_metadata
-from etsin_finder.services.download_service import download_data
 from etsin_finder.services import rems_service
 from etsin_finder.utils.contact_utils import \
     create_email_message_body, \
@@ -459,45 +458,6 @@ class Language(Resource):
         if set_language(language):
             return '', 200
         return 'Unsupported language', 404
-
-
-class Download(Resource):
-    """Class for file download functionalities"""
-
-    def __init__(self):
-        """Setup Download endpoint"""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument('cr_id', type=str, required=True)
-        self.parser.add_argument('file_id', type=str, action='append', required=False)
-        self.parser.add_argument('dir_id', type=str, action='append', required=False)
-
-    @log_request
-    def get(self):
-        """Download data REST endpoint for frontend.
-
-        Returns:
-            If success, stream the download content to the frontend.
-
-        """
-        # Check request query parameters are present
-        args = self.parser.parse_args()
-        cr_id = args.get('cr_id')
-        if not authorization.user_can_view_dataset(cr_id):
-            abort(404)
-
-        cr = cr_service.get_catalog_record(cr_id, False, False)
-        if not cr:
-            abort(400, message="Unable to get catalog record")
-
-        allowed, reason = authorization.user_is_allowed_to_download_from_ida(cr, authentication.is_authenticated())
-        if allowed:
-            # Retrieving file_id and dir_id from IDA, if empty, use empty list as value
-            log.info(args)
-            file_ids = args.get('file_id') or []
-            dir_ids = args.get('dir_id') or []
-            return download_data(cr_id, file_ids, dir_ids)
-        else:
-            abort(403, message="Not authorized", reason=reason)
 
 
 class AppConfig(Resource):

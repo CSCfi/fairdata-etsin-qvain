@@ -73,8 +73,7 @@ class DatasetQuery {
   @action
   getData(id) {
     this.Packages.clearPackages()
-    const { metaxApiV2 } = this.Env
-    const url = metaxApiV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
+    const url = `/api/v2/dataset/${id}`
     return new Promise((resolve, reject) => {
       axios
         .get(url)
@@ -105,11 +104,7 @@ class DatasetQuery {
 
   @action
   async fetchAndStoreFiles() {
-    const { metaxApiV2 } = this.Env
-    if (metaxApiV2) {
-      return this.Files.openDataset(this.results)
-    }
-    return null
+    return this.Files.openDataset(this.results)
   }
 
   @action

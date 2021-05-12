@@ -98,7 +98,6 @@ const testFile4 = {
 
 const getStores = () => {
   const QvainStore = new QvainStoreClass(Env)
-  Env.Flags.setFlag('METAX_API_V2', true)
   QvainStore.resetQvainStore()
 
   QvainStore.hierarchy = Directory(

@@ -16,7 +16,6 @@ jest.mock('axios')
 const QvainStore = new QvainStoreClass(Env)
 
 const getStores = () => {
-  Env.Flags.setFlag('METAX_API_V2', true)
   return {
     Auth,
     Env,
