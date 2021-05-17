@@ -209,12 +209,9 @@ describe('ReferenceField', () => {
 
         describe('when calling validateStr', () => {
           let returnValue
-          beforeEach(() => {
-            returnValue = referenceField.validateStr()
-          })
 
-          test('should set validationError error', () => {
-            //referenceField.validationError.should.eql(error.errors)
+          beforeEach(async () => {
+            returnValue = await referenceField.validateStr()
           })
 
           test('should return false', () => {

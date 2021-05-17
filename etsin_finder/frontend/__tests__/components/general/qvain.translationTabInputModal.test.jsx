@@ -37,7 +37,7 @@ describe('TranslationsTabInputModal', () => {
       const parsedProps = { ...props, ...extraProps }
 
       wrapper = shallow(<TranslationTabInputModal {...parsedProps} />)
-      inputElement = wrapper.find('#datumField')
+      inputElement = wrapper.findWhere(elem => elem.prop('component') === TranslationTabInputElem)
     }
 
     beforeEach(() => {

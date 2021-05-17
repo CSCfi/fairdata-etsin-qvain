@@ -54,16 +54,20 @@ describe('ActorsRef', () => {
     })
 
     describe('when calling addRefsOnlyToActors with actors that are not in actors', () => {
-      const actorsRefRef = [{ uiid: 3, roles: ['role'], isReference: true }, actors.actors[0]]
+      const expectedRef = {
+        uiid: 3,
+        roles: ['role'],
+        isReference: true,
+        some: "data that determines it's different",
+      }
+      const actorsRefRef = [expectedRef, actors.actors[0]]
 
       beforeEach(() => {
         actorsRef.addRefsOnlyToActors(actorsRefRef)
       })
 
-      test.skip('should add actors, that are not in the actors', () => {
-        // but it doesn't
-        // isActorEqual says that empty object is equal with {uiid:1, roles: ["mother", "Ph.D. in Math"]}
-        actorsRef.actors.actors.should.deep.include(actorsRefRef[0])
+      test('should add actors, that are not in the actors', () => {
+        actorsRef.actors.actors.should.deep.include(expectedRef)
       })
     })
 

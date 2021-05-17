@@ -46,7 +46,7 @@ describe('Qvain Access Type', () => {
     options = component.instance().state.options
   }
 
-  describe('given AccessType is OPEN and isUsingRems is true ', () => {
+  describe('given AccessType is OPEN and isUsingRems is false ', () => {
     beforeEach(async () => {
       Qvain.AccessType.set({ url: ACCESS_TYPE_URL.OPEN })
       await setAuthUserAndRender({ isUsingRems: false })

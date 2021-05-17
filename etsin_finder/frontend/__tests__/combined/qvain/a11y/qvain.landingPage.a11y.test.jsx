@@ -41,7 +41,6 @@ describe('Qvain landing page', () => {
   })
 
   it('should call Accessibility.handleNavigation', async () => {
-    // maybe deprecated after stores refactor check it before merge to test
     expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([[]])
   })
 })
