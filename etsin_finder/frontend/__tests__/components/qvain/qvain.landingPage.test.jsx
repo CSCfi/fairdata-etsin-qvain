@@ -18,8 +18,6 @@ import Image from '../../../js/components/qvain/views/landingPage/image'
 
 jest.mock('../../../js/stores/stores')
 
-//mockkaa useEffect
-
 describe('given mockStores', () => {
   const mockStores = {
     Accessibility: {},
