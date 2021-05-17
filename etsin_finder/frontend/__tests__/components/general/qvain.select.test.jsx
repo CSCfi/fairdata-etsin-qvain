@@ -39,7 +39,7 @@ describe('Select', () => {
 
   const getCurrentOptionReturnValue = 'getCurrentOptionReturnValue'
   const onChangeReturnValue = 'onChangeReturnValue'
-  const getOptionValueReturnValue = 'getOptionValueReturValue'
+  const getOptionValueReturnValue = 'getOptionValueReturnValue'
   const emptyGetReferenceDataRes = { data: { hits: { hits: [] } } }
 
   beforeEach(() => {
