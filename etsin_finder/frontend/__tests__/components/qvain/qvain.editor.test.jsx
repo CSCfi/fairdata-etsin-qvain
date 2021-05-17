@@ -154,7 +154,7 @@ describe('given haveDataset true', () => {
       harness.shouldExist()
     })
 
-    test('should hvae children with expected props', () => {
+    test('should have children with expected props', () => {
       const children = [
         { label: 'DisableImplicitSubmit', findArgs: DisableImplicitSubmit },
         { label: 'Description', findArgs: Description },
