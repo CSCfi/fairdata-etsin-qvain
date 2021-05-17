@@ -67,7 +67,7 @@ describe('given mockStores', () => {
       harness.dive()
     })
 
-    test('should include children wiht expected props', () => {
+    test('should include children with expected props', () => {
       const children = [
         {
           label: 'Header',
@@ -177,7 +177,7 @@ describe('given mockStores', () => {
       harness.dive()
     })
 
-    test('should have chlidren with expected props', () => {
+    test('should have children with expected props', () => {
       const children = [
         { label: 'IDABoxTitle', findArgs: 'box__BoxTitle', text: 'IDA' },
         { label: 'IDABoxImage', findArgs: Image },

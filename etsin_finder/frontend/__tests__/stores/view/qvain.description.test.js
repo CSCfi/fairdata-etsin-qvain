@@ -35,7 +35,7 @@ describe('Description', () => {
       expect(description.constructorFunc).to.have.beenCalledWith(Parent)
     })
 
-    test('should call makeObservbles', () => {
+    test('should call makeObservable', () => {
       expect(makeObservable).to.have.beenCalledWith(description)
     })
 
