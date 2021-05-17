@@ -67,7 +67,7 @@ describe('given mockStores', () => {
       harness.dive()
     })
 
-    test('should include children wiht expected props', () => {
+    test('should include children with expected props', () => {
       const children = [
         {
           label: 'Header',
