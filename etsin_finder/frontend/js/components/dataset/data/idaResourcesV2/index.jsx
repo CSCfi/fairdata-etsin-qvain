@@ -11,6 +11,7 @@ import { withStores } from '../../../../stores/stores'
 import getDownloadAction from './downloadActions'
 import ErrorMessage from './errorMessage'
 import PackageModal from './packageModal'
+import ManualDownloadModal from './manualDownloadModal'
 import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
 
 const downloadAll = identifier => {
@@ -110,6 +111,7 @@ function IdaResources(props) {
       <Tree allowDownload={allowDownload} />
       {inInfo && <Info {...infoProps} />}
       <PackageModal Packages={Packages} />
+      <ManualDownloadModal Packages={Packages} />
     </>
   )
 }

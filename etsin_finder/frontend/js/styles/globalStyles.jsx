@@ -291,6 +291,10 @@ const GlobalStyle = createGlobalStyle`
     line-height: calc(1.7 * 1em);
   }
 
+  em {
+    font-weight: bold;
+  }
+
   .small-text {
     font-size: 0.875em;
   }
