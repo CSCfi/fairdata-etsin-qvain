@@ -89,6 +89,7 @@ class MetaxAPIService(FlaskService):
             return None
         return resp
 
+
 def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
     """Get single catalog record from Metax API v2.
 
@@ -113,23 +114,6 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
         return current_app.cr_cache.update_cache(cr_id, cr)
     else:
         return cr
-
-def _get_cr_from_metax(cr_id, check_removed_if_not_exist):
-    """Get removed catalog record from Metax
-
-    Args:
-        cr_id (str): Catalog record identifier.
-        check_removed_if_not_exist (bool): -
-
-    Returns:
-        dict: Return the responce from Metax as dict, else None.
-
-    """
-    _metax_api = MetaxAPIService(current_app)
-    cr = _metax_api.get_catalog_record(cr_id)
-    if not cr and check_removed_if_not_exist:
-        cr = _metax_api.get_removed_catalog_record(cr_id)
-    return cr
 
 
 def get_catalog_record_access_type(cr):
@@ -209,6 +193,7 @@ def is_rems_catalog_record(catalog_record):
     if get_catalog_record_access_type(catalog_record) == ACCESS_TYPES.get('permit'):
         return True
     return False
+
 
 def is_draft(catalog_record):
     """
