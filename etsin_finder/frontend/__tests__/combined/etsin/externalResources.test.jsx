@@ -6,6 +6,7 @@ import 'chai/register-should'
 import { ThemeProvider } from 'styled-components'
 import '../../../locale/translations'
 
+import { buildStores } from '../../../js/stores'
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../js/utils/constants'
 import Locale from '../../../js/stores/view/locale'
 import Packages from '../../../js/stores/view/packages'
@@ -37,10 +38,11 @@ import {
 import etsinTheme from '../../../js/styles/theme'
 
 jest.mock('../../../js/stores/stores')
+const Stores = buildStores()
 
 const renderResources = resources => {
   useStores.mockReturnValue({
-    Locale,
+    ...Stores,
     DatasetQuery: {
       results: datasetWithResources(resources),
     },
@@ -115,7 +117,7 @@ describe('ExternalResources', () => {
 
   describe('ResourceItem', () => {
     beforeEach(() => {
-      useStores.mockReturnValue({ Locale })
+      useStores.mockReturnValue({ Locale: Stores.Locale })
     })
 
     const renderResource = resource =>

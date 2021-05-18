@@ -32,14 +32,6 @@ class Projects {
     this.changed = true
   }
 
-  @action changeProject = projectId => {
-    this.selectedProject = projectId
-    this.hierarchy = {}
-    this.selectedFiles = []
-    this.selectedDirectories = []
-    return this.getInitialDirectories()
-  }
-
   @action fromBackend = dataset => {
     // Projects
     const projects = dataset.is_output_of
@@ -92,7 +84,6 @@ class Projects {
           })
           params.push(fundingAgencies)
         } else params.push(null)
-
         return Project(...params)
       })
     }

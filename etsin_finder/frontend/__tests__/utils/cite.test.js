@@ -1,11 +1,11 @@
 import 'chai/register-should'
 
-import Locale from '../../js/stores/view/locale'
+import { buildStores } from '../../js/stores'
 import Cite from '../../js/components/dataset/citation/cite'
 import { getNameInitials, getLastnameFirst } from '../../js/components/dataset/citation/cite/utils'
-import { should } from 'chai'
 
-const cite = new Cite(Locale.getValueTranslation)
+const stores = buildStores()
+const cite = new Cite(stores.Locale.getValueTranslation)
 
 const emptyDataset = {
   research_dataset: {},
@@ -121,7 +121,7 @@ const secondVersionDataset = {
 }
 
 beforeEach(() => {
-  Locale.setLang('en', false)
+  stores.Locale.setLang('en', false)
 })
 
 describe('Citation styles', () => {
@@ -169,7 +169,7 @@ describe('Citation styles', () => {
     })
 
     it('should use Finnish titles', () => {
-      Locale.setLang('fi', true)
+      stores.Locale.setLang('fi', true)
       c(organizationDataset).should.eq(
         'Pääorganisaatio. (2021). Julkaisun nimi. Julkaisija. http://urn.fi/urn:nbn:fi:att:feedc0de'
       )
@@ -235,7 +235,7 @@ describe('Citation styles', () => {
     })
 
     it('should use Finnish titles', () => {
-      Locale.setLang('fi', true)
+      stores.Locale.setLang('fi', true)
       c(organizationDataset).should.eq(
         'Pääorganisaatio. 2021. ”Julkaisun nimi”. Julkaisija. http://urn.fi/urn:nbn:fi:att:feedc0de'
       )
@@ -298,7 +298,7 @@ describe('Citation styles', () => {
     })
 
     it('should use Finnish titles', () => {
-      Locale.setLang('fi', true)
+      stores.Locale.setLang('fi', true)
       c(organizationDataset).should.eq(
         'Pääorganisaatio. ”Julkaisun nimi”. Julkaisija, 2021. http://urn.fi/urn:nbn:fi:att:feedc0de'
       )

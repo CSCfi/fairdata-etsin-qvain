@@ -11,10 +11,10 @@
 import React from 'react'
 import { observable, action, makeObservable } from 'mobx'
 import translate from 'counterpart'
-import env from '../domain/env'
 
 class Accessibility {
-  constructor() {
+  constructor(Env) {
+    this.Env = Env
     makeObservable(this)
     this.announce = this.announce.bind(this)
   }
@@ -81,12 +81,12 @@ class Accessibility {
 
   @action
   handleNavigation(location, resetFocus = true) {
-    if (env.isQvain) {
+    if (this.Env.isQvain) {
       this.setQvainPageTitle(translate('general.qvainPageTitle'))
       return
     }
 
-    let loc = location;
+    let loc = location
     loc = this.getLocation()
 
     const pageName = translate(`general.etsinPageTitles.${loc}`)
@@ -109,7 +109,7 @@ class Accessibility {
     ]
 
     let location
-    const pathname = env.history.location.pathname
+    const pathname = this.Env.history.location.pathname
     for (const [matchLocation, matcher] of etsinLocationMatchers) {
       if (matcher.test(pathname)) {
         location = matchLocation
@@ -145,4 +145,4 @@ class Accessibility {
   }
 }
 
-export default new Accessibility()
+export default Accessibility

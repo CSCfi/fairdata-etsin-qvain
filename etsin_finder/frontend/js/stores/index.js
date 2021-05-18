@@ -8,32 +8,47 @@
  * @license   MIT
  */
 
-import Locale from './view/locale'
-import Env from './domain/env'
-import Auth from './domain/auth'
-import ElasticQuery from './view/elasticquery'
-import DatasetQuery from './view/datasetquery'
-import Accessibility from './view/accessibility'
-import Map from './view/map'
-import Qvain from './view/qvain'
-import QvainDatasets from './view/qvain/qvain.datasets'
-import Access from './view/access'
-import SearchFilters from './view/searchfilters'
-import Matomo from './tracking'
+import LocaleClass from './view/locale'
+import EnvClass from './domain/env'
+import AuthClass from './domain/auth'
+import ElasticQueryClass from './view/elasticquery'
+import DatasetQueryClass from './view/datasetquery'
+import AccessibilityClass from './view/accessibility'
+import MapClass from './view/map'
+import QvainClass from './view/qvain'
+import QvainDatasetsClass from './view/qvain/qvain.datasets'
+import AccessClass from './view/access'
+import SearchFiltersClass from './view/searchfilters'
+import MatomoClass from './tracking'
 
-const Stores = {
-  Env,
-  Auth,
-  Locale,
-  ElasticQuery,
-  DatasetQuery: new DatasetQuery(Env),
-  Accessibility,
-  Map,
-  Qvain: new Qvain(Env),
-  QvainDatasets,
-  Access,
-  SearchFilters,
-  Matomo: new Matomo(Env),
+export const buildStores = () => {
+  const Env = new EnvClass()
+  const Auth = new AuthClass()
+  const QvainDatasets = new QvainDatasetsClass()
+  const SearchFilters = new SearchFiltersClass()
+  const Access = new AccessClass(Auth)
+  const Qvain = new QvainClass(Env)
+  const Accessibility = new AccessibilityClass(Env)
+  const ElasticQuery = new ElasticQueryClass(Env)
+  const Locale = new LocaleClass(Accessibility, ElasticQuery)
+  const DatasetQuery = new DatasetQueryClass(Env, Access)
+  const Map = new MapClass(Locale)
+  const Matomo = new MatomoClass(Env)
+
+  return {
+    Env,
+    Qvain,
+    Accessibility,
+    Locale,
+    ElasticQuery,
+    DatasetQuery,
+    Auth,
+    Access,
+    Map,
+    QvainDatasets,
+    SearchFilters,
+    Matomo,
+  }
 }
 
-export default Stores
+export default buildStores()

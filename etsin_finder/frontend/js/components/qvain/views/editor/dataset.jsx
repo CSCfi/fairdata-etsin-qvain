@@ -17,7 +17,7 @@ import TemporalAndSpatial from '../../fields/temporalAndSpatial'
 import History from '../../fields/history'
 import Project from '../../fields/project'
 
-const Dataset = ({
+export const Dataset = ({
   datasetError,
   haveDataset,
   datasetErrorTitle,

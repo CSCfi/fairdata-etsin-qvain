@@ -11,8 +11,8 @@ const brief = {
 }
 
 const Spatial = () => (
-  <Field brief={brief}>
-    <SpatialFieldContent />
+  <Field brief={brief} labelFor="spatial-coverage">
+    <SpatialFieldContent id="spatial-coverage" />
   </Field>
 )
 

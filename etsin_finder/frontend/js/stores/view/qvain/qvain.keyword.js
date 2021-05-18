@@ -1,14 +1,16 @@
-import { action, makeObservable } from 'mobx'
+import { override, makeObservable } from 'mobx'
+import { keywordsSchema, keywordsArraySchema } from '../../../components/qvain/utils/formValidation'
 import ReferenceField from './qvain.referenceField'
 
 class Keywords extends ReferenceField {
   constructor(Parent, defaultStorageFactory = () => [], defaultItem = undefined) {
     super(Parent, defaultStorageFactory, defaultItem)
+    this.reset()
     makeObservable(this)
   }
 
-  @action
-  addKeyword = () => {
+  @override
+  addItemStr() {
     if (this.itemStr.length > 0) {
       const keywordsInString = this.itemStr.split(',').map(word => word.trim())
       const noEmptyKeywords = keywordsInString.filter(kw => kw !== '')
@@ -16,7 +18,6 @@ class Keywords extends ReferenceField {
       const keywordsToStore = uniqKeywords.filter(word => !this.storage.includes(word))
       this.set([...this.storage, ...keywordsToStore])
       this.removeItemStr()
-      this.changed = true
     }
   }
 
@@ -26,6 +27,12 @@ class Keywords extends ReferenceField {
   }
 
   toBackend = () => this.storage
+
+  itemSchema = keywordsSchema
+
+  Schema = keywordsArraySchema
+
+  translationsRoot = 'qvain.description.keywords'
 }
 
 export default Keywords

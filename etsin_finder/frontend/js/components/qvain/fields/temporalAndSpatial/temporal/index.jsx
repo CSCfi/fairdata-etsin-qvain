@@ -6,7 +6,7 @@ import Field from '../../../general/section/field'
 import TemporalFieldContent from './temporalFieldContent'
 import { useStores } from '../../../utils/stores'
 
-const brief = {
+export const brief = {
   title: 'qvain.temporalAndSpatial.temporal.title',
   description: 'qvain.temporalAndSpatial.temporal.description',
 }

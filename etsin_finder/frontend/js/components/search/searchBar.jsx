@@ -16,6 +16,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { observer } from 'mobx-react'
 
 import { Search } from '../../routes'
 import ErrorBoundary from '../general/errorBoundary'
@@ -135,4 +136,4 @@ const SearchInner = styled.div`
     }
   }
 `
-export default withStores(SearchBar)
+export default withStores(observer(SearchBar))

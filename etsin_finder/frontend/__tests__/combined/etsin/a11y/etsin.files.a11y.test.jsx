@@ -9,15 +9,12 @@ import { makeAutoObservable } from 'mobx'
 
 expect.extend(toHaveNoViolations)
 
+import { buildStores } from '../../../../js/stores'
 import IdaResources from '../../../../js/components/dataset/data/idaResourcesV2/index'
 import FileTreeItem from '../../../../js/components/dataset/data/idaResourcesV2/fileTreeItem'
 import '../../../../locale/translations'
 import PackageModal from '../../../../js/components/dataset/data/idaResourcesV2/packageModal'
 import etsinTheme from '../../../../js/styles/theme'
-import Env from '../../../../js/stores/domain/env'
-import QvainStoreClass from '../../../../js/stores/view/qvain'
-import LocaleStore from '../../../../js/stores/view/locale'
-
 import { get } from '../../../__testdata__/qvain.files.data'
 import dataset from '../../../__testdata__/dataset.ida'
 import { StoresProvider, useStores } from '../../../../js/stores/stores'
@@ -26,9 +23,6 @@ import Modal from '../../../../js/components/general/modal'
 import { DownloadButton } from '../../../../js/components/dataset/data/idaResourcesV2/fileTreeItem'
 
 global.Promise = require('bluebird')
-
-Env.Flags.setFlag('METAX_API_V2', true)
-Env.Flags.setFlag('DOWNLOAD_API_V2', true)
 
 Promise.config({
   cancellation: true,
@@ -49,8 +43,6 @@ jest.mock('../../../../js/stores/stores', () => {
 axios.get.mockImplementation(get)
 
 const Files = new FilesClass()
-
-const QvainStore = new QvainStoreClass(Env)
 
 class MockPackages {
   constructor() {
@@ -79,10 +71,11 @@ class MockPackages {
 }
 
 const getStores = () => {
-  const stores = {
-    Env,
-    Qvain: QvainStore,
-    Locale: LocaleStore,
+  let stores = buildStores()
+  stores.Env.Flags.setFlag('METAX_API_V2', true)
+  stores.Env.Flags.setFlag('DOWNLOAD_API_V2', true)
+  stores = {
+    ...stores,
     Auth: {
       user: { idaProjects: ['project-identifier'] },
     },
