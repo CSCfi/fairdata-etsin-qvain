@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -95,7 +95,14 @@ function Dataset({
     Locale: { lang },
     Matomo,
   } = useStores()
+  const rowRef = useRef()
   const actions = []
+
+  useEffect(() => {
+    if (highlight && rowRef?.current?.scrollIntoView) {
+      rowRef.current.scrollIntoView({ block: 'center' })
+    }
+  }, [highlight])
 
   actions.push({
     text: 'qvain.datasets.useAsTemplate',
@@ -133,7 +140,7 @@ function Dataset({
   }
 
   return (
-    <DatasetRow key={dataset.identifier} tabIndex="0" highlight={highlight}>
+    <DatasetRow ref={rowRef} key={dataset.identifier} tabIndex="0" highlight={highlight}>
       <BodyCellWordWrap style={titleCellStyle}>
         {indent && <Marker />}
         {getTitle(dataset, lang)}
