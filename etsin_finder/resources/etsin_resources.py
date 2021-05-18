@@ -15,7 +15,6 @@ from etsin_finder.auth import authentication
 from etsin_finder.auth import authentication_direct_proxy
 from etsin_finder.auth import authorization
 from etsin_finder.services import cr_service
-from etsin_finder.services import cr_service_v2
 from etsin_finder.services.download_metadata_service import download_metadata
 from etsin_finder.services import rems_service
 from etsin_finder.utils.contact_utils import \
@@ -62,7 +61,6 @@ class Dataset(Resource):
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 
-        # The draft_of field should not exist in Metax v1 but may be present due to a Metax bug
         if 'draft_of' in cr:
             del cr['draft_of']
 
@@ -99,7 +97,7 @@ class V2Dataset(Resource):
             abort(404)
 
         is_authd = authentication.is_authenticated()
-        cr = cr_service_v2.get_catalog_record(cr_id, True, True)
+        cr = cr_service.get_catalog_record(cr_id, True, True)
         if not cr:
             abort(400, message="Unable to get catalog record from Metax")
 

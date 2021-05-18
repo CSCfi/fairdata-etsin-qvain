@@ -137,7 +137,6 @@ def validate_config(app):
             common_service_v2,
             qvain_service,
             cr_service,
-            cr_service_v2,
             download_metadata_service,
             download_service_v2,
         )
@@ -145,7 +144,6 @@ def validate_config(app):
         # Services that use app parameter
         validate_flags(app)
         cr_service.MetaxAPIService(app)
-        cr_service_v2.MetaxAPIService(app)
         download_metadata_service.DatasetMetadataService(app)
         download_service_v2.DownloadAPIService(app).validate_config(False)
 
