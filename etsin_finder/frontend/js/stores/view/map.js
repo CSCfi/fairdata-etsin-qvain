@@ -10,17 +10,42 @@
 
 import WKT from 'terraformer-wkt-parser'
 import { OpenStreetMapProvider } from 'leaflet-geosearch'
-import checkDataLang from '../../utils/checkDataLang'
 
 // functions for map component
 class Map {
+  constructor(Locale) {
+    this.Locale = Locale
+  }
+
+  // to prevent dependency cycle checkDataLang is copy-pasted here.
+  checkDataLang = (object, lang) => {
+    let language = lang
+    if (!lang) {
+      language = this.Locale.currentLang
+    }
+    if (typeof object === 'undefined' || Object.keys(object).length === 0) {
+      return ''
+    }
+    if (typeof object === 'string') {
+      return object
+    }
+    if (object[language]) return object[language]
+    if (object.und) {
+      return object.und
+    }
+    return object[Object.keys(object)[0]]
+  }
+
   createBounds = minmax => {
     const minY = minmax[0]
     const minX = minmax[1]
     const maxY = minmax[2]
     const maxX = minmax[3]
     // X and Y might be the wrong way around here
-    return [[minX, minY], [maxX, maxY]]
+    return [
+      [minX, minY],
+      [maxX, maxY],
+    ]
   }
 
   makeGeometry(geometry, placeUri) {
@@ -48,7 +73,7 @@ class Map {
   makeGeometryFromPlace = placeUri => {
     const provider = new OpenStreetMapProvider()
     return provider
-      .search({ query: checkDataLang(placeUri) })
+      .search({ query: this.checkDataLang(placeUri) })
       .then(results => [
         { type: 'Rectangle', coordinates: [results[0].bounds], bounds: results[0].bounds },
       ])
@@ -58,4 +83,4 @@ class Map {
   }
 }
 
-export default new Map()
+export default Map

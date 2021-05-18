@@ -5,17 +5,21 @@ import { MemoryRouter } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
 import { syncHistoryWithStore } from 'mobx-react-router'
 
-import { FilterItem } from '../../../js/components/search/filterResults/filterItem'
-import ElasticQuery from '../../../js/stores/view/elasticquery'
-import env from '../../../js/stores/domain/env'
+import FilterItem from '../../../js/components/search/filterResults/filterItem'
+import { buildStores } from '../../../js/stores'
+
+const mockStores = buildStores()
 
 // Syncing history with store
 const browserHistory = createBrowserHistory()
-const history = syncHistoryWithStore(browserHistory, env.history)
+const history = syncHistoryWithStore(browserHistory, mockStores.Env.history)
+
+jest.mock('../../../js/stores/stores', () => ({
+  withStores: Component => props => <Component Stores={mockStores} {...props} />,
+}))
 
 describe('FilterItem', () => {
-  ElasticQuery.updateSearch('Helsinki')
-  const Stores = { ElasticQuery, Matomo: jest.fn() }
+  mockStores.ElasticQuery.updateSearch('Helsinki')
 
   const facet = {
     item: { key: 'Pirkko Suihkonen', doc_count: 92 },
@@ -27,7 +31,6 @@ describe('FilterItem', () => {
     const filterItem = mount(
       <MemoryRouter>
         <FilterItem
-          Stores={Stores}
           key={facet.item.key}
           item={facet.item}
           aggregationName={facet.aggregationName}
@@ -37,24 +40,26 @@ describe('FilterItem', () => {
         />
       </MemoryRouter>
     )
-    it('should contain button', () => {
-      expect(filterItem.children().children().children().children().type()).toEqual('button')
-    })
+
     it('should contain key and doc_count', () => {
       expect(filterItem.text()).toEqual('Pirkko Suihkonen (92)')
     })
-    it('should not be active', () => {
-      expect(filterItem.children().children().children().children().props().className).toEqual(
-        undefined
+
+    it('should have button that is not active', () => {
+      const activeButton = filterItem.findWhere(
+        elem => elem.props().type === 'button' && elem.props().className === undefined
       )
+
+      expect(activeButton.exists()).toBe(true)
     })
   })
+
   describe('Filter currently active', () => {
-    ElasticQuery.updateFilter(facet.termName, facet.item.key)
+    mockStores.ElasticQuery.updateFilter(facet.termName, facet.item.key)
+
     const filterItem = mount(
       <MemoryRouter>
         <FilterItem
-          Stores={Stores}
           key={facet.item.key}
           item={facet.item}
           aggregationName={facet.aggregationName}
@@ -64,10 +69,13 @@ describe('FilterItem', () => {
         />
       </MemoryRouter>
     )
+
     it('should be active', () => {
-      expect(filterItem.children().children().children().children().props().className).toEqual(
-        'active'
+      const activeButton = filterItem.findWhere(
+        elem => elem.props().type === 'button' && elem.props().className === 'active'
       )
+
+      expect(activeButton.exists()).toBe(true)
     })
   })
 })

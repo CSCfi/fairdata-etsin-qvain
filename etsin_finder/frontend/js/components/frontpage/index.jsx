@@ -20,7 +20,6 @@ import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
 import KeyValues from './keyValues'
 import Modal from '../general/modal'
-import Accessibility from '../../stores/view/accessibility'
 import { withStores } from '../../stores/stores'
 
 const customStyles = {
@@ -32,20 +31,20 @@ const customStyles = {
 }
 
 class FrontPage extends Component {
+  state = {
+    userPermissionErrorModalIsOpen: false,
+    userHomeOrganizationErrorModalIsOpen: false,
+  }
+
   constructor(props) {
     super(props)
-
-    this.state = {
-      userPermissionErrorModalIsOpen: false,
-      userHomeOrganizationErrorModalIsOpen: false,
-    }
-
     this.closeUserPermissionErrorModal = this.closeUserPermissionErrorModal.bind(this)
     this.closeUserHomeOrganizationErrorModal = this.closeUserHomeOrganizationErrorModal.bind(this)
   }
 
   componentDidMount() {
     const {
+      Accessibility,
       Matomo: { recordEvent },
     } = this.props.Stores
 
@@ -60,21 +59,18 @@ class FrontPage extends Component {
   }
 
   checkUserLoginStatus() {
-    const { Stores } = this.props
-    Stores.Auth.checkLogin()
+    const { Auth } = this.props.Stores
+    Auth.checkLogin()
       .then(() => {
         // If the user was logged in but does not have a user.name,
         // it means they were verified through HAKA, but do not have a CSC account.
-        if (Stores.Auth.user.loggedIn && Stores.Auth.user.name === undefined) {
+        if (Auth.user.loggedIn && Auth.user.name === undefined) {
           this.setState({
             userPermissionErrorModalIsOpen: true,
           })
           // If the user has a user.name, but not a user.homeOrganizationName,
           // it means they have a CSC account, but no home organization set.
-        } else if (
-          Stores.Auth.user.name !== undefined &&
-          Stores.Auth.user.homeOrganizationName === undefined
-        ) {
+        } else if (Auth.user.name !== undefined && Auth.user.homeOrganizationName === undefined) {
           this.setState({
             userHomeOrganizationErrorModalIsOpen: true,
           })

@@ -6,7 +6,6 @@ import {
 
 export default async Field => {
   const { inEdit, save, clearInEdit, setValidationError } = Field
-
   try {
     await provenanceNameSchema.validate(inEdit.name, { strict: true })
     if (inEdit.startDate || inEdit.endDate) {

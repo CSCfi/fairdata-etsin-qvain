@@ -24,10 +24,12 @@ const ActorsInput = () => {
 
   const CreateOption = { Option: CustomOption }
 
+  const translationsRoot = 'qvain.history.provenance.modal.actorsInput'
+
   const options = [
     {
       value: 'create-actor',
-      label: translate('qvain.history.provenance.modal.actorsInput.createButton'),
+      label: translate(`${translationsRoot}.createButton`),
     },
     ...Actors.actorOptions
       .filter(option => !selectedOptionIds.includes(option.value))
@@ -62,7 +64,7 @@ const ActorsInput = () => {
     const id = selection.value
     Provenances.inEdit.associations.addActorWithId(id)
     Provenances.inEdit.associations.addRole(id, ROLE.PROVENANCE)
-    setSelectedActor('selectedActor', undefined)
+    setSelectedActor(undefined)
   }
 
   const setSelectedActor = value => {
@@ -79,11 +81,7 @@ const ActorsInput = () => {
 
   return (
     <>
-      <Translate
-        component={Label}
-        content="qvain.history.provenance.modal.actorsInput.label"
-        htmlFor="actors-input"
-      />
+      <Translate component={Label} content={`${translationsRoot}.label`} htmlFor="actors-input" />
       <ActorsList
         language={language}
         actors={Provenances.inEdit.associations}
@@ -92,7 +90,7 @@ const ActorsInput = () => {
       <Translate
         component={ReactSelect}
         inputId="actors-select"
-        attributes={{ placeholder: 'qvain.history.provenance.modal.actorsInput.placeholder' }}
+        attributes={{ placeholder: `${translationsRoot}.placeholder` }}
         options={options}
         styles={styles}
         components={CreateOption}
@@ -108,7 +106,7 @@ const ActorsInput = () => {
   )
 }
 
-const CustomOption = ({ children, ...props }) => (
+export const CustomOption = ({ children, ...props }) => (
   <selectComponents.Option {...props}>
     {children} {props.value === 'create-actor' && <EditIcon color="primary" />}
   </selectComponents.Option>

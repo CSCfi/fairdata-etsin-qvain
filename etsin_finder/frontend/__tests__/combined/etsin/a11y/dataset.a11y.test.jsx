@@ -10,7 +10,7 @@ global.Promise = require('bluebird')
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
-import stores from '../../../../js/stores'
+import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import dataset from '../../../__testdata__/dataset.att'
 import Dataset from '../../../../js/components/dataset'
@@ -18,7 +18,6 @@ import Description from '../../../../js/components/dataset/description'
 import Maps from '../../../../js/components/dataset/maps'
 import Events from '../../../../js/components/dataset/events'
 import ExternalResources from '../../../../js/components/dataset/data/externalResources'
-import Accessibility from '../../../../js/stores/view/accessibility'
 import axios from 'axios'
 
 jest.mock('../../../../js/components/dataset/sidebar/special/importImages', () => ({
@@ -56,7 +55,8 @@ const mockGet = () => {
 const identifier = dataset.identifier
 const path = `/dataset/${identifier}`
 
-Accessibility.handleNavigation = jest.fn()
+const stores = buildStores()
+stores.Accessibility.handleNavigation = jest.fn()
 
 const flushPromises = () => new Promise(setImmediate)
 
@@ -106,7 +106,7 @@ describe('Etsin dataset page', () => {
   })
 
   it('should call Accessibility.handleNavigation for dataset', async () => {
-    expect(Accessibility.handleNavigation.mock.calls).toEqual([['dataset', false]])
+    expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([['dataset', false]])
   })
 
   describe('Data tab (external resources)', () => {
@@ -126,7 +126,7 @@ describe('Etsin dataset page', () => {
     })
 
     it('should call Accessibility.handleNavigation for data', async () => {
-      expect(Accessibility.handleNavigation.mock.calls).toEqual([['data', false]])
+      expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([['data', false]])
     })
   })
 
@@ -147,7 +147,7 @@ describe('Etsin dataset page', () => {
     })
 
     it('should call Accessibility.handleNavigation for data', async () => {
-      expect(Accessibility.handleNavigation.mock.calls).toEqual([['events', false]])
+      expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([['events', false]])
     })
   })
 
@@ -168,7 +168,7 @@ describe('Etsin dataset page', () => {
     })
 
     it('should call Accessibility.handleNavigation for maps', async () => {
-      expect(Accessibility.handleNavigation.mock.calls).toEqual([['maps', false]])
+      expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([['maps', false]])
     })
   })
 })

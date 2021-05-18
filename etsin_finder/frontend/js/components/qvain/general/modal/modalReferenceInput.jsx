@@ -33,7 +33,6 @@ const ModalReferenceInput = ({
       metaxIdentifier={metaxIdentifier}
       placeholder={translations.placeholder}
       inModal
-      search
       isClearable
     />
   )

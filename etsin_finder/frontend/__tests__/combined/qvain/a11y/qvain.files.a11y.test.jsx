@@ -9,6 +9,7 @@ import Translate from 'react-translate-component'
 
 expect.extend(toHaveNoViolations)
 
+import { buildStores } from '../../../../js/stores'
 import '../../../../locale/translations'
 import FilePicker from '../../../../js/components/qvain/fields/files/ida'
 import AddItemsModal from '../../../../js/components/qvain/fields/files/ida/addItems'
@@ -27,7 +28,8 @@ import SelectedItemsTreeItem from '../../../../js/components/qvain/fields/files/
 
 global.Promise = require('bluebird')
 
-Env.Flags.setFlag('METAX_API_V2', true)
+const stores = buildStores()
+stores.Env.Flags.setFlag('METAX_API_V2', true)
 
 Promise.config({
   cancellation: true,
@@ -47,14 +49,8 @@ jest.mock('../../../../js/stores/stores', () => {
 // Mock responses for a dataset containing IDA files. See the data file for the project structure.
 axios.get.mockImplementation(get)
 
-const QvainStore = new QvainStoreClass(Env)
-const stores = {
-  Env,
-  Qvain: QvainStore,
-  Locale: LocaleStore,
-  Auth: {
-    user: { idaProjects: ['project-identifier'] },
-  },
+stores.Auth = {
+  user: { idaProjects: ['project-identifier'] },
 }
 
 const datasetIdentifier = '6d2cb5f5-4867-47f7-9874-09357f2901a3'

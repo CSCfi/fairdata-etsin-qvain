@@ -31,6 +31,8 @@ import GlobalStyle from './styles/globalStyles'
 import Stores from './stores'
 import { StoresProvider } from './stores/stores'
 
+const { Env, Locale, Auth, Accessibility } = Stores
+
 registerLocale('fi', fi)
 registerLocale('en', en)
 
@@ -43,7 +45,7 @@ if (BUILD === 'test') {
 }
 
 // Syncing history with store
-const history = syncHistoryWithStore(browserHistory, Stores.Env.history)
+const history = syncHistoryWithStore(browserHistory, Env.history)
 
 const hideSpinner = () => {
   const spinner = document.getElementById('app-spinner')
@@ -57,14 +59,14 @@ const App = () => {
 
   // Load runtime config
   const configure = async () => {
-    await Stores.Env.fetchAppConfig()
-    Stores.Locale.loadLang()
+    await Env.fetchAppConfig()
+    Locale.loadLang()
     hideSpinner()
     setInitialized(true)
   }
 
   useEffect(() => {
-    Stores.Auth.checkLogin()
+    Auth.checkLogin()
     configure()
   }, [])
 
@@ -91,4 +93,4 @@ const App = () => {
 export default App
 
 // setup tabbing
-Stores.Accessibility.initialLoad()
+Accessibility.initialLoad()

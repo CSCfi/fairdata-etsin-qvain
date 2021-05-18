@@ -14,22 +14,28 @@ import {
   FileLabel,
 } from '../../../js/components/qvain/fields/files/legacy/selectedFiles'
 import { DeleteButton } from '../../../js/components/qvain/general/buttons'
-import Env from '../../../js/stores/domain/env'
-import QvainStoreClass from '../../../js/stores/view/qvain'
+import EnvClass from '../../../js/stores/domain/env'
+import QvainClass from '../../../js/stores/view/qvain'
 import { Directory } from '../../../js/stores/view/qvain/qvain.filesv1'
-import LocaleStore from '../../../js/stores/view/locale'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import LocaleClass from '../../../js/stores/view/locale'
 import { DATA_CATALOG_IDENTIFIER } from '../../../js/utils/constants'
 import { useStores } from '../../../js/stores/stores'
 
 global.Promise = require('bluebird')
-const QvainStore = new QvainStoreClass(Env)
+const Env = new EnvClass()
+const Accessibility = new AccessibilityClass(Env)
+const ElasticQuery = new ElasticQueryClass(Env)
+const Locale = new LocaleClass(Accessibility, ElasticQuery)
+const Qvain = new QvainClass(Env)
 
 const getStores = () => {
   Env.Flags.setFlag('METAX_API_V2', false)
   return {
     Env,
-    Qvain: QvainStore,
-    Locale: LocaleStore,
+    Qvain,
+    Locale,
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
@@ -21,50 +21,46 @@ const IssuedDateField = () => {
       original,
       useDoi,
       readonly,
-      IssuedDate: { value: issuedDate, set: setIssuedDate, Schema },
+      IssuedDate: { value: issuedDate, set: setIssuedDate, validationError, validate },
     },
     Locale: { lang },
   } = useStores()
-  const [error, setError] = useState('')
-
-  useEffect(() => {
-    Schema.validate(issuedDate, { strict: true })
-      .then(() => {
-        setError('')
-      })
-      .catch(err => {
-        setError(err.errors)
-      })
-  }, [issuedDate, Schema])
 
   const publishedWithDoi = !!(useDoi && original)
 
   return (
     <Card bottomContent>
       <LabelLarge htmlFor="issuedDateInput">
-        <Tooltip
-          title={translate('qvain.description.fieldHelpTexts.requiredToPublish', {
-            locale: lang,
-          })}
+        <Translate
+          component={Tooltip}
           position="right"
+          attributes={{
+            title: 'qvain.description.fieldHelpTexts.requiredToPublish',
+          }}
         >
           <Translate content="qvain.description.issuedDate.title" /> *
-        </Tooltip>
+        </Translate>
       </LabelLarge>
       <Translate component="p" content="qvain.description.issuedDate.infoText" />
       <DatePicker
         id="issuedDateInput"
         strictParsing
         selected={issuedDate ? new Date(issuedDate) : new Date()}
-        onChangeRaw={e => e && handleDatePickerChange(e.target.value, setIssuedDate)}
-        onChange={date => date && handleDatePickerChange(date.toISOString(), setIssuedDate)}
+        onChangeRaw={e => {
+          if (e) handleDatePickerChange(e.target.value, setIssuedDate)
+          validate()
+        }}
+        onChange={date => {
+          if (date) handleDatePickerChange(date.toISOString(), setIssuedDate)
+          validate()
+        }}
         locale={lang}
         placeholderText={translate('qvain.description.issuedDate.placeholder')}
         dateFormat={getDateFormatLocale(lang)}
         disabled={readonly || publishedWithDoi}
         required
       />
-      <>{error && <ValidationError>{error}</ValidationError>}</>
+      <>{validationError && <ValidationError>{validationError}</ValidationError>}</>
     </Card>
   )
 }

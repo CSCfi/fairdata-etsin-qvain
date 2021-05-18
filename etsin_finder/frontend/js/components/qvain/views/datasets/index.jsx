@@ -11,7 +11,7 @@ import { ContainerLight, ContainerSubsection, QvainContainer, PageTitle } from '
 import { SaveButton } from '../../general/buttons'
 import NoticeBar from '../../../general/noticeBar'
 
-const Datasets = ({ history }) => {
+export const Datasets = ({ history }) => {
   const {
     Qvain: { resetQvainStore },
     QvainDatasets: { publishedDataset, setPublishedDataset },

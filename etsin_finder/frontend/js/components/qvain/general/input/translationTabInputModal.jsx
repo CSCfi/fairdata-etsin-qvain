@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { Input, Label } from '../modal/form'
 import ValidationError from '../errors/validationError'
 
@@ -39,21 +39,17 @@ const TranslationTabInput = ({
       <Label htmlFor={id}>
         <Translate content={translations.label} /> {isRequired ? '*' : ''}
       </Label>
-      <Observer>
-        {() => (
-          <Translate
-            component={TranslationTabInputElem}
-            type={type}
-            id={id}
-            autoFocus
-            attributes={{ placeholder: translations.placeholder }}
-            disabled={readonly}
-            value={(inEdit[datum] || {})[language]}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-        )}
-      </Observer>
+      <Translate
+        component={TranslationTabInputElem}
+        type={type}
+        id={id}
+        autoFocus
+        attributes={{ placeholder: translations.placeholder }}
+        disabled={readonly}
+        value={(inEdit[datum] || {})[language]}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
       {error && <TranslationTabError>{error}</TranslationTabError>}
     </>
   )
@@ -88,4 +84,4 @@ export const TranslationTabInputElem = styled(Input)`
   }
 `
 
-export default TranslationTabInput
+export default observer(TranslationTabInput)

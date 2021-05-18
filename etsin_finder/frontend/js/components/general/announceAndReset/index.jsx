@@ -11,23 +11,26 @@
 }
 
 import React from 'react'
-import Accessibility from '../../../stores/view/accessibility'
+import { useStores } from '../../../stores/stores'
 import TextToAnnounce from './textToAnnounce'
 
-const AnnounceAndReset = () => (
-  <>
-    <div className="sr-only" aria-live="polite">
-      <TextToAnnounce location="politeAnnouncement" />
-    </div>
-    <div
-      className="sr-only"
-      aria-live="assertive"
-      tabIndex="-1"
-      ref={Accessibility.focusableElement}
-    >
-      <TextToAnnounce location="assertiveAnnouncement" />
-    </div>
-  </>
-)
+const AnnounceAndReset = () => {
+  const { Accessibility } = useStores()
+  return (
+    <>
+      <div className="sr-only" aria-live="polite">
+        <TextToAnnounce location="politeAnnouncement" />
+      </div>
+      <div
+        className="sr-only"
+        aria-live="assertive"
+        tabIndex="-1"
+        ref={Accessibility.focusableElement}
+      >
+        <TextToAnnounce location="assertiveAnnouncement" />
+      </div>
+    </>
+  )
+}
 
 export default AnnounceAndReset

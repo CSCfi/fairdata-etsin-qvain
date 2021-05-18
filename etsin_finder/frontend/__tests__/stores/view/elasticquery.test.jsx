@@ -1,10 +1,12 @@
 import createBrowserHistory from 'history/createBrowserHistory'
 import { syncHistoryWithStore } from 'mobx-react-router'
-import ElasticQuery from '../../../js/stores/view/elasticquery'
-import env from '../../../js/stores/domain/env'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import EnvClass from '../../../js/stores/domain/env'
 
+const Env = new EnvClass()
+const ElasticQuery = new ElasticQueryClass(Env)
 const browserHistory = createBrowserHistory()
-const history = syncHistoryWithStore(browserHistory, env.history)
+const history = syncHistoryWithStore(browserHistory, Env.history)
 
 describe('ElasticQuery', () => {
   // ------ UPDATE SEARCH ------

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
-import Locale from '../../../stores/view/locale'
+import Stores from '../../../stores'
 
 const InfoItem = props => (
   <tr>
@@ -19,7 +19,7 @@ const InfoCell = styled.td`
 `
 
 InfoItem.defaultProps = {
-  lang: Locale.currentLang
+  lang: Stores.Locale.currentLang,
 }
 
 InfoItem.propTypes = {

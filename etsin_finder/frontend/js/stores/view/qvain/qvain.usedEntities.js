@@ -2,7 +2,7 @@ import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 
-const UsedEntity = (
+export const UsedEntityTemplate = (
   uiid = uuidv4(),
   name = { fi: '', en: '', und: '' },
   description = { fi: '', en: '', und: '' },
@@ -12,9 +12,8 @@ const UsedEntity = (
 
 class UsedEntities extends Field {
   constructor(Qvain) {
-    super(Qvain, UsedEntity, UsedEntityModel, 'usedEntities')
+    super(Qvain, UsedEntityTemplate, UsedEntityModel, 'usedEntities')
     makeObservable(this)
-    this.Qvain = Qvain
   }
 
   clone = () => this

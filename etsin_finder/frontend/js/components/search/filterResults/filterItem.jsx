@@ -15,17 +15,14 @@ import PropTypes from 'prop-types'
 
 import { withStores } from '../../../stores/stores'
 
-export class FilterItem extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      term: this.props.term,
-      key: this.props.item.key,
-      doc_count: this.props.item.doc_count,
-    }
-    this.updateFilter = this.updateFilter.bind(this)
+class FilterItem extends Component {
+  state = {
+    term: this.props.term,
+    key: this.props.item.key,
+    doc_count: this.props.item.doc_count,
   }
+
+  updateFilter = this.updateFilter.bind(this)
 
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(newProps) {

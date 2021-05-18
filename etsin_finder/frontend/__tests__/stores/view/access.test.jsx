@@ -1,11 +1,6 @@
-import axios from 'axios'
-import Access from '../../../js/stores/view/access'
-import auth from '../../../js/stores/domain/auth'
+import AccessClass from '../../../js/stores/view/access'
+import AuthClass from '../../../js/stores/domain/auth'
 import { ACCESS_TYPE_URL } from '../../../js/utils/constants'
-
-jest.mock('../../../js/stores/domain/auth', () => ({
-  userLogged: false,
-}))
 
 const accessRights = {
   license: [
@@ -79,6 +74,9 @@ const accessRights = {
     },
   ],
 }
+
+const Auth = new AuthClass()
+const Access = new AccessClass(Auth)
 
 describe('Access Store', () => {
   describe('Update for open access', () => {
@@ -192,7 +190,7 @@ describe('Access Store', () => {
   describe('Update for login access', () => {
     describe('User not logged in', () => {
       it('Should start update process', done => {
-        auth.userLogged = false
+        Auth.userLogged = false
         const restricted_registration = accessRights
         restricted_registration.access_type.identifier = ACCESS_TYPE_URL.LOGIN
         Access.updateAccess(restricted_registration)
@@ -213,7 +211,7 @@ describe('Access Store', () => {
     })
     describe('User logged in', () => {
       it('Should start update process', done => {
-        auth.userLogged = true
+        Auth.userLogged = true
         const restricted_registration = accessRights
         restricted_registration.access_type.identifier = ACCESS_TYPE_URL.LOGIN
         Access.updateAccess(restricted_registration)
