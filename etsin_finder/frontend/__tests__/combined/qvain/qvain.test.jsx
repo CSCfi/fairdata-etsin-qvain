@@ -1,41 +1,26 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Translate from 'react-translate-component'
-import { components } from 'react-select'
-import CreatableSelect from 'react-select/creatable'
 
-import etsinTheme from '../../../js/styles/theme'
 import '../../../locale/translations'
 import { Qvain as QvainBase } from '../../../js/components/qvain/views/main'
-import DescriptionField from '../../../js/components/qvain/fields/description'
-import OtherIdentifierField from '../../../js/components/qvain/fields/description/otherIdentifier'
-import FieldOfScienceField from '../../../js/components/qvain/fields/description/fieldOfScience'
-import IssuedDateField from '../../../js/components/qvain/fields/description/issuedDate'
 import LanguageField from '../../../js/components/qvain/fields/description/language'
-import KeywordsField from '../../../js/components/qvain/fields/description/keywords'
-import SubjectHeadingsField from '../../../js/components/qvain/fields/description/subjectHeadings'
-import RightsAndLicenses from '../../../js/components/qvain/fields/licenses'
-import { License } from '../../../js/components/qvain/fields/licenses/licenses'
-import { AccessType } from '../../../js/components/qvain/fields/licenses/accessType'
-import RestrictionGrounds from '../../../js/components/qvain/fields/licenses/restrictionGrounds'
-import EmbargoExpires from '../../../js/components/qvain/fields/licenses/embargoExpires'
-import { ACCESS_TYPE_URL, LICENSE_URL, DATA_CATALOG_IDENTIFIER } from '../../../js/utils/constants'
+import { DATA_CATALOG_IDENTIFIER } from '../../../js/utils/constants'
 import { qvainFormSchema } from '../../../js/components/qvain/utils/formValidation'
 import { ExternalFilesBase } from '../../../js/components/qvain/fields/files/external/externalFiles'
 import DoiSelection, { DoiCheckbox } from '../../../js/components/qvain/fields/files/doiSelection'
 import { ButtonGroup } from '../../../js/components/qvain/general/buttons'
-import { ValidationErrors } from '../../../js/components/qvain/general/errors/validationError'
 import { SlidingContent } from '../../../js/components/qvain/general/card'
-import Env from '../../../js/stores/domain/env'
-import QvainStoreClass, { ExternalResource } from '../../../js/stores/view/qvain'
-import LocaleStore from '../../../js/stores/view/locale'
+import EnvClass from '../../../js/stores/domain/env'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import QvainClass, { ExternalResource } from '../../../js/stores/view/qvain'
+import LocaleClass from '../../../js/stores/view/locale'
 import TablePasState from '../../../js/components/qvain/views/datasets/tablePasState'
 import {
   filterByTitle,
   filterGroupsByTitle,
   groupDatasetsByVersionSet,
 } from '../../../js/components/qvain/views/datasets/filter'
-import DatePicker from '../../../js/components/qvain/general/input/datepicker'
 import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
 import { useStores } from '../../../js/stores/stores'
 
@@ -69,12 +54,18 @@ jest.mock('../../../js/stores/stores', () => {
   }
 })
 
+const Env = new EnvClass()
+const Accessibility = new AccessibilityClass(Env)
+const ElasticQuery = new ElasticQueryClass(Env)
+const Locale = new LocaleClass(Accessibility, ElasticQuery)
+const Qvain = new QvainClass(Env)
+
 const getStores = () => {
-  LocaleStore.setLang('en')
+  Locale.setLang('en')
   return {
     Env,
-    Qvain: new QvainStoreClass(Env),
-    Locale: LocaleStore,
+    Qvain,
+    Locale,
     Matomo: {
       recordEvent: jest.fn(),
     },
@@ -200,41 +191,6 @@ describe('Qvain dataset list PreservationStates', () => {
   })
 })
 
-describe('Qvain.Description', () => {
-  let stores
-
-  beforeEach(() => {
-    stores = getStores()
-    stores.Qvain.resetQvainStore()
-    useStores.mockReturnValue(stores)
-  })
-
-  it('should render <DescriptionField />', () => {
-    const component = shallow(<DescriptionField />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <OtherIdentifierField />', () => {
-    const component = shallow(<OtherIdentifierField.wrappedComponent />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <FieldOfScienceField />', () => {
-    const component = shallow(<FieldOfScienceField.wrappedComponent />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <LanguageField />', () => {
-    const component = shallow(<LanguageField.wrappedComponent />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <KeywordsField />', () => {
-    const component = shallow(<KeywordsField.wrappedComponent />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <SubjectHeadingsField />', () => {
-    const component = shallow(<SubjectHeadingsField.wrappedComponent Stores={getStores()} />)
-    expect(component).toMatchSnapshot()
-  })
-})
-
 describe('Qvain translation tabs', () => {
   let stores
   beforeEach(() => {
@@ -342,133 +298,6 @@ describe('Qvain dataset list filtering', () => {
   })
 })
 
-describe('Qvain.RightsAndLicenses', () => {
-  let stores
-  const getRenderedLicenseUrls = shallowLicenseComponent => {
-    const selectedOptions = shallowLicenseComponent
-      .findWhere(c => c.prop('component') === CreatableSelect)
-      .dive()
-      .dive()
-      .dive()
-      .dive()
-      .find(components.MultiValue)
-    return selectedOptions.map(opt => opt.prop('data').identifier)
-  }
-
-  beforeEach(() => {
-    stores = getStores()
-    stores.Qvain.resetQvainStore()
-    useStores.mockReturnValue(stores)
-  })
-
-  it('should render <RightsAndLicenses />', () => {
-    const component = shallow(<RightsAndLicenses />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <Licenses />', () => {
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render default license', () => {
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    expect(getRenderedLicenseUrls(component)).toEqual([LICENSE_URL.CCBY4])
-  })
-  it('should render one added license, Other (URL)', () => {
-    const { set: setLicenseArray, Model: LicenseConstructor } = stores.Qvain.Licenses
-    setLicenseArray([
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test.url'),
-    ])
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    expect(getRenderedLicenseUrls(component)).toEqual(['https://test.url'])
-  })
-  it('should render one added license, CCBY4', () => {
-    const { set: setLicenseArray, Model: LicenseConstructor } = stores.Qvain.Licenses
-    setLicenseArray([])
-    setLicenseArray([
-      LicenseConstructor(
-        { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
-        LICENSE_URL.CCBY4
-      ),
-    ])
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    expect(getRenderedLicenseUrls(component)).toEqual([LICENSE_URL.CCBY4])
-  })
-  it('should render three added licenses, Other (URL) x 2 + CCBY4', () => {
-    const { set: setLicenseArray, Model: LicenseConstructor } = stores.Qvain.Licenses
-    setLicenseArray([
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test.url'),
-      LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test2.url'),
-      LicenseConstructor(
-        { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
-        LICENSE_URL.CCBY4
-      ),
-    ])
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    expect(getRenderedLicenseUrls(component)).toEqual([
-      'https://test.url',
-      'https://test2.url',
-      LICENSE_URL.CCBY4,
-    ])
-  })
-  it('should render four licenses where two have errors', () => {
-    const { Licenses } = stores.Qvain
-    Licenses.set([
-      Licenses.Model(
-        { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
-        LICENSE_URL.CCBY4
-      ),
-      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url'),
-      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'http://ok.url'),
-      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httppp:/fail.url'),
-    ])
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    component.instance().validateLicenses()
-    expect(getRenderedLicenseUrls(component)).toEqual([
-      LICENSE_URL.CCBY4,
-      'httpöötest.url',
-      'http://ok.url',
-      'httppp:/fail.url',
-    ])
-    const errors = component
-      .find(ValidationErrors)
-      .dive()
-      .find(Translate) // ValidationErrorItem
-      .map(item => item.text())
-
-    expect(errors.length).toBe(2)
-    expect(errors[0].startsWith('httpöötest.url'))
-    expect(errors[1].startsWith('httppp:/fail.url'))
-  })
-  it('should render <AccessType />', () => {
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <RestrictionGrounds />', () => {
-    const { set: setAccessType, Model: AccessTypeConstructor } = stores.Qvain.AccessType
-    setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(RestrictionGrounds).length).toBe(1)
-  })
-  it('should NOT render <RestrictionGrounds />', () => {
-    const { set: setAccessType, Model: AccessTypeConstructor } = stores.Qvain.AccessType
-    setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(RestrictionGrounds).length).toBe(0)
-  })
-  it('should render <EmbargoExpires />', () => {
-    const { set: setAccessType, Model: AccessTypeConstructor } = stores.Qvain.AccessType
-    setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.EMBARGO))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(EmbargoExpires).length).toBe(1)
-  })
-  it('should NOT render <EmbargoExpires />', () => {
-    const { set: setAccessType, Model: AccessTypeConstructor } = stores.Qvain.AccessType
-    setAccessType(AccessTypeConstructor(undefined, ACCESS_TYPE_URL.OPEN))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(EmbargoExpires).length).toBe(0)
-  })
-})
-
 describe('Qvain.ExternalFiles', () => {
   let stores
 
@@ -496,38 +325,6 @@ describe('Qvain.ExternalFiles', () => {
     )
     const externalFiles = shallow(<ExternalFilesBase />)
     expect(externalFiles.find(ButtonGroup).length).toBe(1)
-  })
-})
-
-describe('Qvain issued date', () => {
-  let Qvain
-  let stores
-
-  beforeEach(() => {
-    stores = getStores()
-    useStores.mockReturnValue(stores)
-    Qvain = stores.Qvain
-    Qvain.resetQvainStore()
-  })
-
-  const IssuedDateFieldBase = IssuedDateField.wrappedComponent
-
-  it('is enabled', () => {
-    const component = shallow(<IssuedDateFieldBase />)
-    expect(component.find(DatePicker).prop('disabled')).toEqual(false)
-  })
-
-  it('is enabled for unpublished DOI dataset', () => {
-    Qvain.setUseDoi(true)
-    const component = shallow(<IssuedDateFieldBase />)
-    expect(component.find(DatePicker).prop('disabled')).toEqual(false)
-  })
-
-  it('is disabled for published DOI dataset', () => {
-    Qvain.setUseDoi(true)
-    Qvain.setOriginal({ identifier: 'test' })
-    const component = shallow(<IssuedDateFieldBase />)
-    expect(component.find(DatePicker).prop('disabled')).toEqual(true)
   })
 })
 

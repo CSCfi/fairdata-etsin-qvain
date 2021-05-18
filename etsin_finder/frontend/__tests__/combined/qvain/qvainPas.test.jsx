@@ -2,7 +2,6 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import axios from 'axios'
-import { act, waitFor } from 'react-dom/test-utils'
 
 import '../../../locale/translations'
 
@@ -18,9 +17,11 @@ import AccessType from '../../../js/components/qvain/fields/licenses/accessType'
 import FileForm from '../../../js/components/qvain/fields/files/ida/forms/fileForm'
 import DirectoryForm from '../../../js/components/qvain/fields/files/ida/forms/directoryForm'
 import { File, Directory, Project } from '../../../js/stores/view/common.files.items'
-import QvainStoreClass from '../../../js/stores/view/qvain'
-import LocaleStore from '../../../js/stores/view/locale'
-import EnvStore from '../../../js/stores/domain/env'
+import QvainClass from '../../../js/stores/view/qvain'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import LocaleClass from '../../../js/stores/view/locale'
+import EnvClass from '../../../js/stores/domain/env'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../../js/utils/constants'
 import { metaxResponses } from '../../__testdata__/qvainPas.data'
 
@@ -30,14 +31,18 @@ Promise.config({
   cancellation: true,
 })
 
-const QvainStore = new QvainStoreClass(EnvStore)
+const Env = new EnvClass()
+const Accessibility = new AccessibilityClass(Env)
+const ElasticQuery = new ElasticQueryClass(Env)
+const Locale = new LocaleClass(Accessibility, ElasticQuery)
+const Qvain = new QvainClass(Env)
 
 const getStores = () => {
-  QvainStore.resetQvainStore()
+  Qvain.resetQvainStore()
   return {
-    Qvain: QvainStore,
-    Locale: LocaleStore,
-    Env: EnvStore,
+    Qvain,
+    Locale,
+    Env,
   }
 }
 

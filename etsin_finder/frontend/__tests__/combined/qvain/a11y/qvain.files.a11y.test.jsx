@@ -9,15 +9,13 @@ import Translate from 'react-translate-component'
 
 expect.extend(toHaveNoViolations)
 
+import { buildStores } from '../../../../js/stores'
 import '../../../../locale/translations'
 import FilePicker from '../../../../js/components/qvain/fields/files/ida'
 import AddItemsModal from '../../../../js/components/qvain/fields/files/ida/addItems'
 import UserMetadataModal from '../../../../js/components/qvain/fields/files/ida/forms/formModal'
 import PASModal from '../../../../js/components/qvain/fields/files/metadataModal'
 import etsinTheme from '../../../../js/styles/theme'
-import Env from '../../../../js/stores/domain/env'
-import QvainStoreClass from '../../../../js/stores/view/qvain'
-import LocaleStore from '../../../../js/stores/view/locale'
 import urls from '../../../../js/components/qvain/utils/urls'
 
 import { get } from '../../../__testdata__/qvain.files.data'
@@ -26,6 +24,8 @@ import Modal from '../../../../js/components/general/modal'
 import SelectedItemsTreeItem from '../../../../js/components/qvain/fields/files/ida/selectedItemsTreeItem'
 
 global.Promise = require('bluebird')
+
+const stores = buildStores()
 
 Promise.config({
   cancellation: true,
@@ -45,14 +45,8 @@ jest.mock('../../../../js/stores/stores', () => {
 // Mock responses for a dataset containing IDA files. See the data file for the project structure.
 axios.get.mockImplementation(get)
 
-const QvainStore = new QvainStoreClass(Env)
-const stores = {
-  Env,
-  Qvain: QvainStore,
-  Locale: LocaleStore,
-  Auth: {
-    user: { idaProjects: ['project-identifier'] },
-  },
+stores.Auth = {
+  user: { idaProjects: ['project-identifier'] },
 }
 
 const datasetIdentifier = '6d2cb5f5-4867-47f7-9874-09357f2901a3'

@@ -38,6 +38,8 @@ class Env {
 
   @observable ssoPrefix = ''
 
+  @observable app = getCookieValue('etsin_app')
+
   async fetchAppConfig() {
     const values = await importValuesAsync()
     this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
@@ -70,8 +72,6 @@ class Env {
   @action setQvainHost(host) {
     this.qvainHost = host
   }
-
-  @observable app = getCookieValue('etsin_app')
 
   @computed
   get isQvain() {
@@ -111,4 +111,4 @@ class Env {
   history = routingStore
 }
 
-export default new Env()
+export default Env

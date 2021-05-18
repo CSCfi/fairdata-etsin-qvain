@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
-import { configure, runInAction } from 'mobx'
+import { configure } from 'mobx'
 import axios from 'axios'
 import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
@@ -18,15 +18,17 @@ import ActorModal, { ActorModalBase } from '../../../js/components/qvain/fields/
 import OrgInfo from '../../../js/components/qvain/fields/actors/modal/org/orgInfo'
 import OrgForm from '../../../js/components/qvain/fields/actors/modal/org/orgForm'
 import { ButtonGroup, DeleteButton } from '../../../js/components/qvain/general/buttons'
-import Env from '../../../js/stores/domain/env'
-import QvainStoreClass from '../../../js/stores/view/qvain'
+import EnvClass from '../../../js/stores/domain/env'
+import QvainClass from '../../../js/stores/view/qvain'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
 import {
   Actor,
   Organization,
   Person,
   maybeReference,
 } from '../../../js/stores/view/qvain/qvain.actors'
-import LocaleStore from '../../../js/stores/view/locale'
+import LocaleClass from '../../../js/stores/view/locale'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
 import organizationMockGet, {
   dataset,
   AaltoIdentifier,
@@ -53,12 +55,18 @@ jest.mock('../../../js/stores/stores', () => {
   }
 })
 
-const QvainStore = new QvainStoreClass(Env)
+const Env = new EnvClass()
+const Qvain = new QvainClass(Env)
+const Accessibility = new AccessibilityClass(Env)
+const ElasticQuery = new ElasticQueryClass(Env)
+const Locale = new LocaleClass(Accessibility, ElasticQuery)
+
 const stores = {
   Env,
-  Qvain: QvainStore,
-  Locale: LocaleStore,
+  Qvain,
+  Locale,
 }
+
 beforeEach(() => {
   axios.get.mockReset()
   stores.Qvain.resetQvainStore()

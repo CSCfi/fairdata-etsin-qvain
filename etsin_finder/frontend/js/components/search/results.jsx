@@ -10,14 +10,13 @@
    */
 }
 
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 
-import ElasticQuery from '../../stores/view/elasticquery'
 import HeightTransition from '../general/animations/heightTransition'
 import SortResults from './sortResults'
 import Pagination from './pagination'
@@ -29,80 +28,74 @@ import FilterToggle from './filterResults/filterToggle'
 import NoResults from './noResults'
 import ClearFilters from './filterResults/clearFilters'
 
-class Results extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      filterOpen: false,
-    }
+import { useStores } from '../../stores/stores'
+
+const Results = () => {
+  const { ElasticQuery } = useStores()
+  const [filterOpen, setFilterOpen] = useState(false)
+
+  const toggleFilter = () => {
+    setFilterOpen(!filterOpen)
   }
 
-  toggleFilter = () => {
-    this.setState(state => ({
-      filterOpen: !state.filterOpen,
-    }))
-  }
-
-  render() {
-    return (
-      <div className="container">
-        <div className="regular-row">
-          {ElasticQuery.results.total === 0 && !ElasticQuery.loading ? (
-            <NoResults />
-          ) : (
-            <div>
-              {ElasticQuery.results.total !== 0 ? (
-                <div>
-                  <Header>
-                    <AmountCont>
-                      <ResultsAmount amount={ElasticQuery.results.total} />
-                    </AmountCont>
-                    <ResultsHeader>
-                      <QueryCont>
-                        <CurrentQuery />
-                      </QueryCont>
-                      <Settings>
-                        <FilterToggle
-                          margin="0em 0.5em 0em 0em"
-                          onClick={this.toggleFilter}
-                          active={this.state.filterOpen}
-                        >
-                          <FontAwesomeIcon icon={faFilter} />{' '}
-                          <Translate content="search.filter.filter" />
-                        </FilterToggle>
-                        <SortResults />
-                      </Settings>
-                    </ResultsHeader>
-                  </Header>
-                  <Flex>
-                    <Translate
-                      component={Sidebar}
-                      role="search"
-                      attributes={{ 'aria-label': 'search.filter.filters' }}
-                    >
-                      <HeightTransition in={this.state.filterOpen} duration={300} onlyMobile>
-                        <ClearFilters />
-                        <FilterResults open={this.state.filterOpen} />
-                      </HeightTransition>
-                    </Translate>
-                    <ResultsCont>
-                      <ResultsList />
-                    </ResultsCont>
-                  </Flex>
-                  <Pagination
-                    loading={ElasticQuery.loading}
-                    totalResults={ElasticQuery.results.total}
-                    perPage={ElasticQuery.perPage}
-                    currentPage={ElasticQuery.pageNum}
-                  />
-                </div>
-              ) : null}
-            </div>
-          )}
-        </div>
+  return (
+    <div className="container">
+      <div className="regular-row">
+        {ElasticQuery.results.total === 0 && !ElasticQuery.loading ? (
+          <NoResults />
+        ) : (
+          <div>
+            {ElasticQuery.results.total !== 0 ? (
+              <div>
+                <Header>
+                  <AmountCont>
+                    <ResultsAmount amount={ElasticQuery.results.total} />
+                  </AmountCont>
+                  <ResultsHeader>
+                    <QueryCont>
+                      <CurrentQuery />
+                    </QueryCont>
+                    <Settings>
+                      <FilterToggle
+                        margin="0em 0.5em 0em 0em"
+                        onClick={toggleFilter}
+                        active={filterOpen}
+                      >
+                        <FontAwesomeIcon icon={faFilter} />{' '}
+                        <Translate content="search.filter.filter" />
+                      </FilterToggle>
+                      <SortResults />
+                    </Settings>
+                  </ResultsHeader>
+                </Header>
+                <Flex>
+                  <Translate
+                    component={Sidebar}
+                    role="search"
+                    attributes={{ 'aria-label': 'search.filter.filters' }}
+                  >
+                    <HeightTransition in={filterOpen} duration={300} onlyMobile>
+                      <ClearFilters />
+                      <FilterResults open={filterOpen} />
+                    </HeightTransition>
+                  </Translate>
+                  <ResultsCont>
+                    <ResultsList />
+                  </ResultsCont>
+                </Flex>
+                <Pagination
+                  loading={ElasticQuery.loading}
+                  totalResults={ElasticQuery.results.total}
+                  perPage={ElasticQuery.perPage}
+                  currentPage={ElasticQuery.pageNum}
+                />
+              </div>
+            ) : null}
+          </div>
+        )}
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 const Header = styled.div`

@@ -2,9 +2,11 @@ import React from 'react'
 import axios from 'axios'
 import { shallow } from 'enzyme'
 
-import Env from '../../../js/stores/domain/env'
-import QvainStoreClass from '../../../js/stores/view/qvain'
-import LocaleStore from '../../../js/stores/view/locale'
+import EnvClass from '../../../js/stores/domain/env'
+import QvainClass from '../../../js/stores/view/qvain'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import LocaleClass from '../../../js/stores/view/locale'
 import { sortFunc } from '../../../js/stores/view/common.files.utils'
 import {
   itemLoaderNew,
@@ -74,19 +76,22 @@ const sorted = items => {
 // Mock responses for a dataset containing IDA files. See the data file for the project structure.
 axios.get.mockImplementation(get)
 
-const QvainStore = new QvainStoreClass(Env)
+const Env = new EnvClass()
+const Accessibility = new AccessibilityClass(Env)
+const ElasticQuery = new ElasticQueryClass(Env)
+const Locale = new LocaleClass(Accessibility, ElasticQuery)
+const Qvain = new QvainClass(Env)
 const stores = {
   Env,
-  Qvain: QvainStore,
-  Locale: LocaleStore,
+  Qvain,
+  Locale,
 }
 
 const datasetIdentifier = '6d2cb5f5-4867-47f7-9874-09357f2901a3'
 const emptyDatasetIdentifier = '6d2cb5f5-4867-47f7-9874-123456789'
 
 let root
-const { Qvain } = stores
-const { Files } = Qvain
+const { Files } = stores.Qvain
 
 const itemPaths = items => items.map(item => item.prop('item').path).sort(sortFunc)
 expect.extend({

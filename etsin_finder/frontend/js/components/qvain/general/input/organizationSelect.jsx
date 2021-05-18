@@ -42,7 +42,7 @@ class OrganizationSelect extends Component {
       department: 'qvain.select.placeholder',
     },
     creatable: true,
-    value: undefined,
+    value: {},
   }
 
   state = {
@@ -69,13 +69,13 @@ class OrganizationSelect extends Component {
    * @param {Object} prevProps Previous props
    */
   componentDidUpdate(prevProps) {
-    const didOrganizationChnage = this.didValueChange('organization', prevProps)
-    const didDepartmentChnage = this.didValueChange('department', prevProps)
-    if (didOrganizationChnage || didDepartmentChnage) {
+    const didOrganizationChange = this.didValueChange('organization', prevProps)
+    const didDepartmentChange = this.didValueChange('department', prevProps)
+    if (didOrganizationChange || didDepartmentChange) {
       const { organization, department } = this.props.value
       this.fetchOptions(
-        didOrganizationChnage ? organization || {} : {},
-        didDepartmentChnage ? department || {} : {}
+        didOrganizationChange ? organization || {} : {},
+        didDepartmentChange ? department || {} : {}
       )
     }
   }
@@ -203,6 +203,7 @@ class OrganizationSelect extends Component {
     return (
       <SelectContainer>
         <Translate
+          id="org-select"
           component={Select}
           onChange={this.onOrganizationChange}
           onBlur={() => this.onBlur('organization')}
@@ -212,12 +213,13 @@ class OrganizationSelect extends Component {
           options={options?.organization?.[lang] || []}
           placeholder={placeholder.organization}
           creatable={creatable}
-          allowReset={value.organization && !value.department}
+          allowReset={Boolean(value.organization && !value.department)}
           attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.organization' }}
         />
         <Department>
           {value.organization && (
             <Translate
+              id="department-select"
               component={Select}
               onChange={this.onDepartmentChange}
               onBlur={() => this.onBlur('department')}
@@ -227,13 +229,14 @@ class OrganizationSelect extends Component {
               options={options?.department ? options.department[lang] : []}
               placeholder={placeholder.department}
               creatable={creatable}
-              allowReset={value.department && !value.subDepartment}
+              allowReset={Boolean(value.department && !value.subDepartment)}
               attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.department' }}
             />
           )}
           <Department>
             {value.department && (
               <Translate
+                id="subdepartment-select"
                 component={Select}
                 onChange={this.onSubdepartmentChange}
                 onBlur={() => this.onBlur('subDepartment')}

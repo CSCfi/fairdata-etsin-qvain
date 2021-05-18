@@ -8,9 +8,11 @@ import { BrowserRouter } from 'react-router-dom'
 import etsinTheme from '../../../js/styles/theme'
 
 import { CUMULATIVE_STATE } from '../../../js/utils/constants'
-import Env from '../../../js/stores/domain/env'
-import QvainStoreClass from '../../../js/stores/view/qvain'
-import Locale from '../../../js/stores/view/locale'
+import EnvClass from '../../../js/stores/domain/env'
+import QvainClass from '../../../js/stores/view/qvain'
+import LocaleClass from '../../../js/stores/view/locale'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
 import CumulativeState, {
   CumulativeStateButton,
 } from '../../../js/components/qvain/fields/files/cumulativeStateV2'
@@ -34,7 +36,11 @@ jest.mock('../../../js/stores/stores', () => {
   }
 })
 
-const Qvain = new QvainStoreClass(Env)
+const Env = new EnvClass()
+const Qvain = new QvainClass(Env)
+const Accessibility = new AccessibilityClass(Env)
+const ElasticQuery = new ElasticQueryClass(Env)
+const Locale = new LocaleClass(Accessibility, ElasticQuery)
 
 const stores = {
   Env,

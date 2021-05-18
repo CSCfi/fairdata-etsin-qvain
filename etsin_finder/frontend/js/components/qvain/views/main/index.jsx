@@ -175,10 +175,6 @@ export class Qvain extends Component {
     return promise
   }
 
-  getErrorTitle() {
-    return <Translate component="h2" content="qvain.error.render" />
-  }
-
   clearSubmitResponse = () => {
     const { clearResponse, setError } = this.props.Stores.Qvain.Submit
     clearResponse()
@@ -265,7 +261,7 @@ export class Qvain extends Component {
       <QvainContainer>
         <Header {...this.getHeaderProps()} />
         <StickyHeader {...this.getStickyHeaderProps()} />
-        <ErrorBoundary title={this.getErrorTitle()} callback={this.enableRenderFailed}>
+        <ErrorBoundary title={ErrorTitle()} callback={this.enableRenderFailed}>
           <Dataset {...this.getDatasetProps()} />
         </ErrorBoundary>
         <LooseActorDialog />
@@ -279,5 +275,7 @@ export class Qvain extends Component {
     )
   }
 }
+
+export const ErrorTitle = () => <Translate component="h2" content="qvain.error.render" />
 
 export default withRouter(withStores(observer(Qvain)))

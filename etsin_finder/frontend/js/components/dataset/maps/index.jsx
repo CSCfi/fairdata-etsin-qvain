@@ -5,11 +5,11 @@ import { faMapMarkerAlt, faExpandArrowsAlt } from '@fortawesome/free-solid-svg-i
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Popup } from 'react-leaflet'
+import { observer } from 'mobx-react'
 
 import { TypeLocation } from '../../../utils/propTypes'
 import MyMap from './map'
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
-import Accessibility from '../../../stores/view/accessibility'
 import { withStores } from '../../../stores/stores'
 
 const Table = styled.table`
@@ -59,8 +59,10 @@ class Maps extends Component {
   }
 
   componentDidMount() {
+    const { Accessibility, Matomo } = this.props.Stores
+
     Accessibility.handleNavigation('maps', false)
-    this.props.Stores.Matomo.recordEvent(`MAPS / ${this.props.match.params.identifier}`)
+    Matomo.recordEvent(`MAPS / ${this.props.match.params.identifier}`)
   }
 
   render() {
@@ -186,4 +188,4 @@ const CustomPopup = styled(Popup)`
   }
 `
 
-export default withStores(Maps)
+export default withStores(observer(Maps))

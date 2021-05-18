@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { reaction } from 'mobx'
 import PropTypes from 'prop-types'
@@ -18,7 +18,7 @@ import { filterGroupsByTitle, groupDatasetsByVersionSet } from './filter'
 import etsinTheme from '../../../../styles/theme'
 import { withStores } from '../../../../stores/stores'
 
-class DatasetTable extends Component {
+export class DatasetTable extends Component {
   promises = []
 
   static propTypes = {
