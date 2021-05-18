@@ -59,8 +59,9 @@ def get_language():
 
 translations = {
     'fi': {
-        'etsin.download.notification.subject': 'Paketti on ladattavissa Etsimestä',
-        'etsin.download.notification.body': 'Paketti kansiolle {folder} aineistossa {pref_id} on valmis ladattavaksi.\n\n{data_url}\n',
+        'etsin.download.notification.subject': 'Lataus on aloitettavissa Etsimessä',
+        'etsin.download.notification.body.partial': 'Lataus paketille {folder} aineistossa {pref_id} voidaan aloittaa Etsimessä:\n\n{data_url}\n',
+        'etsin.download.notification.body.full': 'Lataus aineistolle {pref_id} voidaan aloittaa Etsimessä:\n\n{data_url}\n',
         'etsin.title': 'Etsin | Tutkimusaineistojen hakupalvelu',
         'etsin.description': ('Kuvailutietojen perusteella käyttäjät voivat etsiä aineistoja ja arvioida'
                               'löytämiensä aineistojen käyttökelpoisuutta tarpeisiinsa.'),
@@ -69,8 +70,9 @@ translations = {
                               'kuvailun ja julkaisemisen helpoksi.')
     },
     'en': {
-        'etsin.download.notification.subject': 'Package is ready for download in Etsin',
-        'etsin.download.notification.body': 'Package for {folder} in dataset {pref_id} is ready for download.\n\n{data_url}\n',
+        'etsin.download.notification.subject': 'Download can be started in Etsin',
+        'etsin.download.notification.body.partial': 'Download for package {folder} in dataset {pref_id} can now be started in Etsin:\n\n{data_url}\n',
+        'etsin.download.notification.body.full': 'Download for dataset {pref_id} can now be started in Etsin:\n\n{data_url}\n',
         'etsin.title': 'Etsin | Research Dataset Finder ',
         'etsin.description': 'Etsin enables you to find research datasets from all fields of science.',
         'qvain.title': 'Qvain | Research Dataset Description Tool',
