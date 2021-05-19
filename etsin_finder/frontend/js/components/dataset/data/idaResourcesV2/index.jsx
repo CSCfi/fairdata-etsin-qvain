@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons'
@@ -13,6 +14,8 @@ import ErrorMessage from './errorMessage'
 import PackageModal from './packageModal'
 import ManualDownloadModal from './manualDownloadModal'
 import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
+import { SplitButtonContainer, MoreButton } from './splitButton'
+import FlaggedComponent from '../../../general/flaggedComponent'
 
 const downloadAll = identifier => {
   const handle = window.open(`/api/dl?cr_id=${identifier}`)
@@ -64,6 +67,8 @@ function IdaResources(props) {
 
   let downloadFunc = () => downloadAll(props.dataset.identifier)
   const buttonProps = {}
+  let moreFunc
+  let moreAriaLabel
   let downloadAllText = 'dataset.dl.downloadAll'
 
   // Download full dataset package
@@ -76,6 +81,8 @@ function IdaResources(props) {
     buttonProps.attributes = {
       tooltip: action.tooltip,
     }
+    moreFunc = action.moreFunc
+    moreAriaLabel = action.moreAriaLabel
     if (DatasetQuery.isDraft) {
       allowDownload = false
       downloadAllText = 'dataset.dl.downloadDisabledForDraft'
@@ -86,6 +93,18 @@ function IdaResources(props) {
     }
   }
 
+  const downloadButton = (
+    <Translate
+      component={HeaderButton}
+      disabled={!allowDownload}
+      onClick={downloadFunc}
+      {...buttonProps}
+    >
+      <Translate content={downloadAllText} />
+      <Translate className="sr-only" content="dataset.dl.file_types.both" />
+    </Translate>
+  )
+
   return (
     <>
       <Header>
@@ -95,15 +114,20 @@ function IdaResources(props) {
           {totalSize ? ` (${sizeParse(totalSize)})` : null}
         </HeaderStats>
 
-        <Translate
-          component={HeaderButton}
-          disabled={!allowDownload}
-          onClick={downloadFunc}
-          {...buttonProps}
-        >
-          <Translate content={downloadAllText} />
-          <Translate className="sr-only" content="dataset.dl.file_types.both" />
-        </Translate>
+        <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
+          <HeaderButtonSplit split={moreFunc}>
+            {downloadButton}
+            {moreFunc && (
+              <Translate
+                component={MoreButton}
+                color={buttonProps.color}
+                disabled={!allowDownload}
+                onClick={moreFunc}
+                attributes={{ 'aria-label': moreAriaLabel }}
+              />
+            )}
+          </HeaderButtonSplit>
+        </FlaggedComponent>
       </Header>
 
       <ErrorMessage error={Packages.error} clear={Packages.clearError} />
@@ -115,6 +139,13 @@ function IdaResources(props) {
     </>
   )
 }
+
+const HeaderButtonSplit = styled(SplitButtonContainer)`
+  width: 10.5em;
+  & > button:last-child {
+    margin: 0;
+  }
+`
 
 IdaResources.propTypes = {
   dataset: PropTypes.object.isRequired,
