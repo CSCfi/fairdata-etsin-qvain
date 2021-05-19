@@ -534,6 +534,7 @@ const ResponseOverlay = styled.div`
 export const AutoWidthTableButton = styled(TableButton)`
   width: auto;
   max-width: none;
+  padding: 0 0.5em;
 `
 
 export default withStores(observer(MetadataModal))
