@@ -56,7 +56,7 @@ class DownloadAPIService(FlaskService):
 
         url = self._create_url(cr_id, file_ids, dir_ids)
         try:
-            dl_api_response = requests.get(url, stream=True, timeout=15, auth=(self.USER,
+            dl_api_response = requests.get(url, stream=True, timeout=30, auth=(self.USER,
                                                                                self.PASSWORD.encode('utf-8')))
             dl_api_response.raise_for_status()
         except requests.Timeout as t:

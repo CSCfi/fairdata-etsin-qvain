@@ -117,7 +117,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
         args = dict(headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
                     auth=(self._USER, self._PASSWORD),
                     verify=self._VERIFY_SSL,
-                    timeout=10,
+                    timeout=30,
                     proxies=self.proxies)
         args.update(kwargs)
         return args

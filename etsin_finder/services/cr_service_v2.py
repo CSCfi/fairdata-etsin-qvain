@@ -57,7 +57,7 @@ class MetaxAPIService(FlaskService):
                                         auth=(self.user, self.pw),
                                         verify=self.verify_ssl,
                                         proxies=self.proxies,
-                                        timeout=3)
+                                        timeout=30)
         if not success:
             log.warning("Failed to get catalog record {0} from Metax API".format(identifier))
             return None
@@ -82,7 +82,7 @@ class MetaxAPIService(FlaskService):
                                         auth=(self.user, self.pw),
                                         verify=self.verify_ssl,
                                         proxies=self.proxies,
-                                        timeout=3)
+                                        timeout=30)
         if not success:
             log.warning("Failed to get removed catalog record {0} from Metax API".format(identifier))
             return None
