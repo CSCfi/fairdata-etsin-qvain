@@ -46,7 +46,7 @@ const EmbargoExpires = () => {
   )
 }
 
-const ExpirationLabel = styled(Label)`
+export const ExpirationLabel = styled(Label)`
   margin-top: 1rem;
   padding: 0;
 `

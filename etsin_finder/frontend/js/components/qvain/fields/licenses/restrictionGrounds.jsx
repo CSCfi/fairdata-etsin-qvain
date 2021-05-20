@@ -28,10 +28,9 @@ const RestrictionGrounds = () => {
         htmlFor="restrictionGrounds-select"
         content="qvain.rightsAndLicenses.restrictionGrounds.title"
       />
-      <Translate
+      <Select
         name="restrictionGrounds"
         metaxIdentifier="restriction_grounds"
-        component={Select}
         placeholder="qvain.rightsAndLicenses.restrictionGrounds.placeholder"
         model={Model}
         getter={restrictionGrounds}

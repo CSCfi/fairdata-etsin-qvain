@@ -45,10 +45,9 @@ const FieldOfScienceField = () => {
         <Translate content="qvain.description.fieldOfScience.title" />
       </LabelLarge>
       <Translate component="p" content="qvain.description.fieldOfScience.help" />
-      <Translate
+      <Select
         name="fieldOfScience"
         metaxIdentifier="field_of_science"
-        component={Select}
         placeholder="qvain.description.fieldOfScience.placeholder"
         isMulti
         isClearable={false}
