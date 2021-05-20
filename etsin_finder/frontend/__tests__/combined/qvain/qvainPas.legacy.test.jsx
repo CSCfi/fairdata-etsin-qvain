@@ -17,10 +17,12 @@ import AccessType from '../../../js/components/qvain/fields/licenses/accessType'
 import Files from '../../../js/components/qvain/fields/files'
 import FileForm from '../../../js/components/qvain/fields/files/legacy/fileForm'
 import IDAFilePicker from '../../../js/components/qvain/fields/files/legacy/idaFilePicker'
-import QvainStoreClass from '../../../js/stores/view/qvain'
 import { Directory, File } from '../../../js/stores/view/qvain/qvain.filesv1'
-import LocaleStore from '../../../js/stores/view/locale'
-import EnvStore from '../../../js/stores/domain/env'
+import QvainClass from '../../../js/stores/view/qvain'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import LocaleClass from '../../../js/stores/view/locale'
+import EnvClass from '../../../js/stores/domain/env'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../../js/utils/constants'
 import { StoresProvider, useStores } from '../../../js/stores/stores'
 
@@ -30,15 +32,19 @@ Promise.config({
   cancellation: true,
 })
 
-const QvainStore = new QvainStoreClass(EnvStore)
+const Env = new EnvClass()
+const Accessibility = new AccessibilityClass(Env)
+const ElasticQuery = new ElasticQueryClass(Env)
+const Locale = new LocaleClass(Accessibility, ElasticQuery)
+const Qvain = new QvainClass(Env)
 
 const getStores = () => {
-  QvainStore.resetQvainStore()
-  EnvStore.Flags.setFlag('METAX_API_V2', false)
+  Qvain.resetQvainStore()
+  Env.Flags.setFlag('METAX_API_V2', false)
   return {
-    Qvain: QvainStore,
-    Locale: LocaleStore,
-    Env: EnvStore,
+    Qvain,
+    Locale,
+    Env,
   }
 }
 

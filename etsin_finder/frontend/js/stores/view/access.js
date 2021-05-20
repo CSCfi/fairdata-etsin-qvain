@@ -10,7 +10,6 @@
 
 import { observable, action, makeObservable } from 'mobx'
 
-import auth from '../domain/auth'
 import { ACCESS_TYPE_URL } from '../../utils/constants'
 
 export const accessTypes = {
@@ -22,7 +21,8 @@ export const accessTypes = {
 }
 
 class Access {
-  constructor() {
+  constructor(Auth) {
+    this.Auth = Auth
     makeObservable(this)
   }
 
@@ -136,7 +136,7 @@ class Access {
 
   @action
   loginAccess() {
-    if (auth.userLogged) {
+    if (this.Auth.userLogged) {
       this.restrictions = {
         open: true,
         allowDataRemote: true,
@@ -158,4 +158,4 @@ class Access {
   }
 }
 
-export default new Access()
+export default Access

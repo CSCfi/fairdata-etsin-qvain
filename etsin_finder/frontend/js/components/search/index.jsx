@@ -11,17 +11,18 @@
 }
 
 import React, { Component } from 'react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
-import ElasticQuery from '../../stores/view/elasticquery'
-import Accessibility from '../../stores/view/accessibility'
 import { Dataset } from '../../routes'
 import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
 
-export default class Search extends Component {
+import { withStores } from '../../stores/stores'
+
+class Search extends Component {
   constructor() {
     super()
     this.state = {
@@ -30,11 +31,16 @@ export default class Search extends Component {
   }
 
   componentDidMount() {
+    const {
+      Stores: { Accessibility },
+    } = this.props
+
     Accessibility.handleNavigation('datasets')
     this.initialQuery()
   }
 
   initialQuery = () => {
+    const { ElasticQuery } = this.props.Stores
     ElasticQuery.updateFromUrl(this.props.match.params.query, true)
     ElasticQuery.queryES(true).then(() => {
       this.setState({
@@ -67,6 +73,7 @@ export default class Search extends Component {
 }
 
 Search.propTypes = {
+  Stores: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }).isRequired,
@@ -76,3 +83,5 @@ Search.propTypes = {
     }).isRequired,
   }).isRequired,
 }
+
+export default withStores(observer(Search))

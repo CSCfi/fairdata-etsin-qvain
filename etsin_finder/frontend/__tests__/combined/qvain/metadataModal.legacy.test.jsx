@@ -10,21 +10,28 @@ import '../../../locale/translations.js'
 import etsinTheme from '../../../js/styles/theme'
 import FileSelector from '../../../js/components/qvain/fields/files/legacy/fileSelector'
 import MetadataModal from '../../../js/components/qvain/fields/files/metadataModal'
-import Env from '../../../js/stores/domain/env'
-import QvainStoreClass from '../../../js/stores/view/qvain'
+import EnvClass from '../../../js/stores/domain/env'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import LocaleClass from '../../../js/stores/view/locale'
+import QvainClass from '../../../js/stores/view/qvain'
 import { DatasetFile, Directory } from '../../../js/stores/view/qvain/qvain.filesv1.js'
-import LocaleStore from '../../../js/stores/view/locale'
 import { StoresProvider } from '../../../js/stores/stores.jsx'
 
 jest.mock('axios')
 
-const QvainStore = new QvainStoreClass(Env)
+const Env = new EnvClass()
+const Accessibility = new AccessibilityClass(Env)
+const ElasticQuery = new ElasticQueryClass(Env)
+const Locale = new LocaleClass(Accessibility, ElasticQuery)
+const Qvain = new QvainClass(Env)
+
 const getStores = () => {
   Env.Flags.setFlag('METAX_API_V2', false)
   return {
     Env,
-    Qvain: QvainStore,
-    Locale: LocaleStore,
+    Qvain,
+    Locale,
   }
 }
 

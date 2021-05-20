@@ -14,13 +14,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
+import { observer } from 'mobx-react'
 
-import access from '../../stores/view/access'
 import Description from './description'
 import Data from './data'
 import Events from './events'
 import Tabs from './tabs'
 import Maps from './maps'
+import { withStores } from '../../stores/stores'
 
 const MarginAfter = styled.div`
   margin-bottom: 3em;
@@ -63,6 +64,7 @@ class Content extends Component {
     // - the access_rights allow it
     // - the dataset in removed or deprecated
 
+    const { Access } = this.props.Stores
     if (
       (!this.props.hasFiles && !this.props.hasRemote) ||
       this.props.harvested ||
@@ -71,11 +73,12 @@ class Content extends Component {
     ) {
       return false
     }
+
     if (this.props.hasFiles) {
-      return access.restrictions.allowDataIda
+      return Access.restrictions.allowDataIda
     }
     if (this.props.hasRemote) {
-      return access.restrictions.allowDataRemote
+      return Access.restrictions.allowDataRemote
     }
     return false
   }
@@ -191,7 +194,7 @@ class Content extends Component {
   }
 }
 
-export default withRouter(Content)
+export default withStores(withRouter(observer(Content)))
 
 Content.defaultProps = {
   harvested: false,
@@ -199,6 +202,7 @@ Content.defaultProps = {
 }
 
 Content.propTypes = {
+  Stores: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   dataset: PropTypes.object.isRequired,
   emails: PropTypes.shape({

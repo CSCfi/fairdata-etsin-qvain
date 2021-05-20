@@ -15,7 +15,6 @@ import counterpart from 'counterpart'
 import isUrnQuery, { transformQuery } from '../../utils/transformQuery'
 import UrlParse from '../../utils/urlParse'
 import Helpers from '../../utils/helpers'
-import Env from '../domain/env'
 
 const fields = [
   'title.*^5',
@@ -43,7 +42,8 @@ const fields = [
 let lastQueryTime = 0
 
 class ElasticQuery {
-  constructor() {
+  constructor(Env) {
+    this.Env = Env
     makeObservable(this)
   }
 
@@ -256,7 +256,7 @@ class ElasticQuery {
       }
     }
 
-    const urlParams = UrlParse.searchParams(Env.history.location.search)
+    const urlParams = UrlParse.searchParams(this.Env.history.location.search)
 
     if (query) {
       this.updateSearch(decodeURIComponent(query), false)
@@ -303,7 +303,7 @@ class ElasticQuery {
     urlParams.p = this.pageNum
     urlParams.sort = this.sorting
     urlParams.pas = this.includePasDatasets
-    Env.history.replace({ pathname: path, search: UrlParse.makeSearchParams(urlParams) })
+    this.Env.history.replace({ pathname: path, search: UrlParse.makeSearchParams(urlParams) })
     return { path, search: UrlParse.makeSearchParams(urlParams) }
   }
 
@@ -483,4 +483,4 @@ class ElasticQuery {
   }
 }
 
-export default new ElasticQuery()
+export default ElasticQuery

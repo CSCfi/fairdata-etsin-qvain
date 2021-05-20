@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { computed, action, makeObservable, override } from 'mobx'
 import Field from './qvain.field'
 
-const Temporal = (uiid = uuidv4(), startDate = undefined, endDate = undefined) => ({
+export const TemporalTemplate = (uiid = uuidv4(), startDate = undefined, endDate = undefined) => ({
   uiid,
   startDate,
   endDate,
@@ -10,7 +10,7 @@ const Temporal = (uiid = uuidv4(), startDate = undefined, endDate = undefined) =
 
 class Temporals extends Field {
   constructor(Parent) {
-    super(Parent, Temporal, TemporalModel, 'temporals')
+    super(Parent, TemporalTemplate, TemporalModel, 'temporals')
     makeObservable(this)
   }
 
@@ -36,7 +36,6 @@ class Temporals extends Field {
   }
 
   toBackend = () => {
-    // save on submit if Temporal is filled are filled but not added
     if ((this.inEdit || {}).startDate && (this.inEdit || {}).endDate) {
       this.save()
     }

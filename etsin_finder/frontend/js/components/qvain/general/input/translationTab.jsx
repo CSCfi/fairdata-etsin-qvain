@@ -20,6 +20,7 @@ const TranslationTab = ({ language, setLanguage, children }) => {
     <>
       <LangButtonContainer>
         <LangButton
+          id="primary-tab"
           type="button"
           active={language === languages[0]}
           onClick={() => setLanguage(languages[0])}
@@ -29,6 +30,7 @@ const TranslationTab = ({ language, setLanguage, children }) => {
         </LangButton>
         <EmptyBlock width="2%" />
         <LangButton
+          id="secondary-tab"
           type="button"
           active={language === languages[1]}
           onClick={() => setLanguage(languages[1])}

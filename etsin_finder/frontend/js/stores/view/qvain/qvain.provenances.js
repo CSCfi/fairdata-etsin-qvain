@@ -6,7 +6,7 @@ import Field from './qvain.field'
 import { ActorsRef } from './qvain.actors'
 import { ROLE } from '../../../utils/constants'
 
-const Provenance = ({
+export const Provenance = ({
   uiid = uuidv4(),
   name = { fi: '', en: '', und: '' },
   description = { fi: '', en: '', und: '' },
@@ -78,9 +78,9 @@ class Provenances extends Field {
       temporal:
         p.startDate || p.endDate
           ? {
-            start_date: new Date(p.startDate).toISOString(),
-            end_date: new Date(p.endDate).toISOString(),
-          }
+              start_date: new Date(p.startDate).toISOString(),
+              end_date: new Date(p.endDate).toISOString(),
+            }
           : undefined, // TODO: move this conversion to Temporal when it's implemented
       spatial: p.spatials.toBackend()[0],
       event_outcome: { identifier: (p.outcome || {}).url },
@@ -101,7 +101,7 @@ class Provenances extends Field {
     )
     if (!provenancesWithActorRefsToBeRemoved.length) return Promise.resolve(true)
     this.provenancesWithNonExistingActors = provenancesWithActorRefsToBeRemoved
-    return this.Parent.createLooseProvenancePromise()
+    return this.Qvain.createLooseProvenancePromise()
   }
 
   @action removeActorFromRefs = actor => {
@@ -138,9 +138,9 @@ export const ProvenanceModel = (provenanceData, Qvain) => ({
   }),
   lifecycle: provenanceData.lifecycle_event
     ? Lifecycle(
-      provenanceData.lifecycle_event.pref_label,
-      provenanceData.lifecycle_event.identifier
-    )
+        provenanceData.lifecycle_event.pref_label,
+        provenanceData.lifecycle_event.identifier
+      )
     : undefined,
 })
 

@@ -16,10 +16,11 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
 import HeroBanner from '../general/hero'
-import Accessibility from '../../stores/view/accessibility'
+import { withStores } from '../../stores/stores'
 
 class ErrorPage extends React.Component {
   componentDidMount() {
+    const { Accessibility } = this.props.Stores
     if (this.props.error.type === 'cscloginrequired') {
       Accessibility.handleNavigation('loginRequired')
     } else {
@@ -52,6 +53,7 @@ class ErrorPage extends React.Component {
 }
 
 ErrorPage.propTypes = {
+  Stores: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }).isRequired,
@@ -60,4 +62,4 @@ ErrorPage.propTypes = {
   }).isRequired,
 }
 
-export default withRouter(ErrorPage)
+export default withRouter(withStores(ErrorPage))

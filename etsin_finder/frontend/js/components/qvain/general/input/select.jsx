@@ -148,7 +148,7 @@ class Select extends Component {
       props.attributes = { ...props.attributes, placeholder: 'qvain.select.placeholder' }
     }
 
-    return <Translate component={ReactSelect} {...props} />
+    return <Translate {...props} />
   }
 }
 
