@@ -15,29 +15,16 @@ import { useStores } from '../../utils/stores'
 const EmbargoExpires = () => {
   const {
     Qvain: {
-      EmbargoExpDate: { value: embargoExpDate, set: setEmbargoExpDate, readonly, Schema },
+      EmbargoExpDate: {
+        value: embargoExpDate,
+        set: setEmbargoExpDate,
+        readonly,
+        validationError,
+        validate,
+      },
     },
     Locale: { lang },
   } = useStores()
-
-  const [focused, setFocused] = useState(false)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    const validate = () => {
-      Schema.validate(embargoExpDate, { strict: true })
-        .then(() => {
-          setError(null)
-        })
-        .catch(err => {
-          setError(err.errors)
-        })
-    }
-
-    if (!focused) {
-      validate()
-    }
-  }, [focused, embargoExpDate, Schema])
 
   return (
     <>
@@ -51,10 +38,9 @@ const EmbargoExpires = () => {
         placeholderText={translate('qvain.rightsAndLicenses.embargoDate.placeholder')}
         dateFormat={getDateFormatLocale(lang)}
         disabled={readonly}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        onBlur={validate}
       />
-      {error && <ValidationError>{error}</ValidationError>}
+      {validationError && <ValidationError>{validationError}</ValidationError>}
       <Translate component="p" content="qvain.rightsAndLicenses.embargoDate.help" />
     </>
   )

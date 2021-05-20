@@ -13,7 +13,9 @@
 // checks if there is a translation available for specific language.
 // if no language is specified, uses current language.
 
-import Locale from '../stores/view/locale'
+import Stores from '../stores'
+
+const { Locale } = Stores
 
 const checkDataLang = (object, lang) => {
   let language = lang
@@ -22,9 +24,11 @@ const checkDataLang = (object, lang) => {
   }
   if (typeof object === 'undefined' || Object.keys(object).length === 0) {
     return ''
-  } if (typeof object === 'string') {
+  }
+  if (typeof object === 'string') {
     return object
-  } if (object[language]) return object[language]
+  }
+  if (object[language]) return object[language]
   if (object.und) {
     return object.und
   }
@@ -35,9 +39,11 @@ export const getDataLang = object => {
   const language = Locale.currentLang
   if (typeof object === 'undefined' || Object.keys(object).length === 0) {
     return undefined
-  } if (typeof object === 'string') {
+  }
+  if (typeof object === 'string') {
     return undefined
-  } if (object[language]) return language
+  }
+  if (object[language]) return language
   return Object.keys(object)[0]
 }
 

@@ -17,18 +17,17 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
-import ElasticQuery from '../../../stores/view/elasticquery'
-import Accessibility from '../../../stores/view/accessibility'
 import { withStores } from '../../../stores/stores'
 
 class Pagination extends Component {
+  state = {
+    pageAmount: 0,
+    after: [],
+    before: [],
+  }
+
   constructor(props) {
     super(props)
-    this.state = {
-      pageAmount: 0,
-      after: [],
-      before: [],
-    }
     this.beforeCounter = 0
     this.afterCounter = 0
     this.changePage = this.changePage.bind(this)
@@ -106,6 +105,7 @@ class Pagination extends Component {
   }
 
   changePage(event, value) {
+    const { ElasticQuery, Accessibility } = this.props.Stores
     ElasticQuery.updatePageNum(value)
     ElasticQuery.queryES()
     Accessibility.announce(translate('search.pagination.changepage', { value }))
@@ -317,6 +317,7 @@ const PaginationContainer = styled.nav`
 `
 
 Pagination.propTypes = {
+  Stores: PropTypes.object.isRequired,
   totalResults: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,

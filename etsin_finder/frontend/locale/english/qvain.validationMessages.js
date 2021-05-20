@@ -47,6 +47,7 @@ const validationMessages = {
       oneOf:
         'Roles must be one of "Creator", "Publisher", "Curator", "Rights holder" or "Contributor"',
       required: 'Please specify the role of the actor. The creator role is mandatory.',
+      min: 'Actor must have at least one role',
     },
     name: {
       string: 'The name must be a string value.',

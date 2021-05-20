@@ -17,7 +17,6 @@ import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-import Stores from '../../../stores'
 import Button from '../button'
 import Loader from '../loader'
 import NoticeBar from '../noticeBar'
@@ -27,6 +26,7 @@ import { withStores } from '../../../stores/stores'
 
 class Login extends Component {
   static propTypes = {
+    Stores: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     margin: PropTypes.string,
     width: PropTypes.string,
@@ -93,7 +93,8 @@ class Login extends Component {
   }
 
   render() {
-    if (!Stores.Auth[this.props.isLoggedInKey]) {
+    const { Auth } = this.props.Stores
+    if (!Auth[this.props.isLoggedInKey]) {
       return (
         <>
           <Cont width={this.props.width} margin={this.props.margin}>

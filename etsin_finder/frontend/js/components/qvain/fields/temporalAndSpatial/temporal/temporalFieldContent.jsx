@@ -22,7 +22,7 @@ const TemporalFieldContent = ({ Store, lang }) => {
       <TemporalList
         lang={lang}
         temporals={Field.storage}
-        remove={uiid => Field.removeTemporal(uiid)}
+        remove={Field.removeTemporal}
         readonly={Field.readonly}
       />
       <DurationPicker

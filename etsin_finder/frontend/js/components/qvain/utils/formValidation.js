@@ -108,13 +108,13 @@ const descriptionSchemaDraft = yup
   .nullable()
 
 const keywordsSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.keywords.string')
+  .max(1000, 'qvain.validationMessages.keywords.max')
+
+const keywordsArraySchema = yup
   .array()
-  .of(
-    yup
-      .string()
-      .typeError('qvain.validationMessages.keywords.string')
-      .max(1000, 'qvain.validationMessages.keywords.max')
-  )
+  .of(keywordsSchema)
   .required('qvain.validationMessages.keywords.required')
 
 // Validation for draft datasets: keywords are not .required()
@@ -218,6 +218,7 @@ const actorRolesSchema = yup
         'qvain.validationMessages.actors.roles.oneOf'
       )
   )
+  .min(1, 'qvain.validationMessages.actors.roles.min')
   .required('qvain.validationMessages.actors.roles.required')
 
 const actorRolesSchemaDraft = yup
@@ -237,6 +238,7 @@ const actorRolesSchemaDraft = yup
         'qvain.validationMessages.actors.roles.oneOf'
       )
   )
+  .min(1, 'qvain.validationMessages.actors.roles.min')
 
 const personNameSchema = yup
   .string()
@@ -622,7 +624,7 @@ const qvainFormSchema = yup.object().shape({
     otherwise: yup.string().date().nullable(),
   }),
   fieldOfScience: fieldsOfScienceSchema,
-  keywords: keywordsSchema,
+  keywords: keywordsArraySchema,
   otherIdentifiers: otherIdentifiersArraySchema,
   accessType: accessTypeSchema,
   license: yup.mixed().when('dataCatalog', {
@@ -672,6 +674,7 @@ export {
   otherIdentifierSchema,
   otherIdentifiersArraySchema,
   keywordsSchema,
+  keywordsArraySchema,
   accessTypeSchema,
   licenseSchema,
   embargoExpDateSchema,

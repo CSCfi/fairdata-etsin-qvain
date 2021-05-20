@@ -13,17 +13,16 @@ import { observable, action, computed, makeObservable } from 'mobx'
 import counterpart from 'counterpart'
 import moment from 'moment'
 
-import elasticquery from './elasticquery'
-import Accessibility from './accessibility'
-import env from '../domain/env'
-
 const languages = ['en', 'fi']
 
 const getInitialLanguage = () =>
   languages.find(lang => lang === document.documentElement.lang) || languages[0]
 
 class Locale {
-  constructor() {
+  constructor(Accessibility, ElasticQuery) {
+    this.Accessibility = Accessibility
+    this.Env = Accessibility.Env
+    this.ElasticQuery = ElasticQuery
     makeObservable(this)
 
     if (BUILD !== 'production') {
@@ -40,11 +39,11 @@ class Locale {
   }
 
   @computed get cookieDomain() {
-    return env.ssoCookieDomain
+    return this.Env.ssoCookieDomain
   }
 
   @computed get cookieName() {
-    const prefix = env.ssoPrefix
+    const prefix = this.Env.ssoPrefix
     if (prefix) {
       return `${prefix}_fd_language`
     }
@@ -76,22 +75,22 @@ class Locale {
     const current = counterpart.getLocale()
     this.setLang(current === 'fi' ? 'en' : 'fi')
 
-    Accessibility.handleNavigation()
+    this.Accessibility.handleNavigation()
 
     // TODO: this should probably not be here
     // other things to do when language changes
     // removes all filters and queries new results after filters are removed
     // changes url only on /datasets/ page
-    const isSearch = env.history.location.pathname === '/datasets/'
+    const isSearch = this.Env.history.location.pathname === '/datasets/'
     if (isSearch) {
       // update url true
-      const filtersChanged = elasticquery.clearFilters(true)
+      const filtersChanged = this.ElasticQuery.clearFilters(true)
       if (filtersChanged) {
-        elasticquery.queryES()
+        this.ElasticQuery.queryES()
       }
     } else {
       // update url false
-      elasticquery.clearFilters(false)
+      this.ElasticQuery.clearFilters(false)
     }
   }
 
@@ -142,4 +141,4 @@ class Locale {
   }
 }
 
-export default new Locale()
+export default Locale

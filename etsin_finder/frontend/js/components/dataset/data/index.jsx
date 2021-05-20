@@ -14,7 +14,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 
-import Accessibility from '../../../stores/view/accessibility'
 import ExternalResources from './externalResources'
 import IdaResources from './idaResources'
 import IdaResourcesV2 from './idaResourcesV2'
@@ -26,6 +25,7 @@ class Data extends Component {
       DatasetQuery,
       Matomo: { recordEvent },
       Env: { downloadApiV2 },
+      Accessibility,
     } = this.props.Stores
 
     Accessibility.handleNavigation('data', false)

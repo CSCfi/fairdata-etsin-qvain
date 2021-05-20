@@ -10,7 +10,7 @@ global.Promise = require('bluebird')
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
-import stores from '../../../../js/stores'
+import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import searchResults from '../../../__testdata__/searchResults.data'
 import Search from '../../../../js/components/search'
@@ -24,8 +24,9 @@ jest.mock('axios')
 
 const datasetsCalls = observable.array([])
 
-import Env from '../../../../js/stores/domain/env'
-Env.history = {
+const stores = buildStores()
+
+stores.Env.history = {
   location: {
     search:
       '?keys=Funding%20Organization&terms=organization_name_en.keyword&p=1&sort=best&pas=false',
@@ -34,7 +35,7 @@ Env.history = {
 
 const path = `/datasets/some%20dataset`
 
-Accessibility.handleNavigation = jest.fn()
+stores.Accessibility.handleNavigation = jest.fn()
 
 const flushPromises = () => new Promise(setImmediate)
 
@@ -60,7 +61,7 @@ describe('Etsin search page', () => {
             </main>
           </ThemeProvider>
         </MemoryRouter>
-      </StoresProvider>,
+      </StoresProvider>
     )
     await flushPromises()
     wrapper.update()
@@ -76,6 +77,6 @@ describe('Etsin search page', () => {
   })
 
   it('should call Accessibility.handleNavigation for datasets', async () => {
-    expect(Accessibility.handleNavigation.mock.calls).toEqual([['datasets']])
+    expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([['datasets']])
   })
 })

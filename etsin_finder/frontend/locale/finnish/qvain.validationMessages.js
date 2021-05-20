@@ -47,6 +47,7 @@ const validationMessages = {
       oneOf:
         'Roolin kuuluisi olla "Tekijä", "Julkaisija", "Kuraattori", "Oikeuksienhaltija" tai "Muu tekijä".',
       required: 'Tekijän rooli on pakollinen.',
+      min: 'Toimijalla täytyy olla vähintään yksi rooli',
     },
     name: {
       string: 'Nimi pitää olla arvoltaan merkkijono.',

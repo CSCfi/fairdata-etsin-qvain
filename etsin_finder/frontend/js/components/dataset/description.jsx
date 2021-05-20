@@ -16,10 +16,8 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Link } from 'react-router-dom'
-
 import AccessRights from './accessRights'
 import FairdataPasDatasetIcon from './fairdataPasDatasetIcon'
-import Accessibility from '../../stores/view/accessibility'
 import AskForAccess from './askForAccess'
 import Contact from './contact'
 import ErrorBoundary from '../general/errorBoundary'
@@ -97,6 +95,7 @@ class Description extends Component {
   componentDidMount() {
     const {
       Matomo: { recordEvent },
+      Accessibility,
     } = this.props.Stores
     Accessibility.handleNavigation('dataset', false)
     recordEvent(`DETAILS / ${this.props.dataset.identifier}`)

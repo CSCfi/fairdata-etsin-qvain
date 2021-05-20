@@ -5,17 +5,11 @@ import { runInAction } from 'mobx'
 import { StoresProvider } from '../../../js/stores/stores'
 import '../../../locale/translations'
 import etsinTheme from '../../../js/styles/theme'
-import Qvain, { Qvain as QvainBase } from '../../../js/components/qvain/views/main'
-import Description from '../../../js/components/qvain/fields/description'
-import DescriptionField from '../../../js/components/qvain/fields/description'
-import OtherIdentifierField from '../../../js/components/qvain/fields/description/otherIdentifier'
-import FieldOfScienceField from '../../../js/components/qvain/fields/description/fieldOfScience'
-import KeywordsField from '../../../js/components/qvain/fields/description/keywords'
+import QvainComponent, { Qvain as QvainBase } from '../../../js/components/qvain/views/main'
 import RightsAndLicenses from '../../../js/components/qvain/fields/licenses'
 import { License } from '../../../js/components/qvain/fields/licenses/licenses'
 import { AccessType } from '../../../js/components/qvain/fields/licenses/accessType'
 import RestrictionGrounds from '../../../js/components/qvain/fields/licenses/restrictionGrounds'
-import EmbargoExpires from '../../../js/components/qvain/fields/licenses/embargoExpires'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../../js/utils/constants'
 import Files from '../../../js/components/qvain/fields/files'
 import IDAFilePicker, {
@@ -29,10 +23,12 @@ import {
   FileLabel,
 } from '../../../js/components/qvain/fields/files/legacy/selectedFiles'
 import { DeleteButton } from '../../../js/components/qvain/general/buttons'
-import Env from '../../../js/stores/domain/env'
-import QvainStoreClass from '../../../js/stores/view/qvain'
+import EnvClass from '../../../js/stores/domain/env'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import QvainClass from '../../../js/stores/view/qvain'
+import LocaleClass from '../../../js/stores/view/locale'
 import { Directory } from '../../../js/stores/view/qvain/qvain.filesv1'
-import LocaleStore from '../../../js/stores/view/locale'
 
 global.fdweRecordEvent = () => {}
 
@@ -71,13 +67,18 @@ jest.mock('../../../js/stores/stores', () => {
   }
 })
 
-const QvainStore = new QvainStoreClass(Env)
+const Env = new EnvClass()
+const Accessibility = new AccessibilityClass(Env)
+const ElasticQuery = new ElasticQueryClass(Env)
+const Locale = new LocaleClass(Accessibility, ElasticQuery)
+const Qvain = new QvainClass(Env)
+
 const getStores = () => {
   Env.Flags.setFlag('METAX_API_V2', false)
   return {
     Env,
-    Qvain: QvainStore,
-    Locale: LocaleStore,
+    Qvain,
+    Locale,
     Matomo: {
       recordEvent: jest.fn(),
     },
@@ -88,7 +89,7 @@ describe('Qvain', () => {
   it('should render correctly', () => {
     const component = shallow(
       <StoresProvider store={getStores()}>
-        <Qvain />
+        <QvainComponent />
       </StoresProvider>
     )
 
@@ -178,95 +179,6 @@ describe('Qvain', () => {
     wrapper.setProps({ match: anotherMatch })
     expect(callCount).toBe(3)
     expect(lastCall).toBe(anotherMatch.params.identifier)
-  })
-})
-
-describe('Qvain.Description', () => {
-  it('should render <Description />', () => {
-    const component = shallow(
-      <StoresProvider store={getStores()}>
-        <Description />
-      </StoresProvider>
-    )
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <DescriptionField />', () => {
-    const component = shallow(
-      <StoresProvider store={getStores()}>
-        <DescriptionField />
-      </StoresProvider>
-    )
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <OtherIdentifierField />', () => {
-    const component = shallow(
-      <StoresProvider store={getStores()}>
-        <OtherIdentifierField />
-      </StoresProvider>
-    )
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <FieldOfScienceField />', () => {
-    const component = shallow(
-      <StoresProvider store={getStores()}>
-        <FieldOfScienceField />
-      </StoresProvider>
-    )
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <KeywordsField />', () => {
-    const component = shallow(
-      <StoresProvider store={getStores()}>
-        <KeywordsField />
-      </StoresProvider>
-    )
-    expect(component).toMatchSnapshot()
-  })
-})
-
-describe('Qvain.RightsAndLicenses', () => {
-  let stores
-  let Licenses
-  let AccessTypeStore
-
-  beforeEach(() => {
-    stores = getStores()
-    stores.Qvain.resetQvainStore()
-    Licenses = stores.Qvain.Licenses
-    AccessTypeStore = stores.Qvain.AccessType
-  })
-
-  it('should render <RightsAndLicenses />', () => {
-    const component = shallow(<RightsAndLicenses />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <Licenses />', () => {
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <AccessType />', () => {
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component).toMatchSnapshot()
-  })
-  it('should render <RestrictionGrounds />', () => {
-    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.EMBARGO))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(RestrictionGrounds).length).toBe(1)
-  })
-  it('should NOT render <RestrictionGrounds />', () => {
-    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.OPEN))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(RestrictionGrounds).length).toBe(0)
-  })
-  it('should render <EmbargoExpires />', () => {
-    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.EMBARGO))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(EmbargoExpires).length).toBe(1)
-  })
-  it('should NOT render <EmbargoExpires />', () => {
-    AccessTypeStore.set(AccessTypeStore.Model(undefined, ACCESS_TYPE_URL.OPEN))
-    const component = shallow(<AccessType Stores={stores} />)
-    expect(component.find(EmbargoExpires).length).toBe(0)
   })
 })
 

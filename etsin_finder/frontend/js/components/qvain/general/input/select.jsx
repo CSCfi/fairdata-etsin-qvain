@@ -151,7 +151,7 @@ class Select extends Component {
       props.attributes = { ...props.attributes, placeholder }
     }
 
-    return <Translate component={ReactSelect} {...props} />
+    return <Translate {...props} />
   }
 }
 

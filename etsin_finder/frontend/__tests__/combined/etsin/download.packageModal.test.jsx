@@ -7,17 +7,11 @@ import ReactModal from 'react-modal'
 
 import 'chai/register-should'
 
+import { buildStores } from '../../../js/stores'
+import Packages from '../../../js/stores/view/packages'
 import { StoresProvider, useStores } from '../../../js/stores/stores'
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../js/utils/constants'
-import Env from '../../../js/stores/domain/env'
-import Packages from '../../../js/stores/view/packages'
 import { fakeDownload, applyMockAdapter } from '../../__testdata__/download.data'
-import { runInAction } from 'mobx'
-import getDownloadAction from '../../../js/components/dataset/data/idaResourcesV2/downloadActions'
-import {
-  downloadFile,
-  downloadPackage,
-} from '../../../js/components/dataset/data/idaResourcesV2/download'
 import etsinTheme from '../../../js/styles/theme'
 import PackageModal from '../../../js/components/dataset/data/idaResourcesV2/packageModal'
 import PackageCreate from '../../../js/components/dataset/data/idaResourcesV2/packageModal/packageCreate'
@@ -53,7 +47,6 @@ jest.mock('../../../js/stores/stores', () => {
 
 const { PENDING, STARTED, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
 
-Env.Flags.setFlag('DOWNLOAD_API_V2', true)
 const mockAdapter = new MockAdapter(axios)
 applyMockAdapter(mockAdapter)
 
@@ -95,11 +88,10 @@ describe('PackageModal', () => {
   }
 
   const getStores = () => {
-    const packages = new Packages(Env)
-    return {
-      Env,
-      Packages: packages,
-    }
+    const stores = buildStores()
+    stores.Env.Flags.setFlag('DOWNLOAD_API_V2', true)
+    const packages = new Packages(stores.Env)
+    return { ...stores, Packages: packages }
   }
 
   beforeEach(() => {
