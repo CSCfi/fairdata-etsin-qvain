@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
