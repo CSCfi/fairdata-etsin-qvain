@@ -42,8 +42,6 @@ const Accessibility = new AccessibilityClass(Env)
 const ElasticQuery = new ElasticQueryClass(Env)
 const Locale = new LocaleClass(Accessibility, ElasticQuery)
 
-Env.Flags.setFlag('METAX_API_V2', true)
-
 const stores = {
   Env,
   Qvain,
