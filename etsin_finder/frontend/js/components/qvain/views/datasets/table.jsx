@@ -106,12 +106,7 @@ export class DatasetTable extends Component {
     }
 
     this.setState({ loading: true, error: false, errorMessage: '' })
-    let url
-    if (this.props.Stores.Env.metaxApiV2) {
-      url = urls.v2.datasets()
-    } else {
-      url = urls.v1.datasets()
-    }
+    const url = urls.v2.datasets()
     const promise = axios
       .get(url, { params: { no_pagination: true } })
       .then(result => {
@@ -144,16 +139,12 @@ export class DatasetTable extends Component {
 
   handleCreateNewVersion = async identifier => {
     const {
-      Env: { metaxApiV2, getQvainUrl },
+      Env: { getQvainUrl },
       Matomo: { recordEvent },
     } = this.props.Stores
 
     recordEvent(`NEW_VERSION / ${identifier}`)
 
-    if (!metaxApiV2) {
-      console.error('Metax API V2 is required for creating a new version')
-      return
-    }
     const promise = axios.post(urls.v2.rpc.createNewVersion(), null, {
       params: { identifier },
     })
@@ -255,23 +246,11 @@ export class DatasetTable extends Component {
   }
 
   render() {
-    const {
-      onPage,
-      loading,
-      error,
-      errorMessage,
-      page,
-      searchTerm,
-      datasetGroups,
-      count,
-    } = this.state
+    const { onPage, loading, error, errorMessage, page, searchTerm, datasetGroups, count } =
+      this.state
 
-    const { metaxApiV2 } = this.props.Stores.Env
-    const {
-      publishedDataset,
-      datasetsPerPage,
-      minDatasetsForSearchTool,
-    } = this.props.Stores.QvainDatasets
+    const { publishedDataset, datasetsPerPage, minDatasetsForSearchTool } =
+      this.props.Stores.QvainDatasets
 
     const noOfDatasetGroups = datasetGroups.length
     const searchInput = noOfDatasetGroups > minDatasetsForSearchTool && (
@@ -317,9 +296,7 @@ export class DatasetTable extends Component {
           <TableHeader>
             <Row>
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.title" />
-              {metaxApiV2 && (
-                <Translate component={HeaderCell} content="qvain.datasets.tableRows.state" />
-              )}
+              <Translate component={HeaderCell} content="qvain.datasets.tableRows.state" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.created" />
               <Translate component={HeaderCell} content="qvain.datasets.tableRows.actions" />
             </Row>

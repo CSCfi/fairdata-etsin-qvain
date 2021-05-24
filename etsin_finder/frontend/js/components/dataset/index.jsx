@@ -170,8 +170,7 @@ class Dataset extends React.Component {
   }
 
   render() {
-    const { Accessibility, DatasetQuery, Env, Auth } = this.props.Stores
-    const { metaxApiV2 } = Env
+    const { Accessibility, DatasetQuery, Auth } = this.props.Stores
     const { cscUserLogged } = Auth
     const { location } = this.props
     const { identifier } = this.props.match.params
@@ -207,12 +206,8 @@ class Dataset extends React.Component {
     const dataset = DatasetQuery.results
     const cumulative = DatasetQuery.cumulative_state === 1
     const emailInfo = DatasetQuery.emailInfo
-    const hasV2Files =
-      metaxApiV2 && DatasetQuery.Files.root && DatasetQuery.Files.root.directChildCount > 0
-    const hasFiles =
-      (dataset.research_dataset.directories || dataset.research_dataset.files) !== undefined ||
-      hasV2Files ||
-      false
+    const hasV2Files = DatasetQuery.Files.root && DatasetQuery.Files.root.directChildCount > 0
+    const hasFiles = hasV2Files || false
     const hasRemote = dataset.research_dataset.remote_resources !== undefined
     const harvested = dataset.data_catalog.catalog_json.harvested
     const deprecated = dataset.deprecated

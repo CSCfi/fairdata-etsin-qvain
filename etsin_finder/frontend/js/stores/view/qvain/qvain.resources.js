@@ -17,11 +17,9 @@ import RestrictionGrounds from './qvain.restrictionGrounds'
 import Title from './qvain.title'
 import SubjectHeadings from './qvain.subjectHeadings'
 import Description from './qvain.description'
-import FilesV1 from './qvain.filesv1'
 
-class Resources extends FilesV1 {
+class Resources {
   constructor() {
-    super()
     this.Title = new Title(this)
     this.Description = new Description(this)
     this.SubjectHeadings = new SubjectHeadings(this)

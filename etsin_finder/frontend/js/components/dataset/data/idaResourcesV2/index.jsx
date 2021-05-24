@@ -31,8 +31,6 @@ function IdaResources(props) {
 
   const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel, root } = Files
 
-  const { downloadApiV2 } = props.Stores.Env
-
   const { DatasetQuery } = props.Stores
   const { Packages } = DatasetQuery
 
@@ -67,23 +65,21 @@ function IdaResources(props) {
   let downloadAllText = 'dataset.dl.downloadAll'
 
   // Download full dataset package
-  if (downloadApiV2) {
-    const action = getDownloadAction(props.dataset.identifier, null, Packages, Files)
-    downloadFunc = action.func
-    buttonProps.icon = action.icon
-    buttonProps.spin = action.spin
-    buttonProps.color = action.color
-    buttonProps.attributes = {
-      tooltip: action.tooltip,
-    }
-    if (DatasetQuery.isDraft) {
-      allowDownload = false
-      downloadAllText = 'dataset.dl.downloadDisabledForDraft'
-    } else if (action.pending) {
-      downloadAllText = 'dataset.dl.packages.pending'
-    } else if (!action.available) {
-      downloadAllText = 'dataset.dl.packages.createForAll'
-    }
+  const action = getDownloadAction(props.dataset.identifier, null, Packages, Files)
+  downloadFunc = action.func
+  buttonProps.icon = action.icon
+  buttonProps.spin = action.spin
+  buttonProps.color = action.color
+  buttonProps.attributes = {
+    tooltip: action.tooltip,
+  }
+  if (DatasetQuery.isDraft) {
+    allowDownload = false
+    downloadAllText = 'dataset.dl.downloadDisabledForDraft'
+  } else if (action.pending) {
+    downloadAllText = 'dataset.dl.packages.pending'
+  } else if (!action.available) {
+    downloadAllText = 'dataset.dl.packages.createForAll'
   }
 
   return (
