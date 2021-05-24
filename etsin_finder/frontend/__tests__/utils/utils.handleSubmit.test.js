@@ -1,141 +1,10 @@
 import 'chai/register-expect'
 
-import handleSubmit, {
-  directoriesToMetax,
-  filesToMetax,
-} from '../../js/components/qvain/utils/handleSubmit'
-
-describe('when calling directoriesToMetax without args', () => {
-  let returnValue
-
-  beforeEach(() => {
-    returnValue = directoriesToMetax()
-  })
-
-  test('should return empty Array', () => {
-    const expectedReturn = []
-    returnValue.should.eql(expectedReturn)
-  })
-})
-
-describe('when callling directoriesToMetax with args', () => {
-  let returnValue
-  const selectedDirectories = [
-    { identifier: 'id' },
-    {
-      identifier: 'id2',
-      title: 'title',
-      description: 'description',
-      useCategory: 'useCategory',
-      projectIdentifier: 'projectIdentifier',
-    },
-  ]
-  const existingDirectories = [
-    {
-      identifier: 'id',
-      title: 'title',
-      description: 'description',
-      useCategory: 'useCategory',
-      projectIdentifier: 'projectIdentifier',
-    },
-  ]
-
-  beforeEach(() => {
-    returnValue = directoriesToMetax(selectedDirectories, existingDirectories)
-  })
-
-  test('should return expectedReturn', () => {
-    const expectedReturn = [
-      {
-        identifier: 'id',
-        title: undefined,
-        description: undefined,
-        useCategory: { identifier: undefined },
-        projectIdentifier: undefined,
-      },
-      {
-        identifier: 'id2',
-        title: 'title',
-        description: 'description',
-        useCategory: { identifier: 'useCategory' },
-        projectIdentifier: 'projectIdentifier',
-      },
-    ]
-
-    returnValue.should.deep.eql(expectedReturn)
-  })
-})
-
-describe('when calling filesToMetax without args', () => {
-  let returnValue
-
-  beforeEach(() => {
-    returnValue = filesToMetax()
-  })
-
-  test('should return empty Array', () => {
-    returnValue.should.eql([])
-  })
-})
-
-describe('when calling filesToMetax with args', () => {
-  let returnValue
-  const selectedFiles = [
-    { identifier: 'id' },
-    {
-      identifier: 'id2',
-      title: 'title',
-      description: 'description',
-      fileType: 'fileType',
-      useCategory: 'useCategory',
-      projectIdentifier: 'projectIdentifier',
-    },
-  ]
-  const existingFiles = [
-    {
-      identifier: 'id',
-      title: 'title',
-      description: 'description',
-      fileType: 'fileType',
-      useCategory: 'useCategory',
-      projectIdentifier: 'projectIdentifier',
-    },
-  ]
-
-  beforeEach(() => {
-    returnValue = filesToMetax(selectedFiles, existingFiles)
-  })
-
-  test('should return expectedReturn', () => {
-    const expectedReturn = [
-      {
-        description: undefined,
-        fileType: undefined,
-        identifier: 'id',
-        projectIdentifier: undefined,
-        title: undefined,
-        useCategory: { identifier: undefined },
-      },
-      {
-        description: 'description',
-        fileType: { identifier: 'fileType' },
-        identifier: 'id2',
-        projectIdentifier: 'projectIdentifier',
-        title: 'title',
-        useCategory: { identifier: 'useCategory' },
-      },
-    ]
-
-    returnValue.should.deep.eql(expectedReturn)
-  })
-})
+import handleSubmit from '../../js/components/qvain/utils/handleSubmit'
 
 describe('when calling handleSubmit with mockStores', () => {
   let returnValue
   const mockStores = {
-    Env: {
-      metaxApiV2: true,
-    },
     Qvain: {
       Title: {
         toBackend: jest.fn(() => 'title'),
@@ -202,7 +71,7 @@ describe('when calling handleSubmit with mockStores', () => {
   }
 
   beforeEach(() => {
-    returnValue = handleSubmit(mockStores.Env, mockStores.Qvain)
+    returnValue = handleSubmit(mockStores.Qvain)
   })
 
   test('should return expectedReturn', () => {

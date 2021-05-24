@@ -10,7 +10,6 @@ import { HelpIcon } from '../../general/modal/form'
 import IDAFilePicker from './ida'
 import ExternalFiles from './external/externalFiles'
 import DataCatalog from './dataCatalog'
-import CumulativeState from './cumulativeState'
 import CumulativeStateV2 from './cumulativeStateV2'
 import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
 import Tooltip from '../../general/section/tooltip'
@@ -18,28 +17,22 @@ import FilesInfo from './filesInfo'
 import MetadataModal from './metadataModal'
 import ClearMetadataModal from './metadataModal/clearMetadataModal'
 import SelectedItems from './ida/selectedItems'
-import LegacyFilePicker from './legacy/idaFilePicker'
-import LegacySelectedFiles from './legacy/selectedFiles'
 import FormModal from './ida/forms/formModal'
 import { useStores } from '../../utils/stores'
 
 const Files = () => {
   const {
     Qvain: { dataCatalog, isPas },
-    Env: { metaxApiV2 },
   } = useStores()
   const [tooltipOpen, setTooltipOpen] = useState(false)
 
   const getData = () => {
-    const SelectedItemsComponent = metaxApiV2 ? SelectedItems : LegacySelectedFiles
-    const FilePickerComponent = metaxApiV2 ? IDAFilePicker : LegacyFilePicker
-
     if (isPas) {
       return (
         <>
-          {metaxApiV2 && <FormModal />}
+          <FormModal />
           <ContainerSubsectionBottom>
-            <SelectedItemsComponent />
+            <SelectedItems />
           </ContainerSubsectionBottom>
         </>
       )
@@ -48,9 +41,9 @@ const Files = () => {
       return (
         <>
           <ContainerSubsectionBottom>
-            <FilePickerComponent />
+            <IDAFilePicker />
           </ContainerSubsectionBottom>
-          {metaxApiV2 ? <CumulativeStateV2 /> : <CumulativeState />}
+          <CumulativeStateV2 />
         </>
       )
     }

@@ -286,21 +286,13 @@ class Submit {
   }
 
   @action prepareDataset = () => {
-    const dataset = handleSubmitToBackend(this.Qvain.Env, this.Qvain)
-    delete dataset.directories
-    delete dataset.files
+    const dataset = handleSubmitToBackend(this.Qvain)
     return dataset
   }
 
   @action prepareActions = () => {
-    const {
-      original,
-      Files,
-      canRemoveFiles,
-      canSelectFiles,
-      newCumulativeState,
-      cumulativeState,
-    } = this.Qvain
+    const { original, Files, canRemoveFiles, canSelectFiles, newCumulativeState, cumulativeState } =
+      this.Qvain
 
     const values = {}
     const fileActions = Files.actionsToMetax()

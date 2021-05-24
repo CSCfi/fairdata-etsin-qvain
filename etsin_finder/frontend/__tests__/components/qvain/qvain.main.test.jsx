@@ -159,8 +159,6 @@ describe('given required props', () => {
       test('should set state: datasetLoading, submitted, response', () => {
         const expectedState = {
           datasetLoading: false,
-          submitted: true,
-          response: err.errors,
         }
 
         harness.state.should.deep.include(expectedState)
@@ -180,8 +178,6 @@ describe('given required props', () => {
       test('should set state: datasetLoading, submitted, response', () => {
         const expectedState = {
           datasetLoading: false,
-          submitted: true,
-          response,
         }
 
         harness.state.should.deep.include(expectedState)
@@ -203,8 +199,6 @@ describe('given required props', () => {
 
       test('should set expected state', () => {
         const expectedState = {
-          response: null,
-          submitted: false,
           datasetLoading: false,
           datasetError: false,
           datasetErrorTitle: null,
@@ -251,8 +245,6 @@ describe('given required props', () => {
       test('should set state', () => {
         const expectedState = {
           datasetLoading: false,
-          submitted: true,
-          response: error.errors,
         }
 
         harness.state.should.include(expectedState)
@@ -268,8 +260,6 @@ describe('given required props', () => {
       test('should set state', () => {
         const expectedState = {
           datasetLoading: false,
-          submitted: true,
-          response,
         }
 
         harness.state.should.include(expectedState)

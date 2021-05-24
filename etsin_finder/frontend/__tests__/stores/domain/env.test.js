@@ -3,7 +3,6 @@ import { RouterStore } from 'mobx-react-router'
 import axios from 'axios'
 
 import EnvClass from '../../../js/stores/domain/env'
-import Flags from '../../../js/stores/domain/env.flags'
 import { getCookieValue } from '../../../js/utils/cookies'
 
 const defaultCookieValue = 'etsin'
@@ -127,30 +126,6 @@ describe('Env', () => {
 
     test('should set qvainHost with testValue', () => {
       Env.qvainHost.should.be.string(testValue)
-    })
-  })
-
-  describe('when accessing computed property metaxApiV2', () => {
-    const expectedParameter = 'METAX_API_V2.FRONTEND'
-
-    beforeEach(() => {
-      Env.metaxApiV2
-    })
-
-    test('should call Flags.flagEnabled with expected parameter', () => {
-      expect(Env.Flags.flagEnabled).toHaveBeenCalledWith(expectedParameter)
-    })
-  })
-
-  describe('when accessing computed property downloadApiV2', () => {
-    const expectedParameter = 'DOWNLOAD_API_V2.FRONTEND'
-
-    beforeEach(() => {
-      Env.downloadApiV2
-    })
-
-    test('should call Flags.flagEnabled with expected parameter', () => {
-      expect(Env.Flags.flagEnabled).toHaveBeenCalledWith(expectedParameter)
     })
   })
 
