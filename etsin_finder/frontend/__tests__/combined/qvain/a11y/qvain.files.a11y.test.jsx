@@ -16,9 +16,6 @@ import AddItemsModal from '../../../../js/components/qvain/fields/files/ida/addI
 import UserMetadataModal from '../../../../js/components/qvain/fields/files/ida/forms/formModal'
 import PASModal from '../../../../js/components/qvain/fields/files/metadataModal'
 import etsinTheme from '../../../../js/styles/theme'
-import Env from '../../../../js/stores/domain/env'
-import QvainStoreClass from '../../../../js/stores/view/qvain'
-import LocaleStore from '../../../../js/stores/view/locale'
 import urls from '../../../../js/components/qvain/utils/urls'
 
 import { get } from '../../../__testdata__/qvain.files.data'
@@ -29,7 +26,6 @@ import SelectedItemsTreeItem from '../../../../js/components/qvain/fields/files/
 global.Promise = require('bluebird')
 
 const stores = buildStores()
-stores.Env.Flags.setFlag('METAX_API_V2', true)
 
 Promise.config({
   cancellation: true,

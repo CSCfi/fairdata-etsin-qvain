@@ -61,7 +61,6 @@ const Locale = new LocaleClass(Accessibility, ElasticQuery)
 const Qvain = new QvainClass(Env)
 
 const getStores = () => {
-  Env.Flags.setFlag('METAX_API_V2', true)
   Locale.setLang('en')
   return {
     Env,

@@ -9,7 +9,6 @@ import { withStores } from '../../../../stores/stores'
 
 export function FileTree(props) {
   const { Files, Packages } = props.Stores.DatasetQuery
-  const { downloadApiV2 } = props.Stores.Env
   const { View } = Files
   const { allowDownload } = props
 
@@ -33,7 +32,6 @@ export function FileTree(props) {
     {
       allowDownload,
       Packages,
-      downloadApiV2,
     }
   )
 

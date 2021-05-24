@@ -73,14 +73,6 @@ class Env {
     this.qvainHost = host
   }
 
-  @computed get metaxApiV2() {
-    return this.Flags.flagEnabled('METAX_API_V2.FRONTEND')
-  }
-
-  @computed get downloadApiV2() {
-    return this.Flags.flagEnabled('DOWNLOAD_API_V2.FRONTEND')
-  }
-
   @computed
   get isQvain() {
     return this.app === 'qvain'
