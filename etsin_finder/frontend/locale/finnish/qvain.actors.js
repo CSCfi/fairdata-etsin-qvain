@@ -2,15 +2,23 @@ const actors = {
   title: 'Toimijat',
   infoTitle: 'Toimijat info',
   addButton: 'Lisää uusi toimija',
-  infoText:
-    'Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot. Voit määrittää tekijät (pakollinen), Julkaisijan, Kuraattorit, Oikeuksienhaltijat sekä Muut tekijät. Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen, missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita), ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö, on organisaatiotieto pakollinen tieto. Jo annettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.',
+  infoText: `<p>Toimijat info
+Tutkimukseen tai aineiston tekemiseen osallistuneet henkilöt ja organisaatiot.
+Voit määrittää Tekijät, Julkaisijan, Kuraattorit, Oikeuksienhaltijat sekä Muut tekijät.</p>
+<p>Valitse ensin, onko kyseessä henkilö vai organisaatio. Määritä sen jälkeen,
+missä roolissa ko. toimija osallistui tutkimukseen (voit valita useita),
+ja määritä sen jälkeen tarvittavat tiedot. Jos kyseessä on henkilö,
+on organisaatiotieto pakollinen tieto. Henkilölle on mahdollista ilmoittaa ORCID-tunniste.</p><p>
+Jo tallennettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan kohdalla kynä -ikonia.</p>
+  `,
+
   errors: {
     loadingReferencesFailed: 'Referenssiorganisaatioiden latauksessa tapahtui virhe.',
   },
   add: {
     title: 'Toimijat',
     action: {
-      create: 'Lisää toimija',
+      create: 'Lisää uusi toimija',
       edit: 'Muokkaa toimijaa',
     },
     groups: {
@@ -18,10 +26,10 @@ const actors = {
       roles: 'Roolit',
       info: 'Tiedot',
     },
-    help:
-      'Aineistolla on oltava ainakin yksi tekijä. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
+    help: `Aineistolla on oltava ainakin yksi Tekijä ja Julkaisija.
+      Huomioi että yksittäisellä toimijalla voi olla useampi rooli.`,
     radio: {
-      person: 'Luonnollinen henkilö',
+      person: 'Henkilö',
       organization: 'Organisaatio',
     },
     checkbox: {
@@ -36,6 +44,7 @@ const actors = {
       placeholder: {
         organization: 'Nimi',
         person: 'Etu- ja sukunimi',
+        manualOrganization: 'Syötä organisaation nimi',
       },
       label: 'Nimi',
     },
@@ -45,11 +54,14 @@ const actors = {
     },
     identifier: {
       label: 'Tunniste',
-      placeholder: 'esim. http://orcid.org',
+      placeholder: {
+        person: 'Esim. http://orcid.org',
+        organization: 'Esim. RAID-tunniste tai Y-tunnus',
+      },
     },
     organization: {
       label: 'Organisaatio',
-      placeholder: 'Esim. Helsingin yliopisto',
+      placeholder: 'Hae organisaatiota tai syötä uusi organisaatio',
       placeholderChild: '+ Lisää osasto tai yksikkö',
       loading: 'Ladataan organisaatioita...',
       labels: {

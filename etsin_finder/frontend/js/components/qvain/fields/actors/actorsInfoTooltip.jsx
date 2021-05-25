@@ -4,7 +4,7 @@ import Translate from 'react-translate-component'
 const ActorsInfoTooltip = () => (
   <>
     <Translate component="h2" content="qvain.actors.infoTitle" />
-    <Translate component="p" content="qvain.actors.infoText" />
+    <Translate component="p" content="qvain.actors.infoText" unsafe />
   </>
 )
 

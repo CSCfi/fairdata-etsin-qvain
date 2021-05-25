@@ -4,9 +4,11 @@ import 'chai/register-expect'
 import FieldOfScienceField from '../../../js/components/qvain/fields/description/fieldOfScience'
 import { useStores } from '../../../js/stores/stores'
 import { LabelLarge } from '../../../js/components/qvain/general/modal/form'
-import Select from '../../../js/components/qvain/general/input/select'
 
-jest.mock('../../../js/stores/stores')
+jest.mock('../../../js/stores/stores', () => ({
+  withStores: Component => props => <Component Stores={mockStores} {...props} />,
+  useStores: jest.fn(),
+}))
 
 describe('given mockStores', () => {
   const mockStores = {
@@ -55,7 +57,7 @@ describe('given mockStores', () => {
         Select: {
           name: 'fieldOfScience',
           metaxIdentifier: 'field_of_science',
-          attributes: { placeholder: 'qvain.description.fieldOfScience.placeholder' },
+          placeholder: 'qvain.description.fieldOfScience.placeholder',
           isMulti: true,
           model: mockStores.Qvain.FieldOfSciences.Model,
           getter: mockStores.Qvain.FieldOfSciences.storage,

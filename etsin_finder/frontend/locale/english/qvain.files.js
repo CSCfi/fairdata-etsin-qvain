@@ -9,14 +9,18 @@ const files = {
   },
   dataCatalog: {
     label: 'File origin',
-    infoText:
-      "Fairdata Services need to know whether you are linking files from IDA or remote resources. You can also publish datasets without any files. In that case, please still select either one. The selection cannot be re-done, so if you are not sure whether you'll add files later, select the one you think you'll need in the future.",
+    infoText: `The Fairdata Services need to know whether you are
+    including files from IDA or remote resources.
+    You can also publish datasets without any files.
+    In that case, please still select the most appropriate option.
+    The selection cannot be changed, so if you are not sure whether
+    you will add files later, select the option you think you will need in the future.`,
     explanation:
       'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
     doiSelection:
       'I want the published dataset to have a DOI (digital object identifier) instead of a URN.',
-    doiSelectedHelp:
-      'When the dataset is published, a DOI will be created and stored in the DataCite Service. This operation cannot be undone. The issued date of a dataset that has been published with a DOI cannot be changed afterwards.',
+    doiSelectedHelp: `Choose "IDA" if the data is stored in Fairdata IDA service.
+    Choose "Remote resources" if the data is stored elsewhere.`,
     placeholder: 'Select option',
     ida: 'IDA',
     att: 'Remote resources',
@@ -188,8 +192,11 @@ const files = {
     'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
   ida: {
     title: 'Fairdata IDA files',
-    infoText:
-      "Project dropdown will show all your IDA projects. Select the project from which you want to link your files. Note! One dataset can have files or folder from only one project. After you have chosen the project, you'll get a list of all files and folders that are FROZEN in that project. Select all files and folders you wish to link to your dataset. If you select a folder, ALL files and subfolders in that folder will be linked. In that case, do not select individual files or subfolders from that folder.",
+    infoText: `When including files from IDA, first select your project in IDA.
+    You can then see the project's frozen data.
+    Select the files and folders that you want to include to the dataset.
+    If you select a folder, note that all files within that folder will be included.
+    `,
     help: 'If you have files in Fairdata IDA you can link them from here:',
     button: {
       label: 'Link files from Fairdata IDA',
@@ -262,9 +269,11 @@ const files = {
       'If you have already published the dataset, removing / adding files or folders will automatically create a new version of the dataset (excluding a published dataset without any files; you can add files/folder one time in the existing version). The old version will be tagged as "Old" and the files linked to it will remain untouched.',
   },
   external: {
-    title: 'Remote resources (ATT)',
-    infoText:
-      'Please insert Title, Use Category and URLs for the remote files. Qvain does not upload or store the files, but the URLs act as active links to the files. Access URL = link to the page where the link / license information is. Download URL = direct link to download the file.',
+    title: 'Remote resources',
+    infoText: `Please insert Title, Use Category and URLs for the remote files.
+    Qvain does not upload or store remote files, but the URLs will be used to provide active links to the files.
+    Access URL = link to the page where the link / license information is. Download URL = direct link to download the file.
+    `,
     help: 'Add link to remote files from here:',
     button: {
       label: 'Add link to remote files',
