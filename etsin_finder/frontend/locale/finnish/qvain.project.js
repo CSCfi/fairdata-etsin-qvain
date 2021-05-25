@@ -7,11 +7,6 @@ const project = {
     title: 'Projekti',
     paragraph: 'Projekti jonka tuotoksena aineisto on luotu',
   },
-  project: {
-    title: 'Lisää projekti',
-    addButton: 'Lisää',
-    description: 'Projekti jonka tuotoksena aineisto on luotu',
-  },
   organization: {
     title: 'Organisaatio *',
     description: 'Organisaatio(t), jotka ovat olleet osallisena projektissa',
@@ -22,24 +17,23 @@ const project = {
   inputs: {
     title: {
       label: 'Lisää projektin otsikko',
-      description: 'Projektin nimi, lisää vähintään yksi kieli.',
+      description: 'Projektin nimi on pakollinen vähintään yhdellä kielellä.',
     },
     titleEn: {
-      placeholder: 'Nimi (Engalnti)',
+      placeholder: 'Nimi (englanti)',
     },
     titleFi: {
-      placeholder: 'Nimi (Suomi)',
+      placeholder: 'Nimi (suomi)',
     },
     identifier: {
-      label: 'Yksilöivä tunniste',
-      description:
-        'Yksiselitteinen viittaus resurssiin tietyssä kontekstissa. On suositeltavaa käyttää virallisen tunnistamisjärjestelmän mukaisesta tunnistetta.',
-      placeholder: 'Tunniste',
+      label: 'Tunniste',
+      description: 'On suositeltavaa käyttää yleisiä tunnisteita, jos saatavilla.',
+      placeholder: 'Lisää tunniste',
     },
     fundingIdentifier: {
       label: 'Rahoitustunniste',
       description: 'Projektin uniikki rahoitustunniste',
-      placeholder: 'Tunniste',
+      placeholder: 'Lisää tunniste',
     },
     funderType: {
       label: 'Rahoitustyyppi',
@@ -48,10 +42,6 @@ const project = {
       noOptions: 'Rahoitustyyppiä ei löytynyt',
     },
     organization: {
-      placeholder: {
-        organization: 'Valitse organisaatio',
-        department: 'Valitse osasto',
-      },
       levels: {
         organization: 'Organisaatio',
         department: 'Yksikkö',
@@ -63,25 +53,26 @@ const project = {
     fundingAgency: {
       contributorType: {
         title: 'Organisaation rooli',
-        description: 'Valitse organisaation rooli projektin avustajana.',
+        description: 'Valitse projektiin liittyvän organisaation rooli.',
         organization: {
           label: 'Valitse organisaatio',
           validation: 'Organisaatio tarvitaan',
         },
         identifier: {
           label: 'Rooli',
+          placeholder: 'Valitse rooli',
         },
         definition: {
-          label: 'Selite',
-          description: 'Lisäselite organisaation roolille',
-          placeholderEn: 'Selite (Englanti)',
-          placeholderFi: 'Selite (Suomi)',
+          label: 'Kuvaus',
+          description: 'Kuvaus organisaation roolille',
+          placeholderEn: 'Kuvaus (englanti)',
+          placeholderFi: 'Kuvaus (suomi)',
         },
         addButton: 'Lisää rooli',
         editButton: 'Muokkaa roolia',
       },
-      addButton: 'Lisää avustaja',
-      editButton: 'Muokkaa avustajaa',
+      addButton: 'Lisää organisaatio',
+      editButton: 'Muokkaa organisaatiota',
     },
   },
 }

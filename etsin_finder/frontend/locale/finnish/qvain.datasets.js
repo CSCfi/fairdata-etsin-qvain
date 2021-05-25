@@ -6,7 +6,7 @@ const datasets = {
     placeholder: 'Suodata aineiston nimen mukaan',
   },
   help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
-  createButton: 'Lisää uusi aineisto',
+  createButton: 'Luo uusi aineisto',
   createNewVersion: 'Luo uusi versio',
   useAsTemplate: 'Käytä mallina',
   state: {

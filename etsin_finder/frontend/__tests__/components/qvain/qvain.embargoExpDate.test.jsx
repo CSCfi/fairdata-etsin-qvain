@@ -1,7 +1,9 @@
 import translate from 'counterpart'
 import 'chai/register-expect'
 import Harness from '../componentTestHarness'
-import EmbargoExpires from '../../../js/components/qvain/fields/licenses/embargoExpires'
+import EmbargoExpires, {
+  ExpirationLabel,
+} from '../../../js/components/qvain/fields/licenses/embargoExpires'
 import '../../../locale/translations'
 import { Label } from '../../../js/components/qvain/general/modal/form'
 import DatePicker, {
@@ -44,7 +46,7 @@ describe('given useStores', () => {
 
     test('should have children with expected properties', () => {
       const children = [
-        { label: 'Label', findType: 'prop', findArgs: ['component', Label] },
+        { label: 'Label', findType: 'prop', findArgs: ['component', ExpirationLabel] },
         { label: 'DatePicker', findArgs: DatePicker },
       ]
 

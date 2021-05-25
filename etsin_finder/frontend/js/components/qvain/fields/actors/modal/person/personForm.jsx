@@ -17,7 +17,7 @@ export const PersonFormBase = () => (
         <PersonInput propName="email" schema={personEmailSchema} />
       </div>
     </Fields>
-    <PersonInput propName="identifier" schema={personIdentifierSchema} />
+    <PersonInput propName="identifier" schema={personIdentifierSchema} includeType />
   </>
 )
 
