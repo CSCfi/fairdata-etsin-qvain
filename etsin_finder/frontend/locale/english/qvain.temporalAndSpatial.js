@@ -1,25 +1,25 @@
 const temporalAndSpatial = {
-  title: 'Temporal and Spatial Coverage',
-  tooltip: 'Temporal and Spatial Coverage info',
+  title: 'Time Period and Geograhical area',
+  tooltip: 'Time Peroiod and Geographical area',
   tooltipContent: {
     spatial: {
-      title: 'Spatial coverage',
-      paragraph: 'Area covered by the dataset, e.g. places of observations.  ',
+      title: 'Geographical area',
+      paragraph: 'Area covered by the dataset, i.e. locations of observations.',
     },
     temporal: {
-      title: 'Temporal coverage',
-      paragraph: 'Time span that is covered by the dataset, e.g. period of observations. ',
+      title: 'Time period',
+      paragraph: 'Time period that is covered by the dataset, i.e. period of observations.',
     },
   },
   spatial: {
-    title: 'Spatial coverage',
-    description: 'Area covered by the dataset, e.g. places of observations.',
-    noItems: 'No spatial coverage have been added.',
+    title: 'Geographical area',
+    description: 'Geographical area covered by the dataset, i.e. locations of observations.',
+    noItems: 'No spatial coverage has been added.',
     modal: {
-      addButton: 'Add Spatial coverage',
+      addButton: 'Add Geographical area',
       title: {
-        add: 'Add Spatial coverage',
-        edit: 'Edit spatial coverage',
+        add: 'Add Geographical area',
+        edit: 'Edit Geographical area',
       },
       buttons: {
         addGeometry: 'Add Geometry',
@@ -29,11 +29,11 @@ const temporalAndSpatial = {
       },
       nameInput: {
         label: 'Name',
-        placeholder: 'Name',
+        placeholder: 'Area name',
       },
       altitudeInput: {
         label: 'Altitude',
-        placeholder: 'The altitude of a spatial coverage (meters from WGS84 reference)',
+        placeholder: 'The altitude of the geographical area (meters from WGS84 reference)',
       },
       addressInput: {
         label: 'Address',
@@ -50,8 +50,8 @@ const temporalAndSpatial = {
     },
   },
   temporal: {
-    title: 'Temporal coverage',
-    description: 'Time span that is covered by the dataset, e.g. period of observations. ',
+    title: 'Time period',
+    description: 'Time period that is covered by the dataset, i.e. period of observations.',
     addButton: 'Add temporal coverage',
     modal: {
       durationInput: {

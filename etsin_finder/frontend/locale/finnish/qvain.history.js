@@ -1,15 +1,16 @@
 const history = {
-  title: 'Aineistoon liittyvä materiaali ja historia',
-  tooltip: 'Aineestoon liittyvä materiaali ja historia info',
+  title: 'Aineistoon liittyvät tuotokset ja historia',
+  tooltip: 'Aineestoon liittyvät tuotokset ja historia info',
   tooltipContent: {
     relatedResource: {
       title: 'Viittaukset',
-      paragraph:
-        'Viittaukset muihin aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.',
+      paragraph: `Viittaukset aineistoihin, julkaisuihin tai muihin tuotoksiin,
+        jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.`,
     },
     provenance: {
-      title: 'Historiatiedot (provenienssi)',
-      paragraph: 'Tiedot aineiston historiatiedoista eli provenienssista.',
+      title: 'Historiatiedot',
+      paragraph: `Tiedot aineiston historiatiedoista eli provenienssista.
+      Tällaisia ovat muun muassa aineiston keruuseen, analysointiin tai esittelyyn liittyvät tilaisuudet.`,
     },
     infrastructure: {
       title: 'Infrastruktuuri',
@@ -19,43 +20,44 @@ const history = {
   infrastructure: {
     addButton: 'Lisää infrastruktuuri',
     title: 'Infrastruktuuri',
-    description: 'Voit lisätä palveluita tai rakenteita joita on käytetty aineiston laatimiseen.',
+    description:
+      'Voit lisätä palveluita tai infrastruktuureita joita on käytetty aineiston tuottamiseen.',
     noItems: 'Infrastruktuureja ei ole lisätty.',
   },
   relatedResource: {
-    title: 'Viittaukset toiseen resurssiin',
-    description:
-      'Viittaukset aineistoihin, julkaisuihin tai muihin resursseihin, jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.',
-    noItems: 'Viittauksia toisiin resursseihin ei ole lisätty.',
+    title: 'Viittaukset toiseen tuotokseen',
+    description: `Viittaukset aineistoihin, julkaisuihin tai muihin tuotoksiin,
+        jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.`,
+    noItems: 'Viittauksia toisiin tuotoksiin ei ole lisätty.',
     modal: {
-      addButton: 'Lisää viittaus toiseen resurssiin',
+      addButton: 'Lisää viittaus toiseen tuotokseen',
       title: {
-        add: 'Lisää viittaus toiseen resurssiin',
-        edit: 'Muokkaa viittausta toiseen resurssiin',
+        add: 'Lisää viittaus toiseen tuotokseen',
+        edit: 'Muokkaa viittausta toiseen tuotokseen',
       },
       buttons: {
-        save: 'Tallenna',
+        save: 'Tallenna viittaus',
         editSave: 'Vahvista muutokset',
         cancel: 'Peruuta',
       },
       nameInput: {
         fi: {
           label: 'Nimi',
-          placeholder: 'Nimi (suomeksi)',
+          placeholder: 'Nimi (suomi)',
         },
         en: {
           label: 'Nimi',
-          placeholder: 'Nimi (englanniksi)',
+          placeholder: 'Nimi (englanti)',
         },
       },
       descriptionInput: {
         fi: {
-          label: 'Kuvailu',
-          placeholder: 'Kuvailu (suomeksi)',
+          label: 'Kuvaus',
+          placeholder: 'Kuvaus (suomi)',
         },
         en: {
-          label: 'Kuvailu',
-          placeholder: 'Kuvailu (englanniksi)',
+          label: 'Kuvaus',
+          placeholder: 'Kuvaus (englanti)',
         },
       },
       identifierInput: {
@@ -67,8 +69,8 @@ const history = {
         placeholder: 'Viitteen tyyppi',
       },
       entityTypeInput: {
-        label: 'Resurssin tyyppi',
-        placeholder: 'Resurssin tyyppi',
+        label: 'Tuotoksen tyyppi',
+        placeholder: 'Tuotoksen tyyppi',
       },
     },
   },
@@ -90,43 +92,43 @@ const history = {
       nameInput: {
         fi: {
           label: 'Nimi',
-          placeholder: 'Nimi (suomeksi)',
+          placeholder: 'Nimi (suomi)',
         },
         en: {
           label: 'Nimi',
-          placeholder: 'Nimi (englanniksi)',
+          placeholder: 'Nimi (englanti)',
         },
       },
       descriptionInput: {
         fi: {
           label: 'Seloste',
-          placeholder: 'Seloste (suomeksi)',
+          placeholder: 'Seloste (suomi)',
         },
         en: {
           label: 'Seloste',
-          placeholder: 'Seloste (englanniksi)',
+          placeholder: 'Seloste (englanti)',
         },
       },
       outcomeDescriptionInput: {
         fi: {
-          label: 'Seloste lopputuloksesta',
-          placeholder: 'Seloste lopputuloksesta (suomeksi)',
+          label: 'Kuvaus lopputuloksesta',
+          placeholder: 'Kuvaus lopputuloksesta (suomi)',
         },
         en: {
-          label: 'Seloste lopputuloksesta',
-          placeholder: 'Seloste lopputuloksesta (englanniksi)',
+          label: 'Kuvaus lopputuloksesta',
+          placeholder: 'Kuvaus lopputuloksesta (englanti)',
         },
       },
       periodOfTimeInput: {
         label: 'Ajanjakso',
-        startPlaceholder: 'Alkaa',
-        endPlaceholder: 'Päättyy',
+        startPlaceholder: 'Alkamispäivämäärä',
+        endPlaceholder: 'Päättymispäivämäärä',
       },
       locationInput: {
         label: 'Alueelliset tiedot',
         noItems: 'Alueellisia tietoja ei ole lisätty.',
         error: {
-          nameRequired: 'Nimi on pakollinen kenttä.',
+          nameRequired: 'Nimi on pakollinen tieto.',
           altitudeNan: 'Korkeus täytyy olla numero',
         },
         modal: {
@@ -165,7 +167,7 @@ const history = {
       },
       outcomeInput: {
         label: 'Lopputulos',
-        placeholder: 'Lopputulos',
+        placeholder: 'Valitse lopputulos',
       },
       usedEntityInput: {
         label: 'Käytetyt kokonaisuudet',
@@ -184,21 +186,21 @@ const history = {
           nameInput: {
             fi: {
               label: 'Nimi',
-              placeholder: 'Nimi (suomeksi)',
+              placeholder: 'Nimi (suomi)',
             },
             en: {
               label: 'Nimi',
-              placeholder: 'Nimi (englanniksi)',
+              placeholder: 'Nimi (englanti)',
             },
           },
           descriptionInput: {
             fi: {
-              label: 'Kuvailu',
-              placeholder: 'Kuvailu (suomeksi)',
+              label: 'Kuvaus',
+              placeholder: 'Kuvaus (suomi)',
             },
             en: {
-              label: 'Kuvailu',
-              placeholder: 'Kuvailu (englanniksi)',
+              label: 'Kuvaus',
+              placeholder: 'Kuvaus (englanti)',
             },
           },
           identifierInput: {
@@ -206,8 +208,8 @@ const history = {
             placeholder: 'Tunniste',
           },
           relationTypeInput: {
-            label: 'Viitteen tyyppi',
-            placeholder: 'Viitteen tyyppi',
+            label: 'Suhde aineistoon',
+            placeholder: 'Suhde aineistoon',
           },
           entityTypeInput: {
             label: 'Resurssin tyyppi',
@@ -217,12 +219,12 @@ const history = {
       },
       actorsInput: {
         label: 'Liittyi toimijaan',
-        placeholder: 'Liitä toimija',
-        createButton: 'Luo uusi toimija',
+        placeholder: 'Lisää toimija',
+        createButton: 'Lisää uusi toimija',
       },
       lifecycleInput: {
         label: 'Elinkaaritapahtuma',
-        placeholder: 'Elinkaaritapahtuma',
+        placeholder: 'Valitse elinkaaritapahtuma',
       },
     },
   },

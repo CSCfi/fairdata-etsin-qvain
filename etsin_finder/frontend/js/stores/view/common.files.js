@@ -48,23 +48,23 @@ class Files {
     this.originalMetadata = {}
     this.projectLocked = false
 
-    if (this.loadingProjectInfo?.promise) {
+    if (this.loadingProjectInfo?.promise?.cancel) {
       this.loadingProjectInfo.promise.cancel()
     }
     this.loadingProjectInfo = null
 
-    if (this.loadingMetadata?.promise) {
+    if (this.loadingMetadata?.promise?.cancel) {
       this.loadingMetadata.promise.cancel()
     }
     this.loadingMetadata = null
 
-    if (this.loadingProjectRoot?.promise) {
+    if (this.loadingProjectRoot?.promise?.cancel) {
       this.loadingProjectRoot.promise.cancel()
     }
     this.loadingProjectRoot = null
     this.promiseManager.reset()
 
-    if (this.loadingDraftOfProjects?.promise) {
+    if (this.loadingDraftOfProjects?.promise?.cancel) {
       this.loadingDraftOfProjects.promise.cancel()
     }
     this.loadingDraftOfProjects = null
@@ -225,9 +225,13 @@ class Files {
         }
         await this.loadingDraftOfProjects.promise
       } catch (err) {
-        runInAction(() => { this.loadingDraftOfProjects.error = err })
+        runInAction(() => {
+          this.loadingDraftOfProjects.error = err
+        })
       } finally {
-        runInAction(() => { this.loadingDraftOfProjects = null })
+        runInAction(() => {
+          this.loadingDraftOfProjects = null
+        })
       }
     }
   }
@@ -235,7 +239,11 @@ class Files {
   @action openDataset = async dataset => {
     this.reset()
     this.datasetIdentifier = dataset.identifier
-    await Promise.all([this.loadProjectInfo(), this.loadMetadata(), this.checkDraftOfProjects(dataset)])
+    await Promise.all([
+      this.loadProjectInfo(),
+      this.loadMetadata(),
+      this.checkDraftOfProjects(dataset),
+    ])
     return this.loadProjectRoot()
   }
 
@@ -349,14 +357,14 @@ class Files {
     return dir
   }
 
-  getItemPath = (item) => {
+  getItemPath = item => {
     if (item.parent && item.parent.type === 'directory') {
       return `${this.getItemPath(item.parent)}/${item.name}`
     }
     return `/${item.name}`
   }
 
-  getEquivalentItemScope = (item) => {
+  getEquivalentItemScope = item => {
     // Return topmost path that contains the same files as current item
     if (!item.parent) {
       return '/'
