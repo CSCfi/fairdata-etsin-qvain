@@ -39,14 +39,17 @@ def send_email(language, cr_id, scope, email):
 
     with current_app.mail.record_messages() as outbox:
         try:
-            log.info("Sending notification mail for dataset {cr_id}")
+            log.info(f"Sending notification mail for dataset {cr_id}")
             sender = current_app.config.get('MAIL_DEFAULT_SENDER')
             domain = current_app.config.get('SERVER_ETSIN_DOMAIN_NAME')
             data_url = f"https://{domain}/dataset/{cr_id}/data?show={scope[0]}"
             recipients = [email]
             context = dict(folder=scope[0], pref_id=pref_id, data_url=data_url)
             subject = translate(language, 'etsin.download.notification.subject', context)
-            body = translate(language, 'etsin.download.notification.body', context)
+            if scope == ["/"]:
+                body = translate(language, 'etsin.download.notification.body.full', context)
+            else:
+                body = translate(language, 'etsin.download.notification.body.partial', context)
             msg = Message(recipients=recipients, sender=sender, reply_to=sender, subject=subject, body=body)
             current_app.mail.send(msg)
             if len(outbox) != 1:
@@ -224,7 +227,7 @@ class Subscriptions(Resource):
 
         # Error due to package being already created, send mail immediately
         if package_already_created(resp):
-            send_email(cr_id, scope, email)
+            send_email(language, cr_id, scope, email)
             return '', 200
         return resp, status
 
@@ -258,7 +261,7 @@ class Notifications(Resource):
             abort(400, message='Decoding payload failed')
 
         cr_id = payload.get('cr_id')
-        scope = payload.get('scope') or '/'
+        scope = payload.get('scope') or ['/']
         email = payload["email"]
         language = payload.get("language", default_language)
         send_email(language, cr_id, scope, email)
