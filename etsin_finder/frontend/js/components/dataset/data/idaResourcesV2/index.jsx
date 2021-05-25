@@ -26,7 +26,7 @@ const downloadAll = identifier => {
 
 function IdaResources(props) {
   const { restrictions } = props.Stores.Access
-  let allowDownload =
+  const allowDownload =
     props.dataset.data_catalog.catalog_json.identifier !== 'urn:nbn:fi:att:data-catalog-pas' &&
     restrictions.allowDataIdaDownloadButton
 
@@ -65,7 +65,7 @@ function IdaResources(props) {
 
   let downloadFunc = () => downloadAll(props.dataset.identifier)
   const buttonProps = {}
-  let downloadAllText = 'dataset.dl.downloadAll'
+  const downloadAllText = 'dataset.dl.downloadAll'
 
   // Download full dataset package
   const action = getDownloadAction(props.dataset.identifier, null, Packages, Files)
