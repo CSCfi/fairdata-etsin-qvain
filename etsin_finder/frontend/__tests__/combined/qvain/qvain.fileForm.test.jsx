@@ -5,17 +5,13 @@ import axios from 'axios'
 import { configure } from 'mobx'
 
 import '../../../locale/translations'
+import { buildStores } from '../../../js/stores'
 import { getReferenceData } from '../../__testdata__/referenceData.data'
 import { StoresProvider } from '../../../js/stores/stores'
 import etsinTheme from '../../../js/styles/theme'
 import FileForm from '../../../js/components/qvain/fields/files/ida/forms/fileForm'
 import DirectoryForm from '../../../js/components/qvain/fields/files/ida/forms/directoryForm'
 import { File, Directory, Project } from '../../../js/stores/view/common.files.items'
-import QvainClass from '../../../js/stores/view/qvain'
-import AccessibilityClass from '../../../js/stores/view/accessibility'
-import ElasticQueryClass from '../../../js/stores/view/elasticquery'
-import LocaleClass from '../../../js/stores/view/locale'
-import EnvClass from '../../../js/stores/domain/env'
 import { SaveButton } from '../../../js/components/qvain/general/buttons'
 import { ValidationErrors } from '../../../js/components/qvain/general/errors/validationError'
 
@@ -25,24 +21,11 @@ Promise.config({
   cancellation: true,
 })
 
-const Env = new EnvClass()
-const Accessibility = new AccessibilityClass(Env)
-const ElasticQuery = new ElasticQueryClass(Env)
-const Locale = new LocaleClass(Accessibility, ElasticQuery)
-
 const getStores = () => {
-  Env.Flags.setFlag('METAX_API_V2', true)
-
   configure({ safeDescriptors: false })
-  const Qvain = new QvainClass(Env)
-  Qvain.resetQvainStore()
-
+  const stores = buildStores()
   configure({ safeDescriptors: true })
-  return {
-    Qvain,
-    Locale,
-    Env,
-  }
+  return stores
 }
 
 jest.mock('axios')
@@ -254,11 +237,6 @@ describe('Qvain.Files', () => {
 
     it('should fail to save when use category is not set', async () => {
       await render(true)
-      // await expectSave(undefined)
-      await flushPromises()
-      await flushPromises()
-      await flushPromises()
-      wrapper.update()
       await expectError('qvain.validationMessages.files.directory.useCategory.required')
     })
 
