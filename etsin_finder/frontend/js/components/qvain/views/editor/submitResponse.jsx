@@ -11,10 +11,10 @@ import Loader from '../../../general/loader'
 import { LinkButtonDarkGray } from '../../../general/button'
 import { useStores } from '../../utils/stores'
 
-const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
+const SubmitResponse = ({ response, clearSubmitResponse }) => {
   const {
     Qvain: { original },
-    Env: { getEtsinUrl, getQvainUrl },
+    Env: { getEtsinUrl },
   } = useStores()
 
   const getPreferredIdentifier = () => {
@@ -24,15 +24,6 @@ const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
     }
     identifier = identifier || response.identifier
     return identifier
-  }
-
-  const handleOpenNewVersion = identifier => {
-    history.push(getQvainUrl(`/dataset/${identifier}`))
-    closeSubmitResponse()
-  }
-
-  const closeSubmitResponse = () => {
-    clearSubmitResponse()
   }
 
   let goToEtsin = <Translate content="qvain.datasets.goToEtsin" />
@@ -70,7 +61,7 @@ const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
           <p>Identifier: {getPreferredIdentifier()}</p>
         </ResponseContainerContent>
         <ResponseContainerCloseButtonContainer>
-          <LinkButtonDarkGray type="button" onClick={closeSubmitResponse}>
+          <LinkButtonDarkGray type="button" onClick={clearSubmitResponse}>
             <FontAwesomeIcon icon={faTimes} aria-hidden />
           </LinkButtonDarkGray>
         </ResponseContainerCloseButtonContainer>
@@ -112,48 +103,14 @@ const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
           <p>Identifier: {getPreferredIdentifier()}</p>
         </ResponseContainerContent>
         <ResponseContainerCloseButtonContainer>
-          <LinkButtonDarkGray type="button" onClick={closeSubmitResponse}>
+          <LinkButtonDarkGray type="button" onClick={clearSubmitResponse}>
             <FontAwesomeIcon icon={faTimes} aria-hidden />
           </LinkButtonDarkGray>
         </ResponseContainerCloseButtonContainer>
       </ResponseContainerSuccess>
     )
   }
-  // Only in Metax V1:
-  // If an existing datasets files or directorys have changed and the update automatically
-  // creates a new version of the dataset with its own identifiers.
-  if (response && typeof response === 'object' && 'new_version_created' in response) {
-    const identifier = response.dataset_version_set
-      ? response.dataset_version_set[0].identifier
-      : response.identifier
-    return (
-      <ResponseContainerSuccess>
-        <ResponseContainerContent>
-          <ResponseLabel success>
-            <Translate content="qvain.submitStatus.editFilesSuccess" />
-          </ResponseLabel>
-          <LinkToEtsin
-            onClick={() => handleOpenNewVersion(response.new_version_created.identifier)}
-          >
-            <Translate content="qvain.datasets.openNewVersion" />
-          </LinkToEtsin>
-          <LinkToEtsin
-            onClick={() =>
-              window.open(getEtsinUrl(`/dataset/${identifier}${goToEtsinQuery}`), '_blank')
-            }
-          >
-            {goToEtsin}
-          </LinkToEtsin>
-          <p>Identifier: {identifier}</p>
-        </ResponseContainerContent>
-        <ResponseContainerCloseButtonContainer>
-          <LinkButtonDarkGray type="button" onClick={closeSubmitResponse}>
-            <FontAwesomeIcon icon={faTimes} aria-hidden />
-          </LinkButtonDarkGray>
-        </ResponseContainerCloseButtonContainer>
-      </ResponseContainerSuccess>
-    )
-  }
+
   // If something went wrong.
   if (response) {
     return (
@@ -165,7 +122,7 @@ const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
           <p>{response.toString().replace(/,/g, '\n')}</p>
         </ResponseContainerContent>
         <ResponseContainerCloseButtonContainer>
-          <LinkButtonDarkGray type="button" onClick={closeSubmitResponse}>
+          <LinkButtonDarkGray type="button" onClick={clearSubmitResponse}>
             <FontAwesomeIcon icon={faTimes} aria-hidden />
           </LinkButtonDarkGray>
         </ResponseContainerCloseButtonContainer>
@@ -181,7 +138,6 @@ const SubmitResponse = ({ history, response, clearSubmitResponse }) => {
 }
 
 SubmitResponse.propTypes = {
-  history: PropTypes.object.isRequired,
   clearSubmitResponse: PropTypes.func.isRequired,
   response: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
 }

@@ -4,12 +4,13 @@ const history = {
   tooltipContent: {
     relatedResource: {
       title: 'Reference to a related resource',
-      paragraph:
-        'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. ',
+      paragraph: `Refer to related datasets, publications, and other
+        resources that are relevant in understanding this dataset.`,
     },
     provenance: {
       title: 'Provenance',
-      paragraph: 'Information about the provenance of the data.',
+      paragraph: `Information about the provenance of the data.
+      These are e.g. events related to gathering of the data, data analysis and presenting data.`,
     },
     infrastructure: {
       title: 'Infrastructure',
@@ -18,9 +19,9 @@ const history = {
   },
   relatedResource: {
     title: 'Reference to a related resource',
-    description:
-      'Refer to related datasets, publications, and other resources that are relevant in understanding this dataset. ',
-    noItems: 'No references to a related resources have been added.',
+    description: `Refer to related datasets, publications, and other
+      resources that are relevant in understanding this dataset.`,
+    noItems: 'No references to any related resources have been specified.',
     modal: {
       addButton: 'Add reference to a related resource',
       title: {
@@ -58,24 +59,24 @@ const history = {
       },
       relationTypeInput: {
         label: 'Relation type',
-        placeholder: 'Relation type',
+        placeholder: 'Select relation type',
       },
       entityTypeInput: {
-        label: 'Entity type',
-        placeholder: 'Entity type',
+        label: 'Resource type',
+        placeholder: 'Select resource type',
       },
     },
   },
   infrastructure: {
     addButton: 'Add Infrastructure',
     title: 'Infrastructure',
-    description: 'Services and tools that are used to produce the dataset.',
+    description: 'You can specify services and tools that are used to produce the dataset.',
     noItems: 'No infrastuctures have been added.',
   },
   provenance: {
     title: 'Provenance',
     description: 'An action or event that the dataset was the subject of.',
-    noItems: 'No provenances have been added.',
+    noItems: 'No provenances have been specified.',
     modal: {
       title: {
         add: 'Add Provenance',
@@ -118,7 +119,7 @@ const history = {
         },
       },
       periodOfTimeInput: {
-        label: 'Period of time',
+        label: 'Time period',
         startPlaceholder: 'Start date',
         endPlaceholder: 'End date',
       },
@@ -165,7 +166,7 @@ const history = {
       },
       outcomeInput: {
         label: 'Outcome',
-        placeholder: 'Outcome',
+        placeholder: 'Select outcome',
       },
       usedEntityInput: {
         label: 'Used entities',
@@ -216,13 +217,13 @@ const history = {
         },
       },
       actorsInput: {
-        label: 'Was associated with',
-        placeholder: 'Add associated actor',
-        createButton: 'Create new actor',
+        label: 'Was associated with an actor',
+        placeholder: 'Specify associated actor',
+        createButton: 'Specify new actor',
       },
       lifecycleInput: {
         label: 'Lifecycle event',
-        placeholder: 'Lifecycle event',
+        placeholder: 'Select lifecycle event',
       },
     },
   },

@@ -11,7 +11,6 @@ jest.mock('axios')
 describe('Packages', () => {
   let packages
   const mockEnv = {
-    downloadApiV2: true,
     Flags: { flagEnabled: () => true },
   }
 
