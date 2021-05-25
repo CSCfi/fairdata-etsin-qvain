@@ -8,10 +8,8 @@ import { qvainFormSchema } from '../../utils/formValidation'
 import urls from '../../utils/urls'
 import DoiModal from './doiModal'
 import { withStores } from '../../../../stores/stores'
-import SubmitButtonsV1 from './submitButtonsV1'
 import SubmitButtonsV2 from './submitButtonsV2'
 import handleSubmitToBackend from '../../utils/handleSubmit'
-import FlaggedComponent from '../../../general/flaggedComponent'
 
 export class SubmitButtons extends Component {
   promises = []
@@ -75,7 +73,7 @@ export class SubmitButtons extends Component {
   }
 
   handleCreatePublished = async e => {
-    const obj = handleSubmitToBackend(this.props.Stores.Env, this.props.Stores.Qvain)
+    const obj = handleSubmitToBackend(this.props.Stores.Qvain)
     return qvainFormSchema
       .validate(obj, { abortEarly: false, strict: true })
       .then(() =>
@@ -128,7 +126,7 @@ export class SubmitButtons extends Component {
       />
     )
 
-    const propsBase = {
+    const props = {
       submit: this.submit,
       success: this.success,
       failure: this.failure,
@@ -136,26 +134,10 @@ export class SubmitButtons extends Component {
       submitButtonsRef,
       doiModal,
       disabled,
-    }
-    const propsV1 = {
-      ...propsBase,
-      showUseDoiInformation: this.showUseDoiInformation,
-      handleCreatePublished: this.handleCreatePublished,
-    }
-    const props = {
-      ...propsBase,
       history: this.props.history,
       idSuffix,
     }
-
-    return (
-      <FlaggedComponent
-        flag="METAX_API_V2.FRONTEND"
-        whenDisabled={<SubmitButtonsV1 {...propsV1} />}
-      >
-        <SubmitButtonsV2 {...props} />
-      </FlaggedComponent>
-    )
+    return <SubmitButtonsV2 {...props} />
   }
 }
 

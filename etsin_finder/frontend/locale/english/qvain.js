@@ -12,13 +12,15 @@ import temporalAndSpatial from './qvain.temporalAndSpatial'
 import validationMessages from './qvain.validationMessages'
 
 const qvainEnglish = {
-  saveDraft: 'Save Draft',
+  saveDraft: 'Save draft',
   submit: 'Save and Publish',
   edit: 'Update Dataset',
   unsavedChanges:
     'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',
-  consent:
-    'By using Qvain the user agrees that he or she has asked consent from all persons whose personal information the user will add to the descriptive data and informed them of how they can get their personal data removed. By using Qvain the user agrees to the <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.',
+  consent: `By using Qvain the user agrees to obtain prior consent from all persons whose personal
+  information the user will add to the descriptive data and inform them how they can get
+  their personal data removed. By using Qvain the user agrees to the
+  <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.`,
   submitStatus: {
     success: 'Dataset published!',
     draftSuccess: 'Draft saved!',
@@ -60,7 +62,7 @@ const qvainEnglish = {
   notCSCUserLink: ' CSC Customer Portal',
   notCSCUser2: ' You can register with or without Haka account.',
   notLoggedIn: 'Please login with your CSC account to use Qvain.',
-  titleCreate: 'Create new dataset',
+  titleCreate: 'Create a new dataset',
   titleEdit: 'Edit dataset',
   titleLoading: 'Loading dataset',
   titleLoadingFailed: 'Loading dataset failed',
@@ -97,7 +99,7 @@ const qvainEnglish = {
     placeholder: {
       name: 'Name',
       email: 'Email',
-      identifier: 'e.g http://orcid.org',
+      identifier: 'E.g. http://orcid.org',
     },
   },
   actors,

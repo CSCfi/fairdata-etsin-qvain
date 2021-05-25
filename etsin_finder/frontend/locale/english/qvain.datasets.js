@@ -1,12 +1,12 @@
 const datasets = {
-  title: 'Your Datasets',
+  title: 'Your datasets',
   search: {
     hidden: 'Search',
     searchTitle: 'Search from the list (to filter the datasets)',
     placeholder: 'Filter datasets by name',
   },
-  help: 'Choose a dataset to edit or create a new dataset',
-  createButton: 'Create new dataset',
+  help: 'Edit existing dataset or Create a new one',
+  createButton: 'Create a new dataset',
   createNewVersion: 'Create new version',
   useAsTemplate: 'Use as template',
   state: {

@@ -94,7 +94,7 @@ export const OrgFormBase = ({ organization, updateOrganization }) => {
         type="text"
         id="nameField"
         autoFocus
-        attributes={{ placeholder: 'qvain.actors.add.name.placeholder.organization' }}
+        attributes={{ placeholder: 'qvain.actors.add.name.placeholder.manualOrganization' }}
         disabled={readonly}
         value={organization.name[lang] || ''}
         onChange={event => handleUpdateName(event.target.value, lang)}
@@ -125,7 +125,7 @@ export const OrgFormBase = ({ organization, updateOrganization }) => {
         component={ActorInput}
         type="text"
         disabled={readonly}
-        attributes={{ placeholder: 'qvain.actors.add.identifier.placeholder' }}
+        attributes={{ placeholder: 'qvain.actors.add.identifier.placeholder.organization' }}
         onChange={event => handleUpdateIdentifier(event.target.value)}
         value={organization.identifier}
         onBlur={() => handleOnBlur('identifier')}
