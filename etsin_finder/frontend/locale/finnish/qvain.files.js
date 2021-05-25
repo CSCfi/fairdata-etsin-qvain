@@ -9,8 +9,9 @@ const files = {
   },
   dataCatalog: {
     label: 'Tiedoston lähde',
-    infoText:
-      'Ennenkuin pääset linkittämään tiedostoja aineistoosi, sinun tulee valita, linkitätkö tiedostoja IDAsta vai annatko ulkopuolisen palvelun URL-osoitteet, joista tiedostot löytyvät.',
+    infoText: `Ennen kuin voit liittää tiedostoja aineistoosi,
+      sinun tulee valita, linkitätkö tiedostoja IDAsta vai
+      annatko ulkopuolisen palvelun URL-osoitteet, joista tiedostot löytyvät.`,
     explanation:
       'Valitse "IDA", jos tiedostot on tallennettu Fairdata IDA -palveluun. Valitse "Ulkoinen lähde" jos tiedostot sijaitsevat muualla.',
     doiSelection:
@@ -190,8 +191,12 @@ const files = {
     'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
   ida: {
     title: 'Fairdata IDA tiedostot',
-    infoText:
-      'Jos linkität IDA-tiedostoja, sinun tulee ensin valita IDA-projekti, minkä jälkeen näet ko. projektiin kuuluvat tiedostot ja hakemistot. Kun olet valinnut haluamasi projektin, sivu listaa sinulle ko. projektin sisältämät jäädytetyt hakemistot ja tiedostot. Valitse listasta ne hakemistot ja tiedostot, jotka haluat liittää aineistoosi. Jos liität hakemistot, KAIKKI sen alla olevat tiedostot liitetään aineistoon (älä siinä tapauksessa valitse hakemiston alta enää yksittäisiä tiedostoja).',
+    infoText: `Jos liität aineistoosi tiedostoja IDA-palvelusta,
+    valitse ensin projekti IDAssa. Näet tämän jälkeen projektin jäädytetyt
+    tiedostot ja hakemistot. Valitse ne tiedostot ja hakemistot,
+    jotka haluat liittää aineistoosi. Jos liität aineistoon hakemiston,
+    kaikki sen alla olevat tiedostot liitetään aineistoon.
+    `,
     help: 'Jos sinulla on tiedostoja Fairdata IDA:ssa, voit liittää ne tässä:',
     button: {
       label: 'Liitä tiedostoja Fairdata IDA:sta',
@@ -264,9 +269,14 @@ const files = {
       'Jos julkaistuun aineistoon lisätään tiedostoja tai hakemistoja, tai siitä poistetaan tiedostoja tai hakemistoja, ko. aineistosta syntyy automaattisesti uusi versio. Vanha versio pysyy muuttumattomana ja siihen lisätään "vanha" -tagi. Jos julkaistu aineisto ei sisältänyt yhtään tiedostoa, voit lisätä tiedostoja ja/tai hakemistoja yhden kerran ilman, että uusi versio syntyy.',
   },
   external: {
-    title: 'Ulkoiset tiedostot (ATT)',
-    infoText:
-      'Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta) sekä, kerro, mistä tiedosto / sen lisenssitieto löytyvät (sivun URL). Voit antaa myös suoran latauslinkin, jos sellainen on. Tiedostoa ei ladata Qvaimeen, vaan antamasi sivun URL toimii linkkinä sivulle, jossa tiedosto sijaitsee sekä tiedoston latauslinkin kauttaja pääsee suoraan aloittamaan tiedoston lataamisen omalle koneelleen.',
+    title: 'Ulkoiset tiedostot',
+    infoText: `Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta),
+    sekä kerro, mistä tiedosto / sen lisenssitieto löytyvät (sivun URL).
+    Voit antaa myös suoran latauslinkin, jos sellainen on.
+    Tiedostoa ei ladata Qvaimeen, vaan antamasi sivun URL toimii linkkinä sivulle,
+    jossa tiedosto sijaitsee sekä tiedoston latauslinkin kauttaja
+     pääsee suoraan aloittamaan tiedoston lataamisen omalle koneelleen.
+    `,
     help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
     button: {
       label: 'Lisää linkki ulkoiseen tiedostoon',

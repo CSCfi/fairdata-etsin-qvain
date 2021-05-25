@@ -1,22 +1,28 @@
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 
+import { useStores, withStores } from '../../../js/stores/stores'
 import RestrictionGrounds from '../../../js/components/qvain/fields/licenses/restrictionGrounds'
-import { useStores } from '../../../js/stores/stores'
 import { LabelLarge } from '../../../js/components/qvain/general/modal/form'
 
-describe('given mockStores', () => {
-  const mockStores = {
-    Qvain: {
-      RestrictionGrounds: {
-        value: 'value',
-        set: jest.fn(),
-        Model: jest.fn(),
-        validate: jest.fn(),
-      },
+const mockStores = {
+  Qvain: {
+    RestrictionGrounds: {
+      value: 'value',
+      set: jest.fn(),
+      Model: jest.fn(),
+      validate: jest.fn(),
     },
-  }
+  },
+}
 
+jest.mock('../../../js/stores/stores', () => ({
+  withStores: Component => props => <Component Stores={mockStores} {...props} />,
+  useStores: jest.fn(),
+}))
+
+
+describe('given mockStores', () => {
   const harness = new Harness(RestrictionGrounds)
 
   beforeEach(() => {
@@ -51,7 +57,7 @@ describe('given mockStores', () => {
         Select: {
           name: 'restrictionGrounds',
           metaxIdentifier: 'restriction_grounds',
-          attributes: { placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder' },
+          placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder',
           model: mockStores.Qvain.RestrictionGrounds.Model,
           getter: mockStores.Qvain.RestrictionGrounds.value,
           setter: mockStores.Qvain.RestrictionGrounds.set,

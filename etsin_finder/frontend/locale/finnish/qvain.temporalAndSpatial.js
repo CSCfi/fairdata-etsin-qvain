@@ -16,10 +16,10 @@ const temporalAndSpatial = {
     description: 'Alue jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja. ',
     noItems: 'Maantieteellistä kattavuutta ei ole lisätty.',
     modal: {
-      addButton: 'Lisää maantieteellinen kattavuus',
+      addButton: 'Lisää maantieteellinen alue',
       title: {
-        add: 'Lisää maantieteellinen kattavuus',
-        edit: 'Muokkaa maantieteellistä kattavuutta',
+        add: 'Lisää maantieteellinen alue',
+        edit: 'Muokkaa maantieteellistä aluetta',
       },
       buttons: {
         addGeometry: 'Lisää geometria',
@@ -52,12 +52,12 @@ const temporalAndSpatial = {
   temporal: {
     title: 'Ajallinen kattavuus',
     description: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
-    addButton: 'Lisää ajallinen kattavuus',
+    addButton: 'Lisää ajanjakso',
     modal: {
       durationInput: {
         label: 'Ajanjakso',
-        startPlaceholder: 'Alkamisajankohta',
-        endPlaceholder: 'Loppuajankohta',
+        startPlaceholder: 'Alkamispäivämäärä',
+        endPlaceholder: 'Loppumispäivämäärä',
       },
     },
   },
