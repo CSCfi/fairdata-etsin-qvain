@@ -253,253 +253,169 @@ export const fileType = {
 }
 
 export const useCategory = {
-  took: 1,
+  took: 59,
   timed_out: false,
-  _shards: {
-    total: 2,
-    successful: 2,
-    skipped: 0,
-    failed: 0,
-  },
+  _shards: { total: 2, successful: 2, skipped: 0, failed: 0 },
   hits: {
-    total: {
-      value: 9,
-      relation: 'eq',
-    },
-    max_score: 8.696175,
+    total: { value: 7, relation: 'eq' },
+    max_score: 10.136898,
     hits: [
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id: 'file_type_image',
-        _score: 8.696175,
+        _id: 'use_category_configuration',
+        _score: 10.136898,
         _source: {
-          id: 'file_type_image',
-          code: 'image',
-          type: 'file_type',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/image',
+          id: 'use_category_configuration',
+          code: 'configuration',
+          type: 'use_category',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/configuration',
           wkt: '',
           input_file_format: '',
           output_format_version: '',
           label: {
-            fi: 'Kuva',
-            en: 'Image',
-            und: 'Kuva',
-          },
-          parent_ids: [],
-          child_ids: [],
-          has_children: false,
-          same_as: ['http://purl.org/dc/dcmitype/Image'],
-          internal_code: '',
-          scheme: 'http://uri.suomi.fi/codelist/fairdata/file_type',
-        },
-      },
-      {
-        _index: 'reference_data',
-        _type: '_doc',
-        _id: 'file_type_software',
-        _score: 8.696175,
-        _source: {
-          id: 'file_type_software',
-          code: 'software',
-          type: 'file_type',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/software',
-          wkt: '',
-          input_file_format: '',
-          output_format_version: '',
-          label: {
-            fi: 'Sovellus',
-            en: 'Software',
-            und: 'Sovellus',
-          },
-          parent_ids: [],
-          child_ids: [],
-          has_children: false,
-          same_as: ['http://purl.org/dc/dcmitype/Software'],
-          internal_code: '',
-          scheme: 'http://uri.suomi.fi/codelist/fairdata/file_type',
-        },
-      },
-      {
-        _index: 'reference_data',
-        _type: '_doc',
-        _id: 'file_type_other',
-        _score: 8.696175,
-        _source: {
-          id: 'file_type_other',
-          code: 'other',
-          type: 'file_type',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/other',
-          wkt: '',
-          input_file_format: '',
-          output_format_version: '',
-          label: {
-            fi: 'Muu',
-            en: 'Other',
-            und: 'Muu',
+            fi: 'Konfiguraatiotiedosto',
+            en: 'Configuration files',
+            und: 'Konfiguraatiotiedosto',
           },
           parent_ids: [],
           child_ids: [],
           has_children: false,
           same_as: [],
           internal_code: '',
-          scheme: 'http://uri.suomi.fi/codelist/fairdata/file_type',
+          scheme: 'http://uri.suomi.fi/codelist/fairdata/use_category',
         },
       },
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id: 'file_type_audiovisual',
-        _score: 8.043996,
+        _id: 'use_category_source',
+        _score: 8.670588,
         _source: {
-          id: 'file_type_audiovisual',
-          code: 'audiovisual',
-          type: 'file_type',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/audiovisual',
+          id: 'use_category_source',
+          code: 'source',
+          type: 'use_category',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/source',
           wkt: '',
           input_file_format: '',
           output_format_version: '',
-          label: {
-            fi: 'Audiovisuaalinen',
-            en: 'Audiovisual',
-            und: 'Audiovisuaalinen',
-          },
+          label: { fi: 'Lähdeaineisto', en: 'Source material', und: 'Lähdeaineisto' },
           parent_ids: [],
           child_ids: [],
           has_children: false,
           same_as: [],
           internal_code: '',
-          scheme: 'http://uri.suomi.fi/codelist/fairdata/file_type',
+          scheme: 'http://uri.suomi.fi/codelist/fairdata/use_category',
         },
       },
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id: 'file_type_video',
-        _score: 8.043996,
+        _id: 'use_category_outcome',
+        _score: 8.670588,
         _source: {
-          id: 'file_type_video',
-          code: 'video',
-          type: 'file_type',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/video',
+          id: 'use_category_outcome',
+          code: 'outcome',
+          type: 'use_category',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/outcome',
           wkt: '',
           input_file_format: '',
           output_format_version: '',
-          label: {
-            fi: 'Video',
-            en: 'Video',
-            und: 'Video',
-          },
+          label: { fi: 'Tulosaineisto', en: 'Outcome material', und: 'Tulosaineisto' },
           parent_ids: [],
           child_ids: [],
           has_children: false,
           same_as: [],
           internal_code: '',
-          scheme: 'http://uri.suomi.fi/codelist/fairdata/file_type',
+          scheme: 'http://uri.suomi.fi/codelist/fairdata/use_category',
         },
       },
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id: 'file_type_source_code',
-        _score: 8.043996,
+        _id: 'use_category_publication',
+        _score: 8.670588,
         _source: {
-          id: 'file_type_source_code',
-          code: 'source_code',
-          type: 'file_type',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/source_code',
+          id: 'use_category_publication',
+          code: 'publication',
+          type: 'use_category',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/publication',
           wkt: '',
           input_file_format: '',
           output_format_version: '',
-          label: {
-            fi: 'Lähdekoodi',
-            en: 'Source code',
-            und: 'Lähdekoodi',
-          },
+          label: { fi: 'Julkaisu', en: 'Publication', und: 'Julkaisu' },
           parent_ids: [],
           child_ids: [],
           has_children: false,
           same_as: [],
           internal_code: '',
-          scheme: 'http://uri.suomi.fi/codelist/fairdata/file_type',
+          scheme: 'http://uri.suomi.fi/codelist/fairdata/use_category',
         },
       },
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id: 'file_type_sound',
-        _score: 8.043996,
+        _id: 'use_category_documentation',
+        _score: 8.670588,
         _source: {
-          id: 'file_type_sound',
-          code: 'sound',
-          type: 'file_type',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/sound',
+          id: 'use_category_documentation',
+          code: 'documentation',
+          type: 'use_category',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/documentation',
           wkt: '',
           input_file_format: '',
           output_format_version: '',
-          label: {
-            fi: 'Ääni',
-            en: 'Sound',
-            und: 'Ääni',
-          },
-          parent_ids: [],
-          child_ids: [],
-          has_children: false,
-          same_as: ['http://purl.org/dc/dcmitype/Sound'],
-          internal_code: '',
-          scheme: 'http://uri.suomi.fi/codelist/fairdata/file_type',
-        },
-      },
-      {
-        _index: 'reference_data',
-        _type: '_doc',
-        _id: 'file_type_text',
-        _score: 8.043996,
-        _source: {
-          id: 'file_type_text',
-          code: 'text',
-          type: 'file_type',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/text',
-          wkt: '',
-          input_file_format: '',
-          output_format_version: '',
-          label: {
-            fi: 'Teksti',
-            en: 'Text',
-            und: 'Teksti',
-          },
-          parent_ids: [],
-          child_ids: [],
-          has_children: false,
-          same_as: ['http://purl.org/dc/dcmitype/Text'],
-          internal_code: '',
-          scheme: 'http://uri.suomi.fi/codelist/fairdata/file_type',
-        },
-      },
-      {
-        _index: 'reference_data',
-        _type: '_doc',
-        _id: 'file_type_binary',
-        _score: 8.043996,
-        _source: {
-          id: 'file_type_binary',
-          code: 'binary',
-          type: 'file_type',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_type/code/binary',
-          wkt: '',
-          input_file_format: '',
-          output_format_version: '',
-          label: {
-            fi: 'Binääri',
-            en: 'Binary',
-            und: 'Binääri',
-          },
+          label: { fi: 'Dokumentaatio', en: 'Documentation', und: 'Dokumentaatio' },
           parent_ids: [],
           child_ids: [],
           has_children: false,
           same_as: [],
           internal_code: '',
-          scheme: 'http://uri.suomi.fi/codelist/fairdata/file_type',
+          scheme: 'http://uri.suomi.fi/codelist/fairdata/use_category',
+        },
+      },
+      {
+        _index: 'reference_data',
+        _type: '_doc',
+        _id: 'use_category_method',
+        _score: 8.670588,
+        _source: {
+          id: 'use_category_method',
+          code: 'method',
+          type: 'use_category',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/method',
+          wkt: '',
+          input_file_format: '',
+          output_format_version: '',
+          label: { fi: 'Metodi', en: 'Method', und: 'Metodi' },
+          parent_ids: [],
+          child_ids: [],
+          has_children: false,
+          same_as: [],
+          internal_code: '',
+          scheme: 'http://uri.suomi.fi/codelist/fairdata/use_category',
+        },
+      },
+      {
+        _index: 'reference_data',
+        _type: '_doc',
+        _id: 'use_category_rights',
+        _score: 8.670588,
+        _source: {
+          id: 'use_category_rights',
+          code: 'rights',
+          type: 'use_category',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/rights',
+          wkt: '',
+          input_file_format: '',
+          output_format_version: '',
+          label: { fi: 'Oikeuksien kuvaus', en: 'Rights statement', und: 'Oikeuksien kuvaus' },
+          parent_ids: [],
+          child_ids: [],
+          has_children: false,
+          same_as: [],
+          internal_code: '',
+          scheme: 'http://uri.suomi.fi/codelist/fairdata/use_category',
         },
       },
     ],
@@ -545,8 +461,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_epub+zip_2.0.1',
           code: 'file_format_version_application_epub+zip_2.0.1',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_epub+zip_2.0.1',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_epub+zip_2.0.1',
           wkt: '',
           input_file_format: 'application/epub+zip',
           output_format_version: '2.0.1',
@@ -568,8 +483,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_epub+zip_3.0.0',
           code: 'file_format_version_application_epub+zip_3.0.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_epub+zip_3.0.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_epub+zip_3.0.0',
           wkt: '',
           input_file_format: 'application/epub+zip',
           output_format_version: '3.0.0',
@@ -591,8 +505,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_xhtml+xml_1.0',
           code: 'file_format_version_application_xhtml+xml_1.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_xhtml+xml_1.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_xhtml+xml_1.0',
           wkt: '',
           input_file_format: 'application/xhtml+xml',
           output_format_version: '1.0',
@@ -658,8 +571,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.text_1.0',
           code: 'file_format_version_application_vnd.oasis.opendocument.text_1.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.text_1.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.text_1.0',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.text',
           output_format_version: '1.0',
@@ -681,8 +593,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.text_1.1',
           code: 'file_format_version_application_vnd.oasis.opendocument.text_1.1',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.text_1.1',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.text_1.1',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.text',
           output_format_version: '1.1',
@@ -698,16 +609,13 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.0',
+        _id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.0',
         _score: 6.019429,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.0',
+          id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.0',
           code: 'file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.spreadsheet_1.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.spreadsheet_1.0',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.spreadsheet',
           output_format_version: '1.0',
@@ -723,16 +631,13 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.2',
+        _id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.2',
         _score: 6.019429,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.2',
+          id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.2',
           code: 'file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.2',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.spreadsheet_1.2',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.spreadsheet_1.2',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.spreadsheet',
           output_format_version: '1.2',
@@ -748,16 +653,13 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.2',
+        _id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.2',
         _score: 6.019429,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.2',
+          id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.2',
           code: 'file_format_version_application_vnd.oasis.opendocument.graphics_1.2',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.graphics_1.2',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.graphics_1.2',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.graphics',
           output_format_version: '1.2',
@@ -773,16 +675,13 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.oasis.opendocument.formula_1.0',
+        _id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.formula_1.0',
         _score: 6.019429,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.oasis.opendocument.formula_1.0',
+          id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.formula_1.0',
           code: 'file_format_version_application_vnd.oasis.opendocument.formula_1.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.formula_1.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.formula_1.0',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.formula',
           output_format_version: '1.0',
@@ -798,16 +697,13 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.oasis.opendocument.formula_1.2',
+        _id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.formula_1.2',
         _score: 6.019429,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.oasis.opendocument.formula_1.2',
+          id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.formula_1.2',
           code: 'file_format_version_application_vnd.oasis.opendocument.formula_1.2',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.formula_1.2',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.formula_1.2',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.formula',
           output_format_version: '1.2',
@@ -829,8 +725,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_pdf_A-1a',
           code: 'file_format_version_application_pdf_A-1a',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-1a',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-1a',
           wkt: '',
           input_file_format: 'application/pdf',
           output_format_version: 'A-1a',
@@ -852,8 +747,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_pdf_A-1b',
           code: 'file_format_version_application_pdf_A-1b',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-1b',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-1b',
           wkt: '',
           input_file_format: 'application/pdf',
           output_format_version: 'A-1b',
@@ -875,8 +769,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_pdf_A-2a',
           code: 'file_format_version_application_pdf_A-2a',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-2a',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-2a',
           wkt: '',
           input_file_format: 'application/pdf',
           output_format_version: 'A-2a',
@@ -898,8 +791,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_pdf_A-2b',
           code: 'file_format_version_application_pdf_A-2b',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-2b',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-2b',
           wkt: '',
           input_file_format: 'application/pdf',
           output_format_version: 'A-2b',
@@ -921,8 +813,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_pdf_A-3a',
           code: 'file_format_version_application_pdf_A-3a',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-3a',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-3a',
           wkt: '',
           input_file_format: 'application/pdf',
           output_format_version: 'A-3a',
@@ -944,8 +835,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_pdf_A-3b',
           code: 'file_format_version_application_pdf_A-3b',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-3b',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-3b',
           wkt: '',
           input_file_format: 'application/pdf',
           output_format_version: 'A-3b',
@@ -1077,8 +967,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_x-internet-archive_1.1',
           code: 'file_format_version_application_x-internet-archive_1.1',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_x-internet-archive_1.1',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_x-internet-archive_1.1',
           wkt: '',
           input_file_format: 'application/x-internet-archive',
           output_format_version: '1.1',
@@ -1122,8 +1011,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_gml+xml_3.2.1',
           code: 'file_format_version_application_gml+xml_3.2.1',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_gml+xml_3.2.1',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_gml+xml_3.2.1',
           wkt: '',
           input_file_format: 'application/gml+xml',
           output_format_version: '3.2.1',
@@ -1145,8 +1033,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.google-earth.kml+xml_2.3',
           code: 'file_format_version_application_vnd.google-earth.kml+xml_2.3',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.google-earth.kml+xml_2.3',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.google-earth.kml+xml_2.3',
           wkt: '',
           input_file_format: 'application/vnd.google-earth.kml+xml',
           output_format_version: '2.3',
@@ -1168,8 +1055,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_msword_8.0',
           code: 'file_format_version_application_msword_8.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_msword_8.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_msword_8.0',
           wkt: '',
           input_file_format: 'application/msword',
           output_format_version: '8.0',
@@ -1191,8 +1077,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_msword_8.5',
           code: 'file_format_version_application_msword_8.5',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_msword_8.5',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_msword_8.5',
           wkt: '',
           input_file_format: 'application/msword',
           output_format_version: '8.5',
@@ -1214,8 +1099,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_msword_9.0',
           code: 'file_format_version_application_msword_9.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_msword_9.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_msword_9.0',
           wkt: '',
           input_file_format: 'application/msword',
           output_format_version: '9.0',
@@ -1237,8 +1121,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_msword_10.0',
           code: 'file_format_version_application_msword_10.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_msword_10.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_msword_10.0',
           wkt: '',
           input_file_format: 'application/msword',
           output_format_version: '10.0',
@@ -1260,8 +1143,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_msword_11.0',
           code: 'file_format_version_application_msword_11.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_msword_11.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_msword_11.0',
           wkt: '',
           input_file_format: 'application/msword',
           output_format_version: '11.0',
@@ -1277,24 +1159,19 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
+        _id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
         _score: 6.019429,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
-          code:
-            'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
+          id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
+          code: 'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
           output_format_version: '14.0',
           label: {
-            und:
-              'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
+            und: 'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
           },
           parent_ids: [],
           child_ids: [],
@@ -1307,24 +1184,19 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
+        _id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
         _score: 6.019429,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
-          code:
-            'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
+          id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
+          code: 'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
           output_format_version: '15.0',
           label: {
-            und:
-              'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
+            und: 'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
           },
           parent_ids: [],
           child_ids: [],
@@ -1343,8 +1215,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.ms-excel_8.0',
           code: 'file_format_version_application_vnd.ms-excel_8.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-excel_8.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-excel_8.0',
           wkt: '',
           input_file_format: 'application/vnd.ms-excel',
           output_format_version: '8.0',
@@ -1366,8 +1237,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.ms-excel_10.0',
           code: 'file_format_version_application_vnd.ms-excel_10.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-excel_10.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-excel_10.0',
           wkt: '',
           input_file_format: 'application/vnd.ms-excel',
           output_format_version: '10.0',
@@ -1389,8 +1259,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.ms-powerpoint_8.0',
           code: 'file_format_version_application_vnd.ms-powerpoint_8.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-powerpoint_8.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-powerpoint_8.0',
           wkt: '',
           input_file_format: 'application/vnd.ms-powerpoint',
           output_format_version: '8.0',
@@ -1412,8 +1281,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.ms-powerpoint_9.0',
           code: 'file_format_version_application_vnd.ms-powerpoint_9.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-powerpoint_9.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-powerpoint_9.0',
           wkt: '',
           input_file_format: 'application/vnd.ms-powerpoint',
           output_format_version: '9.0',
@@ -1435,8 +1303,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.ms-powerpoint_11.0',
           code: 'file_format_version_application_vnd.ms-powerpoint_11.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-powerpoint_11.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-powerpoint_11.0',
           wkt: '',
           input_file_format: 'application/vnd.ms-powerpoint',
           output_format_version: '11.0',
@@ -1452,24 +1319,19 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
+        _id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
         _score: 6.019429,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
-          code:
-            'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
+          id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
+          code: 'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.presentationml.presentation',
           output_format_version: '15.0',
           label: {
-            und:
-              'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
+            und: 'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
           },
           parent_ids: [],
           child_ids: [],
@@ -1620,8 +1482,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_epub+zip_3.0.1',
           code: 'file_format_version_application_epub+zip_3.0.1',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_epub+zip_3.0.1',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_epub+zip_3.0.1',
           wkt: '',
           input_file_format: 'application/epub+zip',
           output_format_version: '3.0.1',
@@ -1643,8 +1504,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_epub+zip_3.1',
           code: 'file_format_version_application_epub+zip_3.1',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_epub+zip_3.1',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_epub+zip_3.1',
           wkt: '',
           input_file_format: 'application/epub+zip',
           output_format_version: '3.1',
@@ -1666,8 +1526,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_xhtml+xml_1.1',
           code: 'file_format_version_application_xhtml+xml_1.1',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_xhtml+xml_1.1',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_xhtml+xml_1.1',
           wkt: '',
           input_file_format: 'application/xhtml+xml',
           output_format_version: '1.1',
@@ -1689,8 +1548,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.text_1.2',
           code: 'file_format_version_application_vnd.oasis.opendocument.text_1.2',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.text_1.2',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.text_1.2',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.text',
           output_format_version: '1.2',
@@ -1706,16 +1564,13 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.1',
+        _id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.1',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.1',
+          id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.1',
           code: 'file_format_version_application_vnd.oasis.opendocument.spreadsheet_1.1',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.spreadsheet_1.1',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.spreadsheet_1.1',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.spreadsheet',
           output_format_version: '1.1',
@@ -1731,16 +1586,13 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.0',
+        _id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.0',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.0',
+          id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.0',
           code: 'file_format_version_application_vnd.oasis.opendocument.presentation_1.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.presentation_1.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.presentation_1.0',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.presentation',
           output_format_version: '1.0',
@@ -1756,16 +1608,13 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.1',
+        _id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.1',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.1',
+          id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.1',
           code: 'file_format_version_application_vnd.oasis.opendocument.presentation_1.1',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.presentation_1.1',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.presentation_1.1',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.presentation',
           output_format_version: '1.1',
@@ -1781,16 +1630,13 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.2',
+        _id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.2',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.2',
+          id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.presentation_1.2',
           code: 'file_format_version_application_vnd.oasis.opendocument.presentation_1.2',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.presentation_1.2',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.presentation_1.2',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.presentation',
           output_format_version: '1.2',
@@ -1806,16 +1652,13 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.0',
+        _id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.0',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.0',
+          id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.0',
           code: 'file_format_version_application_vnd.oasis.opendocument.graphics_1.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.graphics_1.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.graphics_1.0',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.graphics',
           output_format_version: '1.0',
@@ -1831,16 +1674,13 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.1',
+        _id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.1',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.1',
+          id: 'file_format_version_file_format_version_application_vnd.oasis.opendocument.graphics_1.1',
           code: 'file_format_version_application_vnd.oasis.opendocument.graphics_1.1',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.graphics_1.1',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.oasis.opendocument.graphics_1.1',
           wkt: '',
           input_file_format: 'application/vnd.oasis.opendocument.graphics',
           output_format_version: '1.1',
@@ -1862,8 +1702,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_pdf_A-2u',
           code: 'file_format_version_application_pdf_A-2u',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-2u',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-2u',
           wkt: '',
           input_file_format: 'application/pdf',
           output_format_version: 'A-2u',
@@ -1885,8 +1724,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_pdf_A-3u',
           code: 'file_format_version_application_pdf_A-3u',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-3u',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_pdf_A-3u',
           wkt: '',
           input_file_format: 'application/pdf',
           output_format_version: 'A-3u',
@@ -2260,8 +2098,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_x-internet-archive_1.0',
           code: 'file_format_version_application_x-internet-archive_1.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_x-internet-archive_1.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_x-internet-archive_1.0',
           wkt: '',
           input_file_format: 'application/x-internet-archive',
           output_format_version: '1.0',
@@ -2283,8 +2120,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_warc_0.17',
           code: 'file_format_version_application_warc_0.17',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_warc_0.17',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_warc_0.17',
           wkt: '',
           input_file_format: 'application/warc',
           output_format_version: '0.17',
@@ -2306,8 +2142,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_warc_1.0',
           code: 'file_format_version_application_warc_1.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_warc_1.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_warc_1.0',
           wkt: '',
           input_file_format: 'application/warc',
           output_format_version: '1.0',
@@ -2329,8 +2164,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_x-spss-por',
           code: 'file_format_version_application_x-spss-por',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_x-spss-por',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_x-spss-por',
           wkt: '',
           input_file_format: 'application/x-spss-por',
           output_format_version: '',
@@ -2346,24 +2180,19 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
+        _id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
-          code:
-            'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
+          id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
+          code: 'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
           output_format_version: '12.0',
           label: {
-            und:
-              'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
+            und: 'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
           },
           parent_ids: [],
           child_ids: [],
@@ -2382,8 +2211,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.ms-excel_9.0',
           code: 'file_format_version_application_vnd.ms-excel_9.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-excel_9.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-excel_9.0',
           wkt: '',
           input_file_format: 'application/vnd.ms-excel',
           output_format_version: '9.0',
@@ -2405,8 +2233,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.ms-excel_11.0',
           code: 'file_format_version_application_vnd.ms-excel_11.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-excel_11.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-excel_11.0',
           wkt: '',
           input_file_format: 'application/vnd.ms-excel',
           output_format_version: '11.0',
@@ -2422,23 +2249,18 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
+        _id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
-          code:
-            'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
+          id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
+          code: 'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
           wkt: '',
           input_file_format: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           output_format_version: '12.0',
           label: {
-            und:
-              'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
+            und: 'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
           },
           parent_ids: [],
           child_ids: [],
@@ -2451,23 +2273,18 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
+        _id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
-          code:
-            'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
+          id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
+          code: 'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
           wkt: '',
           input_file_format: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           output_format_version: '14.0',
           label: {
-            und:
-              'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
+            und: 'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
           },
           parent_ids: [],
           child_ids: [],
@@ -2480,23 +2297,18 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
+        _id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
-          code:
-            'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
+          id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
+          code: 'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
           wkt: '',
           input_file_format: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           output_format_version: '15.0',
           label: {
-            und:
-              'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
+            und: 'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
           },
           parent_ids: [],
           child_ids: [],
@@ -2515,8 +2327,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.ms-powerpoint_10.0',
           code: 'file_format_version_application_vnd.ms-powerpoint_10.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-powerpoint_10.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.ms-powerpoint_10.0',
           wkt: '',
           input_file_format: 'application/vnd.ms-powerpoint',
           output_format_version: '10.0',
@@ -2532,24 +2343,19 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
+        _id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
-          code:
-            'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
+          id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
+          code: 'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.presentationml.presentation',
           output_format_version: '12.0',
           label: {
-            und:
-              'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
+            und: 'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
           },
           parent_ids: [],
           child_ids: [],
@@ -2562,24 +2368,19 @@ const fileFormatVersion = {
       {
         _index: 'reference_data',
         _type: '_doc',
-        _id:
-          'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
+        _id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
         _score: 5.9399652,
         _source: {
-          id:
-            'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
-          code:
-            'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
+          id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
+          code: 'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.presentationml.presentation',
           output_format_version: '14.0',
           label: {
-            und:
-              'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
+            und: 'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
           },
           parent_ids: [],
           child_ids: [],
@@ -2774,8 +2575,7 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_postscript_3.0',
           code: 'file_format_version_application_postscript_3.0',
           type: 'file_format_version',
-          uri:
-            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_postscript_3.0',
+          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_postscript_3.0',
           wkt: '',
           input_file_format: 'application/postscript',
           output_format_version: '3.0',
