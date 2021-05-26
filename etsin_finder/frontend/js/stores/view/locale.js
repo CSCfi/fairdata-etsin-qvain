@@ -24,6 +24,11 @@ class Locale {
     this.Env = Accessibility.Env
     this.ElasticQuery = ElasticQuery
     makeObservable(this)
+
+    if (BUILD !== 'production') {
+      window.setLang = lang => this.setLang(lang)
+      window.toggleLang = () => this.setLang(languages.find(l => l !== this.lang))
+    }
   }
 
   @observable currentLang = counterpart.getLocale()

@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { SaveButton, CancelButton } from '../../../../general/buttons'
 import { Label, Input, Textarea, CustomSelect } from '../../../../general/modal/form'
 import { Container } from '../../../../general/card'
-import ValidationError from '../../../../general/errors/validationError'
+import { ValidationErrors } from '../../../../general/errors/validationError'
 import { getLocalizedOptions } from '../../../../utils/getReferenceData'
 import {
   fileSchema,
@@ -149,13 +149,17 @@ class FileForm extends Component {
   handleUseCategoryBlur = () => {
     this.handleOnBlur(
       fileUseCategorySchema,
-      this.state.useCategory ? this.state.useCategory.value : undefined,
+      this.state.useCategory ? this.state.useCategory : undefined,
       value => this.setState({ useCategoryError: value })
     )
   }
 
   render() {
     const { inEdit } = this.props.Stores.Qvain.Files
+    if (!inEdit) {
+      return null
+    }
+
     const { readonly } = this.props.Stores.Qvain
     const { fileError, titleError, descriptionError, useCategoryError } = this.state
     return (
@@ -168,7 +172,7 @@ class FileForm extends Component {
         />
         <p style={{ marginLeft: '10px' }}>{inEdit.identifier}</p>
 
-        <Label htmlFor="file-form-description">
+        <Label htmlFor="file-form-title">
           <Translate content="qvain.files.selected.form.title.label" /> *
         </Label>
         <Translate
@@ -184,7 +188,7 @@ class FileForm extends Component {
           attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
           id="file-form-title"
         />
-        {titleError !== undefined && <ValidationError>{titleError}</ValidationError>}
+        {titleError !== undefined && <ValidationErrors errors={titleError} />}
         <Label htmlFor="file-form-description">
           <Translate content="qvain.files.selected.form.description.label" /> *
         </Label>
@@ -201,7 +205,7 @@ class FileForm extends Component {
           attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
           id="file-form-description"
         />
-        {descriptionError !== undefined && <ValidationError>{descriptionError}</ValidationError>}
+        {descriptionError !== undefined && <ValidationErrors errors={descriptionError} />}
         <Row>
           <div>
             <Label htmlFor="file-form-use-category">
@@ -224,13 +228,11 @@ class FileForm extends Component {
               attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
               inputId="file-form-use-category"
             />
-            {useCategoryError !== undefined && (
-              <ValidationError>{useCategoryError}</ValidationError>
-            )}
+            {useCategoryError !== undefined && <ValidationErrors errors={useCategoryError} />}
           </div>
           <div>
             <Label htmlFor="file-form-file-type">
-              <Translate component={Label} content="qvain.files.selected.form.fileType.label" />
+              <Translate content="qvain.files.selected.form.fileType.label" />
             </Label>
             <Translate
               component={CustomSelect}
@@ -251,7 +253,7 @@ class FileForm extends Component {
           </div>
         </Row>
 
-        {fileError !== undefined && <ValidationError>{fileError}</ValidationError>}
+        {fileError !== undefined && <ValidationErrors errors={fileError} />}
         <Buttons>
           <Translate
             component={CancelButton}
