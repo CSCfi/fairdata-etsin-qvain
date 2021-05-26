@@ -70,7 +70,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
         args = dict(headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
                     auth=self.auth,
                     verify=self.verify_ssl,
-                    timeout=10,
+                    timeout=30,
                     proxies=self.proxies,
                     error_to_response=self._error_to_response)
         args.update(kwargs)

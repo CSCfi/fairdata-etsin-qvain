@@ -78,9 +78,9 @@ class RemsAPIService(FlaskService):
         log.info('Sending {0} request to {1}'.format(method, url))
         try:
             if json:
-                rems_api_response = request(method=method, headers=self.HEADERS, url=url, json=json, verify=False, timeout=3)
+                rems_api_response = request(method=method, headers=self.HEADERS, url=url, json=json, verify=False, timeout=30)
             else:
-                rems_api_response = request(method=method, headers=self.HEADERS, url=url, verify=False, timeout=3)
+                rems_api_response = request(method=method, headers=self.HEADERS, url=url, verify=False, timeout=30)
             rems_api_response.raise_for_status()
         except Exception as e:
             log.warning(err_message)
