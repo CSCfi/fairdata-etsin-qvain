@@ -51,8 +51,8 @@ const FormModal = () => {
       <h3>
         <FontAwesomeIcon icon={faFile} style={{ marginRight: '1rem' }} />
         <ItemPath item={inEdit} />
+        {changed && '*'}
       </h3>
-      {changed && '*'}
 
       {inEdit.type === 'directory' && (
         <DirectoryForm setChanged={setChanged} requestClose={requestClose} />
