@@ -12,7 +12,7 @@ class QvainDatasets {
   @observable publishedDataset = null
 
   @action
-  setDatasetsPerPage = (datasetsPerPage) => {
+  setDatasetsPerPage = datasetsPerPage => {
     this.datasetsPerPage = datasetsPerPage
   }
 
