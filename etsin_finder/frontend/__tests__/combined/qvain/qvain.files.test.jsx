@@ -141,11 +141,7 @@ const delayGet = () => {
 
 const loadDataset = async () => {
   let response
-  if (Env.metaxApiV2) {
-    response = await axios.get(urls.v2.dataset(datasetIdentifier))
-  } else {
-    response = await axios.get(urls.v1.dataset(datasetIdentifier))
-  }
+  response = await axios.get(urls.v2.dataset(datasetIdentifier))
   Qvain.Files.AddItemsView.setDefaultShowLimit(20, 20)
   Qvain.Files.SelectedItemsView.setDefaultShowLimit(20, 20)
   const promise = stores.Qvain.editDataset(response.data)
@@ -164,7 +160,6 @@ const loadDataset = async () => {
 
 beforeEach(async () => {
   Qvain.resetQvainStore()
-  Env.Flags.setFlag('METAX_API_V2', true)
   await loadDataset()
 })
 
@@ -953,35 +948,35 @@ describe('Qvain.Files SelectedItemsTree ', () => {
 
 describe('Qvain.Files handleSubmit', () => {
   it('submits data correctly', async () => {
-    const dataset = handleSubmitToBackend(Env, Qvain)
+    const dataset = handleSubmitToBackend(Qvain)
     expect(dataset).toMatchSnapshot()
   })
 
   it('submits data correctly after adding directory', async () => {
     const set2 = await Files.getItemByPath('/data/set2')
     Files.addItem(set2)
-    const dataset = handleSubmitToBackend(Env, Qvain)
+    const dataset = handleSubmitToBackend(Qvain)
     expect(dataset).toMatchSnapshot()
   })
 
   it('submits data correctly after adding file', async () => {
     const file2 = await Files.getItemByPath('/data/set2/file2.csv')
     Files.addItem(file2)
-    const dataset = handleSubmitToBackend(Env, Qvain)
+    const dataset = handleSubmitToBackend(Qvain)
     expect(dataset).toMatchSnapshot()
   })
 
   it('submits data correctly after removing directory', async () => {
     const set1 = await Files.getItemByPath('/data/set1')
     Files.removeItem(set1)
-    const dataset = handleSubmitToBackend(Env, Qvain)
+    const dataset = handleSubmitToBackend(Qvain)
     expect(dataset).toMatchSnapshot()
   })
 
   it('submits data correctly after removing file', async () => {
     const info = await Files.getItemByPath('/moredata/info.csv')
     Files.removeItem(info)
-    const dataset = handleSubmitToBackend(Env, Qvain)
+    const dataset = handleSubmitToBackend(Qvain)
     expect(dataset).toMatchSnapshot()
   })
 

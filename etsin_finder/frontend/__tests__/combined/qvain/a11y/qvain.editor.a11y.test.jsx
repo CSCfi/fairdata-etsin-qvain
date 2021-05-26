@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
@@ -16,6 +17,18 @@ import Field from '../../../../js/components/qvain/general/section/field'
 import { ExpandCollapse } from '../../../../js/components/qvain/general/section/expand'
 
 global.fdweRecordEvent = () => {}
+
+jest.mock('axios')
+
+axios.get.mockReturnValue(
+  Promise.resolve({
+    data: {
+      hits: {
+        hits: [],
+      },
+    },
+  })
+)
 
 expect.extend(toHaveNoViolations)
 
@@ -43,6 +56,8 @@ describe('Qvain editor', () => {
     })
     wrapper.update()
   }
+
+  beforeAll(() => {})
 
   beforeEach(async () => {
     await stores.Qvain.editDataset(dataset)

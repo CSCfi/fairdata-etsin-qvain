@@ -66,7 +66,7 @@ class MockPackages {
   closeConfirmModal = () => {}
 
   Notifications = {
-    email: 'email@example.com'
+    email: 'email@example.com',
   }
 }
 

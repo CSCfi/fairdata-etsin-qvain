@@ -22,18 +22,8 @@ const customComponents = {
 
 const DataCatalog = () => {
   const {
-    Qvain: {
-      dataCatalog,
-      setDataCatalog,
-      selectedFiles,
-      selectedDirectories,
-      externalResources,
-      original,
-      isPas,
-      setUseDoi,
-    },
+    Qvain: { dataCatalog, setDataCatalog, externalResources, original, isPas, setUseDoi },
     Locale: { lang },
-    Env: { metaxApiV2 },
   } = useStores()
   const [error, SetError] = useState()
 
@@ -66,17 +56,14 @@ const DataCatalog = () => {
       })
   }
 
-  const selected = [...selectedFiles, ...selectedDirectories, ...externalResources]
+  const selected = [...externalResources]
 
   if (lang) updateOptions()
   // PAS catalog cannot be selected by the user
   const availableOptions = isPas ? pasOptions : options
   const catalogSelectValue = availableOptions.find(opt => opt.value === dataCatalog)
   const isDataCatalogNotDecided =
-    !metaxApiV2 ||
-    (metaxApiV2 &&
-      (!original?.data_catalog ||
-        original?.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.DFT))
+    !original?.data_catalog || original?.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.DFT
   const isDisabled = selected.length > 0 || !isDataCatalogNotDecided || isPas
 
   return (

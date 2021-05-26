@@ -38,7 +38,6 @@ jest.mock('../../../../js/stores/stores', () => {
 })
 
 const stores = buildStores()
-stores.Env.Flags.setFlag('METAX_API_V2', true)
 
 beforeEach(() => {
   axios.get.mockReset()

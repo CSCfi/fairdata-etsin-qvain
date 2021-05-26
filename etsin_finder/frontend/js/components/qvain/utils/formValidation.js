@@ -348,7 +348,7 @@ const fileSchema = yup.object().shape({
   title: fileTitleSchema,
   description: fileDescriptionSchema,
   useCategory: fileUseCategorySchema,
-  fileType: yup.string().nullable(),
+  fileType: yup.object().nullable(),
 })
 
 const filesSchema = yup.array().of(fileSchema)
@@ -367,7 +367,7 @@ const directorySchema = yup.object().shape({
   title: directoryTitleSchema,
   description: directoryDescriptionSchema,
   useCategory: directoryUseCategorySchema,
-  fileType: yup.string().nullable(),
+  fileType: yup.object().nullable(),
 })
 
 const directoriesSchema = yup.array().of(directorySchema)

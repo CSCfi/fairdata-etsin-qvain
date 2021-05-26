@@ -8,7 +8,6 @@ import {
   faFolder,
   faFolderOpen,
   faFile,
-  faEllipsisV,
 } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 
@@ -28,6 +27,7 @@ import {
 import getDownloadAction from './downloadActions'
 import IconButton from '../common/iconButton'
 import FlaggedComponent from '../../../general/flaggedComponent'
+import { MoreButton, SplitButtonContainer } from './splitButton'
 
 const download = (datasetIdentifier, item) => {
   const handle = window.open(
@@ -42,7 +42,7 @@ const download = (datasetIdentifier, item) => {
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const { Files, directoryView, extraProps } = treeProps
-  const { allowDownload, Packages, downloadApiV2 } = extraProps
+  const { allowDownload, Packages } = extraProps
   const { setInInfo, datasetIdentifier } = Files
   let content = null
   const name = item.name
@@ -86,16 +86,14 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   let downloadButtonText = 'dataset.dl.download'
   let downloadButtonColor = null
 
-  if (downloadApiV2) {
-    const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
-    downloadFunc = action.func
-    moreFunc = action.moreFunc
-    moreAriaLabel = action.moreAriaLabel
-    downloadIcon = action.icon
-    downloadIconSpin = action.spin
-    downloadButtonText = action.buttonLabel
-    downloadButtonColor = action.color
-  }
+  const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
+  downloadFunc = action.func
+  moreFunc = action.moreFunc
+  moreAriaLabel = action.moreAriaLabel
+  downloadIcon = action.icon
+  downloadIconSpin = action.spin
+  downloadButtonText = action.buttonLabel
+  downloadButtonColor = action.color
 
   const infoButton = (
     <Translate
@@ -129,7 +127,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
 
   const downloadButtonParts = (
     <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
-      <SplitContainer split={moreFunc}>
+      <SplitButtonContainer split={moreFunc}>
         {downloadButton}
         {moreFunc && (
           <Translate
@@ -140,7 +138,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
             attributes={{ 'aria-label': moreAriaLabel }}
           />
         )}
-      </SplitContainer>
+      </SplitButtonContainer>
     </FlaggedComponent>
   )
 
@@ -155,30 +153,6 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   )
 }
 
-const SplitContainer = styled.span`
-  width: 9em;
-  display: flex;
-  align-items: stretch;
-  & > button:first-child {
-    flex-grow: 1;
-  }
-
-  ${p =>
-    p.split &&
-    `
-  & > button:first-child {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    margin-right: 1px;
-  }
-  & > button:last-child {
-    margin-left: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-  `}
-`
-
 export const DownloadButton = styled(IconButton)`
   width: 7.5em;
 `
@@ -186,13 +160,6 @@ export const DownloadButton = styled(IconButton)`
 export const InfoButton = styled(IconButton).attrs({
   icon: faInfoCircle,
 })``
-
-export const MoreButton = styled(IconButton).attrs({
-  icon: faEllipsisV,
-})`
-  width: 1.5em;
-  padding: 0.125rem 0.125rem;
-`
 
 const Name = styled.span`
   white-space: nowrap;
