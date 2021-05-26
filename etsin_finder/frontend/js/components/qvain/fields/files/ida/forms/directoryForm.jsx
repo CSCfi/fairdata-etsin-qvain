@@ -6,7 +6,7 @@ import Translate from 'react-translate-component'
 import { SaveButton, CancelButton } from '../../../../general/buttons'
 import { Label, CustomSelect, Input, Textarea } from '../../../../general/modal/form'
 import { Container } from '../../../../general/card'
-import ValidationError from '../../../../general/errors/validationError'
+import { ValidationErrors } from '../../../../general/errors/validationError'
 import { getLocalizedOptions } from '../../../../utils/getReferenceData'
 import {
   directorySchema,
@@ -159,7 +159,7 @@ export class DirectoryFormBase extends Component {
           attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
           id="directory-form-title"
         />
-        {titleError !== undefined && <ValidationError>{titleError}</ValidationError>}
+        {titleError !== undefined && <ValidationErrors errors={titleError} />}
         <Label htmlFor="directory-form-description">
           <Translate content="qvain.files.selected.form.description.label" />
         </Label>
@@ -176,7 +176,7 @@ export class DirectoryFormBase extends Component {
           attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
           id="directory-form-description"
         />
-        {descriptionError !== undefined && <ValidationError>{descriptionError}</ValidationError>}
+        {descriptionError !== undefined && <ValidationErrors errors={descriptionError} />}
         <Label htmlFor="directory-form-use-category">
           <Translate content="qvain.files.selected.form.use.label" /> *
         </Label>
@@ -197,8 +197,8 @@ export class DirectoryFormBase extends Component {
           attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
           inputId="directory-form-use-category"
         />
-        {useCategoryError !== undefined && <ValidationError>{useCategoryError}</ValidationError>}
-        {directoryError !== undefined && <ValidationError>{directoryError}</ValidationError>}
+        {useCategoryError !== undefined && <ValidationErrors errors={useCategoryError} />}
+        {directoryError !== undefined && <ValidationErrors errors={directoryError} />}
         <Buttons>
           <Translate
             component={CancelButton}
