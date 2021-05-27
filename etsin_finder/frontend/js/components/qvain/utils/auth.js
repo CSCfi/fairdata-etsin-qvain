@@ -1,5 +1,3 @@
-const devMetadataCreator = 'abc-user-123' // Teppo Testaaja
-
 export const checkLogin = props => {
   const inDev = props.Stores.Env.environment === 'development'
   if (inDev) {
@@ -8,12 +6,4 @@ export const checkLogin = props => {
   return props.Stores.Auth.checkLogin()
 }
 
-export const getUsername = props => {
-  const inDev = props.Stores.Env.environment === 'development'
-  if (inDev && isTeppo(props)) {
-    return devMetadataCreator
-  }
-  return props.Stores.Auth.user.name
-}
-
-export const isTeppo = props => props.Stores.Auth.user.commonName === 'Teppo Testikäyttäjä'
+export const getUsername = props => props.Stores.Auth.user.name
