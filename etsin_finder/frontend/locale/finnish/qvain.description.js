@@ -27,8 +27,9 @@ const description = {
   },
   issuedDate: {
     title: 'Julkaisupäivämäärä',
-    infoText: `Lähteen muodollinen julkaisupäivämäärä. Ei vaikuta aineston näkyvyyteen.
-    Jos kenttä jätetään tyhjäksi, käytetään nykyistä päivämäärää.`,
+    infoText: `Aineiston muodollinen julkaisupäivämäärä.
+    Jos jätät kentät tyhjäksi, julkaisupäivämääräksi täytetään se päivämäärä,
+    jolloin kuvailutiedot tallennetaan ensi kerran.`,
     instructions: '',
     placeholder: 'Päivämäärä',
   },
@@ -73,8 +74,7 @@ const description = {
     kun kirjoitat kenttään tekstiä. Kaikille asiasanoille löytyy käännökset
     englanniksi ja ruotsiksi. Valittavissa ovat Finton ylläpitämän KOKO-ontologian termit.`,
     placeholder: 'Hae vaihtoehtoja',
-    help:
-      'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
+    help: 'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
   },
   error: {
     title: 'Otsikko on pakollinen ainakin yhdellä kielellä.',
