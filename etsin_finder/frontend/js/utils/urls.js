@@ -17,9 +17,9 @@ export default {
     projectFiles: project => `/api/common/projects/${project}/files`,
   },
   dl: {
-    packages: () => '/api/dl/requests',
-    authorize: () => '/api/dl/authorize',
-    subscriptions: () => '/api/dl/subscriptions',
+    packages: () => '/api/download/requests',
+    authorize: () => '/api/download/authorize',
+    subscriptions: () => '/api/download/subscriptions',
   },
   rpc: {
     changeCumulativeState: () => '/api/rpc/datasets/change_cumulative_state',

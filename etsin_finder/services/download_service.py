@@ -52,7 +52,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
             self.AUTHORIZE_URL = f'{self.API_BASE_URL}/authorize'
             self.SUBSCRIBE_URL = f'{self.API_BASE_URL}/subscribe'
             self.DOWNLOAD_URL = f'{self.API_PUBLIC_BASE_URL}/download'
-            self.NOTIFICATION_CALLBACK_URL = f'https://{self_domain}/api/dl/notifications'
+            self.NOTIFICATION_CALLBACK_URL = f'https://{self_domain}/api/download/notifications'
             self.NOTIFICATION_SECRET = generate_fernet_key(app.config['SECRET_KEY'])
 
             self.verify_ssl = verify_ssl

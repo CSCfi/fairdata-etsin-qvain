@@ -302,7 +302,7 @@ describe('Packages', () => {
     })
 
     test('should call axios.get', () => {
-      expect(axios.get).toHaveBeenCalledWith('/api/dl/requests?cr_id=identifier')
+      expect(axios.get).toHaveBeenCalledWith('/api/download/requests?cr_id=identifier')
     })
 
     test('should set datasetIdentifier', () => {
