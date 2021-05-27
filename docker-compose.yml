@@ -19,6 +19,7 @@ services:
           target: /home/etsin-user/app_config
       volumes:
         - ./etsin_finder/:/etsin_finder/
+        - ./tests/:/tests/
       environment:
         - base_url=0.0.0.0:5000
         - FLASK_ENV=development
