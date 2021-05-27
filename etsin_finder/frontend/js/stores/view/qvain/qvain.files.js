@@ -5,7 +5,7 @@ import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from '../common.file
 import { PromiseManager, getAction } from '../common.files.utils'
 import { itemLoaderAny, FetchType } from '../common.files.loaders'
 import { AddItemsView, SelectedItemsView } from '../common.files.views'
-import urls from '../../../components/qvain/utils/urls'
+import urls from '../../../utils/urls'
 
 import FilesBase from '../common.files'
 
@@ -35,7 +35,7 @@ class Files extends FilesBase {
   }
 
   fetchRootIdentifier = async projectIdentifier => {
-    const { data } = await axios.get(urls.v2.projectFiles(projectIdentifier))
+    const { data } = await axios.get(urls.common.projectFiles(projectIdentifier))
     return data.identifier
   }
 

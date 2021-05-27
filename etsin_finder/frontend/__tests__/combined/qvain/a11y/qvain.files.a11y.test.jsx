@@ -16,12 +16,13 @@ import AddItemsModal from '../../../../js/components/qvain/fields/files/ida/addI
 import UserMetadataModal from '../../../../js/components/qvain/fields/files/ida/forms/formModal'
 import PASModal from '../../../../js/components/qvain/fields/files/metadataModal'
 import etsinTheme from '../../../../js/styles/theme'
-import urls from '../../../../js/components/qvain/utils/urls'
+import urls from '../../../../js/utils/urls'
 
 import { get } from '../../../__testdata__/qvain.files.data'
 import { StoresProvider, useStores } from '../../../../js/stores/stores'
 import Modal from '../../../../js/components/general/modal'
 import SelectedItemsTreeItem from '../../../../js/components/qvain/fields/files/ida/selectedItemsTreeItem'
+
 
 global.Promise = require('bluebird')
 
@@ -55,7 +56,7 @@ const { Qvain } = stores
 const { Files } = Qvain
 
 const loadDataset = async () => {
-  const response = await axios.get(urls.v2.dataset(datasetIdentifier))
+  const response = await axios.get(urls.qvain.dataset(datasetIdentifier))
   Qvain.Files.AddItemsView.setDefaultShowLimit(20, 20)
   Qvain.Files.SelectedItemsView.setDefaultShowLimit(20, 20)
   const promise = stores.Qvain.editDataset(response.data)

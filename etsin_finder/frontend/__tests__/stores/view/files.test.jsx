@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import FilesBase from '../../../js/stores/view/files'
-import urls from '../../../js/components/qvain/utils/urls'
+import urls from '../../../js/utils/urls'
 import { get } from '../../__testdata__/qvain.files.data'
 
 global.Promise = require('bluebird')
@@ -24,7 +24,7 @@ const datasetIdentifier = '6d2cb5f5-4867-47f7-9874-09357f2901a3'
 let root
 
 const loadDataset = async () => {
-  const response = await axios.get(urls.v2.dataset(datasetIdentifier))
+  const response = await axios.get(urls.qvain.dataset(datasetIdentifier))
   Files.View.setDefaultShowLimit(20, 20)
   const promise = Files.openDataset(response.data)
   expect(Files.isLoadingProject).toBe(true)

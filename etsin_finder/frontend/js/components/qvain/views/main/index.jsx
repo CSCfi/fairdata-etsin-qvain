@@ -10,7 +10,7 @@ import Translate from 'react-translate-component'
 
 import { QvainContainer } from '../../general/card'
 import ErrorBoundary from '../../../general/errorBoundary'
-import urls from '../../utils/urls'
+import urls from '../../../../utils/urls'
 import Header from '../editor/header'
 import StickyHeader from '../editor/stickyHeader'
 import Dataset from '../editor/dataset'
@@ -121,7 +121,7 @@ export class Qvain extends Component {
     const { resetQvainStore, editDataset } = this.props.Stores.Qvain
     const { getQvainUrl } = this.props.Stores.Env
 
-    const url = urls.v2.dataset(identifier)
+    const url = urls.qvain.dataset(identifier)
 
     const promise = axios
       .get(url)

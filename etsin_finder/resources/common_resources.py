@@ -20,9 +20,9 @@ from etsin_finder.utils.utils import \
 from etsin_finder.schemas.qvain_dataset_schema_v2 import (
     UserMetadataValidationSchema
 )
-from etsin_finder.utils.qvain_utils_v2 import check_dataset_edit_permission
+from etsin_finder.utils.qvain_utils import check_dataset_edit_permission
 
-from etsin_finder.services.common_service_v2 import (
+from etsin_finder.services.common_service import (
     get_directory_for_project,
     get_dataset_projects,
     get_directory,

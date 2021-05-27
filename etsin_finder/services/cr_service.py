@@ -104,11 +104,10 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
         dict: The wanted catalog record.
 
     """
-    cache_key = "v2_{}".format(cr_id)
     if refresh_cache:
-        return current_app.cr_cache.update_cache(cache_key, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
+        return current_app.cr_cache.update_cache(cr_id, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
 
-    cr = current_app.cr_cache.get_from_cache(cache_key)
+    cr = current_app.cr_cache.get_from_cache(cr_id)
     if cr is None:
         cr = _get_cr_from_metax(cr_id, check_removed_if_not_exist)
         return current_app.cr_cache.update_cache(cr_id, cr)

@@ -10,7 +10,7 @@ import { HelpIcon } from '../../general/modal/form'
 import IDAFilePicker from './ida'
 import ExternalFiles from './external/externalFiles'
 import DataCatalog from './dataCatalog'
-import CumulativeStateV2 from './cumulativeStateV2'
+import CumulativeState from './cumulativeState'
 import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
 import Tooltip from '../../general/section/tooltip'
 import FilesInfo from './filesInfo'
@@ -43,7 +43,7 @@ const Files = () => {
           <ContainerSubsectionBottom>
             <IDAFilePicker />
           </ContainerSubsectionBottom>
-          <CumulativeStateV2 />
+          <CumulativeState />
         </>
       )
     }

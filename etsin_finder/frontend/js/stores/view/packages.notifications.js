@@ -2,7 +2,7 @@ import * as yup from 'yup'
 
 import { observable, action, makeObservable } from 'mobx'
 import axios from 'axios'
-import urls from '../../components/qvain/utils/urls'
+import urls from '../../utils/urls'
 
 const emailSchema = yup
   .string()
@@ -70,7 +70,7 @@ class Notifications {
       email: this.email,
     }
     try {
-      await axios.post(urls.v2.subscriptions(), subParams)
+      await axios.post(urls.dl.subscriptions(), subParams)
     } catch (err) {
       console.error(err)
       this.setEmailError(err)

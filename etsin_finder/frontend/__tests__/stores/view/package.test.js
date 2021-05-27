@@ -2,7 +2,7 @@ import 'chai/register-should'
 import axios from 'axios'
 import Packages from '../../../js/stores/view/packages'
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../js/utils/constants'
-import urls from '../../../js/components/qvain/utils/urls'
+import urls from '../../../js/utils/urls'
 
 jest.useFakeTimers()
 
@@ -226,7 +226,7 @@ describe('Packages', () => {
     })
 
     test('should call axios.post with correct url and params', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.v2.packages(), params)
+      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), params)
     })
   })
 
@@ -241,7 +241,7 @@ describe('Packages', () => {
     })
 
     test('should eventially call axios.post with expectedParams', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.v2.packages(), expectedParams)
+      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), expectedParams)
     })
   })
 
@@ -256,7 +256,7 @@ describe('Packages', () => {
     })
 
     test('should eventially call axios.post with expectedParams', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.v2.packages(), expectedParams)
+      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), expectedParams)
     })
   })
 
@@ -302,7 +302,7 @@ describe('Packages', () => {
     })
 
     test('should call axios.get', () => {
-      expect(axios.get).toHaveBeenCalledWith('/api/v2/dl/requests?cr_id=identifier')
+      expect(axios.get).toHaveBeenCalledWith('/api/dl/requests?cr_id=identifier')
     })
 
     test('should set datasetIdentifier', () => {

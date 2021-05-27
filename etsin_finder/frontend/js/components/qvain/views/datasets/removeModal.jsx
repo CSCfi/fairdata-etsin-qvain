@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import urls from '../../utils/urls'
+import urls from '../../../../utils/urls'
 import Modal from '../../../general/modal'
 import { TableButton, DangerButton } from '../../general/buttons'
 import { getResponseError } from '../../utils/responseError'
@@ -41,13 +41,13 @@ export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, onClose })
 
       // Delete unpublished changes first
       if (dataset.next_draft) {
-        const draftUrl = urls.v2.dataset(dataset.next_draft.identifier)
+        const draftUrl = urls.qvain.dataset(dataset.next_draft.identifier)
         await axios.delete(draftUrl)
       }
 
       // Delete the actual dataset
       if (!onlyChanges) {
-        const url = urls.v2.dataset(identifier)
+        const url = urls.qvain.dataset(identifier)
         await axios.delete(url)
       }
 

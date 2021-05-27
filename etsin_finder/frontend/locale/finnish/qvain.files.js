@@ -26,56 +26,16 @@ const files = {
   cumulativeState: {
     label: 'Kasvava aineisto',
     radio: {
-      no:
-        'Ei. (Uusia tiedostoja tai kansioita ei voi lisätä ilman, että aineistosta syntyy uusi versio.)',
-      yes:
-        'Kyllä. (Tiedostoja tai kansioita tullaan lisäämään aineistoon. Lisäys ei aiheuta uuden version syntymistä.)',
-      note:
-        'Huom! Julkaistua aineistoa ei voi muuttaa kasvavaksi ilman, että syntyy uusi versio. Kasvavan aineiston muuttaminen ei-kasvavaksi on sen sijaan sallittua.',
-    },
-    enabled: {
-      state: 'Tämä aineisto on julkaistu kasvavana aineistona.',
-      explanation:
-        'Kasvavaan aineistoon lisätään dataa säännöllisesti. Jos aineistoon ei enää lisätä dataa, se kannattaa muuttaa ei-kasvavaksi.',
-      button: 'Muuta ei-kasvavaksi',
-      note:
-        'Huom! Jos muutat kasvavan aineiston ei-kasvavaksi, et voi enää muuttaa sitä takaisin ilman, että syntyisi uusi versio.',
-      confirm:
-        'Oletko varma, että haluat muuttaa kasvavan aineiston ei-kasvavaksi? Muutos ei aiheuta uuden version syntymistä, mutta jos aineisto myöhemmin vaihdetaan takaisin kasvavaksi, syntyy automaattisesti uusi versio.',
-      cancel: 'Peruuta',
-    },
-    disabled: {
-      state: 'Aineisto on julkaistu tavallisena, ei-kasvavana aineistona.',
-      explanation:
-        'Jos aineistoon lisätään tiedostoja tai hakemistoja, siitä syntyy automaattisesti uusi versio.',
-      button: 'Muuta kasvavaksi',
-      note:
-        'Huom! Jos muutat tavallisen aineiston kasvavaksi aineistoksi, siitä tehdään automaattisesti uusi versio. Vanha versio jää tavalliseksi, ja uudesta tulee kasvava aineisto.',
-      confirm:
-        'Oletko varma, että haluat tehdä aineistosta kasvavan? Muutos aiheuttaa uuden version syntymisen ja uudella versiolla on aina uusi tunniste.',
-      cancel: 'Peruuta',
-    },
-    modalHeader: 'Muuta aineiston kasvavuutta',
-    closeButton: 'Sulje',
-    changes: 'Aineistoon tehdyt muutokset on tallennettava ennen tämän asetuksen muuttamista.',
-  },
-  cumulativeStateV2: {
-    label: 'Kasvava aineisto',
-    radio: {
-      no:
-        'Ei. (Uusien tiedostojen tai kansioiden julkaistuun aineistoon vaatii, että aineistosta tehdään uusi versio.)',
-      yes:
-        'Kyllä. (Tiedostoja tai kansioita tullaan lisäämään aineistoon. Lisäys onnistuu ilman uuden version luomista.)',
-      note:
-        'Huom! Julkaistua aineistoa ei voi muuttaa kasvavaksi ilman, että siitä tehdään uusi versio. Kasvavan aineiston muuttaminen ei-kasvavaksi on sen sijaan sallittua.',
+      no: 'Ei. (Uusien tiedostojen tai kansioiden julkaistuun aineistoon vaatii, että aineistosta tehdään uusi versio.)',
+      yes: 'Kyllä. (Tiedostoja tai kansioita tullaan lisäämään aineistoon. Lisäys onnistuu ilman uuden version luomista.)',
+      note: 'Huom! Julkaistua aineistoa ei voi muuttaa kasvavaksi ilman, että siitä tehdään uusi versio. Kasvavan aineiston muuttaminen ei-kasvavaksi on sen sijaan sallittua.',
     },
     enabled: {
       state: 'Tämä aineisto on merkitty kasvavaksi.',
       explanation:
         'Kasvavaan aineistoon lisätään dataa säännöllisesti. Jos aineistoon ei enää lisätä dataa, se kannattaa muuttaa ei-kasvavaksi.',
       button: 'Muuta ei-kasvavaksi',
-      note:
-        'Huom! Jos muutat kasvavan aineiston ei-kasvavaksi, et voi enää muuttaa sitä takaisin kasvavaksi luomatta uutta versiota.',
+      note: 'Huom! Jos muutat kasvavan aineiston ei-kasvavaksi, et voi enää muuttaa sitä takaisin kasvavaksi luomatta uutta versiota.',
     },
     disabled: {
       state: 'Aineisto on julkaistu tavallisena, ei-kasvavana aineistona.',
@@ -122,8 +82,7 @@ const files = {
   fixDeprecatedModal: {
     statusText: 'Aineisto on vanhentunut. Jotkin aineiston tiedostot eivät ole enää saatavilla.',
     header: 'Korjaa vanhentunut aineisto',
-    help:
-      'Tämä toiminto korjaa aineiston poistamalla siitä kaikki tiedostot ja hakemistot jotka eivät ole enää saatavilla. Aineistosta tehdään uusi versio.',
+    help: 'Tämä toiminto korjaa aineiston poistamalla siitä kaikki tiedostot ja hakemistot jotka eivät ole enää saatavilla. Aineistosta tehdään uusi versio.',
     changes: 'Aineistoon tehdyt muutokset on tallennettava ennen tätä toimintoa.',
     buttons: {
       show: 'Korjaa vanhentunut aineisto',
@@ -134,8 +93,7 @@ const files = {
   },
   metadataModal: {
     header: 'Muokkaa PAS-metadataa',
-    help:
-      'Datan tallentaminen päivittää tiedoston metadatan riippumatta siitä onko se aineistossa.',
+    help: 'Datan tallentaminen päivittää tiedoston metadatan riippumatta siitä onko se aineistossa.',
     csvOptions: 'CSV-määritykset',
     fields: {
       fileFormat: 'Tiedostomuoto',
@@ -161,8 +119,7 @@ const files = {
     },
     clear: {
       header: 'Poista PAS-metadata',
-      help:
-        'Haluatko poistaa PAS-metadatan tiedostosta %(file)s? Muutos tulee voimaan välittömästi.',
+      help: 'Haluatko poistaa PAS-metadatan tiedostosta %(file)s? Muutos tulee voimaan välittömästi.',
       cancel: 'Peruuta',
       confirm: 'Poista',
     },
@@ -187,8 +144,7 @@ const files = {
       csvQuotingChar: 'Kirjoita merkki',
     },
   },
-  help:
-    'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
+  help: 'Aineistoon kuuluvat tiedostot. Aineistoon voi kuulua vain joko IDAssa olevia tiedostoja tai ulkopuolisia tiedostoja. Tiedostojen metadata ei ole osa aineistojen metadataa, joten muista tallentaa muutokset jotka teet tiedostojen metadataan.',
   ida: {
     title: 'Fairdata IDA tiedostot',
     infoText: `Jos liität aineistoosi tiedostoja IDA-palvelusta,

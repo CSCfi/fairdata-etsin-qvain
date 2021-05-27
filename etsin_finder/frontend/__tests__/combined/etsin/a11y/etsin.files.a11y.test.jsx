@@ -10,17 +10,17 @@ import { makeAutoObservable } from 'mobx'
 expect.extend(toHaveNoViolations)
 
 import { buildStores } from '../../../../js/stores'
-import IdaResources from '../../../../js/components/dataset/data/idaResourcesV2/index'
-import FileTreeItem from '../../../../js/components/dataset/data/idaResourcesV2/fileTreeItem'
+import IdaResources from '../../../../js/components/dataset/data/idaResources/index'
+import FileTreeItem from '../../../../js/components/dataset/data/idaResources/fileTreeItem'
 import '../../../../locale/translations'
-import PackageModal from '../../../../js/components/dataset/data/idaResourcesV2/packageModal'
+import PackageModal from '../../../../js/components/dataset/data/idaResources/packageModal'
 import etsinTheme from '../../../../js/styles/theme'
 import { get } from '../../../__testdata__/qvain.files.data'
 import dataset from '../../../__testdata__/dataset.ida'
 import { StoresProvider, useStores } from '../../../../js/stores/stores'
 import FilesClass from '../../../../js/stores/view/files'
 import Modal from '../../../../js/components/general/modal'
-import { DownloadButton } from '../../../../js/components/dataset/data/idaResourcesV2/fileTreeItem'
+import { DownloadButton } from '../../../../js/components/dataset/data/idaResources/fileTreeItem'
 
 global.Promise = require('bluebird')
 
@@ -72,7 +72,6 @@ class MockPackages {
 
 const getStores = () => {
   let stores = buildStores()
-  stores.Env.Flags.setFlag('METAX_API_V2', true)
   stores.Env.Flags.setFlag('DOWNLOAD_API_V2', true)
   stores = {
     ...stores,

@@ -1,7 +1,7 @@
 /*
- **  Files v2 submit cases frontend tests
+ **  Files submit cases frontend tests
  **
- **  Files v2 has 144 theoretical test conditions. Almost half of these cases are inactive or not possible at all.
+ **  Files has 144 theoretical test conditions. Almost half of these cases are inactive or not possible at all.
  **  These tests will test all the cases that can be tested.
  **  Tests lean heavily on the documentation found in the link below.
  **  The cases are named after the theoretical number column.
@@ -24,7 +24,7 @@ import {
   ACCESS_TYPE_URL,
 } from '../../../js/utils/constants'
 import '../../../locale/translations'
-import urls from '../../../js/components/qvain/utils/urls'
+import urls from '../../../js/utils/urls'
 import { configure } from 'mobx'
 
 // first half of the tests mocks qvainFormSchema but the rest of the tests uses actual module
@@ -367,7 +367,7 @@ describe('create new draft', () => {
     handleSubmitToBackend.mockReturnValue('dataset')
     qvainFormSchemaDraft.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitDraft()
-    expect(axios.post).toHaveBeenCalledWith(urls.v2.datasets(), 'dataset', {
+    expect(axios.post).toHaveBeenCalledWith(urls.qvain.datasets(), 'dataset', {
       params: { draft: true },
     })
   })
@@ -512,14 +512,14 @@ describe('publish new dataset', () => {
     qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitPublish()
     expect(axios.post.mock.calls[0]).toEqual([
-      urls.v2.datasets(),
+      urls.qvain.datasets(),
       'dataset',
       {
         params: { draft: true },
       },
     ])
     expect(axios.post.mock.calls[1]).toEqual([
-      urls.v2.rpc.publishDataset(),
+      urls.rpc.publishDataset(),
       null,
       { params: { identifier: 'some identifier' } },
     ])
@@ -656,7 +656,7 @@ describe('edit existing draft dataset', () => {
     handleSubmitToBackend.mockReturnValue(preparedDataset)
     qvainFormSchemaDraft.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitDraft()
-    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('some identifier'), preparedDataset)
+    expect(axios.patch).toHaveBeenCalledWith(urls.qvain.dataset('some identifier'), preparedDataset)
   })
 
   test('cases 37-39: no file origin, urn, cumulative state any', async () => {
@@ -779,10 +779,10 @@ describe('publish existing draft dataset', () => {
     await Submit.submitPublish()
 
     expect(axios.patch).toHaveBeenCalledWith(
-      urls.v2.dataset(preparedDataset.original.identifier),
+      urls.qvain.dataset(preparedDataset.original.identifier),
       preparedDataset
     )
-    expect(axios.post).toHaveBeenCalledWith(urls.v2.rpc.publishDataset(), null, {
+    expect(axios.post).toHaveBeenCalledWith(urls.rpc.publishDataset(), null, {
       params: { identifier: preparedDataset.original.identifier },
     })
   })
@@ -913,11 +913,11 @@ describe('save published dataset as draft', () => {
     handleSubmitToBackend.mockReturnValue(preparedDataset)
     qvainFormSchemaDraft.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitDraft()
-    expect(axios.post).toHaveBeenCalledWith(urls.v2.rpc.createDraft(), null, {
+    expect(axios.post).toHaveBeenCalledWith(urls.rpc.createDraft(), null, {
       params: { identifier: 'some identifier' },
     })
-    expect(axios.get).toHaveBeenCalledWith(urls.v2.dataset('some identifier'))
-    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('fresh id'), {
+    expect(axios.get).toHaveBeenCalledWith(urls.qvain.dataset('some identifier'))
+    expect(axios.patch).toHaveBeenCalledWith(urls.qvain.dataset('fresh id'), {
       original: { identifier: 'fresh id' },
     })
   })
@@ -1051,7 +1051,7 @@ describe('republish dataset', () => {
     handleSubmitToBackend.mockReturnValue(preparedDataset)
     qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitDraft()
-    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('some identifier'), preparedDataset)
+    expect(axios.patch).toHaveBeenCalledWith(urls.qvain.dataset('some identifier'), preparedDataset)
   })
 
   test('cases 91-93: no file origin, urn, cumulative state any', async () => {
@@ -1198,10 +1198,10 @@ describe('publish unpublished dataset', () => {
     handleSubmitToBackend.mockReturnValue(preparedDataset)
     qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitPublish()
-    expect(axios.post).toHaveBeenCalledWith(urls.v2.rpc.mergeDraft(), null, {
+    expect(axios.post).toHaveBeenCalledWith(urls.rpc.mergeDraft(), null, {
       params: { identifier: 'some identifier' },
     })
-    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('some identifier'), preparedDataset)
+    expect(axios.patch).toHaveBeenCalledWith(urls.qvain.dataset('some identifier'), preparedDataset)
   })
 
   test('cases 127-129: no file origin, urn, cumulative state any', async () => {

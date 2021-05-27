@@ -52,7 +52,6 @@ describe('given mockStores', () => {
     },
     Env: {
       getQvainUrl: jest.fn(path => path),
-      metaxApiV2: true,
     },
     Matomo: {
       recordEvent: jest.fn(),
@@ -421,7 +420,7 @@ describe('given mockStores', () => {
 
         test('should call axios.post with expected props', () => {
           expect(axios.post).to.have.beenCalledWith(
-            '/api/v2/rpc/datasets/create_new_version',
+            '/api/rpc/datasets/create_new_version',
             null,
             { params: { identifier: 'identifier' } }
           )

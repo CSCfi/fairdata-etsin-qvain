@@ -2,8 +2,6 @@
 
 import re
 from copy import deepcopy
-import json
-from base64 import urlsafe_b64encode
 from datetime import date
 
 from etsin_finder.utils.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
@@ -222,49 +220,6 @@ def remote_resources_data_to_metax(resources):
     return metax_remote_resources
 
 
-def files_data_to_metax(files):
-    """Create list of objects that comply to Metax schema
-
-    Arguments:
-        files (list): List containing the files from frontend (does contain ALL the data).
-
-    Returns:
-        list: List containing objects that conform to Metax schema.
-
-    """
-    metax_files = []
-    for file in files:
-        metax_file_object = {}
-        metax_file_object["identifier"] = file.get("identifier")
-        metax_file_object["title"] = file.get("title")
-        metax_file_object["description"] = file.get("description")
-        metax_file_object["file_type"] = file.get("fileType") if "fileType" in file else ""
-        metax_file_object["use_category"] = file.get("useCategory")
-        metax_files.append(metax_file_object)
-    return metax_files
-
-
-def directories_data_to_metax(files):
-    """Create list of objects that comply to Metax schema
-
-    Arguments:
-        files (list): List containing the directories from frontend (does contain ALL the data).
-
-    Returns:
-        list: List containing objects that conform to Metax schema.
-
-    """
-    metax_directories = []
-    for file in files:
-        metax_directory_object = {}
-        metax_directory_object["identifier"] = file.get("identifier")
-        metax_directory_object["title"] = file.get("title")
-        metax_directory_object["description"] = file.get("description") if "description" in file else ""
-        metax_directory_object["use_category"] = file.get("useCategory")
-        metax_directories.append(metax_directory_object)
-    return metax_directories
-
-
 def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     """Converts all the data from the frontend to conform to Metax schema.
 
@@ -306,8 +261,6 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "theme": _to_identifier_objects(data.get("theme")),
             "access_rights": access_rights_to_metax(data),
             "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('att') else "",
-            "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
-            "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
             "is_output_of": alter_projects_to_metax(data.get("projects")),
             "relation": data.get("relation"),
             "provenance": provenances,
@@ -428,7 +381,7 @@ def edited_data_to_metax(data, original):
         original (dict): Original data that the dataset contained before editing.
 
     Returns:
-        dict: Metax ready data.
+        Metax ready data.
 
     """
     publisher_array = alter_role_data(data["actors"], "publisher")
@@ -456,8 +409,6 @@ def edited_data_to_metax(data, original):
         "theme": _to_identifier_objects(data.get("theme")),
         "access_rights": access_rights_to_metax(data),
         "remote_resources": remote_resources_data_to_metax(data.get("remote_resources")) if data["dataCatalog"] == DATA_CATALOG_IDENTIFIERS.get('att') else "",
-        "files": files_data_to_metax(data.get("files")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
-        "directories": directories_data_to_metax(data.get("directories")) if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get('ida') else "",
         "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
         "spatial": data.get("spatial"),
         "is_output_of": alter_projects_to_metax(data.get("projects")),
@@ -465,12 +416,13 @@ def edited_data_to_metax(data, original):
         "provenance": provenances,
         "temporal": data.get("temporal"),
     })
-    log.info(research_dataset)
     edited_data = {
         "data_catalog": data.get("dataCatalog", None),
         "research_dataset": research_dataset,
         "use_doi_for_published": data.get("useDoi")
     }
+    if "cumulativeState" in data:
+        edited_data["cumulative_state"] = data.get("cumulativeState")
     return clean_empty_keyvalues_from_dict(edited_data)
 
 

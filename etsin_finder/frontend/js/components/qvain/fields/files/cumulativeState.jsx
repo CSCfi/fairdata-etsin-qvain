@@ -50,7 +50,7 @@ const CumulativeState = () => {
             checked={state === CUMULATIVE_STATE.NO}
           />
           <Label htmlFor="cumulativeStateNo">
-            <Translate content="qvain.files.cumulativeStateV2.radio.no" />
+            <Translate content="qvain.files.cumulativeState.radio.no" />
           </Label>
         </FormField>
         <FormField>
@@ -62,12 +62,12 @@ const CumulativeState = () => {
             checked={state === CUMULATIVE_STATE.YES}
           />
           <Label htmlFor="cumulativeStateYes">
-            <Translate content="qvain.files.cumulativeStateV2.radio.yes" />
+            <Translate content="qvain.files.cumulativeState.radio.yes" />
           </Label>
         </FormField>
 
         <HelpField>
-          <Translate component="p" content="qvain.files.cumulativeStateV2.radio.note" />
+          <Translate component="p" content="qvain.files.cumulativeState.radio.note" />
         </HelpField>
       </>
     )
@@ -83,19 +83,19 @@ const CumulativeState = () => {
         <Paragraph>
           <Translate
             component="strong"
-            content={`qvain.files.cumulativeStateV2.${stateKey}.state`}
+            content={`qvain.files.cumulativeState.${stateKey}.state`}
           />{' '}
-          <Translate content={`qvain.files.cumulativeStateV2.${stateKey}.explanation`} />
+          <Translate content={`qvain.files.cumulativeState.${stateKey}.explanation`} />
           {canChangeCumulativeState && (
             <CumulativeStateButton type="button" onClick={handleToggleNewCumulativeState}>
-              <Translate content={`qvain.files.cumulativeStateV2.${stateOrChangeKey}.button`} />
+              <Translate content={`qvain.files.cumulativeState.${stateOrChangeKey}.button`} />
             </CumulativeStateButton>
           )}
         </Paragraph>
         <Paragraph>
           <Translate
             component={HelpField}
-            content={`qvain.files.cumulativeStateV2.${stateOrChangeKey}.note`}
+            content={`qvain.files.cumulativeState.${stateOrChangeKey}.note`}
           />
         </Paragraph>
       </>
@@ -107,7 +107,7 @@ const CumulativeState = () => {
   return (
     <ContainerSubsectionBottom>
       <LabelLarge htmlFor="cumulativeStateSelect">
-        <Translate content="qvain.files.cumulativeStateV2.label" />
+        <Translate content="qvain.files.cumulativeState.label" />
       </LabelLarge>
       {content}
     </ContainerSubsectionBottom>

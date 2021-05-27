@@ -13,6 +13,7 @@ import axios from 'axios'
 
 import Files from './files'
 import Packages from './packages'
+import urls from '../../utils/urls'
 
 const QueryFields = {
   file: [
@@ -72,7 +73,7 @@ class DatasetQuery {
   @action
   getData(id) {
     this.Packages.clearPackages()
-    const url = `/api/v2/dataset/${id}`
+    const url = urls.dataset(id)
     return new Promise((resolve, reject) => {
       axios
         .get(url)

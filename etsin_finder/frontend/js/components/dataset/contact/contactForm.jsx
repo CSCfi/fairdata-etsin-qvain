@@ -21,6 +21,7 @@ import Select from '../../general/select'
 import Input, { InputArea } from '../common/formItems'
 import { InvertedButton } from '../../general/button'
 import ErrorBoundary from '../../general/errorBoundary'
+import urls from '../../../utils/urls'
 
 const InnerForm = props => {
   const {
@@ -165,17 +166,14 @@ const ContactForm = withFormik({
         .max(1300, props.translations.message.error.max)
         .required(props.translations.message.error.required),
       subject: yup.string().required(props.translations.subject.error.required),
-      recipient: yup
-        .mixed()
-        .nullable('true')
-        .required(props.translations.recipient.error.required),
+      recipient: yup.mixed().nullable('true').required(props.translations.recipient.error.required),
     })
     return validation
   },
   handleSubmit: (values, { props, setSubmitting, setStatus, setFieldError }) => {
     setStatus('')
     axios
-      .post(`/api/email/${props.datasetID}`, {
+      .post(urls.email(props.datasetID), {
         user_subject: values.subject,
         user_email: values.email,
         user_body: values.message,

@@ -162,7 +162,7 @@ const formatPackageResponse = packages => {
 export const applyMockAdapter = mockAdapter => {
   // Use mockAdapter to mock axios responses for the Download API.
 
-  mockAdapter.onGet(RegExp('^/api/v2/dl/requests')).reply(({ url, data }) => {
+  mockAdapter.onGet(RegExp('^/api/dl/requests')).reply(({ url, data }) => {
     const params = getParams(url, data)
     if (errors[params.cr_id]) {
       return errors[params.cr_id]
@@ -172,7 +172,7 @@ export const applyMockAdapter = mockAdapter => {
     return formatPackageResponse(packages)
   })
 
-  mockAdapter.onPost(RegExp('^/api/v2/dl/requests')).reply(({ url, data }) => {
+  mockAdapter.onPost(RegExp('^/api/dl/requests')).reply(({ url, data }) => {
     const params = getParams(url, data)
     if (errors[params.cr_id]) {
       return errors[params.cr_id]
@@ -187,7 +187,7 @@ export const applyMockAdapter = mockAdapter => {
     return formatPackageResponse(createdPackages)
   })
 
-  mockAdapter.onPost(RegExp('^/api/v2/dl/authorize')).reply(({ url, data }) => {
+  mockAdapter.onPost(RegExp('^/api/dl/authorize')).reply(({ url, data }) => {
     const params = getParams(url, data)
     const { cr_id, file, package: pack } = params
     if (errors[cr_id]) {
@@ -199,7 +199,7 @@ export const applyMockAdapter = mockAdapter => {
     return [200, { url: `package_dl_url?cr_id=${cr_id}&package=${pack}` }]
   })
 
-  mockAdapter.onPost(RegExp('^/api/v2/dl/subscriptions')).reply(({ url, data }) => {
+  mockAdapter.onPost(RegExp('^/api/dl/subscriptions')).reply(({ url, data }) => {
     const params = getParams(url, data)
     if (errors[params.cr_id]) {
       return errors[params.cr_id]

@@ -31,6 +31,7 @@ import Loader from '../general/loader'
 import FlaggedComponent from '../general/flaggedComponent'
 import { withStores } from '../../stores/stores'
 import CitationModal from './citation/citationModal'
+import urls from '../../utils/urls'
 
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
@@ -93,7 +94,7 @@ class Dataset extends React.Component {
     if (typeof datasetVersionSet !== 'undefined') {
       // If there are more than 1 version
       for (const k of datasetVersionSet.keys()) {
-        const versionUrl = `/api/dataset/${datasetVersionSet[k].identifier}`
+        const versionUrl = urls.dataset(datasetVersionSet[k].identifier)
         promises.push(axios.get(versionUrl))
       }
 

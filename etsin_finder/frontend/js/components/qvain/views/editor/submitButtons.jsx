@@ -5,7 +5,7 @@ import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 
 import { qvainFormSchema } from '../../utils/formValidation'
-import urls from '../../utils/urls'
+import urls from '../../../../utils/urls'
 import DoiModal from './doiModal'
 import { withStores } from '../../../../stores/stores'
 import SubmitButtonsV2 from './submitButtonsV2'
@@ -64,7 +64,7 @@ export class SubmitButtons extends Component {
   }
 
   updateCumulativeState = (identifier, state) =>
-    axios.post(urls.v2.rpc.changeCumulativeState(), { identifier, cumulative_state: state })
+    axios.post(urls.rpc.changeCumulativeState(), { identifier, cumulative_state: state })
 
   showUseDoiInformation = () => {
     this.setState({
@@ -78,7 +78,7 @@ export class SubmitButtons extends Component {
       .validate(obj, { abortEarly: false, strict: true })
       .then(() =>
         axios
-          .post(urls.v1.datasets(), obj)
+          .post(urls.qvain.datasets(), obj)
           .then(res => {
             this.props.Stores.Qvain.setChanged(false)
             const data = res.data

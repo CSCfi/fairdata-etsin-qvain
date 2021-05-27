@@ -4,7 +4,6 @@ import Harness from '../componentTestHarness'
 
 import { SubmitButtonsV2 } from '../../../js/components/qvain/views/editor/submitButtonsV2'
 import { useStores } from '../../../js/stores/stores'
-import TooltipHoverOnSave from '../../../js/components/qvain/general/header/tooltipHoverOnSave'
 
 const mockSubmitDraft = jest.fn()
 const mockSubmitPublish = jest.fn()

@@ -18,6 +18,7 @@ import { observer } from 'mobx-react'
 
 import FormatSelect from './formatselect'
 import { withStores } from '../../stores/stores'
+import urls from '../../utils/urls'
 
 export class FormatChanger extends Component {
   constructor(props) {
@@ -51,19 +52,11 @@ export class FormatChanger extends Component {
     }
 
     if (dataciteExists) {
-      fields = [
-        { value: 'metax' },
-        { value: 'datacite' },
-      ]
+      fields = [{ value: 'metax' }, { value: 'datacite' }]
     } else if (prefId.startsWith('urn:nbn:fi:att:') || prefId.startsWith('urn:nbn:fi:csc')) {
-      fields = [
-        { value: 'metax' },
-        { value: 'fairdata_datacite' },
-      ]
+      fields = [{ value: 'metax' }, { value: 'fairdata_datacite' }]
     } else {
-      fields = [
-        { value: 'metax' },
-      ]
+      fields = [{ value: 'metax' }]
     }
 
     this.setState({
@@ -75,7 +68,7 @@ export class FormatChanger extends Component {
     if (this.state.formats.some(field => field.value === format.value)) {
       this.setState(
         {
-          url: `/api/format?cr_id=${this.props.idn}&format=${format.value}`,
+          url: urls.format(this.props.idn, format.value),
         },
         () => {
           this.openFormat(this.state.url)
