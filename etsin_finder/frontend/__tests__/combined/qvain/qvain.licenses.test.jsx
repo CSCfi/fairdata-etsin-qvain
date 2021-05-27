@@ -9,13 +9,16 @@ import etsinTheme from '../../../js/styles/theme'
 import { buildStores } from '../../../js/stores'
 import { useStores } from '../../../js/stores/stores'
 import RightsAndLicenses from '../../../js/components/qvain/fields/licenses'
-import LicensesComponent, { License } from '../../../js/components/qvain/fields/licenses/licenses'
+import LicensesComponent, {
+  License,
+  ErrorLabel,
+} from '../../../js/components/qvain/fields/licenses/licenses'
 import AccessTypeComponent, {
   AccessType,
 } from '../../../js/components/qvain/fields/licenses/accessType'
 import RestrictionGrounds from '../../../js/components/qvain/fields/licenses/restrictionGrounds'
 import { ACCESS_TYPE_URL, LICENSE_URL } from '../../../js/utils/constants'
-import { ValidationErrors } from '../../../js/components/qvain/general/errors/validationError'
+import { ValidationError } from '../../../js/components/qvain/general/errors/validationError'
 import Tooltip from '../../../js/components/qvain/general/section/tooltip'
 import { HelpIcon } from '../../../js/components/qvain/general/modal/form'
 import Licenses from '../../../js/stores/view/qvain/qvain.license'
@@ -127,15 +130,17 @@ describe('Qvain.RightsAndLicenses', () => {
       'http://ok.url',
       'httppp:/fail.url',
     ])
-    const errors = component
-      .find(ValidationErrors)
-      .dive()
-      .find(Translate) // ValidationErrorItem
-      .map(item => item.text())
+    const errorLabels = component.find(ErrorLabel).map(item => item.text())
+    expect(errorLabels).toEqual(['httpöötest.url:', 'httppp:/fail.url:'])
+  })
 
-    expect(errors.length).toBe(2)
-    expect(errors[0].startsWith('httpöötest.url'))
-    expect(errors[1].startsWith('httppp:/fail.url'))
+  it('should render invalid url error', () => {
+    const { Licenses } = stores.Qvain
+    Licenses.set([Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url')])
+    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
+    component.instance().validateLicenses()
+    const errors = component.find(ValidationError).map(item => item.children().text())
+    expect(errors).toEqual(['qvain.validationMessages.license.otherUrl.url'])
   })
 
   it('should render <AccessType />', () => {
