@@ -18,6 +18,9 @@ const ModalContent = ({
   onConfirm,
   requestClose,
 }) => {
+  const { editMode } = Field
+  const { readonly } = Store
+
   const translations = {
     title: editMode
       ? `${translationsRoot}.modal.title.edit`
@@ -28,8 +31,6 @@ const ModalContent = ({
       editSave: `${translationsRoot}.modal.buttons.editSave`,
     },
   }
-  const { editMode } = Field
-  const { readonly } = Store
 
   return (
     <>

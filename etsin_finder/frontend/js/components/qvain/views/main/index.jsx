@@ -10,7 +10,6 @@ import Translate from 'react-translate-component'
 
 import { QvainContainer } from '../../general/card'
 import ErrorBoundary from '../../../general/errorBoundary'
-import { getResponseError } from '../../utils/responseError'
 import urls from '../../utils/urls'
 import Header from '../editor/header'
 import StickyHeader from '../editor/stickyHeader'
@@ -48,8 +47,6 @@ export class Qvain extends Component {
   }
 
   state = {
-    response: null,
-    submitted: false,
     haveDataset: false,
     datasetLoading: false,
     datasetError: false,
@@ -120,14 +117,12 @@ export class Qvain extends Component {
   }
 
   getDataset(identifier) {
-    this.setState({ datasetLoading: true, datasetError: false, response: null, submitted: false })
+    this.setState({ datasetLoading: true, datasetError: false })
     const { resetQvainStore, editDataset } = this.props.Stores.Qvain
-    const { metaxApiV2, getQvainUrl } = this.props.Stores.Env
+    const { getQvainUrl } = this.props.Stores.Env
 
-    let url = urls.v1.dataset(identifier)
-    if (metaxApiV2) {
-      url = urls.v2.dataset(identifier)
-    }
+    const url = urls.v2.dataset(identifier)
+
     const promise = axios
       .get(url)
       .then(result => {
@@ -180,17 +175,11 @@ export class Qvain extends Component {
     return promise
   }
 
-  getErrorTitle() {
-    return <Translate component="h2" content="qvain.error.render" />
-  }
-
   clearSubmitResponse = () => {
     const { clearResponse, setError } = this.props.Stores.Qvain.Submit
     clearResponse()
     setError(null)
     this.setState({
-      response: null,
-      submitted: false,
       datasetLoading: false,
       datasetError: false,
       datasetErrorTitle: null,
@@ -198,11 +187,9 @@ export class Qvain extends Component {
     })
   }
 
-  handleSubmitResponse = response => {
+  handleSubmitResponse = () => {
     this.setState({
       datasetLoading: false,
-      submitted: true,
-      response,
     })
   }
 
@@ -211,8 +198,6 @@ export class Qvain extends Component {
       // Validation error
       this.setState({
         datasetLoading: false,
-        submitted: true,
-        response: err.errors,
       })
       return
     }
@@ -221,8 +206,6 @@ export class Qvain extends Component {
     }
     this.setState({
       datasetLoading: false,
-      submitted: true,
-      response: getResponseError(err),
     })
   }
 
@@ -252,15 +235,14 @@ export class Qvain extends Component {
   }
 
   getStickyHeaderProps = () => {
-    const { metaxApiV2 } = this.props.Stores.Env
     const { error, response: responseV2, isLoading } = this.props.Stores.Qvain.Submit
-    const { datasetLoading, datasetError, submitted, response, renderFailed } = this.state
+    const { datasetError, renderFailed } = this.state
 
     return {
-      datasetLoading: metaxApiV2 ? isLoading : datasetLoading,
+      datasetLoading: isLoading,
       datasetError,
-      submitted: metaxApiV2 ? !!error || !!responseV2 : submitted,
-      response: metaxApiV2 ? error || responseV2 : response,
+      submitted: !!error || !!responseV2,
+      response: error || responseV2,
       handleSubmitError: this.handleSubmitError,
       handleSubmitResponse: this.handleSubmitResponse,
       clearSubmitResponse: this.clearSubmitResponse,
@@ -279,7 +261,7 @@ export class Qvain extends Component {
       <QvainContainer>
         <Header {...this.getHeaderProps()} />
         <StickyHeader {...this.getStickyHeaderProps()} />
-        <ErrorBoundary title={this.getErrorTitle()} callback={this.enableRenderFailed}>
+        <ErrorBoundary title={ErrorTitle()} callback={this.enableRenderFailed}>
           <Dataset {...this.getDatasetProps()} />
         </ErrorBoundary>
         <LooseActorDialog />
@@ -293,5 +275,7 @@ export class Qvain extends Component {
     )
   }
 }
+
+export const ErrorTitle = () => <Translate component="h2" content="qvain.error.render" />
 
 export default withRouter(withStores(observer(Qvain)))

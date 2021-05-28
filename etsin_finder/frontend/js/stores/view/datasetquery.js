@@ -11,8 +11,6 @@
 import { observable, computed, action, makeObservable } from 'mobx'
 import axios from 'axios'
 
-import access from './access'
-
 import Files from './files'
 import Packages from './packages'
 
@@ -32,10 +30,11 @@ const QueryFields = {
 }
 
 class DatasetQuery {
-  constructor(Env) {
-    this.Files = new Files()
+  constructor(Env, Access) {
     this.Env = Env
+    this.Files = new Files()
     this.Packages = new Packages(Env)
+    this.Access = Access
     makeObservable(this)
   }
 
@@ -49,13 +48,12 @@ class DatasetQuery {
 
   @observable showCitationModal = false
 
-  @action setShowCitationModal = (value) => {
+  @action setShowCitationModal = value => {
     this.showCitationModal = value
   }
 
   async fetchPackages() {
-    const { downloadApiV2 } = this.Env
-    if (!downloadApiV2 || !this.results || !access.restrictions?.allowDataIdaDownloadButton) {
+    if (!this.results || !this.Access.restrictions?.allowDataIdaDownloadButton) {
       return
     }
 
@@ -74,39 +72,38 @@ class DatasetQuery {
   @action
   getData(id) {
     this.Packages.clearPackages()
-    const { metaxApiV2 } = this.Env
-    const url = metaxApiV2 ? `/api/v2/dataset/${id}` : `/api/dataset/${id}`
+    const url = `/api/v2/dataset/${id}`
     return new Promise((resolve, reject) => {
       axios
         .get(url)
-        .then(action(async res => {
-          this.results = res.data.catalog_record
-          this.emailInfo = res.data.email_info
-          access.updateAccess(
-            res.data.catalog_record.research_dataset.access_rights,
-            res.data.has_permit ? res.data.has_permit : false,
-            res.data.application_state ? res.data.application_state : undefined
-          )
+        .then(
+          action(async res => {
+            this.results = res.data.catalog_record
+            this.emailInfo = res.data.email_info
+            this.Access.updateAccess(
+              res.data.catalog_record.research_dataset.access_rights,
+              res.data.has_permit ? res.data.has_permit : false,
+              res.data.application_state ? res.data.application_state : undefined
+            )
 
-          resolve(res.data)
-        }))
-        .catch(action(error => {
-          this.error = error
-          this.results = []
-          this.emailInfo = []
-          this.directories = []
-          reject(error)
-        }))
+            resolve(res.data)
+          })
+        )
+        .catch(
+          action(error => {
+            this.error = error
+            this.results = []
+            this.emailInfo = []
+            this.directories = []
+            reject(error)
+          })
+        )
     })
   }
 
   @action
   async fetchAndStoreFiles() {
-    const { metaxApiV2 } = this.Env
-    if (metaxApiV2) {
-      return this.Files.openDataset(this.results)
-    }
-    return null
+    return this.Files.openDataset(this.results)
   }
 
   @action

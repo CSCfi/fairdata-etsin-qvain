@@ -8,14 +8,12 @@ import { axe, toHaveNoViolations } from 'jest-axe'
 
 expect.extend(toHaveNoViolations)
 
+import { buildStores } from '../../../../js/stores'
 import '../../../../locale/translations'
 import etsinTheme from '../../../../js/styles/theme'
 import { ENTITY_TYPE } from '../../../../js/utils/constants'
 import ActorModal from '../../../../js/components/qvain/fields/actors/modal'
-import Env from '../../../../js/stores/domain/env'
-import QvainStoreClass from '../../../../js/stores/view/qvain'
 import { Actor } from '../../../../js/stores/view/qvain/qvain.actors'
-import LocaleStore from '../../../../js/stores/view/locale'
 import organizationMockGet, {
   dataset as actorsDataset,
 } from '../../../__testdata__/qvain.actors.data'
@@ -39,13 +37,8 @@ jest.mock('../../../../js/stores/stores', () => {
   }
 })
 
-const QvainStore = new QvainStoreClass(Env)
-Env.Flags.setFlag('METAX_API_V2', true)
-const stores = {
-  Env,
-  Qvain: QvainStore,
-  Locale: LocaleStore,
-}
+const stores = buildStores()
+
 beforeEach(() => {
   axios.get.mockReset()
   stores.Qvain.resetQvainStore()

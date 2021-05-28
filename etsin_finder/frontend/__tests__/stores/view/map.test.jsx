@@ -1,4 +1,6 @@
-import Map from '../../../js/stores/view/map'
+import MapClass from '../../../js/stores/view/map'
+
+const Map = new MapClass()
 
 const data = {
   wkt_point: {

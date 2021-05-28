@@ -11,19 +11,24 @@ import translate from 'counterpart'
 import '../../../locale/translations.js'
 import etsinTheme from '../../../js/styles/theme'
 import MetadataModal from '../../../js/components/qvain/fields/files/metadataModal'
-import Env from '../../../js/stores/domain/env'
-import QvainStoreClass from '../../../js/stores/view/qvain'
+import EnvClass from '../../../js/stores/domain/env'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import LocaleClass from '../../../js/stores/view/locale'
+import QvainClass from '../../../js/stores/view/qvain'
 import { Project, File, Directory } from '../../../js/stores/view/common.files.items'
-import LocaleStore from '../../../js/stores/view/locale'
 
 const getStores = () => {
-  Env.Flags.setFlag('METAX_API_V2', true)
-  const QvainStore = new QvainStoreClass(Env)
-  QvainStore.resetQvainStore()
+  const Env = new EnvClass()
+  const Accessibility = new AccessibilityClass(Env)
+  const ElasticQuery = new ElasticQueryClass(Env)
+  const Locale = new LocaleClass(Accessibility, ElasticQuery)
+  const Qvain = new QvainClass(Env)
+  Qvain.resetQvainStore()
   return {
     Env,
-    Qvain: QvainStore,
-    Locale: LocaleStore,
+    Qvain,
+    Locale,
   }
 }
 

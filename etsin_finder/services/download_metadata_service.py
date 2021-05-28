@@ -78,7 +78,7 @@ class DatasetMetadataService(FlaskService):
         try:
             metax_response = requests.get(url,
                                           stream=True,
-                                          timeout=15,
+                                          timeout=30,
                                           verify=self.verify_ssl,
                                           auth=(self.user, self.password))
             metax_response.raise_for_status()

@@ -28,7 +28,6 @@ class Qvain extends Resources {
     this.Submit = new Submit(this)
     this.original = undefined
     // Reset Files/Directories related data
-    this.resetFilesV1()
     this.Files.reset()
     this.dataCatalog = undefined
     this.preservationState = 0
@@ -239,8 +238,6 @@ class Qvain extends Resources {
       this.useDoi = false
     }
 
-    this.fromBackendFilesV1(researchDataset)
-
     // External resources
     const remoteResources = researchDataset.remote_resources
     if (remoteResources !== undefined) {
@@ -253,9 +250,9 @@ class Qvain extends Resources {
           r.download_url ? r.download_url.identifier : '',
           r.use_category
             ? {
-              label: r.use_category.pref_label.en,
-              value: r.use_category.identifier,
-            }
+                label: r.use_category.pref_label.en,
+                value: r.use_category.identifier,
+              }
             : null
         )
       )
@@ -263,11 +260,7 @@ class Qvain extends Resources {
     }
 
     // Load v2 files
-    if (this.Env.metaxApiV2) {
-      await this.Files.openDataset(dataset)
-    } else {
-      this.Files.reset()
-    }
+    await this.Files.openDataset(dataset)
   }
 
   @action editDataset = async dataset => {
@@ -329,13 +322,11 @@ class Qvain extends Resources {
       return false
     }
 
-    if (this.Env.metaxApiV2) {
-      if (this.hasBeenPublished) {
-        if (this.Files && (!this.Files.projectLocked || this.Files.draftOfHasProject === false)) {
-          return true // for published noncumulative datasets, allow adding files only if none exist yet
-        }
-        return this.isCumulative
+    if (this.hasBeenPublished) {
+      if (this.Files && (!this.Files.projectLocked || this.Files.draftOfHasProject === false)) {
+        return true // for published noncumulative datasets, allow adding files only if none exist yet
       }
+      return this.isCumulative
     }
 
     return true

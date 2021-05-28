@@ -4,7 +4,7 @@ import axios from 'axios'
 import { shallow } from 'enzyme'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../js/utils/constants'
-import Env from '../../../js/stores/domain/env'
+import EnvClass from '../../../js/stores/domain/env'
 import Packages from '../../../js/stores/view/packages'
 import { fakeDownload, applyMockAdapter } from '../../__testdata__/download.data'
 import { runInAction } from 'mobx'
@@ -35,6 +35,8 @@ const { PENDING, STARTED, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
 // jest 27 will change the default to 'modern' which will
 // require some changes.
 jest.useFakeTimers('legacy')
+
+const Env = new EnvClass()
 
 Env.Flags.setFlag('DOWNLOAD_API_V2', true)
 const mockAdapter = new MockAdapter(axios)

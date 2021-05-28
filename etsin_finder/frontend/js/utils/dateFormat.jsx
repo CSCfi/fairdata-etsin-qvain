@@ -1,16 +1,18 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
-import Locale from '../stores/view/locale'
+import Stores from '../stores'
+
+const { Locale } = Stores
 
 const formats = {
   datetime: {
@@ -22,7 +24,8 @@ const formats = {
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        seconds: '2-digit' }
+        seconds: '2-digit',
+      },
     },
     en: {
       lang: 'en-US',
@@ -32,8 +35,9 @@ const formats = {
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        seconds: '2-digit' }
-    }
+        seconds: '2-digit',
+      },
+    },
   },
   date: {
     fi: {
@@ -41,16 +45,18 @@ const formats = {
       options: {
         day: 'numeric',
         month: 'numeric',
-        year: 'numeric' }
+        year: 'numeric',
+      },
     },
     en: {
       lang: 'en-US',
       options: {
         year: 'numeric',
         month: 'long',
-        day: 'numeric' }
-    }
-  }
+        day: 'numeric',
+      },
+    },
+  },
 }
 
 const dateFormat = date => {

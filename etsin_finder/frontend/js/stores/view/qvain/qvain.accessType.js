@@ -9,9 +9,11 @@ const Model = (name, url) => ({
   url,
 })
 
+const defaultValue = Model(undefined, ACCESS_TYPE_URL.OPEN)
+
 class AccessType extends SingleValueField {
   constructor(Parent) {
-    super(Parent, accessTypeSchema, Model(undefined, ACCESS_TYPE_URL.OPEN))
+    super(Parent, accessTypeSchema, defaultValue)
     makeObservable(this)
   }
 

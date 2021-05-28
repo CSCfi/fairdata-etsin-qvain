@@ -32,6 +32,17 @@ class Packages {
 
   @observable packageModalPath = null
 
+  @observable manualDownloadUrlGetter = null
+
+  @action.bound openManualDownloadModal(item) {
+    this.manualDownloadUrlGetter = item
+    this.Notifications.setEmailError(null)
+  }
+
+  @action.bound closeManualDownloadModal() {
+    this.manualDownloadUrlGetter = null
+  }
+
   @action.bound openPackageModal(path) {
     this.packageModalPath = path
     this.Notifications.setEmailError(null)
@@ -173,10 +184,6 @@ class Packages {
   async fetch(datasetIdentifier) {
     try {
       // Fetch list of available downloadable packages
-      const { downloadApiV2 } = this.Env
-      if (!downloadApiV2) {
-        return
-      }
 
       runInAction(() => {
         if (this.datasetIdentifier !== datasetIdentifier) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
@@ -11,21 +11,15 @@ import { useStores } from '../../utils/stores'
 const RestrictionGrounds = () => {
   const {
     Qvain: {
-      RestrictionGrounds: { value: restrictionGrounds, set: setRestrictionGrounds, Schema, Model },
+      RestrictionGrounds: {
+        value: restrictionGrounds,
+        set: setRestrictionGrounds,
+        Model,
+        validate,
+        validationError,
+      },
     },
   } = useStores()
-  const [error, setError] = useState()
-
-  const handleBlur = () => {
-    const { identifier = '' } = restrictionGrounds || {}
-    Schema.validate(identifier, { strict: true })
-      .then(() => {
-        setError(null)
-      })
-      .catch(err => {
-        setError(err.errors)
-      })
-  }
 
   return (
     <RestrictionGroundsContainer>
@@ -34,17 +28,16 @@ const RestrictionGrounds = () => {
         htmlFor="restrictionGrounds-select"
         content="qvain.rightsAndLicenses.restrictionGrounds.title"
       />
-      <Translate
+      <Select
         name="restrictionGrounds"
         metaxIdentifier="restriction_grounds"
-        component={Select}
-        attributes={{ placeholder: 'qvain.rightsAndLicenses.restrictionGrounds.placeholder' }}
+        placeholder="qvain.rightsAndLicenses.restrictionGrounds.placeholder"
         model={Model}
         getter={restrictionGrounds}
         setter={setRestrictionGrounds}
-        onBlur={handleBlur}
+        onBlur={validate}
       />
-      {error && <ValidationError>{error}</ValidationError>}
+      {validationError && <ValidationError>{validationError}</ValidationError>}
       <Text>
         <Translate content="qvain.rightsAndLicenses.restrictionGrounds.text" />
       </Text>

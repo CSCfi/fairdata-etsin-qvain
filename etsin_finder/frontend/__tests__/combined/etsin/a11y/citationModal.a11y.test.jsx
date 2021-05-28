@@ -38,7 +38,7 @@ const flushPromises = () => new Promise(setImmediate)
 
 stores.DatasetQuery.getData()
 
-describe('Etsin contact modal', () => {
+describe('Etsin citation modal', () => {
   let wrapper, helper
 
   beforeAll(async () => {

@@ -15,11 +15,10 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
 import { InvertedButton } from '../../general/button'
-import Accessibility from '../../../stores/view/accessibility'
 import { useStores } from '../../../stores/stores'
 
 const ClearFilters = () => {
-  const { ElasticQuery, Matomo } = useStores()
+  const { ElasticQuery, Matomo, Accessibility } = useStores()
 
   const clear = () => {
     Matomo.recordEvent('CLEAR_FILTERS')

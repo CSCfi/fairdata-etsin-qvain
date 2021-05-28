@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import { Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { Input, Label } from './form'
 import ValidationError from '../errors/validationError'
 
@@ -18,21 +18,17 @@ const ModalInput = ({ Field, translationsRoot, datum, handleBlur, type, error, i
       <Label htmlFor={`${datum}Field`}>
         <Translate content={translations.label} /> {isRequired ? '*' : ''}
       </Label>
-      <Observer>
-        {() => (
-          <Translate
-            component={ModalInputElem}
-            type={type}
-            id={`${datum}Field`}
-            autoFocus
-            attributes={{ placeholder: translations.placeholder }}
-            disabled={Field.readonly}
-            value={Field.inEdit[datum] || ''}
-            onChange={event => changeAttribute(datum, event.target.value)}
-            onBlur={() => handleBlur()}
-          />
-        )}
-      </Observer>
+      <Translate
+        component={ModalInputElem}
+        type={type}
+        id={`${datum}Field`}
+        autoFocus
+        attributes={{ placeholder: translations.placeholder }}
+        disabled={Field.readonly}
+        value={Field.inEdit[datum] || ''}
+        onChange={event => changeAttribute(datum, event.target.value)}
+        onBlur={handleBlur}
+      />
       {error && <ModalError>{error}</ModalError>}
     </>
   )
@@ -66,4 +62,4 @@ export const ModalInputElem = styled(Input)`
   }
 `
 
-export default ModalInput
+export default observer(ModalInput)

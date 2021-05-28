@@ -12,12 +12,9 @@ import re
 from etsin_finder.utils.utils import ensure_app
 
 default_supported_flags = {
-    'DOWNLOAD_API_V2.BACKEND',
-    'DOWNLOAD_API_V2.FRONTEND',
     'DOWNLOAD_API_V2.EMAIL.FRONTEND',
     'DOWNLOAD_API_V2.EMAIL.BACKEND',
-    'METAX_API_V2.BACKEND',
-    'METAX_API_V2.FRONTEND',
+    'DOWNLOAD_API_V2.OPTIONS',
     'UI.BOTTOM_SUBMIT_BUTTONS',
     'UI.CITATION',
     "MATOMO_TRACKING"
