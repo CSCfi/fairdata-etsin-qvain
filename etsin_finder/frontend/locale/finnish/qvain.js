@@ -12,13 +12,17 @@ import temporalAndSpatial from './qvain.temporalAndSpatial'
 import validationMessages from './qvain.validationMessages'
 
 const qvainFinnish = {
-  saveDraft: 'Tallenna Luonnos',
-  submit: 'Julkaise Aineisto',
-  edit: 'Päivitä Aineisto',
+  saveDraft: 'Tallenna luonnos',
+  submit: 'Tallenna ja julkaise',
+  edit: 'Päivitä aineisto',
   unsavedChanges:
     'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
   consent:
-    'Käyttämällä Qvain -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut heille miten he voivat saada henkilötietonsa poistettua palvelusta. Käyttämällä Qvain -työkalua käyttäjä hyväksyy <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.',
+    `Käyttämällä Qvain -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen
+    muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut
+    heille miten he voivat saada henkilötietonsa poistettua palvelusta.
+    Käyttämällä Qvain -työkalua käyttäjä hyväksyy
+    <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.`,
   submitStatus: {
     success: 'Aineisto julkaistu!',
     draftSuccess: 'Luonnos tallennettu!',
@@ -74,7 +78,7 @@ const qvainFinnish = {
     render: 'Aineiston renderöinnissä tapahtui virhe',
     component: 'Kentän %(field)s renderöinnissä tapahtui virhe',
   },
-  backLink: ' Takaisin aineistolistaan',
+  backLink: ' Takaisin aineistoihin',
   common: {
     save: 'Tallenna',
     cancel: 'Peruuta',
@@ -82,7 +86,7 @@ const qvainFinnish = {
   confirmClose: {
     warning: 'Sinulla on tallentamattomia muutoksia. Perutaanko muutokset?',
     confirm: 'Kyllä, peru muutokset',
-    cancel: 'Ei, jatka muokkausta',
+    cancel: 'Ei, jatka muokkaamista',
   },
   select: {
     placeholder: 'Valitse vaihtoehto',
@@ -98,7 +102,7 @@ const qvainFinnish = {
     placeholder: {
       name: 'Nimi',
       email: 'Sähköposti',
-      identifier: 'esim. http://orcid.org',
+      identifier: 'Esim. http://orcid.org',
     },
   },
   actors,

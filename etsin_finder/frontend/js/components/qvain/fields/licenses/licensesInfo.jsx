@@ -7,7 +7,7 @@ const LicensesInfo = () => (
     <Translate component="h3" content="qvain.rightsAndLicenses.license.title" />
     <Translate component="p" content="qvain.rightsAndLicenses.license.infoText" />
     <Translate component="h3" content="qvain.rightsAndLicenses.accessType.title" />
-    <Translate component="p" content="qvain.rightsAndLicenses.accessType.infoText" />
+    <Translate component="p" content="qvain.rightsAndLicenses.accessType.infoText" unsafe />
   </>
 )
 

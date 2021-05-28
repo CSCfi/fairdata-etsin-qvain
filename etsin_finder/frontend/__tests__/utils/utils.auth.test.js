@@ -46,15 +46,11 @@ describe('utils: Auth', () => {
 
 describe('when calling getUsername', () => {
   let returnValue
-  const testUser = 'abc-user-123'
 
-  describe('given Stores.Env.environment: non-development', () => {
+  describe('given user name', () => {
     beforeEach(() => {
       const props = {
         Stores: {
-          Env: {
-            environment: 'non-dev',
-          },
           Auth: {
             user: {
               name: 'name',
@@ -68,29 +64,6 @@ describe('when calling getUsername', () => {
 
     test('should return Stores.Auth.user.name', () => {
       returnValue.should.eql('name')
-    })
-  })
-
-  describe('given environment: development and Stores.Auth.user.commonName: "abc-user-123"', () => {
-    beforeEach(() => {
-      const props = {
-        Stores: {
-          Env: {
-            environment: 'development',
-          },
-          Auth: {
-            user: {
-              commonName: 'Teppo Testikäyttäjä',
-            },
-          },
-        },
-      }
-
-      returnValue = getUsername(props)
-    })
-
-    test('should return "abc-user-123"', () => {
-      returnValue.should.eql(testUser)
     })
   })
 })

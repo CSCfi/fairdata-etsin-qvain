@@ -1,16 +1,11 @@
 const project = {
   title: 'Producer Project',
   description: 'A project in which the dataset was created',
-  addButton: 'Add project',
-  editButton: 'Edit project',
+  addButton: 'Add',
+  editButton: 'Edit',
   tooltipContent: {
     title: 'Producer Project',
     paragraph: 'A project in which the dataset was created',
-  },
-  project: {
-    title: 'Add project',
-    addButton: 'Add project',
-    description: 'A project in which the dataset was created',
   },
   organization: {
     title: 'Organization *',
@@ -32,8 +27,7 @@ const project = {
     },
     identifier: {
       label: 'Identifier',
-      description:
-        'Recommended best practice is to identify the resource by means of a string conforming to a formal identification system. An unambiguous reference to the resource within a given context.',
+      description: 'It is recommended to use general identifiers, if available',
       placeholder: 'Add identifier',
     },
     fundingIdentifier: {
@@ -48,10 +42,6 @@ const project = {
       noOptions: 'Funder type not found',
     },
     organization: {
-      placeholder: {
-        organization: 'Select an organization',
-        department: 'Select a department',
-      },
       levels: {
         organization: 'Organization',
         department: 'Department',
@@ -63,26 +53,26 @@ const project = {
     fundingAgency: {
       contributorType: {
         title: 'Contributor type',
-        description:
-          'Contributor type of the Organization. Based on the subset of the DataCite reference data',
+        description: "Specify organization's role in the project.",
         organization: {
           label: 'Select organization',
           validation: 'A valid organization is required',
         },
         identifier: {
           label: 'Contributor role',
+          placeholder: 'Select contributor role',
         },
         definition: {
-          label: 'Definition',
-          description: 'A statement or formal explanation of the meaning of a concept.',
-          placeholderEn: 'Definition (English)',
-          placeholderFi: 'Definition (Finnish)',
+          label: 'Description',
+          description: "Description of the organization's role.",
+          placeholderEn: 'Description (English)',
+          placeholderFi: 'Description (Finnish)',
         },
-        addButton: 'Add contributor type',
-        editButton: 'Edit contributor type',
+        addButton: 'Add role',
+        editButton: 'Edit role',
       },
-      addButton: 'Add agency',
-      editButton: 'Edit agency',
+      addButton: 'Add organization',
+      editButton: 'Edit organization',
     },
   },
 }

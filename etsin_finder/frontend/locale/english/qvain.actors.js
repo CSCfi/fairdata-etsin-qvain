@@ -2,8 +2,13 @@ const actors = {
   title: 'Actors',
   infoTitle: 'Actors info',
   addButton: 'Add new actor',
-  infoText:
-    'Add at least one Creator. First, select the type of actor (person or organization). Then choose the roles the actor has (you can add multiple). After that, fill in the details: organization is mandatory for a person. You can edit added actors by clicking the pen icon or remove it by clicking the X icon.',
+  infoText: `<p>Specify people or organizations that have been part of the research or making
+  of the dataset. You can specify Creators, Publisher, Curators, Rights Holders and Contributors.</p>
+  <p>First, select the type of actor (person or organization).
+  Then choose the roles the actor has (you can specify multiple roles).
+  After that, fill in the details: organization is mandatory for a person.</p>
+  <p>You can edit added actors by clicking the pen icon or remove it by clicking the X icon.</p>
+  `,
   errors: {
     loadingReferencesFailed: 'Error loading reference organizations.',
   },
@@ -14,12 +19,12 @@ const actors = {
       edit: 'Edit actor',
     },
     groups: {
-      type: 'Actor Type',
+      type: 'Actor type',
       roles: 'Roles',
-      info: 'Actor Information',
+      info: 'Information',
     },
-    help:
-      'Having at least one creator for the dataset is mandatory. Notice that one actor can have multiple roles.',
+    help: `Having at least one Creator and Publisher for the dataset is required.
+      Notice that one actor can have multiple roles.`,
     radio: {
       person: 'Person',
       organization: 'Organization',
@@ -35,7 +40,8 @@ const actors = {
     name: {
       placeholder: {
         organization: 'Name',
-        person: 'First And Last Name',
+        person: 'First and last name',
+        manualOrganization: 'Enter name for organization',
       },
       label: 'Name',
     },
@@ -45,11 +51,14 @@ const actors = {
     },
     identifier: {
       label: 'Identifier',
-      placeholder: 'e.g http://orcid.org',
+      placeholder: {
+        person: 'E.g. http://orcid.org',
+        organization: 'E.g RAID-identifier or Business ID',
+      },
     },
     organization: {
       label: 'Organization',
-      placeholder: 'E.g. University of Helsinki',
+      placeholder: 'Search by typing or add new organization',
       placeholderChild: '+ Add department or unit',
       loading: 'Loading organizations...',
       labels: {
@@ -58,7 +67,7 @@ const actors = {
         identifier: 'Organization identifier',
       },
       options: {
-        create: 'Add new organization manually',
+        create: 'Add new organization',
         dataset: 'Organizations in dataset',
         presets: 'Preset organizations',
       },

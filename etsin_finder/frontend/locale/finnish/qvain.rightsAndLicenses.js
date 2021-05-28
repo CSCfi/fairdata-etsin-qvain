@@ -3,8 +3,13 @@ const rightsAndLicenses = {
   infoTitle: 'Oikeudet ja lisenssit info',
   accessType: {
     title: 'Pääsyoikeus',
-    infoText:
-      'Tällä kentällä määrittelet, miten aineiston (tiedostot) saa käyttöönsä. Tämä kenttä ei vaikuta siihen, miten tämä kuvailu näkyy. Kuvailu näkyy aina automaattisesti Etsimessä julkaisun jälkeen. Jos valitset jotain muuta kuin Avoin (Open), myös syy, miksi tiedostojen latausta on rajoitettu (Restricition Grounds) on pakollinen tieto. Jos valitse "Embargo", määrittele myös embargon expiroitumisajankohta.',
+    infoText: `<p>Tällä tiedolla määrittelet, miten julkaistun aineiston tiedostot saa käyttöönsä.
+    Tämä kenttä ei vaikuta aineiston kuvailutietojen (metadata) näkyvyyteen.
+    Kuvailu näkyy aina automaattisesti Etsimessä julkaisun jälkeen.</p>
+
+    <p>Jos valitset jonkin muun vaihtoehdon kuin "Avoin" ("Open"),
+    valitse myös peruste tiedostojen lataamisen rajoittamiselle.
+    Jos valitset vaihtoehdon "Embargo", määrittele myös embargon päättymisajankohta.</p>`,
     placeholder: 'Valitse vaihtoehto',
     permitInfo:
       'Aineiston omistaja (alkuperäinen kuvailun tekijä) pystyy oletuksena hyväksymään aineiston datan käyttöön liittyvät käyttölupahakemukset. Käyttölupatoimintoa kehitetään, ja jossain vaiheessa tullaan lisäämään mahdollisuus myös muiden ko. organisaation edustajien päästä, joko omistajan lisäksi tai sijaan, hyväksymään käyttölupahakemuksia. Valitsemalla pääsyoikeudeksi "Vaatii luvan hakemista" / "Requires permission" käyttäjä sitoutuu näihin muutoksiin.',
@@ -12,17 +17,20 @@ const rightsAndLicenses = {
   embargoDate: {
     label: 'Embargo loppumispäivämäärä',
     placeholder: 'Päivämäärä',
-    help: 'Oletuksena embargo ei lopu jollei päivämäärää aseteta.',
+    help:
+      'Jos päivämäärää ei aseteta, embargo ei lopu ja näin ollen tiedostot eivät koskaan tule ladattavaksi..',
   },
   restrictionGrounds: {
-    title: 'Saatavuutta rajoitettu',
+    title: 'Rajoituksen peruste',
     placeholder: 'Valitse vaihtoehto',
-    text: 'Jos pääsyoikeus tyyppi ei ole Avoin, valitse rajoituksen syy.',
+    text:
+      'Jos pääsyoikeus on jokin muu kuin "Avoin", valitse peruste tiedostojen lataamisen rajoittamiselle. ',
   },
   license: {
     title: 'Lisenssi',
-    infoText:
-      'Lisenssi on tärkeä osa aineiston kuvailua. Lisenssillä määrittelet, miten aineistoa voi käyttää. Oletuksena on valittuna suositeltu CC BY 4.0. Jos haluat alasvetovalikosta valinnan sijaan määrittää lisenssin URL -osoitteen itse, kirjoita lisenssin URL ja valitse alasvetovalikon alusta "Muu (URL)".',
+    infoText: `Lisenssillä määrittelet, miten aineistoa voi käyttää.
+    Oletuksena on valittuna tutkimusaineistoille suositeltu CC BY 4.0.
+    Jos haluat määrittää lisenssin URL-osoitteen itse, kirjoita kenttään lisenssin verkko-osoite https:// -muodossa.`,
     placeholder: 'Valitse vaihtoehto',
     other: {
       label: 'URL',

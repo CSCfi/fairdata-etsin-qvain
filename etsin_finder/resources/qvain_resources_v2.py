@@ -61,6 +61,8 @@ class FileCharacteristics(Resource):
 
         service = MetaxQvainAPIService()
         file_obj = service.get_file(file_id)
+        if not file_obj:
+            return 'Access denied or file not found', 404
         project_identifier = file_obj.get('project_identifier')
         user_ida_projects = authentication.get_user_ida_projects() or []
 
