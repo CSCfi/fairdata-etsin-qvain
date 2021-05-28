@@ -41,9 +41,9 @@ class ReferenceField {
     this.Parent.setChanged(true)
   }
 
-  @action
-  addItemStr = () => {
-    if (this.itemStr) {
+  @action.bound
+  addItemStr() {
+    if (this.itemStr && this.validate()) {
       this.add(this.itemStr)
       this.removeItemStr()
     }
@@ -69,6 +69,40 @@ class ReferenceField {
   @action
   setValidationError = value => {
     this.validationError = value
+  }
+
+  @action.bound
+  validateStr() {
+    this.setValidationError(null)
+    if (!this.itemSchema || !this.itemStr) return true
+    try {
+      this.itemSchema.validateSync(this.itemStr)
+    } catch (err) {
+      this.setValidationError(err.errors)
+      return false
+    }
+
+    if (this.storage.includes(this.itemStr)) {
+      this.setValidationError(`${this.translationsRoot}.alreadyAdded`)
+      return false
+    }
+
+    return true
+  }
+
+  @action.bound
+  validate() {
+    this.setValidationError(null)
+    if (!this.Schema || !this.validateStr()) return false
+    return this.Schema.validate(this.storage, { strict: true })
+      .then(res => {
+        this.setValidationError(null)
+        res(true)
+      })
+      .catch(err => {
+        this.setValidationError(err.errors)
+        return false
+      })
   }
 
   toBackend = () => this.storage.map(item => item.url)

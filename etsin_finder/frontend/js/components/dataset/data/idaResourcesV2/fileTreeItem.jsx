@@ -26,12 +26,8 @@ import {
 } from '../../../general/files/items'
 import getDownloadAction from './downloadActions'
 import IconButton from '../common/iconButton'
-
-export const DownloadButton = styled(IconButton)`
-  width: 7.5em;
-`
-
-export const InfoButton = styled(IconButton)``
+import FlaggedComponent from '../../../general/flaggedComponent'
+import { MoreButton, SplitButtonContainer } from './splitButton'
 
 const download = (datasetIdentifier, item) => {
   const handle = window.open(
@@ -46,7 +42,7 @@ const download = (datasetIdentifier, item) => {
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const { Files, directoryView, extraProps } = treeProps
-  const { allowDownload, Packages, downloadApiV2 } = extraProps
+  const { allowDownload, Packages } = extraProps
   const { setInInfo, datasetIdentifier } = Files
   let content = null
   const name = item.name
@@ -83,21 +79,21 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const haveMetadata = hasMetadata(item)
   const { type } = item
   let downloadFunc = () => download(datasetIdentifier, item)
+  let moreFunc = null
+  let moreAriaLabel = null
   let downloadIcon = faDownload
   let downloadIconSpin = false
   let downloadButtonText = 'dataset.dl.download'
   let downloadButtonColor = null
-  let downloadTooltip = null
 
-  if (downloadApiV2) {
-    const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
-    downloadFunc = action.func
-    downloadIcon = action.icon
-    downloadIconSpin = action.spin
-    downloadButtonText = action.buttonLabel
-    downloadButtonColor = action.color
-    downloadTooltip = action.tooltip
-  }
+  const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
+  downloadFunc = action.func
+  moreFunc = action.moreFunc
+  moreAriaLabel = action.moreAriaLabel
+  downloadIcon = action.icon
+  downloadIconSpin = action.spin
+  downloadButtonText = action.buttonLabel
+  downloadButtonColor = action.color
 
   const infoButton = (
     <Translate
@@ -105,7 +101,6 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       fontSize="11pt"
       content="dataset.dl.info"
       color="darkgray"
-      icon={faInfoCircle}
       invert
       onClick={() => setInInfo(item)}
       attributes={{
@@ -124,13 +119,27 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       color={downloadButtonColor}
       icon={downloadIcon}
       spin={downloadIconSpin}
-      attributes={{
-        tooltip: downloadTooltip,
-      }}
       disabled={!allowDownload}
       onClick={downloadFunc}
       with={{ name }}
     />
+  )
+
+  const downloadButtonParts = (
+    <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
+      <SplitButtonContainer split={moreFunc}>
+        {downloadButton}
+        {moreFunc && (
+          <Translate
+            component={MoreButton}
+            color={downloadButtonColor}
+            disabled={!allowDownload}
+            onClick={moreFunc}
+            attributes={{ 'aria-label': moreAriaLabel }}
+          />
+        )}
+      </SplitButtonContainer>
+    </FlaggedComponent>
   )
 
   return (
@@ -139,10 +148,18 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       <Group>{content}</Group>
       {sizeTag}
       {infoButton}
-      {downloadButton}
+      {downloadButtonParts}
     </ItemRow>
   )
 }
+
+export const DownloadButton = styled(IconButton)`
+  width: 7.5em;
+`
+
+export const InfoButton = styled(IconButton).attrs({
+  icon: faInfoCircle,
+})``
 
 const Name = styled.span`
   white-space: nowrap;

@@ -14,7 +14,6 @@ import React, { useEffect } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import Accessibility from '../stores/view/accessibility'
 import { Home, Search, Dataset, Qvain, QvainDatasets } from '../routes'
 import ErrorPage from '../components/errorpage'
 
@@ -27,6 +26,7 @@ const Content = ({ contentRef }) => {
     Auth,
     Env: { isQvain, separateQvain, getQvainUrl },
     Matomo: { changeService },
+    Accessibility,
   } = useStores()
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const Content = ({ contentRef }) => {
     } else {
       changeService('ETSIN')
     }
-  }, [isQvain, changeService])
+  }, [Accessibility, isQvain, changeService])
 
   if (Auth.initializing) return null
 

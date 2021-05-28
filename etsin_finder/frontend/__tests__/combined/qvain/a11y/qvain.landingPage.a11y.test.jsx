@@ -9,16 +9,14 @@ import '../../../../locale/translations'
 import stores from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import LandingPage from '../../../../js/components/qvain/views/landingPage/index.jsx'
-import Accessibility from '../../../../js/stores/view/accessibility'
 
-jest.mock('../../../../js/stores/view/accessibility')
 expect.extend(toHaveNoViolations)
 
 describe('Qvain landing page', () => {
   let wrapper
 
   beforeAll(async () => {
-    Accessibility.handleNavigation = jest.fn()
+    stores.Accessibility.handleNavigation = jest.fn()
     wrapper = mount(
       <StoresProvider store={stores}>
         <BrowserRouter>
@@ -43,6 +41,6 @@ describe('Qvain landing page', () => {
   })
 
   it('should call Accessibility.handleNavigation', async () => {
-    expect(Accessibility.handleNavigation.mock.calls).toEqual([[]])
+    expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([[]])
   })
 })

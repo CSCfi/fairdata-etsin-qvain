@@ -3,7 +3,7 @@ import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 
-const RelatedResource = (
+export const RelatedResource = (
   uiid = uuidv4(),
   name = { fi: '', en: '', und: '' },
   description = { fi: '', en: '', und: '' },

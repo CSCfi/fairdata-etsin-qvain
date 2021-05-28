@@ -190,7 +190,7 @@ class Files extends FilesBase {
     clear(item)
   }
 
-  @action applyInEdit = values => {
+  @action.bound applyInEdit(values) {
     this.inEdit.title = values.title
     this.inEdit.description = values.description
     this.inEdit.useCategory = values.useCategory

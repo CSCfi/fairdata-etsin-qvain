@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -91,11 +91,18 @@ function Dataset({
   highlight,
 }) {
   const {
-    Env: { metaxApiV2, getEtsinUrl },
+    Env: { getEtsinUrl },
     Locale: { lang },
     Matomo,
   } = useStores()
+  const rowRef = useRef()
   const actions = []
+
+  useEffect(() => {
+    if (highlight && rowRef?.current?.scrollIntoView) {
+      rowRef.current.scrollIntoView({ block: 'center' })
+    }
+  }, [highlight])
 
   actions.push({
     text: 'qvain.datasets.useAsTemplate',
@@ -103,7 +110,6 @@ function Dataset({
     handler: () => handleUseAsTemplate(dataset),
   })
   if (
-    metaxApiV2 &&
     !dataset.next_draft &&
     dataset.next_dataset_version === undefined &&
     dataset.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.IDA &&
@@ -114,7 +120,7 @@ function Dataset({
       handler: () => handleCreateNewVersion(dataset.identifier),
     })
   }
-  if (metaxApiV2 && dataset.next_draft) {
+  if (dataset.next_draft) {
     actions.push({
       text: 'qvain.datasets.revertButton',
       danger: true,
@@ -133,7 +139,7 @@ function Dataset({
   }
 
   return (
-    <DatasetRow key={dataset.identifier} tabIndex="0" highlight={highlight}>
+    <DatasetRow ref={rowRef} key={dataset.identifier} tabIndex="0" highlight={highlight}>
       <BodyCellWordWrap style={titleCellStyle}>
         {indent && <Marker />}
         {getTitle(dataset, lang)}
@@ -148,11 +154,9 @@ function Dataset({
           <TablePasState preservationState={dataset.preservation_state} />
         )}
       </BodyCellWordWrap>
-      {metaxApiV2 && (
-        <BodyCell>
-          <Translate content={datasetStateTranslation(dataset)} />
-        </BodyCell>
-      )}
+      <BodyCell>
+        <Translate content={datasetStateTranslation(dataset)} />
+      </BodyCell>
       <BodyCell>{formatAge(currentTimestamp, dataset.date_created)}</BodyCell>
       <BodyCellActions>
         <Translate

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { withTheme } from 'styled-components'
+import styled, { withTheme } from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import CreatableSelect from 'react-select/creatable'
@@ -18,7 +18,7 @@ import {
   sortOptions,
   autoSortOptions,
 } from '../../utils/select'
-import { ValidationErrors } from '../../general/errors/validationError'
+import { ValidationError } from '../../general/errors/validationError'
 import { withStores } from '../../utils/stores'
 
 export class License extends Component {
@@ -148,14 +148,34 @@ export class License extends Component {
           styles={styles}
         />
         {licenseErrors && (
-          <ValidationErrors
-            errors={Object.entries(licenseErrors).map(([url, err]) => `${url}: ${err}`)}
-          />
+          <Errors>
+            {Object.entries(licenseErrors).map(([url, err]) => (
+              <ErrorRow key={url}>
+                <ErrorLabel>{url}:</ErrorLabel>
+                <ValidationError>{err}</ValidationError>
+              </ErrorRow>
+            ))}
+          </Errors>
         )}
       </Card>
     )
   }
 }
+
+const Errors = styled.div`
+  color: ${props => props.theme.color.redText};
+  margin-top: 0.5rem;
+  p {
+    margin: 0;
+    display: inline;
+  }
+`
+
+const ErrorRow = styled.div``
+
+export const ErrorLabel = styled.span`
+  margin-right: 0.5rem;
+`
 
 export default withFieldErrorBoundary(
   withTheme(withStores(observer(License))),

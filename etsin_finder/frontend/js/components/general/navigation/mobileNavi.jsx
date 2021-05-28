@@ -19,57 +19,60 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCog } from '@fortawesome/free-solid-svg-icons'
 
-import Accessibility from '../../../stores/view/accessibility'
 import DropdownMenu from './dropdownMenu'
 import LangToggle from './langToggle'
 import LoginButton from './loginButton'
 import { Link } from '../button'
+import { useStores } from '../../../stores/stores'
 
-const MobileNavi = props => (
-  <MobileItems>
-    <DropdownMenu
-      transparent
-      buttonContent={<FontAwesomeIcon title="Menu" icon={faBars} size="lg" />}
-      transparentButton
-    >
-      {props.naviRoutes.map(route => (
-        <NavItem
-          key={route.path}
-          exact={route.exact}
-          to={route.path}
-          onPointerOver={() => {
-            if (route.loadableComponent) {
-              route.loadableComponent.preload()
-            }
-          }}
-          onClick={() => {
-            Accessibility.announce(translate('changepage', { page: translate(route.label) }))
-          }}
-        >
-          <Translate content={route.label} />
-        </NavItem>
-      ))}
-    </DropdownMenu>
-    <DropdownMenu
-      transparent
-      buttonContent={<FontAwesomeIcon title="Settings" icon={faCog} size="lg" />}
-      transparentButton
-    >
-      <CustomContainer>
-        <Row>
-          {props.children}
-          <LangToggle mobile margin="0.4em 0.4em 0.4em 0em" />
-          <Link width="100%" href={props.helpUrl} rel="noopener noreferrer" target="_blank">
-            <Translate content="nav.help" />
-          </Link>
-        </Row>
-      </CustomContainer>
-    </DropdownMenu>
-    <LoginContainer>
-      <LoginButton loginThroughService={props.loginThroughService} />
-    </LoginContainer>
-  </MobileItems>
-)
+const MobileNavi = ({ helpUrl, naviRoutes, children, loginThroughService }) => {
+  const { Accessibility } = useStores()
+  return (
+    <MobileItems>
+      <DropdownMenu
+        transparent
+        buttonContent={<FontAwesomeIcon title="Menu" icon={faBars} size="lg" />}
+        transparentButton
+      >
+        {naviRoutes.map(route => (
+          <NavItem
+            key={route.path}
+            exact={route.exact}
+            to={route.path}
+            onPointerOver={() => {
+              if (route.loadableComponent) {
+                route.loadableComponent.preload()
+              }
+            }}
+            onClick={() => {
+              Accessibility.announce(translate('changepage', { page: translate(route.label) }))
+            }}
+          >
+            <Translate content={route.label} />
+          </NavItem>
+        ))}
+      </DropdownMenu>
+      <DropdownMenu
+        transparent
+        buttonContent={<FontAwesomeIcon title="Settings" icon={faCog} size="lg" />}
+        transparentButton
+      >
+        <CustomContainer>
+          <Row>
+            {children}
+            <LangToggle mobile margin="0.4em 0.4em 0.4em 0em" />
+            <Link width="100%" href={helpUrl} rel="noopener noreferrer" target="_blank">
+              <Translate content="nav.help" />
+            </Link>
+          </Row>
+        </CustomContainer>
+      </DropdownMenu>
+      <LoginContainer>
+        <LoginButton loginThroughService={loginThroughService} />
+      </LoginContainer>
+    </MobileItems>
+  )
+}
 
 const LoginContainer = styled.div`
   display: flex;

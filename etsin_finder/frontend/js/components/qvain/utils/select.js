@@ -32,7 +32,7 @@ const getSingleOption = (model, options, value) => {
 }
 
 // Call setter for single item
-export const onChange = (callback) => selection => {
+export const onChange = callback => selection => {
   if (selection !== null) {
     callback(selection)
   } else {
@@ -41,7 +41,7 @@ export const onChange = (callback) => selection => {
 }
 
 // Call setter for array
-export const onChangeMulti = (callback) => selection => {
+export const onChangeMulti = callback => selection => {
   if (!selection) {
     callback([])
     return
@@ -50,7 +50,7 @@ export const onChangeMulti = (callback) => selection => {
 }
 
 // Get label for option, assumes that first key of model corresponds to label
-export const getGroupLabel = (lang) => group => group?.label[lang]
+export const getGroupLabel = lang => group => group?.label[lang]
 
 // Get label for option, assumes that first key of model corresponds to label
 export const getOptionLabel = (model, lang) => {
@@ -67,7 +67,7 @@ export const getOptionLabel = (model, lang) => {
 }
 
 // Get label for option, assumes that second key of model corresponds to url
-export const getOptionValue = (model) => {
+export const getOptionValue = model => {
   const urlKey = Object.keys(model())[1]
   return opt => opt[urlKey]
 }
@@ -90,7 +90,7 @@ const parseRefResponse = (res, model) => {
   return hits.map(hit => model(hit._source.label, hit._source.uri))
 }
 
-const getCollator = (lang) => new Intl.Collator(lang, { numeric: true, sensitivity: 'base' })
+const getCollator = lang => new Intl.Collator(lang, { numeric: true, sensitivity: 'base' })
 
 // Sort groups array and their options in-place according to lang
 export const sortGroups = async (model, lang, groups, sortFunc = null) => {

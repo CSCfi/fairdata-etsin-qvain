@@ -4,20 +4,23 @@ import axios from 'axios'
 
 import '../../../locale/translations.js'
 import { RemoveModal as RemoveModalBase } from '../../../js/components/qvain/views/datasets/removeModal'
-import QvainStoreClass from '../../../js/stores/view/qvain'
-import LocaleStore from '../../../js/stores/view/locale'
-import EnvStore from '../../../js/stores/domain/env'
+import QvainClass from '../../../js/stores/view/qvain'
+import AccessibilityClass from '../../../js/stores/view/accessibility'
+import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import LocaleClass from '../../../js/stores/view/locale'
+import EnvClass from '../../../js/stores/domain/env'
 
 jest.mock('axios')
 
-const mockEnv = EnvStore
-const mockStores = new QvainStoreClass(mockEnv)
-const mockLocale = LocaleStore
+const mockEnv = new EnvClass()
+const mockStores = new QvainClass(mockEnv)
+const Accessibility = new AccessibilityClass(mockEnv)
+const ElasticQuery = new ElasticQueryClass(mockEnv)
+const mockLocale = new LocaleClass(Accessibility, ElasticQuery)
 
 jest.mock('../../../js/stores/stores', () => {
   const getStores = () => {
     mockStores.resetQvainStore()
-    mockEnv.Flags.setFlag('METAX_API_V2', true)
     return {
       Qvain: mockStores,
       Env: mockEnv,

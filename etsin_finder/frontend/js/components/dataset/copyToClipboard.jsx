@@ -10,7 +10,7 @@
    */
 }
 
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -29,6 +29,7 @@ const CopyToClipboard = ({
   tooltipSuccess,
   tooltipPosition,
   horizontal,
+  disabled,
 }) => {
   const Stores = useStores()
   const { lang } = Stores.Locale
@@ -36,17 +37,30 @@ const CopyToClipboard = ({
 
   const [tooltipText, setTooltipText] = useState('dataset.copyToClipboard')
   const [copiedStatus, setCopiedStatus] = useState(false)
+  const timeoutIndex = useRef()
+
+  const clearCopyTimeout = () => {
+    if (timeoutIndex.current) {
+      clearTimeout(timeoutIndex.current)
+      timeoutIndex.current = null
+    }
+  }
 
   const onClick = () => {
     navigator.clipboard.writeText(content)
     setCopiedStatus(true)
     setTooltipText(tooltipSuccess)
     announce(translate(tooltipSuccess, { locale: lang }))
-    setTimeout(() => {
+    clearCopyTimeout()
+    const index = setTimeout(() => {
       setCopiedStatus(false)
       setTooltipText(tooltip)
     }, 4000)
+    timeoutIndex.current = index
   }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => clearCopyTimeout, [])
 
   // return styled link
   return (
@@ -55,7 +69,7 @@ const CopyToClipboard = ({
       attributes={{ title: tooltipText }}
       position={tooltipPosition}
     >
-      <IconButton horizontal={horizontal} onClick={onClick}>
+      <IconButton horizontal={horizontal} onClick={onClick} disabled={disabled}>
         <IconContent horizontal={horizontal} hide={copiedStatus}>
           <FontAwesomeIcon icon={faClipboard} />
           <Translate content={label} />
@@ -112,17 +126,20 @@ const IconButton = styled(Button)`
 `
 
 CopyToClipboard.propTypes = {
-  content: PropTypes.string.isRequired,
+  content: PropTypes.string,
   label: PropTypes.string.isRequired,
   tooltip: PropTypes.string.isRequired,
   tooltipSuccess: PropTypes.string.isRequired,
   tooltipPosition: PropTypes.oneOf(['top', 'right', 'left']),
   horizontal: PropTypes.bool,
+  disabled: PropTypes.bool,
 }
 
 CopyToClipboard.defaultProps = {
+  content: '',
   tooltipPosition: 'top',
   horizontal: false,
+  disabled: false,
 }
 
 export default CopyToClipboard

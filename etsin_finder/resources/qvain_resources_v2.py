@@ -32,7 +32,7 @@ from etsin_finder.utils.qvain_utils_v2 import (
     get_access_granter,
 )
 
-from etsin_finder.services.qvain_service_v2 import MetaxQvainAPIServiceV2
+from etsin_finder.services.qvain_service import MetaxQvainAPIService
 
 from etsin_finder.utils.log_utils import log_request
 
@@ -59,8 +59,10 @@ class FileCharacteristics(Resource):
         if request.content_type != 'application/json':
             return 'Expected content-type application/json', 403
 
-        service = MetaxQvainAPIServiceV2()
+        service = MetaxQvainAPIService()
         file_obj = service.get_file(file_id)
+        if not file_obj:
+            return 'Access denied or file not found', 404
         project_identifier = file_obj.get('project_identifier')
         user_ida_projects = authentication.get_user_ida_projects() or []
 
@@ -148,7 +150,7 @@ class QvainDatasets(Resource):
         no_pagination = args.get('no_pagination', None)
 
         user_id = authentication.get_user_csc_name()
-        service = MetaxQvainAPIServiceV2()
+        service = MetaxQvainAPIService()
         result = service.get_datasets_for_user(user_id, limit, offset, no_pagination, data_catalog_matcher=data_catalog_matcher)
         if result:
             # Limit the amount of items to be sent to the frontend
@@ -199,7 +201,7 @@ class QvainDatasets(Resource):
 
         metax_ready_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
         metax_ready_data["access_granter"] = get_access_granter()
-        service = MetaxQvainAPIServiceV2()
+        service = MetaxQvainAPIService()
         metax_response = service.create_dataset(metax_ready_data, params)
         return metax_response
 
@@ -223,7 +225,7 @@ class QvainDataset(Resource):
         if error is not None:
             return error
 
-        service = MetaxQvainAPIServiceV2()
+        service = MetaxQvainAPIService()
         response, status = service.get_dataset(cr_id)
         return response, status
 
@@ -274,7 +276,7 @@ class QvainDataset(Resource):
         metax_ready_data = edited_data_to_metax(data, original)
         metax_ready_data["access_granter"] = get_access_granter()
         params = {}
-        service = MetaxQvainAPIServiceV2()
+        service = MetaxQvainAPIService()
         metax_response = service.update_dataset(metax_ready_data, cr_id, last_edit_converted, params)
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
         return metax_response
@@ -296,7 +298,7 @@ class QvainDataset(Resource):
         if error is not None:
             return error
 
-        service = MetaxQvainAPIServiceV2()
+        service = MetaxQvainAPIService()
         metax_response = service.delete_dataset(cr_id)
         return metax_response
 
@@ -338,7 +340,7 @@ class QvainDatasetFiles(Resource):
             "allowed_projects": ",".join(ida_projects)
         }
 
-        service = MetaxQvainAPIServiceV2()
+        service = MetaxQvainAPIService()
         response, status = service.update_dataset_files(cr_id, data, params)
         if status != 200:
             return response, status

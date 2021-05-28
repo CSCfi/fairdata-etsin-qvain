@@ -38,11 +38,11 @@ class OrganizationSelect extends Component {
 
   static defaultProps = {
     placeholder: {
-      organization: 'qvain.select.placeholder',
-      department: 'qvain.select.placeholder',
+      organization: 'qvain.actors.add.organization.placeholder',
+      department: 'qvain.actors.add.organization.placeholderChild',
     },
     creatable: true,
-    value: undefined,
+    value: {},
   }
 
   state = {
@@ -69,13 +69,13 @@ class OrganizationSelect extends Component {
    * @param {Object} prevProps Previous props
    */
   componentDidUpdate(prevProps) {
-    const didOrganizationChnage = this.didValueChange('organization', prevProps)
-    const didDepartmentChnage = this.didValueChange('department', prevProps)
-    if (didOrganizationChnage || didDepartmentChnage) {
+    const didOrganizationChange = this.didValueChange('organization', prevProps)
+    const didDepartmentChange = this.didValueChange('department', prevProps)
+    if (didOrganizationChange || didDepartmentChange) {
       const { organization, department } = this.props.value
       this.fetchOptions(
-        didOrganizationChnage ? organization || {} : {},
-        didDepartmentChnage ? department || {} : {}
+        didOrganizationChange ? organization || {} : {},
+        didDepartmentChange ? department || {} : {}
       )
     }
   }
@@ -203,44 +203,47 @@ class OrganizationSelect extends Component {
     return (
       <SelectContainer>
         <Translate
+          id="org-select"
           component={Select}
           onChange={this.onOrganizationChange}
           onBlur={() => this.onBlur('organization')}
           name={name}
           inputId={inputId}
           value={value.organization === undefined ? null : value.organization}
-          options={options.organization[lang] || []}
+          options={options?.organization?.[lang] || []}
           placeholder={placeholder.organization}
           creatable={creatable}
-          allowReset={value.organization && !value.department}
+          allowReset={Boolean(value.organization && !value.department)}
           attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.organization' }}
         />
         <Department>
           {value.organization && (
             <Translate
+              id="department-select"
               component={Select}
               onChange={this.onDepartmentChange}
               onBlur={() => this.onBlur('department')}
               name={name}
               inputId={`${inputId}-department`}
               value={value.department === undefined ? null : value.department}
-              options={options.department ? options.department[lang] : []}
+              options={options?.department ? options.department[lang] : []}
               placeholder={placeholder.department}
               creatable={creatable}
-              allowReset={value.department && !value.subDepartment}
+              allowReset={Boolean(value.department && !value.subDepartment)}
               attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.department' }}
             />
           )}
           <Department>
             {value.department && (
               <Translate
+                id="subdepartment-select"
                 component={Select}
                 onChange={this.onSubdepartmentChange}
                 onBlur={() => this.onBlur('subDepartment')}
                 name={name}
                 inputId={`${inputId}-subdepartment`}
                 value={value.subDepartment === undefined ? null : value.subDepartment}
-                options={options.subDepartment ? options.subDepartment[lang] : []}
+                options={options?.subDepartment ? options.subDepartment[lang] : []}
                 placeholder={placeholder.department}
                 creatable={creatable}
                 allowReset={Boolean(value.subDepartment)}
@@ -329,7 +332,7 @@ const CreatableSelectComponent = ({
         options: [{ value: 'create', label: t('qvain.organizationSelect.label.addNew') }],
       },
       {
-        label: t(placeholder),
+        label: t('qvain.actors.add.organization.options.presets'),
         options,
       },
     ]

@@ -82,7 +82,6 @@ class Auth {
               idaProjects: res.data.user_ida_projects,
               isUsingRems: res.data.is_using_rems,
             })
-
             // User verified through HAKA or other external verification, but no valid CSC account -> no permission
             if (res.data.is_authenticated && !res.data.is_authenticated_CSC_user) {
               this.userLogged = false
@@ -162,4 +161,4 @@ class Auth {
   }
 }
 
-export default new Auth()
+export default Auth

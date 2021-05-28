@@ -9,7 +9,7 @@ const numberToString = number => {
   return number
 }
 
-const Spatial = (
+export const Spatial = (
   uiid = uuidv4(),
   name = '',
   altitude = '',

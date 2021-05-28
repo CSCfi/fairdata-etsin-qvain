@@ -93,12 +93,7 @@ export class MetadataModal extends Component {
   }
 
   patchFileCharacteristics = (identifier, data) => {
-    let url
-    if (this.props.Stores.Env.metaxApiV2) {
-      url = urls.v2.fileCharacteristics(identifier)
-    } else {
-      url = urls.v1.fileCharacteristics(identifier)
-    }
+    const url = urls.v2.fileCharacteristics(identifier)
     return axios.put(url, data, {
       headers: {
         'Content-Type': 'application/json',
@@ -240,11 +235,7 @@ export class MetadataModal extends Component {
       const response = await patchPromise
 
       // Update file hierarchy with response data, close modal
-      if (this.props.Stores.Env.metaxApiV2) {
-        this.props.Stores.Qvain.Files.applyPASMeta(getPASMeta(response.data))
-      } else {
-        this.props.Stores.Qvain.updateFileMetadata(response.data)
-      }
+      this.props.Stores.Qvain.Files.applyPASMeta(getPASMeta(response.data))
       this.setState({
         fileChanged: false,
       })
@@ -313,9 +304,9 @@ export class MetadataModal extends Component {
   }
 
   initialize() {
-    const { Qvain, Env } = this.props.Stores
+    const { Qvain } = this.props.Stores
     const file = Qvain.metadataModalFile || {}
-    const pasObj = (!Env.metaxApiV2 ? file : file.pasMeta) || {}
+    const pasObj = file.pasMeta || {}
 
     const newState = {
       response: null,
@@ -534,6 +525,7 @@ const ResponseOverlay = styled.div`
 export const AutoWidthTableButton = styled(TableButton)`
   width: auto;
   max-width: none;
+  padding: 0 0.5em;
 `
 
 export default withStores(observer(MetadataModal))
