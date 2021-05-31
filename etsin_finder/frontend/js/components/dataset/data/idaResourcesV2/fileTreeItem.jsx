@@ -127,7 +127,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
 
   const downloadButtonParts = (
     <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
-      <SplitContainer split={moreFunc}>
+      <SplitButtonContainer split={moreFunc}>
         {downloadButton}
         {moreFunc && (
           <Translate
@@ -138,7 +138,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
             attributes={{ 'aria-label': moreAriaLabel }}
           />
         )}
-      </SplitContainer>
+      </SplitButtonContainer>
     </FlaggedComponent>
   )
 
