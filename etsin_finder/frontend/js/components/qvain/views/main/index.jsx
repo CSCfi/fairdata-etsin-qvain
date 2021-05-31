@@ -31,8 +31,6 @@ export class Qvain extends Component {
 
   setFocusOnSubmitOrUpdateButton = this.setFocusOnSubmitButton.bind(this)
 
-  submitButtonsRef = React.createRef()
-
   setFocusOnSubmitButton = this.setFocusOnSubmitButton.bind(this)
 
   submitButtonsRef = React.createRef()
@@ -57,7 +55,6 @@ export class Qvain extends Component {
 
   componentDidMount() {
     this.handleIdentifierChanged()
-    // setInterval(() => this.props.Stores.Qvain.setChanged(false), 100)
 
     // Prevent reload when there are unsaved changes
     this.disposeConfirmReload = autorun(() => {
@@ -122,7 +119,6 @@ export class Qvain extends Component {
     const { getQvainUrl } = this.props.Stores.Env
 
     const url = urls.qvain.dataset(identifier)
-
     const promise = axios
       .get(url)
       .then(result => {
@@ -175,40 +171,6 @@ export class Qvain extends Component {
     return promise
   }
 
-  clearSubmitResponse = () => {
-    const { clearResponse, setError } = this.props.Stores.Qvain.Submit
-    clearResponse()
-    setError(null)
-    this.setState({
-      datasetLoading: false,
-      datasetError: false,
-      datasetErrorTitle: null,
-      datasetErrorDetails: null,
-    })
-  }
-
-  handleSubmitResponse = () => {
-    this.setState({
-      datasetLoading: false,
-    })
-  }
-
-  handleSubmitError = err => {
-    if (err.errors) {
-      // Validation error
-      this.setState({
-        datasetLoading: false,
-      })
-      return
-    }
-    if (!err.response) {
-      console.error(err)
-    }
-    this.setState({
-      datasetLoading: false,
-    })
-  }
-
   handleRetry = () => {
     this.setState({ datasetLoading: false, haveDataset: true })
     this.handleIdentifierChanged()
@@ -218,14 +180,12 @@ export class Qvain extends Component {
     const { datasetError, haveDataset, datasetErrorDetails, datasetErrorTitle } = this.state
 
     return {
-      datasetError,
       haveDataset,
+      datasetError,
       datasetErrorDetails,
       datasetErrorTitle,
       handleRetry: this.handleRetry,
       setFocusOnSubmitButton: this.setFocusOnSubmitButton,
-      handleSubmitError: this.handleSubmitError,
-      handleSubmitResponse: this.handleSubmitResponse,
     }
   }
 
@@ -235,17 +195,10 @@ export class Qvain extends Component {
   }
 
   getStickyHeaderProps = () => {
-    const { error, response: responseV2, isLoading } = this.props.Stores.Qvain.Submit
     const { datasetError, renderFailed } = this.state
 
     return {
-      datasetLoading: isLoading,
       datasetError,
-      submitted: !!error || !!responseV2,
-      response: error || responseV2,
-      handleSubmitError: this.handleSubmitError,
-      handleSubmitResponse: this.handleSubmitResponse,
-      clearSubmitResponse: this.clearSubmitResponse,
       submitButtonsRef: this.submitButtonsRef,
       hideSubmitButtons: renderFailed,
     }
@@ -260,7 +213,8 @@ export class Qvain extends Component {
     return (
       <QvainContainer>
         <Header {...this.getHeaderProps()} />
-        <StickyHeader {...this.getStickyHeaderProps()} />
+        <StickyHeader {...this.getStickyHeaderProps()} datasetLoading />
+
         <ErrorBoundary title={ErrorTitle()} callback={this.enableRenderFailed}>
           <Dataset {...this.getDatasetProps()} />
         </ErrorBoundary>

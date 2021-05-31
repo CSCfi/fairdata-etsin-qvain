@@ -1,4 +1,5 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 import PropTypes, { instanceOf } from 'prop-types'
 import Translate from 'react-translate-component'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
@@ -13,25 +14,29 @@ import {
 } from '../../general/card'
 import SubmitResponse from './submitResponse'
 import {
-  ButtonContainer,
   SubmitButton,
+  ButtonContainer,
   CustomSubHeader,
   LinkBackContainer,
   LinkBack,
   LinkText,
 } from './editor.styled'
+import { useStores } from '../../utils/stores'
 
-const StickyHeader = ({
-  datasetError,
-  datasetLoading,
-  handleSubmitError,
-  handleSubmitResponse,
-  submitButtonsRef,
-  submitted,
-  response,
-  clearSubmitResponse,
-  hideSubmitButtons,
-}) => {
+const StickyHeader = ({ datasetError, submitButtonsRef, hideSubmitButtons }) => {
+  const {
+    Qvain: {
+      Submit: { error, response, isLoading, clearError, clearResponse },
+    },
+  } = useStores()
+
+  const clear = () => {
+    clearError()
+    clearResponse()
+  }
+
+  const submitted = !!error || !!response
+
   const createLinkBack = position => (
     <LinkBackContainer position={position}>
       <LinkBack to="/qvain">
@@ -46,19 +51,14 @@ const StickyHeader = ({
     return null
   }
 
-  if (datasetLoading) {
+  if (isLoading) {
     return (
       <StickySubHeaderWrapper>
         <StickySubHeader>
           <ButtonContainer>
-            <SubmitButton disabled>
-              <Translate content="qvain.titleLoading" />
-            </SubmitButton>
+            <Translate component={SubmitButton} content="qvain.titleLoading" disabled />
           </ButtonContainer>
         </StickySubHeader>
-        <StickySubHeaderResponse>
-          <SubmitResponse response={null} clearSubmitResponse={clearSubmitResponse} />
-        </StickySubHeaderResponse>
       </StickySubHeaderWrapper>
     )
   }
@@ -67,20 +67,14 @@ const StickyHeader = ({
       <CustomSubHeader>
         {createLinkBack('left')}
         <ButtonContainer>
-          {!hideSubmitButtons && (
-            <SubmitButtons
-              handleSubmitError={handleSubmitError}
-              handleSubmitResponse={handleSubmitResponse}
-              submitButtonsRef={submitButtonsRef}
-            />
-          )}
+          {!hideSubmitButtons && <SubmitButtons submitButtonsRef={submitButtonsRef} />}
         </ButtonContainer>
       </CustomSubHeader>
       <PasState />
       <DeprecatedState />
       {submitted ? (
         <StickySubHeaderResponse>
-          <SubmitResponse response={response} clearSubmitResponse={clearSubmitResponse} />
+          <SubmitResponse response={error || response} clearSubmitResponse={clear} />
         </StickySubHeaderResponse>
       ) : null}
     </StickySubHeaderWrapper>
@@ -90,18 +84,11 @@ const StickyHeader = ({
 StickyHeader.propTypes = {
   hideSubmitButtons: PropTypes.bool,
   datasetError: PropTypes.bool.isRequired,
-  datasetLoading: PropTypes.bool.isRequired,
-  submitted: PropTypes.bool.isRequired,
-  response: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
-  handleSubmitError: PropTypes.func.isRequired,
-  handleSubmitResponse: PropTypes.func.isRequired,
-  clearSubmitResponse: PropTypes.func.isRequired,
   submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }).isRequired,
 }
 
 StickyHeader.defaultProps = {
-  response: null,
   hideSubmitButtons: false,
 }
 
-export default StickyHeader
+export default observer(StickyHeader)

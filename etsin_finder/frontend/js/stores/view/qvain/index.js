@@ -1,4 +1,5 @@
 import { observable, action, computed, makeObservable } from 'mobx'
+
 import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Resources from './qvain.resources'
 import Files from './qvain.files'
@@ -11,7 +12,6 @@ class Qvain extends Resources {
     this.Files = new Files(this)
     this.Submit = new Submit(this)
     this.resetQvainStore()
-    this.Submit = new Submit(this)
     makeObservable(this)
   }
 
@@ -25,7 +25,6 @@ class Qvain extends Resources {
 
   @action
   resetQvainStore = () => {
-    this.Submit = new Submit(this)
     this.original = undefined
     // Reset Files/Directories related data
     this.Files.reset()
@@ -345,6 +344,14 @@ class Qvain extends Resources {
   @computed
   get hasBeenPublished() {
     return !!(this.original && (this.original.state === 'published' || this.original.draft_of))
+  }
+
+  @computed
+  get hasBeenPublishedWithDoi() {
+    return !!(
+      this.hasBeenPublished &&
+      this.original?.research_dataset?.preferred_identifier?.startsWith('doi')
+    )
   }
 
   @computed
