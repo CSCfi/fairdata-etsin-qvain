@@ -28,7 +28,7 @@ const description = {
   issuedDate: {
     title: 'Issued date',
     infoText: `Date of formal issuance (publication) of the resource. This value does not affect or
-    reflect the visibility of the dataset itself. If this is left empty, current date is used as default value.`,
+    reflect the visibility of the dataset itself. If left empty, the current date is used as a default value.`,
     instructions: '',
     placeholder: 'Date',
   },
@@ -76,8 +76,7 @@ const description = {
     Finnish and Swedish translations are available for all subject headings.
     The suggested subject headings are from KOKO ontology maintaned by Finto.`,
     placeholder: 'Type to search for available options',
-    help:
-      'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
+    help: 'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
   },
   error: {
     title: 'A title is required in at least one language.',
