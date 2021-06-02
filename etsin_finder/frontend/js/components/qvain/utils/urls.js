@@ -30,4 +30,8 @@ export default {
       mergeDraft: () => '/api/v2/rpc/datasets/merge_draft',
     },
   },
+  crossRef: {
+    search: term =>
+      `https://api.crossref.org/works?order=desc&rows=5&mailto=fairdata@csc.fi&select=author,title,DOI,score,abstract&query.bibliographic=${term}`,
+  },
 }

@@ -22,6 +22,10 @@ const history = {
     description: `Refer to related datasets, publications, and other
       resources that are relevant in understanding this dataset.`,
     noItems: 'No references to any related resources have been specified.',
+    select: {
+      newRelation: 'Create a new reference',
+      placeholder: 'Create a new reference or search reference from external resources',
+    },
     modal: {
       addButton: 'Add reference to a related resource',
       title: {

@@ -29,6 +29,10 @@ const history = {
     description: `Viittaukset aineistoihin, julkaisuihin tai muihin tuotoksiin,
         jotka auttavat ymmärtämään ja käyttämään tätä tutkimusaineistoa.`,
     noItems: 'Viittauksia toisiin tuotoksiin ei ole lisätty.',
+    select: {
+      newRelation: 'Luo uusi viittaus',
+      placeholder: 'Luo uusi viittaus tai etsi viittauksia ulkoisesta lähteestä',
+    },
     modal: {
       addButton: 'Lisää viittaus toiseen tuotokseen',
       title: {

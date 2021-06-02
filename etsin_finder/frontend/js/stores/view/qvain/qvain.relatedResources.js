@@ -1,15 +1,23 @@
-import { makeObservable } from 'mobx'
-// import { observables } from 'mobx'
+import { makeObservable, observable, action } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 
 export const RelatedResource = (
-  uiid = uuidv4(),
-  name = { fi: '', en: '', und: '' },
-  description = { fi: '', en: '', und: '' },
-  identifier = undefined,
-  relationType = undefined,
-  entityType = undefined
+  {
+    uiid = uuidv4(),
+    name = { fi: '', en: '', und: '' },
+    description = { fi: '', en: '', und: '' },
+    identifier = undefined,
+    relationType = undefined,
+    entityType = undefined,
+  } = {
+    uiid: uuidv4(),
+    name: { fi: '', en: '', und: '' },
+    description: { fi: '', en: '', und: '' },
+    identifier: undefined,
+    relationType: undefined,
+    entityType: undefined,
+  }
 ) => ({ uiid, name, description, identifier, relationType, entityType })
 
 class RelatedResources extends Field {
@@ -18,6 +26,28 @@ class RelatedResources extends Field {
     makeObservable(this)
   }
 
+  @observable translationsRoot = 'qvain.history.relatedResource'
+
+  @action
+  prefillInEdit = data => {
+    const modifiedData = {
+      name: { fi: data.label, en: data.label },
+      identifier: data.DOI,
+      description: { fi: data.abstract || '', en: data.abstract || '', und: data.abstract || '' },
+      entityType: {
+        label: { fi: 'Julkaisu', en: 'Publication', und: 'Julkaisu' },
+        url: 'http://uri.suomi.fi/codelist/fairdata/resource_type/code/publication',
+      },
+      relationType: {
+        label: { fi: 'Liittyvä aineisto', en: 'Related Dataset', und: 'Liittyvä aineisto' },
+        url: 'http://purl.org/dc/terms/relation',
+      },
+    }
+
+    this.create(modifiedData)
+  }
+
+  @action
   relatedResourceToBackend = rr => ({
     entity: {
       title: rr.name,
