@@ -82,6 +82,7 @@ export const StickySubHeader = styled.div`
   color: #4f4f4f;
   display: flex;
   width: 100%;
+  min-height: 2.75rem;
   justify-content: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 `

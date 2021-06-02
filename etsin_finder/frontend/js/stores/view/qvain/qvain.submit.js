@@ -33,7 +33,6 @@ class Submit {
   @observable useDoiModalIsOpen = false
 
   @action reset = () => {
-    this.isLoading = false
     this.draftValidationError = []
     this.publishValidationError = []
     this.error = undefined
@@ -49,11 +48,15 @@ class Submit {
     this.error = error
   }
 
+  @action.bound clearError() {
+    this.error = undefined
+  }
+
   @action setResponse = response => {
     this.response = response
   }
 
-  @action clearResponse = () => {
+  @action.bound clearResponse() {
     this.response = null
   }
 
@@ -127,7 +130,9 @@ class Submit {
         console.error('Unknown submit status')
         throw new Error('Unknown submit status')
     }
-    if (this.response?.identifier && cb) cb(this.response.identifier)
+    if (this.response?.identifier && cb) {
+      cb(this.response.identifier)
+    }
   }
 
   @action exec = async (submitFunction, schema = qvainFormSchema) => {
@@ -200,7 +205,7 @@ class Submit {
       this.Qvain.setOriginal(dataset.original)
       await editDataset(dataset.original)
       this.setResponse(dataset.original)
-      this.setError(undefined)
+      this.clearError()
     } catch (error) {
       this.setError(getResponseError(error))
       throw error
