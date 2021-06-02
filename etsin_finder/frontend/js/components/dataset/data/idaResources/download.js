@@ -1,10 +1,12 @@
 import axios from 'axios'
 
+import urls from '../../../../utils/urls'
+
 const authorize = async (params, Packages) => {
   Packages.clearError()
   // Authorize download for single file or package and return url
   try {
-    const resp = await axios.post('/api/v2/dl/authorize', params)
+    const resp = await axios.post(urls.dl.authorize(), params)
     const { url } = resp.data
     return { url, params }
   } catch (error) {

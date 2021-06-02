@@ -15,7 +15,7 @@ import AccessibilityClass from '../../../js/stores/view/accessibility'
 import ElasticQueryClass from '../../../js/stores/view/elasticquery'
 import CumulativeState, {
   CumulativeStateButton,
-} from '../../../js/components/qvain/fields/files/cumulativeStateV2'
+} from '../../../js/components/qvain/fields/files/cumulativeState'
 import { useStores, StoresProvider } from '../../../js/stores/stores'
 
 global.Promise = require('bluebird')

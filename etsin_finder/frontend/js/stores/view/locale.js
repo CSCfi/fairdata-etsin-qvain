@@ -13,6 +13,8 @@ import { observable, action, computed, makeObservable } from 'mobx'
 import counterpart from 'counterpart'
 import moment from 'moment'
 
+import urls from '../../utils/urls'
+
 const languages = ['en', 'fi']
 
 const getInitialLanguage = () =>
@@ -53,7 +55,7 @@ class Locale {
   @observable languages = languages
 
   @action.bound saveLanguage() {
-    return axios.post('/api/language', { language: this.currentLang })
+    return axios.post(urls.language(), { language: this.currentLang })
   }
 
   @action

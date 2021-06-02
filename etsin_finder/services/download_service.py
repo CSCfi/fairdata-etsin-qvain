@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Functionalities for download data from Download API v2"""
+"""Functionalities for download data from Download API"""
 
 import requests
 import re
@@ -14,7 +14,7 @@ import marshmallow
 
 from etsin_finder.utils.request_utils import make_request
 from etsin_finder.utils.crypto_utils import generate_fernet_key, dict_encrypt, dict_decrypt
-from etsin_finder.app_config import get_download_api_v2_config
+from etsin_finder.app_config import get_download_api_config
 from etsin_finder.log import log
 from etsin_finder.utils.utils import FlaskService
 from .base_service import BaseService, ConfigValidationMixin
@@ -34,7 +34,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
         """
         super().__init__(app)
 
-        dl_api_config = get_download_api_v2_config(app)
+        dl_api_config = get_download_api_config(app)
         self.config = dl_api_config
         if dl_api_config:
             host = dl_api_config.get('HOST')
@@ -52,7 +52,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
             self.AUTHORIZE_URL = f'{self.API_BASE_URL}/authorize'
             self.SUBSCRIBE_URL = f'{self.API_BASE_URL}/subscribe'
             self.DOWNLOAD_URL = f'{self.API_PUBLIC_BASE_URL}/download'
-            self.NOTIFICATION_CALLBACK_URL = f'https://{self_domain}/api/v2/dl/notifications'
+            self.NOTIFICATION_CALLBACK_URL = f'https://{self_domain}/api/download/notifications'
             self.NOTIFICATION_SECRET = generate_fernet_key(app.config['SECRET_KEY'])
 
             self.verify_ssl = verify_ssl
@@ -63,7 +63,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
             if dl_api_config.get('HTTPS_PROXY'):
                 self.proxies = dict(https=dl_api_config.get('HTTPS_PROXY'))
         else:
-            log.error('Unable to initialize DownloadAPIService (v2) due to missing config')
+            log.error('Unable to initialize DownloadAPIService due to missing config')
 
     def _get_args(self, **kwargs):
         """Get default args for request, allow overriding with kwargs."""

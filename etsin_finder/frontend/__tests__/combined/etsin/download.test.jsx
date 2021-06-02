@@ -8,15 +8,15 @@ import EnvClass from '../../../js/stores/domain/env'
 import Packages from '../../../js/stores/view/packages'
 import { fakeDownload, applyMockAdapter } from '../../__testdata__/download.data'
 import { runInAction } from 'mobx'
-import getDownloadAction from '../../../js/components/dataset/data/idaResourcesV2/downloadActions'
+import getDownloadAction from '../../../js/components/dataset/data/idaResources/downloadActions'
 import {
   downloadFile,
   downloadPackage,
-} from '../../../js/components/dataset/data/idaResourcesV2/download'
-import ErrorMessage from '../../../js/components/dataset/data/idaResourcesV2/errorMessage'
+} from '../../../js/components/dataset/data/idaResources/download'
+import ErrorMessage from '../../../js/components/dataset/data/idaResources/errorMessage'
 
-jest.mock('../../../js/components/dataset/data/idaResourcesV2/download', () => {
-  const actual = jest.requireActual('../../../js/components/dataset/data/idaResourcesV2/download')
+jest.mock('../../../js/components/dataset/data/idaResources/download', () => {
+  const actual = jest.requireActual('../../../js/components/dataset/data/idaResources/download')
   return {
     ...actual,
     downloadFile: jest.fn().mockImplementation(actual.downloadFile),

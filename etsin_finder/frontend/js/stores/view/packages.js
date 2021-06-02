@@ -1,6 +1,6 @@
 import { observable, action, makeObservable, runInAction } from 'mobx'
 import axios from 'axios'
-import urls from '../../components/qvain/utils/urls'
+import urls from '../../utils/urls'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../utils/constants'
 import Notifications from './packages.notifications'
@@ -134,7 +134,7 @@ class Packages {
       scope.forEach(path => {
         this.setRequestingPackageCreation(path, true)
       })
-      const resp = await axios.post(urls.v2.packages(), params)
+      const resp = await axios.post(urls.dl.packages(), params)
       const { partial, ...full } = resp.data
 
       this.Notifications.subscribe(params)
@@ -195,7 +195,7 @@ class Packages {
 
       let response
       try {
-        const url = `${urls.v2.packages()}?cr_id=${datasetIdentifier}`
+        const url = `${urls.dl.packages()}?cr_id=${datasetIdentifier}`
         response = await axios.get(url)
         this.clearError()
       } catch (err) {

@@ -37,27 +37,27 @@ export const dataset = {
   identifier: '6d2cb5f5-4867-47f7-9874-09357f2901a3',
   data_catalog: {
     id: 9,
-    identifier: 'urn:nbn:fi:att:data-catalog-ida'
+    identifier: 'urn:nbn:fi:att:data-catalog-ida',
   },
   dataset_version_set: [
     {
       identifier: '6d2cb5f5-4867-47f7-9874-09357f2901a3',
       preferred_identifier: 'urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d',
       removed: false,
-      date_created: '2020-03-03T11:58:16+02:00'
+      date_created: '2020-03-03T11:58:16+02:00',
     },
     {
       identifier: '387c0807-f181-4f0b-b4f1-59004bce7fd6',
       preferred_identifier: 'urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f',
       removed: false,
-      date_created: '2020-03-03T11:53:22+02:00'
+      date_created: '2020-03-03T11:53:22+02:00',
     },
     {
       identifier: 'c05a9c97-2b69-4d88-ab30-791c7b365162',
       preferred_identifier: 'urn:nbn:fi:att:f557c60d-9fad-4d38-8a50-86ec3b10d8ad',
       removed: false,
-      date_created: '2020-03-03T10:52:00+02:00'
-    }
+      date_created: '2020-03-03T10:52:00+02:00',
+    },
   ],
   deprecated: false,
   metadata_owner_org: 'ylipoisto.fi',
@@ -75,13 +75,13 @@ export const dataset = {
           pref_label: {
             en: 'Outcome material',
             fi: 'Tulosaineisto',
-            und: 'Tulosaineisto'
-          }
+            und: 'Tulosaineisto',
+          },
         },
         details: {
           parent_directory: {
             identifier: '7ceb3498251f3dfdbe1bde7aa964142b',
-            id: 34
+            id: 34,
           },
           file_modified: '2017-09-27T15:38:18.700000+03:00',
           service_created: 'metax',
@@ -91,7 +91,7 @@ export const dataset = {
           checksum: {
             value: 'string',
             algorithm: 'md5',
-            checked: '2017-09-27T12:38:18.701000Z'
+            checked: '2017-09-27T12:38:18.701000Z',
           },
           byte_size: 1024,
           open_access: true,
@@ -102,12 +102,12 @@ export const dataset = {
           file_frozen: '2017-09-27T15:38:18.700000+03:00',
           file_storage: {
             identifier: 'pid:urn:storageidentifier1',
-            id: 1
+            id: 1,
           },
           file_format: 'string',
           id: 151,
-          removed: false
-        }
+          removed: false,
+        },
       },
       {
         title: 'stuff.csv',
@@ -119,13 +119,13 @@ export const dataset = {
           pref_label: {
             en: 'Outcome material',
             fi: 'Tulosaineisto',
-            und: 'Tulosaineisto'
-          }
+            und: 'Tulosaineisto',
+          },
         },
         details: {
           parent_directory: {
             identifier: '7ceb3498251f3dfdbe1bde7aa964142b',
-            id: 34
+            id: 34,
           },
           file_modified: '2017-09-27T15:38:18.700000+03:00',
           service_created: 'metax',
@@ -135,7 +135,7 @@ export const dataset = {
           checksum: {
             value: 'string',
             algorithm: 'md5',
-            checked: '2017-09-27T12:38:18.701000Z'
+            checked: '2017-09-27T12:38:18.701000Z',
           },
           byte_size: 1024,
           open_access: true,
@@ -146,12 +146,12 @@ export const dataset = {
           file_frozen: '2017-09-27T15:38:18.700000+03:00',
           file_storage: {
             identifier: 'pid:urn:storageidentifier1',
-            id: 1
+            id: 1,
           },
           file_format: 'string',
           id: 150,
-          removed: false
-        }
+          removed: false,
+        },
       },
       {
         title: 'file1.csv',
@@ -163,13 +163,13 @@ export const dataset = {
           pref_label: {
             en: 'Outcome material',
             fi: 'Tulosaineisto',
-            und: 'Tulosaineisto'
-          }
+            und: 'Tulosaineisto',
+          },
         },
         details: {
           parent_directory: {
             identifier: '84189dbab05c39d09e01fb4aff0aee73',
-            id: 35
+            id: 35,
           },
           file_modified: '2017-09-27T15:38:18.700000+03:00',
           service_created: 'metax',
@@ -179,7 +179,7 @@ export const dataset = {
           checksum: {
             value: 'string',
             algorithm: 'md5',
-            checked: '2017-09-27T12:38:18.701000Z'
+            checked: '2017-09-27T12:38:18.701000Z',
           },
           byte_size: 1024,
           open_access: true,
@@ -190,12 +190,12 @@ export const dataset = {
           file_frozen: '2017-09-27T15:38:18.700000+03:00',
           file_storage: {
             identifier: 'pid:urn:storageidentifier1',
-            id: 1
+            id: 1,
           },
           file_format: 'string',
           id: 153,
-          removed: false
-        }
+          removed: false,
+        },
       },
       {
         title: 'changed_title',
@@ -205,8 +205,8 @@ export const dataset = {
           pref_label: {
             en: 'Text',
             fi: 'Teksti',
-            und: 'Teksti'
-          }
+            und: 'Teksti',
+          },
         },
         identifier: 'c8535f22-5d32-11ea-b9f7-94e6f76907f8',
         description: 'Explicitly added file',
@@ -216,13 +216,13 @@ export const dataset = {
           pref_label: {
             en: 'Documentation',
             fi: 'Dokumentaatio',
-            und: 'Dokumentaatio'
-          }
+            und: 'Dokumentaatio',
+          },
         },
         details: {
           parent_directory: {
             identifier: '70fcb44802113cdcbca69d01966ce9b9',
-            id: 36
+            id: 36,
           },
           file_modified: '2017-09-27T15:38:18.700000+03:00',
           service_created: 'metax',
@@ -232,7 +232,7 @@ export const dataset = {
           checksum: {
             value: 'string',
             algorithm: 'md5',
-            checked: '2017-09-27T12:38:18.701000Z'
+            checked: '2017-09-27T12:38:18.701000Z',
           },
           byte_size: 1024,
           open_access: true,
@@ -243,33 +243,31 @@ export const dataset = {
           file_frozen: '2017-09-27T15:38:18.700000+03:00',
           file_storage: {
             identifier: 'pid:urn:storageidentifier1',
-            id: 1
+            id: 1,
           },
           file_format: 'string',
           id: 159,
-          removed: false
-        }
-      }
+          removed: false,
+        },
+      },
     ],
     title: {
-      fi: 'Title'
+      fi: 'Title',
     },
     creator: [
       {
         name: {
           en: 'Org',
           fi: 'Org',
-          und: 'Org'
+          und: 'Org',
         },
         '@type': 'Organization',
-        identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/123456789'
-      }
+        identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/123456789',
+      },
     ],
-    keyword: [
-      'keyword'
-    ],
+    keyword: ['keyword'],
     description: {
-      fi: 'Description'
+      fi: 'Description',
     },
     directories: [
       {
@@ -282,8 +280,8 @@ export const dataset = {
           pref_label: {
             en: 'Outcome material',
             fi: 'Tulosaineisto',
-            und: 'Tulosaineisto'
-          }
+            und: 'Tulosaineisto',
+          },
         },
         details: {
           byte_size: 6144,
@@ -292,7 +290,7 @@ export const dataset = {
           directory_name: 'set1',
           parent_directory: {
             identifier: 'e55c0a9e5e0436b58179782725832719',
-            id: 32
+            id: 32,
           },
           service_created: 'metax',
           date_created: '2020-03-03T11:36:40+02:00',
@@ -300,9 +298,9 @@ export const dataset = {
           directory_path: '/data/set1',
           file_count: 6,
           directory_modified: '2020-03-03T11:36:40.315713+02:00',
-          identifier: '11f69846228a375baf7ef919c04629c6'
-        }
-      }
+          identifier: '11f69846228a375baf7ef919c04629c6',
+        },
+      },
     ],
     access_rights: {
       license: [
@@ -311,8 +309,8 @@ export const dataset = {
             en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)',
           },
           license: 'https://creativecommons.org/licenses/by/4.0/',
-          identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0'
-        }
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+        },
       ],
       access_type: {
         in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
@@ -320,26 +318,26 @@ export const dataset = {
         pref_label: {
           en: 'Open',
           fi: 'Avoin',
-          und: 'Avoin'
-        }
-      }
+          und: 'Avoin',
+        },
+      },
     },
     preferred_identifier: 'urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d',
     total_files_byte_size: 9216,
-    metadata_version_identifier: '615de971-99b1-4801-a45d-d7f03ec06f18'
+    metadata_version_identifier: '615de971-99b1-4801-a45d-d7f03ec06f18',
   },
   preservation_state: 0,
   previous_dataset_version: {
     id: 495,
     identifier: '387c0807-f181-4f0b-b4f1-59004bce7fd6',
-    preferred_identifier: 'urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f'
+    preferred_identifier: 'urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f',
   },
   cumulative_state: 0,
   date_modified: '2020-03-03T12:47:06+02:00',
   date_created: '2020-03-03T11:58:16+02:00',
   service_modified: 'qvain',
   service_created: 'qvain',
-  removed: false
+  removed: false,
 }
 
 // dataset with no added files or directories
@@ -348,27 +346,27 @@ export const emptyDataset = {
   identifier: '6d2cb5f5-4867-47f7-9874-123456789',
   data_catalog: {
     id: 9,
-    identifier: 'urn:nbn:fi:att:data-catalog-ida'
+    identifier: 'urn:nbn:fi:att:data-catalog-ida',
   },
   dataset_version_set: [
     {
       identifier: '6d2cb5f5-4867-47f7-9874-09357f2901a3',
       preferred_identifier: 'urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d',
       removed: false,
-      date_created: '2020-03-03T11:58:16+02:00'
+      date_created: '2020-03-03T11:58:16+02:00',
     },
     {
       identifier: '387c0807-f181-4f0b-b4f1-59004bce7fd6',
       preferred_identifier: 'urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f',
       removed: false,
-      date_created: '2020-03-03T11:53:22+02:00'
+      date_created: '2020-03-03T11:53:22+02:00',
     },
     {
       identifier: 'c05a9c97-2b69-4d88-ab30-791c7b365162',
       preferred_identifier: 'urn:nbn:fi:att:f557c60d-9fad-4d38-8a50-86ec3b10d8ad',
       removed: false,
-      date_created: '2020-03-03T10:52:00+02:00'
-    }
+      date_created: '2020-03-03T10:52:00+02:00',
+    },
   ],
   deprecated: false,
   metadata_owner_org: 'ylipoisto.fi',
@@ -376,24 +374,22 @@ export const emptyDataset = {
   metadata_provider_user: 'TESTUSER',
   research_dataset: {
     title: {
-      fi: 'Title'
+      fi: 'Title',
     },
     creator: [
       {
         name: {
           en: 'Org',
           fi: 'Org',
-          und: 'Org'
+          und: 'Org',
         },
         '@type': 'Organization',
-        identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/123456789'
-      }
+        identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/123456789',
+      },
     ],
-    keyword: [
-      'keyword'
-    ],
+    keyword: ['keyword'],
     description: {
-      fi: 'Description'
+      fi: 'Description',
     },
     access_rights: {
       license: [
@@ -402,8 +398,8 @@ export const emptyDataset = {
             en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)',
           },
           license: 'https://creativecommons.org/licenses/by/4.0/',
-          identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0'
-        }
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+        },
       ],
       access_type: {
         in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
@@ -411,29 +407,27 @@ export const emptyDataset = {
         pref_label: {
           en: 'Open',
           fi: 'Avoin',
-          und: 'Avoin'
-        }
-      }
+          und: 'Avoin',
+        },
+      },
     },
     preferred_identifier: 'urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d',
     total_files_byte_size: 9216,
-    metadata_version_identifier: '615de971-99b1-4801-a45d-d7f03ec06f18'
+    metadata_version_identifier: '615de971-99b1-4801-a45d-d7f03ec06f18',
   },
   preservation_state: 0,
   previous_dataset_version: {
     id: 495,
     identifier: '387c0807-f181-4f0b-b4f1-59004bce7fd6',
-    preferred_identifier: 'urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f'
+    preferred_identifier: 'urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f',
   },
   cumulative_state: 0,
   date_modified: '2020-03-03T12:47:06+02:00',
   date_created: '2020-03-03T11:58:16+02:00',
   service_modified: 'qvain',
   service_created: 'qvain',
-  removed: false
+  removed: false,
 }
-
-
 
 // /api/files/project/[project_id]
 export const project = {
@@ -445,7 +439,7 @@ export const project = {
       directory_name: 'data',
       parent_directory: {
         identifier: 'cb74b1b06e79339e93b391ecf71b18ac',
-        id: 31
+        id: 31,
       },
       service_created: 'metax',
       date_created: '2020-03-03T11:36:40+02:00',
@@ -453,7 +447,7 @@ export const project = {
       directory_path: '/data',
       file_count: 13,
       directory_modified: '2020-03-03T11:36:40.307796+02:00',
-      identifier: 'e55c0a9e5e0436b58179782725832719'
+      identifier: 'e55c0a9e5e0436b58179782725832719',
     },
     {
       byte_size: 2048,
@@ -462,7 +456,7 @@ export const project = {
       directory_name: 'moredata',
       parent_directory: {
         identifier: 'cb74b1b06e79339e93b391ecf71b18ac',
-        id: 31
+        id: 31,
       },
       service_created: 'metax',
       date_created: '2020-03-03T11:37:05+02:00',
@@ -470,16 +464,15 @@ export const project = {
       directory_path: '/moredata',
       file_count: 2,
       directory_modified: '2020-03-03T11:37:05.974225+02:00',
-      identifier: '7ceb3498251f3dfdbe1bde7aa964142b'
+      identifier: '7ceb3498251f3dfdbe1bde7aa964142b',
     },
   ],
   files: [],
   identifier: 'cb74b1b06e79339e93b391ecf71b18ac', // contained in the Metax response when include_parent is enabled
   id: 31,
   file_count: 15,
-  byte_size: 15360
+  byte_size: 15360,
 }
-
 
 // /api/datasets/files/directory/[directory_id]
 const directories = {}
@@ -496,11 +489,11 @@ directories['/'] = {
       identifier: 'e55c0a9e5e0436b58179782725832719',
       parent_directory: {
         id: 31,
-        identifier: 'cb74b1b06e79339e93b391ecf71b18ac'
+        identifier: 'cb74b1b06e79339e93b391ecf71b18ac',
       },
       project_identifier: 'project',
       removed: false,
-      service_created: 'metax'
+      service_created: 'metax',
     },
     {
       byte_size: 2048,
@@ -513,17 +506,17 @@ directories['/'] = {
       identifier: '7ceb3498251f3dfdbe1bde7aa964142b',
       parent_directory: {
         id: 31,
-        identifier: 'cb74b1b06e79339e93b391ecf71b18ac'
+        identifier: 'cb74b1b06e79339e93b391ecf71b18ac',
       },
       project_identifier: 'project',
       removed: false,
-      service_created: 'metax'
-    }
+      service_created: 'metax',
+    },
   ],
   files: [],
   id: 31,
   file_count: 15,
-  byte_size: 15360
+  byte_size: 15360,
 }
 
 directories['/moredata'] = {
@@ -532,7 +525,7 @@ directories['/moredata'] = {
     {
       parent_directory: {
         identifier: '7ceb3498251f3dfdbe1bde7aa964142b',
-        id: 34
+        id: 34,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -542,7 +535,7 @@ directories['/moredata'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -553,16 +546,16 @@ directories['/moredata'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 151,
-      removed: false
+      removed: false,
     },
     {
       parent_directory: {
         identifier: '7ceb3498251f3dfdbe1bde7aa964142b',
-        id: 34
+        id: 34,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -572,7 +565,7 @@ directories['/moredata'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -583,13 +576,13 @@ directories['/moredata'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 150,
-      removed: false
-    }
-  ]
+      removed: false,
+    },
+  ],
 }
 
 directories['/data'] = {
@@ -605,11 +598,11 @@ directories['/data'] = {
       identifier: '11f69846228a375baf7ef919c04629c6',
       parent_directory: {
         id: 32,
-        identifier: 'e55c0a9e5e0436b58179782725832719'
+        identifier: 'e55c0a9e5e0436b58179782725832719',
       },
       project_identifier: 'project',
       removed: false,
-      service_created: 'metax'
+      service_created: 'metax',
     },
     {
       byte_size: 3072,
@@ -622,14 +615,14 @@ directories['/data'] = {
       identifier: '84189dbab05c39d09e01fb4aff0aee73',
       parent_directory: {
         id: 32,
-        identifier: 'e55c0a9e5e0436b58179782725832719'
+        identifier: 'e55c0a9e5e0436b58179782725832719',
       },
       project_identifier: 'project',
       removed: false,
-      service_created: 'metax'
-    }
+      service_created: 'metax',
+    },
   ],
-  files: []
+  files: [],
 }
 
 directories['/data/set1'] = {
@@ -645,11 +638,11 @@ directories['/data/set1'] = {
       identifier: '70fcb44802113cdcbca69d01966ce9b9',
       parent_directory: {
         id: 33,
-        identifier: '11f69846228a375baf7ef919c04629c6'
+        identifier: '11f69846228a375baf7ef919c04629c6',
       },
       project_identifier: 'project',
       removed: false,
-      service_created: 'metax'
+      service_created: 'metax',
     },
     {
       byte_size: 2048,
@@ -662,12 +655,12 @@ directories['/data/set1'] = {
       identifier: '1e64e3f6b0023900b748dc65120619d2',
       parent_directory: {
         id: 33,
-        identifier: '11f69846228a375baf7ef919c04629c6'
+        identifier: '11f69846228a375baf7ef919c04629c6',
       },
       project_identifier: 'project',
       removed: false,
-      service_created: 'metax'
-    }
+      service_created: 'metax',
+    },
   ],
   files: [
     {
@@ -675,7 +668,7 @@ directories['/data/set1'] = {
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:36:40+02:00',
       file_format: 'string',
@@ -685,7 +678,7 @@ directories['/data/set1'] = {
       file_path: '/data/set1/file1.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 149,
@@ -693,19 +686,19 @@ directories['/data/set1'] = {
       open_access: true,
       parent_directory: {
         id: 33,
-        identifier: '11f69846228a375baf7ef919c04629c6'
+        identifier: '11f69846228a375baf7ef919c04629c6',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
     {
       byte_size: 1024,
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:37:17+02:00',
       file_format: 'string',
@@ -715,7 +708,7 @@ directories['/data/set1'] = {
       file_path: '/data/set1/file2.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 152,
@@ -723,19 +716,19 @@ directories['/data/set1'] = {
       open_access: true,
       parent_directory: {
         id: 33,
-        identifier: '11f69846228a375baf7ef919c04629c6'
+        identifier: '11f69846228a375baf7ef919c04629c6',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
     {
       byte_size: 1024,
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:39:47+02:00',
       file_format: 'string',
@@ -745,7 +738,7 @@ directories['/data/set1'] = {
       file_path: '/data/set1/file4.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 162,
@@ -753,14 +746,14 @@ directories['/data/set1'] = {
       open_access: true,
       parent_directory: {
         id: 33,
-        identifier: '11f69846228a375baf7ef919c04629c6'
+        identifier: '11f69846228a375baf7ef919c04629c6',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
-    }
-  ]
+      user_created: 'string',
+    },
+  ],
 }
 
 directories['/data/set2/'] = {
@@ -771,7 +764,7 @@ directories['/data/set2/'] = {
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:37:20+02:00',
       file_format: 'string',
@@ -781,7 +774,7 @@ directories['/data/set2/'] = {
       file_path: '/data/set2/file1.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 153,
@@ -789,19 +782,19 @@ directories['/data/set2/'] = {
       open_access: true,
       parent_directory: {
         id: 35,
-        identifier: '84189dbab05c39d09e01fb4aff0aee73'
+        identifier: '84189dbab05c39d09e01fb4aff0aee73',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
     {
       byte_size: 1024,
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:37:21+02:00',
       file_format: 'string',
@@ -811,7 +804,7 @@ directories['/data/set2/'] = {
       file_path: '/data/set2/file2.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 154,
@@ -819,19 +812,19 @@ directories['/data/set2/'] = {
       open_access: true,
       parent_directory: {
         id: 35,
-        identifier: '84189dbab05c39d09e01fb4aff0aee73'
+        identifier: '84189dbab05c39d09e01fb4aff0aee73',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
     {
       byte_size: 1024,
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:37:22+02:00',
       file_format: 'string',
@@ -841,7 +834,7 @@ directories['/data/set2/'] = {
       file_path: '/data/set2/file3.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 155,
@@ -849,14 +842,14 @@ directories['/data/set2/'] = {
       open_access: true,
       parent_directory: {
         id: 35,
-        identifier: '84189dbab05c39d09e01fb4aff0aee73'
+        identifier: '84189dbab05c39d09e01fb4aff0aee73',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
-    }
-  ]
+      user_created: 'string',
+    },
+  ],
 }
 
 directories['/data/set1/subset'] = {
@@ -867,7 +860,7 @@ directories['/data/set1/subset'] = {
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:38:47+02:00',
       file_format: 'string',
@@ -877,7 +870,7 @@ directories['/data/set1/subset'] = {
       file_path: '/data/set1/subset/file1.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 159,
@@ -885,19 +878,19 @@ directories['/data/set1/subset'] = {
       open_access: true,
       parent_directory: {
         id: 36,
-        identifier: '70fcb44802113cdcbca69d01966ce9b9'
+        identifier: '70fcb44802113cdcbca69d01966ce9b9',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
     {
       byte_size: 1024,
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:38:40+02:00',
       file_format: 'string',
@@ -907,7 +900,7 @@ directories['/data/set1/subset'] = {
       file_path: '/data/set1/subset/file10.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 156,
@@ -915,19 +908,19 @@ directories['/data/set1/subset'] = {
       open_access: true,
       parent_directory: {
         id: 36,
-        identifier: '70fcb44802113cdcbca69d01966ce9b9'
+        identifier: '70fcb44802113cdcbca69d01966ce9b9',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
     {
       byte_size: 1024,
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:38:41+02:00',
       file_format: 'string',
@@ -937,7 +930,7 @@ directories['/data/set1/subset'] = {
       file_path: '/data/set1/subset/file11.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 157,
@@ -945,19 +938,19 @@ directories['/data/set1/subset'] = {
       open_access: true,
       parent_directory: {
         id: 36,
-        identifier: '70fcb44802113cdcbca69d01966ce9b9'
+        identifier: '70fcb44802113cdcbca69d01966ce9b9',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
     {
       byte_size: 1024,
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:38:43+02:00',
       file_format: 'string',
@@ -967,7 +960,7 @@ directories['/data/set1/subset'] = {
       file_path: '/data/set1/subset/file12.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 158,
@@ -975,19 +968,19 @@ directories['/data/set1/subset'] = {
       open_access: true,
       parent_directory: {
         id: 36,
-        identifier: '70fcb44802113cdcbca69d01966ce9b9'
+        identifier: '70fcb44802113cdcbca69d01966ce9b9',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
     {
       byte_size: 1024,
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:53:19+02:00',
       file_format: 'string',
@@ -997,7 +990,7 @@ directories['/data/set1/subset'] = {
       file_path: '/data/set1/subset/file13.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 163,
@@ -1005,14 +998,14 @@ directories['/data/set1/subset'] = {
       open_access: true,
       parent_directory: {
         id: 36,
-        identifier: '70fcb44802113cdcbca69d01966ce9b9'
+        identifier: '70fcb44802113cdcbca69d01966ce9b9',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
-  ]
+  ],
 }
 
 directories['/data/set1/subset2'] = {
@@ -1023,7 +1016,7 @@ directories['/data/set1/subset2'] = {
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:39:40+02:00',
       file_format: 'string',
@@ -1033,7 +1026,7 @@ directories['/data/set1/subset2'] = {
       file_path: '/data/set1/subset2/file1.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 160,
@@ -1041,19 +1034,19 @@ directories['/data/set1/subset2'] = {
       open_access: true,
       parent_directory: {
         id: 37,
-        identifier: '1e64e3f6b0023900b748dc65120619d2'
+        identifier: '1e64e3f6b0023900b748dc65120619d2',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
     {
       byte_size: 1024,
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:39:41+02:00',
       file_format: 'string',
@@ -1063,7 +1056,7 @@ directories['/data/set1/subset2'] = {
       file_path: '/data/set1/subset2/file2.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 161,
@@ -1071,16 +1064,15 @@ directories['/data/set1/subset2'] = {
       open_access: true,
       parent_directory: {
         id: 37,
-        identifier: '1e64e3f6b0023900b748dc65120619d2'
+        identifier: '1e64e3f6b0023900b748dc65120619d2',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
-  ]
+  ],
 }
-
 
 // /api/files
 
@@ -1094,7 +1086,7 @@ existing['/'] = {
       directory_name: 'data',
       parent_directory: {
         identifier: 'cb74b1b06e79339e93b391ecf71b18ac',
-        id: 31
+        id: 31,
       },
       service_created: 'metax',
       date_created: '2020-03-03T11:36:40+02:00',
@@ -1102,7 +1094,7 @@ existing['/'] = {
       directory_path: '/data',
       file_count: 7,
       directory_modified: '2020-03-03T11:36:40.307796+02:00',
-      identifier: 'e55c0a9e5e0436b58179782725832719'
+      identifier: 'e55c0a9e5e0436b58179782725832719',
     },
     {
       byte_size: 0,
@@ -1111,7 +1103,7 @@ existing['/'] = {
       directory_name: 'moredata',
       parent_directory: {
         identifier: 'cb74b1b06e79339e93b391ecf71b18ac',
-        id: 31
+        id: 31,
       },
       service_created: 'metax',
       date_created: '2020-03-03T11:37:05+02:00',
@@ -1119,8 +1111,8 @@ existing['/'] = {
       directory_path: '/moredata',
       file_count: 2,
       directory_modified: '2020-03-03T11:37:05.974225+02:00',
-      identifier: '7ceb3498251f3dfdbe1bde7aa964142b'
-    }
+      identifier: '7ceb3498251f3dfdbe1bde7aa964142b',
+    },
   ],
   files: [],
   file_count: 9,
@@ -1133,7 +1125,7 @@ existing['/moredata'] = {
     {
       parent_directory: {
         identifier: '7ceb3498251f3dfdbe1bde7aa964142b',
-        id: 34
+        id: 34,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -1143,7 +1135,7 @@ existing['/moredata'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -1154,16 +1146,16 @@ existing['/moredata'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 151,
-      removed: false
+      removed: false,
     },
     {
       parent_directory: {
         identifier: '7ceb3498251f3dfdbe1bde7aa964142b',
-        id: 34
+        id: 34,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -1173,7 +1165,7 @@ existing['/moredata'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -1184,12 +1176,12 @@ existing['/moredata'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 150,
-      removed: false
-    }
+      removed: false,
+    },
   ],
 }
 
@@ -1202,7 +1194,7 @@ existing['/data'] = {
       directory_name: 'set1',
       parent_directory: {
         identifier: 'e55c0a9e5e0436b58179782725832719',
-        id: 32
+        id: 32,
       },
       service_created: 'metax',
       date_created: '2020-03-03T11:36:40+02:00',
@@ -1210,7 +1202,7 @@ existing['/data'] = {
       directory_path: '/data/set1',
       file_count: 6,
       directory_modified: '2020-03-03T11:36:40.315713+02:00',
-      identifier: '11f69846228a375baf7ef919c04629c6'
+      identifier: '11f69846228a375baf7ef919c04629c6',
     },
     {
       byte_size: 1024,
@@ -1219,7 +1211,7 @@ existing['/data'] = {
       directory_name: 'set2',
       parent_directory: {
         identifier: 'e55c0a9e5e0436b58179782725832719',
-        id: 32
+        id: 32,
       },
       service_created: 'metax',
       date_created: '2020-03-03T11:37:20+02:00',
@@ -1227,8 +1219,8 @@ existing['/data'] = {
       directory_path: '/data/set2',
       file_count: 1,
       directory_modified: '2020-03-03T11:37:20.149650+02:00',
-      identifier: '84189dbab05c39d09e01fb4aff0aee73'
-    }
+      identifier: '84189dbab05c39d09e01fb4aff0aee73',
+    },
   ],
   files: [],
 }
@@ -1242,7 +1234,7 @@ existing['/data/set1'] = {
       directory_name: 'subset',
       parent_directory: {
         identifier: '11f69846228a375baf7ef919c04629c6',
-        id: 33
+        id: 33,
       },
       service_created: 'metax',
       date_created: '2020-03-03T11:38:40+02:00',
@@ -1250,14 +1242,14 @@ existing['/data/set1'] = {
       directory_path: '/data/set1/subset',
       file_count: 4,
       directory_modified: '2020-03-03T11:38:40.325398+02:00',
-      identifier: '70fcb44802113cdcbca69d01966ce9b9'
-    }
+      identifier: '70fcb44802113cdcbca69d01966ce9b9',
+    },
   ],
   files: [
     {
       parent_directory: {
         identifier: '11f69846228a375baf7ef919c04629c6',
-        id: 33
+        id: 33,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -1267,7 +1259,7 @@ existing['/data/set1'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -1278,16 +1270,16 @@ existing['/data/set1'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 149,
-      removed: false
+      removed: false,
     },
     {
       parent_directory: {
         identifier: '11f69846228a375baf7ef919c04629c6',
-        id: 33
+        id: 33,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -1297,7 +1289,7 @@ existing['/data/set1'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -1308,12 +1300,12 @@ existing['/data/set1'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 152,
-      removed: false
-    }
+      removed: false,
+    },
   ],
 }
 
@@ -1323,7 +1315,7 @@ existing['/data/set2/'] = {
     {
       parent_directory: {
         identifier: '84189dbab05c39d09e01fb4aff0aee73',
-        id: 35
+        id: 35,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -1333,7 +1325,7 @@ existing['/data/set2/'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -1344,12 +1336,12 @@ existing['/data/set2/'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 153,
-      removed: false
-    }
+      removed: false,
+    },
   ],
 }
 
@@ -1359,7 +1351,7 @@ existing['/data/set1/subset'] = {
     {
       parent_directory: {
         identifier: '70fcb44802113cdcbca69d01966ce9b9',
-        id: 36
+        id: 36,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -1369,7 +1361,7 @@ existing['/data/set1/subset'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -1380,16 +1372,16 @@ existing['/data/set1/subset'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 159,
-      removed: false
+      removed: false,
     },
     {
       parent_directory: {
         identifier: '70fcb44802113cdcbca69d01966ce9b9',
-        id: 36
+        id: 36,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -1399,7 +1391,7 @@ existing['/data/set1/subset'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -1410,16 +1402,16 @@ existing['/data/set1/subset'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 156,
-      removed: false
+      removed: false,
     },
     {
       parent_directory: {
         identifier: '70fcb44802113cdcbca69d01966ce9b9',
-        id: 36
+        id: 36,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -1429,7 +1421,7 @@ existing['/data/set1/subset'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -1440,16 +1432,16 @@ existing['/data/set1/subset'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 157,
-      removed: false
+      removed: false,
     },
     {
       parent_directory: {
         identifier: '70fcb44802113cdcbca69d01966ce9b9',
-        id: 36
+        id: 36,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -1459,7 +1451,7 @@ existing['/data/set1/subset'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -1470,13 +1462,13 @@ existing['/data/set1/subset'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 158,
-      removed: false
+      removed: false,
     },
-  ]
+  ],
 }
 
 existing['/data/set1/subset2'] = {
@@ -1485,7 +1477,7 @@ existing['/data/set1/subset2'] = {
     {
       parent_directory: {
         identifier: '84189dbab05c39d09e01fb4aff0aee73',
-        id: 35
+        id: 35,
       },
       file_modified: '2017-09-27T15:38:18.700000+03:00',
       service_created: 'metax',
@@ -1495,7 +1487,7 @@ existing['/data/set1/subset2'] = {
       checksum: {
         value: 'string',
         algorithm: 'md5',
-        checked: '2017-09-27T12:38:18.701000Z'
+        checked: '2017-09-27T12:38:18.701000Z',
       },
       byte_size: 1024,
       open_access: true,
@@ -1506,15 +1498,14 @@ existing['/data/set1/subset2'] = {
       file_frozen: '2017-09-27T15:38:18.700000+03:00',
       file_storage: {
         identifier: 'pid:urn:storageidentifier1',
-        id: 1
+        id: 1,
       },
       file_format: 'string',
       id: 153,
-      removed: false
-    }
-  ]
+      removed: false,
+    },
+  ],
 }
-
 
 // /api/datasets/files/directory/[directory_id]
 const notExisting = {}
@@ -1531,16 +1522,16 @@ notExisting['/'] = {
       identifier: 'e55c0a9e5e0436b58179782725832719',
       parent_directory: {
         id: 31,
-        identifier: 'cb74b1b06e79339e93b391ecf71b18ac'
+        identifier: 'cb74b1b06e79339e93b391ecf71b18ac',
       },
       project_identifier: 'project',
       removed: false,
-      service_created: 'metax'
+      service_created: 'metax',
     },
   ],
   files: [],
   file_count: 6,
-  byte_size: 13312
+  byte_size: 13312,
 }
 
 notExisting['/data'] = {
@@ -1556,11 +1547,11 @@ notExisting['/data'] = {
       identifier: '84189dbab05c39d09e01fb4aff0aee73',
       parent_directory: {
         id: 32,
-        identifier: 'e55c0a9e5e0436b58179782725832719'
+        identifier: 'e55c0a9e5e0436b58179782725832719',
       },
       project_identifier: 'project',
       removed: false,
-      service_created: 'metax'
+      service_created: 'metax',
     },
     {
       byte_size: 10240,
@@ -1573,14 +1564,14 @@ notExisting['/data'] = {
       identifier: '11f69846228a375baf7ef919c04629c6',
       parent_directory: {
         id: 32,
-        identifier: 'e55c0a9e5e0436b58179782725832719'
+        identifier: 'e55c0a9e5e0436b58179782725832719',
       },
       project_identifier: 'project',
       removed: false,
-      service_created: 'metax'
-    }
+      service_created: 'metax',
+    },
   ],
-  files: []
+  files: [],
 }
 
 notExisting['/data/set1'] = {
@@ -1596,11 +1587,11 @@ notExisting['/data/set1'] = {
       identifier: '70fcb44802113cdcbca69d01966ce9b9',
       parent_directory: {
         id: 33,
-        identifier: '11f69846228a375baf7ef919c04629c6'
+        identifier: '11f69846228a375baf7ef919c04629c6',
       },
       project_identifier: 'project',
       removed: false,
-      service_created: 'metax'
+      service_created: 'metax',
     },
     {
       byte_size: 2048,
@@ -1613,12 +1604,12 @@ notExisting['/data/set1'] = {
       identifier: '1e64e3f6b0023900b748dc65120619d2',
       parent_directory: {
         id: 33,
-        identifier: '11f69846228a375baf7ef919c04629c6'
+        identifier: '11f69846228a375baf7ef919c04629c6',
       },
       project_identifier: 'project',
       removed: false,
-      service_created: 'metax'
-    }
+      service_created: 'metax',
+    },
   ],
   files: [
     {
@@ -1626,7 +1617,7 @@ notExisting['/data/set1'] = {
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:39:47+02:00',
       file_format: 'string',
@@ -1636,7 +1627,7 @@ notExisting['/data/set1'] = {
       file_path: '/data/set1/file4.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 162,
@@ -1644,14 +1635,14 @@ notExisting['/data/set1'] = {
       open_access: true,
       parent_directory: {
         id: 33,
-        identifier: '11f69846228a375baf7ef919c04629c6'
+        identifier: '11f69846228a375baf7ef919c04629c6',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
-    }
-  ]
+      user_created: 'string',
+    },
+  ],
 }
 
 notExisting['/data/set2/'] = {
@@ -1662,7 +1653,7 @@ notExisting['/data/set2/'] = {
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:37:21+02:00',
       file_format: 'string',
@@ -1672,7 +1663,7 @@ notExisting['/data/set2/'] = {
       file_path: '/data/set2/file2.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 154,
@@ -1680,19 +1671,19 @@ notExisting['/data/set2/'] = {
       open_access: true,
       parent_directory: {
         id: 35,
-        identifier: '84189dbab05c39d09e01fb4aff0aee73'
+        identifier: '84189dbab05c39d09e01fb4aff0aee73',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
     {
       byte_size: 1024,
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:37:22+02:00',
       file_format: 'string',
@@ -1702,7 +1693,7 @@ notExisting['/data/set2/'] = {
       file_path: '/data/set2/file3.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 155,
@@ -1710,14 +1701,14 @@ notExisting['/data/set2/'] = {
       open_access: true,
       parent_directory: {
         id: 35,
-        identifier: '84189dbab05c39d09e01fb4aff0aee73'
+        identifier: '84189dbab05c39d09e01fb4aff0aee73',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
-  ]
+  ],
 }
 
 notExisting['/data/set1/subset'] = {
@@ -1728,7 +1719,7 @@ notExisting['/data/set1/subset'] = {
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:53:19+02:00',
       file_format: 'string',
@@ -1738,7 +1729,7 @@ notExisting['/data/set1/subset'] = {
       file_path: '/data/set1/subset/file13.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 163,
@@ -1746,14 +1737,14 @@ notExisting['/data/set1/subset'] = {
       open_access: true,
       parent_directory: {
         id: 36,
-        identifier: '70fcb44802113cdcbca69d01966ce9b9'
+        identifier: '70fcb44802113cdcbca69d01966ce9b9',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
-    }
-  ]
+      user_created: 'string',
+    },
+  ],
 }
 
 notExisting['/data/set1/subset2'] = {
@@ -1764,7 +1755,7 @@ notExisting['/data/set1/subset2'] = {
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:39:41+02:00',
       file_format: 'string',
@@ -1774,7 +1765,7 @@ notExisting['/data/set1/subset2'] = {
       file_path: '/data/set1/subset2/file2.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 161,
@@ -1782,19 +1773,19 @@ notExisting['/data/set1/subset2'] = {
       open_access: true,
       parent_directory: {
         id: 37,
-        identifier: '1e64e3f6b0023900b748dc65120619d2'
+        identifier: '1e64e3f6b0023900b748dc65120619d2',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
+      user_created: 'string',
     },
     {
       byte_size: 1024,
       checksum: {
         algorithm: 'md5',
         checked: '2017-09-27T12:38:18.701000Z',
-        value: 'string'
+        value: 'string',
       },
       date_created: '2020-03-03T11:39:40+02:00',
       file_format: 'string',
@@ -1804,7 +1795,7 @@ notExisting['/data/set1/subset2'] = {
       file_path: '/data/set1/subset2/file1.csv',
       file_storage: {
         id: 1,
-        identifier: 'pid:urn:storageidentifier1'
+        identifier: 'pid:urn:storageidentifier1',
       },
       file_uploaded: '2017-09-27T15:38:18.700000+03:00',
       id: 160,
@@ -1812,38 +1803,39 @@ notExisting['/data/set1/subset2'] = {
       open_access: true,
       parent_directory: {
         id: 37,
-        identifier: '1e64e3f6b0023900b748dc65120619d2'
+        identifier: '1e64e3f6b0023900b748dc65120619d2',
       },
       project_identifier: 'project',
       removed: false,
       service_created: 'metax',
-      user_created: 'string'
-    }
-  ]
+      user_created: 'string',
+    },
+  ],
 }
 
+const byId = dirs =>
+  Object.values(dirs).reduce((obj, dir) => {
+    let identifier
+    if (dir.files.length > 0) {
+      identifier = dir.files[0].parent_directory.id
+    } else {
+      identifier = dir.directories[0].parent_directory.id
+    }
+    obj[identifier] = dir
+    return obj
+  }, {})
 
-const byId = (dirs) => Object.values(dirs).reduce((obj, dir) => {
-  let identifier
-  if (dir.files.length > 0) {
-    identifier = dir.files[0].parent_directory.id
-  } else {
-    identifier = dir.directories[0].parent_directory.id
-  }
-  obj[identifier] = dir
-  return obj
-}, {})
-
-const byIdentifier = (dirs) => Object.values(dirs).reduce((obj, dir) => {
-  let identifier
-  if (dir.files.length > 0) {
-    identifier = dir.files[0].parent_directory.identifier
-  } else {
-    identifier = dir.directories[0].parent_directory.identifier
-  }
-  obj[identifier] = dir
-  return obj
-}, {})
+const byIdentifier = dirs =>
+  Object.values(dirs).reduce((obj, dir) => {
+    let identifier
+    if (dir.files.length > 0) {
+      identifier = dir.files[0].parent_directory.identifier
+    } else {
+      identifier = dir.directories[0].parent_directory.identifier
+    }
+    obj[identifier] = dir
+    return obj
+  }, {})
 
 const directoriesById = byId(directories)
 const existingById = byId(existing)
@@ -1852,12 +1844,11 @@ const directoriesByIdentifier = byIdentifier(directories)
 const existingByIdentifier = byIdentifier(existing)
 const notExistingByIdentifier = byIdentifier(notExisting)
 
-const reEdit = RegExp('^/api(/v2)?/qvain/datasets/(.*)')
-const reDatasetProjects = RegExp('^/api/v2/common/datasets/(.*)/projects')
-const reUserMetadata = RegExp('^/api/v2/common/datasets/(.*)/user_metadata')
-const reProject = RegExp('^/api(/v2)?/common/projects/(.*)/files')
-const reDirectories = RegExp('^/api/v2/common/directories/(.*)/files')
-
+const reEdit = RegExp('^/api/qvain/datasets/(.*)')
+const reDatasetProjects = RegExp('^/api/common/datasets/(.*)/projects')
+const reUserMetadata = RegExp('^/api/common/datasets/(.*)/user_metadata')
+const reProject = RegExp('^/api/common/projects/(.*)/files')
+const reDirectories = RegExp('^/api/common/directories/(.*)/files')
 
 const paginate = (data, offset, limit) => {
   let remaining = limit
@@ -1881,11 +1872,11 @@ const paginate = (data, offset, limit) => {
       ...data,
       directories,
       files,
-    }
+    },
   }
 }
 
-const parseIntParam = (param) => {
+const parseIntParam = param => {
   const val = parseInt(param)
   if (isNaN(val)) {
     return undefined
@@ -1894,7 +1885,7 @@ const parseIntParam = (param) => {
 }
 
 // mock getter to replace axios.get
-export const get = (rawURL) => {
+export const get = rawURL => {
   const url = new URL(rawURL, 'https://localhost')
   const path = url.pathname
   const searchParams = url.searchParams
@@ -1939,19 +1930,15 @@ export const get = (rawURL) => {
 
   const matchEdit = reEdit.exec(path)
   if (matchEdit) {
-    const isV2 = matchEdit[1]
-    let process = v => v
-    if (isV2) {
-      process = v => {
-        const ret = { ...v }
-        ret.research_dataset = { ...ret.research_dataset }
-        delete ret.research_dataset.directories
-        delete ret.research_dataset.files
-        return ret
-      }
+    const process = v => {
+      const ret = { ...v }
+      ret.research_dataset = { ...ret.research_dataset }
+      delete ret.research_dataset.directories
+      delete ret.research_dataset.files
+      return ret
     }
 
-    const datasetIdentifier = matchEdit[2]
+    const datasetIdentifier = matchEdit[1]
     if (datasetIdentifier === dataset.identifier) {
       return Promise.resolve({ data: process(dataset) })
     }
@@ -1963,7 +1950,7 @@ export const get = (rawURL) => {
 
   const matchProject = reProject.exec(path)
   if (matchProject) {
-    const projectIdentifier = matchProject[2]
+    const projectIdentifier = matchProject[1]
     if (projectIdentifier !== project.directories[0].project_identifier) {
       throw new Error(`Invalid project ${path}`)
     }
@@ -1979,7 +1966,10 @@ export const get = (rawURL) => {
       if (crIdentifier && notCRIdentifier) {
         throw new Error(`Both cr_identifier and not_cr_identifier params supplied`)
       }
-      if (datasetIdentifier !== dataset.identifier && datasetIdentifier !== emptyDataset.identifier) {
+      if (
+        datasetIdentifier !== dataset.identifier &&
+        datasetIdentifier !== emptyDataset.identifier
+      ) {
         throw new Error(`Invalid dataset identifier`)
       }
       if (!directoriesById[directoryIdentifier] && !directoriesByIdentifier[directoryIdentifier]) {
@@ -2003,7 +1993,8 @@ export const get = (rawURL) => {
       }
       return Promise.resolve({ data: dir })
     } else {
-      const dir = directoriesById[directoryIdentifier] || directoriesByIdentifier[directoryIdentifier]
+      const dir =
+        directoriesById[directoryIdentifier] || directoriesByIdentifier[directoryIdentifier]
       if (!dir) {
         throw new Error(`Invalid directory ${path}`)
       }

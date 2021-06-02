@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import {
-  faDownload,
   faInfoCircle,
   faFolder,
   faFolderOpen,
@@ -28,17 +27,6 @@ import getDownloadAction from './downloadActions'
 import IconButton from '../common/iconButton'
 import FlaggedComponent from '../../../general/flaggedComponent'
 import { MoreButton, SplitButtonContainer } from './splitButton'
-
-const download = (datasetIdentifier, item) => {
-  const handle = window.open(
-    `/api/dl?cr_id=${datasetIdentifier}${
-      item.type === 'directory' ? `&dir_id=${item.identifier}` : `&file_id=${item.identifier}`
-    }`
-  )
-  if (handle == null) {
-    console.error('Unable to open new browser window for download, popup blocker?')
-  }
-}
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const { Files, directoryView, extraProps } = treeProps
@@ -78,22 +66,17 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
 
   const haveMetadata = hasMetadata(item)
   const { type } = item
-  let downloadFunc = () => download(datasetIdentifier, item)
-  let moreFunc = null
-  let moreAriaLabel = null
-  let downloadIcon = faDownload
-  let downloadIconSpin = false
-  let downloadButtonText = 'dataset.dl.download'
-  let downloadButtonColor = null
 
   const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
-  downloadFunc = action.func
-  moreFunc = action.moreFunc
-  moreAriaLabel = action.moreAriaLabel
-  downloadIcon = action.icon
-  downloadIconSpin = action.spin
-  downloadButtonText = action.buttonLabel
-  downloadButtonColor = action.color
+  const {
+    func: downloadFunc,
+    moreFunc,
+    moreAriaLabel,
+    icon: downloadIcon,
+    spin: downloadIconSpin,
+    buttonLabel: downloadButtonText,
+    color: downloadButtonColor,
+  } = action
 
   const infoButton = (
     <Translate

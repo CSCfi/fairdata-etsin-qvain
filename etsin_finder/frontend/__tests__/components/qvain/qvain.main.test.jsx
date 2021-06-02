@@ -11,7 +11,7 @@ import Dataset from '../../../js/components/qvain/views/editor/dataset'
 import LooseActorDialog from '../../../js/components/qvain/views/editor/looseActorDialog'
 import LooseProvenanceDialog from '../../../js/components/qvain/views/editor/looseProvenanceDialog'
 import { Prompt } from 'react-router'
-import urls from '../../../js/components/qvain/utils/urls'
+import urls from '../../../js/utils/urls'
 
 jest.mock('axios')
 axios.get.mockReturnValue(
@@ -59,7 +59,6 @@ describe('given required props', () => {
       recordEvent: jest.fn(),
     },
     Env: {
-      metaxApiV2: true,
       getQvainUrl: jest.fn(),
     },
   }
@@ -307,7 +306,7 @@ describe('given required props', () => {
         })
 
         test('should call axios get', () => {
-          expect(axios.get).to.have.beenCalledWith(urls.v2.dataset('identifier2'))
+          expect(axios.get).to.have.beenCalledWith(urls.qvain.dataset('identifier2'))
         })
 
         test('should call resetQvainStore', () => {

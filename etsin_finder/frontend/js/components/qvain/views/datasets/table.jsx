@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
 import { Table, TableHeader, Row, HeaderCell, TableBody, TableNote } from '../../general/card/table'
-import urls from '../../utils/urls'
+import urls from '../../../../utils/urls'
 import RemoveModal from './removeModal'
 import DatasetPagination from './pagination'
 import { TableButton } from '../../general/buttons'
@@ -106,7 +106,7 @@ export class DatasetTable extends Component {
     }
 
     this.setState({ loading: true, error: false, errorMessage: '' })
-    const url = urls.v2.datasets()
+    const url = urls.qvain.datasets()
     const promise = axios
       .get(url, { params: { no_pagination: true } })
       .then(result => {
@@ -145,7 +145,7 @@ export class DatasetTable extends Component {
 
     recordEvent(`NEW_VERSION / ${identifier}`)
 
-    const promise = axios.post(urls.v2.rpc.createNewVersion(), null, {
+    const promise = axios.post(urls.rpc.createNewVersion(), null, {
       params: { identifier },
     })
     this.promises.push(promise)
