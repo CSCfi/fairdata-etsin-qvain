@@ -19,3 +19,8 @@ global.chaiExpect = chai.expect
 global.setExpect = framework => {
   global.expect = global[`${framework}Expect`]
 }
+
+global.Promise = require('bluebird')
+Promise.config({
+  cancellation: true,
+})

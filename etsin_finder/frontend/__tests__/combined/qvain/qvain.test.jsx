@@ -16,11 +16,6 @@ import ElasticQueryClass from '../../../js/stores/view/elasticquery'
 import QvainClass, { ExternalResource } from '../../../js/stores/view/qvain'
 import LocaleClass from '../../../js/stores/view/locale'
 import TablePasState from '../../../js/components/qvain/views/datasets/tablePasState'
-import {
-  filterByTitle,
-  filterGroupsByTitle,
-  groupDatasetsByVersionSet,
-} from '../../../js/components/qvain/views/datasets/filter'
 import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
 import { useStores } from '../../../js/stores/stores'
 
@@ -223,77 +218,6 @@ describe('Qvain translation tabs', () => {
     expect(getTranslationTabProps('fi', 'en')).toEqual([
       { language: 'fi', active: false },
       { language: 'en', active: true },
-    ])
-  })
-})
-
-describe('Qvain dataset list filtering', () => {
-  const datasets = [
-    {
-      identifier: '1',
-      research_dataset: {
-        title: { en: 'Dataset', fi: 'Aineisto' },
-      },
-    },
-    {
-      identifier: '2',
-      research_dataset: {
-        title: { en: 'Version 1 of Dataset Versions' },
-      },
-      dataset_version_set: [{ identifier: '2' }, { identifier: '3' }, { identifier: '4' }],
-    },
-    {
-      identifier: '3',
-      research_dataset: {
-        title: { en: 'Version 2, Dataset' },
-      },
-      dataset_version_set: [{ identifier: '2' }, { identifier: '3' }, { identifier: '4' }],
-    },
-    {
-      identifier: '5',
-      research_dataset: {
-        title: { en: 'Another Dataset' },
-      },
-    },
-    {
-      identifier: '4',
-      research_dataset: {
-        title: { en: 'Version 3', fi: 'Aineiston versio 3' },
-      },
-      dataset_version_set: [{ identifier: '2' }, { identifier: '3' }, { identifier: '4' }],
-    },
-  ]
-
-  const dataset = datasets[0]
-  const versions = [datasets[1], datasets[2], datasets[4]]
-  const dataset2 = datasets[3]
-
-  it('groups datasets by version set', () => {
-    const groups = groupDatasetsByVersionSet(datasets)
-    expect(groups).toEqual([[dataset], versions, [dataset2]])
-  })
-
-  it('filters dataset groups by title', () => {
-    const groups = groupDatasetsByVersionSet(datasets)
-    expect(filterGroupsByTitle('Dataset', groups)).toEqual([[dataset], versions, [dataset2]])
-  })
-
-  it('filters datasets by title in any language', () => {
-    expect(filterByTitle('Aineisto', datasets)).toEqual([dataset, datasets[4]])
-    expect(filterByTitle('Version', datasets)).toEqual(versions)
-  })
-
-  it('filters dataset groups by title in any language', () => {
-    const groups = groupDatasetsByVersionSet(datasets)
-    expect(filterGroupsByTitle('Aineisto', groups)).toEqual([[dataset], versions])
-  })
-
-  it('ignores case when filtering by title', () => {
-    expect(filterByTitle('dataset', datasets)).toEqual([
-      dataset,
-      datasets[1],
-      datasets[2],
-      dataset2,
     ])
   })
 })

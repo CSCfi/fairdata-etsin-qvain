@@ -25,12 +25,6 @@ import EnvClass from '../../../js/stores/domain/env'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../../js/utils/constants'
 import { metaxResponses } from '../../__testdata__/qvainPas.data'
 
-global.Promise = require('bluebird')
-
-Promise.config({
-  cancellation: true,
-})
-
 const Env = new EnvClass()
 const Accessibility = new AccessibilityClass(Env)
 const ElasticQuery = new ElasticQueryClass(Env)

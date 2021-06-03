@@ -3,7 +3,7 @@ import { observable, action, runInAction, computed, makeObservable } from 'mobx'
 
 import urls from '../../utils/urls'
 import { Project, dirIdentifierKey, fileIdentifierKey } from './common.files.items'
-import { PromiseManager } from './common.files.utils'
+import PromiseManager from '../../utils/promiseManager'
 import { itemLoaderPublic } from './common.files.loaders'
 
 class Files {

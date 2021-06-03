@@ -28,8 +28,8 @@ class Locale {
     makeObservable(this)
 
     if (BUILD !== 'production') {
-      window.setLang = lang => this.setLang(lang)
-      window.toggleLang = () => this.setLang(languages.find(l => l !== this.lang))
+      window.setLang = lang => this.setLang(lang, true)
+      window.toggleLang = () => this.setLang(languages.find(l => l !== this.lang), true)
     }
   }
 
@@ -59,7 +59,7 @@ class Locale {
   }
 
   @action
-  setLang = (lang, save = true) => {
+  setLang = (lang, save = false) => {
     if (!languages.includes(lang)) {
       return
     }
@@ -68,14 +68,14 @@ class Locale {
     moment.locale(lang)
     document.documentElement.lang = this.currentLang
     if (save) {
-      this.saveLanguage()
+      this.saveLanguage() // store language setting
     }
   }
 
   @action
-  toggleLang = () => {
+  toggleLang = (save = false) => {
     const current = counterpart.getLocale()
-    this.setLang(current === 'fi' ? 'en' : 'fi')
+    this.setLang(current === 'fi' ? 'en' : 'fi', save)
 
     this.Accessibility.handleNavigation()
 

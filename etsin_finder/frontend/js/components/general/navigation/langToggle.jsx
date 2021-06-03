@@ -22,7 +22,7 @@ import { useStores } from '../../../utils/stores'
 const LangToggle = ({ inverted, margin, mobile }) => {
   const { Locale } = useStores()
   const changeLang = () => {
-    Locale.toggleLang()
+    Locale.toggleLang(true)
   }
 
   const otherLang = () =>
