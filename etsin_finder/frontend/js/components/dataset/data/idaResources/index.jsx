@@ -17,13 +17,6 @@ import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHe
 import { SplitButtonContainer, MoreButton } from './splitButton'
 import FlaggedComponent from '../../../general/flaggedComponent'
 
-const downloadAll = identifier => {
-  const handle = window.open(`/api/dl?cr_id=${identifier}`)
-  if (handle == null) {
-    console.error('Unable to open new browser window for download, popup blocker?')
-  }
-}
-
 function IdaResources(props) {
   const { restrictions } = props.Stores.Access
   const allowDownload =
@@ -63,13 +56,12 @@ function IdaResources(props) {
     closeModal: () => setInInfo(null),
   }
 
-  let downloadFunc = () => downloadAll(props.dataset.identifier)
   const buttonProps = {}
   const downloadAllText = 'dataset.dl.downloadAll'
 
   // Download full dataset package
   const action = getDownloadAction(props.dataset.identifier, null, Packages, Files)
-  downloadFunc = action.func
+  const downloadFunc = action.func
   buttonProps.icon = action.icon
   buttonProps.spin = action.spin
   buttonProps.color = action.color

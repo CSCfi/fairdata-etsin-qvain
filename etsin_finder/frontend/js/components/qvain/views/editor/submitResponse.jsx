@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled, { keyframes } from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import { withRouter } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
@@ -215,4 +214,4 @@ const ResponseContainerCloseButtonContainer = styled.div`
   padding-right: 20px;
   position: absolute;
 `
-export default withRouter(observer(SubmitResponse))
+export default observer(SubmitResponse)

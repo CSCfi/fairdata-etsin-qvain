@@ -11,7 +11,7 @@ from flask_restful import reqparse, Resource
 
 from etsin_finder.services.qvain_service import MetaxQvainAPIService
 from etsin_finder.utils.log_utils import log_request
-from etsin_finder.utils.qvain_utils_v2 import check_dataset_edit_permission
+from etsin_finder.utils.qvain_utils import check_dataset_edit_permission
 
 
 class QvainDatasetChangeCumulativeState(Resource):

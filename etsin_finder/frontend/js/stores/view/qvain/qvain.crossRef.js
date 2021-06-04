@@ -1,7 +1,7 @@
 import { makeObservable, action, observable, computed, runInAction } from 'mobx'
 import axios from 'axios'
 import translate from 'counterpart'
-import urls from '../../../components/qvain/utils/urls'
+import urls from '../../../utils/urls'
 
 class CrossRef {
   constructor() {

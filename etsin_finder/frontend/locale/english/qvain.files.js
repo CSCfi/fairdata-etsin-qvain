@@ -29,40 +29,6 @@ const files = {
   cumulativeState: {
     label: 'Cumulative dataset',
     radio: {
-      no: 'No. (Adding files or folders will automatically create a new version of the dataset.)',
-      yes: 'Yes. (New files or folders will be added without a version change.)',
-      note:
-        'Note! Once the dataset has been submitted, changing the value from "No" to "Yes" will cause a new version of the dataset to be created. Change from "Yes" to "No" will not cause a new version.',
-    },
-    enabled: {
-      state: 'This dataset has been marked as a cumulative dataset.',
-      explanation:
-        'It means that data is added to it regularly. If data is no longer being added to this dataset, you should turn it non-cumulative.',
-      button: 'Turn non-cumulative',
-      note:
-        'Note! Once changed, turning the dataset back to cumulative will create a new version of the dataset.',
-      confirm:
-        'Are you sure you want to turn this dataset non-cumulative? If you later wish to change it back to cumulative, a new version will be created!',
-      cancel: 'Cancel',
-    },
-    disabled: {
-      state: 'This dataset has been marked non-cumulative.',
-      explanation:
-        'It means that if new data is added, a new version of the dataset will be created automatically.',
-      button: 'Turn cumulative',
-      note:
-        'Note! Changing the dataset cumulative will create a new version of the dataset. The old version will remain non-cumulative.',
-      confirm:
-        'Are you sure you want to turn the dataset cumulative (you want to start regularly adding data into it)? A new version will be created and gets a new identifier. The old version stays non-cumulative.',
-      cancel: 'Cancel',
-    },
-    modalHeader: 'Change dataset cumulation',
-    closeButton: 'Close',
-    changes: 'You need to save your changes to the dataset before you can change this setting.',
-  },
-  cumulativeStateV2: {
-    label: 'Cumulative dataset',
-    radio: {
       no:
         'No. (Adding files or folders to a published dataset requires you to create a new version of the dataset.)',
       yes: 'Yes. (New files or folders will be added without a version change.)',

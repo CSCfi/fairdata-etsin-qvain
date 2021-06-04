@@ -11,7 +11,7 @@ import Dataset from '../../../js/components/qvain/views/editor/dataset'
 import LooseActorDialog from '../../../js/components/qvain/views/editor/looseActorDialog'
 import LooseProvenanceDialog from '../../../js/components/qvain/views/editor/looseProvenanceDialog'
 import { Prompt } from 'react-router'
-import urls from '../../../js/components/qvain/utils/urls'
+import urls from '../../../js/utils/urls'
 
 jest.mock('axios')
 axios.get.mockReturnValue(
@@ -19,12 +19,6 @@ axios.get.mockReturnValue(
     data: {},
   })
 )
-
-jest.mock('../../../js/components/qvain/views/editor/submitButtons', () => {
-  return {
-    default: () => () => <>null</>,
-  }
-})
 
 jest.mock('../../../js/components/qvain/general/errors/fieldErrorBoundary', () => {
   return {
@@ -36,6 +30,7 @@ jest.mock('../../../js/components/qvain/general/errors/fieldErrorBoundary', () =
 jest.mock('../../../js/stores/stores', () => {
   return {
     withStores: () => () => <>null</>,
+    useStores: jest.fn(),
   }
 })
 
@@ -59,7 +54,6 @@ describe('given required props', () => {
       recordEvent: jest.fn(),
     },
     Env: {
-      metaxApiV2: true,
       getQvainUrl: jest.fn(),
     },
   }
@@ -109,13 +103,7 @@ describe('given required props', () => {
           datasetError: false,
         },
         StickyHeader: {
-          datasetLoading: false,
           datasetError: false,
-          submitted: false,
-          response: null,
-          handleSubmitError: harness.instance.handleSubmitError,
-          handleSubmitResponse: harness.instance.handleSubmitResponse,
-          clearSubmitResponse: harness.instance.clearSubmitResponse,
           hideSubmitButtons: false,
         },
         DatasetErrorBoundary: {
@@ -129,8 +117,6 @@ describe('given required props', () => {
           datasetErrorTitle: null,
           handleRetry: harness.instance.handleRetry,
           setFocusOnSubmitButton: harness.instance.setFocusOnSubmitButton,
-          handleSubmitError: harness.instance.handleSubmitError,
-          handleSubmitResponse: harness.instance.handleSubmitResponse,
         },
         UnsavedChangesPrompt: {
           when: mockStores.Qvain.changed,
@@ -139,74 +125,6 @@ describe('given required props', () => {
       }
 
       harness.shouldIncludeChildren(children, props)
-    })
-  })
-
-  describe('StickyHeader', () => {
-    beforeEach(() => {
-      harness.restoreWrapper('StickyHeader')
-    })
-
-    describe('when calling handleSubmitError', () => {
-      const err = {
-        errors: ['some error'],
-      }
-
-      beforeEach(() => {
-        harness.props.handleSubmitError(err)
-      })
-
-      test('should set state: datasetLoading, submitted, response', () => {
-        const expectedState = {
-          datasetLoading: false,
-        }
-
-        harness.state.should.deep.include(expectedState)
-      })
-    })
-
-    describe('when calling handleSubmitResponse', () => {
-      const response = {
-        data: {
-          some: 'data',
-        },
-      }
-      beforeEach(() => {
-        harness.props.handleSubmitResponse(response)
-      })
-
-      test('should set state: datasetLoading, submitted, response', () => {
-        const expectedState = {
-          datasetLoading: false,
-        }
-
-        harness.state.should.deep.include(expectedState)
-      })
-    })
-
-    describe('when calling clearSubmitResponse', () => {
-      beforeEach(() => {
-        harness.props.clearSubmitResponse()
-      })
-
-      test('should call Submit.clearResponse', () => {
-        expect(mockStores.Qvain.Submit.clearResponse).to.have.beenCalledWith()
-      })
-
-      test('should call Submit.setError with null', () => {
-        expect(mockStores.Qvain.Submit.setError).to.have.beenCalledWith(null)
-      })
-
-      test('should set expected state', () => {
-        const expectedState = {
-          datasetLoading: false,
-          datasetError: false,
-          datasetErrorTitle: null,
-          datasetErrorDetails: null,
-        }
-
-        harness.state.should.deep.include(expectedState)
-      })
     })
   })
 
@@ -231,38 +149,6 @@ describe('given required props', () => {
 
       test('should call Matomo.recordEvent', () => {
         expect(mockStores.Matomo.recordEvent).to.have.beenCalledWith('DATASET / identifier')
-      })
-    })
-
-    describe('when calling handleSubmitError', () => {
-      const error = {
-        errors: 'errors',
-      }
-      beforeEach(() => {
-        harness.props.handleSubmitError(error)
-      })
-
-      test('should set state', () => {
-        const expectedState = {
-          datasetLoading: false,
-        }
-
-        harness.state.should.include(expectedState)
-      })
-    })
-
-    describe('handleSubmitResponse', () => {
-      const response = 'response'
-      beforeEach(() => {
-        harness.props.handleSubmitResponse(response)
-      })
-
-      test('should set state', () => {
-        const expectedState = {
-          datasetLoading: false,
-        }
-
-        harness.state.should.include(expectedState)
       })
     })
   })
@@ -307,7 +193,7 @@ describe('given required props', () => {
         })
 
         test('should call axios get', () => {
-          expect(axios.get).to.have.beenCalledWith(urls.v2.dataset('identifier2'))
+          expect(axios.get).to.have.beenCalledWith(urls.qvain.dataset('identifier2'))
         })
 
         test('should call resetQvainStore', () => {

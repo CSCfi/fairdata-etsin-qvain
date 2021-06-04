@@ -44,7 +44,6 @@ describe('given mockStores', () => {
     },
     Env: {
       getQvainUrl: jest.fn(path => path),
-      metaxApiV2: true,
     },
     Matomo: {
       recordEvent: jest.fn(),

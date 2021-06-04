@@ -13,7 +13,7 @@ import {
   itemLoaderAny,
   itemLoaderExisting,
 } from '../../../js/stores/view/common.files.loaders'
-import urls from '../../../js/components/qvain/utils/urls'
+import urls from '../../../js/utils/urls'
 
 import { ShowMore } from '../../../js/components/general/files/tree'
 import SelectedItemsTree from '../../../js/components/qvain/fields/files/ida/selectedItemsTree'
@@ -141,7 +141,7 @@ const delayGet = () => {
 
 const loadDataset = async () => {
   let response
-  response = await axios.get(urls.v2.dataset(datasetIdentifier))
+  response = await axios.get(urls.qvain.dataset(datasetIdentifier))
   Qvain.Files.AddItemsView.setDefaultShowLimit(20, 20)
   Qvain.Files.SelectedItemsView.setDefaultShowLimit(20, 20)
   const promise = stores.Qvain.editDataset(response.data)
@@ -427,7 +427,7 @@ describe('Qvain.Files store', () => {
   })
 
   it('loads files for an empty dataset', async () => {
-    const response = await axios.get(urls.v2.dataset(emptyDatasetIdentifier))
+    const response = await axios.get(urls.qvain.dataset(emptyDatasetIdentifier))
     stores.Qvain.editDataset(response.data)
     Files.changeProject('project')
     await Files.loadingProjectRoot.promise
@@ -876,7 +876,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
   })
 
   it('adds files to a new dataset', async () => {
-    const response = await axios.get(urls.v2.dataset(emptyDatasetIdentifier))
+    const response = await axios.get(urls.qvain.dataset(emptyDatasetIdentifier))
     stores.Qvain.editDataset(response.data)
     Files.changeProject('project')
     await Files.loadingProjectRoot.promise
@@ -920,7 +920,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
   })
 
   it('adds directory to a new dataset', async () => {
-    const response = await axios.get(urls.v2.dataset(emptyDatasetIdentifier))
+    const response = await axios.get(urls.qvain.dataset(emptyDatasetIdentifier))
     stores.Qvain.editDataset(response.data)
     Files.changeProject('project')
     await Files.loadingProjectRoot.promise

@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Download API v2 endpoints"""
+"""Download API endpoints"""
 
 import json
 from flask_mail import Message
@@ -19,7 +19,7 @@ from etsin_finder.auth import authentication
 from etsin_finder.auth import authorization
 from etsin_finder.utils.localization import get_language, translate, default_language
 from etsin_finder.services import cr_service
-from etsin_finder.services.download_service_v2 import DownloadAPIService
+from etsin_finder.services.download_service import DownloadAPIService
 
 from etsin_finder.utils.log_utils import log_request
 

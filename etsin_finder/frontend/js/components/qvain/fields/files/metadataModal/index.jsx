@@ -19,7 +19,7 @@ import { getPASMeta } from '../../../../../stores/view/common.files.items'
 
 import { getOptions, getDefaultOptions, makeOption, findOption } from './options'
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
-import urls from '../../../utils/urls'
+import urls from '../../../../../utils/urls'
 import { withStores } from '../../../utils/stores'
 
 export class MetadataModal extends Component {
@@ -93,7 +93,7 @@ export class MetadataModal extends Component {
   }
 
   patchFileCharacteristics = (identifier, data) => {
-    const url = urls.v2.fileCharacteristics(identifier)
+    const url = urls.qvain.fileCharacteristics(identifier)
     return axios.put(url, data, {
       headers: {
         'Content-Type': 'application/json',

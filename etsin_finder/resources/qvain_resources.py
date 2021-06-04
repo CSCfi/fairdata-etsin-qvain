@@ -23,7 +23,7 @@ from etsin_finder.schemas.qvain_dataset_schema_v2 import (
     FileActionsValidationSchema,
     data_catalog_matcher,
 )
-from etsin_finder.utils.qvain_utils_v2 import (
+from etsin_finder.utils.qvain_utils import (
     data_to_metax,
     check_dataset_edit_permission,
     check_authentication,
