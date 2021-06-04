@@ -17,13 +17,10 @@ import AccessType from '../../../js/components/qvain/fields/licenses/accessType'
 import FileForm from '../../../js/components/qvain/fields/files/ida/forms/fileForm'
 import DirectoryForm from '../../../js/components/qvain/fields/files/ida/forms/directoryForm'
 import { File, Directory, Project } from '../../../js/stores/view/common.files.items'
-import QvainClass from '../../../js/stores/view/qvain'
-import AccessibilityClass from '../../../js/stores/view/accessibility'
-import ElasticQueryClass from '../../../js/stores/view/elasticquery'
-import LocaleClass from '../../../js/stores/view/locale'
-import EnvClass from '../../../js/stores/domain/env'
+
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../../js/utils/constants'
 import { metaxResponses } from '../../__testdata__/qvainPas.data'
+import { buildStores } from '../../../js/stores'
 
 global.Promise = require('bluebird')
 
@@ -31,19 +28,11 @@ Promise.config({
   cancellation: true,
 })
 
-const Env = new EnvClass()
-const Accessibility = new AccessibilityClass(Env)
-const ElasticQuery = new ElasticQueryClass(Env)
-const Locale = new LocaleClass(Accessibility, ElasticQuery)
-const Qvain = new QvainClass(Env)
+const stores = buildStores()
 
 const getStores = () => {
-  Qvain.resetQvainStore()
-  return {
-    Qvain,
-    Locale,
-    Env,
-  }
+  stores.Qvain.resetQvainStore()
+  return stores
 }
 
 jest.mock('axios')
@@ -258,6 +247,7 @@ describe('Qvain.Files', () => {
 
   it('allows editing of file fields', async () => {
     const stores = getStores()
+    stores.Auth.user.idaProjects = ['project_y']
     stores.Qvain.setPreservationState(0)
     wrapper = render(stores)
     const inputs = wrapper.find('input').not('[type="hidden"]')
@@ -271,6 +261,7 @@ describe('Qvain.Files', () => {
 
   it('prevents editing of directory fields', async () => {
     const stores = getStores()
+    stores.Auth.user.idaProjects = ['project_y']
     stores.Qvain.setPreservationState(80)
     wrapper = render(stores, true)
 
@@ -285,6 +276,7 @@ describe('Qvain.Files', () => {
 
   it('allows editing of directory fields', async () => {
     const stores = getStores()
+    stores.Auth.user.idaProjects = ['project_y']
     stores.Qvain.setPreservationState(100)
     wrapper = render(stores, true)
 

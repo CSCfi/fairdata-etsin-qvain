@@ -43,6 +43,7 @@ const flushPromises = () => new Promise(setImmediate)
 describe('Qvain.Files', () => {
   beforeEach(() => {
     stores = getStores()
+    stores.Auth.user.idaProjects = []
   })
 
   let wrapper, stores
@@ -105,6 +106,8 @@ describe('Qvain.Files', () => {
       stores.Qvain.Files.setInEdit(testfile)
       Form = FileForm
     }
+
+    stores.Auth.user.idaProjects = ['project_y']
 
     jest.spyOn(stores.Qvain.Files, 'applyInEdit')
 

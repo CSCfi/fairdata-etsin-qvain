@@ -29,19 +29,16 @@ const files = {
   cumulativeState: {
     label: 'Cumulative dataset',
     radio: {
-      no:
-        'No. (Adding files or folders to a published dataset requires you to create a new version of the dataset.)',
+      no: 'No. (Adding files or folders to a published dataset requires you to create a new version of the dataset.)',
       yes: 'Yes. (New files or folders will be added without a version change.)',
-      note:
-        'Note! Once the dataset has been published, it cannot be turned cumulative without creating a new version of the dataset.',
+      note: 'Note! Once the dataset has been published, it cannot be turned cumulative without creating a new version of the dataset.',
     },
     enabled: {
       state: 'This dataset has been marked as a cumulative dataset.',
       explanation:
         'It means that data is added to it regularly. If data is no longer being added to this dataset, you should turn it non-cumulative.',
       button: 'Turn non-cumulative',
-      note:
-        'Note! Once changed, you need to create a new version of the dataset to turn it back to cumulative.',
+      note: 'Note! Once changed, you need to create a new version of the dataset to turn it back to cumulative.',
     },
     disabled: {
       state: 'This dataset has been marked non-cumulative.',
@@ -89,8 +86,7 @@ const files = {
     statusText:
       'This dataset is deprecated. Some of the files in the dataset are no longer available.',
     header: 'Fix Deprecated Dataset',
-    help:
-      'This will fix the dataset by removing any included files and directories that are no longer available. A new dataset version will be created. The changes will take place immediately.',
+    help: 'This will fix the dataset by removing any included files and directories that are no longer available. A new dataset version will be created. The changes will take place immediately.',
     changes: 'You need to save your changes to the dataset first.',
     buttons: {
       show: 'Fix deprecated dataset',
@@ -101,8 +97,7 @@ const files = {
   },
   metadataModal: {
     header: 'Digital Preservation metadata',
-    help:
-      'Saving the changes will update the file metadata regardless of whether the file is in your dataset or not.',
+    help: 'Saving the changes will update the file metadata regardless of whether the file is in your dataset or not.',
     csvOptions: 'CSV Options',
     fields: {
       fileFormat: 'File format',
@@ -128,8 +123,7 @@ const files = {
     },
     clear: {
       header: 'Remove Digital Preservation metadata',
-      help:
-        'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
+      help: 'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
       cancel: 'Cancel',
       confirm: 'Remove',
     },
@@ -154,8 +148,7 @@ const files = {
       csvQuotingChar: 'Type a character',
     },
   },
-  help:
-    'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
+  help: 'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
   ida: {
     title: 'Fairdata IDA files',
     infoText: `When including files from IDA, first select your project in IDA.
@@ -192,6 +185,7 @@ const files = {
       deselect: 'Deselect %(name)s',
     },
     addUserMetadata: 'Add metadata',
+    showUserMetadata: 'Show metadata',
     editUserMetadata: 'Edit metadata',
     deleteUserMetadata: 'Remove metadata',
     form: {

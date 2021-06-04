@@ -182,6 +182,7 @@ const files = {
       deselect: 'Poista valinta %(name)s',
     },
     addUserMetadata: 'Lisää metadataa',
+    showUserMetadata: 'Tarkastele metadataa',
     editUserMetadata: 'Muokkaa metadataa',
     deleteUserMetadata: 'Poista metadata',
     form: {
