@@ -127,6 +127,7 @@ const EditDropdown = ({ item, parentArgs }) => {
     return (
       <BaseDropdown>
         <MetadataButton type="edit" />
+        <RemoveMetadataButton />
         {PasButtons()}
       </BaseDropdown>
     )
