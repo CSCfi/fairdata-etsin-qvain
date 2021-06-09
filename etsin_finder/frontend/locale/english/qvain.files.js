@@ -115,7 +115,8 @@ const files = {
     },
     buttons: {
       add: 'Add Digital Preservation metadata',
-      show: 'Edit Digital Preservation metadata',
+      show: 'Show Digital Preservation metadata',
+      edit: 'Edit Digital Preservation metadata',
       delete: 'Remove Digital Preservation metadata',
       close: 'Close',
       save: 'Save changes',

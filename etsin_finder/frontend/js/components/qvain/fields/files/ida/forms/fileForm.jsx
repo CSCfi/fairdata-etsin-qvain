@@ -168,6 +168,8 @@ class FileForm extends Component {
 
     const readonly = ro || !userHasRightsToEditProject
 
+    console.log('readonly', readonly)
+
     return (
       <FileContainer className={this.props.className}>
         <Translate

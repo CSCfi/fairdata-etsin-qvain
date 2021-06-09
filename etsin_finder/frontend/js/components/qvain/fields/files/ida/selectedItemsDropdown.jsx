@@ -85,23 +85,27 @@ const EditDropdown = ({ item, parentArgs }) => {
       setClearMetadataModalFile(item)
     }
 
+    let pasOption
+    if (readonly || !canEdit || !userHasRightsToEditProject) pasOption = 'show'
+    else if (itemHasPASMetadata) pasOption = 'edit'
+    else pasOption = 'add'
+
     return (
       isFile(item) && (
         <>
           <Translate
             component={DropdownItem}
-            content={`qvain.files.metadataModal.buttons.${
-              itemHasPASMetadata || !canEdit ? 'show' : 'add'
-            }`}
+            content={`qvain.files.metadataModal.buttons.${pasOption}`}
             onClick={showPasModal}
           />
-          <Translate
-            component={DropdownItem}
-            content="qvain.files.metadataModal.buttons.delete"
-            onClick={showClearPasModal}
-            danger
-            disabled={(readonly || !itemHasPASMetadata) && !canEdit}
-          />
+          {!readonly && itemHasPASMetadata && userHasRightsToEditProject && (
+            <Translate
+              component={DropdownItem}
+              content="qvain.files.metadataModal.buttons.delete"
+              onClick={showClearPasModal}
+              danger
+            />
+          )}
         </>
       )
     )
@@ -115,7 +119,7 @@ const EditDropdown = ({ item, parentArgs }) => {
     type: PropTypes.string.isRequired,
   }
 
-  if (!canEdit && !itemHasMetadata) return null
+  if (!canEdit && !itemHasMetadata && !isFile(item)) return null
   if (!canEdit && itemHasMetadata)
     return (
       <BaseDropdown>
@@ -131,6 +135,8 @@ const EditDropdown = ({ item, parentArgs }) => {
         {PasButtons()}
       </BaseDropdown>
     )
+  if (!canEdit && !itemHasMetadata && isFile(item))
+    return <BaseDropdown>{PasButtons()}</BaseDropdown>
   return (
     <BaseDropdown>
       <MetadataButton type="add" />

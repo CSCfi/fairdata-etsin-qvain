@@ -336,8 +336,14 @@ export class MetadataModal extends Component {
   }
 
   render() {
-    const { metadataModalFile, readonly } = this.props.Stores.Qvain
+    const {
+      metadataModalFile,
+      readonly: ro,
+      Files: { userHasRightsToEditProject },
+    } = this.props.Stores.Qvain
     const options = getOptions()
+    const readonly = ro || !userHasRightsToEditProject
+
     return (
       <Modal
         contentLabel="metadatamodal"

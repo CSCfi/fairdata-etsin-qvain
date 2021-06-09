@@ -111,7 +111,8 @@ const files = {
     },
     buttons: {
       add: 'Lisää PAS-metadata',
-      show: 'Muokkaa PAS-metadataa',
+      show: 'Tarkastele PAS-metadataa',
+      edit: 'Muokkaa PAS-metadataa',
       delete: 'Poista PAS-metadata',
       close: 'Sulje',
       save: 'Tallenna muutokset',
