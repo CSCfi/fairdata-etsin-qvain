@@ -21,6 +21,7 @@ services:
           target: /home/etsin-user/app_config
       volumes:
         - ./etsin_finder/:/etsin_finder/
+        - ./tests/:/tests/
       environment:
         - base_url=0.0.0.0:5000
         - FLASK_ENV=development
@@ -37,8 +38,14 @@ services:
         - "discovery.type=single-node"
       volumes:
         - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    etsin-qvain-memcached:
+      image: memcached:latest
+      hostname: 'etsin-qvain-memcached'
+      ports:
+        - "11211:11211"
+      command: ["memcached"]
     fairdata-nginx:
-      image:  fairdata-docker.artifactory.ci.csc.fi/nginx
+      image: nginx:latest
       configs:
         - source: fairdata-nginx-config
           target: /etc/nginx/nginx.conf
