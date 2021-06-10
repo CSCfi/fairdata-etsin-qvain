@@ -1,7 +1,7 @@
 import 'chai/register-expect'
 import CrossRef from '../../../js/stores/view/qvain/qvain.crossRef'
 import axios from 'axios'
-import urls from '../../../js/components/qvain/utils/urls'
+import urls from '../../../js/utils/urls'
 
 jest.mock('axios')
 

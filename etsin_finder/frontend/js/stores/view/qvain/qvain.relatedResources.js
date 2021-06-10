@@ -2,6 +2,8 @@ import { makeObservable, observable, action } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 
+const parseDoiUrl = doi => `https://doi.org/${doi}`
+
 export const RelatedResource = (
   {
     uiid = uuidv4(),
@@ -32,14 +34,14 @@ class RelatedResources extends Field {
   prefillInEdit = data => {
     const modifiedData = {
       name: { fi: data.label, en: data.label },
-      identifier: data.DOI,
+      identifier: parseDoiUrl(data.DOI),
       description: { fi: data.abstract || '', en: data.abstract || '', und: data.abstract || '' },
       entityType: {
         label: { fi: 'Julkaisu', en: 'Publication', und: 'Julkaisu' },
         url: 'http://uri.suomi.fi/codelist/fairdata/resource_type/code/publication',
       },
       relationType: {
-        label: { fi: 'Liittyvä aineisto', en: 'Related Dataset', und: 'Liittyvä aineisto' },
+        label: { fi: 'Liittyvä aineisto', en: 'Related dataset', und: 'Liittyvä aineisto' },
         url: 'http://purl.org/dc/terms/relation',
       },
     }

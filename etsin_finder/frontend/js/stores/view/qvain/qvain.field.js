@@ -56,7 +56,6 @@ class Field {
   @action changeAttribute = (attribute, value) => {
     this.setChanged(true)
     this.inEdit[attribute] = value
-    console.log(attribute, this.inEdit[attribute])
   }
 
   @action save = () => {
