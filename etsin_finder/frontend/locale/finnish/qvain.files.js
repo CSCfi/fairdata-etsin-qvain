@@ -174,6 +174,7 @@ const files = {
     hideRemoved: 'Piilota poistettavat',
     buttons: {
       edit: 'Muokkaa %(name)s',
+      show: 'Näytä %(name)s',
       remove: 'Poista %(name)s',
       undoRemove: 'Peru %(name)s poisto',
       refresh: 'Päivitä %(name)s',

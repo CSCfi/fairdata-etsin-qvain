@@ -177,6 +177,7 @@ const files = {
     hideRemoved: 'Hide removed',
     buttons: {
       edit: 'Edit %(name)s',
+      show: 'Show %(name)s',
       remove: 'Remove %(name)s',
       undoRemove: 'Undo removing %(name)s',
       refresh: 'Refresh %(name)s',

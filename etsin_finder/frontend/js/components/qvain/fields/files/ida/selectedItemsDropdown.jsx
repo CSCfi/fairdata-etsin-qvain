@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faEye } from '@fortawesome/free-solid-svg-icons'
 
 import { Dropdown, DropdownItem } from '../../../../general/dropdown'
 import { hasMetadata, hasPASMetadata } from '../../../../../stores/view/common.files.items'
@@ -37,20 +37,24 @@ const EditDropdown = ({ item, parentArgs }) => {
   const BaseDropdown = ({ children }) => {
     const editColor = itemHasMetadata ? 'primary' : 'gray'
     let disabledEditColor = itemHasMetadata ? 'error' : 'gray'
+    let icon = faPen
+    let ariaLabel = 'qvain.files.selected.buttons.edit'
 
-    if (readonly) {
+    if (readonly || !userHasRightsToEditProject) {
       disabledEditColor = 'gray'
+      icon = faEye
+      ariaLabel = 'qvain.files.selected.buttons.show'
     }
 
     return (
       <Dropdown
         buttonComponent={ClickableIcon}
         buttonProps={{
-          icon: faPen,
+          icon,
           color: editColor,
           disabledColor: disabledEditColor,
           disabledOpacity: 0.4,
-          attributes: { 'aria-label': 'qvain.files.selected.buttons.edit' },
+          attributes: { 'aria-label': ariaLabel },
         }}
         with={{ name }}
       >
