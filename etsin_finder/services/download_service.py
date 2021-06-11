@@ -39,10 +39,9 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
         if dl_api_config:
             host = dl_api_config.get('HOST')
             port = dl_api_config.get('PORT')
-            user = dl_api_config.get('USER')
-            password = dl_api_config.get('PASSWORD')
             public_host = dl_api_config.get('PUBLIC_HOST')
             public_port = dl_api_config.get('PUBLIC_PORT')
+            auth_token = dl_api_config.get('AUTH_TOKEN')
             verify_ssl = dl_api_config.get('VERIFY_SSL', True)
             self_domain = app.config.get('SERVER_ETSIN_DOMAIN_NAME')
 
@@ -56,9 +55,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
             self.NOTIFICATION_SECRET = generate_fernet_key(app.config['SECRET_KEY'])
 
             self.verify_ssl = verify_ssl
-            self.auth = None
-            if user or password:
-                self.auth = (user, password)
+            self.auth_token = auth_token
             self.proxies = None
             if dl_api_config.get('HTTPS_PROXY'):
                 self.proxies = dict(https=dl_api_config.get('HTTPS_PROXY'))
@@ -67,8 +64,14 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
 
     def _get_args(self, **kwargs):
         """Get default args for request, allow overriding with kwargs."""
-        args = dict(headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
-                    auth=self.auth,
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        if self.auth_token:
+            headers['Authorization'] = f'Bearer {self.auth_token}'
+
+        args = dict(headers=headers,
                     verify=self.verify_ssl,
                     timeout=30,
                     proxies=self.proxies,
