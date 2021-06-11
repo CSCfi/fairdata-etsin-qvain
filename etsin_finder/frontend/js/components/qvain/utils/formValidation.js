@@ -567,11 +567,15 @@ const temporalDateSchema = yup.object().shape({
   startDate: yup
     .string()
     .date()
-    .required('qvain.validationMessages.temporalAndSpatial.temporal.startDateMissing'),
-  endDate: yup
-    .string()
-    .date()
-    .required('qvain.validationMessages.temporalAndSpatial.temporal.endDateMissing'),
+    .when('endDate', {
+      is: undefined,
+      then: yup
+        .string()
+        .date()
+        .required('qvain.validationMessages.temporalAndSpatial.temporal.dateMissing'),
+      otherwise: yup.string().date(),
+    }),
+  endDate: yup.string().date(),
 })
 
 // RELATED RESOURCE

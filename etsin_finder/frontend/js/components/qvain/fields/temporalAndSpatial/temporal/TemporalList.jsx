@@ -7,14 +7,30 @@ import Translate from 'react-translate-component'
 
 import Label from '../../../general/card/label'
 
-const dateToString = (date, lang) => (date ? new Date(date).toLocaleDateString(lang) : '')
+const dateToString = (date, lang) => (date ? new Date(date).toLocaleDateString(lang) : undefined)
+
+const getTranslationItem = (item, lang) => ({
+  startDate: dateToString(item.startDate, lang),
+  endDate: dateToString(item.endDate, lang),
+})
+
+const getTranslationPath = item => {
+  if (item.startDate && !item.endDate)
+    return 'qvain.temporalAndSpatial.temporal.listItem.startDateOnly'
+  if (!item.startDate && item.endDate)
+    return 'qvain.temporalAndSpatial.temporal.listItem.endDateOnly'
+
+  return 'qvain.temporalAndSpatial.temporal.listItem.bothDates'
+}
 
 const TemporalList = ({ temporals, lang, remove, readonly }) =>
   temporals.map(item => (
     <Label color="primary" margin="0 0.5em 0.5em 0" key={item.uiid}>
-      <PaddedWord>
-        {`${dateToString(item.startDate, lang)} - ${dateToString(item.endDate, lang)}`}
-      </PaddedWord>
+      <Translate
+        component={PaddedWord}
+        content={getTranslationPath()}
+        with={getTranslationItem(item, lang)}
+      />
       {!readonly && (
         <Translate
           component={RemoveButton}

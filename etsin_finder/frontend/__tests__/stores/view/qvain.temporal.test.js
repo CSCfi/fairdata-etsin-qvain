@@ -85,6 +85,30 @@ describe('Temporals with Parent as arg', () => {
     })
   })
 
+  describe('given storage partial populated with temporal object', () => {
+    const temporalObj = {
+      startDate: undefined,
+      endDate: new Date(2).toISOString(),
+      uiid: 1,
+    }
+
+    beforeEach(() => {
+      temporals.storage = [temporalObj]
+    })
+
+    describe('when accessing getter renderable', () => {
+      test('should return renderable version of temporals', () => {
+        const renderableObj = {
+          start: undefined,
+          end: temporalObj.endDate,
+          uiid: temporalObj.uiid,
+        }
+
+        temporals.renderable.should.eql([renderableObj])
+      })
+    })
+  })
+
   describe('when calling reset', () => {
     beforeEach(() => {
       temporals.reset()

@@ -271,3 +271,44 @@ describe('given required props and with one item in temporals array', () => {
     })
   })
 })
+
+describe('given required props and with one partial item in temporals array', () => {
+  const props = {
+    temporals: [
+      {
+        startDate: undefined,
+        endDate: 2,
+        uiid: 3,
+      },
+    ],
+    lang: 'en',
+    remove: jest.fn(),
+  }
+
+  const harness = new Harness(TemporalList, props)
+
+  describe('TemporalList', () => {
+    beforeEach(() => {
+      harness.shallow()
+    })
+
+    test('should exist', () => {
+      harness.shouldExist()
+    })
+
+    describe('PaddedWord', () => {
+      beforeEach(() => {
+        harness.findWithName('PaddedWord')
+      })
+
+      test('should exist', () => {
+        harness.shouldExist()
+      })
+
+      test('should have parsed "until <item.endDate>" in text', () => {
+        const expectedText = 'until 1/1/1970'
+        harness.wrapper.text().should.eql(expectedText)
+      })
+    })
+  })
+})
