@@ -31,11 +31,6 @@ jest.mock('../../../js/components/dataset/data/idaResources/download', () => {
   }
 })
 
-global.Promise = require('bluebird')
-Promise.config({
-  cancellation: true,
-})
-
 jest.mock('../../../js/stores/stores', () => {
   const useStores = jest.fn()
 

@@ -23,8 +23,7 @@ import { StoresProvider, useStores } from '../../../../js/stores/stores'
 import Modal from '../../../../js/components/general/modal'
 import SelectedItemsTreeItem from '../../../../js/components/qvain/fields/files/ida/selectedItemsTreeItem'
 
-
-global.Promise = require('bluebird')
+jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
 
 const stores = buildStores()
 

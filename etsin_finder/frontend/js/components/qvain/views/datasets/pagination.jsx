@@ -13,7 +13,7 @@ const DatasetPagination = ({ id, page, count, limit, onChangePage }) => {
   const higherRange = completeRange.slice(page, page + 3)
 
   const handleChangePage = pageNum => () => {
-    onChangePage(pageNum)()
+    onChangePage(pageNum)
   }
 
   const renderPageButtons = range => {
