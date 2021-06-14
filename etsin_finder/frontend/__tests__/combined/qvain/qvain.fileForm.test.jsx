@@ -15,12 +15,6 @@ import { File, Directory, Project } from '../../../js/stores/view/common.files.i
 import { SaveButton } from '../../../js/components/qvain/general/buttons'
 import { ValidationErrors } from '../../../js/components/qvain/general/errors/validationError'
 
-global.Promise = require('bluebird')
-
-Promise.config({
-  cancellation: true,
-})
-
 const getStores = () => {
   configure({ safeDescriptors: false })
   const stores = buildStores()

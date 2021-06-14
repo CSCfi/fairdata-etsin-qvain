@@ -18,8 +18,6 @@ import Modal from '../../../../js/components/general/modal'
 import { EditButton } from '../../../../js/components/qvain/general/buttons/iconButtons'
 import { buildStores } from '../../../../js/stores'
 
-global.Promise = require('bluebird')
-
 // Make sure MobX store values are not mutated outside actions.
 configure({
   enforceActions: 'always',

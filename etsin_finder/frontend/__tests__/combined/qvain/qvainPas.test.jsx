@@ -22,8 +22,6 @@ import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../../js/utils/cons
 import { metaxResponses } from '../../__testdata__/qvainPas.data'
 import { buildStores } from '../../../js/stores'
 
-global.Promise = require('bluebird')
-
 Promise.config({
   cancellation: true,
 })

@@ -352,10 +352,9 @@ class Qvain extends Resources {
 
   @computed
   get hasBeenPublishedWithDoi() {
-    return !!(
-      this.hasBeenPublished &&
-      this.original?.research_dataset?.preferred_identifier?.startsWith('doi')
-    )
+    const hasDoi = this.original?.research_dataset?.preferred_identifier?.startsWith('doi')
+    const draftOfHasDoi = this.original?.draft_of?.preferred_identifier?.startsWith('doi')
+    return !!(this.hasBeenPublished && (hasDoi || draftOfHasDoi))
   }
 
   @computed

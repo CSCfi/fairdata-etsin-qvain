@@ -22,12 +22,6 @@ import { get } from '../../__testdata__/qvain.files.data'
 import { useStores } from '../../../js/stores/stores'
 import { buildStores } from '../../../js/stores'
 
-global.Promise = require('bluebird')
-
-Promise.config({
-  cancellation: true,
-})
-
 jest.mock('axios')
 
 jest.mock('../../../js/stores/stores', () => {

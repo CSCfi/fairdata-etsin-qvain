@@ -36,6 +36,12 @@ services:
         - "discovery.type=single-node"
       volumes:
         - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    etsin-qvain-memcached:
+      image: memcached:latest
+      hostname: 'etsin-qvain-memcached'
+      ports:
+        - "11211:11211"
+      command: ["memcached"]
 
 configs:
   etsin-qvain-app-config:

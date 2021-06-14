@@ -40,6 +40,10 @@ jest.mock('react', () => {
   }
 })
 
+jest.mock('axios', () => ({
+  get: jest.fn().mockReturnValue(Promise.resolve({ data: { hits: { hits: [] } } })),
+}))
+
 describe('Qvain.RightsAndLicenses', () => {
   let stores
 

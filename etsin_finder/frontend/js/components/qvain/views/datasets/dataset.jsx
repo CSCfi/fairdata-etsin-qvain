@@ -13,6 +13,7 @@ import TablePasState from './tablePasState'
 import formatAge from './formatAge'
 import { Dropdown, DropdownItem } from '../../../general/dropdown'
 import { useStores } from '../../utils/stores'
+import getDatasetActions, { groupActions } from './datasetActions'
 
 const datasetStateTranslation = dataset => {
   if (dataset.state === 'published') {
@@ -24,41 +25,12 @@ const datasetStateTranslation = dataset => {
   return 'qvain.datasets.state.draft'
 }
 
-const getGoToEtsinButton = (dataset, getEtsinUrl, Matomo) => {
-  let identifier = dataset.identifier
-  let goToEtsinKey = 'goToEtsin'
-  let query = ''
-  if (dataset.next_draft) {
-    identifier = dataset.next_draft.identifier
-    goToEtsinKey = 'goToEtsinDraft'
-    query = '?preview=1'
-  } else if (dataset.state === 'draft') {
-    goToEtsinKey = 'goToEtsinDraft'
-    query = '?preview=1'
-  }
-
-  return (
-    <Translate
-      component={TableButton}
-      onClick={() => {
-        Matomo.recordEvent(`PREVIEW / ${identifier}`)
-        window.open(getEtsinUrl(`/dataset/${identifier}${query}`), '_blank')
-      }}
-      content={`qvain.datasets.${goToEtsinKey}`}
-    />
-  )
-}
-
-const getTitle = (dataset, lang) => {
+const getTitle = (getValueTranslation, dataset) => {
   let researchDataset = dataset.research_dataset
-  if (
-    dataset.next_draft &&
-    dataset.next_draft.research_dataset &&
-    dataset.next_draft.research_dataset.title
-  ) {
+  if (dataset.next_draft?.research_dataset?.title) {
     researchDataset = dataset.next_draft.research_dataset
   }
-  return researchDataset.title[lang] || researchDataset.title.en || researchDataset.title.fi
+  return getValueTranslation(researchDataset.title)
 }
 
 const getActionButton = action => {
@@ -80,23 +52,12 @@ const getActionItem = action => {
   )
 }
 
-function Dataset({
-  dataset,
-  currentTimestamp,
-  handleCreateNewVersion,
-  handleUseAsTemplate,
-  handleEnterEdit,
-  openRemoveModal,
-  indent,
-  highlight,
-}) {
+function Dataset({ dataset, currentTimestamp, indent, highlight }) {
+  const Stores = useStores()
   const {
-    Env: { getEtsinUrl },
-    Locale: { lang },
-    Matomo,
-  } = useStores()
+    Locale: { getValueTranslation },
+  } = Stores
   const rowRef = useRef()
-  const actions = []
 
   useEffect(() => {
     if (highlight && rowRef?.current?.scrollIntoView) {
@@ -104,45 +65,21 @@ function Dataset({
     }
   }, [highlight])
 
-  actions.push({
-    text: 'qvain.datasets.useAsTemplate',
-    danger: false,
-    handler: () => handleUseAsTemplate(dataset),
-  })
-  if (
-    !dataset.next_draft &&
-    dataset.next_dataset_version === undefined &&
-    dataset.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.IDA &&
-    dataset.state === 'published'
-  ) {
-    actions.push({
-      text: 'qvain.datasets.createNewVersion',
-      handler: () => handleCreateNewVersion(dataset.identifier),
-    })
-  }
-  if (dataset.next_draft) {
-    actions.push({
-      text: 'qvain.datasets.revertButton',
-      danger: true,
-      handler: openRemoveModal(dataset, true),
-    })
-  }
-  actions.push({
-    text: 'qvain.datasets.deleteButton',
-    danger: true,
-    handler: openRemoveModal(dataset),
-  })
-
   let titleCellStyle = null
   if (indent) {
     titleCellStyle = { paddingLeft: '1rem', position: 'relative' }
   }
 
+  const actions = getDatasetActions(Stores, dataset)
+
+  const { buttonActions, dropdownActions } = groupActions(actions, 3)
+  const hasDropDownItems = dropdownActions.length > 0
+
   return (
     <DatasetRow ref={rowRef} key={dataset.identifier} tabIndex="0" highlight={highlight}>
       <BodyCellWordWrap style={titleCellStyle}>
         {indent && <Marker />}
-        {getTitle(dataset, lang)}
+        {getTitle(getValueTranslation, dataset)}
         {dataset.next_dataset_version !== undefined && (
           <Translate color="yellow" content="qvain.datasets.oldVersion" component={DatasetLabel} />
         )}
@@ -159,19 +96,10 @@ function Dataset({
       </BodyCell>
       <BodyCell>{formatAge(currentTimestamp, dataset.date_created)}</BodyCell>
       <BodyCellActions>
-        <Translate
-          component={TableButton}
-          onClick={handleEnterEdit(dataset)}
-          content={
-            dataset.next_draft ? 'qvain.datasets.editDraftButton' : 'qvain.datasets.editButton'
-          }
-        />
-        {getGoToEtsinButton(dataset, getEtsinUrl, Matomo)}
-        {actions.length === 1 ? (
-          getActionButton(actions[0])
-        ) : (
+        {buttonActions.map(action => getActionButton(action))}
+        {hasDropDownItems && (
           <Dropdown buttonContent="qvain.datasets.moreActions" buttonComponent={DropdownButton}>
-            {actions.map(action => getActionItem(action))}
+            {dropdownActions.map(action => getActionItem(action))}
           </Dropdown>
         )}
       </BodyCellActions>
@@ -182,10 +110,6 @@ function Dataset({
 Dataset.propTypes = {
   dataset: PropTypes.object.isRequired,
   currentTimestamp: PropTypes.object.isRequired,
-  handleEnterEdit: PropTypes.func.isRequired,
-  handleUseAsTemplate: PropTypes.func.isRequired,
-  handleCreateNewVersion: PropTypes.func.isRequired,
-  openRemoveModal: PropTypes.func.isRequired,
   indent: PropTypes.bool,
   highlight: PropTypes.bool,
 }
