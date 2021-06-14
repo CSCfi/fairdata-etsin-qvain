@@ -56,9 +56,10 @@ class OrganizationSelect extends Component {
   /**
    * Fetch top level organization options when component is mounted.
    */
+
   async componentDidMount() {
-    const { options } = this.state
     const organization = await resolveOptions()
+    const { options } = this.state
     this.setState({ options: { ...options, organization } })
   }
 

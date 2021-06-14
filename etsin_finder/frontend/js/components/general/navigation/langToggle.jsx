@@ -22,7 +22,7 @@ import { useStores } from '../../../utils/stores'
 const LangToggle = ({ inverted, margin, mobile }) => {
   const { Locale } = useStores()
   const changeLang = () => {
-    Locale.toggleLang()
+    Locale.toggleLang({ save: true })
   }
 
   const otherLang = () =>
@@ -56,11 +56,7 @@ const LangToggle = ({ inverted, margin, mobile }) => {
           {otherLang()}
         </InvertedButton>
       ) : (
-        <TransparentButton
-          onClick={changeLang}
-          margin={margin}
-          aria-labelledby={labelId}
-        >
+        <TransparentButton onClick={changeLang} margin={margin} aria-labelledby={labelId}>
           {otherLang()}
         </TransparentButton>
       )}

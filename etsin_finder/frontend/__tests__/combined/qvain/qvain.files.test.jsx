@@ -26,12 +26,6 @@ import handleSubmitToBackend from '../../../js/components/qvain/utils/handleSubm
 import { get } from '../../__testdata__/qvain.files.data'
 import { StoresProvider, useStores } from '../../../js/stores/stores'
 
-global.Promise = require('bluebird')
-
-Promise.config({
-  cancellation: true,
-})
-
 jest.mock('axios')
 
 jest.mock('../../../js/stores/stores', () => {

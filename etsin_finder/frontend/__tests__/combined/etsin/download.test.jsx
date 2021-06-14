@@ -24,11 +24,6 @@ jest.mock('../../../js/components/dataset/data/idaResources/download', () => {
   }
 })
 
-global.Promise = require('bluebird')
-Promise.config({
-  cancellation: true,
-})
-
 const { PENDING, STARTED, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
 
 // Enable fake timers. Use 'legacy' explicitly because

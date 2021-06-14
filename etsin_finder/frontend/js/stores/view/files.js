@@ -1,10 +1,10 @@
 import { observable, action, makeObservable, override } from 'mobx'
 
 import { dirIdentifierKey, fileIdentifierKey } from './common.files.items'
-import { PromiseManager } from './common.files.utils'
 import { PublicItemsView } from './common.files.views'
 
 import FilesBase from './common.files'
+import PromiseManager from '../../utils/promiseManager'
 
 class Files extends FilesBase {
   // File hierarchy for files that are accessible through a public dataset. Does not support editing.
