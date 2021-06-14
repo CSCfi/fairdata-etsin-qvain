@@ -6,10 +6,10 @@ import Files from './qvain.files'
 import Submit from './qvain.submit'
 
 class Qvain extends Resources {
-  constructor(Env) {
+  constructor(Env, Auth) {
     super()
     this.Env = Env
-    this.Files = new Files(this)
+    this.Files = new Files(this, Auth)
     this.Submit = new Submit(this)
     this.resetQvainStore()
     makeObservable(this)
@@ -317,12 +317,16 @@ class Qvain extends Resources {
 
   @computed
   get canSelectFiles() {
-    if (this.readonly || this.isPas || this.deprecated) {
+    if (this.readonly || this.isPas || this.deprecated || !this.Files.userHasRightsToEditProject) {
       return false
     }
 
     if (this.hasBeenPublished) {
-      if (this.Files && (!this.Files.projectLocked || this.Files.draftOfHasProject === false)) {
+      if (
+        this.Files &&
+        (!this.Files.projectLocked || this.Files.draftOfHasProject === false) &&
+        this.Files.userHasRightsToEditProject
+      ) {
         return true // for published noncumulative datasets, allow adding files only if none exist yet
       }
       return this.isCumulative

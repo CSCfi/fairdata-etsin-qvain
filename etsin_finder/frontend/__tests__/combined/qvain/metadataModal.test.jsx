@@ -11,25 +11,14 @@ import translate from 'counterpart'
 import '../../../locale/translations.js'
 import etsinTheme from '../../../js/styles/theme'
 import MetadataModal from '../../../js/components/qvain/fields/files/metadataModal'
-import EnvClass from '../../../js/stores/domain/env'
-import AccessibilityClass from '../../../js/stores/view/accessibility'
-import ElasticQueryClass from '../../../js/stores/view/elasticquery'
-import LocaleClass from '../../../js/stores/view/locale'
-import QvainClass from '../../../js/stores/view/qvain'
+import { buildStores } from '../../../js/stores/'
 import { Project, File, Directory } from '../../../js/stores/view/common.files.items'
 
 const getStores = () => {
-  const Env = new EnvClass()
-  const Accessibility = new AccessibilityClass(Env)
-  const ElasticQuery = new ElasticQueryClass(Env)
-  const Locale = new LocaleClass(Accessibility, ElasticQuery)
-  const Qvain = new QvainClass(Env)
-  Qvain.resetQvainStore()
-  return {
-    Env,
-    Qvain,
-    Locale,
-  }
+  const stores = buildStores()
+  stores.Qvain.resetQvainStore()
+  stores.Auth.user.idaProjects = ['project_y']
+  return stores
 }
 
 jest.mock('axios')

@@ -139,8 +139,14 @@ export class DirectoryFormBase extends Component {
   }
 
   render() {
-    const { readonly } = this.props.Stores.Qvain
+    const {
+      readonly: ro,
+      Files: { userHasRightsToEditProject },
+    } = this.props.Stores.Qvain
     const { titleError, descriptionError, directoryError, useCategoryError } = this.state
+
+    const readonly = ro || !userHasRightsToEditProject
+
     return (
       <DirectoryContainer className={this.props.className}>
         <Label htmlFor="directory-form-title">

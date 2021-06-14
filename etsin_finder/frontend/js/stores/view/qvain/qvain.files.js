@@ -1,9 +1,9 @@
-import { observable, action, makeObservable, override } from 'mobx'
+import { observable, action, makeObservable, override, computed } from 'mobx'
 import axios from 'axios'
 
 import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from '../common.files.items'
 import { getAction } from '../common.files.utils'
-import { itemLoaderAny, FetchType } from '../common.files.loaders'
+import { itemLoaderAny, itemLoaderPublic, FetchType } from '../common.files.loaders'
 import { AddItemsView, SelectedItemsView } from '../common.files.views'
 import urls from '../../../utils/urls'
 import PromiseManager from '../../../utils/promiseManager'
@@ -14,10 +14,11 @@ class Files extends FilesBase {
   // File hierarchy for files in user projects.
   // Supports file addition and deletion and metadata editing.
 
-  constructor(Qvain) {
+  constructor(Qvain, Auth) {
     super()
     makeObservable(this)
     this.Qvain = Qvain
+    this.Auth = Auth
     this.SelectedItemsView = new SelectedItemsView(this)
     this.AddItemsView = new AddItemsView(this)
     this.promiseManager = new PromiseManager()
@@ -29,14 +30,34 @@ class Files extends FilesBase {
 
   @observable inEdit = undefined
 
+  @computed get userHasRightsToEditProject() {
+    if (!this.selectedProject) return true
+    return this.Auth.user.idaProjects.includes(this.selectedProject)
+  }
+
   cancelOnReset = promise => this.promiseManager.add(promise)
 
   @override async loadDirectory(dir) {
-    return itemLoaderAny.loadDirectory(this, dir, this.initialLoadCount)
+    if (this.userHasRightsToEditProject)
+      return itemLoaderAny.loadDirectory(this, dir, this.initialLoadCount)
+
+    return itemLoaderPublic.loadDirectory(this, dir, this.initialLoadCount)
   }
 
   fetchRootIdentifier = async projectIdentifier => {
-    const { data } = await axios.get(urls.common.projectFiles(projectIdentifier))
+    // when the user is not in project, send datasetIdentifier
+    // when the user is in project, don't send datasetIdentifier
+
+    if (this.userHasRightsToEditProject) {
+      const { data } = await axios.get(urls.common.projectFiles(projectIdentifier))
+      return data.identifier
+    }
+
+    const { data } = await axios.get(urls.common.projectFiles(projectIdentifier), {
+      params: {
+        cr_identifier: this.datasetIdentifier,
+      },
+    })
     return data.identifier
   }
 
