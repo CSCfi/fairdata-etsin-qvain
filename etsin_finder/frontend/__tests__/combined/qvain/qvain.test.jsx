@@ -194,7 +194,7 @@ describe('Qvain translation tabs', () => {
   })
 
   const getTranslationTabProps = (localeLanguage, activeTabLanguage) => {
-    stores.Locale.setLang(localeLanguage, false)
+    stores.Locale.setLang(localeLanguage)
     const component = shallow(
       <TranslationTab language={activeTabLanguage} setLanguage={() => {}} children="" />
     )

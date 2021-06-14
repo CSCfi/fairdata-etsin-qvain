@@ -68,6 +68,18 @@ export class DatasetTable extends Component {
             </Row>
           </TableHeader>
           <TableBody striped>
+            {!error &&
+              datasetGroupsOnPage.map(group => (
+                <DatasetGroup
+                  datasets={group}
+                  key={group[0].identifier}
+                  currentTimestamp={this.state.currentTimestamp}
+                  handleEnterEdit={this.handleEnterEdit}
+                  handleUseAsTemplate={this.handleUseAsTemplate}
+                  handleCreateNewVersion={this.handleCreateNewVersion}
+                  highlight={publishedDataset}
+                />
+              ))}
             {isLoadingDatasets && (
               <Translate component={TableNote} content="qvain.datasets.loading" />
             )}
@@ -90,18 +102,6 @@ export class DatasetTable extends Component {
             {this.noDatasets() && (
               <Translate component={TableNote} content="qvain.datasets.noDatasets" />
             )}
-            {!error &&
-              datasetGroupsOnPage.map(group => (
-                <DatasetGroup
-                  datasets={group}
-                  key={group[0].identifier}
-                  currentTimestamp={this.state.currentTimestamp}
-                  handleEnterEdit={this.handleEnterEdit}
-                  handleUseAsTemplate={this.handleUseAsTemplate}
-                  handleCreateNewVersion={this.handleCreateNewVersion}
-                  highlight={publishedDataset}
-                />
-              ))}
           </TableBody>
         </TablePadded>
         <DatasetPagination

@@ -10,6 +10,7 @@ import {
   getUseAsTemplateAction,
   getRemoveAction,
   getDatasetActions,
+  groupActions,
 } from '../../../js/components/qvain/views/datasets/datasetActions'
 
 import { expect } from 'chai'
@@ -223,4 +224,23 @@ describe('getDatasetActions', () => {
       'qvain.datasets.deleteButton',
     ])
   })
+})
+
+describe('groupActions', () => {
+  test.each([
+    [0, 0, 0, 0],
+    [3, 3, 3, 0],
+    [5, 3, 2, 3],
+    [1, 1, 1, 0],
+    [5, 1, 0, 5],
+    [2, 3, 2, 0],
+  ])(
+    'given actions.length=%d, maxButtons=%d, should return %d button actions and %d dropdown actions',
+    (actionsLength, maxButtons, expectedButtonCount, expectedDropdownCount) => {
+      const actions = Array(actionsLength)
+      const { buttonActions, dropdownActions } = groupActions(actions, maxButtons)
+      buttonActions.length.should.eql(expectedButtonCount)
+      dropdownActions.length.should.eql(expectedDropdownCount)
+    }
+  )
 })

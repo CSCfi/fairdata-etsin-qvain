@@ -144,4 +144,15 @@ export const getDatasetActions = (Stores, dataset) => {
   return actions
 }
 
+export const groupActions = (actions, maxButtons) => {
+  if (actions.length <= maxButtons) {
+    // no dropdown needed
+    return { buttonActions: [...actions], dropdownActions: [] }
+  }
+  // "more" button counts as one button
+  const buttonActions = actions.slice(0, maxButtons - 1)
+  const dropdownActions = actions.slice(maxButtons - 1)
+  return { buttonActions, dropdownActions }
+}
+
 export default getDatasetActions

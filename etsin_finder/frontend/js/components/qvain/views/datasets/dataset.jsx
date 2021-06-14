@@ -13,7 +13,7 @@ import TablePasState from './tablePasState'
 import formatAge from './formatAge'
 import { Dropdown, DropdownItem } from '../../../general/dropdown'
 import { useStores } from '../../utils/stores'
-import getDatasetActions from './datasetActions'
+import getDatasetActions, { groupActions } from './datasetActions'
 
 const datasetStateTranslation = dataset => {
   if (dataset.state === 'published') {
@@ -71,12 +71,9 @@ function Dataset({ dataset, currentTimestamp, indent, highlight }) {
   }
 
   const actions = getDatasetActions(Stores, dataset)
-  const actionButtons = actions.splice(0, 2)
-  if (actions.length === 1) {
-    actionButtons.push(actions.splice(0, 1))
-  }
-  const actionDropdownItems = actions
-  const hasDropDownItems = actionDropdownItems.length > 0
+
+  const { buttonActions, dropdownActions } = groupActions(actions, 3)
+  const hasDropDownItems = dropdownActions.length > 0
 
   return (
     <DatasetRow ref={rowRef} key={dataset.identifier} tabIndex="0" highlight={highlight}>
@@ -99,10 +96,10 @@ function Dataset({ dataset, currentTimestamp, indent, highlight }) {
       </BodyCell>
       <BodyCell>{formatAge(currentTimestamp, dataset.date_created)}</BodyCell>
       <BodyCellActions>
-        {actionButtons.map(action => getActionButton(action))}
+        {buttonActions.map(action => getActionButton(action))}
         {hasDropDownItems && (
           <Dropdown buttonContent="qvain.datasets.moreActions" buttonComponent={DropdownButton}>
-            {actionDropdownItems.map(action => getActionItem(action))}
+            {dropdownActions.map(action => getActionItem(action))}
           </Dropdown>
         )}
       </BodyCellActions>

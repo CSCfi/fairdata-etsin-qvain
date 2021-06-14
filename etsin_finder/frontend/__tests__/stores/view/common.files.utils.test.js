@@ -93,7 +93,7 @@ describe('common.files.utils', () => {
     })
   })
 
-  describe.only('when calling ignoreNotFound with rejecting Promise (generic Error)', () => {
+  describe('when calling ignoreNotFound with rejecting Promise (generic Error)', () => {
     const reject = new Error('test error')
     const getTestPromise = () => Promise.reject(reject)
 
