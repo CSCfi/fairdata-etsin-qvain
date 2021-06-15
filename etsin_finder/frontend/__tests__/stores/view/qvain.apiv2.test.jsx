@@ -209,11 +209,6 @@ describe('Submit.exec()', () => {
     expect(axios.post).not.toHaveBeenCalled()
   })
 
-  test('should set useDoiModalIsOpen to false', async () => {
-    await exec(() => Submit.openUseDoiModal())
-    expect(Submit.useDoiModalIsOpen).toBe(false)
-  })
-
   test('should call handleSubmitToBackend', async () => {
     await exec()
     expect(handleSubmitToBackend).toHaveBeenCalledTimes(1)

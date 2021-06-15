@@ -99,15 +99,14 @@ describe('RestrictionGrounds', () => {
     })
 
     describe('when calling validate (with Schema)', () => {
-      let returnValue
       const Schema = {
         validate: jest.fn(() => Promise.resolve()),
       }
 
-      beforeEach(() => {
+      beforeEach(async () => {
         restrictionGrounds.value = { identifier: 'identifier' }
         restrictionGrounds.Schema = Schema
-        returnValue = restrictionGrounds.validate()
+        await restrictionGrounds.validate()
       })
 
       test('should call Schema.validate', () => {

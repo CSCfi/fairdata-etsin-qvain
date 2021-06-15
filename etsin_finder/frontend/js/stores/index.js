@@ -28,7 +28,7 @@ export const buildStores = () => {
   const QvainDatasets = new QvainDatasetsClass()
   const SearchFilters = new SearchFiltersClass()
   const Access = new AccessClass(Auth)
-  const Qvain = new QvainClass(Env)
+  const Qvain = new QvainClass(Env, Auth)
   const Accessibility = new AccessibilityClass(Env)
   const ElasticQuery = new ElasticQueryClass(Env)
   const Locale = new LocaleClass(Accessibility, ElasticQuery)

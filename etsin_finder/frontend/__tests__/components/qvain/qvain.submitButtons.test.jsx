@@ -3,7 +3,6 @@ import { shallow } from 'enzyme'
 import Harness from '../componentTestHarness'
 
 import { SubmitButtons } from '../../../js/components/qvain/views/editor/submitButtons'
-import DoiModal from '../../../js/components/qvain/views/editor/doiModal'
 import { useStores } from '../../../js/stores/stores'
 
 const mockSubmitDraft = jest.fn()
@@ -28,8 +27,6 @@ describe('SubmitButtons', () => {
         Submit: {
           submitDraft: mockSubmitDraft,
           submitPublish: mockSubmitPublish,
-          useDoiModalIsOpen: false,
-          closeUseDoiModal: jest.fn(),
         },
       },
       Env: { getQvainUrl: mockGetQvainUrl },
@@ -110,9 +107,6 @@ let getMockStores = () => {
         prevalidate: jest.fn(),
         isDraftButtonDisabled: false,
         isPublishButtonDisabled: false,
-        useDoiModalIsOpen: false,
-        closeUseDoiModal: jest.fn(),
-        openUseDoiModal: jest.fn(),
       },
       original: {},
       hasBeenPublishedWithDoi: false,
@@ -259,87 +253,6 @@ describe('given mockStores and required props', () => {
 
       test('should call recordEvent with PUBLISH', () => {
         expect(mockStores.Matomo.recordEvent).toHaveBeenCalledWith('PUBLISH')
-      })
-
-      test('should render closed DoiModal', () => {
-        harness.restoreWrapper('root')
-        harness.shouldIncludeChild({
-          findArgs: DoiModal,
-          props: {
-            isOpen: false,
-          },
-        })
-      })
-    })
-  })
-})
-
-describe('given useDoi and required props', () => {
-  let mockStores
-
-  const props = {
-    submitButtonsRef: {},
-    disabled: false,
-    idSuffix: '-idSuffix',
-  }
-
-  const harness = new Harness(SubmitButtons, props)
-
-  const render = (stores = getMockStores()) => {
-    mockStores = stores
-    mockStores.Qvain.useDoi = true
-    useStores.mockReturnValue(mockStores)
-    harness.shallow()
-  }
-
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
-  describe('PublishButton', () => {
-    describe('when triggering click for new DOI dataset', () => {
-      beforeEach(() => {
-        render()
-        harness.find('#publish-btn-idSuffix')
-        harness.trigger('click')
-      })
-
-      test('should call openUseDoiModal', () => {
-        expect(mockStores.Qvain.Submit.openUseDoiModal).toHaveBeenCalled()
-      })
-
-      test('should not call submitPublish', () => {
-        expect(mockStores.Qvain.Submit.submitPublish).not.toHaveBeenCalled()
-      })
-    })
-
-    describe('when DOI use is confirmed', () => {
-      beforeEach(() => {
-        render()
-        harness.wrapper.find(DoiModal).props().onAcceptUseDoi()
-      })
-
-      test('should call submitPublish', () => {
-        expect(mockStores.Qvain.Submit.submitPublish).toHaveBeenCalled()
-      })
-    })
-
-    describe('when triggering click for existing DOI dataset', () => {
-      beforeEach(() => {
-        const stores = getMockStores()
-        stores.Qvain.hasBeenPublished = true
-        stores.Qvain.hasBeenPublishedWithDoi = true
-        render(stores)
-        harness.find('#publish-btn-idSuffix')
-        harness.trigger('click')
-      })
-
-      test('should not call openUseDoiModal', () => {
-        expect(mockStores.Qvain.Submit.openUseDoiModal).not.toHaveBeenCalled()
-      })
-
-      test('should not submitPublish', () => {
-        expect(mockStores.Qvain.Submit.submitPublish).toHaveBeenCalled()
       })
     })
   })

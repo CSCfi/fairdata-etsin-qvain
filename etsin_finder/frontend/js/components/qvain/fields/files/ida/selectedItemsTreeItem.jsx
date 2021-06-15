@@ -1,15 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import { faPen, faTimes, faFolder, faFolderOpen, faFile } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faFolder, faFolderOpen, faFile } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
-
-import { hasMetadata, hasPASMetadata } from '../../../../../stores/view/common.files.items'
-import { Dropdown, DropdownItem } from '../../../../general/dropdown'
 
 import {
   isDirectory,
-  isFile,
   ItemRow,
   ItemSpacer,
   Tag,
@@ -21,19 +17,18 @@ import {
   NoIcon,
 } from '../../../../general/files/items'
 
+import EditDropdown from './selectedItemsDropdown'
+
+import { useStores } from '../../../utils/stores'
+
 const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
-  const { Files, directoryView } = treeProps
+  const { Qvain } = useStores()
+  const { Files } = Qvain
+
+  const { directoryView } = treeProps
   const { parentAdded, parentRemoved } = parentArgs
-  const { clearMetadata, toggleInEdit } = Files
-  const { canRemoveFiles, readonly } = Files.Qvain
-
-  const showPasModal = () => {
-    Files.Qvain.setMetadataModalFile(item)
-  }
-
-  const showClearPasModal = () => {
-    Files.Qvain.setClearMetadataModalFile(item)
-  }
+  const { userHasRightsToEditProject } = Files
+  const { canRemoveFiles } = Qvain
 
   const handleClickRemove = removedItem => {
     if (removedItem.added && !canRemoveFiles) {
@@ -52,12 +47,11 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   const isRemoved =
     (item.removed || (parentRemoved && !item.added)) && !hasAddedChildren && item.existing
 
-  const canRemove = (canRemoveFiles && (!isRemoved || hasAddedChildren)) || item.added
-  const canUndoRemove = canRemoveFiles && item.existing && item.removed
-  let canEdit = item.added || item.existing || hasAddedChildren || parentAdded
-  if (isRemoved) {
-    canEdit = false
-  }
+  const canRemove =
+    ((canRemoveFiles && (!isRemoved || hasAddedChildren)) || item.added) &&
+    Files.userHasRightsToEditProject
+  const canUndoRemove =
+    canRemoveFiles && item.existing && item.removed && userHasRightsToEditProject
 
   const newTag = !item.existing && isAdded && (
     <Translate component={Tag} content="qvain.files.selected.newTag" color="success" />
@@ -93,68 +87,15 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
 
   const content = isDirectory(item) ? getDirectoryContent() : getFileContent()
 
-  const itemHasMetadata = hasMetadata(item)
-  const itemHasPASMetadata = hasPASMetadata(item)
-  const editColor = itemHasMetadata ? 'primary' : 'gray'
-  let disabledEditColor = itemHasMetadata ? 'error' : 'gray'
-  if (readonly) {
-    disabledEditColor = 'gray'
-  }
-
   const removeAction = canUndoRemove
     ? () => handleClickUndoRemove(item)
     : () => handleClickRemove(item)
   const removeColor = canUndoRemove ? 'gray' : 'error'
   const removeAriaLabel = canUndoRemove ? 'undoRemove' : 'remove'
 
-  const editDropdown = (
-    <Dropdown
-      buttonComponent={ClickableIcon}
-      buttonProps={{
-        icon: faPen,
-        disabled: !canEdit,
-        color: editColor,
-        disabledColor: disabledEditColor,
-        disabledOpacity: 0.4,
-        attributes: { 'aria-label': 'qvain.files.selected.buttons.edit' },
-      }}
-      with={{ name }}
-    >
-      <Translate
-        component={DropdownItem}
-        content={`qvain.files.selected.${itemHasMetadata ? 'editUserMetadata' : 'addUserMetadata'}`}
-        onClick={() => toggleInEdit(item)}
-        disabled={readonly && !itemHasMetadata}
-      />
-      <Translate
-        component={DropdownItem}
-        content="qvain.files.selected.deleteUserMetadata"
-        onClick={() => clearMetadata(item)}
-        danger
-        disabled={readonly || !itemHasMetadata}
-      />
-      {isFile(item) && (
-        <>
-          <Translate
-            component={DropdownItem}
-            content={`qvain.files.metadataModal.buttons.${itemHasPASMetadata ? 'show' : 'add'}`}
-            onClick={showPasModal}
-          />
-          <Translate
-            component={DropdownItem}
-            content="qvain.files.metadataModal.buttons.delete"
-            onClick={showClearPasModal}
-            danger
-            disabled={readonly || !itemHasPASMetadata}
-          />
-        </>
-      )}
-    </Dropdown>
-  )
-
   return (
     <ItemRow isOpen={isOpen}>
-      {editDropdown}
+      <EditDropdown item={item} parentArgs={parentArgs} />
       {canRemove || canUndoRemove ? (
         <Translate
           component={ClickableIcon}

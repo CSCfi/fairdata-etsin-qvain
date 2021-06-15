@@ -22,11 +22,7 @@ import FilesClass from '../../../../js/stores/view/files'
 import Modal from '../../../../js/components/general/modal'
 import { DownloadButton } from '../../../../js/components/dataset/data/idaResources/fileTreeItem'
 
-global.Promise = require('bluebird')
-
-Promise.config({
-  cancellation: true,
-})
+jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
 
 jest.mock('axios')
 

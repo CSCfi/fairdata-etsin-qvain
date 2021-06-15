@@ -30,14 +30,11 @@ class Submit {
 
   @observable response = null
 
-  @observable useDoiModalIsOpen = false
-
   @action reset = () => {
     this.draftValidationError = []
     this.publishValidationError = []
     this.error = undefined
     this.response = null
-    this.useDoiModalIsOpen = false
   }
 
   @action setLoading = state => {
@@ -58,14 +55,6 @@ class Submit {
 
   @action.bound clearResponse() {
     this.response = null
-  }
-
-  @action closeUseDoiModal = () => {
-    this.useDoiModalIsOpen = false
-  }
-
-  @action openUseDoiModal = () => {
-    this.useDoiModalIsOpen = true
   }
 
   @computed get submitType() {
@@ -156,7 +145,6 @@ class Submit {
     if (!cleanupBeforeBackend()) return
     if (!(await this.promptProvenances())) return
 
-    this.closeUseDoiModal()
     let dataset = this.prepareDataset()
     const { fileActions, metadataActions, newCumulativeState } = this.prepareActions()
 

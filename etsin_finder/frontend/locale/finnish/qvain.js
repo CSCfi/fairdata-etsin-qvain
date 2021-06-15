@@ -54,11 +54,6 @@ const qvainFinnish = {
     130: 'Siirto katkesi',
     140: 'Saatavilla',
   },
-  useDoiHeader: 'DOI-tunnisteen luominen',
-  useDoiContent:
-    'Olet pyytänyt aineistollesi pysyväksi tunnisteeksi DOIn URN-tunnisteen sijaan. DOI vaatii, että julkaisupäivämäärä ja julkaisija on määritelty. DOI-tunniste rekisteröidään DataCite-palvelun tietokantaan, eikä toimintoa voi peruuttaa. Oletko varma?',
-  useDoiAffirmative: 'Kyllä',
-  useDoiNegative: 'Ei',
   notCSCUser1:
     'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) niin saatat saada tämän ' +
     'virheilmoituksen, jos tilit eivät ole linkitetty. Linkityksen voi tehdä',

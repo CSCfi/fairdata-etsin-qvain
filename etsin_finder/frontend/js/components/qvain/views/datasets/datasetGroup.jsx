@@ -9,15 +9,7 @@ import { faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { Row, BodyCell } from '../../general/card/table'
 import Dataset from './dataset'
 
-const DatasetGroup = ({
-  datasets,
-  currentTimestamp,
-  handleEnterEdit,
-  handleUseAsTemplate,
-  handleCreateNewVersion,
-  openRemoveModal,
-  highlight,
-}) => {
+const DatasetGroup = ({ datasets, currentTimestamp, highlight }) => {
   const [showAll, setShowAll] = useState(false)
 
   if (datasets.length <= 1) {
@@ -25,10 +17,6 @@ const DatasetGroup = ({
       <Dataset
         dataset={datasets[0]}
         currentTimestamp={currentTimestamp}
-        handleEnterEdit={handleEnterEdit}
-        handleUseAsTemplate={handleUseAsTemplate}
-        handleCreateNewVersion={handleCreateNewVersion}
-        openRemoveModal={openRemoveModal}
         highlight={datasets[0].identifier === highlight}
       />
     )
@@ -58,10 +46,6 @@ const DatasetGroup = ({
           key={dataset.identifier}
           dataset={dataset}
           currentTimestamp={currentTimestamp}
-          handleEnterEdit={handleEnterEdit}
-          handleUseAsTemplate={handleUseAsTemplate}
-          handleCreateNewVersion={handleCreateNewVersion}
-          openRemoveModal={openRemoveModal}
           indent={index !== 0}
           highlight={dataset.identifier === highlight}
         />
@@ -74,10 +58,6 @@ const DatasetGroup = ({
 DatasetGroup.propTypes = {
   datasets: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentTimestamp: PropTypes.object.isRequired,
-  handleEnterEdit: PropTypes.func.isRequired,
-  handleUseAsTemplate: PropTypes.func.isRequired,
-  handleCreateNewVersion: PropTypes.func.isRequired,
-  openRemoveModal: PropTypes.func.isRequired,
   highlight: PropTypes.string,
 }
 

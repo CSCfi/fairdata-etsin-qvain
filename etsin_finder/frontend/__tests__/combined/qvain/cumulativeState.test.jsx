@@ -18,12 +18,6 @@ import CumulativeState, {
 } from '../../../js/components/qvain/fields/files/cumulativeState'
 import { useStores, StoresProvider } from '../../../js/stores/stores'
 
-global.Promise = require('bluebird')
-
-Promise.config({
-  cancellation: true,
-})
-
 jest.mock('axios')
 axios.get.mockImplementation((...args) => {})
 

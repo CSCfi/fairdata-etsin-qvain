@@ -26,6 +26,8 @@ jest.mock('../../../js/stores/stores')
 
 jest.mock('../../../js/components/qvain/utils/formValidation')
 
+const flushPromises = () => new Promise(setImmediate)
+
 describe('given mockStores', () => {
   const mockStores = {
     Qvain: {
@@ -68,8 +70,9 @@ describe('given mockStores', () => {
   describe('RelatedResource', () => {
     const harness = new Harness(RelatedResource)
 
-    beforeEach(() => {
+    beforeEach(async () => {
       harness.shallow()
+      await flushPromises()
       harness.diveInto('RelatedResource')
     })
 
@@ -205,8 +208,9 @@ describe('given mockStores', () => {
 
     const harness = new Harness(Form, props)
 
-    beforeEach(() => {
+    beforeEach(async () => {
       harness.shallow()
+      await flushPromises()
     })
 
     test('should exist', () => {
@@ -263,8 +267,9 @@ describe('given mockStores', () => {
   describe('When calling relatedResources.handleSave with Field and empty options', () => {
     const Field = mockStores.Qvain.RelatedResources
 
-    beforeEach(() => {
+    beforeEach(async () => {
       handleSave(Field, {})
+      await flushPromises()
     })
 
     afterEach(() => {

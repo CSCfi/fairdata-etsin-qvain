@@ -8,7 +8,6 @@ import { useHistory } from 'react-router-dom'
 import { useStores } from '../../utils/stores'
 import SubmitButton from './submitButton.styled'
 import TooltipHoverOnSave from '../../general/header/tooltipHoverOnSave'
-import DoiModal from './doiModal'
 
 export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtonsDisabled }) => {
   const {
@@ -21,12 +20,7 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
         prevalidate,
         isDraftButtonDisabled,
         isPublishButtonDisabled,
-        useDoiModalIsOpen,
-        openUseDoiModal,
-        closeUseDoiModal,
       },
-      useDoi,
-      hasBeenPublishedWithDoi,
       original,
       readonly,
     },
@@ -68,12 +62,7 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
     }
   }
 
-  const handlePublishClick = doiAccepted => {
-    if (!hasBeenPublishedWithDoi && useDoi && !doiAccepted) {
-      openUseDoiModal()
-      return
-    }
-
+  const handlePublishClick = () => {
     submitPublish(goToDatasetsCallBack)
 
     if (original?.identifier) {
@@ -129,11 +118,6 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
           </SubmitButton>
         </WrapperDivForHovering>
       </TooltipHoverOnSave>
-      <DoiModal
-        isOpen={useDoiModalIsOpen}
-        onAcceptUseDoi={() => handlePublishClick(true)}
-        onRequestClose={closeUseDoiModal}
-      />
     </div>
   )
 }
