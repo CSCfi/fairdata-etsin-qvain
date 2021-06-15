@@ -4,10 +4,19 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
+import moment from 'moment'
 
 import Label from '../../../general/card/label'
 
-const dateToString = (date, lang) => (date ? new Date(date).toLocaleDateString(lang) : undefined)
+const dateToString = (date, lang) => {
+  if (date) {
+    if (lang === 'fi') {
+      return new Date(date).toLocaleDateString(lang)
+    }
+    return moment(new Date(date)).format('YYYY-MM-DD')
+  }
+  return undefined
+}
 
 const getTranslationItem = (item, lang) => ({
   startDate: dateToString(item.startDate, lang),
@@ -27,8 +36,9 @@ const TemporalList = ({ temporals, lang, remove, readonly }) =>
   temporals.map(item => (
     <Label color="primary" margin="0 0.5em 0.5em 0" key={item.uiid}>
       <Translate
+        className="date-label"
         component={PaddedWord}
-        content={getTranslationPath()}
+        content={getTranslationPath(item)}
         with={getTranslationItem(item, lang)}
       />
       {!readonly && (

@@ -55,7 +55,7 @@ const temporalAndSpatial = {
     addButton: 'Lisää ajanjakso',
     listItem: {
       bothDates: '%(startDate)s - %(endDate)s',
-      startDateOnly: '%(startDate)s alkaen',
+      startDateOnly: 'alkaen %(startDate)s',
       endDateOnly: '%(endDate)s saakka',
     },
     modal: {
