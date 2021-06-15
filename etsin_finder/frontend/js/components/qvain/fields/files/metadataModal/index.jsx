@@ -336,8 +336,13 @@ export class MetadataModal extends Component {
   }
 
   render() {
-    const { metadataModalFile, readonly } = this.props.Stores.Qvain
+    const {
+      metadataModalFile,
+      readonly: ro,
+      Files: { userHasRightsToEditProject },
+    } = this.props.Stores.Qvain
     const options = getOptions()
+    const readonly = ro || !userHasRightsToEditProject
 
     return (
       <Modal
@@ -352,7 +357,6 @@ export class MetadataModal extends Component {
           style={{ marginBottom: 0 }}
         />
         <Translate content="qvain.files.metadataModal.help" component={HelpField} />
-
         <MetadataSelect
           inputId="pas_file_format"
           options={this.state.formatOptions}
@@ -362,7 +366,6 @@ export class MetadataModal extends Component {
           isLoading={this.state.formatVersionsMap.length === 0}
           field="fileFormat"
         />
-
         <MetadataSelect
           inputId="pas_format_version"
           options={this.getformatVersionOptions()}
@@ -373,7 +376,6 @@ export class MetadataModal extends Component {
           isSearchable={false}
           field="formatVersion"
         />
-
         <MetadataSelect
           inputId="pas_file_encoding"
           options={options.encoding}
@@ -382,7 +384,6 @@ export class MetadataModal extends Component {
           onChange={this.setEncoding}
           field="encoding"
         />
-
         {this.isCsv() && (
           <CsvOptions>
             <Translate
@@ -438,7 +439,6 @@ export class MetadataModal extends Component {
             </div>
           </CsvOptions>
         )}
-
         <Buttons>
           <TableButton disabled={this.state.loading} onClick={this.requestClose}>
             <Translate content={'qvain.files.metadataModal.buttons.close'} />
@@ -451,14 +451,12 @@ export class MetadataModal extends Component {
             <Translate content={'qvain.files.metadataModal.buttons.save'} />
           </DangerButton>
         </Buttons>
-
         <ConfirmClose
           show={this.state.confirmClose}
           onCancel={this.hideConfirmClose}
           onConfirm={this.close}
           disabled={this.state.loading}
         />
-
         {(this.state.loading || this.state.response) && (
           <ResponseOverlay>
             <div style={{ width: '100%' }}>

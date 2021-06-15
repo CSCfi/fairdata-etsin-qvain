@@ -188,8 +188,8 @@ describe('given required props', () => {
       })
 
       describe('when calling handleRetry', () => {
-        beforeEach(() => {
-          harness.props.handleRetry()
+        beforeEach(async () => {
+          await harness.props.handleRetry()
         })
 
         test('should call axios get', () => {

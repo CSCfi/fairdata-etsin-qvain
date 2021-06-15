@@ -4,62 +4,9 @@ import {
   ChildItemCounter,
   getAction,
   ignoreNotFound,
-  PromiseManager,
 } from '../../../js/stores/view/common.files.utils'
 
 describe('common.files.utils', () => {
-  describe('PromiseManager', () => {
-    let promiseManager
-    let testPromise
-
-    beforeEach(() => {
-      promiseManager = new PromiseManager()
-    })
-
-    test('promises should be empty array', () => {
-      promiseManager.promises.should.eql([])
-    })
-
-    describe('when calling add', () => {
-      beforeEach(() => {
-        testPromise = new Promise(jest.fn())
-        promiseManager.add(testPromise)
-      })
-
-      test('should add promise to promises', () => {
-        promiseManager.should.include(testPromise)
-      })
-    })
-
-    describe('when added promise resolves', () => {
-      beforeEach(() => {
-        testPromise = Promise.resolve()
-        promiseManager.add(testPromise)
-      })
-
-      test('should remove promise from promises array', () => {
-        promiseManager.promises.should.eql([])
-      })
-    })
-
-    describe('when calling remove', () => {
-      beforeEach(() => {
-        testPromise = new Promise(() => {})
-        testPromise.cancel = jest.fn()
-        promiseManager.add(testPromise)
-        promiseManager.reset()
-      })
-
-      test('should clear promises', () => {
-        promiseManager.promises.should.eql([])
-      })
-
-      test('should call cancel on promises', () => {
-        expect(testPromise.cancel).toHaveBeenCalledTimes(1)
-      })
-    })
-  })
-
   describe('ChildItemCounter', () => {
     let childItemCounter
     let expectedRoot = { directories: {}, count: 0 }
@@ -148,12 +95,12 @@ describe('common.files.utils', () => {
 
   describe('when calling ignoreNotFound with rejecting Promise (generic Error)', () => {
     const reject = new Error('test error')
-    const testPromise = Promise.reject(reject)
+    const getTestPromise = () => Promise.reject(reject)
 
     test('should re-throw error', async () => {
       let result
       try {
-        result = await ignoreNotFound(testPromise)
+        result = await ignoreNotFound(getTestPromise())
         fail('should not get here!')
       } catch (err) {
         err.should.eql(reject)
@@ -163,12 +110,12 @@ describe('common.files.utils', () => {
   })
 
   describe('when calling ignoreNotFound with rejecting Promise (response 404)', () => {
-    const testPromise = Promise.reject({ response: { status: 404 } })
+    const getTestPromise = () => Promise.reject({ response: { status: 404 } })
     const defaultResponse = 'default response'
 
     test('should return defaultResponse', async () => {
       try {
-        const result = await ignoreNotFound(testPromise, defaultResponse)
+        const result = await ignoreNotFound(getTestPromise(), defaultResponse)
         result.should.be.string(defaultResponse)
       } catch (err) {
         fail('should not throw error')

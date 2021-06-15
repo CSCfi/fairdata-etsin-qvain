@@ -18,8 +18,6 @@ import Provenance from '../../../../js/components/qvain/fields/history/provenanc
 import { EditButton } from '../../../../js/components/qvain/general/buttons/iconButtons'
 import Modal from '../../../../js/components/general/modal'
 
-global.Promise = require('bluebird')
-
 // Make sure MobX store values are not mutated outside actions.
 configure({
   enforceActions: 'always',

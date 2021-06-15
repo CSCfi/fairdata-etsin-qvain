@@ -15,12 +15,6 @@ import { File, Directory, Project } from '../../../js/stores/view/common.files.i
 import { SaveButton } from '../../../js/components/qvain/general/buttons'
 import { ValidationErrors } from '../../../js/components/qvain/general/errors/validationError'
 
-global.Promise = require('bluebird')
-
-Promise.config({
-  cancellation: true,
-})
-
 const getStores = () => {
   configure({ safeDescriptors: false })
   const stores = buildStores()
@@ -43,6 +37,7 @@ const flushPromises = () => new Promise(setImmediate)
 describe('Qvain.Files', () => {
   beforeEach(() => {
     stores = getStores()
+    stores.Auth.user.idaProjects = []
   })
 
   let wrapper, stores
@@ -105,6 +100,8 @@ describe('Qvain.Files', () => {
       stores.Qvain.Files.setInEdit(testfile)
       Form = FileForm
     }
+
+    stores.Auth.user.idaProjects = ['project_y']
 
     jest.spyOn(stores.Qvain.Files, 'applyInEdit')
 

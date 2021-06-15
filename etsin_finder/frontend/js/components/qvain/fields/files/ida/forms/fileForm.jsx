@@ -160,8 +160,14 @@ class FileForm extends Component {
       return null
     }
 
-    const { readonly } = this.props.Stores.Qvain
+    const {
+      readonly: ro,
+      Files: { userHasRightsToEditProject },
+    } = this.props.Stores.Qvain
     const { fileError, titleError, descriptionError, useCategoryError } = this.state
+
+    const readonly = ro || !userHasRightsToEditProject
+
     return (
       <FileContainer className={this.props.className}>
         <Translate
@@ -171,7 +177,6 @@ class FileForm extends Component {
           content="qvain.files.selected.form.identifier.label"
         />
         <p style={{ marginLeft: '10px' }}>{inEdit.identifier}</p>
-
         <Label htmlFor="file-form-title">
           <Translate content="qvain.files.selected.form.title.label" /> *
         </Label>
@@ -252,7 +257,6 @@ class FileForm extends Component {
             />
           </div>
         </Row>
-
         {fileError !== undefined && <ValidationErrors errors={fileError} />}
         <Buttons>
           <Translate

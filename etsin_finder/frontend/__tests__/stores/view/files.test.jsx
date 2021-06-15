@@ -4,12 +4,6 @@ import FilesBase from '../../../js/stores/view/files'
 import urls from '../../../js/utils/urls'
 import { get } from '../../__testdata__/qvain.files.data'
 
-global.Promise = require('bluebird')
-
-Promise.config({
-  cancellation: true,
-})
-
 jest.mock('axios')
 
 const paths = dir => [...dir.directories, ...dir.files].map(item => item.path)

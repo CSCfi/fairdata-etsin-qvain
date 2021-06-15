@@ -6,8 +6,6 @@ import { axe, toHaveNoViolations } from 'jest-axe'
 import ReactModal from 'react-modal'
 import { observable, when } from 'mobx'
 
-global.Promise = require('bluebird')
-
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
 import { buildStores } from '../../../../js/stores'
