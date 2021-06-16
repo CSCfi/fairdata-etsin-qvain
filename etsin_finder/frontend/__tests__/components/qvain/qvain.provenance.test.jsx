@@ -13,8 +13,7 @@ import SpatialsForm from '../../../js/components/qvain/fields/temporalAndSpatial
 import UsedEntitiesForm from '../../../js/components/qvain/fields/history/relatedResource/form'
 import {
   provenanceNameSchema,
-  provenanceStartDateSchema,
-  provenanceEndDateSchema,
+  provenanceDateSchema,
 } from '../../../js/components/qvain/utils/formValidation'
 import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
 import Durationpicker from '../../../js/components/qvain/general/input/durationpicker'
@@ -33,10 +32,7 @@ jest.mock('../../../js/components/qvain/utils/formValidation', () => {
     provenanceNameSchema: {
       validate: jest.fn(),
     },
-    provenanceStartDateSchema: {
-      validate: jest.fn(),
-    },
-    provenanceEndDateSchema: {
+    provenanceDateSchema: {
       validate: jest.fn(),
     },
   }
@@ -130,8 +126,7 @@ describe('Provenance', () => {
 
       beforeEach(() => {
         provenanceNameSchema.validate.mockReturnValue(Promise.resolve())
-        provenanceStartDateSchema.validate.mockReturnValue(Promise.resolve())
-        provenanceEndDateSchema.validate.mockReturnValue(Promise.resolve())
+        provenanceDateSchema.validate.mockReturnValue(Promise.resolve())
         harness.props.handleSave()
       })
 
@@ -139,14 +134,8 @@ describe('Provenance', () => {
         expect(provenanceNameSchema.validate).to.have.beenCalledWith(inEdit.name, { strict: true })
       })
 
-      test('should call provenanceStartDateSchema.validate', () => {
-        expect(provenanceStartDateSchema.validate).to.have.beenCalledWith(inEdit.startDate, {
-          strict: true,
-        })
-      })
-
-      test('should call provenanceEndDateSchema.validate', () => {
-        expect(provenanceEndDateSchema.validate).to.have.beenCalledWith(inEdit.endDate, {
+      test('should call provenanceDateSchema.validate', () => {
+        expect(provenanceDateSchema.validate).to.have.beenCalledWith(inEdit, {
           strict: true,
         })
       })

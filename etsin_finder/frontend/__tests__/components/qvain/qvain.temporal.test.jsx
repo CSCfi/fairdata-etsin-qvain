@@ -14,6 +14,7 @@ import { AddNewButton } from '../../../js/components/qvain/general/buttons'
 import ValidationError from '../../../js/components/qvain/general/errors/validationError'
 import { temporalDateSchema } from '../../../js/components/qvain/utils/formValidation'
 import Label from '../../../js/components/qvain/general/card/label'
+import '../../../locale/translations'
 
 jest.mock('../../../js/components/qvain/fields/temporalAndSpatial/temporal/handleSave')
 
@@ -219,6 +220,18 @@ describe('given required props and with one item in temporals array', () => {
       harness.shouldExist()
     })
 
+    test('should have children with props', () => {
+      const children = [
+        {
+          label: 'DateLabel',
+          findType: 'prop',
+          findArgs: ['className', 'date-label'],
+        },
+      ]
+
+      harness.shouldIncludeChildren(children)
+    })
+
     describe('Label', () => {
       beforeEach(() => {
         harness.find(Label)
@@ -234,9 +247,10 @@ describe('given required props and with one item in temporals array', () => {
       })
     })
 
-    describe('PaddedWord', () => {
+    describe('DateLabel', () => {
       beforeEach(() => {
-        harness.findWithName('PaddedWord')
+        harness.restoreWrapper('DateLabel')
+        harness.wrapper = harness.dive().first().dive()
       })
 
       test('should exist', () => {
@@ -244,7 +258,7 @@ describe('given required props and with one item in temporals array', () => {
       })
 
       test('should have parsed "item.startDate - item.endDate" in text', () => {
-        const expectedText = '1/1/1970 - 1/1/1970'
+        const expectedText = '1970-01-01 - 1970-01-01'
         harness.wrapper.text().should.eql(expectedText)
       })
     })
@@ -267,6 +281,60 @@ describe('given required props and with one item in temporals array', () => {
           const uiid = props.temporals[0].uiid
           expect(props.remove).to.have.beenCalledWith(uiid)
         })
+      })
+    })
+  })
+})
+
+describe('given required props and with one partial item in temporals array', () => {
+  const props = {
+    temporals: [
+      {
+        startDate: undefined,
+        endDate: 2,
+        uiid: 3,
+      },
+    ],
+    lang: 'en',
+    remove: jest.fn(),
+  }
+
+  const harness = new Harness(TemporalList, props)
+
+  describe('TemporalList', () => {
+    beforeEach(() => {
+      harness.shallow()
+    })
+
+    test('should exist', () => {
+      harness.shouldExist()
+    })
+
+    test('should have children with props', () => {
+      const children = [
+        {
+          label: 'DateLabel',
+          findType: 'prop',
+          findArgs: ['className', 'date-label'],
+        },
+      ]
+
+      harness.shouldIncludeChildren(children)
+    })
+
+    describe('DateLabel', () => {
+      beforeEach(() => {
+        harness.restoreWrapper('DateLabel')
+      })
+
+      test('should exist', () => {
+        harness.shouldExist()
+      })
+
+      test('should have parsed "until <item.endDate>" in text', () => {
+        const expectedText = 'until 1970-01-01'
+        harness.wrapper = harness.wrapper.first().dive().dive()
+        harness.wrapper.text().should.eql(expectedText)
       })
     })
   })
