@@ -160,7 +160,7 @@ const validationMessages = {
       altitudeNan: 'Korkeuden täytyy olla numero.',
     },
     temporal: {
-      dateMissing: 'ajankohta puuttuu.',
+      dateMissing: 'Ajankohta puuttuu.',
     },
   },
   history: {
