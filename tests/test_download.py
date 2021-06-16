@@ -12,6 +12,7 @@ Uses the requests_mock fixture provided by the requests-mock
 library for mocking the Download API endpoints.
 """
 
+from etsin_finder.services.download_service import DownloadAPIService
 import json
 import pytest
 import requests
@@ -266,3 +267,19 @@ class TestDownloadResourcesNotifications(BaseTest):
         r = authd_client.post('/api/download/notifications', json=notification)
         assert r.status_code == 400
         assert len(capture_mail) == 0
+
+class TestAuthToken(BaseTest):
+    """Test AUTH_TOKEN"""
+
+    def test_args_without_token(self, app):
+        """Given no AUTH_TOKEN, request should not have Authorization header"""
+        del app.config['DOWNLOAD_API']['AUTH_TOKEN']
+        service = DownloadAPIService(app)
+        args = service._get_args()
+        assert 'Authorization' not in args['headers']
+
+    def test_args_with_token(self, app):
+        """Given AUTH_TOKEN, request should have Authorization header"""
+        service = DownloadAPIService(app)
+        args = service._get_args()
+        assert args['headers'].get('Authorization') == 'Bearer testtoken'
