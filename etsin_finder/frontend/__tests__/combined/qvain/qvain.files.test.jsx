@@ -2,11 +2,6 @@ import React from 'react'
 import axios from 'axios'
 import { shallow } from 'enzyme'
 
-import EnvClass from '../../../js/stores/domain/env'
-import QvainClass from '../../../js/stores/view/qvain'
-import AccessibilityClass from '../../../js/stores/view/accessibility'
-import ElasticQueryClass from '../../../js/stores/view/elasticquery'
-import LocaleClass from '../../../js/stores/view/locale'
 import { sortFunc } from '../../../js/stores/view/common.files.utils'
 import {
   itemLoaderNew,
@@ -24,13 +19,8 @@ import AddItemsTreeItem from '../../../js/components/qvain/fields/files/ida/addI
 import handleSubmitToBackend from '../../../js/components/qvain/utils/handleSubmit'
 
 import { get } from '../../__testdata__/qvain.files.data'
-import { StoresProvider, useStores } from '../../../js/stores/stores'
-
-global.Promise = require('bluebird')
-
-Promise.config({
-  cancellation: true,
-})
+import { useStores } from '../../../js/stores/stores'
+import { buildStores } from '../../../js/stores'
 
 jest.mock('axios')
 
@@ -76,22 +66,14 @@ const sorted = items => {
 // Mock responses for a dataset containing IDA files. See the data file for the project structure.
 axios.get.mockImplementation(get)
 
-const Env = new EnvClass()
-const Accessibility = new AccessibilityClass(Env)
-const ElasticQuery = new ElasticQueryClass(Env)
-const Locale = new LocaleClass(Accessibility, ElasticQuery)
-const Qvain = new QvainClass(Env)
-const stores = {
-  Env,
-  Qvain,
-  Locale,
-}
-
 const datasetIdentifier = '6d2cb5f5-4867-47f7-9874-09357f2901a3'
 const emptyDatasetIdentifier = '6d2cb5f5-4867-47f7-9874-123456789'
 
 let root
+const stores = buildStores()
+const { Qvain } = stores
 const { Files } = stores.Qvain
+stores.Auth.user.idaProjects = ['project']
 
 const itemPaths = items => items.map(item => item.prop('item').path).sort(sortFunc)
 expect.extend({

@@ -111,7 +111,8 @@ const files = {
     },
     buttons: {
       add: 'Lisää PAS-metadata',
-      show: 'Muokkaa PAS-metadataa',
+      show: 'Tarkastele PAS-metadataa',
+      edit: 'Muokkaa PAS-metadataa',
       delete: 'Poista PAS-metadata',
       close: 'Sulje',
       save: 'Tallenna muutokset',
@@ -173,6 +174,7 @@ const files = {
     hideRemoved: 'Piilota poistettavat',
     buttons: {
       edit: 'Muokkaa %(name)s',
+      show: 'Näytä %(name)s',
       remove: 'Poista %(name)s',
       undoRemove: 'Peru %(name)s poisto',
       refresh: 'Päivitä %(name)s',
@@ -182,6 +184,7 @@ const files = {
       deselect: 'Poista valinta %(name)s',
     },
     addUserMetadata: 'Lisää metadataa',
+    showUserMetadata: 'Tarkastele metadataa',
     editUserMetadata: 'Muokkaa metadataa',
     deleteUserMetadata: 'Poista metadata',
     form: {

@@ -18,8 +18,8 @@ class RestrictionGrounds extends SingleValueField {
   toBackend = () => (this.value ? this.value.identifier : undefined)
 
   @override validate() {
-    if (!this.Schema) return
-    this.Schema.validate(this.value.identifier || '', { strict: true })
+    if (!this.Schema) return undefined
+    return this.Schema.validate(this.value.identifier || '', { strict: true })
       .then(() => {
         this.setValidationError(null)
       })

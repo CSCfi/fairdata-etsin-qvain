@@ -19,8 +19,6 @@ import organizationMockGet, {
 } from '../../../__testdata__/qvain.actors.data'
 import { useStores, StoresProvider } from '../../../../js/stores/stores'
 
-global.Promise = require('bluebird')
-
 // Make sure MobX store values are not mutated outside actions.
 configure({
   enforceActions: 'always',

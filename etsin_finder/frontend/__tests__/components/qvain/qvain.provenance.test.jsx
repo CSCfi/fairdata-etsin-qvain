@@ -44,6 +44,8 @@ jest.mock('../../../js/components/qvain/utils/formValidation', () => {
 
 jest.mock('counterpart')
 
+const flushPromises = () => new Promise(setImmediate)
+
 describe('Provenance', () => {
   const mockStores = {
     Qvain: {
@@ -68,9 +70,10 @@ describe('Provenance', () => {
 
   const harness = new Harness(Provenance)
 
-  beforeEach(() => {
+  beforeEach(async () => {
     useStores.mockReturnValue(mockStores)
     harness.shallow()
+    await flushPromises()
     harness.diveInto('Provenance')
   })
 
@@ -162,9 +165,10 @@ describe('Provenance', () => {
         message: 'hello',
       }
 
-      beforeEach(() => {
+      beforeEach(async () => {
         provenanceNameSchema.validate.mockReturnValue(Promise.reject(error))
         harness.props.handleSave()
+        await flushPromises()
       })
 
       test('should call setValidationError', () => {

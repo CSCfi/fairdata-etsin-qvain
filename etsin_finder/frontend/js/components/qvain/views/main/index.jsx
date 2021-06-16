@@ -81,8 +81,8 @@ export class Qvain extends Component {
     }
   }
 
-  handleIdentifierChanged() {
-    if (this.datasetLoading) {
+  async handleIdentifierChanged() {
+    if (this.state.datasetLoading) {
       return
     }
     const identifier = this.props.match.params.identifier
@@ -99,7 +99,7 @@ export class Qvain extends Component {
 
     // Test if we need to load a dataset or do we use the one currently in store
     if (identifier && !(original && original.identifier === identifier)) {
-      this.getDataset(identifier)
+      await this.getDataset(identifier)
     } else {
       this.setState({ datasetLoading: false, haveDataset: true })
     }
@@ -117,7 +117,6 @@ export class Qvain extends Component {
     this.setState({ datasetLoading: true, datasetError: false })
     const { resetQvainStore, editDataset } = this.props.Stores.Qvain
     const { getQvainUrl } = this.props.Stores.Env
-
     const url = urls.qvain.dataset(identifier)
     const promise = axios
       .get(url)
@@ -173,7 +172,7 @@ export class Qvain extends Component {
 
   handleRetry = () => {
     this.setState({ datasetLoading: false, haveDataset: true })
-    this.handleIdentifierChanged()
+    return this.handleIdentifierChanged()
   }
 
   getDatasetProps = () => {
