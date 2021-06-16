@@ -73,6 +73,7 @@ def _get_test_app_config():
             'PORT': 1,
             'PUBLIC_HOST': 'mock-download-public',
             'PUBLIC_PORT': 2,
+            'AUTH_TOKEN': 'testtoken'
         },
         'METAX_API': {
             'HOST': 'mock-metax',
