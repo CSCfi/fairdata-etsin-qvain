@@ -608,15 +608,10 @@ const provenanceNameSchema = yup.object().shape({
   en: yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
 })
 
-const provenanceStartDateSchema = yup
-  .string()
-  .date()
-  .required('qvain.validationMessages.history.provenance.startDateMissing')
-
-const provenanceEndDateSchema = yup
-  .string()
-  .date()
-  .required('qvain.validationMessages.history.provenance.endDateMissing')
+const provenanceDateSchema = yup.object().shape({
+  startDate: yup.string().date(),
+  endDate: yup.string().date(),
+})
 
 // Entire form validation for normal dataset
 const qvainFormSchema = yup.object().shape({
@@ -719,8 +714,7 @@ export {
   relatedResourceNameSchema,
   relatedResourceTypeSchema,
   provenanceNameSchema,
-  provenanceStartDateSchema,
-  provenanceEndDateSchema,
+  provenanceDateSchema,
   temporalDateSchema,
   organizationObjectSchema,
   // Schemas specific to draft datasets
