@@ -12,14 +12,7 @@ export const RelatedResource = (
     identifier = undefined,
     relationType = undefined,
     entityType = undefined,
-  } = {
-    uiid: uuidv4(),
-    name: { fi: '', en: '', und: '' },
-    description: { fi: '', en: '', und: '' },
-    identifier: undefined,
-    relationType: undefined,
-    entityType: undefined,
-  }
+  } = {}
 ) => ({ uiid, name, description, identifier, relationType, entityType })
 
 class RelatedResources extends Field {
