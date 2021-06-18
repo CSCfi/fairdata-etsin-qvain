@@ -1,9 +1,15 @@
 import { action, makeObservable } from 'mobx'
+import * as yup from 'yup'
 import ReferenceField from './qvain.referenceField'
-import {
-  otherIdentifierSchema,
-  otherIdentifiersArraySchema,
-} from '../../../components/qvain/utils/formValidation'
+
+export const otherIdentifierSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.otherIdentifiers.string')
+  .min(10, 'qvain.validationMessages.otherIdentifiers.min')
+  .url('qvain.validationMessages.otherIdentifiers.url')
+  .max(1000, 'qvain.validationMessages.otherIdentifiers.max')
+
+export const otherIdentifiersArraySchema = yup.array().of(otherIdentifierSchema).nullable()
 
 class OtherIdentifiers extends ReferenceField {
   constructor(...args) {

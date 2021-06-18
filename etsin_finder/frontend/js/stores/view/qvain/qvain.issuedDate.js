@@ -1,7 +1,9 @@
 import { action, makeObservable } from 'mobx'
 import moment from 'moment'
+import yup from '../../../utils/extendedYup'
 import SingleValueField from './qvain.singleValueField'
-import { issuedDateSchema } from '../../../components/qvain/utils/formValidation'
+
+export const issuedDateSchema = yup.string().date().nullable()
 
 class IssuedDate extends SingleValueField {
   constructor(Parent) {

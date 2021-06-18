@@ -1,6 +1,16 @@
 import { override, makeObservable } from 'mobx'
-import { keywordsSchema, keywordsArraySchema } from '../../../components/qvain/utils/formValidation'
+import * as yup from 'yup'
 import ReferenceField from './qvain.referenceField'
+
+export const keywordsSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.keywords.string')
+  .max(1000, 'qvain.validationMessages.keywords.max')
+
+export const keywordsArraySchema = yup
+  .array()
+  .of(keywordsSchema)
+  .required('qvain.validationMessages.keywords.required')
 
 class Keywords extends ReferenceField {
   constructor(Parent, defaultStorageFactory = () => [], defaultItem = undefined) {

@@ -1,7 +1,26 @@
 import { action, makeObservable } from 'mobx'
+import * as yup from 'yup'
 
-import { descriptionSchema } from '../../../components/qvain/utils/formValidation'
 import MultiLanguageField from './qvain.multiLanguageField'
+
+export const descriptionSchema = yup.object().shape({
+  fi: yup.mixed().when('en', {
+    is: val => val.length > 0,
+    then: yup
+      .string()
+      .typeError('qvain.validationMessages.description.string')
+      .max(50000, 'qvain.validationMessages.description.max'),
+    otherwise: yup
+      .string()
+      .typeError('qvain.validationMessages.description.string')
+      .max(50000, 'qvain.validationMessages.description.max')
+      .required('qvain.validationMessages.description.required'),
+  }),
+  en: yup
+    .string()
+    .typeError('qvain.validationMessages.description.string')
+    .max(50000, 'qvain.validationMessages.description.max'),
+})
 
 class Description extends MultiLanguageField {
   constructor(Parent) {

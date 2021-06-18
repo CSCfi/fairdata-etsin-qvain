@@ -1,5 +1,28 @@
+import * as yup from 'yup'
 import ReferenceField from './qvain.referenceField'
 import { LICENSE_URL } from '../../../utils/constants'
+
+export const licenseSchema = yup.object().shape({
+  name: yup.object().nullable(),
+  identifier: yup.string().required(),
+  otherLicenseUrl: yup
+    .string()
+    .typeError('qvain.validationMessages.license.otherUrl.string')
+    .url('qvain.validationMessages.license.otherUrl.url')
+    .required('qvain.validationMessages.license.otherUrl.required')
+    .nullable(),
+})
+
+const licenseArrayObject = yup.object().shape({
+  name: yup.object().nullable(),
+  identifier: yup
+    .string()
+    .typeError('qvain.validationMessages.license.otherUrl.string')
+    .url('qvain.validationMessages.license.otherUrl.url')
+    .required('qvain.validationMessages.license.otherUrl.required'),
+})
+
+export const licenseArraySchema = yup.array().of(licenseArrayObject).nullable()
 
 export const Model = (name, identifier) => ({
   name,

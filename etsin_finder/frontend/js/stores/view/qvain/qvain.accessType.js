@@ -1,8 +1,17 @@
 import { action, makeObservable } from 'mobx'
+import * as yup from 'yup'
 
 import SingleValueField from './qvain.singleValueField'
 import { ACCESS_TYPE_URL } from '../../../utils/constants'
-import { accessTypeSchema } from '../../../components/qvain/utils/formValidation'
+
+export const accessTypeSchema = yup.object().shape({
+  name: yup.object().nullable(),
+  url: yup
+    .string()
+    .typeError('qvain.validationMessages.accessType.string')
+    .url('qvain.validationMessages.accessType.url')
+    .required('qvain.validationMessages.accessType.required'),
+})
 
 const Model = (name, url) => ({
   name,

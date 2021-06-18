@@ -1,9 +1,179 @@
 import axios from 'axios'
 import { observable, action, runInAction, computed, makeObservable } from 'mobx'
+import * as yup from 'yup'
 
 import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../../utils/constants'
 
-// helper methods
+// ACTOR VALIDATION SCHEMAS
+
+export const actorType = yup
+  .mixed()
+  .oneOf(
+    [ENTITY_TYPE.PERSON, ENTITY_TYPE.ORGANIZATION],
+    'qvain.validationMessages.actors.type.oneOf'
+  )
+  .required('qvain.validationMessages.actors.type.required')
+
+export const actorRolesSchema = yup
+  .array()
+  .of(
+    yup
+      .mixed()
+      .oneOf(
+        [
+          ROLE.CREATOR,
+          ROLE.CURATOR,
+          ROLE.PUBLISHER,
+          ROLE.RIGHTS_HOLDER,
+          ROLE.CONTRIBUTOR,
+          ROLE.PROVENANCE,
+        ],
+        'qvain.validationMessages.actors.roles.oneOf'
+      )
+  )
+  .min(1, 'qvain.validationMessages.actors.roles.min')
+  .required('qvain.validationMessages.actors.roles.required')
+
+export const personNameSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.actors.name.string')
+  .max(1000, 'qvain.validationMessages.actors.name.max')
+  .required('qvain.validationMessages.actors.name.required')
+
+export const personEmailSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.actors.email.string')
+  .max(1000, 'qvain.validationMessages.actors.email.max')
+  .email('qvain.validationMessages.actors.email.email')
+  .nullable()
+
+export const personIdentifierSchema = yup
+  .string()
+  .max(1000, 'qvain.validationMessages.actors.identifier.max')
+  .nullable()
+
+export const organizationNameSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.actors.organization.name')
+  .min(1, 'qvain.validationMessages.actors.organization.name')
+  .max(1000, 'qvain.validationMessages.actors.name.max')
+  .required('qvain.validationMessages.actors.organization.name')
+
+export const organizationEmailSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.actors.email.string')
+  .max(1000, 'qvain.validationMessages.actors.email.max')
+  .email('qvain.validationMessages.actors.email.email')
+  .nullable()
+
+export const organizationNameTranslationsSchema = yup.lazy(translations => {
+  // Each value in the translations must be an organization name string.
+  const obj = Object.keys(translations).reduce((o, translation) => {
+    o[translation] = organizationNameSchema
+    return o
+  }, {})
+  // At least one translation is required.
+  if (Object.keys(obj).length === 0) {
+    obj.und = organizationNameSchema
+  }
+  return yup.object().shape(obj)
+})
+
+export const organizationIdentifierSchema = yup
+  .string()
+  .max(1000, 'qvain.validationMessages.actors.identifier.max')
+  .nullable()
+
+export const actorOrganizationSchema = yup.object().shape({
+  type: yup
+    .mixed()
+    .oneOf(
+      [ENTITY_TYPE.PERSON, ENTITY_TYPE.ORGANIZATION],
+      'qvain.validationMessages.actors.type.oneOf'
+    )
+    .required('qvain.validationMessages.actors.type.required'),
+  organization: yup.mixed().when('type', {
+    is: ENTITY_TYPE.PERSON,
+    then: yup.object().required('qvain.validationMessages.actors.organization.required'),
+    otherwise: yup.object('qvain.validationMessages.actors.organization.object').shape({
+      value: yup
+        .string()
+        .typeError('qvain.validationMessages.actors.organization.string')
+        .nullable(),
+    }),
+  }),
+})
+
+export const actorSchema = yup.object().shape({
+  type: actorType,
+  roles: actorRolesSchema,
+  person: yup.object().when('type', {
+    is: ENTITY_TYPE.PERSON,
+    then: personSchema.required(),
+    otherwise: yup.object().nullable(),
+  }),
+  organizations: yup
+    .array()
+    .min(1, 'qvain.validationMessages.actors.organization.required')
+    .of(organizationSchema)
+    .required('qvain.validationMessages.actors.organization.required'),
+})
+
+export const actorsSchema = yup
+  .array()
+  .of(actorSchema)
+  // Test: loop through the actor list and the roles of each actor
+  // A Creator must be found in the actor list in order to allow the dataset to be posted to the database
+  .test(
+    'contains-creator',
+    'qvain.validationMessages.actors.requiredActors.mandatoryActors.creator',
+    value => {
+      let foundCreator = false
+      for (let i = 0; i < value.length; i += 1) {
+        for (let j = 0; j < value[i].roles.length; j += 1) {
+          if (value[i].roles[j] === ROLE.CREATOR) {
+            foundCreator = true
+          }
+        }
+      }
+      if (foundCreator) {
+        return true
+      }
+      return false
+    }
+  )
+  .test(
+    'is-doi-and-contains-publisher',
+    'qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher',
+    value => {
+      let foundPublisher = false
+      for (let i = 0; i < value.length; i += 1) {
+        for (let j = 0; j < value[i].roles.length; j += 1) {
+          if (value[i].roles[j] === ROLE.PUBLISHER) {
+            foundPublisher = true
+          }
+        }
+      }
+      if (foundPublisher) {
+        return true
+      }
+      return false
+    }
+  )
+  .required('qvain.validationMessages.actors.requiredActors.atLeastOneActor')
+
+const personSchema = yup.object().shape({
+  name: personNameSchema.required('qvain.validationMessages.actors.name.required'),
+  email: personEmailSchema,
+  identifier: personIdentifierSchema,
+})
+
+const organizationSchema = yup.object().shape({
+  name: organizationNameTranslationsSchema,
+  identifier: organizationIdentifierSchema,
+})
+
+// HELPERS
 
 // Returns a Actor.
 const createActor = (actorJson, roles) => {
