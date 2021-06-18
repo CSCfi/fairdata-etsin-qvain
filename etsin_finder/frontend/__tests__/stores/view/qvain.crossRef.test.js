@@ -2,33 +2,22 @@ import 'chai/register-expect'
 import CrossRef from '../../../js/stores/view/qvain/qvain.crossRef'
 import axios from 'axios'
 import urls from '../../../js/utils/urls'
-
 jest.mock('axios')
-
+axios.isCancel = jest.fn()
 describe('CrossRef', () => {
-  const crossRef = new CrossRef()
   const cancelMockFunc = jest.fn()
-  let originalCancel
+  let crossRef
 
-  beforeAll(() => {
-    crossRef.prevRequest = {}
-    originalCancel = Object.prototype.cancel
-
-    Object.defineProperty(Object.prototype, 'cancel', {
-      value: cancelMockFunc,
-      writable: true,
-    })
+  beforeEach(() => {
+    axios.CancelToken = {
+      source: jest.fn(() => ({ cancel: () => cancelMockFunc })),
+    }
+    crossRef = new CrossRef()
+    crossRef.prevRequest = { cancel: cancelMockFunc }
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
-  })
-
-  afterAll(() => {
-    Object.defineProperty(Object.prototype, 'cancel', {
-      value: originalCancel,
-      writable: true,
-    })
+    jest.resetAllMocks()
   })
 
   describe('when calling search with empty string', () => {
@@ -36,15 +25,12 @@ describe('CrossRef', () => {
     beforeEach(async () => {
       returnValue = await crossRef.search('')
     })
-
     test('should call cancel on prevRequest', () => {
       expect(cancelMockFunc).to.have.beenCalledWith()
     })
-
     test('should not call axios.get', () => {
       expect(axios.get).to.not.have.beenCalled()
     })
-
     test('should clear results', () => {
       returnValue.should.eql(crossRef.defaultOptions)
     })
@@ -65,9 +51,7 @@ describe('CrossRef', () => {
 
       beforeEach(async () => {
         axios.get.mockImplementationOnce(() => Promise.resolve())
-
-        axios.CancelToken = {}
-        axios.CancelToken.source = jest.fn(() => mockRequest)
+        axios.CancelToken.source.mockReturnValueOnce(mockRequest)
         returnValue = await crossRef.search()
       })
 
@@ -79,9 +63,10 @@ describe('CrossRef', () => {
     })
 
     describe('when request gets cancelled', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
+        await Promise.resolve()
         axios.get.mockImplementationOnce(() => Promise.reject('error'))
-        axios.isCancel = jest.fn(() => true)
+        axios.isCancel.mockReturnValueOnce(true)
       })
 
       describe('when calling search', () => {
@@ -104,7 +89,6 @@ describe('CrossRef', () => {
 
   describe('when calling reset', () => {
     beforeEach(() => {
-      crossRef.prevRequest = {}
       crossRef.responseError = 'error'
       crossRef.reset()
     })
@@ -181,7 +165,6 @@ describe('CrossRef', () => {
           },
         },
       ]
-
       returnValue.should.eql(expectedReturn)
     })
   })
