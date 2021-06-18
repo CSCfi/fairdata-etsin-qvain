@@ -32,6 +32,11 @@ class CrossRef {
   }
 
   @action
+  setPrevRequest = request => {
+    this.prevRequest = request
+  }
+
+  @action
   search = async () => {
     this.responseError = undefined
     this.prevRequest?.cancel()
@@ -47,9 +52,7 @@ class CrossRef {
         cancelToken,
       })
 
-      runInAction(() => {
-        this.prevRequest = undefined
-      })
+      this.setPrevRequest(undefined)
 
       return this.parseResults(response)
     } catch (error) {
