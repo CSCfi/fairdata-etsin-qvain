@@ -78,10 +78,10 @@ class Provenances extends Field {
       temporal:
         p.startDate || p.endDate
           ? {
-              start_date: new Date(p.startDate).toISOString(),
-              end_date: new Date(p.endDate).toISOString(),
+              start_date: p.startDate ? new Date(p.startDate).toISOString() : undefined,
+              end_date: p.endDate ? new Date(p.endDate).toISOString() : undefined,
             }
-          : undefined, // TODO: move this conversion to Temporal when it's implemented
+          : undefined,
       spatial: p.spatials.toBackend()[0],
       event_outcome: { identifier: (p.outcome || {}).url },
       used_entity: p.usedEntities.toBackend(),

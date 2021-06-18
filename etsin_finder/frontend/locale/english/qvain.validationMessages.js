@@ -158,8 +158,7 @@ const validationMessages = {
       altitudeNan: 'Altitude must be a number',
     },
     temporal: {
-      startDateMissing: 'Please enter the start date.',
-      endDateMissing: 'Please enter the end date.',
+      dateMissing: 'Please enter a date.',
     },
   },
   history: {

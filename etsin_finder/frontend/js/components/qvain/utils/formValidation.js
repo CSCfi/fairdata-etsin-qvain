@@ -567,11 +567,15 @@ const temporalDateSchema = yup.object().shape({
   startDate: yup
     .string()
     .date()
-    .required('qvain.validationMessages.temporalAndSpatial.temporal.startDateMissing'),
-  endDate: yup
-    .string()
-    .date()
-    .required('qvain.validationMessages.temporalAndSpatial.temporal.endDateMissing'),
+    .when('endDate', {
+      is: undefined,
+      then: yup
+        .string()
+        .date()
+        .required('qvain.validationMessages.temporalAndSpatial.temporal.dateMissing'),
+      otherwise: yup.string().date(),
+    }),
+  endDate: yup.string().date(),
 })
 
 // RELATED RESOURCE
@@ -604,15 +608,10 @@ const provenanceNameSchema = yup.object().shape({
   en: yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
 })
 
-const provenanceStartDateSchema = yup
-  .string()
-  .date()
-  .required('qvain.validationMessages.history.provenance.startDateMissing')
-
-const provenanceEndDateSchema = yup
-  .string()
-  .date()
-  .required('qvain.validationMessages.history.provenance.endDateMissing')
+const provenanceDateSchema = yup.object().shape({
+  startDate: yup.string().date(),
+  endDate: yup.string().date(),
+})
 
 // Entire form validation for normal dataset
 const qvainFormSchema = yup.object().shape({
@@ -715,8 +714,7 @@ export {
   relatedResourceNameSchema,
   relatedResourceTypeSchema,
   provenanceNameSchema,
-  provenanceStartDateSchema,
-  provenanceEndDateSchema,
+  provenanceDateSchema,
   temporalDateSchema,
   organizationObjectSchema,
   // Schemas specific to draft datasets

@@ -53,6 +53,11 @@ const temporalAndSpatial = {
     title: 'Ajallinen kattavuus',
     description: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
     addButton: 'Lisää ajanjakso',
+    listItem: {
+      bothDates: '%(startDate)s - %(endDate)s',
+      startDateOnly: 'alkaen %(startDate)s',
+      endDateOnly: '%(endDate)s saakka',
+    },
     modal: {
       durationInput: {
         label: 'Ajanjakso',
