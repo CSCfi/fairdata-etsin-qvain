@@ -217,8 +217,7 @@ const english = {
       cumulativeDatasetLabel: 'Note: Dataset is growing',
       cumulativeDatasetTooltip: {
         header: 'Growing dataset',
-        info:
-          'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
+        info: 'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
       },
     },
     events_idn: {
@@ -319,7 +318,7 @@ const english = {
     notFound:
       'Sorry, we are having some technical difficulties at the moment. Please, try again later.',
     notLoaded: "Sorry! The page couldn't be found.",
-    undefined: 'Sorry! An error occured.',
+    undefined: 'Sorry! An error occurred.',
     details: {
       showDetails: 'Show details',
       hideDetails: 'Hide details',
@@ -330,7 +329,7 @@ const english = {
     showLess: 'Show less',
     description: 'Description',
     notice: {
-      SRhide: 'piilota ilmoitus',
+      SRhide: 'hide notice',
     },
     state: {
       changedLang: 'Changed language to: %(lang)s',
@@ -452,8 +451,7 @@ const english = {
   footer: {
     fairdata: {
       title: 'Fairdata',
-      text:
-        'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
+      text: 'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
     },
     information: {
       title: 'Information',
