@@ -40,10 +40,16 @@ class Field {
     this.hasChanged = val
   }
 
-  @action create() {
-    this.setChanged(false)
+  @action create(data = undefined) {
+    if (data) {
+      this.setChanged(true)
+      this.inEdit = this.Template(data)
+    } else {
+      this.setChanged(false)
+      this.inEdit = this.Template()
+    }
+
     this.editMode = false
-    this.inEdit = this.Template()
     this.validationError = undefined
   }
 
