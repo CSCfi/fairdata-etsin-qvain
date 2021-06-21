@@ -17,7 +17,8 @@ default_supported_flags = {
     'DOWNLOAD_API_V2.OPTIONS',
     'UI.BOTTOM_SUBMIT_BUTTONS',
     'UI.CITATION',
-    "MATOMO_TRACKING"
+    "MATOMO_TRACKING",
+    "CROSSREF_API"
 }
 
 # Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'
