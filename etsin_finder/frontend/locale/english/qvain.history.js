@@ -75,7 +75,7 @@ const history = {
     addButton: 'Add Infrastructure',
     title: 'Infrastructure',
     description: 'You can specify services and tools that are used to produce the dataset.',
-    noItems: 'No infrastuctures have been added.',
+    noItems: 'No infrastructures have been added.',
   },
   provenance: {
     title: 'Provenance',

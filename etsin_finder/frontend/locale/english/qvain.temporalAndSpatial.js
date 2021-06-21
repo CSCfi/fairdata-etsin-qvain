@@ -1,6 +1,6 @@
 const temporalAndSpatial = {
-  title: 'Time Period and Geograhical area',
-  tooltip: 'Time Peroiod and Geographical area',
+  title: 'Time Period and Geographical area',
+  tooltip: 'Time Period and Geographical area',
   tooltipContent: {
     spatial: {
       title: 'Geographical area',

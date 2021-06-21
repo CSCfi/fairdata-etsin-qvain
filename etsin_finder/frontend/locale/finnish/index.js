@@ -328,7 +328,7 @@ const finnish = {
     showLess: 'Näytä vähemmän',
     description: 'Kuvaus',
     notice: {
-      SRhide: 'hide notice',
+      SRhide: 'piilota ilmoitus',
     },
     state: {
       changedLang: 'Kieli vaihdettu kieleen: %(lang)s',
