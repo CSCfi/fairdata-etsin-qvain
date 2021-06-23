@@ -22,6 +22,10 @@ const history = {
     description: `Refer to related datasets, publications, and other
       resources that are relevant in understanding this dataset.`,
     noItems: 'No references to any related resources have been specified.',
+    select: {
+      newRelation: 'Create a new reference',
+      placeholder: 'Create a new reference or search reference from external resources',
+    },
     modal: {
       addButton: 'Add reference to a related resource',
       title: {
@@ -71,7 +75,7 @@ const history = {
     addButton: 'Add Infrastructure',
     title: 'Infrastructure',
     description: 'You can specify services and tools that are used to produce the dataset.',
-    noItems: 'No infrastuctures have been added.',
+    noItems: 'No infrastructures have been added.',
   },
   provenance: {
     title: 'Provenance',
