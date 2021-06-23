@@ -34,6 +34,12 @@ class Licenses extends ReferenceField {
     super(Parent, () => [Model(undefined, LICENSE_URL.CCBY4)])
   }
 
+  schema = licenseSchema
+
+  arraySchema = licenseArraySchema
+
+  arrayObjectSchema = licenseArrayObject
+
   fromBackend = dataset => {
     const l = dataset.access_rights.license ? dataset.access_rights.license : undefined
     if (l !== undefined) {
@@ -57,10 +63,6 @@ class Licenses extends ReferenceField {
   toBackend = () => this.storage
 
   Model = Model
-
-  schema = licenseSchema
-  arraySchema = licenseArraySchema
-  arrayObjectSchema = licenseArrayObject
 }
 
 export default Licenses

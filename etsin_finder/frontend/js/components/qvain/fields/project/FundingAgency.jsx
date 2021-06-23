@@ -21,7 +21,7 @@ import {
   Expand,
   resolveOptions,
 } from './utils'
-import { withStores } from '../../utils/stores'
+import { withStores, useStores } from '../../utils/stores'
 import { LabelLarge, Input } from '../../general/modal/form'
 import {
   FundingAgency,
@@ -29,15 +29,12 @@ import {
   Organization,
 } from '../../../../stores/view/qvain/qvain.project'
 
-import { useStores } from '../../utils/stores'
-
 const FundingAgencyForm = props => {
   const {
     Qvain: {
-      Projects: { fundingAgencySchema, orgObjectSchema },
+      Projects: { orgObjectSchema },
     },
   } = useStores()
-
   const onOrganizationChange = value => {
     const { formData } = props.value
     props.onChange({ ...formData, organization: value, errors: [] })

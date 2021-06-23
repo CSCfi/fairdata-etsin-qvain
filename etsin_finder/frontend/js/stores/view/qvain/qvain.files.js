@@ -80,15 +80,25 @@ class Files extends FilesBase {
   }
 
   fileMetadataSchema = fileMetadataSchema
+
   fileUseCategorySchema = fileUseCategorySchema
+
   fileTitleSchema = fileTitleSchema
+
   fileDescriptionSchema = fileDescriptionSchema
+
   fileSchema = fileSchema
+
   filesSchema = filesSchema
+
   directoryTitleSchema = directoryTitleSchema
+
   directoryDescriptionSchema = directoryDescriptionSchema
+
   directoryUseCategorySchema = directoryUseCategorySchema
+
   directorySchema = directorySchema
+
   directoriesSchema = directoriesSchema
 
   @observable refreshModalDirectory = undefined

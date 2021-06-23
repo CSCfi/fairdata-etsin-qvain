@@ -1,4 +1,4 @@
-import * as yup from 'yup'
+import yup from '../../../utils/extentedYup'
 
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import { titleSchema } from './qvain.title'
@@ -10,7 +10,12 @@ import { licenseArraySchema } from './qvain.license'
 import { accessTypeSchema } from './qvain.accessType'
 import { restrictionGroundsSchema } from './qvain.restrictionGrounds'
 import { actorsSchema, actorsDraftSchema } from './qvain.actors'
-import { cumulativeStateSchema, useDoiSchema, dataCatalogSchema, dataCatalogDraftSchema } from './'
+import {
+  cumulativeStateSchema,
+  useDoiSchema,
+  dataCatalogSchema,
+  dataCatalogDraftSchema,
+} from './qvain.dataCatalog.schemas'
 import { filesSchema, directoriesSchema } from './qvain.files'
 
 // Entire form validation for normal dataset

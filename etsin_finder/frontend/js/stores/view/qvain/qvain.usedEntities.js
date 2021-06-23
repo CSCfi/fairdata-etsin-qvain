@@ -1,7 +1,7 @@
 import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
-import { relatedResourceNameSchema, relatedResourceNamSchema } from './qvain.relatedResources'
+import { relatedResourceNameSchema } from './qvain.relatedResources'
 
 export const UsedEntityTemplate = (
   uiid = uuidv4(),

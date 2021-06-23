@@ -57,8 +57,11 @@ class Projects {
   }
 
   projectSchema = projectSchema
+
   orgSelectSchema = organizationSelectSchema
+
   orgObjectSchema = organizationObjectSchema
+
   fundingAgencySchema = fundingAgencySchema
 
   @observable projects = []

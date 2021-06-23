@@ -27,10 +27,11 @@ class Title extends MultiLanguageField {
     makeObservable(this)
   }
 
+  schema = titleSchema
+
   @action fromBackend = dataset => {
     this.value = { en: dataset.title?.en || '', fi: dataset.title?.fi || '' }
   }
-  schema = titleSchema
 }
 
 export default Title
