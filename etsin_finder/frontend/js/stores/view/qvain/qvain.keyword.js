@@ -12,6 +12,17 @@ export const keywordsArraySchema = yup
   .of(keywordsSchema)
   .required('qvain.validationMessages.keywords.required')
 
+// Validation for draft datasets: keywords are not .required()
+export const keywordsDraftSchema = yup
+  .array()
+  .nullable()
+  .of(
+    yup
+      .string()
+      .typeError('qvain.validationMessages.keywords.string')
+      .max(1000, 'qvain.validationMessages.keywords.max')
+  )
+
 class Keywords extends ReferenceField {
   constructor(Parent, defaultStorageFactory = () => [], defaultItem = undefined) {
     super(Parent, defaultStorageFactory, defaultItem)

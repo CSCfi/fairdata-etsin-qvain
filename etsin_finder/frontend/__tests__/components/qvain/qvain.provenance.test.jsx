@@ -14,7 +14,7 @@ import UsedEntitiesForm from '../../../js/components/qvain/fields/history/relate
 import {
   provenanceNameSchema,
   provenanceDateSchema,
-} from '../../../js/components/qvain/utils/formValidation'
+} from '../../../js/stores/view/qvain/qvain.submit.schemas'
 import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
 import Durationpicker from '../../../js/components/qvain/general/input/durationpicker'
 import ActorsInput, {
@@ -27,7 +27,7 @@ import { Label } from '../../../js/components/qvain/general/modal/form'
 import ActorsList from '../../../js/components/qvain/fields/history/provenance/form/actorsList'
 import { ROLE } from '../../../js/utils/constants'
 
-jest.mock('../../../js/components/qvain/utils/formValidation', () => {
+jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas', () => {
   return {
     provenanceNameSchema: {
       validate: jest.fn(),
@@ -57,6 +57,9 @@ describe('Provenance', () => {
         save: jest.fn(),
         clearInEdit: jest.fn(),
         setValidationError: jest.fn(),
+        schema: {
+          validate: jest.fn(),
+        },
       },
     },
     Locale: {
@@ -122,20 +125,15 @@ describe('Provenance', () => {
     })
 
     describe('when calling handleSave and validations pass', () => {
-      const { inEdit } = mockStores.Qvain.Provenances
+      const { inEdit, schema } = mockStores.Qvain.Provenances
 
       beforeEach(() => {
-        provenanceNameSchema.validate.mockReturnValue(Promise.resolve())
-        provenanceDateSchema.validate.mockReturnValue(Promise.resolve())
+        schema.validate.mockReturnValue(Promise.resolve())
         harness.props.handleSave()
       })
 
-      test('should call provenanceNameSchema.validate', () => {
-        expect(provenanceNameSchema.validate).to.have.beenCalledWith(inEdit.name, { strict: true })
-      })
-
       test('should call provenanceDateSchema.validate', () => {
-        expect(provenanceDateSchema.validate).to.have.beenCalledWith(inEdit, {
+        expect(schema.validate).to.have.beenCalledWith(inEdit, {
           strict: true,
         })
       })
@@ -155,7 +153,7 @@ describe('Provenance', () => {
       }
 
       beforeEach(async () => {
-        provenanceNameSchema.validate.mockReturnValue(Promise.reject(error))
+        mockStores.Qvain.Provenances.schema.validate.mockReturnValue(Promise.reject(error))
         harness.props.handleSave()
         await flushPromises()
       })

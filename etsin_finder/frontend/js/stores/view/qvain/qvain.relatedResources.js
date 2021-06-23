@@ -1,7 +1,26 @@
 import { makeObservable } from 'mobx'
-// import { observables } from 'mobx'
+
+import yup from '../../../utils/extendedYup'
+
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
+
+// RELATED RESOURCE
+export const relatedResourceNameSchema = yup.object().shape({
+  fi: yup.mixed().when('en', {
+    is: val => val.length > 0,
+    then: yup.string().typeError('qvain.validationMessages.history.relatedResource.nameRequired'),
+    otherwise: yup
+      .string()
+      .typeError('qvain.validationMessages.history.relatedResource.nameRequired')
+      .required('qvain.validationMessages.history.relatedResource.nameRequired'),
+  }),
+  en: yup.string().typeError('qvain.validationMessages.history.relatedResource.nameRequired'),
+})
+
+export const relatedResourceTypeSchema = yup
+  .object()
+  .required('qvain.validationMessages.history.relatedResource.typeRequired')
 
 export const RelatedResource = (
   uiid = uuidv4(),
@@ -31,6 +50,9 @@ class RelatedResources extends Field {
   toBackend = () => this.storage.map(this.relatedResourceToBackend)
 
   fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.relation, Qvain)
+
+  nameSchema = relatedResourceNameSchema
+  typeSchema = relatedResourceTypeSchema
 }
 
 export const RelatedResourceModel = rr => ({

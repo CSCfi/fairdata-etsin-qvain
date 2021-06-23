@@ -12,13 +12,12 @@ import TemporalList, {
 import DurationPicker from '../../../js/components/qvain/general/input/durationpicker'
 import { AddNewButton } from '../../../js/components/qvain/general/buttons'
 import ValidationError from '../../../js/components/qvain/general/errors/validationError'
-import { temporalDateSchema } from '../../../js/components/qvain/utils/formValidation'
 import Label from '../../../js/components/qvain/general/card/label'
 import '../../../locale/translations'
 
 jest.mock('../../../js/components/qvain/fields/temporalAndSpatial/temporal/handleSave')
 
-jest.mock('../../../js/components/qvain/utils/formValidation')
+jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas')
 
 describe('given mocked stores', () => {
   const mockStores = {
@@ -171,10 +170,13 @@ describe('when calling handleSave, on successful validation', () => {
     create: jest.fn(),
     setValidationError: jest.fn(),
     addTemporal: jest.fn(),
+    schema: {
+      validate: jest.fn(),
+    },
   }
 
   beforeEach(async () => {
-    temporalDateSchema.validate.mockReturnValue(Promise.resolve())
+    field.schema.validate.mockReturnValue(Promise.resolve())
     handleSave.mockImplementation(
       jest.requireActual(
         '../../../js/components/qvain/fields/temporalAndSpatial/temporal/handleSave'
@@ -183,8 +185,8 @@ describe('when calling handleSave, on successful validation', () => {
     await handleSave(undefined, field)
   })
 
-  test('should call temporalDateSchema with Field.inEdit', () => {
-    expect(temporalDateSchema.validate).to.have.beenCalledWith(field.inEdit, { strict: true })
+  test('should call schema with Field.inEdit', () => {
+    expect(field.schema.validate).to.have.beenCalledWith(field.inEdit, { strict: true })
   })
 
   test('should call field.addTemporal', () => {

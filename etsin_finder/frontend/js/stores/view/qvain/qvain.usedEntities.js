@@ -1,6 +1,7 @@
 import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
+import { relatedResourceNameSchema, relatedResourceNamSchema } from './qvain.relatedResources'
 
 export const UsedEntityTemplate = (
   uiid = uuidv4(),
@@ -28,6 +29,8 @@ class UsedEntities extends Field {
   toBackend = () => this.storage.map(this.usedEntityToBackend)
 
   fromBackend = this.fromBackendBase
+
+  nameSchema = relatedResourceNameSchema
 }
 
 export const UsedEntityModel = ue => ({

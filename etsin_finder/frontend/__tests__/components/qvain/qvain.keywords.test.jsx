@@ -1,12 +1,11 @@
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 
-import Keywords from '../../../js/components/qvain/fields/description/keywords'
+import Keywords, { keywordsSchema } from '../../../js/components/qvain/fields/description/keywords'
 import { useStores } from '../../../js/stores/stores'
 import { LabelLarge } from '../../../js/components/qvain/general/modal/form'
 import Tooltip from '../../../js/components/general/tooltipHover'
 import StringArray from '../../../js/components/qvain/general/input/stringArray'
-import { keywordsSchema } from '../../../js/components/qvain/utils/formValidation'
 
 jest.mock('../../../js/stores/stores')
 

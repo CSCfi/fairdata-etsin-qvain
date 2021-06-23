@@ -104,6 +104,17 @@ export const actorOrganizationSchema = yup.object().shape({
   }),
 })
 
+export const personSchema = yup.object().shape({
+  name: personNameSchema.required('qvain.validationMessages.actors.name.required'),
+  email: personEmailSchema,
+  identifier: personIdentifierSchema,
+})
+
+export const organizationSchema = yup.object().shape({
+  name: organizationNameTranslationsSchema,
+  identifier: organizationIdentifierSchema,
+})
+
 export const actorSchema = yup.object().shape({
   type: actorType,
   roles: actorRolesSchema,
@@ -162,16 +173,57 @@ export const actorsSchema = yup
   )
   .required('qvain.validationMessages.actors.requiredActors.atLeastOneActor')
 
-const personSchema = yup.object().shape({
-  name: personNameSchema.required('qvain.validationMessages.actors.name.required'),
+// Draft actor
+export const actorTypeDraft = yup
+  .mixed()
+  .oneOf(
+    [ENTITY_TYPE.PERSON, ENTITY_TYPE.ORGANIZATION],
+    'qvain.validationMessages.actors.type.oneOf'
+  )
+
+export const actorRolesDraftSchema = yup
+  .array()
+  .of(
+    yup
+      .mixed()
+      .oneOf(
+        [
+          ROLE.CREATOR,
+          ROLE.CURATOR,
+          ROLE.PUBLISHER,
+          ROLE.RIGHTS_HOLDER,
+          ROLE.CONTRIBUTOR,
+          ROLE.PROVENANCE,
+        ],
+        'qvain.validationMessages.actors.roles.oneOf'
+      )
+  )
+  .min(1, 'qvain.validationMessages.actors.roles.min')
+
+export const personNameDraftSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.actors.name.string')
+  .max(1000, 'qvain.validationMessages.actors.name.max')
+
+export const personDraftSchema = yup.object().shape({
+  name: personNameDraftSchema,
   email: personEmailSchema,
   identifier: personIdentifierSchema,
 })
 
-const organizationSchema = yup.object().shape({
-  name: organizationNameTranslationsSchema,
-  identifier: organizationIdentifierSchema,
+export const actorDraftSchema = yup.object().shape({
+  type: actorTypeDraft,
+  roles: actorRolesDraftSchema,
+  person: yup.object().when('type', {
+    is: ENTITY_TYPE.PERSON,
+    then: personDraftSchema,
+    otherwise: yup.object().nullable(),
+  }),
+  organizations: yup.array().of(organizationSchema),
 })
+
+// Actors schema for draft
+export const actorsDraftSchema = yup.array().of(actorDraftSchema)
 
 // HELPERS
 
@@ -328,6 +380,20 @@ class Actors {
     makeObservable(this)
     this.reset()
   }
+
+  actorType = actorType
+  personNameSchema = personNameSchema
+  personEmailSchema = personEmailSchema
+  personIdentifierSchema = personIdentifierSchema
+  organizationNameSchema = organizationNameSchema
+  organizationEmailSchema = organizationEmailSchema
+  organizationNameTranslationsSchema = organizationNameTranslationsSchema
+  organizationIdentifierSchema = organizationIdentifierSchema
+  actorOrganizationSchema = actorOrganizationSchema
+  personSchema = personSchema
+  organizationSchema = organizationSchema
+  actorSchema = actorSchema
+  actorsSchema = actorsSchema
 
   // Reference organizations by parent
   @observable referenceOrganizations = {}

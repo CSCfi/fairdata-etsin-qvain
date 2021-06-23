@@ -57,6 +57,10 @@ class Licenses extends ReferenceField {
   toBackend = () => this.storage
 
   Model = Model
+
+  schema = licenseSchema
+  arraySchema = licenseArraySchema
+  arrayObjectSchema = licenseArrayObject
 }
 
 export default Licenses

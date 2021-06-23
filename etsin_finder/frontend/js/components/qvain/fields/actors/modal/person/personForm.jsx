@@ -1,25 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
-import {
-  personNameSchema,
-  personEmailSchema,
-  personIdentifierSchema,
-} from '../../../../utils/formValidation'
 import PersonInput from './personInput'
+import { useStores } from '../../../../utils/stores'
 
-export const PersonFormBase = () => (
-  <>
-    <Fields>
-      <div>
-        <PersonInput propName="name" schema={personNameSchema} includeType required />
-      </div>
-      <div>
-        <PersonInput propName="email" schema={personEmailSchema} />
-      </div>
-    </Fields>
-    <PersonInput propName="identifier" schema={personIdentifierSchema} includeType />
-  </>
-)
+export const PersonFormBase = () => {
+  const {
+    Qvain: {
+      Actors: { personNameSchema, personEmailSchema, personIdentifierSchema },
+    },
+  } = useStores()
+  return (
+    <>
+      <Fields>
+        <div>
+          <PersonInput propName="name" schema={personNameSchema} includeType required />
+        </div>
+        <div>
+          <PersonInput propName="email" schema={personEmailSchema} />
+        </div>
+      </Fields>
+      <PersonInput propName="identifier" schema={personIdentifierSchema} includeType />
+    </>
+  )
+}
 
 const Fields = styled.div`
   display: grid;

@@ -23,14 +23,21 @@ import {
 } from './utils'
 import { withStores } from '../../utils/stores'
 import { LabelLarge, Input } from '../../general/modal/form'
-import { fundingAgencySchema, organizationObjectSchema } from '../../utils/formValidation'
 import {
   FundingAgency,
   ContributorType,
   Organization,
 } from '../../../../stores/view/qvain/qvain.project'
 
+import { useStores } from '../../utils/stores'
+
 const FundingAgencyForm = props => {
+  const {
+    Qvain: {
+      Projects: { fundingAgencySchema, orgObjectSchema },
+    },
+  } = useStores()
+
   const onOrganizationChange = value => {
     const { formData } = props.value
     props.onChange({ ...formData, organization: value, errors: [] })
@@ -47,14 +54,8 @@ const FundingAgencyForm = props => {
    */
   const onAddContributorType = () => {
     const { formData } = props.value
-    const {
-      id,
-      identifier,
-      definitionEn,
-      definitionFi,
-      label,
-      inScheme,
-    } = formData.contributorTypeForm
+    const { id, identifier, definitionEn, definitionFi, label, inScheme } =
+      formData.contributorTypeForm
     const definition = { en: definitionEn, fi: definitionFi }
     const contributorType = ContributorType(id, identifier.value, label, definition, inScheme)
     const contributorTypes = formData.contributorTypes
@@ -116,7 +117,7 @@ const FundingAgencyForm = props => {
   const validateAll = organizations => {
     const { formData } = props.value
     const { errors } = formData
-    const validationErrors = validateSync(organizationObjectSchema, organizations)
+    const validationErrors = validateSync(orgObjectSchema, organizations)
     if (!isEmptyObject(validationErrors)) {
       props.onChange({
         ...formData,
@@ -275,7 +276,15 @@ class ContributorTypeFormComponent extends Component {
 
   /** Validate form */
   onBlur = async () => {
-    const { formData, onChange } = this.props
+    const {
+      formData,
+      onChange,
+      Stores: {
+        Qvain: {
+          Projects: { fundingAgencySchema },
+        },
+      },
+    } = this.props
     const errors = await validate(fundingAgencySchema, { ...formData })
     onChange({ ...formData, errors })
   }
@@ -299,7 +308,16 @@ class ContributorTypeFormComponent extends Component {
   }
 
   onAddType = async () => {
-    const { formData, onChange, onAdd } = this.props
+    const {
+      formData,
+      onChange,
+      onAdd,
+      Stores: {
+        Qvain: {
+          Projects: { fundingAgencySchema },
+        },
+      },
+    } = this.props
     const identifier = formData.identifier ? formData.identifier.value : null
     const errors = await validate(fundingAgencySchema, { ...formData, identifier })
     if (!isEmptyObject(errors)) onChange({ ...formData, errors })

@@ -8,12 +8,6 @@ import { Label, CustomSelect, Input, Textarea } from '../../../../general/modal/
 import { Container } from '../../../../general/card'
 import { ValidationErrors } from '../../../../general/errors/validationError'
 import { getLocalizedOptions } from '../../../../utils/getReferenceData'
-import {
-  directorySchema,
-  directoryTitleSchema,
-  directoryDescriptionSchema,
-  directoryUseCategorySchema,
-} from '../../../../utils/formValidation'
 import { withStores } from '../../../../utils/stores'
 
 export class DirectoryFormBase extends Component {
@@ -82,6 +76,8 @@ export class DirectoryFormBase extends Component {
       description,
       useCategory,
     }
+    const { directorySchema } = this.props.Stores.Qvain.Files
+
     directorySchema
       .validate(validationObj, { strict: true })
       .then(() => {
@@ -110,18 +106,21 @@ export class DirectoryFormBase extends Component {
   }
 
   handleTitleBlur = () => {
+    const { directoryTitleSchema } = this.props.Stores.Qvain.Files
     this.handleOnBlur(directoryTitleSchema, this.state.title, value =>
       this.setState({ titleError: value })
     )
   }
 
   handleDescriptionBlur = () => {
+    const { directoryDescriptionSchema } = this.props.Stores.Qvain.Files
     this.handleOnBlur(directoryDescriptionSchema, this.state.description, value =>
       this.setState({ descriptionError: value })
     )
   }
 
   handleOnUseCategoryBlur = () => {
+    const { directoryUseCategorySchema } = this.props.Stores.Qvain.Files
     const { useCategory } = this.state
     directoryUseCategorySchema
       .validate(useCategory, { strict: true })

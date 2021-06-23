@@ -22,6 +22,28 @@ export const descriptionSchema = yup.object().shape({
     .max(50000, 'qvain.validationMessages.description.max'),
 })
 
+// Validation for draft datasets: description is not .required()
+export const descriptionDraftSchema = yup
+  .object()
+  .shape({
+    fi: yup.mixed().when('en', {
+      is: val => val.length > 0,
+      then: yup
+        .string()
+        .typeError('qvain.validationMessages.description.string')
+        .max(50000, 'qvain.validationMessages.description.max'),
+      otherwise: yup
+        .string()
+        .typeError('qvain.validationMessages.description.string')
+        .max(50000, 'qvain.validationMessages.description.max'),
+    }),
+    en: yup
+      .string()
+      .typeError('qvain.validationMessages.description.string')
+      .max(50000, 'qvain.validationMessages.description.max'),
+  })
+  .nullable()
+
 class Description extends MultiLanguageField {
   constructor(Parent) {
     super(Parent, descriptionSchema)
@@ -32,6 +54,8 @@ class Description extends MultiLanguageField {
   fromBackend = dataset => {
     this.value = { en: dataset.description?.en || '', fi: dataset.description?.fi || '' }
   }
+
+  schema = descriptionSchema
 }
 
 export default Description

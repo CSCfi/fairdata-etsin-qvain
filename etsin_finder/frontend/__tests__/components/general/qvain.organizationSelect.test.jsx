@@ -6,7 +6,6 @@ import axios from 'axios'
 import OrganizationSelect from '../../../js/components/qvain/general/input/organizationSelect'
 import { withStores } from '../../../js/stores/stores'
 import { validate } from '../../../js/components/qvain/fields/project/utils'
-import { organizationSelectSchema } from '../../../js/components/qvain/utils/formValidation'
 
 jest.mock('../../../js/stores/stores', () => ({
   withStores: jest.fn(c => c),
@@ -25,7 +24,11 @@ describe('OrganizationSelect', () => {
   let subDepartmentSelect
 
   const Stores = {
-    Qvain: {},
+    Qvain: {
+      Projects: {
+        orgSelectSchema: jest.fn(),
+      },
+    },
     Locale: {
       lang: 'fi',
     },
@@ -415,7 +418,10 @@ describe('OrganizationSelect', () => {
 
         test('should call validate with correct args', () => {
           const { name, email, value } = props.value.organization
-          const expectedArgs = [organizationSelectSchema, { name, email, identifier: value }]
+          const expectedArgs = [
+            Stores.Qvain.Projects.orgSelectSchema,
+            { name, email, identifier: value },
+          ]
           chai.expect(validate).to.have.beenCalledWith(...expectedArgs)
         })
       })

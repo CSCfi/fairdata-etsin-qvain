@@ -1,6 +1,7 @@
 import { observable, action, makeObservable, override, computed } from 'mobx'
 import axios from 'axios'
 
+import yup from '../../../utils/extendedYup'
 import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from '../common.files.items'
 import { getAction } from '../common.files.utils'
 import { itemLoaderAny, itemLoaderPublic, FetchType } from '../common.files.loaders'
@@ -9,6 +10,58 @@ import urls from '../../../utils/urls'
 import PromiseManager from '../../../utils/promiseManager'
 
 import FilesBase from '../common.files'
+
+export const fileMetadataSchema = yup.object().shape({
+  fileFormat: yup.string().required(),
+  formatVersion: yup.string(),
+  encoding: yup.string().required(),
+  csvHasHeader: yup.boolean().required(),
+  csvDelimiter: yup.string().required(),
+  csvRecordSeparator: yup.string().required(),
+  csvQuotingChar: yup.string().required(),
+})
+
+// FILE AND DIRECTORY (IDA RESOURCES) VALIDATION
+
+export const fileUseCategorySchema = yup
+  .object()
+  .required('qvain.validationMessages.files.file.useCategory.required')
+
+export const fileTitleSchema = yup
+  .string()
+  .required('qvain.validationMessages.files.file.title.required')
+
+export const fileDescriptionSchema = yup
+  .string()
+  .required('qvain.validationMessages.files.file.description.required')
+
+export const fileSchema = yup.object().shape({
+  title: fileTitleSchema,
+  description: fileDescriptionSchema,
+  useCategory: fileUseCategorySchema,
+  fileType: yup.object().nullable(),
+})
+
+export const filesSchema = yup.array().of(fileSchema)
+
+export const directoryTitleSchema = yup
+  .string()
+  .required('qvain.validationMessages.files.directory.title.required')
+
+export const directoryDescriptionSchema = yup.string()
+
+export const directoryUseCategorySchema = yup
+  .object()
+  .required('qvain.validationMessages.files.directory.useCategory.required')
+
+export const directorySchema = yup.object().shape({
+  title: directoryTitleSchema,
+  description: directoryDescriptionSchema,
+  useCategory: directoryUseCategorySchema,
+  fileType: yup.object().nullable(),
+})
+
+export const directoriesSchema = yup.array().of(directorySchema)
 
 class Files extends FilesBase {
   // File hierarchy for files in user projects.
@@ -25,6 +78,18 @@ class Files extends FilesBase {
     this.addItem = this.addItem.bind(this)
     this.reset()
   }
+
+  fileMetadataSchema = fileMetadataSchema
+  fileUseCategorySchema = fileUseCategorySchema
+  fileTitleSchema = fileTitleSchema
+  fileDescriptionSchema = fileDescriptionSchema
+  fileSchema = fileSchema
+  filesSchema = filesSchema
+  directoryTitleSchema = directoryTitleSchema
+  directoryDescriptionSchema = directoryDescriptionSchema
+  directoryUseCategorySchema = directoryUseCategorySchema
+  directorySchema = directorySchema
+  directoriesSchema = directoriesSchema
 
   @observable refreshModalDirectory = undefined
 

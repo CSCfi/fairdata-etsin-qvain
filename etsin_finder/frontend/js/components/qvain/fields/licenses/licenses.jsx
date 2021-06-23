@@ -73,13 +73,13 @@ export class License extends Component {
   }
 
   validateLicenses = () => {
-    const { storage, licenseSchema } = this.props.Stores.Qvain.Licenses
+    const { storage, schema } = this.props.Stores.Qvain.Licenses
     const licenseErrors = {}
     storage.forEach(license => {
       const { identifier, name } = license
       const validationObject = { identifier, name, otherLicenseUrl: identifier }
       try {
-        licenseSchema.validateSync(validationObject)
+        schema.validateSync(validationObject)
       } catch (err) {
         licenseErrors[identifier] = err.message
       }

@@ -25,7 +25,7 @@ class RestrictionGrounds extends SingleValueField {
 
   @override validate() {
     if (!this.Schema) return undefined
-    return this.Schema.validate(this.value.identifier || '', { strict: true })
+    return this.Schema.validate(this.value?.identifier || '', { strict: true })
       .then(() => {
         this.setValidationError(null)
       })
@@ -38,6 +38,8 @@ class RestrictionGrounds extends SingleValueField {
     name,
     identifier,
   })
+
+  schema = restrictionGroundsSchema
 }
 
 export default RestrictionGrounds

@@ -1,6 +1,5 @@
 import 'chai/register-should'
-import * as yup from 'yup'
-import '../../js/components/qvain/utils/formValidation'
+import yup from '../../js/utils/extendedYup'
 
 describe('date string validation', () => {
   const isValid = str => {

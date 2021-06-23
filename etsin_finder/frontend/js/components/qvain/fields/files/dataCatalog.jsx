@@ -5,7 +5,6 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
 import Card from '../../general/card'
-import { dataCatalogSchema } from '../../utils/formValidation'
 import ValidationError from '../../general/errors/validationError'
 import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
 import { LabelLarge } from '../../general/modal/form'
@@ -22,7 +21,15 @@ const customComponents = {
 
 const DataCatalog = () => {
   const {
-    Qvain: { dataCatalog, setDataCatalog, externalResources, original, isPas, setUseDoi },
+    Qvain: {
+      dataCatalog,
+      setDataCatalog,
+      externalResources,
+      original,
+      isPas,
+      setUseDoi,
+      dataCatalogSchema,
+    },
     Locale: { lang },
   } = useStores()
   const [error, SetError] = useState()

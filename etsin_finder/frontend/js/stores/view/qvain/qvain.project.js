@@ -1,12 +1,65 @@
 import { observable, action, toJS, makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
+import yup from '../../../utils/extendedYup'
 import { parseOrganization } from '../../../components/qvain/fields/project/utils'
+
+// PROJECT VALIDATION
+export const organizationSelectSchema = yup.object().shape({
+  identifier: yup.string(),
+  name: yup.object().shape({
+    und: yup.string().required('qvain.validationMessages.projects.organization.name'),
+  }),
+  email: yup.string().email('qvain.validationMessages.projects.organization.email'),
+})
+
+export const organizationObjectSchema = yup.object().shape({
+  organization: organizationSelectSchema
+    .nullable()
+    .required('qvain.validationMessages.projects.organization.name'),
+  department: organizationSelectSchema.nullable(),
+  subDepartment: organizationSelectSchema.nullable(),
+})
+
+export const fundingAgencySchema = yup.object().shape({
+  identifier: yup
+    .mixed()
+    .required('qvain.validationMessages.projects.fundingAgency.contributorType.identifier'),
+  labelFi: yup.string(),
+  labelEn: yup.string(),
+  definitionFi: yup.string(),
+  definitionEn: yup.string(),
+  inScheme: yup.string(),
+})
+
+export const projectSchema = yup.object().shape({
+  details: yup.object().shape({
+    titleFi: yup.mixed().when('titleEn', {
+      is: val => Boolean(val),
+      then: yup.string().typeError('qvain.validationMessages.projects.title.string'),
+      otherwise: yup
+        .string()
+        .typeError('qvain.validationMessages.projects.title.string')
+        .required('qvain.validationMessages.projects.title.required'),
+    }),
+    titleEn: yup.string().typeError('qvain.vaidationMessages.projects.title.string'),
+    identifier: yup.string(),
+    fundingIdentifier: yup.string(),
+    funderType: yup.object().nullable(),
+  }),
+  organizations: yup.array().min(1, 'qvain.validationMessages.projects.organization.min'),
+  fundingAgencies: yup.array().min(0),
+})
 
 class Projects {
   constructor(Parent) {
     this.readonly = Parent.readonly
     makeObservable(this)
   }
+
+  projectSchema = projectSchema
+  orgSelectSchema = organizationSelectSchema
+  orgObjectSchema = organizationObjectSchema
+  fundingAgencySchema = fundingAgencySchema
 
   @observable projects = []
 

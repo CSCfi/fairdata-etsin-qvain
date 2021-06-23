@@ -14,6 +14,8 @@ class IssuedDate extends SingleValueField {
   @action fromBackend = dataset => {
     this.value = dataset.issued || undefined
   }
+
+  schema = issuedDateSchema
 }
 
 export default IssuedDate

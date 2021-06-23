@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { observable, action, makeObservable, override } from 'mobx'
+import yup from '../../../utils/extendedYup'
+
 import Spatials from './qvain.spatials'
 import UsedEntities from './qvain.usedEntities'
 import Field from './qvain.field'
@@ -30,6 +32,25 @@ export const Provenance = ({
   usedEntities,
   associations,
   lifecycle,
+})
+
+// PROVENANCE
+export const provenanceNameSchema = yup.object().shape({
+  fi: yup.mixed().when('en', {
+    is: val => val.length > 0,
+    then: yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
+    otherwise: yup
+      .string()
+      .typeError('qvain.validationMessages.history.provenance.nameRequired')
+      .required('qvain.validationMessages.history.provenance.nameRequired'),
+  }),
+  en: yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
+})
+
+export const provenanceSchema = yup.object().shape({
+  name: provenanceNameSchema,
+  startDate: yup.string().date(),
+  endDate: yup.string().date(),
 })
 
 class Provenances extends Field {
@@ -107,6 +128,8 @@ class Provenances extends Field {
   @action removeActorFromRefs = actor => {
     this.storage.forEach(p => p.associations.removeActorRef(actor.uiid))
   }
+
+  schema = provenanceSchema
 }
 
 export const Outcome = (name, url) => ({

@@ -23,6 +23,8 @@ class FieldOfSciences extends ReferenceField {
     name,
     url,
   })
+
+  schema = fieldsOfScienceSchema
 }
 
 export default FieldOfSciences
