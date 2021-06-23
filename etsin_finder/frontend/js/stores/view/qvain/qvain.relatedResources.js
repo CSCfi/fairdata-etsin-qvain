@@ -1,8 +1,8 @@
 import { makeObservable, observable, action } from 'mobx'
+import { v4 as uuidv4 } from 'uuid'
 
 import yup from '../../../utils/extendedYup'
 
-import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 
 const parseDoiUrl = doi => `https://doi.org/${doi}`
@@ -39,6 +39,10 @@ class RelatedResources extends Field {
     makeObservable(this)
   }
 
+  nameSchema = relatedResourceNameSchema
+
+  typeSchema = relatedResourceTypeSchema
+
   @observable translationsRoot = 'qvain.history.relatedResource'
 
   @action
@@ -74,9 +78,6 @@ class RelatedResources extends Field {
   toBackend = () => this.storage.map(this.relatedResourceToBackend)
 
   fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.relation, Qvain)
-
-  nameSchema = relatedResourceNameSchema
-  typeSchema = relatedResourceTypeSchema
 }
 
 export const RelatedResourceModel = rr => ({

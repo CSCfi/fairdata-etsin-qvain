@@ -382,17 +382,29 @@ class Actors {
   }
 
   actorType = actorType
+
   personNameSchema = personNameSchema
+
   personEmailSchema = personEmailSchema
+
   personIdentifierSchema = personIdentifierSchema
+
   organizationNameSchema = organizationNameSchema
+
   organizationEmailSchema = organizationEmailSchema
+
   organizationNameTranslationsSchema = organizationNameTranslationsSchema
+
   organizationIdentifierSchema = organizationIdentifierSchema
+
   actorOrganizationSchema = actorOrganizationSchema
+
   personSchema = personSchema
+
   organizationSchema = organizationSchema
+
   actorSchema = actorSchema
+
   actorsSchema = actorsSchema
 
   // Reference organizations by parent
