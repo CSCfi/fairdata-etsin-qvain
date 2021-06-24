@@ -1,7 +1,8 @@
 import 'chai/register-expect'
 import { makeObservable, override } from 'mobx'
-import { restrictionGroundsSchema } from '../../../js/components/qvain/utils/formValidation'
-import RestrictionGrounds from '../../../js/stores/view/qvain/qvain.restrictionGrounds'
+import RestrictionGrounds, {
+  restrictionGroundsSchema,
+} from '../../../js/stores/view/qvain/qvain.restrictionGrounds'
 
 jest.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
   class mockSingleValueField {

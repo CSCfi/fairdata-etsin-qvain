@@ -9,7 +9,6 @@ import { withFieldErrorBoundary } from '../../general/errors/fieldErrorBoundary'
 import getReferenceData from '../../utils/getReferenceData'
 import Card from '../../general/card'
 import { LabelLarge } from '../../general/modal/form'
-import { licenseSchema } from '../../utils/formValidation'
 import {
   onChangeMulti,
   getCurrentOption,
@@ -74,13 +73,13 @@ export class License extends Component {
   }
 
   validateLicenses = () => {
-    const { storage } = this.props.Stores.Qvain.Licenses
+    const { storage, schema } = this.props.Stores.Qvain.Licenses
     const licenseErrors = {}
     storage.forEach(license => {
       const { identifier, name } = license
       const validationObject = { identifier, name, otherLicenseUrl: identifier }
       try {
-        licenseSchema.validateSync(validationObject)
+        schema.validateSync(validationObject)
       } catch (err) {
         licenseErrors[identifier] = err.message
       }

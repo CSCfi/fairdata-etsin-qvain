@@ -1,5 +1,8 @@
 import { action, makeObservable } from 'mobx'
+import * as yup from 'yup'
 import ReferenceField from './qvain.referenceField'
+
+export const fieldsOfScienceSchema = yup.array().of(yup.string())
 
 class FieldOfSciences extends ReferenceField {
   constructor(...args) {
@@ -20,6 +23,8 @@ class FieldOfSciences extends ReferenceField {
     name,
     url,
   })
+
+  schema = fieldsOfScienceSchema
 }
 
 export default FieldOfSciences

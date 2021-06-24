@@ -1,5 +1,10 @@
 import { observable, action, computed, makeObservable } from 'mobx'
-
+import {
+  cumulativeStateSchema,
+  useDoiSchema,
+  dataCatalogSchema,
+  externalResourceSchema,
+} from './qvain.dataCatalog.schemas'
 import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Resources from './qvain.resources'
 import Files from './qvain.files'
@@ -14,6 +19,14 @@ class Qvain extends Resources {
     this.resetQvainStore()
     makeObservable(this)
   }
+
+  cumulativeStateSchema = cumulativeStateSchema
+
+  useDoiSchema = useDoiSchema
+
+  dataCatalogSchema = dataCatalogSchema
+
+  externalResourceSchema = externalResourceSchema
 
   @observable original = undefined // used if editing, otherwise undefined
 

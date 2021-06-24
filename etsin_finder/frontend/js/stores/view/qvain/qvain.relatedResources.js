@@ -1,25 +1,47 @@
 import { makeObservable, observable, action } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
+
+import * as yup from 'yup'
+
 import Field from './qvain.field'
 
 const parseDoiUrl = doi => `https://doi.org/${doi}`
 
-export const RelatedResource = (
-  {
-    uiid = uuidv4(),
-    name = { fi: '', en: '', und: '' },
-    description = { fi: '', en: '', und: '' },
-    identifier = undefined,
-    relationType = undefined,
-    entityType = undefined,
-  } = {}
-) => ({ uiid, name, description, identifier, relationType, entityType })
+// RELATED RESOURCE
+export const relatedResourceNameSchema = yup.object().shape({
+  fi: yup.mixed().when('en', {
+    is: val => val.length > 0,
+    then: yup.string().typeError('qvain.validationMessages.history.relatedResource.nameRequired'),
+    otherwise: yup
+      .string()
+      .typeError('qvain.validationMessages.history.relatedResource.nameRequired')
+      .required('qvain.validationMessages.history.relatedResource.nameRequired'),
+  }),
+  en: yup.string().typeError('qvain.validationMessages.history.relatedResource.nameRequired'),
+})
+
+export const relatedResourceTypeSchema = yup
+  .object()
+  .required('qvain.validationMessages.history.relatedResource.typeRequired')
+
+export const RelatedResource = ({
+  uiid = uuidv4(),
+  name = { fi: '', en: '', und: '' },
+  description = { fi: '', en: '', und: '' },
+  identifier = undefined,
+  relationType = undefined,
+  entityType = undefined,
+} = {}) => ({ uiid, name, description, identifier, relationType, entityType })
 
 class RelatedResources extends Field {
   constructor(Parent) {
     super(Parent, RelatedResource, RelatedResourceModel, 'relatedResources')
     makeObservable(this)
   }
+
+  nameSchema = relatedResourceNameSchema
+
+  typeSchema = relatedResourceTypeSchema
 
   @observable translationsRoot = 'qvain.history.relatedResource'
 

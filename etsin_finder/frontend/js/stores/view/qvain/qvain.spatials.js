@@ -1,5 +1,8 @@
 import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
+import * as yup from 'yup'
+import '../../../utils/extendYup'
+
 import Field from './qvain.field'
 
 const numberToString = number => {
@@ -8,6 +11,22 @@ const numberToString = number => {
   }
   return number
 }
+
+// SPATIAL VALIDATION
+export const spatialNameSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.temporalAndSpatial.spatial.nameRequired')
+  .required('qvain.validationMessages.temporalAndSpatial.spatial.nameRequired')
+
+export const spatialAltitudeSchema = yup
+  .string()
+  .number()
+  .typeError('qvain.validationMessages.temporalAndSpatial.spatial.altitudeNan')
+
+export const spatialSchema = yup.object().shape({
+  name: spatialNameSchema,
+  altitude: spatialAltitudeSchema,
+})
 
 export const Spatial = (
   uiid = uuidv4(),
@@ -44,6 +63,8 @@ class Spatials extends Field {
   toBackend = () => this.storage.map(this.spatialToBackend)
 
   fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.spatial, Qvain)
+
+  schema = spatialSchema
 }
 
 export const Location = (name, url) => ({

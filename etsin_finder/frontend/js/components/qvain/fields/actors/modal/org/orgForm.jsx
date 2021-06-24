@@ -5,26 +5,24 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { Label } from '../../../../general/modal/form'
 import { ActorInput, ActorError } from '../../common'
-import {
-  organizationNameSchema,
-  organizationEmailSchema,
-  organizationIdentifierSchema,
-} from '../../../../utils/formValidation'
 import { useStores } from '../../../../utils/stores'
-
-const schemas = {
-  name: organizationNameSchema,
-  email: organizationEmailSchema,
-  identifier: organizationIdentifierSchema,
-}
 
 export const OrgFormBase = ({ organization, updateOrganization }) => {
   const [nameError, setNameError] = useState()
   const [emailError, setEmailError] = useState()
   const [identifierError, setIdentifierError] = useState()
-  const Stores = useStores()
-  const { lang: preferredLang, languages } = Stores.Locale
-  const { readonly } = Stores.Qvain
+  const {
+    Locale: { lang: preferredLang, languages },
+    Qvain: {
+      readonly,
+      Actors: { organizationNameSchema, organizationEmailSchema, organizationIdentifierSchema },
+    },
+  } = useStores()
+  const schemas = {
+    name: organizationNameSchema,
+    email: organizationEmailSchema,
+    identifier: organizationIdentifierSchema,
+  }
 
   const onError = (propTag, err) => {
     switch (propTag) {

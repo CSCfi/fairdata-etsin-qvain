@@ -5,7 +5,6 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
 import { Project as ProjectObject } from '../../../../stores/view/qvain/qvain.project'
-import { projectSchema } from '../../utils/formValidation'
 
 import { withFieldErrorBoundary } from '../../general/errors/fieldErrorBoundary'
 import { Section } from '../../general/section'
@@ -149,6 +148,11 @@ class Project extends Component {
   handleAddProject = event => {
     event.preventDefault()
     const { id, details, organizations, fundingAgencies } = this.state
+    const {
+      Qvain: {
+        Projects: { projectSchema },
+      },
+    } = this.props.Stores
 
     // If organizations or funding agencies are present in the state,
     // we assume that those are validated already. We validate only the amount of added objects.

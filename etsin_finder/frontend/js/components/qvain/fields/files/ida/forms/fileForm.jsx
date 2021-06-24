@@ -9,12 +9,6 @@ import { Label, Input, Textarea, CustomSelect } from '../../../../general/modal/
 import { Container } from '../../../../general/card'
 import { ValidationErrors } from '../../../../general/errors/validationError'
 import { getLocalizedOptions } from '../../../../utils/getReferenceData'
-import {
-  fileSchema,
-  fileTitleSchema,
-  fileDescriptionSchema,
-  fileUseCategorySchema,
-} from '../../../../utils/formValidation'
 import { withStores } from '../../../../utils/stores'
 
 class FileForm extends Component {
@@ -99,6 +93,8 @@ class FileForm extends Component {
       useCategory,
       fileType,
     }
+    const { fileSchema } = this.props.Stores.Qvain.Files
+
     fileSchema
       .validate(validationObj, { strict: true })
       .then(() => {
@@ -135,18 +131,21 @@ class FileForm extends Component {
   }
 
   handleTitleBlur = () => {
+    const { fileTitleSchema } = this.props.Stores.Qvain.Files
     this.handleOnBlur(fileTitleSchema, this.state.title, value =>
       this.setState({ titleError: value })
     )
   }
 
   handleDescriptionBlur = () => {
+    const { fileDescriptionSchema } = this.props.Stores.Qvain.Files
     this.handleOnBlur(fileDescriptionSchema, this.state.description, value =>
       this.setState({ descriptionError: value })
     )
   }
 
   handleUseCategoryBlur = () => {
+    const { fileUseCategorySchema } = this.props.Stores.Qvain.Files
     this.handleOnBlur(
       fileUseCategorySchema,
       this.state.useCategory ? this.state.useCategory : undefined,

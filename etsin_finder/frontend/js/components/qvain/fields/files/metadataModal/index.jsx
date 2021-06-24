@@ -10,7 +10,6 @@ import { observable, action, autorun } from 'mobx'
 import Modal from '../../../../general/modal'
 import { ConfirmClose } from '../../../general/modal/confirmClose'
 import getReferenceData from '../../../utils/getReferenceData'
-import { fileMetadataSchema } from '../../../utils/formValidation'
 import { getResponseError } from '../../../utils/responseError'
 import { Label, HelpField, Input } from '../../../general/modal/form'
 import { DangerButton, TableButton } from '../../../general/buttons'
@@ -178,6 +177,7 @@ export class MetadataModal extends Component {
   }
 
   validateMetadata = () => {
+    const { fileMetadataSchema } = this.props.Stores.Qvain.Files
     fileMetadataSchema.validate(this.state, { strict: true })
 
     // Additional validation for formatVersion

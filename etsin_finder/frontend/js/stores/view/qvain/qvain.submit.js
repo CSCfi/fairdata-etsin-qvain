@@ -3,10 +3,7 @@ import axios from 'axios'
 import { ValidationError } from 'yup'
 import debounce from 'lodash.debounce'
 import handleSubmitToBackend from '../../../components/qvain/utils/handleSubmit'
-import {
-  qvainFormSchema,
-  qvainFormSchemaDraft,
-} from '../../../components/qvain/utils/formValidation'
+import { qvainFormSchema, qvainFormDraftSchema } from './qvain.submit.schemas'
 import { DATA_CATALOG_IDENTIFIER, DATASET_STATE } from '../../../utils/constants'
 import urls from '../../../utils/urls'
 import { getResponseError } from '../../../components/qvain/utils/responseError'
@@ -86,14 +83,14 @@ class Submit {
   @action submitDraft = async () => {
     switch (this.submitType) {
       case DATASET_STATE.NEW:
-        await this.exec(this.createNewDraft, qvainFormSchemaDraft)
+        await this.exec(this.createNewDraft, qvainFormDraftSchema)
         return
       case DATASET_STATE.DRAFT:
       case DATASET_STATE.UNPUBLISHED_DRAFT:
-        await this.exec(this.updateDataset, qvainFormSchemaDraft)
+        await this.exec(this.updateDataset, qvainFormDraftSchema)
         return
       case DATASET_STATE.PUBLISHED:
-        await this.exec(this.savePublishedAsDraft, qvainFormSchemaDraft)
+        await this.exec(this.savePublishedAsDraft, qvainFormDraftSchema)
         return
       default:
         console.error('Unknown submit status')
@@ -368,7 +365,7 @@ class Submit {
     }
 
     try {
-      await qvainFormSchemaDraft.validate(dataset, { abortEarly: false, strict: true })
+      await qvainFormDraftSchema.validate(dataset, { abortEarly: false, strict: true })
     } catch (error) {
       this.setDraftValidationError(error)
     }

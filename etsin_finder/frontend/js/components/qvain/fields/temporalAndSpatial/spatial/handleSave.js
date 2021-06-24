@@ -1,11 +1,8 @@
-import { spatialNameSchema, spatialAltitudeSchema } from '../../../utils/formValidation'
-
 export default async Field => {
-  const { inEdit, save, clearInEdit, setValidationError } = Field
+  const { inEdit, save, clearInEdit, setValidationError, schema } = Field
 
   try {
-    await spatialNameSchema.validate(inEdit.name, { strict: true })
-    await spatialAltitudeSchema.validate(inEdit.altitude, { strict: true })
+    await schema.validate(inEdit, { strict: true })
   } catch (e) {
     setValidationError(e.message)
     return

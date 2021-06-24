@@ -14,17 +14,14 @@ import TranslationTab from '../../../js/components/qvain/general/input/translati
 import ModalInput from '../../../js/components/qvain/general/modal/modalInput'
 import { RelationType } from '../../../js/stores/view/qvain/qvain.relatedResources'
 import modalSeparator from '../../../js/components/qvain/general/modal/modalSeparator'
-import {
-  relatedResourceNameSchema,
-  relatedResourceTypeSchema,
-} from '../../../js/components/qvain/utils/formValidation'
+
 import ResourcesSearchField from '../../../js/components/qvain/fields/history/relatedResource/resourceSearchField'
 import FieldListAdd from '../../../js/components/qvain/general/section/fieldListAdd'
 import FlaggedComponent from '../../../js/components/general/flaggedComponent'
 
 jest.mock('../../../js/stores/stores')
 
-jest.mock('../../../js/components/qvain/utils/formValidation')
+jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas')
 
 const flushPromises = () => new Promise(setImmediate)
 
@@ -36,6 +33,12 @@ describe('given mockStores', () => {
         save: jest.fn(),
         clearInEdit: jest.fn(),
         setValidationError: jest.fn(),
+        typeSchema: {
+          validate: jest.fn(),
+        },
+        nameSchema: {
+          validate: jest.fn(),
+        },
         prefillInEdit: jest.fn(),
         create: jest.fn(),
         translationsRoot: 'translationsRoot',
@@ -276,14 +279,14 @@ describe('given mockStores', () => {
       jest.clearAllMocks()
     })
 
-    test('should call relatedResourceNameSchema.validate with inEdit.name', () => {
-      expect(relatedResourceNameSchema.validate).to.have.beenCalledWith(Field.inEdit.name, {
+    test('should call tameSchema.validate with inEdit.relationType', () => {
+      expect(Field.typeSchema.validate).to.have.beenCalledWith(Field.inEdit.relationType, {
         strict: true,
       })
     })
 
-    test('should call relatedResourceTypeSchema', () => {
-      expect(relatedResourceTypeSchema.validate).to.have.beenCalledWith(Field.inEdit.relationType, {
+    test('should call nameSchema.validate with inEdit.name', () => {
+      expect(Field.nameSchema.validate).to.have.beenCalledWith(Field.inEdit.name, {
         strict: true,
       })
     })

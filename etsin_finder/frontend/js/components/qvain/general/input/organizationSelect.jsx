@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 
 import { getOrganizationSearchUrl } from '../../../../stores/view/qvain/qvain.actors'
-import { organizationSelectSchema } from '../../utils/formValidation'
+
 import { Input, Label } from '../modal/form'
 import ValidationError from '../errors/validationError'
 import { DeleteButton } from '../buttons'
@@ -178,9 +178,16 @@ class OrganizationSelect extends Component {
    * Validate form when organization is added manually.
    */
   onBlur = async field => {
-    const formData = this.props.value
+    const {
+      value: formData,
+      Stores: {
+        Qvain: {
+          Projects: { orgSelectSchema },
+        },
+      },
+    } = this.props
     const { name, value, email } = formData[field]
-    const errors = await validate(organizationSelectSchema, { name, identifier: value, email })
+    const errors = await validate(orgSelectSchema, { name, identifier: value, email })
     this.props.onChange({ ...formData, [field]: { ...formData[field], errors } })
   }
 

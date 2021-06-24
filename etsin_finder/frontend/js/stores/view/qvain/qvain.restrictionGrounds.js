@@ -1,6 +1,12 @@
 import { makeObservable, override } from 'mobx'
+import * as yup from 'yup'
 import SingleValueField from './qvain.singleValueField'
-import { restrictionGroundsSchema } from '../../../components/qvain/utils/formValidation'
+
+export const restrictionGroundsSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.restrictionGrounds.string')
+  .url('qvain.validationMessages.restrictionGrounds.url')
+  .required('qvain.validationMessages.restrictionGrounds.required')
 
 class RestrictionGrounds extends SingleValueField {
   constructor(Parent) {
@@ -19,7 +25,7 @@ class RestrictionGrounds extends SingleValueField {
 
   @override validate() {
     if (!this.Schema) return undefined
-    return this.Schema.validate(this.value.identifier || '', { strict: true })
+    return this.Schema.validate(this.value?.identifier || '', { strict: true })
       .then(() => {
         this.setValidationError(null)
       })
@@ -32,6 +38,8 @@ class RestrictionGrounds extends SingleValueField {
     name,
     identifier,
   })
+
+  schema = restrictionGroundsSchema
 }
 
 export default RestrictionGrounds

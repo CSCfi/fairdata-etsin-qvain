@@ -2,8 +2,7 @@ import 'chai/register-expect'
 import moment from 'moment'
 import { makeObservable } from 'mobx'
 
-import { issuedDateSchema } from '../../../js/components/qvain/utils/formValidation'
-import IssuedDate from '../../../js/stores/view/qvain/qvain.issuedDate'
+import IssuedDate, { issuedDateSchema } from '../../../js/stores/view/qvain/qvain.issuedDate'
 
 jest.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
   class mockSingleValueField {

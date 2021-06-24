@@ -6,6 +6,8 @@ import chaiEnzyme from 'chai-enzyme'
 import chaiJestMocks from 'chai-jest-mocks'
 import 'chai/register-should'
 
+import '../js/utils/extendYup'
+
 chai.use(chaiEnzyme)
 chai.use(chaiJestMocks)
 

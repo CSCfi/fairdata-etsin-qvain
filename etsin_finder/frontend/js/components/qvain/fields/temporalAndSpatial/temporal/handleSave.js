@@ -1,9 +1,7 @@
-import { temporalDateSchema } from '../../../utils/formValidation'
-
 export default async (Store, Field) => {
-  const { inEdit, create, setValidationError, addTemporal } = Field
+  const { inEdit, create, setValidationError, addTemporal, schema } = Field
   try {
-    await temporalDateSchema.validate(inEdit, { strict: true })
+    await schema.validate(inEdit, { strict: true })
   } catch (e) {
     setValidationError(e.message)
     return
