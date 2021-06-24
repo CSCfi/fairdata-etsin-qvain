@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { observable, action, makeObservable, override } from 'mobx'
-import yup from '../../../utils/extendedYup'
+import * as yup from 'yup'
 
 import Spatials from './qvain.spatials'
 import UsedEntities from './qvain.usedEntities'

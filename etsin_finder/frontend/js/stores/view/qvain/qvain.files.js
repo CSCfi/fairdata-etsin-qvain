@@ -1,7 +1,7 @@
 import { observable, action, makeObservable, override, computed } from 'mobx'
 import axios from 'axios'
 
-import yup from '../../../utils/extendedYup'
+import * as yup from 'yup'
 import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from '../common.files.items'
 import { getAction } from '../common.files.utils'
 import { itemLoaderAny, itemLoaderPublic, FetchType } from '../common.files.loaders'
