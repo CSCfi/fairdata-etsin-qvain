@@ -1,6 +1,8 @@
 import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
+import '../../../utils/extendYup'
+
 import Field from './qvain.field'
 
 const numberToString = number => {

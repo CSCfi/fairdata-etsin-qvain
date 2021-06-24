@@ -30,7 +30,7 @@ import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
 import Stores from './stores'
 import { StoresProvider } from './stores/stores'
-import extendYup from './utils/extendYup'
+import './utils/extendYup'
 
 const { Env, Locale, Auth, Accessibility } = Stores
 
@@ -54,8 +54,6 @@ const hideSpinner = () => {
     spinner.hidden = true
   }
 }
-
-extendYup()
 
 const App = () => {
   const [initialized, setInitialized] = useState(false)
