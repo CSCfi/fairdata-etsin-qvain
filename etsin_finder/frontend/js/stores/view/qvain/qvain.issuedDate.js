@@ -1,7 +1,6 @@
 import { action, makeObservable } from 'mobx'
 import moment from 'moment'
 import * as yup from 'yup'
-import '../../../utils/extendYup'
 import SingleValueField from './qvain.singleValueField'
 
 export const issuedDateSchema = yup.string().date().nullable()

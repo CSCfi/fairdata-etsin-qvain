@@ -17,7 +17,6 @@ import {
   dataCatalogDraftSchema,
 } from './qvain.dataCatalog.schemas'
 import { filesSchema, directoriesSchema } from './qvain.files'
-import '../../../utils/extendYup'
 
 // Entire form validation for normal dataset
 const qvainFormSchema = yup.object().shape({

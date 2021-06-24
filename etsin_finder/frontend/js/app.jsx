@@ -25,12 +25,12 @@ import browserHistory from './browserHistory'
 import '../fairdata-ui/footer.css'
 import '../fairdata-ui/notification.css'
 import 'react-datepicker/dist/react-datepicker.css'
+import './utils/extendYup'
 
 import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
 import Stores from './stores'
 import { StoresProvider } from './stores/stores'
-import './utils/extendYup'
 
 const { Env, Locale, Auth, Accessibility } = Stores
 
