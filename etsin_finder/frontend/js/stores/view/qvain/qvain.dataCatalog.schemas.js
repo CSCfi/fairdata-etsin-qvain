@@ -1,4 +1,4 @@
-import yup from '../../../utils/extendedYup'
+import * as yup from 'yup'
 import { CUMULATIVE_STATE } from '../../../utils/constants'
 
 // CUMULATIVE STATE

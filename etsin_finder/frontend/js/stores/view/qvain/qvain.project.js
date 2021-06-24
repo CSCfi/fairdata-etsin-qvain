@@ -1,6 +1,6 @@
 import { observable, action, toJS, makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
-import yup from '../../../utils/extendedYup'
+import * as yup from 'yup'
 import { parseOrganization } from '../../../components/qvain/fields/project/utils'
 
 // PROJECT VALIDATION

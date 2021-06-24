@@ -1,4 +1,4 @@
-import yup from '../../../utils/extendedYup'
+import * as yup from 'yup'
 
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import { titleSchema } from './qvain.title'

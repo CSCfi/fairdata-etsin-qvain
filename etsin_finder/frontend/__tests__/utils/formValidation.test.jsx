@@ -1,5 +1,5 @@
 import 'chai/register-should'
-import yup from '../../js/utils/extendedYup'
+import * as yup from 'yup'
 
 describe('date string validation', () => {
   const isValid = str => {

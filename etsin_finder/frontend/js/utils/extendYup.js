@@ -34,7 +34,7 @@ function validateStringNumber() {
   })
 }
 
-yup.addMethod(yup.string, 'date', validateStringDate)
-yup.addMethod(yup.string, 'number', validateStringNumber)
-
-export default yup
+export default () => {
+  yup.addMethod(yup.string, 'date', validateStringDate)
+  yup.addMethod(yup.string, 'number', validateStringNumber)
+}

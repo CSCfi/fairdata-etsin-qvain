@@ -1,5 +1,5 @@
 import { action, makeObservable } from 'mobx'
-import yup from '../../../utils/extendedYup'
+import * as yup from 'yup'
 import SingleValueField from './qvain.singleValueField'
 
 export const embargoExpDateSchema = yup.string().date().nullable()
