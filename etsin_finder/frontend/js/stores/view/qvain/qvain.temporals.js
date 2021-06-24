@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { computed, action, makeObservable, override } from 'mobx'
 import * as yup from 'yup'
+import '../../../utils/extendYup'
 import Field from './qvain.field'
 
 export const TemporalTemplate = (uiid = uuidv4(), startDate = undefined, endDate = undefined) => ({

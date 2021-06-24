@@ -7,6 +7,7 @@ import UsedEntities from './qvain.usedEntities'
 import Field from './qvain.field'
 import { ActorsRef } from './qvain.actors'
 import { ROLE } from '../../../utils/constants'
+import '../../../utils/extendYup'
 
 export const Provenance = ({
   uiid = uuidv4(),
