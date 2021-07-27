@@ -1,6 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import Select from '../../../general/input/searchSelect'
+import Select from '../../../general/input/select'
 
 import { useStores } from '../../../utils/stores'
 
