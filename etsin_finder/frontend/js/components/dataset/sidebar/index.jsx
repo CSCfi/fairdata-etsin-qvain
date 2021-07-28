@@ -9,7 +9,6 @@ import checkNested from '../../../utils/checkNested'
 import dateFormat from '../../../utils/dateFormat'
 import SidebarItem from './sidebarItem'
 import Identifier from '../identifier'
-import Citation from './special/citation'
 import Logo from './special/logo'
 import License from './special/license'
 import ErrorBoundary from '../../general/errorBoundary'
@@ -18,7 +17,6 @@ import Project from './special/project'
 import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
 import { withStores } from '../../../stores/stores'
 import CitationButton from '../citation/citationButton'
-import FlaggedComponent from '../../general/flaggedComponent'
 
 class Sidebar extends Component {
   dateSeparator(start, end) {
@@ -120,7 +118,6 @@ class Sidebar extends Component {
     const researchDataset = this.props.dataset.research_dataset
 
     // sidebar data
-    const harvested = dataCatalog.catalog_json.harvested
     const catalogPublisher = checkNested(dataCatalog, 'catalog_json', 'publisher', 'name')
       ? dataCatalog.catalog_json.publisher.name
       : false
