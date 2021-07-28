@@ -145,6 +145,7 @@ const english = {
         pendingTooltip:
           'Download package is being generated. When the button turns green the download can be started.',
         loading: 'Loading',
+        tooLarge: 'Download is not available due to large size of the download.',
         modal: {
           generate: {
             header: 'Generate download?',

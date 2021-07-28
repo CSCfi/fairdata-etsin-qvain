@@ -14,6 +14,8 @@ class Packages {
     makeObservable(this)
   }
 
+  sizeLimit = 5 * 1024 ** 4 // limit package generation to 5TB
+
   initialPollInterval = 1e3
 
   pollMultiplier = 1.2
@@ -216,6 +218,20 @@ class Packages {
       this.schedulePoll()
       this.setLoadingDataset(false)
     }
+  }
+
+  packageIsTooLarge(Files, item) {
+    if (!item) {
+      // check size of full download
+      if (Files.root) {
+        return Files.root.existingByteSize > this.sizeLimit
+      }
+      return false
+    }
+    if (item.type === 'directory') {
+      return item.existingByteSize > this.sizeLimit
+    }
+    return false
   }
 }
 
