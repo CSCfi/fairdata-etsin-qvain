@@ -198,11 +198,9 @@ class Sidebar extends Component {
               }
             </SidebarItem>
 
-            <FlaggedComponent flag="UI.CITATION">
-              <SidebarItem trans="dataset.citation.titleShort" lineAfter>
-                <CitationButton setShowCitationModal={setShowCitationModal} />
-              </SidebarItem>
-            </FlaggedComponent>
+            <SidebarItem trans="dataset.citation.titleShort" lineAfter>
+              <CitationButton setShowCitationModal={setShowCitationModal} />
+            </SidebarItem>
 
             {/* FIELD OF SCIENCE */}
 
@@ -370,19 +368,6 @@ class Sidebar extends Component {
                   ))}
               </List>
             </SidebarItem>
-
-            {/* CITATION */}
-
-            {!harvested && (
-              <FlaggedComponent
-                flag="UI.CITATION"
-                whenDisabled={
-                  <SidebarItem trans="dataset.citation.sidebar">
-                    <Citation />
-                  </SidebarItem>
-                }
-              />
-            )}
           </dl>
         </ErrorBoundary>
       </SidebarContainer>

@@ -217,9 +217,7 @@ class Dataset extends React.Component {
     // CASE 2: Business as usual
     return (
       <div>
-        <FlaggedComponent flag="UI.CITATION">
-          <CitationModal />
-        </FlaggedComponent>
+        <CitationModal />
         <article className="container regular-row">
           <div className="row">
             <div className="col-12">
