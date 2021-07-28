@@ -125,26 +125,21 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
 
   if (downloadTooltip) {
     downloadButtonParts = (
-      <Translate
-        component={TooltipHover}
-        attributes={{ title: downloadTooltip }}
-        showOnClick
-      >
+      <Translate component={TooltipHover} attributes={{ title: downloadTooltip }} showOnClick>
         {downloadButtonParts}
       </Translate>
     )
   }
 
-  if (action)
-    return (
-      <ItemRow isOpen={isOpen}>
-        <ItemSpacer level={level} />
-        <Group>{content}</Group>
-        {sizeTag}
-        {infoButton}
-        {downloadButtonParts}
-      </ItemRow>
-    )
+  return (
+    <ItemRow isOpen={isOpen}>
+      <ItemSpacer level={level} />
+      <Group>{content}</Group>
+      {sizeTag}
+      {infoButton}
+      {downloadButtonParts}
+    </ItemRow>
+  )
 }
 
 export const DownloadButton = styled(IconButton)`

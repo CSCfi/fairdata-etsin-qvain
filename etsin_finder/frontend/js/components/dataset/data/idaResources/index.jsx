@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons'
-import { opacify } from 'polished'
 
 import Tree from './fileTree'
 import Info from './info'
