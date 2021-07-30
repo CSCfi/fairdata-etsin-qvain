@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Base functionalities for tests"""
+"""Base functionalities for tests."""
 
 import os
 
@@ -20,20 +20,20 @@ from .utils import get_test_catalog_record
 
 
 class FakeLoader(jinja2.BaseLoader):
-    """Fake loader to avoid depending on index.html in tests"""
+    """Fake loader to avoid depending on index.html in tests."""
 
     def get_source(self, environment, template):
-        """Return dummy template"""
+        """Return dummy template."""
         return "hello test", None, lambda: False
 
 
 class BaseTest:
-    """Use as base class for any tests. Contains fixtures and monkeypatched methods"""
+    """Use as base class for any tests. Contains fixtures and monkeypatched methods."""
 
     @pytest.fixture
     def app(self):
         """
-        Create app in testing mode
+        Create app in testing mode.
 
         :return:
         """
@@ -44,7 +44,7 @@ class BaseTest:
     @pytest.fixture
     def authd_client(self, app, monkeypatch):
         """
-        User-authenticated Flask test client, CSC user
+        User-authenticated Flask test client, CSC user.
 
         :param app:
         :param monkeypatch:
@@ -69,7 +69,7 @@ class BaseTest:
     @pytest.fixture
     def authd_no_user_name(self, monkeypatch):
         """
-        User-authenticated Flask test client, CSC user
+        User-authenticated Flask test client, CSC user.
 
         :param monkeypatch:
         :return:
@@ -82,7 +82,7 @@ class BaseTest:
     @pytest.fixture
     def user_details(self, monkeypatch):
         """
-          CSC user details
+          CSC user details.
 
         :param monkeypatch:
         :return:
@@ -108,7 +108,7 @@ class BaseTest:
     @pytest.fixture
     def user_123_details(self, monkeypatch):
         """
-          CSC abc-user-123 details. The user is creator of test data
+          CSC abc-user-123 details. The user is creator of test data.
 
         :param monkeypatch:
         :return:
@@ -131,27 +131,21 @@ class BaseTest:
 
     @pytest.fixture
     def no_IDA_projects(self, monkeypatch):
-        """
-        User with no IDA projects
-        """
+        """User with no IDA projects."""
         from etsin_finder.auth import authentication
 
         monkeypatch.setattr(authentication, "get_user_ida_projects", lambda: None)
 
     @pytest.fixture
     def IDA_project_info_missing(self, monkeypatch):
-        """
-        User with IDA projects information missing/faulty
-        """
+        """User with IDA projects information missing/faulty."""
         from etsin_finder.auth import authentication
 
         monkeypatch.setattr(authentication, "get_user_ida_projects", lambda: False)
 
     @pytest.fixture
     def IDA_projects_dont_match(self, monkeypatch):
-        """
-        User with IDA projects that don't match with files and directories
-        """
+        """User with IDA projects that don't match with files and directories."""
         from etsin_finder.auth import authentication
 
         monkeypatch.setattr(
@@ -160,9 +154,7 @@ class BaseTest:
 
     @pytest.fixture
     def IDA_projects_ok(self, monkeypatch):
-        """
-        User with correct IDA project
-        """
+        """User with correct IDA project."""
         from etsin_finder.auth import authentication
 
         monkeypatch.setattr(
@@ -172,7 +164,7 @@ class BaseTest:
     @pytest.fixture
     def unauthd_client(self, app, monkeypatch):
         """
-        Non-User-authenticated Flask test client
+        Non-User-authenticated Flask test client.
 
         :param app:
         :param monkeypatch:
@@ -189,7 +181,7 @@ class BaseTest:
     @pytest.fixture
     def nonexisting_catalog_record(self, monkeypatch):
         """
-        Nonexisting catalog record
+        Nonexisting catalog record.
 
         :param monkeypatch:
         :return:
@@ -201,7 +193,7 @@ class BaseTest:
     @pytest.fixture
     def open_catalog_record(self, monkeypatch):
         """
-        Open access_type catalog record
+        Open access_type catalog record.
 
         :param monkeypatch:
         :return:
@@ -217,7 +209,7 @@ class BaseTest:
     @pytest.fixture
     def login_catalog_record(self, monkeypatch):
         """
-        Login access_type catalog record
+        Login access_type catalog record.
 
         :param monkeypatch:
         :return:
@@ -233,7 +225,7 @@ class BaseTest:
     @pytest.fixture
     def permit_catalog_record(self, monkeypatch):
         """
-        Permit access_type catalog record
+        Permit access_type catalog record.
 
         :param monkeypatch:
         :return:
@@ -249,7 +241,7 @@ class BaseTest:
     @pytest.fixture
     def embargo_passed_catalog_record(self, monkeypatch):
         """
-        Embargo access_type catalog record with embargo date passed
+        Embargo access_type catalog record with embargo date passed.
 
         :param monkeypatch:
         :return:
@@ -265,7 +257,7 @@ class BaseTest:
     @pytest.fixture
     def embargo_not_passed_catalog_record(self, monkeypatch):
         """
-        Embargo access_type catalog record with embargo date not passed
+        Embargo access_type catalog record with embargo date not passed.
 
         :param monkeypatch:
         :return:
@@ -281,7 +273,7 @@ class BaseTest:
     @pytest.fixture
     def restricted_catalog_record(self, monkeypatch):
         """
-        Restricted access_type catalog record
+        Restricted access_type catalog record.
 
         :param monkeypatch:
         :return:
@@ -297,7 +289,7 @@ class BaseTest:
     @pytest.fixture
     def nonstandard_catalog_record(self, monkeypatch):
         """
-        Some nonstandard catalog record
+        Nonstandard catalog record.
 
         :param monkeypatch:
         :return:
@@ -316,7 +308,7 @@ class BaseTest:
     @pytest.fixture
     def has_rems_permit(self, monkeypatch):
         """
-        Rems entitlement given
+        Rems entitlement given.
 
         :param monkeypatch:
         :return:
@@ -337,7 +329,7 @@ class BaseTest:
     @pytest.fixture
     def no_rems_permit(self, monkeypatch):
         """
-        No Rems entitlement given
+        No Rems entitlement given.
 
         :param monkeypatch:
         :return:
@@ -363,7 +355,7 @@ class BaseTest:
     @pytest.fixture
     def expect_log(self, caplog):
         """
-        Expect specific warnings and errors to be logged
+        Expect specific warnings and errors to be logged.
 
         The number logged warnings and errors of must match
         the length of the supplied warnings/errors lists, and
@@ -378,7 +370,6 @@ class BaseTest:
             errors (list of str): Substrings expected in errors
 
         """
-
         def check(warnings=None, errors=None):
             warnings = warnings or []
             errors = errors or []

@@ -1,4 +1,4 @@
-"""Utilities for transforming the data from the Qvain form to METAX compatible format"""
+"""Utilities for transforming the data from the Qvain form to METAX compatible format."""
 
 import re
 from copy import deepcopy
@@ -13,7 +13,7 @@ from etsin_finder.schemas.qvain_dataset_schema import data_catalog_matcher
 
 
 def clean_empty_keyvalues_from_dict(d):
-    """Cleans all key value pairs from the object that have empty values, like [], {} and ''.
+    """Clean all key value pairs from the object that have empty values, like [], {} and ''.
 
     Arguments:
         d (dict): The object to be sent to metax. (might have empty values)
@@ -38,7 +38,7 @@ def clean_empty_keyvalues_from_dict(d):
 
 
 def alter_role_data(actor_list=[], role="all"):
-    """Converts the role data fom the frontend to comply with the Metax schema.
+    """Convert the role data fom the frontend to comply with the Metax schema.
 
     Arguments:
         actor_list (list): A list of all the actors from the frontend.
@@ -197,15 +197,14 @@ def access_rights_to_metax(data):
                 {"identifier": data.get("restrictionGrounds")}
             )
         if (
-            data["accessType"]["url"] == ACCESS_TYPES.get("embargo")
-            and "embargoDate" in data
+            data["accessType"]["url"] == ACCESS_TYPES.get("embargo") and "embargoDate" in data
         ):
             access_rights["available"] = data.get("embargoDate")
     return access_rights
 
 
 def remote_resources_data_to_metax(resources):
-    """Converts external resources from Qvain schema to Metax schema.
+    """Convert external resources from Qvain schema to Metax schema.
 
     Arguments:
         data (dict): External resources.
@@ -235,7 +234,7 @@ def remote_resources_data_to_metax(resources):
 
 
 def data_to_metax(data, metadata_provider_org, metadata_provider_user):
-    """Converts all the data from the frontend to conform to Metax schema.
+    """Convert all the data from the frontend to conform to Metax schema.
 
     Arguments:
         data (dict): All form data sent from the frontend.

@@ -1,3 +1,4 @@
+"""Frontend test data for qvain tests."""
 from etsin_finder.utils.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 
 original_actors_list = [
