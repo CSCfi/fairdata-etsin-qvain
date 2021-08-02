@@ -12,9 +12,11 @@ export const UsedEntityTemplate = (
 ) => ({ uiid, name, description, identifier, entityType })
 
 class UsedEntities extends Field {
-  constructor(Qvain) {
+  constructor(Qvain, entities = []) {
     super(Qvain, UsedEntityTemplate, UsedEntityModel, 'usedEntities')
     makeObservable(this)
+
+    this.fromBackendBase(entities, Qvain)
   }
 
   clone = () => this
