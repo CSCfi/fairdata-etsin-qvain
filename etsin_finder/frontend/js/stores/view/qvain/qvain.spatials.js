@@ -45,9 +45,11 @@ export const Spatial = (
 })
 
 class Spatials extends Field {
-  constructor(Parent) {
+  constructor(Parent, spatials = []) {
     super(Parent, Spatial, SpatialModel, 'spatials')
     makeObservable(this)
+
+    this.fromBackendBase(spatials, Parent)
   }
 
   clone = () => this

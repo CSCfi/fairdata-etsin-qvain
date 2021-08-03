@@ -9,7 +9,6 @@ import checkNested from '../../../utils/checkNested'
 import dateFormat from '../../../utils/dateFormat'
 import SidebarItem from './sidebarItem'
 import Identifier from '../identifier'
-import Citation from './special/citation'
 import Logo from './special/logo'
 import License from './special/license'
 import ErrorBoundary from '../../general/errorBoundary'
@@ -18,7 +17,6 @@ import Project from './special/project'
 import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
 import { withStores } from '../../../stores/stores'
 import CitationButton from '../citation/citationButton'
-import FlaggedComponent from '../../general/flaggedComponent'
 
 class Sidebar extends Component {
   dateSeparator(start, end) {
@@ -120,7 +118,6 @@ class Sidebar extends Component {
     const researchDataset = this.props.dataset.research_dataset
 
     // sidebar data
-    const harvested = dataCatalog.catalog_json.harvested
     const catalogPublisher = checkNested(dataCatalog, 'catalog_json', 'publisher', 'name')
       ? dataCatalog.catalog_json.publisher.name
       : false
@@ -198,11 +195,9 @@ class Sidebar extends Component {
               }
             </SidebarItem>
 
-            <FlaggedComponent flag="UI.CITATION">
-              <SidebarItem trans="dataset.citation.titleShort" lineAfter>
-                <CitationButton setShowCitationModal={setShowCitationModal} />
-              </SidebarItem>
-            </FlaggedComponent>
+            <SidebarItem trans="dataset.citation.titleShort" lineAfter>
+              <CitationButton setShowCitationModal={setShowCitationModal} />
+            </SidebarItem>
 
             {/* FIELD OF SCIENCE */}
 
@@ -370,19 +365,6 @@ class Sidebar extends Component {
                   ))}
               </List>
             </SidebarItem>
-
-            {/* CITATION */}
-
-            {!harvested && (
-              <FlaggedComponent
-                flag="UI.CITATION"
-                whenDisabled={
-                  <SidebarItem trans="dataset.citation.sidebar">
-                    <Citation />
-                  </SidebarItem>
-                }
-              />
-            )}
           </dl>
         </ErrorBoundary>
       </SidebarContainer>
