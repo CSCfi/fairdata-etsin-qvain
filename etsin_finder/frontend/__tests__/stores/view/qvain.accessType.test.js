@@ -19,7 +19,7 @@ describe('AccessType', () => {
       const mockDataset = {
         access_rights: {
           access_type: {
-            pref_label: 'name',
+            pref_label: { en: 'name' },
             identifier: ACCESS_TYPE_URL.OPEN,
           },
         },
@@ -30,7 +30,7 @@ describe('AccessType', () => {
 
     test('should set value with correlating Model', () => {
       const expectedValue = {
-        name: 'name',
+        name: { en: 'name' },
         url: ACCESS_TYPE_URL.OPEN,
       }
 

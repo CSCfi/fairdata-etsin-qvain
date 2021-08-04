@@ -287,8 +287,8 @@ describe('prevalidate', () => {
     const publishError = 'publish error'
     const draftError = 'draft error'
     beforeEach(async () => {
-      qvainFormSchema.validate.mockReturnValue(Promise.reject(publishError))
-      qvainFormDraftSchema.validate.mockReturnValue(Promise.reject(draftError))
+      qvainFormSchema.validate.mockImplementation(() => Promise.reject(publishError))
+      qvainFormDraftSchema.validate.mockImplementation(() => Promise.reject(draftError))
       await Submit.prevalidate()
     })
 

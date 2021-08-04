@@ -1,6 +1,9 @@
 import * as yup from 'yup'
 import ReferenceField from './qvain.referenceField'
 import { LICENSE_URL } from '../../../utils/constants'
+import { touch } from './track'
+
+const referenceLicenseScheme = "http://uri.suomi.fi/codelist/fairdata/license/"
 
 export const licenseSchema = yup.object().shape({
   name: yup.object().nullable(),
@@ -40,12 +43,15 @@ class Licenses extends ReferenceField {
 
   arrayObjectSchema = licenseArrayObject
 
-  fromBackend = dataset => {
+  fromBackend = (dataset) => {
     const l = dataset.access_rights.license ? dataset.access_rights.license : undefined
     if (l !== undefined) {
       this.item = undefined
       this.storage = l.map(license => {
         if (license.identifier !== undefined) {
+          if (license.identifier.startsWith(referenceLicenseScheme)) {
+            touch(license) // license is from reference data, don't warn about unsupported fields or translations
+          }
           return this.Model(license.title, license.identifier)
         }
         const name = {
