@@ -226,9 +226,7 @@ class Packages {
       if (Files.root) {
         return Files.root.existingByteSize > this.sizeLimit
       }
-      return false
-    }
-    if (item.type === 'directory') {
+    } else if (item.type === 'directory') {
       return item.existingByteSize > this.sizeLimit
     }
     return false
