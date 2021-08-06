@@ -33,6 +33,8 @@ class UsedEntities extends Field {
   fromBackend = this.fromBackendBase
 
   nameSchema = relatedResourceNameSchema
+
+  translationsRoot = 'qvain.history.provenance.modal.usedEntityInput'
 }
 
 export const UsedEntityModel = ue => ({

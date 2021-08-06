@@ -66,6 +66,8 @@ class Temporals extends Field {
   fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.temporal, Qvain)
 
   schema = temporalDateSchema
+
+  translationsRoot = 'qvain.temporalAndSpatial.temporal'
 }
 
 export const TemporalModel = data => ({

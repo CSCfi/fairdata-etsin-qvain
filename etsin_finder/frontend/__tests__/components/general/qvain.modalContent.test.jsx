@@ -1,23 +1,35 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import 'chai/register-expect'
+import { useStores } from '@/stores/stores'
 
 import ModalContent from '../../../js/components/qvain/general/modal/modalContent'
 import ModalButtons from '../../../js/components/qvain/general/modal/modalButtons'
 import { ConfirmClose } from '../../../js/components/qvain/general/modal/confirmClose'
 
+jest.mock('@/stores/stores', () => {
+  return {
+    useStores: jest.fn(),
+  }
+})
 describe('ModalContent', () => {
   let wrapper
+
+  const mockStores = {
+    Qvain: {
+      readonly: false,
+    },
+  }
 
   const Form = () => <div id="form" />
 
   const props = {
-    Store: { readonly: false },
-    Field: {},
+    Field: {
+      translationsRoot: 'translationsRoot',
+    },
     Form,
     formProps: { someProp: 'someProp' },
     handleSave: jest.fn(),
-    translationsRoot: 'translationsRoot',
     language: 'language',
     onConfirmCancel: jest.fn(),
     onConfirm: jest.fn(),
@@ -37,6 +49,7 @@ describe('ModalContent', () => {
   })
 
   const render = extraProps => {
+    useStores.mockReturnValue(mockStores)
     const parsedProps = { ...props, ...extraProps }
     wrapper = shallow(<ModalContent {...parsedProps} />)
   }
@@ -88,10 +101,7 @@ describe('ModalContent', () => {
 
       test('should have expectedProps', () => {
         const expectedProps = {
-          Store: props.Store,
           Field,
-          translationsRoot: props.translationsRoot,
-          language: props.language,
           someProp: props.formProps.someProp,
         }
 

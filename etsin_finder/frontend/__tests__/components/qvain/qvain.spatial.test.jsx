@@ -49,13 +49,14 @@ describe('given mockStore in useStores', () => {
   const harness = new Harness(SpatialFieldContent)
   const mockStores = {
     Qvain: {
-      Spatials: {},
+      Spatials: {
+        translationsRoot: 'translationsRoot',
+      },
     },
     Locale: {
       lang: 'en',
     },
   }
-  const translationsRoot = 'qvain.temporalAndSpatial.spatial'
 
   describe('SpatialFieldContent', () => {
     beforeEach(() => {
@@ -76,12 +77,9 @@ describe('given mockStore in useStores', () => {
       const props = {
         FieldList: {
           Field: mockStores.Qvain.Spatials,
-          lang: mockStores.Locale.lang,
-          translationsRoot,
           disableNoItemsText: false,
         },
         FieldListAdd: {
-          Store: mockStores.Qvain,
           Field: mockStores.Qvain.Spatials,
           Form: Form,
         },
@@ -96,8 +94,8 @@ describe('given mockStore in useStores', () => {
         harness.props.handleSave()
       })
 
-      test('should call handleSave with Qvain.Spatials & translationsRoot', () => {
-        expect(handleSave).to.have.beenCalledWith(mockStores.Qvain.Spatials, translationsRoot)
+      test('should call handleSave with Qvain.Spatials', () => {
+        expect(handleSave).to.have.beenCalledWith(mockStores.Qvain.Spatials)
       })
     })
   })

@@ -37,6 +37,9 @@ const config = env => ({
   },
   resolve: {
     extensions: ['.js', '.jsx'],
+    alias: {
+      '@': '/js',
+    },
   },
   module: {
     rules: [

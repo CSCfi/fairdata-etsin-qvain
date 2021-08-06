@@ -19,12 +19,11 @@ const ActorsInput = () => {
     Qvain: { Actors, Provenances, readonly },
     Locale: { lang: language },
   } = useStores()
-  const selectedOptions = (Provenances.inEdit.associations || {}).actorOptions || []
+  const associations = Provenances.inEdit.associations || {}
+  const selectedOptions = associations.actorOptions || []
   const selectedOptionIds = selectedOptions.map(option => option.value)
-
+  const translationsRoot = Provenances.associationsTranslationsRoot
   const CreateOption = { Option: CustomOption }
-
-  const translationsRoot = 'qvain.history.provenance.modal.actorsInput'
 
   const options = [
     {

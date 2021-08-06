@@ -67,6 +67,8 @@ class Spatials extends Field {
   fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.spatial, Qvain)
 
   schema = spatialSchema
+
+  translationsRoot = 'qvain.temporalAndSpatial.spatial'
 }
 
 export const Location = (name, url) => ({
