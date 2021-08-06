@@ -297,6 +297,58 @@ describe('Download button actions', () => {
     action.func()
     expect(packages.packageModalPath).toBe('/no_package')
   })
+
+  it('allows downloading large files', async () => {
+    const fileItem = { type: 'file', path: '/file', byteSize: packages.sizeLimit + 1 }
+    const action = getDownloadAction(1, fileItem, packages, files)
+    expect(action).toEqual(expect.objectContaining({ disabled: false }))
+  })
+
+  it('allows generating large package with size equal to sizeLimit', async () => {
+    const largeDirectoryItem = {
+      type: 'directory',
+      path: '/pending',
+      existingByteSize: packages.sizeLimit,
+    }
+    const action = getDownloadAction(1, largeDirectoryItem, packages, files)
+    expect(action).toEqual(expect.objectContaining({ disabled: false }))
+  })
+
+  it('prevents generating package for directory larger than sizeLimit', async () => {
+    const largeDirectoryItem = {
+      type: 'directory',
+      path: '/pending',
+      existingByteSize: packages.sizeLimit + 1,
+    }
+    const action = getDownloadAction(1, largeDirectoryItem, packages, files)
+    expect(action).toEqual(expect.objectContaining({ disabled: true }))
+  })
+
+  it('allows generating package for dataset with size equal to sizeLimit', async () => {
+    const filesWithLargeRoot = {
+      ...files,
+      root: {
+        type: 'directory',
+        path: '/pending',
+        existingByteSize: packages.sizeLimit,
+      },
+    }
+    const action = getDownloadAction(1, null, packages, filesWithLargeRoot)
+    expect(action).toEqual(expect.objectContaining({ disabled: false }))
+  })
+
+  it('prevents generating  for dataset larger than sizeLimit', async () => {
+    const filesWithLargeRoot = {
+      ...files,
+      root: {
+        type: 'directory',
+        path: '/pending',
+        existingByteSize: packages.sizeLimit + 1,
+      },
+    }
+    const action = getDownloadAction(1, null, packages, filesWithLargeRoot)
+    expect(action).toEqual(expect.objectContaining({ disabled: true }))
+  })
 })
 
 describe('Download functions', () => {

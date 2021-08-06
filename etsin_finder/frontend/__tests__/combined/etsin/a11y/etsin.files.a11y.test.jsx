@@ -64,6 +64,8 @@ class MockPackages {
   Notifications = {
     email: 'email@example.com',
   }
+
+  packageIsTooLarge = () => false
 }
 
 const getStores = () => {
