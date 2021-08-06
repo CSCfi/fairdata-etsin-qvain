@@ -13,6 +13,8 @@ const actionDefaults = {
   pending: false, // is package being generated
   spin: false,
   type: 'default',
+  disabled: false,
+  tooltip: null,
 }
 
 const actionDownload = (datasetIdentifier, item, path, pack, Packages) => {
@@ -74,18 +76,27 @@ const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
   let action
   if (isFile || (pack && pack.status === DOWNLOAD_API_REQUEST_STATUS.SUCCESS)) {
     action = actionDownload(datasetIdentifier, item, path, pack, Packages)
-  } else if (
-    pack &&
-    (pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING ||
-      pack.status === DOWNLOAD_API_REQUEST_STATUS.STARTED ||
-      pack.requestingPackageCreation)
-  ) {
-    action = actionPending(Packages, path)
-  } else if (Packages.loadingDataset) {
-    action = actionLoading()
   } else {
-    action = actionCreatePackage(Packages, path)
+    if (
+      pack &&
+      (pack.status === DOWNLOAD_API_REQUEST_STATUS.PENDING ||
+        pack.status === DOWNLOAD_API_REQUEST_STATUS.STARTED ||
+        pack.requestingPackageCreation)
+    ) {
+      action = actionPending(Packages, path)
+    } else if (Packages.loadingDataset) {
+      action = actionLoading()
+    } else {
+      action = actionCreatePackage(Packages, path)
+    }
+
+    const isTooLarge = Packages.packageIsTooLarge(Files, item)
+    if (isTooLarge) {
+      action.disabled = true
+      action.tooltip = 'dataset.dl.packages.tooLarge'
+    }
   }
+
   return action
 }
 

@@ -317,4 +317,49 @@ describe('Packages', () => {
       expect(setTimeout).toHaveBeenCalledTimes(1)
     })
   })
+
+  describe('when calling packageIsTooLarge', () => {
+    test('should allow directory', () => {
+      const okDirectory = {
+        type: 'directory',
+        existingByteSize: packages.sizeLimit,
+      }
+      packages.packageIsTooLarge({}, okDirectory).should.be.false
+    })
+
+    test('should disallow too large directory', () => {
+      const tooLargeDirectory = {
+        type: 'directory',
+        existingByteSize: packages.sizeLimit + 1,
+      }
+      packages.packageIsTooLarge({}, tooLargeDirectory).should.be.true
+    })
+
+    test('should allow entire dataset', () => {
+      const okDatasetFiles = {
+        root: {
+          existingByteSize: packages.sizeLimit,
+        },
+      }
+      packages.packageIsTooLarge(okDatasetFiles).should.be.false
+    })
+
+    test('should disallow too large dataset', () => {
+      const tooLargeDatasetFiles = {
+        root: {
+          existingByteSize: packages.sizeLimit + 1,
+        },
+      }
+      packages.packageIsTooLarge(tooLargeDatasetFiles).should.be.true
+    })
+
+
+    test('should allow large file', () => {
+      const largeFile = {
+        type: 'file',
+        existingByteSize: packages.sizeLimit + 1,
+      }
+      packages.packageIsTooLarge({}, largeFile).should.be.false
+    })
+  })
 })
