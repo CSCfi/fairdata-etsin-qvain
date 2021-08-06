@@ -2,12 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import {
-  faInfoCircle,
-  faFolder,
-  faFolderOpen,
-  faFile,
-} from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle, faFolder, faFolderOpen, faFile } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 
 import { hasMetadata } from '../../../../stores/view/common.files.items'
@@ -27,6 +22,7 @@ import getDownloadAction from './downloadActions'
 import IconButton from '../common/iconButton'
 import FlaggedComponent from '../../../general/flaggedComponent'
 import { MoreButton, SplitButtonContainer } from './splitButton'
+import TooltipHover from '../../../general/tooltipHover'
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const { Files, directoryView, extraProps } = treeProps
@@ -76,6 +72,8 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
     spin: downloadIconSpin,
     buttonLabel: downloadButtonText,
     color: downloadButtonColor,
+    disabled: downloadDisabled,
+    tooltip: downloadTooltip,
   } = action
 
   const infoButton = (
@@ -102,13 +100,13 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       color={downloadButtonColor}
       icon={downloadIcon}
       spin={downloadIconSpin}
-      disabled={!allowDownload}
+      disabled={downloadDisabled || !allowDownload}
       onClick={downloadFunc}
       with={{ name }}
     />
   )
 
-  const downloadButtonParts = (
+  let downloadButtonParts = (
     <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
       <SplitButtonContainer split={moreFunc}>
         {downloadButton}
@@ -116,7 +114,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
           <Translate
             component={MoreButton}
             color={downloadButtonColor}
-            disabled={!allowDownload}
+            disabled={downloadDisabled || !allowDownload}
             onClick={moreFunc}
             attributes={{ 'aria-label': moreAriaLabel }}
           />
@@ -124,6 +122,14 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       </SplitButtonContainer>
     </FlaggedComponent>
   )
+
+  if (downloadTooltip) {
+    downloadButtonParts = (
+      <Translate component={TooltipHover} attributes={{ title: downloadTooltip }} showOnClick>
+        {downloadButtonParts}
+      </Translate>
+    )
+  }
 
   return (
     <ItemRow isOpen={isOpen}>

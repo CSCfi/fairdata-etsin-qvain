@@ -16,6 +16,7 @@ import ManualDownloadModal from './manualDownloadModal'
 import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
 import { SplitButtonContainer, MoreButton } from './splitButton'
 import FlaggedComponent from '../../../general/flaggedComponent'
+import TooltipHover from '../../../general/tooltipHover'
 
 function IdaResources(props) {
   const { restrictions } = props.Stores.Access
@@ -73,7 +74,7 @@ function IdaResources(props) {
   const downloadButton = (
     <Translate
       component={HeaderButton}
-      disabled={!allowDownload}
+      disabled={action.disabled || !allowDownload}
       onClick={downloadFunc}
       {...buttonProps}
     >
@@ -91,20 +92,26 @@ function IdaResources(props) {
           {totalSize ? ` (${sizeParse(totalSize)})` : null}
         </HeaderStats>
 
-        <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
-          <HeaderButtonSplit split={moreFunc}>
-            {downloadButton}
-            {moreFunc && (
-              <Translate
-                component={MoreButton}
-                color={buttonProps.color}
-                disabled={!allowDownload}
-                onClick={moreFunc}
-                attributes={{ 'aria-label': moreAriaLabel }}
-              />
-            )}
-          </HeaderButtonSplit>
-        </FlaggedComponent>
+        <Translate
+          component={TooltipHover}
+          attributes={{ title: action.tooltip }}
+          showOnClick
+        >
+          <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
+            <HeaderButtonSplit split={moreFunc}>
+              {downloadButton}
+              {moreFunc && (
+                <Translate
+                  component={MoreButton}
+                  color={buttonProps.color}
+                  disabled={!allowDownload}
+                  onClick={moreFunc}
+                  attributes={{ 'aria-label': moreAriaLabel }}
+                />
+              )}
+            </HeaderButtonSplit>
+          </FlaggedComponent>
+        </Translate>
       </Header>
 
       <ErrorMessage error={Packages.error} clear={Packages.clearError} />
