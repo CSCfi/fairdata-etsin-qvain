@@ -16,7 +16,6 @@ default_supported_flags = {
     'DOWNLOAD_API_V2.EMAIL.BACKEND',
     'DOWNLOAD_API_V2.OPTIONS',
     'UI.BOTTOM_SUBMIT_BUTTONS',
-    'UI.CITATION',
     "MATOMO_TRACKING",
     "CROSSREF_API"
 }

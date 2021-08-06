@@ -28,7 +28,6 @@ import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
 import Loader from '../general/loader'
-import FlaggedComponent from '../general/flaggedComponent'
 import { withStores } from '../../stores/stores'
 import CitationModal from './citation/citationModal'
 import urls from '../../utils/urls'
@@ -217,9 +216,7 @@ class Dataset extends React.Component {
     // CASE 2: Business as usual
     return (
       <div>
-        <FlaggedComponent flag="UI.CITATION">
-          <CitationModal />
-        </FlaggedComponent>
+        <CitationModal />
         <article className="container regular-row">
           <div className="row">
             <div className="col-12">

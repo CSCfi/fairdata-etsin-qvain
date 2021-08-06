@@ -27,7 +27,7 @@ export function FileTree(props) {
       Files,
       Item: FileTreeItem,
       directoryView: View,
-      moreItemsLevel: 3.5,
+      moreItemsLevel: 2,
     },
     {
       allowDownload,
