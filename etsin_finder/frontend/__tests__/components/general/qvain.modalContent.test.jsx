@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import 'chai/register-expect'
 import { useStores } from '@/stores/stores'
 
-import ModalContent from '../../../js/components/qvain/general/modal/modalContent'
+import ModalContent from '@/components/qvain/general/modal/modalContent'
 import ModalButtons from '../../../js/components/qvain/general/modal/modalButtons'
 import { ConfirmClose } from '../../../js/components/qvain/general/modal/confirmClose'
 
