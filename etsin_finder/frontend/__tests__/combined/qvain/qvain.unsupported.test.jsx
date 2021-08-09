@@ -1,5 +1,55 @@
+import React from 'react'
+import { mount } from 'enzyme'
 import maximalDataset from '../../__testdata__/qvain.maximalDataset'
 import QvainClass from '../../../js/stores/view/qvain'
+import Unsupported from '../../../js/components/qvain/views/editor/unsupported'
+import { useStores } from '../../../js/stores/stores'
+import '../../../locale/translations'
+import { ThemeProvider } from 'styled-components'
+import theme from '../../../js/styles/theme'
+
+jest.mock('../../../js/stores/stores')
+
+beforeEach(() => {
+  jest.resetAllMocks()
+})
+
+const render = unsupported => {
+  useStores.mockReturnValue({
+    Qvain: {
+      unsupported: unsupported,
+    },
+  })
+  const Qvain = new QvainClass()
+  Qvain.editDataset(maximalDataset)
+  return mount(
+    <ThemeProvider theme={theme}>
+      <Unsupported />
+    </ThemeProvider>
+  )
+}
+
+describe('Unsupported', () => {
+  test('unsupported fields', () => {
+    const expectedFields = [
+      ['field.subfield', 'value_of_subfield'],
+      ['other_field.subfield', 'other_value'],
+    ]
+    const wrapper = render(expectedFields)
+    wrapper.find('button').simulate('click', {})
+    const fields = wrapper
+      .find('ul')
+      .find('li')
+      .map(v => v.text().split(': '))
+    expect(fields).toEqual(expectedFields)
+  })
+
+  test('no unsupported fields', () => {
+    const expectedFields = []
+    const wrapper = render(expectedFields)
+    expect(wrapper.isEmptyRender()).toBe(true)
+  })
+})
 
 test('it should list unsupported fields in dataset', () => {
   const Qvain = new QvainClass()
