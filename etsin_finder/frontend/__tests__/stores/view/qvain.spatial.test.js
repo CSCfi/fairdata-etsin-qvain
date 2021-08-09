@@ -27,7 +27,7 @@ jest.mock('mobx')
 describe('Spatials store', () => {
   let spatials
   const parent = {}
-  const existingSpatials = ["here lies spatials"]
+  const existingSpatials = ['here lies spatials']
 
   beforeEach(() => {
     spatials = new Spatials(parent, existingSpatials)
@@ -52,15 +52,14 @@ describe('Spatials store', () => {
       expect(spatials.fromBackendBase).to.have.beenCalledWith(existingSpatials, parent)
     })
 
-
     describe('when calling clone', () => {
       let returnValue
       beforeEach(() => {
         returnValue = spatials.clone()
       })
 
-      test("should return clone (actually it's a ref)", () => {
-        returnValue.should.deep.eql(spatials)
+      test('should call fromBackendBase', () => {
+        expect(spatials.fromBackendBase).to.have.beenCalledWith(existingSpatials, parent)
       })
     })
 
