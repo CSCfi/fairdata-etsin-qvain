@@ -117,15 +117,15 @@ describe('Projects', () => {
           },
           source_organization: [
             {
-              name: 'subdep_name',
+              name: { en: 'subdep_name' },
               identifier: 'subdep_identifier',
               email: 'subdep_email',
               is_part_of: {
-                name: 'dep_name',
+                name: { en: 'dep_name' },
                 identifier: 'dep_identifier',
                 email: 'dep_email',
                 is_part_of: {
-                  name: 'org_name',
+                  name: { en: 'org_name' },
                   identifier: 'org_identifier',
                   email: 'org_email',
                 },
@@ -134,15 +134,15 @@ describe('Projects', () => {
           ],
           has_funding_agency: [
             {
-              name: 'fund_subdep_name',
+              name: { en: 'fund_subdep_name' },
               identifier: 'fund_subdep_identifier',
               email: 'fund_subdep_email',
               is_part_of: {
-                name: 'fund_dep_name',
+                name: { en: 'fund_dep_name' },
                 identifier: 'fund_dep_identifier',
                 email: 'fund_dep_email',
                 is_part_of: {
-                  name: 'fund_org_name',
+                  name: { en: 'fund_org_name' },
                   identifier: 'fund_org_identifier',
                   email: 'fund_org_email',
                 },
@@ -178,10 +178,18 @@ describe('Projects', () => {
         organizations: [
           {
             id: 'id',
-            organization: { name: 'org_name', identifier: 'org_identifier', email: 'org_email' },
-            department: { name: 'dep_name', identifier: 'dep_identifier', email: 'dep_email' },
+            organization: {
+              name: { en: 'org_name' },
+              identifier: 'org_identifier',
+              email: 'org_email',
+            },
+            department: {
+              name: { en: 'dep_name' },
+              identifier: 'dep_identifier',
+              email: 'dep_email',
+            },
             subDepartment: {
-              name: 'subdep_name',
+              name: { en: 'subdep_name' },
               identifier: 'subdep_identifier',
               email: 'subdep_email',
             },
@@ -193,17 +201,17 @@ describe('Projects', () => {
             organization: {
               id: 'id',
               organization: {
-                name: 'fund_org_name',
+                name: { en: 'fund_org_name' },
                 identifier: 'fund_org_identifier',
                 email: 'fund_org_email',
               },
               department: {
-                name: 'fund_dep_name',
+                name: { en: 'fund_dep_name' },
                 identifier: 'fund_dep_identifier',
                 email: 'fund_dep_email',
               },
               subDepartment: {
-                name: 'fund_subdep_name',
+                name: { en: 'fund_subdep_name' },
                 identifier: 'fund_subdep_identifier',
                 email: 'fund_subdep_email',
               },

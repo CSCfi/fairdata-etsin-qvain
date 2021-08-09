@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
 
 import Field from './qvain.field'
+import { touch } from './track'
 
 const parseDoiUrl = doi => `https://doi.org/${doi}`
 
@@ -77,7 +78,14 @@ class RelatedResources extends Field {
 
   toBackend = () => this.storage.map(this.relatedResourceToBackend)
 
-  fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.relation, Qvain)
+  fromBackend = (dataset, Qvain) => {
+    if (dataset.relation) {
+      dataset.relation.forEach(r => {
+        touch(r.entity?.type, r.relation_type)
+      })
+    }
+    this.fromBackendBase(dataset.relation, Qvain)
+  }
 }
 
 export const RelatedResourceModel = rr => ({
@@ -100,10 +108,12 @@ export const RelationType = (label, url) => ({
 })
 
 export const fillUndefinedMultiLangProp = (prop = {}) => {
-  if (prop.fi === undefined) prop.fi = ''
-  if (prop.en === undefined) prop.en = ''
-  if (prop.und === undefined) prop.und = ''
-  return prop
+  const values = {
+    fi: prop.fi || '',
+    en: prop.en || '',
+    und: prop.und || '',
+  }
+  return values
 }
 
 export default RelatedResources

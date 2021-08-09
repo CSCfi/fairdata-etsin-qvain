@@ -1096,7 +1096,7 @@ describe('Qvain.Actors store', () => {
       curator: [third],
     }
 
-    stores.Qvain.Actors.editDataset(dataset)
+    stores.Qvain.Actors.fromBackend(dataset)
     expect(stores.Qvain.Actors.actors.length).toBe(4)
     const creators = stores.Qvain.Actors.actors.filter(actor => actor.roles.includes('creator'))
     expect(creators.map(actor => actor.person.name)).toEqual([first.name, second.name, third.name])
