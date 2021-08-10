@@ -1,4 +1,4 @@
-import { observable, action, computed, makeObservable } from 'mobx'
+import { observable, action, computed, makeObservable, toJS } from 'mobx'
 import {
   cumulativeStateSchema,
   useDoiSchema,
@@ -9,6 +9,7 @@ import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/consta
 import Resources from './qvain.resources'
 import Files from './qvain.files'
 import Submit from './qvain.submit'
+import track, { touch } from './track'
 
 class Qvain extends Resources {
   constructor(Env, Auth) {
@@ -36,9 +37,13 @@ class Qvain extends Resources {
 
   @observable externalResourceInEdit = EmptyExternalResource
 
+  @observable unsupported = null
+
   @action
   resetQvainStore = () => {
     this.original = undefined
+    this.unsupported = null
+
     // Reset Files/Directories related data
     this.Files.reset()
     this.dataCatalog = undefined
@@ -218,8 +223,15 @@ class Qvain extends Resources {
   // Dataset related
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action loadBasicFields = dataset => {
-    const researchDataset = dataset.research_dataset
-    this.resources.forEach(r => r.fromBackend(researchDataset, this))
+    const [researchDataset, tracker] = track(toJS(dataset.research_dataset))
+    // avoid reporting fields as unsupported when they are automatically defined by metax
+    touch(
+      researchDataset.metadata_version_identifier,
+      researchDataset.preferred_identifier,
+      researchDataset.total_files_byte_size
+    )
+    this.resources.forEach(r => r.fromBackend(researchDataset, this, tracker))
+    this.unsupported = tracker.getUnused({ deep: true })
   }
 
   // load fields that won't be duplicated by template copy

@@ -1,5 +1,6 @@
 import { action, makeObservable } from 'mobx'
 import ReferenceField from './qvain.referenceField'
+import { touch } from './track'
 
 class Infrastructures extends ReferenceField {
   constructor(...args) {
@@ -12,6 +13,7 @@ class Infrastructures extends ReferenceField {
     // infrastructures
     this.reset()
     if (dataset.infrastructure !== undefined) {
+      touch(dataset.infrastructure)
       this.storage = dataset.infrastructure.map(element =>
         this.Model(element.pref_label, element.identifier)
       )

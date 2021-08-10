@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
 import '../../../utils/extendYup'
 
+import { touch } from './track'
 import Field from './qvain.field'
 
 const numberToString = number => {
@@ -49,7 +50,7 @@ class Spatials extends Field {
     super(Parent, Spatial, SpatialModel, 'spatials')
     makeObservable(this)
 
-    this.fromBackendBase(spatials, Parent)
+    this.fromBackend({ spatial: spatials }, Parent)
   }
 
   clone = () => this
@@ -64,7 +65,14 @@ class Spatials extends Field {
 
   toBackend = () => this.storage.map(this.spatialToBackend)
 
-  fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.spatial, Qvain)
+  fromBackend = (dataset, Qvain) => {
+    if (dataset.spatial) {
+      dataset.spatial.forEach(spatial => {
+        touch(spatial.place_uri)
+      })
+    }
+    return this.fromBackendBase(dataset.spatial, Qvain)
+  }
 
   schema = spatialSchema
 

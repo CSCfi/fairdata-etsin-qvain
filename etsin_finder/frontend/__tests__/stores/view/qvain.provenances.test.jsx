@@ -198,7 +198,7 @@ describe('Provenances', () => {
     })
 
     describe('when calling fromBackend', () => {
-      const dataset = { provenance: 'provenance' }
+      const dataset = { provenance: ['provenance'] }
       const Qvain = 'Qvain'
 
       beforeEach(() => {

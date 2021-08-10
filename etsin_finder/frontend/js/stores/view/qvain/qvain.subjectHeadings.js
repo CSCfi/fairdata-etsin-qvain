@@ -1,5 +1,6 @@
 import { action, makeObservable } from 'mobx'
 import ReferenceField from './qvain.referenceField'
+import { touch } from './track'
 
 class SubjectHeadings extends ReferenceField {
   constructor(...args) {
@@ -8,9 +9,10 @@ class SubjectHeadings extends ReferenceField {
   }
 
   @action
-  fromBackend = dataset => {
+  fromBackend = (dataset) => {
     this.reset()
     if (dataset.theme !== undefined) {
+      touch(dataset.theme)
       this.storage = dataset.theme.map(element =>
         this.Model(element.pref_label, element.identifier)
       )

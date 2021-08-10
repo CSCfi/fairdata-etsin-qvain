@@ -1,6 +1,7 @@
 import { action, makeObservable } from 'mobx'
 import * as yup from 'yup'
 import ReferenceField from './qvain.referenceField'
+import { touch } from './track'
 
 export const otherIdentifierSchema = yup
   .string()
@@ -20,7 +21,10 @@ class OtherIdentifiers extends ReferenceField {
 
   @action fromBackend = dataset => {
     this.reset()
-    this.storage = dataset.other_identifier ? dataset.other_identifier.map(oid => oid.notation) : []
+    if (dataset.other_identifier) {
+      dataset.other_identifier.forEach(oid => touch(oid.type))
+      this.storage = dataset.other_identifier.map(oid => oid.notation)
+    }
   }
 
   @action cleanupBeforeBackend = () => {

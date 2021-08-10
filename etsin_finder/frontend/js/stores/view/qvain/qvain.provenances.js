@@ -7,6 +7,7 @@ import UsedEntities from './qvain.usedEntities'
 import Field from './qvain.field'
 import { ActorsRef } from './qvain.actors'
 import { ROLE } from '../../../utils/constants'
+import { touch } from './track'
 
 export const Provenance = ({
   uiid = uuidv4(),
@@ -113,6 +114,11 @@ class Provenances extends Field {
   @action
   fromBackend = (dataset, Qvain) => {
     this.provenancesWithNonExistingActors = []
+    if (dataset.provenance) {
+      dataset.provenance.forEach(prov => {
+        touch(prov.lifecycle_event, prov.event_outcome)
+      })
+    }
     this.fromBackendBase(dataset.provenance, Qvain)
   }
 
@@ -173,12 +179,12 @@ export const ProvenanceModel = (provenanceData, Qvain) => ({
 
 const parseTranslationField = value => {
   if (!value) return { fi: '', en: '', und: '' }
-  if (!value.fi) value.fi = ''
-  if (!value.en) value.en = ''
-  if (!value.und) {
-    value.und = value.fi || value.en || ''
+  const values = {
+    fi: value.fi || '',
+    en: value.en || '',
+    und: value.und || '',
   }
-  return value
+  return values
 }
 
 export default Provenances
