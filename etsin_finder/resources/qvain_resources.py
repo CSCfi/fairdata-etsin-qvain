@@ -8,7 +8,7 @@
 """RESTful API endpoints, meant to be used by Qvain form"""
 
 from marshmallow import ValidationError
-from flask import request
+from flask import request, current_app
 from flask_restful import reqparse, Resource
 
 from etsin_finder.auth import authentication
@@ -344,5 +344,8 @@ class QvainDatasetFiles(Resource):
         response, status = service.update_dataset_files(cr_id, data, params)
         if status != 200:
             return response, status
+
+        # adding or removing files may change permissions, clear them from cache
+        current_app.cr_permission_cache.delete_from_cache(cr_id)
 
         return response, status
