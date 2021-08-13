@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Contact email sending related utils"""
+"""Contact email sending related utils."""
 import datetime
 import re
 
@@ -24,14 +24,14 @@ def create_email_message_body(pref_id, user_email, user_subject, user_body):
         user_body (str): Email body.
 
     Returns:
-        str: Email message body withall arguments.
+        str: Email message body with all arguments.
 
     """
     now = datetime.datetime.now()
 
-    meta_en = ('The message below was sent via Etsin research data finder on {0}.{1}.{2}. '
+    meta_en = ('The message below was sent via Etsin research data finder on {1} {0}, {2}. '
                'It concerns a dataset with identifier \"{3}\". Please, send your reply to {4}.'
-               .format(now.day, now.month, now.year, pref_id, user_email))
+               .format(now.day, now.strftime("%B"), now.year, pref_id, user_email))
 
     meta_fi = ('Allaoleva viesti on lähetetty Etsin-palvelun kautta {0}.{1}.{2}. Viesti koskee '
                'tutkimusaineistoa, jonka tunniste on \"{3}\". Ole hyvä, lähetä vastauksesi osoitteeseen {4}.'
@@ -150,7 +150,7 @@ def get_harvest_info(catalog_record):
 
 
 def _agent_has_email_address(agent_obj):
-    """Check if agent has email
+    """Check if agent has email.
 
     Arguments:
         agent_obj (list/dict): The specified field from the research dataset. If publisher then dict else list
@@ -167,7 +167,7 @@ def _agent_has_email_address(agent_obj):
     return False
 
 def get_email_list_for_actor(agents):
-    """Return the emails for the specified agents
+    """Return the emails for the specified agents.
 
     Arguments:
         agents (list/dict): The specified field from the research dataset. If publisher then dict else list
