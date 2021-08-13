@@ -53,7 +53,7 @@ class Spatials extends Field {
     this.fromBackend({ spatial: spatials }, Parent)
   }
 
-  clone = () => this
+  clone = () => new Spatials(this.Parent, this.toBackend())
 
   spatialToBackend = spatial => ({
     geographic_name: spatial.name,

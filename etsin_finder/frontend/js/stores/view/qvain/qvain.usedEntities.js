@@ -20,7 +20,7 @@ class UsedEntities extends Field {
     this.fromBackend({ used_entity: entities }, Qvain)
   }
 
-  clone = () => this
+  clone = () => new UsedEntities(this.Parent, this.toBackend())
 
   usedEntityToBackend = ue => ({
     title: ue.name,
