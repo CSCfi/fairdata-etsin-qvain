@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""RESTful API endpoints, meant to be used by Qvain form"""
+"""RESTful API endpoints, meant to be used by Qvain form."""
 
 from marshmallow import ValidationError
 from flask import request
@@ -14,10 +14,7 @@ from flask_restful import reqparse, Resource
 from etsin_finder.auth import authentication
 from etsin_finder.log import log
 
-from etsin_finder.utils.utils import (
-    slice_array_on_limit,
-    datetime_to_header
-)
+from etsin_finder.utils.utils import datetime_to_header
 from etsin_finder.schemas.qvain_dataset_schema_v2 import (
     validate,
     FileActionsValidationSchema,
@@ -37,13 +34,11 @@ from etsin_finder.services.qvain_service import MetaxQvainAPIService
 from etsin_finder.utils.log_utils import log_request
 
 
-TOTAL_ITEM_LIMIT = 1000
-
 class FileCharacteristics(Resource):
     """REST endpoint for updating file_characteristics of a file."""
 
     def __init__(self):
-        """Setup arguments"""
+        """Init arguments."""
         self.parser = reqparse.RequestParser()
 
     def _update_characteristics(self, file_id, replace=False):
@@ -56,31 +51,40 @@ class FileCharacteristics(Resource):
             Metax response.
 
         """
-        if request.content_type != 'application/json':
-            return 'Expected content-type application/json', 403
+        if request.content_type != "application/json":
+            return "Expected content-type application/json", 403
 
         service = MetaxQvainAPIService()
         file_obj = service.get_file(file_id)
         if not file_obj:
-            return 'Access denied or file not found', 404
-        project_identifier = file_obj.get('project_identifier')
+            return "Access denied or file not found", 404
+        project_identifier = file_obj.get("project_identifier")
         user_ida_projects = authentication.get_user_ida_projects() or []
 
         if project_identifier not in user_ida_projects:
-            log.warning('User not authenticated or does not have access to project {0} for file {1}'.format(project_identifier, file_id))
-            return 'Project missing from user or user is not authenticated', 403
+            log.warning(
+                "User not authenticated or does not have access to project {0} for file {1}".format(
+                    project_identifier, file_id
+                )
+            )
+            return "Project missing from user or user is not authenticated", 403
 
         try:
             new_characteristics = request.json
         except Exception as e:
             return str(e), 400
 
-        characteristics = file_obj.get('file_characteristics', {})
+        characteristics = file_obj.get("file_characteristics", {})
 
         # Make sure that only fields specified here are changed
         allowed_fields = {
-            "file_format", "format_version", "encoding",
-            "csv_delimiter", "csv_record_separator", "csv_quoting_char", "csv_has_header"
+            "file_format",
+            "format_version",
+            "encoding",
+            "csv_delimiter",
+            "csv_record_separator",
+            "csv_quoting_char",
+            "csv_has_header",
         }
         for key, value in new_characteristics.items():
             if (key not in characteristics) or (characteristics[key] != value):
@@ -94,9 +98,7 @@ class FileCharacteristics(Resource):
 
         # Update file_characteristics with new values
         characteristics.update(new_characteristics)
-        data = {
-            'file_characteristics': characteristics
-        }
+        data = {"file_characteristics": characteristics}
 
         return service.patch_file(file_id, data)
 
@@ -115,14 +117,14 @@ class QvainDatasets(Resource):
     """Listing and creating Metax datasets for logged in user in Qvain."""
 
     def __init__(self):
-        """Setup required utils for dataset metadata handling"""
+        """Init required utils for dataset metadata handling."""
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('draft', type=bool, required=False)
+        self.parser.add_argument("draft", type=bool, required=False)
 
         # Datasets listing parameters
-        self.parser.add_argument('limit', type=str, required=False)
-        self.parser.add_argument('offset', type=str, required=False)
-        self.parser.add_argument('no_pagination', type=bool, required=False)
+        self.parser.add_argument("limit", type=str, required=False)
+        self.parser.add_argument("offset", type=str, required=False)
+        self.parser.add_argument("no_pagination", type=bool, required=False)
 
     @log_request
     def get(self):
@@ -145,25 +147,35 @@ class QvainDatasets(Resource):
             return error
 
         args = self.parser.parse_args()
-        limit = args.get('limit', None)
-        offset = args.get('offset', None)
-        no_pagination = args.get('no_pagination', None)
+        limit = args.get("limit", None)
+        offset = args.get("offset", None)
+        no_pagination = args.get("no_pagination", None)
 
         user_id = authentication.get_user_csc_name()
         service = MetaxQvainAPIService()
-        result = service.get_datasets_for_user(user_id, limit, offset, no_pagination, data_catalog_matcher=data_catalog_matcher)
+        result = service.get_datasets_for_user(
+            user_id,
+            limit,
+            offset,
+            no_pagination,
+            data_catalog_matcher=data_catalog_matcher,
+        )
         if result:
             # Limit the amount of items to be sent to the frontend
-            if 'results' in result:
+            if "results" in result:
                 # Remove the datasets that have the metax property 'removed': True
                 result = remove_deleted_datasets_from_results(result)
-                result['results'] = slice_array_on_limit(result.get('results', []), TOTAL_ITEM_LIMIT)
+                result["results"] = result.get("results", [])
             # If no datasets are created, an empty response should be returned, without error
-            if result == 'no datasets':
-                return '', 200
+            if result == "no datasets":
+                return "", 200
             return result, 200
-        log.warning('User not authenticated or result for user_id is invalid\nuser_id: {0}'.format(user_id))
-        return '', 404
+        log.warning(
+            "User not authenticated or result for user_id is invalid\nuser_id: {0}".format(
+                user_id
+            )
+        )
+        return "", 404
 
     @log_request
     def post(self):
@@ -179,9 +191,9 @@ class QvainDatasets(Resource):
 
         params = {}
         args = self.parser.parse_args()
-        draft = args.get('draft')
+        draft = args.get("draft")
         if draft:
-            params['draft'] = 'true'
+            params["draft"] = "true"
 
         try:
             data = validate(request.data, params)
@@ -194,12 +206,16 @@ class QvainDatasets(Resource):
 
         if not metadata_provider_org or not metadata_provider_user:
             log.warning("The Metadata provider is not specified\n")
-            return {"PermissionError": "The Metadata provider is not found in login information."}, 401
+            return {
+                "PermissionError": "The Metadata provider is not found in login information."
+            }, 401
 
         if data["useDoi"] is True:
-            params["pid_type"] = 'doi'
+            params["pid_type"] = "doi"
 
-        metax_ready_data = data_to_metax(data, metadata_provider_org, metadata_provider_user)
+        metax_ready_data = data_to_metax(
+            data, metadata_provider_org, metadata_provider_user
+        )
         metax_ready_data["access_granter"] = get_access_granter()
         service = MetaxQvainAPIService()
         metax_response = service.create_dataset(metax_ready_data, params)
@@ -258,26 +274,36 @@ class QvainDataset(Resource):
 
         # If date_modified not present, then the dataset has not been modified
         # after it was created, use date_created instead
-        last_edit = original.get('date_modified') or original.get('date_created')
+        last_edit = original.get("date_modified") or original.get("date_created")
         if not last_edit:
-            log.error('Could not find date_modified or date_created from dataset.')
-            return 'Error getting dataset creation or modification date.', 500
+            log.error("Could not find date_modified or date_created from dataset.")
+            return "Error getting dataset creation or modification date.", 500
 
         last_edit_converted = datetime_to_header(last_edit)
         if not last_edit_converted:
-            log.error('Could not convert last_edit: {0} to http datetime.\nlast_edit is of type: {1}'.format(last_edit, type(last_edit)))
-            return 'Error in dataset creation or modification date..', 500
+            log.error(
+                "Could not convert last_edit: {0} to http datetime.\nlast_edit is of type: {1}".format(
+                    last_edit, type(last_edit)
+                )
+            )
+            return "Error in dataset creation or modification date..", 500
 
-        log.info('Converted datetime from metax: {0} to HTTP datetime: {1}'.format(last_edit, last_edit_converted))
+        log.info(
+            "Converted datetime from metax: {0} to HTTP datetime: {1}".format(
+                last_edit, last_edit_converted
+            )
+        )
         del data["original"]
 
-        log.debug(f'in patch: data: {data}')
+        log.debug(f"in patch: data: {data}")
 
         metax_ready_data = edited_data_to_metax(data, original)
         metax_ready_data["access_granter"] = get_access_granter()
         params = {}
         service = MetaxQvainAPIService()
-        metax_response = service.update_dataset(metax_ready_data, cr_id, last_edit_converted, params)
+        metax_response = service.update_dataset(
+            metax_ready_data, cr_id, last_edit_converted, params
+        )
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
         return metax_response
 
@@ -307,7 +333,7 @@ class QvainDatasetFiles(Resource):
     """Update files of a dataset."""
 
     def __init__(self):
-        """Setup endpoint"""
+        """Init endpoint."""
         self.validationSchema = FileActionsValidationSchema()
 
     @log_request
@@ -333,12 +359,12 @@ class QvainDatasetFiles(Resource):
 
         ida_projects = authentication.get_user_ida_projects()
         if ida_projects is None:
-            return {"IdaError": "Error in IDA group user permission or in IDA user groups."}, 403
+            return {
+                "IdaError": "Error in IDA group user permission or in IDA user groups."
+            }, 403
 
         # Make Metax check that files belong to projects that the user is allowed to use
-        params = {
-            "allowed_projects": ",".join(ida_projects)
-        }
+        params = {"allowed_projects": ",".join(ida_projects)}
 
         service = MetaxQvainAPIService()
         response, status = service.update_dataset_files(cr_id, data, params)
