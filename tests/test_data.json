@@ -184,6 +184,7 @@
       {
         "name": "Teppo Testaaja",
         "@type": "Person",
+        "email": "teppo@yliopisto.fi",
         "member_of": {
           "name": {
             "en": "Aalto University",
@@ -215,6 +216,7 @@
           "fi": "Organisaatio"
         },
         "@type": "Organization",
+        "email": "curator@aalto.fi",
         "identifier": "id:of:curator:default",
         "is_part_of": {
           "name": {
@@ -438,6 +440,7 @@
         "und": "School services, ARTS"
       },
       "@type": "Organization",
+      "email": "arts@aalto.fi",
       "homepage": {
         "title": {
           "en": "Publisher website",
@@ -667,6 +670,7 @@
       {
         "name": "Kalle Kontribuuttaja",
         "@type": "Person",
+        "email": "kalle@yliopisto.fi",
         "member_of": {
           "name": {
             "en": "University of Helsinki",
@@ -1023,6 +1027,7 @@
           "und": "Helsingin yliopisto"
         },
         "@type": "Organization",
+        "email": "rights@aalto.fi",
         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901",
         "is_part_of": {
           "name": {
