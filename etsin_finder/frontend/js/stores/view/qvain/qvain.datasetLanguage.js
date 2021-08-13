@@ -1,6 +1,7 @@
 import { action, makeObservable } from 'mobx'
 
 import ReferenceField from './qvain.referenceField'
+import { touch } from './track'
 
 class DatasetLanguages extends ReferenceField {
   constructor(...args) {
@@ -10,6 +11,7 @@ class DatasetLanguages extends ReferenceField {
 
   @action fromBackend = dataset => {
     if (dataset.language !== undefined) {
+      touch(dataset.language)
       this.storage = dataset.language.map(element => this.Model(element.title, element.identifier))
     }
   }

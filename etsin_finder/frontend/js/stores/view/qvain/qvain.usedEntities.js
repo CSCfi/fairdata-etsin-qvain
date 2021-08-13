@@ -2,6 +2,7 @@ import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 import { relatedResourceNameSchema } from './qvain.relatedResources'
+import { touch } from './track'
 
 export const UsedEntityTemplate = (
   uiid = uuidv4(),
@@ -16,7 +17,7 @@ class UsedEntities extends Field {
     super(Qvain, UsedEntityTemplate, UsedEntityModel, 'usedEntities')
     makeObservable(this)
 
-    this.fromBackendBase(entities, Qvain)
+    this.fromBackend({ used_entity: entities }, Qvain)
   }
 
   clone = () => this
@@ -30,7 +31,14 @@ class UsedEntities extends Field {
 
   toBackend = () => this.storage.map(this.usedEntityToBackend)
 
-  fromBackend = this.fromBackendBase
+  fromBackend = (data, Qvain) => {
+    if (data.used_entity !== undefined) {
+      data.used_entity.forEach(element => {
+        touch(element.type)
+      })
+    }
+    return this.fromBackendBase(data.used_entity, Qvain)
+  }
 
   nameSchema = relatedResourceNameSchema
 }
@@ -49,10 +57,12 @@ export const EntityType = (label, url) => ({
 })
 
 export const fillUndefinedMultiLangProp = (prop = {}) => {
-  if (prop.fi === undefined) prop.fi = ''
-  if (prop.en === undefined) prop.en = ''
-  if (prop.und === undefined) prop.und = ''
-  return prop
+  const values = {
+    fi: prop.fi || '',
+    en: prop.en || '',
+    und: prop.und || '',
+  }
+  return values
 }
 
 export default UsedEntities

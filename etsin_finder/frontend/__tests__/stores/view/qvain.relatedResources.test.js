@@ -109,11 +109,11 @@ describe('RelatedResources', () => {
       })
     })
 
-    describe('when calling formBackend', () => {
+    describe('when calling fromBackend', () => {
       let returnValue
 
       const dataset = {
-        relation: 'relation',
+        relation: ['relation'],
       }
 
       const Qvain = {

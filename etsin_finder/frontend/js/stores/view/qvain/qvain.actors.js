@@ -3,6 +3,7 @@ import { observable, action, runInAction, computed, makeObservable } from 'mobx'
 import * as yup from 'yup'
 
 import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../../utils/constants'
+import { touch } from './track'
 
 // ACTOR VALIDATION SCHEMAS
 
@@ -235,9 +236,10 @@ const createActor = (actorJson, roles) => {
     const orgs = []
     let currentOrg = org
     while (currentOrg) {
+      touch(currentOrg['@type'])
       orgs.unshift(
         Organization({
-          name: currentOrg.name,
+          name: { ...currentOrg.name },
           email: currentOrg.email,
           identifier: currentOrg.identifier,
           isReference: null, // null here means we aren't sure yet
@@ -563,8 +565,9 @@ class Actors {
   }
 
   @action
-  editDataset = researchDataset => {
+  fromBackend = researchDataset => {
     // Load actors
+    this.orphanActors = []
     const actors = []
     if ('creator' in researchDataset) {
       researchDataset.creator.forEach(creator => actors.push(createActor(creator, [ROLE.CREATOR])))
@@ -589,11 +592,6 @@ class Actors {
     this.mergeTheSameActors()
     this.mergeTheSameActorOrganizations()
     this.mergeActorsOrganizationsWithReferences()
-  }
-
-  fromBackend = dataset => {
-    this.orphanActors = []
-    this.editDataset(dataset)
   }
 
   @observable actors = []

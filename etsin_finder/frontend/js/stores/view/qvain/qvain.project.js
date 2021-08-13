@@ -2,6 +2,7 @@ import { observable, action, toJS, makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
 import { parseOrganization } from '../../../components/qvain/fields/project/utils'
+import { touch } from './track'
 
 // PROJECT VALIDATION
 export const organizationSelectSchema = yup.object().shape({
@@ -96,7 +97,7 @@ class Projects {
         const { identifier } = project
 
         // If no English or Finnish name is found, fill in value from other translations if possible
-        let { name } = project
+        let name = { ...project.name }
         if (!name.en && !name.fi) {
           const nameTranslation = name.und || Object.values(name).find(translation => translation)
           if (nameTranslation) {
@@ -108,6 +109,7 @@ class Projects {
         // We need to push null if no funder type found.
         // Consider refactoring params array to object to prevent this
         if (project.funder_type) {
+          touch(project.funder_type)
           params.push(
             ProjectFunderType(project.funder_type.pref_label, project.funder_type.identifier)
           )
@@ -123,6 +125,9 @@ class Projects {
 
         // Funding agencies
         if (project.has_funding_agency) {
+          project.has_funding_agency.forEach(agency => {
+            touch(agency.contributor_type)
+          })
           const fundingAgencies = project.has_funding_agency.map(agency => {
             const parsedOrganizations = parseOrganization(agency)
             parsedOrganizations.reverse()
