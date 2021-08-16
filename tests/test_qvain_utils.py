@@ -134,7 +134,8 @@ class TestQvainUtils(BaseTest):
                 warnings=['Dataset "testcatalog" not found. Editing not allowed.']
             )
             assert (
-                error.get("PermissionError", "") == "Dataset does not exist or user is not allowed to edit the dataset."
+                error.get("PermissionError", "")
+                == "Dataset does not exist or user is not allowed to edit the dataset."
             )
             assert status == 403
 
@@ -151,7 +152,8 @@ class TestQvainUtils(BaseTest):
                 ]
             )
             assert (
-                error.get("PermissionError", "") == "Dataset does not exist or user is not allowed to edit the dataset."
+                error.get("PermissionError", "")
+                == "Dataset does not exist or user is not allowed to edit the dataset."
             )
             assert status == 403
 
@@ -168,7 +170,8 @@ class TestQvainUtils(BaseTest):
                 ]
             )
             assert (
-                error.get("PermissionError", "") == "Editing datasets from catalog nonstandard is not supported by Qvain."
+                error.get("PermissionError", "")
+                == "Editing datasets from catalog nonstandard is not supported by Qvain."
             )
             assert status == 403
 

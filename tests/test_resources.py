@@ -5,18 +5,18 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Test Flask Restful most relevant API endpoints"""
+"""Test Flask Restful most relevant API endpoints."""
 
 from .basetest import BaseTest
 import json
 
 
 class TestDatasetResources(BaseTest):
-    """Test Dataset API endpoints"""
+    """Test Dataset API endpoints."""
 
     def test_nonexisting_dataset(self, unauthd_client, authd_client, nonexisting_catalog_record):
         """
-        Test dataset API response with nonexisting dataset
+        Test dataset API response with nonexisting dataset.
 
         :param unauthd_client:
         :param authd_client:
@@ -31,7 +31,7 @@ class TestDatasetResources(BaseTest):
 
     def test_open_dataset_unauthd_get(self, unauthd_client, open_catalog_record):
         """
-        Test dataset API response with open dataset as unauthenticated user
+        Test dataset API response with open dataset as unauthenticated user.
 
         :param unauthd_client:
         :param open_catalog_record:

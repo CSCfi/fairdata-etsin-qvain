@@ -157,7 +157,6 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
             [type] -- Metax response.
 
         """
-
         req_url = format_url(self._METAX_GET_DIRECTORY_FILES_FOR_PROJECT_URL, project_identifier)
         resp, status, success = make_request(requests.get,
                                              req_url,

@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Utilities for tests"""
+"""Utilities for tests."""
 
 import json
 import os
@@ -17,7 +17,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 def get_test_catalog_record(access_type, embargo_passed=None):
     """
-    Get test catalog record from file
+    Get test catalog record from file.
 
     :param access_type:
     :return:

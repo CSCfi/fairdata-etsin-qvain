@@ -150,7 +150,7 @@ def validate_config(app):
 
 
 def _setup_app_logging(app):
-    """Setup app logging
+    """Set app logging.
 
     Load the logging configurations for the flask app.
 
