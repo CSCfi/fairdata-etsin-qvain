@@ -56,16 +56,16 @@ const actionLoading = () => ({
   type: 'loading',
 })
 
-const actionCreatePackage = (Packages, path) => ({
+const actionCreatePackage = (Packages, path, identifier) => ({
   ...actionDefaults,
   buttonLabel: 'dataset.dl.packages.create',
-  func: () => Packages.openPackageModal(path),
+  func: () => Packages.openPackageModal(path, identifier),
   icon: faCog,
   spin: false,
   type: 'create',
 })
 
-const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
+const getDownloadAction = (datasetIdentifier, item, Packages, Files, directoryIdentifier) => {
   const isFile = item && item.type === 'file'
   let path = '/'
   if (item) {
@@ -87,7 +87,7 @@ const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
     } else if (Packages.loadingDataset) {
       action = actionLoading()
     } else {
-      action = actionCreatePackage(Packages, path)
+      action = actionCreatePackage(Packages, path, directoryIdentifier)
     }
 
     const isTooLarge = Packages.packageIsTooLarge(Files, item)

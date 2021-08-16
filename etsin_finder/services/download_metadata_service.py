@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Functionalities for download data from Download API"""
+"""Functionalities for download data from Download API."""
 
 from flask import Response, stream_with_context, current_app
 import requests
@@ -17,10 +17,10 @@ from etsin_finder.utils.utils import FlaskService, format_url
 
 
 class DatasetMetadataService(FlaskService):
-    """Dataset Metadata Service"""
+    """Dataset Metadata Service."""
 
     def __init__(self, app):
-        """Initialize with necessary configs for metax
+        """Initialize with necessary configs for metax.
 
         Arguments:
             app (object): The Flask app
@@ -38,7 +38,7 @@ class DatasetMetadataService(FlaskService):
 
     @staticmethod
     def _get_error_response(status_code):
-        """Create an error response for service
+        """Create an error response for service.
 
         Arguments:
             status_code (int): The status code to return
@@ -59,7 +59,7 @@ class DatasetMetadataService(FlaskService):
         return 'attachment; filename="metadata.json"'
 
     def download_metadata(self, cr_id, metadata_format):
-        """Stream metadata download of a dataset to frontend
+        """Stream metadata download of a dataset to frontend.
 
         Arguments:
             cr_id (str): Identifier of dataset
@@ -114,6 +114,6 @@ class DatasetMetadataService(FlaskService):
             return response
 
 def download_metadata(cr_id, metadata_format):
-    """Stream metadata download of a dataset to frontend"""
+    """Stream metadata download of a dataset to frontend."""
     metadata_api = DatasetMetadataService(current_app)
     return metadata_api.download_metadata(cr_id, metadata_format)

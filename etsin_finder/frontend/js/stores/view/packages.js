@@ -30,6 +30,8 @@ class Packages {
 
   @observable datasetIdentifier = null
 
+  @observable dirIdentifier = null
+
   @observable packages = {}
 
   @observable packageModalPath = null
@@ -45,13 +47,15 @@ class Packages {
     this.manualDownloadUrlGetter = null
   }
 
-  @action.bound openPackageModal(path) {
+  @action.bound openPackageModal(path, dirIdentifier) {
     this.packageModalPath = path
+    this.dirIdentifier = dirIdentifier
     this.Notifications.setEmailError(null)
   }
 
   @action.bound closePackageModal() {
     this.packageModalPath = null
+    this.dirIdentifier = null
   }
 
   @action clearPackages() {
@@ -163,10 +167,14 @@ class Packages {
     if (path !== '/') {
       params.scope = [path]
     }
+    if(this.dirIdentifier) {
+      params.identifier = this.dirIdentifier
+    }
+
     return params
   }
 
-  createPackageFromPath = async path => {
+  createPackageFromPath = async (path) => {
     const params = this.getParamsForPath(path)
     return this.createPackage(params)
   }

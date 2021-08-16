@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Used for performing operations related to Metax for Etsin and Qvain"""
+"""Used for performing operations related to Metax for Etsin and Qvain."""
 
 import requests
 import marshmallow
@@ -25,23 +25,23 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
     @property
     def config(self):
-        """Get service configuration"""
+        """Get service configuration."""
         return current_app.config.get('METAX_QVAIN_API', None)
 
     @property
     def proxies(self):
-        """Get service proxy configuration"""
+        """Get service proxy configuration."""
         if self.config.get('HTTPS_PROXY'):
             return dict(https=self.config.get('HTTPS_PROXY'))
         return None
 
     @property
     def auth(self):
-        """Get auth params"""
+        """Get auth params."""
         return (self._USER, self._PASSWORD)
 
     def metax_url(self, url):
-        """Return a Metax API URL"""
+        """Return a Metax API URL."""
         return f'https://{self._HOST}{url}'
 
     @property
@@ -61,12 +61,17 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
         return self.config.get('VERIFY_SSL', True)
 
     @property
-    def _METAX_GET_DIRECTORY_FOR_PROJECT_URL(self):
+    def _METAX_GET_SINGLE_DIRECTORY(self):
+        return self.metax_url('/rest/v2/directories') + \
+            '/{0}'
+
+    @property
+    def _METAX_GET_DIRECTORY_FILES_FOR_PROJECT_URL(self):
         return self.metax_url('/rest/v2/directories') + \
             '/files?project={0}&path=%2F&include_parent'
 
     @property
-    def _METAX_GET_DIRECTORY(self):
+    def _METAX_GET_DIRECTORY_FILES(self):
         return self.metax_url('/rest/v2/directories') + \
             '/{0}/files'
 
@@ -94,9 +99,9 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
         args.update(kwargs)
         return args
 
-    def get_directory(self, dir_identifier, params=None):
+    def get_single_directory(self, dir_identifier, params=None):
         """
-        Get a specific directory with directory's id
+        Get a specific directory with directory's id but not sub directories.
 
         Arguments:
             dir_identifier {string} -- The identifier of the directory.
@@ -106,7 +111,7 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
             [type] -- Metax response.
 
         """
-        req_url = format_url(self._METAX_GET_DIRECTORY, dir_identifier)
+        req_url = format_url(self._METAX_GET_SINGLE_DIRECTORY, dir_identifier)
         resp, status, success = make_request(requests.get,
                                              req_url,
                                              params=params,
@@ -117,9 +122,32 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
             return resp, status
         return resp, status
 
-    def get_directory_for_project(self, project_identifier, params=None):
+    def get_directory_files(self, dir_identifier, params=None):
         """
-        Get directory contents for a specific project
+        Get a specific directory with directory's id.
+
+        Arguments:
+            dir_identifier {string} -- The identifier of the directory.
+            params {dict} -- Dictionary of key-value pairs of query parameters.
+
+        Returns
+            [type] -- Metax response.
+
+        """
+        req_url = format_url(self._METAX_GET_DIRECTORY_FILES, dir_identifier)
+        resp, status, success = make_request(requests.get,
+                                             req_url,
+                                             params=params,
+                                             **self._get_args()
+                                             )
+        if not success:
+            log.warning("Failed to get directory {}".format(dir_identifier))
+            return resp, status
+        return resp, status
+
+    def get_directory_files_for_project(self, project_identifier, params=None):
+        """
+        Get directory contents for a specific project.
 
         Arguments:
             project_identifier {string} -- The identifier of the project.
@@ -129,7 +157,8 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
             [type] -- Metax response.
 
         """
-        req_url = format_url(self._METAX_GET_DIRECTORY_FOR_PROJECT_URL, project_identifier)
+
+        req_url = format_url(self._METAX_GET_DIRECTORY_FILES_FOR_PROJECT_URL, project_identifier)
         resp, status, success = make_request(requests.get,
                                              req_url,
                                              params=params,
@@ -208,8 +237,8 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
 
 _service = MetaxCommonAPIService()
-get_directory = _service.get_directory
-get_directory_for_project = _service.get_directory_for_project
+get_directory_files = _service.get_directory_files
+get_directory_files_for_project = _service.get_directory_files_for_project
 get_dataset_projects = _service.get_dataset_projects
 get_dataset_user_metadata = _service.get_dataset_user_metadata
 update_dataset_user_metadata = _service.update_dataset_user_metadata

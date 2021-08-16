@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""RESTful API endpoints, meant to be used by the frontend"""
+"""RESTful API endpoints, meant to be used by the frontend."""
 
 from flask import session, current_app
 from flask_mail import Message
@@ -40,11 +40,11 @@ TOTAL_ITEM_LIMIT = 1000
 
 
 class Dataset(Resource):
-    """Dataset related REST endpoints for frontend"""
+    """Dataset related REST endpoints for frontend."""
 
     @log_request
     def get(self, cr_id):
-        """Get dataset from metax and strip it from having sensitive information
+        """Get dataset from metax and strip it from having sensitive information.
 
         Args:
             cr_id (str): Catalog record identifier.
@@ -80,11 +80,11 @@ class Dataset(Resource):
         return ret_obj, 200
 
 class V2Dataset(Resource):
-    """Metax API v2 dataset related REST endpoints for frontend"""
+    """Metax API v2 dataset related REST endpoints for frontend."""
 
     @log_request
     def get(self, cr_id):
-        """Get dataset from metax and strip it from having sensitive information
+        """Get dataset from metax and strip it from having sensitive information.
 
         Args:
             cr_id (str): Catalog record identifier.
@@ -115,17 +115,17 @@ class V2Dataset(Resource):
         return ret_obj, 200
 
 class DatasetMetadata(Resource):
-    """DatasetMetadata"""
+    """DatasetMetadata."""
 
     def __init__(self):
-        """Init DatasetMetadata endpoint"""
+        """Init DatasetMetadata endpoint."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True)
         self.parser.add_argument('format', type=str, required=True)
 
     @log_request
     def get(self):
-        """Download dataset metadata
+        """Download dataset metadata.
 
         Returns:
             obj: Returns a Flask.Response object streaming the response from metax
@@ -145,10 +145,10 @@ class DatasetMetadata(Resource):
         return download_metadata(cr_id, metadata_format)
 
 class Files(Resource):
-    """File/directory related REST endpoints for frontend"""
+    """File/directory related REST endpoints for frontend."""
 
     def __init__(self):
-        """Setup file endpoints"""
+        """Init file endpoints."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('dir_id', required=True, type=str)
         self.parser.add_argument('file_fields', required=False, type=str)
@@ -193,10 +193,10 @@ class Files(Resource):
         return '', 404
 
 class Contact(Resource):
-    """Contact form related REST endpoints for frontend"""
+    """Contact form related REST endpoints for frontend."""
 
     def __init__(self):
-        """Setup endpoints"""
+        """Setup endpoints."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('user_email', required=True, help='user_email cannot be empty')
         self.parser.add_argument('user_subject', required=True, help='user_subject cannot be empty')

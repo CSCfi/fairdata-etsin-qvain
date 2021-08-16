@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Functionalities for download data from Download API"""
+"""Functionalities for download data from Download API."""
 
 import requests
 import re
@@ -21,12 +21,12 @@ from .base_service import BaseService, ConfigValidationMixin
 from etsin_finder.schemas.services import DownloadServiceConfigurationSchema
 
 class DownloadAPIService(FlaskService, ConfigValidationMixin):
-    """Download API Service"""
+    """Download API Service."""
 
     schema = DownloadServiceConfigurationSchema(unknown=marshmallow.RAISE)
 
     def __init__(self, app):
-        """Setup Download API Service.
+        """Init Download API Service.
 
         Args:
             app (object): flask.Flask object instance.
@@ -86,7 +86,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
         return 'Server error connecting to the download service'
 
     def get_requests(self, dataset):
-        """Get package generation requests for dataset"""
+        """Get package generation requests for dataset."""
         params = {
             'dataset': dataset
         }
@@ -108,7 +108,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
         return resp, status
 
     def post_request(self, dataset, scope):
-        """Post package generation request for dataset"""
+        """Post package generation request for dataset."""
         params = {
             'dataset': dataset,
         }
@@ -125,7 +125,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
         return resp, status
 
     def subscribe(self, dataset, scope, payload):
-        """Subscribe to package generation notification"""
+        """Subscribe to package generation notification."""
         params = {
             'dataset': dataset,
             'subscriptionData': payload,
@@ -144,7 +144,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
         return resp, status
 
     def authorize(self, dataset, file=None, package=None):
-        """Authorize package or file download"""
+        """Authorize package or file download."""
         params = {
             'dataset': dataset
         }
@@ -165,7 +165,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
         return resp, status
 
     def get_download_url(self, token, dataset, file=None, package=None):
-        """Create download URL from token"""
+        """Create download URL from token."""
         params = {
             'token': token,
             'dataset': dataset
@@ -179,9 +179,9 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
         return f'{self.DOWNLOAD_URL}?{keyValues}'
 
     def encode_notification(self, payload):
-        """Encode payload dictionary as json and encrypt it"""
+        """Encode payload dictionary as json and encrypt it."""
         return dict_encrypt(payload, self.NOTIFICATION_SECRET)
 
     def decode_notification(self, encoded_payload):
-        """Decrypt payload and return it as dict"""
+        """Decrypt payload and return it as dict."""
         return dict_decrypt(encoded_payload, self.NOTIFICATION_SECRET)

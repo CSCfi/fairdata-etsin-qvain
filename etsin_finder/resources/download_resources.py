@@ -5,8 +5,9 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Download API endpoints"""
+"""Download API endpoints."""
 
+from etsin_finder.services.common_service import MetaxCommonAPIService
 import json
 from flask_mail import Message
 from dateutil import parser
@@ -23,8 +24,10 @@ from etsin_finder.services.download_service import DownloadAPIService
 
 from etsin_finder.utils.log_utils import log_request
 
+PACKAGE_SIZE_LIMIT = 10000000
+
 def send_email(language, cr_id, scope, email):
-    """Send notification email"""
+    """Send notification email."""
     if not scope:
         scope = ['/']
     try:
@@ -59,7 +62,7 @@ def send_email(language, cr_id, scope, email):
             return abort(500, message=repr(e))
 
 def package_already_created(error):
-    """Checks if error is due to package being already created"""
+    """Check if error is due to package being already created."""
     if type(error) != dict:
         return False
 
@@ -86,7 +89,7 @@ class Requests(Resource):
     """Class for generating and retrieving download package requests."""
 
     def __init__(self):
-        """Setup endpoint"""
+        """Init endpoint."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True, nullable=False)
 
@@ -120,11 +123,21 @@ class Requests(Resource):
 
         """
         self.parser.add_argument('scope', type=str, action='append', required=False)
+        self.parser.add_argument('identifier', type=str, required=False)
         args = self.parser.parse_args(strict=True)
         cr_id = args.get('cr_id')
         check_download_permission(cr_id)
 
         scope = args.get('scope')
+        identifier = args.get('identifier')
+        common_service = MetaxCommonAPIService()
+        resp, status = common_service.get_single_directory(identifier, {})
+
+        if status == 200 and resp is not None:
+            byte_size = resp.get("byte_size", 0)
+            if byte_size > PACKAGE_SIZE_LIMIT:
+                abort(400, message="The package is too big. The biggest allowed size is 5TB.")
+
         download_service = DownloadAPIService(current_app)
         return download_service.post_request(cr_id, scope)
 
@@ -133,7 +146,7 @@ class Authorize(Resource):
     """Class for requesting download authorizations."""
 
     def __init__(self):
-        """Setup endpoint"""
+        """Init endpoint."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True, nullable=False)
         self.parser.add_argument('file', type=str, required=False) # file path
@@ -150,7 +163,7 @@ class Authorize(Resource):
             package (str): Package name
 
         Returns:
-            Object with the dowload URL, or error from download service.
+            Object with the download URL, or error from download service.
 
         """
         args = self.parser.parse_args(strict=True)
@@ -181,7 +194,7 @@ class Subscriptions(Resource):
     """Class for subscribing to package creation emails."""
 
     def __init__(self):
-        """Setup endpoint"""
+        """Init endpoint."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True, nullable=False)
         self.parser.add_argument('scope', type=str, action='append', required=False)
@@ -236,7 +249,7 @@ class Notifications(Resource):
     """Email notification sending."""
 
     def __init__(self):
-        """Setup endpoint"""
+        """Init endpoint."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('subscriptionData', type=str, required=True)
 

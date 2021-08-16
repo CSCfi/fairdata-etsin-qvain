@@ -63,7 +63,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const haveMetadata = hasMetadata(item)
   const { type } = item
 
-  const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
+  const action = getDownloadAction(datasetIdentifier, item, Packages, Files, item.identifier)
   const {
     func: downloadFunc,
     moreFunc,

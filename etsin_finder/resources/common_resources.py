@@ -23,9 +23,9 @@ from etsin_finder.schemas.qvain_dataset_schema_v2 import (
 from etsin_finder.utils.qvain_utils import check_dataset_edit_permission
 
 from etsin_finder.services.common_service import (
-    get_directory_for_project,
+    get_directory_files_for_project,
     get_dataset_projects,
-    get_directory,
+    get_directory_files,
     get_dataset_user_metadata,
     update_dataset_user_metadata,
 )
@@ -33,14 +33,14 @@ from etsin_finder.services.common_service import (
 from etsin_finder.utils.log_utils import log_request
 
 
-TOTAL_ITEM_LIMIT = 1000
+TOTAL_ITEM_LIMIT = 5 * 1024 ** 4
 
 
 class ProjectFiles(Resource):
-    """File/directory related REST endpoints for getting project directory"""
+    """File/directory related REST endpoints for getting project directory."""
 
     def __init__(self):
-        """Setup file endpoints"""
+        """Init file endpoints."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_identifier', type=str, required=False)
 
@@ -74,7 +74,7 @@ class ProjectFiles(Resource):
         user_ida_projects = authentication.get_user_ida_projects() or []
 
         if cr_identifier or pid in user_ida_projects:
-            resp, status = get_directory_for_project(pid, params)
+            resp, status = get_directory_files_for_project(pid, params)
             if status != 200:
                 return resp, status
             project_dir_obj = resp
@@ -97,10 +97,10 @@ class ProjectFiles(Resource):
         return '', 404
 
 class DirectoryFiles(Resource):
-    """File/directory related REST endpoints for getting a directory"""
+    """File/directory related REST endpoints for getting a directory."""
 
     def __init__(self):
-        """Setup file endpoints"""
+        """Init file endpoints."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('not_cr_identifier', type=str, required=False)
         self.parser.add_argument('cr_identifier', type=str, required=False)
@@ -188,7 +188,7 @@ class DirectoryFiles(Resource):
         if file_fields:
             params['file_fields'] = file_fields
 
-        resp, status = get_directory(dir_id, params)
+        resp, status = get_directory_files(dir_id, params)
         if status != 200:
             return resp, status
 
@@ -240,7 +240,7 @@ class DatasetUserMetadata(Resource):
     """Get user metadata for a single dataset."""
 
     def __init__(self):
-        """Setup endpoint"""
+        """Init endpoint."""
         self.validationSchema = UserMetadataValidationSchema()
 
     @log_request

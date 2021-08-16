@@ -142,7 +142,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
         args.update(kwargs)
         return args
 
-    def get_directory_for_project(self, project_identifier, params=None):
+    def get_directory_files_for_project(self, project_identifier, params=None):
         """Get directory contents for a specific project
 
         Args:
@@ -163,7 +163,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             return None
         return resp
 
-    def get_directory(self, dir_identifier, params=None):
+    def get_directory_files(self, dir_identifier, params=None):
         """Get a specific directory with directory's id
 
         Args:

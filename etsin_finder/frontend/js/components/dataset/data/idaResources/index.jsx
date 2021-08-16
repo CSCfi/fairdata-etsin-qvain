@@ -61,7 +61,7 @@ function IdaResources(props) {
   const downloadAllText = 'dataset.dl.downloadAll'
 
   // Download full dataset package
-  const action = getDownloadAction(props.dataset.identifier, null, Packages, Files)
+  const action = getDownloadAction(props.dataset.identifier, null, Packages, Files, infoProps?.identifier)
   const downloadFunc = action.func
   buttonProps.icon = action.icon
   buttonProps.spin = action.spin
