@@ -15,6 +15,7 @@ import pytz
 from dateutil import parser
 from urllib import parse
 
+
 def get_log_config(log_file_path, log_lvl):
     """Function to get the logging configuration from utils.py
 
@@ -26,41 +27,39 @@ def get_log_config(log_file_path, log_lvl):
         dict: Dict containgin the logging configuration.
 
     """
-    if (log_file_path and log_lvl):
+    if log_file_path and log_lvl:
         CONFIG = {
-            'version': 1,
-            'formatters': {
-                'standard': {
-                    'format': '--------------\n[%(asctime)s] [%(process)d] %(levelname)s in %(filename)s:%(lineno)d: %(message)s',
-                    'datefmt': '%Y-%m-%d %H:%M:%S %z',
+            "version": 1,
+            "formatters": {
+                "standard": {
+                    "format": "--------------\n[%(asctime)s] [%(process)d] %(levelname)s in %(filename)s:%(lineno)d: %(message)s",
+                    "datefmt": "%Y-%m-%d %H:%M:%S %z",
                 }
             },
-            'handlers': {
-                'file': {
-                    'class': 'logging.handlers.RotatingFileHandler',
-                    'formatter': 'standard',
-                    'filename': log_file_path,
-                    'maxBytes': 10000000,
-                    'mode': 'a',
-                    'backupCount': 30
+            "handlers": {
+                "file": {
+                    "class": "logging.handlers.RotatingFileHandler",
+                    "formatter": "standard",
+                    "filename": log_file_path,
+                    "maxBytes": 10000000,
+                    "mode": "a",
+                    "backupCount": 30,
                 },
-                'console': {
-                    'class': 'logging.StreamHandler',
-                    'formatter': 'standard',
-                    'stream': 'ext://sys.stdout'
-                }
+                "console": {
+                    "class": "logging.StreamHandler",
+                    "formatter": "standard",
+                    "stream": "ext://sys.stdout",
+                },
             },
-            'root': {
-                'level': log_lvl,
-                'handlers': ['file', 'console']
-            }
+            "root": {"level": log_lvl, "handlers": ["file", "console"]},
         }
         return CONFIG
     return False
 
+
 def executing_travis():
     """Returns True whenever code is being executed by travis"""
-    return True if os.getenv('TRAVIS', False) else False
+    return True if os.getenv("TRAVIS", False) else False
 
 
 def write_json_to_file(json_data, filename):
@@ -121,11 +120,16 @@ def remove_keys_recursively(obj, fields_to_remove):
     """
     if isinstance(obj, dict):
         obj = {
-            key: remove_keys_recursively(value, fields_to_remove) for key, value in obj.items()
+            key: remove_keys_recursively(value, fields_to_remove)
+            for key, value in obj.items()
             if key not in fields_to_remove
         }
     elif isinstance(obj, list):
-        obj = [remove_keys_recursively(item, fields_to_remove) for item in obj if item not in fields_to_remove]
+        obj = [
+            remove_keys_recursively(item, fields_to_remove)
+            for item in obj
+            if item not in fields_to_remove
+        ]
 
     return obj
 
@@ -152,7 +156,7 @@ def _parse_timestamp_string_to_tz_aware_datetime(timestamp_str):
     try:
         dt = parser.parse(timestamp_str)
         if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
-            dt = pytz.timezone('Europe/Helsinki').localize(dt)
+            dt = pytz.timezone("Europe/Helsinki").localize(dt)
         return dt
     except Exception:
         raise ValueError("Unable to parse timestamp: {0}".format(timestamp_str))
@@ -169,7 +173,8 @@ def tz_now_is_later_than_timestamp_str(timestamp_str):
 
     """
     datetime_obj = _parse_timestamp_string_to_tz_aware_datetime(timestamp_str)
-    return datetime.now(tz=pytz.timezone('Europe/Helsinki')) >= datetime_obj
+    return datetime.now(tz=pytz.timezone("Europe/Helsinki")) >= datetime_obj
+
 
 def datetime_to_header(datetime_str):
     """Modifie ISO 8601 datetime format to HTTP datetime (RFC2616).
@@ -184,13 +189,14 @@ def datetime_to_header(datetime_str):
 
     """
     try:
-        assert isinstance(datetime_str, str), 'datetime_str must be of type string.'
+        assert isinstance(datetime_str, str), "datetime_str must be of type string."
         datetime_obj_local = parser.parse(datetime_str)
         datetime_obj_GMT = datetime_obj_local.astimezone(pytz.utc)
-        HTTP_datetime = datetime_obj_GMT.strftime('%a, %d %b %Y %H:%M:%S GMT')
+        HTTP_datetime = datetime_obj_GMT.strftime("%a, %d %b %Y %H:%M:%S GMT")
         return HTTP_datetime
     except Exception:
         return False
+
 
 def sort_array_of_obj_by_key(obj_array, obj_key, obj_nested_key=False):
     """Sort array of objects
@@ -208,25 +214,13 @@ def sort_array_of_obj_by_key(obj_array, obj_key, obj_nested_key=False):
     """
     try:
         if obj_array and obj_key:
-            obj_array.sort(key=lambda x: x.get(obj_key, {}).get(obj_nested_key) if obj_nested_key else x.get(obj_key))
+            obj_array.sort(
+                key=lambda x: x.get(obj_key, {}).get(obj_nested_key)
+                if obj_nested_key
+                else x.get(obj_key)
+            )
     except Exception:
         pass
-
-
-def slice_array_on_limit(array, limit):
-    """If array contains more items than the limit, return an array containing items up until the limit
-
-    Args:
-        array (list): List to be sliced.
-        limit (int): The limit.
-
-    Returns:
-        list: New sliced list.
-
-    """
-    if array and len(array) > limit:
-        return array[0:limit]
-    return array
 
 
 def format_url(url, *args):
@@ -242,8 +236,9 @@ def format_url(url, *args):
         (str): Formatted URL.
 
     """
-    quoted_args = [parse.quote(str(arg), safe='') for arg in args]
+    quoted_args = [parse.quote(str(arg), safe="") for arg in args]
     return url.format(*quoted_args)
+
 
 def ensure_app(app):
     """Use app context if no app parameter is supplied"""
@@ -251,7 +246,8 @@ def ensure_app(app):
         return app
     if has_app_context():
         return current_app
-    raise ValueError('Missing app parameter and no app context available')
+    raise ValueError("Missing app parameter and no app context available")
+
 
 class FlaskService:
     """Use as base class for external dependency services"""
