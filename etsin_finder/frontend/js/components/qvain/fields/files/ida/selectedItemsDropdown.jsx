@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { faPen, faEye } from '@fortawesome/free-solid-svg-icons'
+import { observer } from 'mobx-react'
 
 import { Dropdown, DropdownItem } from '../../../../general/dropdown'
 import { hasMetadata, hasPASMetadata } from '../../../../../stores/view/common.files.items'
@@ -155,4 +156,4 @@ EditDropdown.propTypes = {
   parentArgs: PropTypes.object.isRequired,
 }
 
-export default EditDropdown
+export default observer(EditDropdown)
