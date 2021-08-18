@@ -97,6 +97,12 @@ const qvainEnglish = {
       identifier: 'E.g. http://orcid.org',
     },
   },
+  unsupported: {
+    info: `The dataset contains some fields that are not
+    currently supported in Qvain and may be lost when the dataset is saved.`,
+    showDetails: 'Show unsupported fields',
+    hideDetails: 'Hide unsupported fields',
+  },
   actors,
   datasets,
   description,

@@ -100,6 +100,12 @@ const qvainFinnish = {
       identifier: 'Esim. http://orcid.org',
     },
   },
+  unsupported: {
+    info: `Aineisto sisältää kenttiä joita Qvain ei tue tällä hetkellä.
+    Aineiston tallentaminen voi aiheuttaa kenttien datan menetyksen.`,
+    showDetails: 'Näytä tukemattomat kentät',
+    hideDetails: 'Piilota tukemattomat kentät',
+  },
   actors,
   datasets,
   description,
