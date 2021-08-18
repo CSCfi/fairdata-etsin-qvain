@@ -193,9 +193,11 @@ def create_app(testing=None):
         app.config.update({'SAML_PATH_QVAIN': '/home/etsin-user/qvain'})
     app.mail = Mail(app)
     app.cr_cache = CatalogRecordCache(app)
+    app.cr_permission_cache = CatalogRecordCache(app, ttl=60, prefix='cr_permission_')
     app.rems_cache = RemsCache(app)
     app.url_map.converters['id'] = IdentifierConverter
 
     add_restful_resources(app)
     add_views(app)
+
     return app

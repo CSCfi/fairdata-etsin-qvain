@@ -3,12 +3,14 @@
 import re
 from copy import deepcopy
 from datetime import date
+from etsin_finder import auth
 
 from etsin_finder.utils.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 from etsin_finder.services import cr_service
+from etsin_finder.utils.flags import flag_enabled
 
 from etsin_finder.log import log
-from etsin_finder.auth import authentication
+from etsin_finder.auth import authentication, authorization
 from etsin_finder.schemas.qvain_dataset_schema import data_catalog_matcher
 
 
@@ -348,22 +350,31 @@ def check_dataset_edit_permission(cr_id):
     if error:
         return error
 
+    user_denied_response = ({
+        "PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."
+    }, 403)
+
     cr = cr_service.get_catalog_record(cr_id, False)
     if cr is None:
         log.warning(f'Dataset "{cr_id}" not found. Editing not allowed.')
-        return {
-            "PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."
-        }, 403
+        return user_denied_response
 
     csc_username = authentication.get_user_csc_name()
+
+    user_is_allowed = False
     creator = cr.get("metadata_provider_user")
-    if csc_username != creator:
+    if csc_username == creator:
+        user_is_allowed = True
+
+    if flag_enabled('PERMISSIONS.SHARE_PROJECT'):
+        if authorization.user_has_dataset_project(cr_id):
+            user_is_allowed = True
+
+    if not user_is_allowed:
         log.warning(
-            f'User: "{csc_username}" is not the creator of the dataset. Editing not allowed.'
+            f'User: "{csc_username}" is not an editor of the dataset. Editing not allowed.'
         )
-        return {
-            "PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."
-        }, 403
+        return user_denied_response
 
     catalog_identifier = (
         cr.get("data_catalog", {}).get("catalog_json", {}).get("identifier")
