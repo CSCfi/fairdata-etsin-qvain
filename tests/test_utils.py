@@ -198,8 +198,7 @@ class TestUtils(UtilsTestSuite):
         ):
             ensure_app(None)
 
-    def test_FlaskService_non_testing(self, app):
+    def test_FlaskService_non_testing(self, mock_app):
         """Set is_testing to False."""
-        app.testing = False
-        flask_service = FlaskService(app)
+        flask_service = FlaskService(mock_app)
         assert flask_service.is_testing is False
