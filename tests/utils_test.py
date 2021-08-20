@@ -10,7 +10,6 @@ from .basetest import BaseTest
 from .frontend_test_data import original_complete_dataset
 
 JSON_TEST_FILE_READ_PATH = "testfiles/json_test_file_read.json"
-JSON_TEST_FILE_WRITE_PATH = "testfiles/json_test_file_write.json"
 
 
 class MockResponse:
@@ -71,17 +70,6 @@ class UtilsTestSuite(BaseTest):
     def json_test_file_read_path(self):
         """Return json_test_file path."""
         return JSON_TEST_FILE_READ_PATH
-
-    @pytest.fixture
-    def json_test_file_write_path(self):
-        """Return json_test_file path."""
-        return JSON_TEST_FILE_WRITE_PATH
-
-    @pytest.fixture
-    def clear_json_test_file(self):
-        """Clear json test file."""
-        with open(JSON_TEST_FILE_WRITE_PATH, "w+") as file:
-            file.close()
 
     @pytest.fixture
     def empty_json_response(self):

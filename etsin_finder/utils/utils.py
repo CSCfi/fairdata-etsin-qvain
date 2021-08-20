@@ -62,18 +62,6 @@ def executing_travis():
     return True if os.getenv("TRAVIS", False) else False
 
 
-def write_json_to_file(json_data, filename):
-    """Write JSON data to file.
-
-    Args:
-        json_data (json): JSON data.
-        filename (str): Filename to write the data to.
-
-    """
-    with open(filename, "w") as output_file:
-        json.dump(json_data, output_file)
-
-
 def json_or_empty(response):
     """Return response JSON as python dict or empty dict.
 

@@ -19,7 +19,6 @@ from etsin_finder.utils.utils import (
     remove_keys_recursively,
     sort_array_of_obj_by_key,
     tz_now_is_later_than_timestamp_str,
-    write_json_to_file,
 )
 
 from .frontend_test_data import original_complete_dataset
@@ -50,13 +49,6 @@ class TestUtils(UtilsTestSuite):
     def test_executing_travis_is_travis(self, env_TRAVIS):
         """Return False when env is not Travis."""
         assert executing_travis() is True
-
-    def test_write_to_json(self, json_test_file_write_path, clear_json_test_file):
-        """Write json into file."""
-        write_json_to_file(original_complete_dataset, json_test_file_write_path)
-        with open(json_test_file_write_path, "r") as file:
-            json_from_file = json.loads(file.read())
-            assert json_from_file == original_complete_dataset
 
     def test_json_or_empty_invalid_response(self):
         """Return empty dict when response is invalid."""
