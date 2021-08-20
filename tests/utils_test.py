@@ -33,6 +33,15 @@ class InvalidMockResponse:
         return "text"
 
 
+class MockApp:
+    """Mock app for testin FlaskService class."""
+
+    @property
+    def testing(self):
+        """Return False."""
+        return False
+
+
 class UtilsTestSuite(BaseTest):
     """Test suite for Utils."""
 
@@ -105,3 +114,8 @@ class UtilsTestSuite(BaseTest):
         """Return ISO 8601 timestamp."""
         time = datetime.fromtimestamp(0)
         return time.isoformat()
+
+    @pytest.fixture
+    def mock_app(self):
+        """Return mock app for FalskService."""
+        return MockApp()
