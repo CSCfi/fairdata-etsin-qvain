@@ -44,6 +44,9 @@ class BaseCache(FlaskService):
             str: The value.
 
         """
+        if self.is_testing:
+            return value
+
         try:
             self.cache.set(key, value, expire=ttl)
         except Exception as e:
@@ -73,42 +76,81 @@ class BaseCache(FlaskService):
             log.debug(e)
         return None
 
+    def do_delete(self, key):
+        """Try to delete entry from cache
+
+        Args:
+            key (str): The key to fetch.
+
+        Returns:
+            str: The value for the key, or default if the key wasn’t found.
+
+        """
+        if self.is_testing:
+            return None
+
+        try:
+            return self.cache.delete(key, None)
+        except Exception as e:
+            from etsin_finder.log import log
+            log.debug("Delete from cache failed")
+            log.debug(e)
+        return None
+
 
 class CatalogRecordCache(BaseCache):
-    """Catalog record related cache"""
+    """Cache that stores data related to a specific catalog record"""
 
-    CACHE_ITEM_TTL = 1200
+    def __init__(self, app, ttl=1200, prefix='cr_'):
+        """Setup cache
 
-    def update_cache(self, cr_id, cr_json):
+        Args:
+            app: App instance
+            ttl: How long to store value, in seconds
+            prefix: Cache key prefix, should be unique for each cache
+        """
+        super().__init__(app)
+        self.CACHE_ITEM_TTL = ttl
+        self.CACHE_KEY_PREFIX = prefix
+
+    def update_cache(self, cr_id, data):
         """Update catalog record cache with catalog record json
 
         Args:
             cr_id (str): Catalog record identifier.
-            cr_json (json): Catalog record JSON.
+            data: Data to save.
 
         Returns:
-            json: Updated catalog record JSON
+            data: Updated data
 
         """
-        if cr_id and cr_json:
-            return self.do_update(self._get_cache_key(cr_id), cr_json, self.CACHE_ITEM_TTL)
-        return cr_json
+        if cr_id and data:
+            return self.do_update(self._get_cache_key(cr_id), data, self.CACHE_ITEM_TTL)
+        return data
 
     def get_from_cache(self, cr_id):
-        """Get catalog record json from catalog record cache.
+        """Get data from catalog record cache.
+
+        Args:
+            cr_id (str): Catalog record identifier.
+
+        """
+        return self.do_get(self._get_cache_key(cr_id))
+
+    def delete_from_cache(self, cr_id):
+        """Delete data from catalog record cache.
 
         Args:
             cr_id (str): Catalog record identifier.
 
         Returns:
-            json: Catalog record JSON
+            data: Saved data
 
         """
-        return self.do_get(self._get_cache_key(cr_id))
+        return self.do_delete(self._get_cache_key(cr_id))
 
-    @staticmethod
-    def _get_cache_key(cr_id):
-        return cr_id
+    def _get_cache_key(self, cr_id):
+        return f'{self.CACHE_KEY_PREFIX}{cr_id}'
 
 
 class RemsCache(BaseCache):
