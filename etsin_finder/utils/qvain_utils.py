@@ -38,82 +38,6 @@ def clean_empty_keyvalues_from_dict(d):
         if v or v is False
     }
 
-
-def alter_role_data(actor_list=[], role="all"):
-    """Convert the role data fom the frontend to comply with the Metax schema.
-
-    Arguments:
-        actor_list (list): A list of all the actors from the frontend.
-        role (string): The role, can be 'creator', 'publisher', 'curator', 'rights_holder' or 'contributor'.
-
-    Returns:
-        list: List of the actors with the role in question complyant to Metax schema.
-
-    """
-    actors = []
-    if role == "all":
-        actor_list_with_role = actor_list
-    else:
-        actor_list_with_role = [x for x in actor_list if role in x.get("roles", [])]
-
-    for actor_object in actor_list_with_role:
-        actor_object = deepcopy(actor_object)
-        organizations = actor_object.get("organizations", [])
-
-        for org in organizations:
-            org["@type"] = "Organization"
-
-        # Convert organization hierarchy array [top_level, ...] to a
-        # nested structure {..., is_part_of: { top_level } }
-        organization = organizations[0]
-        for org in organizations[1:]:
-            org["is_part_of"] = organization
-            organization = org
-
-        if actor_object["type"] == "person":
-            person = actor_object.get("person", {})
-            actor = {"@type": "Person", "name": person.get("name")}
-            if "email" in person:
-                actor["email"] = person.get("email")
-            if "identifier" in person:
-                actor["identifier"] = person.get("identifier")
-
-            actor["member_of"] = organization
-        else:
-            actor = organization
-        actors.append(actor)
-    return actors
-
-
-def _organization_array_to_object(organizations):
-    converted = organizations[0]
-    converted["@type"] = "Organization"
-    for sub_organization in organizations[1:]:
-        sub_organization["is_part_of"] = converted
-        sub_organization["@type"] = "Organization"
-        converted = sub_organization
-    return converted
-
-
-def _funding_agency_to_object(funding_agency):
-    converted = _organization_array_to_object(funding_agency["organization"])
-    if funding_agency.get("contributorTypes", []):
-        converted["contributor_type"] = [
-            _contributor_type_to_metax_concept(contributor_type)
-            for contributor_type in funding_agency.get("contributorTypes")
-        ]
-    return converted
-
-
-def _contributor_type_to_metax_concept(contributor_type):
-    return {
-        "identifier": contributor_type.get("identifier"),
-        "pref_label": contributor_type.get("label"),
-        "definition": contributor_type.get("definition"),
-        "in_scheme": contributor_type.get("inScheme"),
-    }
-
-
 def alter_projects_to_metax(projects):
     """Convert project objects from frontend to comply with the Metax schema.
 
@@ -132,14 +56,8 @@ def alter_projects_to_metax(projects):
             "identifier": details.get("identifier"),
             "has_funder_identifier": details.get("fundingIdentifier"),
             "funder_type": details.get("funderType"),
-            "source_organization": [
-                _organization_array_to_object(organization)
-                for organization in project.get("organizations", [])
-            ],
-            "has_funding_agency": [
-                _funding_agency_to_object(funding_agency)
-                for funding_agency in project.get("fundingAgencies", [])
-            ],
+            "source_organization": project.get("organizations", []),
+            "has_funding_agency": project.get("fundingAgencies", []),
         }
         output.append(metax_project)
     return output
@@ -247,14 +165,6 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
         dict: Returns an Dictionary that has been validated and should conform to Metax schema and is ready to be sent to Metax.
 
     """
-    publisher_array = alter_role_data(data["actors"], "publisher")
-
-    provenances = data.get("provenance", [])
-    for provenance in provenances:
-        was_associated_with = provenance.get("was_associated_with")
-        altered_association = alter_role_data(was_associated_with)
-        provenance["was_associated_with"] = altered_association
-
     dataset_data = {
         "metadata_provider_org": metadata_provider_org,
         "metadata_provider_user": metadata_provider_user,
@@ -263,11 +173,11 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
         "research_dataset": {
             "title": data.get("title"),
             "description": data.get("description"),
-            "creator": alter_role_data(data.get("actors"), "creator"),
-            "publisher": publisher_array[0] if publisher_array else {},
-            "curator": alter_role_data(data.get("actors"), "curator"),
-            "rights_holder": alter_role_data(data.get("actors"), "rights_holder"),
-            "contributor": alter_role_data(data.get("actors"), "contributor"),
+            "creator": data.get("creator"),
+            "publisher": data.get("publisher"),
+            "curator": data.get("curator"),
+            "rights_holder": data.get("rights_holder"),
+            "contributor": data.get("contributor"),
             "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
             "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
             "field_of_science": _to_identifier_objects(data.get("fieldOfScience")),
@@ -282,7 +192,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             else "",
             "is_output_of": alter_projects_to_metax(data.get("projects")),
             "relation": data.get("relation"),
-            "provenance": provenances,
+            "provenance": data.get("provenance"),
             "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
             "spatial": data.get("spatial"),
             "temporal": data.get("temporal"),
@@ -429,24 +339,17 @@ def edited_data_to_metax(data, original):
         Metax ready data.
 
     """
-    publisher_array = alter_role_data(data["actors"], "publisher")
     research_dataset = original["research_dataset"]
-
-    provenances = data.get("provenance", [])
-    for provenance in provenances:
-        was_associated_with = provenance.get("was_associated_with")
-        altered_association = alter_role_data(was_associated_with)
-        provenance["was_associated_with"] = altered_association
 
     research_dataset.update(
         {
             "title": data.get("title"),
             "description": data.get("description"),
-            "creator": alter_role_data(data.get("actors"), "creator"),
-            "publisher": publisher_array[0] if publisher_array else {},
-            "curator": alter_role_data(data.get("actors"), "curator"),
-            "rights_holder": alter_role_data(data.get("actors"), "rights_holder"),
-            "contributor": alter_role_data(data.get("actors"), "contributor"),
+            "creator": data.get("creator"),
+            "publisher": data.get("publisher"),
+            "curator": data.get("curator"),
+            "rights_holder": data.get("rights_holder"),
+            "contributor": data.get("contributor"),
             "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
             "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
             "field_of_science": _to_identifier_objects(data.get("fieldOfScience")),
@@ -463,7 +366,7 @@ def edited_data_to_metax(data, original):
             "spatial": data.get("spatial"),
             "is_output_of": alter_projects_to_metax(data.get("projects")),
             "relation": data.get("relation"),
-            "provenance": provenances,
+            "provenance": data.get("provenance"),
             "temporal": data.get("temporal"),
         }
     )

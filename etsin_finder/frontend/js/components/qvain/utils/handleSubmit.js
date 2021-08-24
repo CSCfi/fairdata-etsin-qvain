@@ -5,7 +5,8 @@ const handleSubmitToBackend = values => {
 
   const theme = values.SubjectHeadings.toBackend()
 
-  const actors = values.Actors.toBackend()
+  // eslint-disable-next-line camelcase
+  const { creator, publisher, curator, rights_holder, contributor } = values.Actors.toBackend()
 
   const spatial = values.Spatials.toBackend()
 
@@ -39,7 +40,11 @@ const handleSubmitToBackend = values => {
     identifiers: values.OtherIdentifiers.storage,
     keywords,
     theme,
-    actors,
+    creator,
+    publisher,
+    rights_holder,
+    curator,
+    contributor,
     infrastructure: values.Infrastructures.storage,
     restrictionGrounds,
     embargoDate,
