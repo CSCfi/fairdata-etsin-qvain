@@ -94,7 +94,7 @@ def _render_index_template(saml_errors=[], slo_success=False, template_string=No
         app_description = translate(lang, 'etsin.description')
 
     sso_host = current_app.config.get('SSO', {}).get('HOST')
-    matomo_url = current_app.config.get('MATOMO_URL', {})
+    matomo_url = current_app.config.get('MATOMO_URL')
     context = {
         'lang': lang,
         'app_title': app_title,
