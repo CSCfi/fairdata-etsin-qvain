@@ -1,4 +1,3 @@
-const dotenv = require('dotenv').config()
 const path = require('path')
 const { DefinePlugin } = require('webpack')
 const DotenvPlugin = require('dotenv-webpack')
@@ -45,8 +44,6 @@ const config = env => ({
       filename: 'index.html',
       template: 'static/index.template.ejs',
       favicon: 'static/images/favicon.png',
-      MATOMO_URL: dotenv.parsed ? dotenv.parsed.MATOMO_URL : undefined,
-      MATOMO_SITE_ID: dotenv.parsed ? dotenv.parsed.MATOMO_SITE_ID : undefined,
     }),
     new DotenvPlugin(),
     new DefinePlugin({
