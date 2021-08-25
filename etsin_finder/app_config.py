@@ -57,6 +57,7 @@ def _get_test_app_config():
         'SESSION_COOKIE_SAMESITE': 'Lax',
         'SESSION_COOKIE_SECURE': True,
         'SESSION_COOKIE_HTTPONLY': True,
+        'MATOMO_URL': 'fake_matomo_url.js',
         'PERMANENT_SESSION_LIFETIME': 1800,
         'SESSION_REFRESH_EACH_REQUEST': True,
         'MAIL_SUPPRESS_SEND': True,
