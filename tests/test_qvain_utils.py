@@ -1,6 +1,8 @@
 """Test suite for qvain_utils.py."""
 
 import pytest
+from etsin_finder.services import cr_service
+from etsin_finder.utils.flags import set_flags
 from etsin_finder.utils.qvain_utils import (
     access_rights_to_metax,
     alter_projects_to_metax,
@@ -124,62 +126,6 @@ class TestQvainUtils(BaseTest):
         return_value = check_authentication()
         assert return_value is None
 
-    def test_dataset_edit_permissions_no_catalog_record(
-        self, app, nonexisting_catalog_record, user_details, expect_log
-    ):
-        """Test that function returns correct error when there's no catalog record available."""
-        with app.app_context():
-            error, status = check_dataset_edit_permission("testcatalog")
-            expect_log(
-                warnings=['Dataset "testcatalog" not found. Editing not allowed.']
-            )
-            assert (
-                error.get("PermissionError", "") == "Dataset does not exist or user is not allowed to edit the dataset."
-            )
-            assert status == 403
-
-    def test_dataset_edit_permissions_user_is_not_creator(
-        self, app, expect_log, user_details, open_catalog_record
-    ):
-        """Test that function returns error when the user is not creator of the dataset."""
-        with app.app_context():
-            error, status = check_dataset_edit_permission("testcatalog")
-
-            expect_log(
-                warnings=[
-                    'User: "teppo_testaaja" is not the creator of the dataset. Editing not allowed.'
-                ]
-            )
-            assert (
-                error.get("PermissionError", "") == "Dataset does not exist or user is not allowed to edit the dataset."
-            )
-            assert status == 403
-
-    def test_dataset_edit_permissions_catalog_format_not_supported(
-        self, app, expect_log, user_details, nonstandard_catalog_record
-    ):
-        """Test that function returns error when the user is not creator of the dataset."""
-        with app.app_context():
-            error, status = check_dataset_edit_permission("testcatalog")
-
-            expect_log(
-                warnings=[
-                    "Catalog nonstandard is not supported by Qvain. Editing not allowed"
-                ]
-            )
-            assert (
-                error.get("PermissionError", "") == "Editing datasets from catalog nonstandard is not supported by Qvain."
-            )
-            assert status == 403
-
-    def test_dataset_edit_permissions_ok(
-        self, app, user_123_details, open_catalog_record
-    ):
-        """Test that function returns None when user has permission to edit."""
-        with app.app_context():
-            result = check_dataset_edit_permission("testcatalog")
-            assert result is None
-
     def test_remove_deleted_datasets_from_results(self):
         """Test that function removes items that are marked as removed."""
         result = remove_deleted_datasets_from_results(datasets_partly_deleted)
@@ -229,3 +175,95 @@ class TestQvainUtils(BaseTest):
         with app.app_context():
             result = check_if_data_in_user_IDA_project(files_and_directories)
             assert result is True
+
+class TestCheckDatasetEditPermission(BaseTest):
+    """Tests for check_dataset_edit_permission."""
+
+    deniedOrNotExistResult = ({"PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."}, 403)
+
+    nonStandardCatalogResult = ({
+        "PermissionError": f"Editing datasets from catalog nonstandard is not supported by Qvain."
+    }, 403)
+
+    @pytest.fixture
+    def flagged_app(self, app):
+        """App with PERMISSIONS.SHARE_PROJECT flag enabled"""
+        set_flags({'PERMISSIONS.SHARE_PROJECT': True}, app)
+        return app
+
+    @pytest.fixture
+    def cr_permissions_empty(self, monkeypatch):
+        """Dataset without projects"""
+        monkeypatch.setattr(cr_service, "get_catalog_record_permissions", lambda *x: {'projects': []})
+
+    @pytest.fixture
+    def cr_permissions_project_x(self, monkeypatch):
+        """Dataset in project_x"""
+        monkeypatch.setattr(cr_service, "get_catalog_record_permissions", lambda *x: {'projects': ['project_x']})
+
+    @pytest.fixture
+    def cr_permissions_project_y(self, monkeypatch):
+        """Dataset in project_y"""
+        monkeypatch.setattr(cr_service, "get_catalog_record_permissions", lambda *x: {'projects': ['project_y']})
+
+    def test_dataset_edit_permissions_no_catalog_record(
+        self, flagged_app, nonexisting_catalog_record, user_details, expect_log
+    ):
+        """Test that function returns correct error when there's no catalog record available."""
+        with flagged_app.app_context():
+            result = check_dataset_edit_permission("testcatalog")
+            expect_log(
+                warnings=['Dataset "testcatalog" not found. Editing not allowed.']
+            )
+            assert result == self.deniedOrNotExistResult
+
+    def test_dataset_edit_permissions_user_is_not_creator(
+        self, flagged_app, expect_log, user_details, IDA_project_info_missing, open_catalog_record, cr_permissions_project_x
+    ):
+        """Test that function returns error when the user is not creator of the dataset."""
+        with flagged_app.app_context():
+            result = check_dataset_edit_permission("testcatalog")
+            expect_log(
+                warnings=[
+                    'User: "teppo_testaaja" is not an editor of the dataset. Editing not allowed.'
+                ]
+            )
+            assert result == self.deniedOrNotExistResult
+
+    def test_dataset_edit_permissions_catalog_format_not_supported(
+        self, flagged_app, expect_log, user_details, IDA_project_info_missing, nonstandard_catalog_record
+    ):
+        """Test that function returns error when the user is not creator of the dataset."""
+        with flagged_app.app_context():
+            result = check_dataset_edit_permission("testcatalog")
+            expect_log(
+                warnings=[
+                    "Catalog nonstandard is not supported by Qvain. Editing not allowed"
+                ]
+            )
+            assert result == self.nonStandardCatalogResult
+
+    def test_dataset_edit_permissions_ok_creator(
+        self, flagged_app, user_123_details, IDA_project_info_missing, open_catalog_record
+    ):
+        """Test that function returns None when user is owner of record."""
+        with flagged_app.app_context():
+            result = check_dataset_edit_permission("testcatalog")
+            assert result is None
+
+    def test_dataset_edit_permissions_ok_project(
+        self, flagged_app, expect_log, user_details, IDA_projects_ok, open_catalog_record, cr_permissions_project_x
+    ):
+        """Test that function returns None when user is member of dataset project."""
+        with flagged_app.app_context():
+            result = check_dataset_edit_permission("testcatalog")
+            assert result is None
+
+    def test_dataset_edit_permissions_project_disabled(
+        self, flagged_app, expect_log, user_details, IDA_projects_ok, open_catalog_record, cr_permissions_project_x
+    ):
+        """Test that editing by other project members is denied when PERMISSIONS.SHARE_PROJECT is disabled."""
+        set_flags({'PERMISSIONS.SHARE_PROJECT': False}, flagged_app)
+        with flagged_app.app_context():
+            result = check_dataset_edit_permission("testcatalog")
+            assert result == self.deniedOrNotExistResult
