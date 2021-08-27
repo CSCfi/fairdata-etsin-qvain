@@ -91,6 +91,10 @@ def _get_test_app_config():
         "FLAGS": {
             "DOWNLOAD_API_V2": True,
         },
+        "MEMCACHED": {
+            "HOST": "testing",
+            "PORT": 1234,
+        }
     }
 
 

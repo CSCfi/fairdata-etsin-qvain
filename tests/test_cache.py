@@ -9,33 +9,21 @@ class TestCache(BaseTest):
     """Tests for cache.py."""
 
     @pytest.fixture
-    def memcached_config(self, app):
-        """Configure memcached for testing."""
-        with app.app_context():
-            config = {
-                "MEMCACHED": {
-                    "HOST": "testing",
-                    "PORT": 1234,
-                }
-            }
-            app.config.update(config)
-
-    @pytest.fixture
-    def base_cache(self, app, memcached_config):
+    def base_cache(self, app):
         """Init base cache."""
         base_cache = BaseCache(app)
         base_cache.is_testing = False
         return base_cache
 
     @pytest.fixture
-    def catalog_record_cache(self, app, memcached_config):
+    def catalog_record_cache(self, app):
         """Init catalog record cache."""
         cr_cache = CatalogRecordCache(app)
         cr_cache.is_testing = False
         return cr_cache
 
     @pytest.fixture
-    def rems_cache(self, app, memcached_config):
+    def rems_cache(self, app):
         """Init rems cache."""
         rems_cache = RemsCache(app)
         rems_cache.is_testing = False
