@@ -121,9 +121,6 @@ def get_memcached_config(app=None):
         dict: Dict with memcache configs or None.
 
     """
-    if executing_travis():
-        return None
-
     app = ensure_app(app)
     memcached_conf = app.config.get("MEMCACHED", False)
     if not memcached_conf or not isinstance(memcached_conf, dict):
