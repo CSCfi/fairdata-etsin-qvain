@@ -58,6 +58,7 @@ def _get_test_app_config():
         "SESSION_COOKIE_SAMESITE": "Lax",
         "SESSION_COOKIE_SECURE": True,
         "SESSION_COOKIE_HTTPONLY": True,
+        "MATOMO_URL": "fake_matomo_url.js",
         "PERMANENT_SESSION_LIFETIME": 1800,
         "SESSION_REFRESH_EACH_REQUEST": True,
         "MAIL_SUPPRESS_SEND": True,
@@ -167,9 +168,7 @@ def get_fairdata_rems_api_config(app=None):
         return None
 
     if (
-        "API_KEY" not in rems_conf
-        or "HOST" not in rems_conf
-        or "ENABLED" not in rems_conf
+        "API_KEY" not in rems_conf or "HOST" not in rems_conf or "ENABLED" not in rems_conf
     ):
         return None
 
@@ -189,10 +188,7 @@ def get_metax_api_config(app=None):
         return None
 
     if (
-        "HOST" not in metax_api_conf
-        or "USER" not in metax_api_conf
-        or "PASSWORD" not in metax_api_conf
-        or "VERIFY_SSL" not in metax_api_conf
+        "HOST" not in metax_api_conf or "USER" not in metax_api_conf or "PASSWORD" not in metax_api_conf or "VERIFY_SSL" not in metax_api_conf
     ):
         return None
 
