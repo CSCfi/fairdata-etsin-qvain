@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Download API endpoints"""
+"""Download API endpoints."""
 
 import json
 from flask_mail import Message
@@ -18,13 +18,15 @@ from etsin_finder.log import log
 from etsin_finder.auth import authentication
 from etsin_finder.auth import authorization
 from etsin_finder.utils.localization import get_language, translate, default_language
-from etsin_finder.services import cr_service
+from etsin_finder.services import cr_service, common_service
 from etsin_finder.services.download_service import DownloadAPIService
 
 from etsin_finder.utils.log_utils import log_request
 
+TOTAL_PACKAGE_SIZE = 5 * 1024 ** 4 
+
 def send_email(language, cr_id, scope, email):
-    """Send notification email"""
+    """Send notification email."""
     if not scope:
         scope = ['/']
     try:
@@ -59,7 +61,7 @@ def send_email(language, cr_id, scope, email):
             return abort(500, message=repr(e))
 
 def package_already_created(error):
-    """Checks if error is due to package being already created"""
+    """Check if error is due to package being already created."""
     if type(error) != dict:
         return False
 
@@ -86,7 +88,7 @@ class Requests(Resource):
     """Class for generating and retrieving download package requests."""
 
     def __init__(self):
-        """Setup endpoint"""
+        """Set up endpoint."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True, nullable=False)
 
@@ -125,6 +127,23 @@ class Requests(Resource):
         check_download_permission(cr_id)
 
         scope = args.get('scope')
+
+        projects, status = common_service.get_dataset_projects(cr_id)
+
+        if status != 200:
+            abort(status, message=f"Error occured when Etsin tried to fetch project details from Metax.")
+        if projects is None or len(projects) == 0:
+            abort(500, message=f"Etsin could not find project for dataset using catalog record identifier {cr_id}")
+
+        project = projects[0]
+        directory_details, status = common_service.get_directory_for_project_using_scope(cr_id, project, scope[0])
+        byte_size = directory_details.get("results", {}).get("byte_size", None)
+
+        if status != 200:
+            abort(status, message=f"Error occured when Etsin tried to fetch package details from Metax.")
+        if byte_size > TOTAL_PACKAGE_SIZE:
+            abort(500, message="Package is too large.")
+
         download_service = DownloadAPIService(current_app)
         return download_service.post_request(cr_id, scope)
 
@@ -133,7 +152,7 @@ class Authorize(Resource):
     """Class for requesting download authorizations."""
 
     def __init__(self):
-        """Setup endpoint"""
+        """Set up endpoint."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True, nullable=False)
         self.parser.add_argument('file', type=str, required=False) # file path
@@ -181,7 +200,7 @@ class Subscriptions(Resource):
     """Class for subscribing to package creation emails."""
 
     def __init__(self):
-        """Setup endpoint"""
+        """Set up endpoint."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('cr_id', type=str, required=True, nullable=False)
         self.parser.add_argument('scope', type=str, action='append', required=False)
@@ -236,7 +255,7 @@ class Notifications(Resource):
     """Email notification sending."""
 
     def __init__(self):
-        """Setup endpoint"""
+        """Set up endpoint."""
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('subscriptionData', type=str, required=True)
 
