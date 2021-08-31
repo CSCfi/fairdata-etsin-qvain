@@ -147,7 +147,7 @@ class Requests(Resource):
         byte_size = directory_details.get("results", {}).get("byte_size", None)
 
         if byte_size > TOTAL_PACKAGE_SIZE:
-            abort(500, message="Package is too large.")
+            abort(400, message="Package is too large.")
 
         download_service = DownloadAPIService(current_app)
         return download_service.post_request(cr_id, scope)
