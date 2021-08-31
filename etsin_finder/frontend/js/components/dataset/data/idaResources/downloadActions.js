@@ -100,4 +100,20 @@ const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
   return action
 }
 
+export const getAllowDownload = (DatasetQuery, restrictions) => {
+  if (
+    DatasetQuery.results?.data_catalog?.catalog_json?.identifier ===
+    'urn:nbn:fi:att:data-catalog-pas'
+  ) {
+    return false
+  }
+  if (DatasetQuery.isDraft) {
+    return false
+  }
+  return restrictions.allowDataIdaDownloadButton
+}
+
+export const getDownloadAllText = DatasetQuery =>
+  DatasetQuery.isDraft ? 'dataset.dl.downloadDisabledForDraft' : 'dataset.dl.downloadAll'
+
 export default getDownloadAction
