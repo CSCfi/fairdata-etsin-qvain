@@ -131,7 +131,7 @@ class Requests(Resource):
         if status != 200:
             abort(status, message=f"Error occured when Etsin tried to fetch project details from Metax.")
         if projects is None or len(projects) == 0:
-            abort(500, message=f"Etsin could not find project for dataset using catalog record identifier {cr_id}")
+            abort(404, message=f"Etsin could not find project for dataset using catalog record identifier {cr_id}")
 
         project = projects[0]
         scope = args.get('scope')
