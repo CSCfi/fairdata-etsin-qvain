@@ -135,18 +135,15 @@ class Requests(Resource):
 
         project = projects[0]
         scope = args.get('scope')
-        safe_scope = "/"
-        if scope is not None and len(scope) > 0:
-            safe_scope = scope[0]
 
-        directory_details, status = common_service.get_directory_for_project_using_scope(cr_id, project, safe_scope)
+        directory_details, status = common_service.get_directory_for_project_using_scope(cr_id, project, (scope or ["/"])[0])
 
         if status != 200:
             abort(status, message=f"Error occured when Etsin tried to fetch package details from Metax.")
 
         byte_size = directory_details.get("results", {}).get("byte_size", None)
 
-        if byte_size > TOTAL_PACKAGE_SIZE:
+        if byte_size > TOTAL_PACKAGE_SIZE_LIMIT:
             abort(400, message="Package is too large.")
 
         download_service = DownloadAPIService(current_app)
