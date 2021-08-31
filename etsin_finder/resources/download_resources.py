@@ -23,7 +23,7 @@ from etsin_finder.services.download_service import DownloadAPIService
 
 from etsin_finder.utils.log_utils import log_request
 
-TOTAL_PACKAGE_SIZE = 5 * 1024 ** 4
+TOTAL_PACKAGE_SIZE_LIMIT = 5 * 1024 ** 4
 
 def send_email(language, cr_id, scope, email):
     """Send notification email."""
