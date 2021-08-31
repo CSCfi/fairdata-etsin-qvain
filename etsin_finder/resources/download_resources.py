@@ -126,8 +126,6 @@ class Requests(Resource):
         cr_id = args.get('cr_id')
         check_download_permission(cr_id)
 
-        scope = args.get('scope')
-
         projects, status = common_service.get_dataset_projects(cr_id)
 
         if status != 200:
@@ -136,11 +134,18 @@ class Requests(Resource):
             abort(500, message=f"Etsin could not find project for dataset using catalog record identifier {cr_id}")
 
         project = projects[0]
-        directory_details, status = common_service.get_directory_for_project_using_scope(cr_id, project, scope[0])
-        byte_size = directory_details.get("results", {}).get("byte_size", None)
+        scope = args.get('scope')
+        safe_scope = "/"
+        if scope is not None and len(scope) > 0:
+            safe_scope = scope[0]
+
+        directory_details, status = common_service.get_directory_for_project_using_scope(cr_id, project, safe_scope)
 
         if status != 200:
             abort(status, message=f"Error occured when Etsin tried to fetch package details from Metax.")
+
+        byte_size = directory_details.get("results", {}).get("byte_size", None)
+
         if byte_size > TOTAL_PACKAGE_SIZE:
             abort(500, message="Package is too large.")
 
