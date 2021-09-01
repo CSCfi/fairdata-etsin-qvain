@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Used for performing operations related to Metax for Etsin and Qvain"""
+"""Used for performing operations related to Metax for Etsin and Qvain."""
 
 import requests
 import marshmallow
@@ -25,7 +25,7 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
     @property
     def config(self):
-        """Get service configuration"""
+        """Get service configuration."""
         return current_app.config.get('METAX_QVAIN_API', None)
 
     @property
@@ -99,29 +99,28 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
         args.update(kwargs)
         return args
 
-    def get_directory_for_project_using_scope(self, cr_id, pid, scope, params=None):
+    def get_directory_for_project_using_path(self, cr_id, pid, path, params=None):
         """
         Get a specific directory with directory's id.
 
         Arguments:
             cr_id {string} -- The identifier of the catalog record.
             pid {string} -- The identifier of the project.
-            scope {string} -- The scope of the project directory tree.
+            path {string} -- The path of the project directory tree.
             params {dict} -- Dictionary of key-value pairs of query parameters.
 
         Returns
             [type] -- Metax response.
 
         """
-        req_url = format_url(self._METAX_GET_DIRECTORY_FOR_PROJECT_URL, cr_id, pid, scope)
-        log.info(req_url)
+        req_url = format_url(self._METAX_GET_DIRECTORY_FOR_PROJECT_URL, cr_id, pid, path)
         resp, status, success = make_request(requests.get,
                                              req_url,
                                              params=params,
                                              **self._get_args()
                                              )
         if not success:
-            log.warning("Failed to get directory {}".format(scope))
+            log.warning("Failed to get directory {}".format(path))
             log.warning("Using request {}".format(req_url))
             return resp, status
         return resp, status
@@ -240,7 +239,7 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
 
 _service = MetaxCommonAPIService()
-get_directory_for_project_using_scope = _service.get_directory_for_project_using_scope
+get_directory_for_project_using_path = _service.get_directory_for_project_using_path
 get_directories = _service.get_directories
 get_directories_for_project = _service.get_directories_for_project
 get_dataset_projects = _service.get_dataset_projects

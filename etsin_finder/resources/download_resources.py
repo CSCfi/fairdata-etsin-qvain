@@ -134,9 +134,9 @@ class Requests(Resource):
             abort(404, message=f"Etsin could not find project for dataset using catalog record identifier {cr_id}")
 
         project = projects[0]
-        scope = args.get('scope')
+        path = args.get('scope')
 
-        directory_details, status = common_service.get_directory_for_project_using_scope(cr_id, project, (scope or ["/"])[0])
+        directory_details, status = common_service.get_directory_for_project_using_path(cr_id, project, (path or ["/"])[0])
 
         if status != 200:
             abort(status, message=f"Error occured when Etsin tried to fetch package details from Metax.")
@@ -147,7 +147,7 @@ class Requests(Resource):
             abort(400, message="Package is too large.")
 
         download_service = DownloadAPIService(current_app)
-        return download_service.post_request(cr_id, scope)
+        return download_service.post_request(cr_id, path)
 
 
 class Authorize(Resource):
