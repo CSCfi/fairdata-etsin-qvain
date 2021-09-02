@@ -326,8 +326,6 @@ describe('Projects', () => {
                   {
                     definition: 'contr_definition',
                     identifier: 'contr_identifier',
-                    inScheme: 'contr_in_scheme',
-                    label: 'contr_pref_label',
                   },
                 ],
                 name: { en: 'fund_subdep_name' },
