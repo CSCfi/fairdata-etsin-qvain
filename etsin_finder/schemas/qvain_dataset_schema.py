@@ -5,6 +5,11 @@ from marshmallow_oneofschema import OneOfSchema
 
 data_catalog_matcher = "^urn:nbn:fi:att:data-catalog-(ida|att|pas|dft)$"
 
+class ReferenceObjectValidationSchema(Schema):
+    """Validation schema for generic reference data objects."""
+
+    identifier = fields.URL(required=True)
+
 class OrganizationValidationSchema(Schema):
     """Validation schema for organizations."""
 
@@ -115,15 +120,12 @@ class DatasetValidationSchema(Schema):
     )
     issuedDate = fields.Str()
     identifiers = fields.List(fields.Str())
-    fieldOfScience = fields.List(fields.Str())
-    datasetLanguage = fields.List(fields.Str())
+    field_of_science = fields.List(fields.Nested(ReferenceObjectValidationSchema))
+    language = fields.List(fields.Nested(ReferenceObjectValidationSchema))
     keywords = fields.List(
         fields.Str(), required=True, validate=lambda list: len(list) > 0
     )
-    theme = fields.List(
-        fields.URL(validate=Length(min=1)),
-        required=False,
-    )
+    theme = fields.List(fields.Nested(ReferenceObjectValidationSchema))
 
     creator = fields.List(
         fields.Nested(ActorValidationSchema), required=True, validate=Length(min=1)

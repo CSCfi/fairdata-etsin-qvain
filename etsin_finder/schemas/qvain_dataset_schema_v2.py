@@ -7,6 +7,7 @@ from etsin_finder.schemas.qvain_dataset_schema import (
     DatasetValidationSchema as DatasetValidationSchemaV1,
     ProjectValidationSchema,
     LicenseValidationSchema,
+    ReferenceObjectValidationSchema,
     data_catalog_matcher as data_catalog_matcher_v1,
 )
 
@@ -43,9 +44,9 @@ class DraftDatasetValidationSchema(Schema):
     issuedDate = fields.Str()
     identifiers = fields.List(fields.Str())
 
-    fieldOfScience = fields.List(fields.Str())
+    field_of_science = fields.List(fields.Nested(ReferenceObjectValidationSchema))
 
-    datasetLanguage = fields.List(fields.Str())
+    language = fields.List(fields.Nested(ReferenceObjectValidationSchema))
 
     keywords = fields.List(fields.Str())
 
@@ -63,7 +64,7 @@ class DraftDatasetValidationSchema(Schema):
 
     temporal = fields.List(fields.Dict())
 
-    theme = fields.List(fields.Str())
+    theme = fields.List(fields.Nested(ReferenceObjectValidationSchema))
 
     embargoDate = fields.Str()
     restrictionGrounds = fields.Str()

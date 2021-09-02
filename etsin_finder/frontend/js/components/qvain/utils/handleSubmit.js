@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const handleSubmitToBackend = values => {
   const title = values.Title.toBackend()
 
@@ -5,7 +6,6 @@ const handleSubmitToBackend = values => {
 
   const theme = values.SubjectHeadings.toBackend()
 
-  // eslint-disable-next-line camelcase
   const { creator, publisher, curator, rights_holder, contributor } = values.Actors.toBackend()
 
   const spatial = values.Spatials.toBackend()
@@ -16,9 +16,9 @@ const handleSubmitToBackend = values => {
 
   const provenance = values.Provenances.toBackend()
 
-  const fieldOfScience = values.FieldOfSciences.toBackend()
+  const field_of_science = values.FieldOfSciences.toBackend()
 
-  const datasetLanguage = values.DatasetLanguages.toBackend()
+  const language = values.DatasetLanguages.toBackend()
 
   const issuedDate = values.IssuedDate.toBackend()
 
@@ -45,7 +45,7 @@ const handleSubmitToBackend = values => {
     rights_holder,
     curator,
     contributor,
-    infrastructure: values.Infrastructures.storage,
+    infrastructure: values.Infrastructures.toBackend(),
     restrictionGrounds,
     embargoDate,
     license,
@@ -59,8 +59,8 @@ const handleSubmitToBackend = values => {
     temporal,
     relation,
     provenance,
-    fieldOfScience,
-    datasetLanguage,
+    field_of_science,
+    language,
     issuedDate,
     accessType,
   }
