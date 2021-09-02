@@ -162,11 +162,10 @@ class Projects {
       const organizations = (projectObject.organizations || []).map(fullOrganization =>
         organizationToMetax(fullOrganization)
       )
-
-      const fundingAgencies = (projectObject.fundingAgencies).map(agency => {
+      const fundingAgencies = projectObject.fundingAgencies.map(agency => {
         const contributorTypes = agency.contributorTypes.map(contributorType => {
-          const { identifier, label, definition, inScheme } = contributorType
-          return { identifier, label, definition, inScheme }
+          const { identifier, definition } = contributorType
+          return { identifier, definition }
         })
         const { organization } = agency
         return { ...organizationToMetax(organization), contributor_type: contributorTypes }

@@ -74,11 +74,9 @@ class ContributorTypeValidationSchema(Schema):
     """Validation schema for project funding agency contributor type."""
 
     identifier = fields.Str(required=True)
-    label = fields.Dict(required=False, validate=lambda x: x.get("en") or x.get("fi"))
     definition = fields.Dict(
         required=False, validate=lambda x: x.get("en") or x.get("fi")
     )
-    inScheme = fields.Str(required=False)
 
 
 class ProjectValidationSchema(Schema):
