@@ -101,10 +101,7 @@ const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
 }
 
 export const getAllowDownload = (DatasetQuery, restrictions) => {
-  if (
-    DatasetQuery.results?.data_catalog?.catalog_json?.identifier ===
-    'urn:nbn:fi:att:data-catalog-pas'
-  ) {
+  if (DatasetQuery.isPas) {
     return false
   }
   if (DatasetQuery.isDraft) {

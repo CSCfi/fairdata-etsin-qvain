@@ -405,9 +405,7 @@ describe('getAllowDownload', () => {
       getAllowDownload(
         {
           isDraft: false,
-          results: {
-            data_catalog: { catalog_json: { identifier: 'urn:nbn:fi:att:data-catalog-ida' } },
-          },
+          isPas: false,
         },
         { allowDataIdaDownloadButton: true }
       )
@@ -419,9 +417,7 @@ describe('getAllowDownload', () => {
       getAllowDownload(
         {
           isDraft: false,
-          results: {
-            data_catalog: { catalog_json: { identifier: 'urn:nbn:fi:att:data-catalog-ida' } },
-          },
+          isPas: false,
         },
         { allowDataIdaDownloadButton: false }
       )
@@ -433,9 +429,7 @@ describe('getAllowDownload', () => {
       getAllowDownload(
         {
           isDraft: false,
-          results: {
-            data_catalog: { catalog_json: { identifier: 'urn:nbn:fi:att:data-catalog-pas' } },
-          },
+          isPas: true,
         },
         { allowDataIdaDownloadButton: true }
       )
