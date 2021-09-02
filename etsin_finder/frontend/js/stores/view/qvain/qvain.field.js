@@ -60,6 +60,7 @@ class Field {
 
   @action save = () => {
     this.setChanged(false)
+    this.Parent.setChanged(true)
     this.editMode = false
 
     Object.keys(toJS(this.inEdit)).forEach(key => {
