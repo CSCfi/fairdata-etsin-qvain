@@ -28,6 +28,7 @@ export const temporalDateSchema = yup.object().shape({
 class Temporals extends Field {
   constructor(Parent) {
     super(Parent, TemporalTemplate, TemporalModel, 'temporals')
+    this.Parent = Parent
     makeObservable(this)
   }
 
@@ -46,10 +47,12 @@ class Temporals extends Field {
 
   @action addTemporal = () => {
     this.storage = [...this.storage, this.inEdit]
+    this.Parent.setChanged(true)
   }
 
   @action removeTemporal = uiid => {
     this.storage = this.storage.filter(temp => temp.uiid !== uiid)
+    this.Parent.setChanged(true)
   }
 
   toBackend = () => {
