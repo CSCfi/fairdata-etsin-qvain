@@ -10,7 +10,7 @@ import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
 import stores from '../../../../js/stores'
 import dataset from '../../../__testdata__/dataset.att'
-import ManualDownloadModal from '../../../../js/components/dataset/data/idaResourcesV2/manualDownloadModal'
+import ManualDownloadModal from '../../../../js/components/dataset/data/idaResources/manualDownloadModal'
 import Modal from '../../../../js/components/general/modal'
 import { useStores } from '../../../../js/stores/stores'
 

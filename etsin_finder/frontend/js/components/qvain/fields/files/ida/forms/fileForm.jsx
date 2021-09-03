@@ -9,12 +9,6 @@ import { Label, Input, Textarea, CustomSelect } from '../../../../general/modal/
 import { Container } from '../../../../general/card'
 import { ValidationErrors } from '../../../../general/errors/validationError'
 import { getLocalizedOptions } from '../../../../utils/getReferenceData'
-import {
-  fileSchema,
-  fileTitleSchema,
-  fileDescriptionSchema,
-  fileUseCategorySchema,
-} from '../../../../utils/formValidation'
 import { withStores } from '../../../../utils/stores'
 
 class FileForm extends Component {
@@ -99,6 +93,8 @@ class FileForm extends Component {
       useCategory,
       fileType,
     }
+    const { fileSchema } = this.props.Stores.Qvain.Files
+
     fileSchema
       .validate(validationObj, { strict: true })
       .then(() => {
@@ -135,18 +131,21 @@ class FileForm extends Component {
   }
 
   handleTitleBlur = () => {
+    const { fileTitleSchema } = this.props.Stores.Qvain.Files
     this.handleOnBlur(fileTitleSchema, this.state.title, value =>
       this.setState({ titleError: value })
     )
   }
 
   handleDescriptionBlur = () => {
+    const { fileDescriptionSchema } = this.props.Stores.Qvain.Files
     this.handleOnBlur(fileDescriptionSchema, this.state.description, value =>
       this.setState({ descriptionError: value })
     )
   }
 
   handleUseCategoryBlur = () => {
+    const { fileUseCategorySchema } = this.props.Stores.Qvain.Files
     this.handleOnBlur(
       fileUseCategorySchema,
       this.state.useCategory ? this.state.useCategory : undefined,
@@ -160,8 +159,14 @@ class FileForm extends Component {
       return null
     }
 
-    const { readonly } = this.props.Stores.Qvain
+    const {
+      readonly: ro,
+      Files: { userHasRightsToEditProject },
+    } = this.props.Stores.Qvain
     const { fileError, titleError, descriptionError, useCategoryError } = this.state
+
+    const readonly = ro || !userHasRightsToEditProject
+
     return (
       <FileContainer className={this.props.className}>
         <Translate
@@ -171,7 +176,6 @@ class FileForm extends Component {
           content="qvain.files.selected.form.identifier.label"
         />
         <p style={{ marginLeft: '10px' }}>{inEdit.identifier}</p>
-
         <Label htmlFor="file-form-title">
           <Translate content="qvain.files.selected.form.title.label" /> *
         </Label>
@@ -252,7 +256,6 @@ class FileForm extends Component {
             />
           </div>
         </Row>
-
         {fileError !== undefined && <ValidationErrors errors={fileError} />}
         <Buttons>
           <Translate

@@ -1,7 +1,8 @@
 import { action, makeObservable } from 'mobx'
-
+import * as yup from 'yup'
 import SingleValueField from './qvain.singleValueField'
-import { embargoExpDateSchema } from '../../../components/qvain/utils/formValidation'
+
+export const embargoExpDateSchema = yup.string().date().nullable()
 
 class EmbargoExpDate extends SingleValueField {
   constructor(Parent) {
@@ -12,6 +13,8 @@ class EmbargoExpDate extends SingleValueField {
   @action fromBackend = dataset => {
     this.value = dataset.access_rights.available || undefined
   }
+
+  schema = embargoExpDateSchema
 }
 
 export default EmbargoExpDate

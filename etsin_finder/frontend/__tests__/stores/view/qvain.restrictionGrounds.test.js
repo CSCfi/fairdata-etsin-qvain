@@ -1,7 +1,8 @@
 import 'chai/register-expect'
 import { makeObservable, override } from 'mobx'
-import { restrictionGroundsSchema } from '../../../js/components/qvain/utils/formValidation'
-import RestrictionGrounds from '../../../js/stores/view/qvain/qvain.restrictionGrounds'
+import RestrictionGrounds, {
+  restrictionGroundsSchema,
+} from '../../../js/stores/view/qvain/qvain.restrictionGrounds'
 
 jest.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
   class mockSingleValueField {
@@ -99,15 +100,14 @@ describe('RestrictionGrounds', () => {
     })
 
     describe('when calling validate (with Schema)', () => {
-      let returnValue
       const Schema = {
         validate: jest.fn(() => Promise.resolve()),
       }
 
-      beforeEach(() => {
+      beforeEach(async () => {
         restrictionGrounds.value = { identifier: 'identifier' }
         restrictionGrounds.Schema = Schema
-        returnValue = restrictionGrounds.validate()
+        await restrictionGrounds.validate()
       })
 
       test('should call Schema.validate', () => {

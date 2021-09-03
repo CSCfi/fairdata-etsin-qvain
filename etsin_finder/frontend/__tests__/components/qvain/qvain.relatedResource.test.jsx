@@ -1,26 +1,29 @@
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
+import Select from 'react-select/async'
+import Translate from 'react-translate-component'
 
 import { useStores } from '../../../js/stores/stores'
 import RelatedResource from '../../../js/components/qvain/fields/history/relatedResource'
 import RelatedResourceContent from '../../../js/components/qvain/fields/history/relatedResource/relatedResourceContent'
 import { Field } from '../../../js/components/qvain/general/section'
 import FieldList from '../../../js/components/qvain/general/section/fieldList'
-import FieldListAdd from '../../../js/components/qvain/general/section/fieldListAdd'
 import Form from '../../../js/components/qvain/fields/history/relatedResource/form'
 import handleSave from '../../../js/components/qvain/fields/history/relatedResource/handleSave'
 import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
 import ModalInput from '../../../js/components/qvain/general/modal/modalInput'
 import { RelationType } from '../../../js/stores/view/qvain/qvain.relatedResources'
 import modalSeparator from '../../../js/components/qvain/general/modal/modalSeparator'
-import {
-  relatedResourceNameSchema,
-  relatedResourceTypeSchema,
-} from '../../../js/components/qvain/utils/formValidation'
+
+import ResourcesSearchField from '../../../js/components/qvain/fields/history/relatedResource/resourceSearchField'
+import FieldListAdd from '../../../js/components/qvain/general/section/fieldListAdd'
+import FlaggedComponent from '../../../js/components/general/flaggedComponent'
 
 jest.mock('../../../js/stores/stores')
 
-jest.mock('../../../js/components/qvain/utils/formValidation')
+jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas')
+
+const flushPromises = () => new Promise(setImmediate)
 
 describe('given mockStores', () => {
   const mockStores = {
@@ -30,11 +33,32 @@ describe('given mockStores', () => {
         save: jest.fn(),
         clearInEdit: jest.fn(),
         setValidationError: jest.fn(),
+        typeSchema: {
+          validate: jest.fn(),
+        },
+        nameSchema: {
+          validate: jest.fn(),
+        },
+        prefillInEdit: jest.fn(),
+        create: jest.fn(),
+        translationsRoot: 'translationsRoot',
       },
+    },
+    CrossRef: {
+      search: jest.fn(),
+      setTerm: jest.fn(),
+      term: 'term',
+      defaultOptions: [],
+      translationPath: jest.fn(path => path),
     },
     Locale: {
       lang: 'en',
       getMatchingLang: jest.fn(() => 'en'),
+    },
+    Env: {
+      Flags: {
+        flagEnabled: jest.fn(() => true),
+      },
     },
   }
 
@@ -42,11 +66,16 @@ describe('given mockStores', () => {
     useStores.mockReturnValue(mockStores)
   })
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   describe('RelatedResource', () => {
     const harness = new Harness(RelatedResource)
 
-    beforeEach(() => {
+    beforeEach(async () => {
       harness.shallow()
+      await flushPromises()
       harness.diveInto('RelatedResource')
     })
 
@@ -81,26 +110,95 @@ describe('given mockStores', () => {
       test('should have children with expected properties', () => {
         const children = [
           { label: 'FieldList', findArgs: FieldList },
+          { label: 'FlaggedComponent', findArgs: FlaggedComponent },
           { label: 'FieldListAdd', findArgs: FieldListAdd },
         ]
-        const translationsRoot = 'qvain.history.relatedResource'
 
         const props = {
           FieldList: {
             Field: mockStores.Qvain.RelatedResources,
             lang: 'en',
-            translationsRoot,
+            translationsRoot: mockStores.Qvain.RelatedResources.translationsRoot,
           },
           FieldListAdd: {
-            translationsRoot,
+            translationsRoot: mockStores.Qvain.RelatedResources.translationsRoot,
             Store: mockStores.Qvain,
             Field: mockStores.Qvain.RelatedResources,
-            Form: Form,
-            handleSave: handleSave,
+            Form,
+            handleSave,
+            hideButton: true,
           },
         }
 
         harness.shouldIncludeChildren(children, props)
+      })
+    })
+
+    describe('FlaggedComponent', () => {
+      beforeEach(() => {
+        harness.restoreWrapper('FlaggedComponent')
+      })
+
+      test('should include children', () => {
+        const children = [{ label: 'ResourceSearchField', findArgs: ResourcesSearchField }]
+
+        harness.shouldIncludeChildren(children)
+      })
+    })
+
+    describe('ResourceSearchField', () => {
+      beforeEach(() => {
+        harness.restoreWrapper('ResourceSearchField')
+        harness.dive()
+      })
+
+      test('should include children with properties', () => {
+        const children = [{ label: 'TranslatedSelect', findArgs: Translate }]
+
+        const props = {
+          TranslatedSelect: {
+            component: Select,
+            loadOptions: mockStores.CrossRef.search,
+            onInputChange: mockStores.CrossRef.setTerm,
+            defaultOptions: mockStores.CrossRef.defaultOptions,
+            attributes: { placeholder: 'placeholder' },
+            value: mockStores.CrossRef.term,
+            isClearable: true,
+          },
+        }
+
+        harness.shouldIncludeChildren(children, props)
+      })
+
+      describe("when triggering onChange with selection.value of 'create'", () => {
+        beforeEach(() => {
+          harness.trigger('change', { value: 'create' })
+        })
+
+        test('should call RelatedResource.create', () => {
+          expect(mockStores.Qvain.RelatedResources.create).to.have.beenCalledWith()
+        })
+      })
+
+      describe('when triggering onChange with selection.value of {}', () => {
+        beforeEach(() => {
+          harness.trigger('change', { value: {} })
+        })
+
+        test('should call RelatedResource.prefillInEdit', () => {
+          expect(mockStores.Qvain.RelatedResources.prefillInEdit).to.have.beenCalledWith({})
+        })
+      })
+
+      describe('when triggering onChange without selection', () => {
+        beforeEach(() => {
+          harness.trigger('change')
+        })
+
+        test('should not call RelatedResource.prefillInEdit or RelatedResource.create', () => {
+          expect(mockStores.Qvain.RelatedResources.create).to.not.have.beenCalled()
+          expect(mockStores.Qvain.RelatedResources.prefillInEdit).to.not.have.beenCalled()
+        })
       })
     })
   })
@@ -113,8 +211,9 @@ describe('given mockStores', () => {
 
     const harness = new Harness(Form, props)
 
-    beforeEach(() => {
+    beforeEach(async () => {
       harness.shallow()
+      await flushPromises()
     })
 
     test('should exist', () => {
@@ -171,22 +270,23 @@ describe('given mockStores', () => {
   describe('When calling relatedResources.handleSave with Field and empty options', () => {
     const Field = mockStores.Qvain.RelatedResources
 
-    beforeEach(() => {
+    beforeEach(async () => {
       handleSave(Field, {})
+      await flushPromises()
     })
 
     afterEach(() => {
       jest.clearAllMocks()
     })
 
-    test('should call relatedResourceNameSchema.validate with inEdit.name', () => {
-      expect(relatedResourceNameSchema.validate).to.have.beenCalledWith(Field.inEdit.name, {
+    test('should call tameSchema.validate with inEdit.relationType', () => {
+      expect(Field.typeSchema.validate).to.have.beenCalledWith(Field.inEdit.relationType, {
         strict: true,
       })
     })
 
-    test('should call relatedResourceTypeSchema', () => {
-      expect(relatedResourceTypeSchema.validate).to.have.beenCalledWith(Field.inEdit.relationType, {
+    test('should call nameSchema.validate with inEdit.name', () => {
+      expect(Field.nameSchema.validate).to.have.beenCalledWith(Field.inEdit.name, {
         strict: true,
       })
     })

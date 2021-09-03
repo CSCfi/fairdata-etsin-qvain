@@ -9,7 +9,7 @@ import { DangerButton, TableButton } from '../../../general/buttons'
 import { getPASMeta } from '../../../../../stores/view/common.files.items'
 import { useStores } from '../../../utils/stores'
 
-import urls from '../../../utils/urls'
+import urls from '../../../../../utils/urls'
 
 const ClearMetadataModal = () => {
   const {
@@ -24,7 +24,7 @@ const ClearMetadataModal = () => {
 
   const clearFileCharacteristics = async () => {
     const { identifier } = clearMetadataModalFile
-    const url = urls.v2.fileCharacteristics(identifier)
+    const url = urls.qvain.fileCharacteristics(identifier)
 
     // revert to default file characteristics
     const data = {
@@ -51,7 +51,6 @@ const ClearMetadataModal = () => {
     setClearMetadataModalFile(undefined)
   }
 
-  // Only supported with metaxApiV2
   if (!clearMetadataModalFile) {
     return null
   }

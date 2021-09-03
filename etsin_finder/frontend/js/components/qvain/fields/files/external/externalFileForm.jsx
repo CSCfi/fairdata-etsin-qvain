@@ -6,7 +6,6 @@ import Translate from 'react-translate-component'
 import { Input, Label, CustomSelect } from '../../../general/modal/form'
 import { SaveButton, CancelButton, FileItem } from '../../../general/buttons'
 import ValidationError from '../../../general/errors/validationError'
-import { externalResourceSchema } from '../../../utils/formValidation'
 import { getLocalizedOptions } from '../../../utils/getReferenceData'
 import { EmptyExternalResource } from '../../../../../stores/view/qvain'
 import { useStores } from '../../../utils/stores'
@@ -19,6 +18,7 @@ export const ExternalFileFormBase = () => {
       setIdaPickerOpen,
       saveExternalResource,
       editExternalResource,
+      externalResourceSchema,
     },
     Locale: { lang },
   } = useStores()

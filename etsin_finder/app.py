@@ -16,20 +16,20 @@ from etsin_finder.utils.flags import validate_flags, initialize_supported_flags
 from flask_restful import Api
 from etsin_finder.utils.flags import flag_enabled
 
-def add_download_v2_resources(api):
-    """Set download API v2 endpoints"""
-    from etsin_finder.resources.download_resources_v2 import (
+def add_download_resources(api):
+    """Set download API endpoints"""
+    from etsin_finder.resources.download_resources import (
         Requests,
         Authorize,
         Subscriptions,
         Notifications
     )
-    api.add_resource(Requests, '/api/v2/dl/requests', endpoint="dl_requests")
-    api.add_resource(Authorize, '/api/v2/dl/authorize', endpoint="dl_download")
+    api.add_resource(Requests, '/api/download/requests', endpoint="dl_requests")
+    api.add_resource(Authorize, '/api/download/authorize', endpoint="dl_download")
 
     if flag_enabled('DOWNLOAD_API_V2.EMAIL.BACKEND', api.app):
-        api.add_resource(Subscriptions, '/api/v2/dl/subscriptions', endpoint="dl_subscriptions")
-        api.add_resource(Notifications, '/api/v2/dl/notifications', endpoint="dl_notifications")
+        api.add_resource(Subscriptions, '/api/download/subscriptions', endpoint="dl_subscriptions")
+        api.add_resource(Notifications, '/api/download/notifications', endpoint="dl_notifications")
 
 
 def add_restful_resources(app):
@@ -44,7 +44,6 @@ def add_restful_resources(app):
         REMSApplyForPermission,
         Contact,
         Dataset,
-        V2Dataset,
         DatasetMetadata,
         User,
         Language,
@@ -54,51 +53,48 @@ def add_restful_resources(app):
         SupportedFlags
     )
 
-    from etsin_finder.resources.qvain_rpc_v2 import (
-        QvainDatasetChangeCumulativeState as V2QvainDatasetChangeCumulativeState,
-        QvainDatasetCreateNewVersion as V2QvainDatasetCreateNewVersion,
-        QvainDatasetPublishDataset as V2QvainDatasetPublishDataset,
-        QvainDatasetMergeDraft as V2QvainDatasetMergeDraft,
-        QvainDatasetCreateDraft as V2QvainDatasetCreateDraft
+    from etsin_finder.resources.qvain_rpc import (
+        QvainDatasetChangeCumulativeState,
+        QvainDatasetCreateNewVersion,
+        QvainDatasetPublishDataset,
+        QvainDatasetMergeDraft,
+        QvainDatasetCreateDraft
     )
 
-    from etsin_finder.resources.qvain_resources_v2 import (
-        QvainDataset as V2QvainDataset,
-        QvainDatasets as V2QvainDatasets,
-        QvainDatasetFiles as V2QvainDatasetFiles,
-        FileCharacteristics as V2FileCharacteristics,
+    from etsin_finder.resources.qvain_resources import (
+        QvainDataset,
+        QvainDatasets,
+        QvainDatasetFiles,
+        FileCharacteristics,
     )
 
-    from etsin_finder.resources.common_resources_v2 import (
-        ProjectFiles as V2ProjectFiles,
-        DirectoryFiles as V2DirectoryFiles,
-        DatasetUserMetadata as V2DatasetUserMetadata,
-        DatasetProjects as V2DatasetProjects,
+    from etsin_finder.resources.common_resources import (
+        ProjectFiles,
+        DirectoryFiles,
+        DatasetUserMetadata,
+        DatasetProjects,
     )
 
-    add_download_v2_resources(api)
+    add_download_resources(api)
 
-    # Common Qvain and Etsin endpoints for Metax v2
-    api.add_resource(V2DatasetUserMetadata, '/api/v2/common/datasets/<id:cr_id>/user_metadata', endpoint='v2_dataset_user_metadata')
-    api.add_resource(V2DatasetProjects, '/api/v2/common/datasets/<id:cr_id>/projects', endpoint='v2_dataset_projects')
-    api.add_resource(V2ProjectFiles, '/api/v2/common/projects/<string:pid>/files', endpoint='v2_project_files')
-    api.add_resource(V2DirectoryFiles, '/api/v2/common/directories/<string:dir_id>/files', endpoint='v2_directory_files')
+    # Common Qvain and Etsin endpoints
+    api.add_resource(DatasetUserMetadata, '/api/common/datasets/<id:cr_id>/user_metadata')
+    api.add_resource(DatasetProjects, '/api/common/datasets/<id:cr_id>/projects')
+    api.add_resource(ProjectFiles, '/api/common/projects/<string:pid>/files')
+    api.add_resource(DirectoryFiles, '/api/common/directories/<string:dir_id>/files')
 
-    # Qvain API endpoints for Metax v2
-    api.add_resource(V2FileCharacteristics, '/api/v2/qvain/files/<string:file_id>/file_characteristics', endpoint='v2_file_characteristics')
-    api.add_resource(V2QvainDatasets, '/api/v2/qvain/datasets', endpoint='v2_datasets')
-    api.add_resource(V2QvainDataset, '/api/v2/qvain/datasets/<id:cr_id>', endpoint='v2_dataset_edit')
-    api.add_resource(V2QvainDatasetFiles, '/api/v2/qvain/datasets/<id:cr_id>/files', endpoint='v2_dataset_files')
+    # Qvain API endpoints
+    api.add_resource(FileCharacteristics, '/api/qvain/files/<string:file_id>/file_characteristics')
+    api.add_resource(QvainDatasets, '/api/qvain/datasets')
+    api.add_resource(QvainDataset, '/api/qvain/datasets/<id:cr_id>')
+    api.add_resource(QvainDatasetFiles, '/api/qvain/datasets/<id:cr_id>/files')
 
-    # Qvain API RPC endpoints for Metax v2
-    api.add_resource(V2QvainDatasetChangeCumulativeState, '/api/v2/rpc/datasets/change_cumulative_state', endpoint='v2_change_cumulative_state')
-    api.add_resource(V2QvainDatasetCreateNewVersion, '/api/v2/rpc/datasets/create_new_version', endpoint='v2_create_new_version')
-    api.add_resource(V2QvainDatasetCreateDraft, '/api/v2/rpc/datasets/create_draft', endpoint='v2_create_draft')
-    api.add_resource(V2QvainDatasetPublishDataset, '/api/v2/rpc/datasets/publish_dataset', endpoint='v2_publish_dataset')
-    api.add_resource(V2QvainDatasetMergeDraft, '/api/v2/rpc/datasets/merge_draft', endpoint='v2_merge_draft')
-
-    # Etsin API endpoint for Metax v2 dataset, needed for draft_of
-    api.add_resource(V2Dataset, '/api/v2/dataset/<id:cr_id>', endpoint='v2_etsin_dataset')
+    # Qvain API RPC endpoints
+    api.add_resource(QvainDatasetChangeCumulativeState, '/api/rpc/datasets/change_cumulative_state')
+    api.add_resource(QvainDatasetCreateNewVersion, '/api/rpc/datasets/create_new_version')
+    api.add_resource(QvainDatasetCreateDraft, '/api/rpc/datasets/create_draft')
+    api.add_resource(QvainDatasetPublishDataset, '/api/rpc/datasets/publish_dataset')
+    api.add_resource(QvainDatasetMergeDraft, '/api/rpc/datasets/merge_draft')
 
     # Etsin API endpoints
     api.add_resource(Dataset, '/api/dataset/<id:cr_id>')
@@ -134,21 +130,21 @@ def validate_config(app):
     app.logger.info("Validating configuration")
     with app.app_context():
         from etsin_finder.services import (
-            common_service_v2,
+            common_service,
             qvain_service,
             cr_service,
             download_metadata_service,
-            download_service_v2,
+            download_service,
         )
 
         # Services that use app parameter
         validate_flags(app)
         cr_service.MetaxAPIService(app)
         download_metadata_service.DatasetMetadataService(app)
-        download_service_v2.DownloadAPIService(app).validate_config(False)
+        download_service.DownloadAPIService(app).validate_config(False)
 
         # Services that use app context
-        common_service_v2.MetaxCommonAPIService().validate_config(False)
+        common_service.MetaxCommonAPIService().validate_config(False)
         qvain_service.MetaxQvainAPIService().validate_config(False)
     app.logger.info("Done validating")
 
@@ -197,9 +193,11 @@ def create_app(testing=None):
         app.config.update({'SAML_PATH_QVAIN': '/home/etsin-user/qvain'})
     app.mail = Mail(app)
     app.cr_cache = CatalogRecordCache(app)
+    app.cr_permission_cache = CatalogRecordCache(app, ttl=60, prefix='cr_permission_')
     app.rems_cache = RemsCache(app)
     app.url_map.converters['id'] = IdentifierConverter
 
     add_restful_resources(app)
     add_views(app)
+
     return app

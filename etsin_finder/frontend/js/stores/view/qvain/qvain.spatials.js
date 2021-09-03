@@ -1,5 +1,9 @@
 import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
+import * as yup from 'yup'
+import '../../../utils/extendYup'
+
+import { touch } from './track'
 import Field from './qvain.field'
 
 const numberToString = number => {
@@ -8,6 +12,22 @@ const numberToString = number => {
   }
   return number
 }
+
+// SPATIAL VALIDATION
+export const spatialNameSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.temporalAndSpatial.spatial.nameRequired')
+  .required('qvain.validationMessages.temporalAndSpatial.spatial.nameRequired')
+
+export const spatialAltitudeSchema = yup
+  .string()
+  .number()
+  .typeError('qvain.validationMessages.temporalAndSpatial.spatial.altitudeNan')
+
+export const spatialSchema = yup.object().shape({
+  name: spatialNameSchema,
+  altitude: spatialAltitudeSchema,
+})
 
 export const Spatial = (
   uiid = uuidv4(),
@@ -26,12 +46,14 @@ export const Spatial = (
 })
 
 class Spatials extends Field {
-  constructor(Parent) {
+  constructor(Parent, spatials = []) {
     super(Parent, Spatial, SpatialModel, 'spatials')
     makeObservable(this)
+
+    this.fromBackend({ spatial: spatials }, Parent)
   }
 
-  clone = () => this
+  clone = () => new Spatials(this.Parent, this.toBackend())
 
   spatialToBackend = spatial => ({
     geographic_name: spatial.name,
@@ -43,7 +65,16 @@ class Spatials extends Field {
 
   toBackend = () => this.storage.map(this.spatialToBackend)
 
-  fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.spatial, Qvain)
+  fromBackend = (dataset, Qvain) => {
+    if (dataset.spatial) {
+      dataset.spatial.forEach(spatial => {
+        touch(spatial.place_uri)
+      })
+    }
+    return this.fromBackendBase(dataset.spatial, Qvain)
+  }
+
+  schema = spatialSchema
 }
 
 export const Location = (name, url) => ({

@@ -1,7 +1,7 @@
 /*
- **  Files v2 submit cases frontend tests
+ **  Files submit cases frontend tests
  **
- **  Files v2 has 144 theoretical test conditions. Almost half of these cases are inactive or not possible at all.
+ **  Files has 144 theoretical test conditions. Almost half of these cases are inactive or not possible at all.
  **  These tests will test all the cases that can be tested.
  **  Tests lean heavily on the documentation found in the link below.
  **  The cases are named after the theoretical number column.
@@ -24,19 +24,17 @@ import {
   ACCESS_TYPE_URL,
 } from '../../../js/utils/constants'
 import '../../../locale/translations'
-import urls from '../../../js/components/qvain/utils/urls'
+import urls from '../../../js/utils/urls'
 import { configure } from 'mobx'
 
 // first half of the tests mocks qvainFormSchema but the rest of the tests uses actual module
 import {
   qvainFormSchema,
-  qvainFormSchemaDraft,
-} from '../../../js/components/qvain/utils/formValidation'
-const realQvainFormSchema = jest.requireActual('../../../js/components/qvain/utils/formValidation')
-  .qvainFormSchema
-const realQvainFormSchemaDraft = jest.requireActual(
-  '../../../js/components/qvain/utils/formValidation'
-).qvainFormSchemaDraft
+  qvainFormDraftSchema,
+} from '../../../js/stores/view/qvain/qvain.submit.schemas'
+
+const { qvainFormSchema: realQvainFormSchema, qvainFormDraftSchema: realQvainFormDraftSchema } =
+  jest.requireActual('../../../js/stores/view/qvain/qvain.submit.schemas')
 
 jest.mock('axios')
 
@@ -44,12 +42,12 @@ jest.mock('../../../js/components/qvain/utils/handleSubmit', () => {
   return jest.fn()
 })
 
-jest.mock('../../../js/components/qvain/utils/formValidation', () => {
+jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas', () => {
   return {
     qvainFormSchema: {
       validate: jest.fn(),
     },
-    qvainFormSchemaDraft: {
+    qvainFormDraftSchema: {
       validate: jest.fn(),
     },
   }
@@ -209,11 +207,6 @@ describe('Submit.exec()', () => {
     expect(axios.post).not.toHaveBeenCalled()
   })
 
-  test('should set useDoiModalIsOpen to false', async () => {
-    await exec(() => Submit.openUseDoiModal())
-    expect(Submit.useDoiModalIsOpen).toBe(false)
-  })
-
   test('should call handleSubmitToBackend', async () => {
     await exec()
     expect(handleSubmitToBackend).toHaveBeenCalledTimes(1)
@@ -224,9 +217,9 @@ describe('Submit.exec()', () => {
     expect(qvainFormSchema.validate).toHaveBeenCalledTimes(1)
   })
 
-  test('should call qvainFormSchemaDraft.validate when given specific schema', async () => {
-    await exec(undefined, qvainFormSchemaDraft)
-    expect(qvainFormSchemaDraft.validate).toHaveBeenCalledTimes(1)
+  test('should call qvainFormDraftSchema.validate when given specific schema', async () => {
+    await exec(undefined, qvainFormDraftSchema)
+    expect(qvainFormDraftSchema.validate).toHaveBeenCalledTimes(1)
   })
 
   test('should call setChanged', async () => {
@@ -276,7 +269,7 @@ describe('prevalidate', () => {
 
     test('should call validate functions', () => {
       expect(qvainFormSchema.validate).toHaveBeenCalled()
-      expect(qvainFormSchemaDraft.validate).toHaveBeenCalled()
+      expect(qvainFormDraftSchema.validate).toHaveBeenCalled()
     })
 
     test('should set isDraftButtonDisabled and isPublishButtonDisabled to false', () => {
@@ -294,8 +287,8 @@ describe('prevalidate', () => {
     const publishError = 'publish error'
     const draftError = 'draft error'
     beforeEach(async () => {
-      qvainFormSchema.validate.mockReturnValue(Promise.reject(publishError))
-      qvainFormSchemaDraft.validate.mockReturnValue(Promise.reject(draftError))
+      qvainFormSchema.validate.mockImplementation(() => Promise.reject(publishError))
+      qvainFormDraftSchema.validate.mockImplementation(() => Promise.reject(draftError))
       await Submit.prevalidate()
     })
 
@@ -320,10 +313,10 @@ describe('submitDraft', () => {
     handleSubmitToBackend.mockReturnValue(generateDefaultDatasetForDraft())
   })
 
-  test('should use qvainFormSchemaDraft on exec call', async () => {
-    qvainFormSchemaDraft.validate.mockReturnValue(undefined)
+  test('should use qvainFormDraftSchema on exec call', async () => {
+    qvainFormDraftSchema.validate.mockReturnValue(undefined)
     await Submit.submitDraft()
-    expect(qvainFormSchemaDraft.validate).toHaveBeenCalledTimes(1)
+    expect(qvainFormDraftSchema.validate).toHaveBeenCalledTimes(1)
   })
 })
 
@@ -337,8 +330,8 @@ describe('create new draft', () => {
 
   const expectNoError = async dataset => {
     handleSubmitToBackend.mockReturnValue(dataset)
-    qvainFormSchemaDraft.validate.mockReturnValue(
-      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    qvainFormDraftSchema.validate.mockReturnValue(
+      realQvainFormDraftSchema.validate(dataset, { strict: true })
     )
 
     try {
@@ -352,8 +345,8 @@ describe('create new draft', () => {
 
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue(dataset)
-    qvainFormSchemaDraft.validate.mockReturnValue(
-      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    qvainFormDraftSchema.validate.mockReturnValue(
+      realQvainFormDraftSchema.validate(dataset, { strict: true })
     )
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
@@ -365,9 +358,9 @@ describe('create new draft', () => {
 
   test('should call axios.post with dataset and draft param', async () => {
     handleSubmitToBackend.mockReturnValue('dataset')
-    qvainFormSchemaDraft.validate.mockReturnValue(Promise.resolve(undefined))
+    qvainFormDraftSchema.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitDraft()
-    expect(axios.post).toHaveBeenCalledWith(urls.v2.datasets(), 'dataset', {
+    expect(axios.post).toHaveBeenCalledWith(urls.qvain.datasets(), 'dataset', {
       params: { draft: true },
     })
   })
@@ -512,14 +505,14 @@ describe('publish new dataset', () => {
     qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitPublish()
     expect(axios.post.mock.calls[0]).toEqual([
-      urls.v2.datasets(),
+      urls.qvain.datasets(),
       'dataset',
       {
         params: { draft: true },
       },
     ])
     expect(axios.post.mock.calls[1]).toEqual([
-      urls.v2.rpc.publishDataset(),
+      urls.rpc.publishDataset(),
       null,
       { params: { identifier: 'some identifier' } },
     ])
@@ -628,8 +621,8 @@ describe('edit existing draft dataset', () => {
 
   const expectNoError = async dataset => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
-    qvainFormSchemaDraft.validate.mockReturnValue(
-      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    qvainFormDraftSchema.validate.mockReturnValue(
+      realQvainFormDraftSchema.validate(dataset, { strict: true })
     )
 
     try {
@@ -641,8 +634,8 @@ describe('edit existing draft dataset', () => {
 
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
-    qvainFormSchemaDraft.validate.mockReturnValue(
-      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    qvainFormDraftSchema.validate.mockReturnValue(
+      realQvainFormDraftSchema.validate(dataset, { strict: true })
     )
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
@@ -654,9 +647,9 @@ describe('edit existing draft dataset', () => {
 
   test('should call axios.patch with dataset and existing identifier', async () => {
     handleSubmitToBackend.mockReturnValue(preparedDataset)
-    qvainFormSchemaDraft.validate.mockReturnValue(Promise.resolve(undefined))
+    qvainFormDraftSchema.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitDraft()
-    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('some identifier'), preparedDataset)
+    expect(axios.patch).toHaveBeenCalledWith(urls.qvain.dataset('some identifier'), preparedDataset)
   })
 
   test('cases 37-39: no file origin, urn, cumulative state any', async () => {
@@ -779,10 +772,10 @@ describe('publish existing draft dataset', () => {
     await Submit.submitPublish()
 
     expect(axios.patch).toHaveBeenCalledWith(
-      urls.v2.dataset(preparedDataset.original.identifier),
+      urls.qvain.dataset(preparedDataset.original.identifier),
       preparedDataset
     )
-    expect(axios.post).toHaveBeenCalledWith(urls.v2.rpc.publishDataset(), null, {
+    expect(axios.post).toHaveBeenCalledWith(urls.rpc.publishDataset(), null, {
       params: { identifier: preparedDataset.original.identifier },
     })
   })
@@ -882,8 +875,8 @@ describe('save published dataset as draft', () => {
       ...dataset,
       original: { ...dataset.original, ...preparedDataset.original },
     })
-    qvainFormSchemaDraft.validate.mockReturnValue(
-      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    qvainFormDraftSchema.validate.mockReturnValue(
+      realQvainFormDraftSchema.validate(dataset, { strict: true })
     )
 
     try {
@@ -898,8 +891,8 @@ describe('save published dataset as draft', () => {
       ...dataset,
       original: { ...dataset.original, ...preparedDataset.original },
     })
-    qvainFormSchemaDraft.validate.mockReturnValue(
-      realQvainFormSchemaDraft.validate(dataset, { strict: true })
+    qvainFormDraftSchema.validate.mockReturnValue(
+      realQvainFormDraftSchema.validate(dataset, { strict: true })
     )
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
@@ -911,13 +904,13 @@ describe('save published dataset as draft', () => {
 
   test('should call axios.post to make new draft, patch to save changes', async () => {
     handleSubmitToBackend.mockReturnValue(preparedDataset)
-    qvainFormSchemaDraft.validate.mockReturnValue(Promise.resolve(undefined))
+    qvainFormDraftSchema.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitDraft()
-    expect(axios.post).toHaveBeenCalledWith(urls.v2.rpc.createDraft(), null, {
+    expect(axios.post).toHaveBeenCalledWith(urls.rpc.createDraft(), null, {
       params: { identifier: 'some identifier' },
     })
-    expect(axios.get).toHaveBeenCalledWith(urls.v2.dataset('some identifier'))
-    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('fresh id'), {
+    expect(axios.get).toHaveBeenCalledWith(urls.qvain.dataset('some identifier'))
+    expect(axios.patch).toHaveBeenCalledWith(urls.qvain.dataset('fresh id'), {
       original: { identifier: 'fresh id' },
     })
   })
@@ -1051,7 +1044,7 @@ describe('republish dataset', () => {
     handleSubmitToBackend.mockReturnValue(preparedDataset)
     qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitDraft()
-    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('some identifier'), preparedDataset)
+    expect(axios.patch).toHaveBeenCalledWith(urls.qvain.dataset('some identifier'), preparedDataset)
   })
 
   test('cases 91-93: no file origin, urn, cumulative state any', async () => {
@@ -1198,10 +1191,10 @@ describe('publish unpublished dataset', () => {
     handleSubmitToBackend.mockReturnValue(preparedDataset)
     qvainFormSchema.validate.mockReturnValue(Promise.resolve(undefined))
     await Submit.submitPublish()
-    expect(axios.post).toHaveBeenCalledWith(urls.v2.rpc.mergeDraft(), null, {
+    expect(axios.post).toHaveBeenCalledWith(urls.rpc.mergeDraft(), null, {
       params: { identifier: 'some identifier' },
     })
-    expect(axios.patch).toHaveBeenCalledWith(urls.v2.dataset('some identifier'), preparedDataset)
+    expect(axios.patch).toHaveBeenCalledWith(urls.qvain.dataset('some identifier'), preparedDataset)
   })
 
   test('cases 127-129: no file origin, urn, cumulative state any', async () => {

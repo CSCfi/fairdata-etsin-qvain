@@ -2,7 +2,7 @@ import 'chai/register-should'
 import axios from 'axios'
 import Packages from '../../../js/stores/view/packages'
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../js/utils/constants'
-import urls from '../../../js/components/qvain/utils/urls'
+import urls from '../../../js/utils/urls'
 
 jest.useFakeTimers()
 
@@ -226,7 +226,7 @@ describe('Packages', () => {
     })
 
     test('should call axios.post with correct url and params', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.v2.packages(), params)
+      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), params)
     })
   })
 
@@ -241,7 +241,7 @@ describe('Packages', () => {
     })
 
     test('should eventially call axios.post with expectedParams', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.v2.packages(), expectedParams)
+      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), expectedParams)
     })
   })
 
@@ -256,7 +256,7 @@ describe('Packages', () => {
     })
 
     test('should eventially call axios.post with expectedParams', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.v2.packages(), expectedParams)
+      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), expectedParams)
     })
   })
 
@@ -302,7 +302,7 @@ describe('Packages', () => {
     })
 
     test('should call axios.get', () => {
-      expect(axios.get).toHaveBeenCalledWith('/api/v2/dl/requests?cr_id=identifier')
+      expect(axios.get).toHaveBeenCalledWith('/api/download/requests?cr_id=identifier')
     })
 
     test('should set datasetIdentifier', () => {
@@ -315,6 +315,51 @@ describe('Packages', () => {
 
     test('should schedule poll, (proven by setTimeout check)', () => {
       expect(setTimeout).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('when calling packageIsTooLarge', () => {
+    test('should allow directory', () => {
+      const okDirectory = {
+        type: 'directory',
+        existingByteSize: packages.sizeLimit,
+      }
+      packages.packageIsTooLarge({}, okDirectory).should.be.false
+    })
+
+    test('should disallow too large directory', () => {
+      const tooLargeDirectory = {
+        type: 'directory',
+        existingByteSize: packages.sizeLimit + 1,
+      }
+      packages.packageIsTooLarge({}, tooLargeDirectory).should.be.true
+    })
+
+    test('should allow entire dataset', () => {
+      const okDatasetFiles = {
+        root: {
+          existingByteSize: packages.sizeLimit,
+        },
+      }
+      packages.packageIsTooLarge(okDatasetFiles).should.be.false
+    })
+
+    test('should disallow too large dataset', () => {
+      const tooLargeDatasetFiles = {
+        root: {
+          existingByteSize: packages.sizeLimit + 1,
+        },
+      }
+      packages.packageIsTooLarge(tooLargeDatasetFiles).should.be.true
+    })
+
+
+    test('should allow large file', () => {
+      const largeFile = {
+        type: 'file',
+        existingByteSize: packages.sizeLimit + 1,
+      }
+      packages.packageIsTooLarge({}, largeFile).should.be.false
     })
   })
 })

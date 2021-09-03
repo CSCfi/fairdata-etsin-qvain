@@ -5,9 +5,14 @@ import { useStores } from '../../../js/stores/stores'
 import Infrastructure from '../../../js/components/qvain/fields/history/infrastructure'
 import { Field } from '../../../js/components/qvain/general/section'
 import InfrastructureSelection from '../../../js/components/qvain/fields/history/infrastructure/InfrastructureSelection'
-import Select from '../../../js/components/qvain/general/input/searchSelect'
 
-jest.mock('../../../js/stores/stores')
+import Select from '../../../js/components/qvain/general/input/select'
+
+jest.mock('../../../js/stores/stores', () => ({
+  withStores: Component => props => <Component Stores={mockStores} {...props} />,
+  useStores: jest.fn(),
+}))
+
 
 describe('Infrastructure', () => {
   const harness = new Harness(Infrastructure)

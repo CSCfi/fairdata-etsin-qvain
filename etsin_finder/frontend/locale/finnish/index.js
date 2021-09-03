@@ -145,6 +145,7 @@ const finnish = {
         pendingTooltip:
           'Latauspakettia luodaan. Kun painike muuttuu vihreäksi, lataus voidaan aloittaa.',
         loading: 'Ladataan',
+        tooLarge: 'Lataus ei mahdollista latauksen suuren koon vuoksi.',
         modal: {
           generate: {
             header: 'Luo latauspaketti?',
@@ -328,7 +329,7 @@ const finnish = {
     showLess: 'Näytä vähemmän',
     description: 'Kuvaus',
     notice: {
-      SRhide: 'hide notice',
+      SRhide: 'piilota ilmoitus',
     },
     state: {
       changedLang: 'Kieli vaihdettu kieleen: %(lang)s',

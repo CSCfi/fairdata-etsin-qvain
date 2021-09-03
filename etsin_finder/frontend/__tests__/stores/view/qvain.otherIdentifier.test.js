@@ -2,7 +2,6 @@ import 'chai/register-expect'
 import { makeObservable } from 'mobx'
 
 import OtherIdentifiers from '../../../js/stores/view/qvain/qvain.otherIdentifier'
-import { otherIdentifierSchema } from '../../../js/components/qvain/utils/formValidation'
 
 jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
   class mockReferenceField {
@@ -33,7 +32,7 @@ jest.mock('mobx', () => {
   }
 })
 
-jest.mock('../../../js/components/qvain/utils/formValidation')
+jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas')
 
 describe('OtherIdentifiers', () => {
   let otherIdentifiers

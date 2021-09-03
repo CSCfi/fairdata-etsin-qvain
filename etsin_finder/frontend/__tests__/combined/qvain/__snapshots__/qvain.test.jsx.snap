@@ -103,19 +103,14 @@ exports[`Qvain should render correctly 1`] = `
     datasetLoading={false}
   />
   <StickyHeader
-    clearSubmitResponse={[Function]}
     datasetError={false}
-    datasetLoading={false}
-    handleSubmitError={[Function]}
-    handleSubmitResponse={[Function]}
+    datasetLoading={true}
     hideSubmitButtons={false}
-    response={null}
     submitButtonsRef={
       Object {
         "current": null,
       }
     }
-    submitted={false}
   />
   <ErrorBoundary
     ContainerComponent={
@@ -165,8 +160,6 @@ exports[`Qvain should render correctly 1`] = `
       datasetErrorDetails={null}
       datasetErrorTitle={null}
       handleRetry={[Function]}
-      handleSubmitError={[Function]}
-      handleSubmitResponse={[Function]}
       haveDataset={true}
       setFocusOnSubmitButton={[Function]}
     />

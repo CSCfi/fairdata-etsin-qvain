@@ -9,6 +9,7 @@ import Translate from 'react-translate-component'
 
 expect.extend(toHaveNoViolations)
 
+import AuthClass from '../../../../js/stores/domain/auth'
 import { buildStores } from '../../../../js/stores'
 import '../../../../locale/translations'
 import FilePicker from '../../../../js/components/qvain/fields/files/ida'
@@ -16,16 +17,14 @@ import AddItemsModal from '../../../../js/components/qvain/fields/files/ida/addI
 import UserMetadataModal from '../../../../js/components/qvain/fields/files/ida/forms/formModal'
 import PASModal from '../../../../js/components/qvain/fields/files/metadataModal'
 import etsinTheme from '../../../../js/styles/theme'
-import urls from '../../../../js/components/qvain/utils/urls'
+import urls from '../../../../js/utils/urls'
 
 import { get } from '../../../__testdata__/qvain.files.data'
 import { StoresProvider, useStores } from '../../../../js/stores/stores'
 import Modal from '../../../../js/components/general/modal'
 import SelectedItemsTreeItem from '../../../../js/components/qvain/fields/files/ida/selectedItemsTreeItem'
 
-global.Promise = require('bluebird')
-
-const stores = buildStores()
+jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
 
 Promise.config({
   cancellation: true,
@@ -45,21 +44,19 @@ jest.mock('../../../../js/stores/stores', () => {
 // Mock responses for a dataset containing IDA files. See the data file for the project structure.
 axios.get.mockImplementation(get)
 
-stores.Auth = {
-  user: { idaProjects: ['project-identifier'] },
-}
+const stores = buildStores()
+stores.Auth.user.idaProjects = ['project', 'project-identifier']
 
 const datasetIdentifier = '6d2cb5f5-4867-47f7-9874-09357f2901a3'
 
 const { Qvain } = stores
-const { Files } = Qvain
 
 const loadDataset = async () => {
-  const response = await axios.get(urls.v2.dataset(datasetIdentifier))
+  const response = await axios.get(urls.qvain.dataset(datasetIdentifier))
   Qvain.Files.AddItemsView.setDefaultShowLimit(20, 20)
   Qvain.Files.SelectedItemsView.setDefaultShowLimit(20, 20)
-  const promise = stores.Qvain.editDataset(response.data)
-  Files.SelectedItemsView.setHideRemoved(true)
+  const promise = Qvain.editDataset(response.data)
+  Qvain.Files.SelectedItemsView.setHideRemoved(true)
   await promise
 }
 
@@ -81,7 +78,7 @@ describe('Qvain filepicker', () => {
   const render = async () => {
     cleanup()
     await loadDataset()
-    await Files.loadAllDirectories()
+    await Qvain.Files.loadAllDirectories()
 
     helper = document.createElement('div')
     document.body.appendChild(helper)
@@ -109,7 +106,7 @@ describe('Qvain filepicker', () => {
   describe('Selected files', () => {
     it('is accessible', async () => {
       await render()
-      await Files.SelectedItemsView.setAllOpen(true)
+      await Qvain.Files.SelectedItemsView.setAllOpen(true)
       wrapper.update()
       const results = await axe(wrapper.getDOMNode())
       expect(results).toHaveNoViolations()
@@ -117,7 +114,7 @@ describe('Qvain filepicker', () => {
   })
 
   const getSelectedTreeItem = async name => {
-    await Files.SelectedItemsView.setAllOpen(true)
+    await Qvain.Files.SelectedItemsView.setAllOpen(true)
     wrapper.update()
     return wrapper.find(SelectedItemsTreeItem).filterWhere(i => i.prop('item').name === name)
   }
@@ -155,7 +152,7 @@ describe('Qvain filepicker', () => {
       file2.find('button').first().simulate('click')
       file2
         .find(Translate)
-        .filterWhere(i => i.prop('content') === 'qvain.files.metadataModal.buttons.show')
+        .filterWhere(i => i.prop('content') === 'qvain.files.metadataModal.buttons.edit')
         .find('button')
         .simulate('click')
 
@@ -204,7 +201,7 @@ describe('Qvain filepicker', () => {
     beforeAll(async () => {
       await render()
       wrapper.find('button#show-add-items').simulate('click')
-      await Files.AddItemsView.setAllOpen(true)
+      await Qvain.Files.AddItemsView.setAllOpen(true)
       wrapper.update()
       modal = wrapper.find(AddItemsModal).find(Modal)
     })

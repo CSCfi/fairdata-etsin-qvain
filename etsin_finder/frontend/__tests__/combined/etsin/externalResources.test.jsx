@@ -12,7 +12,7 @@ import Locale from '../../../js/stores/view/locale'
 import Packages from '../../../js/stores/view/packages'
 import { fakeDownload, applyMockAdapter } from '../../__testdata__/download.data'
 import { runInAction } from 'mobx'
-import getDownloadAction from '../../../js/components/dataset/data/idaResourcesV2/downloadActions'
+import getDownloadAction from '../../../js/components/dataset/data/idaResources/downloadActions'
 import ExternalResources, { Grid } from '../../../js/components/dataset/data/externalResources'
 import {
   Header,

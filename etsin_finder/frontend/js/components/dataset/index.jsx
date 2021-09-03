@@ -28,9 +28,9 @@ import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
 import Loader from '../general/loader'
-import FlaggedComponent from '../general/flaggedComponent'
 import { withStores } from '../../stores/stores'
 import CitationModal from './citation/citationModal'
+import urls from '../../utils/urls'
 
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
@@ -93,7 +93,7 @@ class Dataset extends React.Component {
     if (typeof datasetVersionSet !== 'undefined') {
       // If there are more than 1 version
       for (const k of datasetVersionSet.keys()) {
-        const versionUrl = `/api/dataset/${datasetVersionSet[k].identifier}`
+        const versionUrl = urls.dataset(datasetVersionSet[k].identifier)
         promises.push(axios.get(versionUrl))
       }
 
@@ -216,9 +216,7 @@ class Dataset extends React.Component {
     // CASE 2: Business as usual
     return (
       <div>
-        <FlaggedComponent flag="UI.CITATION">
-          <CitationModal />
-        </FlaggedComponent>
+        <CitationModal />
         <article className="container regular-row">
           <div className="row">
             <div className="col-12">

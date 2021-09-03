@@ -20,6 +20,7 @@ import QvainDatasetsClass from './view/qvain/qvain.datasets'
 import AccessClass from './view/access'
 import SearchFiltersClass from './view/searchfilters'
 import MatomoClass from './tracking'
+import CrossRefClass from './view/qvain/qvain.crossRef'
 
 export const buildStores = () => {
   const Env = new EnvClass()
@@ -27,13 +28,14 @@ export const buildStores = () => {
   const QvainDatasets = new QvainDatasetsClass()
   const SearchFilters = new SearchFiltersClass()
   const Access = new AccessClass(Auth)
-  const Qvain = new QvainClass(Env)
+  const Qvain = new QvainClass(Env, Auth)
   const Accessibility = new AccessibilityClass(Env)
   const ElasticQuery = new ElasticQueryClass(Env)
   const Locale = new LocaleClass(Accessibility, ElasticQuery)
   const DatasetQuery = new DatasetQueryClass(Env, Access)
   const Map = new MapClass(Locale)
   const Matomo = new MatomoClass(Env)
+  const CrossRef = new CrossRefClass()
 
   return {
     Env,
@@ -48,6 +50,7 @@ export const buildStores = () => {
     QvainDatasets,
     SearchFilters,
     Matomo,
+    CrossRef,
   }
 }
 

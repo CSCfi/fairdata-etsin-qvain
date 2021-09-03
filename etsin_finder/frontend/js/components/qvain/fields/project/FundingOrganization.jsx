@@ -17,19 +17,24 @@ import {
 } from './utils'
 import Button from '../../../general/button'
 import Label from '../../general/card/label'
-import { withStores } from '../../utils/stores'
 
 import { Organization } from '../../../../stores/view/qvain/qvain.project'
-import { organizationObjectSchema } from '../../utils/formValidation'
+import { useStores } from '../../utils/stores'
 
 const FundingOrganization = props => {
+  const {
+    Qvain: {
+      Projects: { orgObjectSchema, readonly },
+    },
+    Locale: { lang },
+  } = useStores()
+
   /**
    * Put already added organization to form data for organization select.
    */
   const onEdit = async id => {
     const organizationToEdit = props.organizations.addedOrganizations.find(org => org.id === id)
     if (!organizationToEdit) return
-    const { lang } = props.Stores.Locale
     const { organization, department, subDepartment } = organizationToEdit
     const departmentValue = await organizationToSelectValue(
       department,
@@ -61,7 +66,7 @@ const FundingOrganization = props => {
    */
   const validateAll = organizations => {
     const { formData } = props.organizations
-    const validationErrors = validateSync(organizationObjectSchema, organizations)
+    const validationErrors = validateSync(orgObjectSchema, organizations)
 
     if (!isEmptyObject(validationErrors)) {
       props.onChange({
@@ -92,8 +97,6 @@ const FundingOrganization = props => {
   }
 
   const { addedOrganizations, formData } = props.organizations
-  const { lang } = props.Stores.Locale
-  const { readonly } = props.Stores.Qvain.Projects
   return (
     <Card>
       <h3>
@@ -134,7 +137,6 @@ const FundingOrganization = props => {
 }
 
 FundingOrganization.propTypes = {
-  Stores: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onAddOrganization: PropTypes.func.isRequired,
   onRemoveOrganization: PropTypes.func.isRequired,
@@ -165,4 +167,4 @@ const OrganizationLabel = styled(Label)`
   cursor: pointer;
 `
 
-export default withStores(observer(FundingOrganization))
+export default observer(FundingOrganization)

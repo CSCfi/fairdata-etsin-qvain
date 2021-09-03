@@ -6,7 +6,6 @@ import axios from 'axios'
 import OrganizationSelect from '../../../js/components/qvain/general/input/organizationSelect'
 import { withStores } from '../../../js/stores/stores'
 import { validate } from '../../../js/components/qvain/fields/project/utils'
-import { organizationSelectSchema } from '../../../js/components/qvain/utils/formValidation'
 
 jest.mock('../../../js/stores/stores', () => ({
   withStores: jest.fn(c => c),
@@ -16,6 +15,8 @@ jest.mock('axios')
 
 jest.mock('../../../js/components/qvain/fields/project/utils')
 
+const flushPromises = () => new Promise(setImmediate)
+
 describe('OrganizationSelect', () => {
   let wrapper
   let organizationSelect
@@ -23,7 +24,11 @@ describe('OrganizationSelect', () => {
   let subDepartmentSelect
 
   const Stores = {
-    Qvain: {},
+    Qvain: {
+      Projects: {
+        orgSelectSchema: jest.fn(),
+      },
+    },
     Locale: {
       lang: 'fi',
     },
@@ -78,7 +83,7 @@ describe('OrganizationSelect', () => {
     },
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     axios.get.mockReturnValue({
       status: 200,
       data: {
@@ -100,11 +105,13 @@ describe('OrganizationSelect', () => {
     })
     withStores.mockReturnValue(Stores)
     wrapper = shallow(<OrganizationSelect {...props} />)
+    await flushPromises()
   })
 
-  afterEach(() => {
-    jest.resetAllMocks()
+  afterEach(async () => {
+    await flushPromises()
     wrapper.unmount()
+    jest.resetAllMocks()
   })
 
   test('it exists', () => {
@@ -112,7 +119,7 @@ describe('OrganizationSelect', () => {
   })
 
   describe('given no values', () => {
-    const setupState = () => {
+    const setupState = async () => {
       props.value = {
         organization: undefined,
         department: undefined,
@@ -120,21 +127,12 @@ describe('OrganizationSelect', () => {
       }
 
       wrapper = shallow(<OrganizationSelect {...props} />)
-
-      wrapper.setState({
-        options: {
-          organization: {
-            value: 'value',
-            label: 'fi_label',
-            name: { fi: 'fi_label', en: 'en_label', und: 'und_label' },
-          },
-        },
-      })
+      await flushPromises()
     }
 
     describe('OrganizationSelect', () => {
-      beforeEach(() => {
-        setupState()
+      beforeEach(async () => {
+        await setupState()
         organizationSelect = wrapper.find('#org-select')
       })
 
@@ -188,7 +186,7 @@ describe('OrganizationSelect', () => {
   })
 
   describe('given value only for organization', () => {
-    const setupState = () => {
+    const setupState = async () => {
       props.value = {
         organization: 'organization',
         department: undefined,
@@ -196,6 +194,7 @@ describe('OrganizationSelect', () => {
       }
 
       wrapper = shallow(<OrganizationSelect {...props} />)
+      await flushPromises()
 
       wrapper.setState({
         options: {
@@ -215,8 +214,8 @@ describe('OrganizationSelect', () => {
     }
 
     describe('OrganizationSelect', () => {
-      beforeEach(() => {
-        setupState()
+      beforeEach(async () => {
+        await setupState()
         organizationSelect = wrapper.find('#org-select')
       })
 
@@ -231,8 +230,8 @@ describe('OrganizationSelect', () => {
     })
 
     describe('DepartmentSelect', () => {
-      beforeEach(() => {
-        setupState()
+      beforeEach(async () => {
+        await setupState()
         departmentSelect = wrapper.find('#department-select')
       })
 
@@ -265,7 +264,7 @@ describe('OrganizationSelect', () => {
   })
 
   describe('given organization and department but NOT subdepartment', () => {
-    const setupState = () => {
+    const setupState = async () => {
       props.value = {
         organization: 'organization',
         department: 'department',
@@ -273,6 +272,7 @@ describe('OrganizationSelect', () => {
       }
 
       wrapper = shallow(<OrganizationSelect {...props} />)
+      await flushPromises()
 
       wrapper.setState({
         options: {
@@ -292,8 +292,8 @@ describe('OrganizationSelect', () => {
     }
 
     describe('DepartmentSelect', () => {
-      beforeEach(() => {
-        setupState()
+      beforeEach(async () => {
+        await setupState()
         departmentSelect = wrapper.find('#department-select')
       })
 
@@ -331,7 +331,7 @@ describe('OrganizationSelect', () => {
   })
 
   describe('given fully populated value (organization, department, subDepartment)', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       props.value = {
         organization: { formIsOpen: false, name: 'name', email: 'email', value: 'value' },
         department: 'department',
@@ -339,7 +339,7 @@ describe('OrganizationSelect', () => {
       }
 
       wrapper = shallow(<OrganizationSelect {...props} />)
-
+      await flushPromises()
       wrapper.setState({
         options: {
           organization: {
@@ -379,21 +379,22 @@ describe('OrganizationSelect', () => {
       describe('when triggering onChange with {formIsOpen: false}', () => {
         const eventValue = { formIsOpen: false }
         const expectedValue = { organization: eventValue, department: null, subDepartment: null }
-        beforeEach(() => {
+        beforeEach(async () => {
           organizationSelect.simulate('change', eventValue)
+          await flushPromises()
         })
 
-        test('should call props.onChange with expectedValue', () => {
-          // sets organization with evantValue and clears department and subDepartment
+        test('should call props.onChange with expectedValue', async () => {
+          // sets organization with expectedValue and clears department and subDepartment
           chai.expect(props.onChange).to.have.beenCalledWith(expectedValue)
         })
 
-        test('should clear state.options.department', () => {
-          wrapper.state().options.department.should.eql({})
+        test('should not clear state.options.department', async () => {
+          wrapper.state().options.department.should.not.eql({})
         })
 
-        test('should clear state.options.subDepartment', () => {
-          wrapper.state().options.subDepartment.should.eql({})
+        test('should not clear state.options.subDepartment', () => {
+          wrapper.state().options.subDepartment.should.not.eql({})
         })
       })
 
@@ -417,7 +418,10 @@ describe('OrganizationSelect', () => {
 
         test('should call validate with correct args', () => {
           const { name, email, value } = props.value.organization
-          const expectedArgs = [organizationSelectSchema, { name, email, identifier: value }]
+          const expectedArgs = [
+            Stores.Qvain.Projects.orgSelectSchema,
+            { name, email, identifier: value },
+          ]
           chai.expect(validate).to.have.beenCalledWith(...expectedArgs)
         })
       })

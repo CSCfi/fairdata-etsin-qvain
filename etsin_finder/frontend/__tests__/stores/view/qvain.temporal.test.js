@@ -40,7 +40,9 @@ jest.mock('../../../js/stores/view/qvain/qvain.field', () => {
 
 describe('Temporals with Parent as arg', () => {
   let temporals
-  const parent = 'parent'
+  const parent = {
+    setChanged: jest.fn(),
+  }
 
   beforeEach(() => {
     temporals = new Temporals(parent)
@@ -59,6 +61,10 @@ describe('Temporals with Parent as arg', () => {
         'temporals'
       )
     })
+
+    test('should assign Parent', () => {
+      temporals.Parent.should.eql(parent)
+    })
   })
 
   describe('given storage populated with temporal object', () => {
@@ -76,6 +82,30 @@ describe('Temporals with Parent as arg', () => {
       test('should return renderable version of temporals', () => {
         const renderableObj = {
           start: temporalObj.startDate,
+          end: temporalObj.endDate,
+          uiid: temporalObj.uiid,
+        }
+
+        temporals.renderable.should.eql([renderableObj])
+      })
+    })
+  })
+
+  describe('given storage partial populated with temporal object', () => {
+    const temporalObj = {
+      startDate: undefined,
+      endDate: new Date(2).toISOString(),
+      uiid: 1,
+    }
+
+    beforeEach(() => {
+      temporals.storage = [temporalObj]
+    })
+
+    describe('when accessing getter renderable', () => {
+      test('should return renderable version of temporals', () => {
+        const renderableObj = {
+          start: undefined,
           end: temporalObj.endDate,
           uiid: temporalObj.uiid,
         }
@@ -110,6 +140,10 @@ describe('Temporals with Parent as arg', () => {
 
       test('should add inEdit to storage', () => {
         temporals.storage.should.deep.eql([inEditObj])
+      })
+
+      test('should call Parent.setChanged with true', () => {
+        expect(parent.setChanged).to.have.beenCalledWith(true)
       })
     })
 

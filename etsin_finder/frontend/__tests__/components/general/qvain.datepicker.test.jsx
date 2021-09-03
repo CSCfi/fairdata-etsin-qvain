@@ -10,12 +10,6 @@ import DatePicker, {
 } from '../../../js/components/qvain/general/input/datepicker'
 import LocaleStore from '../../../js/stores/view/locale'
 
-global.Promise = require('bluebird')
-
-Promise.config({
-  cancellation: true,
-})
-
 const getStores = () => {
   return {
     Locale: LocaleStore,

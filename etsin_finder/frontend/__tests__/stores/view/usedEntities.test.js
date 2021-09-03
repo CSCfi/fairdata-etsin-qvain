@@ -23,11 +23,12 @@ jest.mock('mobx')
 
 describe('UsedEntities', () => {
   let usedEntities
+  const existingEntities = ['some serious entities here']
 
   const Qvain = {}
 
   beforeEach(() => {
-    usedEntities = new UsedEntities(Qvain)
+    usedEntities = new UsedEntities(Qvain, existingEntities)
   })
 
   describe('when calling constructor', () => {
@@ -43,17 +44,21 @@ describe('UsedEntities', () => {
     test('should call makeObservable', () => {
       expect(makeObservable).to.have.beenCalledWith(usedEntities)
     })
+
+    test('should call fromBackendBase with existingEntities', () => {
+      expect(usedEntities.fromBackendBase).to.have.beenCalledWith(existingEntities, Qvain)
+    })
   })
 
   describe('when calling fromBackend with dataset and Qvain', () => {
-    const dataset = {}
+    const dataset = { used_entity: [] }
 
     beforeEach(() => {
       usedEntities.fromBackend(dataset, Qvain)
     })
 
     test('should call super.fromBackendBase with args', () => {
-      expect(usedEntities.fromBackendBase).to.have.beenCalledWith(dataset, Qvain)
+      expect(usedEntities.fromBackendBase).to.have.beenCalledWith(dataset.used_entity, Qvain)
     })
   })
 

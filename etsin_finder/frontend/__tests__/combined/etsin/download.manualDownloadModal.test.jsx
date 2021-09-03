@@ -12,13 +12,13 @@ import etsinTheme from '../../../js/styles/theme'
 import '../../../locale/translations'
 import stores from '../../../js/stores'
 import dataset from '../../__testdata__/dataset.att'
-import ManualDownloadModal from '../../../js/components/dataset/data/idaResourcesV2/manualDownloadModal'
-import { ErrorDiv } from '../../../js/components/dataset/data/idaResourcesV2/manualDownloadModal/content'
+import ManualDownloadModal from '../../../js/components/dataset/data/idaResources/manualDownloadModal'
+import { ErrorDiv } from '../../../js/components/dataset/data/idaResources/manualDownloadModal/content'
 import Modal from '../../../js/components/general/modal'
 import { useStores } from '../../../js/stores/stores'
 import CopyField, {
   LoaderWrapper,
-} from '../../../js/components/dataset/data/idaResourcesV2/manualDownloadModal/copyField'
+} from '../../../js/components/dataset/data/idaResources/manualDownloadModal/copyField'
 
 expect.extend(toHaveNoViolations)
 

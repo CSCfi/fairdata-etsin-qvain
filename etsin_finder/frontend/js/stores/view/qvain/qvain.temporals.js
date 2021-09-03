@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { computed, action, makeObservable, override } from 'mobx'
+import * as yup from 'yup'
 import Field from './qvain.field'
 
 export const TemporalTemplate = (uiid = uuidv4(), startDate = undefined, endDate = undefined) => ({
@@ -8,9 +9,26 @@ export const TemporalTemplate = (uiid = uuidv4(), startDate = undefined, endDate
   endDate,
 })
 
+// TEMPORAL VALIDATION
+export const temporalDateSchema = yup.object().shape({
+  startDate: yup
+    .string()
+    .date()
+    .when('endDate', {
+      is: undefined,
+      then: yup
+        .string()
+        .date()
+        .required('qvain.validationMessages.temporalAndSpatial.temporal.dateMissing'),
+      otherwise: yup.string().date(),
+    }),
+  endDate: yup.string().date(),
+})
+
 class Temporals extends Field {
   constructor(Parent) {
     super(Parent, TemporalTemplate, TemporalModel, 'temporals')
+    this.Parent = Parent
     makeObservable(this)
   }
 
@@ -29,10 +47,12 @@ class Temporals extends Field {
 
   @action addTemporal = () => {
     this.storage = [...this.storage, this.inEdit]
+    this.Parent.setChanged(true)
   }
 
   @action removeTemporal = uiid => {
     this.storage = this.storage.filter(temp => temp.uiid !== uiid)
+    this.Parent.setChanged(true)
   }
 
   toBackend = () => {
@@ -47,6 +67,8 @@ class Temporals extends Field {
   }
 
   fromBackend = (dataset, Qvain) => this.fromBackendBase(dataset.temporal, Qvain)
+
+  schema = temporalDateSchema
 }
 
 export const TemporalModel = data => ({

@@ -3,12 +3,9 @@ import axios from 'axios'
 import { ValidationError } from 'yup'
 import debounce from 'lodash.debounce'
 import handleSubmitToBackend from '../../../components/qvain/utils/handleSubmit'
-import {
-  qvainFormSchema,
-  qvainFormSchemaDraft,
-} from '../../../components/qvain/utils/formValidation'
+import { qvainFormSchema, qvainFormDraftSchema } from './qvain.submit.schemas'
 import { DATA_CATALOG_IDENTIFIER, DATASET_STATE } from '../../../utils/constants'
-import urls from '../../../components/qvain/utils/urls'
+import urls from '../../../utils/urls'
 import { getResponseError } from '../../../components/qvain/utils/responseError'
 
 // helper functions
@@ -30,15 +27,11 @@ class Submit {
 
   @observable response = null
 
-  @observable useDoiModalIsOpen = false
-
   @action reset = () => {
-    this.isLoading = false
     this.draftValidationError = []
     this.publishValidationError = []
     this.error = undefined
     this.response = null
-    this.useDoiModalIsOpen = false
   }
 
   @action setLoading = state => {
@@ -49,20 +42,16 @@ class Submit {
     this.error = error
   }
 
+  @action.bound clearError() {
+    this.error = undefined
+  }
+
   @action setResponse = response => {
     this.response = response
   }
 
-  @action clearResponse = () => {
+  @action.bound clearResponse() {
     this.response = null
-  }
-
-  @action closeUseDoiModal = () => {
-    this.useDoiModalIsOpen = false
-  }
-
-  @action openUseDoiModal = () => {
-    this.useDoiModalIsOpen = true
   }
 
   @computed get submitType() {
@@ -94,14 +83,14 @@ class Submit {
   @action submitDraft = async () => {
     switch (this.submitType) {
       case DATASET_STATE.NEW:
-        await this.exec(this.createNewDraft, qvainFormSchemaDraft)
+        await this.exec(this.createNewDraft, qvainFormDraftSchema)
         return
       case DATASET_STATE.DRAFT:
       case DATASET_STATE.UNPUBLISHED_DRAFT:
-        await this.exec(this.updateDataset, qvainFormSchemaDraft)
+        await this.exec(this.updateDataset, qvainFormDraftSchema)
         return
       case DATASET_STATE.PUBLISHED:
-        await this.exec(this.savePublishedAsDraft, qvainFormSchemaDraft)
+        await this.exec(this.savePublishedAsDraft, qvainFormDraftSchema)
         return
       default:
         console.error('Unknown submit status')
@@ -127,7 +116,9 @@ class Submit {
         console.error('Unknown submit status')
         throw new Error('Unknown submit status')
     }
-    if (this.response?.identifier && cb) cb(this.response.identifier)
+    if (this.response?.identifier && cb) {
+      cb(this.response.identifier)
+    }
   }
 
   @action exec = async (submitFunction, schema = qvainFormSchema) => {
@@ -151,7 +142,6 @@ class Submit {
     if (!cleanupBeforeBackend()) return
     if (!(await this.promptProvenances())) return
 
-    this.closeUseDoiModal()
     let dataset = this.prepareDataset()
     const { fileActions, metadataActions, newCumulativeState } = this.prepareActions()
 
@@ -193,14 +183,14 @@ class Submit {
       }
       if (fileActions || metadataActions || newCumulativeState != null) {
         // Files changed, get updated dataset
-        const url = urls.v2.dataset(dataset.original.identifier)
+        const url = urls.qvain.dataset(dataset.original.identifier)
         const updatedResponse = await axios.get(url)
         dataset.original = updatedResponse.data
       }
       this.Qvain.setOriginal(dataset.original)
       await editDataset(dataset.original)
       this.setResponse(dataset.original)
-      this.setError(undefined)
+      this.clearError()
     } catch (error) {
       this.setError(getResponseError(error))
       throw error
@@ -210,23 +200,23 @@ class Submit {
   }
 
   createNewDraft = async dataset => {
-    const datasetsUrl = urls.v2.datasets()
+    const datasetsUrl = urls.qvain.datasets()
     const { data } = await axios.post(datasetsUrl, dataset, { params: { draft: true } })
     return data
   }
 
   updateDataset = async dataset => {
-    const url = urls.v2.dataset(dataset.original.identifier)
+    const url = urls.qvain.dataset(dataset.original.identifier)
     const { data } = await axios.patch(url, dataset)
     return data
   }
 
   savePublishedAsDraft = async dataset => {
     const { identifier } = dataset.original
-    const res = await axios.post(urls.v2.rpc.createDraft(), null, { params: { identifier } })
+    const res = await axios.post(urls.rpc.createDraft(), null, { params: { identifier } })
     const newIdentifier = res.data.identifier
 
-    const draftUrl = await urls.v2.dataset(newIdentifier)
+    const draftUrl = await urls.qvain.dataset(newIdentifier)
     const draftResponse = await axios.get(draftUrl)
     const draft = draftResponse.data
 
@@ -235,7 +225,7 @@ class Submit {
   }
 
   publishWithoutUpdating = async dataset => {
-    const url = urls.v2.rpc.publishDataset()
+    const url = urls.rpc.publishDataset()
     const { identifier } = dataset.original
     const { data } = await axios.post(url, null, { params: { identifier } })
     return { ...dataset.original, ...data }
@@ -244,11 +234,11 @@ class Submit {
   mergeDraftWithoutUpdating = async dataset => {
     const { original } = dataset
     const identifier = original?.identifier
-    const url = urls.v2.rpc.mergeDraft()
+    const url = urls.rpc.mergeDraft()
     await axios.post(url, null, { params: { identifier } })
 
     const draftOf = original?.draft_of?.identifier
-    const editUrl = urls.v2.dataset(draftOf)
+    const editUrl = urls.qvain.dataset(draftOf)
     const { data } = await axios.get(editUrl)
     return data
   }
@@ -327,10 +317,10 @@ class Submit {
 
   updateFiles = async (identifier, fileActions, metadataActions) => {
     if (fileActions) {
-      await axios.post(urls.v2.datasetFiles(identifier), fileActions)
+      await axios.post(urls.qvain.datasetFiles(identifier), fileActions)
     }
     if (metadataActions) {
-      await axios.put(urls.v2.datasetUserMetadata(identifier), metadataActions)
+      await axios.put(urls.common.datasetUserMetadata(identifier), metadataActions)
     }
   }
 
@@ -340,7 +330,7 @@ class Submit {
         identifier,
         cumulative_state: newCumulativeState,
       }
-      const url = urls.v2.rpc.changeCumulativeState()
+      const url = urls.rpc.changeCumulativeState()
       await axios.post(url, obj)
     }
   }
@@ -375,7 +365,7 @@ class Submit {
     }
 
     try {
-      await qvainFormSchemaDraft.validate(dataset, { abortEarly: false, strict: true })
+      await qvainFormDraftSchema.validate(dataset, { abortEarly: false, strict: true })
     } catch (error) {
       this.setDraftValidationError(error)
     }

@@ -6,6 +6,8 @@ import chaiEnzyme from 'chai-enzyme'
 import chaiJestMocks from 'chai-jest-mocks'
 import 'chai/register-should'
 
+import '../js/utils/extendYup'
+
 chai.use(chaiEnzyme)
 chai.use(chaiJestMocks)
 
@@ -19,3 +21,8 @@ global.chaiExpect = chai.expect
 global.setExpect = framework => {
   global.expect = global[`${framework}Expect`]
 }
+
+global.Promise = require('bluebird')
+Promise.config({
+  cancellation: true,
+})

@@ -13,27 +13,22 @@ import { StoresProvider, useStores } from '../../../js/stores/stores'
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../js/utils/constants'
 import { fakeDownload, applyMockAdapter } from '../../__testdata__/download.data'
 import etsinTheme from '../../../js/styles/theme'
-import PackageModal from '../../../js/components/dataset/data/idaResourcesV2/packageModal'
-import PackageCreate from '../../../js/components/dataset/data/idaResourcesV2/packageModal/packageCreate'
-import PackagePending from '../../../js/components/dataset/data/idaResourcesV2/packageModal/packagePending'
-import PackageSuccess from '../../../js/components/dataset/data/idaResourcesV2/packageModal/packageSuccess'
+import PackageModal from '../../../js/components/dataset/data/idaResources/packageModal'
+import PackageCreate from '../../../js/components/dataset/data/idaResources/packageModal/packageCreate'
+import PackagePending from '../../../js/components/dataset/data/idaResources/packageModal/packagePending'
+import PackageSuccess from '../../../js/components/dataset/data/idaResources/packageModal/packageSuccess'
 import {
   CreatePackageButton,
   SubmitEmailButton,
-} from '../../../js/components/dataset/data/idaResourcesV2/packageModal/common'
+} from '../../../js/components/dataset/data/idaResources/packageModal/common'
 
-jest.mock('../../../js/components/dataset/data/idaResourcesV2/download', () => {
-  const actual = jest.requireActual('../../../js/components/dataset/data/idaResourcesV2/download')
+jest.mock('../../../js/components/dataset/data/idaResources/download', () => {
+  const actual = jest.requireActual('../../../js/components/dataset/data/idaResources/download')
   return {
     ...actual,
     downloadFile: jest.fn().mockImplementation(actual.downloadFile),
     downloadPackage: jest.fn().mockImplementation(actual.downloadPackage),
   }
-})
-
-global.Promise = require('bluebird')
-Promise.config({
-  cancellation: true,
 })
 
 jest.mock('../../../js/stores/stores', () => {
