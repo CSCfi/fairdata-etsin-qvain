@@ -12,16 +12,19 @@ import '../../../../locale/translations'
 import QvainDatasets from '../../../../js/components/qvain/views/datasets'
 import RemoveModal from '../../../../js/components/qvain/views/datasets/removeModal'
 import { MoreButton } from '../../../../js/components/qvain/views/datasets/datasetGroup'
-import stores from '../../../../js/stores'
+import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import datasets from '../../../__testdata__/qvain.datasets'
 
-global.Promise = require('bluebird')
-
 expect.extend(toHaveNoViolations)
 
-stores.Auth.setUser({
-  name: 'teppo',
+let stores
+
+beforeEach(() => {
+  stores = buildStores()
+  stores.Auth.setUser({
+    name: 'teppo',
+  })
 })
 
 const datasetsCalls = observable.array([])
@@ -77,9 +80,12 @@ describe('Qvain dataset removal modal', () => {
     },
   }
 
-  const nop = () => {}
-
   beforeEach(async () => {
+    stores.QvainDatasets.removeModal.open({
+      dataset,
+      onlyChanges: false,
+      postRemoveCallback: jest.fn(),
+    })
     helper = document.createElement('div')
     document.body.appendChild(helper)
     ReactModal.setAppElement(helper)
@@ -89,7 +95,7 @@ describe('Qvain dataset removal modal', () => {
       <StoresProvider store={stores}>
         <BrowserRouter>
           <ThemeProvider theme={etsinTheme}>
-            <RemoveModal dataset={dataset} onClose={nop} postRemoveUpdate={nop} />
+            <RemoveModal />
           </ThemeProvider>
         </BrowserRouter>
       </StoresProvider>,

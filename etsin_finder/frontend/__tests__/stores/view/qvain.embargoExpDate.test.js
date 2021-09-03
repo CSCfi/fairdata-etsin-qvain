@@ -1,6 +1,7 @@
 import 'chai/register-expect'
-import EmbargoExpDate from '../../../js/stores/view/qvain/qvain.embargoExpDate'
-import { embargoExpDateSchema } from '../../../js/components/qvain/utils/formValidation'
+import EmbargoExpDate, {
+  embargoExpDateSchema,
+} from '../../../js/stores/view/qvain/qvain.embargoExpDate'
 import { makeObservable } from 'mobx'
 
 jest.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {

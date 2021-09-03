@@ -15,7 +15,7 @@ from etsin_finder.app_config import get_metax_api_config
 from etsin_finder.utils.utils import FlaskService, format_url
 from etsin_finder.utils.constants import ACCESS_TYPES
 from etsin_finder.utils.request_utils import make_request
-
+from etsin_finder.services.common_service import MetaxCommonAPIService
 
 class MetaxAPIService(FlaskService):
     """Metax API Service"""
@@ -104,17 +104,51 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
         dict: The wanted catalog record.
 
     """
-    cache_key = "v2_{}".format(cr_id)
     if refresh_cache:
-        return current_app.cr_cache.update_cache(cache_key, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
+        return current_app.cr_cache.update_cache(cr_id, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
 
-    cr = current_app.cr_cache.get_from_cache(cache_key)
+    cr = current_app.cr_cache.get_from_cache(cr_id)
     if cr is None:
         cr = _get_cr_from_metax(cr_id, check_removed_if_not_exist)
         return current_app.cr_cache.update_cache(cr_id, cr)
     else:
         return cr
 
+def get_catalog_record_permissions(cr_id, refresh_cache=False):
+    """Get permissions for a single catalog record from Metax API.
+
+    Args:
+        cr_id (str): Catalog record identifier.
+        refresh_cache (bool, optional): Should the cache be refreshed. Defaults to False.
+
+    Returns:
+        dict: Permissions dict
+
+    """
+    def get_perm():
+        """Retrive permissions from Metax"""
+        common_service = MetaxCommonAPIService()
+        projects, projects_status = common_service.get_dataset_projects(cr_id)
+        if projects_status != 200:
+            return None
+        return {
+            'projects': projects # list of dataset projects
+        }
+
+    perm = None
+    if not refresh_cache:
+        # try to get cached permissions
+        perm = current_app.cr_permission_cache.get_from_cache(cr_id)
+    if perm is None:
+        perm = get_perm()
+        if perm:
+            return current_app.cr_permission_cache.update_cache(cr_id, perm)
+        else:
+            # getting permissions failed, remove previous entry from cache if any
+            current_app.cr_permission_cache.delete_from_cache(cr_id)
+            return None
+    else:
+        return perm
 
 def get_catalog_record_access_type(cr):
     """Get the type of access_type of a catalog record.
@@ -235,7 +269,7 @@ def is_catalog_record_owner(catalog_record, user_id):
     :param user_id:
     :return:
     """
-    if catalog_record.get('metadata_provider_user') == user_id:
+    if user_id and catalog_record.get('metadata_provider_user') == user_id:
         return True
     return False
 

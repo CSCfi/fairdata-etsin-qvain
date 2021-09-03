@@ -40,10 +40,16 @@ class Field {
     this.hasChanged = val
   }
 
-  @action create() {
-    this.setChanged(false)
+  @action create(data = undefined) {
+    if (data) {
+      this.setChanged(true)
+      this.inEdit = this.Template(data)
+    } else {
+      this.setChanged(false)
+      this.inEdit = this.Template()
+    }
+
     this.editMode = false
-    this.inEdit = this.Template()
     this.validationError = undefined
   }
 
@@ -54,6 +60,7 @@ class Field {
 
   @action save = () => {
     this.setChanged(false)
+    this.Parent.setChanged(true)
     this.editMode = false
 
     Object.keys(toJS(this.inEdit)).forEach(key => {
@@ -101,6 +108,7 @@ class Field {
 
   @action remove = uiid => {
     this.storage = this.storage.filter(item => item.uiid !== uiid)
+    this.Parent.setChanged(true)
   }
 
   @action edit = uiid => {

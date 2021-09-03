@@ -1,10 +1,13 @@
 import { v4 as uuidv4 } from 'uuid'
 import { observable, action, makeObservable, override } from 'mobx'
+import * as yup from 'yup'
+
 import Spatials from './qvain.spatials'
 import UsedEntities from './qvain.usedEntities'
 import Field from './qvain.field'
 import { ActorsRef } from './qvain.actors'
 import { ROLE } from '../../../utils/constants'
+import { touch } from './track'
 
 export const Provenance = ({
   uiid = uuidv4(),
@@ -30,6 +33,25 @@ export const Provenance = ({
   usedEntities,
   associations,
   lifecycle,
+})
+
+// PROVENANCE
+export const provenanceNameSchema = yup.object().shape({
+  fi: yup.mixed().when('en', {
+    is: val => val.length > 0,
+    then: yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
+    otherwise: yup
+      .string()
+      .typeError('qvain.validationMessages.history.provenance.nameRequired')
+      .required('qvain.validationMessages.history.provenance.nameRequired'),
+  }),
+  en: yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
+})
+
+export const provenanceSchema = yup.object().shape({
+  name: provenanceNameSchema,
+  startDate: yup.string().date(),
+  endDate: yup.string().date(),
 })
 
 class Provenances extends Field {
@@ -64,8 +86,8 @@ class Provenances extends Field {
       associations: new ActorsRef({
         actors: this.Qvain.Actors,
       }),
-      usedEntities: new UsedEntities(this.Qvain),
-      spatials: new Spatials(this.Qvain),
+      usedEntities: new UsedEntities(this),
+      spatials: new Spatials(this),
     })
   }
 
@@ -78,10 +100,10 @@ class Provenances extends Field {
       temporal:
         p.startDate || p.endDate
           ? {
-              start_date: new Date(p.startDate).toISOString(),
-              end_date: new Date(p.endDate).toISOString(),
+              start_date: p.startDate ? new Date(p.startDate).toISOString() : undefined,
+              end_date: p.endDate ? new Date(p.endDate).toISOString() : undefined,
             }
-          : undefined, // TODO: move this conversion to Temporal when it's implemented
+          : undefined,
       spatial: p.spatials.toBackend()[0],
       event_outcome: { identifier: (p.outcome || {}).url },
       used_entity: p.usedEntities.toBackend(),
@@ -92,6 +114,11 @@ class Provenances extends Field {
   @action
   fromBackend = (dataset, Qvain) => {
     this.provenancesWithNonExistingActors = []
+    if (dataset.provenance) {
+      dataset.provenance.forEach(prov => {
+        touch(prov.lifecycle_event, prov.event_outcome)
+      })
+    }
     this.fromBackendBase(dataset.provenance, Qvain)
   }
 
@@ -107,6 +134,8 @@ class Provenances extends Field {
   @action removeActorFromRefs = actor => {
     this.storage.forEach(p => p.associations.removeActorRef(actor.uiid))
   }
+
+  schema = provenanceSchema
 }
 
 export const Outcome = (name, url) => ({
@@ -146,12 +175,12 @@ export const ProvenanceModel = (provenanceData, Qvain) => ({
 
 const parseTranslationField = value => {
   if (!value) return { fi: '', en: '', und: '' }
-  if (!value.fi) value.fi = ''
-  if (!value.en) value.en = ''
-  if (!value.und) {
-    value.und = value.fi || value.en || ''
+  const values = {
+    fi: value.fi || '',
+    en: value.en || '',
+    und: value.und || '',
   }
-  return value
+  return values
 }
 
 export default Provenances

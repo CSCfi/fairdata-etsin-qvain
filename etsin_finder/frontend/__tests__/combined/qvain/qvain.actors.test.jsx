@@ -37,8 +37,6 @@ import organizationMockGet, {
 } from '../../__testdata__/qvain.actors.data'
 import { useStores, StoresProvider } from '../../../js/stores/stores'
 
-global.Promise = require('bluebird')
-
 // Make sure MobX store values are not mutated outside actions.
 configure({
   enforceActions: 'always',
@@ -1098,7 +1096,7 @@ describe('Qvain.Actors store', () => {
       curator: [third],
     }
 
-    stores.Qvain.Actors.editDataset(dataset)
+    stores.Qvain.Actors.fromBackend(dataset)
     expect(stores.Qvain.Actors.actors.length).toBe(4)
     const creators = stores.Qvain.Actors.actors.filter(actor => actor.roles.includes('creator'))
     expect(creators.map(actor => actor.person.name)).toEqual([first.name, second.name, third.name])

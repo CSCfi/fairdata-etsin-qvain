@@ -9,6 +9,7 @@
 
 from flask import current_app
 
+from etsin_finder.auth import authentication
 from etsin_finder.services import cr_service
 from etsin_finder.services.cr_service import (
     get_catalog_record_access_type,
@@ -22,7 +23,18 @@ from etsin_finder.log import log
 from etsin_finder.services import rems_service
 from etsin_finder.utils.utils import tz_now_is_later_than_timestamp_str, remove_keys_recursively, leave_keys_in_dict
 from etsin_finder.utils.constants import ACCESS_TYPES, ACCESS_DENIED_REASON, DATA_CATALOG_IDENTIFIERS
-from etsin_finder.auth.authentication import get_user_id, is_authenticated
+from etsin_finder.utils.flags import flag_enabled
+
+
+def user_has_dataset_project(cr_id):
+    """Check if at least one of the dataset projects is in user project list."""
+    user_projects = authentication.get_user_ida_projects() or []
+    if not user_projects:
+        return False
+    permissions = cr_service.get_catalog_record_permissions(cr_id)
+    common_projects = permissions and set(user_projects) & set(permissions.get('projects', []))
+    return bool(common_projects)
+
 
 def user_can_view_dataset(cr_id):
     """
@@ -42,10 +54,17 @@ def user_can_view_dataset(cr_id):
     if is_published(cr):
         return True
 
+    if not authentication.is_authenticated():
+        return False
+
     # non-public dataset is available only for the owner
-    user_id = get_user_id()
+    user_id = authentication.get_user_id()
     if is_catalog_record_owner(cr, user_id):
         return True
+
+    if flag_enabled('PERMISSIONS.SHARE_PROJECT'):
+        if user_has_dataset_project(cr_id):
+            return True
     return False
 
 
@@ -61,9 +80,9 @@ def user_has_rems_permission_for_catalog_record(cr_id):
         bool: True if user is entitled, False if not.
 
     """
-    if not is_authenticated():
+    if not authentication.is_authenticated():
         return False
-    user_id = get_user_id()
+    user_id = authentication.get_user_id()
     if not cr_id or not user_id:
         return False
     return rems_service.get_user_rems_permission_for_catalog_record(cr_id, user_id)

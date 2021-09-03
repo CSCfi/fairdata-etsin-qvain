@@ -9,6 +9,7 @@ import Button from '../general/button'
 import REMSButton from './REMSButton'
 import { REMS_URL } from '../../utils/constants'
 import { withStores } from '../../utils/stores'
+import urls from '../../utils/urls'
 
 export class AskForAccess extends Component {
   state = {
@@ -19,7 +20,7 @@ export class AskForAccess extends Component {
   onClick = () => {
     this.setState({ loading: true })
     axios
-      .get(`/api/rems/${this.props.cr_id}`)
+      .get(urls.rems(this.props.cr_id))
       .then(res => {
         console.log(res)
         window.open(`${REMS_URL}/application/${res.data}`, '_blank')

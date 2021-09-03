@@ -1,6 +1,6 @@
 const temporalAndSpatial = {
-  title: 'Time Period and Geograhical area',
-  tooltip: 'Time Peroiod and Geographical area',
+  title: 'Time Period and Geographical area',
+  tooltip: 'Time Period and Geographical area',
   tooltipContent: {
     spatial: {
       title: 'Geographical area',
@@ -53,6 +53,11 @@ const temporalAndSpatial = {
     title: 'Time period',
     description: 'Time period that is covered by the dataset, i.e. period of observations.',
     addButton: 'Add temporal coverage',
+    listItem: {
+      bothDates: '%(startDate)s - %(endDate)s',
+      startDateOnly: 'from %(startDate)s',
+      endDateOnly: 'until %(endDate)s',
+    },
     modal: {
       durationInput: {
         label: 'Period of time',

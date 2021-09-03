@@ -13,9 +13,8 @@ import SpatialsForm from '../../../js/components/qvain/fields/temporalAndSpatial
 import UsedEntitiesForm from '../../../js/components/qvain/fields/history/relatedResource/form'
 import {
   provenanceNameSchema,
-  provenanceStartDateSchema,
-  provenanceEndDateSchema,
-} from '../../../js/components/qvain/utils/formValidation'
+  provenanceDateSchema,
+} from '../../../js/stores/view/qvain/qvain.submit.schemas'
 import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
 import Durationpicker from '../../../js/components/qvain/general/input/durationpicker'
 import ActorsInput, {
@@ -28,21 +27,20 @@ import { Label } from '../../../js/components/qvain/general/modal/form'
 import ActorsList from '../../../js/components/qvain/fields/history/provenance/form/actorsList'
 import { ROLE } from '../../../js/utils/constants'
 
-jest.mock('../../../js/components/qvain/utils/formValidation', () => {
+jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas', () => {
   return {
     provenanceNameSchema: {
       validate: jest.fn(),
     },
-    provenanceStartDateSchema: {
-      validate: jest.fn(),
-    },
-    provenanceEndDateSchema: {
+    provenanceDateSchema: {
       validate: jest.fn(),
     },
   }
 })
 
 jest.mock('counterpart')
+
+const flushPromises = () => new Promise(setImmediate)
 
 describe('Provenance', () => {
   const mockStores = {
@@ -59,6 +57,9 @@ describe('Provenance', () => {
         save: jest.fn(),
         clearInEdit: jest.fn(),
         setValidationError: jest.fn(),
+        schema: {
+          validate: jest.fn(),
+        },
       },
     },
     Locale: {
@@ -68,9 +69,10 @@ describe('Provenance', () => {
 
   const harness = new Harness(Provenance)
 
-  beforeEach(() => {
+  beforeEach(async () => {
     useStores.mockReturnValue(mockStores)
     harness.shallow()
+    await flushPromises()
     harness.diveInto('Provenance')
   })
 
@@ -123,27 +125,15 @@ describe('Provenance', () => {
     })
 
     describe('when calling handleSave and validations pass', () => {
-      const { inEdit } = mockStores.Qvain.Provenances
+      const { inEdit, schema } = mockStores.Qvain.Provenances
 
       beforeEach(() => {
-        provenanceNameSchema.validate.mockReturnValue(Promise.resolve())
-        provenanceStartDateSchema.validate.mockReturnValue(Promise.resolve())
-        provenanceEndDateSchema.validate.mockReturnValue(Promise.resolve())
+        schema.validate.mockReturnValue(Promise.resolve())
         harness.props.handleSave()
       })
 
-      test('should call provenanceNameSchema.validate', () => {
-        expect(provenanceNameSchema.validate).to.have.beenCalledWith(inEdit.name, { strict: true })
-      })
-
-      test('should call provenanceStartDateSchema.validate', () => {
-        expect(provenanceStartDateSchema.validate).to.have.beenCalledWith(inEdit.startDate, {
-          strict: true,
-        })
-      })
-
-      test('should call provenanceEndDateSchema.validate', () => {
-        expect(provenanceEndDateSchema.validate).to.have.beenCalledWith(inEdit.endDate, {
+      test('should call provenanceDateSchema.validate', () => {
+        expect(schema.validate).to.have.beenCalledWith(inEdit, {
           strict: true,
         })
       })
@@ -162,9 +152,10 @@ describe('Provenance', () => {
         message: 'hello',
       }
 
-      beforeEach(() => {
-        provenanceNameSchema.validate.mockReturnValue(Promise.reject(error))
+      beforeEach(async () => {
+        mockStores.Qvain.Provenances.schema.validate.mockReturnValue(Promise.reject(error))
         harness.props.handleSave()
+        await flushPromises()
       })
 
       test('should call setValidationError', () => {

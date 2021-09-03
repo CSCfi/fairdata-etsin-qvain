@@ -11,17 +11,6 @@ import FieldList from '../../../js/components/qvain/general/section/fieldList'
 import FieldListAdd from '../../../js/components/qvain/general/section/fieldListAdd'
 import { Location } from '../../../js/stores/view/qvain/qvain.spatials'
 import { useStores } from '../../../js/stores/stores'
-import {
-  spatialNameSchema,
-  spatialAltitudeSchema,
-} from '../../../js/components/qvain/utils/formValidation'
-
-jest.mock('../../../js/components/qvain/utils/formValidation', () => {
-  return {
-    spatialNameSchema: { validate: jest.fn() },
-    spatialAltitudeSchema: { validate: jest.fn() },
-  }
-})
 
 jest.mock('../../../js/components/qvain/fields/temporalAndSpatial/spatial/handleSave')
 
@@ -59,7 +48,9 @@ describe('given required props', () => {
 describe('given mockStore in useStores', () => {
   const harness = new Harness(SpatialFieldContent)
   const mockStores = {
-    Qvain: { Spatials: {} },
+    Qvain: {
+      Spatials: {},
+    },
     Locale: {
       lang: 'en',
     },
@@ -159,6 +150,9 @@ describe('when calling Spatial handleSave and validations are successful', () =>
       name: 'name',
       altitude: 'alt',
     },
+    schema: {
+      validate: jest.fn(),
+    },
     save: jest.fn(),
     clearInEdit: jest.fn(),
   }
@@ -168,18 +162,13 @@ describe('when calling Spatial handleSave and validations are successful', () =>
       '../../../js/components/qvain/fields/temporalAndSpatial/spatial/handleSave'
     ).default
 
-    spatialNameSchema.validate.mockReturnValue(Promise.resolve())
-    spatialAltitudeSchema.validate.mockReturnValue(Promise.resolve())
+    field.schema.validate.mockReturnValue(Promise.resolve())
 
     await handleSave(field)
   })
 
-  test('should call spatialNameSchema.validate with inEdit.name', () => {
-    expect(spatialNameSchema.validate).to.have.beenCalledWith(field.inEdit.name, { strict: true })
-  })
-
-  test('should call spatialAltitudeSchema.validate with inEdit.altitude', () => {
-    expect(spatialAltitudeSchema.validate).to.have.beenCalledWith(field.inEdit.altitude, {
+  test('should call schema.validate with inEdit', () => {
+    expect(field.schema.validate).to.have.beenCalledWith(field.inEdit, {
       strict: true,
     })
   })
@@ -199,6 +188,9 @@ describe('when calling Spatial handleSave and validation fails', () => {
       name: 'name',
       altitude: 'alt',
     },
+    schema: {
+      validate: jest.fn(),
+    },
     setValidationError: jest.fn(),
   }
 
@@ -209,8 +201,7 @@ describe('when calling Spatial handleSave and validation fails', () => {
       '../../../js/components/qvain/fields/temporalAndSpatial/spatial/handleSave'
     ).default
 
-    spatialNameSchema.validate.mockReturnValue(Promise.reject({ message }))
-    spatialAltitudeSchema.validate.mockReturnValue(Promise.resolve())
+    field.schema.validate.mockReturnValue(Promise.reject({ message }))
 
     await handleSave(field)
   })

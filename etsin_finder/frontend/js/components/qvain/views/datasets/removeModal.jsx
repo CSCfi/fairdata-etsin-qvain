@@ -1,23 +1,45 @@
+import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
-import urls from '../../utils/urls'
+import urls from '../../../../utils/urls'
 import Modal from '../../../general/modal'
 import { TableButton, DangerButton } from '../../general/buttons'
 import { getResponseError } from '../../utils/responseError'
+import { useStores } from '../../utils/stores'
 
-export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, onClose }) => {
+const modalDataTypes = {
+  dataset: PropTypes.object.isRequired,
+  onlyChanges: PropTypes.bool.isRequired,
+  postRemoveCallback: PropTypes.func,
+}
+
+export const RemoveModal = () => {
+  const {
+    QvainDatasets: { removeModal },
+  } = useStores()
+
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  if (!removeModal.data) {
+    return null
+  }
+
+  PropTypes.checkPropTypes(modalDataTypes, removeModal.data, 'data', 'RemoveModal')
+
+  const {
+    close,
+    data: { dataset, onlyChanges, postRemoveCallback },
+  } = removeModal
 
   const clearAndClose = () => {
     setError(null)
     setLoading(null)
-    onClose()
+    close()
   }
 
   const getRemoveKey = () => {
@@ -38,22 +60,26 @@ export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, onClose })
 
     try {
       setLoading(true)
+      let removed = false
 
       // Delete unpublished changes first
       if (dataset.next_draft) {
-        const draftUrl = urls.v2.dataset(dataset.next_draft.identifier)
+        const draftUrl = urls.qvain.dataset(dataset.next_draft.identifier)
         await axios.delete(draftUrl)
+        removed = true
       }
 
       // Delete the actual dataset
       if (!onlyChanges) {
-        const url = urls.v2.dataset(identifier)
+        const url = urls.qvain.dataset(identifier)
         await axios.delete(url)
+        removed = true
       }
 
-      postRemoveUpdate(dataset, onlyChanges)
-      onClose()
-      setError(null)
+      if (removed && postRemoveCallback) {
+        postRemoveCallback()
+      }
+      clearAndClose()
     } catch (err) {
       setError(getResponseError(err))
       console.error(err)
@@ -79,18 +105,6 @@ export const RemoveModal = ({ dataset, onlyChanges, postRemoveUpdate, onClose })
       </DangerButton>
     </Modal>
   )
-}
-
-RemoveModal.propTypes = {
-  dataset: PropTypes.object,
-  onlyChanges: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
-  postRemoveUpdate: PropTypes.func.isRequired,
-}
-
-RemoveModal.defaultProps = {
-  dataset: null,
-  onlyChanges: false,
 }
 
 export const ErrorMessage = styled.p`

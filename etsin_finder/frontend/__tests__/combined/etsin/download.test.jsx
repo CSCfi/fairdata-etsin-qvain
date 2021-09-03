@@ -8,25 +8,23 @@ import EnvClass from '../../../js/stores/domain/env'
 import Packages from '../../../js/stores/view/packages'
 import { fakeDownload, applyMockAdapter } from '../../__testdata__/download.data'
 import { runInAction } from 'mobx'
-import getDownloadAction from '../../../js/components/dataset/data/idaResourcesV2/downloadActions'
+import getDownloadAction, {
+  getAllowDownload,
+  getDownloadAllText,
+} from '../../../js/components/dataset/data/idaResources/downloadActions'
 import {
   downloadFile,
   downloadPackage,
-} from '../../../js/components/dataset/data/idaResourcesV2/download'
-import ErrorMessage from '../../../js/components/dataset/data/idaResourcesV2/errorMessage'
+} from '../../../js/components/dataset/data/idaResources/download'
+import ErrorMessage from '../../../js/components/dataset/data/idaResources/errorMessage'
 
-jest.mock('../../../js/components/dataset/data/idaResourcesV2/download', () => {
-  const actual = jest.requireActual('../../../js/components/dataset/data/idaResourcesV2/download')
+jest.mock('../../../js/components/dataset/data/idaResources/download', () => {
+  const actual = jest.requireActual('../../../js/components/dataset/data/idaResources/download')
   return {
     ...actual,
     downloadFile: jest.fn().mockImplementation(actual.downloadFile),
     downloadPackage: jest.fn().mockImplementation(actual.downloadPackage),
   }
-})
-
-global.Promise = require('bluebird')
-Promise.config({
-  cancellation: true,
 })
 
 const { PENDING, STARTED, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
@@ -302,6 +300,58 @@ describe('Download button actions', () => {
     action.func()
     expect(packages.packageModalPath).toBe('/no_package')
   })
+
+  it('allows downloading large files', async () => {
+    const fileItem = { type: 'file', path: '/file', byteSize: packages.sizeLimit + 1 }
+    const action = getDownloadAction(1, fileItem, packages, files)
+    expect(action).toEqual(expect.objectContaining({ disabled: false }))
+  })
+
+  it('allows generating large package with size equal to sizeLimit', async () => {
+    const largeDirectoryItem = {
+      type: 'directory',
+      path: '/pending',
+      existingByteSize: packages.sizeLimit,
+    }
+    const action = getDownloadAction(1, largeDirectoryItem, packages, files)
+    expect(action).toEqual(expect.objectContaining({ disabled: false }))
+  })
+
+  it('prevents generating package for directory larger than sizeLimit', async () => {
+    const largeDirectoryItem = {
+      type: 'directory',
+      path: '/pending',
+      existingByteSize: packages.sizeLimit + 1,
+    }
+    const action = getDownloadAction(1, largeDirectoryItem, packages, files)
+    expect(action).toEqual(expect.objectContaining({ disabled: true }))
+  })
+
+  it('allows generating package for dataset with size equal to sizeLimit', async () => {
+    const filesWithLargeRoot = {
+      ...files,
+      root: {
+        type: 'directory',
+        path: '/pending',
+        existingByteSize: packages.sizeLimit,
+      },
+    }
+    const action = getDownloadAction(1, null, packages, filesWithLargeRoot)
+    expect(action).toEqual(expect.objectContaining({ disabled: false }))
+  })
+
+  it('prevents generating  for dataset larger than sizeLimit', async () => {
+    const filesWithLargeRoot = {
+      ...files,
+      root: {
+        type: 'directory',
+        path: '/pending',
+        existingByteSize: packages.sizeLimit + 1,
+      },
+    }
+    const action = getDownloadAction(1, null, packages, filesWithLargeRoot)
+    expect(action).toEqual(expect.objectContaining({ disabled: true }))
+  })
 })
 
 describe('Download functions', () => {
@@ -346,6 +396,58 @@ describe('Download functions', () => {
     await downloadPackage(500, 'package-id', mockPackages)
     expect(mockPackages.setError.mock.calls.length).toBe(1)
     expect(console.error.mock.calls.length).toBe(1)
+  })
+})
+
+describe('getAllowDownload', () => {
+  it('returns true for published IDA dataset', () => {
+    expect(
+      getAllowDownload(
+        {
+          isDraft: false,
+          isPas: false,
+        },
+        { allowDataIdaDownloadButton: true }
+      )
+    ).toBe(true)
+  })
+
+  it('returns false for restricted IDA dataset', () => {
+    expect(
+      getAllowDownload(
+        {
+          isDraft: false,
+          isPas: false,
+        },
+        { allowDataIdaDownloadButton: false }
+      )
+    ).toBe(false)
+  })
+
+  it('returns false for DPS dataset', () => {
+    expect(
+      getAllowDownload(
+        {
+          isDraft: false,
+          isPas: true,
+        },
+        { allowDataIdaDownloadButton: true }
+      )
+    ).toBe(false)
+  })
+
+  it('returns false for draft', () => {
+    expect(getAllowDownload({ isDraft: true }, { allowDataIdaDownloadButton: true })).toBe(false)
+  })
+})
+
+describe('getDownloadAllText', () => {
+  it('returns download text for non-draft', () => {
+    expect(getDownloadAllText({ isDraft: false })).toBe('dataset.dl.downloadAll')
+  })
+
+  it('returns download disabled text for draft', () => {
+    expect(getDownloadAllText({ isDraft: true })).toBe('dataset.dl.downloadDisabledForDraft')
   })
 })
 

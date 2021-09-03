@@ -13,6 +13,7 @@ import axios from 'axios'
 
 import Files from './files'
 import Packages from './packages'
+import urls from '../../utils/urls'
 
 const QueryFields = {
   file: [
@@ -60,6 +61,12 @@ class DatasetQuery {
     await this.Packages.fetch(this.results.identifier)
   }
 
+  @computed get isPas() {
+    return (
+      this.results?.data_catalog?.catalog_json?.identifier === 'urn:nbn:fi:att:data-catalog-pas'
+    )
+  }
+
   @computed get isDraft() {
     if (this.results) {
       if (this.results.draft_of || this.results.state === 'draft') {
@@ -72,7 +79,7 @@ class DatasetQuery {
   @action
   getData(id) {
     this.Packages.clearPackages()
-    const url = `/api/v2/dataset/${id}`
+    const url = urls.dataset(id)
     return new Promise((resolve, reject) => {
       axios
         .get(url)

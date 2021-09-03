@@ -1,9 +1,16 @@
 import { action, makeObservable } from 'mobx'
+import * as yup from 'yup'
 import ReferenceField from './qvain.referenceField'
-import {
-  otherIdentifierSchema,
-  otherIdentifiersArraySchema,
-} from '../../../components/qvain/utils/formValidation'
+import { touch } from './track'
+
+export const otherIdentifierSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.otherIdentifiers.string')
+  .min(10, 'qvain.validationMessages.otherIdentifiers.min')
+  .url('qvain.validationMessages.otherIdentifiers.url')
+  .max(1000, 'qvain.validationMessages.otherIdentifiers.max')
+
+export const otherIdentifiersArraySchema = yup.array().of(otherIdentifierSchema).nullable()
 
 class OtherIdentifiers extends ReferenceField {
   constructor(...args) {
@@ -14,7 +21,10 @@ class OtherIdentifiers extends ReferenceField {
 
   @action fromBackend = dataset => {
     this.reset()
-    this.storage = dataset.other_identifier ? dataset.other_identifier.map(oid => oid.notation) : []
+    if (dataset.other_identifier) {
+      dataset.other_identifier.forEach(oid => touch(oid.type))
+      this.storage = dataset.other_identifier.map(oid => oid.notation)
+    }
   }
 
   @action cleanupBeforeBackend = () => {

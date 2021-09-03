@@ -9,6 +9,7 @@ import FlaggedComponent from '../../../general/flaggedComponent'
 import { Button } from '../../../general/button'
 import SubmitButtons from './submitButtons'
 
+import Unsupported from './unsupported'
 import RightsAndLicenses from '../../fields/licenses'
 import Description from '../../fields/description'
 import Actors from '../../fields/actors'
@@ -24,8 +25,6 @@ export const Dataset = ({
   datasetErrorDetails,
   handleRetry,
   setFocusOnSubmitButton,
-  handleSubmitError,
-  handleSubmitResponse,
 }) => {
   if (datasetError) {
     return (
@@ -48,6 +47,9 @@ export const Dataset = ({
   return (
     <Form className="container">
       <DisableImplicitSubmit />
+      <FlaggedComponent flag="UI.SHOW_UNSUPPORTED">
+        <Unsupported />
+      </FlaggedComponent>
       <Description />
       <Actors />
       <RightsAndLicenses />
@@ -59,11 +61,7 @@ export const Dataset = ({
         <Translate component="p" content="qvain.consent" unsafe />
         <FlaggedComponent flag="UI.BOTTOM_SUBMIT_BUTTONS">
           <Center>
-            <SubmitButtons
-              handleSubmitError={handleSubmitError}
-              handleSubmitResponse={handleSubmitResponse}
-              idSuffix="-bottom"
-            />
+            <SubmitButtons idSuffix="-bottom" />
           </Center>
         </FlaggedComponent>
       </SubmitContainer>
@@ -80,8 +78,6 @@ Dataset.propTypes = {
   datasetErrorTitle: PropTypes.node,
   datasetErrorDetails: PropTypes.node,
   handleRetry: PropTypes.func.isRequired,
-  handleSubmitError: PropTypes.func.isRequired,
-  handleSubmitResponse: PropTypes.func.isRequired,
   setFocusOnSubmitButton: PropTypes.func.isRequired,
 }
 

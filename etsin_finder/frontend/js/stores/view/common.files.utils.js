@@ -4,31 +4,6 @@ import { observable, action, makeObservable } from 'mobx'
 const sortOpts = { numeric: true, sensitivity: 'base' }
 export const sortFunc = (a, b) => a.localeCompare(b, undefined, sortOpts)
 
-export class PromiseManager {
-  // Keeps track of promises and cancels all of them when reset() is called.
-  // The canceled promises fail silently; allbacks of a canceled promise won't be called.
-  //
-  // Note: Promises created by mobx.when override the bluebird Promise.cancel fuctionality
-  // and will cause a rejection on cancel. You can do when(stuff).catch(()=>{}) to
-  // prevent unhandled rejection warnings.
-  promises = []
-
-  add = promise => {
-    this.promises.push(promise)
-    promise.then(() => {
-      this.promises = this.promises.filter(p => p !== promise)
-    })
-    return promise
-  }
-
-  reset() {
-    this.promises.forEach(promise => {
-      promise.cancel()
-    })
-    this.promises.length = 0
-  }
-}
-
 export class ChildItemCounter {
   constructor() {
     makeObservable(this)

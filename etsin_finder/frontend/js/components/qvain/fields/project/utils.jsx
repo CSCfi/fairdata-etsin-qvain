@@ -8,6 +8,7 @@ import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 
 import { getOrganizationSearchUrl } from '../../../../stores/view/qvain/qvain.actors'
+import { touch } from '../../../../stores/view/qvain/track'
 import ValidationError from '../../general/errors/validationError'
 import { METAX_FAIRDATA_ROOT_URL } from '../../../../utils/constants'
 
@@ -33,7 +34,8 @@ ErrorMessages.defaultProps = {
 export function parseOrganization(organization) {
   const out = []
   const { name, identifier, email } = organization
-  out.push({ name, identifier, email })
+  touch(organization['@type'])
+  out.push({ name: { ...name }, identifier, email })
   if ('is_part_of' in organization) {
     out.push(...parseOrganization(organization.is_part_of))
   }

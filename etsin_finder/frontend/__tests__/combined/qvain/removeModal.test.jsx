@@ -4,110 +4,143 @@ import axios from 'axios'
 
 import '../../../locale/translations.js'
 import { RemoveModal as RemoveModalBase } from '../../../js/components/qvain/views/datasets/removeModal'
-import QvainClass from '../../../js/stores/view/qvain'
-import AccessibilityClass from '../../../js/stores/view/accessibility'
-import ElasticQueryClass from '../../../js/stores/view/elasticquery'
-import LocaleClass from '../../../js/stores/view/locale'
-import EnvClass from '../../../js/stores/domain/env'
+import { useStores } from '../../../js/stores/stores'
+import { buildStores } from '../../../js/stores'
 
 jest.mock('axios')
-
-const mockEnv = new EnvClass()
-const mockStores = new QvainClass(mockEnv)
-const Accessibility = new AccessibilityClass(mockEnv)
-const ElasticQuery = new ElasticQueryClass(mockEnv)
-const mockLocale = new LocaleClass(Accessibility, ElasticQuery)
-
-jest.mock('../../../js/stores/stores', () => {
-  const getStores = () => {
-    mockStores.resetQvainStore()
-    return {
-      Qvain: mockStores,
-      Env: mockEnv,
-      Locale: mockLocale,
-    }
-  }
-
-  return {
-    ...jest.requireActual('../../../js/stores/stores'),
-    useStores: getStores,
-  }
-})
+jest.mock('../../../js/stores/stores')
 
 describe('Qvain.RemoveModal', () => {
   let wrapper, stores
-  const postRemoveUpdate = jest.fn()
-  const onClose = jest.fn()
 
   beforeEach(() => {
+    stores = buildStores()
+    useStores.mockReturnValue(stores)
     axios.delete.mockReset()
-    wrapper = shallow(
-      <RemoveModalBase postRemoveUpdate={postRemoveUpdate} onClose={onClose} location={{}} />
-    )
   })
+
+  const render = () => {
+    wrapper = shallow(<RemoveModalBase />)
+  }
 
   afterEach(() => {
     wrapper.unmount()
   })
 
-  it('deletes dataset', async () => {
-    wrapper.setProps({
-      dataset: {
-        identifier: 1,
-      },
-      onlyChanges: false,
-    })
-    wrapper.update()
-    wrapper.find('#confirm-remove-dataset').simulate('click')
-    await Promise.resolve()
-    expect(axios.delete.mock.calls).toEqual([['/api/v2/qvain/datasets/1']])
-  })
+  describe('given dataset with no changes', () => {
+    let modalData
 
-  it('deletes unpublished changes', async () => {
-    wrapper.setProps({
-      dataset: {
-        identifier: 1,
-        next_draft: {
-          identifier: 2,
+    beforeEach(async () => {
+      modalData = {
+        dataset: {
+          identifier: 1,
         },
-      },
-      onlyChanges: true,
+        onlyChanges: false,
+        postRemoveCallback: jest.fn(),
+      }
+      stores.QvainDatasets.removeModal.open(modalData)
+      render()
+      wrapper.find('#confirm-remove-dataset').simulate('click')
+      await Promise.resolve()
+      render()
     })
-    wrapper.update()
-    wrapper.find('#confirm-remove-dataset').simulate('click')
-    await Promise.resolve()
-    expect(axios.delete.mock.calls).toEqual([['/api/v2/qvain/datasets/2']])
+
+    it('deletes dataset', async () => {
+      expect(axios.delete.mock.calls).toEqual([['/api/qvain/datasets/1']])
+    })
+
+    it('calls postRemoveCallback', async () => {
+      expect(modalData.postRemoveCallback.mock.calls).toEqual([[]])
+    })
   })
 
-  it('has no changes to delete', async () => {
-    wrapper.setProps({
-      dataset: {
-        identifier: 1,
-      },
-      onlyChanges: true,
-    })
-    wrapper.update()
-    wrapper.find('#confirm-remove-dataset').simulate('click')
-    await Promise.resolve()
-    expect(axios.delete.mock.calls).toEqual([])
-  })
+  describe('given onlyChanges with changed dataset', () => {
+    let modalData
 
-  it('deletes unpublished changes before deleting dataset', async () => {
-    wrapper.setProps({
-      dataset: {
-        identifier: 1,
-        next_draft: {
-          identifier: 2,
+    beforeEach(async () => {
+      modalData = {
+        dataset: {
+          identifier: 1,
+          next_draft: {
+            identifier: 2,
+          },
         },
-      },
-      onlyChanges: false,
+        onlyChanges: true,
+        postRemoveCallback: jest.fn(),
+      }
+      stores.QvainDatasets.removeModal.open(modalData)
+      render()
+      wrapper.find('#confirm-remove-dataset').simulate('click')
+      await Promise.resolve()
+      render()
     })
-    wrapper.update()
-    wrapper.find('#confirm-remove-dataset').simulate('click')
-    await Promise.resolve()
-    expect(axios.delete.mock.calls).toEqual([
-      ['/api/v2/qvain/datasets/2'],
-      ['/api/v2/qvain/datasets/1'],
-    ])
+
+    it('deletes changes', async () => {
+      expect(axios.delete.mock.calls).toEqual([['/api/qvain/datasets/2']])
+    })
+
+    it('calls postRemoveCallback', async () => {
+      expect(modalData.postRemoveCallback.mock.calls).toEqual([[]])
+    })
+  })
+
+  describe('given onlyChanges with unchanged dataset', () => {
+    let modalData
+
+    beforeEach(async () => {
+      modalData = {
+        dataset: {
+          identifier: 1,
+        },
+        onlyChanges: true,
+        postRemoveCallback: jest.fn(),
+      }
+      stores.QvainDatasets.removeModal.open(modalData)
+      render()
+      wrapper.find('#confirm-remove-dataset').simulate('click')
+      await Promise.resolve()
+      render()
+    })
+
+    it('does not delete anything', async () => {
+      expect(axios.delete.mock.calls).toEqual([])
+    })
+
+    it('does not call postRemoveCallback', async () => {
+      expect(modalData.postRemoveCallback.mock.calls).toEqual([])
+    })
+  })
+
+  describe('given changed dataset', () => {
+    let modalData
+
+    beforeEach(async () => {
+      modalData = {
+        dataset: {
+          identifier: 1,
+          next_draft: {
+            identifier: 2,
+          },
+        },
+        onlyChanges: false,
+        postRemoveCallback: jest.fn(),
+      }
+      stores.QvainDatasets.removeModal.open(modalData)
+      render()
+      wrapper.find('#confirm-remove-dataset').simulate('click')
+      await Promise.resolve()
+      render()
+    })
+
+    it('deletes unpublished changes before deleting dataset', async () => {
+      expect(axios.delete.mock.calls).toEqual([
+        ['/api/qvain/datasets/2'],
+        ['/api/qvain/datasets/1'],
+      ])
+    })
+
+    it('calls postRemoveCallback', async () => {
+      expect(modalData.postRemoveCallback.mock.calls).toEqual([[]])
+    })
   })
 })

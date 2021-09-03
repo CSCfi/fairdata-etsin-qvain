@@ -1,12 +1,10 @@
-import { relatedResourceNameSchema, relatedResourceTypeSchema } from '../../../utils/formValidation'
-
 export default async (Field, options = {}) => {
-  const { inEdit, save, clearInEdit, setValidationError } = Field
+  const { inEdit, save, clearInEdit, setValidationError, nameSchema, typeSchema } = Field
 
   try {
-    await relatedResourceNameSchema.validate(inEdit.name, { strict: true })
+    await nameSchema.validate(inEdit.name, { strict: true })
     if (!options.noRelationType) {
-      await relatedResourceTypeSchema.validate(inEdit.relationType, { strict: true })
+      await typeSchema.validate(inEdit.relationType, { strict: true })
     }
 
     if ((inEdit.name.fi || inEdit.name.en) && !inEdit.name.und) {

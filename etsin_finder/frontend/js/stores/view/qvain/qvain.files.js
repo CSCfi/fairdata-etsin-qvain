@@ -1,22 +1,77 @@
-import { observable, action, makeObservable, override } from 'mobx'
+import { observable, action, makeObservable, override, computed } from 'mobx'
 import axios from 'axios'
 
+import * as yup from 'yup'
 import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from '../common.files.items'
-import { PromiseManager, getAction } from '../common.files.utils'
-import { itemLoaderAny, FetchType } from '../common.files.loaders'
+import { getAction } from '../common.files.utils'
+import { itemLoaderAny, itemLoaderPublic, FetchType } from '../common.files.loaders'
 import { AddItemsView, SelectedItemsView } from '../common.files.views'
-import urls from '../../../components/qvain/utils/urls'
+import urls from '../../../utils/urls'
+import PromiseManager from '../../../utils/promiseManager'
 
 import FilesBase from '../common.files'
+
+export const fileMetadataSchema = yup.object().shape({
+  fileFormat: yup.string().required(),
+  formatVersion: yup.string(),
+  encoding: yup.string().required(),
+  csvHasHeader: yup.boolean().required(),
+  csvDelimiter: yup.string().required(),
+  csvRecordSeparator: yup.string().required(),
+  csvQuotingChar: yup.string().required(),
+})
+
+// FILE AND DIRECTORY (IDA RESOURCES) VALIDATION
+
+export const fileUseCategorySchema = yup
+  .object()
+  .required('qvain.validationMessages.files.file.useCategory.required')
+
+export const fileTitleSchema = yup
+  .string()
+  .required('qvain.validationMessages.files.file.title.required')
+
+export const fileDescriptionSchema = yup
+  .string()
+  .required('qvain.validationMessages.files.file.description.required')
+
+export const fileSchema = yup.object().shape({
+  title: fileTitleSchema,
+  description: fileDescriptionSchema,
+  useCategory: fileUseCategorySchema,
+  fileType: yup.object().nullable(),
+})
+
+export const filesSchema = yup.array().of(fileSchema)
+
+export const directoryTitleSchema = yup
+  .string()
+  .required('qvain.validationMessages.files.directory.title.required')
+
+export const directoryDescriptionSchema = yup.string()
+
+export const directoryUseCategorySchema = yup
+  .object()
+  .required('qvain.validationMessages.files.directory.useCategory.required')
+
+export const directorySchema = yup.object().shape({
+  title: directoryTitleSchema,
+  description: directoryDescriptionSchema,
+  useCategory: directoryUseCategorySchema,
+  fileType: yup.object().nullable(),
+})
+
+export const directoriesSchema = yup.array().of(directorySchema)
 
 class Files extends FilesBase {
   // File hierarchy for files in user projects.
   // Supports file addition and deletion and metadata editing.
 
-  constructor(Qvain) {
+  constructor(Qvain, Auth) {
     super()
     makeObservable(this)
     this.Qvain = Qvain
+    this.Auth = Auth
     this.SelectedItemsView = new SelectedItemsView(this)
     this.AddItemsView = new AddItemsView(this)
     this.promiseManager = new PromiseManager()
@@ -24,18 +79,60 @@ class Files extends FilesBase {
     this.reset()
   }
 
+  fileMetadataSchema = fileMetadataSchema
+
+  fileUseCategorySchema = fileUseCategorySchema
+
+  fileTitleSchema = fileTitleSchema
+
+  fileDescriptionSchema = fileDescriptionSchema
+
+  fileSchema = fileSchema
+
+  filesSchema = filesSchema
+
+  directoryTitleSchema = directoryTitleSchema
+
+  directoryDescriptionSchema = directoryDescriptionSchema
+
+  directoryUseCategorySchema = directoryUseCategorySchema
+
+  directorySchema = directorySchema
+
+  directoriesSchema = directoriesSchema
+
   @observable refreshModalDirectory = undefined
 
   @observable inEdit = undefined
 
+  @computed get userHasRightsToEditProject() {
+    if (!this.selectedProject) return true
+    return this.Auth.user.idaProjects.includes(this.selectedProject)
+  }
+
   cancelOnReset = promise => this.promiseManager.add(promise)
 
   @override async loadDirectory(dir) {
-    return itemLoaderAny.loadDirectory(this, dir, this.initialLoadCount)
+    if (this.userHasRightsToEditProject)
+      return itemLoaderAny.loadDirectory(this, dir, this.initialLoadCount)
+
+    return itemLoaderPublic.loadDirectory(this, dir, this.initialLoadCount)
   }
 
   fetchRootIdentifier = async projectIdentifier => {
-    const { data } = await axios.get(urls.v2.projectFiles(projectIdentifier))
+    // when the user is not in project, send datasetIdentifier
+    // when the user is in project, don't send datasetIdentifier
+
+    if (this.userHasRightsToEditProject) {
+      const { data } = await axios.get(urls.common.projectFiles(projectIdentifier))
+      return data.identifier
+    }
+
+    const { data } = await axios.get(urls.common.projectFiles(projectIdentifier), {
+      params: {
+        cr_identifier: this.datasetIdentifier,
+      },
+    })
     return data.identifier
   }
 

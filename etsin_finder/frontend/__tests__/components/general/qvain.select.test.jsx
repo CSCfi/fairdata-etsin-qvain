@@ -19,6 +19,8 @@ const mockStores = {
   Locale: { lang: 'fi' },
 }
 
+const flushPromises = () => new Promise(setImmediate)
+
 jest.mock('../../../js/stores/stores', () => ({
   withStores: Component => props => <Component Stores={mockStores} {...props} />,
 }))
@@ -42,7 +44,7 @@ describe('Select', () => {
   const getOptionValueReturnValue = 'getOptionValueReturnValue'
   const emptyGetReferenceDataRes = { data: { hits: { hits: [] } } }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     getCurrentOption.mockReturnValue(getCurrentOptionReturnValue)
     onChange.mockReturnValue(onChangeReturnValue)
     getOptionValue.mockReturnValue(getOptionValueReturnValue)
@@ -103,7 +105,7 @@ describe('Select', () => {
     })
 
     describe('given inModal is true', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         props.inModal = true
         wrapper = shallow(<Select {...props} />)
         select = wrapper.dive()
@@ -136,9 +138,10 @@ describe('Select', () => {
         },
       }
 
-      beforeEach(() => {
+      beforeEach(async () => {
         getReferenceData.mockReturnValue(Promise.resolve(res))
         wrapper = shallow(<Select {...props} />)
+        await flushPromises()
         select = wrapper.dive()
       })
 
@@ -149,9 +152,10 @@ describe('Select', () => {
       })
 
       describe('given getRefGroups', () => {
-        beforeEach(() => {
+        beforeEach(async () => {
           props.getRefGroups = jest.fn(() => [])
           wrapper = shallow(<Select {...props} />)
+          await flushPromises()
           select = wrapper.dive()
         })
 

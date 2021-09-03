@@ -1,19 +1,33 @@
-import { observable, action, computed, makeObservable } from 'mobx'
+import { observable, action, computed, makeObservable, toJS } from 'mobx'
+import {
+  cumulativeStateSchema,
+  useDoiSchema,
+  dataCatalogSchema,
+  externalResourceSchema,
+} from './qvain.dataCatalog.schemas'
 import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 import Resources from './qvain.resources'
 import Files from './qvain.files'
 import Submit from './qvain.submit'
+import track, { touch } from './track'
 
 class Qvain extends Resources {
-  constructor(Env) {
+  constructor(Env, Auth) {
     super()
     this.Env = Env
-    this.Files = new Files(this)
+    this.Files = new Files(this, Auth)
     this.Submit = new Submit(this)
     this.resetQvainStore()
-    this.Submit = new Submit(this)
     makeObservable(this)
   }
+
+  cumulativeStateSchema = cumulativeStateSchema
+
+  useDoiSchema = useDoiSchema
+
+  dataCatalogSchema = dataCatalogSchema
+
+  externalResourceSchema = externalResourceSchema
 
   @observable original = undefined // used if editing, otherwise undefined
 
@@ -23,10 +37,13 @@ class Qvain extends Resources {
 
   @observable externalResourceInEdit = EmptyExternalResource
 
+  @observable unsupported = null
+
   @action
   resetQvainStore = () => {
-    this.Submit = new Submit(this)
     this.original = undefined
+    this.unsupported = null
+
     // Reset Files/Directories related data
     this.Files.reset()
     this.dataCatalog = undefined
@@ -206,8 +223,15 @@ class Qvain extends Resources {
   // Dataset related
   // perform schema transformation METAX JSON -> etsin backend / internal schema
   @action loadBasicFields = dataset => {
-    const researchDataset = dataset.research_dataset
-    this.resources.forEach(r => r.fromBackend(researchDataset, this))
+    const [researchDataset, tracker] = track(toJS(dataset.research_dataset))
+    // avoid reporting fields as unsupported when they are automatically defined by metax
+    touch(
+      researchDataset.metadata_version_identifier,
+      researchDataset.preferred_identifier,
+      researchDataset.total_files_byte_size
+    )
+    this.resources.forEach(r => r.fromBackend(researchDataset, this, tracker))
+    this.unsupported = tracker.getUnused({ deep: true })
   }
 
   // load fields that won't be duplicated by template copy
@@ -318,12 +342,16 @@ class Qvain extends Resources {
 
   @computed
   get canSelectFiles() {
-    if (this.readonly || this.isPas || this.deprecated) {
+    if (this.readonly || this.isPas || this.deprecated || !this.Files.userHasRightsToEditProject) {
       return false
     }
 
     if (this.hasBeenPublished) {
-      if (this.Files && (!this.Files.projectLocked || this.Files.draftOfHasProject === false)) {
+      if (
+        this.Files &&
+        (!this.Files.projectLocked || this.Files.draftOfHasProject === false) &&
+        this.Files.userHasRightsToEditProject
+      ) {
         return true // for published noncumulative datasets, allow adding files only if none exist yet
       }
       return this.isCumulative
@@ -345,6 +373,13 @@ class Qvain extends Resources {
   @computed
   get hasBeenPublished() {
     return !!(this.original && (this.original.state === 'published' || this.original.draft_of))
+  }
+
+  @computed
+  get hasBeenPublishedWithDoi() {
+    const hasDoi = this.original?.research_dataset?.preferred_identifier?.startsWith('doi')
+    const draftOfHasDoi = this.original?.draft_of?.preferred_identifier?.startsWith('doi')
+    return !!(this.hasBeenPublished && (hasDoi || draftOfHasDoi))
   }
 
   @computed

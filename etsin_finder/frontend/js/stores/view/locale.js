@@ -13,6 +13,8 @@ import { observable, action, computed, makeObservable } from 'mobx'
 import counterpart from 'counterpart'
 import moment from 'moment'
 
+import urls from '../../utils/urls'
+
 const languages = ['en', 'fi']
 
 const getInitialLanguage = () =>
@@ -26,8 +28,12 @@ class Locale {
     makeObservable(this)
 
     if (BUILD !== 'production') {
-      window.setLang = lang => this.setLang(lang)
-      window.toggleLang = () => this.setLang(languages.find(l => l !== this.lang))
+      window.setLang = lang => this.setLang(lang, { save: true })
+      window.toggleLang = () =>
+        this.setLang(
+          languages.find(l => l !== this.lang),
+          { save: true }
+        )
     }
   }
 
@@ -53,11 +59,12 @@ class Locale {
   @observable languages = languages
 
   @action.bound saveLanguage() {
-    return axios.post('/api/language', { language: this.currentLang })
+    return axios.post(urls.language(), { language: this.currentLang })
   }
 
   @action
-  setLang = (lang, save = true) => {
+  setLang = (lang, options = {}) => {
+    const { save } = options
     if (!languages.includes(lang)) {
       return
     }
@@ -66,14 +73,15 @@ class Locale {
     moment.locale(lang)
     document.documentElement.lang = this.currentLang
     if (save) {
-      this.saveLanguage()
+      this.saveLanguage() // store language setting
     }
   }
 
   @action
-  toggleLang = () => {
+  toggleLang = (options = {}) => {
+    const { save } = options
     const current = counterpart.getLocale()
-    this.setLang(current === 'fi' ? 'en' : 'fi')
+    this.setLang(current === 'fi' ? 'en' : 'fi', save)
 
     this.Accessibility.handleNavigation()
 

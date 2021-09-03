@@ -8,7 +8,6 @@ import ActorRoles from './actorRoles'
 import ActorInfo from './actorInfo'
 import Modal from '../../../../general/modal'
 import { ActorIcon } from '../common'
-import { actorSchema } from '../../../utils/formValidation'
 import { ConfirmClose } from '../../../general/modal/confirmClose'
 import ActorErrors from './actorErrors'
 import Buttons from './buttons'
@@ -25,6 +24,7 @@ export const ActorModalBase = () => {
         cancelActor,
         actors,
         referenceOrganizationErrors,
+        actorSchema,
       },
       readonly,
     },

@@ -1,5 +1,31 @@
+import * as yup from 'yup'
 import ReferenceField from './qvain.referenceField'
 import { LICENSE_URL } from '../../../utils/constants'
+import { touch } from './track'
+
+const referenceLicenseScheme = "http://uri.suomi.fi/codelist/fairdata/license/"
+
+export const licenseSchema = yup.object().shape({
+  name: yup.object().nullable(),
+  identifier: yup.string().required(),
+  otherLicenseUrl: yup
+    .string()
+    .typeError('qvain.validationMessages.license.otherUrl.string')
+    .url('qvain.validationMessages.license.otherUrl.url')
+    .required('qvain.validationMessages.license.otherUrl.required')
+    .nullable(),
+})
+
+const licenseArrayObject = yup.object().shape({
+  name: yup.object().nullable(),
+  identifier: yup
+    .string()
+    .typeError('qvain.validationMessages.license.otherUrl.string')
+    .url('qvain.validationMessages.license.otherUrl.url')
+    .required('qvain.validationMessages.license.otherUrl.required'),
+})
+
+export const licenseArraySchema = yup.array().of(licenseArrayObject).nullable()
 
 export const Model = (name, identifier) => ({
   name,
@@ -11,12 +37,21 @@ class Licenses extends ReferenceField {
     super(Parent, () => [Model(undefined, LICENSE_URL.CCBY4)])
   }
 
-  fromBackend = dataset => {
+  schema = licenseSchema
+
+  arraySchema = licenseArraySchema
+
+  arrayObjectSchema = licenseArrayObject
+
+  fromBackend = (dataset) => {
     const l = dataset.access_rights.license ? dataset.access_rights.license : undefined
     if (l !== undefined) {
       this.item = undefined
       this.storage = l.map(license => {
         if (license.identifier !== undefined) {
+          if (license.identifier.startsWith(referenceLicenseScheme)) {
+            touch(license) // license is from reference data, don't warn about unsupported fields or translations
+          }
           return this.Model(license.title, license.identifier)
         }
         const name = {

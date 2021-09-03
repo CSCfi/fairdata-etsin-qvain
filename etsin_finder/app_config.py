@@ -57,6 +57,7 @@ def _get_test_app_config():
         'SESSION_COOKIE_SAMESITE': 'Lax',
         'SESSION_COOKIE_SECURE': True,
         'SESSION_COOKIE_HTTPONLY': True,
+        'MATOMO_URL': 'fake_matomo_url.js',
         'PERMANENT_SESSION_LIFETIME': 1800,
         'SESSION_REFRESH_EACH_REQUEST': True,
         'MAIL_SUPPRESS_SEND': True,
@@ -68,11 +69,12 @@ def _get_test_app_config():
         'SSO': {
             'PREFIX': 'fd_test_csc_fi',
         },
-        'DOWNLOAD_API_V2': {
+        'DOWNLOAD_API': {
             'HOST': 'mock-download',
             'PORT': 1,
             'PUBLIC_HOST': 'mock-download-public',
             'PUBLIC_PORT': 2,
+            'AUTH_TOKEN': 'testtoken'
         },
         'METAX_API': {
             'HOST': 'mock-metax',
@@ -136,32 +138,8 @@ def get_download_api_config(app=None):
         dict: Download api config or None
 
     """
-    if executing_travis():
-        return None
-
     app = ensure_app(app)
-    dl_api_conf = app.config.get('DOWNLOAD_API', False)
-    if not dl_api_conf or not isinstance(dl_api_conf, dict):
-        return None
-
-    if 'USER' not in dl_api_conf or 'HOST' not in dl_api_conf or 'PASSWORD' not in dl_api_conf:
-        return None
-
-    return dl_api_conf
-
-
-def get_download_api_v2_config(app=None):
-    """Get download API config.
-
-    Args:
-        is_testing (bool): Testing.
-
-    Returns:
-        dict: Download api config or None
-
-    """
-    app = ensure_app(app)
-    dl_api_conf = app.config.get('DOWNLOAD_API_V2', False)
+    dl_api_conf = app.config.get('DOWNLOAD_API_V2') or app.config.get('DOWNLOAD_API')
     if not dl_api_conf or not isinstance(dl_api_conf, dict):
         return None
 

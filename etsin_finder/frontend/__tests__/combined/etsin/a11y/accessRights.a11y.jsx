@@ -4,8 +4,6 @@ import { ThemeProvider } from 'styled-components'
 import { axe, toHaveNoViolations } from 'jest-axe'
 import ReactModal from 'react-modal'
 
-global.Promise = require('bluebird')
-
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
 import stores from '../../../../js/stores'

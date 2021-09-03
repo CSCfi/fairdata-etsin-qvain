@@ -10,7 +10,6 @@ import { observable, action, autorun } from 'mobx'
 import Modal from '../../../../general/modal'
 import { ConfirmClose } from '../../../general/modal/confirmClose'
 import getReferenceData from '../../../utils/getReferenceData'
-import { fileMetadataSchema } from '../../../utils/formValidation'
 import { getResponseError } from '../../../utils/responseError'
 import { Label, HelpField, Input } from '../../../general/modal/form'
 import { DangerButton, TableButton } from '../../../general/buttons'
@@ -19,7 +18,7 @@ import { getPASMeta } from '../../../../../stores/view/common.files.items'
 
 import { getOptions, getDefaultOptions, makeOption, findOption } from './options'
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
-import urls from '../../../utils/urls'
+import urls from '../../../../../utils/urls'
 import { withStores } from '../../../utils/stores'
 
 export class MetadataModal extends Component {
@@ -93,7 +92,7 @@ export class MetadataModal extends Component {
   }
 
   patchFileCharacteristics = (identifier, data) => {
-    const url = urls.v2.fileCharacteristics(identifier)
+    const url = urls.qvain.fileCharacteristics(identifier)
     return axios.put(url, data, {
       headers: {
         'Content-Type': 'application/json',
@@ -178,6 +177,7 @@ export class MetadataModal extends Component {
   }
 
   validateMetadata = () => {
+    const { fileMetadataSchema } = this.props.Stores.Qvain.Files
     fileMetadataSchema.validate(this.state, { strict: true })
 
     // Additional validation for formatVersion
@@ -336,8 +336,13 @@ export class MetadataModal extends Component {
   }
 
   render() {
-    const { metadataModalFile, readonly } = this.props.Stores.Qvain
+    const {
+      metadataModalFile,
+      readonly: ro,
+      Files: { userHasRightsToEditProject },
+    } = this.props.Stores.Qvain
     const options = getOptions()
+    const readonly = ro || !userHasRightsToEditProject
 
     return (
       <Modal
@@ -352,7 +357,6 @@ export class MetadataModal extends Component {
           style={{ marginBottom: 0 }}
         />
         <Translate content="qvain.files.metadataModal.help" component={HelpField} />
-
         <MetadataSelect
           inputId="pas_file_format"
           options={this.state.formatOptions}
@@ -362,7 +366,6 @@ export class MetadataModal extends Component {
           isLoading={this.state.formatVersionsMap.length === 0}
           field="fileFormat"
         />
-
         <MetadataSelect
           inputId="pas_format_version"
           options={this.getformatVersionOptions()}
@@ -373,7 +376,6 @@ export class MetadataModal extends Component {
           isSearchable={false}
           field="formatVersion"
         />
-
         <MetadataSelect
           inputId="pas_file_encoding"
           options={options.encoding}
@@ -382,7 +384,6 @@ export class MetadataModal extends Component {
           onChange={this.setEncoding}
           field="encoding"
         />
-
         {this.isCsv() && (
           <CsvOptions>
             <Translate
@@ -438,7 +439,6 @@ export class MetadataModal extends Component {
             </div>
           </CsvOptions>
         )}
-
         <Buttons>
           <TableButton disabled={this.state.loading} onClick={this.requestClose}>
             <Translate content={'qvain.files.metadataModal.buttons.close'} />
@@ -451,14 +451,12 @@ export class MetadataModal extends Component {
             <Translate content={'qvain.files.metadataModal.buttons.save'} />
           </DangerButton>
         </Buttons>
-
         <ConfirmClose
           show={this.state.confirmClose}
           onCancel={this.hideConfirmClose}
           onConfirm={this.close}
           disabled={this.state.loading}
         />
-
         {(this.state.loading || this.state.response) && (
           <ResponseOverlay>
             <div style={{ width: '100%' }}>

@@ -29,53 +29,16 @@ const files = {
   cumulativeState: {
     label: 'Cumulative dataset',
     radio: {
-      no: 'No. (Adding files or folders will automatically create a new version of the dataset.)',
+      no: 'No. (Adding files or folders to a published dataset requires you to create a new version of the dataset.)',
       yes: 'Yes. (New files or folders will be added without a version change.)',
-      note:
-        'Note! Once the dataset has been submitted, changing the value from "No" to "Yes" will cause a new version of the dataset to be created. Change from "Yes" to "No" will not cause a new version.',
+      note: 'Note! Once the dataset has been published, it cannot be turned cumulative without creating a new version of the dataset.',
     },
     enabled: {
       state: 'This dataset has been marked as a cumulative dataset.',
       explanation:
         'It means that data is added to it regularly. If data is no longer being added to this dataset, you should turn it non-cumulative.',
       button: 'Turn non-cumulative',
-      note:
-        'Note! Once changed, turning the dataset back to cumulative will create a new version of the dataset.',
-      confirm:
-        'Are you sure you want to turn this dataset non-cumulative? If you later wish to change it back to cumulative, a new version will be created!',
-      cancel: 'Cancel',
-    },
-    disabled: {
-      state: 'This dataset has been marked non-cumulative.',
-      explanation:
-        'It means that if new data is added, a new version of the dataset will be created automatically.',
-      button: 'Turn cumulative',
-      note:
-        'Note! Changing the dataset cumulative will create a new version of the dataset. The old version will remain non-cumulative.',
-      confirm:
-        'Are you sure you want to turn the dataset cumulative (you want to start regularly adding data into it)? A new version will be created and gets a new identifier. The old version stays non-cumulative.',
-      cancel: 'Cancel',
-    },
-    modalHeader: 'Change dataset cumulation',
-    closeButton: 'Close',
-    changes: 'You need to save your changes to the dataset before you can change this setting.',
-  },
-  cumulativeStateV2: {
-    label: 'Cumulative dataset',
-    radio: {
-      no:
-        'No. (Adding files or folders to a published dataset requires you to create a new version of the dataset.)',
-      yes: 'Yes. (New files or folders will be added without a version change.)',
-      note:
-        'Note! Once the dataset has been published, it cannot be turned cumulative without creating a new version of the dataset.',
-    },
-    enabled: {
-      state: 'This dataset has been marked as a cumulative dataset.',
-      explanation:
-        'It means that data is added to it regularly. If data is no longer being added to this dataset, you should turn it non-cumulative.',
-      button: 'Turn non-cumulative',
-      note:
-        'Note! Once changed, you need to create a new version of the dataset to turn it back to cumulative.',
+      note: 'Note! Once changed, you need to create a new version of the dataset to turn it back to cumulative.',
     },
     disabled: {
       state: 'This dataset has been marked non-cumulative.',
@@ -123,8 +86,7 @@ const files = {
     statusText:
       'This dataset is deprecated. Some of the files in the dataset are no longer available.',
     header: 'Fix Deprecated Dataset',
-    help:
-      'This will fix the dataset by removing any included files and directories that are no longer available. A new dataset version will be created. The changes will take place immediately.',
+    help: 'This will fix the dataset by removing any included files and directories that are no longer available. A new dataset version will be created. The changes will take place immediately.',
     changes: 'You need to save your changes to the dataset first.',
     buttons: {
       show: 'Fix deprecated dataset',
@@ -135,8 +97,7 @@ const files = {
   },
   metadataModal: {
     header: 'Digital Preservation metadata',
-    help:
-      'Saving the changes will update the file metadata regardless of whether the file is in your dataset or not.',
+    help: 'Saving the changes will update the file metadata regardless of whether the file is in your dataset or not.',
     csvOptions: 'CSV Options',
     fields: {
       fileFormat: 'File format',
@@ -154,7 +115,8 @@ const files = {
     },
     buttons: {
       add: 'Add Digital Preservation metadata',
-      show: 'Edit Digital Preservation metadata',
+      show: 'Show Digital Preservation metadata',
+      edit: 'Edit Digital Preservation metadata',
       delete: 'Remove Digital Preservation metadata',
       close: 'Close',
       save: 'Save changes',
@@ -162,8 +124,7 @@ const files = {
     },
     clear: {
       header: 'Remove Digital Preservation metadata',
-      help:
-        'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
+      help: 'Are you sure you want to remove Digital Preservation metadata for file %(file)s? The change will take place immediately.',
       cancel: 'Cancel',
       confirm: 'Remove',
     },
@@ -188,8 +149,7 @@ const files = {
       csvQuotingChar: 'Type a character',
     },
   },
-  help:
-    'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
+  help: 'Files associated with this dataset. A dataset can only have either IDA files or remote files. File metadata will not be associated with datasets, so remember to save edits to file metadata.',
   ida: {
     title: 'Fairdata IDA files',
     infoText: `When including files from IDA, first select your project in IDA.
@@ -217,6 +177,7 @@ const files = {
     hideRemoved: 'Hide removed',
     buttons: {
       edit: 'Edit %(name)s',
+      show: 'Show %(name)s',
       remove: 'Remove %(name)s',
       undoRemove: 'Undo removing %(name)s',
       refresh: 'Refresh %(name)s',
@@ -226,6 +187,7 @@ const files = {
       deselect: 'Deselect %(name)s',
     },
     addUserMetadata: 'Add metadata',
+    showUserMetadata: 'Show metadata',
     editUserMetadata: 'Edit metadata',
     deleteUserMetadata: 'Remove metadata',
     form: {

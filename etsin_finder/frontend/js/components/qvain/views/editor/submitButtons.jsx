@@ -1,144 +1,141 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import PropTypes, { instanceOf } from 'prop-types'
 import { observer } from 'mobx-react'
-import axios from 'axios'
-import { withRouter } from 'react-router-dom'
+import Translate from 'react-translate-component'
+import { useHistory } from 'react-router-dom'
 
-import { qvainFormSchema } from '../../utils/formValidation'
-import urls from '../../utils/urls'
-import DoiModal from './doiModal'
-import { withStores } from '../../../../stores/stores'
-import SubmitButtonsV2 from './submitButtonsV2'
-import handleSubmitToBackend from '../../utils/handleSubmit'
+import { useStores } from '../../utils/stores'
+import SubmitButton from './submitButton.styled'
+import TooltipHoverOnSave from '../../general/header/tooltipHoverOnSave'
 
-export class SubmitButtons extends Component {
-  promises = []
+export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtonsDisabled }) => {
+  const {
+    Qvain: {
+      Submit: {
+        submitDraft,
+        submitPublish,
+        draftValidationError,
+        publishValidationError,
+        prevalidate,
+        isDraftButtonDisabled,
+        isPublishButtonDisabled,
+      },
+      original,
+      readonly,
+    },
+    Env: { getQvainUrl },
+    QvainDatasets: { setPublishedDataset, publishedDataset },
+    Matomo,
+  } = useStores()
 
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
-    handleSubmitError: PropTypes.func.isRequired,
-    handleSubmitResponse: PropTypes.func.isRequired,
-    submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }),
-    idSuffix: PropTypes.string,
-  }
+  const history = useHistory()
+  const disabled = readonly || allButtonsDisabled
 
-  static defaultProps = {
-    submitButtonsRef: null,
-    idSuffix: '',
-  }
+  const [draftButtonHover, setDraftButtonHover] = useState(false)
+  const [publishButtonHover, setPublishButtonHover] = useState(false)
 
-  state = {
-    useDoiModalIsOpen: false,
-    datasetLoading: false,
-  }
-
-  componentWillUnmount() {
-    this.promises.forEach(promise => promise.cancel())
-    this.setState({ datasetLoading: false })
-  }
-
-  setLoading(value) {
-    if (this.state.datasetLoading !== value) {
-      this.setState({ datasetLoading: value })
+  useEffect(() => {
+    prevalidate()
+    const identifier = original?.identifier
+    if (identifier && identifier !== publishedDataset) {
+      const path = `/dataset/${identifier}`
+      if (history.location.pathname !== path) {
+        history.replace(getQvainUrl(path))
+      }
     }
-  }
+  }, [original, publishedDataset, getQvainUrl, history, prevalidate])
 
-  goToDatasets = identifier => {
+  const goToDatasetsCallBack = identifier => {
     // go to datasets view and highlight published dataset
-    const { history } = this.props
-    const { setPublishedDataset } = this.props.Stores.QvainDatasets
     setPublishedDataset(identifier)
     history.push('/qvain')
   }
 
-  submit = async submitFunction => {
-    const { Stores } = this.props
-    const isProvenanceActorsOk = await Stores.Qvain.Actors.checkProvenanceActors()
-    if (!isProvenanceActorsOk) return
+  const handleDraftClick = () => {
+    submitDraft()
 
-    this.closeUseDoiInformation()
-    this.setLoading(true)
-    submitFunction()
-    this.setLoading(false)
-  }
-
-  updateCumulativeState = (identifier, state) =>
-    axios.post(urls.v2.rpc.changeCumulativeState(), { identifier, cumulative_state: state })
-
-  showUseDoiInformation = () => {
-    this.setState({
-      useDoiModalIsOpen: true,
-    })
-  }
-
-  handleCreatePublished = async e => {
-    const obj = handleSubmitToBackend(this.props.Stores.Qvain)
-    return qvainFormSchema
-      .validate(obj, { abortEarly: false, strict: true })
-      .then(() =>
-        axios
-          .post(urls.v1.datasets(), obj)
-          .then(res => {
-            this.props.Stores.Qvain.setChanged(false)
-            const data = res.data
-            if (data && data.identifier) {
-              this.goToDatasets(data.identifier)
-            }
-            this.success({ ...data, is_new: true })
-          })
-          .catch(this.props.handleSubmitError)
-      )
-      .catch(err => {
-        console.error('Error for event: ', e)
-        console.error(err.errors)
-
-        this.failure(err)
-      })
-  }
-
-  // User closes the dialogue without accepting DOI usage ("no" or "exit")
-  closeUseDoiInformation = () => {
-    this.setState({
-      useDoiModalIsOpen: false,
-    })
-  }
-
-  failure = error => {
-    this.props.handleSubmitError(error)
-    this.setLoading(false)
-  }
-
-  success = data => {
-    this.props.handleSubmitResponse(data)
-    this.setLoading(false)
-  }
-
-  render() {
-    const { Stores, submitButtonsRef, idSuffix } = this.props
-    const { readonly } = Stores.Qvain
-    const disabled = readonly || this.state.datasetLoading
-    const doiModal = (
-      <DoiModal
-        isOpen={this.state.useDoiModalIsOpen}
-        onAcceptUseDoi={() => this.handleCreatePublished()}
-        onRequestClose={this.closeUseDoiInformation}
-      />
-    )
-
-    const props = {
-      submit: this.submit,
-      success: this.success,
-      failure: this.failure,
-      goToDatasets: this.goToDatasets,
-      submitButtonsRef,
-      doiModal,
-      disabled,
-      history: this.props.history,
-      idSuffix,
+    if (original?.identifier) {
+      Matomo.recordEvent(`DRAFT / ${original.identifier}`)
+    } else {
+      Matomo.recordEvent('DRAFT')
     }
-    return <SubmitButtonsV2 {...props} />
   }
+
+  const handlePublishClick = () => {
+    submitPublish(goToDatasetsCallBack)
+
+    if (original?.identifier) {
+      Matomo.recordEvent(`PUBLISH / ${original.identifier}`)
+    } else {
+      Matomo.recordEvent('PUBLISH')
+    }
+  }
+
+  return (
+    <div ref={submitButtonsRef}>
+      <TooltipHoverOnSave
+        isOpen={draftButtonHover}
+        errors={draftValidationError?.errors || []}
+        description="qvain.validationMessages.draft.description"
+      >
+        <WrapperDivForHovering
+          id="draft-button-wrapper"
+          onMouseEnter={() => {
+            setDraftButtonHover(true)
+          }}
+          onMouseLeave={() => setDraftButtonHover(false)}
+        >
+          <SubmitButton
+            id={`draft-btn${idSuffix}`}
+            disabled={disabled || isDraftButtonDisabled}
+            onClick={handleDraftClick}
+          >
+            <Translate content="qvain.saveDraft" />
+          </SubmitButton>
+        </WrapperDivForHovering>
+      </TooltipHoverOnSave>
+      <TooltipHoverOnSave
+        isOpen={publishButtonHover}
+        errors={publishValidationError?.errors || []}
+        description="qvain.validationMessages.publish.description"
+      >
+        <WrapperDivForHovering
+          id="publish-button-wrapper"
+          onMouseEnter={() => {
+            setPublishButtonHover(true)
+          }}
+          onMouseLeave={() => {
+            setPublishButtonHover(false)
+          }}
+        >
+          <SubmitButton
+            id={`publish-btn${idSuffix}`}
+            disabled={disabled || isPublishButtonDisabled}
+            onClick={() => handlePublishClick(false)}
+          >
+            <Translate content="qvain.submit" />
+          </SubmitButton>
+        </WrapperDivForHovering>
+      </TooltipHoverOnSave>
+    </div>
+  )
 }
 
-export default withRouter(withStores(observer(SubmitButtons)))
+SubmitButtons.propTypes = {
+  submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }),
+  idSuffix: PropTypes.string,
+  disabled: PropTypes.bool,
+}
+
+SubmitButtons.defaultProps = {
+  submitButtonsRef: null,
+  idSuffix: '',
+  disabled: false,
+}
+
+const WrapperDivForHovering = styled.div`
+  display: inline-block;
+`
+
+export default observer(SubmitButtons)
