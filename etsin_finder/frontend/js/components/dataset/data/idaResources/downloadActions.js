@@ -100,4 +100,17 @@ const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
   return action
 }
 
+export const getAllowDownload = (DatasetQuery, restrictions) => {
+  if (DatasetQuery.isPas) {
+    return false
+  }
+  if (DatasetQuery.isDraft) {
+    return false
+  }
+  return restrictions.allowDataIdaDownloadButton
+}
+
+export const getDownloadAllText = DatasetQuery =>
+  DatasetQuery.isDraft ? 'dataset.dl.downloadDisabledForDraft' : 'dataset.dl.downloadAll'
+
 export default getDownloadAction

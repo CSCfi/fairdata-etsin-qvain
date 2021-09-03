@@ -136,7 +136,6 @@ class Content extends Component {
                   id="tab-data"
                   aria-labelledby="tab-for-data"
                   role="tabpanel"
-                  dataset={this.props.dataset}
                   hasRemote={this.props.hasRemote}
                   hasFiles={this.props.hasFiles}
                   {...props}
