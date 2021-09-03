@@ -776,7 +776,7 @@ class Actors {
     )
     if (!provenancesWithActorRefsToBeRemoved.length) return Promise.resolve(true)
     this.provenancesWithNonExistingActors = provenancesWithActorRefsToBeRemoved
-    return this.createLooseProvenancePromise()
+    return this.Qvain.createLooseProvenancePromise()
   }
 
   @action checkProvenanceActors = () => {
@@ -797,7 +797,7 @@ class Actors {
     if (!orphanActors.length) return Promise.resolve(true)
     this.orphanActors = orphanActors
 
-    return this.createLooseActorPromise()
+    return this.Qvain.createLooseActorPromise()
   }
 
   otherActorsHaveRole = (actor, role) => {
