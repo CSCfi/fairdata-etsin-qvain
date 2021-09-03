@@ -218,6 +218,10 @@ describe('Field', () => {
       field.validationError.should.be.string('')
     })
 
+    test('should call parent.setCganged with true', () => {
+      expect(mockStores.setChanged).toHaveBeenCalledWith(true)
+    })
+
     test('should set hasChanged to false', () => {
       field.hasChanged.should.be.false
     })
