@@ -40,7 +40,9 @@ jest.mock('../../../js/stores/view/qvain/qvain.field', () => {
 
 describe('Temporals with Parent as arg', () => {
   let temporals
-  const parent = 'parent'
+  const parent = {
+    setChanged: jest.fn(),
+  }
 
   beforeEach(() => {
     temporals = new Temporals(parent)
@@ -58,6 +60,10 @@ describe('Temporals with Parent as arg', () => {
         TemporalModel,
         'temporals'
       )
+    })
+
+    test('should assign Parent', () => {
+      temporals.Parent.should.eql(parent)
     })
   })
 
@@ -134,6 +140,10 @@ describe('Temporals with Parent as arg', () => {
 
       test('should add inEdit to storage', () => {
         temporals.storage.should.deep.eql([inEditObj])
+      })
+
+      test('should call Parent.setChanged with true', () => {
+        expect(parent.setChanged).to.have.beenCalledWith(true)
       })
     })
 

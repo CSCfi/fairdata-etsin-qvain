@@ -25,6 +25,16 @@ fakePackage = {
     'status': 'SUCCESS',
 }
 
+fakeProjects = [
+    "project_x"
+]
+
+fakeByteSizeCheck = {
+    "results": {
+        "byte_size": 4000000
+    }
+}
+
 fakeNoActiveTasks = {
     'error': 'no active package generation tasks',
 }
@@ -45,22 +55,45 @@ fakeFileDownloadUrl = {
     'url': f"https://mock-download-public:2/download?token={fakeToken['token']}&dataset=1&file=/folder/filename.gif",
 }
 
-
 def match_dataset(dataset):
     """Matcher that requires supplied dataset parameter to match."""
     def matcher(request):
         return request.json().get('dataset') == str(dataset)
     return matcher
 
-class TestDownloadResourcesRequests(BaseTest):
-    """Test Download API /requests endpoint"""
+class RequestMocks(BaseTest):
+    """Request mocks test suite."""
+
+    @pytest.fixture
+    def mock_requests(self, requests_mock):
+        """Make basic mocks for requests."""
+        requests_mock.get('https://mock-download:1/requests?dataset=1', json=fakePackage, status_code=200)
+        requests_mock.post('https://mock-download:1/requests', json=fakePackage, status_code=200)
+        requests_mock.get('https://mock-metax/rest/v2/datasets/1/projects', json=fakeProjects, status_code=200)
+
+    @pytest.fixture
+    def mock_byte_size_root(self, requests_mock):
+        """Mock byte size check when using root directory."""
+        requests_mock.get('https://mock-metax/rest/v2/directories/files?cr_identifier=1&project=project_x&path=%2F&include_parent&pagination&limit=1',
+            json=fakeByteSizeCheck,
+            status_code=200)
+
+    @pytest.fixture
+    def mock_byte_size_scope(self, requests_mock):
+        """Mock byte size check when using 'hei' directory."""
+        requests_mock.get('https://mock-metax/rest/v2/directories/files?cr_identifier=1&project=project_x&path=%2Fhei&include_parent&pagination&limit=1',
+            json=fakeByteSizeCheck,
+            status_code=200)
+
+
+class TestDownloadResourcesRequests(RequestMocks):
+    """Test Download API /requests endpoint."""
 
     # GET requests
-
-    def test_requests_get_ok(self, unauthd_client, open_catalog_record, requests_mock):
-        """Successful GET"""
-        requests_mock.get('https://mock-download:1/requests?dataset=1', json=fakePackage, status_code=200)
+    def test_requests_get_ok(self, unauthd_client, open_catalog_record, mock_requests, requests_mock, mock_byte_size_root):
+        """Successful GET."""
         r = unauthd_client.get('/api/download/requests?cr_id=1')
+
         assert r.status_code == 200
         assert r.json == fakePackage
 
@@ -107,16 +140,15 @@ class TestDownloadResourcesRequests(BaseTest):
 
     # POST requests
 
-    def test_requests_post_ok(self, unauthd_client, open_catalog_record, requests_mock):
-        """Successful POST"""
-        requests_mock.post('https://mock-download:1/requests', additional_matcher=match_dataset(1), json=fakePackage, status_code=200)
+    def test_requests_post_ok(self, unauthd_client, open_catalog_record, mock_requests, mock_byte_size_root):
+        """Successful POST."""
         r = unauthd_client.post('/api/download/requests', json={ 'cr_id': 1})
+
         assert r.status_code == 200
         assert r.json == fakePackage
 
-    def test_requests_post_scope_ok(self, unauthd_client, open_catalog_record, requests_mock):
-        """Successful POST with scope"""
-        requests_mock.post('https://mock-download:1/requests', additional_matcher=match_dataset(1), json=fakePackage, status_code=200)
+    def test_requests_post_scope_ok(self, unauthd_client, open_catalog_record, mock_requests, mock_byte_size_scope):
+        """Successful POST with scope."""
         r = unauthd_client.post('/api/download/requests', json={ 'cr_id': 1, 'scope': ['/hei', '/moro']})
         assert r.status_code == 200
         assert r.json == fakePackage
@@ -131,26 +163,25 @@ class TestDownloadResourcesRequests(BaseTest):
         r = unauthd_client.post('/api/download/requests', json={ 'cr_id': 1})
         assert r.status_code == 403
 
-    def test_requests_post_logged_in_ok(self, authd_client, login_catalog_record, requests_mock):
+    def test_requests_post_logged_in_ok(self, authd_client, login_catalog_record, mock_requests, mock_byte_size_root):
         """Succesful POST for dataset requiring login"""
-        requests_mock.post('https://mock-download:1/requests', additional_matcher=match_dataset(1), json=fakePackage, status_code=200)
         r = authd_client.post('/api/download/requests', json={ 'cr_id': 1})
         assert r.status_code == 200
 
-    def test_requests_post_not_found(self, unauthd_client, open_catalog_record, requests_mock):
+    def test_requests_post_not_found(self, unauthd_client, open_catalog_record, mock_requests, requests_mock, mock_byte_size_root):
         """Failed POST, dataset not found"""
         requests_mock.post('https://mock-download:1/requests', status_code=404)
         r = unauthd_client.post('/api/download/requests', json={ 'cr_id': 1})
         assert r.status_code == 404
 
-    def test_requests_post_error(self, unauthd_client, open_catalog_record, requests_mock):
+    def test_requests_post_error(self, unauthd_client, open_catalog_record, mock_requests, requests_mock, mock_byte_size_root):
         """Failed POST, connection timeout"""
         requests_mock.post('https://mock-download:1/requests', exc=requests.exceptions.ConnectTimeout)
         r = unauthd_client.post('/api/download/requests', json={ 'cr_id': 1})
         assert r.status_code == 503
 
 
-class TestDownloadResourcesAuthorize(BaseTest):
+class TestDownloadResourcesAuthorize(RequestMocks):
     """Test Download API /authorize endpoint"""
 
     @pytest.fixture
@@ -187,7 +218,7 @@ class TestDownloadResourcesAuthorize(BaseTest):
         r = unauthd_client.post('/api/download/authorize', json={ 'cr_id': 1, 'file': '/folder/filename.gif'})
         assert r.status_code == 403
 
-    def test_authorize_logged_in_ok(self, authd_client, login_catalog_record, authorize_mock):
+    def test_authorize_logged_in_ok(self, authd_client, login_catalog_record, authorize_mock, requests_mock):
         """User logged in, can access dataset"""
         r = authd_client.post('/api/download/authorize', json={ 'cr_id': 1, 'file': '/folder/filename.gif'})
         assert r.status_code == 200

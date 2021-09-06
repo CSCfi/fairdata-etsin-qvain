@@ -86,8 +86,8 @@ class Provenances extends Field {
       associations: new ActorsRef({
         actors: this.Qvain.Actors,
       }),
-      usedEntities: new UsedEntities(this.Qvain),
-      spatials: new Spatials(this.Qvain),
+      usedEntities: new UsedEntities(this),
+      spatials: new Spatials(this),
     })
   }
 

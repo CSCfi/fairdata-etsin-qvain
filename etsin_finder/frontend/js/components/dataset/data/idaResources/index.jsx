@@ -9,7 +9,7 @@ import Tree from './fileTree'
 import Info from './info'
 import sizeParse from '../../../../utils/sizeParse'
 import { withStores } from '../../../../stores/stores'
-import getDownloadAction from './downloadActions'
+import getDownloadAction, { getAllowDownload, getDownloadAllText } from './downloadActions'
 import ErrorMessage from './errorMessage'
 import PackageModal from './packageModal'
 import ManualDownloadModal from './manualDownloadModal'
@@ -20,16 +20,12 @@ import TooltipHover from '../../../general/tooltipHover'
 
 function IdaResources(props) {
   const { restrictions } = props.Stores.Access
-  const allowDownload =
-    props.dataset.data_catalog.catalog_json.identifier !== 'urn:nbn:fi:att:data-catalog-pas' &&
-    restrictions.allowDataIdaDownloadButton
-
   const { Files } = props.Stores.DatasetQuery
-
   const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel, root } = Files
-
   const { DatasetQuery } = props.Stores
   const { Packages } = DatasetQuery
+
+  const allowDownload = getAllowDownload(DatasetQuery, restrictions)
 
   const fileCount = (root && root.existingFileCount) || 0
   const totalSize = (root && root.existingByteSize) || 0
@@ -58,10 +54,10 @@ function IdaResources(props) {
   }
 
   const buttonProps = {}
-  const downloadAllText = 'dataset.dl.downloadAll'
+  const downloadAllText = getDownloadAllText(DatasetQuery)
 
   // Download full dataset package
-  const action = getDownloadAction(props.dataset.identifier, null, Packages, Files)
+  const action = getDownloadAction(DatasetQuery.results?.identifier, null, Packages, Files)
   const downloadFunc = action.func
   buttonProps.icon = action.icon
   buttonProps.spin = action.spin
@@ -92,11 +88,7 @@ function IdaResources(props) {
           {totalSize ? ` (${sizeParse(totalSize)})` : null}
         </HeaderStats>
 
-        <Translate
-          component={TooltipHover}
-          attributes={{ title: action.tooltip }}
-          showOnClick
-        >
+        <Translate component={TooltipHover} attributes={{ title: action.tooltip }} showOnClick>
           <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
             <HeaderButtonSplit split={moreFunc}>
               {downloadButton}
@@ -132,7 +124,6 @@ const HeaderButtonSplit = styled(SplitButtonContainer)`
 `
 
 IdaResources.propTypes = {
-  dataset: PropTypes.object.isRequired,
   Stores: PropTypes.object.isRequired,
 }
 
