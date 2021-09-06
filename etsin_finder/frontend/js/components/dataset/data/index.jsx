@@ -38,7 +38,7 @@ class Data extends Component {
   render() {
     return (
       <div id={this.props.id}>
-        {!this.props.hasRemote && <IdaResources dataset={this.props.dataset} />}
+        {!this.props.hasRemote && <IdaResources />}
         {this.props.hasRemote && <ExternalResources />}
       </div>
     )
@@ -47,7 +47,6 @@ class Data extends Component {
 
 Data.propTypes = {
   Stores: PropTypes.object.isRequired,
-  dataset: PropTypes.object.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }).isRequired,

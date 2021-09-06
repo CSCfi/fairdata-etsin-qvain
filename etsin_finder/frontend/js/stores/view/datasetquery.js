@@ -61,6 +61,12 @@ class DatasetQuery {
     await this.Packages.fetch(this.results.identifier)
   }
 
+  @computed get isPas() {
+    return (
+      this.results?.data_catalog?.catalog_json?.identifier === 'urn:nbn:fi:att:data-catalog-pas'
+    )
+  }
+
   @computed get isDraft() {
     if (this.results) {
       if (this.results.draft_of || this.results.state === 'draft') {
