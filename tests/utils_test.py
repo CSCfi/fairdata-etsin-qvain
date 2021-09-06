@@ -9,8 +9,6 @@ from .basetest import BaseTest
 
 from .frontend_test_data import original_complete_dataset
 
-JSON_TEST_FILE_READ_PATH = "testfiles/json_test_file_read.json"
-
 
 class MockResponse:
     """Mock version of requests.Response."""
@@ -74,11 +72,6 @@ class UtilsTestSuite(BaseTest):
             return True if isEnv == "TRAVIS" else defaultReturn
 
         monkeypatch.setattr(os, "getenv", getenv)
-
-    @pytest.fixture
-    def json_test_file_read_path(self):
-        """Return json_test_file path."""
-        return JSON_TEST_FILE_READ_PATH
 
     @pytest.fixture
     def empty_json_response(self):
