@@ -60,6 +60,7 @@ class Field {
 
   @action save = () => {
     this.setChanged(false)
+    this.Parent.setChanged(true)
     this.editMode = false
 
     Object.keys(toJS(this.inEdit)).forEach(key => {
@@ -107,6 +108,7 @@ class Field {
 
   @action remove = uiid => {
     this.storage = this.storage.filter(item => item.uiid !== uiid)
+    this.Parent.setChanged(true)
   }
 
   @action edit = uiid => {

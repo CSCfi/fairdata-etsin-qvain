@@ -21,7 +21,7 @@ describe('Field', () => {
   let mockStores
 
   beforeEach(() => {
-    mockStores = { readonly }
+    mockStores = { readonly, setChanged: jest.fn() }
     field = new Field(mockStores, Template, testModel)
   })
 
@@ -218,8 +218,16 @@ describe('Field', () => {
       field.validationError.should.be.string('')
     })
 
+    test('should call parent.setCganged with true', () => {
+      expect(mockStores.setChanged).toHaveBeenCalledWith(true)
+    })
+
     test('should set hasChanged to false', () => {
       field.hasChanged.should.be.false
+    })
+
+    test('should call Parent setChanged with true', () => {
+      expect(mockStores.setChanged).toHaveBeenCalledWith(true)
     })
 
     test('should set editMode to true', () => {

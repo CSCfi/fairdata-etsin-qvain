@@ -17,6 +17,7 @@ describe('Projects', () => {
   let projects
   const Parent = {
     readonly: false,
+    setChanged: jest.fn(),
   }
 
   beforeEach(() => {
@@ -60,6 +61,10 @@ describe('Projects', () => {
     test('should set changed to true', () => {
       projects.changed.should.be.true
     })
+
+    test('should call Parent setChanged with true', () => {
+      expect(Parent.setChanged).to.have.beenCalledWith(true)
+    })
   })
 
   describe('when calling setProject with object that is in projects', () => {
@@ -101,6 +106,10 @@ describe('Projects', () => {
 
     test('should set changed to true', () => {
       projects.changed.should.be.true
+    })
+
+    test('should call Parent setChanged with true', () => {
+      expect(Parent.setChanged).to.have.beenCalledWith(true)
     })
   })
 

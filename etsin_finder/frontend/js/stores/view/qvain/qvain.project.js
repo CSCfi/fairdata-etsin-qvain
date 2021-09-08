@@ -55,6 +55,7 @@ export const projectSchema = yup.object().shape({
 class Projects {
   constructor(Parent) {
     this.readonly = Parent.readonly
+    this.Parent = Parent
     makeObservable(this)
   }
 
@@ -83,11 +84,13 @@ class Projects {
         .concat([updatedProject])
     } else this.projects = this.projects.concat([project])
     this.changed = true
+    this.Parent.setChanged(true)
   }
 
   @action removeProject = id => {
     this.projects = this.projects.filter(project => project.id !== id)
     this.changed = true
+    this.Parent.setChanged(true)
   }
 
   @action fromBackend = dataset => {
