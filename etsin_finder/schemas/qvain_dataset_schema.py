@@ -5,10 +5,27 @@ from marshmallow_oneofschema import OneOfSchema
 
 data_catalog_matcher = "^urn:nbn:fi:att:data-catalog-(ida|att|pas|dft)$"
 
+
 class ReferenceObjectValidationSchema(Schema):
     """Validation schema for generic reference data objects."""
 
     identifier = fields.URL(required=True)
+
+
+class RemoteResourceDocumentValidationSchema(Schema):
+    """Validation schema for generic reference data objects."""
+
+    identifier = fields.URL(required=True)
+
+
+class RemoteResourceValidationSchema(Schema):
+    """Validation schema for remote resources."""
+
+    title = fields.String(required=True)
+    use_category = fields.Nested(ReferenceObjectValidationSchema, required=True)
+    download_url = fields.Nested(RemoteResourceDocumentValidationSchema)
+    access_url = fields.Nested(RemoteResourceDocumentValidationSchema)
+
 
 class OrganizationValidationSchema(Schema):
     """Validation schema for organizations."""
@@ -145,6 +162,6 @@ class DatasetValidationSchema(Schema):
     cumulativeState = fields.Int(validate=OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())
     directories = fields.List(fields.Dict())
-    remote_resources = fields.List(fields.Dict())
+    remote_resources = fields.List(fields.Nested(RemoteResourceValidationSchema))
     useDoi = fields.Boolean()
     projects = fields.List(fields.Nested(ProjectValidationSchema))

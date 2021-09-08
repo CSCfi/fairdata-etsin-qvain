@@ -197,9 +197,9 @@ expected_custom_rights = {
 original_remote_resources = [
     {
         "title": "remote_resource",
-        "accessUrl": "access url",
-        "downloadUrl": "download url",
-        "useCategory": {"value": "use category"},
+        "access_url": {"identifier": "access url"},
+        "download_url": {"identifier": "download url"},
+        "use_category": {"identifier": "use category"},
     }
 ]
 
@@ -329,11 +329,10 @@ original_complete_dataset = {
         {
             "id": 0,
             "title": "qew",
-            "accessUrl": "",
-            "downloadUrl": "",
-            "useCategory": {
-                "label": "Publication",
-                "value": "http://uri.suomi.fi/codelist/fairdata/use_category/code/publication",
+            "access_url": "",
+            "download_url": "",
+            "use_category": {
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/publication",
             },
         }
     ],

@@ -27,20 +27,11 @@ export const externalResourceTitleSchema = yup
   .string()
   .required('qvain.validationMessages.externalResources.title.required')
 
-// Use category is one of preset 7 options (all strings)
-export const externalResourceUseCategorySchema = yup.lazy(value => {
-  switch (typeof value) {
-    case 'object':
-      return yup.object().shape({
-        value: yup
-          .string()
-          .required('qvain.validationMessages.externalResources.useCategory.required'),
-      })
-    default:
-      return yup
-        .string()
-        .required('qvain.validationMessages.externalResources.useCategory.required')
-  }
+// Use category is one of preset 7 options
+export const externalResourceUseCategorySchema = yup.object().shape({
+  url: yup
+    .string()
+    .required('qvain.validationMessages.externalResources.useCategory.required'),
 })
 
 export const externalResourceAccessUrlSchema = yup

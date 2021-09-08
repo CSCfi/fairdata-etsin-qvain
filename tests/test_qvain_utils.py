@@ -16,7 +16,6 @@ from etsin_finder.utils.qvain_utils import (
     get_access_granter,
     get_dataset_creator,
     other_identifiers_to_metax,
-    remote_resources_data_to_metax,
     remove_deleted_datasets_from_results,
 )
 
@@ -71,13 +70,6 @@ class TestQvainUtils(BaseTest):
         assert modified_open_rights == expected_open_rights
         assert modified_embargo_rights == expected_embargo_rights
         assert modified_custom_rights == expected_custom_rights
-
-    def test_remote_resources_to_metax(app):
-        """Test that function alters access rights suitable for Metax."""
-        modified_remote_resources = remote_resources_data_to_metax(
-            original_remote_resources
-        )
-        assert modified_remote_resources == expected_remote_resources
 
     def test_data_to_metax(self):
         """Test that function alters dataset for metax."""

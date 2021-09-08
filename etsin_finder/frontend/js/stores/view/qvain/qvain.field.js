@@ -11,6 +11,7 @@ class Field {
     makeObservable(this)
     this.reset = this.reset.bind(this)
     this.create = this.create.bind(this)
+    this.clearInEdit = this.clearInEdit.bind(this)
   }
 
   @computed
@@ -99,7 +100,7 @@ class Field {
     this.attachRefs(refs, this.storage[index])
   }
 
-  @action clearInEdit = () => {
+  @action clearInEdit() {
     this.validationError = ''
     this.setChanged(false)
     this.editMode = false

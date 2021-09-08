@@ -72,7 +72,9 @@ describe('when calling handleSubmit with mockStores', () => {
       dataCatalog: 'dataCatalog',
       cumulativeState: 'cumulativeState',
       useDoi: 'useDoi',
-      externalResources: ['externalResources'],
+      ExternalResources: {
+        toBackend: jest.fn(() => 'externalResources'),
+      },
     },
   }
 
@@ -96,8 +98,7 @@ describe('when calling handleSubmit with mockStores', () => {
       restrictionGrounds: 'restrictionGrounds',
       embargoDate: 'embargoDate',
       license: 'license',
-      // Send no values if empty instead of empty values.
-      remote_resources: ['externalResources'],
+      remote_resources: 'externalResources',
       dataCatalog: 'dataCatalog',
       cumulativeState: 'cumulativeState',
       useDoi: 'useDoi',

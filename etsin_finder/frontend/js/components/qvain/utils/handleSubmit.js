@@ -49,8 +49,7 @@ const handleSubmitToBackend = values => {
     restrictionGrounds,
     embargoDate,
     license,
-    // Send no values if empty instead of empty values.
-    remote_resources: values.externalResources.length > 0 ? values.externalResources : [],
+    remote_resources: values.ExternalResources.toBackend(),
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
