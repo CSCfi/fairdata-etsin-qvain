@@ -3,29 +3,31 @@ import ReferenceField from './qvain.referenceField'
 import { LICENSE_URL } from '../../../utils/constants'
 import { touch } from './track'
 
-const referenceLicenseScheme = "http://uri.suomi.fi/codelist/fairdata/license/"
+const referenceLicenseScheme = 'http://uri.suomi.fi/codelist/fairdata/license/'
 
-export const licenseSchema = yup.object().shape({
-  name: yup.object().nullable(),
-  identifier: yup.string().required(),
-  otherLicenseUrl: yup
-    .string()
-    .typeError('qvain.validationMessages.license.otherUrl.string')
-    .url('qvain.validationMessages.license.otherUrl.url')
-    .required('qvain.validationMessages.license.otherUrl.required')
-    .nullable(),
-})
+const licenseUrlSchema = yup
+  .string()
+  .typeError('qvain.validationMessages.license.otherUrl.string')
+  .url('qvain.validationMessages.license.otherUrl.url')
+  .required('qvain.validationMessages.license.otherUrl.required')
 
-const licenseArrayObject = yup.object().shape({
-  name: yup.object().nullable(),
-  identifier: yup
-    .string()
-    .typeError('qvain.validationMessages.license.otherUrl.string')
-    .url('qvain.validationMessages.license.otherUrl.url')
-    .required('qvain.validationMessages.license.otherUrl.required'),
-})
+export const licenseQvainSchema = yup
+  .object()
+  .shape({
+    name: yup.object().nullable(),
+    identifier: yup.string().required(),
+    otherLicenseUrl: licenseUrlSchema.nullable(),
+  })
+  .noUnknown()
 
-export const licenseArraySchema = yup.array().of(licenseArrayObject).nullable()
+const licenseMetaxSchema = yup
+  .object()
+  .shape({
+    identifier: licenseUrlSchema,
+  })
+  .noUnknown()
+
+export const licenseArrayMetaxSchema = yup.array().of(licenseMetaxSchema).nullable()
 
 export const Model = (name, identifier) => ({
   name,
@@ -37,14 +39,10 @@ class Licenses extends ReferenceField {
     super(Parent, () => [Model(undefined, LICENSE_URL.CCBY4)])
   }
 
-  schema = licenseSchema
+  schema = licenseQvainSchema
 
-  arraySchema = licenseArraySchema
-
-  arrayObjectSchema = licenseArrayObject
-
-  fromBackend = (dataset) => {
-    const l = dataset.access_rights.license ? dataset.access_rights.license : undefined
+  fromBackend = dataset => {
+    const l = dataset.access_rights?.license ? dataset.access_rights.license : undefined
     if (l !== undefined) {
       this.item = undefined
       this.storage = l.map(license => {
@@ -66,7 +64,7 @@ class Licenses extends ReferenceField {
     }
   }
 
-  toBackend = () => this.storage
+  toBackend = () => this.storage.map(lic => ({ identifier: lic.identifier }))
 
   Model = Model
 }

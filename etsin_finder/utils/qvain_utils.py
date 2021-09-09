@@ -81,48 +81,6 @@ def other_identifiers_to_metax(identifiers_list):
     return other_identifiers
 
 
-def access_rights_to_metax(data):
-    """Cherry pick access right data from the frontend form data and make it comply with Metax schema.
-
-    Arguments:
-        data (dict): The whole object sent from the frontend.
-
-    Returns:
-        dict: Dictionary containing access right object that comply to Metax schema.
-
-    """
-    access_rights = {}
-    access_rights["license"] = []
-    license = data.get("license", [])
-    for lic in license:
-        license_id = lic.get("identifier")
-        license_name_en = lic.get("name", {}).get("en") or ""
-        if license_id and not license_name_en.startswith("Other (URL)"):
-            license_object = {}
-            license_object["identifier"] = license_id
-            access_rights["license"].append(license_object)
-        elif license_id and license_name_en.startswith("Other (URL)"):
-            license_object = {}
-            license_object["license"] = license_id
-            access_rights["license"].append(license_object)
-
-    access_type = data.get("accessType", {})
-    access_type_url = access_type.get("url")
-    if access_type:
-        access_rights["access_type"] = {}
-        access_rights["access_type"]["identifier"] = access_type_url
-        if data["accessType"]["url"] != ACCESS_TYPES.get("open"):
-            access_rights["restriction_grounds"] = []
-            access_rights["restriction_grounds"].append(
-                {"identifier": data.get("restrictionGrounds")}
-            )
-        if (
-            data["accessType"]["url"] == ACCESS_TYPES.get("embargo") and "embargoDate" in data
-        ):
-            access_rights["available"] = data.get("embargoDate")
-    return access_rights
-
-
 def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     """Convert all the data from the frontend to conform to Metax schema.
 
@@ -154,7 +112,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "language": data.get("language"),
             "keyword": data.get("keywords"),
             "theme": data.get("theme"),
-            "access_rights": access_rights_to_metax(data),
+            "access_rights": data.get("access_rights"),
             "remote_resources": data.get("remote_resources"),
             "is_output_of": alter_projects_to_metax(data.get("projects")),
             "relation": data.get("relation"),
@@ -310,7 +268,7 @@ def edited_data_to_metax(data, original):
             "language": data.get("language"),
             "keyword": data.get("keywords"),
             "theme": data.get("theme"),
-            "access_rights": access_rights_to_metax(data),
+            "access_rights": data.get("access_rights"),
             "remote_resources": data.get("remote_resources"),
             "infrastructure": data.get("infrastructure"),
             "spatial": data.get("spatial"),
