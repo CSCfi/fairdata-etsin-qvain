@@ -340,17 +340,15 @@ original_complete_dataset = {
     "dataCatalog": "urn:nbn:fi:att:data-catalog-att",
     "cumulativeState": 0,
     "useDoi": False,
-    "projects": [
+    "is_output_of": [
         {
-            "details": {
-                "title": {"en": "qwe", "fi": "qweqwe"},
-                "identifier": "test",
-                "fundingIdentifier": "tetets",
-                "funderType": {
-                    "identifier": "http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes"
-                },
+            "name": {"en": "qwe", "fi": "qweqwe"},
+            "identifier": "test",
+            "has_funder_identifier": "tetets",
+            "funder_type": {
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes"
             },
-            "organizations": [
+            "source_organization": [
                 {
                     "@type": "Organization",
                     "name": {
@@ -371,7 +369,7 @@ original_complete_dataset = {
                     },
                 },
             ],
-            "fundingAgencies": [
+            "has_funding_agency": [
                 {
                     "@type": "Organization",
                     "name": {

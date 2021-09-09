@@ -190,7 +190,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             )
             if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get("att")
             else "",
-            "is_output_of": alter_projects_to_metax(data.get("projects")),
+            "is_output_of": data.get("is_output_of"),
             "relation": data.get("relation"),
             "provenance": data.get("provenance"),
             "infrastructure": data.get("infrastructure"),
@@ -352,7 +352,7 @@ def edited_data_to_metax(data, original):
             else "",
             "infrastructure": data.get("infrastructure"),
             "spatial": data.get("spatial"),
-            "is_output_of": alter_projects_to_metax(data.get("projects")),
+            "is_output_of": data.get("is_output_of"),
             "relation": data.get("relation"),
             "provenance": data.get("provenance"),
             "temporal": data.get("temporal"),

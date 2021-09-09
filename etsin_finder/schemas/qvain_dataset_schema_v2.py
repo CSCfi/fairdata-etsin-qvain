@@ -75,7 +75,7 @@ class DraftDatasetValidationSchema(Schema):
     directories = fields.List(fields.Dict())
     remote_resources = fields.List(fields.Dict())
     useDoi = fields.Boolean()
-    projects = fields.List(fields.Nested(ProjectValidationSchema))
+    is_output_of = fields.List(fields.Nested(ProjectValidationSchema))
 
 
 class PublishDatasetValidationSchema(DatasetValidationSchemaV1):
