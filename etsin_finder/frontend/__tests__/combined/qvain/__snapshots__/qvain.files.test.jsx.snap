@@ -10,27 +10,21 @@ Object {
     },
     "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
   },
-  "actors": Array [
+  "contributor": undefined,
+  "creator": Array [
     Object {
-      "organizations": Array [
-        Object {
-          "email": undefined,
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-          "name": Object {
-            "en": "Org",
-            "fi": "Org",
-            "und": "Org",
-          },
-        },
-      ],
-      "person": undefined,
-      "roles": Array [
-        "creator",
-      ],
-      "type": "organization",
+      "@type": "Organization",
+      "email": undefined,
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
+      "name": Object {
+        "en": "Org",
+        "fi": "Org",
+        "und": "Org",
+      },
     },
   ],
   "cumulativeState": 0,
+  "curator": undefined,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
   "datasetLanguage": Array [],
   "description": Object {
@@ -144,9 +138,11 @@ Object {
   },
   "projects": Array [],
   "provenance": Array [],
+  "publisher": undefined,
   "relation": Array [],
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
+  "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
   "theme": Array [],
@@ -168,27 +164,21 @@ Object {
     },
     "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
   },
-  "actors": Array [
+  "contributor": undefined,
+  "creator": Array [
     Object {
-      "organizations": Array [
-        Object {
-          "email": undefined,
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-          "name": Object {
-            "en": "Org",
-            "fi": "Org",
-            "und": "Org",
-          },
-        },
-      ],
-      "person": undefined,
-      "roles": Array [
-        "creator",
-      ],
-      "type": "organization",
+      "@type": "Organization",
+      "email": undefined,
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
+      "name": Object {
+        "en": "Org",
+        "fi": "Org",
+        "und": "Org",
+      },
     },
   ],
   "cumulativeState": 0,
+  "curator": undefined,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
   "datasetLanguage": Array [],
   "description": Object {
@@ -302,9 +292,11 @@ Object {
   },
   "projects": Array [],
   "provenance": Array [],
+  "publisher": undefined,
   "relation": Array [],
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
+  "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
   "theme": Array [],
@@ -326,27 +318,21 @@ Object {
     },
     "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
   },
-  "actors": Array [
+  "contributor": undefined,
+  "creator": Array [
     Object {
-      "organizations": Array [
-        Object {
-          "email": undefined,
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-          "name": Object {
-            "en": "Org",
-            "fi": "Org",
-            "und": "Org",
-          },
-        },
-      ],
-      "person": undefined,
-      "roles": Array [
-        "creator",
-      ],
-      "type": "organization",
+      "@type": "Organization",
+      "email": undefined,
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
+      "name": Object {
+        "en": "Org",
+        "fi": "Org",
+        "und": "Org",
+      },
     },
   ],
   "cumulativeState": 0,
+  "curator": undefined,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
   "datasetLanguage": Array [],
   "description": Object {
@@ -460,9 +446,11 @@ Object {
   },
   "projects": Array [],
   "provenance": Array [],
+  "publisher": undefined,
   "relation": Array [],
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
+  "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
   "theme": Array [],
@@ -484,27 +472,21 @@ Object {
     },
     "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
   },
-  "actors": Array [
+  "contributor": undefined,
+  "creator": Array [
     Object {
-      "organizations": Array [
-        Object {
-          "email": undefined,
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-          "name": Object {
-            "en": "Org",
-            "fi": "Org",
-            "und": "Org",
-          },
-        },
-      ],
-      "person": undefined,
-      "roles": Array [
-        "creator",
-      ],
-      "type": "organization",
+      "@type": "Organization",
+      "email": undefined,
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
+      "name": Object {
+        "en": "Org",
+        "fi": "Org",
+        "und": "Org",
+      },
     },
   ],
   "cumulativeState": 0,
+  "curator": undefined,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
   "datasetLanguage": Array [],
   "description": Object {
@@ -618,9 +600,11 @@ Object {
   },
   "projects": Array [],
   "provenance": Array [],
+  "publisher": undefined,
   "relation": Array [],
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
+  "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
   "theme": Array [],
@@ -642,27 +626,21 @@ Object {
     },
     "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
   },
-  "actors": Array [
+  "contributor": undefined,
+  "creator": Array [
     Object {
-      "organizations": Array [
-        Object {
-          "email": undefined,
-          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-          "name": Object {
-            "en": "Org",
-            "fi": "Org",
-            "und": "Org",
-          },
-        },
-      ],
-      "person": undefined,
-      "roles": Array [
-        "creator",
-      ],
-      "type": "organization",
+      "@type": "Organization",
+      "email": undefined,
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
+      "name": Object {
+        "en": "Org",
+        "fi": "Org",
+        "und": "Org",
+      },
     },
   ],
   "cumulativeState": 0,
+  "curator": undefined,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
   "datasetLanguage": Array [],
   "description": Object {
@@ -776,9 +754,11 @@ Object {
   },
   "projects": Array [],
   "provenance": Array [],
+  "publisher": undefined,
   "relation": Array [],
   "remote_resources": Array [],
   "restrictionGrounds": undefined,
+  "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
   "theme": Array [],

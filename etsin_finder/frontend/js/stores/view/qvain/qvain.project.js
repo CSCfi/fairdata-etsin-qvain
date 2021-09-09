@@ -2,6 +2,7 @@ import { observable, action, toJS, makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
 import { parseOrganization } from '../../../components/qvain/fields/project/utils'
+import { organizationArrayToMetax } from './qvain.actors'
 import { touch } from './track'
 
 // PROJECT VALIDATION
@@ -162,30 +163,27 @@ class Projects {
       } else delete details.funderType
 
       const organizations = (projectObject.organizations || []).map(fullOrganization =>
-        organizationToArray(fullOrganization)
+        organizationToMetax(fullOrganization)
       )
-
-      const fundingAgencies = (projectObject.fundingAgencies || []).map(agency => {
-        const { organization } = agency
+      const fundingAgencies = projectObject.fundingAgencies.map(agency => {
         const contributorTypes = agency.contributorTypes.map(contributorType => {
-          const { identifier, label, definition, inScheme } = contributorType
-          return { identifier, label, definition, inScheme }
+          const { identifier, definition } = contributorType
+          return { identifier, definition }
         })
-        return { organization: organizationToArray(organization), contributorTypes }
+        const { organization } = agency
+        return { ...organizationToMetax(organization), contributor_type: contributorTypes }
       })
       return { details, organizations, fundingAgencies }
     })
 }
 
-const organizationToArray = fullOrganization => {
+const organizationToMetax = fullOrganization => {
   for (const [key, value] of Object.entries(fullOrganization)) {
     if (value && !value.email) delete fullOrganization[key].email
   }
   const { organization, department, subDepartment } = fullOrganization
-  const output = [{ ...organization }]
-  if (department) output.push({ ...department })
-  if (subDepartment) output.push({ ...subDepartment })
-  return output
+  const organizationArray = [organization, department, subDepartment].filter(v => v)
+  return organizationArrayToMetax(organizationArray)
 }
 
 export const Project = (

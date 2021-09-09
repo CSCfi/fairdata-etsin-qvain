@@ -22,19 +22,20 @@ const ActorRadio = ({ role }) => {
   const handleChangeEntity = type => () => {
     updateActor(actor, { type })
   }
+  const roleKey = role.toLowerCase()
 
   return (
     <ListItem>
       <NestedLabel>
         <RadioInput
-          id={`entity-${role}`}
+          id={`entity-${roleKey}`}
           name="entityType"
           type="radio"
           disabled={readonly}
           onChange={handleChangeEntity(role)}
           checked={checked}
         />
-        <Translate content={`qvain.actors.add.radio.${role}`} />
+        <Translate content={`qvain.actors.add.radio.${roleKey}`} />
       </NestedLabel>
     </ListItem>
   )

@@ -53,8 +53,8 @@ export const CUMULATIVE_STATE = {
 }
 
 export const ENTITY_TYPE = {
-  PERSON: 'person',
-  ORGANIZATION: 'organization',
+  PERSON: 'Person',
+  ORGANIZATION: 'Organization',
 }
 
 export const ROLE = {
