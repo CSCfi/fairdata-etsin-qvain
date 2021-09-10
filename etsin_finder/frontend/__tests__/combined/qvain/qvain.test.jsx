@@ -324,22 +324,15 @@ describe('Qvain DOI selection', () => {
 })
 
 describe('Qvain validation', () => {
-  let actors
   let dataset
+  const organization = {
+    '@type': 'Organization',
+    name: {
+      en: 'Test organization',
+    },
+  }
+
   beforeEach(() => {
-    actors = [
-      {
-        type: 'organization',
-        roles: ['creator'],
-        organizations: [
-          {
-            name: {
-              en: 'Test organization',
-            },
-          },
-        ],
-      },
-    ]
     dataset = {
       title: { en: 'title' },
       description: { en: 'description' },
@@ -351,7 +344,7 @@ describe('Qvain validation', () => {
         },
       ],
       dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
-      actors,
+      creator: [organization],
       accessType: {
         url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
       },
@@ -359,7 +352,7 @@ describe('Qvain validation', () => {
   })
 
   it('should validate dataset', async () => {
-    actors[0].roles.push('publisher')
+    dataset.publisher = organization
     try {
       expect(await qvainFormSchema.validate(dataset, { abortEarly: false, strict: true }))
     } catch (e) {
@@ -391,7 +384,7 @@ describe('Qvain validation', () => {
   it('should validate dataset with DOI enabled', async () => {
     dataset.useDoi = true
     dataset.issuedDate = '2020-06-01'
-    actors[0].roles.push('publisher')
+    dataset.publisher = organization
 
     try {
       expect(await qvainFormSchema.validate(dataset, { abortEarly: false, strict: true }))

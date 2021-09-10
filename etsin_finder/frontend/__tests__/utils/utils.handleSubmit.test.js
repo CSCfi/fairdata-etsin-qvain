@@ -16,7 +16,13 @@ describe('when calling handleSubmit with mockStores', () => {
         toBackend: jest.fn(() => 'theme'),
       },
       Actors: {
-        toBackend: jest.fn(() => 'actors'),
+        toBackend: jest.fn(() => ({
+          creator: 'creator',
+          publisher: 'publisher',
+          rights_holder: 'rights_holder',
+          curator: 'curator',
+          contributor: 'contributor',
+        })),
       },
       Spatials: {
         toBackend: jest.fn(() => 'spatial'),
@@ -81,7 +87,11 @@ describe('when calling handleSubmit with mockStores', () => {
       identifiers: 'identifiers',
       keywords: 'keywords',
       theme: 'theme',
-      actors: 'actors',
+      creator: 'creator',
+      publisher: 'publisher',
+      rights_holder: 'rights_holder',
+      curator: 'curator',
+      contributor: 'contributor',
       infrastructure: 'infrastructures',
       restrictionGrounds: 'restrictionGrounds',
       embargoDate: 'embargoDate',

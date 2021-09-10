@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { observable, action, runInAction, computed, makeObservable } from 'mobx'
+import { toJS, observable, action, runInAction, computed, makeObservable } from 'mobx'
 import * as yup from 'yup'
 
 import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../../utils/constants'
@@ -131,106 +131,40 @@ export const actorSchema = yup.object().shape({
     .required('qvain.validationMessages.actors.organization.required'),
 })
 
-export const actorsSchema = yup
-  .array()
-  .of(actorSchema)
-  // Test: loop through the actor list and the roles of each actor
-  // A Creator must be found in the actor list in order to allow the dataset to be posted to the database
-  .test(
-    'contains-creator',
-    'qvain.validationMessages.actors.requiredActors.mandatoryActors.creator',
-    value => {
-      let foundCreator = false
-      for (let i = 0; i < value.length; i += 1) {
-        for (let j = 0; j < value[i].roles.length; j += 1) {
-          if (value[i].roles[j] === ROLE.CREATOR) {
-            foundCreator = true
-          }
-        }
-      }
-      if (foundCreator) {
-        return true
-      }
-      return false
-    }
-  )
-  .test(
-    'is-doi-and-contains-publisher',
-    'qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher',
-    value => {
-      let foundPublisher = false
-      for (let i = 0; i < value.length; i += 1) {
-        for (let j = 0; j < value[i].roles.length; j += 1) {
-          if (value[i].roles[j] === ROLE.PUBLISHER) {
-            foundPublisher = true
-          }
-        }
-      }
-      if (foundPublisher) {
-        return true
-      }
-      return false
-    }
-  )
-  .required('qvain.validationMessages.actors.requiredActors.atLeastOneActor')
-
-// Draft actor
-export const actorTypeDraft = yup
-  .mixed()
-  .oneOf(
-    [ENTITY_TYPE.PERSON, ENTITY_TYPE.ORGANIZATION],
-    'qvain.validationMessages.actors.type.oneOf'
-  )
-
-export const actorRolesDraftSchema = yup
-  .array()
-  .of(
-    yup
-      .mixed()
-      .oneOf(
-        [
-          ROLE.CREATOR,
-          ROLE.CURATOR,
-          ROLE.PUBLISHER,
-          ROLE.RIGHTS_HOLDER,
-          ROLE.CONTRIBUTOR,
-          ROLE.PROVENANCE,
-        ],
-        'qvain.validationMessages.actors.roles.oneOf'
-      )
-  )
-  .min(1, 'qvain.validationMessages.actors.roles.min')
-
-export const personNameDraftSchema = yup
-  .string()
-  .typeError('qvain.validationMessages.actors.name.string')
-  .max(1000, 'qvain.validationMessages.actors.name.max')
-
-export const personDraftSchema = yup.object().shape({
-  name: personNameDraftSchema,
-  email: personEmailSchema,
-  identifier: personIdentifierSchema,
+const metaxOrganizationSchema = organizationSchema.shape({
+  '@type': yup.string().oneOf([ENTITY_TYPE.ORGANIZATION]),
+  is_part_of: metaxOrganizationSchema,
 })
 
-export const actorDraftSchema = yup.object().shape({
-  type: actorTypeDraft,
-  roles: actorRolesDraftSchema,
-  person: yup.object().when('type', {
-    is: ENTITY_TYPE.PERSON,
-    then: personDraftSchema,
-    otherwise: yup.object().nullable(),
-  }),
-  organizations: yup.array().of(organizationSchema),
+const metaxPersonSchema = personSchema.shape({
+  '@type': yup.string().oneOf([ENTITY_TYPE.PERSON]),
+  member_of: metaxOrganizationSchema.required(
+    'qvain.validationMessages.actors.organization.required'
+  ),
 })
 
-// Actors schema for draft
-export const actorsDraftSchema = yup.array().of(actorDraftSchema)
+export const metaxActorSchema = yup.lazy(actor => {
+  if (actor?.['@type'] === ENTITY_TYPE.PERSON) {
+    return metaxPersonSchema
+  }
+  return metaxOrganizationSchema
+})
+
+export const getRequiredMetaxActorSchema = message =>
+  yup.lazy(actor => {
+    if (actor?.['@type'] === ENTITY_TYPE.PERSON) {
+      return metaxPersonSchema.required(message)
+    }
+    return metaxOrganizationSchema.required(message)
+  })
+
+export const metaxActorsSchema = yup.array().of(metaxActorSchema)
 
 // HELPERS
 
 // Returns a Actor.
 const createActor = (actorJson, roles) => {
-  const entityType = actorJson['@type'].toLowerCase()
+  const entityType = actorJson['@type']
 
   const flattenOrganizations = org => {
     const orgs = []
@@ -291,23 +225,40 @@ export const getOrganizationSearchUrl = parentId => {
   return `${METAX_FAIRDATA_ROOT_URL}/es/organization_data/organization/_search?size=3000&q=parent_id:"${shortId}"`
 }
 
-const actorToBackend = actor => ({
-  type: actor.type,
-  roles: actor.roles,
-  person:
-    actor.type === ENTITY_TYPE.PERSON
-      ? {
-          name: actor.person.name,
-          email: actor.person.email || undefined,
-          identifier: actor.person.identifier || undefined,
-        }
-      : undefined,
-  organizations: actor.organizations.map(org => ({
-    name: org.name,
+export const organizationArrayToMetax = orgs => {
+  const metaxOrgs = orgs.map(org => ({
+    name: { ...org.name },
     email: org.email || undefined,
     identifier: org.identifier || undefined,
-  })),
-})
+    '@type': ENTITY_TYPE.ORGANIZATION,
+  }))
+  const subOrgFirst = metaxOrgs.reverse()
+  const org = subOrgFirst[0]
+  let currentLevel = org
+  for (const nextOrg of subOrgFirst.slice(1)) {
+    currentLevel.is_part_of = nextOrg
+    currentLevel = nextOrg
+  }
+  return org
+}
+
+const actorToMetax = origActor => {
+  const actor = toJS(origActor)
+  const org = organizationArrayToMetax(actor.organizations)
+
+  if (actor.type === ENTITY_TYPE.ORGANIZATION) {
+    return org
+  }
+
+  const person = {
+    name: actor.person.name,
+    email: actor.person.email || undefined,
+    identifier: actor.person.identifier || undefined,
+    member_of: org,
+    '@type': ENTITY_TYPE.PERSON,
+  }
+  return person
+}
 
 const isActorEqual = (org1, org2) => isEqual(org1, org2, ['uiid', 'roles', 'isReference'])
 
@@ -406,8 +357,6 @@ class Actors {
   organizationSchema = organizationSchema
 
   actorSchema = actorSchema
-
-  actorsSchema = actorsSchema
 
   // Reference organizations by parent
   @observable referenceOrganizations = {}
@@ -776,7 +725,7 @@ class Actors {
     )
     if (!provenancesWithActorRefsToBeRemoved.length) return Promise.resolve(true)
     this.provenancesWithNonExistingActors = provenancesWithActorRefsToBeRemoved
-    return this.createLooseProvenancePromise()
+    return this.Qvain.createLooseProvenancePromise()
   }
 
   @action checkProvenanceActors = () => {
@@ -797,7 +746,7 @@ class Actors {
     if (!orphanActors.length) return Promise.resolve(true)
     this.orphanActors = orphanActors
 
-    return this.createLooseActorPromise()
+    return this.Qvain.createLooseActorPromise()
   }
 
   otherActorsHaveRole = (actor, role) => {
@@ -810,24 +759,24 @@ class Actors {
     return existingRoles.has(role)
   }
 
-  toBackend = () =>
-    this.actors.map(actor => ({
-      type: actor.type,
-      roles: actor.roles,
-      person:
-        actor.type === ENTITY_TYPE.PERSON
-          ? {
-              name: actor.person.name,
-              email: actor.person.email || undefined,
-              identifier: actor.person.identifier || undefined,
-            }
-          : undefined,
-      organizations: actor.organizations.map(org => ({
-        name: org.name,
-        email: org.email || undefined,
-        identifier: org.identifier || undefined,
-      })),
-    }))
+  toBackend = () => {
+    const roles = ['creator', 'publisher', 'curator', 'rights_holder', 'contributor']
+    const result = {}
+
+    for (const role of roles) {
+      const roleActors = this.actors
+        .filter(actor => actor.roles.includes(role))
+        .map(actor => actorToMetax(actor))
+      if (roleActors.length > 0) {
+        if (role === 'publisher') {
+          result[role] = roleActors[0]
+        } else {
+          result[role] = roleActors
+        }
+      }
+    }
+    return result
+  }
 
   @computed get actorOptions() {
     return this.actors.map(ref => ({
@@ -891,7 +840,7 @@ export class ActorsRef {
 
   @computed get toBackend() {
     // makes a list of names to be stored to metax
-    return Object.values(this.actorsRef).map(actorToBackend)
+    return Object.values(this.actorsRef).map(actorToMetax)
   }
 
   @action addActorRef = actor => {
