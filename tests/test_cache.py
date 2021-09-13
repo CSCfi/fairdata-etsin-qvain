@@ -37,7 +37,7 @@ class TestCache(BaseTest):
         def raise_():
             raise Exception("set error.")
 
-        base.Client.set = lambda a, b, c, expire: raise_()
+        base.Client.set = lambda a, b, c, expire, noreply: raise_()
 
     @pytest.fixture
     def mock_cache_set(self, mocker):
@@ -48,6 +48,23 @@ class TestCache(BaseTest):
     def mock_cache_get(self, mocker):
         """Mock cache.get function."""
         mocker.patch("pymemcache.client.base.Client.get")
+
+    @pytest.fixture
+    def mock_cache_add(self, mocker):
+        """Mock cache.get function."""
+        mocker.patch("pymemcache.client.base.Client.add", return_value=True)
+
+    @pytest.fixture
+    def mock_cache_gets(self, mocker):
+        """Mock cache.gets function."""
+        mocker.patch(
+            "pymemcache.client.base.Client.gets", return_value=("data", "token")
+        )
+
+    @pytest.fixture
+    def mock_cache_gets_fail(self, mocker):
+        """Mock cache.gets function."""
+        mocker.patch("pymemcache.client.base.Client.gets", return_value=(None, None))
 
     @pytest.fixture
     def mock_cache_get_error(self):
@@ -81,29 +98,35 @@ class TestCache(BaseTest):
     def test_do_update(self, base_cache, mock_cache_set):
         """Call cache.set."""
         base_cache.do_update("key", "value", 60)
-        base_cache.cache.set.assert_called_once_with("key", "value", expire=60)
+        base_cache.cache.set.assert_called_once_with(
+            "key", "value", expire=60, noreply=None
+        )
 
     def test_do_update_fail(self, app, base_cache, mock_cache_set_error, expect_log):
         """Call cache.set and catch warnings."""
-        with app.app_context():
-            base_cache.do_update("key", "value", 60)
-            expect_log(warnings=["Insert to cache failed", "set error."])
+        base_cache.do_update("key", "value", 60)
+        expect_log(warnings=["Insert to cache failed", "set error."])
 
     def test_do_get(self, base_cache, mock_cache_get):
         """Call cache.get."""
         base_cache.do_get("key")
         base_cache.cache.get.assert_called_once_with("key", None)
 
+    def test_do_gets(self, base_cache, mock_cache_gets):
+        """Call cache.gets."""
+        (data, token) = base_cache.do_gets("key")
+        assert (data, token) == ("data", "token")
+        base_cache.cache.gets.assert_called_once_with("key")
+
     def test_do_delete(self, base_cache, mock_cache_delete):
         """Call cache.delete."""
         base_cache.do_delete("key")
-        base_cache.cache.delete.assert_called_once_with("key", None)
+        base_cache.cache.delete.assert_called_once_with("key", noreply=None)
 
     def test_do_delete_fail(self, app, base_cache, mock_cache_delete_error):
         """Call cache.delete and fail."""
-        with app.app_context():
-            result = base_cache.do_delete("key")
-            assert result is None
+        result = base_cache.do_delete("key")
+        assert result is False
 
     def test_cr_cache_init(self, catalog_record_cache):
         """Create a cache on init with default values."""
@@ -111,60 +134,87 @@ class TestCache(BaseTest):
         assert catalog_record_cache.CACHE_ITEM_TTL == 1200
         assert catalog_record_cache.CACHE_KEY_PREFIX == "cr_"
 
-    def test_cr_update_cache(self, catalog_record_cache, mock_cache_set):
+    def test_cr_update(self, catalog_record_cache, mock_cache_set):
         """Call cache.set."""
         cr_id = "id"
         data = "value"
 
-        catalog_record_cache.update_cache(cr_id, data)
+        catalog_record_cache.update(cr_id, data)
         catalog_record_cache.cache.set.assert_called_once_with(
-            "cr_id", "value", expire=1200
+            "cr_id", "value", expire=1200, noreply=None
         )
 
-    def test_cr_update_cache_cr_id_missing(self, catalog_record_cache):
+    def test_cr_update_cr_id_missing(self, catalog_record_cache):
         """Call cache.set."""
         cr_id = None
         data = "value"
 
-        result = catalog_record_cache.update_cache(cr_id, data)
+        result = catalog_record_cache.update(cr_id, data)
         assert result == data
 
-    def test_cr_get_from_cache(self, catalog_record_cache, mock_cache_get):
+    def test_cr_get(self, catalog_record_cache, mock_cache_get):
         """Call cache.get."""
         cr_id = "id"
 
-        catalog_record_cache.get_from_cache(cr_id)
+        catalog_record_cache.get(cr_id)
         catalog_record_cache.cache.get.assert_called_once_with("cr_id", None)
 
-    def test_cr_delete_from_cache(self, catalog_record_cache, mock_cache_delete):
+    def test_cr_delete(self, catalog_record_cache, mock_cache_delete):
         """Call cache.delete."""
         cr_id = "id"
 
-        catalog_record_cache.delete_from_cache(cr_id)
-        catalog_record_cache.cache.delete.assert_called_once_with("cr_id", None)
+        catalog_record_cache.delete(cr_id)
+        catalog_record_cache.cache.delete.assert_called_once_with("cr_id", noreply=None)
 
-    def test_rems_update_cache(self, rems_cache, mock_cache_set):
+    def test_cr_add_to_cache(self, catalog_record_cache, mock_cache_add):
+        """Call cache.add."""
+        cr_id = "id"
+
+        catalog_record_cache.add(cr_id, "data")
+        catalog_record_cache.cache.add.assert_called_once_with(
+            "cr_id", "data", expire=1200, noreply=None
+        )
+
+    def test_cr_gets(self, catalog_record_cache, mock_cache_gets):
+        """Call cache.add."""
+        cr_id = "id"
+
+        data, token = catalog_record_cache.gets(cr_id)
+        assert (data, token) == ("data", "token")
+        catalog_record_cache.cache.gets.assert_called_once_with("cr_id")
+
+    def test_cr_gets_fail(self, catalog_record_cache, mock_cache_gets_fail):
+        """Call cache.add."""
+        cr_id = "id"
+
+        data, token = catalog_record_cache.gets(cr_id)
+        assert (data, token) == (None, None)
+        catalog_record_cache.cache.gets.assert_called_once_with("cr_id")
+
+    def test_rems_update(self, rems_cache, mock_cache_set):
         """Call cache.set."""
         cr_id = "cr_"
         user_id = "id"
         permission = True
 
-        rems_cache.update_cache(cr_id, user_id, permission)
-        rems_cache.cache.set.assert_called_once_with("cr_id", True, expire=300)
+        rems_cache.update(cr_id, user_id, permission)
+        rems_cache.cache.set.assert_called_once_with(
+            "cr_id", True, expire=300, noreply=None
+        )
 
-    def test_rems_update_cache_cr_id_missing(self, rems_cache, mock_cache_set):
+    def test_rems_update_cr_id_missing(self, rems_cache, mock_cache_set):
         """Call cache.set."""
         cr_id = None
         user_id = "id"
         permission = True
 
-        result = rems_cache.update_cache(cr_id, user_id, permission)
+        result = rems_cache.update(cr_id, user_id, permission)
         assert result is True
 
-    def test_rems_get_from_cache(self, rems_cache, mock_cache_get):
+    def test_rems_get(self, rems_cache, mock_cache_get):
         """Call cache.get."""
         cr_id = "cr_"
         user_id = "id"
 
-        rems_cache.get_from_cache(cr_id, user_id)
+        rems_cache.get(cr_id, user_id)
         rems_cache.cache.get.assert_called_once_with("cr_id", None)

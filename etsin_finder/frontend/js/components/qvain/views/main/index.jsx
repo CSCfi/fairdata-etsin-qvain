@@ -65,6 +65,9 @@ export class Qvain extends Component {
         window.removeEventListener('beforeunload', confirmReload)
       }
     })
+
+    // Attempt to release lock when window is closed, won't work on mobile
+    window.addEventListener('unload', this.props.Stores.Qvain.Lock?.unload)
   }
 
   componentDidUpdate(prevProps) {
@@ -79,6 +82,8 @@ export class Qvain extends Component {
     if (this.disposeConfirmReload) {
       this.disposeConfirmReload()
     }
+
+    window.removeEventListener('unload', this.props.Stores.Qvain.Lock?.unload)
   }
 
   async handleIdentifierChanged() {
@@ -116,11 +121,14 @@ export class Qvain extends Component {
   getDataset(identifier) {
     this.setState({ datasetLoading: true, datasetError: false })
     const { resetQvainStore, editDataset } = this.props.Stores.Qvain
-    const { getQvainUrl } = this.props.Stores.Env
+    const {
+      getQvainUrl,
+      Flags: { flagEnabled },
+    } = this.props.Stores.Env
     const url = urls.qvain.dataset(identifier)
     const promise = axios
       .get(url)
-      .then(result => {
+      .then(async result => {
         resetQvainStore()
 
         // Open draft instead if it exists
@@ -129,6 +137,13 @@ export class Qvain extends Component {
           this.props.history.replace(getQvainUrl(`/dataset/${nextDraft}`))
         } else {
           editDataset(result.data)
+          if (flagEnabled('PERMISSIONS.WRITE_LOCK')) {
+            try {
+              await Promise.all(this.props.Stores.Qvain.Lock.promises)
+              // eslint-disable-next-line no-empty
+            } catch (e) {}
+          }
+
           this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
         }
       })

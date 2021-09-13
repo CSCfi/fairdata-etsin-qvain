@@ -126,9 +126,14 @@ class Submit {
       OtherIdentifiers: { cleanupBeforeBackend },
       editDataset,
       setChanged,
+      Lock,
     } = this.Qvain
     this.response = undefined
     this.error = undefined
+
+    if (Lock) {
+      await Lock.request()
+    }
 
     let draftFunction
     let publishFunction

@@ -2,7 +2,6 @@ import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
 
 export const getEnterEditAction = (Stores, dataset) => {
   const {
-    Qvain: { editDataset },
     Env: { getQvainUrl, history },
     Matomo,
   } = Stores
@@ -18,7 +17,6 @@ export const getEnterEditAction = (Stores, dataset) => {
       }
 
       Matomo.recordEvent(`EDIT / ${dataset.identifier}`)
-      editDataset(dataset)
       history.push(getQvainUrl(`/dataset/${dataset.identifier}`))
     },
   }

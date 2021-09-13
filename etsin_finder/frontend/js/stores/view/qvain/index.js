@@ -9,6 +9,7 @@ import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/consta
 import Resources from './qvain.resources'
 import Files from './qvain.files'
 import Submit from './qvain.submit'
+import Lock from './qvain.lock'
 import track, { touch } from './track'
 
 class Qvain extends Resources {
@@ -19,6 +20,7 @@ class Qvain extends Resources {
     this.Submit = new Submit(this)
     this.resetQvainStore()
     makeObservable(this)
+    this.Lock = new Lock(this, Auth)
   }
 
   cumulativeStateSchema = cumulativeStateSchema
@@ -38,6 +40,10 @@ class Qvain extends Resources {
   @observable externalResourceInEdit = EmptyExternalResource
 
   @observable unsupported = null
+
+  @computed get datasetIdentifier() {
+    return this.original?.identifier
+  }
 
   @action
   resetQvainStore = () => {
@@ -384,6 +390,11 @@ class Qvain extends Resources {
 
   @computed
   get readonly() {
+    if (this.Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK') && this.Lock.enabled) {
+      if (this.original && !this.Lock.haveLock) {
+        return true
+      }
+    }
     return (
       this.preservationState >= 80 &&
       this.preservationState !== 100 &&
