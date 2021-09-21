@@ -22,16 +22,13 @@ export const organizationObjectSchema = yup.object().shape({
   subDepartment: organizationSelectSchema.nullable(),
 })
 
-export const fundingAgencySchema = yup.object().shape({
-  identifier: yup
-    .mixed()
-    .required('qvain.validationMessages.projects.fundingAgency.contributorType.identifier'),
-  labelFi: yup.string(),
-  labelEn: yup.string(),
-  definitionFi: yup.string(),
-  definitionEn: yup.string(),
-  inScheme: yup.string(),
-})
+export const contributorTypeSchema = yup.array().of(
+  yup.object().shape({
+    identifier: yup
+      .mixed()
+      .required('qvain.validationMessages.projects.fundingAgency.contributorType.identifier'),
+  })
+)
 
 export const projectSchema = yup.object().shape({
   details: yup.object().shape({
@@ -65,7 +62,7 @@ class Projects {
 
   orgObjectSchema = organizationObjectSchema
 
-  fundingAgencySchema = fundingAgencySchema
+  contributorTypeSchema = contributorTypeSchema
 
   @observable projects = []
 
@@ -137,13 +134,7 @@ class Projects {
             parsedOrganizations.reverse()
             const organization = Organization(uuidv4(), ...parsedOrganizations)
             const contributorTypes = (agency.contributor_type || []).map(contributorType =>
-              ContributorType(
-                uuidv4(),
-                contributorType.identifier,
-                contributorType.pref_label,
-                contributorType.definition,
-                contributorType.in_scheme
-              )
+              ContributorType(uuidv4(), contributorType.identifier, contributorType.pref_label)
             )
             return FundingAgency(uuidv4(), organization, contributorTypes)
           })
@@ -167,8 +158,8 @@ class Projects {
       )
       const fundingAgencies = projectObject.fundingAgencies.map(agency => {
         const contributorTypes = agency.contributorTypes.map(contributorType => {
-          const { identifier, definition } = contributorType
-          return { identifier, definition }
+          const { identifier } = contributorType
+          return { identifier }
         })
         const { organization } = agency
         return { ...organizationToMetax(organization), contributor_type: contributorTypes }
@@ -219,12 +210,10 @@ export const FundingAgency = (id, organization, contributorTypes) => ({
   contributorTypes: contributorTypes || [], // Array<ContributorType>
 })
 
-export const ContributorType = (id, identifier, label, definition, inScheme) => ({
+export const ContributorType = (id, identifier, label) => ({
   id: id || uuidv4(),
   identifier,
   label,
-  definition,
-  inScheme,
 })
 
 export default Projects

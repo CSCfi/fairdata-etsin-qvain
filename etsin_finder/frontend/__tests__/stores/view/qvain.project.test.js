@@ -160,8 +160,6 @@ describe('Projects', () => {
                 {
                   identifier: 'contr_identifier',
                   pref_label: 'contr_pref_label',
-                  definition: 'contr_definition',
-                  in_scheme: 'contr_in_scheme',
                 },
               ],
             },
@@ -230,8 +228,6 @@ describe('Projects', () => {
                 id: 'id',
                 identifier: 'contr_identifier',
                 label: 'contr_pref_label',
-                definition: 'contr_definition',
-                inScheme: 'contr_in_scheme',
               },
             ],
           },
@@ -333,7 +329,6 @@ describe('Projects', () => {
                 '@type': 'Organization',
                 contributor_type: [
                   {
-                    definition: 'contr_definition',
                     identifier: 'contr_identifier',
                   },
                 ],

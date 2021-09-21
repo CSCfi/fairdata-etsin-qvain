@@ -5,6 +5,7 @@ from marshmallow_oneofschema import OneOfSchema
 
 data_catalog_matcher = "^urn:nbn:fi:att:data-catalog-(ida|att|pas|dft)$"
 
+
 class OrganizationValidationSchema(Schema):
     """Validation schema for organizations."""
 
@@ -74,9 +75,6 @@ class ContributorTypeValidationSchema(Schema):
     """Validation schema for project funding agency contributor type."""
 
     identifier = fields.Str(required=True)
-    definition = fields.Dict(
-        required=False, validate=lambda x: x.get("en") or x.get("fi")
-    )
 
 
 class ProjectValidationSchema(Schema):

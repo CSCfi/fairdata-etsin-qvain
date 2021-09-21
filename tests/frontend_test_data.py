@@ -53,8 +53,6 @@ original_project_list = [
                     {
                         "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Other",
                         "pref_label": {"en": "Other", "fi": "Muu", "und": "Muu"},
-                        "definition": {"en": "other", "fi": "oerhhrh"},
-                        "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
                     }
                 ],
             }
@@ -116,8 +114,6 @@ expected_project_list = [
                             "fi": "Muu",
                             "und": "Muu",
                         },
-                        "definition": {"en": "other", "fi": "oerhhrh"},
-                        "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
                     }
                 ],
             }
