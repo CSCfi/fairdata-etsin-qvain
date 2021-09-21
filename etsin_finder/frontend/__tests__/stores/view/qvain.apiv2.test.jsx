@@ -32,6 +32,7 @@ import {
   qvainFormSchema,
   qvainFormDraftSchema,
 } from '../../../js/stores/view/qvain/qvain.submit.schemas'
+import { Organization } from '../../../js/stores/view/qvain/qvain.actors'
 
 const { qvainFormSchema: realQvainFormSchema, qvainFormDraftSchema: realQvainFormDraftSchema } =
   jest.requireActual('../../../js/stores/view/qvain/qvain.submit.schemas')
@@ -62,28 +63,24 @@ const errors = {
   wrongFileOrigin: 'Doi can be used only with Ida datasets.',
 }
 
+const testOrganization = {
+  '@type': 'Organization',
+  name: {
+    en: 'University of Helsinki',
+    fi: 'Helsingin yliopisto',
+    sv: 'Helsingfors universitet',
+    und: 'Helsingin yliopisto',
+  },
+  identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
+}
+
 const generateDefaultDatasetForPublish = settings => ({
   title: { fi: 'otsikko', en: 'title' },
   description: { fi: 'kuvailu', en: 'description' },
   issuedDate: moment().format('YYYY-MM-DD'), // needs to be mocked if using snapshots
   keywords: ['key', 'words'],
-  actors: [
-    {
-      type: 'organization',
-      roles: ['publisher', 'creator'],
-      organizations: [
-        {
-          name: {
-            en: 'University of Helsinki',
-            fi: 'Helsingin yliopisto',
-            sv: 'Helsingfors universitet',
-            und: 'Helsingin yliopisto',
-          },
-          identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/01901',
-        },
-      ],
-    },
-  ],
+  creator: [testOrganization],
+  publisher: testOrganization,
   license: [
     {
       name: {

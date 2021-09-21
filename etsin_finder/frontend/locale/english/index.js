@@ -112,7 +112,7 @@ const english = {
       download: 'Download',
       downloadFailed: 'Download failed',
       downloadAll: 'Download all',
-      downloadDisabledForDraft: 'Download disabled for draft',
+      downloadDisabledForDraft: 'Download is disabled for drafts',
       downloading: 'Downloading...',
       source: 'Source',
       commonSource: 'Go to the original source',

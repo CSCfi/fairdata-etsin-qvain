@@ -9,7 +9,7 @@ import { otherIdentifiersArraySchema } from './qvain.otherIdentifier'
 import { licenseArraySchema } from './qvain.license'
 import { accessTypeSchema } from './qvain.accessType'
 import { restrictionGroundsSchema } from './qvain.restrictionGrounds'
-import { actorsSchema, actorsDraftSchema } from './qvain.actors'
+import { metaxActorsSchema, metaxActorSchema, getRequiredMetaxActorSchema } from './qvain.actors'
 import {
   cumulativeStateSchema,
   useDoiSchema,
@@ -40,7 +40,16 @@ const qvainFormSchema = yup.object().shape({
     is: url => url !== ACCESS_TYPE_URL.OPEN,
     then: restrictionGroundsSchema,
   }),
-  actors: actorsSchema,
+  creator: metaxActorsSchema.min(
+    1,
+    'qvain.validationMessages.actors.requiredActors.mandatoryActors.creator'
+  ),
+  publisher: getRequiredMetaxActorSchema(
+    'qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher'
+  ),
+  rights_holder: metaxActorsSchema,
+  curator: metaxActorsSchema,
+  contributor: metaxActorsSchema,
   dataCatalog: dataCatalogSchema,
   cumulativeState: cumulativeStateSchema,
   files: filesSchema,
@@ -62,7 +71,11 @@ const qvainFormDraftSchema = yup.object().shape({
     is: url => url !== ACCESS_TYPE_URL.OPEN,
     then: restrictionGroundsSchema,
   }),
-  actors: actorsDraftSchema,
+  creator: metaxActorsSchema,
+  publisher: metaxActorSchema,
+  rights_holder: metaxActorsSchema,
+  curator: metaxActorsSchema,
+  contributor: metaxActorsSchema,
   dataCatalog: dataCatalogDraftSchema,
   cumulativeState: cumulativeStateSchema,
   files: filesSchema,

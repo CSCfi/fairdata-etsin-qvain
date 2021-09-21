@@ -8,7 +8,10 @@ import EnvClass from '../../../js/stores/domain/env'
 import Packages from '../../../js/stores/view/packages'
 import { fakeDownload, applyMockAdapter } from '../../__testdata__/download.data'
 import { runInAction } from 'mobx'
-import getDownloadAction from '../../../js/components/dataset/data/idaResources/downloadActions'
+import getDownloadAction, {
+  getAllowDownload,
+  getDownloadAllText,
+} from '../../../js/components/dataset/data/idaResources/downloadActions'
 import {
   downloadFile,
   downloadPackage,
@@ -393,6 +396,58 @@ describe('Download functions', () => {
     await downloadPackage(500, 'package-id', mockPackages)
     expect(mockPackages.setError.mock.calls.length).toBe(1)
     expect(console.error.mock.calls.length).toBe(1)
+  })
+})
+
+describe('getAllowDownload', () => {
+  it('returns true for published IDA dataset', () => {
+    expect(
+      getAllowDownload(
+        {
+          isDraft: false,
+          isPas: false,
+        },
+        { allowDataIdaDownloadButton: true }
+      )
+    ).toBe(true)
+  })
+
+  it('returns false for restricted IDA dataset', () => {
+    expect(
+      getAllowDownload(
+        {
+          isDraft: false,
+          isPas: false,
+        },
+        { allowDataIdaDownloadButton: false }
+      )
+    ).toBe(false)
+  })
+
+  it('returns false for DPS dataset', () => {
+    expect(
+      getAllowDownload(
+        {
+          isDraft: false,
+          isPas: true,
+        },
+        { allowDataIdaDownloadButton: true }
+      )
+    ).toBe(false)
+  })
+
+  it('returns false for draft', () => {
+    expect(getAllowDownload({ isDraft: true }, { allowDataIdaDownloadButton: true })).toBe(false)
+  })
+})
+
+describe('getDownloadAllText', () => {
+  it('returns download text for non-draft', () => {
+    expect(getDownloadAllText({ isDraft: false })).toBe('dataset.dl.downloadAll')
+  })
+
+  it('returns download disabled text for draft', () => {
+    expect(getDownloadAllText({ isDraft: true })).toBe('dataset.dl.downloadDisabledForDraft')
   })
 })
 

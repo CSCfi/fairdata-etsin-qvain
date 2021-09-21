@@ -19,9 +19,9 @@ from etsin_finder.schemas.qvain_dataset_schema_v2 import UserMetadataValidationS
 from etsin_finder.utils.qvain_utils import check_dataset_edit_permission
 
 from etsin_finder.services.common_service import (
-    get_directory_for_project,
+    get_directories_for_project,
     get_dataset_projects,
-    get_directory,
+    get_directories,
     get_dataset_user_metadata,
     update_dataset_user_metadata,
 )
@@ -70,7 +70,7 @@ class ProjectFiles(Resource):
         user_ida_projects = authentication.get_user_ida_projects() or []
 
         if cr_identifier or pid in user_ida_projects:
-            resp, status = get_directory_for_project(pid, params)
+            resp, status = get_directories_for_project(pid, params)
             if status != 200:
                 return resp, status
             project_dir_obj = resp
@@ -196,7 +196,7 @@ class DirectoryFiles(Resource):
         if file_fields:
             params["file_fields"] = file_fields
 
-        resp, status = get_directory(dir_id, params)
+        resp, status = get_directories(dir_id, params)
         if status != 200:
             return resp, status
 

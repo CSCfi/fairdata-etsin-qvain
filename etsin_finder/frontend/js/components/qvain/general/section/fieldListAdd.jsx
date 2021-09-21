@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { Observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import Modal from '../../../general/modal'
 import Button from '../../../general/button'
@@ -42,42 +42,31 @@ const FieldListAdd = ({
 
   return (
     <>
-      <Observer>
-        {() => {
-          if (Field.inEdit) {
-            return (
-              <Modal
-                isOpen
-                onRequestClose={confirmClose}
-                contentLabel={contentLabel}
-                customStyles={modalStyle}
-              >
-                <ModalContent
-                  Field={Field}
-                  handleSave={handleSave}
-                  Form={Form}
-                  formProps={formProps}
-                  confirm={confirm}
-                  requestClose={confirmClose}
-                  onConfirmCancel={confirmCancel}
-                  onConfirm={close}
-                />
-              </Modal>
-            )
-          }
-          return null
-        }}
-      </Observer>
+      {Field.inEdit && (
+        <Modal
+          isOpen
+          onRequestClose={confirmClose}
+          contentLabel={contentLabel}
+          customStyles={modalStyle}
+        >
+          <ModalContent
+            Field={Field}
+            handleSave={handleSave}
+            Form={Form}
+            formProps={formProps}
+            confirm={confirm}
+            requestClose={confirmClose}
+            onConfirmCancel={confirmCancel}
+            onConfirm={close}
+          />
+        </Modal>
+      )}
       {!hideButton && (
-        <Observer>
-          {() => (
-            <ButtonContainer position={position}>
-              <AddNewButton type="button" onClick={open} disabled={Field.readonly}>
-                <Translate content={`${translationsRoot}.modal.addButton`} />
-              </AddNewButton>
-            </ButtonContainer>
-          )}
-        </Observer>
+        <ButtonContainer position={position}>
+          <AddNewButton type="button" onClick={open} disabled={Field.readonly}>
+            <Translate content={`${translationsRoot}.modal.addButton`} />
+          </AddNewButton>
+        </ButtonContainer>
       )}
     </>
   )
@@ -138,4 +127,4 @@ const modalStyle = {
   },
 }
 
-export default FieldListAdd
+export default observer(FieldListAdd)
