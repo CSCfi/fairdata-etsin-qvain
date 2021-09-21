@@ -20,7 +20,7 @@ describe('Given modified provenance with added used entity', () => {
     mockStores.Qvain.Provenances.clearInEdit()
   })
 
-  test('Provenance should not have Used enitities', () => {
+  test('Provenance should not have Used entities', () => {
     mockStores.Qvain.Provenances.storage.length.should.eql(1)
     mockStores.Qvain.Provenances.storage[0].uiid.should.eql(uiid)
     mockStores.Qvain.Provenances.storage[0].usedEntities.storage.length.should.eql(0)
