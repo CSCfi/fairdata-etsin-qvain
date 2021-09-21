@@ -41,6 +41,8 @@ class UsedEntities extends Field {
   }
 
   nameSchema = relatedResourceNameSchema
+
+  translationsRoot = 'qvain.history.provenance.modal.usedEntityInput'
 }
 
 export const UsedEntityModel = ue => ({
