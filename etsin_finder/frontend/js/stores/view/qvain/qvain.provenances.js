@@ -48,17 +48,7 @@ export const provenanceNameSchema = yup.object().shape({
   en: yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
 })
 
-const dateTest = yup.string().test('testStartDate', value => {
-  const utcRegex = /^d{4}-[0-1][0-3]-[0-3]d{1}T[0-2]d{1}:[0-5]d{1}:[0-5]d{1}Z$/
-  const dateSchema = yup.string().date()
-  const isValidUtc = utcRegex.test(value)
-  const isValidDate = dateSchema.isValid(value)
-
-  if (isValidDate || isValidUtc) {
-    return true
-  }
-  return false
-})
+const dateTest = yup.string().date()
 
 export const provenanceSchema = yup.object().shape({
   name: provenanceNameSchema,
