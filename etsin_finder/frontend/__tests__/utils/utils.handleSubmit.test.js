@@ -105,7 +105,7 @@ describe('when calling handleSubmit with mockStores', () => {
       dataCatalog: 'dataCatalog',
       cumulativeState: 'cumulativeState',
       useDoi: 'useDoi',
-      projects: 'projects',
+      is_output_of: 'projects',
       spatial: 'spatial',
       temporal: 'temporal',
       relation: 'relation',

@@ -56,7 +56,7 @@ const handleSubmitToBackend = values => {
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
-    projects,
+    is_output_of: projects,
     spatial,
     temporal,
     relation,

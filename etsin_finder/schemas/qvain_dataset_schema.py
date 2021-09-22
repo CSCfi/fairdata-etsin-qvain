@@ -81,17 +81,6 @@ class LicenseValidationSchema(Schema):
     name = fields.Dict()
 
 
-class ProjectDetailsValidationSchema(Schema):
-    """Validation schema for project details."""
-
-    title = fields.Dict(required=True, validate=lambda x: x.get("en") or x.get("fi"))
-    identifier = fields.Str(required=False)
-    fundingIdentifier = fields.Str(required=False)
-    funderType = fields.Dict(
-        required=False, validate=lambda value: bool(value.get("identifier"))
-    )
-
-
 class ContributorTypeValidationSchema(Schema):
     """Validation schema for project funding agency contributor type."""
 
@@ -104,13 +93,18 @@ class ContributorTypeValidationSchema(Schema):
 class ProjectValidationSchema(Schema):
     """Validation schema for projects."""
 
-    details = fields.Nested(ProjectDetailsValidationSchema, required=True)
-    organizations = fields.List(
+    name = fields.Dict(required=True, validate=lambda x: x.get("en") or x.get("fi"))
+    identifier = fields.Str(required=False)
+    has_funder_identifier = fields.Str(required=False)
+    funder_type = fields.Dict(
+        required=False, validate=lambda value: bool(value.get("identifier"))
+    )
+    source_organization = fields.List(
         fields.Nested(OrganizationValidationSchema),
         required=True,
         validate=Length(min=1),
     )
-    fundingAgencies = fields.List(
+    has_funding_agency = fields.List(
         fields.Nested(OrganizationValidationSchema), required=False
     )
 
@@ -168,4 +162,4 @@ class DatasetValidationSchema(Schema):
     directories = fields.List(fields.Dict())
     remote_resources = fields.List(fields.Nested(RemoteResourceValidationSchema))
     useDoi = fields.Boolean()
-    projects = fields.List(fields.Nested(ProjectValidationSchema))
+    is_output_of = fields.List(fields.Nested(ProjectValidationSchema))
