@@ -6,14 +6,14 @@ import ModalReferenceInput from '../../../../general/modal/modalReferenceInput'
 import { Location } from '../../../../../../stores/view/qvain/qvain.spatials'
 import { FormContainer } from '../../../../general/modal/form'
 
-const Form = props => (
+const Form = ({ Field }) => (
   <FormContainer>
-    <ModalInput {...props} datum="name" isRequired />
-    <ModalInput {...props} datum="altitude" />
-    <ModalInput {...props} datum="address" />
-    <SpatialArrayInput {...props} datum="geometry" type="text" />
+    <ModalInput Field={Field} datum="name" isRequired />
+    <ModalInput Field={Field} datum="altitude" />
+    <ModalInput Field={Field} datum="address" />
+    <SpatialArrayInput Field={Field} datum="geometry" type="text" />
     <ModalReferenceInput
-      {...props}
+      Field={Field}
       datum="location"
       model={Location}
       metaxIdentifier="location"
@@ -23,9 +23,7 @@ const Form = props => (
 )
 
 Form.propTypes = {
-  Store: PropTypes.object.isRequired,
   Field: PropTypes.object.isRequired,
-  translationsRoot: PropTypes.string.isRequired,
 }
 
 export default Form

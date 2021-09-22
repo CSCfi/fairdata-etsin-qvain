@@ -117,12 +117,8 @@ describe('given mockStores', () => {
         const props = {
           FieldList: {
             Field: mockStores.Qvain.RelatedResources,
-            lang: 'en',
-            translationsRoot: mockStores.Qvain.RelatedResources.translationsRoot,
           },
           FieldListAdd: {
-            translationsRoot: mockStores.Qvain.RelatedResources.translationsRoot,
-            Store: mockStores.Qvain,
             Field: mockStores.Qvain.RelatedResources,
             Form,
             handleSave,

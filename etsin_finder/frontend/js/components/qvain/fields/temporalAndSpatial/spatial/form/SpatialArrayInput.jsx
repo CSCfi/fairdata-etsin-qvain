@@ -11,16 +11,8 @@ import { Input, Label } from '../../../../general/modal/form'
 import ValidationError from '../../../../general/errors/validationError'
 import Button from '../../../../../general/button'
 
-const ModalArrayInput = ({
-  datum,
-  handleBlur,
-  type,
-  Field,
-  error,
-  translationsRoot,
-  isRequired,
-}) => {
-  const { changeAttribute, readonly } = Field
+const ModalArrayInput = ({ datum, handleBlur, type, Field, error, isRequired }) => {
+  const { changeAttribute, readonly, translationsRoot } = Field
 
   const translations = {
     label: `${translationsRoot}.modal.${datum}Input.label`,
@@ -93,7 +85,6 @@ ModalArrayInput.propTypes = {
   handleBlur: PropTypes.func,
   error: PropTypes.string,
   isRequired: PropTypes.bool,
-  translationsRoot: PropTypes.string.isRequired,
 }
 
 ModalArrayInput.defaultProps = {

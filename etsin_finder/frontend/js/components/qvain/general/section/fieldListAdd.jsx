@@ -8,18 +8,16 @@ import Button from '../../../general/button'
 import ModalContent from '../modal/modalContent'
 
 const FieldListAdd = ({
-  Store,
   Field,
-  translationsRoot,
   handleSave,
   formProps,
   Form,
-  language,
   contentLabel,
   position,
   hideButton,
 }) => {
   const [confirm, setConfirm] = useState(false)
+  const translationsRoot = Field.translationsRoot
 
   const close = () => {
     const { clearInEdit } = Field
@@ -52,13 +50,10 @@ const FieldListAdd = ({
           customStyles={modalStyle}
         >
           <ModalContent
-            translationsRoot={translationsRoot}
-            Store={Store}
             Field={Field}
             handleSave={handleSave}
             Form={Form}
             formProps={formProps}
-            language={language}
             confirm={confirm}
             requestClose={confirmClose}
             onConfirmCancel={confirmCancel}
@@ -78,20 +73,16 @@ const FieldListAdd = ({
 }
 
 FieldListAdd.propTypes = {
-  Store: PropTypes.object.isRequired,
   Field: PropTypes.object.isRequired,
   hideButton: PropTypes.bool,
-  translationsRoot: PropTypes.string.isRequired,
   handleSave: PropTypes.func.isRequired,
   Form: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   formProps: PropTypes.object,
-  language: PropTypes.string,
   contentLabel: PropTypes.string,
   position: PropTypes.string,
 }
 
 FieldListAdd.defaultProps = {
-  language: '',
   contentLabel: '',
   position: 'left',
   formProps: {},

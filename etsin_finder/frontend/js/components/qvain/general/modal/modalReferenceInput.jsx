@@ -8,16 +8,9 @@ import SearchSelect from '../input/searchSelect'
 import Select from '../input/select'
 import { Label } from './form'
 
-const ModalReferenceInput = ({
-  Field,
-  translationsRoot,
-  datum,
-  model,
-  metaxIdentifier,
-  search,
-  isRequired,
-}) => {
+const ModalReferenceInput = ({ Field, datum, model, metaxIdentifier, search, isRequired }) => {
   const setValue = value => Field.changeAttribute(datum, value)
+  const translationsRoot = Field.translationsRoot
   const translations = {
     label: `${translationsRoot}.modal.${datum}Input.label`,
     placeholder: `${translationsRoot}.modal.${datum}Input.placeholder`,
@@ -66,7 +59,6 @@ const ModalReferenceInput = ({
 
 ModalReferenceInput.propTypes = {
   Field: PropTypes.object.isRequired,
-  translationsRoot: PropTypes.string.isRequired,
   datum: PropTypes.string.isRequired,
   model: PropTypes.func.isRequired,
   metaxIdentifier: PropTypes.string.isRequired,
