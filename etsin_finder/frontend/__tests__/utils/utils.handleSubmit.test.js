@@ -37,10 +37,10 @@ describe('when calling handleSubmit with mockStores', () => {
         toBackend: jest.fn(() => 'provenance'),
       },
       FieldOfSciences: {
-        toBackend: jest.fn(() => 'fieldOfScience'),
+        toBackend: jest.fn(() => 'field_of_science'),
       },
       DatasetLanguages: {
-        toBackend: jest.fn(() => 'datasetLanguage'),
+        toBackend: jest.fn(() => 'language'),
       },
       IssuedDate: {
         toBackend: jest.fn(() => 'issuedDate'),
@@ -67,7 +67,7 @@ describe('when calling handleSubmit with mockStores', () => {
         storage: 'identifiers',
       },
       Infrastructures: {
-        storage: 'infrastructures',
+        toBackend: jest.fn(() => 'infrastructures'),
       },
       dataCatalog: 'dataCatalog',
       cumulativeState: 'cumulativeState',
@@ -106,8 +106,8 @@ describe('when calling handleSubmit with mockStores', () => {
       temporal: 'temporal',
       relation: 'relation',
       provenance: 'provenance',
-      fieldOfScience: 'fieldOfScience',
-      datasetLanguage: 'datasetLanguage',
+      field_of_science: 'field_of_science',
+      language: 'language',
       issuedDate: 'issuedDate',
       accessType: 'accessType',
     }

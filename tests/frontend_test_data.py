@@ -217,7 +217,7 @@ original_complete_dataset = {
     "description": {"en": "desc", "fi": ""},
     "identifiers": ["https://doin.com/some_identifier"],
     "keywords": ["qwe"],
-    "theme": ["http://www.yso.fi/onto/koko/p46606"],
+    "theme": [{"identifier": "http://www.yso.fi/onto/koko/p46606"}],
     "creator": [
         {
             "@type": "Person",
@@ -310,12 +310,7 @@ original_complete_dataset = {
     ],
     "infrastructure": [
         {
-            "name": {
-                "en": "Biocenter Finland",
-                "fi": "Biokeskus Suomi",
-                "und": "Biokeskus Suomi",
-            },
-            "url": "http://urn.fi/urn:nbn:fi:research-infras-2016072515",
+            "identifier": "http://urn.fi/urn:nbn:fi:research-infras-2016072515",
         }
     ],
     "restrictionGrounds": "http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/copyright",
@@ -398,7 +393,12 @@ original_complete_dataset = {
                     "contributor_type": [
                         {
                             "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Other",
-                            "pref_label": {"en": "Other", "fi": "Muu", "sv": "Annan", "und": "Muu"},
+                            "pref_label": {
+                                "en": "Other",
+                                "fi": "Muu",
+                                "sv": "Annan",
+                                "und": "Muu",
+                            },
                             "definition": {"en": "other", "fi": "oerhhrh"},
                             "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
                         }
@@ -439,8 +439,8 @@ original_complete_dataset = {
             "lifecycle_event": {},
         }
     ],
-    "fieldOfScience": ["http://www.yso.fi/onto/okm-tieteenala/ta112"],
-    "datasetLanguage": ["http://lexvo.org/id/iso639-3/udm"],
+    "field_of_science": [{"identifier": "http://www.yso.fi/onto/okm-tieteenala/ta112"}],
+    "language": [{"identifier": "http://lexvo.org/id/iso639-3/udm"}],
     "issuedDate": "2021-06-23",
     "accessType": {
         "name": {"en": "Embargo", "fi": "Embargo", "und": "Embargo"},
@@ -886,7 +886,11 @@ expected_complete_dataset = {
                 },
                 "source_organization": [
                     {
-                        "name": {"fi": "Yliopistopalvelut", "en": "Yliopistopalvelut", "und": "Yliopistopalvelut"},
+                        "name": {
+                            "fi": "Yliopistopalvelut",
+                            "en": "Yliopistopalvelut",
+                            "und": "Yliopistopalvelut",
+                        },
                         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901-H01",
                         "is_part_of": {
                             "name": {
@@ -1072,7 +1076,11 @@ expected_edited_dataset = {
                 },
                 "source_organization": [
                     {
-                        "name": {"fi": "Yliopistopalvelut", "en": "Yliopistopalvelut", "und": "Yliopistopalvelut"},
+                        "name": {
+                            "fi": "Yliopistopalvelut",
+                            "en": "Yliopistopalvelut",
+                            "und": "Yliopistopalvelut",
+                        },
                         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901-H01",
                         "is_part_of": {
                             "name": {
