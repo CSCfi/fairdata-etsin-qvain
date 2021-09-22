@@ -6,17 +6,8 @@ import { observer } from 'mobx-react'
 import { Input, Label } from '../modal/form'
 import ValidationError from '../errors/validationError'
 
-const TranslationTabInput = ({
-  language,
-  datum,
-  Field,
-  handleBlur,
-  type,
-  error,
-  isRequired,
-  translationsRoot,
-}) => {
-  const { changeAttribute, inEdit, readonly } = Field
+const TranslationTabInput = ({ language, datum, Field, handleBlur, type, error, isRequired }) => {
+  const { changeAttribute, inEdit, readonly, translationsRoot } = Field
 
   const handleChange = event => {
     const newData = { ...inEdit[datum], [language]: event.target.value }
@@ -58,7 +49,6 @@ const TranslationTabInput = ({
 TranslationTabInput.propTypes = {
   Field: PropTypes.object.isRequired,
   datum: PropTypes.string.isRequired,
-  translationsRoot: PropTypes.string.isRequired,
   type: PropTypes.string,
   handleBlur: PropTypes.func,
   error: PropTypes.string,

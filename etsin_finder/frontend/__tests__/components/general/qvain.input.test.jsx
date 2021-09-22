@@ -18,10 +18,10 @@ let Field = {
     startDate: '1.1.2000',
     endDate: '2.2.2020',
   },
+  translationsRoot: 'translationsRoot',
   changeAttribute: jest.fn(),
 }
 
-let translationsRoot = 'translationsRoot'
 let datum = 'datum'
 let id = 'id'
 
@@ -29,7 +29,7 @@ const expectedLabelContent = 'translationsRoot.modal.datumInput.label'
 
 describe('DurationPicker', () => {
   let wrapper
-  let props = { Field, translationsRoot, datum, id }
+  let props = { Field, datum, id }
   const Stores = {
     Qvain: {
       readonly: false,

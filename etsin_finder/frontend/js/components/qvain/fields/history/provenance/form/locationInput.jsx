@@ -8,37 +8,27 @@ import handleSave from '../../../temporalAndSpatial/spatial/handleSave'
 import Form from '../../../temporalAndSpatial/spatial/form'
 import { useStores } from '../../../../utils/stores'
 
-const translationsRoot = 'qvain.history.provenance.modal.locationInput'
-const translations = {
-  label: `${translationsRoot}.label`,
-}
-
 const Location = () => {
   const {
     Qvain: { Provenances: Store },
     Locale: { lang },
   } = useStores()
-  const Field = Store.inEdit.spatials
-
+  const Field = Store.inEdit.locations
   if (!Field) return null
 
   return (
     <>
-      <Translate component={Label} content={translations.label} htmlFor="location-input" />
-      <FieldList
-        Store={Store}
-        Field={Field}
-        fieldIdentifier="spatials"
-        lang={lang}
-        translationsRoot={translationsRoot}
-        disableNoItemsText
+      <Translate
+        component={Label}
+        content={`${Field.translationsRoot}.label`}
+        htmlFor="location-input"
       />
+      <FieldList Store={Store} Field={Field} lang={lang} disableNoItemsText />
       <FieldListAdd
         Store={Store}
         Field={Field}
         Form={Form}
-        translationsRoot={translationsRoot}
-        handleSave={() => handleSave(Field, translationsRoot)}
+        handleSave={() => handleSave(Field)}
         position="left"
         hideButton={!!Field.storage.length}
       />

@@ -12,11 +12,11 @@ import ActorsInput from './actorsInput'
 import DurationPicker from '../../../../general/input/durationpicker'
 import { useStores } from '../../../../utils/stores'
 
-const Form = props => {
+const Form = ({ Field }) => {
   const {
     Locale: { getMatchingLang },
   } = useStores()
-  const { inEdit } = props.Field
+  const { inEdit } = Field
 
   const translations = [inEdit.name, inEdit.description, inEdit.outcomeDescription]
   const [language, setLanguage] = useState(getMatchingLang(translations))
@@ -24,16 +24,21 @@ const Form = props => {
   return (
     <FormContainer>
       <TranslationTab language={language} setLanguage={setLanguage}>
-        <TabInput {...props} datum="name" language={language} isRequired />
-        <TabInput {...props} datum="description" language={language} />
-        <TabInput {...props} datum="outcomeDescription" language={language} />
+        <TabInput Field={Field} datum="name" language={language} isRequired />
+        <TabInput Field={Field} datum="description" language={language} />
+        <TabInput Field={Field} datum="outcomeDescription" language={language} />
       </TranslationTab>
       <Separator />
-      <DurationPicker {...props} datum="periodOfTime" language={language} id="provenance-period" />
+      <DurationPicker
+        Field={Field}
+        datum="periodOfTime"
+        language={language}
+        id="provenance-period"
+      />
       <LocationInput />
       <Separator />
       <ModalReferenceInput
-        {...props}
+        Field={Field}
         datum="outcome"
         metaxIdentifier="event_outcome"
         model={Outcome}
@@ -41,10 +46,10 @@ const Form = props => {
       <Separator />
       <UsedEntityInput />
       <Separator />
-      <ActorsInput {...props} datum="actors" />
+      <ActorsInput Field={Field} datum="actors" />
       <Separator />
       <ModalReferenceInput
-        {...props}
+        Field={Field}
         datum="lifecycle"
         metaxIdentifier="lifecycle_event"
         model={Lifecycle}
@@ -54,9 +59,7 @@ const Form = props => {
 }
 
 Form.propTypes = {
-  Store: PropTypes.object.isRequired,
   Field: PropTypes.object.isRequired,
-  translationsRoot: PropTypes.string.isRequired,
 }
 
 export default Form

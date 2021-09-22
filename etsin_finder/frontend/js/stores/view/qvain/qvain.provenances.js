@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { observable, action, makeObservable, override } from 'mobx'
 import * as yup from 'yup'
 
-import Spatials from './qvain.spatials'
+import Locations from './qvain.provenances.locations'
 import UsedEntities from './qvain.usedEntities'
 import Field from './qvain.field'
 import { ActorsRef } from './qvain.actors'
@@ -16,7 +16,7 @@ export const Provenance = ({
   outcomeDescription = { fi: '', en: '', und: '' },
   startDate = undefined,
   endDate = undefined,
-  spatials, // aka location
+  locations = undefined,
   outcome = undefined,
   usedEntities,
   associations = undefined,
@@ -28,7 +28,7 @@ export const Provenance = ({
   outcomeDescription,
   startDate,
   endDate,
-  spatials,
+  locations,
   outcome,
   usedEntities,
   associations,
@@ -59,7 +59,7 @@ class Provenances extends Field {
     super(Qvain, Provenance, ProvenanceModel, 'provenances', [
       'associations',
       'usedEntities',
-      'spatials',
+      'locations',
     ])
     makeObservable(this)
     this.Qvain = Qvain
@@ -69,7 +69,7 @@ class Provenances extends Field {
 
   @observable provenancesWithNonExistingActors = []
 
-  @action saveAndClearSpatials = () => {
+  @action saveAndClearLocations = () => {
     this.selectedActor = undefined
   }
 
@@ -87,7 +87,7 @@ class Provenances extends Field {
         actors: this.Qvain.Actors,
       }),
       usedEntities: new UsedEntities(this),
-      spatials: new Spatials(this),
+      locations: new Locations(this),
     })
   }
 
@@ -104,7 +104,7 @@ class Provenances extends Field {
               end_date: p.endDate ? new Date(p.endDate).toISOString() : undefined,
             }
           : undefined,
-      spatial: p.spatials.toBackend()[0],
+      spatial: p.locations.toBackend()[0],
       event_outcome: { identifier: (p.outcome || {}).url },
       used_entity: p.usedEntities.toBackend(),
       was_associated_with: p.associations.toBackend,
@@ -136,6 +136,10 @@ class Provenances extends Field {
   }
 
   schema = provenanceSchema
+
+  translationsRoot = 'qvain.history.provenance'
+
+  associationsTranslationsRoot = 'qvain.history.provenance.modal.actorsInput'
 }
 
 export const Outcome = (name, url) => ({
@@ -155,7 +159,7 @@ export const ProvenanceModel = (provenanceData, Qvain) => ({
   outcomeDescription: parseTranslationField(provenanceData.outcome_description),
   startDate: (provenanceData.temporal || {}).start_date,
   endDate: (provenanceData.temporal || {}).end_date,
-  spatials: new Spatials(Qvain, provenanceData.spatial ? [provenanceData.spatial] : []),
+  locations: new Locations(Qvain, provenanceData.spatial ? [provenanceData.spatial] : []),
   outcome: provenanceData.event_outcome
     ? Outcome(provenanceData.event_outcome.pref_label, provenanceData.event_outcome.identifier)
     : undefined,
