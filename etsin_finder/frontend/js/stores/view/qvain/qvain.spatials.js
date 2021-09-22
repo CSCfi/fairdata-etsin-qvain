@@ -75,6 +75,8 @@ class Spatials extends Field {
   }
 
   schema = spatialSchema
+
+  translationsRoot = 'qvain.temporalAndSpatial.spatial'
 }
 
 export const Location = (name, url) => ({

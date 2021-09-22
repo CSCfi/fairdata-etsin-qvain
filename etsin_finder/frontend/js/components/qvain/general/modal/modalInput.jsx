@@ -6,8 +6,8 @@ import { observer } from 'mobx-react'
 import { Input, Label } from './form'
 import ValidationError from '../errors/validationError'
 
-const ModalInput = ({ Field, translationsRoot, datum, handleBlur, type, error, isRequired }) => {
-  const { changeAttribute } = Field
+const ModalInput = ({ Field, datum, handleBlur, type, error, isRequired }) => {
+  const { changeAttribute, translationsRoot } = Field
   const translations = {
     label: `${translationsRoot}.modal.${datum}Input.label`,
     placeholder: `${translationsRoot}.modal.${datum}Input.placeholder`,
@@ -37,7 +37,6 @@ const ModalInput = ({ Field, translationsRoot, datum, handleBlur, type, error, i
 ModalInput.propTypes = {
   Field: PropTypes.object.isRequired,
   datum: PropTypes.string.isRequired,
-  translationsRoot: PropTypes.string.isRequired,
   type: PropTypes.string,
   handleBlur: PropTypes.func,
   error: PropTypes.string,

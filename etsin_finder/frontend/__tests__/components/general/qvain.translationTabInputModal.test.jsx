@@ -25,11 +25,11 @@ describe('TranslationsTabInputModal', () => {
       Stores = buildStores()
       Field = new FieldClass(Stores.Qvain, template, model)
       Field.create()
+      Field.translationsRoot = 'translationsRoot'
 
       props = {
         Field,
         datum: 'datum',
-        translationsRoot: 'translationsRoot',
         language: 'en',
         handleBlur: jest.fn(),
       }

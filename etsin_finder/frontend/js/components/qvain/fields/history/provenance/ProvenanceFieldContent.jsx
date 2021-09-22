@@ -13,17 +13,11 @@ const ProvenanceFieldContent = () => {
   } = useStores()
 
   const Field = Store.Provenances
-  const translationsRoot = 'qvain.history.provenance'
+
   return (
     <>
-      <FieldList Field={Field} lang={lang} translationsRoot={translationsRoot} />
-      <FieldListAdd
-        Store={Store}
-        Field={Field}
-        translationsRoot={translationsRoot}
-        handleSave={() => handleSave(Field)}
-        Form={Form}
-      />
+      <FieldList Field={Field} lang={lang} />
+      <FieldListAdd Store={Store} Field={Field} handleSave={() => handleSave(Field)} Form={Form} />
     </>
   )
 }

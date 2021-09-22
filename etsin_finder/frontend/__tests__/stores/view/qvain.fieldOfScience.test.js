@@ -4,6 +4,9 @@ import { makeObservable } from 'mobx'
 import FieldOfSciences from '../../../js/stores/view/qvain/qvain.fieldOfScience'
 
 jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
+  const actual = jest.requireActual('../../../js/stores/view/qvain/qvain.referenceField')
+  const { referenceObjectSchema } = actual
+
   class mockReferenceField {
     constructor(...args) {
       this.constructorFunc(...args)
@@ -14,7 +17,7 @@ jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
     reset = jest.fn()
   }
 
-  return mockReferenceField
+  return { __esModule: true, default: mockReferenceField, referenceObjectSchema }
 })
 
 jest.mock('mobx', () => {

@@ -154,27 +154,36 @@ class Projects {
     }
   }
 
-  toBackend = () =>
-    this.projects.map(project => {
-      const projectObject = toJS(project)
-      const { details } = projectObject
-      if (details.funderType && details.funderType.url) {
-        details.funderType = { identifier: details.funderType.url }
-      } else delete details.funderType
+  projectToMetax = project => {
+    const projectObject = toJS(project)
+    const { details } = projectObject
 
-      const organizations = (projectObject.organizations || []).map(fullOrganization =>
-        organizationToMetax(fullOrganization)
-      )
-      const fundingAgencies = projectObject.fundingAgencies.map(agency => {
-        const contributorTypes = agency.contributorTypes.map(contributorType => {
-          const { identifier, definition } = contributorType
-          return { identifier, definition }
-        })
-        const { organization } = agency
-        return { ...organizationToMetax(organization), contributor_type: contributorTypes }
+    const fundingAgencies = projectObject.fundingAgencies.map(agency => {
+      const contributorTypes = agency.contributorTypes.map(contributorType => {
+        const { identifier, definition } = contributorType
+        return { identifier, definition }
       })
-      return { details, organizations, fundingAgencies }
+      const { organization } = agency
+      return { ...organizationToMetax(organization), contributor_type: contributorTypes }
     })
+
+    const metaxProject = {
+      name: project.details?.title,
+      identifier: project.details?.identifier,
+      has_funder_identifier: project.details?.fundingIdentifier,
+      source_organization: (projectObject.organizations || []).map(fullOrganization =>
+        organizationToMetax(fullOrganization)
+      ),
+      has_funding_agency: fundingAgencies,
+    }
+
+    if (details.funderType?.url) {
+      metaxProject.funder_type = { identifier: details.funderType.url }
+    }
+    return metaxProject
+  }
+
+  toBackend = () => this.projects.map(this.projectToMetax)
 }
 
 const organizationToMetax = fullOrganization => {

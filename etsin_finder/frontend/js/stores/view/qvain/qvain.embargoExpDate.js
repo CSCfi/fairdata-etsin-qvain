@@ -11,7 +11,7 @@ class EmbargoExpDate extends SingleValueField {
   }
 
   @action fromBackend = dataset => {
-    this.value = dataset.access_rights.available || undefined
+    this.value = dataset.access_rights?.available || undefined
   }
 
   schema = embargoExpDateSchema

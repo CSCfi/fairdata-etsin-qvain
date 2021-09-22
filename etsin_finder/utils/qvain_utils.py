@@ -81,78 +81,6 @@ def other_identifiers_to_metax(identifiers_list):
     return other_identifiers
 
 
-def access_rights_to_metax(data):
-    """Cherry pick access right data from the frontend form data and make it comply with Metax schema.
-
-    Arguments:
-        data (dict): The whole object sent from the frontend.
-
-    Returns:
-        dict: Dictionary containing access right object that comply to Metax schema.
-
-    """
-    access_rights = {}
-    access_rights["license"] = []
-    license = data.get("license", [])
-    for lic in license:
-        license_id = lic.get("identifier")
-        license_name_en = lic.get("name", {}).get("en") or ""
-        if license_id and not license_name_en.startswith("Other (URL)"):
-            license_object = {}
-            license_object["identifier"] = license_id
-            access_rights["license"].append(license_object)
-        elif license_id and license_name_en.startswith("Other (URL)"):
-            license_object = {}
-            license_object["license"] = license_id
-            access_rights["license"].append(license_object)
-
-    access_type = data.get("accessType", {})
-    access_type_url = access_type.get("url")
-    if access_type:
-        access_rights["access_type"] = {}
-        access_rights["access_type"]["identifier"] = access_type_url
-        if data["accessType"]["url"] != ACCESS_TYPES.get("open"):
-            access_rights["restriction_grounds"] = []
-            access_rights["restriction_grounds"].append(
-                {"identifier": data.get("restrictionGrounds")}
-            )
-        if (
-            data["accessType"]["url"] == ACCESS_TYPES.get("embargo") and "embargoDate" in data
-        ):
-            access_rights["available"] = data.get("embargoDate")
-    return access_rights
-
-
-def remote_resources_data_to_metax(resources):
-    """Convert external resources from Qvain schema to Metax schema.
-
-    Arguments:
-        data (dict): External resources.
-
-    Returns:
-        dict: Dictionary containing external resources array that complies with Metax schema.
-
-    """
-    metax_remote_resources = []
-    for resource in resources:
-        metax_remote_resources_object = {}
-        metax_remote_resources_object["use_category"] = {}
-        metax_remote_resources_object["access_url"] = {}
-        metax_remote_resources_object["download_url"] = {}
-        metax_remote_resources_object["title"] = resource.get("title")
-        metax_remote_resources_object["access_url"]["identifier"] = resource.get(
-            "accessUrl", ""
-        )
-        metax_remote_resources_object["download_url"]["identifier"] = resource.get(
-            "downloadUrl", ""
-        )
-        metax_remote_resources_object["use_category"]["identifier"] = resource.get(
-            "useCategory", {}
-        ).get("value")
-        metax_remote_resources.append(metax_remote_resources_object)
-    return metax_remote_resources
-
-
 def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     """Convert all the data from the frontend to conform to Metax schema.
 
@@ -180,20 +108,16 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "contributor": data.get("contributor"),
             "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
             "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
-            "field_of_science": _to_identifier_objects(data.get("fieldOfScience")),
-            "language": _to_identifier_objects(data.get("datasetLanguage")),
+            "field_of_science": data.get("field_of_science"),
+            "language": data.get("language"),
             "keyword": data.get("keywords"),
-            "theme": _to_identifier_objects(data.get("theme")),
-            "access_rights": access_rights_to_metax(data),
-            "remote_resources": remote_resources_data_to_metax(
-                data.get("remote_resources")
-            )
-            if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get("att")
-            else "",
-            "is_output_of": alter_projects_to_metax(data.get("projects")),
+            "theme": data.get("theme"),
+            "access_rights": data.get("access_rights"),
+            "remote_resources": data.get("remote_resources"),
+            "is_output_of": data.get("is_output_of"),
             "relation": data.get("relation"),
             "provenance": data.get("provenance"),
-            "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
+            "infrastructure": data.get("infrastructure"),
             "spatial": data.get("spatial"),
             "temporal": data.get("temporal"),
         },
@@ -334,18 +258,6 @@ def remove_deleted_datasets_from_results(result):
     return result
 
 
-def _to_identifier_objects(array):
-    return [{"identifier": identifier} for identifier in array]
-
-
-def _to_metax_infrastructure(infrastructures):
-    metax_infrastructures = []
-    for element in infrastructures:
-        metax_infrastructure_object = {"identifier": element.get("url")}
-        metax_infrastructures.append(metax_infrastructure_object)
-    return metax_infrastructures
-
-
 def edited_data_to_metax(data, original):
     """Alter the research_dataset field to contain the new changes from editing.
 
@@ -370,19 +282,15 @@ def edited_data_to_metax(data, original):
             "contributor": data.get("contributor"),
             "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
             "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
-            "field_of_science": _to_identifier_objects(data.get("fieldOfScience")),
-            "language": _to_identifier_objects(data.get("datasetLanguage")),
+            "field_of_science": data.get("field_of_science"),
+            "language": data.get("language"),
             "keyword": data.get("keywords"),
-            "theme": _to_identifier_objects(data.get("theme")),
-            "access_rights": access_rights_to_metax(data),
-            "remote_resources": remote_resources_data_to_metax(
-                data.get("remote_resources")
-            )
-            if data["dataCatalog"] == DATA_CATALOG_IDENTIFIERS.get("att")
-            else "",
-            "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
+            "theme": data.get("theme"),
+            "access_rights": data.get("access_rights"),
+            "remote_resources": data.get("remote_resources"),
+            "infrastructure": data.get("infrastructure"),
             "spatial": data.get("spatial"),
-            "is_output_of": alter_projects_to_metax(data.get("projects")),
+            "is_output_of": data.get("is_output_of"),
             "relation": data.get("relation"),
             "provenance": data.get("provenance"),
             "temporal": data.get("temporal"),

@@ -7,18 +7,18 @@ import { Label } from '../modal/form'
 import { DatePicker, handleDatePickerChange, getDateFormatLocale } from './datepicker'
 import { useStores } from '../../utils/stores'
 
-const DurationPicker = ({ Field, translationsRoot, datum, id }) => {
+const DurationPicker = ({ Field, datum, id }) => {
+  const { startDate, endDate } = Field.inEdit
+  const { changeAttribute, translationsRoot } = Field
+  const {
+    Qvain: { readonly },
+    Locale: { lang },
+  } = useStores()
   const translations = {
     label: `${translationsRoot}.modal.${datum}Input.label`,
     startPlaceholder: `${translationsRoot}.modal.${datum}Input.startPlaceholder`,
     endPlaceholder: `${translationsRoot}.modal.${datum}Input.endPlaceholder`,
   }
-  const { startDate, endDate } = Field.inEdit
-  const { changeAttribute } = Field
-  const {
-    Qvain: { readonly },
-    Locale: { lang },
-  } = useStores()
 
   const handleDateChangeRaw = (e, propName) =>
     e && handleDatePickerChange(e.target.value, date => changeAttribute(propName, date))
@@ -77,7 +77,6 @@ const DurationPicker = ({ Field, translationsRoot, datum, id }) => {
 
 DurationPicker.propTypes = {
   Field: PropTypes.object.isRequired,
-  translationsRoot: PropTypes.string.isRequired,
   datum: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
 }
