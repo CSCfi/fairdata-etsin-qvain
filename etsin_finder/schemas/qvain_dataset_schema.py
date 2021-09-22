@@ -114,6 +114,13 @@ class ProjectValidationSchema(Schema):
         fields.Nested(OrganizationValidationSchema), required=False
     )
 
+class AccessRightsValidationSchema(Schema):
+    """Access rights validation schema"""
+
+    license = fields.List(fields.Nested(LicenseValidationSchema))
+    available = fields.Str() # Embargo date
+    restriction_grounds = fields.List(fields.Nested(ReferenceObjectValidationSchema))
+    access_type = fields.Dict(required=True)
 
 class DatasetValidationSchema(Schema):
     """
@@ -151,13 +158,10 @@ class DatasetValidationSchema(Schema):
     curator = fields.List(fields.Nested(ActorValidationSchema))
     rights_holder = fields.List(fields.Nested(ActorValidationSchema))
     contributor = fields.List(fields.Nested(ActorValidationSchema))
-    accessType = fields.Dict(required=True)
     infrastructure = fields.List(fields.Dict())
     spatial = fields.List(fields.Dict())
     temporal = fields.List(fields.Dict())
-    embargoDate = fields.Str()
-    restrictionGrounds = fields.Str()
-    license = fields.List(fields.Nested(LicenseValidationSchema))
+    access_rights = fields.Nested(AccessRightsValidationSchema)
     dataCatalog = fields.Str(validate=validate.Regexp(data_catalog_matcher))
     cumulativeState = fields.Int(validate=OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())

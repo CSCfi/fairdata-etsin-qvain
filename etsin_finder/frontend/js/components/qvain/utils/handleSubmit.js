@@ -46,9 +46,12 @@ const handleSubmitToBackend = values => {
     curator,
     contributor,
     infrastructure: values.Infrastructures.toBackend(),
-    restrictionGrounds,
-    embargoDate,
-    license,
+    access_rights: {
+      license,
+      access_type: accessType,
+      restriction_grounds: restrictionGrounds,
+      available: embargoDate
+    },
     remote_resources: values.ExternalResources.toBackend(),
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
@@ -61,7 +64,6 @@ const handleSubmitToBackend = values => {
     field_of_science,
     language,
     issuedDate,
-    accessType,
   }
 
   if (values.original) {

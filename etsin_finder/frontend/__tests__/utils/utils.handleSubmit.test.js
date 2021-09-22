@@ -95,9 +95,12 @@ describe('when calling handleSubmit with mockStores', () => {
       curator: 'curator',
       contributor: 'contributor',
       infrastructure: 'infrastructures',
-      restrictionGrounds: 'restrictionGrounds',
-      embargoDate: 'embargoDate',
-      license: 'license',
+      access_rights: {
+        license: 'license',
+        access_type: 'accessType',
+        available: 'embargoDate',
+        restriction_grounds: 'restrictionGrounds',
+      },
       remote_resources: 'externalResources',
       dataCatalog: 'dataCatalog',
       cumulativeState: 'cumulativeState',
@@ -110,7 +113,6 @@ describe('when calling handleSubmit with mockStores', () => {
       field_of_science: 'field_of_science',
       language: 'language',
       issuedDate: 'issuedDate',
-      accessType: 'accessType',
     }
 
     returnValue.should.deep.eql(expectedReturn)
