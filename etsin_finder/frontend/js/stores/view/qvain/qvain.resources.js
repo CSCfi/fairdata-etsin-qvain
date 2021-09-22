@@ -17,6 +17,7 @@ import RestrictionGrounds from './qvain.restrictionGrounds'
 import Title from './qvain.title'
 import SubjectHeadings from './qvain.subjectHeadings'
 import Description from './qvain.description'
+import ExternalResources from './qvain.externalResources'
 
 class Resources {
   constructor() {
@@ -39,6 +40,7 @@ class Resources {
     this.Licenses = new Licenses(this)
     this.EmbargoExpDate = new EmbargoExpDate(this)
     this.RestrictionGrounds = new RestrictionGrounds(this)
+    this.ExternalResources = new ExternalResources(this)
     this.resources = [
       this.Title,
       this.Description,
@@ -59,6 +61,7 @@ class Resources {
       this.Licenses,
       this.EmbargoExpDate,
       this.RestrictionGrounds,
+      this.ExternalResources,
     ]
   }
 }

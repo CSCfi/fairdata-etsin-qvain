@@ -123,36 +123,6 @@ def access_rights_to_metax(data):
     return access_rights
 
 
-def remote_resources_data_to_metax(resources):
-    """Convert external resources from Qvain schema to Metax schema.
-
-    Arguments:
-        data (dict): External resources.
-
-    Returns:
-        dict: Dictionary containing external resources array that complies with Metax schema.
-
-    """
-    metax_remote_resources = []
-    for resource in resources:
-        metax_remote_resources_object = {}
-        metax_remote_resources_object["use_category"] = {}
-        metax_remote_resources_object["access_url"] = {}
-        metax_remote_resources_object["download_url"] = {}
-        metax_remote_resources_object["title"] = resource.get("title")
-        metax_remote_resources_object["access_url"]["identifier"] = resource.get(
-            "accessUrl", ""
-        )
-        metax_remote_resources_object["download_url"]["identifier"] = resource.get(
-            "downloadUrl", ""
-        )
-        metax_remote_resources_object["use_category"]["identifier"] = resource.get(
-            "useCategory", {}
-        ).get("value")
-        metax_remote_resources.append(metax_remote_resources_object)
-    return metax_remote_resources
-
-
 def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     """Convert all the data from the frontend to conform to Metax schema.
 
@@ -185,11 +155,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "keyword": data.get("keywords"),
             "theme": data.get("theme"),
             "access_rights": access_rights_to_metax(data),
-            "remote_resources": remote_resources_data_to_metax(
-                data.get("remote_resources")
-            )
-            if data.get("dataCatalog") == DATA_CATALOG_IDENTIFIERS.get("att")
-            else "",
+            "remote_resources": data.get("remote_resources"),
             "is_output_of": alter_projects_to_metax(data.get("projects")),
             "relation": data.get("relation"),
             "provenance": data.get("provenance"),
@@ -345,11 +311,7 @@ def edited_data_to_metax(data, original):
             "keyword": data.get("keywords"),
             "theme": data.get("theme"),
             "access_rights": access_rights_to_metax(data),
-            "remote_resources": remote_resources_data_to_metax(
-                data.get("remote_resources")
-            )
-            if data["dataCatalog"] == DATA_CATALOG_IDENTIFIERS.get("att")
-            else "",
+            "remote_resources": data.get("remote_resources"),
             "infrastructure": data.get("infrastructure"),
             "spatial": data.get("spatial"),
             "is_output_of": alter_projects_to_metax(data.get("projects")),

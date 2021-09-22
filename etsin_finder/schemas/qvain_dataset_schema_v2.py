@@ -8,6 +8,7 @@ from etsin_finder.schemas.qvain_dataset_schema import (
     ProjectValidationSchema,
     LicenseValidationSchema,
     ReferenceObjectValidationSchema,
+    RemoteResourceValidationSchema,
     data_catalog_matcher as data_catalog_matcher_v1,
 )
 
@@ -73,7 +74,7 @@ class DraftDatasetValidationSchema(Schema):
     cumulativeState = fields.Int(validate=OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())
     directories = fields.List(fields.Dict())
-    remote_resources = fields.List(fields.Dict())
+    remote_resources = fields.List(fields.Nested(RemoteResourceValidationSchema))
     useDoi = fields.Boolean()
     projects = fields.List(fields.Nested(ProjectValidationSchema))
 
