@@ -48,7 +48,7 @@ export const provenanceNameSchema = yup.object().shape({
   en: yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
 })
 
-const dateTest = yup.string().date()
+const dateTest = yup.string().date({ allowTime: true })
 
 export const provenanceSchema = yup.object().shape({
   name: provenanceNameSchema,
