@@ -37,10 +37,10 @@ describe('when calling handleSubmit with mockStores', () => {
         toBackend: jest.fn(() => 'provenance'),
       },
       FieldOfSciences: {
-        toBackend: jest.fn(() => 'fieldOfScience'),
+        toBackend: jest.fn(() => 'field_of_science'),
       },
       DatasetLanguages: {
-        toBackend: jest.fn(() => 'datasetLanguage'),
+        toBackend: jest.fn(() => 'language'),
       },
       IssuedDate: {
         toBackend: jest.fn(() => 'issuedDate'),
@@ -67,12 +67,14 @@ describe('when calling handleSubmit with mockStores', () => {
         storage: 'identifiers',
       },
       Infrastructures: {
-        storage: 'infrastructures',
+        toBackend: jest.fn(() => 'infrastructures'),
       },
       dataCatalog: 'dataCatalog',
       cumulativeState: 'cumulativeState',
       useDoi: 'useDoi',
-      externalResources: ['externalResources'],
+      ExternalResources: {
+        toBackend: jest.fn(() => 'externalResources'),
+      },
     },
   }
 
@@ -93,23 +95,24 @@ describe('when calling handleSubmit with mockStores', () => {
       curator: 'curator',
       contributor: 'contributor',
       infrastructure: 'infrastructures',
-      restrictionGrounds: 'restrictionGrounds',
-      embargoDate: 'embargoDate',
-      license: 'license',
-      // Send no values if empty instead of empty values.
-      remote_resources: ['externalResources'],
+      access_rights: {
+        license: 'license',
+        access_type: 'accessType',
+        available: 'embargoDate',
+        restriction_grounds: 'restrictionGrounds',
+      },
+      remote_resources: 'externalResources',
       dataCatalog: 'dataCatalog',
       cumulativeState: 'cumulativeState',
       useDoi: 'useDoi',
-      projects: 'projects',
+      is_output_of: 'projects',
       spatial: 'spatial',
       temporal: 'temporal',
       relation: 'relation',
       provenance: 'provenance',
-      fieldOfScience: 'fieldOfScience',
-      datasetLanguage: 'datasetLanguage',
+      field_of_science: 'field_of_science',
+      language: 'language',
       issuedDate: 'issuedDate',
-      accessType: 'accessType',
     }
 
     returnValue.should.deep.eql(expectedReturn)

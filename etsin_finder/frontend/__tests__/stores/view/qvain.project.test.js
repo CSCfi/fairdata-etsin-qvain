@@ -316,15 +316,13 @@ describe('Projects', () => {
       test('should return backend ready array', () => {
         const expectedReturn = [
           {
-            details: {
-              funderType: { identifier: 'url' },
-              fundingIdentifier: 'funder_identifier',
-              identifier: 'identifier',
-              title: {
-                fi: 'fi-name',
-              },
+            funder_type: { identifier: 'url' },
+            has_funder_identifier: 'funder_identifier',
+            identifier: 'identifier',
+            name: {
+              fi: 'fi-name',
             },
-            fundingAgencies: [
+            has_funding_agency: [
               {
                 '@type': 'Organization',
                 contributor_type: [
@@ -349,7 +347,7 @@ describe('Projects', () => {
                 },
               },
             ],
-            organizations: [
+            source_organization: [
               {
                 '@type': 'Organization',
                 name: { en: 'subdep_name' },
