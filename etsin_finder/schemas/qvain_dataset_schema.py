@@ -15,7 +15,7 @@ class ReferenceObjectValidationSchema(Schema):
 class RemoteResourceDocumentValidationSchema(Schema):
     """Validation schema for generic reference data objects."""
 
-    identifier = fields.URL(required=True)
+    identifier = fields.URL()
 
 
 class RemoteResourceValidationSchema(Schema):

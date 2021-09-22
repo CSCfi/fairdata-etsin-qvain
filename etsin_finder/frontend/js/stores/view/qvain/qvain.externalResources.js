@@ -32,10 +32,10 @@ class ExternalResources extends Field {
         identifier: p.useCategory.url,
       },
       access_url: {
-        identifier: p.accessUrl,
+        identifier: p.accessUrl || undefined,
       },
       download_url: {
-        identifier: p.downloadUrl,
+        identifier: p.downloadUrl || undefined,
       },
     }))
 
