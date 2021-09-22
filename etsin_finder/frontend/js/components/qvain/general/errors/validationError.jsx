@@ -3,15 +3,20 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
+export const isAlreadyTranslated = children => {
+  if (Array.isArray(children)) {
+    return children[0]?.includes(' ')
+  }
+  if (typeof children === 'string') {
+    return children.includes(' ')
+  }
+  return false
+}
+
 export const ValidationError = ({ children }) => {
   if (!children) return null
-  let isAlreadyTranslated = false
-  if (Array.isArray(children)) {
-    isAlreadyTranslated = children[0]?.includes(' ')
-  } else if (typeof children === 'string') {
-    isAlreadyTranslated = children.includes(' ')
-  }
-  if (isAlreadyTranslated) {
+
+  if (isAlreadyTranslated(children)) {
     return <ValidationErrorText>{children}</ValidationErrorText>
   }
   return <Translate content={children} component={ValidationErrorText} />

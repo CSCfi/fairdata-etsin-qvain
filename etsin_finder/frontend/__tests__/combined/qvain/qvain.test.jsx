@@ -12,7 +12,7 @@ import { SlidingContent } from '../../../js/components/qvain/general/card'
 import EnvClass from '../../../js/stores/domain/env'
 import AccessibilityClass from '../../../js/stores/view/accessibility'
 import ElasticQueryClass from '../../../js/stores/view/elasticquery'
-import QvainClass, { ExternalResource } from '../../../js/stores/view/qvain'
+import QvainClass from '../../../js/stores/view/qvain'
 import LocaleClass from '../../../js/stores/view/locale'
 import TablePasState from '../../../js/components/qvain/views/datasets/tablePasState'
 import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
@@ -238,16 +238,15 @@ describe('Qvain.ExternalFiles', () => {
 
   // External resources should be listed if there are any
   it('should list all added resources', () => {
-    stores.Qvain.saveExternalResource(
-      ExternalResource(
-        1,
-        'External Resource Title',
-        'http://en.wikipedia.org',
-        'https://en.wikipedia.org/wiki/Portal:Arts'
-      )
-    )
+    stores.Qvain.ExternalResources.create({
+      title: 'External Resource Title',
+      accessUrl: 'http://en.wikipedia.org',
+      downloadUrl: 'https://en.wikipedia.org/wiki/Portal:Arts',
+    })
+    stores.Qvain.ExternalResources.save()
     const externalFiles = shallow(<ExternalFilesBase />)
     expect(externalFiles.find(ButtonGroup).length).toBe(1)
+    expect(externalFiles.find(ButtonGroup).text().includes('External Resource Title')).toBe(true)
   })
 })
 

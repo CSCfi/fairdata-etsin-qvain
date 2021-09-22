@@ -46,11 +46,13 @@ const handleSubmitToBackend = values => {
     curator,
     contributor,
     infrastructure: values.Infrastructures.toBackend(),
-    restrictionGrounds,
-    embargoDate,
-    license,
-    // Send no values if empty instead of empty values.
-    remote_resources: values.externalResources.length > 0 ? values.externalResources : [],
+    access_rights: {
+      license,
+      access_type: accessType,
+      restriction_grounds: restrictionGrounds,
+      available: embargoDate
+    },
+    remote_resources: values.ExternalResources.toBackend(),
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
@@ -62,7 +64,6 @@ const handleSubmitToBackend = values => {
     field_of_science,
     language,
     issuedDate,
-    accessType,
   }
 
   if (values.original) {

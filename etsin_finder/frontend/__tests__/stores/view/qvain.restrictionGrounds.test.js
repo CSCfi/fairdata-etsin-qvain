@@ -1,7 +1,7 @@
 import 'chai/register-expect'
 import { makeObservable, override } from 'mobx'
 import RestrictionGrounds, {
-  restrictionGroundsSchema,
+  restrictionGroundsIdentifierSchema,
 } from '../../../js/stores/view/qvain/qvain.restrictionGrounds'
 
 jest.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
@@ -41,7 +41,7 @@ describe('RestrictionGrounds', () => {
     test('should call super.constructor', () => {
       expect(restrictionGrounds.constructorFunc).to.have.beenCalledWith(
         Parent,
-        restrictionGroundsSchema
+        restrictionGroundsIdentifierSchema
       )
     })
 
@@ -82,8 +82,8 @@ describe('RestrictionGrounds', () => {
         returnValue = restrictionGrounds.toBackend()
       })
 
-      test('should return value.identifier', () => {
-        returnValue.should.eql('identifier')
+      test('should return identifier object in array', () => {
+        returnValue.should.eql([{ identifier: 'identifier' }])
       })
     })
 

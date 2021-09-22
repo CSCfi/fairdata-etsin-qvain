@@ -72,7 +72,9 @@ describe('when calling handleSubmit with mockStores', () => {
       dataCatalog: 'dataCatalog',
       cumulativeState: 'cumulativeState',
       useDoi: 'useDoi',
-      externalResources: ['externalResources'],
+      ExternalResources: {
+        toBackend: jest.fn(() => 'externalResources'),
+      },
     },
   }
 
@@ -93,11 +95,13 @@ describe('when calling handleSubmit with mockStores', () => {
       curator: 'curator',
       contributor: 'contributor',
       infrastructure: 'infrastructures',
-      restrictionGrounds: 'restrictionGrounds',
-      embargoDate: 'embargoDate',
-      license: 'license',
-      // Send no values if empty instead of empty values.
-      remote_resources: ['externalResources'],
+      access_rights: {
+        license: 'license',
+        access_type: 'accessType',
+        available: 'embargoDate',
+        restriction_grounds: 'restrictionGrounds',
+      },
+      remote_resources: 'externalResources',
       dataCatalog: 'dataCatalog',
       cumulativeState: 'cumulativeState',
       useDoi: 'useDoi',
@@ -109,7 +113,6 @@ describe('when calling handleSubmit with mockStores', () => {
       field_of_science: 'field_of_science',
       language: 'language',
       issuedDate: 'issuedDate',
-      accessType: 'accessType',
     }
 
     returnValue.should.deep.eql(expectedReturn)
