@@ -180,10 +180,10 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "contributor": data.get("contributor"),
             "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
             "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
-            "field_of_science": _to_identifier_objects(data.get("fieldOfScience")),
-            "language": _to_identifier_objects(data.get("datasetLanguage")),
+            "field_of_science": data.get("field_of_science"),
+            "language": data.get("language"),
             "keyword": data.get("keywords"),
-            "theme": _to_identifier_objects(data.get("theme")),
+            "theme": data.get("theme"),
             "access_rights": access_rights_to_metax(data),
             "remote_resources": remote_resources_data_to_metax(
                 data.get("remote_resources")
@@ -193,7 +193,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "is_output_of": alter_projects_to_metax(data.get("projects")),
             "relation": data.get("relation"),
             "provenance": data.get("provenance"),
-            "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
+            "infrastructure": data.get("infrastructure"),
             "spatial": data.get("spatial"),
             "temporal": data.get("temporal"),
         },
@@ -316,18 +316,6 @@ def remove_deleted_datasets_from_results(result):
     return result
 
 
-def _to_identifier_objects(array):
-    return [{"identifier": identifier} for identifier in array]
-
-
-def _to_metax_infrastructure(infrastructures):
-    metax_infrastructures = []
-    for element in infrastructures:
-        metax_infrastructure_object = {"identifier": element.get("url")}
-        metax_infrastructures.append(metax_infrastructure_object)
-    return metax_infrastructures
-
-
 def edited_data_to_metax(data, original):
     """Alter the research_dataset field to contain the new changes from editing.
 
@@ -352,17 +340,17 @@ def edited_data_to_metax(data, original):
             "contributor": data.get("contributor"),
             "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
             "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
-            "field_of_science": _to_identifier_objects(data.get("fieldOfScience")),
-            "language": _to_identifier_objects(data.get("datasetLanguage")),
+            "field_of_science": data.get("field_of_science"),
+            "language": data.get("language"),
             "keyword": data.get("keywords"),
-            "theme": _to_identifier_objects(data.get("theme")),
+            "theme": data.get("theme"),
             "access_rights": access_rights_to_metax(data),
             "remote_resources": remote_resources_data_to_metax(
                 data.get("remote_resources")
             )
             if data["dataCatalog"] == DATA_CATALOG_IDENTIFIERS.get("att")
             else "",
-            "infrastructure": _to_metax_infrastructure(data.get("infrastructure")),
+            "infrastructure": data.get("infrastructure"),
             "spatial": data.get("spatial"),
             "is_output_of": alter_projects_to_metax(data.get("projects")),
             "relation": data.get("relation"),

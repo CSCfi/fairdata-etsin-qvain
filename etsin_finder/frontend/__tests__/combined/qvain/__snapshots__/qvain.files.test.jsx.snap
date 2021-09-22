@@ -26,19 +26,19 @@ Object {
   "cumulativeState": 0,
   "curator": undefined,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
-  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
   },
   "embargoDate": undefined,
-  "fieldOfScience": Array [],
+  "field_of_science": Array [],
   "identifiers": Array [],
   "infrastructure": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
+  "language": Array [],
   "license": Array [
     Object {
       "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
@@ -180,19 +180,19 @@ Object {
   "cumulativeState": 0,
   "curator": undefined,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
-  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
   },
   "embargoDate": undefined,
-  "fieldOfScience": Array [],
+  "field_of_science": Array [],
   "identifiers": Array [],
   "infrastructure": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
+  "language": Array [],
   "license": Array [
     Object {
       "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
@@ -334,19 +334,19 @@ Object {
   "cumulativeState": 0,
   "curator": undefined,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
-  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
   },
   "embargoDate": undefined,
-  "fieldOfScience": Array [],
+  "field_of_science": Array [],
   "identifiers": Array [],
   "infrastructure": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
+  "language": Array [],
   "license": Array [
     Object {
       "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
@@ -488,19 +488,19 @@ Object {
   "cumulativeState": 0,
   "curator": undefined,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
-  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
   },
   "embargoDate": undefined,
-  "fieldOfScience": Array [],
+  "field_of_science": Array [],
   "identifiers": Array [],
   "infrastructure": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
+  "language": Array [],
   "license": Array [
     Object {
       "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
@@ -642,19 +642,19 @@ Object {
   "cumulativeState": 0,
   "curator": undefined,
   "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
-  "datasetLanguage": Array [],
   "description": Object {
     "en": "",
     "fi": "Description",
   },
   "embargoDate": undefined,
-  "fieldOfScience": Array [],
+  "field_of_science": Array [],
   "identifiers": Array [],
   "infrastructure": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
+  "language": Array [],
   "license": Array [
     Object {
       "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",

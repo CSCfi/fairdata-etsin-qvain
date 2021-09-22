@@ -8,7 +8,7 @@ const testError = 'test error'
 const readonlyValue = 'readonly'
 
 const toBackendStorage = [{ url: testStr }, { url: testStr2 }]
-const expectedToBackendList = [testStr, testStr2]
+const expectedToBackendList = [{ identifier: testStr }, { identifier: testStr2 }]
 
 describe('ReferenceField', () => {
   let referenceField
@@ -170,7 +170,7 @@ describe('ReferenceField', () => {
 
       test('should return mapped storage', () => {
         const expectedList = referenceField.toBackend()
-        expectedList.should.have.members(expectedToBackendList)
+        expectedList.should.have.deep.members(expectedToBackendList)
       })
     })
   })
