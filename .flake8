@@ -1,5 +1,5 @@
 [flake8]
-ignore = 
+ignore =
     # line too long (97 > 79 characters)
     E501,
     # block comment should start with '# '
@@ -18,6 +18,8 @@ ignore =
     E202,
     # whitespace before '{'
     E201,
+    # whitespace before ':'
+    E203,
     # module level import not at top of file
     E402,
     # continuation line under-indented for visual indent
