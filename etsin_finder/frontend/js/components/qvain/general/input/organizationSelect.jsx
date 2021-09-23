@@ -502,7 +502,7 @@ function isEmptyObject(obj = {}) {
 }
 
 const SelectContainer = styled.div`
-  padding-left: 1.5rem;
+  padding-left: 1rem;
 `
 
 const Department = styled.div`

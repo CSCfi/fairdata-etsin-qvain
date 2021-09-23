@@ -18,11 +18,10 @@ import {
   validate,
   isEmptyObject,
   organizationToSelectValue,
-  Expand,
   resolveOptions,
 } from './utils'
 import { withStores, useStores } from '../../utils/stores'
-import { LabelLarge, Input } from '../../general/modal/form'
+import { LabelLarge } from '../../general/modal/form'
 import {
   FundingAgency,
   ContributorType,
@@ -49,12 +48,9 @@ const FundingAgencyForm = props => {
    * Add contributor type to value.
    * Expects the contributor type to be validated and valid.
    */
-  const onAddContributorType = () => {
-    const { formData } = props.value
-    const { id, identifier, definitionEn, definitionFi, label, inScheme } =
-      formData.contributorTypeForm
-    const definition = { en: definitionEn, fi: definitionFi }
-    const contributorType = ContributorType(id, identifier.value, label, definition, inScheme)
+  const onAddContributorType = val => {
+    const { id, identifier, label } = val
+    const contributorType = ContributorType(id, identifier, label)
     const contributorTypes = formData.contributorTypes
       .filter(type => type.id !== id)
       .concat([contributorType])
@@ -65,9 +61,11 @@ const FundingAgencyForm = props => {
     })
   }
 
-  const onRemoveContributorType = id => {
+  const onRemoveContributorType = identifier => {
     const { formData } = props.value
-    const contributorTypes = formData.contributorTypes.filter(type => type.id !== id)
+    const contributorTypes = formData.contributorTypes.filter(
+      type => type.identifier !== identifier
+    )
     props.onChange({ ...formData, contributorTypeForm: { errors: {} }, contributorTypes })
   }
 
@@ -172,23 +170,14 @@ const FundingAgencyForm = props => {
         inputId="project-funding-organization"
       />
       <ErrorMessages errors={formData.errors.organization} />
-      <Expand
-        title={
-          <Translate
-            component="h3"
-            content="qvain.project.inputs.fundingAgency.contributorType.title"
-          />
-        }
-      >
-        <ContributorTypeForm
-          formData={formData.contributorTypeForm}
-          contributorTypes={formData.contributorTypes}
-          onChange={onContributorTypeChange}
-          onAdd={onAddContributorType}
-          onRemove={onRemoveContributorType}
-          readonly={readonly}
-        />
-      </Expand>
+      <ContributorTypeForm
+        formData={formData.contributorTypeForm}
+        contributorTypes={formData.contributorTypes}
+        onChange={onContributorTypeChange}
+        onAdd={onAddContributorType}
+        onRemove={onRemoveContributorType}
+        readonly={readonly}
+      />
       <AddAgencyContainer>
         <Button onClick={onAddAgency} disabled={readonly}>
           <Translate
@@ -275,99 +264,51 @@ class ContributorTypeFormComponent extends Component {
   onBlur = async () => {
     const {
       formData,
+      contributorTypes,
       onChange,
       Stores: {
         Qvain: {
-          Projects: { fundingAgencySchema },
+          Projects: { contributorTypeSchema },
         },
       },
     } = this.props
-    const errors = await validate(fundingAgencySchema, { ...formData })
+    const errors = await validate(contributorTypeSchema, contributorTypes || [])
     onChange({ ...formData, errors })
   }
 
-  onFieldChange = event => {
-    const { formData, onChange } = this.props
-    const { name, value } = event.target
-    onChange({ ...formData, [name]: value })
-  }
-
   /** Map form properties from select value to form data. */
-  onSelectChange = selectValue => {
-    const { value, label, name, inScheme } = selectValue
-    const { formData, onChange } = this.props
-    onChange({
-      ...formData,
-      identifier: { value, label },
-      label: name,
-      inScheme,
-    })
-  }
+  onSelectChange = (contributorTypes, { action, option, removedValue }) => {
+    if (action === 'select-option') {
+      this.props.onAdd({
+        id: option.value,
+        identifier: option.value,
+        label: option.label,
+      })
+    }
 
-  onAddType = async () => {
-    const {
-      formData,
-      onChange,
-      onAdd,
-      Stores: {
-        Qvain: {
-          Projects: { fundingAgencySchema },
-        },
-      },
-    } = this.props
-    const identifier = formData.identifier ? formData.identifier.value : null
-    const errors = await validate(fundingAgencySchema, { ...formData, identifier })
-    if (!isEmptyObject(errors)) onChange({ ...formData, errors })
-    else onAdd()
-  }
-
-  onEditType = id => {
-    const { contributorTypes, onChange } = this.props
-    const { lang } = this.props.Stores.Locale
-
-    const contributorTypeToEdit = contributorTypes.find(
-      contributorType => contributorType.id === id
-    )
-    if (!contributorTypeToEdit) return
-    const { definition, label, inScheme } = contributorTypeToEdit
-    // Find correct select value based on contributor type identifier
-    const identifier = this.state.options[lang].find(
-      option => option.value === contributorTypeToEdit.identifier
-    )
-    onChange({
-      id,
-      identifier: { label: identifier.label, value: identifier.value },
-      label,
-      inScheme,
-      definitionEn: definition ? definition.en : '',
-      definitionFi: definition ? definition.fi : '',
-      errors: {},
-    })
+    if (action === 'remove-value') {
+      this.props.onRemove(removedValue.identifier)
+    }
   }
 
   render() {
     const { options, loading } = this.state
     if (loading) return null
 
-    const { contributorTypes, onRemove, readonly, formData } = this.props
+    const { contributorTypes, readonly, formData } = this.props
     const { lang } = this.props.Stores.Locale
 
     return (
-      <Card>
+      <>
         <Translate
-          component="p"
+          component={LabelLarge}
+          htmlFor="identifier"
+          content="qvain.project.inputs.fundingAgency.contributorType.identifier.label"
+        />
+        <Translate
+          component="div"
           content="qvain.project.inputs.fundingAgency.contributorType.description"
         />
-        <AddedContributorTypes
-          contributorTypes={contributorTypes}
-          onEdit={this.onEditType}
-          onRemove={onRemove}
-          lang={lang}
-        />
-        <LabelLarge htmlFor="identifier">
-          <Translate content="qvain.project.inputs.fundingAgency.contributorType.identifier.label" />{' '}
-          *
-        </LabelLarge>
         <Translate
           component={StyledSelect}
           name="identifier"
@@ -375,61 +316,20 @@ class ContributorTypeFormComponent extends Component {
           isDisabled={readonly}
           onChange={this.onSelectChange}
           onBlur={this.onBlur}
-          value={formData.identifier === undefined ? null : formData.identifier}
+          value={contributorTypes}
+          isMulti
+          isClearable={false}
+          getOptionLabel={opt => opt.label?.[lang]}
           className="basic-single"
           classNamePrefix="select"
-          options={options[lang]}
+          options={options.all}
           attributes={{
             placeholder:
               'qvain.project.inputs.fundingAgency.contributorType.identifier.placeholder',
           }}
         />
         <ErrorMessages errors={formData.errors.identifier} />
-        <LabelLarge htmlFor="definitionEn">
-          <Translate content="qvain.project.inputs.fundingAgency.contributorType.definition.label" />
-        </LabelLarge>
-        <Translate
-          component="p"
-          content="qvain.project.inputs.fundingAgency.contributorType.definition.description"
-        />
-        <Translate
-          component={Input}
-          value={formData.definitionEn || ''}
-          onChange={this.onFieldChange}
-          onBlur={this.onBlur}
-          attributes={{
-            placeholder:
-              'qvain.project.inputs.fundingAgency.contributorType.definition.placeholderEn',
-          }}
-          disabled={readonly}
-          name="definitionEn"
-          id="definitionEn"
-        />
-        <Translate
-          component={Input}
-          value={formData.definitionFi || ''}
-          onChange={this.onFieldChange}
-          onBlur={this.onBlur}
-          attributes={{
-            placeholder:
-              'qvain.project.inputs.fundingAgency.contributorType.definition.placeholderFi',
-          }}
-          disabled={readonly}
-          name="definitionFi"
-          id="definitionFi"
-        />
-        <AddAgencyContainer>
-          <Button onClick={this.onAddType} disabled={readonly}>
-            <Translate
-              content={
-                formData.id
-                  ? 'qvain.project.inputs.fundingAgency.contributorType.editButton'
-                  : 'qvain.project.inputs.fundingAgency.contributorType.addButton'
-              }
-            />
-          </Button>
-        </AddAgencyContainer>
-      </Card>
+      </>
     )
   }
 }
