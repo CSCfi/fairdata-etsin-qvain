@@ -23,13 +23,15 @@ ignore =
     # module level import not at top of file
     E402,
     # continuation line under-indented for visual indent
-    E128
+    E128,
     # module imported but unused
-    F401
+    F401,
     # First line should end with a period
-    D400
+    D400,
     # First line should be in imperative mood; try rephrasing
-    D401
+    D401,
+    # line break before binary operator
+    W503
 
 # often contains "unused" imports
 exclude = etsin_finder/frontend
