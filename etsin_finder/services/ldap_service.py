@@ -8,7 +8,7 @@
 """Service for LDAP idm. Mainly used by Qvain."""
 
 import marshmallow
-from ldap3 import Server, Connection
+from ldap3 import Server, Connection, SYNC, MOCK_SYNC
 from flask import current_app
 from etsin_finder.schemas.services import LDAPIdmServiceConfigurationSchema
 from etsin_finder.services.base_service import BaseService, ConfigValidationMixin
@@ -23,8 +23,17 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
     def __init__(self):
         """Set up LDAP."""
         self.server = Server(self.config.get("HOST"), use_ssl=True)
+        strategyStr = self.config.get("STRATEGY")
+        strategy = SYNC
+
+        if strategyStr == "MOCK_SYNC":
+            strategy = MOCK_SYNC
+
         self.connection = Connection(
-            self.server, self.config.get("BIND"), self.config.get("PASSWORD")
+            self.server,
+            self.config.get("BIND"),
+            self.config.get("PASSWORD"),
+            client_strategy=strategy,
         )
         self.connection.open()
 

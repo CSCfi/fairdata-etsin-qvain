@@ -202,8 +202,8 @@ def create_app(testing=None):
 
     app.config.update(load_app_config(testing))
     initialize_supported_flags(app)
-    # if not app.testing and not executing_travis():
-    #    _setup_app_logging(app)
+    if not app.testing and not executing_travis():
+        _setup_app_logging(app)
     validate_config(app)
     if not executing_travis():
         app.config.update({"SAML_PATH": "/home/etsin-user"})
