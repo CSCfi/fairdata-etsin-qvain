@@ -14,6 +14,7 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
+import { isAlreadyTranslated } from '../errors/validationError'
 
 const TooltipHoverOnSave = ({ isOpen, children, errors, description }) => {
   const wrapperTooltipButtonRef = useRef(null)
@@ -23,9 +24,13 @@ const TooltipHoverOnSave = ({ isOpen, children, errors, description }) => {
     return children
   }
 
-  const TranslatedErrors = errors.map(error => (
-    <Translate key={error} content={error} component={TooltipText} />
-  ))
+  const TranslatedErrors = errors.map(error =>
+    isAlreadyTranslated(error) ? (
+      <TooltipText key={error}>{error}</TooltipText>
+    ) : (
+      <Translate key={error} content={error} component={TooltipText} />
+    )
+  )
 
   return (
     <>

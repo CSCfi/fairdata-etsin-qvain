@@ -12,42 +12,48 @@ import re
 from etsin_finder.utils.utils import ensure_app
 
 default_supported_flags = {
-    'DOWNLOAD_API_V2.EMAIL.FRONTEND',
-    'DOWNLOAD_API_V2.EMAIL.BACKEND',
-    'DOWNLOAD_API_V2.OPTIONS',
-    'UI.BOTTOM_SUBMIT_BUTTONS',
-    'UI.SHOW_UNSUPPORTED',
-    'PERMISSIONS.SHARE_PROJECT',
+    "DOWNLOAD_API_V2.EMAIL.FRONTEND",
+    "DOWNLOAD_API_V2.EMAIL.BACKEND",
+    "DOWNLOAD_API_V2.OPTIONS",
+    "UI.BOTTOM_SUBMIT_BUTTONS",
+    "UI.SHOW_UNSUPPORTED",
+    "UI.NEW_DATASETS_VIEW",
+    "PERMISSIONS.SHARE_PROJECT",
     "MATOMO_TRACKING",
-    "CROSSREF_API"
+    "CROSSREF_API",
 }
 
 # Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'
-re_last_part = re.compile(r'\.?[^\.]*$')
+re_last_part = re.compile(r"\.?[^\.]*$")
+
 
 def _get_partial_paths(paths, include_full=False):
     """Split flag paths into groups."""
     partials = set()
     for path in paths:
-        parts = path.split('.')
+        parts = path.split(".")
         limit = len(parts)
         if not include_full:
             limit -= 1
         for i in range(limit):
-            partials.add('.'.join(parts[0:i + 1]))
+            partials.add(".".join(parts[0 : i + 1]))
     return partials
+
 
 def set_flags(value, app):
     """Set flags for app (useful for testing)"""
-    app.config['FLAGS'] = value
+    app.config["FLAGS"] = value
+
 
 def set_supported_flags(app, flags):
     """Set supported flags for app (useful for testing)"""
-    app.config['SUPPORTED_FLAGS'] = set(flags)
+    app.config["SUPPORTED_FLAGS"] = set(flags)
+
 
 def initialize_supported_flags(app):
     """Assign default supported flags for app"""
-    app.config['SUPPORTED_FLAGS'] = set(default_supported_flags)
+    app.config["SUPPORTED_FLAGS"] = set(default_supported_flags)
+
 
 def validate_flags(app=None):
     """Validate flags
@@ -57,23 +63,26 @@ def validate_flags(app=None):
     """
     app = ensure_app(app)
     supported = _get_partial_paths(get_supported_flags(app), True)
-    flags = app.config.get('FLAGS', {})
+    flags = app.config.get("FLAGS", {})
     for path, value in flags.items():
         if type(value) is not bool and value is not None:
-            app.logger.warning(f'validate_flags: invalid flag value {path}={value}')
+            app.logger.warning(f"validate_flags: invalid flag value {path}={value}")
 
     flag_paths = set(flags.keys())
     unknown_flags = list(flag_paths.difference(supported))
     if len(unknown_flags) > 0:
-        app.logger.warning(f'validate_flags: unsupported flags {sorted(unknown_flags)}')
+        app.logger.warning(f"validate_flags: unsupported flags {sorted(unknown_flags)}")
+
 
 def get_flags(app):
     """Get feature flag dictionary"""
-    return app.config.get('FLAGS', {})
+    return app.config.get("FLAGS", {})
+
 
 def get_supported_flags(app):
     """Get set of supported feature flags"""
-    return app.config.get('SUPPORTED_FLAGS', set())
+    return app.config.get("SUPPORTED_FLAGS", set())
+
 
 def flag_enabled(flag_path, app=None):
     """Get state of flag for feature
@@ -92,13 +101,15 @@ def flag_enabled(flag_path, app=None):
     app = ensure_app(app)
 
     if flag_path not in get_supported_flags(app):
-        app.logger.warning(f'flag_enabled: requesting value for unsupported flag {flag_path}')
+        app.logger.warning(
+            f"flag_enabled: requesting value for unsupported flag {flag_path}"
+        )
 
     flags = get_flags(app)
     while flag_path:
         value = flags.get(flag_path)
         if value is not None:
             return value
-        flag_path = re_last_part.sub('', flag_path)
+        flag_path = re_last_part.sub("", flag_path)
 
     return False

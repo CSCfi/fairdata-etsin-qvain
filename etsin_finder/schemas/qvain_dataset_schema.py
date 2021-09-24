@@ -5,10 +5,27 @@ from marshmallow_oneofschema import OneOfSchema
 
 data_catalog_matcher = "^urn:nbn:fi:att:data-catalog-(ida|att|pas|dft)$"
 
+
 class ReferenceObjectValidationSchema(Schema):
     """Validation schema for generic reference data objects."""
 
     identifier = fields.URL(required=True)
+
+
+class RemoteResourceDocumentValidationSchema(Schema):
+    """Validation schema for generic reference data objects."""
+
+    identifier = fields.URL()
+
+
+class RemoteResourceValidationSchema(Schema):
+    """Validation schema for remote resources."""
+
+    title = fields.String(required=True)
+    use_category = fields.Nested(ReferenceObjectValidationSchema, required=True)
+    download_url = fields.Nested(RemoteResourceDocumentValidationSchema)
+    access_url = fields.Nested(RemoteResourceDocumentValidationSchema)
+
 
 class OrganizationValidationSchema(Schema):
     """Validation schema for organizations."""
@@ -64,39 +81,37 @@ class LicenseValidationSchema(Schema):
     name = fields.Dict()
 
 
-class ProjectDetailsValidationSchema(Schema):
-    """Validation schema for project details."""
-
-    title = fields.Dict(required=True, validate=lambda x: x.get("en") or x.get("fi"))
-    identifier = fields.Str(required=False)
-    fundingIdentifier = fields.Str(required=False)
-    funderType = fields.Dict(
-        required=False, validate=lambda value: bool(value.get("identifier"))
-    )
-
-
 class ContributorTypeValidationSchema(Schema):
     """Validation schema for project funding agency contributor type."""
 
     identifier = fields.Str(required=True)
-    definition = fields.Dict(
-        required=False, validate=lambda x: x.get("en") or x.get("fi")
-    )
 
 
 class ProjectValidationSchema(Schema):
     """Validation schema for projects."""
 
-    details = fields.Nested(ProjectDetailsValidationSchema, required=True)
-    organizations = fields.List(
+    name = fields.Dict(required=True, validate=lambda x: x.get("en") or x.get("fi"))
+    identifier = fields.Str(required=False)
+    has_funder_identifier = fields.Str(required=False)
+    funder_type = fields.Dict(
+        required=False, validate=lambda value: bool(value.get("identifier"))
+    )
+    source_organization = fields.List(
         fields.Nested(OrganizationValidationSchema),
         required=True,
         validate=Length(min=1),
     )
-    fundingAgencies = fields.List(
+    has_funding_agency = fields.List(
         fields.Nested(OrganizationValidationSchema), required=False
     )
 
+class AccessRightsValidationSchema(Schema):
+    """Access rights validation schema"""
+
+    license = fields.List(fields.Nested(LicenseValidationSchema))
+    available = fields.Str() # Embargo date
+    restriction_grounds = fields.List(fields.Nested(ReferenceObjectValidationSchema))
+    access_type = fields.Dict(required=True)
 
 class DatasetValidationSchema(Schema):
     """
@@ -134,17 +149,14 @@ class DatasetValidationSchema(Schema):
     curator = fields.List(fields.Nested(ActorValidationSchema))
     rights_holder = fields.List(fields.Nested(ActorValidationSchema))
     contributor = fields.List(fields.Nested(ActorValidationSchema))
-    accessType = fields.Dict(required=True)
     infrastructure = fields.List(fields.Dict())
     spatial = fields.List(fields.Dict())
     temporal = fields.List(fields.Dict())
-    embargoDate = fields.Str()
-    restrictionGrounds = fields.Str()
-    license = fields.List(fields.Nested(LicenseValidationSchema))
+    access_rights = fields.Nested(AccessRightsValidationSchema)
     dataCatalog = fields.Str(validate=validate.Regexp(data_catalog_matcher))
     cumulativeState = fields.Int(validate=OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())
     directories = fields.List(fields.Dict())
-    remote_resources = fields.List(fields.Dict())
+    remote_resources = fields.List(fields.Nested(RemoteResourceValidationSchema))
     useDoi = fields.Boolean()
-    projects = fields.List(fields.Nested(ProjectValidationSchema))
+    is_output_of = fields.List(fields.Nested(ProjectValidationSchema))

@@ -154,6 +154,7 @@ export function referenceDataToOptions(hits) {
   return {
     en: hits.map(hit => getOption(hit, 'en')),
     fi: hits.map(hit => getOption(hit, 'fi')),
+    all: hits.map(hit => ({ value: hit._source.uri, label: hit._source.label })),
   }
 }
 
