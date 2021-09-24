@@ -53,8 +53,6 @@ original_project_list = [
                     {
                         "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Other",
                         "pref_label": {"en": "Other", "fi": "Muu", "und": "Muu"},
-                        "definition": {"en": "other", "fi": "oerhhrh"},
-                        "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
                     }
                 ],
             }
@@ -116,8 +114,6 @@ expected_project_list = [
                             "fi": "Muu",
                             "und": "Muu",
                         },
-                        "definition": {"en": "other", "fi": "oerhhrh"},
-                        "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
                     }
                 ],
             }
@@ -197,9 +193,9 @@ expected_custom_rights = {
 original_remote_resources = [
     {
         "title": "remote_resource",
-        "accessUrl": "access url",
-        "downloadUrl": "download url",
-        "useCategory": {"value": "use category"},
+        "access_url": {"identifier": "access url"},
+        "download_url": {"identifier": "download url"},
+        "use_category": {"identifier": "use category"},
     }
 ]
 
@@ -218,6 +214,22 @@ original_complete_dataset = {
     "identifiers": ["https://doin.com/some_identifier"],
     "keywords": ["qwe"],
     "theme": [{"identifier": "http://www.yso.fi/onto/koko/p46606"}],
+    "access_rights": {
+        "license": [
+            {
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0"
+            }
+        ],
+        "access_type": {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo"
+        },
+        "restriction_grounds": [
+            {
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/copyright"
+            }
+        ],
+        "available": "2021-07-14",
+    },
     "creator": [
         {
             "@type": "Person",
@@ -313,44 +325,29 @@ original_complete_dataset = {
             "identifier": "http://urn.fi/urn:nbn:fi:research-infras-2016072515",
         }
     ],
-    "restrictionGrounds": "http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/copyright",
-    "embargoDate": "2021-07-14",
-    "license": [
-        {
-            "name": {
-                "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
-                "fi": "Creative Commons Nimeä 4.0 Kansainvälinen (CC BY 4.0)",
-                "und": "Creative Commons Nimeä 4.0 Kansainvälinen (CC BY 4.0)",
-            },
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-        }
-    ],
     "remote_resources": [
         {
             "id": 0,
             "title": "qew",
-            "accessUrl": "",
-            "downloadUrl": "",
-            "useCategory": {
-                "label": "Publication",
-                "value": "http://uri.suomi.fi/codelist/fairdata/use_category/code/publication",
+            "access_url": "",
+            "download_url": "",
+            "use_category": {
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/publication",
             },
         }
     ],
     "dataCatalog": "urn:nbn:fi:att:data-catalog-att",
     "cumulativeState": 0,
     "useDoi": False,
-    "projects": [
+    "is_output_of": [
         {
-            "details": {
-                "title": {"en": "qwe", "fi": "qweqwe"},
-                "identifier": "test",
-                "fundingIdentifier": "tetets",
-                "funderType": {
-                    "identifier": "http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes"
-                },
+            "name": {"en": "qwe", "fi": "qweqwe"},
+            "identifier": "test",
+            "has_funder_identifier": "tetets",
+            "funder_type": {
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes"
             },
-            "organizations": [
+            "source_organization": [
                 {
                     "@type": "Organization",
                     "name": {
@@ -371,7 +368,7 @@ original_complete_dataset = {
                     },
                 },
             ],
-            "fundingAgencies": [
+            "has_funding_agency": [
                 {
                     "@type": "Organization",
                     "name": {
@@ -442,10 +439,6 @@ original_complete_dataset = {
     "field_of_science": [{"identifier": "http://www.yso.fi/onto/okm-tieteenala/ta112"}],
     "language": [{"identifier": "http://lexvo.org/id/iso639-3/udm"}],
     "issuedDate": "2021-06-23",
-    "accessType": {
-        "name": {"en": "Embargo", "fi": "Embargo", "und": "Embargo"},
-        "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo",
-    },
     "original": {
         "id": 2182,
         "identifier": "d986fc86-adfc-4227-8944-df1460d61e7a",

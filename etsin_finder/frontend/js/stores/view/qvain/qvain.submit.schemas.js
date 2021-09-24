@@ -1,14 +1,14 @@
 import * as yup from 'yup'
 
-import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
+import { ACCESS_TYPE_URL } from '../../../utils/constants'
 import { titleSchema } from './qvain.title'
 import { descriptionSchema, descriptionDraftSchema } from './qvain.description'
 import { keywordsArraySchema, keywordsDraftSchema } from './qvain.keyword'
 import { fieldsOfScienceSchema } from './qvain.fieldOfScience'
 import { otherIdentifiersArraySchema } from './qvain.otherIdentifier'
-import { licenseArraySchema } from './qvain.license'
-import { accessTypeSchema } from './qvain.accessType'
-import { restrictionGroundsSchema } from './qvain.restrictionGrounds'
+import { licenseArrayMetaxSchema } from './qvain.license'
+import { accessTypeMetaxSchema } from './qvain.accessType'
+import { restrictionGroundsMetaxSchema } from './qvain.restrictionGrounds'
 import { metaxActorsSchema, metaxActorSchema, getRequiredMetaxActorSchema } from './qvain.actors'
 import {
   cumulativeStateSchema,
@@ -17,6 +17,20 @@ import {
   dataCatalogDraftSchema,
 } from './qvain.dataCatalog.schemas'
 import { filesSchema, directoriesSchema } from './qvain.files'
+import { embargoExpDateSchema } from './qvain.embargoExpDate'
+
+const accessRightsSchema = yup
+  .object()
+  .shape({
+    license: licenseArrayMetaxSchema,
+    access_type: accessTypeMetaxSchema,
+    restriction_grounds: yup.mixed().when('access_type.identifier', {
+      is: url => url !== ACCESS_TYPE_URL.OPEN,
+      then: restrictionGroundsMetaxSchema,
+    }),
+    available: embargoExpDateSchema,
+  })
+  .noUnknown()
 
 // Entire form validation for normal dataset
 const qvainFormSchema = yup.object().shape({
@@ -27,19 +41,10 @@ const qvainFormSchema = yup.object().shape({
     then: yup.string().date().required('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
     otherwise: yup.string().date().nullable(),
   }),
+  access_rights: accessRightsSchema,
   field_of_science: fieldsOfScienceSchema,
   keywords: keywordsArraySchema,
   otherIdentifiers: otherIdentifiersArraySchema,
-  accessType: accessTypeSchema,
-  license: yup.mixed().when('dataCatalog', {
-    is: DATA_CATALOG_IDENTIFIER.IDA,
-    then: licenseArraySchema.required('qvain.validationMessages.license.requiredIfIDA'),
-    otherwise: licenseArraySchema,
-  }),
-  restrictionGrounds: yup.mixed().when('accessType.url', {
-    is: url => url !== ACCESS_TYPE_URL.OPEN,
-    then: restrictionGroundsSchema,
-  }),
   creator: metaxActorsSchema.min(
     1,
     'qvain.validationMessages.actors.requiredActors.mandatoryActors.creator'
@@ -65,12 +70,7 @@ const qvainFormDraftSchema = yup.object().shape({
   field_of_science: fieldsOfScienceSchema,
   keywords: keywordsDraftSchema,
   otherIdentifiers: otherIdentifiersArraySchema,
-  accessType: accessTypeSchema,
-  license: licenseArraySchema,
-  restrictionGrounds: yup.mixed().when('accessType.url', {
-    is: url => url !== ACCESS_TYPE_URL.OPEN,
-    then: restrictionGroundsSchema,
-  }),
+  access_rights: accessRightsSchema,
   creator: metaxActorsSchema,
   publisher: metaxActorSchema,
   rights_holder: metaxActorsSchema,

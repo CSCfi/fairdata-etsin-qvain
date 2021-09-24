@@ -75,6 +75,10 @@ const datasets = {
   loading: 'Lataa...',
   errorOccurred: 'Virhe tapahtui',
   tableHeader: 'Luodut aineistot',
+  tabs: {
+    all: 'Kaikki aineistot',
+    another: 'Toinen välilehti',
+  },
 }
 
 export default datasets

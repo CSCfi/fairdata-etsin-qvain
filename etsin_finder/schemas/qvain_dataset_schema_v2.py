@@ -4,10 +4,11 @@ from marshmallow.validate import Length, OneOf
 
 from etsin_finder.schemas.qvain_dataset_schema import (
     ActorValidationSchema,
+    AccessRightsValidationSchema,
     DatasetValidationSchema as DatasetValidationSchemaV1,
     ProjectValidationSchema,
-    LicenseValidationSchema,
     ReferenceObjectValidationSchema,
+    RemoteResourceValidationSchema,
     data_catalog_matcher as data_catalog_matcher_v1,
 )
 
@@ -56,7 +57,7 @@ class DraftDatasetValidationSchema(Schema):
     rights_holder = fields.List(fields.Nested(ActorValidationSchema))
     contributor = fields.List(fields.Nested(ActorValidationSchema))
 
-    accessType = fields.Dict()
+    access_rights = fields.Nested(AccessRightsValidationSchema)
 
     infrastructure = fields.List(fields.Dict())
 
@@ -66,16 +67,13 @@ class DraftDatasetValidationSchema(Schema):
 
     theme = fields.List(fields.Nested(ReferenceObjectValidationSchema))
 
-    embargoDate = fields.Str()
-    restrictionGrounds = fields.Str()
-    license = fields.List(fields.Nested(LicenseValidationSchema))
     dataCatalog = fields.Str()
     cumulativeState = fields.Int(validate=OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())
     directories = fields.List(fields.Dict())
-    remote_resources = fields.List(fields.Dict())
+    remote_resources = fields.List(fields.Nested(RemoteResourceValidationSchema))
     useDoi = fields.Boolean()
-    projects = fields.List(fields.Nested(ProjectValidationSchema))
+    is_output_of = fields.List(fields.Nested(ProjectValidationSchema))
 
 
 class PublishDatasetValidationSchema(DatasetValidationSchemaV1):

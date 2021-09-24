@@ -2,13 +2,17 @@
 
 exports[`Qvain.Files handleSubmit submits data correctly 1`] = `
 Object {
-  "accessType": Object {
-    "name": Object {
-      "en": "Open",
-      "fi": "Avoin",
-      "und": "Avoin",
+  "access_rights": Object {
+    "access_type": Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
-    "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+    "available": undefined,
+    "license": Array [
+      Object {
+        "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      },
+    ],
+    "restriction_grounds": undefined,
   },
   "contributor": undefined,
   "creator": Array [
@@ -30,23 +34,15 @@ Object {
     "en": "",
     "fi": "Description",
   },
-  "embargoDate": undefined,
   "field_of_science": Array [],
   "identifiers": Array [],
   "infrastructure": Array [],
+  "is_output_of": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
   "language": Array [],
-  "license": Array [
-    Object {
-      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-      "name": Object {
-        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
-      },
-    },
-  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -136,12 +132,10 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "projects": Array [],
   "provenance": Array [],
   "publisher": undefined,
   "relation": Array [],
   "remote_resources": Array [],
-  "restrictionGrounds": undefined,
   "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
@@ -156,13 +150,17 @@ Object {
 
 exports[`Qvain.Files handleSubmit submits data correctly after adding directory 1`] = `
 Object {
-  "accessType": Object {
-    "name": Object {
-      "en": "Open",
-      "fi": "Avoin",
-      "und": "Avoin",
+  "access_rights": Object {
+    "access_type": Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
-    "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+    "available": undefined,
+    "license": Array [
+      Object {
+        "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      },
+    ],
+    "restriction_grounds": undefined,
   },
   "contributor": undefined,
   "creator": Array [
@@ -184,23 +182,15 @@ Object {
     "en": "",
     "fi": "Description",
   },
-  "embargoDate": undefined,
   "field_of_science": Array [],
   "identifiers": Array [],
   "infrastructure": Array [],
+  "is_output_of": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
   "language": Array [],
-  "license": Array [
-    Object {
-      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-      "name": Object {
-        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
-      },
-    },
-  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -290,12 +280,10 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "projects": Array [],
   "provenance": Array [],
   "publisher": undefined,
   "relation": Array [],
   "remote_resources": Array [],
-  "restrictionGrounds": undefined,
   "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
@@ -310,13 +298,17 @@ Object {
 
 exports[`Qvain.Files handleSubmit submits data correctly after adding file 1`] = `
 Object {
-  "accessType": Object {
-    "name": Object {
-      "en": "Open",
-      "fi": "Avoin",
-      "und": "Avoin",
+  "access_rights": Object {
+    "access_type": Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
-    "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+    "available": undefined,
+    "license": Array [
+      Object {
+        "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      },
+    ],
+    "restriction_grounds": undefined,
   },
   "contributor": undefined,
   "creator": Array [
@@ -338,23 +330,15 @@ Object {
     "en": "",
     "fi": "Description",
   },
-  "embargoDate": undefined,
   "field_of_science": Array [],
   "identifiers": Array [],
   "infrastructure": Array [],
+  "is_output_of": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
   "language": Array [],
-  "license": Array [
-    Object {
-      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-      "name": Object {
-        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
-      },
-    },
-  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -444,12 +428,10 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "projects": Array [],
   "provenance": Array [],
   "publisher": undefined,
   "relation": Array [],
   "remote_resources": Array [],
-  "restrictionGrounds": undefined,
   "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
@@ -464,13 +446,17 @@ Object {
 
 exports[`Qvain.Files handleSubmit submits data correctly after removing directory 1`] = `
 Object {
-  "accessType": Object {
-    "name": Object {
-      "en": "Open",
-      "fi": "Avoin",
-      "und": "Avoin",
+  "access_rights": Object {
+    "access_type": Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
-    "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+    "available": undefined,
+    "license": Array [
+      Object {
+        "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      },
+    ],
+    "restriction_grounds": undefined,
   },
   "contributor": undefined,
   "creator": Array [
@@ -492,23 +478,15 @@ Object {
     "en": "",
     "fi": "Description",
   },
-  "embargoDate": undefined,
   "field_of_science": Array [],
   "identifiers": Array [],
   "infrastructure": Array [],
+  "is_output_of": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
   "language": Array [],
-  "license": Array [
-    Object {
-      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-      "name": Object {
-        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
-      },
-    },
-  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -598,12 +576,10 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "projects": Array [],
   "provenance": Array [],
   "publisher": undefined,
   "relation": Array [],
   "remote_resources": Array [],
-  "restrictionGrounds": undefined,
   "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
@@ -618,13 +594,17 @@ Object {
 
 exports[`Qvain.Files handleSubmit submits data correctly after removing file 1`] = `
 Object {
-  "accessType": Object {
-    "name": Object {
-      "en": "Open",
-      "fi": "Avoin",
-      "und": "Avoin",
+  "access_rights": Object {
+    "access_type": Object {
+      "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
-    "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+    "available": undefined,
+    "license": Array [
+      Object {
+        "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+      },
+    ],
+    "restriction_grounds": undefined,
   },
   "contributor": undefined,
   "creator": Array [
@@ -646,23 +626,15 @@ Object {
     "en": "",
     "fi": "Description",
   },
-  "embargoDate": undefined,
   "field_of_science": Array [],
   "identifiers": Array [],
   "infrastructure": Array [],
+  "is_output_of": Array [],
   "issuedDate": undefined,
   "keywords": Array [
     "keyword",
   ],
   "language": Array [],
-  "license": Array [
-    Object {
-      "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
-      "name": Object {
-        "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
-      },
-    },
-  ],
   "original": Object {
     "cumulative_state": 0,
     "data_catalog": Object {
@@ -752,12 +724,10 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "projects": Array [],
   "provenance": Array [],
   "publisher": undefined,
   "relation": Array [],
   "remote_resources": Array [],
-  "restrictionGrounds": undefined,
   "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],

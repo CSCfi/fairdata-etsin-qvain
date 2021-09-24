@@ -5,7 +5,6 @@ from etsin_finder.services import cr_service
 from etsin_finder.utils.flags import set_flags
 from copy import deepcopy
 from etsin_finder.utils.qvain_utils import (
-    access_rights_to_metax,
     alter_projects_to_metax,
     check_authentication,
     check_dataset_edit_permission,
@@ -16,7 +15,6 @@ from etsin_finder.utils.qvain_utils import (
     get_access_granter,
     get_dataset_creator,
     other_identifiers_to_metax,
-    remote_resources_data_to_metax,
     remove_deleted_datasets_from_results,
 )
 
@@ -62,22 +60,6 @@ class TestQvainUtils(BaseTest):
         """Test that function alters other identifiers suitable for Metax."""
         modified_identifiers = other_identifiers_to_metax(original_other_identifiers)
         assert modified_identifiers == expected_other_identifiers
-
-    def test_access_rights_to_metax(app):
-        """Test that function alters access rights suitable for Metax."""
-        modified_open_rights = access_rights_to_metax(original_open_rights)
-        modified_embargo_rights = access_rights_to_metax(original_embargo_rights)
-        modified_custom_rights = access_rights_to_metax(original_custom_rights)
-        assert modified_open_rights == expected_open_rights
-        assert modified_embargo_rights == expected_embargo_rights
-        assert modified_custom_rights == expected_custom_rights
-
-    def test_remote_resources_to_metax(app):
-        """Test that function alters access rights suitable for Metax."""
-        modified_remote_resources = remote_resources_data_to_metax(
-            original_remote_resources
-        )
-        assert modified_remote_resources == expected_remote_resources
 
     def test_data_to_metax(self):
         """Test that function alters dataset for metax."""
