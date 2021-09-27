@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
@@ -114,4 +113,4 @@ export const ErrorMessage = styled.p`
   padding: 0.5em;
 `
 
-export default withRouter(observer(RemoveModal))
+export default observer(RemoveModal)

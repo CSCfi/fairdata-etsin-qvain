@@ -107,14 +107,14 @@ describe('PackageModal', () => {
       const stores = getStores()
       stores.Packages.openPackageModal('/data')
       render(stores)
-      wrapper.find(PackageCreate).should.exist
+      wrapper.find(PackageCreate).should.have.lengthOf(1)
     })
 
     it('should render 2 buttons', async () => {
       const stores = getStores()
       stores.Packages.openPackageModal('/data')
       render(stores)
-      wrapper.find(PackageCreate).find('button').length.should.eql(2)
+      wrapper.find(PackageCreate).find('button').should.have.lengthOf(2)
     })
 
     it('should create package', async () => {
@@ -139,13 +139,13 @@ describe('PackageModal', () => {
     it('should render PackagePending', async () => {
       const stores = await openPending()
       render(stores)
-      wrapper.find(PackagePending).should.exist
+      wrapper.find(PackagePending).should.have.lengthOf(1)
     })
 
     it('should render 2 buttons', async () => {
       const stores = await openPending()
       render(stores)
-      wrapper.find(PackagePending).find('button').length.should.eql(2)
+      wrapper.find(PackagePending).find('button').should.have.lengthOf(2)
     })
 
     it('should subscribe to email notification', async () => {
@@ -170,13 +170,13 @@ describe('PackageModal', () => {
     it('should render PackageSuccess', async () => {
       const stores = await openCreated()
       render(stores)
-      wrapper.find(PackageSuccess).should.exist
+      wrapper.find(PackageSuccess).should.have.lengthOf(1)
     })
 
     it('should render only close button', async () => {
       const stores = await openCreated()
       render(stores)
-      wrapper.find(PackageSuccess).find('button').length.should.eql(1)
+      wrapper.find(PackageSuccess).find('button').should.have.lengthOf(1)
     })
   })
 })

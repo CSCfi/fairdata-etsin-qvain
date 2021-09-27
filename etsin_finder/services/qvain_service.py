@@ -84,7 +84,13 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
     def _METAX_GET_ALL_DATASETS_FOR_USER(self):
         return (
             self.metax_url("/rest/v2/datasets")
-            + "?metadata_provider_user={0}&ordering=-date_created&no_pagination=true"
+            + "?metadata_provider_user={0}&no_pagination=true&ordering=-date_created"
+        )
+
+    @property
+    def _METAX_GET_ALL_DATASETS_FOR_PROJECTS(self):
+        return (
+            self.metax_url("/rest/v2/datasets") + "?projects={0}&ordering=-date_created"
         )
 
     @property
@@ -258,13 +264,44 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
         if data_catalog_matcher:
             params["data_catalog"] = data_catalog_matcher
 
-        resp, _, success = make_request(
+        resp, status, success = make_request(
+            requests.get, req_url, params=params, **self._get_args()
+        )
+        if not success or len(resp) == 0:
+            log.info(f"No datasets found. {status}")
+            return [], status
+        return resp, status
+
+    def get_datasets_for_projects(self, projects, data_catalog_matcher=None):
+        """Get datasets created by the specified user.
+
+        Uses pagination, so offset and limit are used as well.
+
+        Args:
+            user_id (str): User identifier.
+            limit (list): The limit of returned datasets.
+            offset (list): The offset for pagination.
+            no_pagination (bool): To use pagination or not.
+
+        Returns:
+            Metax response.
+
+        """
+        req_url = format_url(
+            self._METAX_GET_ALL_DATASETS_FOR_PROJECTS, ",".join(projects)
+        )
+
+        params = {"pagination": "false"}
+        if data_catalog_matcher:
+            params["data_catalog"] = data_catalog_matcher
+
+        resp, status, success = make_request(
             requests.get, req_url, params=params, **self._get_args()
         )
         if not success or len(resp) == 0:
             log.info("No datasets found.")
-            return "no datasets"
-        return resp
+            return [], status
+        return resp, status
 
     def create_dataset(self, data, params=None):
         """Send the data from the frontend to Metax.

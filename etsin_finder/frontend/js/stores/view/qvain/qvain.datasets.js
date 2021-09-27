@@ -27,6 +27,8 @@ class QvainDatasets {
 
   @observable searchTerm = ''
 
+  @observable loadTime = new Date()
+
   @action.bound reset() {
     this.datasets.replace([])
     this.error = null
@@ -39,6 +41,7 @@ class QvainDatasets {
 
   @action.bound setDatasets(datasets) {
     this.datasets = datasets
+    this.loadTime = new Date()
   }
 
   @action.bound setPage(page) {
@@ -131,12 +134,12 @@ class QvainDatasets {
     })
   }
 
-  loadDatasets = async () => {
+  loadDatasets = async ({ shared } = {}) => {
     this.clearError()
     try {
       const url = urls.qvain.datasets()
       const response = await this.promiseManager.add(
-        axios.get(url, { params: { no_pagination: true } }),
+        axios.get(url, { params: { no_pagination: true, shared } }),
         'datasets'
       )
       const data = response.data || []
@@ -149,7 +152,13 @@ class QvainDatasets {
       }
       this.setPage(1)
     } catch (error) {
-      this.setError(error)
+      if (error.response?.status === 404) {
+        this.setDatasets([])
+        this.clearError()
+        this.setPage(1)
+        return
+      }
+      this.setError(error?.response?.data || error)
     }
   }
 

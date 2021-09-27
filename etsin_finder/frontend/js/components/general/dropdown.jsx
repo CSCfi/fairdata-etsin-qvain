@@ -126,7 +126,7 @@ export class Dropdown extends Component {
   render() {
     const ButtonComponent = this.props.buttonComponent
     return (
-      <DropdownContainer ref={this.container} onBlur={this.onBlur}>
+      <DropdownContainer ref={this.container} onBlur={this.onBlur} aria-haspopup="true">
         <ButtonWrapper>
           <Translate
             role="button"
@@ -150,7 +150,13 @@ export class Dropdown extends Component {
             {this.props.icon && <Icon icon={this.props.icon} />}
           </Translate>
         </ButtonWrapper>
-        <Content ref={this.content} open={this.state.open} onClick={this.close} tabIndex="-1">
+        <Content
+          role="menu"
+          ref={this.content}
+          open={this.state.open}
+          onClick={this.close}
+          tabIndex="-1"
+        >
           {this.props.children}
         </Content>
       </DropdownContainer>

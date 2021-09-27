@@ -52,7 +52,7 @@ describe('SearchSelect', () => {
   })
 
   test('it exists', () => {
-    wrapper.should.exist
+    wrapper.should.have.lengthOf(1)
   })
 
   test('props should include expectedProps', () => {
@@ -108,7 +108,7 @@ describe('SearchSelect', () => {
 
   describe('given InModal set to false. (set by defaultProps)', () => {
     test('it exists', () => {
-      select.should.exist
+      select.should.have.lengthOf(1)
     })
 
     test('props should not include exculdedProps', () => {
@@ -125,7 +125,7 @@ describe('SearchSelect', () => {
     })
 
     test('it exists', () => {
-      select.should.exist
+      select.should.have.lengthOf(1)
     })
 
     test('props should include expectedProps', () => {

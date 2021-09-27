@@ -22,6 +22,10 @@ const datasets = {
     created: 'Luotu',
     state: 'Tila',
     actions: 'Toiminnot',
+    edit: 'Muokkaa',
+    share: 'Jaa',
+    preview: 'Esikatsele',
+    owner: 'Omistaja',
     dateFormat: {
       moments: 'Muutama hetki sitten',
       oneMinute: '1 minuutti sitten',
@@ -35,6 +39,10 @@ const datasets = {
       oneYear: '1 vuosi sitten',
       years: 'vuotta sitten',
     },
+  },
+  owner: {
+    me: 'Minä',
+    project: 'Projekti',
   },
   moreActions: 'Lisää',
   moreVersions: {
@@ -70,6 +78,7 @@ const datasets = {
   goToEtsin: 'Katso Etsimessä',
   goToEtsinDraft: 'Esikatsele Etsimessä',
   openNewVersion: 'Avaa uusi versio',
+  share: 'Jaa',
   noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
   reload: 'Lataa uudelleen',
   loading: 'Lataa...',
@@ -77,7 +86,6 @@ const datasets = {
   tableHeader: 'Luodut aineistot',
   tabs: {
     all: 'Kaikki aineistot',
-    another: 'Toinen välilehti',
   },
 }
 
