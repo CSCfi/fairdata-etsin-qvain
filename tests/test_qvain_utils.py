@@ -15,7 +15,6 @@ from etsin_finder.utils.qvain_utils import (
     get_access_granter,
     get_dataset_creator,
     other_identifiers_to_metax,
-    remove_deleted_datasets_from_results,
 )
 
 from .basetest import BaseTest
@@ -100,14 +99,6 @@ class TestQvainUtils(BaseTest):
         """Test that function returns None when auth is ok."""
         return_value = check_authentication()
         assert return_value is None
-
-    def test_remove_deleted_datasets_from_results(self):
-        """Test that function removes items that are marked as removed."""
-        result = remove_deleted_datasets_from_results(datasets_partly_deleted)
-        results = result.get("results", [])
-        assert len(results) == 2
-        for dataset in results:
-            assert dataset.get("removed", True) is False
 
     def test_edited_data_to_metax(self):
         """Test that function maps dataset to Metax format."""

@@ -43,7 +43,7 @@ const Tab = styled.button.attrs({ type: 'button', role: 'tab' })`
 
 const TabRow = styled.div.attrs({ role: 'tablist'})`
   display: flex;
-  padding-left: 2.5rem;
+  padding-left: 2rem;
   border-bottom: 4px solid #eee;
   gap: 0.25rem;
 `

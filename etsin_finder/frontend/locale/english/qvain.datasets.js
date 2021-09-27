@@ -22,6 +22,10 @@ const datasets = {
     created: 'Created',
     state: 'Status',
     actions: 'Actions',
+    edit: 'Edit',
+    share: 'Share',
+    preview: 'Preview',
+    owner: 'Owner',
     dateFormat: {
       moments: 'A few moments ago',
       oneMinute: '1 minute ago',
@@ -35,6 +39,10 @@ const datasets = {
       oneYear: '1 year ago',
       years: 'years ago',
     },
+  },
+  owner: {
+    me: 'Me',
+    project: 'Project',
   },
   moreActions: 'More',
   moreVersions: {
@@ -69,6 +77,7 @@ const datasets = {
   goToEtsin: 'View in Etsin',
   goToEtsinDraft: 'Preview in Etsin',
   openNewVersion: 'Open new version',
+  share: 'Share',
   noDatasets: 'You have no datasets',
   reload: 'Reload',
   loading: 'Loading...',
@@ -76,7 +85,6 @@ const datasets = {
   tableHeader: 'Created datasets',
   tabs: {
     all: 'All datasets',
-    another: 'Another tab',
   },
 }
 export default datasets

@@ -27,7 +27,7 @@ export const buildStores = () => {
   const Env = new EnvClass()
   const Auth = new AuthClass()
   const QvainDatasets = new QvainDatasetsClass()
-  const QvainDatasetsV2 = new QvainDatasetsV2Class()
+  const QvainDatasetsV2 = new QvainDatasetsV2Class(QvainDatasets)
   const SearchFilters = new SearchFiltersClass()
   const Access = new AccessClass(Auth)
   const Qvain = new QvainClass(Env, Auth)

@@ -131,7 +131,7 @@ describe('ExternalResources', () => {
       const wrapper = renderResource(downloadUrlResource)
       wrapper.find(Name).text().should.eql(downloadUrlResource.title)
       wrapper.find(Category).text().should.eql(downloadUrlResource.use_category.pref_label.en)
-      wrapper.find(LinkButton).should.be.empty
+      wrapper.find(LinkButton).should.have.lengthOf(0)
       wrapper
         .find(DownloadButton)
         .prop('href')
@@ -143,7 +143,7 @@ describe('ExternalResources', () => {
       wrapper.find(Name).text().should.eql(accessUrlResource.title)
       wrapper.find(Category).text().should.eql(accessUrlResource.use_category.pref_label.en)
       wrapper.find(LinkButton).prop('href').should.eql(accessUrlResource.access_url.identifier)
-      wrapper.find(DownloadButton).should.be.empty
+      wrapper.find(DownloadButton).should.have.lengthOf(0)
     })
 
     it('should render resource with both urls', () => {

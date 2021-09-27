@@ -5,7 +5,7 @@ class Tabs {
     makeObservable(this)
   }
 
-  @observable options = { all: 'qvain.datasets.tabs.all', another: 'qvain.datasets.tabs.another' }
+  @observable options = { all: 'qvain.datasets.tabs.all' }
 
   @observable active = 'all'
 

@@ -1,5 +1,112 @@
 const datasets = [
   {
+    "sources": ["creator"],
+    "id": 5001,
+    "identifier": "1f1dcb80-bc20-43d6-b279-9455dabde6fc",
+    "draft_of": {"identifier": "2f1dcb80-bc20-43d6-b279-9455dabde6fc" },
+    "data_catalog": {
+      "id": 16,
+      "identifier": "urn:nbn:fi:att:data-catalog-dft"
+    },
+    "deprecated": false,
+    "metadata_provider_org": "test.csc.fi",
+    "metadata_provider_user": "tkoppa",
+    "research_dataset": {
+      "title": {
+        "en": "Changes here"
+      },
+      "issued": "2021-05-05",
+      "access_rights": {
+        "license": [
+          {
+            "title": {
+              "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+              "fi": "Creative Commons Nime\u00e4 4.0 Kansainv\u00e4linen (CC BY 4.0)",
+              "und": "Creative Commons Nime\u00e4 4.0 Kansainv\u00e4linen (CC BY 4.0)"
+            },
+            "license": "https://creativecommons.org/licenses/by/4.0/",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0"
+          }
+        ],
+        "access_type": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/access_type",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+          "pref_label": {
+            "en": "Open",
+            "fi": "Avoin",
+            "und": "Avoin"
+          }
+        }
+      },
+      "preferred_identifier": "draft:7f1dcb80-bc20-43d6-b279-9455dabde6fc",
+      "metadata_version_identifier": "5907b794-c46a-4a8e-ae32-5519c04b7303"
+    },
+    "preservation_state": 0,
+    "state": "draft",
+    "use_doi_for_published": false,
+    "cumulative_state": 0,
+    "api_meta": {
+      "version": 2
+    },
+    "date_created": "2021-05-05T10:01:56+02:00",
+    "service_created": "qvain",
+    "removed": false
+  },
+  {
+    "sources": ["creator"],
+    "id": 5000,
+    "identifier": "2f1dcb80-bc20-43d6-b279-9455dabde6fc",
+    "next_draft": {"identifier": "1f1dcb80-bc20-43d6-b279-9455dabde6fc" },
+    "data_catalog": {
+      "id": 15,
+      "identifier": "urn:nbn:fi:att:data-catalog-dft"
+    },
+    "deprecated": false,
+    "metadata_provider_org": "test.csc.fi",
+    "metadata_provider_user": "tkoppa",
+    "research_dataset": {
+      "title": {
+        "en": "Published but changed"
+      },
+      "issued": "2021-02-01",
+      "access_rights": {
+        "license": [
+          {
+            "title": {
+              "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+              "fi": "Creative Commons Nime\u00e4 4.0 Kansainv\u00e4linen (CC BY 4.0)",
+              "und": "Creative Commons Nime\u00e4 4.0 Kansainv\u00e4linen (CC BY 4.0)"
+            },
+            "license": "https://creativecommons.org/licenses/by/4.0/",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0"
+          }
+        ],
+        "access_type": {
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/access_type",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+          "pref_label": {
+            "en": "Open",
+            "fi": "Avoin",
+            "und": "Avoin"
+          }
+        }
+      },
+      "preferred_identifier": "draft:7f1dcb80-bc20-43d6-b279-9455dabde6fc",
+      "metadata_version_identifier": "5907b794-c46a-4a8e-ae32-5519c04b7303"
+    },
+    "preservation_state": 0,
+    "state": "published",
+    "use_doi_for_published": false,
+    "cumulative_state": 0,
+    "api_meta": {
+      "version": 2
+    },
+    "date_created": "2021-05-01T10:01:56+02:00",
+    "service_created": "qvain",
+    "removed": false
+  },
+  {
+    "sources": ["creator"],
     "id": 4557,
     "identifier": "aad48718-5c69-48d7-a4e0-0c06fb06cccd",
     "data_catalog": {
@@ -11,7 +118,7 @@ const datasets = [
     "metadata_provider_user": "tkoppa",
     "research_dataset": {
       "title": {
-        "en": "Draft 5"
+        "en": "Draft 5 by me"
       },
       "issued": "2021-02-05",
       "access_rights": {
@@ -53,6 +160,7 @@ const datasets = [
     "removed": false
   },
   {
+    "sources": ["project"],
     "id": 4556,
     "identifier": "96f408d2-eb81-40a6-8791-f56ed76934cf",
     "data_catalog": {
@@ -64,7 +172,7 @@ const datasets = [
     "metadata_provider_user": "tkoppa",
     "research_dataset": {
       "title": {
-        "en": "Draft 4"
+        "en": "Draft 4 by project"
       },
       "issued": "2021-02-05",
       "access_rights": {
@@ -106,6 +214,7 @@ const datasets = [
     "removed": false
   },
   {
+    "sources": ["creator", "project"],
     "id": 4555,
     "identifier": "b5479d7a-b0f0-421c-9e6f-b5c5ddc08bc1",
     "data_catalog": {
@@ -117,7 +226,7 @@ const datasets = [
     "metadata_provider_user": "tkoppa",
     "research_dataset": {
       "title": {
-        "en": "Draft 3"
+        "en": "Draft 3 by me and project"
       },
       "issued": "2021-02-05",
       "access_rights": {

@@ -9,6 +9,8 @@ import { QvainContainer, PageTitle } from '../../general/card'
 import { SaveButton } from '../../general/buttons'
 import NoticeBar from '../../../general/noticeBar'
 import Tabs from './tabs'
+import Table from './table'
+import RemoveModal from '../datasets/removeModal'
 
 export const Datasets = () => {
   const history = useHistory()
@@ -16,9 +18,6 @@ export const Datasets = () => {
   const {
     Qvain: { resetQvainStore },
     QvainDatasets: { publishedDataset, setPublishedDataset },
-    QvainDatasetsV2: {
-      tabs: { active },
-    },
     Env: { getQvainUrl },
     Matomo: { recordEvent },
   } = useStores()
@@ -50,8 +49,9 @@ export const Datasets = () => {
         </DatasetsHeader>
         <Tabs />
         <DatasetsContent>
-          Current tab is <strong>{active}</strong>. Feels like I contain nothing at all&hellip;
+          <Table />
         </DatasetsContent>
+        <RemoveModal />
       </DatasetsContainer>
     </QvainContainer>
   )
@@ -78,10 +78,11 @@ const DatasetsContainer = styled.div.attrs({
   background: white;
   margin-top: 1.5rem;
   padding: 0;
+  margin-bottom: 1rem;
 `
 
 const DatasetsContent = styled.div`
-  padding: 1rem 1.5rem;
+  padding: 1rem 2rem;
   font-size: 16px;
 `
 

@@ -38,6 +38,7 @@ def clean_empty_keyvalues_from_dict(d):
         if v or v is False
     }
 
+
 def alter_projects_to_metax(projects):
     """Convert project objects from frontend to comply with the Metax schema.
 
@@ -244,23 +245,6 @@ def check_dataset_edit_permission_and_lock(cr_id):
     return None
 
 
-def remove_deleted_datasets_from_results(result):
-    """Remove datasets marked as removed from results.
-
-    Arguments:
-        result (dict): Results with all datasets.
-
-    Returns:
-        dict: Results where removed datasets are removed.
-
-    """
-    new_results = [
-        dataset for dataset in result.get("results") if dataset.get("removed") is False
-    ]
-    result["results"] = new_results
-    return result
-
-
 def edited_data_to_metax(data, original):
     """Alter the research_dataset field to contain the new changes from editing.
 
@@ -353,3 +337,28 @@ def check_if_data_in_user_IDA_project(data):
                     )
                     return False
     return True
+
+
+def add_sources(datasets, *sources):
+    """Attach source information to datasets in list"""
+    for dataset in datasets:
+        dataset["sources"] = list(sources)
+
+
+def merge_and_sort_dataset_lists(*lists):
+    """Merge multiple lists of datasets, remove duplicates and sort by newest"""
+    datasets_by_id = {}
+    for lst in lists:
+        for dataset in lst:
+            cr_id = dataset.get("id")
+            if not datasets_by_id.get(cr_id):
+                datasets_by_id[cr_id] = {**dataset}
+            elif dataset.get("sources"):
+                sources = datasets_by_id[cr_id].get("sources", [])
+                sources.extend(dataset.get("sources"))
+                datasets_by_id[cr_id]["sources"] = sources
+
+    datasets = sorted(
+        datasets_by_id.values(), key=lambda cr: cr.get("date_created"), reverse=True
+    )
+    return datasets
