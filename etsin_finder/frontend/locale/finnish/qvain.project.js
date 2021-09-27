@@ -62,12 +62,6 @@ const project = {
           label: 'Rooli',
           placeholder: 'Valitse rooli',
         },
-        definition: {
-          label: 'Kuvaus',
-          description: 'Kuvaus organisaation roolille',
-          placeholderEn: 'Kuvaus (englanti)',
-          placeholderFi: 'Kuvaus (suomi)',
-        },
         addButton: 'Lisää rooli',
         editButton: 'Muokkaa roolia',
       },

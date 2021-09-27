@@ -17,6 +17,7 @@ import AccessibilityClass from './view/accessibility'
 import MapClass from './view/map'
 import QvainClass from './view/qvain'
 import QvainDatasetsClass from './view/qvain/qvain.datasets'
+import QvainDatasetsV2Class from './view/qvain/qvain.datasetsV2'
 import AccessClass from './view/access'
 import SearchFiltersClass from './view/searchfilters'
 import MatomoClass from './tracking'
@@ -26,6 +27,7 @@ export const buildStores = () => {
   const Env = new EnvClass()
   const Auth = new AuthClass()
   const QvainDatasets = new QvainDatasetsClass()
+  const QvainDatasetsV2 = new QvainDatasetsV2Class()
   const SearchFilters = new SearchFiltersClass()
   const Access = new AccessClass(Auth)
   const Qvain = new QvainClass(Env, Auth)
@@ -48,6 +50,7 @@ export const buildStores = () => {
     Access,
     Map,
     QvainDatasets,
+    QvainDatasetsV2,
     SearchFilters,
     Matomo,
     CrossRef,

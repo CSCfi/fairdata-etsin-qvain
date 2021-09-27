@@ -62,12 +62,6 @@ const project = {
           label: 'Contributor role',
           placeholder: 'Select contributor role',
         },
-        definition: {
-          label: 'Description',
-          description: "Description of the organization's role.",
-          placeholderEn: 'Description (English)',
-          placeholderFi: 'Description (Finnish)',
-        },
         addButton: 'Add role',
         editButton: 'Edit role',
       },
