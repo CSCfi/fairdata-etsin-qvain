@@ -14,13 +14,14 @@ import React, { useState, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Router } from 'react-router-dom'
 import { syncHistoryWithStore } from 'mobx-react-router'
-import Stores from '@/stores'
-import { StoresProvider } from '@/stores/stores'
 
-import '../locale/translations'
 import { registerLocale } from 'react-datepicker'
 import fi from 'date-fns/locale/fi'
 import en from 'date-fns/locale/en-GB'
+
+import Stores from '@/stores'
+import { StoresProvider } from '@/stores/stores'
+import '../locale/translations'
 import Layout from './layout'
 import browserHistory from './browserHistory'
 

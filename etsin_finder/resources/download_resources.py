@@ -129,7 +129,7 @@ class Requests(Resource):
         projects, status = common_service.get_dataset_projects(cr_id)
 
         if status != 200:
-            abort(status, message=f"Error occured when Etsin tried to fetch project details from Metax.")
+            abort(status, message="Error occured when Etsin tried to fetch project details from Metax.")
         if projects is None or len(projects) == 0:
             abort(404, message=f"Etsin could not find project for dataset using catalog record identifier {cr_id}")
 
@@ -139,7 +139,7 @@ class Requests(Resource):
         directory_details, status = common_service.get_directory_for_project_using_path(cr_id, project, (path or ["/"])[0])
 
         if status != 200:
-            abort(status, message=f"Error occured when Etsin tried to fetch package details from Metax.")
+            abort(status, message="Error occured when Etsin tried to fetch package details from Metax.")
 
         byte_size = directory_details.get("results", {}).get("byte_size", None)
 

@@ -35,6 +35,8 @@ class KeyValues extends Component {
       error: false,
       lang: this.props.Stores.Locale.currentLang,
     }
+
+    this.promises = []
   }
 
   componentDidMount() {
@@ -43,6 +45,7 @@ class KeyValues extends Component {
   }
 
   componentWillUnmount() {
+    this.promises.forEach(promise => promise.cancel())
     counterpart.offLocaleChange(this.localeChanged)
   }
 
@@ -65,7 +68,9 @@ class KeyValues extends Component {
       },
     })
 
-    Promise.all([datasets, es])
+    const allLoaded = Promise.all([datasets, es])
+    this.promises.push(allLoaded)
+    allLoaded
       .then(res => {
         this.setState({
           datasetsNum: res[0].data.count,
