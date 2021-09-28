@@ -83,6 +83,7 @@ export default observer(Content)
 
 const redirectToQvain = (isQvain, getQvainUrl) => props => {
   // redirect /qvain to the new qvain app url
+  // eslint-disable-next-line react/prop-types
   const path = props.location.pathname.replace(/^\/qvain/, '')
   if (isQvain) {
     // already in qvain, just remove /qvain from path

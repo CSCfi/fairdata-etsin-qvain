@@ -38,7 +38,7 @@ describe('Qvain datasets page', () => {
   let wrapper
 
   beforeEach(async () => {
-    stores.QvainDatasets.setDatasetsPerPage(5)
+    stores.QvainDatasets.setDatasetsPerPage(6)
     wrapper = mount(
       <StoresProvider store={stores}>
         <BrowserRouter>
@@ -50,6 +50,7 @@ describe('Qvain datasets page', () => {
         </BrowserRouter>
       </StoresProvider>
     )
+    // wait until datasets have been fetched
     await when(() => stores.QvainDatasets.datasetGroupsOnPage.length > 0)
     wrapper.update()
 

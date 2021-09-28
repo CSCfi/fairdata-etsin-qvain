@@ -184,9 +184,12 @@ def check_dataset_edit_permission(cr_id):
     if error:
         return error
 
-    user_denied_response = ({
-        "PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."
-    }, 403)
+    user_denied_response = (
+        {
+            "PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."
+        },
+        403,
+    )
 
     cr = cr_service.get_catalog_record(cr_id, False)
     if cr is None:
@@ -200,7 +203,7 @@ def check_dataset_edit_permission(cr_id):
     if csc_username == creator:
         user_is_allowed = True
 
-    if flag_enabled('PERMISSIONS.SHARE_PROJECT'):
+    if flag_enabled("PERMISSIONS.SHARE_PROJECT"):
         if authorization.user_has_dataset_project(cr_id):
             user_is_allowed = True
 
@@ -236,7 +239,7 @@ def check_dataset_edit_permission_and_lock(cr_id):
                 f"Failed to get lock for dataset {cr_id}."
             )
             return {
-                "PermissionError": f"Dataset is locked for editing."
+                "PermissionError": "Dataset is locked for editing."
             }, 409
     return None
 

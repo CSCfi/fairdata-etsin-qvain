@@ -47,6 +47,7 @@ export class Dropdown extends Component {
     const containerRect = this.container.current.getBoundingClientRect()
 
     let listHeight = list.offsetHeight
+    const listWidth = list.offsetWidth
     if (listHeight === 0) {
       // If the list has display: none, it doesn't have a height.
       // Temporarily make list displayed but hidden so the height can be computed.
@@ -65,7 +66,7 @@ export class Dropdown extends Component {
     } else {
       list.style.top = `${containerRect.top - listHeight}px`
     }
-    list.style.left = `${containerRect.left}px`
+    list.style.left = `${(containerRect.left + containerRect.right) / 2 - listWidth / 2}px`
   }
 
   onBlur = e => {
@@ -126,7 +127,7 @@ export class Dropdown extends Component {
     const ButtonComponent = this.props.buttonComponent
     return (
       <DropdownContainer ref={this.container} onBlur={this.onBlur}>
-        <div style={{ display: 'flex' }}>
+        <ButtonWrapper>
           <Translate
             role="button"
             component={ButtonComponent}
@@ -134,6 +135,10 @@ export class Dropdown extends Component {
             aria-pressed={this.state.open}
             with={this.props.with}
             onClick={this.onClick}
+            attributes={{
+              'aria-label':
+                typeof this.props.buttonContent === 'string' ? this.props.buttonContent : undefined,
+            }}
             {...this.props.buttonProps}
           >
             {this.props.buttonContent &&
@@ -144,7 +149,7 @@ export class Dropdown extends Component {
               ))}
             {this.props.icon && <Icon icon={this.props.icon} />}
           </Translate>
-        </div>
+        </ButtonWrapper>
         <Content ref={this.content} open={this.state.open} onClick={this.close} tabIndex="-1">
           {this.props.children}
         </Content>
@@ -152,6 +157,11 @@ export class Dropdown extends Component {
     )
   }
 }
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`
 
 const DropdownContainer = styled.div`
   position: relative;
@@ -192,7 +202,7 @@ Dropdown.propTypes = {
   children: PropTypes.node.isRequired,
   buttonContent: PropTypes.node,
   with: PropTypes.object,
-  buttonComponent: PropTypes.object,
+  buttonComponent: PropTypes.elementType,
   buttonProps: PropTypes.object,
   icon: PropTypes.object,
 }
@@ -205,15 +215,31 @@ Dropdown.defaultProps = {
   buttonProps: {},
 }
 
-export const DropdownItem = ({ children, ...props }) => (
-  <li>
+export const DropdownItem = ({ onlyNarrow, children, ...props }) => (
+  <DropdownItemLi onlyNarrow={onlyNarrow}>
     <DropdownItemButton {...props}>{children}</DropdownItemButton>
-  </li>
+  </DropdownItemLi>
 )
 
 DropdownItem.propTypes = {
+  onlyNarrow: PropTypes.bool,
   children: PropTypes.node.isRequired,
 }
+
+DropdownItem.defaultProps = {
+  onlyNarrow: false,
+}
+
+const DropdownItemLi = styled.li`
+  ${p =>
+    p.onlyNarrow &&
+    `
+    display: block;
+    @media screen and (min-width: ${p.theme.breakpoints.md}) {
+      display: none;
+    }
+    `}
+`
 
 export const DropdownItemButton = styled.button.attrs({ type: 'button' })`
   width: 100%;
