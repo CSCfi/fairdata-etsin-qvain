@@ -55,14 +55,37 @@ describe('common.files.utils', () => {
     })
 
     describe('given tagged promises', () => {
+      const resolvers = []
+
+      const resolveAll = () => resolvers.forEach(f => f())
+
+      const newPromise = () => {
+        const p = new Promise(resolve => {
+          resolvers.push(resolve)
+        })
+        return p
+      }
+
       beforeEach(() => {
-        promiseManager.add(Promise.resolve(), 'fetchDatasets')
-        promiseManager.add(Promise.resolve(), 'deleteDataset')
-        promiseManager.add(Promise.resolve(), 'fetchDatasets')
+        resolvers.length = 0
+        promiseManager.add(newPromise(), 'fetchDatasets')
+        promiseManager.add(newPromise(), 'deleteDataset')
+        promiseManager.add(newPromise(), 'fetchDatasets')
       })
 
-      test('should count all promises ', () => {
+      afterEach(() => {
+        resolveAll()
+        resolvers.length = 0
+      })
+
+      test('should count all promises', () => {
         promiseManager.count().should.eql(3)
+      })
+
+      test('should remove resolved promises', async () => {
+        resolveAll()
+        await Promise.resolve()
+        promiseManager.count().should.eql(0)
       })
 
       test('should count promises matching tag', () => {

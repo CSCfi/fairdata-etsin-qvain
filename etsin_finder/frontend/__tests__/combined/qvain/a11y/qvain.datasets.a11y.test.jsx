@@ -27,11 +27,8 @@ beforeEach(() => {
   })
 })
 
-const datasetsCalls = observable.array([])
-
 jest.mock('axios')
 axios.get = jest.fn((...args) => {
-  datasetsCalls.push(JSON.parse(JSON.stringify(args)))
   return Promise.resolve({
     data: datasets,
   })
@@ -41,8 +38,7 @@ describe('Qvain datasets page', () => {
   let wrapper
 
   beforeEach(async () => {
-    datasetsCalls.clear()
-    stores.QvainDatasets.setDatasetsPerPage(5)
+    stores.QvainDatasets.setDatasetsPerPage(6)
     wrapper = mount(
       <StoresProvider store={stores}>
         <BrowserRouter>
@@ -55,7 +51,7 @@ describe('Qvain datasets page', () => {
       </StoresProvider>
     )
     // wait until datasets have been fetched
-    await when(() => datasetsCalls.length > 0)
+    await when(() => stores.QvainDatasets.datasetGroupsOnPage.length > 0)
     wrapper.update()
 
     // show more versions
@@ -90,7 +86,6 @@ describe('Qvain dataset removal modal', () => {
     document.body.appendChild(helper)
     ReactModal.setAppElement(helper)
 
-    datasetsCalls.clear()
     wrapper = mount(
       <StoresProvider store={stores}>
         <BrowserRouter>
