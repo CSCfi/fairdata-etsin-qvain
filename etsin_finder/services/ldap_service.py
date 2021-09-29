@@ -8,6 +8,7 @@
 """Service for LDAP idm. Mainly used by Qvain."""
 
 import marshmallow
+import json
 from ldap3 import Server, Connection, SYNC, MOCK_SYNC
 from flask import current_app
 from etsin_finder.schemas.services import LDAPIdmServiceConfigurationSchema
@@ -52,6 +53,9 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
         """
         try:
             self.connection.search(path, filter, attributes=output)
-            return self.connection.entries, 200
+            entries = []
+            for entry in self.connection.entries:
+                entries.append(json.loads(entry.entry_to_json()))
+            return entries, 200
         except Exception as e:
             return e, 500
