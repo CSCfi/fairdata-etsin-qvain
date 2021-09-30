@@ -39,10 +39,6 @@ class Qvain extends Resources {
 
   @observable unsupported = null
 
-  @computed get datasetIdentifier() {
-    return this.original?.identifier
-  }
-
   @action
   resetQvainStore = () => {
     this.original = undefined
@@ -141,6 +137,10 @@ class Qvain extends Resources {
       }
     })
     return result
+  }
+
+  @computed get datasetIdentifier() {
+    return this.original?.identifier
   }
 
   @computed

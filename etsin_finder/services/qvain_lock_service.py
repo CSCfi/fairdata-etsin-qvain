@@ -6,7 +6,7 @@ from etsin_finder.auth import authentication
 
 
 class QvainLockService:
-    """Write locks for datasets in Qvain
+    """Write locks for datasets in Qvain.
 
     Allows exclusive write access to a dataset for a short time. A lock
     should be refreshed periodically to keep it from expiring.
@@ -23,7 +23,7 @@ class QvainLockService:
         return {"cr_id": cr_id, "user_id": user_id}
 
     def request_lock(self, cr_id, force=False):
-        """Request/refresh lock for dataset
+        """Request/refresh lock for dataset.
 
         Uses Check-And-Set to confirm that the lock is available
         before setting the new value atomically.
@@ -51,7 +51,7 @@ class QvainLockService:
         return success, (prev_data or {})
 
     def release_lock(self, cr_id):
-        """Release lock for dataset
+        """Release lock for dataset.
 
         Because the cache API does not support reading and deleting keys atomically,
         this uses Check-And-Set to assign None value to the key.

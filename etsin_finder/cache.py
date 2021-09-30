@@ -44,7 +44,7 @@ class BaseCache(FlaskService):
         Args:
             key (str): The key to update.
             value (str): The value to update the key with.
-            ttl (int): Number of secocnds until the item is expired from the cache.
+            ttl (int): Number of seconds until the item is expired from the cache.
             noreply (bool): Set True or False to override default noreply value for request.
 
         Returns:
@@ -222,7 +222,7 @@ class CatalogRecordCache(BaseCache):
         return self.do_delete(self._get_cache_key(cr_id), noreply=self.CACHE_NO_REPLY)
 
     def gets(self, cr_id):
-        """Get value from cache cache.
+        """Get value from cache.
 
         Args:
             cr_id (str): Catalog record identifier.
@@ -255,7 +255,7 @@ class CatalogRecordCache(BaseCache):
                 self.CACHE_ITEM_TTL,
                 noreply=self.CACHE_NO_REPLY,
             )
-        return (None, None)
+        return False
 
     def cas(self, cr_id, data, token):
         """Update catalog record cache with catalog record json.
