@@ -23,6 +23,9 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
 
     def __init__(self):
         """Set up LDAP."""
+        if self.config is None:
+            return
+
         self.server = Server(self.config.get("HOST"), use_ssl=True)
         strategyStr = self.config.get("STRATEGY")
         strategy = SYNC
@@ -51,6 +54,9 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
           filter (str): Filter conditions in LDAP format
           output (List<str>): Output fields.
         """
+        if self.connection is None:
+            return "LDAP connection not established", 500
+
         try:
             self.connection.search(path, filter, attributes=output)
             entries = []
