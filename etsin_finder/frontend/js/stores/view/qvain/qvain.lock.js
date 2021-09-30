@@ -178,7 +178,6 @@ class Lock {
   unload() {
     // release lock on window unload
     if (!this.enabled) {
-      console.log("NOTENABLED!")
       return
     }
     const dataset = this.lockData?.dataset
