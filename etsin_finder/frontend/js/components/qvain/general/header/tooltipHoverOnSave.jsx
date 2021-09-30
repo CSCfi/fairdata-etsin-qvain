@@ -20,8 +20,10 @@ const TooltipHoverOnSave = ({ isOpen, children, errors, description }) => {
   const wrapperTooltipButtonRef = useRef(null)
   const wrapperTooltipCardRef = useRef(null)
 
+  const childSpan = <span ref={wrapperTooltipButtonRef}>{children}</span>
+
   if (!isOpen || errors.length === 0) {
-    return children
+    return childSpan
   }
 
   const TranslatedErrors = errors.map(error =>
@@ -34,7 +36,7 @@ const TooltipHoverOnSave = ({ isOpen, children, errors, description }) => {
 
   return (
     <>
-      <span ref={wrapperTooltipButtonRef}>{children}</span>
+      {childSpan}
       <Wrapper ref={wrapperTooltipCardRef}>
         <TooltipDownV2>
           <TooltipArrowDown />

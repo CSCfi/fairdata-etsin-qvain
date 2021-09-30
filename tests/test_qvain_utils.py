@@ -157,7 +157,7 @@ class TestCheckDatasetEditPermission(BaseTest):
     deniedOrNotExistResult = ({"PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."}, 403)
 
     nonStandardCatalogResult = ({
-        "PermissionError": f"Editing datasets from catalog nonstandard is not supported by Qvain."
+        "PermissionError": "Editing datasets from catalog nonstandard is not supported by Qvain."
     }, 403)
 
     @pytest.fixture

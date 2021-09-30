@@ -16,8 +16,7 @@ describe('common.files.utils', () => {
 
     describe('when calling add', () => {
       beforeEach(() => {
-        testPromise = new Promise(jest.fn())
-        promiseManager.add(testPromise)
+        testPromise = promiseManager.add(new Promise(jest.fn()))
       })
 
       test('should add promise to promises', () => {
@@ -39,9 +38,8 @@ describe('common.files.utils', () => {
 
     describe('when calling reset', () => {
       beforeEach(() => {
-        testPromise = new Promise(() => {})
+        testPromise = promiseManager.add(new Promise(() => {}))
         testPromise.cancel = jest.fn()
-        promiseManager.add(testPromise)
         promiseManager.reset()
       })
 

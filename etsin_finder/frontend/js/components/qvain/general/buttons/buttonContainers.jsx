@@ -10,7 +10,7 @@ export const ButtonGroup = styled.div`
   border-radius: 4px;
   background-color: #fff;
   margin-bottom: 12px;
-  overflow: overlay;
+  overflow: hidden;
 
   > ${ButtonContainer} {
     margin-top: 0;
