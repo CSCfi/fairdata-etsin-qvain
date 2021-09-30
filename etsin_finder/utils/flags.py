@@ -19,6 +19,7 @@ default_supported_flags = {
     "UI.SHOW_UNSUPPORTED",
     "UI.NEW_DATASETS_VIEW",
     "PERMISSIONS.SHARE_PROJECT",
+    "PERMISSIONS.WRITE_LOCK",
     "MATOMO_TRACKING",
     "CROSSREF_API",
 }

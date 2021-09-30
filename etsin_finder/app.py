@@ -71,6 +71,7 @@ def add_restful_resources(app):
         QvainDataset,
         QvainDatasets,
         QvainDatasetFiles,
+        QvainDatasetLock,
         FileCharacteristics,
     )
 
@@ -98,6 +99,7 @@ def add_restful_resources(app):
     api.add_resource(QvainDatasets, "/api/qvain/datasets")
     api.add_resource(QvainDataset, "/api/qvain/datasets/<id:cr_id>")
     api.add_resource(QvainDatasetFiles, "/api/qvain/datasets/<id:cr_id>/files")
+    api.add_resource(QvainDatasetLock, "/api/qvain/datasets/<id:cr_id>/lock")
 
     # Qvain API RPC endpoints
     api.add_resource(
@@ -212,6 +214,9 @@ def create_app(testing=None):
     app.mail = Mail(app)
     app.cr_cache = CatalogRecordCache(app)
     app.cr_permission_cache = CatalogRecordCache(app, ttl=60, prefix="cr_permission_")
+    app.cr_lock_cache = CatalogRecordCache(
+        app, ttl=60, prefix="cr_lock_", noreply=False
+    )
     app.rems_cache = RemsCache(app)
     app.url_map.converters["id"] = IdentifierConverter
 

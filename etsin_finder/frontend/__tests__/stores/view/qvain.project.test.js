@@ -28,10 +28,6 @@ describe('Projects', () => {
     test('should call makeObservable', () => {
       expect(makeObservable).to.have.beenCalledWith(projects)
     })
-
-    test('should set readonly', () => {
-      projects.readonly.should.be.false
-    })
   })
 
   describe('when calling reset', () => {

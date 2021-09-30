@@ -105,12 +105,15 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
 
     """
     if refresh_cache:
-        return current_app.cr_cache.update_cache(cr_id, _get_cr_from_metax(cr_id, check_removed_if_not_exist))
+        cr = _get_cr_from_metax(cr_id, check_removed_if_not_exist)
+        current_app.cr_cache.update(cr_id, cr)
+        return cr
 
-    cr = current_app.cr_cache.get_from_cache(cr_id)
+    cr = current_app.cr_cache.get(cr_id)
     if cr is None:
         cr = _get_cr_from_metax(cr_id, check_removed_if_not_exist)
-        return current_app.cr_cache.update_cache(cr_id, cr)
+        current_app.cr_cache.update(cr_id, cr)
+        return cr
     else:
         return cr
 
@@ -138,14 +141,15 @@ def get_catalog_record_permissions(cr_id, refresh_cache=False):
     perm = None
     if not refresh_cache:
         # try to get cached permissions
-        perm = current_app.cr_permission_cache.get_from_cache(cr_id)
+        perm = current_app.cr_permission_cache.get(cr_id)
     if perm is None:
         perm = get_perm()
         if perm:
-            return current_app.cr_permission_cache.update_cache(cr_id, perm)
+            current_app.cr_permission_cache.update(cr_id, perm)
+            return perm
         else:
             # getting permissions failed, remove previous entry from cache if any
-            current_app.cr_permission_cache.delete_from_cache(cr_id)
+            current_app.cr_permission_cache.delete(cr_id)
             return None
     else:
         return perm

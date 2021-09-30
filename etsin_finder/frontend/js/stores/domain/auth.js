@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action, runInAction, makeObservable } from 'mobx'
+import { observable, action, computed, runInAction, makeObservable } from 'mobx'
 import axios from 'axios'
 
 class Auth {
@@ -32,6 +32,10 @@ class Auth {
     homeOrganizationName: undefined,
     idaProjects: [],
     isUsingRems: undefined,
+  }
+
+  @computed get userName() {
+    return this.user?.name
   }
 
   @action
