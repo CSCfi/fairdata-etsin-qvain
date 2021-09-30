@@ -50,8 +50,8 @@ const datasetWithChanges = {
 
 describe('getEnterEditAction', () => {
   describe.each([
-    ['IDA', idaDataset, 'published-id', true],
-    ['draft', draftDataset, 'draft-id', true],
+    ['IDA', idaDataset, 'published-id', false],
+    ['draft', draftDataset, 'draft-id', false],
     ['changed', datasetWithChanges, 'changes-id', false],
   ])('given %s dataset', (description, dataset, expectedIdentifier, expectCallEditDataset) => {
     beforeEach(() => {

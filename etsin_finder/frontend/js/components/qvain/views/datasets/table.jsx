@@ -25,6 +25,8 @@ export class DatasetTable extends Component {
 
   componentDidMount() {
     const { loadDatasets } = this.props.Stores.QvainDatasets
+    const { resetQvainStore } = this.props.Stores.Qvain
+    resetQvainStore()
     loadDatasets()
     reaction(
       () => this.props.Stores.Auth.user.name,

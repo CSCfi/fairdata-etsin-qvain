@@ -148,7 +148,7 @@ const FundingAgencyForm = props => {
 
   const { onRemove, value } = props
   const { formData, addedFundingAgencies } = value
-  const { readonly } = props.Stores.Qvain.Projects
+  const { readonly } = props.Stores.Qvain
   const { lang } = props.Stores.Locale
 
   return (
@@ -158,6 +158,7 @@ const FundingAgencyForm = props => {
         onEdit={onEdit}
         onRemove={onRemove}
         lang={lang}
+        readonly={readonly}
       />
       <LabelLarge htmlFor="project-funding-organization">
         <Translate content="qvain.project.inputs.fundingAgency.contributorType.organization.label" />{' '}
@@ -201,14 +202,16 @@ FundingAgencyForm.propTypes = {
   onChange: PropTypes.func.isRequired,
 }
 
-const AddedAgencies = ({ agencies, onRemove, onEdit, lang }) => (
+const AddedAgencies = ({ agencies, onRemove, onEdit, lang, readonly }) => (
   <div>
     {agencies.map(agency => (
       <AgencyLabel color="#007fad" margin="0 0.5em 0.5em 0" key={agency.id}>
         <PaddedWord onClick={() => onEdit(agency.id)}>
           {agency.organization.organization.name[lang] || agency.organization.organization.name.und}
         </PaddedWord>
-        <FontAwesomeIcon onClick={() => onRemove(agency.id)} icon={faTimes} size="xs" />
+        {!readonly && (
+          <FontAwesomeIcon onClick={() => onRemove(agency.id)} icon={faTimes} size="xs" />
+        )}
       </AgencyLabel>
     ))}
   </div>
@@ -219,10 +222,12 @@ AddedAgencies.propTypes = {
   onRemove: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
+  readonly: PropTypes.bool,
 }
 
 AddedAgencies.defaultProps = {
   agencies: [],
+  readonly: false,
 }
 
 /**

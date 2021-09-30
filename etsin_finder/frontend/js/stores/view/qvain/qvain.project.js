@@ -51,7 +51,6 @@ export const projectSchema = yup.object().shape({
 
 class Projects {
   constructor(Parent) {
-    this.readonly = Parent.readonly
     this.Parent = Parent
     makeObservable(this)
   }

@@ -420,7 +420,7 @@ const CreatableSelectComponent = ({
         {renderForm()}
       </div>
       <div className="col-1">
-        {allowReset ? (
+        {allowReset && !readonly ? (
           <DeleteButton
             type="button"
             onClick={onReset}

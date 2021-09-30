@@ -55,6 +55,7 @@ describe('given required props', () => {
     },
     Env: {
       getQvainUrl: jest.fn(),
+      Flags: { flagEnabled: () => false },
     },
   }
 

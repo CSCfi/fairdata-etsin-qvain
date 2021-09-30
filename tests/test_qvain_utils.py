@@ -162,12 +162,9 @@ class TestCheckDatasetEditPermission(BaseTest):
         403,
     )
 
-    nonStandardCatalogResult = (
-        {
-            "PermissionError": "Editing datasets from catalog nonstandard is not supported by Qvain."
-        },
-        403,
-    )
+    nonStandardCatalogResult = ({
+        "PermissionError": "Editing datasets from catalog nonstandard is not supported by Qvain."
+    }, 403)
 
     @pytest.fixture
     def flagged_app(self, app):
