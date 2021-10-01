@@ -5,7 +5,7 @@ import { disposeOnUnmount } from 'mobx-react'
 import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
 // If label is missing from selected option, use one from the options if available.
-// Allows having default options without have hardcoded labels.
+// Allows having default options without requiring hardcoded labels.
 export const getCurrentOption = (model, options, getter) => {
   if (Array.isArray(getter)) {
     return getter.map(value => getSingleOption(model, options, value))
@@ -77,6 +77,13 @@ export const getOptions = async (model, ref, inputValue) => {
   if (!inputValue) return []
   const api = refDataApi(ref)
   const response = await api.get(`_search?size=100&q=*${inputValue}*`)
+  return parseRefResponse(response, model)
+}
+
+// Fetch all options
+export const getAllOptions = async (model, ref) => {
+  const api = refDataApi(ref)
+  const response = await api.get(`_search?size=1000`)
   return parseRefResponse(response, model)
 }
 

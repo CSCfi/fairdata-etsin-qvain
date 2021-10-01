@@ -6,6 +6,7 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
+import LockNotification from './lockNotification'
 import SubmitButtons from './submitButtons'
 import {
   StickySubHeaderWrapper,
@@ -70,6 +71,7 @@ const StickyHeader = ({ datasetError, submitButtonsRef, hideSubmitButtons }) => 
           {!hideSubmitButtons && <SubmitButtons submitButtonsRef={submitButtonsRef} />}
         </ButtonContainer>
       </CustomSubHeader>
+      <LockNotification />
       <PasState />
       <DeprecatedState />
       {submitted ? (

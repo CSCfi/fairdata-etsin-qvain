@@ -58,16 +58,16 @@ describe('Provenances', () => {
         Provenance,
         ProvenanceModel,
         'provenances',
-        ['associations', 'usedEntities', 'spatials'],
+        ['associations', 'usedEntities', 'locations'],
       ]
 
       expect(provenances.constructorFunction).to.have.beenCalledWith(...expectedProps)
     })
 
-    describe('when calling saveAndClearSpatials', () => {
+    describe('when calling saveAndClearLocations', () => {
       beforeEach(() => {
         provenances.selectedActor = 'selected'
-        provenances.saveAndClearSpatials()
+        provenances.saveAndClearLocations()
       })
 
       test('should set selectedActor to undefined', () => {
@@ -129,7 +129,7 @@ describe('Provenances', () => {
             fi: '',
             und: '',
           },
-          spatials: {
+          locations: {
             storage: [],
           },
           startDate: undefined,
@@ -158,7 +158,7 @@ describe('Provenances', () => {
         },
         startDate: 1,
         endDate: 2,
-        spatials: { toBackend: jest.fn(() => []) },
+        locations: { toBackend: jest.fn(() => []) },
         outcome: { url: 'outcome_identifier' },
         usedEntities: { toBackend: jest.fn() },
         associations: { toBackend: undefined },
@@ -192,7 +192,7 @@ describe('Provenances', () => {
       })
 
       test('should call spatials and usedEntities toBackend functions', () => {
-        expect(obj.spatials.toBackend).to.have.beenCalledWith()
+        expect(obj.locations.toBackend).to.have.beenCalledWith()
         expect(obj.usedEntities.toBackend).to.have.beenCalledWith()
       })
     })

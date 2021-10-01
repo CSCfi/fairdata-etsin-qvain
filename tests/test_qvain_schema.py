@@ -12,8 +12,6 @@ import json
 
 from .basetest import BaseTest
 
-from etsin_finder.utils.qvain_utils import alter_role_data
-
 from etsin_finder.schemas.qvain_dataset_schema import (
     PersonValidationSchema,
     OrganizationValidationSchema,
@@ -25,45 +23,31 @@ from etsin_finder.schemas.qvain_dataset_schema import (
 def getPerson(replace=None, delete=None):
     """Generate valid Person."""
     return {
+        '@type': 'Person',
         'name': 'Teppo',
         'email': 'email@example.com',
-        'identifier': 'person_identifier'
+        'identifier': 'person_identifier',
+        'member_of': getOrganization(),
     }
 
 def getOrganization():
     """Generate valid Organization."""
     return {
-        'name': {
-            'en': 'Organization',
-            'fi': 'Järjestö'
-        },
-        'email': 'org@example.com',
-        'identifier': 'organization_identifier'
-    }
-
-def getPersonActor():
-    """Generate valid person Actor."""
-    return {
-        'type': 'person',
-        'roles': ['creator', 'rights_holder'],
-        'person': getPerson(),
-        'organizations': [getOrganization()],
-    }
-
-def getOrganizationActor():
-    """Generate valid organization Actor."""
-    org = getOrganization()
-    childOrg = {
+        '@type': 'Organization',
         'name': {
             'en': 'Child Organization',
         },
         'email': 'child-org@example.com',
-        'identifier': 'child_organization_identifier'
-    }
-    return {
-        'type': 'organization',
-        'roles': ['creator', 'publisher'],
-        'organizations': [org, childOrg],
+        'identifier': 'child_organization_identifier',
+        'is_part_of': {
+            '@type': 'Organization',
+            'name': {
+                'en': 'Organization',
+                'fi': 'Järjestö'
+            },
+            'email': 'org@example.com',
+            'identifier': 'organization_identifier'
+        }
     }
 
 
@@ -211,132 +195,56 @@ class TestQvainLightDatasetSchemaActor(BaseTest):
 
     def test_organization_actor(self):
         """Test ok organization actor."""
-        actor = getOrganizationActor()
+        actor = getOrganization()
         errors = ActorValidationSchema().validate(actor)
         assert not errors
 
     def test_person_actor(self):
         """Test ok person actor."""
-        actor = getPersonActor()
+        actor = getPerson()
+        print(actor)
         errors = ActorValidationSchema().validate(actor)
         assert not errors
 
     def test_actor_invalid_type(self):
         """Test actor with invalid type."""
-        actor = getPersonActor()
-        actor['type'] = 'organiperson'
+        actor = getPerson()
+        actor['@type'] = 'Organiperson'
         errors = ActorValidationSchema().validate(actor)
-        assert errors
+        assert errors == {'type': ['Unsupported value: Organiperson']}
 
     def test_person_actor_wrong_type(self):
         """Test person actor with wrong type."""
-        actor = getPersonActor()
-        actor['type'] = 'organization'
+        actor = getPerson()
+        actor['@type'] = 'Organization'
         errors = ActorValidationSchema().validate(actor)
-        assert errors
+        assert errors == {'member_of': ['Unknown field.'], 'name': ['Not a valid mapping type.']}
 
     def test_organization_actor_wrong_type(self):
         """Test organization actor with wrong type."""
-        actor = getOrganizationActor()
-        actor['type'] = 'person'
+        actor = getOrganization()
+        actor['@type'] = 'Person'
         errors = ActorValidationSchema().validate(actor)
-        assert errors
-
-    def test_actor_organizations_empty(self):
-        """Test actor with empty organizations."""
-        actor = getPersonActor()
-        actor['organizations'] = []
-        errors = ActorValidationSchema().validate(actor)
-        assert errors
+        assert errors == {
+            'is_part_of': ['Unknown field.'],
+            'member_of': ['Missing data for required field.'],
+            'name': ['Not a valid string.']
+        }
 
     def test_actor_organizations_missing(self):
         """Test actor with missing organizations field."""
-        actor = getPersonActor()
-        del actor['organizations']
+        actor = getPerson()
+        del actor['member_of']
         errors = ActorValidationSchema().validate(actor)
-        assert errors
+        assert errors == {'member_of': ['Missing data for required field.']}
 
     def test_actor_invalid_organization(self):
         """Test actor with invalid organization."""
-        actor = getPersonActor()
-        org = getOrganization()
-        del org['name']
-        actor['organizations'].append(org)
+        actor = getPerson()
+        del actor['member_of']['name']
         errors = ActorValidationSchema().validate(actor)
-        assert errors
+        assert errors == {'member_of': {'name': ['Missing data for required field.']}}
 
-    def test_actor_roles_missing(self):
-        """Test actor with missing roles field."""
-        actor = getPersonActor()
-        del actor['roles']
-        errors = ActorValidationSchema().validate(actor)
-        assert errors
-
-    def test_actor_roles_empty(self):
-        """Test actor with empty roles."""
-        actor = getPersonActor()
-        actor['roles'] = []
-        errors = ActorValidationSchema().validate(actor)
-        assert errors
-
-    def test_actor_roles_invalid_role(self):
-        """Test actor with an invalid role."""
-        actor = getPersonActor()
-        actor['roles'].append('')
-        errors = ActorValidationSchema().validate(actor)
-        assert errors
-
-
-class TestQvainLightDatasetAlterRoleData(BaseTest):
-    """Test converting roles from Qvain to Metax schema."""
-
-    def test_roles(self):
-        """Test that roles are filtered correctly."""
-        creator = getOrganizationActor()
-        creator['roles'] = ['creator']
-        also_creator = getOrganizationActor()
-        also_creator['roles'] = ['creator']
-        not_creator = getPersonActor()
-        not_creator['roles'] = ['publisher']
-
-        creators = alter_role_data([creator, also_creator, not_creator], 'creator')
-        assert len(creators) == 2
-
-    def test_organization_actor(self):
-        """Test organization actor."""
-        qvain_actors = [getOrganizationActor()]
-        creators = alter_role_data(qvain_actors, 'creator')
-        actor = creators[0]
-        assert actor == {
-            '@type': 'Organization',
-            'email': 'child-org@example.com',
-            'name': {'en': 'Child Organization' },
-            'identifier': 'child_organization_identifier',
-            'is_part_of': {
-                '@type': 'Organization',
-                'email': 'org@example.com',
-                'name': {'en': 'Organization', 'fi': 'Järjestö' },
-                'identifier': 'organization_identifier'
-            },
-        }
-
-    def test_person_actor(self):
-        """Test person actor."""
-        qvain_actors = [getPersonActor()]
-        creators = alter_role_data(qvain_actors, 'creator')
-        actor = creators[0]
-        assert actor == {
-            '@type': 'Person',
-            'email': 'email@example.com',
-            'name': 'Teppo',
-            'identifier': 'person_identifier',
-            'member_of': {
-                '@type': 'Organization',
-                'email': 'org@example.com',
-                'name': {'en': 'Organization', 'fi': 'Järjestö' },
-                'identifier': 'organization_identifier'
-            },
-        }
 
 class TestQvainDatasetDataCatalog(BaseTest):
     """Test allowed data catalogs"""

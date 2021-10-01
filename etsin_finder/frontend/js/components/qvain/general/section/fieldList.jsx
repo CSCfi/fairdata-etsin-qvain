@@ -6,11 +6,12 @@ import { observer } from 'mobx-react'
 import { ButtonGroup, ButtonLabel, EditButton, DeleteButton, ButtonContainer } from '../buttons'
 import { useStores } from '../../utils/stores'
 
-const FieldList = ({ Field, lang, translationsRoot, disableNoItemsText }) => {
+const FieldList = ({ Field, disableNoItemsText }) => {
   const {
-    Locale: { getValueTranslation },
+    Locale: { getValueTranslation, lang },
   } = useStores()
   const { remove, edit, storage, readonly } = Field
+  const translationsRoot = Field.translationsRoot
 
   if (!storage.length) {
     if (disableNoItemsText) return null
@@ -43,8 +44,6 @@ const FieldList = ({ Field, lang, translationsRoot, disableNoItemsText }) => {
 
 FieldList.propTypes = {
   Field: PropTypes.object.isRequired,
-  lang: PropTypes.string.isRequired,
-  translationsRoot: PropTypes.string.isRequired,
   disableNoItemsText: PropTypes.bool,
 }
 

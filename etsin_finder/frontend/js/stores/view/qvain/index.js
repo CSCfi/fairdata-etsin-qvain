@@ -9,6 +9,7 @@ import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/consta
 import Resources from './qvain.resources'
 import Files from './qvain.files'
 import Submit from './qvain.submit'
+import Lock from './qvain.lock'
 import track, { touch } from './track'
 
 class Qvain extends Resources {
@@ -19,6 +20,7 @@ class Qvain extends Resources {
     this.Submit = new Submit(this)
     this.resetQvainStore()
     makeObservable(this)
+    this.Lock = new Lock(this, Auth)
   }
 
   cumulativeStateSchema = cumulativeStateSchema
@@ -34,8 +36,6 @@ class Qvain extends Resources {
   @observable changed = false // has dataset been changed
 
   @observable deprecated = false
-
-  @observable externalResourceInEdit = EmptyExternalResource
 
   @observable unsupported = null
 
@@ -60,12 +60,6 @@ class Qvain extends Resources {
 
     this.useDoi = false
 
-    // Reset External resources related data
-    this.externalResources = []
-    this.externalResourceInEdit = EmptyExternalResource
-    this.extResFormOpen = false
-    this.resourceInEdit = undefined
-
     this.changed = false
     this.deprecated = false
 
@@ -79,43 +73,6 @@ class Qvain extends Resources {
       this.Submit.hasValidated = false
       this.Submit.prevalidate()
     }
-  }
-
-  @action saveExternalResource = resource => {
-    const existing = this.externalResources.find(r => r.id === resource.id)
-    if (existing !== undefined) {
-      existing.title = resource.title
-      existing.accessUrl = resource.accessUrl
-      existing.downloadUrl = resource.downloadUrl
-      existing.useCategory = resource.useCategory
-    } else {
-      // Create an internal identifier for the resource to help with UI interaction
-      const newId = this.createExternalResourceUIId()
-      const newResource = ExternalResource(
-        newId,
-        resource.title,
-        resource.accessUrl,
-        resource.downloadUrl,
-        resource.useCategory
-      )
-      this.externalResources = [...this.externalResources, newResource]
-    }
-    this.changed = true
-  }
-
-  @action
-  editExternalResource = externalResource => {
-    this.externalResourceInEdit = { ...externalResource }
-  }
-
-  @computed
-  get addedExternalResources() {
-    return this.externalResources
-  }
-
-  @computed
-  get getExternalResourceInEdit() {
-    return this.externalResourceInEdit
   }
 
   // FILE PICKER STATE MANAGEMENT
@@ -180,6 +137,10 @@ class Qvain extends Resources {
       }
     })
     return result
+  }
+
+  @computed get datasetIdentifier() {
+    return this.original?.identifier
   }
 
   @computed
@@ -262,27 +223,6 @@ class Qvain extends Resources {
       this.useDoi = false
     }
 
-    // External resources
-    const remoteResources = researchDataset.remote_resources
-    if (remoteResources !== undefined) {
-      this.externalResources = remoteResources.map(r =>
-        ExternalResource(
-          // Iterate over existing elements from MobX, to assign them a local externalResourceUIId
-          remoteResources.indexOf(r),
-          r.title,
-          r.access_url ? r.access_url.identifier : '',
-          r.download_url ? r.download_url.identifier : '',
-          r.use_category
-            ? {
-                label: r.use_category.pref_label.en,
-                value: r.use_category.identifier,
-              }
-            : null
-        )
-      )
-      this.extResFormOpen = true
-    }
-
     // Load v2 files
     await this.Files.openDataset(dataset)
   }
@@ -303,26 +243,6 @@ class Qvain extends Resources {
 
   @action setOriginal = newOriginal => {
     this.original = newOriginal
-  }
-
-  // EXTERNAL FILES
-
-  @observable externalResources = []
-
-  @observable extResFormOpen = false
-
-  createExternalResourceUIId = (resources = this.externalResources) => {
-    const latestId = resources.length > 0 ? Math.max(...resources.map(r => r.id)) : 0
-    return latestId + 1
-  }
-
-  @action removeExternalResource = id => {
-    this.externalResources = this.externalResources.filter(r => r.id !== id)
-    this.changed = true
-  }
-
-  @action setResourceInEdit = id => {
-    this.resourceInEdit = this.externalResources.find(r => r.id === id)
   }
 
   // PAS
@@ -384,6 +304,11 @@ class Qvain extends Resources {
 
   @computed
   get readonly() {
+    if (this.Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK') && this.Lock.enabled) {
+      if (this.original && !this.Lock.haveLock) {
+        return true
+      }
+    }
     return (
       this.preservationState >= 80 &&
       this.preservationState !== 100 &&
@@ -412,15 +337,5 @@ class Qvain extends Resources {
       }
     })
 }
-
-export const ExternalResource = (id, title, accessUrl, downloadUrl, useCategory) => ({
-  id,
-  title,
-  accessUrl,
-  downloadUrl,
-  useCategory,
-})
-
-export const EmptyExternalResource = ExternalResource(undefined, '', '', '', '')
 
 export default Qvain

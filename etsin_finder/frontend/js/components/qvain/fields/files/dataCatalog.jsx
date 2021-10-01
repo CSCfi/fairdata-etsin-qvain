@@ -24,7 +24,7 @@ const DataCatalog = () => {
     Qvain: {
       dataCatalog,
       setDataCatalog,
-      externalResources,
+      ExternalResources,
       original,
       isPas,
       setUseDoi,
@@ -63,7 +63,7 @@ const DataCatalog = () => {
       })
   }
 
-  const selected = [...externalResources]
+  const hasExternalResources = ExternalResources.storage.length > 0
 
   if (lang) updateOptions()
   // PAS catalog cannot be selected by the user
@@ -71,7 +71,7 @@ const DataCatalog = () => {
   const catalogSelectValue = availableOptions.find(opt => opt.value === dataCatalog)
   const isDataCatalogNotDecided =
     !original?.data_catalog || original?.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.DFT
-  const isDisabled = selected.length > 0 || !isDataCatalogNotDecided || isPas
+  const isDisabled = hasExternalResources.length > 0 || !isDataCatalogNotDecided || isPas
 
   return (
     <Card>

@@ -1,18 +1,25 @@
+import parseDateISO from 'date-fns/parseISO'
 import parseDate from 'date-fns/parse'
 import * as yup from 'yup'
 
-function validateStringDate() {
+function validateDate({ allowTime } = {}) {
   // eslint-disable-next-line func-names
   return this.test('is a date string', undefined, function (value) {
     const { path, createError } = this
     if (!value) {
       return true
     }
-    const parsed = parseDate(value, 'yyyy-MM-dd', new Date())
-    if (!parsed || Number.isNaN(parsed.getTime())) {
-      return createError({ path, message: 'qvain.validationMessages.types.string.date' })
+
+    let parsed = parseDate(value, 'yyyy-MM-dd', new Date())
+    if (allowTime) {
+      parsed = parseDateISO(value)
     }
-    return true
+
+    if (parsed && !Number.isNaN(parsed.getTime())) {
+      return true
+    }
+
+    return createError({ path, message: 'qvain.validationMessages.types.string.date' })
   })
 }
 
@@ -34,5 +41,5 @@ function validateStringNumber() {
   })
 }
 
-yup.addMethod(yup.string, 'date', validateStringDate)
+yup.addMethod(yup.string, 'date', validateDate)
 yup.addMethod(yup.string, 'number', validateStringNumber)

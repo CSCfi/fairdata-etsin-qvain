@@ -1,82 +1,6 @@
 """Frontend test data for qvain tests."""
 from etsin_finder.utils.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 
-original_actors_list = [
-    {
-        "type": "person",
-        "roles": ["creator", "publisher"],
-        "person": {
-            "name": "Teppo Testaaja",
-            "email": "teppo.testaaja@hotmail.com",
-            "identifier": "https://doi.com/teppotestaa1337",
-        },
-        "organizations": [
-            {
-                "name": {
-                    "fi": "Suomen Pankki",
-                    "und": "Suomen Pankki",
-                    "en": "Suomen Pankki",
-                    "sv": "Finlands bank",
-                },
-                "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02022481",
-            },
-            {
-                "name": {"en": "testiosasto"},
-                "email": "testiosasto@suomenpankki.fi",
-            },
-        ],
-    },
-    {
-        "type": "organization",
-        "roles": ["creator", "curator", "rights_holder", "contributor"],
-        "organizations": [
-            {
-                "name": {
-                    "fi": "Suomen Pankki",
-                    "und": "Suomen Pankki",
-                    "en": "Suomen Pankki",
-                    "sv": "Finlands bank",
-                },
-                "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02022481",
-            }
-        ],
-    },
-]
-
-expected_actors_list = [
-    {
-        "@type": "Person",
-        "name": "Teppo Testaaja",
-        "email": "teppo.testaaja@hotmail.com",
-        "identifier": "https://doi.com/teppotestaa1337",
-        "member_of": {
-            "@type": "Organization",
-            "name": {"en": "testiosasto"},
-            "email": "testiosasto@suomenpankki.fi",
-            "is_part_of": {
-                "@type": "Organization",
-                "name": {
-                    "fi": "Suomen Pankki",
-                    "und": "Suomen Pankki",
-                    "en": "Suomen Pankki",
-                    "sv": "Finlands bank",
-                },
-                "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02022481",
-            },
-        },
-    },
-    {
-        "@type": "Organization",
-        "name": {
-            "fi": "Suomen Pankki",
-            "und": "Suomen Pankki",
-            "en": "Suomen Pankki",
-            "sv": "Finlands bank",
-        },
-        "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02022481",
-    },
-]
-
 original_project_list = [
     {
         "details": {
@@ -88,8 +12,16 @@ original_project_list = [
             },
         },
         "organizations": [
-            [
-                {
+            {
+                "@type": "Organization",
+                "name": {
+                    "en": "Yliopistopalvelut",
+                    "fi": "Yliopistopalvelut",
+                    "und": "Yliopistopalvelut",
+                },
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901-H01",
+                "is_part_of": {
+                    "@type": "Organization",
                     "name": {
                         "en": "University of Helsinki",
                         "fi": "Helsingin yliopisto",
@@ -97,42 +29,30 @@ original_project_list = [
                     },
                     "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901",
                 },
-                {
-                    "name": {
-                        "en": "Yliopistopalvelut",
-                        "fi": "Yliopistopalvelut",
-                        "und": "Yliopistopalvelut",
-                    },
-                    "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901-H01",
-                },
-            ]
+            },
         ],
         "fundingAgencies": [
             {
-                "organization": [
-                    {
-                        "name": {
-                            "en": "Aalto University",
-                            "fi": "Aalto yliopisto",
-                            "und": "Aalto yliopisto",
-                        },
-                        "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
+                "@type": "Organization",
+                "name": {
+                    "en": "School services, ARTS",
+                    "fi": "School services, ARTS",
+                    "und": "School services, ARTS",
+                },
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A800",
+                "is_part_of": {
+                    "@type": "Organization",
+                    "name": {
+                        "en": "Aalto University",
+                        "fi": "Aalto yliopisto",
+                        "und": "Aalto yliopisto",
                     },
-                    {
-                        "name": {
-                            "en": "School services, ARTS",
-                            "fi": "School services, ARTS",
-                            "und": "School services, ARTS",
-                        },
-                        "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A800",
-                    },
-                ],
-                "contributorTypes": [
+                    "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
+                },
+                "contributor_type": [
                     {
                         "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Other",
-                        "label": {"en": "Other", "fi": "Muu", "und": "Muu"},
-                        "definition": {"en": "other", "fi": "oerhhrh"},
-                        "inScheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+                        "pref_label": {"en": "Other", "fi": "Muu", "und": "Muu"},
                     }
                 ],
             }
@@ -150,6 +70,7 @@ expected_project_list = [
         },
         "source_organization": [
             {
+                "@type": "Organization",
                 "name": {
                     "en": "Yliopistopalvelut",
                     "fi": "Yliopistopalvelut",
@@ -165,7 +86,6 @@ expected_project_list = [
                     "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901",
                     "@type": "Organization",
                 },
-                "@type": "Organization",
             }
         ],
         "has_funding_agency": [
@@ -194,8 +114,6 @@ expected_project_list = [
                             "fi": "Muu",
                             "und": "Muu",
                         },
-                        "definition": {"en": "other", "fi": "oerhhrh"},
-                        "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
                     }
                 ],
             }
@@ -275,9 +193,9 @@ expected_custom_rights = {
 original_remote_resources = [
     {
         "title": "remote_resource",
-        "accessUrl": "access url",
-        "downloadUrl": "download url",
-        "useCategory": {"value": "use category"},
+        "access_url": {"identifier": "access url"},
+        "download_url": {"identifier": "download url"},
+        "use_category": {"identifier": "use category"},
     }
 ]
 
@@ -295,18 +213,35 @@ original_complete_dataset = {
     "description": {"en": "desc", "fi": ""},
     "identifiers": ["https://doin.com/some_identifier"],
     "keywords": ["qwe"],
-    "theme": ["http://www.yso.fi/onto/koko/p46606"],
-    "actors": [
+    "theme": [{"identifier": "http://www.yso.fi/onto/koko/p46606"}],
+    "access_rights": {
+        "license": [
+            {
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0"
+            }
+        ],
+        "access_type": {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo"
+        },
+        "restriction_grounds": [
+            {
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/copyright"
+            }
+        ],
+        "available": "2021-07-14",
+    },
+    "creator": [
         {
-            "type": "person",
-            "roles": ["creator", "publisher"],
-            "person": {
-                "name": "Teppo Testaaja",
-                "email": "teppo.testaaja@hotmail.com",
-                "identifier": "https://doi.com/teppotestaa1337",
-            },
-            "organizations": [
-                {
+            "@type": "Person",
+            "name": "Teppo Testaaja",
+            "email": "teppo.testaaja@hotmail.com",
+            "identifier": "https://doi.com/teppotestaa1337",
+            "member_of": {
+                "@type": "Organization",
+                "name": {"en": "testiosasto"},
+                "email": "testiosasto@suomenpankki.fi",
+                "is_part_of": {
+                    "@type": "Organization",
                     "name": {
                         "en": "Suomen Pankki",
                         "fi": "Suomen Pankki",
@@ -315,75 +250,114 @@ original_complete_dataset = {
                     },
                     "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02022481",
                 },
-                {"name": {"en": "testiosasto"}, "email": "testiosasto@suomenpankki.fi"},
-            ],
+            },
         },
         {
-            "type": "organization",
-            "roles": ["creator", "curator", "rights_holder", "contributor"],
-            "organizations": [
-                {
-                    "name": {
-                        "en": "Suomen Pankki",
-                        "fi": "Suomen Pankki",
-                        "sv": "Finlands bank",
-                        "und": "Suomen Pankki",
-                    },
-                    "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02022481",
-                }
-            ],
+            "@type": "Organization",
+            "name": {
+                "en": "Suomen Pankki",
+                "fi": "Suomen Pankki",
+                "sv": "Finlands bank",
+                "und": "Suomen Pankki",
+            },
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02022481",
+        },
+    ],
+    "publisher": {
+        "@type": "Person",
+        "name": "Teppo Testaaja",
+        "email": "teppo.testaaja@hotmail.com",
+        "identifier": "https://doi.com/teppotestaa1337",
+        "member_of": {
+            "@type": "Organization",
+            "name": {"en": "testiosasto"},
+            "email": "testiosasto@suomenpankki.fi",
+            "is_part_of": {
+                "@type": "Organization",
+                "name": {
+                    "en": "Suomen Pankki",
+                    "fi": "Suomen Pankki",
+                    "sv": "Finlands bank",
+                    "und": "Suomen Pankki",
+                },
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02022481",
+            },
+        },
+    },
+    "curator": [
+        {
+            "@type": "Organization",
+            "name": {
+                "en": "Suomen Pankki",
+                "fi": "Suomen Pankki",
+                "sv": "Finlands bank",
+                "und": "Suomen Pankki",
+            },
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02022481",
+        },
+    ],
+    "rights_holder": [
+        {
+            "@type": "Organization",
+            "name": {
+                "en": "Suomen Pankki",
+                "fi": "Suomen Pankki",
+                "sv": "Finlands bank",
+                "und": "Suomen Pankki",
+            },
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02022481",
+        },
+    ],
+    "contributor": [
+        {
+            "@type": "Organization",
+            "name": {
+                "en": "Suomen Pankki",
+                "fi": "Suomen Pankki",
+                "sv": "Finlands bank",
+                "und": "Suomen Pankki",
+            },
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02022481",
         },
     ],
     "infrastructure": [
         {
-            "name": {
-                "en": "Biocenter Finland",
-                "fi": "Biokeskus Suomi",
-                "und": "Biokeskus Suomi",
-            },
-            "url": "http://urn.fi/urn:nbn:fi:research-infras-2016072515",
-        }
-    ],
-    "restrictionGrounds": "http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/copyright",
-    "embargoDate": "2021-07-14",
-    "license": [
-        {
-            "name": {
-                "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
-                "fi": "Creative Commons Nimeä 4.0 Kansainvälinen (CC BY 4.0)",
-                "und": "Creative Commons Nimeä 4.0 Kansainvälinen (CC BY 4.0)",
-            },
-            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+            "identifier": "http://urn.fi/urn:nbn:fi:research-infras-2016072515",
         }
     ],
     "remote_resources": [
         {
             "id": 0,
             "title": "qew",
-            "accessUrl": "",
-            "downloadUrl": "",
-            "useCategory": {
-                "label": "Publication",
-                "value": "http://uri.suomi.fi/codelist/fairdata/use_category/code/publication",
+            "access_url": "",
+            "download_url": "",
+            "use_category": {
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/use_category/code/publication",
             },
         }
     ],
     "dataCatalog": "urn:nbn:fi:att:data-catalog-att",
     "cumulativeState": 0,
     "useDoi": False,
-    "projects": [
+    "is_output_of": [
         {
-            "details": {
-                "title": {"en": "qwe", "fi": "qweqwe"},
-                "identifier": "test",
-                "fundingIdentifier": "tetets",
-                "funderType": {
-                    "identifier": "http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes"
-                },
+            "name": {"en": "qwe", "fi": "qweqwe"},
+            "identifier": "test",
+            "has_funder_identifier": "tetets",
+            "funder_type": {
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes"
             },
-            "organizations": [
-                [
-                    {
+            "source_organization": [
+                {
+                    "@type": "Organization",
+                    "name": {
+                        "en": "Yliopistopalvelut",
+                        "fi": "Yliopistopalvelut",
+                        "und": "Yliopistopalvelut",
+                    },
+                    "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901-H01",
+                    "is_part_of": {
+                        "@type": "Organization",
                         "name": {
                             "en": "University of Helsinki",
                             "fi": "Helsingin yliopisto",
@@ -392,43 +366,38 @@ original_complete_dataset = {
                         },
                         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901",
                     },
-                    {
-                        "name": {"fi": "Yliopistopalvelut", "und": "Yliopistopalvelut"},
-                        "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901-H01",
-                    },
-                ]
+                },
             ],
-            "fundingAgencies": [
+            "has_funding_agency": [
                 {
-                    "organization": [
-                        {
-                            "name": {
-                                "en": "Aalto University",
-                                "fi": "Aalto yliopisto",
-                                "sv": "Aalto universitetet",
-                                "und": "Aalto yliopisto",
-                            },
-                            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
+                    "@type": "Organization",
+                    "name": {
+                        "en": "School services, ARTS",
+                        "fi": "School services, ARTS",
+                        "und": "School services, ARTS",
+                    },
+                    "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A800",
+                    "is_part_of": {
+                        "@type": "Organization",
+                        "name": {
+                            "en": "Aalto University",
+                            "sv": "Aalto universitetet",
+                            "fi": "Aalto yliopisto",
+                            "und": "Aalto yliopisto",
                         },
-                        {
-                            "name": {
-                                "fi": "School services, ARTS",
-                                "und": "School services, ARTS",
-                            },
-                            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A800",
-                        },
-                    ],
-                    "contributorTypes": [
+                        "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
+                    },
+                    "contributor_type": [
                         {
                             "identifier": "http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Other",
-                            "label": {
+                            "pref_label": {
                                 "en": "Other",
                                 "fi": "Muu",
                                 "sv": "Annan",
                                 "und": "Muu",
                             },
                             "definition": {"en": "other", "fi": "oerhhrh"},
-                            "inScheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
+                            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/contributor_type",
                         }
                     ],
                 }
@@ -467,13 +436,9 @@ original_complete_dataset = {
             "lifecycle_event": {},
         }
     ],
-    "fieldOfScience": ["http://www.yso.fi/onto/okm-tieteenala/ta112"],
-    "datasetLanguage": ["http://lexvo.org/id/iso639-3/udm"],
+    "field_of_science": [{"identifier": "http://www.yso.fi/onto/okm-tieteenala/ta112"}],
+    "language": [{"identifier": "http://lexvo.org/id/iso639-3/udm"}],
     "issuedDate": "2021-06-23",
-    "accessType": {
-        "name": {"en": "Embargo", "fi": "Embargo", "und": "Embargo"},
-        "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo",
-    },
     "original": {
         "id": 2182,
         "identifier": "d986fc86-adfc-4227-8944-df1460d61e7a",
@@ -622,6 +587,7 @@ original_complete_dataset = {
                     "has_funding_agency": [
                         {
                             "name": {
+                                "en": "School services, ARTS",
                                 "fi": "School services, ARTS",
                                 "und": "School services, ARTS",
                             },
@@ -913,7 +879,11 @@ expected_complete_dataset = {
                 },
                 "source_organization": [
                     {
-                        "name": {"fi": "Yliopistopalvelut", "und": "Yliopistopalvelut"},
+                        "name": {
+                            "fi": "Yliopistopalvelut",
+                            "en": "Yliopistopalvelut",
+                            "und": "Yliopistopalvelut",
+                        },
                         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901-H01",
                         "is_part_of": {
                             "name": {
@@ -931,6 +901,7 @@ expected_complete_dataset = {
                 "has_funding_agency": [
                     {
                         "name": {
+                            "en": "School services, ARTS",
                             "fi": "School services, ARTS",
                             "und": "School services, ARTS",
                         },
@@ -1098,7 +1069,11 @@ expected_edited_dataset = {
                 },
                 "source_organization": [
                     {
-                        "name": {"fi": "Yliopistopalvelut", "und": "Yliopistopalvelut"},
+                        "name": {
+                            "fi": "Yliopistopalvelut",
+                            "en": "Yliopistopalvelut",
+                            "und": "Yliopistopalvelut",
+                        },
                         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/01901-H01",
                         "is_part_of": {
                             "name": {
@@ -1116,6 +1091,7 @@ expected_edited_dataset = {
                 "has_funding_agency": [
                     {
                         "name": {
+                            "en": "School services, ARTS",
                             "fi": "School services, ARTS",
                             "und": "School services, ARTS",
                         },

@@ -1,74 +1,78 @@
 """Validation schemas for form data coming in from Qvain"""
 from marshmallow import Schema, fields, validates_schema, ValidationError, validate
 from marshmallow.validate import Length, OneOf
+from marshmallow_oneofschema import OneOfSchema
+
+data_catalog_matcher = "^urn:nbn:fi:att:data-catalog-(ida|att|pas|dft)$"
 
 
-data_catalog_matcher = '^urn:nbn:fi:att:data-catalog-(ida|att|pas|dft)$'
+class ReferenceObjectValidationSchema(Schema):
+    """Validation schema for generic reference data objects."""
 
-class PersonValidationSchema(Schema):
-    """Validation schema for person."""
+    identifier = fields.URL(required=True)
 
-    name = fields.Str(
-        required=True,
-        validate=Length(min=1)
-    )
-    email = fields.Email()
-    identifier = fields.Str()
+
+class RemoteResourceDocumentValidationSchema(Schema):
+    """Validation schema for generic reference data objects."""
+
+    identifier = fields.URL()
+
+
+class RemoteResourceValidationSchema(Schema):
+    """Validation schema for remote resources."""
+
+    title = fields.String(required=True)
+    use_category = fields.Nested(ReferenceObjectValidationSchema, required=True)
+    download_url = fields.Nested(RemoteResourceDocumentValidationSchema)
+    access_url = fields.Nested(RemoteResourceDocumentValidationSchema)
 
 
 class OrganizationValidationSchema(Schema):
-    """Validation schema for organization."""
+    """Validation schema for organizations."""
 
-    # At least one name translation is needed
-    name = fields.Dict(
-        required=True,
-        validate=lambda names: len(names) > 0 and all(type(v) is str and len(v) > 0 for v in names.values())
-    )
+    identifier = fields.String()
+    name = fields.Dict(required=True,
+                       validate=lambda names: len(names) > 0 and all(type(v) is str and len(v) > 0 for v in names.values()))
     email = fields.Email()
-    identifier = fields.Str()
+    contributor_type = fields.List(fields.Dict())
+    is_part_of = fields.Nested(lambda: OrganizationValidationSchema)
+
+    class Meta:
+        """Meta options for validation."""
+
+        include = {"@type": fields.Str(required=True)}
 
 
-class ActorValidationSchema(Schema):
+class PersonValidationSchema(Schema):
+    """Validation schema for persons."""
+
+    identifier = fields.String()
+    name = fields.String(required=True, validate=Length(min=1))
+    email = fields.Email()
+    member_of = fields.Nested(OrganizationValidationSchema, required=True)
+
+    class Meta:
+        """Meta options for validation."""
+
+        include = {"@type": fields.Str(required=True)}
+
+
+class ActorValidationSchema(OneOfSchema):
     """Validation schema for actors."""
 
-    type = fields.Str(
-        required=True,
-        validate=Length(min=1)
-    )
-    roles = fields.List(
-        fields.Str(validate=Length(min=1)),
-        validate=Length(min=1),
-        required=True
-    )
+    type_schemas = {
+        "Person": PersonValidationSchema,
+        "Organization": OrganizationValidationSchema,
+    }
 
-    person = fields.Nested(PersonValidationSchema)
-
-    organizations = fields.List(
-        fields.Nested(OrganizationValidationSchema),
-        required=True,
-        validate=Length(min=1)
-    )
-
-    @validates_schema
-    def validate_person(self, data, **kwargs):
-        """Require person if actor is a person.
-
-        Args:
-            data (dict): -
-
-        Raises:
-            ValidationError: A validation error occurred.
-
-        """
-        if data.get('type') == 'person':
-            if not data.get('person'):
-                raise ValidationError('Person is required for person actor.')
-        elif data.get('type') == 'organization':
-            if data.get('person'):
-                raise ValidationError(
-                    'Person not allowed for organization actor.')
+    def get_data_type(self, data):
+        """Determine which schema to use for data"""
+        typ = type(data) is dict and data.get("@type")
+        if typ:
+            return typ
         else:
-            raise ValidationError('Invalid actor type.')
+            raise Exception("Missing or unknown actor type")
+
 
 class LicenseValidationSchema(Schema):
     """Validation schema for licenses."""
@@ -76,61 +80,38 @@ class LicenseValidationSchema(Schema):
     identifier = fields.URL()
     name = fields.Dict()
 
-class ProjectDetailsValidationSchema(Schema):
-    """Validation schema for project details."""
-
-    title = fields.Dict(
-        required=True,
-        validate=lambda x: x.get('en') or x.get('fi')
-    )
-    identifier = fields.Str(required=False)
-    fundingIdentifier = fields.Str(required=False)
-    funderType = fields.Dict(
-        required=False,
-        validate=lambda value: bool(value.get('identifier'))
-    )
-
 
 class ContributorTypeValidationSchema(Schema):
     """Validation schema for project funding agency contributor type."""
 
     identifier = fields.Str(required=True)
-    label = fields.Dict(
-        required=False,
-        validate=lambda x: x.get('en') or x.get('fi')
-    )
-    definition = fields.Dict(
-        required=False,
-        validate=lambda x: x.get('en') or x.get('fi')
-    )
-    inScheme = fields.Str(required=False)
-
-
-class FundingAgencyValidationSchema(Schema):
-    """Validation schema for project funding agency"""
-
-    organization = fields.List(fields.Nested(OrganizationValidationSchema))
-    contributorTypes = fields.List(
-        fields.Nested(ContributorTypeValidationSchema)
-    )
 
 
 class ProjectValidationSchema(Schema):
     """Validation schema for projects."""
 
-    details = fields.Nested(ProjectDetailsValidationSchema, required=True)
-    organizations = fields.List(
-        fields.List(
-            fields.Nested(OrganizationValidationSchema)
-        ),
-        required=True,
-        validate=Length(min=1)
+    name = fields.Dict(required=True, validate=lambda x: x.get("en") or x.get("fi"))
+    identifier = fields.Str(required=False)
+    has_funder_identifier = fields.Str(required=False)
+    funder_type = fields.Dict(
+        required=False, validate=lambda value: bool(value.get("identifier"))
     )
-    fundingAgencies = fields.List(
-        fields.Nested(FundingAgencyValidationSchema),
-        required=False
+    source_organization = fields.List(
+        fields.Nested(OrganizationValidationSchema),
+        required=True,
+        validate=Length(min=1),
+    )
+    has_funding_agency = fields.List(
+        fields.Nested(OrganizationValidationSchema), required=False
     )
 
+class AccessRightsValidationSchema(Schema):
+    """Access rights validation schema"""
+
+    license = fields.List(fields.Nested(LicenseValidationSchema))
+    available = fields.Str() # Embargo date
+    restriction_grounds = fields.List(fields.Nested(ReferenceObjectValidationSchema))
+    access_type = fields.Dict(required=True)
 
 class DatasetValidationSchema(Schema):
     """
@@ -141,73 +122,41 @@ class DatasetValidationSchema(Schema):
 
     """
 
-    relation = fields.List(
-        fields.Dict(),
-        required=False
-    )
-    provenance = fields.List(
-        fields.Dict(),
-        required=False
-    )
+    relation = fields.List(fields.Dict())
+    provenance = fields.List(fields.Dict())
     original = fields.Dict()
     title = fields.Dict(
         required=True,
-        validate=lambda x: len(x.get('en', [])) + len(x.get('fi', [])) > 0
+        validate=lambda x: len(x.get("en", [])) + len(x.get("fi", [])) > 0,
     )
     description = fields.Dict(
         required=True,
-        validate=lambda x: len(x.get('en', [])) + len(x.get('fi', [])) > 0
+        validate=lambda x: len(x.get("en", [])) + len(x.get("fi", [])) > 0,
     )
     issuedDate = fields.Str()
     identifiers = fields.List(fields.Str())
-    fieldOfScience = fields.List(
-        fields.Str(),
-        required=False
-    )
-    datasetLanguage = fields.List(
-        fields.Str(),
-        required=False
-    )
+    field_of_science = fields.List(fields.Nested(ReferenceObjectValidationSchema))
+    language = fields.List(fields.Nested(ReferenceObjectValidationSchema))
     keywords = fields.List(
-        fields.Str(),
-        required=True,
-        validate=lambda list: len(list) > 0
+        fields.Str(), required=True, validate=lambda list: len(list) > 0
     )
-    theme = fields.List(
-        fields.URL(
-            validate=Length(min=1)
-        ),
-        required=False,
+    theme = fields.List(fields.Nested(ReferenceObjectValidationSchema))
+
+    creator = fields.List(
+        fields.Nested(ActorValidationSchema), required=True, validate=Length(min=1)
     )
-    actors = fields.List(fields.Nested(
-        ActorValidationSchema),
-        required=True,
-        validate=lambda list: len(list) > 0
-    )
-    accessType = fields.Dict(
-        required=True
-    )
-    infrastructure = fields.List(
-        fields.Dict(),
-        required=False
-    )
-    spatial = fields.List(
-        fields.Dict()
-    )
-    temporal = fields.List(
-        fields.Dict(),
-        required=False
-    )
-    embargoDate = fields.Str()
-    restrictionGrounds = fields.Str()
-    license = fields.List(fields.Nested(LicenseValidationSchema))
+    publisher = fields.Nested(ActorValidationSchema, required=True)
+    curator = fields.List(fields.Nested(ActorValidationSchema))
+    rights_holder = fields.List(fields.Nested(ActorValidationSchema))
+    contributor = fields.List(fields.Nested(ActorValidationSchema))
+    infrastructure = fields.List(fields.Dict())
+    spatial = fields.List(fields.Dict())
+    temporal = fields.List(fields.Dict())
+    access_rights = fields.Nested(AccessRightsValidationSchema)
     dataCatalog = fields.Str(validate=validate.Regexp(data_catalog_matcher))
-    cumulativeState = fields.Int(OneOf([0, 1, 2]))
+    cumulativeState = fields.Int(validate=OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())
     directories = fields.List(fields.Dict())
-    remote_resources = fields.List(fields.Dict())
+    remote_resources = fields.List(fields.Nested(RemoteResourceValidationSchema))
     useDoi = fields.Boolean()
-    projects = fields.List(
-        fields.Nested(ProjectValidationSchema),
-        required=False
-    )
+    is_output_of = fields.List(fields.Nested(ProjectValidationSchema))
