@@ -103,7 +103,7 @@ describe('ActorsRef', () => {
       beforeEach(() => {
         actorsRef.actorsRef = {
           1: {
-            type: 'person',
+            type: 'Person',
             uiid: 1,
             person: {
               name: 'Selvi Sipuli',
@@ -112,7 +112,7 @@ describe('ActorsRef', () => {
             },
             organizations: [
               {
-                name: 'org',
+                name: { en: 'org' },
                 email: 'org@org.net',
                 identifier: 'identifier',
               },
@@ -132,20 +132,16 @@ describe('ActorsRef', () => {
           test('should return actorsRef ready for backend', () => {
             actorsRef.toBackend.should.deep.eql([
               {
-                type: 'person',
-                roles: ['mother', 'Ph.D. in Math'],
-                person: {
-                  name: 'Selvi Sipuli',
-                  email: 'selvi.sipuli@onionhaslayers.com',
+                '@type': 'Person',
+                name: 'Selvi Sipuli',
+                email: 'selvi.sipuli@onionhaslayers.com',
+                identifier: 'identifier',
+                member_of: {
+                  '@type': 'Organization',
+                  name: { en: 'org' },
+                  email: 'org@org.net',
                   identifier: 'identifier',
                 },
-                organizations: [
-                  {
-                    name: 'org',
-                    email: 'org@org.net',
-                    identifier: 'identifier',
-                  },
-                ],
               },
             ])
           })

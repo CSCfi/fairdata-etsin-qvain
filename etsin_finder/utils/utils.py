@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Various utils"""
+"""Various utils."""
 
 from flask import current_app, has_app_context
 import json
@@ -17,7 +17,7 @@ from urllib import parse
 
 
 def get_log_config(log_file_path, log_lvl):
-    """Function to get the logging configuration from utils.py
+    """Get the logging configuration from utils.py.
 
     Arguments:
         log_file_path (str): The log file path.
@@ -58,57 +58,44 @@ def get_log_config(log_file_path, log_lvl):
 
 
 def executing_travis():
-    """Returns True whenever code is being executed by travis"""
+    """Return True whenever code is being executed by travis."""
     return True if os.getenv("TRAVIS", False) else False
-
-
-def write_json_to_file(json_data, filename):
-    """Write JSON data to file.
-
-    Args:
-        json_data (json): JSON data.
-        filename (str): Filename to write the data to.
-
-    """
-    with open(filename, "w") as output_file:
-        json.dump(json_data, output_file)
 
 
 def json_or_empty(response):
     """Return response JSON as python dict or empty dict.
 
     Args:
-        response (object): flask.Response object
+        response (object): requests.Response object
 
     Returns:
         dict: The json as dict.
 
     """
-    response_json = {}
     try:
-        response_json = response.json()
+        return response.json()
     except Exception:
-        pass
-    return response_json
+        return {}
 
 
 def json_or_text(response):
     """
     Return response JSON as python object, or text if no JSON is present.
 
-    :param response:
-    :return:
+    Args:
+        response: requests.Response object
+    Returns:
+        dict: json as dict
+        OR text: response as text.
     """
-    response_json = {}
     try:
-        response_json = response.json()
+        return response.json()
     except Exception:
         return response.text
-    return response_json
 
 
 def remove_keys_recursively(obj, fields_to_remove):
-    """Remove specified keys recursively from a python object (dict or list)
+    """Remove specified keys recursively from a python object (dict or list).
 
     Args:
         obj (dict/list): from where keys need to be removed.
@@ -135,7 +122,7 @@ def remove_keys_recursively(obj, fields_to_remove):
 
 
 def leave_keys_in_dict(dict_obj, fields_to_leave):
-    """Removes the key-values from dict_obj, for which key is NOT listed in fields_to_leave.
+    """Remove the key-values from dict_obj, for which key is NOT listed in fields_to_leave.
 
     NOTE: Is not recursive
 
@@ -163,7 +150,7 @@ def _parse_timestamp_string_to_tz_aware_datetime(timestamp_str):
 
 
 def tz_now_is_later_than_timestamp_str(timestamp_str):
-    """Is timestamp_str later in time than current time.
+    """Return True when timestamp_str later in time than current time.
 
     Args:
         timestamp_str (str): Time stamp.
@@ -177,7 +164,7 @@ def tz_now_is_later_than_timestamp_str(timestamp_str):
 
 
 def datetime_to_header(datetime_str):
-    """Modifie ISO 8601 datetime format to HTTP datetime (RFC2616).
+    """Modify ISO 8601 datetime format to HTTP datetime (RFC2616).
 
     The function does also work with some other formats and without
     tz, but it is not recommended.
@@ -199,7 +186,7 @@ def datetime_to_header(datetime_str):
 
 
 def sort_array_of_obj_by_key(obj_array, obj_key, obj_nested_key=False):
-    """Sort array of objects
+    """Sort array of objects.
 
     Sort the objects in an array by using the value of an object key,
     or if needed, the value of a nested object key contained inside an
@@ -224,7 +211,7 @@ def sort_array_of_obj_by_key(obj_array, obj_key, obj_nested_key=False):
 
 
 def format_url(url, *args):
-    """Helper for formatting URLs.
+    """Format URLs.
 
     Converts the arguments to strings and performs percent encoding on them before using them in url.format().
 
@@ -241,7 +228,7 @@ def format_url(url, *args):
 
 
 def ensure_app(app):
-    """Use app context if no app parameter is supplied"""
+    """Use app context if no app parameter is supplied."""
     if app:
         return app
     if has_app_context():
@@ -250,10 +237,10 @@ def ensure_app(app):
 
 
 class FlaskService:
-    """Use as base class for external dependency services"""
+    """Use as base class for external dependency services."""
 
     def __init__(self, app):
-        """Init FlaskService"""
+        """Init FlaskService."""
         if app.testing or executing_travis():
             self.is_testing = True
         else:

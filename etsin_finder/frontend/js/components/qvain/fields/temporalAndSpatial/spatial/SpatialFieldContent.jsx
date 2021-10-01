@@ -6,22 +6,15 @@ import handleSave from './handleSave'
 import Form from './form'
 import { useStores } from '../../../utils/stores'
 
-const translationsRoot = 'qvain.temporalAndSpatial.spatial'
-
 const SpatialFieldContent = () => {
-  const {
-    Qvain: Store,
-    Locale: { lang },
-  } = useStores()
+  const { Qvain: Store } = useStores()
 
   return (
     <>
-      <FieldList Field={Store.Spatials} lang={lang} translationsRoot={translationsRoot} />
+      <FieldList Field={Store.Spatials} />
       <FieldListAdd
-        Store={Store}
         Field={Store.Spatials}
-        translationsRoot={translationsRoot}
-        handleSave={() => handleSave(Store.Spatials, translationsRoot)}
+        handleSave={() => handleSave(Store.Spatials)}
         Form={Form}
       />
     </>

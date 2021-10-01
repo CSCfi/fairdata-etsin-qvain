@@ -9,11 +9,11 @@ import { RelationType } from '../../../../../../stores/view/qvain/qvain.relatedR
 import ModalSeparator from '../../../../general/modal/modalSeparator'
 import { useStores } from '../../../../utils/stores'
 
-const Form = props => {
+const Form = ({ Field, hideRelationType }) => {
   const {
     Locale: { getMatchingLang },
   } = useStores()
-  const { inEdit } = props.Field
+  const { inEdit } = Field
 
   const translations = [inEdit.name, inEdit.description]
   const [language, setLanguage] = useState(getMatchingLang(translations))
@@ -21,20 +21,20 @@ const Form = props => {
   return (
     <FormContainer>
       <TranslationTab language={language} setLanguage={setLanguage}>
-        <TabInput {...props} datum="name" language={language} isRequired />
-        <TabInput {...props} datum="description" language={language} />
+        <TabInput Field={Field} datum="name" language={language} isRequired />
+        <TabInput Field={Field} datum="description" language={language} />
       </TranslationTab>
-      <ModalInput {...props} datum="identifier" />
+      <ModalInput Field={Field} datum="identifier" />
       <ModalReferenceInput
-        {...props}
+        Field={Field}
         datum="entityType"
         metaxIdentifier="resource_type"
         model={RelationType}
       />
       <ModalSeparator />
-      {!props.hideRelationType && (
+      {!hideRelationType && (
         <ModalReferenceInput
-          {...props}
+          Field={Field}
           datum="relationType"
           metaxIdentifier="relation_type"
           model={RelationType}
@@ -47,7 +47,6 @@ const Form = props => {
 
 Form.propTypes = {
   Field: PropTypes.object.isRequired,
-  translationsRoot: PropTypes.string.isRequired,
   hideRelationType: PropTypes.bool,
 }
 

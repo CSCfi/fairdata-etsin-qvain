@@ -44,7 +44,7 @@ const PersonInput = ({ propName, schema, includeType, required }) => {
         id={id}
         attributes={{
           placeholder: includeType
-            ? `qvain.actors.add.${propName}.placeholder.${actor.type}`
+            ? `qvain.actors.add.${propName}.placeholder.${actor.type.toLowerCase()}`
             : `qvain.actors.add.${propName}.placeholder`,
         }}
         disabled={readonly}

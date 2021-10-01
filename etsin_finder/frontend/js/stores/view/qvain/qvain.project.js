@@ -2,6 +2,7 @@ import { observable, action, toJS, makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
 import { parseOrganization } from '../../../components/qvain/fields/project/utils'
+import { organizationArrayToMetax } from './qvain.actors'
 import { touch } from './track'
 
 // PROJECT VALIDATION
@@ -21,16 +22,13 @@ export const organizationObjectSchema = yup.object().shape({
   subDepartment: organizationSelectSchema.nullable(),
 })
 
-export const fundingAgencySchema = yup.object().shape({
-  identifier: yup
-    .mixed()
-    .required('qvain.validationMessages.projects.fundingAgency.contributorType.identifier'),
-  labelFi: yup.string(),
-  labelEn: yup.string(),
-  definitionFi: yup.string(),
-  definitionEn: yup.string(),
-  inScheme: yup.string(),
-})
+export const contributorTypeSchema = yup.array().of(
+  yup.object().shape({
+    identifier: yup
+      .mixed()
+      .required('qvain.validationMessages.projects.fundingAgency.contributorType.identifier'),
+  })
+)
 
 export const projectSchema = yup.object().shape({
   details: yup.object().shape({
@@ -53,7 +51,6 @@ export const projectSchema = yup.object().shape({
 
 class Projects {
   constructor(Parent) {
-    this.readonly = Parent.readonly
     this.Parent = Parent
     makeObservable(this)
   }
@@ -64,7 +61,7 @@ class Projects {
 
   orgObjectSchema = organizationObjectSchema
 
-  fundingAgencySchema = fundingAgencySchema
+  contributorTypeSchema = contributorTypeSchema
 
   @observable projects = []
 
@@ -136,13 +133,7 @@ class Projects {
             parsedOrganizations.reverse()
             const organization = Organization(uuidv4(), ...parsedOrganizations)
             const contributorTypes = (agency.contributor_type || []).map(contributorType =>
-              ContributorType(
-                uuidv4(),
-                contributorType.identifier,
-                contributorType.pref_label,
-                contributorType.definition,
-                contributorType.in_scheme
-              )
+              ContributorType(uuidv4(), contributorType.identifier, contributorType.pref_label)
             )
             return FundingAgency(uuidv4(), organization, contributorTypes)
           })
@@ -153,39 +144,42 @@ class Projects {
     }
   }
 
-  toBackend = () =>
-    this.projects.map(project => {
-      const projectObject = toJS(project)
-      const { details } = projectObject
-      if (details.funderType && details.funderType.url) {
-        details.funderType = { identifier: details.funderType.url }
-      } else delete details.funderType
+  projectToMetax = project => {
+    const projectObject = toJS(project)
+    const { details } = projectObject
 
-      const organizations = (projectObject.organizations || []).map(fullOrganization =>
-        organizationToArray(fullOrganization)
-      )
-
-      const fundingAgencies = (projectObject.fundingAgencies || []).map(agency => {
-        const { organization } = agency
-        const contributorTypes = agency.contributorTypes.map(contributorType => {
-          const { identifier, label, definition, inScheme } = contributorType
-          return { identifier, label, definition, inScheme }
-        })
-        return { organization: organizationToArray(organization), contributorTypes }
-      })
-      return { details, organizations, fundingAgencies }
+    const fundingAgencies = projectObject.fundingAgencies.map(agency => {
+      const contributorTypes = agency.contributorTypes.map(contributorType => ({
+        identifier: contributorType.identifier,
+      }))
+      return { ...organizationToMetax(agency.organization), contributor_type: contributorTypes }
     })
+    const metaxProject = {
+      name: project.details?.title,
+      identifier: project.details?.identifier,
+      has_funder_identifier: project.details?.fundingIdentifier,
+      source_organization: (projectObject.organizations || []).map(fullOrganization =>
+        organizationToMetax(fullOrganization)
+      ),
+      has_funding_agency: fundingAgencies,
+    }
+
+    if (details.funderType?.url) {
+      metaxProject.funder_type = { identifier: details.funderType.url }
+    }
+    return metaxProject
+  }
+
+  toBackend = () => this.projects.map(this.projectToMetax)
 }
 
-const organizationToArray = fullOrganization => {
+const organizationToMetax = fullOrganization => {
   for (const [key, value] of Object.entries(fullOrganization)) {
     if (value && !value.email) delete fullOrganization[key].email
   }
   const { organization, department, subDepartment } = fullOrganization
-  const output = [{ ...organization }]
-  if (department) output.push({ ...department })
-  if (subDepartment) output.push({ ...subDepartment })
-  return output
+  const organizationArray = [organization, department, subDepartment].filter(v => v)
+  return organizationArrayToMetax(organizationArray)
 }
 
 export const Project = (
@@ -221,12 +215,10 @@ export const FundingAgency = (id, organization, contributorTypes) => ({
   contributorTypes: contributorTypes || [], // Array<ContributorType>
 })
 
-export const ContributorType = (id, identifier, label, definition, inScheme) => ({
+export const ContributorType = (id, identifier, label) => ({
   id: id || uuidv4(),
   identifier,
   label,
-  definition,
-  inScheme,
 })
 
 export default Projects

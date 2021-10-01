@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "baseUrl": "./",
+    "paths": {
+      "@": ["js"],
+    }
+
   },
-  "exclude": ["node_modules", "stories", "static", "build", "__tests__"]
+  "exclude": ["node_modules", "stories", "static", "build", "__tests__"],
+
 }

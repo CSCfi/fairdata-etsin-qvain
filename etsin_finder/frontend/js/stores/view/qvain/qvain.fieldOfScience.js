@@ -1,9 +1,9 @@
 import { action, makeObservable } from 'mobx'
 import * as yup from 'yup'
-import ReferenceField from './qvain.referenceField'
+import ReferenceField, { referenceObjectSchema } from './qvain.referenceField'
 import { touch } from './track'
 
-export const fieldsOfScienceSchema = yup.array().of(yup.string())
+export const fieldsOfScienceSchema = yup.array().of(referenceObjectSchema)
 
 class FieldOfSciences extends ReferenceField {
   constructor(...args) {

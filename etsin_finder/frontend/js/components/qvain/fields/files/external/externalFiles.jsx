@@ -11,7 +11,6 @@ import {
   ButtonLabel,
   ButtonContainer,
 } from '../../../general/buttons'
-import { EmptyExternalResource } from '../../../../../stores/view/qvain'
 import { Input, SelectedFilesTitle } from '../../../general/modal/form'
 import { SlidingContent } from '../../../general/card'
 import ExternalFileForm from './externalFileForm'
@@ -19,16 +18,18 @@ import { useStores } from '../../../utils/stores'
 
 export const ExternalFilesBase = () => {
   const {
-    Qvain: { editExternalResource, removeExternalResource, addedExternalResources },
+    Qvain: {
+      ExternalResources: { edit, remove, clearInEdit, storage: externalResources },
+    },
   } = useStores()
 
   const handleEditExternalResource = externalResource => () => {
-    editExternalResource(externalResource)
+    edit(externalResource.uiid)
   }
 
   const handleRemoveExternalResource = externalResourceId => () => {
-    removeExternalResource(externalResourceId)
-    editExternalResource(EmptyExternalResource)
+    remove(externalResourceId)
+    clearInEdit()
   }
 
   const parseUrl = resource =>
@@ -46,15 +47,15 @@ export const ExternalFilesBase = () => {
           component={SelectedFilesTitle}
           content="qvain.files.external.addedResources.title"
         />
-        {addedExternalResources.length === 0 && (
+        {externalResources.length === 0 && (
           <Translate
             tabIndex="0"
             component="p"
             content="qvain.files.external.addedResources.none"
           />
         )}
-        {addedExternalResources.map(addedExternalResource => (
-          <ButtonGroup tabIndex="0" key={addedExternalResource.id}>
+        {externalResources.map(addedExternalResource => (
+          <ButtonGroup tabIndex="0" key={addedExternalResource.uiid}>
             <ButtonLabel>
               {addedExternalResource.title}
               {parseUrl(addedExternalResource.accessUrl)}
@@ -67,7 +68,7 @@ export const ExternalFilesBase = () => {
               />
               <DeleteButton
                 type="button"
-                onClick={handleRemoveExternalResource(addedExternalResource.id)}
+                onClick={handleRemoveExternalResource(addedExternalResource.uiid)}
               />
             </ButtonContainer>
           </ButtonGroup>

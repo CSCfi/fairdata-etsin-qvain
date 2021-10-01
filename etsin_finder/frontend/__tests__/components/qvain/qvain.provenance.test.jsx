@@ -60,6 +60,8 @@ describe('Provenance', () => {
         schema: {
           validate: jest.fn(),
         },
+        translationsRoot: 'provenance translationsRoot',
+        associationsTranslationsRoot: 'qvain.history.provenance.modal.actorsInput',
       },
     },
     Locale: {
@@ -105,12 +107,10 @@ describe('Provenance', () => {
         FieldList: {
           Field: mockStores.Qvain.Provenances,
           lang: 'en',
-          translationsRoot: 'qvain.history.provenance',
         },
         FieldListAdd: {
           Store: mockStores.Qvain,
           Field: mockStores.Qvain.Provenances,
-          translationsRoot: 'qvain.history.provenance',
           Form,
         },
       }
@@ -185,11 +185,13 @@ describe('given required props and mockStores', () => {
           outcomeDescription: {
             fi: 'fi-outcome',
           },
-          spatials: {
+          locations: {
             storage: [],
+            translationsRoot: 'locations translationsRoot',
           },
           usedEntities: {
             storage: [],
+            translationsRoot: 'usedEntities translationsRoot',
           },
           associations: {
             actorOptions: [],
@@ -209,9 +211,7 @@ describe('given required props and mockStores', () => {
   }
 
   const props = {
-    Store: mockStores.Qvain,
     Field: mockStores.Qvain.Provenances,
-    translationsRoot: 'translationsRoot',
   }
 
   const harness = new Harness(Form, props)
@@ -316,7 +316,7 @@ describe('given required props and mockStores', () => {
         { label: 'LocationFieldListAdd', findArgs: FieldListAdd },
       ]
 
-      const translationsRoot = 'qvain.history.provenance.modal.locationInput'
+      const translationsRoot = 'locations translationsRoot'
 
       const props = {
         LocationLabel: {
@@ -324,18 +324,12 @@ describe('given required props and mockStores', () => {
           htmlFor: 'location-input',
         },
         LocationFieldList: {
-          Store: mockStores.Qvain.Provenances,
-          Field: mockStores.Qvain.Provenances.inEdit.spatials,
-          fieldIdentifier: 'spatials',
-          lang: 'en',
-          translationsRoot,
+          Field: mockStores.Qvain.Provenances.inEdit.locations,
           disableNoItemsText: true,
         },
         LocationFieldListAdd: {
-          Store: mockStores.Qvain.Provenances,
-          Field: mockStores.Qvain.Provenances.inEdit.spatials,
+          Field: mockStores.Qvain.Provenances.inEdit.locations,
           Form: SpatialsForm,
-          translationsRoot,
           position: 'left',
           hideButton: false,
         },
@@ -345,7 +339,7 @@ describe('given required props and mockStores', () => {
     })
   })
 
-  describe('LocationInput', () => {
+  describe('UsedEntityInput', () => {
     beforeEach(() => {
       harness.restoreWrapper('UsedEntityInput')
       harness.dive()
@@ -358,7 +352,7 @@ describe('given required props and mockStores', () => {
         { label: 'UsedEntityFieldListAdd', findArgs: FieldListAdd },
       ]
 
-      const translationsRoot = 'qvain.history.provenance.modal.usedEntityInput'
+      const translationsRoot = 'usedEntities translationsRoot'
 
       const props = {
         UsedEntityLabel: {
@@ -366,18 +360,12 @@ describe('given required props and mockStores', () => {
           htmlFor: 'used-entity-input',
         },
         UsedEntityFieldList: {
-          Store: mockStores.Qvain.Provenances,
           Field: mockStores.Qvain.Provenances.inEdit.usedEntities,
-          fieldIdentifier: 'usedEntities',
-          lang: 'en',
-          translationsRoot: translationsRoot,
           disableNoItemsText: true,
         },
         LocationFieldListAdd: {
-          Store: mockStores.Qvain.Provenances,
           Field: mockStores.Qvain.Provenances.inEdit.usedEntities,
           Form: UsedEntitiesForm,
-          translationsRoot: translationsRoot,
           formProps: { hideRelationType: true },
           position: 'left',
           hideButton: false,
@@ -403,13 +391,11 @@ describe('given required props and mockStores', () => {
         { label: 'ActorsSelect', findType: 'prop', findArgs: ['component', ReactSelect] },
       ]
 
-      const { inEdit } = mockStores.Qvain.Provenances
-
-      const translationsRoot = 'qvain.history.provenance.modal.actorsInput'
+      const { inEdit, associationsTranslationsRoot } = mockStores.Qvain.Provenances
 
       const expectedProps = {
         ActorsLabel: {
-          content: `${translationsRoot}.label`,
+          content: `${associationsTranslationsRoot}.label`,
           htmlFor: 'actors-input',
         },
         ActorsList: {
@@ -419,7 +405,7 @@ describe('given required props and mockStores', () => {
         },
         ActorsSelect: {
           inputId: 'actors-select',
-          attributes: { placeholder: `${translationsRoot}.placeholder` },
+          attributes: { placeholder: `${associationsTranslationsRoot}.placeholder` },
           options: [
             {
               label: createButtonTranslation,

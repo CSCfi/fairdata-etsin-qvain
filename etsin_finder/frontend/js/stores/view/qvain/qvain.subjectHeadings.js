@@ -9,7 +9,7 @@ class SubjectHeadings extends ReferenceField {
   }
 
   @action
-  fromBackend = (dataset) => {
+  fromBackend = dataset => {
     this.reset()
     if (dataset.theme !== undefined) {
       touch(dataset.theme)

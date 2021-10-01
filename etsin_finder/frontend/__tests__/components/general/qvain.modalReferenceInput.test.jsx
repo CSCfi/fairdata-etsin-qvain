@@ -12,11 +12,11 @@ const Field = {
   inEdit: {
     datum: {},
   },
+  translationsRoot: 'translationsRoot',
 }
 
 const props = {
   Field,
-  translationsRoot: 'translationsRoot',
   datum: 'datum',
   model: jest.fn(),
   metaxIdentifier: 'metaxIdentifier',
@@ -26,8 +26,8 @@ describe('ModalRefenceInput', function () {
   let wrapper
 
   const getTranslations = props => ({
-    label: `${props.translationsRoot}.modal.${props.datum}Input.label`,
-    placeholder: `${props.translationsRoot}.modal.${props.datum}Input.placeholder`,
+    label: `${Field.translationsRoot}.modal.${props.datum}Input.label`,
+    placeholder: `${Field.translationsRoot}.modal.${props.datum}Input.placeholder`,
   })
 
   const render = extraProps => {

@@ -24,7 +24,8 @@ import { useStores } from '../../utils/stores'
 const FundingOrganization = props => {
   const {
     Qvain: {
-      Projects: { orgObjectSchema, readonly },
+      readonly,
+      Projects: { orgObjectSchema },
     },
     Locale: { lang },
   } = useStores()

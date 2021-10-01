@@ -420,7 +420,7 @@ const CreatableSelectComponent = ({
         {renderForm()}
       </div>
       <div className="col-1">
-        {allowReset ? (
+        {allowReset && !readonly ? (
           <DeleteButton
             type="button"
             onClick={onReset}
@@ -502,7 +502,7 @@ function isEmptyObject(obj = {}) {
 }
 
 const SelectContainer = styled.div`
-  padding-left: 1.5rem;
+  padding-left: 1rem;
 `
 
 const Department = styled.div`

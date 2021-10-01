@@ -7,8 +7,6 @@
 
 """Functionalities related to authorization and what users are allowed to see."""
 
-from flask import current_app
-
 from etsin_finder.auth import authentication
 from etsin_finder.services import cr_service
 from etsin_finder.services.cr_service import (

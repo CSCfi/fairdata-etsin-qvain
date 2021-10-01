@@ -17,8 +17,7 @@ const qvainFinnish = {
   edit: 'Päivitä aineisto',
   unsavedChanges:
     'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
-  consent:
-    `Käyttämällä Qvain -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen
+  consent: `Käyttämällä Qvain -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen
     muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut
     heille miten he voivat saada henkilötietonsa poistettua palvelusta.
     Käyttämällä Qvain -työkalua käyttäjä hyväksyy
@@ -64,6 +63,11 @@ const qvainFinnish = {
   titleEdit: 'Muokkaa aineistoa',
   titleLoading: 'Ladataan aineistoa',
   titleLoadingFailed: 'Aineiston Lataus Epäonnistui',
+  lock: {
+    force: 'Muokkaa aineistoa',
+    error: 'Aineiston avaaminen muokattavaksi epäonnistui.',
+    unavailable: 'Aineisto on auki käyttäjällä %(user)s ja on vain luku -tilass.',
+  },
   error: {
     deprecated:
       'Aineistoa ei voida julkaista, koska aineisto on vanhentunut. Korjaa vanhentunut aineisto ensin.',

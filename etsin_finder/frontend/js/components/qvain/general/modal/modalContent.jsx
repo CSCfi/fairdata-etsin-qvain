@@ -2,24 +2,24 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import { useStores } from '@/stores/stores'
 import { ConfirmClose } from './confirmClose'
 import ModalButtons from './modalButtons'
 
 const ModalContent = ({
-  Store,
   Field,
   handleSave,
   Form,
-  translationsRoot,
-  language,
   formProps,
   confirm,
   onConfirmCancel,
   onConfirm,
   requestClose,
 }) => {
-  const { editMode } = Field
-  const { readonly } = Store
+  const {
+    Qvain: { readonly },
+  } = useStores()
+  const { editMode, translationsRoot } = Field
 
   const translations = {
     title: editMode
@@ -38,13 +38,7 @@ const ModalContent = ({
         <Translate content={translations.title} />
       </Header>
       <Content>
-        <Form
-          Store={Store}
-          Field={Field}
-          translationsRoot={translationsRoot}
-          language={language}
-          {...formProps}
-        />
+        <Form Field={Field} {...formProps} />
         <ModalButtons
           handleRequestClose={requestClose}
           translations={translations}
@@ -59,13 +53,10 @@ const ModalContent = ({
 }
 
 ModalContent.propTypes = {
-  Store: PropTypes.object.isRequired,
   Field: PropTypes.object.isRequired,
   Form: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   formProps: PropTypes.object.isRequired,
   handleSave: PropTypes.func.isRequired,
-  translationsRoot: PropTypes.string.isRequired,
-  language: PropTypes.string.isRequired,
   onConfirmCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   confirm: PropTypes.bool.isRequired,

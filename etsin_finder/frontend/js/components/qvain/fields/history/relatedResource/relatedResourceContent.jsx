@@ -10,23 +10,18 @@ import FlaggedComponent from '../../../../general/flaggedComponent'
 
 const RelatedResourceContent = () => {
   const {
-    Qvain: Store,
-    Locale: { lang },
+    Qvain: { RelatedResources: Field },
     Env: {
       Flags: { flagEnabled },
     },
   } = useStores()
-  const Field = Store.RelatedResources
-  const translationsRoot = Field.translationsRoot
   return (
     <>
-      <FieldList Field={Field} lang={lang} translationsRoot={translationsRoot} />
+      <FieldList Field={Field} />
       <FlaggedComponent flag="CROSSREF_API">
         <ResourcesSearchField />
       </FlaggedComponent>
       <FieldListAdd
-        translationsRoot={translationsRoot}
-        Store={Store}
         Field={Field}
         Form={Form}
         handleSave={handleSave}
