@@ -74,9 +74,11 @@ class Project extends Component {
   }
 
   onProjectFormChange = (field, value) => {
-    const { details } = this.state
-    details[field] = value
-    this.setState({ details })
+    this.setState(prevState => {
+      const details = { ...prevState.details }
+      details[field] = value
+      return { details }
+    })
   }
 
   onOrganizationFormChange = value => {
