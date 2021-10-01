@@ -61,6 +61,11 @@ const qvainEnglish = {
   titleEdit: 'Edit dataset',
   titleLoading: 'Loading dataset',
   titleLoadingFailed: 'Loading dataset failed',
+  lock: {
+    force: 'Edit dataset',
+    error: 'Failed to open dataset for editing.',
+    unavailable: 'The dataset is being edited by %(user)s and is in read-only mode.',
+  },
   error: {
     deprecated:
       'Cannot publish dataset because it is deprecated. Please resolve deprecation first.',

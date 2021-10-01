@@ -36,6 +36,7 @@ import organizationMockGet, {
   NotReallyReferenceIdentifier,
 } from '../../__testdata__/qvain.actors.data'
 import { useStores, StoresProvider } from '../../../js/stores/stores'
+import removeEmpty from '../../../js/utils/removeEmpty'
 
 // Make sure MobX store values are not mutated outside actions.
 configure({
@@ -779,7 +780,7 @@ describe('Qvain.Actors store', () => {
     const asdasd = stores.Qvain.Actors.actors.find(
       actor => actor.person && actor.person.name === 'Asdasd J. Qwerty'
     )
-    expect(asdasd.roles.slice().sort()).toEqual(['creator', 'publisher'])
+    expect(asdasd.roles.slice().sort()).toEqual(['creator', 'publisher', 'rights_holder'])
     expect(asdasd.person.email).toEqual('asdasd@test.com')
 
     const teppo = stores.Qvain.Actors.actors.find(
@@ -1042,6 +1043,45 @@ describe('Qvain.Actors store', () => {
   it('converts dataset for backend', async () => {
     stores.Qvain.editDataset(dataset)
     expect(stores.Qvain.Actors.toBackend()).toMatchSnapshot()
+  })
+
+  it('opens and saves actors in same format', async () => {
+    stores.Qvain.editDataset(dataset)
+
+    const getName = metaxActor => metaxActor.name.en || metaxActor.name.fi || metaxActor.name
+
+    const tidy = metaxActors => {
+      // normalize actors for comparison.
+      // order of actors may change and fields with nonexistent values may be added/removed
+      if (!metaxActors) {
+        return metaxActors
+      }
+      if (!Array.isArray(metaxActors)) {
+        return removeEmpty(metaxActors) // single actor
+      }
+      const sorted = [...metaxActors].sort((a, b) => getName(a).localeCompare(getName(b)))
+      return removeEmpty(sorted)
+    }
+
+    const originalCreator = dataset.research_dataset.creator
+    const originalRightsHolder = dataset.research_dataset.rights_holder
+    const originalPublisher = dataset.research_dataset.publisher
+    const originalCurator = dataset.research_dataset.curator
+    const originalContributor = dataset.research_dataset.contributor
+
+    const {
+      creator,
+      publisher,
+      rights_holder: rightsHolder,
+      curator,
+      contributor,
+    } = stores.Qvain.Actors.toBackend()
+
+    expect(tidy(creator)).toEqual(tidy(originalCreator))
+    expect(tidy(rightsHolder)).toEqual(tidy(originalRightsHolder))
+    expect(tidy(publisher)).toEqual(tidy(originalPublisher))
+    expect(tidy(curator)).toEqual(tidy(originalCurator))
+    expect(tidy(contributor)).toEqual(tidy(originalContributor))
   })
 
   describe('otherActorsHaveRole', () => {

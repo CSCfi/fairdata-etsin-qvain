@@ -5,7 +5,7 @@ const datasets = {
     searchTitle: 'Search from the list (to filter the datasets)',
     placeholder: 'Filter datasets by name',
   },
-  help: 'Edit existing dataset or Create a new one',
+  help: 'Choose a dataset to edit or create a new dataset',
   createButton: 'Create a new dataset',
   createNewVersion: 'Create new version',
   useAsTemplate: 'Use as template',
@@ -52,8 +52,7 @@ const datasets = {
   remove: {
     confirm: {
       published: {
-        text:
-          'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
+        text: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
         ok: 'Delete',
       },
       draft: {
@@ -75,5 +74,9 @@ const datasets = {
   loading: 'Loading...',
   errorOccurred: 'An error occurred',
   tableHeader: 'Created datasets',
+  tabs: {
+    all: 'All datasets',
+    another: 'Another tab',
+  },
 }
 export default datasets

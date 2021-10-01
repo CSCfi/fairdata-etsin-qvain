@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
 import { toJS, action } from 'mobx'
 import styled from 'styled-components'
@@ -6,32 +6,30 @@ import Translate from 'react-translate-component'
 import { Input, Label, CustomSelect } from '../../../general/modal/form'
 import { SaveButton, CancelButton, FileItem } from '../../../general/buttons'
 import ValidationError from '../../../general/errors/validationError'
-import { getLocalizedOptions } from '../../../utils/getReferenceData'
-import { EmptyExternalResource } from '../../../../../stores/view/qvain'
+import {
+  onChange,
+  getCurrentOption,
+  getOptionLabel,
+  getOptionValue,
+  getAllOptions,
+} from '../../../utils/select'
+import { UseCategory } from '../../../../../stores/view/qvain/qvain.externalResources'
+import { externalResourceSchema } from '../../../../../stores/view/qvain/qvain.dataCatalog.schemas'
 import { useStores } from '../../../utils/stores'
 
 export const ExternalFileFormBase = () => {
   const {
     Qvain: {
-      externalResourceInEdit: externalResource,
-      idaPickerOpen,
-      setIdaPickerOpen,
-      saveExternalResource,
-      editExternalResource,
-      externalResourceSchema,
+      readonly,
+      ExternalResources: { save, clearInEdit, inEdit: externalResource, setUseCategory },
     },
     Locale: { lang },
   } = useStores()
-  const [useCategories, setUseCategories] = useState({ en: [], fi: [] })
+  const [useCategoryOptions, setUseCategoryOptions] = useState([])
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    getLocalizedOptions('use_category').then(translations => {
-      setUseCategories({
-        en: translations.en,
-        fi: translations.fi,
-      })
-    })
+    getAllOptions(UseCategory, 'use_category').then(opts => setUseCategoryOptions(opts))
   }, [])
 
   const handleSaveExternalResource = event => {
@@ -40,15 +38,9 @@ export const ExternalFileFormBase = () => {
     externalResourceSchema
       .validate(externalResourceJs, { strict: true })
       .then(() => {
-        saveExternalResource(externalResource)
-        editExternalResource(EmptyExternalResource)
+        save(externalResource)
+        clearInEdit()
         setError(undefined)
-
-        // Close IDA picker if it is open since after adding an externalResources,
-        // user shouldn't be able to add IDA files or directories
-        if (idaPickerOpen) {
-          setIdaPickerOpen(false)
-        }
       })
       .catch(err => {
         setError(err.errors)
@@ -57,7 +49,7 @@ export const ExternalFileFormBase = () => {
 
   const handleCancel = event => {
     event.preventDefault()
-    editExternalResource(EmptyExternalResource)
+    clearInEdit()
     setError(null)
   }
 
@@ -81,13 +73,18 @@ export const ExternalFileFormBase = () => {
       </Label>
       <Translate
         component={CustomSelect}
-        inputId="useCategoryInput"
-        value={externalResource.useCategory}
-        options={useCategories[lang]}
-        onChange={action(selection => {
-          externalResource.useCategory = selection
-        })}
-        attributes={{ placeholder: 'qvain.files.external.form.useCategory.placeholder' }}
+        inputId="externalFileUseCategory"
+        name="useCategory"
+        options={useCategoryOptions}
+        clearable
+        isDisabled={readonly}
+        value={getCurrentOption(UseCategory, useCategoryOptions, externalResource.useCategory)}
+        onChange={val => onChange(setUseCategory)(val)}
+        getOptionLabel={getOptionLabel(UseCategory, lang)}
+        getOptionValue={getOptionValue(UseCategory)}
+        attributes={{
+          placeholder: 'qvain.files.external.form.useCategory.placeholder',
+        }}
       />
       <Label htmlFor="accessUrlInput">
         <Translate content="qvain.files.external.form.accessUrl.label" />

@@ -7,12 +7,14 @@
 
 """RESTful API endpoints, meant to be used by Qvain form."""
 
+from etsin_finder.services.qvain_lock_service import QvainLockService
 from marshmallow import ValidationError
 from flask import request, current_app
-from flask_restful import reqparse, Resource
+from flask_restful import reqparse, Resource, abort
 
 from etsin_finder.auth import authentication
 from etsin_finder.log import log
+from etsin_finder.utils.flags import flag_enabled
 
 from etsin_finder.utils.utils import datetime_to_header
 from etsin_finder.schemas.qvain_dataset_schema_v2 import (
@@ -23,6 +25,7 @@ from etsin_finder.schemas.qvain_dataset_schema_v2 import (
 from etsin_finder.utils.qvain_utils import (
     data_to_metax,
     check_dataset_edit_permission,
+    check_dataset_edit_permission_and_lock,
     check_authentication,
     remove_deleted_datasets_from_results,
     edited_data_to_metax,
@@ -254,7 +257,7 @@ class QvainDataset(Resource):
 
         """
         params = {}
-        error = check_dataset_edit_permission(cr_id)
+        error = check_dataset_edit_permission_and_lock(cr_id)
         if error is not None:
             return error
 
@@ -320,7 +323,7 @@ class QvainDataset(Resource):
 
         """
         # only creator of the dataset is allowed to delete it
-        error = check_dataset_edit_permission(cr_id)
+        error = check_dataset_edit_permission_and_lock(cr_id)
         if error is not None:
             return error
 
@@ -347,7 +350,7 @@ class QvainDatasetFiles(Resource):
             Metax response.
 
         """
-        error = check_dataset_edit_permission(cr_id)
+        error = check_dataset_edit_permission_and_lock(cr_id)
         if error is not None:
             return error
 
@@ -372,6 +375,51 @@ class QvainDatasetFiles(Resource):
             return response, status
 
         # adding or removing files may change permissions, clear them from cache
-        current_app.cr_permission_cache.delete_from_cache(cr_id)
-
+        current_app.cr_permission_cache.delete(cr_id)
         return response, status
+
+class QvainDatasetLock(Resource):
+    """Endpoints for handling dataset write locks."""
+
+    def __init__(self):
+        """Initialization common for all methods"""
+        if not flag_enabled('PERMISSIONS.WRITE_LOCK'):
+            abort(405)
+
+    def put(self, cr_id):
+        """Request/refresh write lock for dataset.
+
+        The response status code is 200 if successful, 409 otherwise.
+
+        Arguments:
+            cr_id {str} -- Identifier of dataset.
+            force {bool} -- Attempt to get lock regardless of its current holder.
+
+        Returns:
+            lock {dict} -- lock object or {} if there is no lock currently
+
+        """
+        check_dataset_edit_permission(cr_id)
+        parser = reqparse.RequestParser()
+        parser.add_argument("force", type=bool, required=False)
+        args = parser.parse_args()
+        force = args.get("force", None)
+
+        lock_service = QvainLockService()
+        success, data = lock_service.request_lock(cr_id, force)
+
+        if success:
+            return data, 200
+        return data, 409
+
+    def delete(self, cr_id):
+        """Release write lock for dataset.
+
+        Arguments:
+            cr_id {str} -- Identifier of dataset.
+
+        """
+        check_dataset_edit_permission(cr_id)
+        lock_service = QvainLockService()
+        lock_service.release_lock(cr_id)
+        return "", 200

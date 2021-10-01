@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const handleSubmitToBackend = values => {
   const title = values.Title.toBackend()
 
@@ -5,7 +6,7 @@ const handleSubmitToBackend = values => {
 
   const theme = values.SubjectHeadings.toBackend()
 
-  const actors = values.Actors.toBackend()
+  const { creator, publisher, curator, rights_holder, contributor } = values.Actors.toBackend()
 
   const spatial = values.Spatials.toBackend()
 
@@ -15,9 +16,9 @@ const handleSubmitToBackend = values => {
 
   const provenance = values.Provenances.toBackend()
 
-  const fieldOfScience = values.FieldOfSciences.toBackend()
+  const field_of_science = values.FieldOfSciences.toBackend()
 
-  const datasetLanguage = values.DatasetLanguages.toBackend()
+  const language = values.DatasetLanguages.toBackend()
 
   const issuedDate = values.IssuedDate.toBackend()
 
@@ -39,25 +40,30 @@ const handleSubmitToBackend = values => {
     identifiers: values.OtherIdentifiers.storage,
     keywords,
     theme,
-    actors,
-    infrastructure: values.Infrastructures.storage,
-    restrictionGrounds,
-    embargoDate,
-    license,
-    // Send no values if empty instead of empty values.
-    remote_resources: values.externalResources.length > 0 ? values.externalResources : [],
+    creator,
+    publisher,
+    rights_holder,
+    curator,
+    contributor,
+    infrastructure: values.Infrastructures.toBackend(),
+    access_rights: {
+      license,
+      access_type: accessType,
+      restriction_grounds: restrictionGrounds,
+      available: embargoDate
+    },
+    remote_resources: values.ExternalResources.toBackend(),
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
-    projects,
+    is_output_of: projects,
     spatial,
     temporal,
     relation,
     provenance,
-    fieldOfScience,
-    datasetLanguage,
+    field_of_science,
+    language,
     issuedDate,
-    accessType,
   }
 
   if (values.original) {

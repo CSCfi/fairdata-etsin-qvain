@@ -14,23 +14,23 @@ export default class PromiseManager {
 
   count(tag = undefined) {
     if (tag !== undefined) {
-      return this.promisesWithTags.filter(({ tag: t }) => t === tag).length
+      return this.promisesWithTags.filter(({ tags }) => tags.includes(tag)).length
     }
     return this.promisesWithTags.length
   }
 
   // Keep track of promises and cancel all of them when reset() is called.
   // The canceled promises fail silently; resolve/reject callbacks of a canceled promise won't be called.
-  @action.bound add(promise, tag = undefined) {
-    this.promisesWithTags.push({ promise, tag })
-    promise.finally(
+  @action.bound add(promise, ...tags) {
+    const promiseWithFinally = promise.finally(
       action(() => {
         this.promisesWithTags.replace(
-          this.promisesWithTags.filter(({ promise: p }) => p !== promise)
+          this.promisesWithTags.filter(({ promise: p }) => p !== promiseWithFinally)
         )
       })
     )
-    return promise
+    this.promisesWithTags.push({ promise: promiseWithFinally, tags })
+    return promiseWithFinally
   }
 
   @action.bound reset() {

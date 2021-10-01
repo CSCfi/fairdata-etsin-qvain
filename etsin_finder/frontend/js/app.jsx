@@ -14,6 +14,8 @@ import React, { useState, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Router } from 'react-router-dom'
 import { syncHistoryWithStore } from 'mobx-react-router'
+import Stores from '@/stores'
+import { StoresProvider } from '@/stores/stores'
 
 import '../locale/translations'
 import { registerLocale } from 'react-datepicker'
@@ -29,8 +31,6 @@ import './utils/extendYup'
 
 import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
-import Stores from './stores'
-import { StoresProvider } from './stores/stores'
 
 const { Env, Locale, Auth, Accessibility } = Stores
 
@@ -61,6 +61,9 @@ const App = () => {
   // Load runtime config
   const configure = async () => {
     await Env.fetchAppConfig()
+    if (Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK')) {
+      Stores.Qvain.Lock.enable()
+    }
     Locale.loadLang()
     hideSpinner()
     setInitialized(true)

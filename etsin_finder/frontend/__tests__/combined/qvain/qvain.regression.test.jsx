@@ -20,7 +20,7 @@ describe('Given modified provenance with added used entity', () => {
     mockStores.Qvain.Provenances.clearInEdit()
   })
 
-  test('Provenance should not have Used enitities', () => {
+  test('Provenance should not have Used entities', () => {
     mockStores.Qvain.Provenances.storage.length.should.eql(1)
     mockStores.Qvain.Provenances.storage[0].uiid.should.eql(uiid)
     mockStores.Qvain.Provenances.storage[0].usedEntities.storage.length.should.eql(0)
@@ -39,7 +39,7 @@ describe('Given modified provenance with added location', () => {
     mockStores.Qvain.Provenances.clearInEdit()
     // then edit the provenance to add a new location
     mockStores.Qvain.Provenances.edit(uiid)
-    mockStores.Qvain.Provenances.inEdit.spatials.create()
+    mockStores.Qvain.Provenances.inEdit.locations.create()
     // cancel provennace
     mockStores.Qvain.Provenances.clearInEdit()
   })
@@ -47,6 +47,6 @@ describe('Given modified provenance with added location', () => {
   test('Provenance should not have Locations', () => {
     mockStores.Qvain.Provenances.storage.length.should.eql(1)
     mockStores.Qvain.Provenances.storage[0].uiid.should.eql(uiid)
-    mockStores.Qvain.Provenances.storage[0].spatials.storage.length.should.eql(0)
+    mockStores.Qvain.Provenances.storage[0].locations.storage.length.should.eql(0)
   })
 })

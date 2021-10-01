@@ -11,7 +11,7 @@ import { Label } from '../../../js/components/qvain/general/modal/form'
 describe('ModalInput', () => {
   let wrapper
 
-  const Field = { changeAttribute: jest.fn(), inEdit: {} }
+  const Field = { changeAttribute: jest.fn(), inEdit: {}, translationsRoot: 'translationsRoot' }
 
   const props = {
     Field,

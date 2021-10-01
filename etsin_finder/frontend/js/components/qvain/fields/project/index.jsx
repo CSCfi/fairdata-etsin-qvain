@@ -74,9 +74,11 @@ class Project extends Component {
   }
 
   onProjectFormChange = (field, value) => {
-    const { details } = this.state
-    details[field] = value
-    this.setState({ details })
+    this.setState(prevState => {
+      const details = { ...prevState.details }
+      details[field] = value
+      return { details }
+    })
   }
 
   onOrganizationFormChange = value => {
@@ -224,7 +226,7 @@ class Project extends Component {
 
   removeProject = (id, event) => {
     if (event) event.preventDefault()
-    if (this.props.Stores.Qvain.Projects.readonly) return
+    if (this.props.Stores.Qvain.readonly) return
     if (id === this.state.id) this.resetForm()
     this.props.Stores.Qvain.Projects.removeProject(id)
   }
@@ -242,7 +244,7 @@ class Project extends Component {
 
   render() {
     const { details, organizations, projectInEdit, fundingAgencies } = this.state
-    const { readonly } = this.props.Stores.Qvain.Projects
+    const { readonly } = this.props.Stores.Qvain
     return (
       <Section {...FIELD_PROPS}>
         <Card>
@@ -285,7 +287,8 @@ class Project extends Component {
 
 const AddedProjectsComponent = ({ Stores, editProject, removeProject }) => {
   const { lang } = Stores.Locale
-  const { projects, readonly } = Stores.Qvain.Projects
+  const { projects } = Stores.Qvain.Projects
+  const { readonly } = Stores.Qvain
 
   const renderProjectTitle = details => {
     const { fi, en } = details.title || {}

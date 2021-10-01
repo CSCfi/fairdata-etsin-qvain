@@ -1,4 +1,9 @@
+import * as yup from 'yup'
 import { action, observable, computed, makeObservable } from 'mobx'
+
+export const referenceObjectSchema = yup.object().shape({
+  identifier: yup.string().required(),
+})
 
 class ReferenceField {
   constructor(Parent, defaultStorageFactory = () => [], defaultItem = undefined) {
@@ -105,7 +110,7 @@ class ReferenceField {
       })
   }
 
-  toBackend = () => this.storage.map(item => item.url)
+  toBackend = () => this.storage.map(item => ({ identifier: item.url }))
 
   @computed
   get readonly() {

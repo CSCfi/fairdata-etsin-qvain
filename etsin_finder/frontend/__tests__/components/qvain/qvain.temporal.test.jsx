@@ -19,14 +19,22 @@ jest.mock('../../../js/components/qvain/fields/temporalAndSpatial/temporal/handl
 
 jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas')
 
-describe('given mocked stores', () => {
-  const mockStores = {
-    Qvain: { some: 'data' },
-    Locale: {
-      lang: 'lang',
+const mockStores = {
+  Qvain: {
+    Temporals: {
+      storage: [],
+      removeTemporal: jest.fn(),
+      readonly: false,
+      validationError: undefined,
+      translationsRoot: 'translationsRoot',
     },
-  }
+  },
+  Locale: {
+    lang: 'lang',
+  },
+}
 
+describe('given mocked stores', () => {
   const harness = new Harness(Temporal)
 
   describe('Temporal', () => {
@@ -50,10 +58,6 @@ describe('given mocked stores', () => {
         Field: {
           brief,
         },
-        FieldContent: {
-          Store: mockStores.Qvain,
-          lang: mockStores.Locale.lang,
-        },
       }
 
       harness.shouldIncludeChildren(children, props)
@@ -62,17 +66,9 @@ describe('given mocked stores', () => {
 })
 
 describe('given required props', () => {
-  const Store = {
-    Temporals: {
-      storage: [],
-      removeTemporal: jest.fn(),
-      readonly: false,
-    },
-  }
+  const lang = 'lang'
 
-  const lang = 'en'
-
-  const harness = new Harness(TemporalFieldContent, { Store, lang }, 'TemporalFieldContent')
+  const harness = new Harness(TemporalFieldContent, {}, 'TemporalFieldContent')
 
   describe('TemporalFieldContent', () => {
     beforeEach(() => {
@@ -97,20 +93,18 @@ describe('given required props', () => {
       const props = {
         TemporalList: {
           lang,
-          temporals: Store.Temporals.storage,
-          remove: Store.Temporals.removeTemporal,
-          readonly: Store.Temporals.readonly,
+          temporals: mockStores.Qvain.Temporals.storage,
+          remove: mockStores.Qvain.Temporals.removeTemporal,
+          readonly: mockStores.Qvain.Temporals.readonly,
         },
         DurationPicker: {
-          Store,
-          Field: Store.Temporals,
-          translationsRoot: 'qvain.temporalAndSpatial.temporal',
+          Field: mockStores.Qvain.Temporals,
           datum: 'duration',
           id: 'temporal-period',
         },
         AddNewButton: {
-          content: 'qvain.temporalAndSpatial.temporal.addButton',
-          disabled: Store.Temporals.readonly,
+          content: 'translationsRoot.addButton',
+          disabled: mockStores.Qvain.Temporals.readonly,
         },
       }
 
@@ -144,14 +138,18 @@ describe('given required props', () => {
 
   describe('given additional prop Store.Temporals.validationError', () => {
     beforeEach(() => {
-      harness.shallow({
-        Store: {
+      harness.restoreWrapper('TemporalFieldContent')
+      useStores.mockReturnValue({
+        ...mockStores,
+        Qvain: {
+          ...mockStores.Qvain,
           Temporals: {
-            ...Store.Temporals,
+            ...mockStores.Qvain.Temporals,
             validationError: 'validationError',
           },
         },
       })
+      harness.shallow()
     })
 
     test('should have child ValidationError with text', () => {
