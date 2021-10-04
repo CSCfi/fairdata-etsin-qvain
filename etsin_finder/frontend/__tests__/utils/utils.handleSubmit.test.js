@@ -64,7 +64,7 @@ describe('when calling handleSubmit with mockStores', () => {
         toBackend: jest.fn(() => 'keywords'),
       },
       OtherIdentifiers: {
-        storage: 'identifiers',
+        toBackend: jest.fn(() => 'otherIdentifiers'),
       },
       Infrastructures: {
         toBackend: jest.fn(() => 'infrastructures'),
@@ -86,7 +86,7 @@ describe('when calling handleSubmit with mockStores', () => {
     const expectedReturn = {
       title: 'title',
       description: 'description',
-      identifiers: 'identifiers',
+      other_identifier: 'otherIdentifiers',
       keywords: 'keywords',
       theme: 'theme',
       creator: 'creator',

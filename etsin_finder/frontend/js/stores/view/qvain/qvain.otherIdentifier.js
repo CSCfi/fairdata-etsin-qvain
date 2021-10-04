@@ -27,6 +27,8 @@ class OtherIdentifiers extends ReferenceField {
     }
   }
 
+  toBackend = () => this.storage.map(url => ({ notation: url }))
+
   @action cleanupBeforeBackend = () => {
     const { validateStr, addItemStr } = this
     if (!validateStr()) {

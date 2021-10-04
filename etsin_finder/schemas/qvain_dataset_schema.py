@@ -13,9 +13,15 @@ class ReferenceObjectValidationSchema(Schema):
 
 
 class RemoteResourceDocumentValidationSchema(Schema):
-    """Validation schema for generic reference data objects."""
+    """Validation schema for remote resource urls."""
 
     identifier = fields.URL()
+
+
+class OtherIdentifierValidationSchema(Schema):
+    """Validation schema for other identifiers."""
+
+    notation = fields.URL(required=True)
 
 
 class RemoteResourceValidationSchema(Schema):
@@ -134,7 +140,7 @@ class DatasetValidationSchema(Schema):
         validate=lambda x: len(x.get("en", [])) + len(x.get("fi", [])) > 0,
     )
     issuedDate = fields.Str()
-    identifiers = fields.List(fields.Str())
+    other_identifier = fields.List(fields.Nested(OtherIdentifierValidationSchema))
     field_of_science = fields.List(fields.Nested(ReferenceObjectValidationSchema))
     language = fields.List(fields.Nested(ReferenceObjectValidationSchema))
     keywords = fields.List(

@@ -37,7 +37,7 @@ const handleSubmitToBackend = values => {
   const obj = {
     title,
     description,
-    identifiers: values.OtherIdentifiers.storage,
+    other_identifier: values.OtherIdentifiers.toBackend(),
     keywords,
     theme,
     creator,

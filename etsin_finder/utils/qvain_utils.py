@@ -64,24 +64,6 @@ def alter_projects_to_metax(projects):
     return output
 
 
-def other_identifiers_to_metax(identifiers_list):
-    """Convert other identifiers to comply with Metax schema.
-
-    Arguments:
-        identifiers_list (list): List of other identifiers from frontend.
-
-    Returns:
-        list: List of other identifiers that comply to Metax schema.
-
-    """
-    other_identifiers = []
-    for identifier in identifiers_list:
-        id_dict = {}
-        id_dict["notation"] = identifier
-        other_identifiers.append(id_dict)
-    return other_identifiers
-
-
 def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     """Convert all the data from the frontend to conform to Metax schema.
 
@@ -108,7 +90,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "rights_holder": data.get("rights_holder"),
             "contributor": data.get("contributor"),
             "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
-            "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
+            "other_identifier": data.get("other_identifier"),
             "field_of_science": data.get("field_of_science"),
             "language": data.get("language"),
             "keyword": data.get("keywords"),
@@ -268,7 +250,7 @@ def edited_data_to_metax(data, original):
             "rights_holder": data.get("rights_holder"),
             "contributor": data.get("contributor"),
             "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
-            "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
+            "other_identifier": data.get("other_identifier"),
             "field_of_science": data.get("field_of_science"),
             "language": data.get("language"),
             "keyword": data.get("keywords"),
