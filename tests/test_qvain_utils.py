@@ -14,15 +14,12 @@ from etsin_finder.utils.qvain_utils import (
     edited_data_to_metax,
     get_access_granter,
     get_dataset_creator,
-    other_identifiers_to_metax,
 )
 
 from .basetest import BaseTest
 from .frontend_test_data import (
     original_project_list,
     expected_project_list,
-    original_other_identifiers,
-    expected_other_identifiers,
     original_open_rights,
     expected_open_rights,
     original_embargo_rights,
@@ -54,11 +51,6 @@ class TestQvainUtils(BaseTest):
         """Test that function alters project list suitable to metax."""
         modified_list = alter_projects_to_metax(original_project_list)
         assert modified_list == expected_project_list
-
-    def test_other_identifiers_to_metax(app):
-        """Test that function alters other identifiers suitable for Metax."""
-        modified_identifiers = other_identifiers_to_metax(original_other_identifiers)
-        assert modified_identifiers == expected_other_identifiers
 
     def test_data_to_metax(self):
         """Test that function alters dataset for metax."""

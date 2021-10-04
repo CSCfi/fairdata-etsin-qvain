@@ -121,10 +121,6 @@ expected_project_list = [
     }
 ]
 
-original_other_identifiers = ["some url", "some other url"]
-
-expected_other_identifiers = [{"notation": "some url"}, {"notation": "some other url"}]
-
 original_open_rights = {
     "license": [
         {
@@ -211,7 +207,7 @@ expected_remote_resources = [
 original_complete_dataset = {
     "title": {"en": "test", "fi": ""},
     "description": {"en": "desc", "fi": ""},
-    "identifiers": ["https://doin.com/some_identifier"],
+    "other_identifier": [{"notation": "https://doin.com/some_identifier"}],
     "keywords": ["qwe"],
     "theme": [{"identifier": "http://www.yso.fi/onto/koko/p46606"}],
     "access_rights": {

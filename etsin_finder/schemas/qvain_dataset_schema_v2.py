@@ -9,6 +9,7 @@ from etsin_finder.schemas.qvain_dataset_schema import (
     ProjectValidationSchema,
     ReferenceObjectValidationSchema,
     RemoteResourceValidationSchema,
+    OtherIdentifierValidationSchema,
     data_catalog_matcher as data_catalog_matcher_v1,
 )
 
@@ -43,7 +44,7 @@ class DraftDatasetValidationSchema(Schema):
 
     original = fields.Dict()
     issuedDate = fields.Str()
-    identifiers = fields.List(fields.Str())
+    other_identifier = fields.List(fields.Nested(OtherIdentifierValidationSchema))
 
     field_of_science = fields.List(fields.Nested(ReferenceObjectValidationSchema))
 
