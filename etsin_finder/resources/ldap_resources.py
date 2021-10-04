@@ -1,18 +1,16 @@
 """Rest api for Qvain LDAP searches."""
-
+import json
 from etsin_finder.services.ldap_service import LDAPIdmService
 from etsin_finder.utils.qvain_utils import (
     check_authentication,
-    check_dataset_edit_permission,
 )
 from flask import current_app
 from flask_restful import reqparse, Resource
 
 from etsin_finder.utils.log_utils import log_request
-from etsin_finder.auth import authentication
 
 
-class QvainUser(Resource):
+class SearchUser(Resource):
     """Rest endpoint to get user details for inviting person to edit dataset."""
 
     def __init__(self):
@@ -21,11 +19,13 @@ class QvainUser(Resource):
         path (str): Default path where are all the users in LDAP tree.
         output (List<str>): Fields to be returned per entry.
         """
+        self.parser = reqparse.RequestParser()
+
         self.PATH = "ou=External,ou=Users,ou=idm,dc=csc,dc=fi"
         self.OUTPUT = ["givenName", "sn", "mail", "uid"]
 
     @log_request
-    def get(self):
+    def get(self, name):
         """Get user details.
 
         Arguments:
@@ -39,11 +39,11 @@ class QvainUser(Resource):
         if error is not None:
             return error
 
-        name = self.parser.parse_args().get("name", "")
         filter = self.parse_filter_from_name(name)
         ldap_service = LDAPIdmService()
 
         response, status = ldap_service.search(self.PATH, filter, self.OUTPUT)
+
         if status == 500:
             current_app.logger.warning(f"Exception in LDAP search: {str(response)}")
             return str(response), 500
