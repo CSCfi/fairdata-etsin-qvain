@@ -56,10 +56,9 @@ def get_log_config(log_file_path, log_lvl):
         return CONFIG
     return False
 
-
-def executing_travis():
-    """Return True whenever code is being executed by travis."""
-    return True if os.getenv("TRAVIS", False) else False
+def executing_cicd():
+    """Returns True whenever code is being executed by ci/cd"""
+    return True if os.getenv('CICD', False) else False
 
 
 def json_or_empty(response):
@@ -240,8 +239,8 @@ class FlaskService:
     """Use as base class for external dependency services."""
 
     def __init__(self, app):
-        """Init FlaskService."""
-        if app.testing or executing_travis():
+        """Init FlaskService"""
+        if app.testing or executing_cicd():
             self.is_testing = True
         else:
             self.is_testing = False

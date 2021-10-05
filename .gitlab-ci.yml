@@ -1,0 +1,98 @@
+# Example connection to fairdata-ci (test)
+# To be added
+
+#variables:
+#  INSTANCE: etsin-qvain-$CI_COMMIT_REF_SLUG
+#  VERSION: $CI_COMMIT_BRANCH
+#
+#include:
+#  - project: fairdata/fairdata-ci
+#    ref: staging
+#    file:
+#      - /templates/test.yml
+#
+#stages:
+#  - test
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(demo|stable|staging|test)$/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME !~ /^(demo|master|stable|staging|test)$/
+
+stages:
+  - deploy
+  - test
+  - clean_test
+  - clean_gitlab_env
+#  - update
+  - clean_previous_build
+
+  # Deployment of application code
+deploy:
+  stage: deploy
+  environment: $CI_COMMIT_REF_NAME
+  tags:
+    - shell
+  script:
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DEPLOY_PLAYBOOK -e "build_id=$CI_COMMIT_SHORT_SHA repo_version=$CI_COMMIT_REF_NAME"
+
+# Test of application code
+test:
+  stage: test
+  tags:
+    - shell
+  script:
+      - python3.8 -m virtualenv venv
+      - source venv/bin/activate
+      - pip install -r requirements.txt
+      - pip install -r test_requirements.txt
+      - tox -e cicd
+      - cd etsin_finder/frontend
+      - npm install
+      - npm run lint
+      - npm run test
+
+# ...
+clean_test:
+  stage: clean_test
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    on_stop: clean_gitlab_env
+  tags:
+    - shell
+  script:
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "build_id=$CI_COMMIT_SHORT_SHA"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: always
+    - when: never
+
+# Clean deleted branches from environments
+clean_gitlab_env:
+  stage: clean_gitlab_env
+  variables:
+    GIT_STRATEGY: none
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    action: stop
+  tags:
+    - shell
+  script:
+    - echo "Cleaning deleted branches from environments"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+    - when: never
+
+# Clean previous build of appication code from target environment
+clean_previous_build:
+  stage: clean_previous_build
+  environment: $CI_COMMIT_REF_NAME
+  tags:
+    - shell
+  script:
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "build_id=${CI_COMMIT_BEFORE_SHA:0:8}"
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(demo|stable|staging|test)$/
+      when: always
+    - when: never

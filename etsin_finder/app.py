@@ -9,7 +9,7 @@ from flask_mail import Mail
 
 from etsin_finder.app_config import load_app_config
 from etsin_finder.cache import CatalogRecordCache, RemsCache
-from etsin_finder.utils.utils import executing_travis, get_log_config
+from etsin_finder.utils.utils import executing_cicd, get_log_config
 from etsin_finder.utils.converters import IdentifierConverter
 from etsin_finder.utils.flags import validate_flags, initialize_supported_flags
 
@@ -186,10 +186,10 @@ def create_app(testing=None):
 
     app.config.update(load_app_config(testing))
     initialize_supported_flags(app)
-    if not app.testing and not executing_travis():
+    if not app.testing and not executing_cicd():
         _setup_app_logging(app)
     validate_config(app)
-    if not executing_travis():
+    if not executing_cicd():
         app.config.update({'SAML_PATH': '/home/etsin-user'})
         app.config.update({'SAML_PATH_ETSIN': '/home/etsin-user/etsin'})
         app.config.update({'SAML_PATH_QVAIN': '/home/etsin-user/qvain'})
