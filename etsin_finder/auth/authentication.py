@@ -9,7 +9,7 @@
 
 from flask import session
 from etsin_finder.log import log
-from etsin_finder.utils.utils import executing_travis
+from etsin_finder.utils.utils import executing_cicd
 from etsin_finder.utils.constants import SAML_ATTRIBUTES
 from etsin_finder.auth.authentication_fairdata_sso import (
     is_authenticated_through_fairdata_sso,
@@ -33,7 +33,7 @@ def is_authenticated():
         bool: Is auth.
 
     """
-    if executing_travis():
+    if executing_cicd():
         return False
 
     if is_authenticated_through_direct_proxy():
@@ -50,7 +50,7 @@ def is_authenticated_CSC_user():
         bool: Is CSC user.
 
     """
-    if executing_travis():
+    if executing_cicd():
         return False
 
     # Authenticated through direct proxy

@@ -64,12 +64,12 @@ class UtilsTestSuite(BaseTest):
         monkeypatch.setattr(os, "getenv", getenv)
 
     @pytest.fixture
-    def env_TRAVIS(self, monkeypatch):
-        """Set getenv to TRAVIS."""
+    def env_CICD(self, monkeypatch):
+        """Set getenv to CICD"""
         import os
 
         def getenv(isEnv, defaultReturn):
-            return True if isEnv == "TRAVIS" else defaultReturn
+            return True if isEnv == "CICD" else defaultReturn
 
         monkeypatch.setattr(os, "getenv", getenv)
 

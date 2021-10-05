@@ -9,7 +9,7 @@
 
 import yaml
 
-from etsin_finder.utils.utils import executing_travis, ensure_app
+from etsin_finder.utils.utils import executing_cicd, ensure_app
 
 
 def _get_app_config_from_file():
@@ -33,8 +33,8 @@ def load_app_config(is_testing):
         function: function to get app config.
 
     """
-    if executing_travis():
-        return _get_app_config_for_travis()
+    if executing_cicd():
+        return _get_app_config_for_cicd()
     if is_testing:
         return _get_test_app_config()
     return _get_app_config_from_file()
@@ -98,8 +98,8 @@ def _get_test_app_config():
     }
 
 
-def _get_app_config_for_travis():
-    """Get app config for travis.
+def _get_app_config_for_cicd():
+    """Get app config for ci/cd
 
     Returns:
         dict: app config.
@@ -121,6 +121,9 @@ def get_memcached_config(app=None):
         dict: Dict with memcache configs or None.
 
     """
+    if executing_cicd():
+        return None
+
     app = ensure_app(app)
     memcached_conf = app.config.get("MEMCACHED", False)
     if not memcached_conf or not isinstance(memcached_conf, dict):
@@ -160,7 +163,7 @@ def get_fairdata_rems_api_config(app=None):
         dict: REMS api config or None.
 
     """
-    if executing_travis():
+    if executing_cicd():
         return None
 
     app = ensure_app(app)
