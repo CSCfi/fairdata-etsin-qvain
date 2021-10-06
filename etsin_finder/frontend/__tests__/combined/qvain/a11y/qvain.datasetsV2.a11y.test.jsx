@@ -18,7 +18,7 @@ expect.extend(toHaveNoViolations)
 
 let stores
 
-jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
+jest.setTimeout(25000) // the default 5000ms timeout is not always enough here
 
 beforeEach(() => {
   stores = buildStores()

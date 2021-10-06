@@ -12,8 +12,9 @@ import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import searchResults from '../../../__testdata__/searchResults.data'
 import Search from '../../../../js/components/search'
-import Accessibility from '../../../../js/stores/view/accessibility'
 import axios from 'axios'
+
+jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
 
 jest.mock('../../../../js/stores/view/accessibility')
 expect.extend(toHaveNoViolations)
