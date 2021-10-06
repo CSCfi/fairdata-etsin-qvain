@@ -25,7 +25,7 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
       readonly,
     },
     Env: { getQvainUrl },
-    QvainDatasets: { setPublishedDataset, publishedDataset },
+    QvainDatasets,
     Matomo,
   } = useStores()
 
@@ -38,18 +38,18 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
   useEffect(() => {
     prevalidate()
     const identifier = original?.identifier
-    if (identifier && identifier !== publishedDataset) {
+    if (identifier && identifier !== QvainDatasets.publishedDataset) {
       const path = `/dataset/${identifier}`
       if (history.location.pathname !== path) {
         history.replace(getQvainUrl(path))
       }
     }
-  }, [original, publishedDataset, getQvainUrl, history, prevalidate])
+  }, [original, QvainDatasets, getQvainUrl, history, prevalidate])
 
   const goToDatasetsCallBack = identifier => {
     // go to datasets view and highlight published dataset
-    setPublishedDataset(identifier)
-    history.push('/qvain')
+    QvainDatasets.setPublishedDataset(identifier)
+    history.push(getQvainUrl('/'))
   }
 
   const handleDraftClick = () => {

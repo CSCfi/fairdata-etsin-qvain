@@ -24,7 +24,7 @@ import { StoresProvider, useStores } from '../../../../js/stores/stores'
 import Modal from '../../../../js/components/general/modal'
 import SelectedItemsTreeItem from '../../../../js/components/qvain/fields/files/ida/selectedItemsTreeItem'
 
-jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
+jest.setTimeout(25000) // the default 5000ms timeout is not always enough here
 
 Promise.config({
   cancellation: true,
