@@ -10,6 +10,7 @@
 import yaml
 
 from etsin_finder.utils.utils import executing_cicd, ensure_app
+from ldap3 import MOCK_SYNC
 
 
 def _get_app_config_from_file():
@@ -94,7 +95,13 @@ def _get_test_app_config():
         "MEMCACHED": {
             "HOST": "testing",
             "PORT": 1234,
-        }
+        },
+        "LDAP": {
+            "HOST": "fake host",
+            "BIND": "fake bind",
+            "PASSWORD": "fake password",
+            "STRATEGY": MOCK_SYNC,
+        },
     }
 
 
@@ -172,7 +179,9 @@ def get_fairdata_rems_api_config(app=None):
         return None
 
     if (
-        "API_KEY" not in rems_conf or "HOST" not in rems_conf or "ENABLED" not in rems_conf
+        "API_KEY" not in rems_conf
+        or "HOST" not in rems_conf
+        or "ENABLED" not in rems_conf
     ):
         return None
 
@@ -192,8 +201,33 @@ def get_metax_api_config(app=None):
         return None
 
     if (
-        "HOST" not in metax_api_conf or "USER" not in metax_api_conf or "PASSWORD" not in metax_api_conf or "VERIFY_SSL" not in metax_api_conf
+        "HOST" not in metax_api_conf
+        or "USER" not in metax_api_conf
+        or "PASSWORD" not in metax_api_conf
+        or "VERIFY_SSL" not in metax_api_conf
     ):
         return None
 
     return metax_api_conf
+
+
+def get_ldap_config(app=None):
+    """Get LDAP idm config.
+
+    Returns:
+        dict: LDAP configuration or None.
+
+    """
+    app = ensure_app(app)
+    ldap_config = app.config.get("LDAP")
+    if not ldap_config or not isinstance(ldap_config, dict):
+        return None
+
+    if (
+        "HOST" not in ldap_config
+        or "BIND" not in ldap_config
+        or "PASSWORD" not in ldap_config
+    ):
+        return None
+
+    return ldap_config
