@@ -1,8 +1,8 @@
 blinker==1.4
 cryptography==3.4.7
-Flask==1.0.2
+Flask==1.1.4
 Flask-Mail==0.9.1
-flask-restful==0.3.7
+flask-restful==0.3.8
 gevent==1.4.0
 gunicorn==19.9.0
 marshmallow==v3.13.0
