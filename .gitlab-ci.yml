@@ -88,6 +88,8 @@ clean_gitlab_env:
 update_etsin_qvain:
   stage: update
   environment: $CI_COMMIT_REF_NAME
+  tags:
+    - shell
   script:
     - ansible-playbook -i $ANSIBLE_INVENTORY $UPDATE_PROXY_PLAYBOOK -e "build_id=$CI_COMMIT_SHORT_SHA"
   rules:
