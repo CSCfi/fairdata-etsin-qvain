@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash'
 import Spatials from './qvain.spatials'
 
 class Locations extends Spatials {
@@ -5,7 +6,12 @@ class Locations extends Spatials {
     super(Parent, locations)
   }
 
-  clone = () => new Locations(this.Parent, this.toBackend())
+  clone = () => {
+    const newLocations = new Locations(this.Parent)
+
+    newLocations.storage = this.storage.map(loc => cloneDeep(loc))
+    return newLocations
+  }
 
   translationsRoot = 'qvain.history.provenance.modal.locationInput'
 }
