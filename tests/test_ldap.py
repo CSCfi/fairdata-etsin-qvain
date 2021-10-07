@@ -1,5 +1,6 @@
 """Test suite for LDAP idm."""
 from etsin_finder.services.ldap_service import LDAPIdmService
+from etsin_finder.resources.ldap_resources import SearchUser
 from .basetest import BaseTest
 from ldap3 import MOCK_SYNC
 
@@ -24,5 +25,21 @@ class TestLDAP(BaseTest):
                     "ou=Users,dc=fake,dc=server", "(cn=teppo)", ["test"]
                 )
 
-                assert entries[0].get("attributes", {}).get("test") == ["test"]
-                assert status == 200
+            expectedEntries = [
+                {
+                    "attributes": {"test": ["test"]},
+                    "dn": "cn=teppo,ou=Users,dc=fake,dc=server",
+                }
+            ]
+
+            assert entries == expectedEntries
+            assert status == 200
+
+    def test_parse_filter_from_name_two_parts(self):
+        """Return correct filter string."""
+        name = "Teppo Test"
+        expected_filter = "(|(&(|(givenName=Teppo)(sn=Teppo))(|(givenName=Test*)(sn=Test*)))(mail=Teppo Test*))"
+        ldap_resource = SearchUser()
+        filter = ldap_resource.parse_filter_from_name(name)
+
+        assert filter == expected_filter
