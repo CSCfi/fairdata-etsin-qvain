@@ -82,6 +82,8 @@ def add_restful_resources(app):
         DatasetProjects,
     )
 
+    from etsin_finder.resources.ldap_resources import SearchUser
+
     add_download_resources(api)
 
     # Common Qvain and Etsin endpoints
@@ -125,6 +127,9 @@ def add_restful_resources(app):
 
     # REMS API endpoints
     api.add_resource(REMSApplyForPermission, "/api/rems/<id:cr_id>")
+
+    # LDAP API endpoints
+    api.add_resource(SearchUser, "/api/ldap/users/<string:name>")
 
 
 def add_views(app):

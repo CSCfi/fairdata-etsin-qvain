@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Used for performing operations related to Metax for Qvain"""
+"""Used for performing operations related to Metax for Qvain."""
 
 import requests
 import json
@@ -28,34 +28,34 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
     @property
     def config(self):
         """Get service configuration"""
-        return current_app.config.get('METAX_QVAIN_API', None)
+        return current_app.config.get("METAX_QVAIN_API", None)
 
     @property
     def proxies(self):
         """Get service proxy configuration"""
-        if self.config.get('HTTPS_PROXY'):
-            return dict(https=self.config.get('HTTPS_PROXY'))
+        if self.config.get("HTTPS_PROXY"):
+            return dict(https=self.config.get("HTTPS_PROXY"))
         return None
 
     def metax_url(self, url):
         """Return a Metax API URL"""
-        return f'https://{self._HOST}{url}'
+        return f"https://{self._HOST}{url}"
 
     @property
     def _HOST(self):
-        return self.config.get('HOST')
+        return self.config.get("HOST")
 
     @property
     def _USER(self):
-        return self.config.get('USER')
+        return self.config.get("USER")
 
     @property
     def _PASSWORD(self):
-        return self.config.get('PASSWORD')
+        return self.config.get("PASSWORD")
 
     @property
     def _VERIFY_SSL(self):
-        return self.config.get('VERIFY_SSL', True)
+        return self.config.get("VERIFY_SSL", True)
 
     @property
     def _METAX_GET_DIRECTORY_FOR_PROJECT_URL(self):
@@ -67,41 +67,41 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
     @property
     def _METAX_GET_FILE(self):
-        return self.metax_url('/rest/v2/files') + \
-            '/{0}'
+        return self.metax_url("/rest/v2/files") + "/{0}"
 
     @property
     def _METAX_GET_DATASET(self):
-        return self.metax_url('/rest/v2/datasets') + \
-            '/{0}'
+        return self.metax_url("/rest/v2/datasets") + "/{0}"
 
     @property
     def _METAX_GET_DATASETS_FOR_USER(self):
-        return self.metax_url('/rest/v2/datasets') + \
-            '?metadata_provider_user={0}&ordering=-date_created'
+        return (
+            self.metax_url("/rest/v2/datasets")
+            + "?metadata_provider_user={0}&ordering=-date_created"
+        )
 
     @property
     def _METAX_GET_ALL_DATASETS_FOR_USER(self):
-        return self.metax_url('/rest/v2/datasets') + \
-            '?metadata_provider_user={0}&ordering=-date_created&no_pagination=true'
+        return (
+            self.metax_url("/rest/v2/datasets")
+            + "?metadata_provider_user={0}&ordering=-date_created&no_pagination=true"
+        )
 
     @property
     def _METAX_CREATE_DATASET(self):
-        return self.metax_url('/rest/v2/datasets')
+        return self.metax_url("/rest/v2/datasets")
 
     @property
     def _METAX_PATCH_DATASET(self):
-        return self.metax_url('/rest/v2/datasets') + \
-            '/{0}'
+        return self.metax_url("/rest/v2/datasets") + "/{0}"
 
     @property
     def _METAX_DELETE_DATASET(self):
-        return self.metax_url('/rest/v2/datasets') + \
-            '/{0}'
+        return self.metax_url("/rest/v2/datasets") + "/{0}"
 
     @property
     def _METAX_CHANGE_CUMULATIVE_STATE(self):
-        return self.metax_url('/rpc/v2/datasets/change_cumulative_state')
+        return self.metax_url("/rpc/v2/datasets/change_cumulative_state")
 
     @property
     def _METAX_REFRESH_DIRECTORY_CONTENT(self):
@@ -109,36 +109,37 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
     @property
     def _METAX_FIX_DEPRECATED(self):
-        return self.metax_url('/rpc/v2/datasets/fix_deprecated')
+        return self.metax_url("/rpc/v2/datasets/fix_deprecated")
 
     @property
     def _METAX_UPDATE_DATASET_FILES(self):
-        return self.metax_url('/rest/v2/datasets') + \
-            '/{0}/files'
+        return self.metax_url("/rest/v2/datasets") + "/{0}/files"
 
     @property
     def _METAX_CREATE_NEW_VERSION(self):
-        return self.metax_url('/rpc/v2/datasets/create_new_version')
+        return self.metax_url("/rpc/v2/datasets/create_new_version")
 
     @property
     def _METAX_PUBLISH_DATASET(self):
-        return self.metax_url('/rpc/v2/datasets/publish_dataset')
+        return self.metax_url("/rpc/v2/datasets/publish_dataset")
 
     @property
     def _METAX_MERGE_DRAFT(self):
-        return self.metax_url('/rpc/v2/datasets/merge_draft')
+        return self.metax_url("/rpc/v2/datasets/merge_draft")
 
     @property
     def _METAX_CREATE_DRAFT(self):
-        return self.metax_url('/rpc/v2/datasets/create_draft')
+        return self.metax_url("/rpc/v2/datasets/create_draft")
 
     def _get_args(self, **kwargs):
         """Get default args for request, allow overriding with kwargs."""
-        args = dict(headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
-                    auth=(self._USER, self._PASSWORD),
-                    verify=self._VERIFY_SSL,
-                    timeout=30,
-                    proxies=self.proxies)
+        args = dict(
+            headers={"Accept": "application/json", "Content-Type": "application/json"},
+            auth=(self._USER, self._PASSWORD),
+            verify=self._VERIFY_SSL,
+            timeout=30,
+            proxies=self.proxies,
+        )
         args.update(kwargs)
         return args
 
@@ -152,14 +153,18 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             Metax response
 
         """
-        req_url = format_url(self._METAX_GET_DIRECTORY_FOR_PROJECT_URL, project_identifier)
-        resp, _, success = make_request(requests.get,
-                                        req_url,
-                                        params=params,
-                                        **self._get_args()
-                                        )
+        req_url = format_url(
+            self._METAX_GET_DIRECTORY_FOR_PROJECT_URL, project_identifier
+        )
+        resp, _, success = make_request(
+            requests.get, req_url, params=params, **self._get_args()
+        )
         if not success:
-            log.warning("Failed to get directory contents for project {}".format(project_identifier))
+            log.warning(
+                "Failed to get directory contents for project {}".format(
+                    project_identifier
+                )
+            )
             return None
         return resp
 
@@ -175,10 +180,9 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_GET_DIRECTORY, dir_identifier)
-        resp, _, success = make_request(requests.get,
-                                        req_url,
-                                        params=params,
-                                        **self._get_args())
+        resp, _, success = make_request(
+            requests.get, req_url, params=params, **self._get_args()
+        )
         if not success:
             log.warning("Failed to get directory {}".format(dir_identifier))
             return None
@@ -195,10 +199,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_GET_FILE, file_identifier)
-        resp, _, success = make_request(requests.get,
-                                        req_url,
-                                        **self._get_args()
-                                        )
+        resp, _, success = make_request(requests.get, req_url, **self._get_args())
         if not success:
             log.warning("Failed to get file {}".format(file_identifier))
             return None
@@ -221,16 +222,16 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_GET_FILE, file_identifier)
-        resp, code, success = make_request(requests.patch,
-                                           req_url,
-                                           json=data,
-                                           **self._get_args()
-                                           )
+        resp, code, success = make_request(
+            requests.patch, req_url, json=data, **self._get_args()
+        )
         if not success:
             log.warning("Failed to patch file {}".format(file_identifier))
         return resp, code
 
-    def get_datasets_for_user(self, user_id, limit, offset, no_pagination, data_catalog_matcher=None):
+    def get_datasets_for_user(
+        self, user_id, limit, offset, no_pagination, data_catalog_matcher=None
+    ):
         """Get datasets created by the specified user.
 
         Uses pagination, so offset and limit are used as well.
@@ -246,25 +247,23 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_GET_DATASETS_FOR_USER, user_id)
-        if (no_pagination):
+        if no_pagination:
             req_url = format_url(self._METAX_GET_ALL_DATASETS_FOR_USER, user_id)
 
         params = {}
-        if (limit):
-            params['limit'] = limit
-        if (offset):
-            params['offset'] = offset
+        if limit:
+            params["limit"] = limit
+        if offset:
+            params["offset"] = offset
         if data_catalog_matcher:
-            params['data_catalog'] = data_catalog_matcher
+            params["data_catalog"] = data_catalog_matcher
 
-        resp, _, success = make_request(requests.get,
-                                        req_url,
-                                        params=params,
-                                        **self._get_args()
-                                        )
+        resp, _, success = make_request(
+            requests.get, req_url, params=params, **self._get_args()
+        )
         if not success or len(resp) == 0:
-            log.info('No datasets found.')
-            return 'no datasets'
+            log.info("No datasets found.")
+            return "no datasets"
         return resp
 
     def create_dataset(self, data, params=None):
@@ -280,15 +279,16 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
         """
         req_url = self._METAX_CREATE_DATASET
         args = self._get_args(timeout=30)
-        resp, status, success = make_request(requests.post,
-                                             req_url,
-                                             params=params,
-                                             json=data,
-                                             **args
-                                             )
+        resp, status, success = make_request(
+            requests.post, req_url, params=params, json=data, **args
+        )
 
         if success:
-            log.info('Created dataset with identifier: {}'.format(resp.get('identifier', 'COULD-NOT-GET-IDENTIFIER')))
+            log.info(
+                "Created dataset with identifier: {}".format(
+                    resp.get("identifier", "COULD-NOT-GET-IDENTIFIER")
+                )
+            )
         else:
             log.warning("Failed to create dataset")
 
@@ -308,21 +308,23 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_PATCH_DATASET, cr_id)
-        headers = {'Accept': 'application/json', 'If-Unmodified-Since': last_modified}
-        log.debug('Request URL: PATCH {0}\nHeaders: {1}\nData: {2}'.format(req_url, headers, json.dumps(data, indent=2)))
+        headers = {"Accept": "application/json", "If-Unmodified-Since": last_modified}
+        log.debug(
+            "Request URL: PATCH {0}\nHeaders: {1}\nData: {2}".format(
+                req_url, headers, json.dumps(data, indent=2)
+            )
+        )
 
         args = self._get_args(timeout=30)
-        resp, status, success = make_request(requests.patch,
-                                             req_url,
-                                             params=params,
-                                             json=data,
-                                             **args)
+        resp, status, success = make_request(
+            requests.patch, req_url, params=params, json=data, **args
+        )
 
         if status == 412:
-            return 'Resource has been modified since last publish', status
+            return "Resource has been modified since last publish", status
 
         if success:
-            log.info('Updated dataset with identifier: {}'.format(cr_id))
+            log.info("Updated dataset with identifier: {}".format(cr_id))
         else:
             log.warning("Failed to update dataset {}".format(cr_id), status)
         return resp, status
@@ -338,11 +340,9 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_GET_DATASET, cr_id)
-        resp, status, success = make_request(requests.get,
-                                             req_url,
-                                             **self._get_args())
+        resp, status, success = make_request(requests.get, req_url, **self._get_args())
         if not success:
-            log.warning('Failed to get dataset {}'.format(cr_id))
+            log.warning("Failed to get dataset {}".format(cr_id))
         return resp, status
 
     def delete_dataset(self, cr_id):
@@ -356,13 +356,13 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_DELETE_DATASET, cr_id)
-        resp, status, success = make_request(requests.delete,
-                                             req_url,
-                                             **self._get_args())
+        resp, status, success = make_request(
+            requests.delete, req_url, **self._get_args()
+        )
         if success:
-            log.info('Deleted dataset with identifier: {}'.format(cr_id))
+            log.info("Deleted dataset with identifier: {}".format(cr_id))
         else:
-            log.warning('Failed to delete dataset {}'.format(cr_id))
+            log.warning("Failed to delete dataset {}".format(cr_id))
         return resp, status
 
     def change_cumulative_state(self, cr_id, cumulative_state):
@@ -377,19 +377,22 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = self._METAX_CHANGE_CUMULATIVE_STATE
-        params = {
-            "identifier": cr_id,
-            "cumulative_state": cumulative_state
-        }
-        resp, status, success = make_request(requests.post,
-                                             req_url,
-                                             params=params,
-                                             **self._get_args()
-                                             )
+        params = {"identifier": cr_id, "cumulative_state": cumulative_state}
+        resp, status, success = make_request(
+            requests.post, req_url, params=params, **self._get_args()
+        )
         if success:
-            log.info('Changed cumulative state of dataset {} to {}'.format(cr_id, cumulative_state))
+            log.info(
+                "Changed cumulative state of dataset {} to {}".format(
+                    cr_id, cumulative_state
+                )
+            )
         else:
-            log.warning('Failed to change cumulative_state of dataset {} to {}'.format(cr_id, cumulative_state))
+            log.warning(
+                "Failed to change cumulative_state of dataset {} to {}".format(
+                    cr_id, cumulative_state
+                )
+            )
         return resp, status
 
     def refresh_directory_content(self, cr_identifier, dir_identifier):
@@ -414,24 +417,21 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_UPDATE_DATASET_FILES, cr_id)
-        log.debug('Request URL: {0}\nData: {1}'.format(req_url, data))
+        log.debug("Request URL: {0}\nData: {1}".format(req_url, data))
 
         args = self._get_args(timeout=30)
-        resp, status, success = make_request(requests.post,
-                                             req_url,
-                                             params=params,
-                                             json=data,
-                                             **args
-                                             )
+        resp, status, success = make_request(
+            requests.post, req_url, params=params, json=data, **args
+        )
 
         if not success:
             log.warning("Failed to update dataset {}".format(cr_id))
             return resp, status
 
         if status == 412:
-            return 'Resource has been modified since last publish', 412
+            return "Resource has been modified since last publish", 412
 
-        log.info('Updated dataset with identifier: {}'.format(cr_id))
+        log.info("Updated dataset with identifier: {}".format(cr_id))
         return resp, status
 
     def create_new_version(self, cr_identifier):
@@ -449,16 +449,16 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             "identifier": cr_identifier,
         }
         args = self._get_args(timeout=30)
-        resp, status, success = make_request(requests.post,
-                                             req_url,
-                                             params=params,
-                                             **args
-                                             )
+        resp, status, success = make_request(
+            requests.post, req_url, params=params, **args
+        )
 
         if success:
-            log.info('Created new version of dataset {}'.format(cr_identifier))
+            log.info("Created new version of dataset {}".format(cr_identifier))
         else:
-            log.warning("Failed to create new version of dataset {}".format(cr_identifier))
+            log.warning(
+                "Failed to create new version of dataset {}".format(cr_identifier)
+            )
         return resp, status
 
     def publish_dataset(self, cr_identifier):
@@ -476,10 +476,9 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             "identifier": cr_identifier,
         }
         args = self._get_args(timeout=30)
-        resp, status, success = make_request(requests.post,
-                                             req_url,
-                                             params=params,
-                                             **args)
+        resp, status, success = make_request(
+            requests.post, req_url, params=params, **args
+        )
 
         if success:
             log.info("Published dataset {}".format(cr_identifier))
@@ -503,11 +502,9 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             "identifier": cr_identifier,
         }
         args = self._get_args(timeout=30)
-        resp, status, success = make_request(requests.post,
-                                             req_url,
-                                             params=params,
-                                             **args
-                                             )
+        resp, status, success = make_request(
+            requests.post, req_url, params=params, **args
+        )
 
         if success:
             log.info("Merged draft {}".format(cr_identifier))
@@ -530,11 +527,9 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             "identifier": cr_identifier,
         }
         args = self._get_args(timeout=30)
-        resp, status, success = make_request(requests.post,
-                                             req_url,
-                                             params=params,
-                                             **args
-                                             )
+        resp, status, success = make_request(
+            requests.post, req_url, params=params, **args
+        )
 
         if success:
             log.info("Created draft of {}".format(cr_identifier))
