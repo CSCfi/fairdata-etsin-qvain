@@ -12,7 +12,6 @@ export const ConfirmDialog = ({ show, disabled, onConfirm, onCancel, content }) 
   return (
     <ResponseOverlay>
       {content.warning}
-      <div style={{ margin: 10 }} />
       <ConfirmButtonContainer>
         <DangerCancelButton disabled={disabled} onClick={onCancel}>
           {content.cancel}
@@ -44,9 +43,9 @@ ConfirmDialog.defaultProps = {
 // Show confirmation overlay for closing a modal with unsaved changes.
 export const ConfirmClose = props => {
   const content = {
-    warning: <Translate content={'qvain.confirmClose.warning'} component="p" />,
-    confirm: <Translate content={'qvain.confirmClose.confirm'} />,
-    cancel: <Translate content={'qvain.confirmClose.cancel'} />,
+    warning: <Translate content={props.warning} component="p" />,
+    confirm: <Translate content={props.confirm} />,
+    cancel: <Translate content={props.cancel} />,
   }
   return <ConfirmDialog {...props} content={content} />
 }
@@ -56,8 +55,14 @@ ConfirmClose.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  warning: PropTypes.string,
+  confirm: PropTypes.string,
+  cancel: PropTypes.string,
 }
 
 ConfirmClose.defaultProps = {
   disabled: false,
+  warning: 'qvain.confirmClose.warning',
+  confirm: 'qvain.confirmClose.confirm',
+  cancel: 'qvain.confirmClose.cancel',
 }

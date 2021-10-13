@@ -79,7 +79,8 @@ class SearchUser(Resource):
         else:
             name_filter = f'(&{"".join(name_part_filters)})'
 
-        email_filter = f"(mail={name}*)"
-        filter = f"(|{name_filter}{email_filter})"
+        email_filter = f"(mail={safe_name}*)"
+        uid_filter = f"(cn={safe_name}*)"
+        filter = f"(&(|{name_filter}{email_filter}{uid_filter})(objectClass=person))"
 
         return filter

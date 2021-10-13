@@ -5,7 +5,8 @@ import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { ThemeProvider } from 'styled-components'
-import { BrowserRouter } from 'react-router-dom'
+import { MemoryRouter, Route } from 'react-router-dom'
+import ReactModal from 'react-modal'
 
 import '@/../locale/translations'
 import etsinTheme from '@/styles/theme'
@@ -18,33 +19,68 @@ jest.useFakeTimers('modern')
 jest.setSystemTime(new Date('2021-05-07T10:00:00Z'))
 
 jest.mock('axios')
-axios.get = jest.fn((...args) => {
-  return Promise.resolve({
-    data: datasets,
-  })
+
+let stores, wrapper, helper, testLocation
+
+beforeEach(() => {
+  axios.get.mockReturnValue(
+    Promise.resolve({
+      data: datasets,
+    })
+  )
 })
 
-let stores, wrapper
+const wait = async cond => {
+  let counter = 0
+  while (!cond()) {
+    counter += 1
+    if (counter > 100) {
+      throw new Error('Wait timed out')
+    }
+    jest.advanceTimersByTime(1000)
+    await Promise.resolve()
+    wrapper.update()
+  }
+}
 
 const render = async () => {
   wrapper?.unmount?.()
+  if (helper) {
+    document.body.removeChild(helper)
+    helper = null
+  }
   stores = buildStores()
+  stores.Env.app = 'qvain'
   stores.Auth.setUser({
     name: 'teppo',
   })
   stores.Env.Flags.setFlag('UI.NEW_DATASETS_VIEW', true)
+
+  helper = document.createElement('div')
+  document.body.appendChild(helper)
+  ReactModal.setAppElement(helper)
   wrapper = mount(
     <StoresProvider store={stores}>
-      <BrowserRouter>
+      <MemoryRouter>
+        <Route
+          path="*"
+          render={({ location }) => {
+            testLocation = location
+            return null
+          }}
+        />
         <ThemeProvider theme={etsinTheme}>
           <DatasetsV2 />
         </ThemeProvider>
-      </BrowserRouter>
-    </StoresProvider>
+      </MemoryRouter>
+    </StoresProvider>,
+    { attachTo: helper }
   )
 
   // wait until datasets have been fetched
-  await when(() => stores.QvainDatasets.datasetGroupsOnPage.length > 0)
+  await when(
+    () => stores.QvainDatasets.datasetGroupsOnPage.length > 0 || stores.QvainDatasets.error
+  )
   wrapper.update()
 }
 
@@ -55,11 +91,37 @@ const findDatasetWithTitle = title =>
     .closest('tr')
 
 describe('DatasetsV2', () => {
+  describe('given error', () => {
+    beforeEach(async () => {
+      axios.get.mockReturnValueOnce(Promise.reject('this is not supposed to happen'))
+      await render()
+    })
+
+    it('should show error', async () => {
+      wrapper.text().should.include('this is not supposed to happen')
+    })
+
+    it('should reload datasets when button is clicked', async () => {
+      wrapper.find('button[children="Reload"]').simulate('click')
+      await wait(() => wrapper.find('tbody').length > 0)
+      wrapper.find('tbody').length.should.eql(7)
+    })
+  })
+
+  describe('create new dataset', () => {
+    it('should redirect to /dataset', async () => {
+      await render()
+      testLocation.pathname.should.eql('/')
+      const createNewBtn = wrapper.find('button[children="Create a new dataset"]')
+      createNewBtn.simulate('click')
+      testLocation.pathname.should.eql('/dataset')
+    })
+  })
+
   describe('show more', () => {
     it('should show more datasets', async () => {
       await render()
-      const getMoreBtn = () =>
-        wrapper.find('button').filterWhere(btn => btn.prop('children').includes?.('Show more'))
+      const getMoreBtn = () => wrapper.find('span[children*="Show more"]').closest('button')
       stores.QvainDatasetsV2.setShowCount({ initial: 4, current: 4, increment: 2 })
       wrapper.update()
       wrapper.find('tbody').length.should.eql(4)
@@ -67,6 +129,17 @@ describe('DatasetsV2', () => {
       wrapper.find('tbody').length.should.eql(6)
       getMoreBtn().simulate('click')
       wrapper.find('tbody').length.should.eql(7)
+    })
+  })
+
+  describe('PublishSuccess', () => {
+    it('should hide when close button is clicked', async () => {
+      await render()
+      stores.QvainDatasets.setPublishedDataset('someDatasetIdentifier')
+      wrapper.update()
+      wrapper.find('span[children="Dataset published!"]').length.should.eql(1)
+      wrapper.find('span[children="hide notice"]').simulate('click')
+      wrapper.find('span[children="Dataset published!"]').length.should.eql(0)
     })
   })
 
@@ -180,5 +253,16 @@ describe('DatasetsV2', () => {
         dataset.find(`[role="menu"] span[children="${label}"]`).should.have.lengthOf(menu ? 1 : 0)
       }
     )
+  })
+
+  describe('Share button', () => {
+    it('should open modal', async () => {
+      await render()
+      const dataset = findDatasetWithTitle('IDA dataset')
+      const shareButton = dataset.find(`button[aria-label="Share"]`)
+      wrapper.find('[aria-label="shareDatasetModal"]').should.have.lengthOf(0)
+      shareButton.simulate('click')
+      wrapper.find('[aria-label="shareDatasetModal"]').should.have.lengthOf(1)
+    })
   })
 })

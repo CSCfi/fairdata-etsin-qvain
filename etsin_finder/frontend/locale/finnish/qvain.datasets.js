@@ -7,8 +7,6 @@ const datasets = {
   },
   help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
   createButton: 'Luo uusi aineisto',
-  createNewVersion: 'Luo uusi versio',
-  useAsTemplate: 'Käytä mallina',
   state: {
     draft: 'Luonnos',
     published: 'Julkaistu',
@@ -24,7 +22,7 @@ const datasets = {
     actions: 'Toiminnot',
     edit: 'Muokkaa',
     share: 'Jaa',
-    preview: 'Esikatsele',
+    preview: 'Katsele',
     owner: 'Omistaja',
     dateFormat: {
       moments: 'Muutama hetki sitten',
@@ -53,15 +51,22 @@ const datasets = {
   oldVersion: 'Vanha versio',
   latestVersion: 'Uusin',
   deprecated: 'Vanhentunut',
-  editButton: 'Muokkaa',
-  editDraftButton: 'Muokkaa luonnosta',
-  deleteButton: 'Poista',
-  revertButton: 'Poista muutokset',
+  actions: {
+    edit: 'Muokkaa',
+    editDraft: 'Muokkaa luonnosta',
+    goToEtsin: 'Katso Etsimessä',
+    goToEtsinDraft: 'Esikatsele Etsimessä',
+    share: 'Jaa',
+    createNewVersion: 'Luo uusi versio',
+    useAsTemplate: 'Käytä mallina',
+    revert: 'Poista muutokset',
+    delete: 'Poista',
+  },
   remove: {
     confirm: {
       published: {
         text:
-          'Haluatko varmasti poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
+        'Haluatko varmasti poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
         ok: 'Poista',
       },
       draft: {
@@ -75,10 +80,7 @@ const datasets = {
       cancel: 'Peruuta',
     },
   },
-  goToEtsin: 'Katso Etsimessä',
-  goToEtsinDraft: 'Esikatsele Etsimessä',
   openNewVersion: 'Avaa uusi versio',
-  share: 'Jaa',
   noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
   reload: 'Lataa uudelleen',
   loading: 'Lataa...',
@@ -86,6 +88,33 @@ const datasets = {
   tableHeader: 'Luodut aineistot',
   tabs: {
     all: 'Kaikki aineistot',
+  },
+  share: {
+    title: 'Jaa aineisto',
+    tabs: {
+      invite: 'Kutsu',
+      members: 'Jäsenet',
+    },
+    invite: {
+      users: {
+        label: 'Käyttäjät',
+        placeholder: 'Etsi käyttäjiä',
+        help: 'Etsi käyttäjiä nimen, käyttäjätunnuksen tai sähköpostin perusteella.',
+        empty: 'Käyttäjiä ei löytynyt.',
+        searchError: 'Käyttäjien hakemisessa tapahtui virhe.',
+        searching: 'Haetaan...',
+      },
+      message: {
+        label: 'Viesti',
+        placeholder: 'Kirjoita halutessasi kutsuun liitettävä viesti.',
+      },
+      button: 'Kutsu',
+      confirm: {
+        warning: 'Olet tehnyt lähettämättämän kutsun. Perutaanko kutsun lähetys?',
+        confirm: 'Kyllä, unohda kutsu',
+        cancel: 'Ei, jatka muokkausta',
+      },
+    },
   },
 }
 

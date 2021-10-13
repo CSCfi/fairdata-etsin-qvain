@@ -11,6 +11,7 @@ class QvainDatasets {
     makeObservable(this)
     this.promiseManager = new PromiseManager()
     this.removeModal = new Modal()
+    this.shareModal = new Modal()
   }
 
   @observable datasets = []
@@ -37,6 +38,7 @@ class QvainDatasets {
     this.searchTerm = ''
     this.promiseManager.reset()
     this.removeModal.close()
+    this.shareModal.close()
   }
 
   @action.bound setDatasets(datasets) {

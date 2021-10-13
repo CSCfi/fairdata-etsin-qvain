@@ -8,7 +8,7 @@ export const getEnterEditAction = (Stores, dataset) => {
   } = Stores
 
   return {
-    text: dataset.next_draft ? 'qvain.datasets.editDraftButton' : 'qvain.datasets.editButton',
+    text: dataset.next_draft ? 'qvain.datasets.actions.editDraft' : 'qvain.datasets.actions.edit',
     danger: false,
     icon: faEdit,
     onlyIcon: true,
@@ -43,7 +43,7 @@ export const getGoToEtsinAction = (Stores, dataset) => {
   }
 
   return {
-    text: `qvain.datasets.${goToEtsinKey}`,
+    text: `qvain.datasets.actions.${goToEtsinKey}`,
     danger: false,
     icon: faEye,
     moreIfNarrow: true,
@@ -57,14 +57,17 @@ export const getGoToEtsinAction = (Stores, dataset) => {
 export const getShareAction = (Stores, dataset) => {
   const { Matomo } = Stores
   const identifier = dataset.identifier
-  const shareKey = 'share'
+  const {
+    share: { modal },
+  } = Stores.QvainDatasetsV2
 
   return {
-    text: `qvain.datasets.${shareKey}`,
+    text: `qvain.datasets.actions.share`,
     danger: false,
     icon: faUserPlus,
     moreIfNarrow: true,
     handler: () => {
+      modal.open({ dataset })
       Matomo.recordEvent(`SHARE / ${identifier}`)
     },
   }
@@ -79,7 +82,7 @@ export const getCreateNewVersionAction = (Stores, dataset) => {
   const { identifier } = dataset
 
   return {
-    text: 'qvain.datasets.createNewVersion',
+    text: 'qvain.datasets.actions.createNewVersion',
     danger: false,
     handler: async () => {
       const newIdentifier = await createNewVersion(dataset)
@@ -97,7 +100,7 @@ export const getUseAsTemplateAction = (Stores, dataset) => {
   } = Stores
 
   return {
-    text: 'qvain.datasets.useAsTemplate',
+    text: 'qvain.datasets.actions.useAsTemplate',
     danger: false,
     handler: () => {
       history.push(getQvainUrl('/dataset'))
@@ -118,7 +121,7 @@ export const getRemoveAction = (Stores, dataset, onlyChanges) => {
   const { removeModal, removeDataset, removeDatasetChanges } = Stores.QvainDatasets
 
   return {
-    text: onlyChanges ? 'qvain.datasets.revertButton' : 'qvain.datasets.deleteButton',
+    text: onlyChanges ? 'qvain.datasets.actions.revert' : 'qvain.datasets.actions.delete',
     danger: true,
     handler: () =>
       removeModal.open({

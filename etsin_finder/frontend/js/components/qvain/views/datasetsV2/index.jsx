@@ -11,6 +11,7 @@ import NoticeBar from '../../../general/noticeBar'
 import Tabs from './tabs'
 import Table from './table'
 import RemoveModal from '../datasets/removeModal'
+import ShareModal from './shareModal'
 
 export const Datasets = () => {
   const history = useHistory()
@@ -52,14 +53,15 @@ export const Datasets = () => {
           <Table />
         </DatasetsContent>
         <RemoveModal />
+        <ShareModal />
       </DatasetsContainer>
     </QvainContainer>
   )
 }
 
-const PublishSuccess = styled(NoticeBar).attrs(() => ({
+const PublishSuccess = styled(NoticeBar).attrs({
   bg: 'success',
-}))`
+})`
   margin: 0.5rem 0;
 `
 

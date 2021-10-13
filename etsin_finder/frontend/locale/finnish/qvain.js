@@ -81,6 +81,7 @@ const qvainFinnish = {
   common: {
     save: 'Tallenna',
     cancel: 'Peruuta',
+    close: 'Sulje',
   },
   confirmClose: {
     warning: 'Sinulla on tallentamattomia muutoksia. Perutaanko muutokset?',

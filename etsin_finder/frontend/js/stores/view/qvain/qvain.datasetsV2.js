@@ -1,11 +1,13 @@
 import { action, computed, makeObservable, observable } from 'mobx'
 
-import Tabs from './qvain.datasetsV2.tabs'
+import Tabs from './tabs'
+import Share from './qvain.datasetsV2.share'
 
 class QvainDatasetsV2 {
   constructor(QvainDatasets) {
     makeObservable(this)
-    this.tabs = new Tabs()
+    this.tabs = new Tabs({ all: 'qvain.datasets.tabs.all' }, 'all')
+    this.share = new Share()
     this.QvainDatasets = QvainDatasets
     this.reset()
   }
@@ -26,10 +28,6 @@ class QvainDatasetsV2 {
 
   @action.bound showMore() {
     this.showCount.current += this.showCount.increment
-  }
-
-  @computed get datasets() {
-    return this.QvainDatasets.datasets
   }
 
   @computed get datasetGroups() {

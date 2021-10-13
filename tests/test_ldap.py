@@ -38,7 +38,7 @@ class TestLDAP(BaseTest):
     def test_parse_filter_from_name_two_parts(self):
         """Return correct filter string."""
         name = "Teppo Test"
-        expected_filter = "(|(&(|(givenName=Teppo)(sn=Teppo))(|(givenName=Test*)(sn=Test*)))(mail=Teppo Test*))"
+        expected_filter = "(&(|(&(|(givenName=Teppo)(sn=Teppo))(|(givenName=Test*)(sn=Test*)))(mail=Teppo Test*)(cn=Teppo Test*))(objectClass=person))"
         ldap_resource = SearchUser()
         filter = ldap_resource.parse_filter_from_name(name)
 
