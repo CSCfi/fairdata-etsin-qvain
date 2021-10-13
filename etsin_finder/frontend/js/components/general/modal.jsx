@@ -102,10 +102,14 @@ export default class Modal extends Component {
         style={this.getStyles()}
         contentLabel={this.props.contentLabel}
       >
-        <CloseButton onClick={this.props.onRequestClose} noMargin>
-          <Translate className="sr-only" content="dataset.dl.close_modal" />
+        <Translate
+          component={CloseButton}
+          onClick={this.props.onRequestClose}
+          noMargin
+          attributes={{ 'aria-label': 'qvain.common.close' }}
+        >
           <FontAwesomeIcon aria-hidden icon={faTimes} />
-        </CloseButton>
+        </Translate>
         <ErrorBoundary callback={this.errorCallback}>{this.props.children}</ErrorBoundary>
       </ReactModal>
     )

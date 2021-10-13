@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import Translate from 'react-translate-component'
 
 import { LinkButton } from '../button'
 import { ItemRow, Items, ItemSpacer, isDirectory } from './items'
@@ -16,9 +17,11 @@ const getParentArgs = (directoryView, parent, parentArgs) => ({
 export const ShowMore = ({ directoryView, parent, level }) => (
   <ItemRow key="more">
     <ItemSpacer level={level} />
-    <LinkButton onClick={() => directoryView.showMore(parent)} type="button">
-      Show more
-    </LinkButton>
+    <Translate
+      component={LinkButton}
+      content="general.showMore"
+      onClick={() => directoryView.showMore(parent)}
+    />
   </ItemRow>
 )
 

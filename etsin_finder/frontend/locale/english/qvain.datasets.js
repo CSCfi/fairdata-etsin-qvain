@@ -7,8 +7,6 @@ const datasets = {
   },
   help: 'Choose a dataset to edit or create a new dataset',
   createButton: 'Create a new dataset',
-  createNewVersion: 'Create new version',
-  useAsTemplate: 'Use as template',
   state: {
     draft: 'Draft',
     published: 'Published',
@@ -53,10 +51,17 @@ const datasets = {
   oldVersion: 'Old',
   latestVersion: 'Latest',
   deprecated: 'Deprecated',
-  editButton: 'Edit',
-  editDraftButton: 'Edit draft',
-  deleteButton: 'Delete',
-  revertButton: 'Revert changes',
+  actions: {
+    edit: 'Edit',
+    editDraft: 'Edit draft',
+    goToEtsin: 'View in Etsin',
+    goToEtsinDraft: 'Preview in Etsin',
+    share: 'Share',
+    createNewVersion: 'Create new version',
+    useAsTemplate: 'Use as template',
+    revert: 'Revert changes',
+    delete: 'Delete',
+  },
   remove: {
     confirm: {
       published: {
@@ -74,10 +79,7 @@ const datasets = {
       cancel: 'Cancel',
     },
   },
-  goToEtsin: 'View in Etsin',
-  goToEtsinDraft: 'Preview in Etsin',
   openNewVersion: 'Open new version',
-  share: 'Share',
   noDatasets: 'You have no datasets',
   reload: 'Reload',
   loading: 'Loading...',
@@ -85,6 +87,33 @@ const datasets = {
   tableHeader: 'Created datasets',
   tabs: {
     all: 'All datasets',
+  },
+  share: {
+    title: 'Share with people',
+    tabs: {
+      invite: 'Invite',
+      members: 'Members',
+    },
+    invite: {
+      users: {
+        label: 'Users',
+        placeholder: 'Search users',
+        help: 'Type to search users by name, username or email.',
+        empty: 'No matching users found.',
+        searchError: 'There was an error searching for users.',
+        searching: 'Loading...',
+      },
+      message: {
+        label: 'Message',
+        placeholder: 'Type here to send a message with the invite.',
+      },
+      button: 'Invite',
+      confirm: {
+        warning: 'You have an unsent invitation. Do you want to discard the invitation?',
+        confirm: 'Yes, discard invitation',
+        cancel: 'No, continue editing',
+      },
+    },
   },
 }
 export default datasets

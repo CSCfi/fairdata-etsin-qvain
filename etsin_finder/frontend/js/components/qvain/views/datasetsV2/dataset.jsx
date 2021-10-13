@@ -60,16 +60,14 @@ const datasetOwner = dataset => {
   if (sources.includes('creator')) {
     return <Translate content="qvain.datasets.owner.me" />
   }
-  if (sources.includes('project')) {
-    return (
-      <Translate
-        component={FontAwesomeIcon}
-        icon={faUsers}
-        attributes={{ 'aria-label': 'qvain.datasets.owner.project' }}
-      />
-    )
-  }
-  return null
+  // shared with user
+  return (
+    <Translate
+      component={FontAwesomeIcon}
+      icon={faUsers}
+      attributes={{ 'aria-label': 'qvain.datasets.owner.project' }}
+    />
+  )
 }
 
 const Dataset = ({ dataset, canExpand }) => {
@@ -141,7 +139,7 @@ const StyledIconButton = styled.button.attrs({ type: 'button' })`
   border: none;
   background: transparent;
   height: 2.5rem;
-  width: 2.5rem;
+  width: 4rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;

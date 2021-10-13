@@ -1,14 +1,14 @@
 import 'chai/register-expect'
 import { makeObservable } from 'mobx'
 
-import Tabs from '../../../js/stores/view/qvain/qvain.datasetsV2.tabs'
+import QvainDatasetsStore from '../../../js/stores/view/qvain/qvain.datasetsV2'
 
 jest.mock('mobx')
 
 describe('Datasets Tabs', () => {
   let tabs
   beforeEach(() => {
-    tabs = new Tabs()
+    tabs = new QvainDatasetsStore({}).tabs
   })
 
   describe('when calling constructor', () => {

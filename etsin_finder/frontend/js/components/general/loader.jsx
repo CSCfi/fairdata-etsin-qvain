@@ -43,7 +43,7 @@ const Holder = styled.div`
   align-items: center;
   flex-grow: 1;
   max-height: 0em;
-  overflow: hidden;
+  overflow: visible;
   margin: 0;
   &.loader-active {
     margin: ${props => props.margin};

@@ -49,7 +49,8 @@ const Table = () => {
     return (
       <PlaceholderWrapper>
         <ErrorMessage>
-          <Translate content="qvain.datasets.errorOccurred" />: {error.message || JSON.stringify(error)}
+          <Translate content="qvain.datasets.errorOccurred" />:{' '}
+          {error.message || JSON.stringify(error)}
         </ErrorMessage>
         <Translate
           content="qvain.datasets.reload"
@@ -69,17 +70,25 @@ const Table = () => {
             <Translate component={HeadCell} content="qvain.datasets.tableRows.state" />
             <Translate component={HeadCell} content="qvain.datasets.tableRows.owner" />
             <Translate component={HeadCell} content="qvain.datasets.tableRows.created" />
-            <Translate component={HeadCell} content="qvain.datasets.tableRows.edit" />
-            <Translate component={HeadCell} content="qvain.datasets.tableRows.preview" onlyWide />
-            <Translate component={HeadCell} content="qvain.datasets.tableRows.share" onlyWide />
-            <Translate component={HeadCell} content="qvain.datasets.moreActions" />
+            <Translate component={IconHeadCell} content="qvain.datasets.tableRows.edit" />
+            <Translate
+              component={IconHeadCell}
+              content="qvain.datasets.tableRows.preview"
+              onlyWide
+            />
+            <Translate component={IconHeadCell} content="qvain.datasets.tableRows.share" onlyWide />
+            <Translate component={IconHeadCell} content="qvain.datasets.moreActions" />
           </Header>
         </thead>
         {datasetGroups.map(group => (
           <DatasetGroup key={group[0].id} group={group} />
         ))}
       </DatasetsTable>
-      {moreAvailable && <MoreButton onClick={showMore}>Show more &gt;</MoreButton>}
+      {moreAvailable && (
+        <MoreButton onClick={showMore}>
+          <Translate content="general.showMore" /> &gt;
+        </MoreButton>
+      )}
     </>
   )
 }
@@ -118,6 +127,10 @@ const HeadCell = styled.th`
   `}
 `
 
+const IconHeadCell = styled(HeadCell)`
+  padding: 0.5rem 0.25rem;
+`
+
 const TitleCell = styled(HeadCell)`
   width: 100%;
 `
@@ -127,7 +140,7 @@ const DatasetsTable = styled.table`
 `
 
 const PlaceholderWrapper = styled.div`
-  height: 20rem;
+  min-height: 20rem;
   display: flex;
   align-items: center;
   justify-content: center;

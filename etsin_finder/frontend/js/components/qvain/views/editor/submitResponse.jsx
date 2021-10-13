@@ -25,11 +25,11 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
     return identifier
   }
 
-  let goToEtsin = <Translate content="qvain.datasets.goToEtsin" />
+  let goToEtsin = <Translate content="qvain.datasets.actions.goToEtsin" />
   let goToEtsinQuery = ''
 
   if (original && original.state === 'draft') {
-    goToEtsin = <Translate content="qvain.datasets.goToEtsinDraft" />
+    goToEtsin = <Translate content="qvain.datasets.actions.goToEtsinDraft" />
     goToEtsinQuery = '?preview=1'
   }
 

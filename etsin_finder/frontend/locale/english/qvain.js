@@ -79,6 +79,7 @@ const qvainEnglish = {
   common: {
     save: 'Save',
     cancel: 'Cancel',
+    close: 'Close',
   },
   confirmClose: {
     warning: 'You have unsaved changes. Are you sure you want to discard your changes?',

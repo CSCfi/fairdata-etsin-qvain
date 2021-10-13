@@ -70,7 +70,7 @@ export const DangerCancelButton = styled(Button)`
   border: solid 1px #4f4f4f;
   font-size: 16px;
   line-height: 1.31;
-  padding: 0.75rem 0.25rem;
+  padding: 0.75rem 1rem;
   color: #4f4f4f;
   &:hover {
     background-color: #ccc;
