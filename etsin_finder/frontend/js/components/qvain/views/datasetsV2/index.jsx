@@ -84,7 +84,7 @@ const DatasetsContainer = styled.div.attrs({
 `
 
 const DatasetsContent = styled.div`
-  padding: 1rem 2rem;
+  padding: 1rem 0rem;
   font-size: 16px;
 `
 

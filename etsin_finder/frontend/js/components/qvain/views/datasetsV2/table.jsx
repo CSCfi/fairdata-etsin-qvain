@@ -66,6 +66,7 @@ const Table = () => {
       <DatasetsTable>
         <thead>
           <Header>
+            <PadHeadCell />
             <Translate component={TitleCell} content="qvain.datasets.tableRows.title" />
             <Translate component={HeadCell} content="qvain.datasets.tableRows.state" />
             <Translate component={HeadCell} content="qvain.datasets.tableRows.owner" />
@@ -78,6 +79,7 @@ const Table = () => {
             />
             <Translate component={IconHeadCell} content="qvain.datasets.tableRows.share" onlyWide />
             <Translate component={IconHeadCell} content="qvain.datasets.moreActions" />
+            <PadHeadCell />
           </Header>
         </thead>
         {datasetGroups.map(group => (
@@ -101,11 +103,16 @@ const MoreButton = styled.button`
   text-effect: underline;
   cursor: pointer;
   color: ${props => props.theme.color.primary};
+  margin-left: 2rem;
 `
 
 const Header = styled.tr`
-  border-bottom: 1px solid #cecece;
   text-align: center;
+`
+
+
+const PadHeadCell = styled.th.attrs({ 'aria-hidden': true })`
+  padding: 1rem;
 `
 
 const HeadCell = styled.th`

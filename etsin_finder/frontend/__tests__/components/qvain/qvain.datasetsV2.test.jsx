@@ -90,6 +90,14 @@ const findDatasetWithTitle = title =>
     .filterWhere(e => e.text().includes(title))
     .closest('tr')
 
+const findDatasetWithTitleExact = title => {
+  const dataset = wrapper.find(`td.dataset-title span[children="${title}"]`)
+  if (dataset.length === 0) {
+    return dataset
+  }
+  return dataset.closest('tr')
+}
+
 describe('DatasetsV2', () => {
   describe('given error', () => {
     beforeEach(async () => {
@@ -115,6 +123,29 @@ describe('DatasetsV2', () => {
       const createNewBtn = wrapper.find('button[children="Create a new dataset"]')
       createNewBtn.simulate('click')
       testLocation.pathname.should.eql('/dataset')
+    })
+  })
+
+  describe('given multiple dataset versions', () => {
+    it('should toggle visibility of previous versions', async () => {
+      await render()
+      findDatasetWithTitleExact('IDA dataset').should.have.lengthOf(0)
+      let dataset = findDatasetWithTitle('IDA dataset version 2')
+      const showPrev = dataset.find('svg[aria-label="Show previous versions"]')
+
+      // show previous versions
+      showPrev.simulate('click')
+      wrapper.find('td[children="Previous versions"]').should.have.lengthOf(1)
+      const previousDataset = findDatasetWithTitleExact('IDA dataset')
+      previousDataset.should.have.lengthOf(1)
+      previousDataset.find('span[children="Version 1"]').should.have.lengthOf(1)
+
+      // hide previous versions
+      dataset = findDatasetWithTitle('IDA dataset version 2')
+      const hidePrev = dataset.find('svg[aria-label="Hide previous versions"]')
+      hidePrev.simulate('click')
+      wrapper.find('td[children="Previous versions"]').should.have.lengthOf(0)
+      findDatasetWithTitleExact('IDA dataset').should.have.lengthOf(0)
     })
   })
 

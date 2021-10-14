@@ -13,7 +13,7 @@ export const Tab = styled.button.attrs({ type: 'button', role: 'tab' })`
 
   ${p =>
     p['aria-selected'] &&
-    `background: #eaf4f8;
+    `background: ${p.theme.color.primaryLight};
     border-bottom: 4px solid ${p.theme.color.primary};`}
 `
 

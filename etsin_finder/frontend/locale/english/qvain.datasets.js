@@ -115,5 +115,10 @@ const datasets = {
       },
     },
   },
+  previousVersions: {
+    label: 'Previous versions',
+    show: 'Show previous versions',
+    hide: 'Hide previous versions',
+  },
 }
 export default datasets
