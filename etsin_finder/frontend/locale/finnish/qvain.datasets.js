@@ -65,8 +65,7 @@ const datasets = {
   remove: {
     confirm: {
       published: {
-        text:
-        'Haluatko varmasti poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
+        text: 'Haluatko varmasti poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
         ok: 'Poista',
       },
       draft: {
@@ -115,6 +114,11 @@ const datasets = {
         cancel: 'Ei, jatka muokkausta',
       },
     },
+  },
+  previousVersions: {
+    label: 'Edelliset versiot',
+    show: 'Näytä edelliset versiot',
+    hide: 'Piilota edelliset versiot',
   },
 }
 

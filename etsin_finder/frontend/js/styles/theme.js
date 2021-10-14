@@ -18,7 +18,7 @@ const etsinTheme = {
     bgPrimary: 'white',
     bgLight: '#f7f7f7',
     bgSecondary: 'rgb(235, 235, 235)',
-    primaryLight: '#e5f2f7',
+    primaryLight: '#eaf4f8',
     primary: '#007FAD',
     primaryDark: '#004d79',
     secondary: 'rgb(235, 235, 235)',
