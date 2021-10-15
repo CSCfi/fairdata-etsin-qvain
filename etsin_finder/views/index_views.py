@@ -17,7 +17,7 @@ from flask import (
     current_app,
 )
 import requests
-import os
+from flask_restful import abort
 
 from etsin_finder.auth.authentication import is_authenticated
 from etsin_finder.auth.authentication_direct_proxy import (
@@ -127,3 +127,10 @@ def _render_index_template(saml_errors=[], slo_success=False, template_string=No
         return render_template_string(template_string, **context)
     else:
         return render_template("index.html", **context)
+
+
+@index_views.route("/api", defaults={"path": ""})
+@index_views.route("/api/<path:path>")
+def api404(path):
+    """Abort with page not found urls that does not exist."""
+    abort(404)
