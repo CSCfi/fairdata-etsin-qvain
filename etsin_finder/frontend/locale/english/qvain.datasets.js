@@ -97,11 +97,14 @@ const datasets = {
     invite: {
       users: {
         label: 'Users',
-        placeholder: 'Search users',
+        placeholder: 'Add users',
         help: 'Type to search users by name, username or email.',
         empty: 'No matching users found.',
         searchError: 'There was an error searching for users.',
         searching: 'Loading...',
+      },
+      roles: {
+        editor: 'as Editor',
       },
       message: {
         label: 'Message',
@@ -112,6 +115,17 @@ const datasets = {
         warning: 'You have an unsent invitation. Do you want to discard the invitation?',
         confirm: 'Yes, discard invitation',
         cancel: 'No, continue editing',
+      },
+    },
+    members: {
+      roles: {
+        owner: 'Owner',
+        editor: 'Editor',
+      },
+      remove: 'Remove',
+      labels: {
+        permissions: 'Members',
+        projectMembers: 'Project members',
       },
     },
   },

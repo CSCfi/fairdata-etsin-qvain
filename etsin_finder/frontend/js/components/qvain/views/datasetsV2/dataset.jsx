@@ -217,7 +217,7 @@ VersionNumber.propTypes = {
 const StyledVersionNumber = styled.span`
   margin-left: 0.5rem;
   margin-right: 1rem;
-  color: ${p => p.theme.color.primary};
+  font-weight: bold;
   display: none;
   @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     display: inline;

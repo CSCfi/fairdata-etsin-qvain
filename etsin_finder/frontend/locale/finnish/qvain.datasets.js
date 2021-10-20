@@ -97,21 +97,35 @@ const datasets = {
     invite: {
       users: {
         label: 'Käyttäjät',
-        placeholder: 'Etsi käyttäjiä',
+        placeholder: 'Lisää käyttäjiä',
         help: 'Etsi käyttäjiä nimen, käyttäjätunnuksen tai sähköpostin perusteella.',
         empty: 'Käyttäjiä ei löytynyt.',
         searchError: 'Käyttäjien hakemisessa tapahtui virhe.',
         searching: 'Haetaan...',
       },
+      roles: {
+        editor: 'Muokkaaja',
+      },
       message: {
         label: 'Viesti',
-        placeholder: 'Kirjoita halutessasi kutsuun liitettävä viesti.',
+        placeholder: 'Kirjoita kutsuun viesti.',
       },
       button: 'Kutsu',
       confirm: {
-        warning: 'Olet tehnyt lähettämättämän kutsun. Perutaanko kutsun lähetys?',
+        warning: 'Kutsua ei ole vielä lähetetty. Perutaanko kutsun lähetys?',
         confirm: 'Kyllä, unohda kutsu',
         cancel: 'Ei, jatka muokkausta',
+      },
+    },
+    members: {
+      roles: {
+        owner: 'Omistaja',
+        editor: 'Muokkaaja',
+      },
+      remove: 'Poista',
+      labels: {
+        permissions: 'Jäsenet',
+        projectMembers: 'Projektin jäsenet',
       },
     },
   },

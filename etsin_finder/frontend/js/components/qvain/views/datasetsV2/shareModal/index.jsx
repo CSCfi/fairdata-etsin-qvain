@@ -9,6 +9,7 @@ import { ConfirmClose } from '../../../general/modal/confirmClose'
 import { useStores } from '../../../utils/stores'
 import Tabs from './tabs'
 import Invite from './invite'
+import Members from './members'
 
 const modalDataTypes = {
   dataset: PropTypes.object.isRequired,
@@ -44,7 +45,7 @@ export const ShareModal = () => {
   if (tabs.active === 'invite') {
     selectedTab = <Invite />
   } else {
-    selectedTab = tabs.active
+    selectedTab = <Members />
   }
 
   return (

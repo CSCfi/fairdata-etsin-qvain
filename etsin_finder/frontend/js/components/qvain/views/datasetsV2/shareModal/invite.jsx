@@ -87,26 +87,37 @@ const Invite = () => {
         htmlFor="search-users-input"
         content="qvain.datasets.share.invite.users.label"
       />
+      <SearchRow>
+        <Translate
+          inputId="search-users-input"
+          component={Select}
+          styles={{ container: provided => ({ ...provided, flexGrow: 1 }) }}
+          value={toJS(selectedUsers)}
+          loadOptions={fetchOptions}
+          getOptionLabel={person => getPersonLabel(person)}
+          getOptionValue={person => person.uid}
+          isMulti
+          components={customComponents}
+          onChange={setSelected}
+          menuPlacement="auto"
+          menuPosition="fixed"
+          menuShouldScrollIntoView={false}
+          attributes={{ placeholder: 'qvain.datasets.share.invite.users.placeholder' }}
+        />
+        <Translate component={Role} content="qvain.datasets.share.invite.roles.editor" />
+      </SearchRow>
       <Translate
-        inputId="search-users-input"
-        component={Select}
-        value={toJS(selectedUsers)}
-        loadOptions={fetchOptions}
-        getOptionLabel={person => getPersonLabel(person)}
-        isMulti
-        place
-        components={customComponents}
-        onChange={setSelected}
-        menuPlacement="auto"
-        menuPosition="fixed"
-        menuShouldScrollIntoView={false}
-        attributes={{ placeholder: 'qvain.datasets.share.invite.users.placeholder' }}
+        component={Label}
+        htmlFor="invite-message-input"
+        content="qvain.datasets.share.invite.message.label"
       />
-      <Translate component={Label} content="qvain.datasets.share.invite.message.label" />
+
       <Translate
+        id="invite-message-input"
         component={Message}
         value={inviteMessage}
         onChange={e => setInviteMessage(e.target.value)}
+        disabled={selectedUsers.length === 0}
         attributes={{ placeholder: 'qvain.datasets.share.invite.message.placeholder' }}
       />
       <InviteButton disabled={selectedUsers.length === 0 || isInviting} onClick={sendInvite}>
@@ -121,7 +132,7 @@ const Invite = () => {
   )
 }
 
-const InviteButton = styled(Button).attrs({ role: 'button' })`
+const InviteButton = styled(Button).attrs({ role: 'button', className: 'send-invite' })`
   margin: 1.5rem 0 0 0;
   align-self: end;
   width: 6rem;
@@ -150,6 +161,18 @@ const Label = styled.label`
   font-weight: bold;
   font-size: 18px;
   margin: 1.5rem 0 0.5rem;
+`
+
+const SearchRow = styled.div`
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+`
+
+const Role = styled.div`
+  font-weight: bold;
+  margin-left: 1rem;
+  flex-shrink: 0;
 `
 
 const Message = styled.textarea`
