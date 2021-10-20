@@ -8,16 +8,24 @@ import Tabs from './tabs'
 
 const CancelToken = axios.CancelToken
 
-export const combineName = (first, last) => {
+const first = arr => arr?.[0]
+
+export const combineName = (firstName, lastName) => {
   const parts = []
-  if (first) {
-    parts.push(first)
+  if (firstName) {
+    parts.push(firstName)
   }
-  if (last) {
-    parts.push(last)
+  if (lastName) {
+    parts.push(lastName)
   }
   return parts.join(' ')
 }
+
+const toPerson = ({ attributes }) => ({
+  uid: first(attributes.uid),
+  name: combineName(first(attributes.givenName), first(attributes.sn)),
+  email: first(attributes.mail),
+})
 
 class Share {
   constructor() {
@@ -28,6 +36,7 @@ class Share {
       'invite'
     )
     makeObservable(this)
+    this.getTabItemCount = this.getTabItemCount.bind(this)
     reaction(() => this.modal.isOpen, this.handleToggle)
   }
 
@@ -41,6 +50,8 @@ class Share {
 
   @observable confirmClose = false
 
+  @observable userPermissions = []
+
   handleToggle = isOpen => {
     if (isOpen) {
       this.fetchPermissions()
@@ -53,16 +64,21 @@ class Share {
     this.error = undefined
     this.searchResults = []
     this.selectedUsers = []
+    this.userPermissions = []
     this.inviteMessage = ''
     this.confirmClose = false
   }
 
   @computed get hasUnsentInvite() {
-    return this.selectedUsers.length > 0 || this.inviteMessage.trim().length > 0
+    return this.selectedUsers.length > 0
   }
 
   @computed get isInviting() {
     return this.promiseManager.count('invite') > 0
+  }
+
+  @computed get isLoadingPermissions() {
+    return this.promiseManager.count('permissions') > 0
   }
 
   @action.bound
@@ -95,12 +111,7 @@ class Share {
         await Promise.delay(300)
         const resp = await axios.get(`/api/ldap/users/${str}`, { cancelToken, timeout: 10000 })
 
-        const first = arr => arr?.[0]
-        const options = resp.data.map(person => ({
-          uid: first(person.attributes.uid),
-          name: combineName(first(person.attributes.givenName), first(person.attributes.sn)),
-          email: first(person.attributes.mail),
-        }))
+        const options = resp.data.map(toPerson)
         this.setSearchResults(options)
         return options
       } catch (e) {
@@ -130,13 +141,57 @@ class Share {
     this.searchResults.replace(results)
   }
 
+  @action.bound
+  setUserPermissions(perms) {
+    this.userPermissions = perms
+  }
+
   async fetchPermissions() {
     // TODO: fetch user and project permissions
+
+    const fetchPerms = async () => {
+      await Promise.delay(5000)
+
+      this.setUserPermissions([
+        {
+          uid: 'teppo',
+          name: 'teppo testaaja',
+          email: 'teppo@example.com',
+          isProjectMember: true,
+          role: 'owner',
+        },
+        {
+          uid: 'other',
+          name: 'Other Person',
+          email: 'other@example.com',
+          isProjectMember: false,
+          role: 'editor',
+        },
+        {
+          uid: 'longname',
+          name: 'Longlong von Longlonglonglongname',
+          email: 'long@example.com',
+          isProjectMember: true,
+        },
+      ])
+    }
+
+    await this.promiseManager.add(fetchPerms(), 'permissions')
   }
 
   @action.bound
   setInviteMessage(message) {
     this.inviteMessage = message
+  }
+
+  getTabItemCount(tab) {
+    if (tab === 'members') {
+      if (this.isLoadingPermissions) {
+        return { count: 0, loading: true }
+      }
+      return { count: this.userPermissions.length, loading: false }
+    }
+    return undefined
   }
 }
 

@@ -250,7 +250,9 @@ const DropdownItemLi = styled.li`
 export const DropdownItemButton = styled.button.attrs({ type: 'button' })`
   width: 100%;
   border: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  ${p => (p.border === 'top' || p.border === 'both') && `border-top: 1px solid rgba(0, 0, 0, 0.4);`}
+  ${p =>
+    (p.border === 'bottom' || p.border === 'both') && `border-top: 1px solid rgba(0, 0, 0, 0.4);`}
   background: none;
   color: ${p => (p.disabled ? p.theme.color.gray : p.theme.color.dark)};
   :not(:disabled) {
