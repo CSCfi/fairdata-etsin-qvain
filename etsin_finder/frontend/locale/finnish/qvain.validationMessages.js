@@ -73,12 +73,10 @@ const validationMessages = {
     },
     requiredActors: {
       atLeastOneActor: 'Aineistoon on lisättävä vähintään yksi toimija.',
-      mandatoryActors: {
-        creator:
-          'Toimijat: Aineistolla on oltava ainakin yksi tekijä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
-        publisher:
-          'Toimijat: Aineistolla on oltava ainakin yksi julkaisija. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
-      },
+      creator:
+        'Toimijat: Aineistolla on oltava ainakin yksi tekijä. Huomioi: yksittäisellä toimijalla voi olla useampi rooli.',
+      publisher:
+        'Toimijat: Aineistolla on oltava ainakin yksi julkaisija. Huomioi että yksittäisellä toimijalla voi olla useampi rooli.',
     },
   },
   accessType: {

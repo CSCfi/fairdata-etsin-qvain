@@ -20,7 +20,7 @@ const handleSubmitToBackend = values => {
 
   const language = values.DatasetLanguages.toBackend()
 
-  const issuedDate = values.IssuedDate.toBackend()
+  const issued = values.IssuedDate.toBackend()
 
   const accessType = values.AccessType.toBackend()
 
@@ -63,7 +63,7 @@ const handleSubmitToBackend = values => {
     provenance,
     field_of_science,
     language,
-    issuedDate,
+    issued,
   }
 
   if (values.original) {

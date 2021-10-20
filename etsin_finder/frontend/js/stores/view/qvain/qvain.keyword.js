@@ -10,6 +10,7 @@ export const keywordsSchema = yup
 export const keywordsArraySchema = yup
   .array()
   .of(keywordsSchema)
+  .min(1, 'qvain.validationMessages.keywords.required')
   .required('qvain.validationMessages.keywords.required')
 
 // Validation for draft datasets: keywords are not .required()

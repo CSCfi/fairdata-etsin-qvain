@@ -112,7 +112,7 @@ describe('when calling handleSubmit with mockStores', () => {
       provenance: 'provenance',
       field_of_science: 'field_of_science',
       language: 'language',
-      issuedDate: 'issuedDate',
+      issued: 'issuedDate',
     }
 
     returnValue.should.deep.eql(expectedReturn)

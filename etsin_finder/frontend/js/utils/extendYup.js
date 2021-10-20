@@ -41,5 +41,24 @@ function validateStringNumber() {
   })
 }
 
+function validateHasTranslation(message) {
+  if (!message) {
+    throw new Error('validateHasTranslation requires an error message')
+  }
+  // eslint-disable-next-line func-names
+  return this.test('has translation', undefined, function (value) {
+    // if object exists, require it to have at least one translation property
+    if (!value) {
+      return true
+    }
+    if (value.en || value.fi) {
+      return true
+    }
+    const { path, createError } = this
+    return createError({ path, message })
+  })
+}
+
 yup.addMethod(yup.string, 'date', validateDate)
 yup.addMethod(yup.string, 'number', validateStringNumber)
+yup.addMethod(yup.object, 'requireTranslation', validateHasTranslation)

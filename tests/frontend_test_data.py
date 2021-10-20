@@ -434,7 +434,7 @@ original_complete_dataset = {
     ],
     "field_of_science": [{"identifier": "http://www.yso.fi/onto/okm-tieteenala/ta112"}],
     "language": [{"identifier": "http://lexvo.org/id/iso639-3/udm"}],
-    "issuedDate": "2021-06-23",
+    "issued": "2021-06-23",
     "original": {
         "id": 2182,
         "identifier": "d986fc86-adfc-4227-8944-df1460d61e7a",
