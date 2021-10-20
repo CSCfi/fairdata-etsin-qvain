@@ -344,8 +344,10 @@ describe('Qvain validation', () => {
       ],
       dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
       creator: [organization],
-      accessType: {
-        url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
+      access_rights: {
+        access_type: {
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
+        },
       },
     }
   })
@@ -374,7 +376,7 @@ describe('Qvain validation', () => {
       expect(e.errors).toEqual(
         expect.arrayContaining([
           'qvain.validationMessages.issuedDate.requiredIfUseDoi',
-          'qvain.validationMessages.actors.requiredActors.mandatoryActors.publisher',
+          'qvain.validationMessages.actors.requiredActors.publisher',
         ])
       )
     }
@@ -382,7 +384,7 @@ describe('Qvain validation', () => {
 
   it('should validate dataset with DOI enabled', async () => {
     dataset.useDoi = true
-    dataset.issuedDate = '2020-06-01'
+    dataset.issued = '2020-06-01'
     dataset.publisher = organization
 
     try {

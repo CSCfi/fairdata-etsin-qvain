@@ -73,10 +73,8 @@ const validationMessages = {
     },
     requiredActors: {
       atLeastOneActor: 'At least one actor is required for the dataset.',
-      mandatoryActors: {
-        creator: 'Actors: Creator role is required. Note: one actor can have multiple roles.',
-        publisher: 'Actors: Publisher role is required. Note: one actor can have multiple roles.',
-      },
+      creator: 'Actors: Creator role is required. Note: one actor can have multiple roles.',
+      publisher: 'Actors: Publisher role is required. Note: one actor can have multiple roles.',
     },
   },
   accessType: {

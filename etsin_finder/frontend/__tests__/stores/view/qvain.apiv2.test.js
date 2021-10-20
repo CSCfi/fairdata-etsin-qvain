@@ -1,4 +1,8 @@
 /*
+ * @jest-environment node
+ */
+
+/*
  **  Files submit cases frontend tests
  **
  **  Files has 144 theoretical test conditions. Almost half of these cases are inactive or not possible at all.
@@ -32,7 +36,6 @@ import {
   qvainFormSchema,
   qvainFormDraftSchema,
 } from '../../../js/stores/view/qvain/qvain.submit.schemas'
-import { Organization } from '../../../js/stores/view/qvain/qvain.actors'
 
 const { qvainFormSchema: realQvainFormSchema, qvainFormDraftSchema: realQvainFormDraftSchema } =
   jest.requireActual('../../../js/stores/view/qvain/qvain.submit.schemas')
@@ -77,7 +80,7 @@ const testOrganization = {
 const generateDefaultDatasetForPublish = settings => ({
   title: { fi: 'otsikko', en: 'title' },
   description: { fi: 'kuvailu', en: 'description' },
-  issuedDate: moment().format('YYYY-MM-DD'), // needs to be mocked if using snapshots
+  issued: moment().format('YYYY-MM-DD'), // needs to be mocked if using snapshots
   keywords: ['key', 'words'],
   creator: [testOrganization],
   publisher: testOrganization,
@@ -91,7 +94,9 @@ const generateDefaultDatasetForPublish = settings => ({
       identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
     },
   ],
-  accessType: { url: ACCESS_TYPE_URL.OPEN },
+  access_rights: {
+    access_type: { identifier: ACCESS_TYPE_URL.OPEN },
+  },
   cumulativeState: CUMULATIVE_STATE.NO,
   useDoi: false,
   dataCatalog: DATA_CATALOG_IDENTIFIER.IDA,
@@ -1261,5 +1266,107 @@ describe('publish unpublished dataset', () => {
     })
 
     await expectError(dataset, errors.wrongFileOrigin)
+  })
+})
+
+describe('required fields', () => {
+  const expectDraftErrors = (settings, expectedErrors) => {
+    const dataset = generateDefaultDatasetForDraft(settings)
+    let errors
+    try {
+      realQvainFormDraftSchema.validateSync(dataset, { strict: true })
+    } catch (e) {
+      errors = e.errors
+    }
+    expect(errors).toEqual(expectedErrors)
+  }
+
+  const expectPublishErrors = (settings, expectedErrors) => {
+    const dataset = generateDefaultDatasetForPublish(settings)
+    let errors
+    try {
+      realQvainFormSchema.validateSync(dataset, { strict: true })
+    } catch (e) {
+      errors = e.errors
+    }
+    expect(errors).toEqual(expectedErrors)
+  }
+
+  describe('draft', () => {
+    it('should require title object', async () => {
+      expectDraftErrors({ title: undefined }, ['qvain.validationMessages.title.required'])
+    })
+
+    it('should require title object to have a translation', async () => {
+      expectDraftErrors({ title: {} }, ['qvain.validationMessages.title.required'])
+    })
+  })
+
+  describe('published', () => {
+    it('should require data catalog', async () => {
+      expectPublishErrors({ dataCatalog: undefined }, [
+        'qvain.validationMessages.files.dataCatalog.required',
+      ])
+    })
+
+    it('should require title object', async () => {
+      expectPublishErrors({ title: undefined }, ['qvain.validationMessages.title.required'])
+    })
+
+    it('should require title object to have a translation', async () => {
+      expectPublishErrors({ title: {} }, ['qvain.validationMessages.title.required'])
+    })
+
+    it('should require description object', async () => {
+      expectPublishErrors({ description: undefined }, [
+        'qvain.validationMessages.description.required',
+      ])
+    })
+
+    it('should require description object to have a translation', async () => {
+      expectPublishErrors({ description: {} }, ['qvain.validationMessages.description.required'])
+    })
+
+    it('should require keywords array', async () => {
+      expectPublishErrors({ keywords: undefined }, ['qvain.validationMessages.keywords.required'])
+    })
+
+    it('should require keywords array to not be empty', async () => {
+      expectPublishErrors({ keywords: [] }, ['qvain.validationMessages.keywords.required'])
+    })
+
+    it('should require creator array', async () => {
+      expectPublishErrors({ creator: undefined }, [
+        'qvain.validationMessages.actors.requiredActors.creator',
+      ])
+    })
+
+    it('should require creator array to not be empty', async () => {
+      expectPublishErrors({ creator: [] }, [
+        'qvain.validationMessages.actors.requiredActors.creator',
+      ])
+    })
+
+    it('should require publisher', async () => {
+      expectPublishErrors({ publisher: undefined }, [
+        'qvain.validationMessages.actors.requiredActors.publisher',
+      ])
+    })
+
+    it('should require access_rights object', async () => {
+      expectPublishErrors({ access_rights: undefined }, [
+        'qvain.validationMessages.accessType.required',
+      ])
+    })
+
+    it('should require access_rights.access_type object', async () => {
+      expectPublishErrors({ access_rights: {} }, ['qvain.validationMessages.accessType.required'])
+    })
+
+    it('should require access_rights.access_type object to not be empty', async () => {
+      expectPublishErrors({ access_rights: { access_type: {} } }, [
+        'qvain.validationMessages.accessType.required',
+      ])
+    })
   })
 })

@@ -139,7 +139,7 @@ class DatasetValidationSchema(Schema):
         required=True,
         validate=lambda x: len(x.get("en", [])) + len(x.get("fi", [])) > 0,
     )
-    issuedDate = fields.Str()
+    issued = fields.Str()
     other_identifier = fields.List(fields.Nested(OtherIdentifierValidationSchema))
     field_of_science = fields.List(fields.Nested(ReferenceObjectValidationSchema))
     language = fields.List(fields.Nested(ReferenceObjectValidationSchema))
