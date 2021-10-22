@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { opacify, desaturate } from 'polished'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,6 +11,8 @@ import {
   faLink,
   faChevronRight,
   faChevronDown,
+  faSortAmountDown,
+  faSortAmountDownAlt,
 } from '@fortawesome/free-solid-svg-icons'
 
 const FileIconStyles = styled(FontAwesomeIcon)`
@@ -95,3 +98,35 @@ export const DeleteButton = props => (
     <FontAwesomeIcon size="lg" icon={faTimes} />
   </Translate>
 )
+
+export const SortDirectionButton = props => (
+  <Translate
+    component={SortButtonStyles}
+    attributes={{
+      'aria-label': `qvain.general.sort.${props.descending ? 'descending' : 'ascending'}`,
+    }}
+    {...props}
+  >
+    <FontAwesomeIcon size="lg" icon={props.descending ? faSortAmountDown : faSortAmountDownAlt} />
+  </Translate>
+)
+
+SortDirectionButton.propTypes = {
+  descending: PropTypes.bool.isRequired,
+}
+
+const SortButtonStyles = styled.button`
+  background-color: #fff;
+  width: 40px;
+  height: 38px;
+  border: none;
+  text-align: center;
+  display: inline-block;
+  margin: 5px;
+  border-radius: 4px;
+  border: solid 1px #cccccc;
+  &:not(:disabled):hover {
+    background-color: rgba(0, 187, 255, 0.1);
+    border-color: rgb(0, 127, 173);
+  }
+`

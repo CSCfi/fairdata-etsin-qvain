@@ -21,6 +21,10 @@ const general = {
     save: 'Tallenna',
     cancel: 'Peruuta',
   },
+  sort: {
+    ascending: 'Nouseva',
+    descending: 'Laskeva',
+  },
 }
 
 export default general

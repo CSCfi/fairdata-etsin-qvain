@@ -12,6 +12,7 @@ import Tabs from './tabs'
 import Table from './table'
 import RemoveModal from '../datasets/removeModal'
 import ShareModal from './shareModal'
+import Search from './search'
 
 export const Datasets = () => {
   const history = useHistory()
@@ -50,6 +51,7 @@ export const Datasets = () => {
         </DatasetsHeader>
         <Tabs />
         <DatasetsContent>
+          <Search />
           <Table />
         </DatasetsContent>
         <RemoveModal />

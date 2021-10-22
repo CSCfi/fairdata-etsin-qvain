@@ -21,6 +21,10 @@ const general = {
     save: 'Save',
     cancel: 'Cancel',
   },
+  sort: {
+    ascending: 'Ascending',
+    descending: 'Descending',
+  },
 }
 
 export default general
