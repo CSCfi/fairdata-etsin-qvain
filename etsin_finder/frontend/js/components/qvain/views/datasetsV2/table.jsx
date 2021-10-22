@@ -10,8 +10,8 @@ import { InvertedButton } from '../../../general/button'
 
 const Table = () => {
   const {
-    QvainDatasets: { count, error, loadDatasets, isLoadingDatasets, reset },
-    QvainDatasetsV2: { datasetGroups, showMore, moreAvailable, reset: resetV2 },
+    QvainDatasets: { count, error, loadDatasets, isLoadingDatasets, reset, searchTerm },
+    QvainDatasetsV2: { filteredGroups, showMore, moreAvailable, reset: resetV2 },
     Env: {
       Flags: { flagEnabled },
     },
@@ -40,7 +40,7 @@ const Table = () => {
   if (noDatasets) {
     return (
       <PlaceholderWrapper>
-        <Translate content="qvain.datasets.noDatasets" />
+        <Translate content={`qvain.datasets.${searchTerm ? 'noMatchingDatasets' : 'noDatasets'}`} />
       </PlaceholderWrapper>
     )
   }
@@ -82,7 +82,7 @@ const Table = () => {
             <PadHeadCell />
           </Header>
         </thead>
-        {datasetGroups.map(group => (
+        {filteredGroups.map(group => (
           <DatasetGroup key={group[0].id} group={group} />
         ))}
       </DatasetsTable>
@@ -109,7 +109,6 @@ const MoreButton = styled.button`
 const Header = styled.tr`
   text-align: center;
 `
-
 
 const PadHeadCell = styled.th.attrs({ 'aria-hidden': true })`
   padding: 1rem;

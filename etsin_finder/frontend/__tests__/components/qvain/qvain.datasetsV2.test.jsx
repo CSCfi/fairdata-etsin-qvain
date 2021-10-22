@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
 import ReactModal from 'react-modal'
+import { components } from 'react-select'
 
 import '@/../locale/translations'
 import etsinTheme from '@/styles/theme'
@@ -50,6 +51,7 @@ const render = async () => {
     helper = null
   }
   stores = buildStores()
+  stores.Locale.setLang('en')
   stores.Env.app = 'qvain'
   stores.Auth.setUser({
     name: 'teppo',
@@ -294,6 +296,180 @@ describe('DatasetsV2', () => {
       wrapper.find('[aria-label="shareDatasetModal"]').should.have.lengthOf(0)
       shareButton.simulate('click')
       wrapper.find('[aria-label="shareDatasetModal"]').should.have.lengthOf(1)
+    })
+  })
+
+  describe('sorting', () => {
+    beforeEach(async () => {
+      await render()
+    })
+
+    const sortBy = async type => {
+      const input = wrapper.find('input#sort-datasets-input')
+      input.simulate('mouseDown', { button: 'left' })
+      await wait(() => wrapper.find(components.Option).length > 0)
+      wrapper.find(components.Menu).find(`span[children="${type}"]`).simulate('click')
+    }
+
+    const getColumns = (...classes) => {
+      let values
+      for (let c of classes) {
+        const row = wrapper
+          .find(c)
+          .hostNodes()
+          .map(t => t.text() || t.find('[aria-label]').hostNodes().prop('aria-label'))
+        if (!values) {
+          values = row.map(v => [v])
+        } else {
+          values = values.map((v, i) => [...v, row[i]])
+        }
+      }
+      return values
+    }
+
+    it('should sort datasets by title', async () => {
+      await sortBy('Title')
+      stores.QvainDatasetsV2.sort.type.should.eql('title')
+      getColumns('.dataset-title').should.eql([
+        ['Changes here'],
+        ['Draft 2'],
+        ['Draft 3 by me and project'],
+        ['Draft 4 by project'],
+        ['Draft 5 by me'],
+        ['Draft dataset'],
+        ['IDA dataset version 2'],
+      ])
+    })
+
+    it('should sort datasets by active language', async () => {
+      await sortBy('Title')
+      stores.Locale.setLang('fi')
+      stores.QvainDatasetsV2.sort.type.should.eql('title')
+      getColumns('.dataset-title').should.eql([
+        ['Changes here'],
+        ['Draft 2 suomeksi'],
+        ['Draft 3 by me and project'],
+        ['Draft 4 by project'],
+        ['Draft 5 by me'],
+        ['Draft dataset'],
+        ['Tämä on suomenkielinen nimi'],
+      ])
+    })
+
+    it('should reverse sort order', async () => {
+      await sortBy('Title')
+      wrapper.find(`button.sort-direction`).simulate('click')
+
+      stores.QvainDatasetsV2.sort.type.should.eql('title')
+      getColumns('.dataset-title').should.eql([
+        ['IDA dataset version 2'],
+        ['Draft dataset'],
+        ['Draft 5 by me'],
+        ['Draft 4 by project'],
+        ['Draft 3 by me and project'],
+        ['Draft 2'],
+        ['Changes here'],
+      ])
+    })
+
+    it('should sort datasets by creation date', async () => {
+      await sortBy('Date')
+      stores.QvainDatasetsV2.sort.type.should.eql('dateCreated')
+      getColumns('.dataset-title', '.dataset-created').should.eql([
+        ['Draft 3 by me and project', '5 days ago'],
+        ['Changes here', '6 days ago'],
+        ['Draft 2', '1 month ago'],
+        ['IDA dataset version 2', '1 month ago'],
+        ['Draft 5 by me', '3 months ago'],
+        ['Draft 4 by project', '3 months ago'],
+        ['Draft dataset', '4 months ago'],
+      ])
+    })
+
+    it('should sort datasets by owner', async () => {
+      await sortBy('Owner')
+      stores.QvainDatasetsV2.sort.type.should.eql('owner')
+      getColumns('.dataset-title', '.dataset-owner').should.eql([
+        ['Changes here', 'Me'],
+        ['Draft 3 by me and project', 'Me'],
+        ['Draft 5 by me', 'Me'],
+        ['Draft dataset', 'Me'],
+        ['IDA dataset version 2', 'Me'],
+        ['Draft 2', 'Project'],
+        ['Draft 4 by project', 'Project'],
+      ])
+    })
+
+    it('should sort datasets by status', async () => {
+      await sortBy('Status')
+      stores.QvainDatasetsV2.sort.type.should.eql('status')
+      getColumns('.dataset-title', '.dataset-state').should.eql([
+        ['IDA dataset version 2', 'Published'],
+        ['Changes here', 'Unpublished changes'],
+        ['Draft 2', 'Draft'],
+        ['Draft 3 by me and project', 'Draft'],
+        ['Draft 4 by project', 'Draft'],
+        ['Draft 5 by me', 'Draft'],
+        ['Draft dataset', 'Draft'],
+      ])
+    })
+  })
+
+  describe('filtering', () => {
+    beforeEach(async () => {
+      await render()
+    })
+
+    const filterBy = async str => {
+      const input = wrapper.find('input#search-datasets-input')
+      input.instance().value = str
+      input.simulate('change')
+      wrapper.update()
+    }
+
+    const getTitles = (...classes) => {
+      const titles = wrapper
+        .find('.dataset-title')
+        .hostNodes()
+        .map(t => t.text())
+      return titles
+    }
+
+    it('should filter datasets by title', async () => {
+      await filterBy('Draft')
+      getTitles().should.eql([
+        'Draft 3 by me and project',
+        'Draft 2',
+        'Draft 5 by me',
+        'Draft 4 by project',
+        'Draft dataset',
+      ])
+    })
+
+    it('should not clear filter input loses focus', async () => {
+      await filterBy('search string')
+      const input = wrapper.find('input#search-datasets-input')
+      input.simulate('blur')
+      input.instance().value.should.eql('search string')
+    })
+
+    it('should filter datasets by other translations', async () => {
+      await filterBy('suom')
+      getTitles().should.eql(['Draft 2', 'IDA dataset version 2'])
+    })
+
+    it('should show message when no matches are found', async () => {
+      await filterBy('no such dataset')
+      getTitles().should.eql([])
+      wrapper.find('span[children="No matching datasets found."]').should.have.lengthOf(1)
+    })
+
+    it('should not show "Show more" when no more matches are available', async () => {
+      await filterBy('Draft')
+      stores.QvainDatasetsV2.setShowCount({ initial: 5, current: 5, increment: 2 })
+      wrapper.update()
+      wrapper.find('tbody').length.should.eql(5)
+      wrapper.find('span[children*="Show more"]').should.have.lengthOf(0)
     })
   })
 })
