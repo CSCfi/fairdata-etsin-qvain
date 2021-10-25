@@ -128,7 +128,7 @@ class QvainDatasets(Resource):
     def _get_datasets_from_response(self, response, status, source):
         """Get datasets from response dict, add source information"""
         datasets = []
-        if status not in [200, 404]:
+        if status != 200:
             user_id = authentication.get_user_csc_name()
             projects = authentication.get_user_ida_projects()
             log.warning(
@@ -204,10 +204,8 @@ class QvainDatasets(Resource):
         datasets = merge_and_sort_dataset_lists(datasets, projects_datasets)
 
         if datasets or type(datasets) is list:
-            if len(datasets) > 0:
-                return datasets, 200
-            else:
-                return datasets, 404
+            return datasets, 200
+
         log.warning(
             "User not authenticated or result for user_id is invalid\nuser_id: {0}".format(
                 user_id
@@ -413,12 +411,13 @@ class QvainDatasetFiles(Resource):
         current_app.cr_permission_cache.delete(cr_id)
         return response, status
 
+
 class QvainDatasetLock(Resource):
     """Endpoints for handling dataset write locks."""
 
     def __init__(self):
         """Initialization common for all methods"""
-        if not flag_enabled('PERMISSIONS.WRITE_LOCK'):
+        if not flag_enabled("PERMISSIONS.WRITE_LOCK"):
             abort(405)
 
     def put(self, cr_id):
