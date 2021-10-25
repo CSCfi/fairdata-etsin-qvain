@@ -154,12 +154,6 @@ class QvainDatasets {
       }
       this.setPage(1)
     } catch (error) {
-      if (error.response?.status === 404) {
-        this.setDatasets([])
-        this.clearError()
-        this.setPage(1)
-        return
-      }
       this.setError(error?.response?.data || error)
     }
   }
