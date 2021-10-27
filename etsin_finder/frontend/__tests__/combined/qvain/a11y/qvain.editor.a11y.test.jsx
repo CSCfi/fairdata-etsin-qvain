@@ -3,7 +3,7 @@ import axios from 'axios'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 
 import etsinTheme from '../../../../js/styles/theme'
@@ -29,8 +29,6 @@ axios.get.mockReturnValue(
     },
   })
 )
-
-expect.extend(toHaveNoViolations)
 
 describe('Qvain editor', () => {
   let wrapper, helper
@@ -89,13 +87,13 @@ describe('Qvain editor', () => {
     setSectionsExpanded(wrapper, true)
     setFieldsExpanded(wrapper, true)
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible()
   })
 
   it('is accessible with sections closed', async () => {
     setSectionsExpanded(wrapper, false)
     setFieldsExpanded(wrapper, false)
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible({ ignore: ['jeee'] })
   })
 })

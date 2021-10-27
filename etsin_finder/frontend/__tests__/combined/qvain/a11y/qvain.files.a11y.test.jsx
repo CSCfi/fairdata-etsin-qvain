@@ -3,13 +3,10 @@ import axios from 'axios'
 import { mount } from 'enzyme'
 import ReactModal from 'react-modal'
 import { BrowserRouter } from 'react-router-dom'
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 import { ThemeProvider } from 'styled-components'
 import Translate from 'react-translate-component'
 
-expect.extend(toHaveNoViolations)
-
-import AuthClass from '../../../../js/stores/domain/auth'
 import { buildStores } from '../../../../js/stores'
 import '../../../../locale/translations'
 import FilePicker from '../../../../js/components/qvain/fields/files/ida'
@@ -109,7 +106,7 @@ describe('Qvain filepicker', () => {
       await Qvain.Files.SelectedItemsView.setAllOpen(true)
       wrapper.update()
       const results = await axe(wrapper.getDOMNode())
-      expect(results).toHaveNoViolations()
+      expect(results).toBeAccessible()
     })
   })
 
@@ -140,7 +137,7 @@ describe('Qvain filepicker', () => {
 
     it('is accessible', async () => {
       const results = await axe(modal.getDOMNode())
-      expect(results).toHaveNoViolations()
+      expect(results).toBeAccessible()
     })
   })
 
@@ -165,7 +162,7 @@ describe('Qvain filepicker', () => {
 
     it('is accessible', async () => {
       const results = await axe(modal.getDOMNode())
-      expect(results).toHaveNoViolations()
+      expect(results).toBeAccessible()
     })
   })
 
@@ -192,7 +189,7 @@ describe('Qvain filepicker', () => {
 
     it('is accessible', async () => {
       const results = await axe(modal.getDOMNode())
-      expect(results).toHaveNoViolations()
+      expect(results).toBeAccessible()
     })
   })
 
@@ -212,7 +209,7 @@ describe('Qvain filepicker', () => {
 
     it('is accessible', async () => {
       const results = await axe(modal.getDOMNode())
-      expect(results).toHaveNoViolations()
+      expect(results).toBeAccessible()
     })
   })
 })

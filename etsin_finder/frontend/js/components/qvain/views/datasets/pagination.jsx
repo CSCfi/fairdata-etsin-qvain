@@ -108,7 +108,7 @@ const DatasetPagination = ({ id, page, count, limit, onChangePage }) => {
   if (pageCount === 1) return null
 
   return (
-    <PaginationContainer className="col-lg-12" aria-labelledby={id}>
+    <PaginationContainer className="col-lg-12">
       <Translate
         content="search.pagination.SRpagination"
         className="pagination-label sr-only"

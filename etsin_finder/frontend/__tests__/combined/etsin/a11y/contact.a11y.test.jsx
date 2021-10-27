@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 
 import etsinTheme from '../../../../js/styles/theme'
@@ -9,8 +9,6 @@ import '../../../../locale/translations'
 import dataset from '../../../__testdata__/dataset.att'
 import Contact from '../../../../js/components/dataset/contact'
 import Modal from '../../../../js/components/general/modal'
-
-expect.extend(toHaveNoViolations)
 
 const emailInfo = {
   CONTRIBUTOR: true,
@@ -49,6 +47,6 @@ describe('Etsin contact modal', () => {
 
   it('should be accessible', async () => {
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible()
   })
 })

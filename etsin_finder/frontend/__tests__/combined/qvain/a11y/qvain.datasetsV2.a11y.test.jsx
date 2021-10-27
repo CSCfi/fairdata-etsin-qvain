@@ -3,7 +3,7 @@ import { mount } from 'enzyme'
 import { when } from 'mobx'
 import axios from 'axios'
 
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
 
@@ -13,8 +13,6 @@ import datasets from '../../../__testdata__/qvain.datasets'
 import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
 import DatasetsV2 from '@/components/qvain/views/datasetsV2'
-
-expect.extend(toHaveNoViolations)
 
 let stores
 
@@ -59,6 +57,6 @@ describe('DatasetsV2', () => {
     wrapper.update()
 
     const results = await axe(wrapper.getDOMNode(), { rules: { region: { enabled: false } } })
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible()
   })
 })

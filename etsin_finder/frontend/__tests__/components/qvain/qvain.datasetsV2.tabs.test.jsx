@@ -1,7 +1,5 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { runInAction } from 'mobx'
-import { axe, toHaveNoViolations } from 'jest-axe'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
 import counterpart from 'counterpart'
@@ -13,8 +11,6 @@ import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
 import TabsStore from '../../../js/stores/view/qvain/tabs'
 import Tabs from '@/components/qvain/views/datasetsV2/tabs'
-
-expect.extend(toHaveNoViolations)
 
 let stores
 

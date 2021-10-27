@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 
 import etsinTheme from '../../../../js/styles/theme'
@@ -13,7 +13,6 @@ import AccessRights from '../../../../js/components/dataset/accessRights'
 import Modal from '../../../../js/components/general/modal'
 
 jest.mock('../../../../js/stores/view/accessibility')
-expect.extend(toHaveNoViolations)
 
 describe('Etsin access rights modal', () => {
   let wrapper, helper
@@ -47,6 +46,6 @@ describe('Etsin access rights modal', () => {
 
   it('should be accessible', async () => {
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible()
   })
 })

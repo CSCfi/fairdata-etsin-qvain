@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 import axios from 'axios'
 
@@ -12,8 +12,6 @@ import dataset from '../../../__testdata__/dataset.att'
 import CitationModal from '../../../../js/components/dataset/citation/citationModal'
 import Modal from '../../../../js/components/general/modal'
 import { useStores } from '../../../../js/stores/stores'
-
-expect.extend(toHaveNoViolations)
 
 jest.mock('../../../../js/stores/stores', () => {
   const useStores = jest.fn()
@@ -71,6 +69,6 @@ describe('Etsin citation modal', () => {
 
   it('should be accessible', async () => {
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible()
   })
 })
