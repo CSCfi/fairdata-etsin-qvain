@@ -2,9 +2,8 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
-import { axe, toHaveNoViolations } from 'jest-axe'
-import ReactModal from 'react-modal'
-import { observable, when } from 'mobx'
+import { axe } from 'jest-axe'
+import { observable } from 'mobx'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
@@ -17,7 +16,6 @@ import axios from 'axios'
 jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
 
 jest.mock('../../../../js/stores/view/accessibility')
-expect.extend(toHaveNoViolations)
 
 jest.mock('axios')
 
@@ -72,7 +70,7 @@ describe('Etsin search page', () => {
 
   it('should be accessible', async () => {
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible({ ignore: ['identical-links-same-purpose'] })
   })
 
   it('should call Accessibility.handleNavigation for datasets', async () => {

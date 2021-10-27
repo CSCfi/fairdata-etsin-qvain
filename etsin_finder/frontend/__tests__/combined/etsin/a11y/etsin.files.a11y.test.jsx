@@ -3,11 +3,9 @@ import axios from 'axios'
 import { mount } from 'enzyme'
 import ReactModal from 'react-modal'
 import { BrowserRouter } from 'react-router-dom'
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 import { ThemeProvider } from 'styled-components'
 import { makeAutoObservable } from 'mobx'
-
-expect.extend(toHaveNoViolations)
 
 import { buildStores } from '../../../../js/stores'
 import IdaResources from '../../../../js/components/dataset/data/idaResources/index'
@@ -139,7 +137,7 @@ describe('Qvain filepicker', () => {
       await Files.View.setAllOpen(true)
       wrapper.update()
       const results = await axe(wrapper.getDOMNode())
-      expect(results).toHaveNoViolations()
+      expect(results).toBeAccessible()
     })
   })
 
@@ -165,7 +163,7 @@ describe('Qvain filepicker', () => {
 
     it('is accessible', async () => {
       const results = await axe(modal.getDOMNode())
-      expect(results).toHaveNoViolations()
+      expect(results).toBeAccessible()
     })
   })
 })

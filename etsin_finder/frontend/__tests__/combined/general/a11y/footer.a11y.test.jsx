@@ -1,11 +1,9 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 
 import '../../../../locale/translations'
 import Footer from '../../../../js/layout/footer'
-
-expect.extend(toHaveNoViolations)
 
 describe('Footer', () => {
   let wrapper
@@ -21,6 +19,6 @@ describe('Footer', () => {
 
   it('should be accessible', async () => {
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible()
   })
 })

@@ -4,9 +4,7 @@ import { configure } from 'mobx'
 import axios from 'axios'
 import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
-import { axe, toHaveNoViolations } from 'jest-axe'
-
-expect.extend(toHaveNoViolations)
+import { axe } from 'jest-axe'
 
 import '../../../../locale/translations'
 import { buildStores } from '../../../../js/stores'
@@ -87,6 +85,6 @@ describe('Related resources modal', () => {
 
   it('is accessible', async () => {
     const results = await axe(helper)
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible({ ignore: ['aria-hidden-focus'] })
   })
 })
