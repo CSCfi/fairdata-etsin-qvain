@@ -2,7 +2,7 @@
   /**
    * This file is part of the Etsin service
    *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   * Copyright 2017-2021 Ministry of Education and Culture, Finland
    *
    *
    * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
@@ -10,264 +10,104 @@
    */
 }
 
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
-import { withStores } from '../../../stores/stores'
+import { useStores } from '../../../stores/stores'
+import getPages from './getPages'
 
-class Pagination extends Component {
-  state = {
-    pageAmount: 0,
-    after: [],
-    before: [],
-  }
+const Pagination = ({ totalResults, perPage, currentPage: initialCurrentPage }) => {
+  const Stores = useStores()
+  const pageCount = Math.ceil(totalResults / perPage)
+  const currentPage = Math.min(Math.max(1, initialCurrentPage), pageCount)
+  const pages = getPages({
+    pageCount,
+    currentPage,
+  })
 
-  constructor(props) {
-    super(props)
-    this.beforeCounter = 0
-    this.afterCounter = 0
-    this.changePage = this.changePage.bind(this)
-    this.checkAround = this.checkAround.bind(this)
-    this.checkAfter = this.checkAfter.bind(this)
-    this.checkBefore = this.checkBefore.bind(this)
-    this.createPagination = this.createPagination.bind(this)
-  }
-
-  componentDidMount() {
-    if (!this.pageAmount) {
-      const pages = Math.ceil(this.props.totalResults / this.props.perPage)
-      this.setState(
-        {
-          currentPage: parseInt(this.props.currentPage, 10),
-          pageAmount: pages,
-        },
-        () => {
-          this.checkAround()
-        }
-      )
-    }
-  }
-
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(newProps) {
-    if (!newProps.loading) {
-      const pages = Math.ceil(this.props.totalResults / this.props.perPage)
-      this.setState(
-        {
-          currentPage: parseInt(this.props.currentPage, 10),
-          pageAmount: pages,
-        },
-        () => {
-          this.checkAround()
-        }
-      )
-    }
-  }
-
-  checkAround() {
-    this.setState(
-      {
-        after: [],
-        before: [],
-      },
-      () => {
-        this.beforeCounter = 0
-        this.afterCounter = 0
-        this.checkBefore().then(() => this.pagesBefore())
-        this.checkAfter().then(() => this.pagesAfter())
-      }
-    )
-  }
-
-  checkBefore() {
-    return new Promise(resolve => {
-      while (this.state.currentPage - this.beforeCounter > 1 && this.beforeCounter < 7) {
-        this.beforeCounter += 1
-      }
-      resolve()
-    })
-  }
-
-  checkAfter() {
-    return new Promise(resolve => {
-      while (
-        this.state.currentPage + this.afterCounter < this.state.pageAmount &&
-        this.afterCounter < 7
-      ) {
-        this.afterCounter += 1
-      }
-      resolve()
-    })
-  }
-
-  changePage(event, value) {
-    const { ElasticQuery, Accessibility } = this.props.Stores
+  const changePage = (event, value) => {
+    const { ElasticQuery, Accessibility } = Stores
     ElasticQuery.updatePageNum(value)
     ElasticQuery.queryES()
     Accessibility.announce(translate('search.pagination.changepage', { value }))
     Accessibility.resetFocus()
   }
 
-  singlePage(value, link) {
-    if (value === '...') {
-      return (
-        <li>
-          <PaginationItem className="pagination-rest d-none d-md-block">
-            <span className="sr-only">
-              <Translate content="search.pagination.SRskipped" />
-            </span>
-            <span aria-hidden="true">...</span>
-          </PaginationItem>
-        </li>
-      )
+  const getItemPage = item => {
+    if (item.toString().startsWith('...')) {
+      return undefined
     }
+    if (item === '<') {
+      return currentPage - 1
+    }
+    if (item === '>') {
+      return currentPage + 1
+    }
+    return item
+  }
+
+  const getItemLabel = (item, currentStr) => {
+    if (item === '...') {
+      return 'search.pagination.skipped'
+    }
+    if (item === '<') {
+      return 'search.pagination.prev'
+    }
+    if (item === '>') {
+      return 'search.pagination.next'
+    }
+
+    return `search.pagination.${currentStr}page`
+  }
+
+  const getItemKey = (item, index) => {
+    if (item === '...') {
+      return `pagination-skip-${index}`
+    }
+    return `pagination-${item}`
+  }
+
+  const renderItem = (item, index) => {
+    const currentStr = item === currentPage ? 'current' : ''
+    const restStr = item === '...' ? 'pagination-rest' : ''
+    const className = [currentStr, restStr].filter(v => v).join(' ')
+    const page = getItemPage(item)
+    const onClick = page && (e => changePage(e, page))
+
     return (
-      <li key={`pagination-${value}`}>
-        {link ? (
-          <PaginationButton
-            onClick={e => {
-              this.changePage(e, value)
-            }}
-          >
-            <Translate content="search.pagination.SRpage" className="sr-only" /> {value}
-          </PaginationButton>
-        ) : (
-          <PaginationButton className="current" disabled aria-disabled="true">
-            <Translate content="search.pagination.SRcurrentpage" className="sr-only" /> {value}
-          </PaginationButton>
-        )}
+      <li key={getItemKey(item, index)}>
+        <Translate
+          component={PaginationButton}
+          className={className}
+          onClick={onClick}
+          attributes={{ 'aria-label': getItemLabel(item, currentStr) }}
+          with={{ page }}
+        >
+          {item}
+        </Translate>
       </li>
     )
   }
 
-  pagesBefore() {
-    const pagesAll = []
-    let pages = []
-    for (let i = 1; i < this.beforeCounter; i += 1) {
-      pagesAll.push(this.singlePage(this.state.currentPage - i, true))
-    }
-    if (this.afterCounter < 4) {
-      pages = pagesAll.slice(0, 3 + (2 - (this.afterCounter - 1))) // atleast 2, max 4
-    } else {
-      pages = pagesAll.slice(0, 2)
-    }
-    this.setState({
-      before: pages.reverse(),
-    })
-  }
-
-  pagesAfter() {
-    const pagesAll = []
-    let pages = []
-    for (let i = 1; i < this.afterCounter; i += 1) {
-      pagesAll.push(this.singlePage(this.state.currentPage + i, true))
-    }
-    if (this.beforeCounter < 4) {
-      pages = pagesAll.slice(0, 3 + (2 - (this.beforeCounter - 1))) // atleast 2, max 4
-    } else {
-      pages = pagesAll.slice(0, 2)
-    }
-    this.setState({
-      after: pages,
-    })
-  }
-
-  restDots(where) {
-    if (where === 'before') {
-      if (
-        (this.state.currentPage === 5 && this.state.pageAmount > 8) ||
-        (this.state.pageAmount === 9 && this.state.currentPage > 5)
-      ) {
-        return this.singlePage(2, true)
-      }
-      if (this.state.currentPage > 5 && this.state.pageAmount > 8) {
-        return this.singlePage('...', false)
-      }
-    } else if (where === 'after') {
-      if (
-        (this.state.pageAmount - this.state.currentPage === 4 && this.state.pageAmount > 8) ||
-        (this.state.pageAmount === 9 && this.state.currentPage < 5)
-      ) {
-        return this.singlePage(this.state.pageAmount - 1, true)
-      }
-      if (this.state.pageAmount - this.state.currentPage > 4 && this.state.pageAmount > 8) {
-        return this.singlePage('...', false)
-      }
-    }
+  if (pages.length <= 1) {
     return null
   }
 
-  createPagination() {
-    return (
-      <ul>
-        {this.state.currentPage > 1 && (
-          <li>
-            <PaginationButton
-              onClick={e => {
-                this.changePage(e, this.state.currentPage - 1)
-              }}
-            >
-              <span aria-hidden>{'<'}</span>{' '}
-              <Translate content="search.pagination.prev" className="sr-only" />
-            </PaginationButton>
-          </li>
-        )}
-        {
-          // first page
-          this.state.currentPage !== 1 && this.singlePage(1, true)
-        }
-        {this.restDots('before')}
-        {
-          // pages before
-          this.state.before.map(single => single)
-        }
-        {this.singlePage(this.state.currentPage, false)} {/* currentpage */}
-        {
-          // pages after
-          this.state.after.map(single => single)
-        }
-        {this.restDots('after')}
-        {
-          // last page
-          this.state.currentPage !== this.state.pageAmount &&
-            this.singlePage(this.state.pageAmount, true)
-        }
-        {this.state.currentPage < this.state.pageAmount && (
-          <li>
-            <PaginationButton
-              onClick={e => {
-                this.changePage(e, this.state.currentPage + 1)
-              }}
-            >
-              <Translate content="search.pagination.next" className="sr-only" />{' '}
-              <span aria-hidden>{'>'}</span>
-            </PaginationButton>
-          </li>
-        )}
-      </ul>
-    )
-  }
-
-  render() {
-    if (!this.state.pageAmount) {
-      return null
-    }
-    return (
-      <PaginationContainer className="col-lg-12" aria-labelledby="pagination-label">
-        <Translate
-          content="search.pagination.SRpagination"
-          className="pagination-label sr-only"
-          aria-hidden
-          id="pagination-label"
-        />
-        {this.createPagination()}
-      </PaginationContainer>
-    )
-  }
+  return (
+    <PaginationContainer className="col-lg-12" aria-labelledby="pagination-label">
+      <Translate
+        content="search.pagination.pagination"
+        className="pagination-label sr-only"
+        aria-hidden
+        id="pagination-label"
+      />
+      <ul>{pages.map(renderItem)}</ul>
+    </PaginationContainer>
+  )
 }
 
 const PaginationItem = styled.span.attrs(() => ({
@@ -317,10 +157,9 @@ const PaginationContainer = styled.nav`
 `
 
 Pagination.propTypes = {
-  Stores: PropTypes.object.isRequired,
   totalResults: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
 }
 
-export default withStores(observer(Pagination))
+export default observer(Pagination)

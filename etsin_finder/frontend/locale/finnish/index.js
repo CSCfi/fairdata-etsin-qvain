@@ -417,10 +417,10 @@ const finnish = {
     pagination: {
       prev: 'Edellinen sivu',
       next: 'Seuraava sivu',
-      SRskipped: 'Ylihypätyt sivut',
-      SRpage: 'sivu',
-      SRcurrentpage: 'nykyinen sivu',
-      SRpagination: 'Paginaatio',
+      skipped: 'Ylihypätyt sivut',
+      page: 'sivu',
+      currentpage: 'nykyinen sivu',
+      pagination: 'Paginaatio',
       changepage: 'Sivu %(value)s',
     },
     noResults: {

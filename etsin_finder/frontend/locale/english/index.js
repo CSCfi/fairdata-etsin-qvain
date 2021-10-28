@@ -417,10 +417,10 @@ const english = {
     pagination: {
       prev: 'Previous page',
       next: 'Next page',
-      SRskipped: 'Skipped pages indicator',
-      SRpage: 'page',
-      SRcurrentpage: 'current page',
-      SRpagination: 'Pagination',
+      skipped: 'Skipped pages indicator',
+      page: 'Page %(page)s',
+      currentpage: 'Current page %(page)s',
+      pagination: 'Pagination',
       changepage: 'Page %(value)s',
     },
     noResults: {

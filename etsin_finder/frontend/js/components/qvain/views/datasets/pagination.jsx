@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { PaginationItem, PaginationButton, PaginationContainer } from '../editor/pagination'
+import { PaginationItem, PaginationButton, PaginationContainer } from './paginationStyled'
 
 const DatasetPagination = ({ id, page, count, limit, onChangePage }) => {
   const pageCount = Math.ceil(count / limit)
@@ -44,7 +44,7 @@ const DatasetPagination = ({ id, page, count, limit, onChangePage }) => {
         <li>
           <PaginationItem className="pagination-rest d-none d-md-block">
             <span className="sr-only">
-              <Translate content="search.pagination.SRskipped" />
+              <Translate content="search.pagination.skipped" />
             </span>
             <span aria-hidden="true">...</span>
           </PaginationItem>
@@ -55,13 +55,27 @@ const DatasetPagination = ({ id, page, count, limit, onChangePage }) => {
     return (
       <li key={`pagination-${value}`}>
         {link ? (
-          <PaginationButton onClick={handleChangePage(value)}>
-            <Translate content="search.pagination.SRpage" className="sr-only" /> {value}
-          </PaginationButton>
+          <Translate
+            component={PaginationButton}
+            attributes={{ 'aria-label': 'search.pagination.page' }}
+            with={{ page: value }}
+            onClick={handleChangePage(value)}
+          >
+            <Translate content="search.pagination.page" className="sr-only" />
+            {value}
+          </Translate>
         ) : (
-          <PaginationButton className="current" disabled aria-disabled="true">
-            <Translate content="search.pagination.SRcurrentpage" className="sr-only" /> {value}
-          </PaginationButton>
+          <Translate
+            component={PaginationButton}
+            className="current"
+            attributes={{ 'aria-label': 'search.pagination.currentpage' }}
+            with={{ page: value }}
+            disabled
+            aria-disabled="true"
+          >
+            <Translate content="search.pagination.currentpage" className="sr-only" />
+            {value}
+          </Translate>
         )}
       </li>
     )
@@ -110,7 +124,7 @@ const DatasetPagination = ({ id, page, count, limit, onChangePage }) => {
   return (
     <PaginationContainer className="col-lg-12">
       <Translate
-        content="search.pagination.SRpagination"
+        content="search.pagination.pagination"
         className="pagination-label sr-only"
         aria-hidden
         id={id}
