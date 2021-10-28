@@ -45,9 +45,8 @@ class Temporals extends Field {
     super.create()
   }
 
-  @action addTemporal = () => {
-    this.storage = [...this.storage, this.inEdit]
-    this.Parent.setChanged(true)
+  @override clearInEdit() {
+    return this.create()
   }
 
   @action removeTemporal = uiid => {

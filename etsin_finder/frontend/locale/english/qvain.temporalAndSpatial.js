@@ -54,7 +54,7 @@ const temporalAndSpatial = {
     description: 'Time period that is covered by the dataset, i.e. period of observations.',
     addButton: 'Add temporal coverage',
     listItem: {
-      bothDates: '%(startDate)s - %(endDate)s',
+      bothDates: '%(startDate)s – %(endDate)s',
       startDateOnly: 'from %(startDate)s',
       endDateOnly: 'until %(endDate)s',
     },

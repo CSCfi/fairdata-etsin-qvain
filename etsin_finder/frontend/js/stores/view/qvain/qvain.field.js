@@ -1,3 +1,4 @@
+import * as yup from 'yup'
 import { observable, computed, action, toJS, makeObservable } from 'mobx'
 import cloneDeep from 'lodash.clonedeep'
 
@@ -9,10 +10,9 @@ class Field {
     this.references = references
     this.Parent = Parent
     makeObservable(this)
-    this.reset = this.reset.bind(this)
-    this.create = this.create.bind(this)
-    this.clearInEdit = this.clearInEdit.bind(this)
   }
+
+  schema = yup.object()
 
   @computed
   get readonly() {
@@ -29,7 +29,7 @@ class Field {
 
   @observable validationError
 
-  @action reset() {
+  @action.bound reset() {
     this.storage = []
     this.hasChanged = false
     this.inEdit = undefined
@@ -41,7 +41,7 @@ class Field {
     this.hasChanged = val
   }
 
-  @action create(data = undefined) {
+  @action.bound create(data = undefined) {
     if (data) {
       this.setChanged(true)
       this.inEdit = this.Template(data)
@@ -64,12 +64,6 @@ class Field {
     this.Parent.setChanged(true)
     this.editMode = false
 
-    Object.keys(toJS(this.inEdit)).forEach(key => {
-      if (this.inEdit[key] && (this.inEdit[key].fi || this.inEdit[key].en)) {
-        this.inEdit[key].und = this.inEdit[key].fi || this.inEdit[key].en
-      }
-    })
-
     const edited = this.storage.find(s => s.uiid === this.inEdit.uiid)
 
     if (!this.saveEdited(edited)) {
@@ -77,7 +71,7 @@ class Field {
     }
   }
 
-  saveEdited = edited => {
+  @action saveEdited = edited => {
     this.validationError = ''
 
     if (edited) {
@@ -92,7 +86,7 @@ class Field {
     return false
   }
 
-  saveNew = () => {
+  @action saveNew = () => {
     this.validationError = ''
     const refs = this.detachRefs(this.inEdit)
     const index = this.storage.length
@@ -100,7 +94,18 @@ class Field {
     this.attachRefs(refs, this.storage[index])
   }
 
-  @action clearInEdit() {
+  @action.bound async validateAndSave() {
+    const { inEdit, save, clearInEdit, setValidationError, schema } = this
+    try {
+      await schema.validate(inEdit, { strict: true })
+      save()
+      clearInEdit()
+    } catch (e) {
+      setValidationError(e.message)
+    }
+  }
+
+  @action.bound clearInEdit() {
     this.validationError = ''
     this.setChanged(false)
     this.editMode = false

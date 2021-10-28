@@ -4,11 +4,10 @@ import { observer } from 'mobx-react'
 import { Label } from '../../../../general/modal/form'
 import FieldList from '../../../../general/section/fieldList'
 import FieldListAdd from '../../../../general/section/fieldListAdd'
-import handleSave from '../../relatedResource/handleSave'
 import Form from '../../relatedResource/form'
 import { useStores } from '../../../../utils/stores'
 
-const Location = () => {
+const UsedEntity = () => {
   const {
     Qvain: { Provenances: Store },
     Locale: { lang },
@@ -31,7 +30,6 @@ const Location = () => {
           Field={Field}
           Form={Form}
           formProps={{ hideRelationType: true }}
-          handleSave={() => handleSave(Field, { noRelationType: true })}
           position="left"
         />
       </div>
@@ -39,4 +37,4 @@ const Location = () => {
   )
 }
 
-export default observer(Location)
+export default observer(UsedEntity)

@@ -2,7 +2,6 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import FieldList from '../../../general/section/fieldList'
 import FieldListAdd from '../../../general/section/fieldListAdd'
-import handleSave from './handleSave'
 import Form from './form'
 import { useStores } from '../../../utils/stores'
 
@@ -17,7 +16,7 @@ const ProvenanceFieldContent = () => {
   return (
     <>
       <FieldList Field={Field} lang={lang} />
-      <FieldListAdd Store={Store} Field={Field} handleSave={() => handleSave(Field)} Form={Form} />
+      <FieldListAdd Store={Store} Field={Field} Form={Form} />
     </>
   )
 }

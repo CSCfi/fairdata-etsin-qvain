@@ -118,53 +118,6 @@ describe('Provenance', () => {
       harness.shouldIncludeChildren(children, props)
     })
   })
-
-  describe('FieldListAdd', () => {
-    beforeEach(() => {
-      harness.restoreWrapper('FieldListAdd')
-    })
-
-    describe('when calling handleSave and validations pass', () => {
-      const { inEdit, schema } = mockStores.Qvain.Provenances
-
-      beforeEach(() => {
-        schema.validate.mockReturnValue(Promise.resolve())
-        harness.props.handleSave()
-      })
-
-      test('should call provenanceDateSchema.validate', () => {
-        expect(schema.validate).to.have.beenCalledWith(inEdit, {
-          strict: true,
-        })
-      })
-
-      test('should call Provenances.save', () => {
-        expect(mockStores.Qvain.Provenances.save).to.have.beenCalledWith()
-      })
-
-      test('should call clearInEdit', () => {
-        expect(mockStores.Qvain.Provenances.clearInEdit).to.have.beenCalledWith()
-      })
-    })
-
-    describe('when calling handleSave and validations rejects', () => {
-      const error = {
-        message: 'hello',
-      }
-
-      beforeEach(async () => {
-        mockStores.Qvain.Provenances.schema.validate.mockReturnValue(Promise.reject(error))
-        harness.props.handleSave()
-        await flushPromises()
-      })
-
-      test('should call setValidationError', () => {
-        expect(mockStores.Qvain.Provenances.setValidationError).to.have.beenCalledWith(
-          error.message
-        )
-      })
-    })
-  })
 })
 
 describe('given required props and mockStores', () => {

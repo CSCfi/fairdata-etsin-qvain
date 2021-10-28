@@ -9,7 +9,6 @@ import ModalContent from '../modal/modalContent'
 
 const FieldListAdd = ({
   Field,
-  handleSave,
   formProps,
   Form,
   contentLabel,
@@ -51,7 +50,7 @@ const FieldListAdd = ({
         >
           <ModalContent
             Field={Field}
-            handleSave={handleSave}
+            handleSave={Field.validateAndSave}
             Form={Form}
             formProps={formProps}
             confirm={confirm}
@@ -75,7 +74,6 @@ const FieldListAdd = ({
 FieldListAdd.propTypes = {
   Field: PropTypes.object.isRequired,
   hideButton: PropTypes.bool,
-  handleSave: PropTypes.func.isRequired,
   Form: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   formProps: PropTypes.object,
   contentLabel: PropTypes.string,

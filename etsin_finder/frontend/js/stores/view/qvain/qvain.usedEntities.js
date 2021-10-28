@@ -1,8 +1,13 @@
+import * as yup from 'yup'
 import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 import { relatedResourceNameSchema } from './qvain.relatedResources'
 import { touch } from './track'
+
+export const usedEntitySchema = yup.object().shape({
+  name: relatedResourceNameSchema,
+})
 
 export const UsedEntityTemplate = (
   uiid = uuidv4(),
@@ -40,7 +45,7 @@ class UsedEntities extends Field {
     return this.fromBackendBase(data.used_entity, Qvain)
   }
 
-  nameSchema = relatedResourceNameSchema
+  schema = usedEntitySchema
 
   translationsRoot = 'qvain.history.provenance.modal.usedEntityInput'
 }

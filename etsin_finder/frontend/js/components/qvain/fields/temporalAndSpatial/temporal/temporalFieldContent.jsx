@@ -6,7 +6,6 @@ import DurationPicker from '../../../general/input/durationpicker'
 import ValidationError from '../../../general/errors/validationError'
 import { ButtonContainer, AddNewButton } from '../../../general/buttons'
 import TemporalList from './TemporalList'
-import handleSave from './handleSave'
 
 const TemporalFieldContent = () => {
   const {
@@ -16,11 +15,6 @@ const TemporalFieldContent = () => {
 
   const Field = Qvain.Temporals
   const { validationError, translationsRoot, storage, removeTemporal, readonly } = Field
-
-  const handleClick = () => {
-    handleSave(Qvain, Field)
-  }
-
   return (
     <>
       <TemporalList lang={lang} temporals={storage} remove={removeTemporal} readonly={readonly} />
@@ -30,7 +24,7 @@ const TemporalFieldContent = () => {
         <Translate
           component={AddNewButton}
           content={`${translationsRoot}.addButton`}
-          onClick={handleClick}
+          onClick={Field.validateAndSave}
           disabled={readonly}
         />
       </ButtonContainer>

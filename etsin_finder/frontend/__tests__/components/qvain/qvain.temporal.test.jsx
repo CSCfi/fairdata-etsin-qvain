@@ -3,7 +3,6 @@ import 'chai/register-expect'
 
 import Temporal, { brief } from '../../../js/components/qvain/fields/temporalAndSpatial/temporal'
 import TemporalFieldContent from '../../../js/components/qvain/fields/temporalAndSpatial/temporal/temporalFieldContent'
-import handleSave from '../../../js/components/qvain/fields/temporalAndSpatial/temporal/handleSave'
 import { useStores } from '../../../js/stores/stores'
 import Field from '../../../js/components/qvain/general/section/field'
 import TemporalList, {
@@ -15,8 +14,6 @@ import ValidationError from '../../../js/components/qvain/general/errors/validat
 import Label from '../../../js/components/qvain/general/card/label'
 import '../../../locale/translations'
 
-jest.mock('../../../js/components/qvain/fields/temporalAndSpatial/temporal/handleSave')
-
 jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas')
 
 const mockStores = {
@@ -27,6 +24,7 @@ const mockStores = {
       readonly: false,
       validationError: undefined,
       translationsRoot: 'translationsRoot',
+      validateAndSave: jest.fn(),
     },
   },
   Locale: {
@@ -121,16 +119,8 @@ describe('given required props', () => {
           harness.props.onClick()
         })
 
-        afterAll(() => {
-          handleSave.mockImplementation(
-            jest.requireActual(
-              '../../../js/components/qvain/fields/temporalAndSpatial/temporal/handleSave'
-            )
-          )
-        })
-
-        test('should call handleSave', () => {
-          expect(handleSave).to.have.beenCalledTimes(1)
+        test('should call validateAndSave', () => {
+          expect(mockStores.Qvain.Temporals.validateAndSave).to.have.beenCalledTimes(1)
         })
       })
     })
@@ -159,40 +149,6 @@ describe('given required props', () => {
       })
       harness.children.text().should.eql('validationError')
     })
-  })
-})
-
-describe('when calling handleSave, on successful validation', () => {
-  const field = {
-    inEdit: { some: 'data' },
-    create: jest.fn(),
-    setValidationError: jest.fn(),
-    addTemporal: jest.fn(),
-    schema: {
-      validate: jest.fn(),
-    },
-  }
-
-  beforeEach(async () => {
-    field.schema.validate.mockReturnValue(Promise.resolve())
-    handleSave.mockImplementation(
-      jest.requireActual(
-        '../../../js/components/qvain/fields/temporalAndSpatial/temporal/handleSave'
-      ).default
-    )
-    await handleSave(undefined, field)
-  })
-
-  test('should call schema with Field.inEdit', () => {
-    expect(field.schema.validate).to.have.beenCalledWith(field.inEdit, { strict: true })
-  })
-
-  test('should call field.addTemporal', () => {
-    expect(field.addTemporal).to.have.beenCalledWith()
-  })
-
-  test('should call field.create', () => {
-    expect(field.create).to.have.beenCalledWith()
   })
 })
 
@@ -258,7 +214,7 @@ describe('given required props and with one item in temporals array', () => {
       })
 
       test('should have parsed "item.startDate - item.endDate" in text', () => {
-        const expectedText = '1970-01-01 - 1970-01-01'
+        const expectedText = '1970-01-01 – 1970-01-01'
         harness.wrapper.text().should.eql(expectedText)
       })
     })

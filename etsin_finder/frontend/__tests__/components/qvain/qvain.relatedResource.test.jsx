@@ -9,7 +9,6 @@ import RelatedResourceContent from '../../../js/components/qvain/fields/history/
 import { Field } from '../../../js/components/qvain/general/section'
 import FieldList from '../../../js/components/qvain/general/section/fieldList'
 import Form from '../../../js/components/qvain/fields/history/relatedResource/form'
-import handleSave from '../../../js/components/qvain/fields/history/relatedResource/handleSave'
 import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
 import ModalInput from '../../../js/components/qvain/general/modal/modalInput'
 import { RelationType } from '../../../js/stores/view/qvain/qvain.relatedResources'
@@ -121,7 +120,6 @@ describe('given mockStores', () => {
           FieldListAdd: {
             Field: mockStores.Qvain.RelatedResources,
             Form,
-            handleSave,
             hideButton: true,
           },
         }
@@ -260,43 +258,6 @@ describe('given mockStores', () => {
       }
 
       harness.shouldIncludeChildren(children, props)
-    })
-  })
-
-  describe('When calling relatedResources.handleSave with Field and empty options', () => {
-    const Field = mockStores.Qvain.RelatedResources
-
-    beforeEach(async () => {
-      handleSave(Field, {})
-      await flushPromises()
-    })
-
-    afterEach(() => {
-      jest.clearAllMocks()
-    })
-
-    test('should call tameSchema.validate with inEdit.relationType', () => {
-      expect(Field.typeSchema.validate).to.have.beenCalledWith(Field.inEdit.relationType, {
-        strict: true,
-      })
-    })
-
-    test('should call nameSchema.validate with inEdit.name', () => {
-      expect(Field.nameSchema.validate).to.have.beenCalledWith(Field.inEdit.name, {
-        strict: true,
-      })
-    })
-
-    test('should populate name.und with name.en', () => {
-      Field.inEdit.name.should.eql({ en: 'name', und: 'name' })
-    })
-
-    test('should call save', () => {
-      expect(Field.save).to.have.beenCalled()
-    })
-
-    test('should call clearInEdit', () => {
-      expect(Field.clearInEdit).to.have.beenCalled()
     })
   })
 })

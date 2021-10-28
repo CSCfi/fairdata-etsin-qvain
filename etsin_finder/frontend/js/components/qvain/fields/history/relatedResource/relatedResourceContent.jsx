@@ -4,7 +4,6 @@ import ResourcesSearchField from './resourceSearchField'
 import FieldList from '../../../general/section/fieldList'
 import FieldListAdd from '../../../general/section/fieldListAdd'
 import Form from './form'
-import handleSave from './handleSave'
 import { useStores } from '../../../utils/stores'
 import FlaggedComponent from '../../../../general/flaggedComponent'
 
@@ -15,18 +14,14 @@ const RelatedResourceContent = () => {
       Flags: { flagEnabled },
     },
   } = useStores()
+
   return (
     <>
       <FieldList Field={Field} />
       <FlaggedComponent flag="CROSSREF_API">
         <ResourcesSearchField />
       </FlaggedComponent>
-      <FieldListAdd
-        Field={Field}
-        Form={Form}
-        handleSave={handleSave}
-        hideButton={flagEnabled('CROSSREF_API')}
-      />
+      <FieldListAdd Field={Field} Form={Form} hideButton={flagEnabled('CROSSREF_API')} />
     </>
   )
 }

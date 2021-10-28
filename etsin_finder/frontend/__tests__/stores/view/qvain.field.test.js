@@ -1,3 +1,4 @@
+import { configure } from 'mobx'
 import Field from '../../../js/stores/view/qvain/qvain.field'
 import 'chai/register-should'
 
@@ -22,7 +23,9 @@ describe('Field', () => {
 
   beforeEach(() => {
     mockStores = { readonly, setChanged: jest.fn() }
+    configure({ safeDescriptors: false })
     field = new Field(mockStores, Template, testModel)
+    configure({ safeDescriptors: true })
   })
 
   test('storage should be empty array', () => {
@@ -130,10 +133,6 @@ describe('Field', () => {
 
     test('should set editMode to false', () => {
       field.editMode.should.be.false
-    })
-
-    test("should add und to multi language attributes' value", () => {
-      field.inEdit[multiLanguageAttributeName].und.should.be.string(multiLangFiValue)
     })
 
     test('should set validationError to empty string', () => {
@@ -304,6 +303,59 @@ describe('Field', () => {
 
     test('should call clone of the refs listed on field.references', () => {
       expect(item.testRef.clone).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('when calling validateAndSave, on successful validation', () => {
+    let inEdit
+
+    beforeEach(async () => {
+      field.create()
+      inEdit = { ...field.inEdit }
+      jest.spyOn(field.schema, 'validate')
+      jest.spyOn(field, 'save')
+      jest.spyOn(field, 'clearInEdit')
+      await field.validateAndSave()
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    test('should call schema with Field.inEdit', () => {
+      expect(field.schema.validate).toHaveBeenCalledWith(
+        inEdit,
+        expect.objectContaining({ strict: true })
+      )
+    })
+
+    test('should call field.save', () => {
+      expect(field.save).toHaveBeenCalledWith()
+    })
+
+    test('should call field.clearInEdit', () => {
+      expect(field.clearInEdit).toHaveBeenCalledWith()
+    })
+  })
+
+  describe('when calling validateAndSave, on failing validation', () => {
+    const error = {
+      message: 'hello',
+    }
+
+    beforeEach(async () => {
+      jest.spyOn(field.schema, 'validate')
+      jest.spyOn(field, 'setValidationError')
+      field.schema.validate.mockReturnValue(Promise.reject(error))
+      await field.validateAndSave()
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    test('should call setValidationError', () => {
+      expect(field.setValidationError).toHaveBeenCalledWith(error.message)
     })
   })
 })

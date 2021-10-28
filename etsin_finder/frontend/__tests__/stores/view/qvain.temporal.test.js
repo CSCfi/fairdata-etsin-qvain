@@ -133,25 +133,14 @@ describe('Temporals with Parent as arg', () => {
       temporals.inEdit = inEditObj
     })
 
-    describe('when calling addTemporal', () => {
-      beforeEach(() => {
-        temporals.addTemporal()
-      })
-
-      test('should add inEdit to storage', () => {
-        temporals.storage.should.deep.eql([inEditObj])
-      })
-
-      test('should call Parent.setChanged with true', () => {
-        expect(parent.setChanged).to.have.beenCalledWith(true)
-      })
-    })
-
     describe('when calling toBackend', () => {
       let returnValue
 
       beforeEach(() => {
-        temporals.save.mockImplementation(() => temporals.addTemporal())
+        temporals.save.mockImplementation(() => {
+          temporals.storage = [...temporals.storage, temporals.inEdit]
+          temporals.Parent.setChanged(true)
+        })
         returnValue = temporals.toBackend()
       })
 

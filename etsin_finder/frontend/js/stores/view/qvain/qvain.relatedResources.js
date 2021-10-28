@@ -25,6 +25,11 @@ export const relatedResourceTypeSchema = yup
   .object()
   .required('qvain.validationMessages.history.relatedResource.typeRequired')
 
+export const relatedResourceSchema = yup.object().shape({
+  name: relatedResourceNameSchema,
+  relationType: relatedResourceTypeSchema,
+})
+
 export const RelatedResource = ({
   uiid = uuidv4(),
   name = { fi: '', en: '', und: '' },
@@ -40,9 +45,7 @@ class RelatedResources extends Field {
     makeObservable(this)
   }
 
-  nameSchema = relatedResourceNameSchema
-
-  typeSchema = relatedResourceTypeSchema
+  schema = relatedResourceSchema
 
   @observable translationsRoot = 'qvain.history.relatedResource'
 
