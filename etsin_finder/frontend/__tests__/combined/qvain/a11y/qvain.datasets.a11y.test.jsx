@@ -2,10 +2,10 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 import axios from 'axios'
-import { observable, when } from 'mobx'
+import { when } from 'mobx'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
@@ -15,8 +15,6 @@ import { MoreButton } from '../../../../js/components/qvain/views/datasets/datas
 import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import datasets from '../../../__testdata__/qvain.datasets'
-
-expect.extend(toHaveNoViolations)
 
 let stores
 
@@ -38,7 +36,7 @@ describe('Qvain datasets page', () => {
   let wrapper
 
   beforeEach(async () => {
-    stores.QvainDatasets.setDatasetsPerPage(5)
+    stores.QvainDatasets.setDatasetsPerPage(6)
     wrapper = mount(
       <StoresProvider store={stores}>
         <BrowserRouter>
@@ -50,6 +48,7 @@ describe('Qvain datasets page', () => {
         </BrowserRouter>
       </StoresProvider>
     )
+    // wait until datasets have been fetched
     await when(() => stores.QvainDatasets.datasetGroupsOnPage.length > 0)
     wrapper.update()
 
@@ -63,7 +62,7 @@ describe('Qvain datasets page', () => {
 
   it('is accessible', async () => {
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible()
   })
 })
 
@@ -104,6 +103,6 @@ describe('Qvain dataset removal modal', () => {
 
   it('is accessible', async () => {
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible()
   })
 })

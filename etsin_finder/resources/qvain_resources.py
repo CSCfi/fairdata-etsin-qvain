@@ -10,12 +10,12 @@
 from etsin_finder.services.qvain_lock_service import QvainLockService
 from marshmallow import ValidationError
 from flask import request, current_app
-from flask_restful import reqparse, Resource, abort
+from flask_restful import reqparse, Resource, abort, inputs
 
 from etsin_finder.auth import authentication
 from etsin_finder.log import log
-from etsin_finder.utils.flags import flag_enabled
 
+from etsin_finder.utils.flags import flag_enabled
 from etsin_finder.utils.utils import datetime_to_header
 from etsin_finder.schemas.qvain_dataset_schema_v2 import (
     validate,
@@ -27,9 +27,10 @@ from etsin_finder.utils.qvain_utils import (
     check_dataset_edit_permission,
     check_dataset_edit_permission_and_lock,
     check_authentication,
-    remove_deleted_datasets_from_results,
     edited_data_to_metax,
     get_access_granter,
+    merge_and_sort_dataset_lists,
+    add_sources,
 )
 
 from etsin_finder.services.qvain_service import MetaxQvainAPIService
@@ -122,12 +123,24 @@ class QvainDatasets(Resource):
     def __init__(self):
         """Init required utils for dataset metadata handling."""
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument("draft", type=bool, required=False)
+        self.parser.add_argument("draft", type=inputs.boolean, required=False)
 
-        # Datasets listing parameters
-        self.parser.add_argument("limit", type=str, required=False)
-        self.parser.add_argument("offset", type=str, required=False)
-        self.parser.add_argument("no_pagination", type=bool, required=False)
+    def _get_datasets_from_response(self, response, status, source):
+        """Get datasets from response dict, add source information"""
+        datasets = []
+        if status != 200:
+            user_id = authentication.get_user_csc_name()
+            projects = authentication.get_user_ida_projects()
+            log.warning(
+                f"Failed to get datasets ({status})\nuser_id:{user_id}\nsource:{source}\nprojects:{projects}"
+            )
+            abort(status, message="Failed to get datasets")
+        if type(response) is dict and response.get("results"):
+            datasets = response.get("results")
+        else:
+            datasets = response
+        add_sources(datasets, source)
+        return datasets
 
     @log_request
     def get(self):
@@ -149,30 +162,50 @@ class QvainDatasets(Resource):
         if error is not None:
             return error
 
-        args = self.parser.parse_args()
+        # Datasets listing parameters
+        self.parser.add_argument("limit", type=str, required=False)
+        self.parser.add_argument("offset", type=str, required=False)
+        self.parser.add_argument("no_pagination", type=inputs.boolean, required=False)
+        self.parser.add_argument(
+            "shared", type=inputs.boolean, default=False, required=False
+        )
+
+        args = self.parser.parse_args(strict=True)
         limit = args.get("limit", None)
         offset = args.get("offset", None)
         no_pagination = args.get("no_pagination", None)
 
+        shared = flag_enabled("PERMISSIONS.SHARE_PROJECT") and args.get("shared")
+
+        if not no_pagination and shared:
+            abort(message="'no_pagination' is required when 'shared' is enabled")
+
         user_id = authentication.get_user_csc_name()
         service = MetaxQvainAPIService()
-        result = service.get_datasets_for_user(
+        response, status = service.get_datasets_for_user(
             user_id,
             limit,
             offset,
             no_pagination,
             data_catalog_matcher=data_catalog_matcher,
         )
-        if result:
-            # Limit the amount of items to be sent to the frontend
-            if "results" in result:
-                # Remove the datasets that have the metax property 'removed': True
-                result = remove_deleted_datasets_from_results(result)
-                result["results"] = result.get("results", [])
-            # If no datasets are created, an empty response should be returned, without error
-            if result == "no datasets":
-                return "", 200
-            return result, 200
+        datasets = self._get_datasets_from_response(response, status, "creator")
+
+        projects_datasets = []
+        if shared:
+            projects = authentication.get_user_ida_projects()
+            projects_response, status = service.get_datasets_for_projects(
+                projects=projects,
+                data_catalog_matcher=data_catalog_matcher,
+            )
+            datasets.extend(
+                self._get_datasets_from_response(projects_response, status, "project")
+            )
+        datasets = merge_and_sort_dataset_lists(datasets, projects_datasets)
+
+        if datasets or type(datasets) is list:
+            return datasets, 200
+
         log.warning(
             "User not authenticated or result for user_id is invalid\nuser_id: {0}".format(
                 user_id
@@ -378,12 +411,13 @@ class QvainDatasetFiles(Resource):
         current_app.cr_permission_cache.delete(cr_id)
         return response, status
 
+
 class QvainDatasetLock(Resource):
     """Endpoints for handling dataset write locks."""
 
     def __init__(self):
         """Initialization common for all methods"""
-        if not flag_enabled('PERMISSIONS.WRITE_LOCK'):
+        if not flag_enabled("PERMISSIONS.WRITE_LOCK"):
             abort(405)
 
     def put(self, cr_id):

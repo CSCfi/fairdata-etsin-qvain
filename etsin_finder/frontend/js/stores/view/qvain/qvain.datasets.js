@@ -11,6 +11,7 @@ class QvainDatasets {
     makeObservable(this)
     this.promiseManager = new PromiseManager()
     this.removeModal = new Modal()
+    this.shareModal = new Modal()
   }
 
   @observable datasets = []
@@ -27,6 +28,8 @@ class QvainDatasets {
 
   @observable searchTerm = ''
 
+  @observable loadTime = new Date()
+
   @action.bound reset() {
     this.datasets.replace([])
     this.error = null
@@ -35,10 +38,12 @@ class QvainDatasets {
     this.searchTerm = ''
     this.promiseManager.reset()
     this.removeModal.close()
+    this.shareModal.close()
   }
 
   @action.bound setDatasets(datasets) {
     this.datasets = datasets
+    this.loadTime = new Date()
   }
 
   @action.bound setPage(page) {
@@ -131,12 +136,12 @@ class QvainDatasets {
     })
   }
 
-  loadDatasets = async () => {
+  loadDatasets = async ({ shared } = {}) => {
     this.clearError()
     try {
       const url = urls.qvain.datasets()
       const response = await this.promiseManager.add(
-        axios.get(url, { params: { no_pagination: true } }),
+        axios.get(url, { params: { no_pagination: true, shared } }),
         'datasets'
       )
       const data = response.data || []
@@ -149,7 +154,7 @@ class QvainDatasets {
       }
       this.setPage(1)
     } catch (error) {
-      this.setError(error)
+      this.setError(error?.response?.data || error)
     }
   }
 

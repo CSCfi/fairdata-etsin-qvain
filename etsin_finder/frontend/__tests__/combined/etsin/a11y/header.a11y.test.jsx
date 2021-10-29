@@ -2,15 +2,13 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
 import stores from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import EtsinHeader from '../../../../js/components/header'
-
-expect.extend(toHaveNoViolations)
 
 describe('Etsin header', () => {
   let wrapper
@@ -36,6 +34,6 @@ describe('Etsin header', () => {
 
   it('should be accessible', async () => {
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible()
   })
 })

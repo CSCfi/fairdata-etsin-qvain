@@ -9,6 +9,10 @@ import { QvainContainer, PageTitle } from '../../general/card'
 import { SaveButton } from '../../general/buttons'
 import NoticeBar from '../../../general/noticeBar'
 import Tabs from './tabs'
+import Table from './table'
+import RemoveModal from '../datasets/removeModal'
+import ShareModal from './shareModal'
+import Search from './search'
 
 export const Datasets = () => {
   const history = useHistory()
@@ -16,9 +20,6 @@ export const Datasets = () => {
   const {
     Qvain: { resetQvainStore },
     QvainDatasets: { publishedDataset, setPublishedDataset },
-    QvainDatasetsV2: {
-      tabs: { active },
-    },
     Env: { getQvainUrl },
     Matomo: { recordEvent },
   } = useStores()
@@ -50,16 +51,19 @@ export const Datasets = () => {
         </DatasetsHeader>
         <Tabs />
         <DatasetsContent>
-          Current tab is <strong>{active}</strong>. Feels like I contain nothing at all&hellip;
+          <Search />
+          <Table />
         </DatasetsContent>
+        <RemoveModal />
+        <ShareModal />
       </DatasetsContainer>
     </QvainContainer>
   )
 }
 
-const PublishSuccess = styled(NoticeBar).attrs(() => ({
+const PublishSuccess = styled(NoticeBar).attrs({
   bg: 'success',
-}))`
+})`
   margin: 0.5rem 0;
 `
 
@@ -78,10 +82,11 @@ const DatasetsContainer = styled.div.attrs({
   background: white;
   margin-top: 1.5rem;
   padding: 0;
+  margin-bottom: 1rem;
 `
 
 const DatasetsContent = styled.div`
-  padding: 1rem 1.5rem;
+  padding: 1rem 0rem;
   font-size: 16px;
 `
 

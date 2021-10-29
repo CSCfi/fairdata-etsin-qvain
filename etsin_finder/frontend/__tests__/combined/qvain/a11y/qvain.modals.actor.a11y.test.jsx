@@ -4,9 +4,7 @@ import { configure } from 'mobx'
 import axios from 'axios'
 import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
-import { axe, toHaveNoViolations } from 'jest-axe'
-
-expect.extend(toHaveNoViolations)
+import { axe } from 'jest-axe'
 
 import { buildStores } from '../../../../js/stores'
 import '../../../../locale/translations'
@@ -78,13 +76,13 @@ describe('Qvain.Actors modal', () => {
     const { editActor, actors } = stores.Qvain.Actors
     editActor(actors.find(actor => actor.type === ENTITY_TYPE.PERSON))
     const results = await axe(helper)
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible({ ignore: ['aria-hidden-focus'] })
   })
 
   it('organization modal is accessible', async () => {
     const { editActor, actors } = stores.Qvain.Actors
     editActor(actors.find(actor => actor.type === ENTITY_TYPE.ORGANIZATION))
     const results = await axe(helper)
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible({ ignore: ['aria-hidden-focus'] })
   })
 })

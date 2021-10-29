@@ -18,20 +18,26 @@ const config = env => ({
   devtool: 'eval-source-map',
   devServer: {
     host: '0.0.0.0', // Default IP (Docker)
-    // inline: true,
-    publicPath: '/', // This needs to be set for devServer
-    contentBase: '/static/',
-    public: '0.0.0.0', // Needs to be specified without port, for connection from sockjs-node (nginx)
-    disableHostCheck: true, // Should be enabled when running inside a container
+    allowedHosts: 'all', // Allow any host when running inside a container
     hot: true,
     historyApiFallback: true,
-    clientLogLevel: 'silent',
     port: 8080, // This is the port where webpack is available
-    writeToDisk: false,
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1500,
-      ignored: /node_modules/,
+    static: {
+      directory: '/static/',
+      watch: {
+        aggregateTimeout: 300,
+        poll: 1500,
+        ignored: /node_modules/,
+      },
+    },
+    devMiddleware: {
+      publicPath: '/', // This needs to be set for devServer
+      writeToDisk: false,
+    },
+    webSocketServer: 'ws',
+    client: {
+      logging: 'none',
+      webSocketURL: 'wss://0.0.0.0:443/ws',
     },
   },
   resolve: {
@@ -63,7 +69,11 @@ const config = env => ({
     ],
   },
   plugins: [
-    new ReactRefreshWebpackPlugin(),
+    new ReactRefreshWebpackPlugin({
+      overlay: {
+        sockPort: 443,
+      },
+    }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       // TODO: add manifest to new html

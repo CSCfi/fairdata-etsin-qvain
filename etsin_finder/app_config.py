@@ -9,7 +9,8 @@
 
 import yaml
 
-from etsin_finder.utils.utils import executing_travis, ensure_app
+from etsin_finder.utils.utils import executing_cicd, ensure_app
+from ldap3 import MOCK_SYNC
 
 
 def _get_app_config_from_file():
@@ -33,8 +34,8 @@ def load_app_config(is_testing):
         function: function to get app config.
 
     """
-    if executing_travis():
-        return _get_app_config_for_travis()
+    if executing_cicd():
+        return _get_app_config_for_cicd()
     if is_testing:
         return _get_test_app_config()
     return _get_app_config_from_file()
@@ -94,12 +95,18 @@ def _get_test_app_config():
         "MEMCACHED": {
             "HOST": "testing",
             "PORT": 1234,
-        }
+        },
+        "LDAP": {
+            "HOST": "fake host",
+            "BIND": "fake bind",
+            "PASSWORD": "fake password",
+            "STRATEGY": MOCK_SYNC,
+        },
     }
 
 
-def _get_app_config_for_travis():
-    """Get app config for travis.
+def _get_app_config_for_cicd():
+    """Get app config for ci/cd
 
     Returns:
         dict: app config.
@@ -121,6 +128,9 @@ def get_memcached_config(app=None):
         dict: Dict with memcache configs or None.
 
     """
+    if executing_cicd():
+        return None
+
     app = ensure_app(app)
     memcached_conf = app.config.get("MEMCACHED", False)
     if not memcached_conf or not isinstance(memcached_conf, dict):
@@ -160,7 +170,7 @@ def get_fairdata_rems_api_config(app=None):
         dict: REMS api config or None.
 
     """
-    if executing_travis():
+    if executing_cicd():
         return None
 
     app = ensure_app(app)
@@ -169,7 +179,9 @@ def get_fairdata_rems_api_config(app=None):
         return None
 
     if (
-        "API_KEY" not in rems_conf or "HOST" not in rems_conf or "ENABLED" not in rems_conf
+        "API_KEY" not in rems_conf
+        or "HOST" not in rems_conf
+        or "ENABLED" not in rems_conf
     ):
         return None
 
@@ -189,8 +201,33 @@ def get_metax_api_config(app=None):
         return None
 
     if (
-        "HOST" not in metax_api_conf or "USER" not in metax_api_conf or "PASSWORD" not in metax_api_conf or "VERIFY_SSL" not in metax_api_conf
+        "HOST" not in metax_api_conf
+        or "USER" not in metax_api_conf
+        or "PASSWORD" not in metax_api_conf
+        or "VERIFY_SSL" not in metax_api_conf
     ):
         return None
 
     return metax_api_conf
+
+
+def get_ldap_config(app=None):
+    """Get LDAP idm config.
+
+    Returns:
+        dict: LDAP configuration or None.
+
+    """
+    app = ensure_app(app)
+    ldap_config = app.config.get("LDAP")
+    if not ldap_config or not isinstance(ldap_config, dict):
+        return None
+
+    if (
+        "HOST" not in ldap_config
+        or "BIND" not in ldap_config
+        or "PASSWORD" not in ldap_config
+    ):
+        return None
+
+    return ldap_config

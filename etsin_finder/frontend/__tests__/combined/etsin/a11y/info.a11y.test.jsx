@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 
 import etsinTheme from '../../../../js/styles/theme'
@@ -12,7 +12,6 @@ import Info from '../../../../js/components/dataset/data/info'
 import Modal from '../../../../js/components/general/modal'
 
 jest.mock('../../../../js/stores/view/accessibility')
-expect.extend(toHaveNoViolations)
 
 const infoProps = {
   name: 'File',
@@ -65,6 +64,6 @@ describe('Etsin file info modal', () => {
 
   it('should be accessible', async () => {
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible()
   })
 })

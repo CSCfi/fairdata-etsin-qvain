@@ -1,3 +1,4 @@
+import { faEdit, faEye, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
 
 export const getEnterEditAction = (Stores, dataset) => {
@@ -7,8 +8,10 @@ export const getEnterEditAction = (Stores, dataset) => {
   } = Stores
 
   return {
-    text: dataset.next_draft ? 'qvain.datasets.editDraftButton' : 'qvain.datasets.editButton',
+    text: dataset.next_draft ? 'qvain.datasets.actions.editDraft' : 'qvain.datasets.actions.edit',
     danger: false,
+    icon: faEdit,
+    onlyIcon: true,
     handler: () => {
       if (dataset.next_draft) {
         Matomo.recordEvent(`EDIT / ${dataset.next_draft.identifier}`)
@@ -40,11 +43,32 @@ export const getGoToEtsinAction = (Stores, dataset) => {
   }
 
   return {
-    text: `qvain.datasets.${goToEtsinKey}`,
+    text: `qvain.datasets.actions.${goToEtsinKey}`,
     danger: false,
+    icon: faEye,
+    moreIfNarrow: true,
     handler: () => {
       Matomo.recordEvent(`PREVIEW / ${identifier}`)
       window.open(getEtsinUrl(`/dataset/${identifier}${query}`), '_blank')
+    },
+  }
+}
+
+export const getShareAction = (Stores, dataset) => {
+  const { Matomo } = Stores
+  const identifier = dataset.identifier
+  const {
+    share: { modal },
+  } = Stores.QvainDatasetsV2
+
+  return {
+    text: `qvain.datasets.actions.share`,
+    danger: false,
+    icon: faUserPlus,
+    moreIfNarrow: true,
+    handler: () => {
+      modal.open({ dataset })
+      Matomo.recordEvent(`SHARE / ${identifier}`)
     },
   }
 }
@@ -58,7 +82,7 @@ export const getCreateNewVersionAction = (Stores, dataset) => {
   const { identifier } = dataset
 
   return {
-    text: 'qvain.datasets.createNewVersion',
+    text: 'qvain.datasets.actions.createNewVersion',
     danger: false,
     handler: async () => {
       const newIdentifier = await createNewVersion(dataset)
@@ -76,7 +100,7 @@ export const getUseAsTemplateAction = (Stores, dataset) => {
   } = Stores
 
   return {
-    text: 'qvain.datasets.useAsTemplate',
+    text: 'qvain.datasets.actions.useAsTemplate',
     danger: false,
     handler: () => {
       history.push(getQvainUrl('/dataset'))
@@ -97,7 +121,7 @@ export const getRemoveAction = (Stores, dataset, onlyChanges) => {
   const { removeModal, removeDataset, removeDatasetChanges } = Stores.QvainDatasets
 
   return {
-    text: onlyChanges ? 'qvain.datasets.revertButton' : 'qvain.datasets.deleteButton',
+    text: onlyChanges ? 'qvain.datasets.actions.revert' : 'qvain.datasets.actions.delete',
     danger: true,
     handler: () =>
       removeModal.open({
@@ -129,6 +153,24 @@ export const getDatasetActions = (Stores, dataset) => {
   const actions = [
     getEnterEditAction(Stores, dataset),
     getGoToEtsinAction(Stores, dataset),
+    getUseAsTemplateAction(Stores, dataset),
+  ]
+  if (canCreateNewVersion(dataset)) {
+    actions.push(getCreateNewVersionAction(Stores, dataset))
+  }
+  if (hasUnpublishedChanges(dataset)) {
+    actions.push(getRemoveAction(Stores, dataset, true))
+  }
+  actions.push(getRemoveAction(Stores, dataset, false))
+
+  return actions
+}
+
+export const getDatasetActionsV2 = (Stores, dataset) => {
+  const actions = [
+    getEnterEditAction(Stores, dataset),
+    getGoToEtsinAction(Stores, dataset),
+    getShareAction(Stores, dataset),
     getUseAsTemplateAction(Stores, dataset),
   ]
   if (canCreateNewVersion(dataset)) {

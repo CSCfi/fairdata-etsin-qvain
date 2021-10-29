@@ -115,7 +115,7 @@ describe('OrganizationSelect', () => {
   })
 
   test('it exists', () => {
-    wrapper.should.exist
+    wrapper.should.have.lengthOf(1)
   })
 
   describe('given no values', () => {
@@ -137,7 +137,7 @@ describe('OrganizationSelect', () => {
       })
 
       test('should exist', () => {
-        organizationSelect.should.exist
+        organizationSelect.should.have.lengthOf(1)
       })
 
       test('props should include expectedProps', () => {
@@ -220,7 +220,7 @@ describe('OrganizationSelect', () => {
       })
 
       test('it exists', () => {
-        organizationSelect.should.exist
+        organizationSelect.should.have.lengthOf(1)
       })
 
       test('props should include expectedProps', () => {
@@ -236,7 +236,7 @@ describe('OrganizationSelect', () => {
       })
 
       test('it exists', () => {
-        departmentSelect.should.exist
+        departmentSelect.should.have.lengthOf(1)
       })
 
       test('props should include expectedProps', () => {
@@ -298,7 +298,7 @@ describe('OrganizationSelect', () => {
       })
 
       test('it exists', () => {
-        departmentSelect.should.exist
+        departmentSelect.should.have.lengthOf(1)
       })
 
       test('props should include expectedProps', () => {
@@ -314,7 +314,7 @@ describe('OrganizationSelect', () => {
       })
 
       test('should exist', () => {
-        subDepartmentSelect.should.exist
+        subDepartmentSelect.should.have.lengthOf(1)
       })
 
       test('props should include expectedProps', () => {
@@ -536,7 +536,7 @@ describe('OrganizationSelect', () => {
       })
 
       test('should exist', () => {
-        subDepartmentSelect.should.exist
+        subDepartmentSelect.should.have.lengthOf(1)
       })
 
       test('options should be predetermined subDepartmentOption', () => {

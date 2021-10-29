@@ -79,25 +79,23 @@ class AccessRights extends Component {
 
   restricted() {
     return (
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-      <div tabIndex="0">
+      <>
         <FontAwesomeIcon icon={faLock} title="Closed lock" />
         <AccessLabel lang={getDataLang(this.state.title)}>
           {checkDataLang(this.state.title)}
         </AccessLabel>
-      </div>
+      </>
     )
   }
 
   openAccess() {
     return (
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-      <div tabIndex="0">
+      <>
         <FontAwesomeIcon icon={faLockOpen} title="Lock open" />
         <AccessLabel lang={getDataLang(this.state.title)}>
           {checkDataLang(this.state.title)}
         </AccessLabel>
-      </div>
+      </>
     )
   }
 

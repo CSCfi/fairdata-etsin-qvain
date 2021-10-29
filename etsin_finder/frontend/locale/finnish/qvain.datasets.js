@@ -2,13 +2,20 @@ const datasets = {
   title: 'Aineistot',
   search: {
     hidden: 'Haku',
+    label: 'Haku',
     searchTitle: 'Hakusana ao. listan filtteröimiseksi',
     placeholder: 'Suodata aineiston nimen mukaan',
+    searchTitleShort: 'Etsi aineistoja',
+  },
+  sort: {
+    label: 'Järjestys:',
+    title: 'Otsikko',
+    status: 'Tila',
+    owner: 'Omistaja',
+    dateCreated: 'Luotu',
   },
   help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
   createButton: 'Luo uusi aineisto',
-  createNewVersion: 'Luo uusi versio',
-  useAsTemplate: 'Käytä mallina',
   state: {
     draft: 'Luonnos',
     published: 'Julkaistu',
@@ -22,6 +29,10 @@ const datasets = {
     created: 'Luotu',
     state: 'Tila',
     actions: 'Toiminnot',
+    edit: 'Muokkaa',
+    share: 'Jaa',
+    preview: 'Katsele',
+    owner: 'Omistaja',
     dateFormat: {
       moments: 'Muutama hetki sitten',
       oneMinute: '1 minuutti sitten',
@@ -36,6 +47,10 @@ const datasets = {
       years: 'vuotta sitten',
     },
   },
+  owner: {
+    me: 'Minä',
+    project: 'Projekti',
+  },
   moreActions: 'Lisää',
   moreVersions: {
     one: 'Näytä 1 versio lisää',
@@ -45,15 +60,21 @@ const datasets = {
   oldVersion: 'Vanha versio',
   latestVersion: 'Uusin',
   deprecated: 'Vanhentunut',
-  editButton: 'Muokkaa',
-  editDraftButton: 'Muokkaa luonnosta',
-  deleteButton: 'Poista',
-  revertButton: 'Poista muutokset',
+  actions: {
+    edit: 'Muokkaa',
+    editDraft: 'Muokkaa luonnosta',
+    goToEtsin: 'Katso Etsimessä',
+    goToEtsinDraft: 'Esikatsele Etsimessä',
+    share: 'Jaa',
+    createNewVersion: 'Luo uusi versio',
+    useAsTemplate: 'Käytä mallina',
+    revert: 'Poista muutokset',
+    delete: 'Poista',
+  },
   remove: {
     confirm: {
       published: {
-        text:
-          'Haluatko varmasti poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
+        text: 'Haluatko varmasti poistaa aineiston? Aineiston poiston jälkeen se ei enää näy Qvaimessa eikä Etsimen haku löydä sitä. Aineiston laskeutumissivua ei poisteta.',
         ok: 'Poista',
       },
       draft: {
@@ -67,17 +88,61 @@ const datasets = {
       cancel: 'Peruuta',
     },
   },
-  goToEtsin: 'Katso Etsimessä',
-  goToEtsinDraft: 'Esikatsele Etsimessä',
   openNewVersion: 'Avaa uusi versio',
-  noDatasets: 'Sinulla ei ole olemassa olevia aineistoja',
+  noDatasets: 'Sinulla ei ole olemassa olevia aineistoja.',
+  noMatchingDatasets: 'Hakua vastaavia aineistoja ei löytynyt.',
   reload: 'Lataa uudelleen',
   loading: 'Lataa...',
   errorOccurred: 'Virhe tapahtui',
   tableHeader: 'Luodut aineistot',
   tabs: {
     all: 'Kaikki aineistot',
-    another: 'Toinen välilehti',
+  },
+  share: {
+    title: 'Jaa aineisto',
+    tabs: {
+      invite: 'Kutsu',
+      members: 'Jäsenet',
+    },
+    invite: {
+      users: {
+        label: 'Käyttäjät',
+        placeholder: 'Lisää käyttäjiä',
+        help: 'Etsi käyttäjiä nimen, käyttäjätunnuksen tai sähköpostin perusteella.',
+        empty: 'Käyttäjiä ei löytynyt.',
+        searchError: 'Käyttäjien hakemisessa tapahtui virhe.',
+        searching: 'Haetaan...',
+      },
+      roles: {
+        editor: 'Muokkaaja',
+      },
+      message: {
+        label: 'Viesti',
+        placeholder: 'Kirjoita kutsuun viesti.',
+      },
+      button: 'Kutsu',
+      confirm: {
+        warning: 'Kutsua ei ole vielä lähetetty. Perutaanko kutsun lähetys?',
+        confirm: 'Kyllä, unohda kutsu',
+        cancel: 'Ei, jatka muokkausta',
+      },
+    },
+    members: {
+      roles: {
+        owner: 'Omistaja',
+        editor: 'Muokkaaja',
+      },
+      remove: 'Poista',
+      labels: {
+        permissions: 'Jäsenet',
+        projectMembers: 'Projektin jäsenet',
+      },
+    },
+  },
+  previousVersions: {
+    label: 'Edelliset versiot',
+    show: 'Näytä edelliset versiot',
+    hide: 'Piilota edelliset versiot',
   },
 }
 

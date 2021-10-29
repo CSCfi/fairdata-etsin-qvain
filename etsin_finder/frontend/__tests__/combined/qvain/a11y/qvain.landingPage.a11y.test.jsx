@@ -2,15 +2,13 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
-import { axe, toHaveNoViolations } from 'jest-axe'
+import { axe } from 'jest-axe'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
 import stores from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import LandingPage from '../../../../js/components/qvain/views/landingPage/index.jsx'
-
-expect.extend(toHaveNoViolations)
 
 describe('Qvain landing page', () => {
   let wrapper
@@ -37,7 +35,7 @@ describe('Qvain landing page', () => {
 
   it('should be accessible', async () => {
     const results = await axe(wrapper.getDOMNode())
-    expect(results).toHaveNoViolations()
+    expect(results).toBeAccessible()
   })
 
   it('should call Accessibility.handleNavigation', async () => {

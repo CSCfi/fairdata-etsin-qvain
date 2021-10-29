@@ -12,7 +12,7 @@ from flask import request, current_app
 from urllib.parse import urlparse, urlunparse, parse_qs, urlencode, urljoin
 
 from etsin_finder.log import log
-from etsin_finder.utils.utils import executing_travis
+from etsin_finder.utils.utils import executing_cicd
 
 def get_sso_environment_prefix():
     """Checks what environment the user is currently in, based on app_config
@@ -52,7 +52,7 @@ def is_authenticated_through_fairdata_sso():
         bool: Is auth.
 
     """
-    if executing_travis():
+    if executing_cicd():
         return False
 
     fd_sso_session = get_decrypted_sso_session_details()

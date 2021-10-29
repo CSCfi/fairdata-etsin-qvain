@@ -9,11 +9,11 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "$$typeof": Symbol(react.forward_ref),
         "attrs": Array [],
         "componentStyle": e {
-          "baseHash": -703652486,
+          "baseHash": -291192186,
           "baseStyle": e {
-            "baseHash": -1988014698,
+            "baseHash": 1387173706,
             "baseStyle": undefined,
-            "componentId": "label__Label-x0jqqw-0",
+            "componentId": "label__Label-sc-x0jqqw-0",
             "isStatic": false,
             "rules": Array [
               "
@@ -31,7 +31,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
             ],
             "staticRulesId": "",
           },
-          "componentId": "tablePasState__PasLabel-kh2b5p-0",
+          "componentId": "tablePasState__PasLabel-sc-kh2b5p-0",
           "isStatic": false,
           "rules": Array [
             "
@@ -43,11 +43,11 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         },
         "displayName": "tablePasState__PasLabel",
         "foldedComponentIds": Array [
-          "label__Label-x0jqqw-0",
+          "label__Label-sc-x0jqqw-0",
         ],
         "render": [Function],
         "shouldForwardProp": undefined,
-        "styledComponentId": "tablePasState__PasLabel-kh2b5p-0",
+        "styledComponentId": "tablePasState__PasLabel-sc-kh2b5p-0",
         "target": "div",
         "toString": [Function],
         "warnTooManyClasses": [Function],
@@ -62,9 +62,9 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "$$typeof": Symbol(react.forward_ref),
         "attrs": Array [],
         "componentStyle": e {
-          "baseHash": -1476272384,
+          "baseHash": 682788508,
           "baseStyle": undefined,
-          "componentId": "tablePasState__PasText-kh2b5p-1",
+          "componentId": "tablePasState__PasText-sc-kh2b5p-1",
           "isStatic": false,
           "rules": Array [
             "
@@ -84,7 +84,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "foldedComponentIds": Array [],
         "render": [Function],
         "shouldForwardProp": undefined,
-        "styledComponentId": "tablePasState__PasText-kh2b5p-1",
+        "styledComponentId": "tablePasState__PasText-sc-kh2b5p-1",
         "target": "span",
         "toString": [Function],
         "warnTooManyClasses": [Function],
@@ -122,9 +122,9 @@ exports[`Qvain should render correctly 1`] = `
           },
         ],
         "componentStyle": e {
-          "baseHash": -342646166,
+          "baseHash": 1359012054,
           "baseStyle": undefined,
-          "componentId": "errorBoundary__ErrorContainer-kebdqo-0",
+          "componentId": "errorBoundary__ErrorContainer-sc-kebdqo-0",
           "isStatic": false,
           "rules": Array [
             "
@@ -140,7 +140,7 @@ exports[`Qvain should render correctly 1`] = `
         "foldedComponentIds": Array [],
         "render": [Function],
         "shouldForwardProp": undefined,
-        "styledComponentId": "errorBoundary__ErrorContainer-kebdqo-0",
+        "styledComponentId": "errorBoundary__ErrorContainer-sc-kebdqo-0",
         "target": "div",
         "toString": [Function],
         "warnTooManyClasses": [Function],

@@ -121,10 +121,6 @@ expected_project_list = [
     }
 ]
 
-original_other_identifiers = ["some url", "some other url"]
-
-expected_other_identifiers = [{"notation": "some url"}, {"notation": "some other url"}]
-
 original_open_rights = {
     "license": [
         {
@@ -211,7 +207,7 @@ expected_remote_resources = [
 original_complete_dataset = {
     "title": {"en": "test", "fi": ""},
     "description": {"en": "desc", "fi": ""},
-    "identifiers": ["https://doin.com/some_identifier"],
+    "other_identifier": [{"notation": "https://doin.com/some_identifier"}],
     "keywords": ["qwe"],
     "theme": [{"identifier": "http://www.yso.fi/onto/koko/p46606"}],
     "access_rights": {
@@ -438,7 +434,7 @@ original_complete_dataset = {
     ],
     "field_of_science": [{"identifier": "http://www.yso.fi/onto/okm-tieteenala/ta112"}],
     "language": [{"identifier": "http://lexvo.org/id/iso639-3/udm"}],
-    "issuedDate": "2021-06-23",
+    "issued": "2021-06-23",
     "original": {
         "id": 2182,
         "identifier": "d986fc86-adfc-4227-8944-df1460d61e7a",

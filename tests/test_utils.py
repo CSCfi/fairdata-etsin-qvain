@@ -10,7 +10,7 @@ from etsin_finder.utils.utils import (
     FlaskService,
     datetime_to_header,
     ensure_app,
-    executing_travis,
+    executing_cicd,
     format_url,
     get_log_config,
     json_or_empty,
@@ -42,13 +42,13 @@ class TestUtils(UtilsTestSuite):
         result = get_log_config(log_file_path, log_lvl)
         assert result == expected_log_config
 
-    def test_executing_travis_not_travis(self, env_TEST):
-        """Return False when env is not Travis."""
-        assert executing_travis() is False
+    def test_executing_cicd_not_cicd(self, env_TEST):
+        """Return False when env is not CICD."""
+        assert executing_cicd() is False
 
-    def test_executing_travis_is_travis(self, env_TRAVIS):
-        """Return False when env is not Travis."""
-        assert executing_travis() is True
+    def test_executing_cicd_is_cicd(self, env_CICD):
+        """Return False when env is not CICD."""
+        assert executing_cicd() is True
 
     def test_json_or_empty_invalid_response(self):
         """Return empty dict when response is invalid."""

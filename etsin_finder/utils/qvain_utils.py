@@ -38,6 +38,7 @@ def clean_empty_keyvalues_from_dict(d):
         if v or v is False
     }
 
+
 def alter_projects_to_metax(projects):
     """Convert project objects from frontend to comply with the Metax schema.
 
@@ -61,24 +62,6 @@ def alter_projects_to_metax(projects):
         }
         output.append(metax_project)
     return output
-
-
-def other_identifiers_to_metax(identifiers_list):
-    """Convert other identifiers to comply with Metax schema.
-
-    Arguments:
-        identifiers_list (list): List of other identifiers from frontend.
-
-    Returns:
-        list: List of other identifiers that comply to Metax schema.
-
-    """
-    other_identifiers = []
-    for identifier in identifiers_list:
-        id_dict = {}
-        id_dict["notation"] = identifier
-        other_identifiers.append(id_dict)
-    return other_identifiers
 
 
 def data_to_metax(data, metadata_provider_org, metadata_provider_user):
@@ -106,8 +89,8 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "curator": data.get("curator"),
             "rights_holder": data.get("rights_holder"),
             "contributor": data.get("contributor"),
-            "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
-            "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
+            "issued": data.get("issued", date.today().strftime("%Y-%m-%d")),
+            "other_identifier": data.get("other_identifier"),
             "field_of_science": data.get("field_of_science"),
             "language": data.get("language"),
             "keyword": data.get("keywords"),
@@ -184,9 +167,12 @@ def check_dataset_edit_permission(cr_id):
     if error:
         return error
 
-    user_denied_response = ({
-        "PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."
-    }, 403)
+    user_denied_response = (
+        {
+            "PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."
+        },
+        403,
+    )
 
     cr = cr_service.get_catalog_record(cr_id, False)
     if cr is None:
@@ -200,7 +186,7 @@ def check_dataset_edit_permission(cr_id):
     if csc_username == creator:
         user_is_allowed = True
 
-    if flag_enabled('PERMISSIONS.SHARE_PROJECT'):
+    if flag_enabled("PERMISSIONS.SHARE_PROJECT"):
         if authorization.user_has_dataset_project(cr_id):
             user_is_allowed = True
 
@@ -236,26 +222,9 @@ def check_dataset_edit_permission_and_lock(cr_id):
                 f"Failed to get lock for dataset {cr_id}."
             )
             return {
-                "PermissionError": f"Dataset is locked for editing."
+                "PermissionError": "Dataset is locked for editing."
             }, 409
     return None
-
-
-def remove_deleted_datasets_from_results(result):
-    """Remove datasets marked as removed from results.
-
-    Arguments:
-        result (dict): Results with all datasets.
-
-    Returns:
-        dict: Results where removed datasets are removed.
-
-    """
-    new_results = [
-        dataset for dataset in result.get("results") if dataset.get("removed") is False
-    ]
-    result["results"] = new_results
-    return result
 
 
 def edited_data_to_metax(data, original):
@@ -280,8 +249,8 @@ def edited_data_to_metax(data, original):
             "curator": data.get("curator"),
             "rights_holder": data.get("rights_holder"),
             "contributor": data.get("contributor"),
-            "issued": data.get("issuedDate", date.today().strftime("%Y-%m-%d")),
-            "other_identifier": other_identifiers_to_metax(data.get("identifiers")),
+            "issued": data.get("issued", date.today().strftime("%Y-%m-%d")),
+            "other_identifier": data.get("other_identifier"),
             "field_of_science": data.get("field_of_science"),
             "language": data.get("language"),
             "keyword": data.get("keywords"),
@@ -350,3 +319,28 @@ def check_if_data_in_user_IDA_project(data):
                     )
                     return False
     return True
+
+
+def add_sources(datasets, *sources):
+    """Attach source information to datasets in list"""
+    for dataset in datasets:
+        dataset["sources"] = list(sources)
+
+
+def merge_and_sort_dataset_lists(*lists):
+    """Merge multiple lists of datasets, remove duplicates and sort by newest"""
+    datasets_by_id = {}
+    for lst in lists:
+        for dataset in lst:
+            cr_id = dataset.get("id")
+            if not datasets_by_id.get(cr_id):
+                datasets_by_id[cr_id] = {**dataset}
+            elif dataset.get("sources"):
+                sources = datasets_by_id[cr_id].get("sources", [])
+                sources.extend(dataset.get("sources"))
+                datasets_by_id[cr_id]["sources"] = sources
+
+    datasets = sorted(
+        datasets_by_id.values(), key=lambda cr: cr.get("date_created"), reverse=True
+    )
+    return datasets

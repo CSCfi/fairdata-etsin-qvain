@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
-import { toHaveNoViolations } from 'jest-axe'
 import ReactModal from 'react-modal'
 import axios from 'axios'
 
@@ -19,8 +18,6 @@ import { useStores } from '../../../js/stores/stores'
 import CopyField, {
   LoaderWrapper,
 } from '../../../js/components/dataset/data/idaResources/manualDownloadModal/copyField'
-
-expect.extend(toHaveNoViolations)
 
 jest.mock('../../../js/stores/stores', () => {
   const useStores = jest.fn()

@@ -1,7 +1,5 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { runInAction } from 'mobx'
-import { axe, toHaveNoViolations } from 'jest-axe'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
 import counterpart from 'counterpart'
@@ -11,10 +9,8 @@ import etsinTheme from '@/styles/theme'
 
 import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
-import TabsStore from '../../../js/stores/view/qvain/qvain.datasetsV2.tabs'
+import TabsStore from '../../../js/stores/view/qvain/tabs'
 import Tabs from '@/components/qvain/views/datasetsV2/tabs'
-
-expect.extend(toHaveNoViolations)
 
 let stores
 
@@ -26,11 +22,7 @@ counterpart.registerTranslations('en', {
 
 beforeEach(() => {
   stores = buildStores()
-  stores.QvainDatasetsV2.tabs = new TabsStore()
-  runInAction(() => {
-    stores.QvainDatasetsV2.tabs.options = { all: 'test.tabs.all', another: 'test.tabs.another' }
-    stores.QvainDatasetsV2.tabs.active = 'all'
-  })
+  stores.QvainDatasetsV2.tabs = new TabsStore({ all: 'test.tabs.all', another: 'test.tabs.another' }, 'all')
 })
 
 describe('Datasets Tabs', () => {

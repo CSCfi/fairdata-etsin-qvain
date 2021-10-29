@@ -196,32 +196,32 @@ describe('getDatasetActions', () => {
   test('given ida dataset, should allow creating a new version', () => {
     const actions = getDatasetActions(stores, idaDataset).map(({ text }) => text)
     actions.should.eql([
-      'qvain.datasets.editButton',
-      'qvain.datasets.goToEtsin',
-      'qvain.datasets.useAsTemplate',
-      'qvain.datasets.createNewVersion',
-      'qvain.datasets.deleteButton',
+      'qvain.datasets.actions.edit',
+      'qvain.datasets.actions.goToEtsin',
+      'qvain.datasets.actions.useAsTemplate',
+      'qvain.datasets.actions.createNewVersion',
+      'qvain.datasets.actions.delete',
     ])
   })
 
   test('given draft dataset, should allow preview', () => {
     const actions = getDatasetActions(stores, draftDataset).map(({ text }) => text)
     actions.should.eql([
-      'qvain.datasets.editButton',
-      'qvain.datasets.goToEtsinDraft',
-      'qvain.datasets.useAsTemplate',
-      'qvain.datasets.deleteButton',
+      'qvain.datasets.actions.edit',
+      'qvain.datasets.actions.goToEtsinDraft',
+      'qvain.datasets.actions.useAsTemplate',
+      'qvain.datasets.actions.delete',
     ])
   })
 
   test('given dataset with changes, should allow reverting changes', () => {
     const actions = getDatasetActions(stores, datasetWithChanges).map(({ text }) => text)
     actions.should.eql([
-      'qvain.datasets.editDraftButton',
-      'qvain.datasets.goToEtsinDraft',
-      'qvain.datasets.useAsTemplate',
-      'qvain.datasets.revertButton',
-      'qvain.datasets.deleteButton',
+      'qvain.datasets.actions.editDraft',
+      'qvain.datasets.actions.goToEtsinDraft',
+      'qvain.datasets.actions.useAsTemplate',
+      'qvain.datasets.actions.revert',
+      'qvain.datasets.actions.delete',
     ])
   })
 })

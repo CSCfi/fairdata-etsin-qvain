@@ -2,13 +2,20 @@ const datasets = {
   title: 'Your datasets',
   search: {
     hidden: 'Search',
+    label: 'Search',
     searchTitle: 'Search from the list (to filter the datasets)',
     placeholder: 'Filter datasets by name',
+    searchTitleShort: 'Search datasets',
+  },
+  sort: {
+    label: 'Sort by:',
+    title: 'Title',
+    status: 'Status',
+    owner: 'Owner',
+    dateCreated: 'Date',
   },
   help: 'Choose a dataset to edit or create a new dataset',
   createButton: 'Create a new dataset',
-  createNewVersion: 'Create new version',
-  useAsTemplate: 'Use as template',
   state: {
     draft: 'Draft',
     published: 'Published',
@@ -22,6 +29,10 @@ const datasets = {
     created: 'Created',
     state: 'Status',
     actions: 'Actions',
+    edit: 'Edit',
+    share: 'Share',
+    preview: 'Preview',
+    owner: 'Owner',
     dateFormat: {
       moments: 'A few moments ago',
       oneMinute: '1 minute ago',
@@ -36,6 +47,10 @@ const datasets = {
       years: 'years ago',
     },
   },
+  owner: {
+    me: 'Me',
+    project: 'Project',
+  },
   moreActions: 'More',
   moreVersions: {
     one: 'Show 1 more version',
@@ -45,10 +60,17 @@ const datasets = {
   oldVersion: 'Old',
   latestVersion: 'Latest',
   deprecated: 'Deprecated',
-  editButton: 'Edit',
-  editDraftButton: 'Edit draft',
-  deleteButton: 'Delete',
-  revertButton: 'Revert changes',
+  actions: {
+    edit: 'Edit',
+    editDraft: 'Edit draft',
+    goToEtsin: 'View in Etsin',
+    goToEtsinDraft: 'Preview in Etsin',
+    share: 'Share',
+    createNewVersion: 'Create new version',
+    useAsTemplate: 'Use as template',
+    revert: 'Revert changes',
+    delete: 'Delete',
+  },
   remove: {
     confirm: {
       published: {
@@ -66,17 +88,61 @@ const datasets = {
       cancel: 'Cancel',
     },
   },
-  goToEtsin: 'View in Etsin',
-  goToEtsinDraft: 'Preview in Etsin',
   openNewVersion: 'Open new version',
-  noDatasets: 'You have no datasets',
+  noDatasets: 'You have no datasets.',
+  noMatchingDatasets: 'No matching datasets found.',
   reload: 'Reload',
   loading: 'Loading...',
   errorOccurred: 'An error occurred',
   tableHeader: 'Created datasets',
   tabs: {
     all: 'All datasets',
-    another: 'Another tab',
+  },
+  share: {
+    title: 'Share with people',
+    tabs: {
+      invite: 'Invite',
+      members: 'Members',
+    },
+    invite: {
+      users: {
+        label: 'Users',
+        placeholder: 'Add users',
+        help: 'Type to search users by name, username or email.',
+        empty: 'No matching users found.',
+        searchError: 'There was an error searching for users.',
+        searching: 'Loading...',
+      },
+      roles: {
+        editor: 'as Editor',
+      },
+      message: {
+        label: 'Message',
+        placeholder: 'Type here to send a message with the invite.',
+      },
+      button: 'Invite',
+      confirm: {
+        warning: 'You have an unsent invitation. Do you want to discard the invitation?',
+        confirm: 'Yes, discard invitation',
+        cancel: 'No, continue editing',
+      },
+    },
+    members: {
+      roles: {
+        owner: 'Owner',
+        editor: 'Editor',
+      },
+      remove: 'Remove',
+      labels: {
+        permissions: 'Members',
+        projectMembers: 'Project members',
+      },
+    },
+  },
+  previousVersions: {
+    label: 'Previous versions',
+    show: 'Show previous versions',
+    hide: 'Hide previous versions',
   },
 }
 export default datasets
