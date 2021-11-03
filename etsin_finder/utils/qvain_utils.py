@@ -208,22 +208,19 @@ def check_dataset_edit_permission(cr_id):
         }, 403
     return None
 
+
 def check_dataset_edit_permission_and_lock(cr_id):
     """Check dataset permission and request write lock."""
     err = check_dataset_edit_permission(cr_id)
     if err:
         return err
 
-    if flag_enabled('PERMISSIONS.WRITE_LOCK'):
+    if flag_enabled("PERMISSIONS.WRITE_LOCK"):
         lock_service = qvain_lock_service.QvainLockService()
         success, data = lock_service.request_lock(cr_id)
         if not success:
-            log.warning(
-                f"Failed to get lock for dataset {cr_id}."
-            )
-            return {
-                "PermissionError": "Dataset is locked for editing."
-            }, 409
+            log.warning(f"Failed to get lock for dataset {cr_id}.")
+            return {"PermissionError": "Dataset is locked for editing."}, 409
     return None
 
 

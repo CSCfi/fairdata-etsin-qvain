@@ -8,6 +8,7 @@ from .utils import get_test_catalog_record
 
 FAKE_TIME = datetime.datetime(2021, 7, 2, 13, 53, 55)
 
+
 class ContactTest(BaseTest):
     """class for contact tests."""
 
@@ -62,14 +63,16 @@ class ContactTest(BaseTest):
     @pytest.fixture
     def expected_email_body(self):
         """Set up expected email body when using fixtures."""
-        return 'The message below was sent via Etsin research data finder on July 2, 2021. It concerns a dataset with identifier "dataset-123". Please, send your reply to teppo@yliopisto.fi.\n' \
-            '\n' \
-            'Allaoleva viesti on lähetetty Etsin-palvelun kautta 2.7.2021. Viesti koskee tutkimusaineistoa, jonka tunniste on "dataset-123". Ole hyvä, lähetä vastauksesi osoitteeseen teppo@yliopisto.fi.\n' \
-            '\n' \
-            '---\n' \
-            '\n' \
-            'Subject / Aihe: Oikeudet\n' \
-            'Message / Viesti: Sinulle on myönnetty oikeudet.'
+        return (
+            'The message below was sent via Etsin research data finder on July 2, 2021. It concerns a dataset with identifier "dataset-123". Please, send your reply to teppo@yliopisto.fi.\n'
+            "\n"
+            'Allaoleva viesti on lähetetty Etsin-palvelun kautta 2.7.2021. Viesti koskee tutkimusaineistoa, jonka tunniste on "dataset-123". Ole hyvä, lähetä vastauksesi osoitteeseen teppo@yliopisto.fi.\n'
+            "\n"
+            "---\n"
+            "\n"
+            "Subject / Aihe: Oikeudet\n"
+            "Message / Viesti: Sinulle on myönnetty oikeudet."
+        )
 
     @pytest.fixture
     def catalog_record(self):
@@ -82,7 +85,8 @@ class ContactTest(BaseTest):
 
         :returns dict that consists details of the test.
         """
-        class mock_datetime():
+
+        class mock_datetime:
             @classmethod
             def now(cls):
                 return FAKE_TIME

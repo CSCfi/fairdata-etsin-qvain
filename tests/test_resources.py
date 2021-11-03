@@ -14,7 +14,9 @@ import json
 class TestDatasetResources(BaseTest):
     """Test Dataset API endpoints"""
 
-    def test_nonexisting_dataset(self, unauthd_client, authd_client, nonexisting_catalog_record):
+    def test_nonexisting_dataset(
+        self, unauthd_client, authd_client, nonexisting_catalog_record
+    ):
         """
         Test dataset API response with nonexisting dataset
 
@@ -23,10 +25,10 @@ class TestDatasetResources(BaseTest):
         :param nonexisting_catalog_record:
         :return:
         """
-        r = unauthd_client.get('/api/dataset/nonexisting')
+        r = unauthd_client.get("/api/dataset/nonexisting")
         assert r.status_code == 404
 
-        r = authd_client.get('/api/dataset/nonexisting')
+        r = authd_client.get("/api/dataset/nonexisting")
         assert r.status_code == 404
 
     def test_open_dataset_unauthd_get(self, unauthd_client, open_catalog_record):
@@ -37,7 +39,7 @@ class TestDatasetResources(BaseTest):
         :param open_catalog_record:
         :return:
         """
-        r = unauthd_client.get('/api/dataset/123')
+        r = unauthd_client.get("/api/dataset/123")
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
         self._assert_catalog_record_basics(r_json)
@@ -51,7 +53,7 @@ class TestDatasetResources(BaseTest):
         :param open_catalog_record:
         :return:
         """
-        r = authd_client.get('/api/dataset/123')
+        r = authd_client.get("/api/dataset/123")
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
         self._assert_catalog_record_basics(r_json)
@@ -65,7 +67,7 @@ class TestDatasetResources(BaseTest):
         :param login_catalog_record:
         :return:
         """
-        r = unauthd_client.get('/api/dataset/123')
+        r = unauthd_client.get("/api/dataset/123")
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
         self._assert_catalog_record_basics(r_json)
@@ -79,7 +81,7 @@ class TestDatasetResources(BaseTest):
         :param login_catalog_record:
         :return:
         """
-        r = authd_client.get('/api/dataset/123')
+        r = authd_client.get("/api/dataset/123")
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
         self._assert_catalog_record_basics(r_json)
@@ -130,7 +132,9 @@ class TestDatasetResources(BaseTest):
     #     self._assert_catalog_record_basics(r_json)
     #     self._assert_catalog_record_is_stripped(r_json)
 
-    def test_embargo_passed_dataset_unauthd_get(self, unauthd_client, embargo_passed_catalog_record):
+    def test_embargo_passed_dataset_unauthd_get(
+        self, unauthd_client, embargo_passed_catalog_record
+    ):
         """
         Test dataset API response with embargo passed dataset as unauthenticated user
 
@@ -138,13 +142,15 @@ class TestDatasetResources(BaseTest):
         :param embargo_passed_catalog_record:
         :return:
         """
-        r = unauthd_client.get('/api/dataset/123')
+        r = unauthd_client.get("/api/dataset/123")
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
         self._assert_catalog_record_basics(r_json)
         self._assert_catalog_record_not_stripped(r_json)
 
-    def test_embargo_not_passed_dataset_unauthd_get(self, unauthd_client, embargo_not_passed_catalog_record):
+    def test_embargo_not_passed_dataset_unauthd_get(
+        self, unauthd_client, embargo_not_passed_catalog_record
+    ):
         """
         Test dataset API response with embargo not passed dataset as unauthenticated user
 
@@ -152,13 +158,15 @@ class TestDatasetResources(BaseTest):
         :param embargo_not_passed_catalog_record:
         :return:
         """
-        r = unauthd_client.get('/api/dataset/123')
+        r = unauthd_client.get("/api/dataset/123")
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
         self._assert_catalog_record_basics(r_json)
         self._assert_catalog_record_is_stripped(r_json)
 
-    def test_restricted_dataset_unauthd_get(self, unauthd_client, restricted_catalog_record):
+    def test_restricted_dataset_unauthd_get(
+        self, unauthd_client, restricted_catalog_record
+    ):
         """
         Test dataset API response with restricted dataset as unauthenticated user
 
@@ -166,13 +174,15 @@ class TestDatasetResources(BaseTest):
         :param restricted_catalog_record:
         :return:
         """
-        r = unauthd_client.get('/api/dataset/123')
+        r = unauthd_client.get("/api/dataset/123")
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
         self._assert_catalog_record_basics(r_json)
         self._assert_catalog_record_is_stripped(r_json)
 
-    def test_restricted_dataset_authd_get(self, authd_client, restricted_catalog_record):
+    def test_restricted_dataset_authd_get(
+        self, authd_client, restricted_catalog_record
+    ):
         """
         Test dataset API response with restricted dataset as authenticated user
 
@@ -180,37 +190,69 @@ class TestDatasetResources(BaseTest):
         :param login_catalog_record:
         :return:
         """
-        r = authd_client.get('/api/dataset/123')
+        r = authd_client.get("/api/dataset/123")
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
         self._assert_catalog_record_basics(r_json)
         self._assert_catalog_record_is_stripped(r_json)
 
     def _assert_catalog_record_basics(self, cr_json):
-        assert 'catalog_record' in cr_json
-        assert 'research_dataset' in cr_json['catalog_record']
+        assert "catalog_record" in cr_json
+        assert "research_dataset" in cr_json["catalog_record"]
 
     def _assert_catalog_record_not_stripped(self, cr_json):
-        assert 'files' in cr_json['catalog_record']['research_dataset']
-        assert 'title' in cr_json['catalog_record']['research_dataset']['files'][0]
-        assert 'description' in cr_json['catalog_record']['research_dataset']['files'][0]
-        assert 'project_identifier' in cr_json['catalog_record']['research_dataset']['files'][0]['details']
+        assert "files" in cr_json["catalog_record"]["research_dataset"]
+        assert "title" in cr_json["catalog_record"]["research_dataset"]["files"][0]
+        assert (
+            "description" in cr_json["catalog_record"]["research_dataset"]["files"][0]
+        )
+        assert (
+            "project_identifier"
+            in cr_json["catalog_record"]["research_dataset"]["files"][0]["details"]
+        )
 
-        assert 'directories' in cr_json['catalog_record']['research_dataset']
-        assert 'title' in cr_json['catalog_record']['research_dataset']['directories'][0]
-        assert 'description' in cr_json['catalog_record']['research_dataset']['directories'][0]
-        assert 'project_identifier' in cr_json['catalog_record']['research_dataset']['directories'][0]['details']
+        assert "directories" in cr_json["catalog_record"]["research_dataset"]
+        assert (
+            "title" in cr_json["catalog_record"]["research_dataset"]["directories"][0]
+        )
+        assert (
+            "description"
+            in cr_json["catalog_record"]["research_dataset"]["directories"][0]
+        )
+        assert (
+            "project_identifier"
+            in cr_json["catalog_record"]["research_dataset"]["directories"][0][
+                "details"
+            ]
+        )
 
     def _assert_catalog_record_is_stripped(self, cr_json):
-        assert 'files' in cr_json['catalog_record']['research_dataset']
-        assert 'title' not in cr_json['catalog_record']['research_dataset']['files'][0]
-        assert 'description' not in cr_json['catalog_record']['research_dataset']['files'][0]
-        assert 'project_identifier' not in cr_json['catalog_record']['research_dataset']['files'][0]['details']
+        assert "files" in cr_json["catalog_record"]["research_dataset"]
+        assert "title" not in cr_json["catalog_record"]["research_dataset"]["files"][0]
+        assert (
+            "description"
+            not in cr_json["catalog_record"]["research_dataset"]["files"][0]
+        )
+        assert (
+            "project_identifier"
+            not in cr_json["catalog_record"]["research_dataset"]["files"][0]["details"]
+        )
 
-        assert 'directories' in cr_json['catalog_record']['research_dataset']
-        assert 'title' not in cr_json['catalog_record']['research_dataset']['directories'][0]
-        assert 'description' not in cr_json['catalog_record']['research_dataset']['directories'][0]
-        assert 'project_identifier' not in cr_json['catalog_record']['research_dataset']['directories'][0]['details']
+        assert "directories" in cr_json["catalog_record"]["research_dataset"]
+        assert (
+            "title"
+            not in cr_json["catalog_record"]["research_dataset"]["directories"][0]
+        )
+        assert (
+            "description"
+            not in cr_json["catalog_record"]["research_dataset"]["directories"][0]
+        )
+        assert (
+            "project_identifier"
+            not in cr_json["catalog_record"]["research_dataset"]["directories"][0][
+                "details"
+            ]
+        )
 
 
 class TestUserResources(BaseTest):
@@ -223,10 +265,10 @@ class TestUserResources(BaseTest):
         :param unauthd_client:
         :return:
         """
-        r = unauthd_client.get('/api/user')
+        r = unauthd_client.get("/api/user")
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
-        assert 'is_authenticated' in r_json and not r_json['is_authenticated']
+        assert "is_authenticated" in r_json and not r_json["is_authenticated"]
 
     def test_authd_get(self, authd_client):
         """
@@ -235,7 +277,7 @@ class TestUserResources(BaseTest):
         :param authd_client:
         :return:
         """
-        r = authd_client.get('/api/user')
+        r = authd_client.get("/api/user")
         assert r.status_code == 200
         r_json = json.loads(r.get_data())
-        assert 'is_authenticated' in r_json
+        assert "is_authenticated" in r_json

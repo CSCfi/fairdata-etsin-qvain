@@ -15,6 +15,7 @@ from etsin_finder.schemas.qvain_dataset_schema import (
 
 data_catalog_matcher = data_catalog_matcher_v1
 
+
 def validate(data, params):
     """Controller function for validation.
 

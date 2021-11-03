@@ -37,8 +37,11 @@ class OrganizationValidationSchema(Schema):
     """Validation schema for organizations."""
 
     identifier = fields.String()
-    name = fields.Dict(required=True,
-                       validate=lambda names: len(names) > 0 and all(type(v) is str and len(v) > 0 for v in names.values()))
+    name = fields.Dict(
+        required=True,
+        validate=lambda names: len(names) > 0
+        and all(type(v) is str and len(v) > 0 for v in names.values()),
+    )
     email = fields.Email()
     contributor_type = fields.List(fields.Dict())
     is_part_of = fields.Nested(lambda: OrganizationValidationSchema)
@@ -111,13 +114,15 @@ class ProjectValidationSchema(Schema):
         fields.Nested(OrganizationValidationSchema), required=False
     )
 
+
 class AccessRightsValidationSchema(Schema):
     """Access rights validation schema"""
 
     license = fields.List(fields.Nested(LicenseValidationSchema))
-    available = fields.Str() # Embargo date
+    available = fields.Str()  # Embargo date
     restriction_grounds = fields.List(fields.Nested(ReferenceObjectValidationSchema))
     access_type = fields.Dict(required=True)
+
 
 class DatasetValidationSchema(Schema):
     """

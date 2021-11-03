@@ -81,7 +81,9 @@ class Dataset(Resource):
             "email_info": get_email_info(cr),
         }
         if (
-            cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config() is not None
+            cr_service.is_rems_catalog_record(cr)
+            and is_authd
+            and get_fairdata_rems_api_config() is not None
         ):
             user_id = authentication.get_user_id()
             state = rems_service.get_application_state_for_resource(cr, user_id)
@@ -125,7 +127,9 @@ class V2Dataset(Resource):
             "email_info": get_email_info(cr),
         }
         if (
-            cr_service.is_rems_catalog_record(cr) and is_authd and get_fairdata_rems_api_config() is not None
+            cr_service.is_rems_catalog_record(cr)
+            and is_authd
+            and get_fairdata_rems_api_config() is not None
         ):
             user_id = authentication.get_user_id()
             state = rems_service.get_application_state_for_resource(cr, user_id)

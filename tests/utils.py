@@ -25,11 +25,15 @@ def get_test_catalog_record(access_type, embargo_passed=None):
     if access_type not in ACCESS_TYPES.keys():
         return None
 
-    with open(dir_path + '/test_data.json') as f:
+    with open(dir_path + "/test_data.json") as f:
         cr_json = json.load(f)
 
-    cr_json['research_dataset']['access_rights']['access_type']['identifier'] = ACCESS_TYPES[access_type]
+    cr_json["research_dataset"]["access_rights"]["access_type"][
+        "identifier"
+    ] = ACCESS_TYPES[access_type]
 
-    if access_type == 'embargo' and embargo_passed is not None:
-        cr_json['research_dataset']['access_rights']['available'] = '2018-01-01' if embargo_passed else '2100-01-01'
+    if access_type == "embargo" and embargo_passed is not None:
+        cr_json["research_dataset"]["access_rights"]["available"] = (
+            "2018-01-01" if embargo_passed else "2100-01-01"
+        )
     return cr_json

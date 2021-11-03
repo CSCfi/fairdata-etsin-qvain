@@ -28,21 +28,23 @@ def generate_fernet_key(source_key):
         info=None,
     )
     if type(source_key) == str:
-        source_bytes = source_key.encode('utf-8')
+        source_bytes = source_key.encode("utf-8")
     else:
         source_bytes = source_key
     key = hkdf.derive(source_bytes)
     return base64.urlsafe_b64encode(key)
 
+
 def dict_encrypt(payload, key):
     """Encode payload dictionary as json and encrypt it"""
     f = Fernet(key)
-    payload_json = json.dumps(payload).encode('utf-8')
-    return f.encrypt(payload_json).decode('utf-8')
+    payload_json = json.dumps(payload).encode("utf-8")
+    return f.encrypt(payload_json).decode("utf-8")
+
 
 def dict_decrypt(encoded_payload, key):
     """Decrypt payload and return it as dict"""
     f = Fernet(key)
-    payload_bytes = encoded_payload.encode('utf-8')
-    payload_json = f.decrypt(payload_bytes).decode('utf-8')
+    payload_bytes = encoded_payload.encode("utf-8")
+    payload_json = f.decrypt(payload_bytes).decode("utf-8")
     return json.loads(payload_json)

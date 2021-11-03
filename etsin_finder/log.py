@@ -2,7 +2,8 @@
 
 from flask import current_app
 
-class CurrentAppLogger():
+
+class CurrentAppLogger:
     """Convenience class for logger."""
 
     def __getattr__(self, name):

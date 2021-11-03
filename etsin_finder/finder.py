@@ -12,7 +12,7 @@ from etsin_finder.app import create_app
 
 app = create_app()
 
-if os.environ.get('FLASK_ENV') == 'development':
-    app.run(host='0.0.0.0')
+if os.environ.get("FLASK_ENV") == "development":
+    app.run(host="0.0.0.0")
 elif __name__ == "__main__":
     app.run()

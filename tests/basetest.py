@@ -370,6 +370,7 @@ class BaseTest:
             errors (list of str): Substrings expected in errors
 
         """
+
         def check(warnings=None, errors=None):
             warnings = warnings or []
             errors = errors or []

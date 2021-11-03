@@ -17,6 +17,7 @@ from etsin_finder.utils.constants import ACCESS_TYPES
 from etsin_finder.utils.request_utils import make_request
 from etsin_finder.services.common_service import MetaxCommonAPIService
 
+
 class MetaxAPIService(FlaskService):
     """Metax API Service"""
 
@@ -27,17 +28,21 @@ class MetaxAPIService(FlaskService):
         metax_api_config = get_metax_api_config(app)
 
         if metax_api_config:
-            self.METAX_GET_CATALOG_RECORD_URL = 'https://{0}/rest/v2/datasets'.format(metax_api_config.get('HOST')) + \
-                '/{0}?expand_relation=data_catalog'
+            self.METAX_GET_CATALOG_RECORD_URL = (
+                "https://{0}/rest/v2/datasets".format(metax_api_config.get("HOST"))
+                + "/{0}?expand_relation=data_catalog"
+            )
 
-            self.METAX_GET_REMOVED_CATALOG_RECORD_URL = self.METAX_GET_CATALOG_RECORD_URL + '&removed=true'
+            self.METAX_GET_REMOVED_CATALOG_RECORD_URL = (
+                self.METAX_GET_CATALOG_RECORD_URL + "&removed=true"
+            )
 
-            self.user = metax_api_config.get('USER')
-            self.pw = metax_api_config.get('PASSWORD')
-            self.verify_ssl = metax_api_config.get('VERIFY_SSL', True)
+            self.user = metax_api_config.get("USER")
+            self.pw = metax_api_config.get("PASSWORD")
+            self.verify_ssl = metax_api_config.get("VERIFY_SSL", True)
             self.proxies = None
-            if metax_api_config.get('HTTPS_PROXY'):
-                self.proxies = dict(https=metax_api_config.get('HTTPS_PROXY'))
+            if metax_api_config.get("HTTPS_PROXY"):
+                self.proxies = dict(https=metax_api_config.get("HTTPS_PROXY"))
         elif not self.is_testing:
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
@@ -52,15 +57,19 @@ class MetaxAPIService(FlaskService):
 
         """
         url = format_url(self.METAX_GET_CATALOG_RECORD_URL, identifier)
-        resp, _, success = make_request(requests.get,
-                                        url,
-                                        headers={'Accept': 'application/json'},
-                                        auth=(self.user, self.pw),
-                                        verify=self.verify_ssl,
-                                        proxies=self.proxies,
-                                        timeout=30)
+        resp, _, success = make_request(
+            requests.get,
+            url,
+            headers={"Accept": "application/json"},
+            auth=(self.user, self.pw),
+            verify=self.verify_ssl,
+            proxies=self.proxies,
+            timeout=30,
+        )
         if not success:
-            log.warning("Failed to get catalog record {0} from Metax API".format(identifier))
+            log.warning(
+                "Failed to get catalog record {0} from Metax API".format(identifier)
+            )
             return None
         return resp
 
@@ -77,15 +86,21 @@ class MetaxAPIService(FlaskService):
 
         """
         url = format_url(self.METAX_GET_REMOVED_CATALOG_RECORD_URL, identifier)
-        resp, _, success = make_request(requests.get,
-                                        url,
-                                        headers={'Accept': 'application/json'},
-                                        auth=(self.user, self.pw),
-                                        verify=self.verify_ssl,
-                                        proxies=self.proxies,
-                                        timeout=30)
+        resp, _, success = make_request(
+            requests.get,
+            url,
+            headers={"Accept": "application/json"},
+            auth=(self.user, self.pw),
+            verify=self.verify_ssl,
+            proxies=self.proxies,
+            timeout=30,
+        )
         if not success:
-            log.warning("Failed to get removed catalog record {0} from Metax API".format(identifier))
+            log.warning(
+                "Failed to get removed catalog record {0} from Metax API".format(
+                    identifier
+                )
+            )
             return None
         return resp
 
@@ -117,6 +132,7 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
     else:
         return cr
 
+
 def get_catalog_record_permissions(cr_id, refresh_cache=False):
     """Get permissions for a single catalog record from Metax API.
 
@@ -128,15 +144,14 @@ def get_catalog_record_permissions(cr_id, refresh_cache=False):
         dict: Permissions dict
 
     """
+
     def get_perm():
         """Retrive permissions from Metax"""
         common_service = MetaxCommonAPIService()
         projects, projects_status = common_service.get_dataset_projects(cr_id)
         if projects_status != 200:
             return None
-        return {
-            'projects': projects # list of dataset projects
-        }
+        return {"projects": projects}  # list of dataset projects
 
     perm = None
     if not refresh_cache:
@@ -154,6 +169,7 @@ def get_catalog_record_permissions(cr_id, refresh_cache=False):
     else:
         return perm
 
+
 def get_catalog_record_access_type(cr):
     """Get the type of access_type of a catalog record.
 
@@ -164,7 +180,12 @@ def get_catalog_record_access_type(cr):
         str: Returns the Access type of the dataset. If not found then ''.
 
     """
-    return cr.get('research_dataset', {}).get('access_rights', {}).get('access_type', {}).get('identifier', '')
+    return (
+        cr.get("research_dataset", {})
+        .get("access_rights", {})
+        .get("access_type", {})
+        .get("identifier", "")
+    )
 
 
 def get_catalog_record_embargo_available(cr):
@@ -177,7 +198,7 @@ def get_catalog_record_embargo_available(cr):
         str: The embargo available for a dataset. Id not found then ''.
 
     """
-    return cr.get('research_dataset', {}).get('access_rights', {}).get('available', '')
+    return cr.get("research_dataset", {}).get("access_rights", {}).get("available", "")
 
 
 def get_catalog_record_data_catalog_id(cr):
@@ -190,7 +211,7 @@ def get_catalog_record_data_catalog_id(cr):
         str: Returns the datacatalog id for a dataset. If not found then ''.
 
     """
-    return cr.get('data_catalog', {}).get('catalog_json', {}).get('identifier', '')
+    return cr.get("data_catalog", {}).get("catalog_json", {}).get("identifier", "")
 
 
 def get_catalog_record_preferred_identifier(cr):
@@ -203,7 +224,8 @@ def get_catalog_record_preferred_identifier(cr):
         str: The preferred identifier of e dataset. If not found then ''.
 
     """
-    return cr.get('research_dataset', {}).get('preferred_identifier', '')
+    return cr.get("research_dataset", {}).get("preferred_identifier", "")
+
 
 def get_catalog_record_REMS_identifier(cr):
     """Get REMS identifier for a catalog record.
@@ -215,7 +237,7 @@ def get_catalog_record_REMS_identifier(cr):
         str: Retruns the REMS identifier for a dataset. If not foyunf then ''.
 
     """
-    return cr.get('rems_identifier', '')
+    return cr.get("rems_identifier", "")
 
 
 def is_rems_catalog_record(catalog_record):
@@ -228,7 +250,7 @@ def is_rems_catalog_record(catalog_record):
         bool: Returns True if catalog record has the 'permit' Access type. Else return False.
 
     """
-    if get_catalog_record_access_type(catalog_record) == ACCESS_TYPES.get('permit'):
+    if get_catalog_record_access_type(catalog_record) == ACCESS_TYPES.get("permit"):
         return True
     return False
 
@@ -244,7 +266,7 @@ def is_draft(catalog_record):
         bool: True if record is a draft
 
     """
-    if catalog_record.get('state') == 'draft':
+    if catalog_record.get("state") == "draft":
         return True
     return False
 
@@ -260,7 +282,7 @@ def is_published(catalog_record):
         bool: True if record is published
 
     """
-    if catalog_record.get('state') == 'published':
+    if catalog_record.get("state") == "published":
         return True
     return False
 
@@ -273,7 +295,7 @@ def is_catalog_record_owner(catalog_record, user_id):
     :param user_id:
     :return:
     """
-    if user_id and catalog_record.get('metadata_provider_user') == user_id:
+    if user_id and catalog_record.get("metadata_provider_user") == user_id:
         return True
     return False
 

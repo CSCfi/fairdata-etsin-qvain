@@ -9,6 +9,7 @@
 
 import json
 
+
 def get_etsin_saml_config_from_file():
     """Get Etsin saml config.
 
@@ -16,5 +17,5 @@ def get_etsin_saml_config_from_file():
         saml_config
 
     """
-    with open('/home/etsin-user/etsin/settings.json') as saml_json_file:
+    with open("/home/etsin-user/etsin/settings.json") as saml_json_file:
         return json.load(saml_json_file)

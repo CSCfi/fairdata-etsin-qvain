@@ -26,13 +26,13 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
     @property
     def config(self):
         """Get service configuration."""
-        return current_app.config.get('METAX_QVAIN_API', None)
+        return current_app.config.get("METAX_QVAIN_API", None)
 
     @property
     def proxies(self):
         """Get service proxy configuration."""
-        if self.config.get('HTTPS_PROXY'):
-            return dict(https=self.config.get('HTTPS_PROXY'))
+        if self.config.get("HTTPS_PROXY"):
+            return dict(https=self.config.get("HTTPS_PROXY"))
         return None
 
     @property
@@ -42,43 +42,45 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
     def metax_url(self, url):
         """Return a Metax API URL."""
-        return f'https://{self._HOST}{url}'
+        return f"https://{self._HOST}{url}"
 
     @property
     def _HOST(self):
-        return self.config.get('HOST')
+        return self.config.get("HOST")
 
     @property
     def _USER(self):
-        return self.config.get('USER')
+        return self.config.get("USER")
 
     @property
     def _PASSWORD(self):
-        return self.config.get('PASSWORD')
+        return self.config.get("PASSWORD")
 
     @property
     def _VERIFY_SSL(self):
-        return self.config.get('VERIFY_SSL', True)
+        return self.config.get("VERIFY_SSL", True)
 
     @property
     def _METAX_GET_DIRECTORY_FOR_PROJECT_URL(self):
-        return self.metax_url('/rest/v2/directories') + \
-            '/files?cr_identifier={0}&project={1}&path={2}&include_parent&pagination&limit=1'
+        return (
+            self.metax_url("/rest/v2/directories")
+            + "/files?cr_identifier={0}&project={1}&path={2}&include_parent&pagination&limit=1"
+        )
 
     @property
     def _METAX_GET_DIRECTORIES_FOR_PROJECT_URL(self):
-        return self.metax_url('/rest/v2/directories') + \
-            '/files?project={0}&path=%2F&include_parent'
+        return (
+            self.metax_url("/rest/v2/directories")
+            + "/files?project={0}&path=%2F&include_parent"
+        )
 
     @property
     def _METAX_GET_DIRECTORIES(self):
-        return self.metax_url('/rest/v2/directories') + \
-            '/{0}/files'
+        return self.metax_url("/rest/v2/directories") + "/{0}/files"
 
     @property
     def _METAX_GET_DATASET_USER_METADATA(self):
-        return self.metax_url('/rest/v2/datasets') + \
-            '/{0}/files/user_metadata'
+        return self.metax_url("/rest/v2/datasets") + "/{0}/files/user_metadata"
 
     @property
     def _METAX_PUT_DATASET_USER_METADATA(self):
@@ -86,16 +88,17 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
     @property
     def _METAX_GET_DATASET_PROJECTS(self):
-        return self.metax_url('/rest/v2/datasets') + \
-            '/{0}/projects'
+        return self.metax_url("/rest/v2/datasets") + "/{0}/projects"
 
     def _get_args(self, **kwargs):
         """Get default args for request, allow overriding with kwargs."""
-        args = dict(headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
-                    auth=(self._USER, self._PASSWORD),
-                    verify=self._VERIFY_SSL,
-                    timeout=10,
-                    proxies=self.proxies)
+        args = dict(
+            headers={"Accept": "application/json", "Content-Type": "application/json"},
+            auth=(self._USER, self._PASSWORD),
+            verify=self._VERIFY_SSL,
+            timeout=10,
+            proxies=self.proxies,
+        )
         args.update(kwargs)
         return args
 
@@ -113,12 +116,12 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
             [type] -- Metax response.
 
         """
-        req_url = format_url(self._METAX_GET_DIRECTORY_FOR_PROJECT_URL, cr_id, pid, path)
-        resp, status, success = make_request(requests.get,
-                                             req_url,
-                                             params=params,
-                                             **self._get_args()
-                                             )
+        req_url = format_url(
+            self._METAX_GET_DIRECTORY_FOR_PROJECT_URL, cr_id, pid, path
+        )
+        resp, status, success = make_request(
+            requests.get, req_url, params=params, **self._get_args()
+        )
         if not success:
             log.warning("Failed to get directory {}".format(path))
             log.warning("Using request {}".format(req_url))
@@ -138,11 +141,9 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_GET_DIRECTORIES, dir_identifier)
-        resp, status, success = make_request(requests.get,
-                                             req_url,
-                                             params=params,
-                                             **self._get_args()
-                                             )
+        resp, status, success = make_request(
+            requests.get, req_url, params=params, **self._get_args()
+        )
         if not success:
             log.warning("Failed to get directory {}".format(dir_identifier))
             return resp, status
@@ -160,14 +161,18 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
             [type] -- Metax response.
 
         """
-        req_url = format_url(self._METAX_GET_DIRECTORIES_FOR_PROJECT_URL, project_identifier)
-        resp, status, success = make_request(requests.get,
-                                             req_url,
-                                             params=params,
-                                             **self._get_args()
-                                             )
+        req_url = format_url(
+            self._METAX_GET_DIRECTORIES_FOR_PROJECT_URL, project_identifier
+        )
+        resp, status, success = make_request(
+            requests.get, req_url, params=params, **self._get_args()
+        )
         if not success:
-            log.warning("Failed to get directory contents for project {}".format(project_identifier))
+            log.warning(
+                "Failed to get directory contents for project {}".format(
+                    project_identifier
+                )
+            )
         return resp, status
 
     def get_dataset_projects(self, cr_id):
@@ -182,9 +187,7 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_GET_DATASET_PROJECTS, cr_id)
-        resp, status, success = make_request(requests.get,
-                                             req_url,
-                                             **self._get_args())
+        resp, status, success = make_request(requests.get, req_url, **self._get_args())
         if not success:
             log.warning("Failed to get projects for dataset {}".format(cr_id))
         return resp, status
@@ -201,9 +204,7 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_GET_DATASET_USER_METADATA, cr_id)
-        resp, status, success = make_request(requests.get,
-                                             req_url,
-                                             **self._get_args())
+        resp, status, success = make_request(requests.get, req_url, **self._get_args())
         if not success:
             log.warning("Failed to get user metadata for dataset {}".format(cr_id))
         return resp, status
@@ -229,10 +230,9 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_PUT_DATASET_USER_METADATA, cr_id)
-        resp, status, success = make_request(requests.put,
-                                             req_url,
-                                             json=data,
-                                             **self._get_args())
+        resp, status, success = make_request(
+            requests.put, req_url, json=data, **self._get_args()
+        )
         if not success:
             log.warning("Failed to update user metadata for dataset {}".format(cr_id))
         return resp, status

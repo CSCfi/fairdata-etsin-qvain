@@ -29,12 +29,14 @@ class DatasetMetadataService(FlaskService):
         super().__init__(app)
         metax_api_config = get_metax_api_config(app)
         if metax_api_config:
-            self.HOST = 'https://{0}'.format(metax_api_config.get('HOST'))
-            self.user = metax_api_config.get('USER')
-            self.password = metax_api_config.get('PASSWORD')
-            self.verify_ssl = metax_api_config.get('VERIFY_SSL', True)
+            self.HOST = "https://{0}".format(metax_api_config.get("HOST"))
+            self.user = metax_api_config.get("USER")
+            self.password = metax_api_config.get("PASSWORD")
+            self.verify_ssl = metax_api_config.get("VERIFY_SSL", True)
         elif not self.is_testing:
-            log.error('Unable to initialize DatasetMetadataService due to missing config')
+            log.error(
+                "Unable to initialize DatasetMetadataService due to missing config"
+            )
 
     @staticmethod
     def _get_error_response(status_code):
@@ -48,13 +50,13 @@ class DatasetMetadataService(FlaskService):
 
         """
         response = Response(status=status_code)
-        response.headers['Content-Type'] = 'application/octet-stream'
-        response.headers['Content-Disposition'] = 'attachment; filename="error"'
+        response.headers["Content-Type"] = "application/octet-stream"
+        response.headers["Content-Disposition"] = 'attachment; filename="error"'
         return response
 
     @staticmethod
     def _get_content_disposition(content_type):
-        if 'application/xml' in content_type:
+        if "application/xml" in content_type:
             return 'attachment; filename="metadata.xml"'
         return 'attachment; filename="metadata.json"'
 
@@ -69,49 +71,74 @@ class DatasetMetadataService(FlaskService):
             Returns a Flask.Response object streaming the response from metax
 
         """
-        if metadata_format == 'metax':
-            url = format_url(self.HOST + '/rest/datasets/{}.json', cr_id)
+        if metadata_format == "metax":
+            url = format_url(self.HOST + "/rest/datasets/{}.json", cr_id)
         else:
-            url = format_url(self.HOST + '/rest/datasets/{}?dataset_format={}', cr_id, metadata_format)
+            url = format_url(
+                self.HOST + "/rest/datasets/{}?dataset_format={}",
+                cr_id,
+                metadata_format,
+            )
 
-        log.info('Request dataset metadata from: {0}'.format(url))
+        log.info("Request dataset metadata from: {0}".format(url))
         try:
-            metax_response = requests.get(url,
-                                          stream=True,
-                                          timeout=30,
-                                          verify=self.verify_ssl,
-                                          auth=(self.user, self.password))
+            metax_response = requests.get(
+                url,
+                stream=True,
+                timeout=30,
+                verify=self.verify_ssl,
+                auth=(self.user, self.password),
+            )
             metax_response.raise_for_status()
         except requests.HTTPError:
-            log.warning('Metax returned an unsuccessful status code: {0}\n\
-                Response: {1}'.format(metax_response.status_code, metax_response))
+            log.warning(
+                "Metax returned an unsuccessful status code: {0}\n\
+                Response: {1}".format(
+                    metax_response.status_code, metax_response
+                )
+            )
             return self._get_error_response(metax_response.status_code)
         except requests.Timeout as t:
-            log.error('Attempt to download dataset metadata timed out\n{0}'.format(t))
+            log.error("Attempt to download dataset metadata timed out\n{0}".format(t))
             return self._get_error_response(408)
         except requests.ConnectionError as c:
-            log.error('Unable to connect to Metax\n{0}'.format(c))
+            log.error("Unable to connect to Metax\n{0}".format(c))
             return self._get_error_response(503)
         except Exception as e:
-            log.error('Error trying to download dataset metadata:\n{0}'.format(e))
+            log.error("Error trying to download dataset metadata:\n{0}".format(e))
             return self._get_error_response(500)
         else:
-            response = Response(response=stream_with_context(metax_response.iter_content(chunk_size=1024)),
-                                status=metax_response.status_code)
+            response = Response(
+                response=stream_with_context(
+                    metax_response.iter_content(chunk_size=1024)
+                ),
+                status=metax_response.status_code,
+            )
 
             content_type = None
-            if 'Content-Type' in metax_response.headers:
-                content_type = metax_response.headers.get('Content-Type')
-                response.headers['Content-Type'] = content_type
-            if 'Content-Disposition' in metax_response.headers:
-                response.headers['Content-Disposition'] = metax_response.headers.get('Content-Disposition')
+            if "Content-Type" in metax_response.headers:
+                content_type = metax_response.headers.get("Content-Type")
+                response.headers["Content-Type"] = content_type
+            if "Content-Disposition" in metax_response.headers:
+                response.headers["Content-Disposition"] = metax_response.headers.get(
+                    "Content-Disposition"
+                )
             else:
-                response.headers['Content-Disposition'] = self._get_content_disposition(content_type)
-            if 'Content-Length' in metax_response.headers:
-                response.headers['Content-Length'] = metax_response.headers.get('Content-Length')
+                response.headers["Content-Disposition"] = self._get_content_disposition(
+                    content_type
+                )
+            if "Content-Length" in metax_response.headers:
+                response.headers["Content-Length"] = metax_response.headers.get(
+                    "Content-Length"
+                )
 
-            log.debug('Download URL: {0} Responded with HTTP status {1}'.format(url, response.status_code))
+            log.debug(
+                "Download URL: {0} Responded with HTTP status {1}".format(
+                    url, response.status_code
+                )
+            )
             return response
+
 
 def download_metadata(cr_id, metadata_format):
     """Stream metadata download of a dataset to frontend"""

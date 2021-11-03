@@ -56,9 +56,10 @@ def get_log_config(log_file_path, log_lvl):
         return CONFIG
     return False
 
+
 def executing_cicd():
     """Returns True whenever code is being executed by ci/cd"""
-    return True if os.getenv('CICD', False) else False
+    return True if os.getenv("CICD", False) else False
 
 
 def json_or_empty(response):

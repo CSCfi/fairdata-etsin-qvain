@@ -11,6 +11,7 @@ from werkzeug.routing import BaseConverter
 
 identifier_regex = r"[0-9a-z\-]+"
 
+
 class IdentifierConverter(BaseConverter):
     """Restrict allowed characters for catalog record identifiers."""
 

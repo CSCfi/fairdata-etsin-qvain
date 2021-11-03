@@ -11,7 +11,10 @@ from flask_restful import reqparse, Resource
 
 from etsin_finder.services.qvain_service import MetaxQvainAPIService
 from etsin_finder.utils.log_utils import log_request
-from etsin_finder.utils.qvain_utils import check_dataset_edit_permission, check_dataset_edit_permission_and_lock
+from etsin_finder.utils.qvain_utils import (
+    check_dataset_edit_permission,
+    check_dataset_edit_permission_and_lock,
+)
 
 
 class QvainDatasetChangeCumulativeState(Resource):
@@ -20,8 +23,8 @@ class QvainDatasetChangeCumulativeState(Resource):
     def __init__(self):
         """Setup endpoints"""
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('identifier', type=str, required=True)
-        self.parser.add_argument('cumulative_state', type=int, required=True)
+        self.parser.add_argument("identifier", type=str, required=True)
+        self.parser.add_argument("cumulative_state", type=int, required=True)
 
     @log_request
     def post(self):
@@ -36,8 +39,8 @@ class QvainDatasetChangeCumulativeState(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args.get('identifier')
-        cumulative_state = args.get('cumulative_state')
+        cr_id = args.get("identifier")
+        cumulative_state = args.get("cumulative_state")
         error = check_dataset_edit_permission_and_lock(cr_id)
         if error is not None:
             return error
@@ -52,7 +55,7 @@ class QvainDatasetCreateNewVersion(Resource):
     def __init__(self):
         """Setup endpoints"""
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('identifier', type=str, required=True)
+        self.parser.add_argument("identifier", type=str, required=True)
 
     @log_request
     def post(self):
@@ -68,7 +71,7 @@ class QvainDatasetCreateNewVersion(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args.get('identifier')
+        cr_id = args.get("identifier")
         err = check_dataset_edit_permission(cr_id)
         if err is not None:
             return err
@@ -83,7 +86,7 @@ class QvainDatasetCreateDraft(Resource):
     def __init__(self):
         """Setup endpoints"""
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('identifier', type=str, required=True)
+        self.parser.add_argument("identifier", type=str, required=True)
 
     @log_request
     def post(self):
@@ -97,7 +100,7 @@ class QvainDatasetCreateDraft(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args.get('identifier')
+        cr_id = args.get("identifier")
         err = check_dataset_edit_permission(cr_id)
         if err is not None:
             return err
@@ -112,7 +115,7 @@ class QvainDatasetMergeDraft(Resource):
     def __init__(self):
         """Setup endpoints"""
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('identifier', type=str, required=True)
+        self.parser.add_argument("identifier", type=str, required=True)
 
     @log_request
     def post(self):
@@ -126,7 +129,7 @@ class QvainDatasetMergeDraft(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args.get('identifier')
+        cr_id = args.get("identifier")
         err = check_dataset_edit_permission_and_lock(cr_id)
         if err is not None:
             return err
@@ -141,7 +144,7 @@ class QvainDatasetPublishDataset(Resource):
     def __init__(self):
         """Setup endpoints"""
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('identifier', type=str, required=True)
+        self.parser.add_argument("identifier", type=str, required=True)
 
     @log_request
     def post(self):
@@ -155,7 +158,7 @@ class QvainDatasetPublishDataset(Resource):
 
         """
         args = self.parser.parse_args()
-        cr_id = args.get('identifier')
+        cr_id = args.get("identifier")
         err = check_dataset_edit_permission_and_lock(cr_id)
         if err is not None:
             return err
