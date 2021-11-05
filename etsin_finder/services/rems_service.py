@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Used for performing operations related to Fairdata Rems"""
+"""Used for performing operations related to Fairdata Rems."""
 
 from requests import request, HTTPError
 from flask import session, current_app
@@ -22,10 +22,10 @@ from etsin_finder.log import log
 
 
 class RemsAPIService(FlaskService):
-    """Rems Service"""
+    """Class Rems Service."""
 
     def __init__(self, app, user):
-        """Setup Rems API Service"""
+        """Set up Rems API Service."""
         super().__init__(app)
 
         rems_api_config = get_fairdata_rems_api_config(app)
@@ -69,7 +69,7 @@ class RemsAPIService(FlaskService):
     def rems_request(
         self, method, url, err_message, json=None, user_id="RDowner@funet.fi"
     ):
-        """Genaral method for sending requests to REMS
+        """General method for sending requests to REMS.
 
         Arguments:
             method (str): The http verb, GET or POST
@@ -125,7 +125,7 @@ class RemsAPIService(FlaskService):
         return rems_api_response.json()
 
     def get_user_applications(self):
-        """Get all applications which the current user can see
+        """Get all applications which the current user can see.
 
         Returns:
             list: List of application dicts
@@ -141,7 +141,7 @@ class RemsAPIService(FlaskService):
         return self.rems_request(method, url, err_message, user_id=self.USER_ID)
 
     def create_application(self, id):
-        """Creates application in REMS
+        """Create application in REMS.
 
         Arguments:
             id (int): Catalogue item id
@@ -165,7 +165,7 @@ class RemsAPIService(FlaskService):
         )
 
     def get_catalogue_item_for_resource(self, resource):
-        """Get catalogue item for resource from REMS
+        """Get catalogue item for resource from REMS.
 
         Arguments:
             resource (str): The preferred identifier of the resource
@@ -190,7 +190,7 @@ class RemsAPIService(FlaskService):
         return self.rems_request(method, url, err_message)
 
     def create_user(self, userdata):
-        """Create user in REMS
+        """Create user in REMS.
 
         Arguments:
             userdata (dict): Dict with name, user_id and email.

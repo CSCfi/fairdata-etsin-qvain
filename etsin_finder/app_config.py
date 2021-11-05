@@ -103,6 +103,12 @@ def _get_test_app_config():
             "PASSWORD": "fake password",
             "STRATEGY": MOCK_SYNC,
         },
+        "FD_REMS": {
+            "ENABLED": True,
+            "API_KEY": 1234,
+            "HOST": "fake host",
+            "HTTPS_PROXY": "proxy",
+        },
     }
 
 
@@ -171,9 +177,6 @@ def get_fairdata_rems_api_config(app=None):
         dict: REMS api config or None.
 
     """
-    if executing_cicd():
-        return None
-
     app = ensure_app(app)
     rems_conf = app.config.get("FD_REMS", False)
     if not rems_conf or not isinstance(rems_conf, dict):
