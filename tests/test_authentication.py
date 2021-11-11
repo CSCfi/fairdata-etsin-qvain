@@ -44,13 +44,13 @@ class MockSamlAuth:
 
 
 def make_sso_user_cookie(user):
-    """Creata a sso user cookie for tests."""
+    """Create a sso user cookie for tests."""
     encrypted_session = jwt.encode({"authenticated_user": user}, "fake key")
     return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session)
 
 
 def make_sso_cookie(cookie):
-    """Creata a sso user cookie for tests."""
+    """Create a sso user cookie for tests."""
     encrypted_session = jwt.encode(cookie, "fake key")
     return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session)
 
