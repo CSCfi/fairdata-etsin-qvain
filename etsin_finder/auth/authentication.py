@@ -9,7 +9,6 @@
 
 from flask import session
 from etsin_finder.log import log
-from etsin_finder.utils.utils import executing_cicd
 from etsin_finder.utils.constants import SAML_ATTRIBUTES
 from etsin_finder.auth.authentication_fairdata_sso import (
     is_authenticated_through_fairdata_sso,
@@ -37,9 +36,6 @@ def is_authenticated():
         bool: Is auth.
 
     """
-    if executing_cicd():
-        return False
-
     if is_authenticated_through_direct_proxy():
         return True
     if is_authenticated_through_fairdata_sso():
@@ -55,9 +51,6 @@ def is_authenticated_CSC_user():
         bool: Is CSC user.
 
     """
-    if executing_cicd():
-        return False
-
     # Authenticated through direct proxy
     if is_authenticated_through_direct_proxy():
         if (
@@ -200,7 +193,7 @@ def get_user_lastname():
 
 
 def get_user_ida_projects():
-    """Get user IDA projects in two different ways
+    """Get user IDA projects in two different ways.
 
     1) For proxy login: get IDA projects from IDM groups
     2) For Fairdata SSO login: get IDA projects directly from SSO cookies
@@ -253,7 +246,7 @@ def get_user_ida_projects():
 
 
 def get_user_home_organization_id():
-    """Get the HAKA organization id from the saml userdata
+    """Get the HAKA organization id from the saml userdata.
 
     Returns:
         string: The id of the users home organization, or None.

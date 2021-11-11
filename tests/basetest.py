@@ -67,6 +67,26 @@ class BaseTest:
         return client
 
     @pytest.fixture
+    def session_lang_en(self, app, monkeypatch):
+        """
+        User-authenticated Flask test client, CSC user.
+
+        :param app:
+        :param monkeypatch:
+        :return:
+        """
+        from etsin_finder.auth import authentication
+
+        monkeypatch.setattr(authentication, "is_authenticated", lambda: True)
+        monkeypatch.setattr(authentication, "is_authenticated_CSC_user", lambda: True)
+
+        client = app.test_client()
+        with client as c:
+            with c.session_transaction() as sess:
+                sess["language"] = "en"
+        return client
+
+    @pytest.fixture
     def authd_no_user_name(self, monkeypatch):
         """
         User-authenticated Flask test client, CSC user.

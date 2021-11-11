@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Direct authentication related functionalities"""
+"""Direct authentication related functionalities."""
 
 from urllib.parse import urlparse
 from flask import session, current_app
@@ -13,7 +13,7 @@ from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
 
 def get_saml_auth(flask_request, service):
-    """Get saml auth
+    """Get saml auth.
 
     Args:
         flask_request (object): flask.Request
@@ -29,7 +29,7 @@ def get_saml_auth(flask_request, service):
 
 
 def init_saml_auth(saml_prepared_flask_request, service):
-    """Init saml auth
+    """Init saml auth.
 
     Args:
         saml_prepared_flask_request (object): Prepared flask request.
@@ -45,7 +45,7 @@ def init_saml_auth(saml_prepared_flask_request, service):
 
 
 def is_authenticated_through_direct_proxy():
-    """Is user authenticated through the old proxy solution
+    """Is user authenticated through the old proxy solution.
 
     Returns:
         bool: Is auth.
@@ -57,7 +57,7 @@ def is_authenticated_through_direct_proxy():
 
 
 def prepare_flask_request_for_saml(request, service):
-    """Prepare Flask request for saml
+    """Prepare Flask request for saml.
 
     Args:
         request (object): flask.Request
@@ -80,11 +80,11 @@ def prepare_flask_request_for_saml(request, service):
 
 
 def reset_flask_session_on_login():
-    """Reset Flask session on login"""
+    """Reset Flask session on login."""
     session.clear()
     session.permanent = True
 
 
 def reset_flask_session_on_logout():
-    """Reset Flask session on logout"""
+    """Reset Flask session on logout."""
     session.clear()

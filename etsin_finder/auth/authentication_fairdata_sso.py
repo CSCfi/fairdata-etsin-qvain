@@ -5,7 +5,7 @@
 # :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
 # :license: MIT
 
-"""Fairdata SSO authentication related functionalities"""
+"""Fairdata SSO authentication related functionalities."""
 
 import jwt
 from flask import request, current_app
@@ -16,7 +16,7 @@ from etsin_finder.utils.utils import executing_cicd
 
 
 def get_sso_environment_prefix():
-    """Checks what environment the user is currently in, based on app_config
+    """Check what environment the user is currently in, based on app_config.
 
     Returns
         session_data (string): String that defines what the SSO environment is
@@ -27,7 +27,7 @@ def get_sso_environment_prefix():
 
 
 def get_decrypted_sso_session_details():
-    """Retrieve decrypted_sso_session_details
+    """Retrieve decrypted_sso_session_details.
 
     Returns:
         decrypted_fd_sso_session(list): List of decrypted cookies
@@ -51,15 +51,12 @@ def get_decrypted_sso_session_details():
 
 
 def is_authenticated_through_fairdata_sso():
-    """Is user authenticated through the new Fairdata single-sign on login
+    """Is user authenticated through the new Fairdata single-sign on login.
 
     Returns:
         bool: Is auth.
 
     """
-    if executing_cicd():
-        return False
-
     fd_sso_session = get_decrypted_sso_session_details()
 
     if fd_sso_session:
@@ -70,14 +67,14 @@ def is_authenticated_through_fairdata_sso():
 
 
 def log_sso_values():
-    """Log SSO values for the Fairdata session"""
+    """Log SSO values for the Fairdata session."""
     log.info(request.cookies)
     log.info(get_decrypted_sso_session_details())
 
 
 def join_redirect_url_path(url, path):
     """
-    Append path to redirect_url parameter in URL
+    Append path to redirect_url parameter in URL.
 
     Used to append a path to the redirect_url query parameter in a URL.
     If the query parameter does not exist, the URL is returned unchanged.

@@ -56,6 +56,9 @@ def _get_test_app_config():
         "SEARCH_APP_LOG_PATH": "/var/log/etsin_finder_search/etsin_finder_search.log",
         "DEBUG": True,
         "SECRET_KEY": "cb1c9f28f16ddd1e41fb47e12d4a73f9ed76d6df93c54f31",
+        "SERVER_FAKE_SERVICE_DOMAIN_NAME": "face_service",
+        "SERVER_ETSIN_DOMAIN_NAME": "etsin",
+        "SERVER_QVAIN_DOMAIN_NAME": "qvain",
         "SESSION_COOKIE_SAMESITE": "Lax",
         "SESSION_COOKIE_SECURE": True,
         "SESSION_COOKIE_HTTPONLY": True,
@@ -68,9 +71,7 @@ def _get_test_app_config():
         "MAIL_USERNAME": "",
         "MAIL_PASSWORD": "",
         "MAIL_DEFAULT_SENDER": "test@fairdata.fi",
-        "SSO": {
-            "PREFIX": "fd_test_csc_fi",
-        },
+        "SSO": {"PREFIX": "fd_test_csc_fi", "HOST": "sso_fake_host", "KEY": "fake key"},
         "DOWNLOAD_API": {
             "HOST": "mock-download",
             "PORT": 1,
