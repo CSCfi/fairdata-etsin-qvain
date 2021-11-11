@@ -2,7 +2,11 @@ import 'chai/register-should'
 
 import { buildStores } from '../../js/stores'
 import Cite from '../../js/components/dataset/citation/cite'
-import { getNameInitials, getLastnameFirst } from '../../js/components/dataset/citation/cite/utils'
+import {
+  getNameInitials,
+  getLastnameFirst,
+  getNameParts,
+} from '../../js/components/dataset/citation/cite/utils'
 
 const stores = buildStores()
 const cite = new Cite(stores.Locale.getValueTranslation)
@@ -382,6 +386,24 @@ describe('Utils', () => {
 
     it('should preserve St. in surname', () => {
       getLastnameFirst('Ashley M. St. John').should.eq('St. John, Ashley M.')
+    })
+  })
+
+  describe('getNameParts', () => {
+    it('should preserve St. in surname', () => {
+      getNameParts('Ashley M. St. John').should.eql({
+        first: ['Ashley', 'M.'],
+        last: ['St.', 'John'],
+        suffixes: [],
+      })
+    })
+
+    it('should ignore extra spaces in name', () => {
+      getNameParts('    Name    With   Extra     Spaces ').should.eql({
+        first: ['Name', 'With', 'Extra'],
+        last: ['Spaces'],
+        suffixes: [],
+      })
     })
   })
 })

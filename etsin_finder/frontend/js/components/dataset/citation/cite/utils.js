@@ -11,7 +11,7 @@ const topOrg = org => {
 // For surname formatting examples, see
 // https://blog.apastyle.org/apastyle/2017/05/whats-in-a-name-two-part-surnames-in-apa-style.html
 
-const startsWithLowerCase = str => str[0] === str[0].toLowerCase()
+const startsWithLowerCase = str => !!str && str[0] === str[0].toLowerCase()
 
 const suffixParts = ['Jr', 'Jr.', 'Sr', 'Sr.']
 
@@ -22,7 +22,7 @@ const romanNumeralMatch = /^(((IX|IV|V)I{0,3})|I{1,3})$/
 const toInitial = name => `${name[0]}.`
 
 export const getNameParts = name => {
-  const parts = name.trim().split(' ')
+  const parts = name.trim().split(' ').filter(part => part.length > 0)
   if (parts.length === 1) {
     return { first: [], last: [parts[0]], suffixes: [] }
   }
