@@ -104,6 +104,9 @@ const datasets = {
       invite: 'Invite',
       members: 'Members',
     },
+    errors: {
+      loadingPermissions: 'Error retrieving data. Please try again.',
+    },
     invite: {
       users: {
         label: 'Users',
@@ -129,14 +132,15 @@ const datasets = {
     },
     members: {
       roles: {
-        owner: 'Owner',
+        creator: 'Creator',
         editor: 'Editor',
       },
       remove: 'Remove',
       labels: {
         permissions: 'Members',
-        projectMembers: 'Project members',
+        projectMembers: 'Project %(project)s members',
       },
+      updateError: 'There was an error updating user permissions. Please try again.'
     },
   },
   previousVersions: {

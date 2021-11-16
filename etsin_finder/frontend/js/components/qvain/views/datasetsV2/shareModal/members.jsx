@@ -9,7 +9,16 @@ import Loader from '../../../../general/loader'
 import { useStores } from '../../../utils/stores'
 import { Dropdown, DropdownItem } from '../../../../general/dropdown'
 
-const getPersonLabel = ({ name, uid, email }) => `${name} (${uid}, ${email})`
+const joinParts = parts => {
+  const nonEmptyParts = parts.filter(p => p)
+  let joined = nonEmptyParts.splice(0, 1)
+  if (nonEmptyParts.length > 0) {
+    joined += ` (${nonEmptyParts.join(', ')})`
+  }
+  return joined
+}
+
+const getPersonLabel = ({ name, uid, email }) => joinParts([name, uid, email])
 
 const getRoleKey = role => `qvain.datasets.share.members.roles.${role}`
 
@@ -40,7 +49,7 @@ const Check = styled(FontAwesomeIcon).attrs({ icon: faCheck })`
 export const Members = () => {
   const {
     QvainDatasetsV2: {
-      share: { userPermissions, isLoadingPermissions },
+      share: { userPermissions, project, removeUserPermission, isUpdatingUserPermission, permissionChangeError },
     },
   } = useStores()
 
@@ -48,11 +57,32 @@ export const Members = () => {
 
   const permissionMembers = userPermissions.filter(user => user.role)
 
-  if (isLoadingPermissions) {
+  const userRoleButton = user => {
+    if (isUpdatingUserPermission(user)) {
+      return (
+        <Role>
+          <Translate content={getRoleKey(user.role)} />
+          <RoleLoaderWrapper>
+            <Loader active size="12pt" spinnerSize="0.15em" />
+          </RoleLoaderWrapper>
+        </Role>
+      )
+    }
+    if (user.role === 'creator') {
+      return <Translate component={Role} content={getRoleKey(user.role)} />
+    }
     return (
-      <LoaderWrapper>
-        <Loader active size="6rem " />
-      </LoaderWrapper>
+      <Dropdown buttonComponent={RoleButton} buttonContent={getRoleKey(user.role)}>
+        <RoleOptions activeRole={user.role} />
+        <Translate
+          component={DropdownItem}
+          content="qvain.datasets.share.members.remove"
+          border="top"
+          onClick={() => {
+            removeUserPermission(user)
+          }}
+        />
+      </Dropdown>
     )
   }
 
@@ -66,25 +96,17 @@ export const Members = () => {
         {permissionMembers.map(user => (
           <User key={user.uid}>
             <Name>{getPersonLabel(user)}</Name>
-            {user.role === 'owner' ? (
-              <Translate component={Role} content={getRoleKey(user.role)} />
-            ) : (
-              <Dropdown buttonComponent={RoleButton} buttonContent={getRoleKey(user.role)}>
-                <RoleOptions activeRole={user.role} />
-                <Translate
-                  component={DropdownItem}
-                  content="qvain.datasets.share.members.remove"
-                  border="top"
-                />
-              </Dropdown>
-            )}
+            {userRoleButton(user)}
           </User>
         ))}
       </UserList>
       {projectMembers.length > 0 && (
         <>
           <Label>
-            <Translate content="qvain.datasets.share.members.labels.projectMembers" />
+            <Translate
+              content="qvain.datasets.share.members.labels.projectMembers"
+              with={{ project }}
+            />
             {` (${projectMembers.length})`}
           </Label>
           <UserList className="project-member-users">
@@ -96,15 +118,19 @@ export const Members = () => {
           </UserList>
         </>
       )}
+      { permissionChangeError  && <Translate component={Error} content="qvain.datasets.share.members.updateError" /> }
+
     </>
   )
 }
 
-const LoaderWrapper = styled.div`
+const RoleLoaderWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1;
+  flex-grow: 0;
+  width: 0.625em;
+  margin-right: 0.5rem;
 `
 
 const User = styled.li.attrs({ className: 'member-user' })`
@@ -121,7 +147,7 @@ const Name = styled.span.attrs({ className: 'member-name' })`
 `
 
 const Role = styled.div.attrs({ className: 'member-role' })`
-  min-width: 7rem;
+  min-width: 7.5rem;
   flex-shrink: 0;
   display: flex;
   justify-content: space-between;
@@ -133,6 +159,12 @@ const Role = styled.div.attrs({ className: 'member-role' })`
   margin: -0.5rem 0;
   color: inherit;
 `
+
+const Error = styled.div`
+  color: ${p => p.theme.color.error};
+  margin-top: 0.25rem;
+`
+
 
 const RoleButton = styled(Role).attrs({ as: 'button', type: 'button' })`
   cursor: pointer;

@@ -65,7 +65,6 @@ class TestUtils(UtilsTestSuite):
         Write json file first, so that it can be used as test material.
         """
         result = json_or_empty(full_json_response)
-        print(result)
         assert result == original_complete_dataset
 
     def test_json_or_text_empty_response(self, empty_json_response):

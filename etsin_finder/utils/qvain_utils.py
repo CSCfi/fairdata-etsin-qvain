@@ -4,6 +4,7 @@ import re
 from copy import deepcopy
 from datetime import date
 from etsin_finder import auth
+from flask_restful import abort
 
 from etsin_finder.utils.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 from etsin_finder.services import cr_service, qvain_lock_service
@@ -186,7 +187,7 @@ def check_dataset_edit_permission(cr_id):
     if csc_username == creator:
         user_is_allowed = True
 
-    if flag_enabled("PERMISSIONS.SHARE_PROJECT"):
+    if flag_enabled("PERMISSIONS.EDITOR_RIGHTS"):
         if authorization.user_has_dataset_project(cr_id):
             user_is_allowed = True
 
@@ -341,3 +342,46 @@ def merge_and_sort_dataset_lists(*lists):
         datasets_by_id.values(), key=lambda cr: cr.get("date_created"), reverse=True
     )
     return datasets
+
+
+def metax_userpermissions_as_dict(users):
+    """Convert list of user permissions to dict with username as key."""
+    return {user.get("user_id"): {"role": user.get("role")} for user in users}
+
+
+def ldap_users_as_dict(users):
+    """Convert list of ldap users to dict with username as key."""
+    return {user.get("uid"): {**user} for user in users}
+
+
+def merge_metax_and_ldap_user_data(usernames, project_users, metax_data, ldap_data):
+    """Combine user data from Metax with data from LDAP.
+
+    Arguments:
+        usernames (list): List of usernames.
+        project_users (list): List of usernames belonging to project.
+        metax_data (list): List of user permission dicts.
+        ldap_data (list): List of LDAP user dicts.
+
+    """
+    usernames = sorted(usernames)
+    metax_user_data_as_dict = metax_userpermissions_as_dict(metax_data)
+    ldap_user_data_as_dict = ldap_users_as_dict(ldap_data)
+    users = [
+        {
+            "uid": username,
+            "is_project_member": username in project_users,
+            **metax_user_data_as_dict.get(username, {}),
+            **ldap_user_data_as_dict.get(username, {}),
+        }
+        for username in usernames
+    ]
+    return users
+
+
+def abort_on_fail(response_and_status):
+    """Abort if status in (response, status) contains a non-ok response HTTP status code."""
+    response, status = response_and_status
+    if status not in (200, 201, 204):
+        abort(status, message=response)
+    return response

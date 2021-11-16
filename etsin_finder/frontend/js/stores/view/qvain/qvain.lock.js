@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { observable, action, computed, makeObservable, reaction } from 'mobx'
 import PromiseManager from '../../../utils/promiseManager'
+import urls from '../../../utils/urls'
 
 class Lock {
   constructor(Qvain, Auth) {
@@ -136,7 +137,7 @@ class Lock {
       const data = { force: !!force }
       let responseData
       try {
-        const resp = await axios.put(`/api/qvain/datasets/${dataset}/lock`, data, {
+        const resp = await axios.put(urls.qvain.datasetLock(dataset), data, {
           timeout: this.requestTimeout,
         })
         responseData = resp?.data
@@ -169,7 +170,7 @@ class Lock {
     const dataset = this.lockData?.dataset
     this.setLockData(undefined, undefined)
     if (dataset) {
-      await axios.delete(`/api/qvain/datasets/${dataset}/lock`, {
+      await axios.delete(urls.qvain.datasetLock(dataset), {
         timeout: this.requestTimeout,
       })
     }
@@ -182,7 +183,7 @@ class Lock {
     }
     const dataset = this.lockData?.dataset
     if (dataset && window.fetch) {
-      window.fetch(`/api/qvain/datasets/${dataset}/lock`, {
+      window.fetch(urls.qvain.datasetLock(dataset), {
         keepalive: true,
         method: 'DELETE',
       })

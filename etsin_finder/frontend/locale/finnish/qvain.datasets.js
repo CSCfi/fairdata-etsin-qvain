@@ -104,6 +104,9 @@ const datasets = {
       invite: 'Kutsu',
       members: 'Jäsenet',
     },
+    errors: {
+      loadingPermissions: 'Error retrieving data. Please try again.',
+    },
     invite: {
       users: {
         label: 'Käyttäjät',
@@ -129,14 +132,15 @@ const datasets = {
     },
     members: {
       roles: {
-        owner: 'Omistaja',
+        creator: 'Luoja',
         editor: 'Muokkaaja',
       },
       remove: 'Poista',
       labels: {
         permissions: 'Jäsenet',
-        projectMembers: 'Projektin jäsenet',
+        projectMembers: 'Projektin %(project)s jäsenet',
       },
+      updateError: 'Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä uudelleen.'
     },
   },
   previousVersions: {

@@ -137,6 +137,14 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
     def _METAX_CREATE_DRAFT(self):
         return self.metax_url("/rpc/v2/datasets/create_draft")
 
+    @property
+    def _METAX_DATASET_EDITOR_PERMISSIONS_USERS(self):
+        return self.metax_url("/rest/v2/datasets") + "/{0}/editor_permissions/users"
+
+    @property
+    def _METAX_DATASET_EDITOR_PERMISSIONS_USER(self):
+        return self.metax_url("/rest/v2/datasets") + "/{0}/editor_permissions/users/{1}"
+
     def _get_args(self, **kwargs):
         """Get default args for request, allow overriding with kwargs."""
         args = dict(
@@ -572,4 +580,58 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             log.info("Created draft of {}".format(cr_identifier))
         else:
             log.warning("Failed to create draft of dataset {}".format(cr_identifier))
+        return resp, status
+
+    def get_dataset_editor_permissions_users(self, cr_id):
+        """Get dataset.
+
+        Arguments:
+            cr_id (str): The identifier of the dataset.
+
+        Returns:
+            Metax response.
+
+        """
+        req_url = format_url(self._METAX_DATASET_EDITOR_PERMISSIONS_USERS, cr_id)
+        resp, status, success = make_request(requests.get, req_url, **self._get_args())
+        if not success:
+            log.warning("Failed to get dataset {}".format(cr_id))
+        return resp, status
+
+    def create_dataset_editor_permissions_user(self, cr_id, user, role="editor"):
+        """Get dataset.
+
+        Arguments:
+            cr_id (str): The identifier of the dataset.
+
+        Returns:
+            Metax response.
+
+        """
+        data = {"user_id": user, "role": role}
+        req_url = format_url(self._METAX_DATASET_EDITOR_PERMISSIONS_USERS, cr_id)
+        resp, status, success = make_request(
+            requests.post, req_url, json=data, **self._get_args()
+        )
+        if not success:
+            log.warning("Failed to get dataset {}".format(cr_id))
+        return resp, status
+
+    def delete_dataset_editor_permissions_user(self, cr_id, user):
+        """Get dataset.
+
+        Arguments:
+            cr_id (str): The identifier of the dataset.
+
+        Returns:
+            Metax response.
+
+        """
+        data = {"user_id": user}
+        req_url = format_url(self._METAX_DATASET_EDITOR_PERMISSIONS_USER, cr_id, user)
+        resp, status, success = make_request(
+            requests.delete, req_url, json=data, **self._get_args()
+        )
+        if not success:
+            log.warning("Failed to delete dataset {}".format(cr_id))
         return resp, status

@@ -3,8 +3,7 @@
 import pytest
 
 from .basetest import BaseTest
-from etsin_finder.utils.flags import set_flags, get_flags
-from etsin_finder.app import add_restful_resources
+from etsin_finder.utils.flags import set_flags
 
 
 class BaseLockTest(BaseTest):
@@ -15,7 +14,8 @@ class BaseLockTest(BaseTest):
         """Config common for all tests."""
         set_flags({"PERMISSIONS.WRITE_LOCK": True}, app)  # enable write lock by default
         mocker.patch(
-            "etsin_finder.resources.qvain_resources.check_dataset_edit_permission"
+            "etsin_finder.resources.qvain_resources.check_dataset_edit_permission",
+            return_value=None,
         )
 
     @pytest.fixture

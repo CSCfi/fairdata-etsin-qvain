@@ -6,7 +6,6 @@ import styled from 'styled-components'
 
 import { useStores } from '../../../utils/stores'
 import { Tab, TabRow } from '../common'
-import Loader from '../../../../general/loader'
 
 export const Tabs = () => {
   const {
@@ -32,36 +31,22 @@ export const Tabs = () => {
   )
 }
 
-const ItemCount = ({ count, loading }) => {
-  if (count === undefined) {
+const ItemCount = ({ count }) => {
+  if (!count) {
     return null
-  }
-  if (loading) {
-    return (
-      <LoaderWrapper>
-        <Loader active size="12pt" spinnerSize="0.15em" />
-      </LoaderWrapper>
-    )
   }
   return <StyledItemCount>({count})</StyledItemCount>
 }
 
 ItemCount.propTypes = {
   count: PropTypes.number,
-  loading: PropTypes.bool,
 }
 
 ItemCount.defaultProps = {
   count: undefined,
-  loading: false,
 }
 
 const StyledItemCount = styled.span`
-  margin-left: 0.5rem;
-`
-
-const LoaderWrapper = styled.span`
-  display: inline-block;
   margin-left: 0.5rem;
 `
 

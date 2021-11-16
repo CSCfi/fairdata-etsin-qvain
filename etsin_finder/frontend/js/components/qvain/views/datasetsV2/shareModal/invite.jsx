@@ -57,6 +57,7 @@ const Invite = () => {
         searchError,
         sendInvite,
         isInviting,
+        userPermissions,
       },
     },
   } = useStores()
@@ -80,6 +81,10 @@ const Invite = () => {
     LoadingMessage,
   }
 
+  const existingUsers = new Set(
+    userPermissions.filter(user => user.role).map(user => user.uid)
+  )
+
   return (
     <Container>
       <Translate
@@ -96,6 +101,7 @@ const Invite = () => {
           loadOptions={fetchOptions}
           getOptionLabel={person => getPersonLabel(person)}
           getOptionValue={person => person.uid}
+          isOptionDisabled={option => existingUsers.has(option.uid)}
           isMulti
           components={customComponents}
           onChange={setSelected}
@@ -124,7 +130,7 @@ const Invite = () => {
         <Translate content="qvain.datasets.share.invite.button" />
         {isInviting && (
           <LoaderWrapper>
-            <Loader active color="white" size="12pt" spinnerSize="0.15em" />
+            <Loader active size="12pt" spinnerSize="0.15em" />
           </LoaderWrapper>
         )}
       </InviteButton>

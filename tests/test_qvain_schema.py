@@ -200,7 +200,6 @@ class TestQvainLightDatasetSchemaActor(BaseTest):
     def test_person_actor(self):
         """Test ok person actor."""
         actor = getPerson()
-        print(actor)
         errors = ActorValidationSchema().validate(actor)
         assert not errors
 

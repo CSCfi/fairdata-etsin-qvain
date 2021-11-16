@@ -154,8 +154,8 @@ class TestCheckDatasetEditPermission(BaseTest):
 
     @pytest.fixture
     def flagged_app(self, app):
-        """App with PERMISSIONS.SHARE_PROJECT flag enabled"""
-        set_flags({"PERMISSIONS.SHARE_PROJECT": True}, app)
+        """App with PERMISSIONS.EDITOR_RIGHTS flag enabled"""
+        set_flags({"PERMISSIONS.EDITOR_RIGHTS": True}, app)
         return app
 
     @pytest.fixture
@@ -266,8 +266,8 @@ class TestCheckDatasetEditPermission(BaseTest):
         open_catalog_record,
         cr_permissions_project_x,
     ):
-        """Test that editing by other project members is denied when PERMISSIONS.SHARE_PROJECT is disabled."""
-        set_flags({"PERMISSIONS.SHARE_PROJECT": False}, flagged_app)
+        """Test that editing by other project members is denied when PERMISSIONS.EDITOR_RIGHTS is disabled."""
+        set_flags({"PERMISSIONS.EDITOR_RIGHTS": False}, flagged_app)
         with flagged_app.app_context():
             result = check_dataset_edit_permission("testcatalog")
             assert result == self.deniedOrNotExistResult

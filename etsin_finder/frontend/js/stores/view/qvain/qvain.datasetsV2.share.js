@@ -1,14 +1,21 @@
-import { action, computed, reaction, makeObservable, observable } from 'mobx'
+import { action, computed, reaction, makeObservable, observable, runInAction } from 'mobx'
 import axios from 'axios'
 
 import PromiseManager from '../../../utils/promiseManager'
+import urls from '../../../utils/urls'
 
 import Modal from './modal'
 import Tabs from './tabs'
 
 const CancelToken = axios.CancelToken
 
-const first = arr => arr?.[0]
+const sortOpts = { numeric: true, sensitivity: 'base' }
+const nameCompare = (a, b) => (a.name || '').localeCompare(b.name || '', undefined, sortOpts)
+
+const roleValue = v => (v.role === 'creator' ? 0 : 1)
+const roleCompare = (a, b) => roleValue(a) - roleValue(b)
+
+const timeout = 20000
 
 export const combineName = (firstName, lastName) => {
   const parts = []
@@ -21,12 +28,6 @@ export const combineName = (firstName, lastName) => {
   return parts.join(' ')
 }
 
-const toPerson = ({ attributes }) => ({
-  uid: first(attributes.uid),
-  name: combineName(first(attributes.givenName), first(attributes.sn)),
-  email: first(attributes.mail),
-})
-
 class Share {
   constructor() {
     this.promiseManager = new PromiseManager()
@@ -37,10 +38,15 @@ class Share {
     )
     makeObservable(this)
     this.getTabItemCount = this.getTabItemCount.bind(this)
+    this.isUpdatingUserPermission = this.isUpdatingUserPermission.bind(this)
     reaction(() => this.modal.isOpen, this.handleToggle)
   }
 
   @observable searchError = undefined
+
+  @observable permissionLoadError = undefined
+
+  @observable permissionChangeError = undefined
 
   @observable searchResults = []
 
@@ -52,6 +58,12 @@ class Share {
 
   @observable userPermissions = []
 
+  @observable project = undefined
+
+  @computed get datasetIdentifier() {
+    return this.modal.data?.dataset.identifier
+  }
+
   handleToggle = isOpen => {
     if (isOpen) {
       this.fetchPermissions()
@@ -61,10 +73,13 @@ class Share {
   }
 
   @action.bound resetValues() {
-    this.error = undefined
+    this.searchError = undefined
+    this.permissionLoadError = undefined
+    this.permissionChangeError = undefined
     this.searchResults = []
     this.selectedUsers = []
     this.userPermissions = []
+    this.project = undefined
     this.inviteMessage = ''
     this.confirmClose = false
   }
@@ -109,9 +124,9 @@ class Share {
       try {
         this.setSearchError(undefined)
         await Promise.delay(300)
-        const resp = await axios.get(`/api/ldap/users/${str}`, { cancelToken, timeout: 10000 })
+        const resp = await axios.get(urls.ldap.searchUser(str), { cancelToken, timeout })
 
-        const options = resp.data.map(toPerson)
+        const options = resp.data
         this.setSearchResults(options)
         return options
       } catch (e) {
@@ -127,13 +142,69 @@ class Share {
 
   @action.bound
   async sendInvite() {
-    // TODO: send invitation
     const invite = async () => {
-      await Promise.delay(2000)
+      await axios.post(
+        urls.qvain.datasetEditorPermissions(this.datasetIdentifier),
+        { users: this.selectedUsers.map(u => u.uid) },
+        { timeout }
+      )
       this.resetValues()
       this.modal.close()
     }
     await this.promiseManager.add(invite(), 'invite')
+  }
+
+  @action.bound
+  async fetchPermissions() {
+    const fetchPerms = async () => {
+      try {
+        const resp = await axios.get(urls.qvain.datasetEditorPermissions(this.datasetIdentifier), {
+          timeout,
+        })
+        const users = (resp.data.users || []).map(user => ({
+          uid: user.uid,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          isProjectMember: user.is_project_member,
+        }))
+        users.sort(nameCompare)
+        users.sort(roleCompare) // creator first
+        this.setUserPermissions(users)
+        this.setProject(resp.data.project)
+      } catch (err) {
+        this.setUserPermissions([])
+        console.error(err)
+        runInAction(() => {
+          this.permissionLoadError = err
+        })
+      }
+    }
+
+    await this.promiseManager.add(fetchPerms(), 'permissions')
+  }
+
+  isUpdatingUserPermission(user) {
+    return this.promiseManager.count(`update-user-${user.uid}`) > 0
+  }
+
+  @action.bound
+  async removeUserPermission(user) {
+    const remove = async () => {
+      try {
+        await axios.delete(
+          urls.qvain.datasetEditorPermissionsUser(this.datasetIdentifier, user.uid),
+          { timeout }
+        )
+        const users = this.userPermissions.filter(u => u.uid !== user.uid)
+        this.setUserPermissions(users)
+      } catch (err) {
+        this.setPermissionChangeError(err)
+      }
+    }
+
+    this.setPermissionChangeError(undefined)
+    await this.promiseManager.add(remove(), ['update-user', `update-user-${user.uid}`])
   }
 
   @action.bound
@@ -142,41 +213,18 @@ class Share {
   }
 
   @action.bound
-  setUserPermissions(perms) {
-    this.userPermissions = perms
+  setProject(project) {
+    this.project = project
   }
 
-  async fetchPermissions() {
-    // TODO: fetch user and project permissions
+  @action.bound
+  setPermissionChangeError(error) {
+    this.permissionChangeError = error
+  }
 
-    const fetchPerms = async () => {
-      await Promise.delay(5000)
-
-      this.setUserPermissions([
-        {
-          uid: 'teppo',
-          name: 'teppo testaaja',
-          email: 'teppo@example.com',
-          isProjectMember: true,
-          role: 'owner',
-        },
-        {
-          uid: 'other',
-          name: 'Other Person',
-          email: 'other@example.com',
-          isProjectMember: false,
-          role: 'editor',
-        },
-        {
-          uid: 'longname',
-          name: 'Longlong von Longlonglonglongname',
-          email: 'long@example.com',
-          isProjectMember: true,
-        },
-      ])
-    }
-
-    await this.promiseManager.add(fetchPerms(), 'permissions')
+  @action.bound
+  setUserPermissions(perms) {
+    this.userPermissions = perms
   }
 
   @action.bound

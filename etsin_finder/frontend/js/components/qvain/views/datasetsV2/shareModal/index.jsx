@@ -10,6 +10,7 @@ import { useStores } from '../../../utils/stores'
 import Tabs from './tabs'
 import Invite from './invite'
 import Members from './members'
+import Loader from '../../../../general/loader'
 
 const modalDataTypes = {
   dataset: PropTypes.object.isRequired,
@@ -18,7 +19,16 @@ const modalDataTypes = {
 export const ShareModal = () => {
   const {
     QvainDatasetsV2: {
-      share: { modal, tabs, confirmClose, setConfirmClose, isInviting, hasUnsentInvite },
+      share: {
+        modal,
+        tabs,
+        confirmClose,
+        setConfirmClose,
+        isInviting,
+        hasUnsentInvite,
+        isLoadingPermissions,
+        permissionLoadError,
+      },
     },
   } = useStores()
 
@@ -42,7 +52,12 @@ export const ShareModal = () => {
   }
 
   let selectedTab = null
-  if (tabs.active === 'invite') {
+
+  if (permissionLoadError) {
+    selectedTab = <Translate component={Error} content="qvain.datasets.share.errors.loadingPermissions" />
+  } else if (isLoadingPermissions) {
+    selectedTab = <Loader active size="6rem " />
+  } else if (tabs.active === 'invite') {
     selectedTab = <Invite />
   } else {
     selectedTab = <Members />
@@ -92,6 +107,14 @@ const TabContent = styled.div`
 
 const Title = styled.h3`
   text-align: center;
+`
+
+const Error = styled.div`
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${p => p.theme.color.error};
 `
 
 export const ErrorMessage = styled.p`

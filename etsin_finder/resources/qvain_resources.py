@@ -15,6 +15,7 @@ from flask_restful import reqparse, Resource, abort, inputs
 from etsin_finder.auth import authentication
 from etsin_finder.log import log
 
+from etsin_finder.services.ldap_service import LDAPIdmService
 from etsin_finder.utils.flags import flag_enabled
 from etsin_finder.utils.utils import datetime_to_header
 from etsin_finder.schemas.qvain_dataset_schema_v2 import (
@@ -31,9 +32,12 @@ from etsin_finder.utils.qvain_utils import (
     get_access_granter,
     merge_and_sort_dataset_lists,
     add_sources,
+    merge_metax_and_ldap_user_data,
+    abort_on_fail,
 )
 
 from etsin_finder.services.qvain_service import MetaxQvainAPIService
+from etsin_finder.services.common_service import MetaxCommonAPIService
 
 from etsin_finder.utils.log_utils import log_request
 
@@ -175,7 +179,7 @@ class QvainDatasets(Resource):
         offset = args.get("offset", None)
         no_pagination = args.get("no_pagination", None)
 
-        shared = flag_enabled("PERMISSIONS.SHARE_PROJECT") and args.get("shared")
+        shared = flag_enabled("PERMISSIONS.EDITOR_RIGHTS") and args.get("shared")
 
         if not no_pagination and shared:
             abort(message="'no_pagination' is required when 'shared' is enabled")
@@ -190,17 +194,17 @@ class QvainDatasets(Resource):
             data_catalog_matcher=data_catalog_matcher,
         )
         datasets = self._get_datasets_from_response(response, status, "creator")
-
         projects_datasets = []
         if shared:
             projects = authentication.get_user_ida_projects()
-            projects_response, status = service.get_datasets_for_projects(
-                projects=projects,
-                data_catalog_matcher=data_catalog_matcher,
-            )
-            datasets.extend(
-                self._get_datasets_from_response(projects_response, status, "project")
-            )
+            if projects:
+                projects_response, status = service.get_datasets_for_projects(
+                    projects=projects,
+                    data_catalog_matcher=data_catalog_matcher,
+                )
+                datasets.extend(
+                    self._get_datasets_from_response(projects_response, status, "project")
+                )
         datasets = merge_and_sort_dataset_lists(datasets, projects_datasets)
 
         if datasets or type(datasets) is list:
@@ -433,7 +437,10 @@ class QvainDatasetLock(Resource):
             lock {dict} -- lock object or {} if there is no lock currently
 
         """
-        check_dataset_edit_permission(cr_id)
+        error = check_dataset_edit_permission(cr_id)
+        if error is not None:
+            return error
+
         parser = reqparse.RequestParser()
         parser.add_argument("force", type=bool, required=False)
         args = parser.parse_args()
@@ -453,7 +460,132 @@ class QvainDatasetLock(Resource):
             cr_id {str} -- Identifier of dataset.
 
         """
-        check_dataset_edit_permission(cr_id)
+        error = check_dataset_edit_permission(cr_id)
+        if error is not None:
+            return error
+
         lock_service = QvainLockService()
         lock_service.release_lock(cr_id)
         return "", 200
+
+
+class QvainDatasetEditorPermissions(Resource):
+    """Endpoints for dataset editor permissions."""
+
+    def __init__(self):
+        """Initialization common for all methods"""
+        if not flag_enabled("PERMISSIONS.EDITOR_RIGHTS"):
+            abort(405)
+
+    def get(self, cr_id):
+        """Get editor permissions for dataset.
+
+        Arguments:
+            cr_id {str} -- Identifier of dataset.
+
+        Returns editor permission data as a dict:
+            {
+                project: project id if any
+                users: [{
+                    uid: username,
+                    email: email address,
+                    name: real name,
+                    role: role,
+                    is_project_member: True if user is member of project
+                }, {...}]
+            }
+
+        """
+        error = check_dataset_edit_permission(cr_id)
+        if error is not None:
+            return error
+
+        # get user permission data from metax
+        qvain_service = MetaxQvainAPIService()
+        metax_user_data = abort_on_fail(
+            qvain_service.get_dataset_editor_permissions_users(cr_id)
+        )
+        usernames = [user.get("user_id") for user in metax_user_data]
+
+        # get project from metax
+        common_service = MetaxCommonAPIService()
+        projects = abort_on_fail(common_service.get_dataset_projects(cr_id))
+        project = projects[0] if len(projects) > 0 else None
+
+        # get project members and user data from ldap
+        project_users = []
+        with LDAPIdmService() as ldap_service:
+            if project:
+                project_users = abort_on_fail(ldap_service.get_project_users(project))
+                usernames = list(set(usernames + project_users))
+            ldap_user_data = abort_on_fail(ldap_service.get_users_details(usernames))
+
+        users = merge_metax_and_ldap_user_data(
+            usernames, project_users, metax_user_data, ldap_user_data
+        )
+
+        perms = {"users": users}
+        if project:
+            perms["project"] = project
+
+        return perms, 200
+
+    def post(self, cr_id):
+        """Add editor permissions to dataset.
+
+        Arguments:
+            cr_id {str} -- Identifier of dataset.
+            data {json} -- Array of usernames to give permission to.
+
+        """
+        error = check_dataset_edit_permission(cr_id)
+        if error is not None:
+            return error
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("users", type=str, required=True, action="append")
+        args = parser.parse_args()
+        users = args.get("users", None)
+
+        # verify that users exist in LDAP
+        with LDAPIdmService() as ldap_service:
+            user_data = abort_on_fail(ldap_service.get_users_details(users))
+            found_users = set(user.get("uid") for user in user_data)
+            missing_users = list(set(users) - found_users)
+            if len(missing_users) > 0:
+                missing_users.sort()
+                abort(400, message=f'Users not found: {", ".join(missing_users)}')
+
+        service = MetaxQvainAPIService()
+        for user in users:
+            response, status = service.create_dataset_editor_permissions_user(
+                cr_id, user
+            )
+            if status != 201:
+                return response, status
+        return "", 201
+
+
+class QvainDatasetEditorPermissionsUser(Resource):
+    """Endpoints for single user editor permission."""
+
+    def delete(self, cr_id, user_id):
+        """Delete editor permissions for a single user.
+
+        Arguments:
+            cr_id {str} -- Identifier of dataset.
+            user_id {str} -- Username of user permission to remove.
+
+        Returns:
+            Metax response
+
+        """
+        error = check_dataset_edit_permission(cr_id)
+        if error is not None:
+            return error
+
+        service = MetaxQvainAPIService()
+        response, status = service.delete_dataset_editor_permissions_user(
+            cr_id, user_id
+        )
+        return response, status

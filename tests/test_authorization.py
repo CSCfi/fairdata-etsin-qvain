@@ -57,8 +57,8 @@ class TestUserCanViewDataset(BaseTest):
 
     @pytest.fixture
     def flagged_app(self, app):
-        """App with PERMISSIONS.SHARE_PROJECT flag enabled"""
-        set_flags({"PERMISSIONS.SHARE_PROJECT": True}, app)
+        """App with PERMISSIONS.EDITOR_RIGHTS flag enabled"""
+        set_flags({"PERMISSIONS.EDITOR_RIGHTS": True}, app)
         return app
 
     @pytest.fixture
@@ -155,7 +155,7 @@ class TestUserCanViewDataset(BaseTest):
         cr_permissions_project_x,
     ):
         """Non-creator project members can't view draft if flag is disabled"""
-        set_flags({"PERMISSIONS.SHARE_PROJECT": False}, flagged_app)
+        set_flags({"PERMISSIONS.EDITOR_RIGHTS": False}, flagged_app)
         with flagged_app.test_request_context():
             assert authorization.user_can_view_dataset(1) is False
 

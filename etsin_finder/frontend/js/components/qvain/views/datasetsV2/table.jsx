@@ -18,7 +18,7 @@ const Table = () => {
   } = useStores()
 
   useEffect(() => {
-    loadDatasets({ shared: flagEnabled('PERMISSIONS.SHARE_PROJECT') })
+    loadDatasets({ shared: flagEnabled('PERMISSIONS.EDITOR_RIGHTS') })
     return () => {
       reset()
       resetV2()

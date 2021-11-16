@@ -71,6 +71,8 @@ def add_restful_resources(app):
         QvainDataset,
         QvainDatasets,
         QvainDatasetFiles,
+        QvainDatasetEditorPermissions,
+        QvainDatasetEditorPermissionsUser,
         QvainDatasetLock,
         FileCharacteristics,
     )
@@ -102,6 +104,14 @@ def add_restful_resources(app):
     api.add_resource(QvainDataset, "/api/qvain/datasets/<id:cr_id>")
     api.add_resource(QvainDatasetFiles, "/api/qvain/datasets/<id:cr_id>/files")
     api.add_resource(QvainDatasetLock, "/api/qvain/datasets/<id:cr_id>/lock")
+    api.add_resource(
+        QvainDatasetEditorPermissions,
+        "/api/qvain/datasets/<id:cr_id>/editor_permissions",
+    )
+    api.add_resource(
+        QvainDatasetEditorPermissionsUser,
+        "/api/qvain/datasets/<id:cr_id>/editor_permissions/<string:user_id>",
+    )
 
     # Qvain API RPC endpoints
     api.add_resource(

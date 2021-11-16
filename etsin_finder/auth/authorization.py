@@ -70,7 +70,7 @@ def user_can_view_dataset(cr_id):
     if is_catalog_record_owner(cr, user_id):
         return True
 
-    if flag_enabled("PERMISSIONS.SHARE_PROJECT"):
+    if flag_enabled("PERMISSIONS.EDITOR_RIGHTS"):
         if user_has_dataset_project(cr_id):
             return True
     return False

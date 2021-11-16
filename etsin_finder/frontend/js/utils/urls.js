@@ -8,13 +8,20 @@ export default {
     datasets: () => '/api/qvain/datasets',
     dataset: dataset => `/api/qvain/datasets/${dataset}`,
     datasetFiles: dataset => `/api/qvain/datasets/${dataset}/files`,
+    datasetLock: dataset => `/api/qvain/datasets/${dataset}/lock`,
     fileCharacteristics: file => `/api/qvain/files/${file}/file_characteristics`,
+    datasetEditorPermissions: dataset => `/api/qvain/datasets/${dataset}/editor_permissions`,
+    datasetEditorPermissionsUser: (dataset, username) =>
+      `/api/qvain/datasets/${dataset}/editor_permissions/${username}`,
   },
   common: {
     datasetProjects: dataset => `/api/common/datasets/${dataset}/projects`,
     datasetUserMetadata: dataset => `/api/common/datasets/${dataset}/user_metadata`,
     directoryFiles: directory => `/api/common/directories/${directory}/files`,
     projectFiles: project => `/api/common/projects/${project}/files`,
+  },
+  ldap: {
+    searchUser: str => `/api/ldap/users/${str}`,
   },
   dl: {
     packages: () => '/api/download/requests',

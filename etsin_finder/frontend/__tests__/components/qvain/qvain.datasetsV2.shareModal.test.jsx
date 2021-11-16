@@ -1,6 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import axios from 'axios'
+import { when } from 'mobx'
 import MockAdapter from 'axios-mock-adapter'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
@@ -27,37 +28,11 @@ const otherTestUser = {
   uid: 'person',
 }
 
-const testinen = {
-  attributes: {
-    givenName: ['Testi'],
-    mail: ['testi.testinen@example.com'],
-    sn: ['Testinen'],
-    uid: ['testinen'],
-  },
-  dn: 'CN=testinen,OU=testinen_set,OU=Academic,OU=External,OU=Users,ou=idm,dc=csc,dc=fi',
-}
+const searchResultsTesti = [testUser, otherTestUser]
 
-const otherTesti = {
-  attributes: {
-    givenName: ['Othertesti'],
-    mail: ['othertes.person@example.com'],
-    sn: ['Person'],
-    uid: ['person'],
-  },
-  dn: 'CN=testinen,OU=testinen_set,OU=Academic,OU=External,OU=Users,ou=idm,dc=csc,dc=fi',
-}
+const searchResultsTestinen = [testUser]
 
-const searchResultsTesti = [testinen, otherTesti]
-
-const searchResultsTestinen = [testinen]
-
-const mockAdapter = new MockAdapter(axios)
-mockAdapter.onGet(RegExp('^/api/ldap/users/testi$')).reply(200, searchResultsTesti)
-mockAdapter.onGet(RegExp('^/api/ldap/users/testinen$')).reply(200, searchResultsTestinen)
-mockAdapter.onGet(RegExp('^/api/ldap/users/empty$')).reply(200, [])
-mockAdapter.onGet(RegExp('^/api/ldap/users/error$')).reply(500, 'error happened')
-
-let stores, wrapper, helper
+let stores, wrapper, helper, mockAdapter
 
 const render = async () => {
   wrapper?.unmount?.()
@@ -74,6 +49,8 @@ const render = async () => {
 
   const dataset = { identifier: 'jeejee' }
   stores.QvainDatasetsV2.share.modal.open({ dataset })
+
+  await when(() => !stores.QvainDatasetsV2.share.isLoadingPermissions)
 
   helper = document.createElement('div')
   document.body.appendChild(helper)
@@ -104,6 +81,15 @@ const wait = async cond => {
 }
 
 beforeEach(async () => {
+  jest.resetAllMocks()
+  mockAdapter = new MockAdapter(axios)
+  mockAdapter.onGet(RegExp('^/api/ldap/users/testi$')).reply(200, searchResultsTesti)
+  mockAdapter.onGet(RegExp('^/api/ldap/users/testinen$')).reply(200, searchResultsTestinen)
+  mockAdapter.onGet(RegExp('^/api/ldap/users/empty$')).reply(200, [])
+  mockAdapter.onGet(RegExp('^/api/ldap/users/error$')).reply(500, 'error happened')
+  mockAdapter.onGet(RegExp('^/api/qvain/datasets/jeejee/editor_permissions$')).reply(200, [])
+  mockAdapter.onPost(RegExp('^/api/qvain/datasets/jeejee/editor_permissions$')).reply(200, '')
+
   await render()
 })
 
@@ -111,15 +97,11 @@ const getInviteButton = () => wrapper.find('button.send-invite')
 
 describe('ShareModal', () => {
   it('should have "Invite" tab selected', async () => {
-    wrapper
-      .find('button.tab-invite')
-      .should.have.lengthOf(1)
+    wrapper.find('button.tab-invite').should.have.lengthOf(1)
   })
 
   it('should have "Members" tab not selected', async () => {
-    wrapper
-    .find('button.tab-members')
-      .should.have.lengthOf(1)
+    wrapper.find('button.tab-members').should.have.lengthOf(1)
   })
 
   describe('Invite tab', () => {
@@ -230,9 +212,7 @@ describe('ShareModal', () => {
         it('should require confirmation even if invite tab is not open', async () => {
           // open "Members" tab
           wrapper.find('button.tab-members').simulate('click')
-          wrapper
-            .find('button.tab-members[aria-selected=true]')
-            .should.have.lengthOf(1)
+          wrapper.find('button.tab-members[aria-selected=true]').should.have.lengthOf(1)
 
           // click close button, modal should still be open
           wrapper.find('button[aria-label="Close"]').simulate('click')
@@ -277,51 +257,66 @@ describe('ShareModal', () => {
   })
 
   describe('Members tab', () => {
-    beforeEach(() => {
-      // cancel fetching permissions, set values manually
-      stores.QvainDatasetsV2.share.promiseManager.reset('permissions')
-      stores.QvainDatasetsV2.share.setUserPermissions([
-        {
-          uid: 'teppo',
-          name: 'teppo testaaja',
-          email: 'teppo@example.com',
-          isProjectMember: true,
-          role: 'owner',
-        },
-        {
-          uid: 'member',
-          name: 'Member Person',
-          email: 'member@example.com',
-          isProjectMember: true,
-        },
-        {
-          uid: 'longname',
-          name: 'Longlong von Longlonglonglongname',
-          email: 'long@example.com',
-          isProjectMember: false,
-          role: 'editor',
-        },
-      ])
-
+    beforeEach(async () => {
+      mockAdapter.onGet(RegExp('^/api/qvain/datasets/jeejee/editor_permissions$')).reply(200, {
+        users: [
+          {
+            uid: 'teppo',
+            name: 'teppo testaaja',
+            email: 'teppo@example.com',
+            is_project_member: true,
+            role: 'creator',
+          },
+          {
+            uid: 'member',
+            name: 'Member Person',
+            email: 'member@example.com',
+            is_project_member: true,
+          },
+          {
+            uid: 'not_in_ldap',
+            is_project_member: false,
+            role: 'editor',
+          },
+          {
+            uid: 'longname',
+            name: 'Longlong von Longlonglonglongname',
+            email: 'long@example.com',
+            is_project_member: false,
+            role: 'editor',
+          },
+        ],
+        project: 'some_project',
+      })
+      await stores.QvainDatasetsV2.share.fetchPermissions()
       wrapper.find('button.tab-members').simulate('click')
     })
 
     it('should be selected', async () => {
-      wrapper
-        .find('button.tab-members')
-        .hostNodes()
-        .should.have.lengthOf(1)
+      wrapper.find('button.tab-members').hostNodes().should.have.lengthOf(1)
     })
 
-    it('should show loader for tab and content', async () => {
-      stores.QvainDatasetsV2.share.fetchPermissions()
+    it('should show loader while loading permissions', async () => {
+      const promise = stores.QvainDatasetsV2.share.fetchPermissions()
       wrapper.update()
-      wrapper.find('.loader-active').hostNodes().should.have.lengthOf(2)
+      wrapper.find('.loader-active').hostNodes().should.have.lengthOf(1)
+      await promise
+      wrapper.update()
+      wrapper.find('.loader-active').hostNodes().should.have.lengthOf(0)
+    })
+
+    it('should show error when loading permissions fails', async () => {
+      jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+      mockAdapter.onGet(RegExp('^/api/qvain/datasets/jeejee/editor_permissions$')).reply(400, '')
+      stores.QvainDatasetsV2.share.fetchPermissions()
+      await wait(() => wrapper.find('div[children*="Error retrieving data"]').length > 0)
+      expect(console.error.mock.calls.length).toBe(1)
     })
 
     it('should list users with roles', () => {
       const expectedPermissions = [
-        ['teppo testaaja (teppo, teppo@example.com)', 'Owner'],
+        ['teppo testaaja (teppo, teppo@example.com)', 'Creator'],
+        ['not_in_ldap', 'Editor'],
         ['Longlong von Longlonglonglongname (longname, long@example.com)', 'Editor'],
       ]
       const permissions = wrapper
@@ -340,6 +335,49 @@ describe('ShareModal', () => {
         .find('.member-name')
         .map(member => member.text())
       members.should.eql(expectedMembers)
+    })
+
+    it('should list project members', () => {
+      const expectedMembers = [
+        'teppo testaaja (teppo, teppo@example.com)',
+        'Member Person (member, member@example.com)',
+      ]
+      const members = wrapper
+        .find('ul.project-member-users')
+        .find('.member-name')
+        .map(member => member.text())
+      members.should.eql(expectedMembers)
+    })
+
+    it('should remove user from members list', async () => {
+      mockAdapter
+        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap$'))
+        .reply(200, '')
+      const getMember = name =>
+        wrapper.find('.member-user').filterWhere(u => u.find('span.member-name').text() === name)
+      const dropdownButton = getMember('not_in_ldap').find('button[aria-label="Editor"]')
+      dropdownButton.simulate('click')
+      wrapper.find('.member-user').should.have.lengthOf(5)
+      const removeButton = getMember('not_in_ldap').find(
+        'ul[role="menu"] button[children="Remove"]'
+      )
+      removeButton.simulate('click')
+      await wait(() => wrapper.find('.member-user').length === 4)
+    })
+
+    it('should show error when deletion fails', async () => {
+      mockAdapter
+        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap$'))
+        .reply(400, '')
+      const getMember = name =>
+        wrapper.find('.member-user').filterWhere(u => u.find('span.member-name').text() === name)
+      const dropdownButton = getMember('not_in_ldap').find('button[aria-label="Editor"]')
+      dropdownButton.simulate('click')
+      const removeButton = getMember('not_in_ldap').find(
+        'ul[role="menu"] button[children="Remove"]'
+      )
+      removeButton.simulate('click')
+      await wait(() => wrapper.find('div[children*="There was an error"]').length === 1)
     })
   })
 })
