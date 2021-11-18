@@ -241,7 +241,7 @@ describe('Qvain.Files store', () => {
       addedChildCount: 0,
       removedChildCount: 0,
       directories: { length: 2 },
-      files: { length: 0 },
+      files: { length: 1 },
     })
 
     const moredata = root.directories.find(d => d.name === 'moredata')
@@ -405,7 +405,7 @@ describe('Qvain.Files store', () => {
     await Files.loadAllDirectories()
     const items = flatten(Files.root)
     expect(items.filter(item => item.existing).length).toBe(14)
-    expect(items.filter(item => !item.existing).length).toBe(7)
+    expect(items.filter(item => !item.existing).length).toBe(8)
   })
 
   it('loads files for an empty dataset', async () => {
@@ -417,7 +417,7 @@ describe('Qvain.Files store', () => {
 
     const items = flatten(Files.root)
     expect(items.filter(item => item.existing).length).toBe(0)
-    expect(items.filter(item => !item.existing).length).toBe(21)
+    expect(items.filter(item => !item.existing).length).toBe(22)
   })
 })
 

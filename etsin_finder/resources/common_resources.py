@@ -156,6 +156,7 @@ class DirectoryFiles(Resource):
                     "byte_size",
                     "checksum_value",
                     "checksum_algorithm",
+                    "service_created",
                 ]
             )
 
@@ -172,6 +173,7 @@ class DirectoryFiles(Resource):
                     "use_category",
                     "title",
                     "byte_size",
+                    "service_created",
                 ]
             )
 

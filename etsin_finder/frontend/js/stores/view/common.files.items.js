@@ -1,18 +1,18 @@
 // Create prefixed keys from file/directory identifiers. Makes it possible to have
 // files and directories in the same array without risk of id conflicts.
-export const dirKey = (dir) => `dir:${dir.id}`
-export const fileKey = (file) => `file:${file.id}`
-export const dirIdentifierKey = (dir) => `dir:${dir.identifier}`
-export const fileIdentifierKey = (file) => `file:${file.identifier}`
-
+export const dirKey = dir => `dir:${dir.id}`
+export const fileKey = file => `file:${file.id}`
+export const dirIdentifierKey = dir => `dir:${dir.identifier}`
+export const fileIdentifierKey = file => `file:${file.identifier}`
 
 // properties common to directories and files
-const Item = (metaxItem) => ({
+const Item = metaxItem => ({
   identifier: metaxItem.identifier,
   key: null,
   title: metaxItem.title || '',
   description: metaxItem.description,
   useCategory: metaxItem.use_category && metaxItem.use_category.identifier,
+  serviceCreated: metaxItem.service_created,
   parent: null,
   path: null,
   index: null, // sorting index of item
@@ -41,7 +41,7 @@ export const Directory = (metaxDir, args) => ({
     existingFileCountsPromise: null,
     offsets: {},
     counts: {},
-    fullyLoaded: false
+    fullyLoaded: false,
   },
   loading: false,
   type: 'directory',
@@ -51,7 +51,7 @@ export const Directory = (metaxDir, args) => ({
 })
 
 // PAS metadata is updated separately using an RPC call.
-export const getPASMeta = (metaxFile) => {
+export const getPASMeta = metaxFile => {
   const characteristics = metaxFile.file_characteristics || {}
   const pasMeta = {}
   if (characteristics.file_format !== undefined) {
@@ -86,7 +86,7 @@ export const File = (metaxFile, args) => ({
   checksum: metaxFile.checksum,
   type: 'file',
   pasMeta: getPASMeta(metaxFile),
-  ...args
+  ...args,
 })
 
 // Project root, similar to a directory but cannot be added/removed or opened/closed.
@@ -104,12 +104,12 @@ export const Project = (projectIdentifier, identifier, args) => ({
     existingFileCountsPromise: null,
     offsets: {},
     counts: {},
-    fullyLoaded: false
+    fullyLoaded: false,
   },
-  ...args
+  ...args,
 })
 
-export const hasMetadata = (item) => {
+export const hasMetadata = item => {
   if (item.description || item.useCategory || (item.title && item.title !== item.name)) {
     return true
   }
@@ -119,18 +119,20 @@ export const hasMetadata = (item) => {
   return false
 }
 
-export const hasPASMetadata = (file) => {
+export const hasPASMetadata = file => {
   const pasMeta = file.pasMeta
   if (file.type !== 'file' || !pasMeta) {
     return false
   }
-  if (pasMeta.description ||
+  if (
+    pasMeta.description ||
     pasMeta.formatVersion ||
     pasMeta.encoding !== 'UTF-8' ||
     pasMeta.csvDelimiter ||
     pasMeta.csvRecordSeparator ||
     pasMeta.csvQuotingChar ||
-    pasMeta.csvHasHeader) {
+    pasMeta.csvHasHeader
+  ) {
     return true
   }
   return false

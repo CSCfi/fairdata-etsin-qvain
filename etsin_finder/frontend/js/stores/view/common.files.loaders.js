@@ -45,7 +45,10 @@ const fetchExistingChildDataForDirectory = async (
 
   const url = new URL(urls.common.directoryFiles(dir.identifier), document.location.origin)
   url.searchParams.set('file_fields', 'id')
-  url.searchParams.set('directory_fields', ['id', 'file_count', 'byte_size'].join(','))
+  url.searchParams.set(
+    'directory_fields',
+    ['id', 'file_count', 'byte_size', 'service_created'].join(',')
+  )
   url.searchParams.set('cr_identifier', datasetIdentifier)
   url.searchParams.set('include_parent', true)
   const resp = ignoreNotFound(axios.get(url.href), emptyDirectoryResponse)
@@ -108,7 +111,10 @@ const fetchAnyChildDataForDirectory = async (Files, dir, defaults = {}) => {
 
   const url = new URL(urls.common.directoryFiles(dir.identifier), document.location.origin)
   url.searchParams.set('file_fields', 'id')
-  url.searchParams.set('directory_fields', ['id', 'file_count', 'byte_size'].join(','))
+  url.searchParams.set(
+    'directory_fields',
+    ['id', 'file_count', 'byte_size', 'service_created'].join(',')
+  )
   url.searchParams.set('include_parent', true)
   const resp = axios.get(url.href)
   const { data } = await Files.cancelOnReset(resp)

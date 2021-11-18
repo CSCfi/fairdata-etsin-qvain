@@ -33,13 +33,17 @@ ShowMore.propTypes = {
 
 // draw child items recursively
 const drawChildren = (treeProps, parent, level = 0, parentArgs = {}) => {
-  const { Item, EmptyHelp, directoryView, moreItemsLevel } = treeProps
+  const { Item, EmptyHelp, directoryView, moreItemsLevel, filterByService } = treeProps
 
   const newParentArgs = getParentArgs(directoryView, parent, parentArgs)
 
-  const items = directoryView.getItems(parent)
-  const hasMore = directoryView.hasMore(parent)
+  let filterFunc = v => v
+  if (filterByService) {
+    filterFunc = v => v.serviceCreated === filterByService
+  }
 
+  const items = directoryView.getItems(parent).filter(filterFunc)
+  const hasMore = directoryView.hasMore(parent)
   return (
     <>
       {items.map(item => (
@@ -68,12 +72,21 @@ export const useRenderTree = (
     EmptyHelp = () => null, // component shown when there are no visible items
     NoProjectHelp = () => null, // component shown when project root fails to load
     moreItemsLevel = 0, // indentation for the "Show All Items" button to account for space taken by buttons
+    filterByService = 'ida', // show only items created by specific service
   },
   extraProps
 ) => {
   const renderTree = () => {
     const { root, isLoadingProject, selectedProject } = Files
-    const treeProps = { Files, Item, directoryView, moreItemsLevel, EmptyHelp, extraProps }
+    const treeProps = {
+      Files,
+      Item,
+      directoryView,
+      moreItemsLevel,
+      EmptyHelp,
+      extraProps,
+      filterByService,
+    }
     const LoaderComponent = Loader || DefaultLoader
 
     if (isLoadingProject) {
