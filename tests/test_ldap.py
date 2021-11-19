@@ -130,7 +130,6 @@ class TestLDAPSearchUser(LDAPTestBase):
     def test_search_user_by_name_multiple(self, ldap_service):
         """Should match multiple users by real name."""
         results, status = ldap_service.search_user(search_str="von")
-        results = sorted(results, key=lambda user: user.get("uid"))
         assert results == [self.koe_user, self.teppo_user]
         assert status == 200
 

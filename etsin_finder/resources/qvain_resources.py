@@ -563,6 +563,9 @@ class QvainDatasetEditorPermissions(Resource):
             )
             if status != 201:
                 return response, status
+
+        # clear permissions cache
+        current_app.cr_permission_cache.delete(cr_id)
         return "", 201
 
 
@@ -588,4 +591,6 @@ class QvainDatasetEditorPermissionsUser(Resource):
         response, status = service.delete_dataset_editor_permissions_user(
             cr_id, user_id
         )
+        # clear permissions cache
+        current_app.cr_permission_cache.delete(cr_id)
         return response, status

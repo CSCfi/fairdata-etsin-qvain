@@ -183,6 +183,24 @@ class TestCheckDatasetEditPermission(BaseTest):
             lambda *x: {"projects": ["project_y"]},
         )
 
+    @pytest.fixture
+    def cr_permissions_user_123(self, monkeypatch):
+        """Dataset has editor abc-user-123."""
+        monkeypatch.setattr(
+            cr_service,
+            "get_catalog_record_permissions",
+            lambda *x: {"users": [{"user_id": "abc-user-123"}]},
+        )
+
+    @pytest.fixture
+    def cr_permissions_user_teppo(self, monkeypatch):
+        """Dataset has editor teppo_testaaja."""
+        monkeypatch.setattr(
+            cr_service,
+            "get_catalog_record_permissions",
+            lambda *x: {"users": [{"user_id": "teppo_testaaja"}]},
+        )
+
     def test_dataset_edit_permissions_no_catalog_record(
         self, flagged_app, nonexisting_catalog_record, user_details, expect_log
     ):
@@ -220,6 +238,7 @@ class TestCheckDatasetEditPermission(BaseTest):
         user_details,
         IDA_project_info_missing,
         nonstandard_catalog_record,
+        cr_permissions_user_teppo,
     ):
         """Test that function returns error when the user is not creator of the dataset."""
         with flagged_app.app_context():
@@ -237,6 +256,7 @@ class TestCheckDatasetEditPermission(BaseTest):
         user_123_details,
         IDA_project_info_missing,
         open_catalog_record,
+        cr_permissions_user_123,
     ):
         """Test that function returns None when user is owner of record."""
         with flagged_app.app_context():

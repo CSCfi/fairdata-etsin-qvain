@@ -180,18 +180,8 @@ def check_dataset_edit_permission(cr_id):
         log.warning(f'Dataset "{cr_id}" not found. Editing not allowed.')
         return user_denied_response
 
-    csc_username = authentication.get_user_csc_name()
-
-    user_is_allowed = False
-    creator = cr.get("metadata_provider_user")
-    if csc_username == creator:
-        user_is_allowed = True
-
-    if flag_enabled("PERMISSIONS.EDITOR_RIGHTS"):
-        if authorization.user_has_dataset_project(cr_id):
-            user_is_allowed = True
-
-    if not user_is_allowed:
+    if not authorization.user_has_edit_access(cr_id):
+        csc_username = authentication.get_user_csc_name()
         log.warning(
             f'User: "{csc_username}" is not an editor of the dataset. Editing not allowed.'
         )

@@ -14,7 +14,7 @@ from etsin_finder.services.cr_service import (
     get_catalog_record_data_catalog_id,
     get_catalog_record_embargo_available,
     is_published,
-    is_catalog_record_owner,
+    is_catalog_record_metadata_provider_user,
 )
 
 from etsin_finder.log import log
@@ -34,19 +34,74 @@ from etsin_finder.utils.flags import flag_enabled
 
 def user_has_dataset_project(cr_id):
     """Check if at least one of the dataset projects is in user project list."""
+    if not flag_enabled("PERMISSIONS.EDITOR_RIGHTS"):
+        return False
+
+    if not authentication.is_authenticated():
+        return False
+
     user_projects = authentication.get_user_ida_projects() or []
     if not user_projects:
         return False
     permissions = cr_service.get_catalog_record_permissions(cr_id)
+    if not permissions:
+        return False
     common_projects = permissions and set(user_projects) & set(
         permissions.get("projects", [])
     )
     return bool(common_projects)
 
 
+def user_has_dataset_editor_permission(cr_id):
+    """Check if user has editor permission for dataset."""
+    if not flag_enabled("PERMISSIONS.EDITOR_RIGHTS"):
+        return False
+
+    if not authentication.is_authenticated():
+        return False
+
+    user_id = authentication.get_user_id()
+    permissions = cr_service.get_catalog_record_permissions(cr_id)
+    if not permissions:
+        return False
+
+    user_perm = next(
+        filter(
+            lambda user: user.get("user_id") == user_id, permissions.get("users", [])
+        ),
+        None,
+    )
+    if not user_perm:
+        return False
+    return True
+
+
+def user_has_edit_access(cr_id):
+    """Check if user has permission to edit dataset."""
+    if not authentication.is_authenticated():
+        return False
+
+    if flag_enabled("PERMISSIONS.EDITOR_RIGHTS"):
+        if user_has_dataset_project(cr_id):
+            return True
+        if user_has_dataset_editor_permission(cr_id):
+            return True
+    else:
+        # only metadata_provider_user can edit dataset
+        user_id = authentication.get_user_id()
+        cr = cr_service.get_catalog_record(cr_id, True, False)
+        if cr is None:
+            return False
+
+        if is_catalog_record_metadata_provider_user(cr, user_id):
+            return True
+
+    return False
+
+
 def user_can_view_dataset(cr_id):
     """
-    If dataset is a draft, it's visible only for the owner.
+    If dataset is a draft, it's visible only for users who are allowed to edit it.
 
     Arguments:
         cr_id {string} -- Identifier of dataset.
@@ -62,17 +117,10 @@ def user_can_view_dataset(cr_id):
     if is_published(cr):
         return True
 
-    if not authentication.is_authenticated():
-        return False
-
-    # non-public dataset is available only for the owner
-    user_id = authentication.get_user_id()
-    if is_catalog_record_owner(cr, user_id):
+    # non-public dataset is available only for the creator and editors
+    if user_has_edit_access(cr_id):
         return True
 
-    if flag_enabled("PERMISSIONS.EDITOR_RIGHTS"):
-        if user_has_dataset_project(cr_id):
-            return True
     return False
 
 

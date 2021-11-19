@@ -90,6 +90,10 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
     def _METAX_GET_DATASET_PROJECTS(self):
         return self.metax_url("/rest/v2/datasets") + "/{0}/projects"
 
+    @property
+    def _METAX_DATASET_EDITOR_PERMISSIONS_USERS(self):
+        return self.metax_url("/rest/v2/datasets") + "/{0}/editor_permissions/users"
+
     def _get_args(self, **kwargs):
         """Get default args for request, allow overriding with kwargs."""
         args = dict(
@@ -190,6 +194,22 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
         resp, status, success = make_request(requests.get, req_url, **self._get_args())
         if not success:
             log.warning("Failed to get projects for dataset {}".format(cr_id))
+        return resp, status
+
+    def get_dataset_editor_permissions_users(self, cr_id):
+        """Get dataset.
+
+        Arguments:
+            cr_id (str): The identifier of the dataset.
+
+        Returns:
+            Metax response.
+
+        """
+        req_url = format_url(self._METAX_DATASET_EDITOR_PERMISSIONS_USERS, cr_id)
+        resp, status, success = make_request(requests.get, req_url, **self._get_args())
+        if not success:
+            log.warning("Failed to get dataset {}".format(cr_id))
         return resp, status
 
     def get_dataset_user_metadata(self, cr_id):

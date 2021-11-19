@@ -146,12 +146,24 @@ def get_catalog_record_permissions(cr_id, refresh_cache=False):
     """
 
     def get_perm():
-        """Retrive permissions from Metax"""
+        """Retrieve permissions from Metax"""
         common_service = MetaxCommonAPIService()
         projects, projects_status = common_service.get_dataset_projects(cr_id)
         if projects_status != 200:
+            log.error(
+                f"Getting list of projects for dataset {cr_id} failed with {projects_status}: {projects}"
+            )
             return None
-        return {"projects": projects}  # list of dataset projects
+        perms, perms_status = common_service.get_dataset_editor_permissions_users(cr_id)
+        if perms_status != 200:
+            log.error(
+                f"Getting editor permissions users for dataset {cr_id} failed with {perms_status}: {perms}"
+            )
+            return None
+        return {
+            "projects": projects,
+            "users": perms,
+        }  # list of dataset projects and editor users
 
     perm = None
     if not refresh_cache:
@@ -287,7 +299,7 @@ def is_published(catalog_record):
     return False
 
 
-def is_catalog_record_owner(catalog_record, user_id):
+def is_catalog_record_metadata_provider_user(catalog_record, user_id):
     """
     Does user_id own catalog_record.
 
