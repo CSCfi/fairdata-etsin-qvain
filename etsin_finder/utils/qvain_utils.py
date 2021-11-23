@@ -310,9 +310,25 @@ def check_if_data_in_user_IDA_project(data):
 
 
 def add_sources(datasets, *sources):
-    """Attach source information to datasets in list"""
+    """Attach source information to datasets in list.
+
+    A source can be string or a function that inputs a dataset and returns a string.
+    """
     for dataset in datasets:
-        dataset["sources"] = list(sources)
+        dataset["sources"] = [
+            source(dataset) if callable(source) else source for source in sources
+        ]
+
+
+def get_editor_source_func(user):
+    """Return function that determines if user is creator or editor of a dataset."""
+
+    def _func(dataset):
+        if dataset.get("metadata_provider_user") == user:
+            return "creator"
+        return "editor"
+
+    return _func
 
 
 def merge_and_sort_dataset_lists(*lists):

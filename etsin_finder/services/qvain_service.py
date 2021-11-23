@@ -88,6 +88,13 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
         )
 
     @property
+    def _METAX_GET_ALL_DATASETS_FOR_EDITOR(self):
+        return (
+            self.metax_url("/rest/v2/datasets")
+            + "?editor_permissions_user={0}&ordering=-date_created"
+        )
+
+    @property
     def _METAX_GET_ALL_DATASETS_FOR_PROJECTS(self):
         return (
             self.metax_url("/rest/v2/datasets") + "?projects={0}&ordering=-date_created"
@@ -280,16 +287,39 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             return [], status
         return resp, status
 
-    def get_datasets_for_projects(self, projects, data_catalog_matcher=None):
-        """Get datasets created by the specified user.
-
-        Uses pagination, so offset and limit are used as well.
+    def get_datasets_for_editor(
+        self, user_id, data_catalog_matcher=None
+    ):
+        """Get datasets where user has editor permission.
 
         Args:
-            user_id (str): User identifier.
-            limit (list): The limit of returned datasets.
-            offset (list): The offset for pagination.
-            no_pagination (bool): To use pagination or not.
+            user_id (str): User identifier
+            data_catalog_matcher (regexp): Filter datasets by data catalog
+
+        Returns:
+            Metax response.
+
+        """
+        req_url = format_url(self._METAX_GET_ALL_DATASETS_FOR_EDITOR, user_id)
+
+        params = {"pagination": "false"}
+        if data_catalog_matcher:
+            params["data_catalog"] = data_catalog_matcher
+
+        resp, status, success = make_request(
+            requests.get, req_url, params=params, **self._get_args()
+        )
+        if not success or len(resp) == 0:
+            log.info(f"No datasets found. {status}")
+            return [], status
+        return resp, status
+
+    def get_datasets_for_projects(self, projects, data_catalog_matcher=None):
+        """Get datasets belonging to one of projects.
+
+        Args:
+            projects (list): List of project identifiers
+            data_catalog_matcher (regexp): Filter datasets by data catalog
 
         Returns:
             Metax response.

@@ -34,6 +34,7 @@ from etsin_finder.utils.qvain_utils import (
     add_sources,
     merge_metax_and_ldap_user_data,
     abort_on_fail,
+    get_editor_source_func,
 )
 
 from etsin_finder.services.qvain_service import MetaxQvainAPIService
@@ -166,36 +167,42 @@ class QvainDatasets(Resource):
         if error is not None:
             return error
 
-        # Datasets listing parameters
-        self.parser.add_argument("limit", type=str, required=False)
-        self.parser.add_argument("offset", type=str, required=False)
-        self.parser.add_argument("no_pagination", type=inputs.boolean, required=False)
-        self.parser.add_argument(
-            "shared", type=inputs.boolean, default=False, required=False
-        )
-
-        args = self.parser.parse_args(strict=True)
-        limit = args.get("limit", None)
-        offset = args.get("offset", None)
-        no_pagination = args.get("no_pagination", None)
-
-        shared = flag_enabled("PERMISSIONS.EDITOR_RIGHTS") and args.get("shared")
-
-        if not no_pagination and shared:
-            abort(message="'no_pagination' is required when 'shared' is enabled")
-
+        datasets = []
         user_id = authentication.get_user_csc_name()
         service = MetaxQvainAPIService()
-        response, status = service.get_datasets_for_user(
-            user_id,
-            limit,
-            offset,
-            no_pagination,
-            data_catalog_matcher=data_catalog_matcher,
-        )
-        datasets = self._get_datasets_from_response(response, status, "creator")
-        projects_datasets = []
-        if shared:
+        if not flag_enabled("PERMISSIONS.EDITOR_RIGHTS"):
+            # Datasets listing parameters
+            self.parser.add_argument("limit", type=str, required=False)
+            self.parser.add_argument("offset", type=str, required=False)
+            self.parser.add_argument(
+                "no_pagination", type=inputs.boolean, required=False
+            )
+            args = self.parser.parse_args(strict=True)
+            limit = args.get("limit", None)
+            offset = args.get("offset", None)
+            no_pagination = args.get("no_pagination", None)
+            response, status = service.get_datasets_for_user(
+                user_id,
+                limit,
+                offset,
+                no_pagination,
+                data_catalog_matcher=data_catalog_matcher,
+            )
+            datasets = self._get_datasets_from_response(
+                response,
+                status, "creator"
+            )
+        else:
+            # datasets from editor permissions
+            response, status = service.get_datasets_for_editor(
+                user_id,
+                data_catalog_matcher=data_catalog_matcher,
+            )
+            datasets = self._get_datasets_from_response(
+                response, status, get_editor_source_func(user_id)
+            )
+
+            # datasets from user projects
             projects = authentication.get_user_ida_projects()
             if projects:
                 projects_response, status = service.get_datasets_for_projects(
@@ -203,9 +210,11 @@ class QvainDatasets(Resource):
                     data_catalog_matcher=data_catalog_matcher,
                 )
                 datasets.extend(
-                    self._get_datasets_from_response(projects_response, status, "project")
+                    self._get_datasets_from_response(
+                        projects_response, status, "project"
+                    )
                 )
-        datasets = merge_and_sort_dataset_lists(datasets, projects_datasets)
+        datasets = merge_and_sort_dataset_lists(datasets)
 
         if datasets or type(datasets) is list:
             return datasets, 200
