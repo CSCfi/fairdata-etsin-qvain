@@ -11,10 +11,13 @@ from etsin_finder.services.qvain_lock_service import QvainLockService
 from marshmallow import ValidationError
 from flask import request, current_app
 from flask_restful import reqparse, Resource, abort, inputs
+from flask_mail import Message
 
 from etsin_finder.auth import authentication
 from etsin_finder.log import log
+from etsin_finder.utils.localization import get_language, translate, get_multilang_value
 
+from etsin_finder.services import cr_service
 from etsin_finder.services.ldap_service import LDAPIdmService
 from etsin_finder.utils.flags import flag_enabled
 from etsin_finder.utils.utils import datetime_to_header
@@ -188,10 +191,7 @@ class QvainDatasets(Resource):
                 no_pagination,
                 data_catalog_matcher=data_catalog_matcher,
             )
-            datasets = self._get_datasets_from_response(
-                response,
-                status, "creator"
-            )
+            datasets = self._get_datasets_from_response(response, status, "creator")
         else:
             # datasets from editor permissions
             response, status = service.get_datasets_for_editor(
@@ -553,10 +553,13 @@ class QvainDatasetEditorPermissions(Resource):
 
         parser = reqparse.RequestParser()
         parser.add_argument("users", type=str, required=True, action="append")
+        parser.add_argument("message", type=str, required=False, default="")
         args = parser.parse_args()
-        users = args.get("users", None)
+        users = args.get("users")
+        message = args.get("message")
 
         # verify that users exist in LDAP
+        user_data = []
         with LDAPIdmService() as ldap_service:
             user_data = abort_on_fail(ldap_service.get_users_details(users))
             found_users = set(user.get("uid") for user in user_data)
@@ -573,9 +576,68 @@ class QvainDatasetEditorPermissions(Resource):
             if status != 201:
                 return response, status
 
+        emails = [user.get("email") for user in user_data if user.get("email")]
+        username = authentication.get_user_csc_name()
+        self._send_share_notification_email(
+            cr_id, sender_user=username, emails=emails, message=message
+        )
+
         # clear permissions cache
         current_app.cr_permission_cache.delete(cr_id)
         return "", 201
+
+    def _send_share_notification_email(self, cr_id, sender_user, emails, message=""):
+        """Send notification email."""
+        message = message.strip()
+        if len(message) > 0:
+            message += "\n"
+        language = get_language()
+        title = ""
+        try:
+            cr = cr_service.get_catalog_record(cr_id, False, False)
+            if not cr:
+                log.warning(f"Notifications: Catalog record {cr_id} not found.")
+                abort(404, message="Catalog record not found")
+            title = (
+                get_multilang_value(
+                    language, cr.get("research_dataset", {}).get("title", {})
+                )
+                or cr_id
+            )
+        except Exception as e:
+            log.error(e)
+            abort(500, message=repr(e))
+
+        with current_app.mail.record_messages() as outbox:
+            try:
+                log.info(f"Sending share notification mail for dataset {cr_id}")
+                sender = current_app.config.get("MAIL_DEFAULT_SENDER")
+                domain = current_app.config.get("SERVER_QVAIN_DOMAIN_NAME")
+                qvain_url = f"https://{domain}/dataset/{cr_id}"
+                recipients = emails
+                context = dict(
+                    sender_user=sender_user,
+                    title=title,
+                    message=message,
+                    qvain_url=qvain_url,
+                )
+                subject = translate(
+                    language, "qvain.share.notification.subject", context
+                )
+                body = translate(language, "qvain.share.notification.body", context)
+                msg = Message(
+                    recipients=recipients,
+                    sender=sender,
+                    reply_to=sender,
+                    subject=subject,
+                    body=body,
+                )
+                current_app.mail.send(msg)
+                if len(outbox) != 1:
+                    raise Exception
+            except Exception as e:
+                log.error(f"Failed to send share notification email: {repr(e)}")
+                return abort(500, message=repr(e))
 
 
 class QvainDatasetEditorPermissionsUser(Resource):

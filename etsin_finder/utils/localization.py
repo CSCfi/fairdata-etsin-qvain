@@ -69,13 +69,19 @@ translations = {
         "etsin.download.notification.body.full": "Lataus aineistolle {pref_id} voidaan aloittaa Etsimessä:\n\n{data_url}\n",
         "etsin.title": "Etsin | Tutkimusaineistojen hakupalvelu",
         "etsin.description": (
-            "Kuvailutietojen perusteella käyttäjät voivat etsiä aineistoja ja arvioida"
+            "Kuvailutietojen perusteella käyttäjät voivat etsiä aineistoja ja arvioida "
             "löytämiensä aineistojen käyttökelpoisuutta tarpeisiinsa."
         ),
         "qvain.title": "Qvain | Tutkimusaineiston metatietotyökalu",
         "qvain.description": (
             "Fairdata Qvain -työkalu tekee datasi "
             "kuvailun ja julkaisemisen helpoksi."
+        ),
+        "qvain.share.notification.subject": "Sinulla on uusi muokkausoikeus Qvaimessa",
+        "qvain.share.notification.body": (
+            'Käyttäjä {sender_user} on antanut Qvaimessa sinulle muokkausoikeuden aineistoon "{title}":\n\n'
+            "{message}"
+            "{qvain_url}\n"
         ),
     },
     "en": {
@@ -86,6 +92,12 @@ translations = {
         "etsin.description": "Etsin enables you to find research datasets from all fields of science.",
         "qvain.title": "Qvain | Research Dataset Description Tool",
         "qvain.description": "Fairdata Qvain tool makes describing and publishing your research data effortless for you.",
+        "qvain.share.notification.subject": "You have new editing rights in Qvain",
+        "qvain.share.notification.body": (
+            'User {sender_user} has given you editing rights to Qvain dataset "{title}":\n\n'
+            "{message}"
+            "{qvain_url}\n"
+        ),
     },
 }
 
@@ -101,3 +113,19 @@ def translate(lang, key, context=None):
     if not translation:
         return f"missing translation: {lang}.{key}"
     return translation.format(**context)
+
+
+def get_multilang_value(lang, translation_dict):
+    """Return translation from the translations dict for a given language."""
+    # todo docstring
+    if not translation_dict:
+        return ""
+    translation = translation_dict.get(lang)
+    if translation:
+        return translation
+
+    for lang in languages:
+        if translation_dict.get(lang):
+            return translation_dict.get(lang)
+
+    return next(iter(translation_dict.values()), "")

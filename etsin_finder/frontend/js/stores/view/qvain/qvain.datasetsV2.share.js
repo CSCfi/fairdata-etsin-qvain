@@ -145,7 +145,7 @@ class Share {
     const invite = async () => {
       await axios.post(
         urls.qvain.datasetEditorPermissions(this.datasetIdentifier),
-        { users: this.selectedUsers.map(u => u.uid) },
+        { users: this.selectedUsers.map(u => u.uid), message: this.inviteMessage },
         { timeout }
       )
       this.resetValues()

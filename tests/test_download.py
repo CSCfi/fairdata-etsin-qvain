@@ -16,7 +16,6 @@ from etsin_finder.services.download_service import DownloadAPIService
 import json
 import pytest
 import requests
-from flask_mail import email_dispatched
 
 from .basetest import BaseTest
 
@@ -375,17 +374,6 @@ class TestDownloadResourcesNotifications(BaseTest):
     def subscribe_mock(self, requests_mock):
         """Helper fixture for mocking subscribe endpoint"""
         return requests_mock.post("https://mock-download:1/subscribe", status_code=200)
-
-    @pytest.fixture
-    def capture_mail(self, app):
-        """Keep track of sent emails"""
-        messages = []
-
-        def sent(message, app):
-            messages.append(message)
-
-        email_dispatched.connect(sent, weak=True)
-        yield messages  # yield instead of return to keep signal alive until teardown
 
     def test_notify(
         self, app, authd_client, login_catalog_record, subscribe_mock, capture_mail

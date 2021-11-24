@@ -15,6 +15,7 @@ import jinja2
 
 from etsin_finder.utils.flags import initialize_supported_flags
 from etsin_finder.app import create_app
+from flask_mail import email_dispatched
 
 from .utils import get_test_catalog_record
 
@@ -40,6 +41,17 @@ class BaseTest:
         test_app = create_app(True)
         test_app.jinja_loader = FakeLoader()
         return test_app
+
+    @pytest.fixture
+    def capture_mail(self, app):
+        """Keep track of sent emails"""
+        messages = []
+
+        def sent(message, app):
+            messages.append(message)
+
+        email_dispatched.connect(sent, weak=True)
+        yield messages  # yield instead of return to keep signal alive until teardown
 
     @pytest.fixture
     def authd_client(self, app, monkeypatch):

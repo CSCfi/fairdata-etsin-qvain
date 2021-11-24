@@ -287,7 +287,7 @@ class TestQvainDatasetsGetLegacy(BaseTest):
         assert r.json == {"PermissionError": "User not logged in."}
 
 
-class TestQvainDatasetsGetEditorPermissions(BaseTest):
+class TestQvainDatasetsEditorPermissions(BaseTest):
     """Tests for dataset editor permissions."""
 
     @pytest.fixture
@@ -309,6 +309,7 @@ class TestQvainDatasetsGetEditorPermissions(BaseTest):
                 "data_catalog": {
                     "catalog_json": {"identifier": "urn:nbn:fi:att:data-catalog-ida"}
                 },
+                "research_dataset": {"title": {"en": "This is the title of dataset 1"}},
             },
             status_code=200,
         )
@@ -395,13 +396,27 @@ class TestQvainDatasetsGetEditorPermissions(BaseTest):
         assert r.json == {"message": "Search failed due to an error."}
 
     def test_post_user_editor_permissions(
-        self, mocks, authd_client, user_details, IDA_projects_ok
+        self, mocks, authd_client, user_details, IDA_projects_ok, capture_mail
     ):
         """Test that editor permissions are collected from Metax and LDAP."""
-        data = {"users": ["not_member"]}
+        data = {"users": ["not_member", "jasen"], "message": "Hello, this is dataset."}
         r = authd_client.post("/api/qvain/datasets/1/editor_permissions", json=data)
         assert r.status_code == 201
         assert r.json == ""
+
+        # check that correct email is sent
+        assert len(capture_mail) == 1
+        msg = capture_mail[0]
+        assert msg.send_to == {
+            "not_member@example.com",
+            "jasen@example.com",
+        }
+        assert msg.subject == "You have new editing rights in Qvain"
+        assert msg.body == (
+            'User teppo_testaaja has given you editing rights to Qvain dataset "This is the title of dataset 1":\n\n'
+            "Hello, this is dataset.\n"
+            "https://qvain/dataset/1\n"
+        )
 
     def test_post_user_editor_permissions_metax_fail(
         self, mocks, authd_client, user_details, IDA_projects_ok, requests_mock

@@ -38,7 +38,7 @@ def send_email(language, cr_id, scope, email):
         pref_id = cr_service.get_catalog_record_preferred_identifier(cr)
     except Exception as e:
         log.error(e)
-        abort(500, repr(e))
+        abort(500, message=repr(e))
 
     with current_app.mail.record_messages() as outbox:
         try:
