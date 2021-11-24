@@ -99,7 +99,7 @@ const datasets = {
     all: 'Kaikki aineistot',
   },
   share: {
-    title: 'Jaa aineisto',
+    title: 'Jaa metadatan muokkausoikeuksia',
     tabs: {
       invite: 'Kutsu',
       members: 'Jäsenet',
@@ -140,7 +140,10 @@ const datasets = {
         permissions: 'Jäsenet',
         projectMembers: 'Projektin %(project)s jäsenet',
       },
-      updateError: 'Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä uudelleen.'
+      updateError: 'Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä uudelleen.',
+      projectHelp:
+        'Projektin jäsenille myönnetään muokkausoikeudet automaattisesti. Projektin jäseniä voi muuttaa My CSC:n kautta.',
+      projectHelpLabel: 'Info',
     },
   },
   previousVersions: {

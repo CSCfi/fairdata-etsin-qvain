@@ -258,21 +258,21 @@ describe('DatasetsV2', () => {
       row          | label                   | items
       ${PUBLISHED} | ${'Edit'}               | ${BUTTON}
       ${PUBLISHED} | ${'View in Etsin'}      | ${BOTH}
-      ${PUBLISHED} | ${'Share'}              | ${BOTH}
+      ${PUBLISHED} | ${'Add editors'}        | ${BOTH}
       ${PUBLISHED} | ${'Use as template'}    | ${MENU}
       ${PUBLISHED} | ${'Create new version'} | ${MENU}
       ${PUBLISHED} | ${'Revert changes'}     | ${NONE}
       ${PUBLISHED} | ${'Delete'}             | ${MENU}
       ${CHANGED}   | ${'Edit draft'}         | ${BUTTON}
       ${CHANGED}   | ${'Preview in Etsin'}   | ${BOTH}
-      ${CHANGED}   | ${'Share'}              | ${BOTH}
+      ${CHANGED}   | ${'Add editors'}        | ${BOTH}
       ${CHANGED}   | ${'Use as template'}    | ${MENU}
       ${CHANGED}   | ${'Create new version'} | ${NONE}
       ${CHANGED}   | ${'Revert changes'}     | ${MENU}
       ${CHANGED}   | ${'Delete'}             | ${MENU}
       ${DRAFT}     | ${'Edit'}               | ${BUTTON}
       ${DRAFT}     | ${'Preview in Etsin'}   | ${BOTH}
-      ${DRAFT}     | ${'Share'}              | ${BOTH}
+      ${DRAFT}     | ${'Add editors'}        | ${BOTH}
       ${DRAFT}     | ${'Use as template'}    | ${MENU}
       ${DRAFT}     | ${'Create new version'} | ${NONE}
       ${DRAFT}     | ${'Revert changes'}     | ${NONE}
@@ -288,11 +288,11 @@ describe('DatasetsV2', () => {
     )
   })
 
-  describe('Share button', () => {
+  describe('Add editors button', () => {
     it('should open modal', async () => {
       await render()
       const dataset = findDatasetWithTitle('IDA dataset')
-      const shareButton = dataset.find(`button[aria-label="Share"]`)
+      const shareButton = dataset.find(`button[aria-label="Add editors"]`)
       wrapper.find('[aria-label="shareDatasetModal"]').should.have.lengthOf(0)
       shareButton.simulate('click')
       wrapper.find('[aria-label="shareDatasetModal"]').should.have.lengthOf(1)

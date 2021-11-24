@@ -14,11 +14,13 @@ const clearEventListeners = (updatePosition, handleClickOutside) => {
   document.removeEventListener('mousedown', handleClickOutside)
 }
 
-const Tooltip = ({ isOpen, close, align, text, children }) => {
+const Tooltip = ({ isOpen, close, align, text, children, fixed }) => {
   const [currentAlign, setCurrentAlign] = useState(align)
 
   const wrapperTooltipButtonRef = useRef(null)
   const wrapperTooltipCardRef = useRef(null)
+
+  const [offset, setOffset] = useState(0)
 
   const updatePosition = useCallback(() => {
     // Move tooltip to opposite side if it doesn't fit to window
@@ -27,6 +29,13 @@ const Tooltip = ({ isOpen, close, align, text, children }) => {
       const tooltip = wrapper?.firstChild
       if (!tooltip) {
         return activeCurrentAlign
+      }
+
+      if (fixed) {
+        const button = wrapperTooltipButtonRef.current
+        if (button) {
+          setOffset(button.getBoundingClientRect().y)
+        }
       }
 
       // hide tooltip until its position is determined
@@ -41,7 +50,7 @@ const Tooltip = ({ isOpen, close, align, text, children }) => {
       }
       return activeCurrentAlign
     })
-  }, [align])
+  }, [align, fixed])
 
   const handleClickOutside = useCallback(
     event => {
@@ -71,6 +80,8 @@ const Tooltip = ({ isOpen, close, align, text, children }) => {
       cardRef={wrapperTooltipCardRef}
       alignment={currentAlign}
       text={text}
+      top={offset}
+      fixed={fixed}
     >
       {children}
     </AlignedTooltip>
@@ -85,11 +96,24 @@ Tooltip.propTypes = {
   align: PropTypes.string.isRequired,
   text: PropTypes.element.isRequired,
   children: PropTypes.element.isRequired,
+  fixed: PropTypes.bool, // use to allow overflow from modals
+}
+
+Tooltip.defaultProps = {
+  fixed: false,
 }
 
 export default Tooltip
 
-export const AlignedTooltip = ({ buttonRef, cardRef, text, children, alignment = 'Down' }) => {
+export const AlignedTooltip = ({
+  buttonRef,
+  cardRef,
+  text,
+  children,
+  alignment = 'Down',
+  fixed,
+  top,
+}) => {
   const mappedTooltipComponents = {
     Right: (
       <TooltipRight>
@@ -119,10 +143,20 @@ export const AlignedTooltip = ({ buttonRef, cardRef, text, children, alignment =
 
   const alignedTooltipComponent = mappedTooltipComponents[alignment]
 
+  const tooltip = fixed ? (
+    <div style={{ position: 'absolute', display: 'inline' }}>
+      <div style={{ position: 'fixed', top }}>
+        <Wrapper ref={cardRef}>{alignedTooltipComponent}</Wrapper>
+      </div>
+    </div>
+  ) : (
+    <Wrapper ref={cardRef}>{alignedTooltipComponent}</Wrapper>
+  )
+
   return (
     <>
       <span ref={buttonRef}>{children}</span>
-      <Wrapper ref={cardRef}>{alignedTooltipComponent}</Wrapper>
+      {tooltip}
     </>
   )
 }
@@ -133,10 +167,14 @@ AlignedTooltip.propTypes = {
   alignment: PropTypes.string,
   text: PropTypes.element.isRequired,
   children: PropTypes.element.isRequired,
+  fixed: PropTypes.bool,
+  top: PropTypes.number,
 }
 
 AlignedTooltip.defaultProps = {
   alignment: 'Down',
+  fixed: false,
+  top: 0,
 }
 
 const Wrapper = styled.span`

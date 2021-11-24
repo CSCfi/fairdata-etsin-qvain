@@ -115,6 +115,7 @@ const PadHeadCell = styled.th.attrs({ 'aria-hidden': true })`
 `
 
 const HeadCell = styled.th`
+  vertical-align: middle;
   padding: 0.5rem 0.5rem;
   @media (min-width: ${props => props.theme.breakpoints.sm}) {
   }

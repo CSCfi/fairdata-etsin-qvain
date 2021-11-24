@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Loader from '../../../../general/loader'
 import { useStores } from '../../../utils/stores'
 import { Dropdown, DropdownItem } from '../../../../general/dropdown'
+import { HelpIcon } from '../../../../general/form'
+import Tooltip from '../../../general/section/tooltip'
 
 const joinParts = parts => {
   const nonEmptyParts = parts.filter(p => p)
@@ -49,7 +51,13 @@ const Check = styled(FontAwesomeIcon).attrs({ icon: faCheck })`
 export const Members = () => {
   const {
     QvainDatasetsV2: {
-      share: { userPermissions, project, removeUserPermission, isUpdatingUserPermission, permissionChangeError },
+      share: {
+        userPermissions,
+        project,
+        removeUserPermission,
+        isUpdatingUserPermission,
+        permissionChangeError,
+      },
     },
   } = useStores()
 
@@ -102,13 +110,16 @@ export const Members = () => {
       </UserList>
       {projectMembers.length > 0 && (
         <>
-          <Label>
-            <Translate
-              content="qvain.datasets.share.members.labels.projectMembers"
-              with={{ project }}
-            />
-            {` (${projectMembers.length})`}
-          </Label>
+          <ProjectLabelRow>
+            <div>
+              <Translate
+                content="qvain.datasets.share.members.labels.projectMembers"
+                with={{ project }}
+              />
+              {` (${projectMembers.length})`}
+            </div>
+            <ProjectHelp />
+          </ProjectLabelRow>
           <UserList className="project-member-users">
             {projectMembers.map(user => (
               <User key={user.uid}>
@@ -118,9 +129,32 @@ export const Members = () => {
           </UserList>
         </>
       )}
-      { permissionChangeError  && <Translate component={Error} content="qvain.datasets.share.members.updateError" /> }
-
+      {permissionChangeError && (
+        <Translate component={Error} content="qvain.datasets.share.members.updateError" />
+      )}
     </>
+  )
+}
+
+const ProjectHelp = () => {
+  const [tooltipOpen, setTooltipOpen] = useState(false)
+
+  return (
+    <TooltipWrapper>
+      <Tooltip
+        isOpen={tooltipOpen}
+        close={() => setTooltipOpen(false)}
+        align="Right"
+        text={<Translate content={'qvain.datasets.share.members.projectHelp'} />}
+        fixed
+      >
+        <Translate
+          onClick={() => setTooltipOpen(true)}
+          component={HelpIcon}
+          attributes={{ 'aria-label': 'qvain.datasets.share.members.projectHelpLabel' }}
+        />
+      </Tooltip>
+    </TooltipWrapper>
   )
 }
 
@@ -165,16 +199,25 @@ const Error = styled.div`
   margin-top: 0.25rem;
 `
 
-
 const RoleButton = styled(Role).attrs({ as: 'button', type: 'button' })`
   cursor: pointer;
 `
 
-const Label = styled.label`
+const Label = styled.div`
   display: block;
   font-weight: bold;
   font-size: 18px;
   margin: 1.5rem 0 0.5rem;
+`
+
+const TooltipWrapper = styled.span`
+  margin-left: 1em;
+`
+
+const ProjectLabelRow = styled(Label)`
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
 `
 
 export default observer(Members)

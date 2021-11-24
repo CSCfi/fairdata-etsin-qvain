@@ -54,7 +54,9 @@ export const ShareModal = () => {
   let selectedTab = null
 
   if (permissionLoadError) {
-    selectedTab = <Translate component={Error} content="qvain.datasets.share.errors.loadingPermissions" />
+    selectedTab = (
+      <Translate component={Error} content="qvain.datasets.share.errors.loadingPermissions" />
+    )
   } else if (isLoadingPermissions) {
     selectedTab = <Loader active size="6rem " />
   } else if (tabs.active === 'invite') {

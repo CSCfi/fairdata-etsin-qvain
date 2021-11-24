@@ -35,6 +35,7 @@ const searchResultsTestinen = [testUser]
 let stores, wrapper, helper, mockAdapter
 
 const render = async () => {
+  jest.resetAllMocks()
   wrapper?.unmount?.()
   if (helper) {
     document.body.removeChild(helper)
@@ -337,16 +338,18 @@ describe('ShareModal', () => {
       members.should.eql(expectedMembers)
     })
 
-    it('should list project members', () => {
-      const expectedMembers = [
-        'teppo testaaja (teppo, teppo@example.com)',
-        'Member Person (member, member@example.com)',
-      ]
-      const members = wrapper
-        .find('ul.project-member-users')
-        .find('.member-name')
-        .map(member => member.text())
-      members.should.eql(expectedMembers)
+    it('should show project help', () => {
+      // wrapper.simulate does not support triggering global events so we need to mock them here
+      const handlers = {}
+      jest.spyOn(document, 'addEventListener').mockImplementation((type, event) => {
+        handlers[type] = event
+      })
+
+      wrapper.find('button[aria-label="Info"]').simulate('click')
+      wrapper.find({ content: 'qvain.datasets.share.members.projectHelp' }).should.have.lengthOf(1)
+      handlers.mousedown({})
+      wrapper.update()
+      wrapper.find({ content: 'qvain.datasets.share.members.projectHelp' }).should.have.lengthOf(0)
     })
 
     it('should remove user from members list', async () => {

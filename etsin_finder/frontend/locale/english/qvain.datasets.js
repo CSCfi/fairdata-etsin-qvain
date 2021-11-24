@@ -30,7 +30,7 @@ const datasets = {
     state: 'Status',
     actions: 'Actions',
     edit: 'Edit',
-    share: 'Share',
+    share: 'Add editors',
     preview: 'Preview',
     owner: 'Owner',
     dateFormat: {
@@ -65,7 +65,7 @@ const datasets = {
     editDraft: 'Edit draft',
     goToEtsin: 'View in Etsin',
     goToEtsinDraft: 'Preview in Etsin',
-    share: 'Share',
+    share: 'Add editors',
     createNewVersion: 'Create new version',
     useAsTemplate: 'Use as template',
     revert: 'Revert changes',
@@ -99,7 +99,7 @@ const datasets = {
     all: 'All datasets',
   },
   share: {
-    title: 'Share with people',
+    title: 'Share metadata editing rights',
     tabs: {
       invite: 'Invite',
       members: 'Members',
@@ -140,7 +140,11 @@ const datasets = {
         permissions: 'Members',
         projectMembers: 'Project %(project)s members',
       },
-      updateError: 'There was an error updating user permissions. Please try again.'
+      updateError: 'There was an error updating user permissions. Please try again.',
+      projectHelp:
+        'Project members are automatically granted editing rights. Project members can be changed via My CSC.',
+      projectHelpLabel:
+        'Info',
     },
   },
   previousVersions: {
