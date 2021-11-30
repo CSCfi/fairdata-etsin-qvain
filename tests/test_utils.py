@@ -156,8 +156,8 @@ class TestUtils(UtilsTestSuite):
         )
 
     def test_datetime_to_header_invalid_date(self):
-        """Return False when invalid date is given."""
-        assert datetime_to_header(1234) is False
+        """Return None when invalid date is given."""
+        assert datetime_to_header(1234) is None
 
     def test_sort_array_of_obj_by_key(self):
         """Sort a given list based on a given key."""

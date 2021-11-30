@@ -9,6 +9,7 @@
 
 
 import json
+import pytest
 
 from .basetest import BaseTest
 
@@ -17,6 +18,7 @@ from etsin_finder.schemas.qvain_dataset_schema import (
     OrganizationValidationSchema,
     ActorValidationSchema,
     DatasetValidationSchema,
+    OriginalDatasetSchema,
 )
 
 
@@ -284,4 +286,60 @@ class TestQvainDatasetDataCatalog(BaseTest):
         errors = self.schema.validate(
             {"dataCatalog": "urn:nbn:fi:att:data-catalog-attenborough"}
         )
+        assert errors
+
+
+class TestQvainDatasetOriginal(BaseTest):
+    """Test allowed data catalogs"""
+
+    schema = OriginalDatasetSchema()
+
+    @pytest.fixture
+    def original(self):
+        """Original with all fields required by the schema."""
+        return {
+            "date_created": "2020-01-01T12:00Z",
+            "date_modified": "2020-01-02T12:00Z",
+            "research_dataset": {},
+        }
+
+    def test_all_original(self, original):
+        """Test original with all fields."""
+        errors = self.schema.validate(original)
+        assert not errors
+
+    def test_ok_original(self, original):
+        """Test original with required fields."""
+        del original["date_modified"]
+        errors = self.schema.validate(original)
+        assert not errors
+
+    def test_invalid_date_created(self, original):
+        """Test original with invalid date_created."""
+        original["date_created"] = "12345"
+        errors = self.schema.validate(original)
+        assert errors
+
+    def test_invalid_date_modified(self, original):
+        """Test original with invalid date_modified."""
+        original["date_modified"] = "12345"
+        errors = self.schema.validate(original)
+        assert errors
+
+    def test_invalid_research_dataset(self, original):
+        """Test original with invalid research_dataset."""
+        original["research_dataset"] = "12345"
+        errors = self.schema.validate(original)
+        assert errors
+
+    def test_missing_date_created(self, original):
+        """Test original with missing date_created."""
+        del original["date_created"]
+        errors = self.schema.validate(original)
+        assert errors
+
+    def test_missing_research_dataset(self, original):
+        """Test original with missing research_dataset."""
+        del original["research_dataset"]
+        errors = self.schema.validate(original)
         assert errors

@@ -21,10 +21,7 @@ class TestFinderUtils(BaseTest):
         test4_datetime_wrong_format = "2020/01/27T07:21:35+02:00"
         test_ISO_8601 = "2020-01-27T07:21:35+02:00"
 
-        assert datetime_to_header(test_int) is False
-        assert datetime_to_header(test_randome_string) is False
-        assert (
-            datetime_to_header(test4_datetime_wrong_format)
-            == "Mon, 27 Jan 2020 05:21:35 GMT"
-        )
+        assert datetime_to_header(test_int) is None
+        assert datetime_to_header(test_randome_string) is None
+        assert datetime_to_header(test4_datetime_wrong_format) is None
         assert datetime_to_header(test_ISO_8601) == "Mon, 27 Jan 2020 05:21:35 GMT"

@@ -1,9 +1,27 @@
 """Validation schemas for form data coming in from Qvain"""
-from marshmallow import Schema, fields, validates_schema, ValidationError, validate
+from marshmallow import (
+    Schema,
+    fields,
+    validate,
+    INCLUDE,
+)
 from marshmallow.validate import Length, OneOf
 from marshmallow_oneofschema import OneOfSchema
 
 data_catalog_matcher = "^urn:nbn:fi:att:data-catalog-(ida|att|pas|dft)$"
+
+
+class OriginalDatasetSchema(Schema):
+    """Validation schema for original dataset opened for editing."""
+
+    date_created = fields.DateTime(format="iso", required=True)
+    date_modified = fields.DateTime(format="iso")
+    research_dataset = fields.Dict(required=True)
+
+    class Meta:
+        """Meta options for validation."""
+
+        unknown = INCLUDE  # allow unknown fields
 
 
 class ReferenceObjectValidationSchema(Schema):
@@ -135,7 +153,7 @@ class DatasetValidationSchema(Schema):
 
     relation = fields.List(fields.Dict())
     provenance = fields.List(fields.Dict())
-    original = fields.Dict()
+    original = fields.Nested(OriginalDatasetSchema)
     title = fields.Dict(
         required=True,
         validate=lambda x: len(x.get("en", [])) + len(x.get("fi", [])) > 0,

@@ -132,15 +132,15 @@ class TestQvainDatasetsGet(BaseTest):
 
     user_dataset = {
         "id": "user_dataset",
-        "date_created": "2020-01-03",
+        "date_created": "2020-01-03T01:02:03",
         "metadata_provider_user": "teppo_testaaja",
     }
     user_project_dataset = {
         "id": "user_project_dataset",
-        "date_created": "2020-01-02",
+        "date_created": "2020-01-02T01:02:03",
         "metadata_provider_user": "teppo_testaaja",
     }
-    project_dataset = {"id": "project_dataset", "date_created": "2020-01-01"}
+    project_dataset = {"id": "project_dataset", "date_created": "2020-01-01T01:02:03"}
 
     user_datasets_url = (
         "https://mock-metax/rest/v2/datasets?editor_permissions_user=teppo_testaaja"
@@ -724,26 +724,9 @@ class TestQvainDatasetsGetLegacy(BaseTest):
                     "headers": {"COOKIE": sso_cookie_login()},
                     "json": {
                         "title": {"fi": "Otsikko", "en": "Title"},
-                        "original": {"identifier": "test-1234"},
-                    },
-                },
-                {"cr_responses": [default_cr_response, default_cr_response]},
-                {
-                    "response": "Error getting dataset creation or modification date.",
-                    "status": 500,
-                },
-            ),
-            (
-                {
-                    "call": lambda: QvainDataset().patch("test-1234"),
-                },
-                {
-                    "headers": {"COOKIE": sso_cookie_login()},
-                    "json": {
-                        "title": {"fi": "Otsikko", "en": "Title"},
                         "original": {
                             "identifier": "test-1234",
-                            "date_created": date.today().strftime("%Y-%m-%d"),
+                            "date_created": "2020-01-03T01:02:03Z",
                             "research_dataset": {},
                         },
                     },
@@ -759,6 +742,7 @@ class TestQvainDatasetsGetLegacy(BaseTest):
                             "headers": {
                                 "Accept": "application/json",
                                 "Content-Type": "application/json",
+                                "If-Unmodified-Since": "Fri, 03 Jan 2020 01:02:03 GMT",
                             },
                             "json": {
                                 "access_granter": {

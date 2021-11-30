@@ -88,7 +88,8 @@ class RemsAPIService(FlaskService):
             return False
 
         self.HEADERS["x-rems-user-id"] = user_id
-        assert method in ["GET", "POST"], "Method attribute must be one of [GET, POST]."
+        if method not in ["GET", "POST"]:
+            raise ValueError("Method attribute must be one of [GET, POST].")
         log.info("Sending {0} request to {1}".format(method, url))
         try:
             if json:
@@ -153,7 +154,8 @@ class RemsAPIService(FlaskService):
         if not self.ENABLED:
             return False
 
-        assert isinstance(id, int), "id should be integer, id: {0}".format(id)
+        if not isinstance(id, int):
+            raise ValueError(f"id should be integer, {id=}")
 
         log.info("Create REMS application for catalogue item with id: {0}".format(id))
         method = "POST"
@@ -177,9 +179,8 @@ class RemsAPIService(FlaskService):
         if not self.ENABLED:
             return False
 
-        assert isinstance(
-            resource, str
-        ), "resource should be string, resource: {0}".format(resource)
+        if not isinstance(resource, str):
+            raise TypeError(f"resource should be string, {resource=}")
 
         log.info("Get catalog item for resource: {0}".format(resource))
         method = "GET"
@@ -202,11 +203,14 @@ class RemsAPIService(FlaskService):
         if not self.ENABLED:
             return False
 
-        assert isinstance(userdata, dict) and userdata.keys() >= {
+        if not isinstance(userdata, dict) and userdata.keys() >= {
             "userid",
             "name",
             "email",
-        }, "usedata should be a dict containing userid, name and email."
+        }:
+            raise ValueError(
+                "userdata should be a dict containing userid, name and email."
+            )
         log.info("Create user in REMS")
         method = "POST"
         url = self.REMS_CREATE_USER
@@ -247,9 +251,8 @@ class RemsAPIService(FlaskService):
         if not self.ENABLED:
             return False
 
-        assert (
-            rems_resource
-        ), "rems_resource should be string, rems_resource: {0}".format(rems_resource)
+        if not isinstance(rems_resource, str):
+            raise TypeError(f"rems_resource should be string, {rems_resource=}")
 
         log.info("Get entitlements for resource: {0}".format(rems_resource))
         method = "GET"

@@ -1,6 +1,7 @@
 """Validation schemas for form data coming in from Qvain"""
+import json
 from marshmallow import Schema, fields, validates_schema, ValidationError
-from marshmallow.validate import Length, OneOf
+from marshmallow.validate import OneOf
 
 from etsin_finder.schemas.qvain_dataset_schema import (
     ActorValidationSchema,
@@ -10,6 +11,7 @@ from etsin_finder.schemas.qvain_dataset_schema import (
     ReferenceObjectValidationSchema,
     RemoteResourceValidationSchema,
     OtherIdentifierValidationSchema,
+    OriginalDatasetSchema,
     data_catalog_matcher as data_catalog_matcher_v1,
 )
 
@@ -27,7 +29,9 @@ def validate(data, params):
     if isDraft:
         schema = DraftDatasetValidationSchema()
 
-    return schema.loads(data)
+    parsed = json.loads(data)
+    schema.load(parsed)
+    return parsed
 
 
 class DraftDatasetValidationSchema(Schema):
@@ -43,7 +47,7 @@ class DraftDatasetValidationSchema(Schema):
     relation = fields.List(fields.Dict())
     provenance = fields.List(fields.Dict())
 
-    original = fields.Dict()
+    original = fields.Nested(OriginalDatasetSchema)
     issued = fields.Str()
     other_identifier = fields.List(fields.Nested(OtherIdentifierValidationSchema))
 

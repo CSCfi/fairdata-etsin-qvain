@@ -14,7 +14,7 @@ from flask import current_app
 
 from etsin_finder.log import log
 
-from etsin_finder.utils.utils import format_url
+from etsin_finder.utils.utils import datetime_to_header, format_url
 from etsin_finder.utils.request_utils import make_request
 from etsin_finder.schemas.services import MetaxServiceConfigurationSchema
 from .base_service import BaseService, ConfigValidationMixin
@@ -287,9 +287,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             return [], status
         return resp, status
 
-    def get_datasets_for_editor(
-        self, user_id, data_catalog_matcher=None
-    ):
+    def get_datasets_for_editor(self, user_id, data_catalog_matcher=None):
         """Get datasets where user has editor permission.
 
         Args:
@@ -375,7 +373,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
         Arguments:
             data (object): Object with the dataset data that has been validated and converted to comply with the Metax schema.
             cr_id (str): The identifier of the dataset.
-            last_modified (str): HTTP datetime string (RFC2616)
+            last_modified (datetime): Datetime of last modification.
             params (dict): Dictionary of key-value pairs of query parameters.
 
         Returns:
@@ -383,20 +381,25 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_PATCH_DATASET, cr_id)
-        headers = {"Accept": "application/json", "If-Unmodified-Since": last_modified}
+        last_modified_str = datetime_to_header(last_modified)
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "If-Unmodified-Since": last_modified_str,
+        }
         log.debug(
             "Request URL: PATCH {0}\nHeaders: {1}\nData: {2}".format(
                 req_url, headers, json.dumps(data, indent=2)
             )
         )
 
-        args = self._get_args(timeout=30)
+        args = self._get_args(timeout=30, headers=headers)
         resp, status, success = make_request(
             requests.patch, req_url, params=params, json=data, **args
         )
 
         if status == 412:
-            return "Resource has been modified since last publish", status
+            return "Resource has been modified elsewhere.", status
 
         if success:
             log.info("Updated dataset with identifier: {}".format(cr_id))
@@ -504,7 +507,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             return resp, status
 
         if status == 412:
-            return "Resource has been modified since last publish", 412
+            return "Resource has been modified elsewhere.", 412
 
         log.info("Updated dataset with identifier: {}".format(cr_id))
         return resp, status

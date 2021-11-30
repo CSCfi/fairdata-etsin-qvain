@@ -176,13 +176,12 @@ def datetime_to_header(datetime_str):
 
     """
     try:
-        assert isinstance(datetime_str, str), "datetime_str must be of type string."
-        datetime_obj_local = parser.parse(datetime_str)
+        datetime_obj_local = parser.isoparse(datetime_str)
         datetime_obj_GMT = datetime_obj_local.astimezone(pytz.utc)
         HTTP_datetime = datetime_obj_GMT.strftime("%a, %d %b %Y %H:%M:%S GMT")
         return HTTP_datetime
     except Exception:
-        return False
+        return None
 
 
 def sort_array_of_obj_by_key(obj_array, obj_key, obj_nested_key=False):

@@ -313,36 +313,18 @@ class QvainDataset(Resource):
             log.warning("Invalid form data: {0}".format(err.messages))
             return err.messages, 400
 
-        if not data.get("original"):
+        original = data.get("original")
+        if not original:
             return {"Error": "Missing original dataset."}, 400
+        del data["original"]
 
-        original_cr_id = data["original"].get("identifier")
+        original_cr_id = original.get("identifier")
         if cr_id != original_cr_id:
             return {"Error": "Changing dataset identifier is not allowed."}, 400
-        original = data["original"]
 
         # If date_modified not present, then the dataset has not been modified
         # after it was created, use date_created instead
         last_edit = original.get("date_modified") or original.get("date_created")
-        if not last_edit:
-            log.error("Could not find date_modified or date_created from dataset.")
-            return "Error getting dataset creation or modification date.", 500
-
-        last_edit_converted = datetime_to_header(last_edit)
-        if not last_edit_converted:
-            log.error(
-                "Could not convert last_edit: {0} to http datetime.\nlast_edit is of type: {1}".format(
-                    last_edit, type(last_edit)
-                )
-            )
-            return "Error in dataset creation or modification date..", 500
-
-        log.info(
-            "Converted datetime from metax: {0} to HTTP datetime: {1}".format(
-                last_edit, last_edit_converted
-            )
-        )
-        del data["original"]
 
         log.debug(f"in patch: data: {data}")
 
@@ -351,7 +333,7 @@ class QvainDataset(Resource):
         params = {}
         service = MetaxQvainAPIService()
         metax_response = service.update_dataset(
-            metax_ready_data, cr_id, last_edit_converted, params
+            metax_ready_data, cr_id, last_edit, params
         )
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
         return metax_response
