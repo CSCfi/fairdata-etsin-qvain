@@ -332,7 +332,7 @@ def get_editor_source_func(user):
 
 
 def merge_and_sort_dataset_lists(*lists):
-    """Merge multiple lists of datasets, remove duplicates and sort by newest"""
+    """Merge multiple lists of datasets, remove duplicates and sort by newest."""
     datasets_by_id = {}
     for lst in lists:
         for dataset in lst:

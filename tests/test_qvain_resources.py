@@ -1,12 +1,68 @@
 """Test suite for Qvain resources."""
 
 import pytest
+import requests
+from datetime import date
+from etsin_finder.resources.qvain_resources import (
+    FileCharacteristics,
+    QvainDataset,
+    QvainDatasetFiles,
+    QvainDatasets,
+)
 from etsin_finder.utils.flags import set_flags
 
-from .basetest import BaseTest
+from .basetest import BaseTest, make_sso_cookie
 from .test_ldap import createMockLDAPIdmService, MockLDAPIdmServiceFail
 
-"Test Qvain resources"
+
+def sso_cookie_login():
+    """Return default test sso cookie."""
+    return make_sso_cookie(
+        {
+            "services": {"IDA": {"projects": ["test-1234"]}},
+            "authenticated_user": {
+                "id": "teppo",
+                "organization": {"id": "Testers inc."},
+            },
+        }
+    )
+
+
+default_cr_response = (
+    {
+        "metadata_provider_user": "teppo",
+        "data_catalog": {
+            "catalog_json": {"identifier": "urn:nbn:fi:att:data-catalog-ida"}
+        },
+    },
+    200,
+    True,
+)
+
+
+default_file_characteristics_call_args = {
+    "url": "https://mock-metax/rest/v2/files/file_id",
+    "auth": ("qvain", "test-qvain"),
+    "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    },
+    "proxies": None,
+    "timeout": 30,
+    "verify": True,
+}
+
+default_datasets_call_args = {
+    "url": "https://mock-metax/rest/v2/datasets",
+    "auth": ("qvain", "test-qvain"),
+    "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    },
+    "proxies": None,
+    "timeout": 30,
+    "verify": True,
+}
 
 MockLDAPIdmService = createMockLDAPIdmService(
     users=[
@@ -28,8 +84,37 @@ class TestQvainDatasetsGet(BaseTest):
     """Tests for Qvain Datasets GET."""
 
     @pytest.fixture
+    def sso_cookie(self):
+        """Return default test sso cookie."""
+        return make_sso_cookie(
+            {
+                "services": {"IDA": {"projects": ["test-1234"]}},
+                "authenticated_user": {
+                    "id": "teppo",
+                    "organization": {"id": "Testers inc."},
+                },
+            }
+        )
+
+    @pytest.fixture
+    def request_no_login(self, app):
+        """Open test requst ocntext without login."""
+        with app.test_request_context(
+            headers={"content-type": "application/json"}
+        ) as context:
+            yield context
+
+    @pytest.fixture
+    def request_login(self, app, sso_cookie):
+        """Open test requst ocntext without login."""
+        with app.test_request_context(
+            headers={"COOKIE": sso_cookie, "content-type": "application/json"}
+        ) as context:
+            yield context
+
+    @pytest.fixture
     def unauthd_datasets_client(self, app, unauthd_client):
-        """Setup unauthenticated client."""
+        """Set up unauthenticated client."""
         set_flags({"PERMISSIONS.EDITOR_RIGHTS": True}, app)
         return unauthd_client
 
@@ -41,7 +126,7 @@ class TestQvainDatasetsGet(BaseTest):
         IDA_projects_ok,
         authd_client,
     ):
-        """Setup authenticated client with user details and projects."""
+        """Set up authenticated client with user details and projects."""
         set_flags({"PERMISSIONS.EDITOR_RIGHTS": True}, app)
         return authd_client
 
@@ -74,7 +159,7 @@ class TestQvainDatasetsGet(BaseTest):
 
     @pytest.fixture
     def fail_user_datasets(self, requests_mock):
-        """Fetching user datasets fails."""
+        """Fetch user datasets fails."""
         requests_mock.get(
             self.user_datasets_url,
             json="user fail",
@@ -104,7 +189,7 @@ class TestQvainDatasetsGet(BaseTest):
 
     @pytest.fixture
     def fail_project_datasets(self, requests_mock):
-        """Fetching project datasets fails."""
+        """Fetch project datasets fails."""
         requests_mock.get(
             self.project_datasets_url,
             json="project fail",
@@ -203,7 +288,7 @@ class TestQvainDatasetsGetLegacy(BaseTest):
 
     @pytest.fixture
     def unauthd_datasets_client(self, app, unauthd_client):
-        """Setup unauthenticated client."""
+        """Set up unauthenticated client."""
         set_flags({"PERMISSIONS.EDITOR_RIGHTS": False}, app)
         return unauthd_client
 
@@ -215,7 +300,7 @@ class TestQvainDatasetsGetLegacy(BaseTest):
         IDA_projects_ok,
         authd_client,
     ):
-        """Setup authenticated client with user details and projects."""
+        """Set up authenticated client with user details and projects."""
         set_flags({"PERMISSIONS.EDITOR_RIGHTS": False}, app)
         return authd_client
 
@@ -242,7 +327,7 @@ class TestQvainDatasetsGetLegacy(BaseTest):
 
     @pytest.fixture
     def fail_user_datasets(self, requests_mock):
-        """Fetching user datasets fails."""
+        """Fetch of user datasets fails."""
         requests_mock.get(
             self.user_datasets_url,
             json="user fail",
@@ -286,13 +371,600 @@ class TestQvainDatasetsGetLegacy(BaseTest):
         assert r.status_code == 401
         assert r.json == {"PermissionError": "User not logged in."}
 
+    @pytest.mark.parametrize(
+        "test_details, context_details, mock_requests, expected",
+        [
+            (
+                {
+                    "call": lambda: FileCharacteristics().put("file_id"),
+                },
+                {"headers": {"content-type": "text/html"}},
+                {},
+                {
+                    "response": "Expected content-type application/json",
+                    "status": 403,
+                },
+            ),
+            (
+                {
+                    "call": lambda: FileCharacteristics().put("file_id"),
+                },
+                {"headers": {"content-type": "application/json"}},
+                {
+                    "metax_responses": [(None, 200, True)],
+                    "metax_calls": [
+                        {
+                            "request": requests.get,
+                            **default_file_characteristics_call_args,
+                        }
+                    ],
+                },
+                {
+                    "response": "Access denied or file not found",
+                    "status": 404,
+                },
+            ),
+            (
+                {
+                    "call": lambda: FileCharacteristics().put("file_id"),
+                },
+                {"headers": {"content-type": "application/json"}},
+                {
+                    "metax_responses": [(None, 200, True)],
+                    "metax_calls": [
+                        {
+                            "request": requests.get,
+                            **default_file_characteristics_call_args,
+                        }
+                    ],
+                },
+                {
+                    "response": "Access denied or file not found",
+                    "status": 404,
+                },
+            ),
+            (
+                {
+                    "call": lambda: FileCharacteristics().put("file_id"),
+                },
+                {"headers": {"content-type": "application/json"}},
+                {"metax_responses": [({"project_identifier": "test-1234"}, 200, True)]},
+                {
+                    "response": "Project missing from user or user is not authenticated",
+                    "status": 403,
+                },
+            ),
+            (
+                {
+                    "call": lambda: FileCharacteristics().put("file_id"),
+                },
+                {
+                    "headers": {
+                        "content-type": "application/json",
+                        "COOKIE": sso_cookie_login(),
+                    }
+                },
+                {"metax_responses": [({"project_identifier": "test-1234"}, 200, True)]},
+                {
+                    "response": "400 Bad Request: Failed to decode JSON object: Expecting value: line 1 column 1 (char 0)",
+                    "status": 400,
+                },
+            ),
+            (
+                {
+                    "call": lambda: FileCharacteristics().put("file_id"),
+                },
+                {
+                    "headers": {
+                        "content-type": "application/json",
+                        "COOKIE": sso_cookie_login(),
+                    },
+                    "json": {"illegal_key": "very illegal"},
+                },
+                {"metax_responses": [({"project_identifier": "test-1234"}, 200, True)]},
+                {
+                    "response": "Changing field illegal_key is not allowed",
+                    "status": 400,
+                },
+            ),
+            (
+                {
+                    "call": lambda: FileCharacteristics().put("file_id"),
+                },
+                {
+                    "headers": {
+                        "content-type": "application/json",
+                        "COOKIE": sso_cookie_login(),
+                    },
+                    "json": {"encoding": "H.264"},
+                },
+                {
+                    "metax_responses": [
+                        (
+                            {
+                                "project_identifier": "test-1234",
+                                "characteristics": {
+                                    "encoding": "SHA256",
+                                    "csv_delimiter": True,
+                                },
+                            },
+                            200,
+                            True,
+                        ),
+                        ("patched", 200, True),
+                    ],
+                    "metax_calls": [
+                        {
+                            "request": requests.patch,
+                            "json": {"file_characteristics": {"encoding": "H.264"}},
+                            **default_file_characteristics_call_args,
+                        },
+                    ],
+                },
+                {"response": "patched", "status": 200},
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasets().get(),
+                },
+                {},
+                {},
+                {
+                    "response": {"PermissionError": "User not logged in."},
+                    "status": 401,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasets().get(),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}},
+                {"metax_responses": [([], 200, True)]},
+                {"response": [], "status": 200},
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasets().get(),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}},
+                {"metax_responses": [([{"test": "test"}], 200, True)]},
+                {"response": [{"test": "test", "sources": ["creator"]}], "status": 200},
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasets().post(),
+                },
+                {},
+                {},
+                {"response": {"PermissionError": "User not logged in."}, "status": 401},
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasets().post(),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}, "json": {}},
+                {},
+                {
+                    "response": {
+                        "title": ["Missing data for required field."],
+                    },
+                    "status": 400,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasets().post(),
+                },
+                {
+                    "headers": {"COOKIE": sso_cookie_login()},
+                    "json": {
+                        "title": {"fi": "Otsikko", "en": "Title"},
+                        "illegal": "field",
+                    },
+                },
+                {},
+                {
+                    "response": {
+                        "illegal": ["Unknown field."],
+                    },
+                    "status": 400,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasets().post(),
+                },
+                {
+                    "headers": {"COOKIE": sso_cookie_login()},
+                    "json": {
+                        "title": {"fi": "Otsikko", "en": "Title"},
+                        "useDoi": False,
+                    },
+                },
+                {"metax_responses": [(None, 123, False)]},
+                {
+                    "response": None,
+                    "status": 123,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasets().post(),
+                },
+                {
+                    "headers": {"COOKIE": sso_cookie_login()},
+                    "json": {
+                        "title": {"fi": "Otsikko", "en": "Title"},
+                        "useDoi": False,
+                    },
+                },
+                {
+                    "metax_responses": [({"identifier": "test-1234"}, 200, True)],
+                    "metax_calls": [
+                        {
+                            "request": requests.post,
+                            **default_datasets_call_args,
+                            "params": {},
+                            "json": {
+                                "metadata_provider_org": "Testers inc.",
+                                "metadata_provider_user": "teppo",
+                                "research_dataset": {
+                                    "title": {"en": "Title", "fi": "Otsikko"},
+                                    "issued": date.today().strftime("%Y-%m-%d"),
+                                },
+                                "access_granter": {
+                                    "userid": "teppo",
+                                    "email": None,
+                                    "name": "None None",
+                                },
+                            },
+                        },
+                    ],
+                },
+                {
+                    "response": {"identifier": "test-1234"},
+                    "status": 200,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().get("test-1234"),
+                },
+                {},
+                {},
+                {"response": {"PermissionError": "User not logged in."}, "status": 401},
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().get("test-1234"),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}},
+                {},
+                {
+                    "response": {
+                        "PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."
+                    },
+                    "status": 403,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().get("test-1234"),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}},
+                {
+                    "cr_responses": [default_cr_response, default_cr_response],
+                    "metax_responses": [
+                        ({"catalog": "record"}, 200, True),
+                    ],
+                    "metax_calls": [
+                        {
+                            "request": requests.get,
+                            **default_datasets_call_args,
+                            "url": "https://mock-metax/rest/v2/datasets/test-1234",
+                        }
+                    ],
+                },
+                {
+                    "response": {"catalog": "record"},
+                    "status": 200,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().patch("test-1234"),
+                },
+                {},
+                {},
+                {"response": {"PermissionError": "User not logged in."}, "status": 401},
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().patch("test-1234"),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}},
+                {},
+                {
+                    "response": {
+                        "PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."
+                    },
+                    "status": 403,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().patch("test-1234"),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}, "json": {}},
+                {"cr_responses": [default_cr_response, default_cr_response]},
+                {
+                    "response": {"title": ["Missing data for required field."]},
+                    "status": 400,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().patch("test-1234"),
+                },
+                {
+                    "headers": {"COOKIE": sso_cookie_login()},
+                    "json": {"title": {"fi": "Otsikko", "en": "Title"}},
+                },
+                {"cr_responses": [default_cr_response, default_cr_response]},
+                {
+                    "response": {"Error": "Missing original dataset."},
+                    "status": 400,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().patch("test-1234"),
+                },
+                {
+                    "headers": {"COOKIE": sso_cookie_login()},
+                    "json": {
+                        "title": {"fi": "Otsikko", "en": "Title"},
+                        "original": {"identifier": "test-1234"},
+                    },
+                },
+                {"cr_responses": [default_cr_response, default_cr_response]},
+                {
+                    "response": "Error getting dataset creation or modification date.",
+                    "status": 500,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().patch("test-1234"),
+                },
+                {
+                    "headers": {"COOKIE": sso_cookie_login()},
+                    "json": {
+                        "title": {"fi": "Otsikko", "en": "Title"},
+                        "original": {
+                            "identifier": "test-1234",
+                            "date_created": date.today().strftime("%Y-%m-%d"),
+                            "research_dataset": {},
+                        },
+                    },
+                },
+                {
+                    "cr_responses": [default_cr_response, default_cr_response],
+                    "metax_responses": [({"catalog": "record"}, 200, True)],
+                    "metax_calls": [
+                        {
+                            "request": requests.patch,
+                            "url": "https://mock-metax/rest/v2/datasets/test-1234",
+                            "auth": ("qvain", "test-qvain"),
+                            "headers": {
+                                "Accept": "application/json",
+                                "Content-Type": "application/json",
+                            },
+                            "json": {
+                                "access_granter": {
+                                    "email": None,
+                                    "name": "None None",
+                                    "userid": "teppo",
+                                },
+                                "research_dataset": {
+                                    "issued": date.today().strftime("%Y-%m-%d"),
+                                    "title": {"en": "Title", "fi": "Otsikko"},
+                                },
+                            },
+                            "params": {},
+                            "proxies": None,
+                            "timeout": 30,
+                            "verify": True,
+                        }
+                    ],
+                },
+                {
+                    "response": {"catalog": "record"},
+                    "status": 200,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().delete("test-1234"),
+                },
+                {},
+                {},
+                {"response": {"PermissionError": "User not logged in."}, "status": 401},
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().delete("test-1234"),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}},
+                {},
+                {
+                    "response": {
+                        "PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."
+                    },
+                    "status": 403,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDataset().delete("test-1234"),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}},
+                {
+                    "cr_responses": [default_cr_response, default_cr_response],
+                    "metax_responses": [
+                        (None, 200, True),
+                    ],
+                    "metax_calls": [
+                        {
+                            "request": requests.delete,
+                            "url": "https://mock-metax/rest/v2/datasets/test-1234",
+                            "auth": ("qvain", "test-qvain"),
+                            "headers": {
+                                "Accept": "application/json",
+                                "Content-Type": "application/json",
+                            },
+                            "proxies": None,
+                            "timeout": 30,
+                            "verify": True,
+                        },
+                    ],
+                },
+                {
+                    "response": None,
+                    "status": 200,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasetFiles().post("test-1234"),
+                },
+                {},
+                {},
+                {"response": {"PermissionError": "User not logged in."}, "status": 401},
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasetFiles().post("test-1234"),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}},
+                {},
+                {
+                    "response": {
+                        "PermissionError": "Dataset does not exist or user is not allowed to edit the dataset."
+                    },
+                    "status": 403,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasetFiles().post("test-1234"),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}, "json": {}},
+                {
+                    "cr_responses": [default_cr_response, default_cr_response],
+                    "metax_responses": [("metax_error", 123, True)],
+                    "metax_calls": [
+                        {
+                            "request": requests.post,
+                            "url": "https://mock-metax/rest/v2/datasets/test-1234/files",
+                            "auth": ("qvain", "test-qvain"),
+                            "headers": {
+                                "Accept": "application/json",
+                                "Content-Type": "application/json",
+                            },
+                            "proxies": None,
+                            "timeout": 30,
+                            "verify": True,
+                            "json": {},
+                            "params": {"allowed_projects": "test-1234"},
+                        },
+                    ],
+                },
+                {
+                    "response": "metax_error",
+                    "status": 123,
+                },
+            ),
+            (
+                {
+                    "call": lambda: QvainDatasetFiles().post("test-1234"),
+                },
+                {"headers": {"COOKIE": sso_cookie_login()}, "json": {}},
+                {
+                    "cr_responses": [default_cr_response, default_cr_response],
+                    "metax_responses": [("response", 200, True)],
+                    "metax_calls": [
+                        {
+                            "request": requests.post,
+                            "url": "https://mock-metax/rest/v2/datasets/test-1234/files",
+                            "auth": ("qvain", "test-qvain"),
+                            "headers": {
+                                "Accept": "application/json",
+                                "Content-Type": "application/json",
+                            },
+                            "proxies": None,
+                            "timeout": 30,
+                            "verify": True,
+                            "json": {},
+                            "params": {"allowed_projects": "test-1234"},
+                        },
+                    ],
+                },
+                {
+                    "response": "response",
+                    "status": 200,
+                },
+            ),
+        ],
+    )
+    def test_qvain_resources(
+        self, app, mocker, test_details, context_details, mock_requests, expected
+    ):
+        """Test qvain resources."""
+        if test_details.get("flags", False) is True:
+            mocker.patch(
+                "etsin_finder.resources.qvain_resources.flag_enabled", return_value=True
+            )
+
+        metax_make_request = None
+        if mock_requests.get("metax_responses") is not None:
+            metax_make_request = mocker.patch(
+                "etsin_finder.services.qvain_service.make_request",
+                side_effect=mock_requests["metax_responses"],
+            )
+
+        cr_make_request = None
+        if mock_requests.get("cr_responses") is not None:
+            cr_make_request = mocker.patch(
+                "etsin_finder.services.cr_service.make_request",
+                side_effect=mock_requests["cr_responses"],
+            )
+
+        with app.test_request_context(**context_details):
+            response, status = test_details.get("call")()
+            assert response == expected.get("response")
+            assert status == expected.get("status")
+            for call in mock_requests.get("metax_calls", []):
+                request = call["request"]
+                del call["request"]
+                url = call["url"]
+                del call["url"]
+                metax_make_request.assert_any_call(request, url, **call)
+
+            for call in mock_requests.get("cr_calls", []):
+                request = call["request"]
+                del call["request"]
+                url = call["url"]
+                del call["url"]
+                cr_make_request.assert_called_with(request, url, **call)
+
 
 class TestQvainDatasetsEditorPermissions(BaseTest):
     """Tests for dataset editor permissions."""
 
     @pytest.fixture
     def mocks(self, requests_mock, mocker, app):
-        """Mocks for editor permissions."""
+        """Mock editor permissions."""
         set_flags({"PERMISSIONS.EDITOR_RIGHTS": True}, app)
 
         mocker.patch(

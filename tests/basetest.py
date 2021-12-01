@@ -8,7 +8,8 @@
 """Base functionalities for tests."""
 
 import os
-
+import jwt
+from werkzeug import http
 import pytest
 import logging
 import jinja2
@@ -18,6 +19,18 @@ from etsin_finder.app import create_app
 from flask_mail import email_dispatched
 
 from .utils import get_test_catalog_record
+
+
+def make_sso_user_cookie(user):
+    """Create a sso user cookie for tests."""
+    encrypted_session = jwt.encode({"authenticated_user": user}, "fake key")
+    return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session)
+
+
+def make_sso_cookie(cookie):
+    """Create a sso user cookie for tests."""
+    encrypted_session = jwt.encode(cookie, "fake key")
+    return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session)
 
 
 class FakeLoader(jinja2.BaseLoader):

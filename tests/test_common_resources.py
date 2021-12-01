@@ -1,8 +1,6 @@
 """Test suite for common resource."""
 from pytest import fixture
-import jwt
 import requests
-from werkzeug import http
 
 from etsin_finder.resources.common_resources import (
     DatasetProjects,
@@ -10,13 +8,7 @@ from etsin_finder.resources.common_resources import (
     DirectoryFiles,
     ProjectFiles,
 )
-from .basetest import BaseTest
-
-
-def make_sso_cookie(cookie):
-    """Creata a sso user cookie for tests."""
-    encrypted_session = jwt.encode(cookie, "fake key")
-    return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session)
+from .basetest import BaseTest, make_sso_cookie
 
 
 class TestCommonResource(BaseTest):

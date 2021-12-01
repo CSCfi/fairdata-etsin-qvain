@@ -365,7 +365,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
                 )
             )
         else:
-            log.warning("Failed to create dataset")
+            log.warning(f"Failed to create dataset: {data}, {params}")
 
         return resp, status
 

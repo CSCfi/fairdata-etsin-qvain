@@ -134,7 +134,7 @@ class QvainDatasets(Resource):
         self.parser.add_argument("draft", type=inputs.boolean, required=False)
 
     def _get_datasets_from_response(self, response, status, source):
-        """Get datasets from response dict, add source information"""
+        """Get datasets from response dict, add source information."""
         datasets = []
         if status != 200:
             user_id = authentication.get_user_csc_name()
@@ -429,7 +429,7 @@ class QvainDatasetLock(Resource):
     """Endpoints for handling dataset write locks."""
 
     def __init__(self):
-        """Initialization common for all methods"""
+        """Initialize common for all methods."""
         if not flag_enabled("PERMISSIONS.WRITE_LOCK"):
             abort(405)
 

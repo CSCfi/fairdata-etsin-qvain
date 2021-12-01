@@ -8,7 +8,6 @@ Test suite should cover at least:
 """
 
 from flask.globals import session
-import jwt
 import json
 from werkzeug import http
 from etsin_finder.auth.authentication import (
@@ -32,7 +31,7 @@ from etsin_finder.views.auth_views import (
     login_etsin,
     login_qvain,
 )
-from .basetest import BaseTest
+from .basetest import BaseTest, make_sso_user_cookie, make_sso_cookie
 
 
 class MockSamlAuth:
@@ -41,18 +40,6 @@ class MockSamlAuth:
     def login(self, url):
         """Saml auth fake login."""
         return "fake url"
-
-
-def make_sso_user_cookie(user):
-    """Create a sso user cookie for tests."""
-    encrypted_session = jwt.encode({"authenticated_user": user}, "fake key")
-    return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session)
-
-
-def make_sso_cookie(cookie):
-    """Create a sso user cookie for tests."""
-    encrypted_session = jwt.encode(cookie, "fake key")
-    return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session)
 
 
 class TestAuth(BaseTest):
