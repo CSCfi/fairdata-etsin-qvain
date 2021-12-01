@@ -47,7 +47,13 @@ export const IDAFilePickerBase = () => {
 
   let error
 
-  if (original && loadingProjectError) {
+  if (selectedProject && !haveItems) {
+    error = (
+      <div className="container">
+        <Translate content="qvain.files.error.noFiles" />
+      </div>
+    )
+  } else if (original && loadingProjectError) {
     error = (
       <div className="container">
         <ErrorContainer>
