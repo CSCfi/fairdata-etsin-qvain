@@ -30,7 +30,6 @@ export const IDAFilePickerBase = () => {
         loadingProjectError,
       },
       canSelectFiles,
-      original,
     },
   } = useStores()
   const [modalOpen, setModalOpen] = useState(false)
@@ -41,19 +40,21 @@ export const IDAFilePickerBase = () => {
       root.directories.some(d => d.existing) ||
       root.addedChildCount > 0)
 
+  const isEmptyProject = loadingProjectError?.response?.status === 404
+
   if (loadingProjectError) {
     console.error(loadingProjectError)
   }
 
   let error
 
-  if (selectedProject && !haveItems) {
+  if (isEmptyProject) {
     error = (
       <div className="container">
         <Translate content="qvain.files.error.noFiles" />
       </div>
     )
-  } else if (original && loadingProjectError) {
+  } else if (loadingProjectError) {
     error = (
       <div className="container">
         <ErrorContainer>

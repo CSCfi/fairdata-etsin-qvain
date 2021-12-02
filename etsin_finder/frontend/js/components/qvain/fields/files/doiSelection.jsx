@@ -4,7 +4,7 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
-import { Checkbox } from '../../general/modal/form'
+import { Checkbox, HelpField } from '../../general/modal/form'
 import { useStores } from '../../utils/stores'
 
 function DoiSelection() {
