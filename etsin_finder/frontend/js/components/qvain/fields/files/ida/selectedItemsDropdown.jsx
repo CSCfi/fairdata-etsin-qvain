@@ -57,6 +57,7 @@ const EditDropdown = ({ item, parentArgs }) => {
           disabledOpacity: 0.4,
           attributes: { 'aria-label': ariaLabel },
         }}
+        align="right"
         with={{ name }}
       >
         {children}

@@ -106,6 +106,7 @@ const Dataset = ({ dataset, isExpanded, expandGroup, isLatest, versionNumber }) 
           buttonContent="qvain.datasets.moreActions"
           buttonComponent={IconButton}
           buttonProps={{ icon: faEllipsisH }}
+          align="left"
         >
           {actions.filter(({ onlyIcon }) => !onlyIcon).map(action => getActionItem(action))}
         </Dropdown>

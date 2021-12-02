@@ -61,12 +61,26 @@ export class Dropdown extends Component {
     }
 
     // move dropdown above button if it doesn't fit below
-    if (containerRect.bottom + listHeight < window.innerHeight) {
+    const pageHeight = document.documentElement.clientHeight
+    if (containerRect.bottom + listHeight < pageHeight) {
       list.style.top = `${containerRect.bottom}px`
     } else {
       list.style.top = `${containerRect.top - listHeight}px`
     }
-    list.style.left = `${(containerRect.left + containerRect.right) / 2 - listWidth / 2}px`
+
+    // position dropdown horizontally, keep inside window
+    const margin = 5 // margin from edge of window
+    const pageWidth = document.documentElement.clientWidth
+    let left
+    if (this.props.align === 'right') {
+      left = containerRect.left
+    } else if (this.props.align === 'left') {
+      left = containerRect.right - listWidth
+    } else { // center
+      left = (containerRect.left + containerRect.right) / 2 - listWidth / 2
+    }
+    left = Math.max(margin, Math.min(pageWidth - listWidth - margin, left))
+    list.style.left = `${left}px`
   }
 
   onBlur = e => {
@@ -211,6 +225,7 @@ Dropdown.propTypes = {
   buttonComponent: PropTypes.elementType,
   buttonProps: PropTypes.object,
   icon: PropTypes.object,
+  align: PropTypes.oneOf(['left', 'center', 'right']),
 }
 
 Dropdown.defaultProps = {
@@ -219,6 +234,7 @@ Dropdown.defaultProps = {
   with: undefined,
   buttonComponent: CustomButton,
   buttonProps: {},
+  align: 'center',
 }
 
 export const DropdownItem = ({ onlyNarrow, children, ...props }) => (
