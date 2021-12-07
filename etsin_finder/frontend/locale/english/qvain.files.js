@@ -266,7 +266,10 @@ const files = {
         label: 'Clear fields',
       },
       save: {
-        label: 'Add external file',
+        label: 'Add external resource',
+      },
+      edit: {
+        label: 'Update external resource',
       },
       add: {
         label: 'Add',

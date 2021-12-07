@@ -21,7 +21,13 @@ export const ExternalFileFormBase = () => {
   const {
     Qvain: {
       readonly,
-      ExternalResources: { save, clearInEdit, inEdit: externalResource, setUseCategory },
+      ExternalResources: {
+        save,
+        clearInEdit,
+        inEdit: externalResource,
+        setUseCategory,
+        resourceExists,
+      },
     },
     Locale: { lang },
   } = useStores()
@@ -123,7 +129,7 @@ export const ExternalFileFormBase = () => {
       <Translate
         component={SaveButton}
         onClick={handleSaveExternalResource}
-        content={'qvain.files.external.form.save.label'}
+        content={`qvain.files.external.form.${resourceExists ? 'edit' : 'save'}.label`}
       />
     </>
   )

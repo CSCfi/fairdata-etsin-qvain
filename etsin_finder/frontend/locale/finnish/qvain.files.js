@@ -269,6 +269,9 @@ const files = {
       save: {
         label: 'Lisää ulkoinen lähde',
       },
+      edit: {
+        label: 'Tallenna ulkoinen lähde',
+      },
       add: {
         label: 'Lisää',
       },

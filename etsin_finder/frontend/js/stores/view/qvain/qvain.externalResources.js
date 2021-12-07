@@ -1,4 +1,4 @@
-import { action, makeObservable, override } from 'mobx'
+import { action, makeObservable, override, computed } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 
 import { externalResourceSchema } from './qvain.dataCatalog.schemas'
@@ -52,6 +52,11 @@ class ExternalResources extends Field {
 
   @action setUseCategory = useCategory => {
     this.inEdit.useCategory = useCategory
+  }
+
+  @computed
+  get resourceExists() {
+    return !!this.storage.find(item => item.uiid === this.inEdit?.uiid)
   }
 }
 

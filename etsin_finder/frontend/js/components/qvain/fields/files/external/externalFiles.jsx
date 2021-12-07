@@ -32,12 +32,6 @@ export const ExternalFilesBase = () => {
     clearInEdit()
   }
 
-  const parseUrl = resource =>
-    // Disable lint rule because this syntax is more readable using concatenation
-    /* eslint-disable prefer-template */
-    resource != null &&
-    ' / ' + (' / ' + resource.length > 40 ? resource.substring(0, 40).concat('... ') : resource)
-
   return (
     <>
       <Translate component="p" content="qvain.files.external.help" />
@@ -56,11 +50,7 @@ export const ExternalFilesBase = () => {
         )}
         {externalResources.map(addedExternalResource => (
           <ButtonGroup tabIndex="0" key={addedExternalResource.uiid}>
-            <ButtonLabel>
-              {addedExternalResource.title}
-              {parseUrl(addedExternalResource.accessUrl)}
-              {parseUrl(addedExternalResource.downloadUrl)}
-            </ButtonLabel>
+            <ButtonLabel>{addedExternalResource.title}</ButtonLabel>
             <ButtonContainer>
               <EditButton
                 type="button"
