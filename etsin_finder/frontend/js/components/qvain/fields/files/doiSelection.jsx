@@ -4,7 +4,7 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import { DATA_CATALOG_IDENTIFIER } from '../../../../utils/constants'
-import { Checkbox, HelpField } from '../../general/modal/form'
+import { Checkbox } from '../../general/modal/form'
 import { useStores } from '../../utils/stores'
 
 function DoiSelection() {
@@ -35,20 +35,12 @@ function DoiSelection() {
           <Translate content="qvain.files.dataCatalog.doiSelection" />
         </DoiLabel>
       </CheckBoxRow>
-      {useDoi && (
-        <Translate component={DoiHelpField} content="qvain.files.dataCatalog.doiSelectedHelp" />
-      )}
     </DoiSelectionContainer>
   )
 }
 
 export const DoiCheckbox = styled(Checkbox)`
   flex-shrink: 0;
-`
-
-const DoiHelpField = styled(HelpField)`
-  display: block;
-  margin-top: 0.5rem;
 `
 
 const CheckBoxRow = styled.div`

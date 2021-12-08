@@ -20,8 +20,6 @@ const files = {
       'Choose "IDA" if the data is stored in Fairdata IDA Service. Choose "Remote resources" if the data is in remote location.',
     doiSelection:
       'I want the published dataset to have a DOI (digital object identifier) instead of a URN.',
-    doiSelectedHelp: `Choose "IDA" if the data is stored in Fairdata IDA service.
-    Choose "Remote resources" if the data is stored elsewhere.`,
     placeholder: 'Select option',
     ida: 'IDA',
     att: 'Remote resources',

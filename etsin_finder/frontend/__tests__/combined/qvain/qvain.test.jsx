@@ -275,7 +275,7 @@ describe('Qvain DOI selection', () => {
     stores.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
     const component = shallow(<DoiSelection />)
     const checkbox = component.find(DoiCheckbox)
-    expect(checkbox.prop('checked')).toBe(false)
+    expect(checkbox.prop('checked')).toBe(true)
   })
 
   it('should not render DOI selector for published dataset', () => {
@@ -296,7 +296,7 @@ describe('Qvain DOI selection', () => {
     })
     const component = shallow(<DoiSelection />)
     const checkbox = component.find(DoiCheckbox)
-    expect(checkbox.prop('checked')).toBe(false)
+    expect(checkbox.prop('checked')).toBe(true)
   })
 
   it('should not render DOI selector for draft of published dataset', () => {

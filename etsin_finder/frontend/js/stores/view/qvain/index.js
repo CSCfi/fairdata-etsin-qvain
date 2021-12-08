@@ -109,6 +109,10 @@ class Qvain extends Resources {
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
       this.useDoi = false
     }
+
+    if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
+      this.setUseDoi(true)
+    }
   }
 
   @action
