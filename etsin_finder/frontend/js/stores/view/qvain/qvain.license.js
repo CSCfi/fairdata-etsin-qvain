@@ -9,14 +9,18 @@ const licenseUrlSchema = yup
   .string()
   .typeError('qvain.validationMessages.license.otherUrl.string')
   .url('qvain.validationMessages.license.otherUrl.url')
-  .required('qvain.validationMessages.license.otherUrl.required')
 
 export const licenseQvainSchema = yup
   .object()
   .shape({
     name: yup.object().nullable(),
-    identifier: yup.string().required(),
-    otherLicenseUrl: licenseUrlSchema.nullable(),
+    identifier: yup.string(),
+    otherLicenseUrl: yup.string().when('identifier', {
+      is: prop => !prop,
+      then: licenseUrlSchema
+        .nullable()
+        .required('qvain.validationMessages.license.otherUrl.required'),
+    }),
   })
   .noUnknown()
 
@@ -24,6 +28,10 @@ const licenseMetaxSchema = yup
   .object()
   .shape({
     identifier: licenseUrlSchema,
+    license: yup.string().when('identifier', {
+      is: prop => !prop,
+      then: licenseUrlSchema.required('qvain.validationMessages.license.otherUrl.required'),
+    }),
   })
   .noUnknown()
 
@@ -32,6 +40,11 @@ export const licenseArrayMetaxSchema = yup.array().of(licenseMetaxSchema).nullab
 export const Model = (name, identifier) => ({
   name,
   identifier,
+})
+
+export const CustomLicenseModel = (name, otherLicenseUrl) => ({
+  name,
+  otherLicenseUrl,
 })
 
 class Licenses extends ReferenceField {
@@ -56,7 +69,7 @@ class Licenses extends ReferenceField {
           en: `Other (URL): ${license.license}`,
           fi: `Muu (URL): ${license.license}`,
         }
-        return this.Model(name, license.license)
+        return this.CustomLicenseModel(name, license.license)
       })
     } else {
       this.item = undefined
@@ -64,9 +77,14 @@ class Licenses extends ReferenceField {
     }
   }
 
-  toBackend = () => this.storage.map(lic => ({ identifier: lic.identifier }))
+  toBackend = () =>
+    this.storage.map(lic =>
+      lic.identifier ? { identifier: lic.identifier } : { license: lic.otherLicenseUrl }
+    )
 
   Model = Model
+
+  CustomLicenseModel = CustomLicenseModel
 }
 
 export default Licenses

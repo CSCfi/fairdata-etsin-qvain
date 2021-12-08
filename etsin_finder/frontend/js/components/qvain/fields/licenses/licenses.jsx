@@ -76,12 +76,11 @@ export class License extends Component {
     const { storage, schema } = this.props.Stores.Qvain.Licenses
     const licenseErrors = {}
     storage.forEach(license => {
-      const { identifier, name } = license
-      const validationObject = { identifier, name, otherLicenseUrl: identifier }
+      const validationObject = { ...license }
       try {
         schema.validateSync(validationObject)
       } catch (err) {
-        licenseErrors[identifier] = err.message
+        licenseErrors[license.identifier || license.otherLicenseUrl] = err.message
       }
     })
     this.setState({ licenseErrors })
@@ -94,7 +93,7 @@ export class License extends Component {
   }
 
   createLicense = url =>
-    this.props.Stores.Qvain.Licenses.Model(
+    this.props.Stores.Qvain.Licenses.CustomLicenseModel(
       { fi: `Muu (URL): ${url}`, en: `Other (URL): ${url}` },
       url
     )

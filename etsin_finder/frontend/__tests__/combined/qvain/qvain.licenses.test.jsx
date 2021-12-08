@@ -57,7 +57,9 @@ describe('Qvain.RightsAndLicenses', () => {
       .dive()
       .dive()
       .find(components.MultiValue)
-    return selectedOptions.map(opt => opt.prop('data').identifier)
+    return selectedOptions.map(
+      opt => opt.prop('data').identifier || opt.prop('data').otherLicenseUrl
+    )
   }
 
   beforeEach(() => {
@@ -122,9 +124,9 @@ describe('Qvain.RightsAndLicenses', () => {
         { en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)' },
         LICENSE_URL.CCBY4
       ),
-      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url'),
-      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'http://ok.url'),
-      Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httppp:/fail.url'),
+      Licenses.CustomLicenseModel({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url'),
+      Licenses.CustomLicenseModel({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'http://ok.url'),
+      Licenses.CustomLicenseModel({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httppp:/fail.url'),
     ])
     const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     component.instance().validateLicenses()
@@ -140,7 +142,9 @@ describe('Qvain.RightsAndLicenses', () => {
 
   it('should render invalid url error', () => {
     const { Licenses } = stores.Qvain
-    Licenses.set([Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url')])
+    Licenses.set([
+      Licenses.CustomLicenseModel({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url'),
+    ])
     const component = shallow(<License Stores={stores} theme={etsinTheme} />)
     component.instance().validateLicenses()
     const errors = component.find(ValidationError).map(item => item.children().text())

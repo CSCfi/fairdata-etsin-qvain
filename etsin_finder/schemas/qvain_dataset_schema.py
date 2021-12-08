@@ -105,6 +105,7 @@ class LicenseValidationSchema(Schema):
     """Validation schema for licenses."""
 
     identifier = fields.URL()
+    license = fields.URL()
     name = fields.Dict()
 
 
