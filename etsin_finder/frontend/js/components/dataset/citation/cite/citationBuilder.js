@@ -5,16 +5,9 @@ class CitationBuilder {
 
   constructor(parts) {
     this.parts = parts
-    this.addPart = this.addPart.bind(this)
     this.joinStrings = this.joinStrings.bind(this)
     this.renderPart = this.renderPart.bind(this)
     this.get = this.get.bind(this)
-  }
-
-  addPart(part, format = val => val) {
-    if (part !== undefined) {
-      this.parts.push(format(part))
-    }
   }
 
   joinStrings(stringArray, sep) {
@@ -33,7 +26,6 @@ class CitationBuilder {
     for (const subpart of (part.parts || [])) {
       if (typeof subpart === 'object' && subpart !== undefined) {
         const rendered = this.renderPart(subpart, level + 1)
-        // const rendered = 'huoh'
         if (rendered !== undefined) {
           parts.push(rendered)
         }

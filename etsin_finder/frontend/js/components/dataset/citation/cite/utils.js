@@ -22,7 +22,10 @@ const romanNumeralMatch = /^(((IX|IV|V)I{0,3})|I{1,3})$/
 const toInitial = name => `${name[0]}.`
 
 export const getNameParts = name => {
-  const parts = name.trim().split(' ').filter(part => part.length > 0)
+  const parts = name
+    .trim()
+    .split(' ')
+    .filter(part => part.length > 0)
   if (parts.length === 1) {
     return { first: [], last: [parts[0]], suffixes: [] }
   }
@@ -128,13 +131,6 @@ export const capitalizeFirst = string => {
   return `${string.charAt(0).toUpperCase()}${string.slice(1)}`
 }
 
-export const getInitial = string => {
-  if (string === undefined) {
-    return undefined
-  }
-  return `${string.charAt(0).toUpperCase()}.`
-}
-
 export const getYear = dataset => {
   const issued = dataset.research_dataset.issued
   if (!issued) {
@@ -165,16 +161,13 @@ export const getVersion = (dataset, getTranslation) => {
 }
 
 export const getIdentifier = dataset => {
-  const identifier = dataset.research_dataset.preferred_identifier
+  const identifier = dataset.draft_of?.preferred_identifier || dataset.research_dataset.preferred_identifier
   if (!identifier) {
     return undefined
   }
   const url = idnToLink(identifier)
   if (url) {
     return url
-  }
-  if (dataset.draft_of) {
-    return dataset.draft_of.preferred_identifier
   }
   if (dataset.state === 'draft') {
     return undefined

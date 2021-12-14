@@ -2,11 +2,15 @@ import 'chai/register-should'
 
 import { buildStores } from '../../js/stores'
 import Cite from '../../js/components/dataset/citation/cite'
+import CitationBuilder from '../../js/components/dataset/citation/cite/citationBuilder'
 import {
   getNameInitials,
   getLastnameFirst,
   getNameParts,
+  getVersion,
+  getIdentifier,
 } from '../../js/components/dataset/citation/cite/utils'
+import { externalResourceUseCategorySchema } from '../../js/stores/view/qvain/qvain.dataCatalog.schemas'
 
 const stores = buildStores()
 const cite = new Cite(stores.Locale.getValueTranslation)
@@ -405,5 +409,76 @@ describe('Utils', () => {
         suffixes: [],
       })
     })
+  })
+
+  describe('getVersion', () => {
+    const getTranslation = v => v.en
+    it('returns correct version', () => {
+      const dataset = {
+        identifier: 1,
+        dataset_version_set: [{ identifier: 1 }, { identifier: 3 }, { identifier: 5 }],
+      }
+      expect(getVersion(dataset, getTranslation)).toEqual('Version 3')
+    })
+
+    it('returns undefined if dataset has no version set', () => {
+      const dataset = { identifier: 1 }
+      expect(getVersion(dataset, getTranslation)).toEqual(undefined)
+    })
+
+    it('returns undefined if dataset is not in version set', () => {
+      const dataset = { identifier: 1, dataset_version_set: [] }
+      expect(getVersion(dataset, getTranslation)).toEqual(undefined)
+    })
+  })
+
+  describe('getIdentifier', () => {
+    it('returns preferred identifier', () => {
+      const dataset = {
+        research_dataset: { preferred_identifier: 'xyz'}
+      }
+      expect(getIdentifier(dataset)).toEqual('xyz')
+    })
+
+    it('returns unefined for draft', () => {
+      const dataset = {
+        research_dataset: { preferred_identifier: 'xyz'},
+        state: 'draft'
+      }
+      expect(getIdentifier(dataset)).toEqual(undefined)
+    })
+
+    it('returns preferred identifier of published original', () => {
+      const dataset = {
+        research_dataset: { preferred_identifier: 'draft-id'},
+        draft_of: { preferred_identifier: 'published-id'}
+      }
+      expect(getIdentifier(dataset)).toEqual('published-id')
+    })
+
+    it('returns doi url', () => {
+      const dataset = {
+        research_dataset: { preferred_identifier: 'doi:xyz'}
+      }
+      expect(getIdentifier(dataset)).toEqual('https://doi.org/xyz')
+    })
+  })
+})
+
+describe('CitationBuilder', () => {
+  it('ignores empty parts', () => {
+    const citation = new CitationBuilder({
+      sep: '.',
+      parts: [
+        {
+          sep: '!',
+          parts: ['hello', 'world'],
+        },
+        {
+          sep: '?',
+        },
+      ],
+    })
+    citation.get().should.eql('Hello! world')
   })
 })
