@@ -13,10 +13,9 @@ class ConfigValidationMixin:
         else:
             errors = self.schema.validate(self.config)
         if len(errors) > 0:
-            if verbose:
-                log.error(
-                    f"Error validating configuration for {self.__class__.__name__}: {errors}"
-                )
+            log.error(
+                f"Error validating configuration for {self.__class__.__name__}: {errors}"
+            )
             return False
 
         if verbose:

@@ -40,7 +40,7 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
         """
         self.server = None
         self.connection = None
-        if self.config is None:
+        if not self.validate_config(False):
             return
 
         self.server = Server(self.config.get("HOST"), use_ssl=True)

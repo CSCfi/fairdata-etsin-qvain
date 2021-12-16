@@ -18,8 +18,7 @@ class DownloadServiceConfigurationSchema(Schema):
 
     HOST = fields.Str(required=True, validate=Length(min=1))
     PORT = fields.Int(required=True)
-    USER = fields.Str(allow_none=True)
-    PASSWORD = fields.Str(allow_none=True)
+    AUTH_TOKEN = fields.Str(required=True)
     PUBLIC_HOST = fields.Str(required=True)
     PUBLIC_PORT = fields.Int(required=True)
     HTTPS_PROXY = fields.Str(allow_none=True)
@@ -32,3 +31,4 @@ class LDAPIdmServiceConfigurationSchema(Schema):
     HOST = fields.Str(required=True, validate=Length(min=1))
     BIND = fields.Str(required=True, validate=Length(min=1))
     PASSWORD = fields.Str(required=True, validate=Length(min=1))
+    STRATEGY = fields.Str()
