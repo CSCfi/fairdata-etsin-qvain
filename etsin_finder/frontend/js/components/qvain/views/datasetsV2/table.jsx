@@ -55,7 +55,7 @@ const Table = () => {
         <Translate
           content="qvain.datasets.reload"
           component={InvertedButton}
-          onClick={() => loadDatasets()}
+          onClick={() => loadDatasets({ shared: flagEnabled('PERMISSIONS.EDITOR_RIGHTS') })}
         />
       </PlaceholderWrapper>
     )
