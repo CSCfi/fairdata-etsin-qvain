@@ -55,6 +55,9 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
 
     def __enter__(self):
         """Open connection and access service via context manager."""
+        if self.connection is None:
+            log.error("Cannot establish LDAP connection.")
+            abort(503, message="Cannot establish LDAP connection")
         self.connection.open()
         return self
 
