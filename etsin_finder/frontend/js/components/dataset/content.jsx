@@ -154,13 +154,7 @@ class Content extends Component {
                   id="tab-events"
                   aria-labelledby="tab-for-events"
                   role="tabpanel"
-                  provenance={this.props.dataset.research_dataset.provenance}
-                  other_identifier={this.props.dataset.research_dataset.other_identifier}
-                  preservation_dataset_origin_version_identifier={
-                    this.props.dataset.preservation_dataset_origin_version
-                  }
-                  relation={this.props.dataset.research_dataset.relation}
-                  dataset_version_set={this.props.dataset.dataset_version_set}
+                  dataset={this.props.dataset}
                   {...props}
                 />
               )}

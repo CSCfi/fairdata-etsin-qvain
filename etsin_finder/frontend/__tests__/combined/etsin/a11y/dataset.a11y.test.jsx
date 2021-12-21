@@ -18,12 +18,7 @@ import Events from '../../../../js/components/dataset/events'
 import ExternalResources from '../../../../js/components/dataset/data/externalResources'
 import axios from 'axios'
 
-jest.mock('../../../../js/components/dataset/sidebar/special/importImages', () => ({
-  __esModule: true,
-  default: () => {
-    return { 'fairdata_tree_logo.svg': '/url/to/fairdata_tree_logo.svg' }
-  },
-}))
+jest.mock('@/components/dataset/sidebar/special/importImages')
 
 jest.mock('../../../../js/stores/view/accessibility')
 

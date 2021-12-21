@@ -223,7 +223,7 @@ const english = {
     },
     events_idn: {
       deleted_versions: {
-        title: 'Deleted Versions',
+        title: 'Deleted versions',
         date: 'Delete date',
         version: 'Version',
         link_to_dataset: 'Link to dataset',

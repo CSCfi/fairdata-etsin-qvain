@@ -10,18 +10,19 @@ const DatasetGroup = ({ group }) => {
   const [expanded, setExpanded] = useState(false)
 
   const expandGroup = group.length > 1 ? () => setExpanded(!expanded) : undefined
+  const canExpand = group.length > 1
 
   return (
-    <Group expanded={expanded}>
+    <Group expanded={canExpand && expanded}>
       <Dataset
         dataset={group[0]}
-        canExpand={group.length > 1}
-        isExpanded={expanded}
+        canExpand={canExpand}
+        isExpanded={canExpand && expanded}
         expandGroup={expandGroup}
         isLatest
       />
 
-      {expanded && (
+      {canExpand && expanded && (
         <>
           <PreviousVersions />
           {group.slice(1).map((ds, index) => (

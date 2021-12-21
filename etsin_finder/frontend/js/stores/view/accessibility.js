@@ -128,7 +128,7 @@ class Accessibility {
   }
 
   resetFocus() {
-    this.focusableElement.current.focus()
+    this.focusableElement.current?.focus()
   }
 
   @action
