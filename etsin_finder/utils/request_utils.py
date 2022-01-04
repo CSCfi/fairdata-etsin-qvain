@@ -41,23 +41,26 @@ def make_request(request_func, *args, error_to_response=None, **kwargs):
     response = None
     success = False
     url = get_request_url(*args, **kwargs)
+    payload = ""
+    if kwargs.get("json"):
+        payload = kwargs.get("json")
     try:
         response = request_func(*args, **kwargs)
         response.raise_for_status()
         success = True
     except requests.Timeout as e:
-        log.error(f"Request to {url} timed out\n{e}")
+        log.error(f"Request to {url} with payload: {payload} timed out\n{e}")
         return error_to_response(e, 503), 503, False
     except requests.ConnectionError as e:
-        log.error(f"Unable to connect to {url}\n{e}")
+        log.error(f"Unable to connect to {url} with payload: {payload}\n{e}")
         return error_to_response(e, 503), 503, False
     except requests.HTTPError:
         log.warning(
-            "\nResponse status code: {0}\nResponse text: {1}".format(
-                response.status_code, json_or_text(response)
+            "\nResponse status code: {0}\nResponse text: {1}\nWith payload {3}".format(
+                response.status_code, json_or_text(response), payload
             )
         )
     except Exception as e:
-        log.error(f"Error {type(e)} at {url}\n{e}")
+        log.error(f"Error {type(e)} at {url} with payload: {payload}\n{e}")
         return error_to_response(e, 500), 500, False
     return json_or_text(response), response.status_code, success
