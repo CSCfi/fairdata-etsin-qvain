@@ -43,6 +43,30 @@ When there are updates to python packages, you will need to build, tag, and push
 3 Push image:
 - `docker push fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask`
 
+## Updating Python dependencies
+
+Python dependencies are managed with Poetry. 
+
+Add dependencies with `poetry add <dependency>`. 
+
+Add development dependencies using -D option, e.g. `poetry add -D tox`. 
+
+After poetry commands, update requirements.txt with `poetry export --without-hashes -o requirements.txt`, you can include dev dependencies with `--dev` option.
+
+For full documentation of Poetry, visit the [official documentation](https://python-poetry.org/docs/)
+
+### Installing Poetry
+
+First, install [pipx](https://github.com/pypa/pipx), with pipx installed, install Poetry with `pipx install poetry`. 
+
+### Installing dependencies
+
+you can install project dependencies with `poetry install`
+
+### Updating dependencies 
+
+To update dependencies according to `pyproject.toml` file constrains, run `poetry update`, followed by `poetry export --without-hashes -o requirements.txt`.
+
 ## Running syntax checks
 
 1 Running tox:
