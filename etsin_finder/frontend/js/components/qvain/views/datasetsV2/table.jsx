@@ -12,13 +12,10 @@ const Table = () => {
   const {
     QvainDatasets: { count, error, loadDatasets, isLoadingDatasets, reset, searchTerm },
     QvainDatasetsV2: { filteredGroups, showMore, moreAvailable, reset: resetV2 },
-    Env: {
-      Flags: { flagEnabled },
-    },
   } = useStores()
 
   useEffect(() => {
-    loadDatasets({ shared: flagEnabled('PERMISSIONS.EDITOR_RIGHTS') })
+    loadDatasets()
     return () => {
       reset()
       resetV2()
@@ -55,7 +52,7 @@ const Table = () => {
         <Translate
           content="qvain.datasets.reload"
           component={InvertedButton}
-          onClick={() => loadDatasets({ shared: flagEnabled('PERMISSIONS.EDITOR_RIGHTS') })}
+          onClick={() => loadDatasets()}
         />
       </PlaceholderWrapper>
     )

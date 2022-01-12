@@ -136,12 +136,12 @@ class QvainDatasets {
     })
   }
 
-  loadDatasets = async ({ shared } = {}) => {
+  loadDatasets = async () => {
     this.clearError()
     try {
       const url = urls.qvain.datasets()
       const response = await this.promiseManager.add(
-        axios.get(url, { params: { no_pagination: true, shared } }),
+        axios.get(url, { params: { no_pagination: true } }),
         'datasets'
       )
       const data = response.data || []
