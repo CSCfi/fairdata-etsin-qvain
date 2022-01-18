@@ -195,9 +195,23 @@ class Share {
           urls.qvain.datasetEditorPermissionsUser(this.datasetIdentifier, user.uid),
           { timeout }
         )
-        const users = this.userPermissions.filter(u => u.uid !== user.uid)
-        this.setUserPermissions(users)
+
+        const perms = [ ...this.userPermissions ]
+        const index = perms.findIndex(p => p.uid === user.uid)
+
+        // remove only role if user is project member
+        if (index >= 0) {
+          perms[index] = { ...perms[index] }
+          if (perms[index].isProjectMember) {
+            delete perms[index].role
+          } else {
+            perms.splice(index, 1)
+          }
+
+          this.setUserPermissions(perms)
+        }
         this.setPermissionChangeError(undefined)
+
         return true
       } catch (err) {
         this.setPermissionChangeError(err)

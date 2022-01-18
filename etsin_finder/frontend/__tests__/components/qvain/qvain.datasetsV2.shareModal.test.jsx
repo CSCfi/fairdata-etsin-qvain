@@ -329,6 +329,13 @@ describe('ShareModal', () => {
             is_project_member: false,
             role: 'editor',
           },
+          {
+            uid: 'editormember',
+            name: 'Editor Member',
+            email: 'editormember@example.com',
+            is_project_member: true,
+            role: 'editor',
+          },
         ],
         project: 'some_project',
       })
@@ -361,8 +368,10 @@ describe('ShareModal', () => {
       const expectedPermissions = [
         ['teppo testaaja (teppo, teppo@example.com)', 'Creator'],
         ['not_in_ldap', 'Editor'],
+        ['Editor Member (editormember, editormember@example.com)', 'Editor'],
         ['Longlong von Longlonglonglongname (longname, long@example.com)', 'Editor'],
       ]
+
       const permissions = wrapper
         .find('ul.permission-users .member-user')
         .map(user => [user.find('.member-name').text(), user.find('.member-role').text()])
@@ -372,6 +381,7 @@ describe('ShareModal', () => {
     it('should list project members', () => {
       const expectedMembers = [
         'teppo testaaja (teppo, teppo@example.com)',
+        'Editor Member (editormember, editormember@example.com)',
         'Member Person (member, member@example.com)',
       ]
       const members = wrapper
@@ -395,45 +405,61 @@ describe('ShareModal', () => {
       wrapper.find({ content: 'qvain.datasets.share.members.projectHelp' }).should.have.lengthOf(0)
     })
 
-    const openConfirmRemoveDialog = async () => {
+    const openConfirmRemoveDialog = async memberLabel => {
       const getMember = name =>
-        wrapper.find('.member-user').filterWhere(u => u.find('span.member-name').text() === name)
-      const dropdownButton = getMember('not_in_ldap').find('button[aria-label="Editor"]')
+        wrapper
+          .find('.permission-users .member-user')
+          .filterWhere(u => u.find('span.member-name').text() === name)
+      const dropdownButton = getMember(memberLabel).find('button[aria-label="Editor"]')
       dropdownButton.simulate('click')
-      wrapper.find('.member-user').should.have.lengthOf(5)
-      const removeButton = getMember('not_in_ldap').find(
-        'ul[role="menu"] button[children="Remove"]'
-      )
+      const removeButton = getMember(memberLabel).find('ul[role="menu"] button[children="Remove"]')
       removeButton.simulate('click')
       await wait(() => wrapper.find('button span[children="Remove"]').length === 1)
     }
 
-    it('should remove user from members list', async () => {
+    it('should remove member editor from permissions list', async () => {
+      const permissionCount = wrapper.find('.permission-users .member-user').length
+      const memberCount = wrapper.find('.project-member-users .member-user').length
       mockAdapter
-        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap$'))
+        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/editormember$'))
         .reply(200, '')
-      await openConfirmRemoveDialog()
+      await openConfirmRemoveDialog('Editor Member (editormember, editormember@example.com)')
       wrapper.find('button span[children="Remove"]').simulate('click')
       await wait(() => wrapper.find('button span[children="Remove"]').length === 0)
-      wrapper.find('.member-user').should.have.lengthOf(4)
+      wrapper.find('.permission-users .member-user').should.have.lengthOf(permissionCount - 1)
+      wrapper.find('.project-member-users .member-user').should.have.lengthOf(memberCount)
     })
 
-    it('should cancel removing user from members list', async () => {
+    it('should remove non-member editor from permissions list', async () => {
+      const permissionCount = wrapper.find('.permission-users .member-user').length
+      const memberCount = wrapper.find('.project-member-users .member-user').length
       mockAdapter
         .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap$'))
         .reply(200, '')
-      await openConfirmRemoveDialog()
+      await openConfirmRemoveDialog('not_in_ldap')
+      wrapper.find('button span[children="Remove"]').simulate('click')
+      await wait(() => wrapper.find('button span[children="Remove"]').length === 0)
+      wrapper.find('.permission-users .member-user').should.have.lengthOf(permissionCount - 1)
+      wrapper.find('.project-member-users .member-user').should.have.lengthOf(memberCount)
+    })
+
+    it('should cancel removing user from permissions list', async () => {
+      mockAdapter
+        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/editormember$'))
+        .reply(200, '')
+      wrapper.find('.member-user').should.have.lengthOf(7)
+      await openConfirmRemoveDialog('Editor Member (editormember, editormember@example.com)')
       wrapper.find('button[children="Cancel"]').simulate('click')
       await wait(() => wrapper.find('button span[children="Remove"]').length === 0)
-      wrapper.find('.member-user').should.have.lengthOf(5)
+      wrapper.find('.member-user').should.have.lengthOf(7)
     })
 
     it('should show error when deletion fails', async () => {
       mockAdapter
-        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap$'))
+        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/editormember$'))
         .reply(400, '')
 
-      await openConfirmRemoveDialog()
+      await openConfirmRemoveDialog('Editor Member (editormember, editormember@example.com)')
       wrapper.find('button span[children="Remove"]').simulate('click')
       await wait(() => wrapper.find('[children*="There was an error"]').length > 0)
     })
