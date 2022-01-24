@@ -165,7 +165,7 @@ export default class Agent extends Component {
       return ''
     }
     return (
-      <InlineLi>
+      <AgentListItem inline={this.props.inline}>
         {this.props.first ? '' : ' & '}
         {!this.shouldHavePopup() ? (
           <TextWithoutPopup lang={getDataLang(this.state.agent.name)}>
@@ -197,7 +197,7 @@ export default class Agent extends Component {
             </InlineTransparentLink>
           </PopUp>
         )}
-      </InlineLi>
+      </AgentListItem>
     )
   }
 }
@@ -209,10 +209,12 @@ const InlineTransparentLink = styled(TransparentLink)`
 Agent.defaultProps = {
   first: false,
   popupAlign: 'left',
+  inline: false,
 }
 
 Agent.propTypes = {
   first: PropTypes.bool,
+  inline: PropTypes.bool,
   agent: PropTypes.object.isRequired,
   popupAlign: PropTypes.oneOf(['left', 'left-fit-content', 'right', 'center', 'sidebar']),
 }
@@ -226,9 +228,9 @@ const PopUpContainer = styled.div`
   min-width: 13em;
 `
 
-const InlineLi = styled.li`
+const AgentListItem = styled.li`
   list-style: none;
-  display: inline;
+  ${p => p.inline && 'display: inline;'}
 `
 
 const Name = styled.h4`

@@ -62,6 +62,7 @@ export default class TogglableAgentList extends Component {
             if (agent.name) {
               return (
                 <Agent
+                  inline
                   lang={getDataLang(agent.name)}
                   key={checkDataLang(agent.name)}
                   first={i === 0}
@@ -78,6 +79,7 @@ export default class TogglableAgentList extends Component {
               if (agent.name) {
                 return (
                   <Agent
+                    inline
                     lang={getDataLang(agent.name)}
                     key={checkDataLang(agent.name)}
                     agent={agent}
