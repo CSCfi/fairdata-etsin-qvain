@@ -1,6 +1,5 @@
 const path = require('path')
 const { DefinePlugin } = require('webpack')
-const DotenvPlugin = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
@@ -83,7 +82,6 @@ const config = env => ({
       favicon: 'static/images/favicon.png',
       /* scriptLoading: 'defer', */
     }),
-    new DotenvPlugin(),
     new DefinePlugin({
       BUILD: JSON.stringify(env.BUILD || process.env.NODE_ENV || 'production'),
     }),

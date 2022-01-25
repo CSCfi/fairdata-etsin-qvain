@@ -1,7 +1,6 @@
 require('@babel/polyfill')
 const path = require('path')
 const { DefinePlugin } = require('webpack')
-const DotenvPlugin = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { insertBeforeStyled } = require('./helpers')
@@ -47,7 +46,6 @@ const config = env => ({
       template: 'static/index.template.ejs',
       favicon: 'static/images/favicon.png',
     }),
-    new DotenvPlugin(),
     new DefinePlugin({
       BUILD: JSON.stringify(env.BUILD || process.env.NODE_ENV || 'production'),
     }),
