@@ -11,27 +11,62 @@ import Tabs from './Tabs'
 import Invite from './Invite'
 import Members from './Members'
 import Loader from '../../../../general/loader'
+import InviteResults from './inviteResults'
 import ConfirmRemove from './ConfirmRemove'
 
 const modalDataTypes = {
   dataset: PropTypes.object.isRequired,
 }
 
+const getSelectedTab = ({ share }) => {
+  const { tabs, isLoadingPermissions, permissionLoadError } = share
+
+  if (permissionLoadError) {
+    return <Translate component={Error} content="qvain.datasets.share.errors.loadingPermissions" />
+  }
+  if (isLoadingPermissions) {
+    return <Loader active size="6rem " />
+  }
+  if (tabs.active === 'invite') {
+    return <Invite />
+  }
+  return <Members />
+}
+
+const getModalContent = ({ share }) => {
+  const { confirmClose, setConfirmClose, inviteResults, modal } = share
+
+  if (inviteResults) {
+    return (
+      <TabContent>
+        <InviteResults />
+      </TabContent>
+    )
+  }
+
+  const selectedTab = getSelectedTab({ share })
+  return (
+    <>
+      <Tabs />
+      {selectedTab && <TabContent>{selectedTab}</TabContent>}
+      <ConfirmClose
+        show={confirmClose}
+        onCancel={() => setConfirmClose(false)}
+        onConfirm={modal.close}
+        warning="qvain.datasets.share.invite.confirm.warning"
+        confirm="qvain.datasets.share.invite.confirm.confirm"
+        cancel="qvain.datasets.share.invite.confirm.cancel"
+      />
+    </>
+  )
+}
+
 export const ShareModal = () => {
   const {
-    QvainDatasetsV2: {
-      share: {
-        modal,
-        tabs,
-        confirmClose,
-        setConfirmClose,
-        isInviting,
-        hasUnsentInvite,
-        isLoadingPermissions,
-        permissionLoadError,
-      },
-    },
+    QvainDatasetsV2: { share },
   } = useStores()
+
+  const { modal, setConfirmClose, isInviting, hasUnsentInvite } = share
 
   if (!modal.data) {
     return null
@@ -52,20 +87,6 @@ export const ShareModal = () => {
     }
   }
 
-  let selectedTab = null
-
-  if (permissionLoadError) {
-    selectedTab = (
-      <Translate component={Error} content="qvain.datasets.share.errors.loadingPermissions" />
-    )
-  } else if (isLoadingPermissions) {
-    selectedTab = <Loader active size="6rem " />
-  } else if (tabs.active === 'invite') {
-    selectedTab = <Invite />
-  } else {
-    selectedTab = <Members />
-  }
-
   return (
     <Modal
       isOpen
@@ -74,16 +95,7 @@ export const ShareModal = () => {
       customStyles={modalStyles}
     >
       <Translate component={Title} content="qvain.datasets.share.title" />
-      <Tabs />
-      {selectedTab && <TabContent>{selectedTab}</TabContent>}
-      <ConfirmClose
-        show={confirmClose}
-        onCancel={() => setConfirmClose(false)}
-        onConfirm={close}
-        warning="qvain.datasets.share.invite.confirm.warning"
-        confirm="qvain.datasets.share.invite.confirm.confirm"
-        cancel="qvain.datasets.share.invite.confirm.cancel"
-      />
+      {getModalContent({ share })}
       <ConfirmRemove />
     </Modal>
   )
@@ -111,6 +123,9 @@ const TabContent = styled.div`
 
 const Title = styled.h3`
   text-align: center;
+  border-bottom: 1px solid ${p => p.theme.color.medgray};
+  padding-bottom: 0.5rem;
+  margin-bottom: 0;
 `
 
 const Error = styled.div`

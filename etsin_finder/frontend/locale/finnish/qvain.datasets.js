@@ -129,6 +129,11 @@ const datasets = {
         confirm: 'Kyllä, unohda kutsu',
         cancel: 'Ei, jatka muokkausta',
       },
+      results: {
+        success: 'Muokkausoikeus jaettu käyttäjille',
+        fail: 'Muokkausoikeuksien jakaminen epäonnistui käyttäjille',
+        close: 'Sulje',
+      },
     },
     members: {
       roles: {

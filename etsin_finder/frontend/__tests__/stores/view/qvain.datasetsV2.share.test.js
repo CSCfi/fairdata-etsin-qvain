@@ -1,15 +1,13 @@
-import { combineName } from '../../../js/stores/view/qvain/qvain.datasetsV2.share'
+import Share from '../../../js/stores/view/qvain/qvain.datasetsV2.share'
 
-describe('combineName', () => {
-  it('should combine first and last name', () => {
-    combineName('mauno', 'ahonen').should.eql('mauno ahonen')
+const share = new Share()
+
+describe('given no inviteResults', () => {
+  it('inviteSuccessUsers should return empty array', () => {
+    share.inviteSuccessUsers.should.eql([])
   })
 
-  it('should ignore missing last name', () => {
-    combineName('mauno', undefined).should.eql('mauno')
-  })
-
-  it('should ignore missing first name', () => {
-    combineName(undefined, 'ahonen').should.eql('ahonen')
+  it('inviteFailUsers should return empty array', () => {
+    share.inviteFailUsers.should.eql([])
   })
 })

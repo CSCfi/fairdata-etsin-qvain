@@ -52,7 +52,6 @@ const StyledItemCount = styled.span`
 
 const ModalTab = styled(Tab)`
   border-radius: 0;
-  border-top: 1px solid ${p => p.theme.color.medgray};
   margin-bottom: -4px;
   flex-basis: 0;
   flex-grow: 1;

@@ -1057,8 +1057,26 @@ class TestQvainDatasetsEditorPermissions(BaseTest):
         """Test that editor permissions are collected from Metax and LDAP."""
         data = {"users": ["not_member", "jasen"], "message": "Hello, this is dataset."}
         r = authd_client.post("/api/qvain/datasets/1/editor_permissions", json=data)
-        assert r.status_code == 201
-        assert r.json == ""
+        assert r.status_code == 200
+        assert r.json == {
+            "users": [
+                {
+                    "name": "Projen Jäsen",
+                    "uid": "jasen",
+                    "email": "jasen@example.com",
+                    "success": True,
+                    "status": 201,
+                },
+                {
+                    "name": "Not Member",
+                    "uid": "not_member",
+                    "email": "not_member@example.com",
+                    "success": True,
+                    "status": 201,
+                },
+            ],
+            "email": {"success": True},
+        }
 
         # check that correct email is sent
         assert len(capture_mail) == 1
@@ -1085,8 +1103,19 @@ class TestQvainDatasetsEditorPermissions(BaseTest):
         )
         data = {"users": ["not_member"]}
         r = authd_client.post("/api/qvain/datasets/1/editor_permissions", json=data)
-        assert r.status_code == 400
-        assert r.json == {"user_id": "User_id already exists"}
+        assert r.status_code == 200
+        assert r.json == {
+            "users": [
+                {
+                    "email": "not_member@example.com",
+                    "name": "Not Member",
+                    "status": 400,
+                    "success": False,
+                    "uid": "not_member",
+                }
+            ],
+            "email": {"success": False},
+        }
 
     def test_post_user_editor_permissions_not_in_ldap(
         self, mocks, authd_client, user_details, IDA_projects_ok

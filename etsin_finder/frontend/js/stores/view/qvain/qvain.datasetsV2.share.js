@@ -17,17 +17,6 @@ const roleCompare = (a, b) => roleValue(a) - roleValue(b)
 
 const timeout = 20000
 
-export const combineName = (firstName, lastName) => {
-  const parts = []
-  if (firstName) {
-    parts.push(firstName)
-  }
-  if (lastName) {
-    parts.push(lastName)
-  }
-  return parts.join(' ')
-}
-
 class Share {
   constructor() {
     this.promiseManager = new PromiseManager()
@@ -63,6 +52,8 @@ class Share {
 
   @observable userPermissionToRemove = undefined
 
+  @observable inviteResults = undefined
+
   @computed get datasetIdentifier() {
     return this.modal.data?.dataset.identifier
   }
@@ -86,6 +77,7 @@ class Share {
     this.inviteMessage = ''
     this.confirmClose = false
     this.userPermissionToRemove = undefined
+    this.inviteResults = undefined
   }
 
   @computed get hasUnsentInvite() {
@@ -147,13 +139,12 @@ class Share {
   @action.bound
   async sendInvite() {
     const invite = async () => {
-      await axios.post(
+      const resp = await axios.post(
         urls.qvain.datasetEditorPermissions(this.datasetIdentifier),
         { users: this.selectedUsers.map(u => u.uid), message: this.inviteMessage },
         { timeout }
       )
-      this.resetValues()
-      this.modal.close()
+      this.setInviteResults(resp.data)
     }
     await this.promiseManager.add(invite(), 'invite')
   }
@@ -264,6 +255,25 @@ class Share {
   @action.bound
   setInviteMessage(message) {
     this.inviteMessage = message
+  }
+
+  @action.bound
+  setInviteResults(results) {
+    this.inviteResults = results
+  }
+
+  @computed get inviteSuccessUsers() {
+    if (!this.inviteResults?.users) {
+      return []
+    }
+    return this.inviteResults.users.filter(user => user.success)
+  }
+
+  @computed get inviteFailUsers() {
+    if (!this.inviteResults?.users) {
+      return []
+    }
+    return this.inviteResults.users.filter(user => !user.success)
   }
 
   getTabItemCount(tab) {

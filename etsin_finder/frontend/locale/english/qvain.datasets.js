@@ -129,6 +129,11 @@ const datasets = {
         confirm: 'Yes, discard invitation',
         cancel: 'No, continue editing',
       },
+      results: {
+        success: 'Successfully shared editing rights with',
+        fail: 'There was an error sharing editing rights with',
+        close: 'Close',
+      },
     },
     members: {
       roles: {

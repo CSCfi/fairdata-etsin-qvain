@@ -10,6 +10,7 @@ import Translate from 'react-translate-component'
 import { useStores } from '../../../utils/stores'
 import Button from '../../../../general/button'
 import Loader from '../../../../general/loader'
+import getPersonLabel from './getPersonLabel'
 
 const LoadingMessage = props => (
   <components.LoadingMessage {...props}>
@@ -42,8 +43,6 @@ const Control = ({ theme, ...props }) => (
 Control.propTypes = {
   theme: PropTypes.object.isRequired,
 }
-
-const getPersonLabel = ({ name, uid, email }) => `${name} (${uid}, ${email})`
 
 const Invite = () => {
   const {
@@ -81,9 +80,7 @@ const Invite = () => {
     LoadingMessage,
   }
 
-  const existingUsers = new Set(
-    userPermissions.filter(user => user.role).map(user => user.uid)
-  )
+  const existingUsers = new Set(userPermissions.filter(user => user.role).map(user => user.uid))
 
   return (
     <Container>
@@ -96,7 +93,10 @@ const Invite = () => {
         <Translate
           inputId="search-users-input"
           component={Select}
-          styles={{ container: provided => ({ ...provided, flexGrow: 1 }) }}
+          styles={{
+            container: provided => ({ ...provided, flexGrow: 1 }),
+            multiValueLabel: provided => ({ ...provided, whiteSpace: 'normal' }),
+          }}
           value={toJS(selectedUsers)}
           loadOptions={fetchOptions}
           getOptionLabel={person => getPersonLabel(person)}

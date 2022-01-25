@@ -528,6 +528,19 @@ class QvainDatasetEditorPermissions(Resource):
             cr_id {str} -- Identifier of dataset.
             data {json} -- Array of usernames to give permission to.
 
+        Returns operation success as dict:
+            {
+                users: [{
+                    uid: username,
+                    email: email address,
+                    name: real name,
+                    success: was adding permission successful,
+                    status: status code
+                }, {...}],
+                {
+                    success: was sending emails succssful
+                }
+            }
         """
         error = check_dataset_edit_permission(cr_id)
         if error is not None:
@@ -551,22 +564,35 @@ class QvainDatasetEditorPermissions(Resource):
                 abort(400, message=f'Users not found: {", ".join(missing_users)}')
 
         service = MetaxQvainAPIService()
-        for user in users:
+        for user in user_data:
             response, status = service.create_dataset_editor_permissions_user(
-                cr_id, user
+                cr_id, user.get("uid")
             )
-            if status != 201:
-                return response, status
+            if status == 201:
+                user.update({"success": True, "status": status})
+            else:
+                user.update({"success": False, "status": status})
+                log.error(f"Creating permission failed: {response}")
 
-        emails = [user.get("email") for user in user_data if user.get("email")]
+        emails = [
+            user.get("email")
+            for user in user_data
+            if user.get("email") and user.get("success")
+        ]
         username = authentication.get_user_csc_name()
-        self._send_share_notification_email(
-            cr_id, sender_user=username, emails=emails, message=message
-        )
+        email_success = False
+        if len(emails) > 0:
+            try:
+                self._send_share_notification_email(
+                    cr_id, sender_user=username, emails=emails, message=message
+                )
+                email_success = True
+            except Exception as e:
+                log.error(f"Failed to send share notification email: {repr(e)}")
 
         # clear permissions cache
         current_app.cr_permission_cache.delete(cr_id)
-        return "", 201
+        return {"users": user_data, "email": {"success": email_success}}, 200
 
     def _send_share_notification_email(self, cr_id, sender_user, emails, message=""):
         """Send notification email."""
@@ -591,35 +617,29 @@ class QvainDatasetEditorPermissions(Resource):
             abort(500, message=repr(e))
 
         with current_app.mail.record_messages() as outbox:
-            try:
-                log.info(f"Sending share notification mail for dataset {cr_id}")
-                sender = current_app.config.get("MAIL_DEFAULT_SENDER")
-                domain = current_app.config.get("SERVER_QVAIN_DOMAIN_NAME")
-                qvain_url = f"https://{domain}/dataset/{cr_id}"
-                recipients = emails
-                context = dict(
-                    sender_user=sender_user,
-                    title=title,
-                    message=message,
-                    qvain_url=qvain_url,
-                )
-                subject = translate(
-                    language, "qvain.share.notification.subject", context
-                )
-                body = translate(language, "qvain.share.notification.body", context)
-                msg = Message(
-                    recipients=recipients,
-                    sender=sender,
-                    reply_to=sender,
-                    subject=subject,
-                    body=body,
-                )
-                current_app.mail.send(msg)
-                if len(outbox) != 1:
-                    raise Exception
-            except Exception as e:
-                log.error(f"Failed to send share notification email: {repr(e)}")
-                return abort(500, message=repr(e))
+            log.info(f"Sending share notification mail for dataset {cr_id}")
+            sender = current_app.config.get("MAIL_DEFAULT_SENDER")
+            domain = current_app.config.get("SERVER_QVAIN_DOMAIN_NAME")
+            qvain_url = f"https://{domain}/dataset/{cr_id}"
+            recipients = emails
+            context = dict(
+                sender_user=sender_user,
+                title=title,
+                message=message,
+                qvain_url=qvain_url,
+            )
+            subject = translate(language, "qvain.share.notification.subject", context)
+            body = translate(language, "qvain.share.notification.body", context)
+            msg = Message(
+                recipients=recipients,
+                sender=sender,
+                reply_to=sender,
+                subject=subject,
+                body=body,
+            )
+            current_app.mail.send(msg)
+            if len(outbox) != 1:
+                raise Exception
 
 
 class QvainDatasetEditorPermissionsUser(Resource):

@@ -28,6 +28,30 @@ const otherTestUser = {
   uid: 'person',
 }
 
+const failTestUser = {
+  name: 'Fail Dude',
+  email: 'fail@example.com',
+  uid: 'fail',
+}
+
+const userInviteResponses = {
+  testinen: {
+    ...testUser,
+    success: true,
+    status: 201,
+  },
+  person: {
+    otherTestUser,
+    success: true,
+    status: 201,
+  },
+  fail: {
+    failTestUser,
+    success: false,
+    status: 400,
+  },
+}
+
 const searchResultsTesti = [testUser, otherTestUser]
 
 const searchResultsTestinen = [testUser]
@@ -89,7 +113,12 @@ beforeEach(async () => {
   mockAdapter.onGet(RegExp('^/api/ldap/users/empty$')).reply(200, [])
   mockAdapter.onGet(RegExp('^/api/ldap/users/error$')).reply(500, 'error happened')
   mockAdapter.onGet(RegExp('^/api/qvain/datasets/jeejee/editor_permissions$')).reply(200, [])
-  mockAdapter.onPost(RegExp('^/api/qvain/datasets/jeejee/editor_permissions$')).reply(200, '')
+  mockAdapter.onPost(RegExp('^/api/qvain/datasets/jeejee/editor_permissions$')).reply(config => {
+    const statuses = JSON.parse(config.data).users.map(uid => ({
+      ...userInviteResponses[uid],
+    }))
+    return [200, { users: statuses }]
+  })
 
   await render()
 })
@@ -231,14 +260,28 @@ describe('ShareModal', () => {
         getInviteButton().prop('disabled').should.be.false
       })
 
-      it('should close modal after sending invitation', async () => {
+      it('should show successful share', async () => {
         stores.QvainDatasetsV2.share.setSelectedUsers([testUser])
         wrapper
           .find('textarea[placeholder*="message"]')
           .simulate('change', { target: { value: 'This is a message' } })
         getInviteButton().simulate('click', { button: 0 })
-        jest.advanceTimersByTime(10000)
-        await wait(() => wrapper.find('[aria-label="shareDatasetModal"]').length === 0)
+        await wait(
+          () => wrapper.find('h3[children*="Successfully shared editing rights"]').length === 1
+        )
+        wrapper.find('h3[children*="There was an error sharing editing rights"]').should.have.lengthOf(0)
+      })
+
+      it('should show failed shares', async () => {
+        stores.QvainDatasetsV2.share.setSelectedUsers([testUser, failTestUser])
+        wrapper
+          .find('textarea[placeholder*="message"]')
+          .simulate('change', { target: { value: 'This is a message' } })
+        getInviteButton().simulate('click', { button: 0 })
+        await wait(
+          () => wrapper.find('h3[children*="Successfully shared editing rights"]').length === 1
+        )
+        wrapper.find('h3[children*="There was an error sharing editing rights"]').should.have.lengthOf(1)
       })
 
       it('should not allow closing modal while sending invitation', async () => {
