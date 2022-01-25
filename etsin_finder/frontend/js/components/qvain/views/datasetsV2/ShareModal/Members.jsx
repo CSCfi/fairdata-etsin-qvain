@@ -54,7 +54,7 @@ export const Members = () => {
       share: {
         userPermissions,
         project,
-        removeUserPermission,
+        requestRemoveUserPermission,
         isUpdatingUserPermission,
         permissionChangeError,
       },
@@ -87,7 +87,7 @@ export const Members = () => {
           content="qvain.datasets.share.members.remove"
           border="top"
           onClick={() => {
-            removeUserPermission(user)
+            requestRemoveUserPermission(user)
           }}
         />
       </Dropdown>

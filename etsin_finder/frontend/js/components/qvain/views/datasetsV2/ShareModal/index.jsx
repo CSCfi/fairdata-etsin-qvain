@@ -7,10 +7,11 @@ import Translate from 'react-translate-component'
 import Modal from '../../../../general/modal'
 import { ConfirmClose } from '../../../general/modal/confirmClose'
 import { useStores } from '../../../utils/stores'
-import Tabs from './tabs'
-import Invite from './invite'
-import Members from './members'
+import Tabs from './Tabs'
+import Invite from './Invite'
+import Members from './Members'
 import Loader from '../../../../general/loader'
+import ConfirmRemove from './ConfirmRemove'
 
 const modalDataTypes = {
   dataset: PropTypes.object.isRequired,
@@ -83,6 +84,7 @@ export const ShareModal = () => {
         confirm="qvain.datasets.share.invite.confirm.confirm"
         cancel="qvain.datasets.share.invite.confirm.cancel"
       />
+      <ConfirmRemove />
     </Modal>
   )
 }

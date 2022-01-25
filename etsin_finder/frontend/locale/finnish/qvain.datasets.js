@@ -145,6 +145,11 @@ const datasets = {
         'Projektin jäsenille myönnetään muokkausoikeudet automaattisesti. Projektin jäseniä voi muuttaa My CSC:n kautta.',
       projectHelpLabel: 'Info',
     },
+    remove: {
+      warning: 'Olet poistamassa aineiston muokkausoikeudet käyttäjältä %(user)s. Oletko varma?',
+      confirm: 'Poista',
+      cancel: 'Peruuta',
+    },
   },
   previousVersions: {
     label: 'Edelliset versiot',

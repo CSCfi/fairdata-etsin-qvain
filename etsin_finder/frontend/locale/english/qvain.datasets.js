@@ -143,8 +143,12 @@ const datasets = {
       updateError: 'There was an error updating user permissions. Please try again.',
       projectHelp:
         'Project members are automatically granted editing rights. Project members can be changed via My CSC.',
-      projectHelpLabel:
-        'Info',
+      projectHelpLabel: 'Info',
+    },
+    remove: {
+      warning: 'You are about to remove editing rights from user %(user)s. Are you sure?',
+      confirm: 'Remove',
+      cancel: 'Cancel',
     },
   },
   previousVersions: {

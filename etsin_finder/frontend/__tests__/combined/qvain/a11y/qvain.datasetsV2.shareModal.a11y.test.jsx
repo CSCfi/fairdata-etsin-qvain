@@ -12,7 +12,7 @@ import etsinTheme from '@/styles/theme'
 import datasets from '../../../__testdata__/qvain.datasets'
 import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
-import ShareModal from '@/components/qvain/views/datasetsV2/shareModal'
+import ShareModal from '@/components/qvain/views/datasetsV2/ShareModal'
 
 let stores
 

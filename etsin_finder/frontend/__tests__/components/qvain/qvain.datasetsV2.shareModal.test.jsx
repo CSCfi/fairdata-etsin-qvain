@@ -12,7 +12,7 @@ import '@/../locale/translations'
 import etsinTheme from '@/styles/theme'
 import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
-import ShareModal from '@/components/qvain/views/datasetsV2/shareModal'
+import ShareModal from '@/components/qvain/views/datasetsV2/ShareModal'
 
 jest.useFakeTimers('modern')
 
@@ -352,10 +352,7 @@ describe('ShareModal', () => {
       wrapper.find({ content: 'qvain.datasets.share.members.projectHelp' }).should.have.lengthOf(0)
     })
 
-    it('should remove user from members list', async () => {
-      mockAdapter
-        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap$'))
-        .reply(200, '')
+    const openConfirmRemoveDialog = async () => {
       const getMember = name =>
         wrapper.find('.member-user').filterWhere(u => u.find('span.member-name').text() === name)
       const dropdownButton = getMember('not_in_ldap').find('button[aria-label="Editor"]')
@@ -365,22 +362,37 @@ describe('ShareModal', () => {
         'ul[role="menu"] button[children="Remove"]'
       )
       removeButton.simulate('click')
-      await wait(() => wrapper.find('.member-user').length === 4)
+      await wait(() => wrapper.find('button span[children="Remove"]').length === 1)
+    }
+
+    it('should remove user from members list', async () => {
+      mockAdapter
+        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap$'))
+        .reply(200, '')
+      await openConfirmRemoveDialog()
+      wrapper.find('button span[children="Remove"]').simulate('click')
+      await wait(() => wrapper.find('button span[children="Remove"]').length === 0)
+      wrapper.find('.member-user').should.have.lengthOf(4)
+    })
+
+    it('should cancel removing user from members list', async () => {
+      mockAdapter
+        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap$'))
+        .reply(200, '')
+      await openConfirmRemoveDialog()
+      wrapper.find('button[children="Cancel"]').simulate('click')
+      await wait(() => wrapper.find('button span[children="Remove"]').length === 0)
+      wrapper.find('.member-user').should.have.lengthOf(5)
     })
 
     it('should show error when deletion fails', async () => {
       mockAdapter
         .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap$'))
         .reply(400, '')
-      const getMember = name =>
-        wrapper.find('.member-user').filterWhere(u => u.find('span.member-name').text() === name)
-      const dropdownButton = getMember('not_in_ldap').find('button[aria-label="Editor"]')
-      dropdownButton.simulate('click')
-      const removeButton = getMember('not_in_ldap').find(
-        'ul[role="menu"] button[children="Remove"]'
-      )
-      removeButton.simulate('click')
-      await wait(() => wrapper.find('div[children*="There was an error"]').length === 1)
+
+      await openConfirmRemoveDialog()
+      wrapper.find('button span[children="Remove"]').simulate('click')
+      await wait(() => wrapper.find('[children*="There was an error"]').length > 0)
     })
   })
 })

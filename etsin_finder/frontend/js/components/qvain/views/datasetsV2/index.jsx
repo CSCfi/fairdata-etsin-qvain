@@ -11,7 +11,7 @@ import NoticeBar from '../../../general/noticeBar'
 import Tabs from './tabs'
 import Table from './table'
 import RemoveModal from '../datasets/removeModal'
-import ShareModal from './shareModal'
+import ShareModal from './ShareModal'
 import Search from './search'
 
 export const Datasets = () => {

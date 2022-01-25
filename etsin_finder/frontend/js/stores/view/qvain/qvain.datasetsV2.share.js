@@ -39,6 +39,7 @@ class Share {
     makeObservable(this)
     this.getTabItemCount = this.getTabItemCount.bind(this)
     this.isUpdatingUserPermission = this.isUpdatingUserPermission.bind(this)
+    this.isRemovingUserPermission = this.isRemovingUserPermission.bind(this)
     reaction(() => this.modal.isOpen, this.handleToggle)
   }
 
@@ -59,6 +60,8 @@ class Share {
   @observable userPermissions = []
 
   @observable project = undefined
+
+  @observable userPermissionToRemove = undefined
 
   @computed get datasetIdentifier() {
     return this.modal.data?.dataset.identifier
@@ -82,6 +85,7 @@ class Share {
     this.project = undefined
     this.inviteMessage = ''
     this.confirmClose = false
+    this.userPermissionToRemove = undefined
   }
 
   @computed get hasUnsentInvite() {
@@ -188,6 +192,10 @@ class Share {
     return this.promiseManager.count(`update-user-${user.uid}`) > 0
   }
 
+  isRemovingUserPermission(user) {
+    return this.promiseManager.count(`remove-user-${user.uid}`) > 0
+  }
+
   @action.bound
   async removeUserPermission(user) {
     const remove = async () => {
@@ -198,13 +206,39 @@ class Share {
         )
         const users = this.userPermissions.filter(u => u.uid !== user.uid)
         this.setUserPermissions(users)
+        this.setPermissionChangeError(undefined)
+        return true
       } catch (err) {
         this.setPermissionChangeError(err)
+        return false
       }
     }
 
     this.setPermissionChangeError(undefined)
-    await this.promiseManager.add(remove(), ['update-user', `update-user-${user.uid}`])
+    const success = await this.promiseManager.add(remove(), [
+      'remove-user',
+      `remove-user-${user.uid}`,
+    ])
+    return success
+  }
+
+  @action.bound
+  requestRemoveUserPermission(user) {
+    this.userPermissionToRemove = user
+  }
+
+  @action.bound
+  async confirmRemoveUserPermission() {
+    const success = await this.removeUserPermission(this.userPermissionToRemove)
+    if (success) {
+      this.requestRemoveUserPermission(undefined)
+    }
+  }
+
+  @action.bound
+  cancelRemoveUserPermission() {
+    this.userPermissionToRemove = undefined
+    this.setPermissionChangeError(undefined)
   }
 
   @action.bound

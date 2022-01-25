@@ -58,6 +58,7 @@ export const DangerButton = styled(Button)`
   margin-left: 20px;
   padding: 10px 25px;
   &:hover {
+    border: 1px solid ${props => (props.disabled ? '#ddb6b6' : '#ff4c4c')};
     background-color: ${props => (props.disabled ? '#ddb6b6' : '#ff4c4c')};
   }
 `

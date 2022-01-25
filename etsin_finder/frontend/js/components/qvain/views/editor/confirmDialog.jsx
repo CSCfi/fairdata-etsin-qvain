@@ -7,7 +7,7 @@ const ConfirmModal = props => {
   if (!props.show) return null
 
   return (
-    <Modal isOpen contentLabel={'Warning'} customStyles={modalStyle}>
+    <Modal isOpen contentLabel="Warning" customStyles={modalStyle}>
       <ConfirmDialog {...props} />
     </Modal>
   )
