@@ -41,12 +41,12 @@ const userInviteResponses = {
     status: 201,
   },
   person: {
-    otherTestUser,
+    ...otherTestUser,
     success: true,
     status: 201,
   },
   fail: {
-    failTestUser,
+    ...failTestUser,
     success: false,
     status: 400,
   },
@@ -228,7 +228,7 @@ describe('ShareModal', () => {
           stores.QvainDatasetsV2.share.setSelectedUsers([testUser])
         })
 
-        it('should allow canceling confirmation open', async () => {
+        it('should allow canceling confirmation', async () => {
           // click close button, modal should still be open
           wrapper.find('button[aria-label="Close"]').simulate('click')
           wrapper.find('[aria-label="shareDatasetModal"]').should.have.lengthOf(1)
@@ -269,7 +269,13 @@ describe('ShareModal', () => {
         await wait(
           () => wrapper.find('h3[children*="Successfully shared editing rights"]').length === 1
         )
-        wrapper.find('h3[children*="There was an error sharing editing rights"]').should.have.lengthOf(0)
+        wrapper
+          .find('ul.success-users')
+          .text()
+          .should.eql('Testi Testinen (testinen, testi.testinen@example.com)')
+        wrapper
+          .find('h3[children*="There was an error sharing editing rights"]')
+          .should.have.lengthOf(0)
       })
 
       it('should show failed shares', async () => {
@@ -281,7 +287,32 @@ describe('ShareModal', () => {
         await wait(
           () => wrapper.find('h3[children*="Successfully shared editing rights"]').length === 1
         )
-        wrapper.find('h3[children*="There was an error sharing editing rights"]').should.have.lengthOf(1)
+        wrapper.find('ul.fail-users').text().should.eql('Fail Dude (fail, fail@example.com)')
+        wrapper
+          .find('h3[children*="There was an error sharing editing rights"]')
+          .should.have.lengthOf(1)
+      })
+
+      it('should return to invite tab and remove succesfully added users from selected', async () => {
+        mockAdapter.onGet(RegExp('^/api/qvain/datasets/jeejee/editor_permissions$')).reply(200, {
+          users: [
+            {
+              ...testUser,
+              role: 'creator',
+            },
+          ],
+        })
+        stores.QvainDatasetsV2.share.setSelectedUsers([testUser, failTestUser])
+        wrapper
+          .find('textarea[placeholder*="message"]')
+          .simulate('change', { target: { value: 'This is a message' } })
+        getInviteButton().simulate('click', { button: 0 })
+        await wait(
+          () => wrapper.find('h3[children*="Successfully shared editing rights"]').length === 1
+        )
+        wrapper.find('button[aria-label="Close"]').simulate('click')
+        await wait(() => wrapper.find('input#search-users-input').length === 1)
+        stores.QvainDatasetsV2.share.selectedUsers.should.eql([failTestUser])
       })
 
       it('should not allow closing modal while sending invitation', async () => {

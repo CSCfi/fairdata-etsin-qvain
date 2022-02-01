@@ -10,16 +10,15 @@ import getPersonLabel from './getPersonLabel'
 const InviteResults = () => {
   const {
     QvainDatasetsV2: {
-      share: { inviteSuccessUsers, inviteFailUsers, modal },
+      share: { inviteSuccessUsers, inviteFailUsers, requestCloseModal },
     },
   } = useStores()
-
   return (
     <>
       {inviteSuccessUsers.length > 0 && (
         <>
           <Translate component={Label} content="qvain.datasets.share.invite.results.success" />
-          <ul>
+          <ul className="success-users">
             {inviteSuccessUsers.map(user => (
               <li key={user.uid}>{getPersonLabel(user)}</li>
             ))}
@@ -30,14 +29,14 @@ const InviteResults = () => {
       {inviteFailUsers.length > 0 && (
         <>
           <Translate component={Label} content="qvain.datasets.share.invite.results.fail" />
-          <ul>
+          <ul className="fail-users">
             {inviteFailUsers.map(user => (
               <li key={user.uid}>{getPersonLabel(user)}</li>
             ))}
           </ul>
         </>
       )}
-      <InviteButton onClick={modal.close}>
+      <InviteButton onClick={requestCloseModal}>
         <Translate content="qvain.datasets.share.invite.results.close" />
       </InviteButton>
     </>

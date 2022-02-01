@@ -80,6 +80,10 @@ class Share {
     this.inviteResults = undefined
   }
 
+  @computed get hasInviteResults() {
+    return !!this.inviteResults
+  }
+
   @computed get hasUnsentInvite() {
     return this.selectedUsers.length > 0
   }
@@ -90,6 +94,20 @@ class Share {
 
   @computed get isLoadingPermissions() {
     return this.promiseManager.count('permissions') > 0
+  }
+
+  @action.bound
+  requestCloseModal() {
+    if (this.isInviting) {
+      return
+    }
+    if (this.hasInviteResults) {
+      this.setInviteResults(undefined)
+    } else if (this.hasUnsentInvite) {
+      this.setConfirmClose(true)
+    } else {
+      this.modal.close()
+    }
   }
 
   @action.bound
@@ -145,8 +163,17 @@ class Share {
         { timeout }
       )
       this.setInviteResults(resp.data)
+      this.fetchPermissions() // fetch in background
     }
     await this.promiseManager.add(invite(), 'invite')
+  }
+
+  @action.bound
+  removeAddedUsersFromSelected() {
+    // Remove users that already have permissions from selection.
+    const successes = this.userPermissions.filter(u => u.role).map(u => u.uid)
+    const unsuccessful = this.selectedUsers.filter(u => !successes.includes(u.uid))
+    this.setSelectedUsers(unsuccessful)
   }
 
   @action.bound
@@ -167,6 +194,7 @@ class Share {
         users.sort(roleCompare) // creator first
         this.setUserPermissions(users)
         this.setProject(resp.data.project)
+        this.removeAddedUsersFromSelected()
       } catch (err) {
         this.setUserPermissions([])
         console.error(err)
@@ -196,7 +224,7 @@ class Share {
           { timeout }
         )
 
-        const perms = [ ...this.userPermissions ]
+        const perms = [...this.userPermissions]
         const index = perms.findIndex(p => p.uid === user.uid)
 
         // remove only role if user is project member

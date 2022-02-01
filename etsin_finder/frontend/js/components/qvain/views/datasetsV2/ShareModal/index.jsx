@@ -11,7 +11,7 @@ import Tabs from './Tabs'
 import Invite from './Invite'
 import Members from './Members'
 import Loader from '../../../../general/loader'
-import InviteResults from './inviteResults'
+import InviteResults from './InviteResults'
 import ConfirmRemove from './ConfirmRemove'
 
 const modalDataTypes = {
@@ -66,7 +66,7 @@ export const ShareModal = () => {
     QvainDatasetsV2: { share },
   } = useStores()
 
-  const { modal, setConfirmClose, isInviting, hasUnsentInvite } = share
+  const { modal, requestCloseModal } = share
 
   if (!modal.data) {
     return null
@@ -74,23 +74,10 @@ export const ShareModal = () => {
 
   PropTypes.checkPropTypes(modalDataTypes, modal.data, 'data', 'ShareModal')
 
-  const { close } = modal
-
-  const requestClose = () => {
-    if (isInviting) {
-      return
-    }
-    if (hasUnsentInvite) {
-      setConfirmClose(true)
-    } else {
-      close()
-    }
-  }
-
   return (
     <Modal
       isOpen
-      onRequestClose={requestClose}
+      onRequestClose={requestCloseModal}
       contentLabel="shareDatasetModal"
       customStyles={modalStyles}
     >
