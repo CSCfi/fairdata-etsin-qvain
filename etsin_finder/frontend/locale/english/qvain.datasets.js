@@ -71,6 +71,13 @@ const datasets = {
     revert: 'Revert changes',
     delete: 'Delete',
   },
+  shortActions: {
+    edit: 'Edit',
+    editDraft: 'Edit',
+    goToEtsin: 'Preview',
+    goToEtsinDraft: 'Preview',
+    share: 'Editors',
+  },
   remove: {
     confirm: {
       published: {

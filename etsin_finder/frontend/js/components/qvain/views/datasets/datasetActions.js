@@ -9,9 +9,10 @@ export const getEnterEditAction = (Stores, dataset) => {
 
   return {
     text: dataset.next_draft ? 'qvain.datasets.actions.editDraft' : 'qvain.datasets.actions.edit',
+    shortText: dataset.next_draft ? 'qvain.datasets.shortActions.editDraft' : 'qvain.datasets.actions.edit',
     danger: false,
     icon: faEdit,
-    onlyIcon: true,
+    onlyIcon: false,
     handler: () => {
       if (dataset.next_draft) {
         Matomo.recordEvent(`EDIT / ${dataset.next_draft.identifier}`)
@@ -44,8 +45,10 @@ export const getGoToEtsinAction = (Stores, dataset) => {
 
   return {
     text: `qvain.datasets.actions.${goToEtsinKey}`,
+    shortText: `qvain.datasets.shortActions.${goToEtsinKey}`,
     danger: false,
     icon: faEye,
+    onlyIcon: false,
     moreIfNarrow: true,
     handler: () => {
       Matomo.recordEvent(`PREVIEW / ${identifier}`)
@@ -63,8 +66,10 @@ export const getShareAction = (Stores, dataset) => {
 
   return {
     text: `qvain.datasets.actions.share`,
+    shortText: `qvain.datasets.shortActions.share`,
     danger: false,
     icon: faUserPlus,
+    onlyIcon: false,
     moreIfNarrow: true,
     handler: () => {
       modal.open({ dataset })
@@ -83,7 +88,9 @@ export const getCreateNewVersionAction = (Stores, dataset) => {
 
   return {
     text: 'qvain.datasets.actions.createNewVersion',
+    shortText: `qvain.datasets.shortActions.createNewVersion`,
     danger: false,
+    more: true,
     handler: async () => {
       const newIdentifier = await createNewVersion(dataset)
       recordEvent(`NEW_VERSION / ${identifier}`)
@@ -101,7 +108,9 @@ export const getUseAsTemplateAction = (Stores, dataset) => {
 
   return {
     text: 'qvain.datasets.actions.useAsTemplate',
+    shortText: `qvain.datasets.shortActions.useAsTemplate`,
     danger: false,
+    more: true,
     handler: () => {
       history.push(getQvainUrl('/dataset'))
       recordEvent(`TEMPLATE / ${dataset.identifier}`)
@@ -123,6 +132,7 @@ export const getRemoveAction = (Stores, dataset, onlyChanges) => {
   return {
     text: onlyChanges ? 'qvain.datasets.actions.revert' : 'qvain.datasets.actions.delete',
     danger: true,
+    more: true,
     handler: () =>
       removeModal.open({
         dataset,

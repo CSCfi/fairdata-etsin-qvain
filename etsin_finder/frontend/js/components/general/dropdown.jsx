@@ -257,7 +257,7 @@ const DropdownItemLi = styled.li`
     p.onlyNarrow &&
     `
     display: block;
-    @media screen and (min-width: ${p.theme.breakpoints.md}) {
+    @media screen and (min-width: ${p.theme.breakpoints.lg}) {
       display: none;
     }
     `}

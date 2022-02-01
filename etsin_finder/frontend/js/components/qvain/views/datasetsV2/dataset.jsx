@@ -16,7 +16,7 @@ import formatAge from '../datasets/formatAge'
 import { getDatasetActionsV2 } from '../datasets/datasetActions'
 import { Dropdown, DropdownItem } from '../../../general/dropdown'
 
-const getActionItem = action => {
+const getActionMenuItem = action => {
   const { text, handler, danger, moreIfNarrow } = action
   return (
     <DropdownItem
@@ -32,14 +32,16 @@ const getActionItem = action => {
 }
 
 const getActionButton = action => (
-  <Cell key={action.text} onlyNarrow={action.moreIfNarrow}>
-    <Translate
-      onClick={action.handler}
-      component={IconButton}
-      icon={action.icon}
-      attributes={{ 'aria-label': action.text }}
-    />
-  </Cell>
+    <Cell key={action.text} onlyNarrow={action.moreIfNarrow}>
+      <Translate
+        onClick={action.handler}
+        content={action.shortText}
+        component={IconButton}
+        icon={action.icon}
+        onlyIcon={action.onlyIcon}
+        attributes={{ 'aria-label': action.text }}
+      />
+    </Cell>
 )
 
 const getTitle = (getValueTranslation, dataset) => {
@@ -105,10 +107,12 @@ const Dataset = ({ dataset, isExpanded, expandGroup, isLatest, versionNumber }) 
         <Dropdown
           buttonContent="qvain.datasets.moreActions"
           buttonComponent={IconButton}
-          buttonProps={{ icon: faEllipsisH }}
+          buttonProps={{ icon: faEllipsisH, onlyIcon: true }}
           align="left"
         >
-          {actions.filter(({ onlyIcon }) => !onlyIcon).map(action => getActionItem(action))}
+          {actions
+            .filter(({ moreIfNarrow, more }) => moreIfNarrow || more)
+            .map(action => getActionMenuItem(action))}
         </Dropdown>
       </Cell>
       <PadCell />
@@ -152,27 +156,47 @@ const ExpandIconWrapper = styled.span`
   width: 1rem;
 `
 
-const IconButton = ({ icon, ...props }) => (
-  <StyledIconButton {...props}>
-    <FontAwesomeIcon icon={icon} />
+const IconButton = ({ icon, children, onlyIcon, ...props }) => (
+  <StyledIconButton {...props} onlyIcon={onlyIcon || !children}>
+    <StyledFontAwesomeIcon icon={icon} />
+    {!onlyIcon && children}
   </StyledIconButton>
 )
 
 IconButton.propTypes = {
   icon: PropTypes.object.isRequired,
+  onlyIcon: PropTypes.bool,
+  children: PropTypes.node,
+}
+
+IconButton.defaultProps = {
+  onlyIcon: false,
+  children: undefined,
 }
 
 const StyledIconButton = styled.button.attrs({ type: 'button' })`
   color: inherit;
   border: none;
   background: transparent;
-  height: 2.5rem;
   width: 4rem;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   cursor: pointer;
   font-size: 20px;
+  ${props =>
+    !props.onlyIcon &&
+    `border: solid ${props.theme.color.primary} 1px;
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    font-size: 12pt;
+    width: 100%;
+    gap: 2px;`}
+`
+
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  color: ${props => props.theme.color.primary};
+  margin-right: 0.25rem;
 `
 
 const StyledDataset = styled.tr`
@@ -193,7 +217,7 @@ const Cell = styled.td`
     `
     display: none;
   `}
-  @media screen and (min-width: ${p => p.theme.breakpoints.md}) {
+  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     display: table-cell;
   }
 `

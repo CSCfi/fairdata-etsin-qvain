@@ -125,14 +125,14 @@ const HeadCell = styled.th`
     p.onlyWide &&
     `
     display: none;
-    @media screen and (min-width: ${p.theme.breakpoints.md}) {
+    @media screen and (min-width: ${p.theme.breakpoints.lg}) {
       display: table-cell;
     }
   `}
 `
 
 const IconHeadCell = styled(HeadCell)`
-  padding: 0.5rem 0.25rem;
+  padding: 0.5rem 1rem;
 `
 
 const TitleCell = styled(HeadCell)`

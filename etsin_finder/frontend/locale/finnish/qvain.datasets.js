@@ -65,11 +65,18 @@ const datasets = {
     editDraft: 'Muokkaa luonnosta',
     goToEtsin: 'Katso Etsimessä',
     goToEtsinDraft: 'Esikatsele Etsimessä',
-    share: 'Jaa',
+    share: 'Muokkaajat',
     createNewVersion: 'Luo uusi versio',
     useAsTemplate: 'Käytä mallina',
     revert: 'Poista muutokset',
     delete: 'Poista',
+  },
+  shortActions: {
+    edit: 'Muokkaa',
+    editDraft: 'Muokkaa',
+    goToEtsin: 'Katsele',
+    goToEtsinDraft: 'Katsele',
+    share: 'Muokkaajat',
   },
   remove: {
     confirm: {
