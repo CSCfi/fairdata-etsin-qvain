@@ -1085,9 +1085,9 @@ class TestQvainDatasetsEditorPermissions(BaseTest):
             "not_member@example.com",
             "jasen@example.com",
         }
-        assert msg.subject == "You have new editing rights in Qvain"
+        assert msg.subject == "You have new editing rights in Qvain https://qvain/dataset/1"
         assert msg.body == (
-            'User teppo_testaaja has given you editing rights to Qvain dataset "This is the title of dataset 1":\n\n'
+            'User Teppo Testaaja has given you editing rights to Qvain dataset "This is the title of dataset 1":\n\n'
             "Hello, this is dataset.\n"
             "https://qvain/dataset/1\n"
         )

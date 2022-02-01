@@ -579,7 +579,11 @@ class QvainDatasetEditorPermissions(Resource):
             for user in user_data
             if user.get("email") and user.get("success")
         ]
-        username = authentication.get_user_csc_name()
+
+        username = "{} {}".format(authentication.get_user_firstname(), authentication.get_user_lastname())
+        if len(username) < 2:
+            username = authentication.get_user_csc_name()
+
         email_success = False
         if len(emails) > 0:
             try:
