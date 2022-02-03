@@ -574,21 +574,23 @@ class QvainDatasetEditorPermissions(Resource):
                 user.update({"success": False, "status": status})
                 log.error(f"Creating permission failed: {response}")
 
-        emails = [
-            user.get("email")
+        recipients = [
+            {"uid": user.get("uid"), "email": user.get("email")}
             for user in user_data
             if user.get("email") and user.get("success")
         ]
 
-        username = "{} {}".format(authentication.get_user_firstname(), authentication.get_user_lastname())
+        username = "{} {}".format(
+            authentication.get_user_firstname(), authentication.get_user_lastname()
+        )
         if len(username) < 2:
             username = authentication.get_user_csc_name()
 
         email_success = False
-        if len(emails) > 0:
+        if len(recipients) > 0:
             try:
                 self._send_share_notification_email(
-                    cr_id, sender_user=username, emails=emails, message=message
+                    cr_id, sender_user=username, recipients=recipients, message=message
                 )
                 email_success = True
             except Exception as e:
@@ -598,7 +600,9 @@ class QvainDatasetEditorPermissions(Resource):
         current_app.cr_permission_cache.delete(cr_id)
         return {"users": user_data, "email": {"success": email_success}}, 200
 
-    def _send_share_notification_email(self, cr_id, sender_user, emails, message=""):
+    def _send_share_notification_email(
+        self, cr_id, sender_user, recipients, message=""
+    ):
         """Send notification email."""
         message = message.strip()
         if len(message) > 0:
@@ -625,24 +629,28 @@ class QvainDatasetEditorPermissions(Resource):
             sender = current_app.config.get("MAIL_DEFAULT_SENDER")
             domain = current_app.config.get("SERVER_QVAIN_DOMAIN_NAME")
             qvain_url = f"https://{domain}/dataset/{cr_id}"
-            recipients = emails
-            context = dict(
-                sender_user=sender_user,
-                title=title,
-                message=message,
-                qvain_url=qvain_url,
-            )
-            subject = translate(language, "qvain.share.notification.subject", context)
-            body = translate(language, "qvain.share.notification.body", context)
-            msg = Message(
-                recipients=recipients,
-                sender=sender,
-                reply_to=sender,
-                subject=subject,
-                body=body,
-            )
-            current_app.mail.send(msg)
-            if len(outbox) != 1:
+            for recipient in recipients:
+                context = dict(
+                    sender_user=sender_user,
+                    recipient_uid=recipient.get("uid"),
+                    title=title,
+                    message=message,
+                    qvain_url=qvain_url,
+                )
+                subject = translate(
+                    language, "qvain.share.notification.subject", context
+                )
+                body = translate(language, "qvain.share.notification.body", context)
+                print(body)
+                msg = Message(
+                    recipients=[recipient.get("email")],
+                    sender=sender,
+                    reply_to=sender,
+                    subject=subject,
+                    body=body,
+                )
+                current_app.mail.send(msg)
+            if len(outbox) != len(recipients):
                 raise Exception
 
 

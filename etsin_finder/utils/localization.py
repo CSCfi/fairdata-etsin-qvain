@@ -77,9 +77,9 @@ translations = {
             "Fairdata Qvain -työkalu tekee datasi "
             "kuvailun ja julkaisemisen helpoksi."
         ),
-        "qvain.share.notification.subject": "Sinulla on uusi muokkausoikeus Qvaimessa {qvain_url}",
+        "qvain.share.notification.subject": "Sinulla {recipient_uid} on uusi muokkausoikeus Fairdata Qvaimessa",
         "qvain.share.notification.body": (
-            'Käyttäjä {sender_user} on antanut Qvaimessa sinulle muokkausoikeuden aineistoon "{title}":\n\n'
+            'Käyttäjä {sender_user} on antanut Fairdata Qvaimessa sinulle muokkausoikeuden aineistoon "{title}":\n\n'
             "{message}"
             "{qvain_url}\n"
         ),
@@ -92,9 +92,9 @@ translations = {
         "etsin.description": "Etsin enables you to find research datasets from all fields of science.",
         "qvain.title": "Qvain | Research Dataset Description Tool",
         "qvain.description": "Fairdata Qvain tool makes describing and publishing your research data effortless for you.",
-        "qvain.share.notification.subject": "You have new editing rights in Qvain {qvain_url}",
+        "qvain.share.notification.subject": "You have new editing rights in Fairdata Qvain",
         "qvain.share.notification.body": (
-            'User {sender_user} has given you editing rights to Qvain dataset "{title}":\n\n'
+            'User {sender_user} has given you {recipient_uid} editing rights in Fairdata Qvain to dataset "{title}":\n\n'
             "{message}"
             "{qvain_url}\n"
         ),

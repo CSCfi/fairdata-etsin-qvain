@@ -1078,16 +1078,26 @@ class TestQvainDatasetsEditorPermissions(BaseTest):
             "email": {"success": True},
         }
 
-        # check that correct email is sent
-        assert len(capture_mail) == 1
+        # check that correct emails are sent
+        assert len(capture_mail) == 2
         msg = capture_mail[0]
         assert msg.send_to == {
-            "not_member@example.com",
             "jasen@example.com",
         }
-        assert msg.subject == "You have new editing rights in Qvain https://qvain/dataset/1"
+        assert msg.subject == "You have new editing rights in Fairdata Qvain"
         assert msg.body == (
-            'User Teppo Testaaja has given you editing rights to Qvain dataset "This is the title of dataset 1":\n\n'
+            'User Teppo Testaaja has given you jasen editing rights in Fairdata Qvain to dataset "This is the title of dataset 1":\n\n'
+            "Hello, this is dataset.\n"
+            "https://qvain/dataset/1\n"
+        )
+
+        msg = capture_mail[1]
+        assert msg.send_to == {
+            "not_member@example.com",
+        }
+        assert msg.subject == "You have new editing rights in Fairdata Qvain"
+        assert msg.body == (
+            'User Teppo Testaaja has given you not_member editing rights in Fairdata Qvain to dataset "This is the title of dataset 1":\n\n'
             "Hello, this is dataset.\n"
             "https://qvain/dataset/1\n"
         )
