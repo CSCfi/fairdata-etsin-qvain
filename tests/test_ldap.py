@@ -31,25 +31,24 @@ def createMockLDAPIdmService(users=None, projects=None):
             for project in projects:
                 self._add_project(*project)
 
-        def _add_user(self, uid, given_name, surname, mail):
+        def _add_user(self, uid, given_name, surname, mail, nsAccountLock="false"):
             self.connection.strategy.add_entry(
-                f"cn={uid},ou=External,ou=Users,ou=idm,dc=csc,dc=fi",
+                f"cn={uid},ou=Academic,ou=External,ou=Users,ou=idm,dc=csc,dc=fi",
                 {
-                    "dn": f"cn={uid},ou=External,ou=Users,ou=idm,dc=csc,dc=fi",
                     "cn": uid,
                     "uid": uid,
                     "mail": mail,
                     "givenName": given_name,
                     "sn": surname,
                     "objectClass": "person",
+                    "nsAccountLock": nsAccountLock,
                 },
             )
 
         def _add_project(self, project_id, members):
             self.connection.strategy.add_entry(
-                f"cn={project_id},ou=Projects,ou=idm,dc=csc,dc=fi",
+                f"cn={project_id},ou=Academic,ou=Projects,ou=idm,dc=csc,dc=fi",
                 {
-                    "dn": f"cn={project_id},ou=External,ou=Users,ou=idm,dc=csc,dc=fi",
                     "cn": project_id,
                     "objectClass": "CSCProject",
                     "member": [
@@ -66,6 +65,7 @@ MockLDAPIdmService = createMockLDAPIdmService(
     users=[
         ("tt", "teppo", "von test", "teppo@example.com"),
         ("kk", "koe", "von kokeilu", "koe@example.com"),
+        ("locked", "locked", "von ignoreme", "locked@example.com", "true"),
     ],
     projects=[("teppo_project", ["tt"]), ("all_project", ["tt", "kk"])],
 )
@@ -202,7 +202,8 @@ class TestLDAPFilters(LDAPTestBase):
             "(&(givenName=Test*)(sn=Teppo*)))"
             "(mail=Teppo Test*)"
             "(cn=Teppo Test*))"
-            "(objectClass=person))"
+            "(objectClass=person)"
+            "(!(nsAccountLock=true)))"
         )
         filter = ldap_service._create_person_search_filter(name)
         assert filter == expected_filter

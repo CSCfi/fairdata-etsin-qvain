@@ -27,7 +27,7 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
 
     PROJECT_PATH = "ou=Projects,ou=idm,dc=csc,dc=fi"
     PROJECT_OUTPUT = ["member"]
-    USERS_PATH = "ou=External,ou=Users,ou=idm,dc=csc,dc=fi"
+    USERS_PATH = "ou=Academic,ou=External,ou=Users,ou=idm,dc=csc,dc=fi"
     USERS_OUTPUT = ["givenName", "sn", "mail", "uid"]
 
     schema = LDAPIdmServiceConfigurationSchema(unknown=marshmallow.RAISE)
@@ -158,7 +158,7 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
 
         email_filter = f"(mail={safe_str}*)"
         uid_filter = f"(cn={safe_str}*)"
-        filter = f"(&(|{name_filter}{email_filter}{uid_filter})(objectClass=person))"
+        filter = f"(&(|{name_filter}{email_filter}{uid_filter})(objectClass=person)(!(nsAccountLock=true)))"
 
         return filter
 
@@ -196,7 +196,7 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
         uid_filters = [
             f"(cn={escape_filter_chars(username)})" for username in usernames
         ]
-        filter = f'(&(|{"".join(uid_filters)})(objectClass=person))'
+        filter = f'(&(|{"".join(uid_filters)})(objectClass=person)(!(nsAccountLock=true)))'
         data, status = self._search(self.USERS_PATH, filter, self.USERS_OUTPUT)
         if status != 200:
             return data, status
