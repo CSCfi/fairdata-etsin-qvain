@@ -1086,7 +1086,7 @@ class TestQvainDatasetsEditorPermissions(BaseTest):
         }
         assert msg.subject == "You have new editing rights in Fairdata Qvain"
         assert msg.body == (
-            'User Teppo Testaaja has given you jasen editing rights in Fairdata Qvain to dataset "This is the title of dataset 1":\n\n'
+            'User Teppo Testaaja has given you (jasen) editing rights in Fairdata Qvain, dataset "This is the title of dataset 1":\n\n'
             "Hello, this is dataset.\n"
             "https://qvain/dataset/1\n"
         )
@@ -1097,7 +1097,7 @@ class TestQvainDatasetsEditorPermissions(BaseTest):
         }
         assert msg.subject == "You have new editing rights in Fairdata Qvain"
         assert msg.body == (
-            'User Teppo Testaaja has given you not_member editing rights in Fairdata Qvain to dataset "This is the title of dataset 1":\n\n'
+            'User Teppo Testaaja has given you (not_member) editing rights in Fairdata Qvain, dataset "This is the title of dataset 1":\n\n'
             "Hello, this is dataset.\n"
             "https://qvain/dataset/1\n"
         )
