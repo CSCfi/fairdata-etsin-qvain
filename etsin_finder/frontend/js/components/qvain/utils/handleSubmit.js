@@ -1,3 +1,5 @@
+import { REMOTE_RESOURCES_DATA_CATALOGS } from '../../../utils/constants'
+
 /* eslint-disable camelcase */
 const handleSubmitToBackend = values => {
   const title = values.Title.toBackend()
@@ -50,9 +52,8 @@ const handleSubmitToBackend = values => {
       license,
       access_type: accessType,
       restriction_grounds: restrictionGrounds,
-      available: embargoDate
+      available: embargoDate,
     },
-    remote_resources: values.ExternalResources.toBackend(),
     dataCatalog: values.dataCatalog,
     cumulativeState: values.cumulativeState,
     useDoi: values.useDoi,
@@ -64,6 +65,10 @@ const handleSubmitToBackend = values => {
     field_of_science,
     language,
     issued,
+  }
+
+  if (REMOTE_RESOURCES_DATA_CATALOGS.includes(values.dataCatalog)) {
+    obj.remote_resources = values.ExternalResources.toBackend()
   }
 
   if (values.original) {

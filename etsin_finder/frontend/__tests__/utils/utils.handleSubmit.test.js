@@ -3,8 +3,7 @@ import 'chai/register-expect'
 import handleSubmit from '../../js/components/qvain/utils/handleSubmit'
 
 describe('when calling handleSubmit with mockStores', () => {
-  let returnValue
-  const mockStores = {
+  const getMockStores = dataCatalog => ({
     Qvain: {
       Title: {
         toBackend: jest.fn(() => 'title'),
@@ -69,52 +68,65 @@ describe('when calling handleSubmit with mockStores', () => {
       Infrastructures: {
         toBackend: jest.fn(() => 'infrastructures'),
       },
-      dataCatalog: 'dataCatalog',
+      dataCatalog,
       cumulativeState: 'cumulativeState',
       useDoi: 'useDoi',
       ExternalResources: {
         toBackend: jest.fn(() => 'externalResources'),
       },
     },
-  }
-
-  beforeEach(() => {
-    returnValue = handleSubmit(mockStores.Qvain)
   })
 
-  test('should return expectedReturn', () => {
-    const expectedReturn = {
-      title: 'title',
-      description: 'description',
-      other_identifier: 'otherIdentifiers',
-      keywords: 'keywords',
-      theme: 'theme',
-      creator: 'creator',
-      publisher: 'publisher',
-      rights_holder: 'rights_holder',
-      curator: 'curator',
-      contributor: 'contributor',
-      infrastructure: 'infrastructures',
-      access_rights: {
-        license: 'license',
-        access_type: 'accessType',
-        available: 'embargoDate',
-        restriction_grounds: 'restrictionGrounds',
-      },
-      remote_resources: 'externalResources',
-      dataCatalog: 'dataCatalog',
-      cumulativeState: 'cumulativeState',
-      useDoi: 'useDoi',
-      is_output_of: 'projects',
-      spatial: 'spatial',
-      temporal: 'temporal',
-      relation: 'relation',
-      provenance: 'provenance',
-      field_of_science: 'field_of_science',
-      language: 'language',
-      issued: 'issuedDate',
-    }
+  const expectedReturnCommon = {
+    title: 'title',
+    description: 'description',
+    other_identifier: 'otherIdentifiers',
+    keywords: 'keywords',
+    theme: 'theme',
+    creator: 'creator',
+    publisher: 'publisher',
+    rights_holder: 'rights_holder',
+    curator: 'curator',
+    contributor: 'contributor',
+    infrastructure: 'infrastructures',
+    access_rights: {
+      license: 'license',
+      access_type: 'accessType',
+      available: 'embargoDate',
+      restriction_grounds: 'restrictionGrounds',
+    },
+    // remote_resources: undefined,
+    // dataCatalog: 'dataCatalog',
+    cumulativeState: 'cumulativeState',
+    useDoi: 'useDoi',
+    is_output_of: 'projects',
+    spatial: 'spatial',
+    temporal: 'temporal',
+    relation: 'relation',
+    provenance: 'provenance',
+    field_of_science: 'field_of_science',
+    language: 'language',
+    issued: 'issuedDate',
+  }
 
-    returnValue.should.deep.eql(expectedReturn)
+  const expectedReturnATT = {
+    ...expectedReturnCommon,
+    remote_resources: 'externalResources',
+    dataCatalog: 'urn:nbn:fi:att:data-catalog-att',
+  }
+
+  const expectedReturnIDA = {
+    ...expectedReturnCommon,
+    dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
+  }
+
+  test('should return data with external resources', () => {
+    const returnValue = handleSubmit(getMockStores('urn:nbn:fi:att:data-catalog-att').Qvain)
+    returnValue.should.deep.eql(expectedReturnATT)
+  })
+
+  test('should return data without external resources', () => {
+    const returnValue = handleSubmit(getMockStores('urn:nbn:fi:att:data-catalog-ida').Qvain)
+    returnValue.should.deep.eql(expectedReturnIDA)
   })
 })

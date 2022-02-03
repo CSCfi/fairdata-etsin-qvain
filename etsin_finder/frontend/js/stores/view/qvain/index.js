@@ -5,7 +5,12 @@ import {
   dataCatalogSchema,
   externalResourceSchema,
 } from './qvain.dataCatalog.schemas'
-import { CUMULATIVE_STATE, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
+import {
+  CUMULATIVE_STATE,
+  DATA_CATALOG_IDENTIFIER,
+  REMOTE_RESOURCES_DATA_CATALOGS,
+  FILES_DATA_CATALOGS,
+} from '../../../utils/constants'
 import Resources from './qvain.resources'
 import Files from './qvain.files'
 import Submit from './qvain.submit'
@@ -112,6 +117,14 @@ class Qvain extends Resources {
 
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
       this.setUseDoi(true)
+    }
+
+    if (!FILES_DATA_CATALOGS.includes(selectedDataCatalog)) {
+      this.Files.reset()
+    }
+
+    if (!REMOTE_RESOURCES_DATA_CATALOGS.includes(selectedDataCatalog)) {
+      this.ExternalResources.reset()
     }
   }
 
@@ -242,6 +255,7 @@ class Qvain extends Resources {
   @action resetWithTemplate = async dataset => {
     this.resetQvainStore()
     this.loadBasicFields(dataset)
+    this.ExternalResources.reset()
     this.setChanged(true)
   }
 

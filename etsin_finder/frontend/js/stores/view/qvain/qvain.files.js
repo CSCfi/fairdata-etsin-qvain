@@ -453,6 +453,10 @@ class Files extends FilesBase {
     }
     return actions
   }
+
+  @computed get hasSelectedItems() {
+    return !!(this.root && this.SelectedItemsView.getItems(this.root).length > 0)
+  }
 }
 
 export default Files

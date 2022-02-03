@@ -21,6 +21,15 @@ export const DATA_CATALOG_IDENTIFIER = {
   DFT: 'urn:nbn:fi:att:data-catalog-dft',
 }
 
+export const REMOTE_RESOURCES_DATA_CATALOGS = [
+  DATA_CATALOG_IDENTIFIER.ATT,
+]
+
+export const FILES_DATA_CATALOGS = [
+  DATA_CATALOG_IDENTIFIER.IDA,
+  DATA_CATALOG_IDENTIFIER.PAS,
+]
+
 export const REMS_URL = 'https://vm1446.kaj.pouta.csc.fi'
 
 export const LEGACY_QVAIN_URL = 'https://qvain.fairdata.fi'

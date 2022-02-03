@@ -22,6 +22,7 @@ const customComponents = {
 const DataCatalog = () => {
   const {
     Qvain: {
+      Files,
       dataCatalog,
       setDataCatalog,
       ExternalResources,
@@ -64,6 +65,7 @@ const DataCatalog = () => {
   }
 
   const hasExternalResources = ExternalResources.storage.length > 0
+  const hasFiles = Files.hasSelectedItems
 
   if (lang) updateOptions()
   // PAS catalog cannot be selected by the user
@@ -71,7 +73,7 @@ const DataCatalog = () => {
   const catalogSelectValue = availableOptions.find(opt => opt.value === dataCatalog)
   const isDataCatalogNotDecided =
     !original?.data_catalog || original?.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.DFT
-  const isDisabled = hasExternalResources.length > 0 || !isDataCatalogNotDecided || isPas
+  const isDisabled = hasFiles || hasExternalResources || !isDataCatalogNotDecided || isPas
 
   return (
     <Card>
