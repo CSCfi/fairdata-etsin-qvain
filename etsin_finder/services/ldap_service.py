@@ -59,6 +59,9 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
             log.error("Cannot establish LDAP connection.")
             abort(503, message="Cannot establish LDAP connection")
         self.connection.open()
+        if not self.connection.bind():
+            log.error("LDAP connection bind failed.")
+            abort(503, message="Cannot establish LDAP connection")
         return self
 
     def __exit__(self, exception_type, exception_value, exception_traceback):

@@ -98,9 +98,9 @@ def _get_test_app_config():
             "PORT": 1234,
         },
         "LDAP": {
-            "HOST": "fake host",
-            "BIND": "fake bind",
-            "PASSWORD": "fake password",
+            "HOST": "fake_host",
+            "BIND": "cn=fake_bind",
+            "PASSWORD": "fake_password",
             "STRATEGY": MOCK_SYNC,
         },
         "FD_REMS": {

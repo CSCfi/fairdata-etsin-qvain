@@ -26,6 +26,7 @@ def createMockLDAPIdmService(users=None, projects=None):
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
+            self.connection.strategy.add_entry('cn=fake_bind', {'userPassword': 'fake_password', 'sn': 'user0_sn', 'revision': 0})
             for user in users:
                 self._add_user(*user)
             for project in projects:

@@ -468,6 +468,7 @@ class QvainDatasetEditorPermissions(Resource):
         if not flag_enabled("PERMISSIONS.EDITOR_RIGHTS"):
             abort(405)
 
+    @log_request
     def get(self, cr_id):
         """Get editor permissions for dataset.
 
@@ -521,6 +522,7 @@ class QvainDatasetEditorPermissions(Resource):
 
         return perms, 200
 
+    @log_request
     def post(self, cr_id):
         """Add editor permissions to dataset.
 
@@ -657,6 +659,7 @@ class QvainDatasetEditorPermissions(Resource):
 class QvainDatasetEditorPermissionsUser(Resource):
     """Endpoints for single user editor permission."""
 
+    @log_request
     def delete(self, cr_id, user_id):
         """Delete editor permissions for a single user.
 

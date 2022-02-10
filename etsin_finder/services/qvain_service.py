@@ -666,5 +666,5 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             requests.delete, req_url, json=data, **self._get_args()
         )
         if not success:
-            log.warning("Failed to delete dataset {}".format(cr_id))
+            log.warning(f"Failed to delete dataset {cr_id} user permission for {user}")
         return resp, status
