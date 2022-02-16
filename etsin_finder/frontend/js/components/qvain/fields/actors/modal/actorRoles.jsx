@@ -18,7 +18,7 @@ export const ActorRolesBase = () => {
     <Fieldset>
       <Translate component={GroupLabel} content="qvain.actors.add.groups.roles" />
       <List>
-        <RoleCheckbox role={ROLE.CREATOR} help={'(min. 1)'} />
+        <RoleCheckbox role={ROLE.CREATOR} help={'(min. 1)'} required />
         <RoleCheckbox
           disabled={otherActorsHaveRole(actor, ROLE.PUBLISHER)}
           role={ROLE.PUBLISHER}
