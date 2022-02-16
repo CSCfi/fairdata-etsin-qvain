@@ -131,74 +131,79 @@ class Submit {
     this.response = undefined
     this.error = undefined
 
-    if (Lock) {
-      await Lock.request()
-    }
-
-    let draftFunction
-    let publishFunction
-    if (submitFunction.draftFunction || submitFunction.publishFunction) {
-      draftFunction = submitFunction.draftFunction
-      publishFunction = submitFunction.publishFunction
-    } else {
-      draftFunction = submitFunction
-    }
-
-    if (!cleanupBeforeBackend()) return
-    if (!(await this.promptProvenances())) return
-
-    let dataset = this.prepareDataset()
-    const { fileActions, metadataActions, newCumulativeState } = this.prepareActions()
-
-    try {
-      await schema.validate(dataset, { strict: true })
-      await this.checkDoiCompability(dataset)
-    } catch (error) {
-      this.setLoading(false)
-      this.setError(error)
-      if (error instanceof ValidationError) {
-        return
-      }
-      console.error(error)
-      throw error
+    if (this.isLoading) {
+      return
     }
 
     try {
       this.setLoading(true)
-      if (draftFunction) {
-        const updatedOriginal = await draftFunction(dataset)
-        dataset = {
-          ...dataset,
-          original: updatedOriginal,
-        }
+      if (Lock) {
+        await Lock.request()
       }
-      await this.updateFiles(dataset.original.identifier, fileActions, metadataActions)
 
-      if (this.Qvain.original) {
-        await this.updateCumulativeState(dataset.original.identifier, newCumulativeState)
+      let draftFunction
+      let publishFunction
+      if (submitFunction.draftFunction || submitFunction.publishFunction) {
+        draftFunction = submitFunction.draftFunction
+        publishFunction = submitFunction.publishFunction
+      } else {
+        draftFunction = submitFunction
       }
-      setChanged(false)
 
-      if (publishFunction) {
-        const updatedOriginal = await publishFunction(dataset)
-        dataset = {
-          ...dataset,
-          original: updatedOriginal,
+      if (!cleanupBeforeBackend()) return
+      if (!(await this.promptProvenances())) return
+
+      let dataset = this.prepareDataset()
+      const { fileActions, metadataActions, newCumulativeState } = this.prepareActions()
+
+      try {
+        await schema.validate(dataset, { strict: true })
+        await this.checkDoiCompability(dataset)
+      } catch (error) {
+        this.setError(error)
+        if (error instanceof ValidationError) {
+          return
         }
+        console.error(error)
+        throw error
       }
-      if (fileActions || metadataActions || newCumulativeState != null) {
-        // Files changed, get updated dataset
-        const url = urls.qvain.dataset(dataset.original.identifier)
-        const updatedResponse = await axios.get(url)
-        dataset.original = updatedResponse.data
+
+      try {
+        if (draftFunction) {
+          const updatedOriginal = await draftFunction(dataset)
+          dataset = {
+            ...dataset,
+            original: updatedOriginal,
+          }
+        }
+        await this.updateFiles(dataset.original.identifier, fileActions, metadataActions)
+
+        if (this.Qvain.original) {
+          await this.updateCumulativeState(dataset.original.identifier, newCumulativeState)
+        }
+        setChanged(false)
+
+        if (publishFunction) {
+          const updatedOriginal = await publishFunction(dataset)
+          dataset = {
+            ...dataset,
+            original: updatedOriginal,
+          }
+        }
+        if (fileActions || metadataActions || newCumulativeState != null) {
+          // Files changed, get updated dataset
+          const url = urls.qvain.dataset(dataset.original.identifier)
+          const updatedResponse = await axios.get(url)
+          dataset.original = updatedResponse.data
+        }
+        this.Qvain.setOriginal(dataset.original)
+        await editDataset(dataset.original)
+        this.setResponse(dataset.original)
+        this.clearError()
+      } catch (error) {
+        this.setError(getResponseError(error))
+        throw error
       }
-      this.Qvain.setOriginal(dataset.original)
-      await editDataset(dataset.original)
-      this.setResponse(dataset.original)
-      this.clearError()
-    } catch (error) {
-      this.setError(getResponseError(error))
-      throw error
     } finally {
       this.setLoading(false)
     }

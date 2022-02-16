@@ -169,6 +169,19 @@ describe('Submit.exec()', () => {
     expect(Submit.isLoading).toBe(false)
   })
 
+  test.only('while exec is running, other exec calls should be ignored', async () => {
+    const first = exec()
+    expect(Submit.isLoading).toBe(true)
+    await Promise.all([first, exec(), exec()])
+    expect(submitFunction).toHaveBeenCalledTimes(1)
+    expect(Submit.isLoading).toBe(false)
+
+    await Promise.all([exec(), exec(), exec()])
+    expect(submitFunction).toHaveBeenCalledTimes(2)
+    expect(Submit.isLoading).toBe(false)
+  })
+
+
   test('exec should perform actions in correct order', async () => {
     const callOrder = []
     const logCallOrder = (name, returnValue) => {
