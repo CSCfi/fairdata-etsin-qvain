@@ -72,7 +72,7 @@ const DatasetsHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  font-size: 20px;
+  font-size: 16px;
 `
 
 const DatasetsContainer = styled.div.attrs({
