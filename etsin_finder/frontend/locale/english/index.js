@@ -114,7 +114,7 @@ const english = {
       downloadAll: 'Download all',
       downloadDisabledForDraft: 'Download is disabled for drafts',
       downloading: 'Downloading...',
-      source: 'Source',
+      source: 'External source page',
       commonSource: 'Go to the original source',
       fileAmount: '%(amount)s objects',
       close_modal: 'Close info modal',

@@ -114,7 +114,7 @@ const finnish = {
       downloadAll: 'Lataa kaikki',
       downloadDisabledForDraft: 'Lataus ei käytössä luonnoksille',
       downloading: 'Ladataan...',
-      source: 'Lähde',
+      source: 'Ulkoinen lähdesivu',
       commonSource: 'Avaa alkuperäinen lähde',
       fileAmount: '%(amount)s objektia',
       close_modal: 'Sulje info',

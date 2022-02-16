@@ -88,33 +88,6 @@ describe('ExternalResources', () => {
     ])
   })
 
-  it('should have common source link', () => {
-    const wrapper = renderResources([
-      downloadUrlResource,
-      accessUrlResource,
-      bothUrlsResource,
-      noUrlResource,
-    ])
-    hasCommonSourceLink(wrapper).should.eql(true)
-    wrapper.find(ResourceItem).map(item => item.prop('hideAccess')).should.eql([true, true, true, true])
-  })
-
-  it('should not have common source link when there are different access urls', () => {
-    const wrapper = renderResources([
-      downloadUrlResource,
-      accessUrlResource,
-      anotherAccessUrlResource,
-      bothUrlsResource,
-      noUrlResource,
-    ])
-    hasCommonSourceLink(wrapper).should.eql(false)
-  })
-
-  it('should not have common source link when there no access urls', () => {
-    const wrapper = renderResources([downloadUrlResource, noUrlResource])
-    hasCommonSourceLink(wrapper).should.eql(false)
-  })
-
   describe('ResourceItem', () => {
     beforeEach(() => {
       useStores.mockReturnValue({ Locale: Stores.Locale })
@@ -172,12 +145,12 @@ describe('ExternalResources', () => {
       })
     })
 
-    it('has no urls', () => {
-      // access urls are not displayed if all resources have the same url
+    it('has same access urls', () => {
+      // access urls are also displayed if all resources have the same url
       const wrapper = renderResources([accessUrlResource, accessUrlResource])
       wrapper.find(Grid).props().should.include({
         hasDownload: false,
-        showAccess: false,
+        showAccess: true,
       })
     })
 
