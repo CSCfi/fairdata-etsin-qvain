@@ -99,6 +99,7 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
       {canRemove || canUndoRemove ? (
         <Translate
           component={ClickableIcon}
+          className="remove-item"
           icon={faTimes}
           color={removeColor}
           onClick={removeAction}

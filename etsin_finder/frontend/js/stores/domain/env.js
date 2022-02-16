@@ -15,7 +15,6 @@ import Flags from './env.flags'
 
 import { getCookieValue } from '../../utils/cookies'
 
-const routingStore = new RouterStore()
 
 async function importValuesAsync() {
   const response = await axios.get('/api/app_config')
@@ -26,6 +25,7 @@ class Env {
   constructor() {
     makeObservable(this)
     this.Flags = new Flags()
+    this.history = new RouterStore()
   }
 
   @observable etsinHost = ''
@@ -107,8 +107,6 @@ class Env {
     }
     return `/qvain${path}`
   }
-
-  history = routingStore
 }
 
 export default Env

@@ -1,7 +1,10 @@
 import React from 'react'
 import axios from 'axios'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
+import { ThemeProvider } from 'styled-components'
+import '@/../locale/translations'
 
+import etsinTheme from '@/styles/theme'
 import { sortFunc } from '../../../js/stores/view/common.files.utils'
 import {
   itemLoaderNew,
@@ -21,6 +24,8 @@ import handleSubmitToBackend from '../../../js/components/qvain/utils/handleSubm
 import { get } from '../../__testdata__/qvain.files.data'
 import { useStores } from '../../../js/stores/stores'
 import { buildStores } from '../../../js/stores'
+import SelectedItemsDropdown from '../../../js/components/qvain/fields/files/ida/selectedItemsDropdown'
+import { runInAction } from 'mobx'
 
 jest.mock('axios')
 
@@ -69,11 +74,7 @@ axios.get.mockImplementation(get)
 const datasetIdentifier = '6d2cb5f5-4867-47f7-9874-09357f2901a3'
 const emptyDatasetIdentifier = '6d2cb5f5-4867-47f7-9874-123456789'
 
-let root
-const stores = buildStores()
-const { Qvain } = stores
-const { Files } = stores.Qvain
-stores.Auth.user.idaProjects = ['project']
+let root, stores, Qvain, Files
 
 const itemPaths = items => items.map(item => item.prop('item').path).sort(sortFunc)
 expect.extend({
@@ -141,7 +142,11 @@ const loadDataset = async () => {
 }
 
 beforeEach(async () => {
-  Qvain.resetQvainStore()
+  stores = buildStores()
+  stores.Auth.user.idaProjects = ['project']
+  Qvain = stores.Qvain
+  Files = Qvain.Files
+  useStores.mockReturnValue(stores)
   await loadDataset()
 })
 
@@ -513,7 +518,6 @@ describe('Qvain.Files tree', () => {
     Files.addItem(data) // add data (already exists but is not selected)
     // wrapper = shallow(<SelectedItemsTreeBase Stores={stores} />).dive()
 
-    useStores.mockReturnValue(stores)
     let wrapper = shallow(<SelectedItemsTree />)
 
     expect(data.added).toBe(true)
@@ -534,15 +538,14 @@ describe('Qvain.Files tree', () => {
   it('propagates parent check', async () => {
     await Files.SelectedItemsView.setAllOpen(true)
 
-    useStores.mockReturnValue(stores)
-    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    let wrapper = shallow(<SelectedItemsTree />)
 
     const data = await Files.getItemByPath('/data')
     const subset = await Files.getItemByPath('/data/set1/subset')
     const subsetFile1 = await Files.getItemByPath('/data/set1/subset/file1.csv')
 
     Files.SelectedItemsView.toggleChecked(data) // check data
-    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    wrapper = shallow(<SelectedItemsTree />)
 
     expect(Files.SelectedItemsView.isChecked(data)).toBe(true)
     let items = wrapper.find(SelectedItemsTreeItem)
@@ -559,7 +562,7 @@ describe('Qvain.Files tree', () => {
     })
 
     Files.SelectedItemsView.toggleChecked(data) // uncheck data
-    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    wrapper = shallow(<SelectedItemsTree />)
 
     expect(Files.SelectedItemsView.isChecked(data)).toBe(false)
     items = wrapper.find(SelectedItemsTreeItem)
@@ -579,8 +582,7 @@ describe('Qvain.Files tree', () => {
   it('shows subitems for open directories', async () => {
     await Files.loadAllDirectories()
 
-    useStores.mockReturnValue(stores)
-    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    let wrapper = shallow(<SelectedItemsTree />)
     const view = Files.SelectedItemsView
 
     let items = wrapper.find(SelectedItemsTreeItem)
@@ -590,7 +592,7 @@ describe('Qvain.Files tree', () => {
     expect(items.filter('[level=0]').length).toBe(2)
 
     await view.open(data)
-    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    wrapper = shallow(<SelectedItemsTree />)
     expect(view.isOpen(data)).toBe(true)
     items = wrapper.find(SelectedItemsTreeItem)
 
@@ -598,14 +600,14 @@ describe('Qvain.Files tree', () => {
     expect(items.filter('[level=1]').length).toBe(2)
 
     await view.open(set1)
-    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    wrapper = shallow(<SelectedItemsTree />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=0]').length).toBe(2)
     expect(items.filter('[level=1]').length).toBe(2)
     expect(items.filter('[level=2]').length).toBe(3)
 
     view.close(data)
-    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    wrapper = shallow(<SelectedItemsTree />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=0]').length).toBe(2)
     expect(items.filter(':not([level=0])').length).toBe(0)
@@ -616,8 +618,7 @@ describe('Qvain.Files tree', () => {
     await view.setAllOpen(true)
     view.setDefaultShowLimit(3, 1)
 
-    useStores.mockReturnValue(stores)
-    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    let wrapper = shallow(<SelectedItemsTree />)
 
     const subset = await Files.getItemByPath('/data/set1/subset')
     let items = wrapper.find(SelectedItemsTreeItem)
@@ -625,7 +626,7 @@ describe('Qvain.Files tree', () => {
     expect(wrapper.find(ShowMore).length).toBe(1)
 
     await view.showMore(subset)
-    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    wrapper = shallow(<SelectedItemsTree />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(4)
   })
@@ -635,14 +636,13 @@ describe('Qvain.Files tree', () => {
     view.setDefaultShowLimit(4, 10)
     await view.setAllOpen(true)
 
-    useStores.mockReturnValue(stores)
-    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    let wrapper = shallow(<SelectedItemsTree />)
 
     let items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(4)
 
     view.setDefaultShowLimit(2, 1)
-    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    wrapper = shallow(<SelectedItemsTree />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(2)
   })
@@ -653,19 +653,18 @@ describe('Qvain.Files tree', () => {
     await view.setAllOpen(true)
     const subset = await Files.getItemByPath('/data/set1/subset', true)
 
-    useStores.mockReturnValue(stores)
-    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    let wrapper = shallow(<SelectedItemsTree />)
 
     let items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(2)
 
     await view.showMore(subset)
-    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    wrapper = shallow(<SelectedItemsTree />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(3)
 
     await view.showMore(subset)
-    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    wrapper = shallow(<SelectedItemsTree />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(items.filter('[level=3]').length).toBe(4)
   })
@@ -685,7 +684,7 @@ describe('Qvain.Files tree', () => {
     const addItems = addWrapper.find(AddItemsTreeItem)
     expect(addItems.length).toBe(21)
 
-    const selectedWrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    const selectedWrapper = shallow(<SelectedItemsTree />)
     const selectedItems = selectedWrapper.find(SelectedItemsTreeItem)
     expect(selectedItems.length).toBe(0)
   })
@@ -707,7 +706,7 @@ describe('Qvain.Files tree', () => {
 
     Files.SelectedItemsView.setHideRemoved(false)
 
-    let selectedWrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    let selectedWrapper = shallow(<SelectedItemsTree />)
     let selectedItems = selectedWrapper.find(SelectedItemsTreeItem)
     expect(selectedItems.length).toBe(14)
   })
@@ -722,10 +721,80 @@ describe('Qvain.Files tree', () => {
     await Files.AddItemsView.setAllOpen(true)
     await Files.SelectedItemsView.setAllOpen(true)
 
-    const selectedWrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    const selectedWrapper = shallow(<SelectedItemsTree />)
     const selectedItems = selectedWrapper.find(SelectedItemsTreeItem)
     expect(selectedWrapper.find(ShowMore).length).toBe(0)
     expect(selectedItems.length).toBe(21)
+  })
+})
+
+describe('Qvain.Files SelectedItemsTreeItem', () => {
+  describe.each`
+    type           | name           | pasAllowed
+    ${'file'}      | ${'File'}      | ${true}
+    ${'directory'} | ${'Directory'} | ${false}
+  `('$name', ({ type, name, pasAllowed }) => {
+    const props = {
+      item: { name, type, description: 'hello world', existing: true },
+      parentArgs: { parentChecked: false, parentAdded: false, parentRemoved: false },
+      treeProps: {
+        directoryView: { isOpen: () => false },
+      },
+      level: 1,
+    }
+
+    if (pasAllowed) {
+      props.item.pasMeta = {'description': 'hello DPS'}
+    }
+
+    it(`should allow removing ${type} from unpublished dataset`, async () => {
+      const selectedWrapper = shallow(<SelectedItemsTreeItem {...props} />)
+      expect(selectedWrapper.find('.remove-item').length).toBe(1)
+    })
+
+    it(`should not allow removing ${type} from published dataset`, async () => {
+      runInAction(() => {
+        stores.Qvain.original.state = 'published'
+      })
+      const selectedWrapper = shallow(<SelectedItemsTreeItem {...props} />)
+      expect(selectedWrapper.find('.remove-item').length).toBe(0)
+    })
+
+    it(`should allow removing ${type} when creating new version`, async () => {
+      runInAction(() => {
+        stores.Qvain.original.state = 'published'
+        stores.Env.history.location = { search: '?new_version' }
+      })
+      const selectedWrapper = shallow(<SelectedItemsTreeItem {...props} />)
+      expect(selectedWrapper.find('.remove-item').length).toBe(1)
+    })
+
+    it(`should allow editing ${type} user metadata`, async () => {
+      const selectedWrapper = mount(
+        <ThemeProvider theme={etsinTheme}>
+          <SelectedItemsTreeItem {...props} />
+        </ThemeProvider>
+      )
+      expect(selectedWrapper.find('.edit-user-metadata').hostNodes().length).toBe(1)
+    })
+
+    it(`should ${pasAllowed ? '' : 'not '}allow editing PAS metadata of ${type}`, async () => {
+      const selectedWrapper = mount(
+        <ThemeProvider theme={etsinTheme}>
+          <SelectedItemsTreeItem {...props} />
+        </ThemeProvider>
+      )
+      expect(selectedWrapper.find('.edit-pas-metadata').hostNodes().length).toBe(pasAllowed ? 1 : 0)
+    })
+
+    it(`should ${pasAllowed ? '' : 'not '}allow removing PAS metadata of ${type}`, async () => {
+      const selectedWrapper = mount(
+        <ThemeProvider theme={etsinTheme}>
+          <SelectedItemsTreeItem {...props} />
+        </ThemeProvider>
+      )
+      expect(selectedWrapper.find('.remove-pas-metadata').hostNodes().length).toBe(pasAllowed ? 1 : 0)
+    })
   })
 })
 
@@ -796,7 +865,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
   it('shows selected and existing items', async () => {
     await Files.SelectedItemsView.setAllOpen(true)
 
-    const wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    const wrapper = shallow(<SelectedItemsTree />)
     const items = wrapper.find(SelectedItemsTreeItem)
 
     expect(itemPaths(items.filter('[level=0]'))).toEqual(['/data', '/moredata'])
@@ -833,7 +902,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
     Files.addItem(file)
     await Files.SelectedItemsView.setAllOpen(true)
 
-    const wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    const wrapper = shallow(<SelectedItemsTree />)
     const items = wrapper.find(SelectedItemsTreeItem)
 
     expect(itemPaths(items.filter('[level=2]'))).toEqual([
@@ -871,7 +940,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
     Files.addItem(file)
     Files.addItem(file2)
 
-    let wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    let wrapper = shallow(<SelectedItemsTree />)
     let items = wrapper.find(SelectedItemsTreeItem)
 
     expect(itemPaths(items)).toEqual([
@@ -889,7 +958,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
     expect(Files.SelectedItemsView.showLimitState).toEqual({ 'dir:37': 2 })
 
     // testing components with updated showMore
-    wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    wrapper = shallow(<SelectedItemsTree />)
     items = wrapper.find(SelectedItemsTreeItem)
     expect(itemPaths(items)).toEqual([
       '/data',
@@ -913,7 +982,7 @@ describe('Qvain.Files SelectedItemsTree ', () => {
     const dir = await Files.getItemByPath('/data/set1/subset2')
     Files.addItem(dir)
 
-    const wrapper = shallow(<SelectedItemsTree Stores={stores} />)
+    const wrapper = shallow(<SelectedItemsTree />)
     let items = wrapper.find(SelectedItemsTreeItem)
 
     expect(itemPaths(items)).toEqual([

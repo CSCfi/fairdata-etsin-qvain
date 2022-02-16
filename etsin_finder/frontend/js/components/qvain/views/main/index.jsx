@@ -39,6 +39,7 @@ export class Qvain extends Component {
     Stores: PropTypes.object.isRequired,
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
+      search: PropTypes.string.isRequired,
     }).isRequired,
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,

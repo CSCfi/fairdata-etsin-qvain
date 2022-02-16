@@ -169,7 +169,7 @@ describe('Submit.exec()', () => {
     expect(Submit.isLoading).toBe(false)
   })
 
-  test.only('while exec is running, other exec calls should be ignored', async () => {
+  test('while exec is running, other exec calls should be ignored', async () => {
     const first = exec()
     expect(Submit.isLoading).toBe(true)
     await Promise.all([first, exec(), exec()])

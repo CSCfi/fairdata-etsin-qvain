@@ -48,13 +48,13 @@ jest.mock('../../../js/stores/stores', () => {
   }
 })
 
-const Env = new EnvClass()
-const Accessibility = new AccessibilityClass(Env)
-const ElasticQuery = new ElasticQueryClass(Env)
-const Locale = new LocaleClass(Accessibility, ElasticQuery)
-const Qvain = new QvainClass(Env)
 
 const getStores = () => {
+  const Env = new EnvClass()
+  const Accessibility = new AccessibilityClass(Env)
+  const ElasticQuery = new ElasticQueryClass(Env)
+  const Locale = new LocaleClass(Accessibility, ElasticQuery)
+  const Qvain = new QvainClass(Env)
   Locale.setLang('en')
   return {
     Env,
@@ -79,7 +79,12 @@ describe('Qvain', () => {
 
   it('should render correctly', () => {
     const component = shallow(
-      <QvainBase Stores={getStores()} history={{}} location={{ pathname: '' }} match={emptyMatch} />
+      <QvainBase
+        Stores={getStores()}
+        history={{}}
+        location={{ pathname: '', search: '' }}
+        match={emptyMatch}
+      />
     )
 
     expect(component).toMatchSnapshot()
@@ -104,7 +109,12 @@ describe('Qvain', () => {
 
     // Create empty dataset, getDataset should not be called
     shallow(
-      <FakeQvain Stores={stores} match={emptyMatch} history={{}} location={{ pathname: '/' }} />
+      <FakeQvain
+        Stores={stores}
+        match={emptyMatch}
+        history={{}}
+        location={{ pathname: '/', search: '' }}
+      />
     )
     expect(callCount).toBe(0)
     expect(lastCall).toBe(undefined)
@@ -123,7 +133,7 @@ describe('Qvain', () => {
         Stores={datasetOpenedStore}
         match={identifierMatch}
         history={{}}
-        location={{ pathname: '/' }}
+        location={{ pathname: '/', search: '' }}
       />
     )
     expect(callCount).toBe(0)
@@ -143,7 +153,7 @@ describe('Qvain', () => {
         Stores={anotherDatasetOpenedStore}
         match={identifierMatch}
         history={{}}
-        location={{ pathname: '/' }}
+        location={{ pathname: '/', search: '' }}
       />
     )
     expect(callCount).toBe(1)
@@ -156,7 +166,7 @@ describe('Qvain', () => {
         Stores={stores}
         match={identifierMatch}
         history={{}}
-        location={{ pathname: '/' }}
+        location={{ pathname: '/', search: '' }}
       />
     )
     expect(callCount).toBe(2)
@@ -167,6 +177,20 @@ describe('Qvain', () => {
     wrapper.setProps({ match: anotherMatch })
     expect(callCount).toBe(3)
     expect(lastCall).toBe(anotherMatch.params.identifier)
+  })
+
+  it('should enable isNewVersion when new_version query parameter is set', () => {
+    stores.Env.history.location = { pathname: '/', search: '?new_version' }
+    // Create empty dataset, getDataset should not be called
+    shallow(
+      <QvainBase
+        Stores={stores}
+        match={emptyMatch}
+        history={{}}
+        location={stores.Env.history.location}
+      />
+    )
+    stores.Qvain.isNewVersion.should.eql(true)
   })
 })
 
@@ -278,6 +302,7 @@ describe('Qvain DOI selection', () => {
     expect(checkbox.prop('checked')).toBe(true)
   })
 
+
   it('should not render DOI selector for published dataset', () => {
     const { setDataCatalog, setOriginal } = stores.Qvain
     setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
@@ -286,6 +311,18 @@ describe('Qvain DOI selection', () => {
     })
     const component = shallow(<DoiSelection />)
     expect(component.type()).toBe(null)
+  })
+
+  it('should render DOI selector for new version of published dataset', () => {
+    const { setDataCatalog, setOriginal, Env } = stores.Qvain
+    Env.history.location = { pathname: '/', search: '?new_version' }
+    setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
+    setOriginal({
+      state: 'published',
+    })
+    const component = shallow(<DoiSelection />)
+    const checkbox = component.find(DoiCheckbox)
+    expect(checkbox.prop('checked')).toBe(true)
   })
 
   it('renders DOI selector for new draft', () => {

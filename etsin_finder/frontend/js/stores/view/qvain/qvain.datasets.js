@@ -167,16 +167,6 @@ class QvainDatasets {
     }
   }
 
-  createNewVersion = async dataset => {
-    const { identifier } = dataset
-    const resp = await this.promiseManager.add(
-      axios.post(urls.rpc.createNewVersion(), null, {
-        params: { identifier },
-      }),
-      'createNewVersion'
-    )
-    return resp.data.identifier
-  }
 }
 
 export default QvainDatasets

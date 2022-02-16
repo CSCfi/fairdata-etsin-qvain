@@ -65,6 +65,11 @@ class Submit {
       return DATASET_STATE.DRAFT
     }
 
+    // new versions are initially created as drafts
+    if (this.Qvain.isNewVersion) {
+      return DATASET_STATE.DRAFT
+    }
+
     return DATASET_STATE.PUBLISHED
   }
 
@@ -121,6 +126,16 @@ class Submit {
     }
   }
 
+  createNewVersion = async dataset => {
+    const { identifier } = dataset.original
+    const resp = await axios.post(urls.rpc.createNewVersion(), null, {
+      params: { identifier },
+    })
+    const newVersionUrl = urls.qvain.dataset(resp.data.identifier)
+    const { data } = await axios.get(newVersionUrl)
+    return data
+  }
+
   @action exec = async (submitFunction, schema = qvainFormSchema) => {
     const {
       OtherIdentifiers: { cleanupBeforeBackend },
@@ -169,6 +184,12 @@ class Submit {
       }
 
       try {
+        this.setLoading(true)
+        if (this.Qvain.isNewVersion) {
+          const newVersion = await this.createNewVersion(dataset)
+          dataset = { ...dataset, original: newVersion }
+        }
+
         if (draftFunction) {
           const updatedOriginal = await draftFunction(dataset)
           dataset = {

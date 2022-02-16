@@ -26,8 +26,6 @@ beforeEach(() => {
   stores.Env.history.push = jest.fn()
   stores.Qvain.editDataset = jest.fn()
   stores.Qvain.resetWithTemplate = jest.fn()
-  stores.QvainDatasets.createNewVersion = jest.fn()
-  stores.QvainDatasets.createNewVersion.mockReturnValue(Promise.resolve('new_identifier'))
   stores.QvainDatasets.removeModal = { open: jest.fn() }
   window.open = jest.fn()
 })
@@ -109,10 +107,6 @@ describe('getCreateNewVersionAction', () => {
         await getCreateNewVersionAction(stores, dataset).handler()
       })
 
-      it('should create a new version', () => {
-        expect(stores.QvainDatasets.createNewVersion).to.have.beenCalledWith(dataset)
-      })
-
       it('should call Matomo.recordEvent', () => {
         expect(stores.Matomo.recordEvent).to.have.beenCalledWith(
           `NEW_VERSION / ${expectedIdentifier}`
@@ -120,7 +114,7 @@ describe('getCreateNewVersionAction', () => {
       })
 
       it('should call navigate to editor url', () => {
-        expect(stores.Env.history.push).to.have.beenCalledWith(`/qvain/dataset/new_identifier`)
+        expect(stores.Env.history.push).to.have.beenCalledWith(`/qvain/dataset/published-id?new_version`)
       })
     }
   )

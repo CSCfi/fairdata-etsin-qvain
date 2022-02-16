@@ -68,6 +68,7 @@ describe('given required props', () => {
     },
     location: {
       pathname: 'pathname',
+      search: '',
     },
     history: {},
   }

@@ -67,6 +67,7 @@ const EditDropdown = ({ item, parentArgs }) => {
 
   const MetadataButton = ({ type }) => (
     <Translate
+      className={`${type}-user-metadata`}
       component={DropdownItem}
       content={`qvain.files.selected.${type}UserMetadata`}
       onClick={() => toggleInEdit(item)}
@@ -75,6 +76,7 @@ const EditDropdown = ({ item, parentArgs }) => {
 
   const RemoveMetadataButton = () => (
     <Translate
+      className="remove-user-metadata"
       component={DropdownItem}
       content="qvain.files.selected.deleteUserMetadata"
       onClick={() => clearMetadata(item)}
@@ -100,12 +102,14 @@ const EditDropdown = ({ item, parentArgs }) => {
       isFile(item) && (
         <>
           <Translate
+            className={`${pasOption}-pas-metadata`}
             component={DropdownItem}
             content={`qvain.files.metadataModal.buttons.${pasOption}`}
             onClick={showPasModal}
           />
           {!readonly && itemHasPASMetadata && userHasRightsToEditProject && (
             <Translate
+              className={`remove-pas-metadata`}
               component={DropdownItem}
               content="qvain.files.metadataModal.buttons.delete"
               onClick={showClearPasModal}

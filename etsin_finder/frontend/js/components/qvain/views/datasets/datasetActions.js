@@ -82,7 +82,6 @@ export const getCreateNewVersionAction = (Stores, dataset) => {
   const {
     Env: { getQvainUrl, history },
     Matomo: { recordEvent },
-    QvainDatasets: { createNewVersion },
   } = Stores
   const { identifier } = dataset
 
@@ -92,9 +91,8 @@ export const getCreateNewVersionAction = (Stores, dataset) => {
     danger: false,
     more: true,
     handler: async () => {
-      const newIdentifier = await createNewVersion(dataset)
       recordEvent(`NEW_VERSION / ${identifier}`)
-      history.push(getQvainUrl(`/dataset/${newIdentifier}`))
+      history.push(getQvainUrl(`/dataset/${dataset.identifier}?new_version`))
     },
   }
 }

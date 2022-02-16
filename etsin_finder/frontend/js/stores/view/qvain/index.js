@@ -16,6 +16,7 @@ import Files from './qvain.files'
 import Submit from './qvain.submit'
 import Lock from './qvain.lock'
 import track, { touch } from './track'
+import queryParamEnabled from '@/utils/queryParamEnabled'
 
 class Qvain extends Resources {
   constructor(Env, Auth) {
@@ -279,12 +280,17 @@ class Qvain extends Resources {
   }
 
   @computed
+  get isNewVersion() {
+    return queryParamEnabled(this.Env.history.location, 'new_version')
+  }
+
+  @computed
   get canSelectFiles() {
     if (this.readonly || this.isPas || this.deprecated || !this.Files.userHasRightsToEditProject) {
       return false
     }
 
-    if (this.hasBeenPublished) {
+    if (this.hasBeenPublished && !this.isNewVersion) {
       if (
         this.Files &&
         (!this.Files.projectLocked || this.Files.draftOfHasProject === false) &&
