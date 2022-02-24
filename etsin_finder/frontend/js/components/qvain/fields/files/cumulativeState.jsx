@@ -18,12 +18,13 @@ const CumulativeState = () => {
       setCumulativeState,
       setNewCumulativeState,
       hasBeenPublished,
+      isNewVersion,
       original,
     },
   } = useStores()
 
   const offState = isCumulative ? CUMULATIVE_STATE.CLOSED : CUMULATIVE_STATE.NO
-  const canChangeCumulativeState = !hasBeenPublished || cumulativeState === CUMULATIVE_STATE.YES
+  const canChangeCumulativeState = isNewVersion || !hasBeenPublished || cumulativeState === CUMULATIVE_STATE.YES
 
   const handleToggleNewCumulativeState = () => {
     if (newCumulativeState === CUMULATIVE_STATE.YES) {
@@ -102,7 +103,7 @@ const CumulativeState = () => {
     )
   }
 
-  const content = hasBeenPublished ? getPublishedContent() : getUnpublishedContent()
+  const content = (isNewVersion || !hasBeenPublished) ? getUnpublishedContent() : getPublishedContent()
 
   return (
     <ContainerSubsectionBottom>

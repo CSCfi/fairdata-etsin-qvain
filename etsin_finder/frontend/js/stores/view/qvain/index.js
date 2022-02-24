@@ -227,7 +227,8 @@ class Qvain extends Resources {
     this.preservationState = dataset.preservation_state
 
     // Load cumulative state
-    this.cumulativeState = dataset.cumulative_state
+    this.cumulativeState =
+      dataset.cumulative_state === CUMULATIVE_STATE.YES ? CUMULATIVE_STATE.YES : CUMULATIVE_STATE.NO
     this.newCumulativeState = this.cumulativeState
 
     // Load DOI
