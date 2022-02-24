@@ -4,7 +4,7 @@ import { ValidationError } from 'yup'
 import debounce from 'lodash.debounce'
 import handleSubmitToBackend from '../../../components/qvain/utils/handleSubmit'
 import { qvainFormSchema, qvainFormDraftSchema } from './qvain.submit.schemas'
-import { DATA_CATALOG_IDENTIFIER, DATASET_STATE } from '../../../utils/constants'
+import { DATA_CATALOG_IDENTIFIER, DATASET_STATE, CUMULATIVE_STATE } from '../../../utils/constants'
 import urls from '../../../utils/urls'
 import { getResponseError } from '../../../components/qvain/utils/responseError'
 
@@ -187,7 +187,11 @@ class Submit {
         this.setLoading(true)
         if (this.Qvain.isNewVersion) {
           const newVersion = await this.createNewVersion(dataset)
-          dataset = { ...dataset, original: newVersion }
+          dataset = {
+            ...dataset,
+            cumulativeState: newVersion.cumulative_state,
+            original: newVersion,
+          }
         }
 
         if (draftFunction) {
@@ -312,8 +316,15 @@ class Submit {
   }
 
   @action prepareActions = () => {
-    const { original, Files, canRemoveFiles, canSelectFiles, newCumulativeState, cumulativeState } =
-      this.Qvain
+    const {
+      original,
+      Files,
+      canRemoveFiles,
+      canSelectFiles,
+      newCumulativeState,
+      cumulativeState,
+      isNewVersion,
+    } = this.Qvain
 
     const values = {}
     const fileActions = Files.actionsToMetax()
@@ -340,7 +351,10 @@ class Submit {
       values.metadataActions = metadataActions
     }
 
-    if (newCumulativeState !== undefined && newCumulativeState !== cumulativeState) {
+    const cumulativeStateChanged =
+      newCumulativeState !== undefined && newCumulativeState !== cumulativeState
+    const isDefaultCumulativeState = newCumulativeState === CUMULATIVE_STATE.NO
+    if (cumulativeStateChanged || (isNewVersion && !isDefaultCumulativeState)) {
       values.newCumulativeState = newCumulativeState
     }
     return values
