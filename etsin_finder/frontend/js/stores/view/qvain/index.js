@@ -21,11 +21,11 @@ import queryParamEnabled from '@/utils/queryParamEnabled'
 class Qvain extends Resources {
   constructor(Env, Auth) {
     super()
+    makeObservable(this)
     this.Env = Env
     this.Files = new Files(this, Auth)
     this.Submit = new Submit(this)
     this.resetQvainStore()
-    makeObservable(this)
     this.Lock = new Lock(this, Auth)
   }
 
@@ -246,6 +246,7 @@ class Qvain extends Resources {
   }
 
   @action editDataset = async dataset => {
+    this.resetQvainStore()
     this.Submit.reset()
     this.setChanged(false)
     this.original = { ...dataset }

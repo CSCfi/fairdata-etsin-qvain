@@ -19,8 +19,9 @@ class SingleValueField {
     this.Parent.setChanged(true)
   }
 
-  @action reset = () => {
+  @action.bound reset() {
     this.value = this.defaultValue
+    this.validationError = undefined
   }
 
   @action setValidationError = error => {
