@@ -102,6 +102,8 @@ def _get_test_app_config():
             "BIND": "cn=fake_bind",
             "PASSWORD": "fake_password",
             "STRATEGY": MOCK_SYNC,
+            "USER_FILTERS": "(CSCUserType=user_test)",
+            "PROJECT_FILTERS": "(CSCPrjType=project_test)",
         },
         "FD_REMS": {
             "ENABLED": True,

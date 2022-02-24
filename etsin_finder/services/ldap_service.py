@@ -27,8 +27,10 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
 
     PROJECT_PATH = "ou=Projects,ou=idm,dc=csc,dc=fi"
     PROJECT_OUTPUT = ["member"]
-    USERS_PATH = "ou=Academic,ou=External,ou=Users,ou=idm,dc=csc,dc=fi"
-    USERS_OUTPUT = ["givenName", "sn", "mail", "uid"]
+    PROJECT_COMMON_FILTERS = "(objectClass=CSCProject)"
+    USER_PATH = "ou=Academic,ou=External,ou=Users,ou=idm,dc=csc,dc=fi"
+    USER_OUTPUT = ["givenName", "sn", "mail", "uid"]
+    USER_COMMON_FILTERS = "(&(objectClass=person)(!(nsAccountLock=true)))"
 
     schema = LDAPIdmServiceConfigurationSchema(unknown=marshmallow.RAISE)
 
@@ -73,8 +75,18 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
 
     @property
     def config(self):
-        """Get LDAP idm configuration."""
+        """Get LDAP IdM configuration."""
         return get_ldap_config(current_app)
+
+    @property
+    def USER_FILTERS(self):
+        """Get user filters from LDAP configuration"""
+        return (self.config or {}).get("USER_FILTERS") or ""
+
+    @property
+    def PROJECT_FILTERS(self):
+        """Get project filters from LDAP configuration"""
+        return (self.config or {}).get("PROJECT_FILTERS") or ""
 
     def _search(self, path, filter, output):
         """Search from path using filter conditions anf return output fields.
@@ -130,7 +142,15 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
     def _create_project_filter(self, project_id):
         """Return LDAP filter for getting correct project."""
         safe_id = escape_filter_chars(project_id)
-        return f"(&(cn={safe_id})(objectClass=CSCProject))"
+        return self.trim_filter(
+            f"""
+            (&
+                (cn={safe_id})
+                {self.PROJECT_COMMON_FILTERS}
+                {self.PROJECT_FILTERS}
+            )
+            """
+        )
 
     def _create_person_search_filter(self, search_str):
         """Transform search field input into LDAP filter.
@@ -161,9 +181,25 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
 
         email_filter = f"(mail={safe_str}*)"
         uid_filter = f"(cn={safe_str}*)"
-        filter = f"(&(|{name_filter}{email_filter}{uid_filter})(objectClass=person)(!(nsAccountLock=true)))"
-
+        filter = self.trim_filter(
+            f"""
+            (&
+                (|
+                    {name_filter}
+                    {email_filter}
+                    {uid_filter}
+                )
+                {self.USER_COMMON_FILTERS}
+                {self.USER_FILTERS}
+            )
+            """
+        )
         return filter
+
+    @staticmethod
+    def trim_filter(filter):
+        """Remove trailing and leading whitespace and concatenate lines from multiline filter string."""
+        return "".join(line.strip() for line in filter.splitlines())
 
     @staticmethod
     def _sorted_users(users):
@@ -180,7 +216,7 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
             list of user details (dict)
         """
         filter = self._create_person_search_filter(search_str)
-        data, status = self._search(self.USERS_PATH, filter, self.USERS_OUTPUT)
+        data, status = self._search(self.USER_PATH, filter, self.USER_OUTPUT)
         if status != 200:
             return data, status
         users = self._entries_to_users(data)
@@ -189,9 +225,6 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
     def get_users_details(self, usernames):
         """Get details for a list of usernames."
 
-        Arguments:
-            project_id (str): Project identifier.
-
         Returns:
             list of user details (dict)
 
@@ -199,8 +232,16 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
         uid_filters = [
             f"(cn={escape_filter_chars(username)})" for username in usernames
         ]
-        filter = f'(&(|{"".join(uid_filters)})(objectClass=person)(!(nsAccountLock=true)))'
-        data, status = self._search(self.USERS_PATH, filter, self.USERS_OUTPUT)
+        filter = self.trim_filter(
+            f"""
+            (&
+                (|{"".join(uid_filters)})
+                {self.USER_COMMON_FILTERS}
+                {self.USER_FILTERS}
+            )
+            """
+        )
+        data, status = self._search(self.USER_PATH, filter, self.USER_OUTPUT)
         if status != 200:
             return data, status
         users = self._entries_to_users(data)
@@ -219,5 +260,7 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
         )
         if status != 200:
             return project_response, status
+        if len(project_response) == 0:
+            log.warning(f"Project {project_id} not found in LDAP.")
         usernames = self._entries_to_members_usernames(project_response)
         return sorted(usernames), status

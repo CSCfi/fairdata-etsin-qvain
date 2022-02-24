@@ -32,3 +32,5 @@ class LDAPIdmServiceConfigurationSchema(Schema):
     BIND = fields.Str(required=True, validate=Length(min=1))
     PASSWORD = fields.Str(required=True, validate=Length(min=1))
     STRATEGY = fields.Str()
+    USER_FILTERS = fields.Str()
+    PROJECT_FILTERS = fields.Str()

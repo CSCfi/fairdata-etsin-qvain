@@ -26,7 +26,10 @@ def createMockLDAPIdmService(users=None, projects=None):
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.connection.strategy.add_entry('cn=fake_bind', {'userPassword': 'fake_password', 'sn': 'user0_sn', 'revision': 0})
+            self.connection.strategy.add_entry(
+                "cn=fake_bind",
+                {"userPassword": "fake_password", "sn": "user0_sn", "revision": 0},
+            )
             for user in users:
                 self._add_user(*user)
             for project in projects:
@@ -43,6 +46,7 @@ def createMockLDAPIdmService(users=None, projects=None):
                     "sn": surname,
                     "objectClass": "person",
                     "nsAccountLock": nsAccountLock,
+                    "CSCUserType": "user_test",
                 },
             )
 
@@ -56,6 +60,7 @@ def createMockLDAPIdmService(users=None, projects=None):
                         f"cn={member_uid},ou=External,ou=Users,ou=idm,dc=csc,dc=fi"
                         for member_uid in members
                     ],
+                    "CSCPrjType": "project_test",
                 },
             )
 
@@ -192,19 +197,45 @@ class TestLDAPGetUsersDetails(LDAPTestBase):
 class TestLDAPFilters(LDAPTestBase):
     """Tests for LDAP filters."""
 
+    def test_trim_filter(self, ldap_service):
+        """Remove"""
+        filter = ldap_service.trim_filter(
+            """
+            (&
+                (|
+                    (&(givenName=Testi)(sn=Teppo))
+                    (&(givenName=Teppo)(sn=Testi))
+                )
+                (objectClass=person)
+                (CSCUserType=user_test)
+            )
+            """
+        )
+        expected = "(&(|(&(givenName=Testi)(sn=Teppo))(&(givenName=Teppo)(sn=Testi)))(objectClass=person)(CSCUserType=user_test))"
+        assert filter == expected
+
     def test_create_person_filter(self, ldap_service):
         """Return correct filter string for person search."""
         name = "Teppo Test"
-        expected_filter = (
-            "(&(|(|"
-            "(&(givenName=*)(sn=Teppo Test*))"
-            "(&(givenName=Teppo Test*)(sn=*))"
-            "(&(givenName=Teppo*)(sn=Test*))"
-            "(&(givenName=Test*)(sn=Teppo*)))"
-            "(mail=Teppo Test*)"
-            "(cn=Teppo Test*))"
-            "(objectClass=person)"
-            "(!(nsAccountLock=true)))"
+        expected_filter = ldap_service.trim_filter(
+            """
+            (&
+                (|
+                    (|
+                        (&(givenName=*)(sn=Teppo Test*))
+                        (&(givenName=Teppo Test*)(sn=*))
+                        (&(givenName=Teppo*)(sn=Test*))
+                        (&(givenName=Test*)(sn=Teppo*))
+                    )
+                    (mail=Teppo Test*)
+                    (cn=Teppo Test*)
+                )
+                (&
+                    (objectClass=person)
+                    (!(nsAccountLock=true))
+                )
+                (CSCUserType=user_test)
+            )"""
         )
         filter = ldap_service._create_person_search_filter(name)
         assert filter == expected_filter
@@ -212,7 +243,15 @@ class TestLDAPFilters(LDAPTestBase):
     def test_create_project_filter(self, ldap_service):
         """Return correct filter string for project search."""
         name = "project_x"
-        expected_filter = "(&(cn=project_x)(objectClass=CSCProject))"
+        expected_filter = ldap_service.trim_filter(
+            """
+            (&
+                (cn=project_x)
+                (objectClass=CSCProject)
+                (CSCPrjType=project_test)
+            )
+            """
+        )
         filter = ldap_service._create_project_filter(name)
         assert filter == expected_filter
 
