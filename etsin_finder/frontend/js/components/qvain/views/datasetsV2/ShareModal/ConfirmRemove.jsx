@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
@@ -10,9 +10,11 @@ import {
   DangerCancelButton as BaseCancelButton,
 } from '../../../general/buttons'
 import Loader from '../../../../general/loader'
+import { Checkbox } from '../../../general/modal/form'
 
 export const ShareModal = () => {
   const {
+    Auth: { userName },
     QvainDatasetsV2: {
       share: {
         userPermissionToRemove,
@@ -23,6 +25,17 @@ export const ShareModal = () => {
       },
     },
   } = useStores()
+
+  const [checked, setChecked] = useState(false)
+
+  useEffect(() => {
+    setChecked(false) // reset when user changes
+  }, [userPermissionToRemove])
+
+  const loseAccessIfRemoved =
+    userPermissionToRemove?.uid === userName && !userPermissionToRemove?.isProjectMember
+
+  const confirmIsDisabled = loseAccessIfRemoved && !checked
 
   if (!userPermissionToRemove) {
     return null
@@ -50,6 +63,21 @@ export const ShareModal = () => {
       {permissionChangeError && (
         <Translate component={Error} content="qvain.datasets.share.members.updateError" />
       )}
+      {loseAccessIfRemoved && (
+        <SelfRemoveWarning>
+          <Translate
+            component="label"
+            content="qvain.datasets.share.remove.loseAccessWarning"
+            htmlFor="remove-self-check"
+          />
+          <Checkbox
+            id="remove-self-check"
+            checked={checked}
+            disabled={loading}
+            onChange={e => setChecked(e.target.checked)}
+          />
+        </SelfRemoveWarning>
+      )}
       <ConfirmButtonContainer>
         <Translate
           component={CancelButton}
@@ -57,7 +85,7 @@ export const ShareModal = () => {
           disabled={loading}
           onClick={requestClose}
         />
-        <DangerButton disabled={loading} onClick={confirmRemoveUserPermission}>
+        <DangerButton disabled={loading || confirmIsDisabled} onClick={confirmRemoveUserPermission}>
           <Translate content="qvain.datasets.share.remove.confirm" />
           {loading && (
             <LoaderWrapper>
@@ -90,15 +118,30 @@ const confirmModalStyles = {
   },
 }
 
+const SelfRemoveWarning = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0.5rem;
+  margin-right: 1.5rem;
+  text-align: center;
+
+  & > * {
+    min-width: 1.2rem;
+  }
+`
+
 const ConfirmButtonContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, max(8em, 10em));
-  gap: 0.5rem;
+  gap: 1rem 0.5rem;
   justify-content: center;
 `
 
 const Text = styled.p`
   margin-right: 1.5rem;
+  margin-bottom: 0.5rem;
   text-align: center;
 `
 

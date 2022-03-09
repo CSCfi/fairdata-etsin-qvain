@@ -159,6 +159,8 @@ const datasets = {
     },
     remove: {
       warning: 'You are about to remove editing rights from user %(user)s. Are you sure?',
+      loseAccessWarning:
+        'You will no longer be able to edit the dataset after this action. Please check to confirm.',
       confirm: 'Remove',
       cancel: 'Cancel',
     },

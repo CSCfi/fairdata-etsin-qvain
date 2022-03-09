@@ -474,6 +474,50 @@ describe('ShareModal', () => {
       wrapper.find('.project-member-users .member-user').should.have.lengthOf(memberCount)
     })
 
+    it('should allow member editors remove themselves from permissions list', async () => {
+      stores.Auth.setUser({
+        name: 'editormember',
+      })
+      const permissionCount = wrapper.find('.permission-users .member-user').length
+      const memberCount = wrapper.find('.project-member-users .member-user').length
+      mockAdapter
+        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/editormember$'))
+        .reply(200, '')
+      await openConfirmRemoveDialog('Editor Member (editormember, editormember@example.com)')
+
+      wrapper.find('input#remove-self-check').should.have.lengthOf(0) // no extra check required
+
+      wrapper.find('button span[children="Remove"]').simulate('click')
+      await wait(() => wrapper.find('button span[children="Remove"]').length === 0)
+      wrapper.find('.permission-users .member-user').should.have.lengthOf(permissionCount - 1)
+      wrapper.find('.project-member-users .member-user').should.have.lengthOf(memberCount)
+    })
+
+    it('should allow require extra confirmation non-member editor remove themself from permissions list', async () => {
+      stores.Auth.setUser({
+        name: 'not_in_ldap',
+      })
+      const permissionCount = wrapper.find('.permission-users .member-user').length
+      const memberCount = wrapper.find('.project-member-users .member-user').length
+      mockAdapter
+        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap$'))
+        .reply(200, '')
+      await openConfirmRemoveDialog('not_in_ldap')
+
+      // "remove" should be disabled until checkbox is clicked
+      wrapper.find('button span[children="Remove"]').closest('button').prop('disabled').should.be
+        .true
+      wrapper.find('input#remove-self-check').simulate('change', { target: { checked: true } })
+      await wait(
+        () => !wrapper.find('button span[children="Remove"]').closest('button').prop('disabled')
+      )
+
+      wrapper.find('button span[children="Remove"]').simulate('click')
+      await wait(() => wrapper.find('button span[children="Remove"]').length === 0)
+      wrapper.find('.permission-users .member-user').should.have.lengthOf(permissionCount - 1)
+      wrapper.find('.project-member-users .member-user').should.have.lengthOf(memberCount)
+    })
+
     it('should cancel removing user from permissions list', async () => {
       mockAdapter
         .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/editormember$'))

@@ -112,7 +112,7 @@ const datasets = {
       members: 'Jäsenet',
     },
     errors: {
-      loadingPermissions: 'Error retrieving data. Please try again.',
+      loadingPermissions: 'Tietojen hakeminen epäonnistui. Ole hyvä ja yritä uudestaan.',
     },
     invite: {
       users: {
@@ -159,6 +159,8 @@ const datasets = {
     },
     remove: {
       warning: 'Olet poistamassa aineiston muokkausoikeudet käyttäjältä %(user)s. Oletko varma?',
+      loseAccessWarning:
+        'Et voi enää muokata aineistoa tämän toiminnon jälkeen. Valitse ruutu vahvistaaksesi.',
       confirm: 'Poista',
       cancel: 'Peruuta',
     },
