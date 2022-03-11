@@ -29,8 +29,8 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
     PROJECT_OUTPUT = ["member"]
     PROJECT_COMMON_FILTERS = "(objectClass=CSCProject)"
     USER_PATH = "ou=Academic,ou=External,ou=Users,ou=idm,dc=csc,dc=fi"
-    USER_OUTPUT = ["givenName", "sn", "mail", "uid"]
-    USER_COMMON_FILTERS = "(&(objectClass=person)(!(nsAccountLock=true)))"
+    USER_OUTPUT = ["givenName", "sn", "mail", "uid", "CSCUserName"]
+    USER_COMMON_FILTERS = "(&(objectClass=person)(!(nsAccountLock=true))(CSCUserName=*))"
 
     schema = LDAPIdmServiceConfigurationSchema(unknown=marshmallow.RAISE)
 
@@ -129,6 +129,11 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
         users = []
         for entry in entries:
             as_dict = entry.entry_attributes_as_dict
+
+            # multiple accounts may have same CSCUserName, ignore those that don't match uid
+            if as_dict.get("CSCUserName") != as_dict.get("uid"):
+                continue
+
             name_parts = as_dict.get("givenName", []) + as_dict.get("sn", []) or None
             name = " ".join(name_parts)
             user = {
