@@ -54,12 +54,13 @@ def createMockLDAPIdmService(users=None, projects=None):
             self.connection.strategy.add_entry(
                 f"cn={project_id},ou=Academic,ou=Projects,ou=idm,dc=csc,dc=fi",
                 {
-                    "cn": project_id,
+                    "cn": f"project_{project_id}",
                     "objectClass": "CSCProject",
                     "member": [
                         f"cn={member_uid},ou=External,ou=Users,ou=idm,dc=csc,dc=fi"
                         for member_uid in members
                     ],
+                    "CSCPrjNum": project_id,
                     "CSCPrjType": "project_test",
                 },
             )
@@ -246,7 +247,7 @@ class TestLDAPFilters(LDAPTestBase):
         expected_filter = ldap_service.trim_filter(
             """
             (&
-                (cn=project_x)
+                (CSCPrjNum=project_x)
                 (objectClass=CSCProject)
                 (CSCPrjType=project_test)
             )

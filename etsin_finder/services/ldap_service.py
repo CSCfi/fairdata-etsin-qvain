@@ -145,7 +145,7 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
         return self.trim_filter(
             f"""
             (&
-                (cn={safe_id})
+                (CSCPrjNum={safe_id})
                 {self.PROJECT_COMMON_FILTERS}
                 {self.PROJECT_FILTERS}
             )
