@@ -40,6 +40,14 @@ const etsinTheme = {
     linkColor: 'rgb(0, 98, 134)',
     redText: '#ce0000',
     itemBackgroundLight: '#eef2f8',
+    tags: {
+      green: '#0C772C',
+      brightGreen: '#DBFFE6',
+      yellow: '#946201',
+      brightYellow: '#FFF0CA',
+      blue: '#002F5F',
+      brightBlue: '#E8F9FF',
+    },
   },
   breakpoints: {
     xs: '410px',

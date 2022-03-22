@@ -11,10 +11,11 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { useStores } from '../../utils/stores'
+import { useStores } from '@/stores/stores'
 import formatAge from '../datasets/formatAge'
 import { getDatasetActionsV2 } from '../datasets/datasetActions'
-import { Dropdown, DropdownItem } from '../../../general/dropdown'
+import { Dropdown, DropdownItem } from '@/components/general/dropdown'
+import { DatasetStateTag } from './tags'
 
 const getActionMenuItem = action => {
   const { text, handler, danger, moreIfNarrow } = action
@@ -32,16 +33,16 @@ const getActionMenuItem = action => {
 }
 
 const getActionButton = action => (
-    <Cell key={action.text} onlyNarrow={action.moreIfNarrow}>
-      <Translate
-        onClick={action.handler}
-        content={action.shortText}
-        component={IconButton}
-        icon={action.icon}
-        onlyIcon={action.onlyIcon}
-        attributes={{ 'aria-label': action.text }}
-      />
-    </Cell>
+  <Cell key={action.text} onlyNarrow={action.moreIfNarrow}>
+    <Translate
+      onClick={action.handler}
+      content={action.shortText}
+      component={IconButton}
+      icon={action.icon}
+      onlyIcon={action.onlyIcon}
+      attributes={{ 'aria-label': action.text }}
+    />
+  </Cell>
 )
 
 const getTitle = (getValueTranslation, dataset) => {
@@ -52,14 +53,14 @@ const getTitle = (getValueTranslation, dataset) => {
   return getValueTranslation(researchDataset.title)
 }
 
-const datasetStateTranslation = dataset => {
+const getDatasetState = dataset => {
   if (dataset.state === 'published') {
     if (dataset.next_draft) {
-      return 'qvain.datasets.state.changed'
+      return 'changed'
     }
-    return 'qvain.datasets.state.published'
+    return 'published'
   }
-  return 'qvain.datasets.state.draft'
+  return 'draft'
 }
 
 const datasetOwner = dataset => {
@@ -95,11 +96,9 @@ const Dataset = ({ dataset, isExpanded, expandGroup, isLatest, versionNumber }) 
           <span>{getTitle(getValueTranslation, dataset)}</span>
         </Title>
       </Cell>
-      <Translate
-        className="dataset-state"
-        component={Cell}
-        content={datasetStateTranslation(dataset)}
-      />
+      <Cell className="dataset-state">
+        <DatasetStateTag state={getDatasetState(dataset)} />
+      </Cell>
       <Cell className="dataset-owner">{datasetOwner(dataset)}</Cell>
       <Cell className="dataset-created">{formatAge(loadTime, dataset.date_created)}</Cell>
       {actions.filter(action => action.icon).map(action => getActionButton(action))}
