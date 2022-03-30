@@ -75,12 +75,12 @@ class Dataset extends React.Component {
     const datasetVersionSet = data.dataset_version_set
     let stateInfo = ''
 
-    let retval = {}
     let urlText = ''
     let latestDate = ''
     const currentDate = new Date(data.date_created)
     let ID = ''
     let linkToOtherVersion = ''
+    const versionTitles = {}
 
     if (data.removed) {
       stateInfo = 'tombstone.removedInfo'
@@ -97,7 +97,15 @@ class Dataset extends React.Component {
         promises.push(axios.get(versionUrl))
       }
 
-      retval = await axios.all(promises) // will fetch all dataset versions
+      const retval = await axios.all(promises) // will fetch all dataset versions
+      retval.forEach(response => {
+        const catalogRecord = response?.data?.catalog_record
+        if (catalogRecord) {
+          const title = catalogRecord.research_dataset.title
+          const identifier = catalogRecord.identifier
+          versionTitles[identifier] = title
+        }
+      })
 
       latestDate = new Date(
         Math.max.apply(
@@ -133,6 +141,7 @@ class Dataset extends React.Component {
         urlText,
         ID,
         linkToOtherVersion,
+        versionTitles,
       },
     })
   }
@@ -267,6 +276,7 @@ class Dataset extends React.Component {
               isDeprecated={deprecated}
               isRemoved={removed}
               emails={emailInfo}
+              versionTitles={this.state.versionInfo.versionTitles}
             />
             <div className="col-lg-4">
               <ErrorBoundary>

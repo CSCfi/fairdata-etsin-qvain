@@ -218,7 +218,8 @@ const english = {
       cumulativeDatasetLabel: 'Note: Dataset is growing',
       cumulativeDatasetTooltip: {
         header: 'Growing dataset',
-        info: 'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
+        info:
+          'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
       },
     },
     events_idn: {
@@ -245,6 +246,18 @@ const english = {
         type: 'Type',
         name: 'Title',
         idn: 'Identifier',
+      },
+      versions: {
+        title: 'Versions',
+        type: 'Type',
+        number: 'Number',
+        name: 'Title',
+        idn: 'Identifier',
+        types: {
+          older: 'Older',
+          latest: 'Latest',
+          newer: 'Newer',
+        },
       },
     },
     map: {
@@ -452,7 +465,8 @@ const english = {
   footer: {
     fairdata: {
       title: 'Fairdata',
-      text: 'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
+      text:
+        'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
     },
     information: {
       title: 'Information',

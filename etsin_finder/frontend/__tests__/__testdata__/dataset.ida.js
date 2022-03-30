@@ -93,6 +93,18 @@ const dataset = {
   metadata_provider_user: 'teppo',
   dataset_version_set: [
     {
+      identifier: '12345677-4867-47f7-9874-112233445566',
+      preferred_identifier: 'urn:nbn:fi:att:12345677-4867-47f7-9874-112233445566',
+      removed: false,
+      date_created: '2022-01-01T14:29:15+02:00',
+    },
+    {
+      identifier: '12345688-4867-47f7-9874-112233445566',
+      preferred_identifier: 'urn:nbn:fi:att:12345688-4867-47f7-9874-112233445566',
+      removed: false,
+      date_created: '2022-02-02T14:29:15+02:00',
+    },
+    {
       identifier: '6d2cb5f5-4867-47f7-9874-09357f2901a3',
       preferred_identifier: 'urn:nbn:fi:att:162e04c5-857b-477c-a452-cd063ee3c44d',
       removed: false,
@@ -586,3 +598,22 @@ const dataset = {
 }
 
 export default dataset
+
+export const versionTitles = {
+  '6d2cb5f5-4867-47f7-9874-09357f2901a3': {
+    en: 'English Title',
+    fi: 'Finnish Title',
+  },
+  '12345678-4867-47f7-9874-112233445566': {
+    en: 'English Title 2',
+    fi: 'Finnish Title 2',
+  },
+  '12345677-4867-47f7-9874-112233445566': {
+    en: 'English Title 3',
+    fi: 'Finnish Title 3',
+  },
+  '12345688-4867-47f7-9874-112233445566': {
+    en: 'English Title 4',
+    fi: 'Finnish Title 4',
+  },
+}

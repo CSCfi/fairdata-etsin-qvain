@@ -247,6 +247,18 @@ const finnish = {
         name: 'Otsikko',
         idn: 'Tunniste',
       },
+      versions: {
+        title: 'Versiot',
+        type: 'Tyyppi',
+        number: 'Numero',
+        name: 'Otsikko',
+        idn: 'Tunniste',
+        types: {
+          older: 'Vanhempi',
+          latest: 'Viimeisin',
+          newer: 'Uudempi',
+        },
+      },
     },
     map: {
       geographic_name: 'Maantieteellinen nimi',

@@ -44,9 +44,15 @@ class Content extends Component {
     return deletedVersion
   }
 
+  versionsExists = () => {
+    const versions = this.props.dataset.dataset_version_set || []
+    return versions.some(version => !version.removed)
+  }
+
   showEvents() {
     return (
       this.deletedVersionsExists() ||
+      this.versionsExists() ||
       (this.props.dataset.research_dataset.provenance !== undefined &&
         this.props.dataset.research_dataset.provenance.length > 0) ||
       (this.props.dataset.research_dataset.other_identifier !== undefined &&
@@ -155,6 +161,7 @@ class Content extends Component {
                   aria-labelledby="tab-for-events"
                   role="tabpanel"
                   dataset={this.props.dataset}
+                  versionTitles={this.props.versionTitles}
                   {...props}
                 />
               )}
@@ -192,6 +199,7 @@ export default withStores(withRouter(observer(Content)))
 Content.defaultProps = {
   harvested: false,
   cumulative: false,
+  versionTitles: undefined,
 }
 
 Content.propTypes = {
@@ -212,4 +220,5 @@ Content.propTypes = {
   identifier: PropTypes.string.isRequired,
   isRemoved: PropTypes.bool.isRequired,
   isDeprecated: PropTypes.bool.isRequired,
+  versionTitles: PropTypes.object,
 }
