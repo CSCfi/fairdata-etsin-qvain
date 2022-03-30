@@ -26,7 +26,6 @@ const validationMessages = {
   },
   otherIdentifiers: {
     string: 'Other identifiers must be string value.',
-    url: 'The identifiers have to be valid URLs.',
     max: 'The identifier is too long.',
     min: 'The identifier needs to be at least 10 characters long.',
   },

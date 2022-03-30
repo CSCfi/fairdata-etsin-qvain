@@ -39,7 +39,7 @@ class RemoteResourceDocumentValidationSchema(Schema):
 class OtherIdentifierValidationSchema(Schema):
     """Validation schema for other identifiers."""
 
-    notation = fields.URL(required=True)
+    notation = fields.String(required=True)
 
 
 class RemoteResourceValidationSchema(Schema):

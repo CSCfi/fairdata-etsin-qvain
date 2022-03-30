@@ -7,7 +7,6 @@ export const otherIdentifierSchema = yup
   .string()
   .typeError('qvain.validationMessages.otherIdentifiers.string')
   .min(10, 'qvain.validationMessages.otherIdentifiers.min')
-  .url('qvain.validationMessages.otherIdentifiers.url')
   .max(1000, 'qvain.validationMessages.otherIdentifiers.max')
 
 export const otherIdentifiersArraySchema = yup.array().of(otherIdentifierSchema).nullable()
@@ -27,7 +26,7 @@ class OtherIdentifiers extends ReferenceField {
     }
   }
 
-  toBackend = () => this.storage.map(url => ({ notation: url }))
+  toBackend = () => this.storage.map(identifier => ({ notation: identifier }))
 
   @action cleanupBeforeBackend = () => {
     const { validateStr, addItemStr } = this

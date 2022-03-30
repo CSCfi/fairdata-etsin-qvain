@@ -26,7 +26,6 @@ const validationMessages = {
   },
   otherIdentifiers: {
     string: 'Tunnisteet tulisivat olla arvoltaan merkkijonoja.',
-    url: 'Tunniste pitää olla URL-formaatissa',
     max: 'Tunniste on liian pitkä.',
     min: 'Tunnisteen pitää olla vähintään 10 merkkiä pitkä.',
   },

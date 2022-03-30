@@ -207,7 +207,7 @@ expected_remote_resources = [
 original_complete_dataset = {
     "title": {"en": "test", "fi": ""},
     "description": {"en": "desc", "fi": ""},
-    "other_identifier": [{"notation": "https://doin.com/some_identifier"}],
+    "other_identifier": [{"notation": "https://doin.com/some_identifier"}, {"notation": "doi:10.23729/12345678-aaaa"}],
     "keywords": ["qwe"],
     "theme": [{"identifier": "http://www.yso.fi/onto/koko/p46606"}],
     "access_rights": {
@@ -834,7 +834,7 @@ expected_complete_dataset = {
             }
         ],
         "issued": "2021-06-23",
-        "other_identifier": [{"notation": "https://doin.com/some_identifier"}],
+        "other_identifier": [{"notation": "https://doin.com/some_identifier"}, {"notation": "doi:10.23729/12345678-aaaa"}],
         "field_of_science": [
             {"identifier": "http://www.yso.fi/onto/okm-tieteenala/ta112"}
         ],
@@ -1164,7 +1164,7 @@ expected_edited_dataset = {
         ],
         "preferred_identifier": "urn:nbn:fi:att:7fbfd248-e8af-427c-9161-b4a0f89c4109",
         "metadata_version_identifier": "77c1a25d-6ca9-4d19-b659-b3f1f38eea8d",
-        "other_identifier": [{"notation": "https://doin.com/some_identifier"}],
+        "other_identifier": [{"notation": "https://doin.com/some_identifier"}, {"notation": "doi:10.23729/12345678-aaaa"}],
     },
     "use_doi_for_published": False,
 }
