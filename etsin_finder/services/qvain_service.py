@@ -280,7 +280,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             params["data_catalog"] = data_catalog_matcher
 
         resp, status, success = make_request(
-            requests.get, req_url, params=params, **self._get_args()
+            requests.get, req_url, params=params, **self._get_args(timeout=120)
         )
         if not success or len(resp) == 0:
             log.info(f"No datasets found. {status}")
@@ -305,7 +305,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             params["data_catalog"] = data_catalog_matcher
 
         resp, status, success = make_request(
-            requests.get, req_url, params=params, **self._get_args()
+            requests.get, req_url, params=params, **self._get_args(timeout=120)
         )
         if not success or len(resp) == 0:
             log.info(f"No datasets found. {status}")
@@ -332,7 +332,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             params["data_catalog"] = data_catalog_matcher
 
         resp, status, success = make_request(
-            requests.get, req_url, params=params, **self._get_args()
+            requests.get, req_url, params=params, **self._get_args(timeout=120)
         )
         if not success or len(resp) == 0:
             log.info("No datasets found.")
