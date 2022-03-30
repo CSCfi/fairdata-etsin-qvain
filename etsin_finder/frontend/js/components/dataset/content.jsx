@@ -46,7 +46,8 @@ class Content extends Component {
 
   versionsExists = () => {
     const versions = this.props.dataset.dataset_version_set || []
-    return versions.some(version => !version.removed)
+    const identifier = this.props.dataset.identifier
+    return versions.some(version => !version.removed && version.identifier !== identifier)
   }
 
   showEvents() {

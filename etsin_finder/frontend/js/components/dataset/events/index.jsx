@@ -83,7 +83,7 @@ const Events = props => {
       removed: single.removed,
     }))
     .filter(v => !v.removed)
-    .filter(v => v.identifier !== datasetVersionSet[currentIndex].identifier)
+    .filter(v => v.identifier !== identifier)
 
   const otherIdentifiers = otherIdentifierObjects.map(v => v.notation)
   const originIdentifier = [preservationDatasetOriginVersion?.preferred_identifier].filter(v => v)
