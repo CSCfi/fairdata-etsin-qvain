@@ -37,24 +37,41 @@ describe('Auth Store', () => {
     await Auth.checkLogin()
     expect(Auth.userLogged).toBe(true)
   })
+
   it('Should have user data', async () => {
     await Auth.checkLogin()
     expect(Auth.user).toEqual(
       expect.objectContaining({
         name: 'Testi Käyttäjä',
         loggedIn: true,
-        homeOrganizationName: 'organisaatio',
+        homeOrganizationId: 'example.com/org',
         idaProjects: ['IDA:project_x', 'IDA:project_y'],
         isUsingRems: true,
       })
     )
   })
+
   it('Should fail to login without CSC user id', async () => {
     const user = { ...mockUser, is_authenticated_CSC_user: false }
     mock.onGet('/api/user').reply(200, user)
     await Auth.checkLogin()
     expect(Auth.userLogged).toBe(false)
   })
+
+  it('Should fail to login without organization id', async () => {
+    const user = { ...mockUser, home_organization_id: undefined }
+    mock.onGet('/api/user').reply(200, user)
+    await Auth.checkLogin()
+    expect(Auth.userLogged).toBe(false)
+  })
+
+  it('Should login without organization name', async () => {
+    const user = { ...mockUser, home_organization_name: undefined }
+    mock.onGet('/api/user').reply(200, user)
+    await Auth.checkLogin()
+    expect(Auth.userLogged).toBe(true)
+  })
+
   it('Should logout with logout()', async () => {
     mock.onDelete('/api/session').reply(200)
     await Auth.checkLogin()
@@ -62,6 +79,7 @@ describe('Auth Store', () => {
     await Auth.logout()
     expect(Auth.userLogged).toBe(false)
   })
+
   it('Should not logout with logout() error', async () => {
     mock.onDelete('/api/session').reply(401)
     await Auth.checkLogin()
@@ -72,6 +90,7 @@ describe('Auth Store', () => {
     expect(errorSpy.mock.calls.length).toBe(1)
     expect(Auth.userLogged).toBe(true)
   })
+
   it('Login renewal error should clear login', async () => {
     mock.onGet('/api/session').reply(401)
     await Auth.checkLogin()
@@ -81,6 +100,7 @@ describe('Auth Store', () => {
     } catch {}
     expect(Auth.userLogged).toBe(false)
   })
+
   it('Login renewal error should clear user', async () => {
     mock.onGet('/api/session').reply(401)
     await Auth.checkLogin()

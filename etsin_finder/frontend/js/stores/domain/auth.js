@@ -29,7 +29,7 @@ class Auth {
     firstName: undefined,
     lastName: undefined,
     loggedIn: false,
-    homeOrganizationName: undefined,
+    homeOrganizationId: undefined,
     idaProjects: [],
     isUsingRems: undefined,
   }
@@ -45,7 +45,7 @@ class Auth {
       firstName: undefined,
       lastName: undefined,
       loggedIn: false,
-      homeOrganizationName: undefined,
+      homeOrganizationId: undefined,
       idaProjects: [],
       isUsingRems: undefined,
     }
@@ -82,7 +82,7 @@ class Auth {
               firstName: res.data.first_name,
               lastName: res.data.last_name,
               loggedIn: res.data.is_authenticated,
-              homeOrganizationName: res.data.home_organization_name,
+              homeOrganizationId: res.data.home_organization_id,
               idaProjects: res.data.user_ida_projects,
               isUsingRems: res.data.is_using_rems,
             })
@@ -96,7 +96,7 @@ class Auth {
             } else if (
               res.data.is_authenticated &&
               res.data.is_authenticated_CSC_user &&
-              !res.data.home_organization_name
+              !res.data.home_organization_id
             ) {
               this.userLogged = false
               this.cscUserLogged = false
@@ -105,7 +105,7 @@ class Auth {
             } else if (
               res.data.is_authenticated &&
               res.data.is_authenticated_CSC_user &&
-              res.data.home_organization_name
+              res.data.home_organization_id
             ) {
               this.userLogged = res.data.is_authenticated
               this.cscUserLogged = res.data.is_authenticated_CSC_user
