@@ -78,7 +78,8 @@ class Access {
 
   @action
   embargoAccess(av) {
-    if (new Date(av).getTime() < new Date().getTime()) {
+    const embargoDate = new Date(av)
+    if (embargoDate < new Date()) {
       this.restrictions = {
         open: true,
         allowDataRemote: true,
@@ -95,6 +96,7 @@ class Access {
         allowDataIdaDownloadButton: false,
         showREMSbutton: false,
         applicationState: null,
+        embargoDate: av,
       }
     }
   }

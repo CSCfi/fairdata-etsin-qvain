@@ -26,6 +26,7 @@ import PropTypes from 'prop-types'
 
 import checkNested from '../../utils/checkNested'
 import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
+import dateFormat from '../../utils/dateFormat'
 import Button from '../general/button'
 import Modal from '../general/modal'
 import { ACCESS_TYPE_URL } from '../../utils/constants'
@@ -51,6 +52,7 @@ class AccessRights extends Component {
     let identifier = ''
     let url = ''
     let id = ''
+    let embargoDate = ''
     if (props.access_rights !== undefined && props.access_rights !== null) {
       if (checkNested(props.access_rights, 'access_type', 'pref_label')) {
         title = props.access_rights.access_type.pref_label
@@ -61,11 +63,13 @@ class AccessRights extends Component {
         `dataset.access_rights_description.${id !== undefined ? id.toLowerCase() : ''}`
       )
       url = props.access_rights.access_url
+      embargoDate = props.access_rights.available
     }
     this.state = {
       title,
       description,
       url,
+      embargoDate,
       restriction_grounds:
         props.access_rights.restriction_grounds !== undefined &&
         props.access_rights.restriction_grounds.length > 0 &&
@@ -80,10 +84,15 @@ class AccessRights extends Component {
   restricted() {
     return (
       <>
-        <FontAwesomeIcon icon={faLock} title="Closed lock" />
-        <AccessLabel lang={getDataLang(this.state.title)}>
-          {checkDataLang(this.state.title)}
-        </AccessLabel>
+        <RestrictedButton>
+          <FontAwesomeIcon icon={faLock} title="Closed lock" />
+          <div>
+            <AccessLabel lang={getDataLang(this.state.title)}>
+              {checkDataLang(this.state.title)}
+            </AccessLabel>
+            {this.state.embargoDate && <Date>{dateFormat(this.state.embargoDate, true)} </Date>}
+          </div>
+        </RestrictedButton>
       </>
     )
   }
@@ -165,7 +174,11 @@ class AccessRights extends Component {
                       icon={faExclamationTriangle}
                       title="Restricted"
                     />
-                    <AccessLabel key={`al-rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)} tabIndex="0">
+                    <AccessLabel
+                      key={`al-rg-${rg.identifier}`}
+                      lang={getDataLang(rg.pref_label)}
+                      tabIndex="0"
+                    >
                       {checkDataLang(rg.pref_label)}
                     </AccessLabel>
                   </div>
@@ -231,6 +244,17 @@ const ModalInner = styled.div`
     margin-bottom: 0.2em;
   }
 `
+
+const Date = styled.span`
+  font-size: 12px;
+  display: block;
+`
+
+const RestrictedButton = styled.div`
+  display: flex;
+  align-items: center;
+`
+
 AccessRights.defaultProps = {
   access_rights: undefined,
   button: false,
@@ -241,6 +265,7 @@ AccessRights.propTypes = {
   access_rights: PropTypes.shape({
     description: PropTypes.object,
     access_url: PropTypes.object,
+    available: PropTypes.string,
     access_type: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
       pref_label: PropTypes.objectOf(PropTypes.string),

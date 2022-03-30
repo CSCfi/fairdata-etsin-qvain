@@ -14,7 +14,7 @@ import Stores from '../stores'
 
 const { Locale } = Stores
 
-const formats = {
+const getFormats = shortMonth => ({
   datetime: {
     fi: {
       lang: 'fi-FI',
@@ -52,14 +52,15 @@ const formats = {
       lang: 'en-US',
       options: {
         year: 'numeric',
-        month: 'long',
+        month: shortMonth ? 'short' : 'long',
         day: 'numeric',
       },
     },
   },
-}
+})
 
-const dateFormat = date => {
+const dateFormat = (date, shortMonth = false) => {
+  const formats = getFormats(shortMonth)
   if (!date) {
     return ''
   }

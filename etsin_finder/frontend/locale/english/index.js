@@ -222,6 +222,7 @@ const english = {
           'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
       },
     },
+    embargo_date: 'Embargo expires',
     events_idn: {
       deleted_versions: {
         title: 'Deleted versions',

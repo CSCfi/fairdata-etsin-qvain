@@ -222,6 +222,7 @@ const finnish = {
           'Tämä on karttuva aineisto, johon mahdollisesti vielä lisätään tiedostoja. Huomio tämä kun käytät aineistoa tai viittaat siihen (esim. ajallinen kattavuus hyvä mainita). Aineistosta ei kuitenkaan voi poistaa tai muuttaa olemassa olevia tiedostoja.',
       },
     },
+    embargo_date: 'Embargo voimassa',
     events_idn: {
       deleted_versions: {
         title: 'Poistetut Versiot',

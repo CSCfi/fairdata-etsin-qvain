@@ -10,6 +10,7 @@ import Info from './info'
 import sizeParse from '../../../../utils/sizeParse'
 import { withStores } from '../../../../stores/stores'
 import getDownloadAction, { getAllowDownload, getDownloadAllText } from './downloadActions'
+import dateFormat from '../../../../utils/dateFormat'
 import ErrorMessage from './errorMessage'
 import PackageModal from './packageModal'
 import ManualDownloadModal from './manualDownloadModal'
@@ -20,6 +21,7 @@ import TooltipHover from '../../../general/tooltipHover'
 
 function IdaResources(props) {
   const { restrictions } = props.Stores.Access
+  const { embargoDate } = restrictions
   const { Files } = props.Stores.DatasetQuery
   const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel, root } = Files
   const { DatasetQuery } = props.Stores
@@ -103,6 +105,12 @@ function IdaResources(props) {
               )}
             </HeaderButtonSplit>
           </FlaggedComponent>
+          {embargoDate && (
+            <EmbargoDate>
+              <Translate content="dataset.embargo_date" />
+              &nbsp; {dateFormat(embargoDate, true)}{' '}
+            </EmbargoDate>
+          )}
         </Translate>
       </Header>
 
@@ -121,6 +129,10 @@ const HeaderButtonSplit = styled(SplitButtonContainer)`
   & > button:last-child {
     margin: 0;
   }
+`
+
+const EmbargoDate = styled.span`
+  font-size: 12px;
 `
 
 IdaResources.propTypes = {
