@@ -57,6 +57,7 @@ class Temporals extends Field {
   toBackend = () => {
     if ((this.inEdit || {}).startDate && (this.inEdit || {}).endDate) {
       this.save()
+      this.clearInEdit()
     }
 
     return this.storage.map(temporal => ({
