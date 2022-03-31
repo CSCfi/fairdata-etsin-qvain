@@ -111,7 +111,7 @@ describe('Auth Store', () => {
     expect(Auth.user).toEqual({
       name: undefined,
       loggedIn: false,
-      homeOrganizationName: undefined,
+      homeOrganizationId: undefined,
       idaProjects: [],
       isUsingRems: undefined,
     })

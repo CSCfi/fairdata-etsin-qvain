@@ -68,9 +68,9 @@ class FrontPage extends Component {
           this.setState({
             userPermissionErrorModalIsOpen: true,
           })
-          // If the user has a user.name, but not a user.homeOrganizationName,
+          // If the user has a user.name, but not a user.homeOrganizationId,
           // it means they have a CSC account, but no home organization set.
-        } else if (Auth.user.name !== undefined && Auth.user.homeOrganizationName === undefined) {
+        } else if (Auth.user.name !== undefined && Auth.user.homeOrganizationId === undefined) {
           this.setState({
             userHomeOrganizationErrorModalIsOpen: true,
           })
