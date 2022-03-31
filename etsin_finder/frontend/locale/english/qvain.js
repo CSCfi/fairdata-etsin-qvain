@@ -109,6 +109,11 @@ const qvainEnglish = {
     showDetails: 'Show unsupported fields',
     hideDetails: 'Hide unsupported fields',
   },
+  state: {
+    published: '',
+    draft: 'Dataset has not yet been published',
+    changed: 'Dataset has been published but unpublished changes exist',
+  },
   actors,
   datasets,
   description,

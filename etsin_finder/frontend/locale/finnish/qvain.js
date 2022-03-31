@@ -111,6 +111,11 @@ const qvainFinnish = {
     showDetails: 'Näytä tukemattomat kentät',
     hideDetails: 'Piilota tukemattomat kentät',
   },
+  state: {
+    published: '',
+    draft: 'Aineistokuvailua ei ole vielä julkaistu',
+    changed: 'Aineistokuvailu on julkaistu, mutta se sisältää julkaisemattomia muutoksia',
+  },
   actors,
   datasets,
   description,

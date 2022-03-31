@@ -1,13 +1,14 @@
 import React from 'react'
+import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import PropTypes, { instanceOf } from 'prop-types'
+import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import DeprecatedState from './deprecatedState'
 import PasState from './pasState'
 import LockNotification from './lockNotification'
-import SubmitButtons from './submitButtons'
 import {
   StickySubHeaderWrapper,
   StickySubHeader,
@@ -24,9 +25,21 @@ import {
 } from './editor.styled'
 import { useStores } from '../../utils/stores'
 
-const StickyHeader = ({ datasetError, submitButtonsRef, hideSubmitButtons }) => {
+const datasetStateTranslation = dataset => {
+  if (!dataset) return ''
+  if (dataset.state === 'published') {
+    return 'qvain.state.published'
+  }
+  if (dataset.draft_of) {
+    return 'qvain.state.changed'
+  }
+  return 'qvain.state.draft'
+}
+
+const StickyHeader = ({ datasetError }) => {
   const {
     Qvain: {
+      original,
       Submit: { error, response, isLoading, clearError, clearResponse },
     },
   } = useStores()
@@ -67,9 +80,8 @@ const StickyHeader = ({ datasetError, submitButtonsRef, hideSubmitButtons }) => 
     <StickySubHeaderWrapper>
       <CustomSubHeader>
         {createLinkBack('left')}
-        <ButtonContainer>
-          {!hideSubmitButtons && <SubmitButtons submitButtonsRef={submitButtonsRef} />}
-        </ButtonContainer>
+        <Translate component={DatasetState} content={datasetStateTranslation(original)} />
+        <Padding />
       </CustomSubHeader>
       <LockNotification />
       <PasState />
@@ -84,13 +96,19 @@ const StickyHeader = ({ datasetError, submitButtonsRef, hideSubmitButtons }) => 
 }
 
 StickyHeader.propTypes = {
-  hideSubmitButtons: PropTypes.bool,
   datasetError: PropTypes.bool.isRequired,
-  submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }).isRequired,
 }
 
-StickyHeader.defaultProps = {
-  hideSubmitButtons: false,
-}
+export const DatasetState = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+  margin: 0.25rem 1rem;
+`
+
+const Padding = styled.div`
+  padding: 0rem 2rem;
+`
 
 export default observer(StickyHeader)

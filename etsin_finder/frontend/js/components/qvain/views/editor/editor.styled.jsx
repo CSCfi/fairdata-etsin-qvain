@@ -73,8 +73,9 @@ export const LinkText = styled.span`
 `
 
 export const CustomSubHeader = styled(StickySubHeader)`
+  display: flex;
   background-color: ${props => props.theme.color.superlightgray};
-  justify-content: flex-start;
+  justify-content: space-between;
 `
 export const customStyles = {
   content: {

@@ -5,9 +5,8 @@ import axios from 'axios'
 import { configure } from 'mobx'
 import Translate from 'react-translate-component'
 
-import StickyHeader from '../../../js/components/qvain/views/editor/stickyHeader'
+import StickyHeader, { DatasetState } from '../../../js/components/qvain/views/editor/stickyHeader'
 import SubmitResponse from '../../../js/components/qvain/views/editor/submitResponse'
-import SubmitButtons from '../../../js/components/qvain/views/editor/submitButtons'
 import { useStores } from '../../../js/stores/stores'
 import { buildStores } from '../../../js/stores'
 import { expect } from 'chai'
@@ -67,24 +66,6 @@ describe('when loaded', () => {
     jest.clearAllMocks()
   })
 
-  describe('SubmitButtons', () => {
-    test('should be rendered', () => {
-      harness.shallow()
-      const child = {
-        findArgs: SubmitButtons,
-      }
-      harness.shouldIncludeChild(child)
-    })
-
-    test('should be hidden', () => {
-      harness.shallow({ hideSubmitButtons: true })
-      const child = {
-        findArgs: SubmitButtons,
-      }
-      expect(() => harness.shouldIncludeChild(child)).to.throw()
-    })
-  })
-
   describe('SubmitResponse', () => {
     beforeEach(() => {
       stores.Qvain.Submit.setResponse('some response')
@@ -110,6 +91,88 @@ describe('when loaded', () => {
       test('should call Submit.clearError', () => {
         expect(stores.Qvain.Submit.clearError).to.have.beenCalled()
       })
+    })
+  })
+})
+
+describe('state texts', () => {
+  const mockStores = {
+    Qvain: {
+      original: {},
+      Submit: {
+        error: null,
+        response: null,
+        isLoading: false,
+        clearError: () => {},
+        clearResponse: () => {},
+      },
+    },
+  }
+
+  const harness = new Harness(StickyHeader, { datasetError: false })
+
+  describe('when state is "published"', () => {
+    beforeEach(() => {
+      mockStores.Qvain.original.state = 'published'
+      useStores.mockReturnValue(mockStores)
+      harness.shallow()
+    })
+
+    test('should have published translation path', () => {
+      const child = {
+        findType: 'prop',
+        findArgs: ['component', DatasetState],
+      }
+
+      const props = {
+        content: 'qvain.state.published',
+      }
+
+      harness.shouldIncludeChild({ ...child, props })
+    })
+  })
+
+  describe('when state is "changed"', () => {
+    beforeEach(() => {
+      mockStores.Qvain.original.state = 'draft'
+      mockStores.Qvain.original.draft_of = true
+      useStores.mockReturnValue(mockStores)
+      harness.shallow()
+    })
+
+    test('should have changed translation path', () => {
+      const child = {
+        findType: 'prop',
+        findArgs: ['component', DatasetState],
+      }
+
+      const props = {
+        content: 'qvain.state.changed',
+      }
+
+      harness.shouldIncludeChild({ ...child, props })
+    })
+  })
+
+  describe('when state is "draft"', () => {
+    beforeEach(() => {
+      mockStores.Qvain.original.state = 'draft'
+      mockStores.Qvain.original.draft_of = false
+      useStores.mockReturnValue(mockStores)
+      harness.shallow()
+    })
+
+    test('should have draft translation path', () => {
+      const child = {
+        findType: 'prop',
+        findArgs: ['component', DatasetState],
+      }
+
+      const props = {
+        content: 'qvain.state.draft',
+      }
+
+      harness.shouldIncludeChild({ ...child, props })
     })
   })
 })

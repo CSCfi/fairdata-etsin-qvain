@@ -17,10 +17,10 @@ import getDatasetActions, { groupActions } from './datasetActions'
 
 const datasetStateTranslation = dataset => {
   if (dataset.state === 'published') {
-    if (dataset.next_draft) {
-      return 'qvain.datasets.state.changed'
-    }
     return 'qvain.datasets.state.published'
+  }
+  if (dataset.draft_of) {
+    return 'qvain.datasets.state.changed'
   }
   return 'qvain.datasets.state.draft'
 }
