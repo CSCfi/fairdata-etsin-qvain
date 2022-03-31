@@ -351,7 +351,7 @@ class User(Resource):
         csc_user = authentication.get_user_csc_name()
         first_name = authentication.get_user_firstname()
         last_name = authentication.get_user_lastname()
-        groups = authentication.get_user_ida_projects()
+        groups = authentication.get_user_ida_projects() or []
         user_info["user_ida_projects"] = groups
 
         is_using_rems_response = get_fairdata_rems_api_config()
