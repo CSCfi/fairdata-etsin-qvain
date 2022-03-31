@@ -25,6 +25,8 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
     schema = MetaxServiceConfigurationSchema(unknown=marshmallow.RAISE)
 
+    DATASETS_RESEARCH_DATASET_FIELDS = 'title,preferred_identifier'
+
     @property
     def config(self):
         """Get service configuration"""
@@ -84,7 +86,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
     def _METAX_GET_ALL_DATASETS_FOR_USER(self):
         return (
             self.metax_url("/rest/v2/datasets")
-            + "?metadata_provider_user={0}&no_pagination=true&ordering=-date_created"
+            + "?metadata_provider_user={0}&pagination=false&ordering=-date_created"
         )
 
     @property
@@ -271,7 +273,9 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
         if no_pagination:
             req_url = format_url(self._METAX_GET_ALL_DATASETS_FOR_USER, user_id)
 
-        params = {}
+        params = {
+            "research_dataset_fields": self.DATASETS_RESEARCH_DATASET_FIELDS,
+        }
         if limit:
             params["limit"] = limit
         if offset:
@@ -300,7 +304,10 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
         """
         req_url = format_url(self._METAX_GET_ALL_DATASETS_FOR_EDITOR, user_id)
 
-        params = {"pagination": "false"}
+        params = {
+            "pagination": "false",
+            "research_dataset_fields": self.DATASETS_RESEARCH_DATASET_FIELDS,
+        }
         if data_catalog_matcher:
             params["data_catalog"] = data_catalog_matcher
 
@@ -327,7 +334,10 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             self._METAX_GET_ALL_DATASETS_FOR_PROJECTS, ",".join(projects)
         )
 
-        params = {"pagination": "false"}
+        params = {
+            "pagination": "false",
+            "research_dataset_fields": self.DATASETS_RESEARCH_DATASET_FIELDS,
+        }
         if data_catalog_matcher:
             params["data_catalog"] = data_catalog_matcher
 
