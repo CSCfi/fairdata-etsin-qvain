@@ -110,6 +110,7 @@ const SearchWrapper = styled.div`
 
 const Placeholder = styled.span`
   margin-left: 1rem;
+  color: #333333;
 `
 
 const Container = styled.div`
