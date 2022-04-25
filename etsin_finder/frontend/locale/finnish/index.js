@@ -134,7 +134,8 @@ const finnish = {
         title: 'Muut latausvaihtoehdot',
         ariaLabel: 'Näytä muut latausvaihtoehdot',
         description: `Etsimen lataukset voi käynnistää myös seuraavin komennoin.
-        Huomioi että komennot ovat <em>kertakäyttöisiä</em> koska jokainen lataus tulee todentaa erikseen.`,
+        Huomioi että komennot ovat <em>kertakäyttöisiä</em> koska jokainen lataus tulee todentaa erikseen.
+        Komennot ovat voimassa 72 tuntia.`,
         error: 'Latauksen valtuuttamisessa tapahtui virhe.',
         copyButton: 'Kopioi',
         copyButtonTooltip: 'Kopioi leikepöydälle',

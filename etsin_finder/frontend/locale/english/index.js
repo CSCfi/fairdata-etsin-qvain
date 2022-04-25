@@ -134,7 +134,8 @@ const english = {
         title: 'Other download options',
         ariaLabel: 'Show other download options',
         description: `Etsin download can be initiated via the following commands.
-        Please note that these are <em>only single use</em>, as every download needs to be authorized separately.`,
+        Please note that these are <em>only single use</em>, as every download needs to be authorized separately.
+        Commands are valid for 72 hours.`,
         error: 'There was an error authorizing download.',
         copyButton: 'Copy',
         copyButtonTooltip: 'Copy to clipboard',
