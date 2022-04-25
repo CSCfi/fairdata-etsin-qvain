@@ -25,9 +25,22 @@ const ErrorMessage = ({ error, clear }) => {
 
   let errorColor = null
   let allowDetails = true
-  let summaryTranslation = `dataset.dl.errors.${
-    error.response?.status === 503 ? 'unknownError' : 'serviceUnavailable'
-  }`
+
+  const statusCodeToErrorMessage = status => {
+    switch (status) {
+      case 500: {
+        return 'idaUnavailable'
+      }
+      case 503: {
+        return 'unknownError'
+      }
+      default: {
+        return 'serviceUnavailable'
+      }
+    }
+  }
+
+  let summaryTranslation = `dataset.dl.errors.${statusCodeToErrorMessage(error.response?.status)}`
 
   const reason = error?.response?.data?.reason
   if (reason in ACCESS_DENIED_MESSAGES) {

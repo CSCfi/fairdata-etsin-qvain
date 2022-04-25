@@ -125,6 +125,8 @@ const english = {
       errors: {
         serviceUnavailable:
           'The download service is currently unavailable. If the problem persists check our <a href="https://www.fairdata.fi/en/maintenance/">maintenance page</a> for more information.',
+        idaUnavailable:
+          'Data downloads are temporarily unavailable due to a maintenance break. More information about maintenance breaks: <a href="https://www.fairdata.fi/huoltokatko/">https://www.fairdata.fi/huoltokatko/</a>',
         unknownError:
           'There was an error using the download service. If the problem persists check our <a href="https://www.fairdata.fi/en/maintenance/">maintenance page</a> for more information.',
       },

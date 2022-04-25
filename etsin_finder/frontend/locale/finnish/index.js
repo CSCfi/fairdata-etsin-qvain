@@ -125,6 +125,8 @@ const finnish = {
       errors: {
         serviceUnavailable:
           'Latauspalvelu ei ole juuri nyt käytettävissä. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
+        idaUnavailable:
+          'Tiedostojen lataus on väliaikaisesti pois käytöstä huoltokatkon takia. Lisätietoa huoltokatkoista: <a href="https://www.fairdata.fi/huoltokatko/">https://www.fairdata.fi/huoltokatko/</a>',
         unknownError:
           'Latauspalvelun käytössä tapahtui virhe. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
       },
