@@ -132,11 +132,11 @@ describe('getUseAsTemplateAction', () => {
 
     if (dataset.next_draft) {
       it('should use dataset.next_draft as template', () => {
-        expect(stores.Qvain.resetWithTemplate).to.have.beenCalledWith(dataset.next_draft)
+        expect(stores.Env.history.push).to.have.beenCalledWith(`/qvain/dataset?template=${dataset.next_draft.identifier}`)
       })
     } else {
       it('should use dataset as template', () => {
-        expect(stores.Qvain.resetWithTemplate).to.have.beenCalledWith(dataset)
+        expect(stores.Env.history.push).to.have.beenCalledWith(`/qvain/dataset?template=${dataset.identifier}`)
       })
     }
 

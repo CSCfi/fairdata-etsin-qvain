@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom'
 import { Prompt } from 'react-router'
 import Translate from 'react-translate-component'
 
+import queryParam from '@/utils/queryParam'
 import { QvainContainer } from '../../general/card'
 import ErrorBoundary from '../../../general/errorBoundary'
 import urls from '../../../../utils/urls'
@@ -91,8 +92,10 @@ export class Qvain extends Component {
     if (this.state.datasetLoading) {
       return
     }
-    const identifier = this.props.match.params.identifier
     const { original } = this.props.Stores.Qvain
+    const matchIdentifier = this.props.match.params.identifier
+    let identifier = matchIdentifier
+    let isTemplate = false
     const {
       Matomo: { recordEvent },
     } = this.props.Stores
@@ -100,15 +103,27 @@ export class Qvain extends Component {
     if (identifier) {
       recordEvent(`DATASET / ${identifier}`)
     } else {
-      recordEvent('DATASET')
+      const templateIdentifier = this.getTemplateIdentifier()
+      console.log(templateIdentifier)
+      if (templateIdentifier) {
+        identifier = templateIdentifier
+        isTemplate = true
+        recordEvent(`TEMPLATE / ${templateIdentifier}`)
+      } else {
+        recordEvent('DATASET')
+      }
     }
 
     // Test if we need to load a dataset or do we use the one currently in store
     if (identifier && !(original && original.identifier === identifier)) {
-      await this.getDataset(identifier)
+      await this.getDataset(identifier, { isTemplate })
     } else {
       this.setState({ datasetLoading: false, haveDataset: true })
     }
+  }
+
+  getTemplateIdentifier() {
+    return queryParam(this.props.Stores.Env.history.location, 'template')
   }
 
   setFocusOnSubmitButton(event) {
@@ -119,13 +134,16 @@ export class Qvain extends Component {
     event.preventDefault()
   }
 
-  getDataset(identifier) {
+  getDataset(identifier, { isTemplate = false } = {}) {
     this.setState({ datasetLoading: true, datasetError: false })
-    const { resetQvainStore, editDataset } = this.props.Stores.Qvain
+
+    const { resetQvainStore, editDataset, resetWithTemplate } = this.props.Stores.Qvain
+
     const {
       getQvainUrl,
       Flags: { flagEnabled },
     } = this.props.Stores.Env
+
     const url = urls.qvain.dataset(identifier)
     const promise = axios
       .get(url)
@@ -137,7 +155,11 @@ export class Qvain extends Component {
         if (nextDraft) {
           this.props.history.replace(getQvainUrl(`/dataset/${nextDraft}`))
         } else {
-          editDataset(result.data)
+          if (isTemplate) {
+            resetWithTemplate(result.data)
+          } else {
+            editDataset(result.data)
+          }
           if (flagEnabled('PERMISSIONS.WRITE_LOCK')) {
             try {
               await Promise.all(this.props.Stores.Qvain.Lock.promises)

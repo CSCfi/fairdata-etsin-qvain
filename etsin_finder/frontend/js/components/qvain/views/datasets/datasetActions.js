@@ -9,7 +9,9 @@ export const getEnterEditAction = (Stores, dataset) => {
 
   return {
     text: dataset.next_draft ? 'qvain.datasets.actions.editDraft' : 'qvain.datasets.actions.edit',
-    shortText: dataset.next_draft ? 'qvain.datasets.shortActions.editDraft' : 'qvain.datasets.actions.edit',
+    shortText: dataset.next_draft
+      ? 'qvain.datasets.shortActions.editDraft'
+      : 'qvain.datasets.actions.edit',
     danger: false,
     icon: faEdit,
     onlyIcon: false,
@@ -100,7 +102,6 @@ export const getCreateNewVersionAction = (Stores, dataset) => {
 export const getUseAsTemplateAction = (Stores, dataset) => {
   const {
     Env: { getQvainUrl, history },
-    Qvain: { resetWithTemplate },
     Matomo: { recordEvent },
   } = Stores
 
@@ -109,15 +110,11 @@ export const getUseAsTemplateAction = (Stores, dataset) => {
     shortText: `qvain.datasets.shortActions.useAsTemplate`,
     danger: false,
     more: true,
-    handler: () => {
-      history.push(getQvainUrl('/dataset'))
+    handler: async () => {
       recordEvent(`TEMPLATE / ${dataset.identifier}`)
 
-      if (dataset.next_draft?.identifier) {
-        resetWithTemplate(dataset.next_draft)
-      } else {
-        resetWithTemplate(dataset)
-      }
+      const identifier = dataset.next_draft?.identifier || dataset.identifier
+      history.push(getQvainUrl(`/dataset?template=${identifier}`))
     },
   }
 }

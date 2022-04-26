@@ -258,8 +258,8 @@ class Qvain extends Resources {
   @action resetWithTemplate = async dataset => {
     this.resetQvainStore()
     this.loadBasicFields(dataset)
+    this.OtherIdentifiers.reset()
     this.ExternalResources.reset()
-    this.setChanged(true)
   }
 
   @action setOriginal = newOriginal => {
