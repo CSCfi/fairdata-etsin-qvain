@@ -15,7 +15,7 @@ import styled from 'styled-components'
 
 import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import dateFormat from '../../../utils/dateFormat'
-import Agent from '../agent'
+import Agent from '../Agent'
 import { hasProvenances, Table, IDLink, Margin } from './common'
 
 const printDate = temp => {

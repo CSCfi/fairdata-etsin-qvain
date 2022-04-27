@@ -2,9 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
-import { axe } from 'jest-axe'
-import ReactModal from 'react-modal'
-import { observable, when } from 'mobx'
+import { observable } from 'mobx'
 
 import etsinTheme from '@/styles/theme'
 import '@/../locale/translations'
@@ -12,11 +10,7 @@ import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import dataset from '../../__testdata__/dataset.ida'
 import { versionTitles } from '../../__testdata__/dataset.ida'
-import Dataset from '@/components/dataset'
-import Description from '@/components/dataset/description'
-import Maps from '@/components/dataset/maps'
 import Events from '@/components/dataset/events'
-import ExternalResources from '@/components/dataset/data/externalResources'
 import axios from 'axios'
 
 jest.mock('axios')
@@ -32,26 +26,6 @@ const path = `/dataset/${identifier}/events`
 
 const stores = buildStores()
 stores.Accessibility.handleNavigation = jest.fn()
-
-const flushPromises = () => new Promise(setImmediate)
-
-const mockGet = () => {
-  axios.get = jest.fn((...args) => {
-    datasetsCalls.push(JSON.parse(JSON.stringify(args)))
-    return Promise.resolve({
-      data: {
-        catalog_record: dataset,
-        email_info: {
-          CONTRIBUTOR: false,
-          CREATOR: false,
-          CURATOR: false,
-          PUBLISHER: false,
-          RIGHTS_HOLDER: false,
-        },
-      },
-    })
-  })
-}
 
 const tableToObjects = tableWrapper => {
   // convert table rows into objects, use table headers as keys

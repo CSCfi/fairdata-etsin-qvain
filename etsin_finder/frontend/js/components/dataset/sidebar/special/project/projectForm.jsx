@@ -16,7 +16,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import checkDataLang from '../../../../../utils/checkDataLang'
 import checkNested from '../../../../../utils/checkNested'
-import Agent from '../../../agent'
+import Agent from '../../../Agent'
 
 
 export default class ProjectForm extends Component {

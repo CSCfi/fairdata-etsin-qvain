@@ -123,26 +123,29 @@ class Locale {
     return defaultLang
   }
 
-  getValueTranslation = (value, lang = this.currentLang) => {
+  getValueTranslationWithLang = (value, lang = this.currentLang) => {
     // Get a translation from a multi-language string object, use supplied language by default
     if (typeof value === 'string' || typeof value === 'undefined') {
-      return value
+      return [value, undefined]
     }
     if (value[lang]) {
-      return value[lang]
+      return [value[lang], lang]
     }
     for (const l of this.languages) {
       if (value[l]) {
-        return value[l]
+        return [value[l], l]
       }
     }
-    for (const translation of Object.values(value)) {
-      if (translation) {
-        return translation
+    for (const [l, translation] of Object.entries(value)) {
+      if (translation && l !== 'und') {
+        return [translation, l]
       }
     }
-    return ''
+    return [value.und || '', undefined]
   }
+
+  getValueTranslation = (value, lang = this.currentLang) =>
+    this.getValueTranslationWithLang(value, lang)[0]
 
   @computed get langTabOrder() {
     return [this.lang, ...this.languages.filter(l => l !== this.lang)]

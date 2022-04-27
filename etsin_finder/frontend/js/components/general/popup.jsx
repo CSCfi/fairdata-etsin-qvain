@@ -1,13 +1,13 @@
 {
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -21,10 +21,12 @@ export default class PopUp extends Component {
     isOpen: PropTypes.bool.isRequired,
     onRequestClose: PropTypes.func.isRequired,
     align: PropTypes.oneOf(['left', 'left-fit-content', 'right', 'center', 'sidebar']),
+    role: PropTypes.string,
   }
 
   static defaultProps = {
     align: 'left',
+    role: undefined,
   }
 
   constructor(props) {
@@ -79,40 +81,39 @@ export default class PopUp extends Component {
     return (
       <Relative>
         {this.props.isOpen && (
-          <>
-            <PopContainer>
-              <Pop
-                ref={this.popRef}
-                tabIndex="-1"
-                autoFocus
-                onBlur={this.onBlur}
-                onFocus={this.onFocus}
-                align={this.props.align}
-              >
-                {this.props.popUp}
-              </Pop>
-              <Svg width="40px" height="20px" viewBox="0 0 20 20">
-                <defs>
-                  <filter id="dropshadow" height="200%" width="200%">
-                    <feOffset dx="0" dy="3" result="offsetblur" />
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-                    <feComponentTransfer>
-                      <feFuncA type="linear" slope="0.6" />
-                    </feComponentTransfer>
-                    <feMerge>
-                      <feMergeNode />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
-                <polygon
-                  fill="white"
-                  points="0,0 10,10 20,0"
-                  style={{ filter: 'url(#dropshadow)' }}
-                />
-              </Svg>
-            </PopContainer>
-          </>
+          <PopContainer>
+            <Pop
+              ref={this.popRef}
+              tabIndex="-1"
+              autoFocus
+              onBlur={this.onBlur}
+              onFocus={this.onFocus}
+              align={this.props.align}
+              role={this.props.role}
+            >
+              {this.props.popUp}
+            </Pop>
+            <Svg width="40px" height="20px" viewBox="0 0 20 20">
+              <defs>
+                <filter id="dropshadow" height="200%" width="200%">
+                  <feOffset dx="0" dy="3" result="offsetblur" />
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+                  <feComponentTransfer>
+                    <feFuncA type="linear" slope="0.6" />
+                  </feComponentTransfer>
+                  <feMerge>
+                    <feMergeNode />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <polygon
+                fill="white"
+                points="0,0 10,10 20,0"
+                style={{ filter: 'url(#dropshadow)' }}
+              />
+            </Svg>
+          </PopContainer>
         )}
         {this.props.children}
       </Relative>
@@ -171,10 +172,12 @@ const alignment = align => {
         @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
           margin-right: -150px;
         }
-        @media screen and (min-width: ${p => p.theme.breakpoints.md}) and (max-width: ${p => p.theme.breakpoints.lg}) {
+        @media screen and (min-width: ${p => p.theme.breakpoints.md}) and (max-width: ${p =>
+            p.theme.breakpoints.lg}) {
           margin-right: -150px;
         }
-        @media screen and (min-width: ${p => p.theme.breakpoints.xs}) and (max-width: ${p => p.theme.breakpoints.md}) {
+        @media screen and (min-width: ${p => p.theme.breakpoints.xs}) and (max-width: ${p =>
+            p.theme.breakpoints.md}) {
           margin-right: -150px;
         }
       `

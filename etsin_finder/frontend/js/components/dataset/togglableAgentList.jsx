@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import Agent from './agent'
+import Agent from './Agent'
 import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import { LinkButton } from '../general/button'
 
