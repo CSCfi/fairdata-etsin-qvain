@@ -20,10 +20,9 @@ from etsin_finder.auth import authorization
 from etsin_finder.utils.localization import get_language, translate, default_language
 from etsin_finder.services import cr_service, common_service
 from etsin_finder.services.download_service import DownloadAPIService
+from etsin_finder.utils.constants import PACKAGE_SIZE_LIMIT
 
 from etsin_finder.utils.log_utils import log_request
-
-TOTAL_PACKAGE_SIZE_LIMIT = 5 * 1024 ** 4
 
 
 def send_email(language, cr_id, scope, email):
@@ -171,7 +170,7 @@ class Requests(Resource):
 
         byte_size = directory_details.get("results", {}).get("byte_size", None)
 
-        if byte_size > TOTAL_PACKAGE_SIZE_LIMIT:
+        if byte_size > PACKAGE_SIZE_LIMIT:
             abort(400, message="Package is too large.")
 
         download_service = DownloadAPIService(current_app)

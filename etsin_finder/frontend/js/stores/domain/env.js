@@ -41,6 +41,8 @@ class Env {
 
   @observable ssoPrefix = ''
 
+  @observable packageSizeLimit = 0 // max downloadable package size in bytes
+
   @observable app = getCookieValue('etsin_app')
 
   async fetchAppConfig() {
@@ -53,7 +55,12 @@ class Env {
     }
     this.setSSOCookieDomain(values.SSO_COOKIE_DOMAIN)
     this.setSSOPrefix(values.SSO_PREFIX)
+    this.setPackageSizeLimit(values.PACKAGE_SIZE_LIMIT)
     this.setAppConfigLoaded(true)
+  }
+
+  @action setPackageSizeLimit(limit) {
+    this.packageSizeLimit = limit
   }
 
   @action setSSOPrefix(prefix) {

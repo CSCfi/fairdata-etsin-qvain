@@ -29,6 +29,7 @@ from etsin_finder.log import log
 from etsin_finder.utils.flags import get_supported_flags
 from etsin_finder.utils.localization import get_language, set_language
 
+from etsin_finder.utils.constants import PACKAGE_SIZE_LIMIT
 from etsin_finder.utils.utils import sort_array_of_obj_by_key
 from etsin_finder.utils.log_utils import log_request
 from etsin_finder.app_config import (
@@ -552,6 +553,7 @@ class AppConfig(Resource):
             "FLAGS": app_config.get("FLAGS", {}),
             "SSO_PREFIX": sso_config.get("PREFIX", ""),
             "SSO_COOKIE_DOMAIN": sso_cookie_domain,
+            "PACKAGE_SIZE_LIMIT": PACKAGE_SIZE_LIMIT,
         }
 
 

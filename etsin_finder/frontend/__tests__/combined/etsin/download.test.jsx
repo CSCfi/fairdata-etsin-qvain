@@ -36,6 +36,7 @@ jest.useFakeTimers('legacy')
 
 const Env = new EnvClass()
 
+Env.setPackageSizeLimit(1024)
 Env.Flags.setFlag('DOWNLOAD_API_V2', true)
 const mockAdapter = new MockAdapter(axios)
 applyMockAdapter(mockAdapter)

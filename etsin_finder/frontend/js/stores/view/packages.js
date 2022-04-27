@@ -1,4 +1,4 @@
-import { observable, action, makeObservable, runInAction } from 'mobx'
+import { observable, action, makeObservable, runInAction, computed } from 'mobx'
 import axios from 'axios'
 import urls from '../../utils/urls'
 
@@ -13,8 +13,6 @@ class Packages {
     this.Notifications = new Notifications(this)
     makeObservable(this)
   }
-
-  sizeLimit = 5 * 1024 ** 4 // limit package generation to 5TB
 
   initialPollInterval = 1e3
 
@@ -35,6 +33,10 @@ class Packages {
   @observable packageModalPath = null
 
   @observable manualDownloadUrlGetter = null
+
+  @computed get sizeLimit() {
+    return this.Env.packageSizeLimit
+  }
 
   @action.bound openManualDownloadModal(item) {
     this.manualDownloadUrlGetter = item

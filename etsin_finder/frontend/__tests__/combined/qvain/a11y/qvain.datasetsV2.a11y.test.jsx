@@ -16,7 +16,7 @@ import DatasetsV2 from '@/components/qvain/views/datasetsV2'
 
 let stores
 
-jest.setTimeout(25000) // the default 5000ms timeout is not always enough here
+jest.setTimeout(50000) // the default 5000ms timeout is not always enough here
 
 beforeEach(() => {
   stores = buildStores()

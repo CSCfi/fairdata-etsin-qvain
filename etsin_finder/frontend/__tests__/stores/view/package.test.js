@@ -12,6 +12,7 @@ describe('Packages', () => {
   let packages
   const mockEnv = {
     Flags: { flagEnabled: () => true },
+    packageSizeLimit: 1024,
   }
 
   beforeEach(() => {

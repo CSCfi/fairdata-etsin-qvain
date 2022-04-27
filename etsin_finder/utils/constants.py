@@ -38,3 +38,5 @@ AGENT_TYPE = {
     "RIGHTS_HOLDER": "RIGHTS_HOLDER",
     "CURATOR": "CURATOR",
 }
+
+PACKAGE_SIZE_LIMIT = 2.6 * 1024 ** 4 # download package generation size limit
