@@ -4,7 +4,7 @@ import PromiseManager from '../../../utils/promiseManager'
 import Modal from './modal'
 import urls from '../../../utils/urls'
 
-import { filterGroupsByTitle, groupDatasetsByVersionSet } from './qvain.datasets.filters'
+import { filterGroups, groupDatasetsByVersionSet } from './qvain.datasets.filters'
 
 class QvainDatasets {
   constructor() {
@@ -94,7 +94,7 @@ class QvainDatasets {
   }
 
   @computed get filteredGroups() {
-    return filterGroupsByTitle(this.searchTerm, this.datasetGroups)
+    return filterGroups(this.searchTerm, this.datasetGroups)
   }
 
   @computed get count() {

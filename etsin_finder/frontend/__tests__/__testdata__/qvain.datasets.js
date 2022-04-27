@@ -91,7 +91,7 @@ const datasets = [
           },
         },
       },
-      preferred_identifier: 'draft:7f1dcb80-bc20-43d6-b279-9455dabde6fc',
+      preferred_identifier: 'urn:nbn:7f1dcb80-bc20-43d6-b279-9455dabde6fc',
       metadata_version_identifier: '5907b794-c46a-4a8e-ae32-5519c04b7303',
     },
     preservation_state: 0,

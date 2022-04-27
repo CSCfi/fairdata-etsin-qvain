@@ -1,13 +1,21 @@
 const filterFunc = (searchStr, dataset) => {
-  const titles = Object.values(dataset.research_dataset.title || [])
-  const matches = titles.map(title => title.toLowerCase().includes(searchStr.toLowerCase())) // ignore cases
+  // filter dataset by title, identifier or preferred_identifier
+  const titles = Object.values(dataset.research_dataset.title || []).map(title =>
+    title.toLowerCase()
+  )
+
+  const identifiers = [dataset.identifier || '']
+  if (dataset.state === 'published') {
+    identifiers.push(dataset.research_dataset.preferred_identifier || '')
+  }
+
+  const matches = [...titles, ...identifiers].some(str => str.includes(searchStr.toLowerCase()))
   return (
-    matches.includes(true) ||
-    (dataset.next_draft?.research_dataset && filterFunc(searchStr, dataset.next_draft))
+    matches || (dataset.next_draft?.research_dataset && filterFunc(searchStr, dataset.next_draft))
   )
 }
 
-export const filterGroupsByTitle = (searchStr, groups) => {
+export const filterGroups = (searchStr, groups) => {
   // return all groups where there is at least one match
   if (searchStr.trim().length > 0) {
     return groups.filter(group => group.some(dataset => filterFunc(searchStr, dataset)))
@@ -15,7 +23,7 @@ export const filterGroupsByTitle = (searchStr, groups) => {
   return groups
 }
 
-export const filterByTitle = (searchStr, datasets) =>
+export const filter = (searchStr, datasets) =>
   searchStr.trim().length > 0
     ? datasets.filter(dataset => filterFunc(searchStr, dataset))
     : datasets
