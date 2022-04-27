@@ -90,7 +90,9 @@ class AccessRights extends Component {
             <AccessLabel lang={getDataLang(this.state.title)}>
               {checkDataLang(this.state.title)}
             </AccessLabel>
-            {this.state.embargoDate && <Date>{dateFormat(this.state.embargoDate, true)} </Date>}
+            {this.state.embargoDate && (
+              <Date>{dateFormat(this.state.embargoDate, { shortMonth: true })} </Date>
+            )}
           </div>
         </RestrictedButton>
       </>

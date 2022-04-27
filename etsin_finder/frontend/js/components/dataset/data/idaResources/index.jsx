@@ -108,7 +108,7 @@ function IdaResources(props) {
           {embargoDate && (
             <EmbargoDate>
               <Translate content="dataset.embargo_date" />
-              &nbsp; {dateFormat(embargoDate, true)}{' '}
+              &nbsp; {dateFormat(embargoDate, { shortMonth: true })}{' '}
             </EmbargoDate>
           )}
         </Translate>

@@ -22,7 +22,9 @@ class Sidebar extends Component {
   dateSeparator(start, end) {
     return (
       (start || end) &&
-      (start === end ? dateFormat(start) : `${dateFormat(start)} - ${dateFormat(end)}`)
+      (start === end
+        ? dateFormat(start, { format: 'date' })
+        : `${dateFormat(start, { format: 'date' })} - ${dateFormat(end, { format: 'date' })}`)
     )
   }
 

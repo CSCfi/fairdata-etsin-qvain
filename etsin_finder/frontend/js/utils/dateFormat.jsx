@@ -59,25 +59,34 @@ const getFormats = shortMonth => ({
   },
 })
 
-const dateFormat = (date, shortMonth = false) => {
+const getDefaultFormat = date => {
+  if (typeof date === 'string' || date instanceof String) {
+    if (date.length === 4) {
+      return 'year'
+    }
+    if (date.length <= 10) {
+      return 'date'
+    }
+  }
+  return 'datetime'
+}
+
+const dateFormat = (date, { shortMonth = false, format } = {}) => {
   const formats = getFormats(shortMonth)
   if (!date) {
     return ''
   }
-  let out = date
-  if ((typeof out === 'string' || out instanceof String) && out.endsWith('-00:00')) {
-    out = out.substring(0, out.length - 6)
+  const outputFormat = format || getDefaultFormat(date)
+  if (outputFormat === 'year') {
+    return new Date(date).getFullYear()
   }
-  if (out.length === 4) {
-    return new Date(out).getFullYear()
-  }
-  if (out.length <= 10) {
-    return new Date(out).toLocaleDateString(
+  if (outputFormat === 'date') {
+    return new Date(date).toLocaleDateString(
       formats.date[Locale.currentLang].lang,
       formats.date[Locale.currentLang].options
     )
   }
-  return new Date(out).toLocaleString(
+  return new Date(date).toLocaleString(
     formats.datetime[Locale.currentLang].lang,
     formats.datetime[Locale.currentLang].options
   )
