@@ -41,6 +41,7 @@
     {% if matomo_url -%}
     <script defer src="{{ matomo_url }}"></script>
     {% endif %} {% if sso_host -%}
+    <link rel="stylesheet" type="text/css" href="{{ sso_host }}/notification.css" />
     <script defer src="{{ sso_host }}/notification.js"></script>
     {% endif %}
   </head>

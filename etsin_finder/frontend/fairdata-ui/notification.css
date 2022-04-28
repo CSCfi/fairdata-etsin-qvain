@@ -1,1 +1,15 @@
-.notification-banner{display:flex;position:fixed;bottom:0;left:0;width:100%;z-index:999;background-color:#f3f2f1;padding:1rem 2rem;align-items:center;justify-content:center}.notification-banner .actions{font-family:Arial,Helvetica,sans-serif;flex-grow:0;padding:0;width:20px;height:20px;min-width:20px;min-height:20px;cursor:pointer}.notification-banner .actions svg{position:absolute;transition:opacity .15s linear}.notification-banner .actions #closeHover{opacity:0}.notification-banner .text-content{flex-grow:3;max-width:630px;margin-right:.3rem}.notification-cls-1,.notification-cls-3{fill:none}.notification-cls-1{stroke:#000}.notification-cls-1-1{fill:#03881c}.notification-cls-2{stroke:none}
+.notification-banner {
+  color: black;
+}
+
+.notification-banner b {
+  font-weight: bold;
+}
+
+.notification-banner button {
+  border: none;
+}
+
+.notification-banner a {
+  text-decoration: underline;
+}
