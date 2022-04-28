@@ -70,7 +70,7 @@ def login_etsin():
     sso_authentication_force = request.cookies.get("sso_authentication")
     app_config = current_app.config
     sso_is_enabled = app_config.get("SSO").get("ENABLED") or sso_authentication_force
-    redirect_url = quote(request.args.get("relay", "/"))
+    redirect_url = request.args.get("relay", "/")
 
     if sso_is_enabled:
         log.info("SSO is enabled, logging in to Etsin using SSO")
@@ -97,7 +97,7 @@ def login_qvain():
     sso_authentication_force = request.cookies.get("sso_authentication")
     app_config = current_app.config
     sso_is_enabled = app_config.get("SSO").get("ENABLED") or sso_authentication_force
-    redirect_url = quote(request.args.get("relay", "/"))
+    redirect_url = request.args.get("relay", "/")
 
     if sso_is_enabled:
         log.info("SSO is enabled, logging in to Qvain using SSO")
