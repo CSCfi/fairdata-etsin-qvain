@@ -1,6 +1,7 @@
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 import { useStores } from '../../../js/stores/stores'
+import { buildStores } from '../../../js/stores'
 
 import Infrastructure from '../../../js/components/qvain/fields/history/infrastructure'
 import { Field } from '../../../js/components/qvain/general/section'
@@ -13,52 +14,44 @@ jest.mock('../../../js/stores/stores', () => ({
   useStores: jest.fn(),
 }))
 
-
 describe('Infrastructure', () => {
   const harness = new Harness(Infrastructure)
 
-  beforeEach(() => {
-    harness.shallow()
-    harness.diveInto('Infrastructure')
-  })
-
-  test('should exist', () => {
-    harness.shouldExist()
-  })
-
-  test('should render children with properties', () => {
-    const children = [
-      { label: 'Field', findArgs: Field },
-      { label: 'InfrastructureSelection', findArgs: InfrastructureSelection },
-    ]
-
-    const props = {
-      Field: {
-        brief: {
-          title: 'qvain.history.infrastructure.title',
-          description: 'qvain.history.infrastructure.description',
-        },
-        labelFor: 'infrastructure-select',
-      },
-    }
-
-    harness.shouldIncludeChildren(children, props)
-  })
-
   describe('given mockStores', () => {
-    const mockStores = {
-      Qvain: {
-        Infrastructures: {
-          storage: [{ some: 'data' }],
-          Model: jest.fn(),
-          set: jest.fn(),
+    const stores = buildStores()
+    stores.Qvain.editDataset({ research_dataset: { infrastructure: [{ identifier: 'x' }] } })
+
+    beforeEach(() => {
+      useStores.mockReturnValue(stores)
+      harness.shallow()
+      harness.diveInto('Infrastructure')
+    })
+
+    test('should exist', () => {
+      harness.shouldExist()
+    })
+
+    test('should render children with properties', () => {
+      const children = [
+        { label: 'Field', findArgs: Field },
+        { label: 'InfrastructureSelection', findArgs: InfrastructureSelection },
+      ]
+
+      const props = {
+        Field: {
+          brief: {
+            title: 'qvain.history.infrastructure.title',
+            description: 'qvain.history.infrastructure.description',
+          },
+          labelFor: 'infrastructure-select',
         },
-      },
-    }
+      }
+
+      harness.shouldIncludeChildren(children, props)
+    })
 
     describe('InfrastructureSelection', () => {
       beforeEach(() => {
-        useStores.mockReturnValue(mockStores)
         harness.diveInto(InfrastructureSelection)
       })
 
@@ -72,15 +65,30 @@ describe('Infrastructure', () => {
         const props = {
           inputId: 'infrastructure-select',
           name: 'infrastructure',
-          getter: mockStores.Qvain.Infrastructures.storage,
-          setter: mockStores.Qvain.Infrastructures.set,
-          model: mockStores.Qvain.Infrastructures.model,
+          getter: stores.Qvain.Infrastructures.storage,
+          setter: stores.Qvain.Infrastructures.set,
+          model: stores.Qvain.Infrastructures.model,
           isMulti: true,
           metaxIdentifier: 'research_infra',
         }
 
         harness.shouldIncludeChild(select, props)
       })
+    })
+  })
+
+  describe('given stores with no existing infrastructure', () => {
+    const stores = buildStores()
+    stores.Qvain.editDataset({ research_dataset: {} })
+
+    beforeEach(() => {
+      useStores.mockReturnValue(stores)
+      harness.shallow()
+      harness.diveInto('Infrastructure')
+    })
+
+    test('should not render anything', () => {
+      harness.wrapper.isEmptyRender().should.eql(true)
     })
   })
 })

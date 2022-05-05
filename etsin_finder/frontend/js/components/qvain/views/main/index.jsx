@@ -104,7 +104,6 @@ export class Qvain extends Component {
       recordEvent(`DATASET / ${identifier}`)
     } else {
       const templateIdentifier = this.getTemplateIdentifier()
-      console.log(templateIdentifier)
       if (templateIdentifier) {
         identifier = templateIdentifier
         isTemplate = true

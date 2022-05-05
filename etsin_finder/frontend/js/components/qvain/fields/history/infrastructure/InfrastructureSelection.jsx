@@ -8,8 +8,15 @@ const InfrastructureSelection = () => {
   const {
     Qvain: {
       Infrastructures: { storage, Model, set },
+      original,
     },
   } = useStores()
+
+  // adding new infrastructures is disabled for now, show only options already in dataset
+  const usedInfras = original?.research_dataset?.infrastructure || []
+  const usedInfraIdentifiers = new Set(usedInfras.map(v => v.identifier))
+  const usedInfrasFilter = v => usedInfraIdentifiers.has(v._source.uri)
+
   return (
     <Select
       inputId="infrastructure-select"
@@ -20,6 +27,7 @@ const InfrastructureSelection = () => {
       isClearable={false}
       model={Model}
       metaxIdentifier="research_infra"
+      filterFunc={usedInfrasFilter}
     />
   )
 }

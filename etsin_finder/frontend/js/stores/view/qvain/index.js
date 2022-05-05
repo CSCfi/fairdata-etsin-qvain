@@ -329,6 +329,11 @@ class Qvain extends Resources {
   }
 
   @computed
+  get originalHasInfrastructures() {
+    return (this.original?.research_dataset?.infrastructure || []).length > 0
+  }
+
+  @computed
   get readonly() {
     if (this.Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK') && this.Lock.enabled) {
       if (this.original && !this.Lock.haveLock) {

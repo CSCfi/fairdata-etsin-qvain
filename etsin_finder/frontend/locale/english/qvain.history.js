@@ -20,7 +20,7 @@ const history = {
   relatedResource: {
     title: 'Reference to a related resource',
     description: `Refer to related datasets, publications, and other
-      resources that are relevant in understanding this dataset.`,
+    resources that are relevant in understanding this dataset.`,
     noItems: 'No references to any related resources have been specified.',
     select: {
       newRelation: 'Create a new reference',
@@ -76,6 +76,9 @@ const history = {
     title: 'Infrastructure',
     description: 'You can specify services and tools that are used to produce the dataset.',
     noItems: 'No infrastructures have been added.',
+    addingDisabled:
+      'At the moment infrastructures cannot be selected. ' +
+      'New infrastructures will be taken into use as soon as possible and they will be integrated with Research.fi.',
   },
   provenance: {
     title: 'Provenance',

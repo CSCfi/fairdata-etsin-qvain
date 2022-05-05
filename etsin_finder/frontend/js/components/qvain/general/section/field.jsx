@@ -45,7 +45,7 @@ const FieldHeaderExpanded = styled.h3``
 const FieldContainerExpanded = styled(Card)``
 
 Field.propTypes = {
-  children: PropTypes.object.isRequired,
+  children: PropTypes.node.isRequired,
   brief: PropTypes.object,
   labelFor: PropTypes.string,
 }

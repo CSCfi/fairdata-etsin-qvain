@@ -29,6 +29,7 @@ class Select extends Component {
     getRefGroups: PropTypes.func,
     modifyOptionLabel: PropTypes.func,
     modifyGroupLabel: PropTypes.func,
+    filterFunc: PropTypes.func,
     sortFunc: PropTypes.func,
     setter: PropTypes.func.isRequired,
     model: PropTypes.func.isRequired,
@@ -47,6 +48,7 @@ class Select extends Component {
     getRefGroups: null,
     modifyOptionLabel: translation => translation,
     modifyGroupLabel: translation => translation,
+    filterFunc: null,
     sortFunc: null,
     placeholder: 'qvain.select.placeholder',
   }
@@ -68,9 +70,13 @@ class Select extends Component {
   }
 
   resolveRefData = res => {
-    const list = res.data.hits.hits
-    const { model, getRefGroups, Stores, sortFunc } = this.props
+    const { model, getRefGroups, Stores, filterFunc, sortFunc } = this.props
     const { lang } = Stores.Locale
+    let list = res.data.hits.hits
+
+    if (filterFunc) {
+      list = list.filter(filterFunc)
+    }
 
     if (getRefGroups) {
       const groups = getRefGroups(list)

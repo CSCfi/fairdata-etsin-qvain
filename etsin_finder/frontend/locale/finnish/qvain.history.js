@@ -23,6 +23,9 @@ const history = {
     description:
       'Voit lisätä palveluita tai infrastruktuureita joita on käytetty aineiston tuottamiseen.',
     noItems: 'Infrastruktuureja ei ole lisätty.',
+    addingDisabled:
+      'Infrastruktuuria ei voi tällä hetkellä valita. ' +
+      'Uudet infrastruktuurit otetaan käyttöön heti kun mahdollista, ja ne integroidaan tiedejatutkimus.fi-portaalin kanssa.',
   },
   relatedResource: {
     title: 'Viittaukset toiseen tuotokseen',
