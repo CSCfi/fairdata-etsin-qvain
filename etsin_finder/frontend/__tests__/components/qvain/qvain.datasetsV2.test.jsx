@@ -446,7 +446,15 @@ describe('DatasetsV2', () => {
       ])
     })
 
-    it('should not clear filter input loses focus', async () => {
+    it('should not clear filter when resetting datasets list', async () => {
+      await filterBy('search string')
+      stores.QvainDatasets.reset()
+      stores.QvainDatasetsV2.reset()
+      const input = wrapper.find('input#search-datasets-input')
+      input.instance().value.should.eql('search string')
+    })
+
+    it('should not clear filter when input loses focus', async () => {
       await filterBy('search string')
       const input = wrapper.find('input#search-datasets-input')
       input.simulate('blur')

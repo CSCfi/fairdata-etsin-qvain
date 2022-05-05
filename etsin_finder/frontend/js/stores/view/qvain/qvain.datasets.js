@@ -35,7 +35,6 @@ class QvainDatasets {
     this.error = null
     this.page = 1
     this.publishedDataset = null
-    this.searchTerm = ''
     this.promiseManager.reset()
     this.removeModal.close()
     this.shareModal.close()

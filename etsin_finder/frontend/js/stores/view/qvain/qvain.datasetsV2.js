@@ -16,7 +16,6 @@ class QvainDatasetsV2 {
 
   @action.bound reset() {
     this.showCount = { initial: 10, current: 10, increment: 10 }
-    this.sort.reset()
   }
 
   @observable showCount
