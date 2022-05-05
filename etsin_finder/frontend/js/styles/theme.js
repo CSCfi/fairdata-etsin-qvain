@@ -27,7 +27,7 @@ const etsinTheme = {
     lightgray: 'rgb(231, 233, 237)',
     medgray: 'rgb(180, 180, 180)',
     gray: 'rgb(115, 115, 115)',
-    darkgray: 'rgb(95, 95, 95)',
+    darkgray: '#4f4f4f',
     superdarkgray: 'rgb(50, 50, 50)',
     dark: '#4F4F4F',
     darker: '#212529',

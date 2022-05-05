@@ -1,13 +1,18 @@
-import styled from 'styled-components'
-import { InvertedButton } from '../../../general/button'
+import styled, { css } from 'styled-components'
+import { InvertedButton, Button } from '@/components/general/button'
 
-export const SubmitButton = styled(InvertedButton)`
-  background: #fff;
-  font-size: 1.2em;
-  border-radius: 25px;
-  padding: 5px 30px;
-  border-color: #007fad;
-  border: 1px solid;
+const submitButton = css`
+  border: 3px solid ${props => props.theme.color.primary};
+  border-radius: 5px;
+  font-size: 1.3em;
+  font-weight: 700;
+  padding: 0.25rem 2rem;
 `
 
-export default SubmitButton
+export const PublishButton = styled(Button)`
+  ${submitButton}
+`
+
+export const SaveButton = styled(InvertedButton)`
+  ${submitButton}
+`

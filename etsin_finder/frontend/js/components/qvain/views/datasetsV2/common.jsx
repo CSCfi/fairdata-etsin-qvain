@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const Tab = styled.button.attrs({ type: 'button', role: 'tab' })`
   color: black;
   font-size: 18px;
-  padding: 0.5rem 1.5rem 0.25rem;
+  padding: 1rem 1.5rem;
   border: none;
   background: transparent;
   border-bottom: 4px solid transparent;

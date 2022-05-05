@@ -12,8 +12,8 @@ import temporalAndSpatial from './qvain.temporalAndSpatial'
 import validationMessages from './qvain.validationMessages'
 
 const qvainEnglish = {
-  saveDraft: 'Save draft',
-  submit: 'Save and Publish',
+  saveDraft: 'Save',
+  submit: 'Publish',
   edit: 'Update Dataset',
   unsavedChanges:
     'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',

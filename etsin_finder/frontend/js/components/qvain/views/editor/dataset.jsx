@@ -59,11 +59,9 @@ export const Dataset = ({
       <Files />
       <SubmitContainer>
         <Translate component="p" content="qvain.consent" unsafe />
-        <FlaggedComponent flag="UI.BOTTOM_SUBMIT_BUTTONS">
-          <Center>
-            <SubmitButtons idSuffix="-bottom" />
-          </Center>
-        </FlaggedComponent>
+        <Right>
+          <SubmitButtons idSuffix="-bottom" />
+        </Right>
       </SubmitContainer>
       <SkipToSubmitDataset onClick={setFocusOnSubmitButton}>
         <Translate content="stsd" />
@@ -86,9 +84,9 @@ Dataset.defaultProps = {
   datasetErrorDetails: null,
 }
 
-const Center = styled.div`
+const Right = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 `
 
 export default Dataset

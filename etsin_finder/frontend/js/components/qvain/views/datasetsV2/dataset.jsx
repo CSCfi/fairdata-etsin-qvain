@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -106,8 +106,9 @@ const Dataset = ({ dataset, isExpanded, expandGroup, isLatest, versionNumber }) 
         <Dropdown
           buttonContent="qvain.datasets.moreActions"
           buttonComponent={IconButton}
-          buttonProps={{ icon: faEllipsisH, onlyIcon: true }}
+          buttonProps={{ icon: faEllipsisH }}
           align="left"
+          icon={null}
         >
           {actions
             .filter(({ moreIfNarrow, more }) => moreIfNarrow || more)
@@ -155,12 +156,21 @@ const ExpandIconWrapper = styled.span`
   width: 1rem;
 `
 
-const IconButton = ({ icon, children, onlyIcon, ...props }) => (
-  <StyledIconButton {...props} onlyIcon={onlyIcon || !children}>
-    <StyledFontAwesomeIcon icon={icon} />
-    {!onlyIcon && children}
-  </StyledIconButton>
-)
+const IconButton = ({ icon, children, onlyIcon, ...props }) => {
+  const [color, setColor] = useState('darkgray')
+  return (
+    <StyledIconButton
+      {...props}
+      onlyIcon={onlyIcon || !children}
+      onMouseLeave={() => setColor('darkgray')}
+      onMouseEnter={() => setColor('primary')}
+      color={color}
+    >
+      <StyledFontAwesomeIcon icon={icon} color={color} />
+      {!onlyIcon && children}
+    </StyledIconButton>
+  )
+}
 
 IconButton.propTypes = {
   icon: PropTypes.object.isRequired,
@@ -173,8 +183,17 @@ IconButton.defaultProps = {
   children: undefined,
 }
 
+const onlyIconStyling = css`
+  border: solid ${props => props.theme.color.darkgray} 1.5px;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 12pt;
+  width: 100%;
+  gap: 0.25rem;
+`
+
 const StyledIconButton = styled.button.attrs({ type: 'button' })`
-  color: inherit;
+  color: ${p => p.theme.color[p.color]};
   border: none;
   background: transparent;
   width: 4rem;
@@ -183,18 +202,16 @@ const StyledIconButton = styled.button.attrs({ type: 'button' })`
   justify-content: space-evenly;
   cursor: pointer;
   font-size: 20px;
-  ${props =>
-    !props.onlyIcon &&
-    `border: solid ${props.theme.color.primary} 1px;
-    border-radius: 4px;
-    padding: 0.5rem 0.75rem;
-    font-size: 12pt;
-    width: 100%;
-    gap: 2px;`}
+  ${props => !props.onlyIcon && onlyIconStyling}
+  &:hover {
+    color: ${props => props.theme.color.primary};
+    border-color: ${props => props.theme.color.primary};
+    background-color: ${props => props.theme.color.primaryLight};
+  }
 `
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
-  color: ${props => props.theme.color.primary};
+  color: ${props => props.theme.color[props.color]};
   margin-right: 0.25rem;
 `
 
@@ -206,7 +223,7 @@ const StyledDataset = styled.tr`
 
 const Cell = styled.td`
   vertical-align: middle;
-  padding: 0.25rem;
+  padding: 0.25rem 0.75rem;
   text-align: center;
 
   ${p => p.onClick && 'cursor: pointer; '}

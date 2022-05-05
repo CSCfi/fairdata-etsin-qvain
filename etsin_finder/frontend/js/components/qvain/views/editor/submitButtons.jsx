@@ -6,7 +6,7 @@ import Translate from 'react-translate-component'
 import { useHistory } from 'react-router-dom'
 
 import { useStores } from '../../utils/stores'
-import SubmitButton from './submitButton.styled'
+import { SaveButton, PublishButton } from './submitButton.styled'
 import TooltipHoverOnSave from '../../general/header/tooltipHoverOnSave'
 
 export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtonsDisabled }) => {
@@ -86,13 +86,13 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
           }}
           onMouseLeave={() => setDraftButtonHover(false)}
         >
-          <SubmitButton
+          <SaveButton
             id={`draft-btn${idSuffix}`}
             disabled={disabled || isDraftButtonDisabled}
             onClick={handleDraftClick}
           >
             <Translate content="qvain.saveDraft" />
-          </SubmitButton>
+          </SaveButton>
         </WrapperDivForHovering>
       </TooltipHoverOnSave>
       <TooltipHoverOnSave
@@ -109,13 +109,13 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
             setPublishButtonHover(false)
           }}
         >
-          <SubmitButton
+          <PublishButton
             id={`publish-btn${idSuffix}`}
             disabled={disabled || isPublishButtonDisabled}
             onClick={() => handlePublishClick(false)}
           >
             <Translate content="qvain.submit" />
-          </SubmitButton>
+          </PublishButton>
         </WrapperDivForHovering>
       </TooltipHoverOnSave>
     </div>

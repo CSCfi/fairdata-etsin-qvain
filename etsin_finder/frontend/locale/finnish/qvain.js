@@ -12,8 +12,8 @@ import temporalAndSpatial from './qvain.temporalAndSpatial'
 import validationMessages from './qvain.validationMessages'
 
 const qvainFinnish = {
-  saveDraft: 'Tallenna luonnos',
-  submit: 'Tallenna ja julkaise',
+  saveDraft: 'Tallenna',
+  submit: 'Julkaise',
   edit: 'Päivitä aineisto',
   unsavedChanges:
     'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
