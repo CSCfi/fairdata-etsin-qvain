@@ -52,7 +52,7 @@ const getActionItem = action => {
   )
 }
 
-function Dataset({ dataset, currentTimestamp, indent, highlight }) {
+function Dataset({ dataset, group, currentTimestamp, indent, highlight }) {
   const Stores = useStores()
   const {
     Locale: { getValueTranslation },
@@ -70,7 +70,7 @@ function Dataset({ dataset, currentTimestamp, indent, highlight }) {
     titleCellStyle = { paddingLeft: '1rem', position: 'relative' }
   }
 
-  const actions = getDatasetActions(Stores, dataset)
+  const actions = getDatasetActions(Stores, dataset, group)
 
   const { buttonActions, dropdownActions } = groupActions(actions, 3)
   const hasDropDownItems = dropdownActions.length > 0
@@ -109,6 +109,7 @@ function Dataset({ dataset, currentTimestamp, indent, highlight }) {
 
 Dataset.propTypes = {
   dataset: PropTypes.object.isRequired,
+  group: PropTypes.array.isRequired,
   currentTimestamp: PropTypes.object.isRequired,
   indent: PropTypes.bool,
   highlight: PropTypes.bool,

@@ -16,6 +16,7 @@ const DatasetGroup = ({ datasets, currentTimestamp, highlight }) => {
     return (
       <Dataset
         dataset={datasets[0]}
+        group={datasets}
         currentTimestamp={currentTimestamp}
         highlight={datasets[0].identifier === highlight}
       />
@@ -45,6 +46,7 @@ const DatasetGroup = ({ datasets, currentTimestamp, highlight }) => {
         <Dataset
           key={dataset.identifier}
           dataset={dataset}
+          group={datasets}
           currentTimestamp={currentTimestamp}
           indent={index !== 0}
           highlight={dataset.identifier === highlight}

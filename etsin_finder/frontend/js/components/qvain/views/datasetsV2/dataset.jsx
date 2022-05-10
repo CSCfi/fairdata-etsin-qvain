@@ -78,14 +78,14 @@ const datasetOwner = dataset => {
   )
 }
 
-const Dataset = ({ dataset, isExpanded, expandGroup, isLatest, versionNumber }) => {
+const Dataset = ({ dataset, group, isExpanded, expandGroup, isLatest, versionNumber }) => {
   const Stores = useStores()
   const {
     QvainDatasets: { loadTime },
     Locale: { getValueTranslation },
   } = Stores
 
-  const actions = getDatasetActionsV2(Stores, dataset)
+  const actions = getDatasetActionsV2(Stores, dataset, group)
   return (
     <StyledDataset isLatest={isLatest} key={dataset.id}>
       <PadCell />
@@ -122,6 +122,7 @@ const Dataset = ({ dataset, isExpanded, expandGroup, isLatest, versionNumber }) 
 
 Dataset.propTypes = {
   dataset: PropTypes.object.isRequired,
+  group: PropTypes.array.isRequired,
   isLatest: PropTypes.bool,
   versionNumber: PropTypes.number,
   expandGroup: PropTypes.func,

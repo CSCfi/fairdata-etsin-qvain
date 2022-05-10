@@ -114,7 +114,9 @@ describe('getCreateNewVersionAction', () => {
       })
 
       it('should call navigate to editor url', () => {
-        expect(stores.Env.history.push).to.have.beenCalledWith(`/qvain/dataset/published-id?new_version`)
+        expect(stores.Env.history.push).to.have.beenCalledWith(
+          `/qvain/dataset/published-id?new_version`
+        )
       })
     }
   )
@@ -132,11 +134,15 @@ describe('getUseAsTemplateAction', () => {
 
     if (dataset.next_draft) {
       it('should use dataset.next_draft as template', () => {
-        expect(stores.Env.history.push).to.have.beenCalledWith(`/qvain/dataset?template=${dataset.next_draft.identifier}`)
+        expect(stores.Env.history.push).to.have.beenCalledWith(
+          `/qvain/dataset?template=${dataset.next_draft.identifier}`
+        )
       })
     } else {
       it('should use dataset as template', () => {
-        expect(stores.Env.history.push).to.have.beenCalledWith(`/qvain/dataset?template=${dataset.identifier}`)
+        expect(stores.Env.history.push).to.have.beenCalledWith(
+          `/qvain/dataset?template=${dataset.identifier}`
+        )
       })
     }
 
@@ -188,7 +194,7 @@ describe('getRemoveAction', () => {
 
 describe('getDatasetActions', () => {
   test('given ida dataset, should allow creating a new version', () => {
-    const actions = getDatasetActions(stores, idaDataset).map(({ text }) => text)
+    const actions = getDatasetActions(stores, idaDataset, [idaDataset]).map(({ text }) => text)
     actions.should.eql([
       'qvain.datasets.actions.edit',
       'qvain.datasets.actions.goToEtsin',
@@ -199,7 +205,7 @@ describe('getDatasetActions', () => {
   })
 
   test('given draft dataset, should allow preview', () => {
-    const actions = getDatasetActions(stores, draftDataset).map(({ text }) => text)
+    const actions = getDatasetActions(stores, draftDataset, [draftDataset]).map(({ text }) => text)
     actions.should.eql([
       'qvain.datasets.actions.edit',
       'qvain.datasets.actions.goToEtsinDraft',
@@ -209,7 +215,9 @@ describe('getDatasetActions', () => {
   })
 
   test('given dataset with changes, should allow reverting changes', () => {
-    const actions = getDatasetActions(stores, datasetWithChanges).map(({ text }) => text)
+    const actions = getDatasetActions(stores, datasetWithChanges, [datasetWithChanges]).map(
+      ({ text }) => text
+    )
     actions.should.eql([
       'qvain.datasets.actions.editDraft',
       'qvain.datasets.actions.goToEtsinDraft',

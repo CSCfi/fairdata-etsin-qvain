@@ -146,21 +146,26 @@ export const getRemoveAction = (Stores, dataset, onlyChanges) => {
   }
 }
 
-const canCreateNewVersion = dataset =>
-  !dataset.next_draft &&
-  dataset.next_dataset_version === undefined &&
-  dataset.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.IDA &&
-  dataset.state === 'published'
+const canCreateNewVersion = (dataset, group) => {
+  const isLatestNonRemoved = dataset === group[0]
+
+  return (
+    isLatestNonRemoved &&
+    !dataset.next_draft &&
+    dataset.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.IDA &&
+    dataset.state === 'published'
+  )
+}
 
 const hasUnpublishedChanges = dataset => !!dataset.next_draft
 
-export const getDatasetActions = (Stores, dataset) => {
+export const getDatasetActions = (Stores, dataset, group) => {
   const actions = [
     getEnterEditAction(Stores, dataset),
     getGoToEtsinAction(Stores, dataset),
     getUseAsTemplateAction(Stores, dataset),
   ]
-  if (canCreateNewVersion(dataset)) {
+  if (canCreateNewVersion(dataset, group)) {
     actions.push(getCreateNewVersionAction(Stores, dataset))
   }
   if (hasUnpublishedChanges(dataset)) {
@@ -171,14 +176,14 @@ export const getDatasetActions = (Stores, dataset) => {
   return actions
 }
 
-export const getDatasetActionsV2 = (Stores, dataset) => {
+export const getDatasetActionsV2 = (Stores, dataset, group) => {
   const actions = [
     getEnterEditAction(Stores, dataset),
     getGoToEtsinAction(Stores, dataset),
     getShareAction(Stores, dataset),
     getUseAsTemplateAction(Stores, dataset),
   ]
-  if (canCreateNewVersion(dataset)) {
+  if (canCreateNewVersion(dataset, group)) {
     actions.push(getCreateNewVersionAction(Stores, dataset))
   }
   if (hasUnpublishedChanges(dataset)) {

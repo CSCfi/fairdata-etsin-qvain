@@ -16,6 +16,7 @@ const DatasetGroup = ({ group }) => {
     <Group expanded={canExpand && expanded}>
       <Dataset
         dataset={group[0]}
+        group={group}
         canExpand={canExpand}
         isExpanded={canExpand && expanded}
         expandGroup={expandGroup}
@@ -26,7 +27,12 @@ const DatasetGroup = ({ group }) => {
         <>
           <PreviousVersions />
           {group.slice(1).map((ds, index) => (
-            <Dataset key={ds.identifier} dataset={ds} versionNumber={group.length - 1 - index} />
+            <Dataset
+              key={ds.identifier}
+              dataset={ds}
+              group={group}
+              versionNumber={group.length - 1 - index}
+            />
           ))}
         </>
       )}
