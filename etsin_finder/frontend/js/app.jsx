@@ -26,7 +26,6 @@ import Layout from './layout'
 import browserHistory from './browserHistory'
 
 import '../fairdata-ui/footer.css'
-import '../fairdata-ui/notification.css'
 import 'react-datepicker/dist/react-datepicker.css'
 import './utils/extendYup'
 
