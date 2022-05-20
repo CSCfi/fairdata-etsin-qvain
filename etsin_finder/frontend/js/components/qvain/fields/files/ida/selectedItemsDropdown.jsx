@@ -129,8 +129,7 @@ const EditDropdown = ({ item, parentArgs }) => {
     type: PropTypes.string.isRequired,
   }
 
-  if (!canEdit && !itemHasMetadata && !isFile(item)) return null
-  if (!canEdit && itemHasMetadata)
+  if (!canEdit)
     return (
       <BaseDropdown>
         <MetadataButton type="show" />
