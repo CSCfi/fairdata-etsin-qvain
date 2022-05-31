@@ -221,8 +221,7 @@ const finnish = {
       cumulativeDatasetLabel: 'Huom: Aineisto on kasvava',
       cumulativeDatasetTooltip: {
         header: 'Kasvava aineisto',
-        info:
-          'Tämä on karttuva aineisto, johon mahdollisesti vielä lisätään tiedostoja. Huomio tämä kun käytät aineistoa tai viittaat siihen (esim. ajallinen kattavuus hyvä mainita). Aineistosta ei kuitenkaan voi poistaa tai muuttaa olemassa olevia tiedostoja.',
+        info: 'Tämä on karttuva aineisto, johon mahdollisesti vielä lisätään tiedostoja. Huomio tämä kun käytät aineistoa tai viittaat siihen (esim. ajallinen kattavuus hyvä mainita). Aineistosta ei kuitenkaan voi poistaa tai muuttaa olemassa olevia tiedostoja.',
       },
     },
     embargo_date: 'Embargo voimassa',
@@ -455,21 +454,17 @@ const finnish = {
     linkTextToNew: 'Saat avattua uuden version tästä.',
     linkTextToOld: 'Saat avattua version tästä.',
   },
-  userAuthenticationError: {
+  loginError: {
     header: 'Kirjautuminen epäonnistui.',
-    content:
+    missingUserName:
       'Tarkistathan, että sinulla on voimassaoleva CSC-tunnus (Qvaimen käyttö vaatii sen). Jos yritit kirjaututua jollain toisella tunnuksella (esim. Haka), sitä ei todennäköisesti ole liitetty CSC-tunnukseen. Lisäohjeita CSC-tunnuksen rekisteröimiseksi: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
-  },
-  userHomeOrganizationErrror: {
-    header: 'Kirjautuminen epäonnistui.',
-    content:
+    missingOrganization:
       'Tunnusta ei ole liitetty mihinkään kotiorganisaatioon. Olethan yhteydessä CSC:n asiakaspalveluun.',
   },
   footer: {
     fairdata: {
       title: 'Fairdata',
-      text:
-        'Fairdata-palvelut järjestää <strong>opetus- ja kulttuuriministeriö</strong> ja toimittaa <strong>CSC – Tieteen tietotekniikan keskus Oy</strong>',
+      text: 'Fairdata-palvelut järjestää <strong>opetus- ja kulttuuriministeriö</strong> ja toimittaa <strong>CSC – Tieteen tietotekniikan keskus Oy</strong>',
     },
     information: {
       title: 'Tietoa',

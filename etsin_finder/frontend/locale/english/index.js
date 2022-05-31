@@ -221,8 +221,7 @@ const english = {
       cumulativeDatasetLabel: 'Note: Dataset is growing',
       cumulativeDatasetTooltip: {
         header: 'Growing dataset',
-        info:
-          'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
+        info: 'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
       },
     },
     embargo_date: 'Embargo expires',
@@ -456,21 +455,17 @@ const english = {
     linkTextToNew: 'You can open the new version via this link.',
     linkTextToOld: 'You can open the version via this link.',
   },
-  userAuthenticationError: {
-    header: 'Login unsuccessful.',
-    content:
+  loginError: {
+    header: 'Login unsuccessful',
+    missingUserName:
       'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might get this error if your account is not associated with CSC account. Please see more instructions in: https://docs.csc.fi/#accounts/how-to-create-new-user-account/',
-  },
-  userHomeOrganizationErrror: {
-    header: 'Login unsuccessful.',
-    content:
+    missingOrganization:
       'You have a verified CSC account, but your account does not seem to have a home organization. Please contact the CSC Helpdesk to set a home organization for your CSC account.',
   },
   footer: {
     fairdata: {
       title: 'Fairdata',
-      text:
-        'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
+      text: 'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
     },
     information: {
       title: 'Information',

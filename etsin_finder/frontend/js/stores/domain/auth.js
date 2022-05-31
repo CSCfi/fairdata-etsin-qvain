@@ -38,7 +38,7 @@ class Auth {
     return this.user?.name
   }
 
-  @action
+  @action.bound
   resetUser = () => {
     this.user = {
       name: undefined,
@@ -51,7 +51,7 @@ class Auth {
     }
   }
 
-  @action
+  @action.bound
   reset = () => {
     this.resetUser()
     this.userLogged = false
@@ -59,12 +59,12 @@ class Auth {
     this.loading = false
   }
 
-  @action
+  @action.bound
   setUser(user) {
     this.user = user
   }
 
-  @action
+  @action.bound
   checkLogin() {
     return new Promise((resolve, reject) => {
       runInAction(() => {
@@ -133,19 +133,21 @@ class Auth {
     })
   }
 
-  @action
+  @action.bound
   logout() {
     return new Promise((resolve, reject) => {
       axios
-        .delete('/api/session')
-        .then(res => {
-          this.userLogged = false
-          this.cscUserLogged = false
+      .delete('/api/session')
+      .then(
+        action(res => {
+            this.userLogged = false
+            this.cscUserLogged = false
 
-          // Since the user will be logged out, all user.* variables should be reset to default values.
-          this.resetUser()
-          resolve(res)
-        })
+            // Since the user will be logged out, all user.* variables should be reset to default values.
+            this.resetUser()
+            resolve(res)
+          })
+        )
         .catch(err => {
           console.error(err)
           reject(err)
@@ -154,7 +156,7 @@ class Auth {
   }
 
   /* keepAlive component calls renewsession if user is active */
-  @action
+  @action.bound
   async renewSession() {
     try {
       await axios.get('/api/session')

@@ -23,6 +23,7 @@ import Footer from './footer'
 import Content from './content'
 import QvainHeader from '../components/qvain/general/header'
 import { withStores } from '../stores/stores'
+import LoginErrorModal from './LoginErrorModal'
 
 class Layout extends Component {
   constructor(props) {
@@ -48,6 +49,7 @@ class Layout extends Component {
         </header>
         <Content contentRef={this.content} />
         <Footer />
+        <LoginErrorModal />
       </ErrorBoundary>
     )
   }
