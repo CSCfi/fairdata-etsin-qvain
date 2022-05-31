@@ -148,24 +148,11 @@ class QvainDatasets {
       const datasetDrafts = data.filter(dataset => dataset.draft_of)
       this.attachDrafts(datasets, datasetDrafts)
       this.setDatasets(datasets)
-      if (this.publishedDataset) {
-        this.moveDatasetToBeginning(this.publishedDataset)
-      }
       this.setPage(1)
     } catch (error) {
       this.setError(error?.response?.data || error)
     }
   }
-
-  @action.bound moveDatasetToBeginning = identifier => {
-    // move dataset to beginning of list
-    const index = this.datasets.findIndex(dataset => dataset.identifier === identifier)
-    if (index > 0) {
-      const dataset = this.datasets.splice(index, 1)[0]
-      this.datasets.unshift(dataset)
-    }
-  }
-
 }
 
 export default QvainDatasets
