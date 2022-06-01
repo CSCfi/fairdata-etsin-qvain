@@ -253,7 +253,11 @@ class Sidebar extends Component {
 
             <SidebarItem trans="dataset.temporal_coverage" fallback="Temporal Coverage">
               {temporal &&
-                temporal.map(dates => this.dateSeparator(dates.start_date, dates.end_date))}
+                temporal.map(dates => (
+                  <TemporalCoverageItem>
+                    {this.dateSeparator(dates.start_date, dates.end_date)}
+                  </TemporalCoverageItem>
+                ))}
             </SidebarItem>
 
             {/* LICENSE */}
@@ -389,6 +393,8 @@ const SidebarContainer = styled.div`
   hyphens: auto;
   padding: 20px 0 0 0;
 `
+
+const TemporalCoverageItem = styled.div``
 
 const SidebarContainerForCumulativeInfo = styled.div`
   padding: 0.5em 0em 0em 0em;
