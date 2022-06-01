@@ -11,13 +11,15 @@ import Translate from 'react-translate-component'
 import queryParam from '@/utils/queryParam'
 import { QvainContainer } from '../../general/card'
 import ErrorBoundary from '../../../general/errorBoundary'
-import urls from '../../../../utils/urls'
-import Header from '../editor/header'
-import StickyHeader from '../editor/stickyHeader'
+import urls from '@/utils/urls'
+import Header from '../headers/header'
+import StickyHeader from '../headers/stickyHeader'
 import Dataset from '../editor/dataset'
-import LooseActorDialog from '../editor/looseActorDialog'
-import LooseProvenanceDialog from '../editor/looseProvenanceDialog'
-import { withStores } from '../../utils/stores'
+import DatasetEditorV2 from '../DatasetEditorV2'
+import LooseActorDialog from './looseActorDialog'
+import LooseProvenanceDialog from './looseProvenanceDialog'
+import { withStores } from '@/stores/stores'
+import FlaggedComponent from '@/components/general/flaggedComponent'
 
 // Event handler to prevent page reload
 const confirmReload = e => {
@@ -121,16 +123,16 @@ export class Qvain extends Component {
     }
   }
 
-  getTemplateIdentifier() {
-    return queryParam(this.props.Stores.Env.history.location, 'template')
-  }
-
   setFocusOnSubmitButton(event) {
     const buttons = this.submitButtonsRef.current
     if (buttons && buttons.firstElementChild) {
       buttons.firstElementChild.focus()
     }
     event.preventDefault()
+  }
+
+  getTemplateIdentifier() {
+    return queryParam(this.props.Stores.Env.history.location, 'template')
   }
 
   getDataset(identifier, { isTemplate = false } = {}) {
@@ -151,23 +153,24 @@ export class Qvain extends Component {
 
         // Open draft instead if it exists
         const nextDraft = result.data.next_draft && result.data.next_draft.identifier
-        if (nextDraft) {
+        if (nextDraft && !isTemplate) {
           this.props.history.replace(getQvainUrl(`/dataset/${nextDraft}`))
+          return
+        }
+
+        if (isTemplate) {
+          resetWithTemplate(result.data)
         } else {
-          if (isTemplate) {
-            resetWithTemplate(result.data)
-          } else {
-            editDataset(result.data)
-          }
+          editDataset(result.data)
+
           if (flagEnabled('PERMISSIONS.WRITE_LOCK')) {
             try {
               await Promise.all(this.props.Stores.Qvain.Lock.promises)
               // eslint-disable-next-line no-empty
             } catch (e) {}
           }
-
-          this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
         }
+        this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
       })
       .catch(e => {
         const status = e.response.status
@@ -252,7 +255,12 @@ export class Qvain extends Component {
         <StickyHeader {...this.getStickyHeaderProps()} datasetLoading />
 
         <ErrorBoundary title={ErrorTitle()} callback={this.enableRenderFailed}>
-          <Dataset {...this.getDatasetProps()} />
+          <FlaggedComponent
+            flag="QVAIN.EDITOR_V2"
+            whenDisabled={<Dataset {...this.getDatasetProps()} />}
+          >
+            <DatasetEditorV2 {...this.getDatasetProps()} />
+          </FlaggedComponent>
         </ErrorBoundary>
         <LooseActorDialog />
         <LooseProvenanceDialog />

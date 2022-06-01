@@ -22,7 +22,6 @@ import ActorsInput, {
 } from '../../../js/components/qvain/fields/history/provenance/form/actorsInput'
 import LocationInput from '../../../js/components/qvain/fields/history/provenance/form/locationInput'
 import { Lifecycle, Outcome } from '../../../js/stores/view/qvain/qvain.provenances'
-import UsedEntityInput from '../../../js/components/qvain/fields/history/provenance/form/usedEntityInput'
 import { Label } from '../../../js/components/qvain/general/modal/form'
 import ActorsList from '../../../js/components/qvain/fields/history/provenance/form/actorsList'
 import { ROLE } from '../../../js/utils/constants'
@@ -203,10 +202,6 @@ describe('given required props and mockStores', () => {
           findType: 'prop',
           findArgs: ['datum', 'outcome'],
         },
-        {
-          label: 'UsedEntityInput',
-          findArgs: UsedEntityInput,
-        },
         { label: 'ActorsInput', findArgs: ActorsInput },
         { label: 'LifecycleInput', findType: 'prop', findArgs: ['datum', 'lifecycle'] },
       ]
@@ -283,43 +278,6 @@ describe('given required props and mockStores', () => {
         LocationFieldListAdd: {
           Field: mockStores.Qvain.Provenances.inEdit.locations,
           Form: SpatialsForm,
-          position: 'left',
-          hideButton: false,
-        },
-      }
-
-      harness.shouldIncludeChildren(children, props)
-    })
-  })
-
-  describe('UsedEntityInput', () => {
-    beforeEach(() => {
-      harness.restoreWrapper('UsedEntityInput')
-      harness.dive()
-    })
-
-    test('should have children with expected props', () => {
-      const children = [
-        { label: 'UsedEntityLabel', findType: 'prop', findArgs: ['component', Label] },
-        { label: 'UsedEntityFieldList', findArgs: FieldList },
-        { label: 'UsedEntityFieldListAdd', findArgs: FieldListAdd },
-      ]
-
-      const translationsRoot = 'usedEntities translationsRoot'
-
-      const props = {
-        UsedEntityLabel: {
-          content: `${translationsRoot}.label`,
-          htmlFor: 'used-entity-input',
-        },
-        UsedEntityFieldList: {
-          Field: mockStores.Qvain.Provenances.inEdit.usedEntities,
-          disableNoItemsText: true,
-        },
-        LocationFieldListAdd: {
-          Field: mockStores.Qvain.Provenances.inEdit.usedEntities,
-          Form: UsedEntitiesForm,
-          formProps: { hideRelationType: true },
           position: 'left',
           hideButton: false,
         },

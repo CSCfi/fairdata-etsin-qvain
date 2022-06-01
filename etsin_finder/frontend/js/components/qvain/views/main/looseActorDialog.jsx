@@ -11,6 +11,8 @@ const LooseActorsDialog = () => {
     Locale: { lang },
   } = useStores()
 
+  const getRoleTranslation = role => translate(`qvain.actors.add.checkbox.${role}`)
+
   const getLooseActorsDialogProps = () => ({
     show: !!promptLooseActors,
     onCancel: () => promptLooseActors(false),
@@ -22,9 +24,7 @@ const LooseActorsDialog = () => {
           <div>
             {(orphanActors || []).map(actor => {
               const actorName = (actor.person || {}).name || actor.organizations[0].name[lang]
-              const rolesStr = actor.roles.map(
-                role => `${translate(`qvain.actors.add.checkbox.${role}`)}`
-              )
+              const rolesStr = actor.roles.map(getRoleTranslation)
               return `${actorName} / ${rolesStr.join(' / ')}`
             })}
           </div>

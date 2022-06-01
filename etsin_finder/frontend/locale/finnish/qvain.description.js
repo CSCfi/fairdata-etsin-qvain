@@ -10,6 +10,7 @@ const description = {
     requiredForAll: 'Pakollinen tieto kaikille aineistoille',
     requiredToPublish: 'Pakollinen tieto julkaistaville aineistoille',
   },
+  charactersRemaining: '%(charactersRemaining)s merkkiä jäljellä.',
   description: {
     langEn: 'ENGLANTI',
     langFi: 'SUOMI',
@@ -17,11 +18,19 @@ const description = {
       label: 'Otsikko',
       placeholderFi: 'Otsikko (suomi)',
       placeholderEn: 'Otsikko (englanti)',
+      infoText: {
+        fi: 'Aineiston otsikko suomeksi',
+        en: 'Aineiston otsikko engalnniksi',
+      },
     },
     description: {
       label: 'Kuvaus',
       placeholderFi: 'Kuvaus (suomi)',
       placeholderEn: 'Kuvaus (englanti)',
+      infoText: {
+        fi: 'Aineiston kuvaus suomeksi',
+        en: 'Aineiston kuvaus englanniksi',
+      },
     },
     instructions: 'Vain yksi kielivalinta on pakollinen',
   },
@@ -60,13 +69,11 @@ const description = {
   keywords: {
     title: 'Avainsanat',
     infoText: `Syötä aineistollesi sopivia avainsanoja. Näillä voit parantaa aineistosi löydettävyyttä.
-    Käytä mahdollisimman tarkkoja termejä. Tässä kentässä ei ole automaattista käännöstä eri kielille.`,
+    Käytä mahdollisimman tarkkoja termejä. Tässä kentässä ei ole automaattista käännöstä eri kielille.
+    Voit lisätä useamman avainsanan erottamalla ne pilkulla (,)`,
     placeholder: 'Esim. taloustiede',
     alreadyAdded: 'Avainsana on jo lisätty',
     addButton: 'Lisää avainsana',
-    help: `Voit lisätä useamman avainsanan erottamalla ne pilkulla (,).
-      Aineistolla on oltava vähintään yksi avainsana.
-      Vähintään yksi avainsana on pakollinen`,
   },
   subjectHeadings: {
     title: 'Asiasanat',

@@ -10,6 +10,7 @@ const description = {
     requiredForAll: 'Required for all datasets',
     requiredToPublish: 'Required to save and publish',
   },
+  charactersRemaining: '%(charactersRemaining)s characters remaining.',
   description: {
     langEn: 'ENGLISH',
     langFi: 'FINNISH',
@@ -17,13 +18,21 @@ const description = {
       label: 'Title',
       placeholderEn: 'Title (English)',
       placeholderFi: 'Title (Finnish)',
+      infoText: {
+        fi: 'Title in English',
+        en: 'Title in Finnish',
+      },
     },
     description: {
       label: 'Description',
       placeholderEn: 'Description (English)',
       placeholderFi: 'Description (Finnish)',
+      infoText: {
+        fi: 'Describe dataset in Finnish',
+        en: 'Describe dataset in English',
+      },
     },
-    instructions: 'Only one language selection is mandatory',
+    instructions: 'Only one language is mandatory',
   },
   issuedDate: {
     title: 'Issued date',
@@ -62,12 +71,11 @@ const description = {
     title: 'Keywords',
     infoText: `Specify keywords that characterize the dataset.
     Keywords affect the dataset's findability. Use terms that are as precise as possible.
-    This field does not include an automatic translation for different languages.`,
+    This field does not include an automatic translation for different languages.
+    You can specify multiple keywords by separating them with a comma (,).`,
     placeholder: 'E.g. Economics',
     alreadyAdded: 'Keyword already added',
     addButton: 'Add keyword',
-    help: `You can specify multiple keywords by separating them with a comma (,).
-      At least one keyword is required.`,
   },
   subjectHeadings: {
     title: 'Subject Headings',

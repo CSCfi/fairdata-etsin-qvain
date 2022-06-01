@@ -70,7 +70,11 @@ class Temporals extends Field {
 
   schema = temporalDateSchema
 
-  translationsRoot = 'qvain.temporalAndSpatial.temporal'
+  @computed get translationsRoot() {
+    return this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
+      ? 'qvain.timePeriod'
+      : 'qvain.temporalAndSpatial.temporal'
+  }
 }
 
 export const TemporalModel = data => ({

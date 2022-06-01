@@ -22,7 +22,7 @@ import {
   LinkBackContainer,
   LinkBack,
   LinkText,
-} from './editor.styled'
+} from './headers.styled'
 import { useStores } from '../../utils/stores'
 
 const datasetStateTranslation = dataset => {

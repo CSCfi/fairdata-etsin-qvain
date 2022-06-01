@@ -226,6 +226,23 @@ const files = {
     content:
       'Jos julkaistuun aineistoon lisätään tiedostoja tai hakemistoja, tai siitä poistetaan tiedostoja tai hakemistoja, ko. aineistosta syntyy automaattisesti uusi versio. Vanha versio pysyy muuttumattomana ja siihen lisätään "vanha" -tagi. Jos julkaistu aineisto ei sisältänyt yhtään tiedostoa, voit lisätä tiedostoja ja/tai hakemistoja yhden kerran ilman, että uusi versio syntyy.',
   },
+  // extRes V2
+  remoteResources: {
+    title: 'Ulkoiset lähteet',
+    noItems: 'Tiedostoja ei ole lisätty',
+    modal: {
+      title: {
+        add: 'Lisää ulkoinen lähde',
+        edit: 'Muokkaa ulkoista lähdettä',
+      },
+      buttons: {
+        save: 'Lisää ulkoinen lähde',
+        editSave: 'Vahvista muutokset',
+        cancel: 'Peru',
+      },
+      addButton: 'Lisää ulkoinen lähde',
+    },
+  },
   external: {
     title: 'Ulkoiset tiedostot',
     infoText: `Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta),

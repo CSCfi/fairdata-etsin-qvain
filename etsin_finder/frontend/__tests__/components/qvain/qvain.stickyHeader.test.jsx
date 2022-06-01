@@ -5,10 +5,10 @@ import axios from 'axios'
 import { configure } from 'mobx'
 import Translate from 'react-translate-component'
 
-import StickyHeader, { DatasetState } from '../../../js/components/qvain/views/editor/stickyHeader'
-import SubmitResponse from '../../../js/components/qvain/views/editor/submitResponse'
-import { useStores } from '../../../js/stores/stores'
-import { buildStores } from '../../../js/stores'
+import StickyHeader, { DatasetState } from '@/components/qvain/views/headers/stickyHeader'
+import SubmitResponse from '@/components/qvain/views/headers/submitResponse'
+import { useStores } from '@/stores/stores'
+import { buildStores } from '@/stores'
 import { expect } from 'chai'
 
 jest.mock('axios')
@@ -18,7 +18,7 @@ axios.get.mockReturnValue(
   })
 )
 
-jest.mock('../../../js/stores/stores', () => {
+jest.mock('@/stores/stores', () => {
   return {
     withStores: () => () => <>null</>,
     useStores: jest.fn(),

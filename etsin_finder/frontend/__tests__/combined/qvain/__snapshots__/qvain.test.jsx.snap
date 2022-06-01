@@ -155,14 +155,28 @@ exports[`Qvain should render correctly 1`] = `
       />
     }
   >
-    <Dataset
-      datasetError={false}
-      datasetErrorDetails={null}
-      datasetErrorTitle={null}
-      handleRetry={[Function]}
-      haveDataset={true}
-      setFocusOnSubmitButton={[Function]}
-    />
+    <FlaggedComponent
+      flag="QVAIN.EDITOR_V2"
+      whenDisabled={
+        <Dataset
+          datasetError={false}
+          datasetErrorDetails={null}
+          datasetErrorTitle={null}
+          handleRetry={[Function]}
+          haveDataset={true}
+          setFocusOnSubmitButton={[Function]}
+        />
+      }
+    >
+      <Dataset
+        datasetError={false}
+        datasetErrorDetails={null}
+        datasetErrorTitle={null}
+        handleRetry={[Function]}
+        haveDataset={true}
+        setFocusOnSubmitButton={[Function]}
+      />
+    </FlaggedComponent>
   </ErrorBoundary>
   <LooseActorsDialog />
   <LooseProvenanceDialog />

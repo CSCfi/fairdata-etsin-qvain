@@ -1,3 +1,4 @@
+// V1
 const temporalAndSpatial = {
   title: 'Time Period and Geographical area',
   tooltip: 'Time Period and Geographical area',
@@ -51,6 +52,7 @@ const temporalAndSpatial = {
   },
   temporal: {
     title: 'Time period',
+    infoText: 'Time period that is covered by the dataset, i.e. period of observations.',
     description: 'Time period that is covered by the dataset, i.e. period of observations.',
     addButton: 'Add temporal coverage',
     listItem: {

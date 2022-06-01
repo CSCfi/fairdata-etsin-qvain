@@ -89,7 +89,7 @@ class Provenances extends Field {
         actors: this.Qvain.Actors,
       }),
       usedEntities: new UsedEntities(this),
-      locations: new Locations(this),
+      locations: new Locations(this, [], this.Qvain.Env),
     })
   }
 
@@ -128,6 +128,7 @@ class Provenances extends Field {
     const provenancesWithActorRefsToBeRemoved = this.storage.filter(
       p => p.associations.actorsRef[actor.uiid]
     )
+
     if (!provenancesWithActorRefsToBeRemoved.length) return Promise.resolve(true)
     this.provenancesWithNonExistingActors = provenancesWithActorRefsToBeRemoved
     return this.Qvain.createLooseProvenancePromise()
@@ -139,9 +140,13 @@ class Provenances extends Field {
 
   schema = provenanceSchema
 
-  translationsRoot = 'qvain.history.provenance'
+  translationsRoot = this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
+    ? 'qvain.historyV2'
+    : 'qvain.history.provenance'
 
-  associationsTranslationsRoot = 'qvain.history.provenance.modal.actorsInput'
+  associationsTranslationsRoot = this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
+    ? 'qvain.historyV2.actors'
+    : 'qvain.history.provenance.modal.actorsInput'
 }
 
 export const Outcome = (name, url) => ({

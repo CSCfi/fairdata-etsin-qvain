@@ -1,27 +1,32 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import maximalDataset from '../../__testdata__/qvain.maximalDataset'
-import QvainClass from '../../../js/stores/view/qvain'
-import Unsupported from '../../../js/components/qvain/views/editor/unsupported'
-import { useStores } from '../../../js/stores/stores'
-import '../../../locale/translations'
 import { ThemeProvider } from 'styled-components'
-import theme from '../../../js/styles/theme'
+import Unsupported from '@/components/qvain/views/editor/unsupported'
+import theme from '@/styles/theme'
+import { useStores } from '@/stores/stores'
+import { buildStores } from '@/stores'
 
-jest.mock('../../../js/stores/stores')
+import '../../../locale/translations'
+import maximalDataset from '../../__testdata__/qvain.maximalDataset'
+
+jest.mock('@/stores/stores')
 
 beforeEach(() => {
   jest.resetAllMocks()
 })
 
 const render = unsupported => {
+  let Stores = buildStores()
+  const Qvain = Stores.Qvain
+  Qvain.editDataset(maximalDataset)
   useStores.mockReturnValue({
+    ...Stores,
     Qvain: {
+      ...Qvain,
       unsupported: unsupported,
     },
   })
-  const Qvain = new QvainClass()
-  Qvain.editDataset(maximalDataset)
+
   return mount(
     <ThemeProvider theme={theme}>
       <Unsupported />
@@ -52,7 +57,8 @@ describe('Unsupported', () => {
 })
 
 test('it should list unsupported fields in dataset', () => {
-  const Qvain = new QvainClass()
+  const Stores = buildStores()
+  const Qvain = Stores.Qvain
   Qvain.editDataset(maximalDataset)
   expect(Qvain.unsupported).toEqual([
     ['access_rights.access_url', ''],

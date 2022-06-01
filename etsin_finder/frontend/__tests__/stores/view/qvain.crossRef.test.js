@@ -1,7 +1,8 @@
 import 'chai/register-expect'
-import CrossRef from '../../../js/stores/view/qvain/qvain.crossRef'
+import CrossRef from '@/stores/view/qvain/qvain.crossRef'
+import EnvClass from '@/stores/domain/env'
 import axios from 'axios'
-import urls from '../../../js/utils/urls'
+import urls from '@/utils/urls'
 jest.mock('axios')
 axios.isCancel = jest.fn()
 describe('CrossRef', () => {
@@ -12,7 +13,8 @@ describe('CrossRef', () => {
     axios.CancelToken = {
       source: jest.fn(() => ({ cancel: () => cancelMockFunc })),
     }
-    crossRef = new CrossRef()
+    const Env = new EnvClass()
+    crossRef = new CrossRef(Env)
     crossRef.prevRequest = { cancel: cancelMockFunc }
   })
 

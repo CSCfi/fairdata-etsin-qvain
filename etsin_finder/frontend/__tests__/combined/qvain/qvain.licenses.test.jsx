@@ -21,7 +21,6 @@ import { ACCESS_TYPE_URL, LICENSE_URL } from '../../../js/utils/constants'
 import { ValidationError } from '../../../js/components/qvain/general/errors/validationError'
 import Tooltip from '../../../js/components/qvain/general/section/tooltip'
 import { HelpIcon } from '../../../js/components/qvain/general/modal/form'
-import Licenses from '../../../js/stores/view/qvain/qvain.license'
 import LicensesInfo from '../../../js/components/qvain/fields/licenses/licensesInfo'
 
 jest.mock('../../../js/stores/stores', () => {

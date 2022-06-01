@@ -37,7 +37,7 @@ export const buildStores = () => {
   const DatasetQuery = new DatasetQueryClass(Env, Access)
   const Map = new MapClass(Locale)
   const Matomo = new MatomoClass(Env)
-  const CrossRef = new CrossRefClass()
+  const CrossRef = new CrossRefClass(Env)
 
   return {
     Env,

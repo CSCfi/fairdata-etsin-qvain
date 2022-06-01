@@ -1,4 +1,4 @@
-import { action, makeObservable } from 'mobx'
+import { makeObservable, action, computed } from 'mobx'
 import * as yup from 'yup'
 
 import MultiLanguageField from './qvain.multiLanguageField'
@@ -30,6 +30,10 @@ class Description extends MultiLanguageField {
   @action
   fromBackend = dataset => {
     this.value = { en: dataset.description?.en || '', fi: dataset.description?.fi || '' }
+  }
+
+  @computed get charactersRemaining() {
+    return { fi: 50000 - this.value?.fi?.length, en: 50000 - this.value?.en?.length }
   }
 
   schema = descriptionSchema

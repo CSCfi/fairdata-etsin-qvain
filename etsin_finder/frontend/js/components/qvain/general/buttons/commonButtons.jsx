@@ -41,7 +41,7 @@ export const SaveButton = styled(Button)`
   font-weight: bold;
   color: #fff;
   margin-left: 20px;
-  padding: 1rem 1.5rem;
+  padding: 10px 25px;
   &:hover {
     background-color: ${props => props.theme.color.primaryDark};
   }

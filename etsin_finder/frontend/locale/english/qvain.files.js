@@ -229,6 +229,23 @@ const files = {
     content:
       'If you have already published the dataset, removing / adding files or folders will automatically create a new version of the dataset (excluding a published dataset without any files; you can add files/folder one time in the existing version). The old version will be tagged as "Old" and the files linked to it will remain untouched.',
   },
+  // extRes V2
+  remoteResources: {
+    title: 'Remote resources',
+    noItems: 'None added',
+    modal: {
+      title: {
+        add: 'Add remote resource',
+        edit: 'Edit remote resource',
+      },
+      buttons: {
+        save: 'Add remote resource',
+        editSave: 'Apply changes',
+        cancel: 'Cancel',
+      },
+      addButton: 'Add remote resource',
+    },
+  },
   external: {
     title: 'Remote resources',
     infoText: `Please insert Title, Use Category and URLs for the remote files.

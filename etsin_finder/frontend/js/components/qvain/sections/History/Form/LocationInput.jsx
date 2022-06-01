@@ -1,0 +1,45 @@
+import React from 'react'
+import Translate from 'react-translate-component'
+import { observer } from 'mobx-react'
+
+import { useStores } from '@/stores/stores'
+import { Title, FieldGroup } from '@/components/qvain/general/V2'
+import FieldList from '@/components/qvain/general/V2/ModalFieldList'
+import FieldListAdd from '@/components/qvain/general/V2/ModalFieldListAdd'
+import Form from '@/components/qvain/sections/Geographics/Form'
+
+const Location = () => {
+  const {
+    Qvain: { Provenances: Store, readonly },
+  } = useStores()
+  const Field = Store.inEdit.locations
+  if (!Field) return null
+
+  return (
+    <FieldGroup>
+      <Translate
+        component={Title}
+        content={'qvain.historyV2.location.label'}
+        htmlFor="location-input"
+      />
+      <FieldList
+        storage={Field.storage}
+        edit={Field.edit}
+        remove={Field.remove}
+        translationsRoot="qvain.historyV2.location"
+        readonly={readonly}
+        disableNoItemsText
+      />
+      <FieldListAdd
+        Field={Field}
+        form={{ Form, props: { Field } }}
+        isOpen={!!Field.inEdit}
+        translationsRoot="qvain.historyV2.location"
+        position="left"
+        hideButton={!!Field.storage.length}
+      />
+    </FieldGroup>
+  )
+}
+
+export default observer(Location)

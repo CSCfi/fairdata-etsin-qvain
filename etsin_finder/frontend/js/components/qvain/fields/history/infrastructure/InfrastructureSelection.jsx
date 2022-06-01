@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Select from '../../../general/input/select'
 
-import { useStores } from '../../../utils/stores'
+import { useStores } from '@/stores/stores'
 
 const InfrastructureSelection = () => {
   const {

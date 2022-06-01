@@ -4,38 +4,15 @@ import { makeObservable } from 'mobx'
 import RelatedResources, {
   RelatedResource,
   RelatedResourceModel,
-} from '../../../js/stores/view/qvain/qvain.relatedResources'
+} from '@/stores/view/qvain/qvain.relatedResources'
 
-jest.mock('../../../js/stores/view/qvain/qvain.field', () => {
-  class mockField {
-    constructor(...args) {
-      this.constructorFunc(...args)
-    }
+import { buildStores } from '@/stores'
 
-    constructorFunc = jest.fn()
-
-    fromBackendBase = jest.fn()
-  }
-
-  return mockField
-})
-
-jest.mock('mobx', () => {
-  return {
-    ...jest.requireActual('mobx'),
-    makeObservable: jest.fn(),
-  }
-})
+jest.mock('mobx')
 
 describe('RelatedResources', () => {
-  let relatedResources
-  const Parent = {
-    some: 'data',
-  }
-
-  beforeEach(() => {
-    relatedResources = new RelatedResources(Parent)
-  })
+  const Stores = buildStores()
+  const relatedResources = Stores.Qvain.RelatedResources
 
   describe('given storage', () => {
     const item = {
@@ -62,12 +39,15 @@ describe('RelatedResources', () => {
 
     describe('when calling constructor with Parent', () => {
       test('should call super.constructor with Parent, RelatedResourceModel and "relatedResources"', () => {
-        expect(relatedResources.constructorFunc).to.have.beenCalledWith(
-          Parent,
-          RelatedResource,
-          RelatedResourceModel,
-          'relatedResources'
-        )
+        const expectedProps = {
+          Template: RelatedResource,
+          Model: RelatedResourceModel,
+          fieldName: 'relatedResources',
+        }
+
+        Object.keys(expectedProps).forEach(key => {
+          expect(relatedResources[key]).to.deep.equal(expectedProps[key])
+        })
       })
 
       test('should call makeObservable', () => {
@@ -121,6 +101,7 @@ describe('RelatedResources', () => {
       }
 
       beforeEach(() => {
+        relatedResources.fromBackendBase = jest.fn()
         returnValue = relatedResources.fromBackend(dataset, Qvain)
       })
 

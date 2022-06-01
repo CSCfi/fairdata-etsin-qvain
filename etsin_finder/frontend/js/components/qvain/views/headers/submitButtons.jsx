@@ -5,9 +5,10 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { useHistory } from 'react-router-dom'
 
-import { useStores } from '../../utils/stores'
+import { useStores } from '@/stores/stores'
+import TooltipHoverOnSave from '@/components/qvain/general/header/tooltipHoverOnSave'
+
 import { SaveButton, PublishButton } from './submitButton.styled'
-import TooltipHoverOnSave from '../../general/header/tooltipHoverOnSave'
 
 export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtonsDisabled }) => {
   const {
@@ -112,7 +113,7 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
           <PublishButton
             id={`publish-btn${idSuffix}`}
             disabled={disabled || isPublishButtonDisabled}
-            onClick={() => handlePublishClick(false)}
+            onClick={handlePublishClick}
           >
             <Translate content="qvain.submit" />
           </PublishButton>

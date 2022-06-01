@@ -1,3 +1,4 @@
+// V1
 const temporalAndSpatial = {
   title: 'Ajallinen ja maantieteellinen kattavuus',
   tooltip: 'Ajallinen ja maantieteellinen kattavuus info',
@@ -51,6 +52,7 @@ const temporalAndSpatial = {
   },
   temporal: {
     title: 'Ajallinen kattavuus',
+    infoText: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
     description: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
     addButton: 'Lisää ajanjakso',
     listItem: {

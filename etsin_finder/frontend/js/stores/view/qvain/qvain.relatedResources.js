@@ -1,7 +1,8 @@
-import { makeObservable, observable, action } from 'mobx'
+import { makeObservable, observable, action, computed } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 
 import * as yup from 'yup'
+import { RESOURCE_ENTITY_TYPE, RELATION_TYPE } from '@/utils/constants'
 
 import Field from './qvain.field'
 import { touch } from './track'
@@ -12,22 +13,27 @@ const parseDoiUrl = doi => `https://doi.org/${doi}`
 export const relatedResourceNameSchema = yup.object().shape({
   fi: yup.mixed().when('en', {
     is: val => val.length > 0,
-    then: yup.string().typeError('qvain.validationMessages.history.relatedResource.nameRequired'),
+    then: yup.string().typeError('qvain.validationMessages.publications.nameRequired'),
     otherwise: yup
       .string()
-      .typeError('qvain.validationMessages.history.relatedResource.nameRequired')
-      .required('qvain.validationMessages.history.relatedResource.nameRequired'),
+      .typeError('qvain.validationMessages.publications.nameRequired')
+      .required('qvain.validationMessages.publications.nameRequired'),
   }),
-  en: yup.string().typeError('qvain.validationMessages.history.relatedResource.nameRequired'),
+  en: yup.string().typeError('qvain.validationMessages.publications.nameRequired'),
 })
 
 export const relatedResourceTypeSchema = yup
   .object()
-  .required('qvain.validationMessages.history.relatedResource.typeRequired')
+  .required('qvain.validationMessages.publications.typeRequired')
+
+export const entityTypeSchema = yup
+  .object()
+  .required('qvain.validationMessages.publications.entityTypeRequired')
 
 export const relatedResourceSchema = yup.object().shape({
   name: relatedResourceNameSchema,
   relationType: relatedResourceTypeSchema,
+  entityType: entityTypeSchema,
 })
 
 export const RelatedResource = ({
@@ -39,6 +45,15 @@ export const RelatedResource = ({
   entityType = undefined,
 } = {}) => ({ uiid, name, description, identifier, relationType, entityType })
 
+export const Publication = ({
+  uiid = uuidv4(),
+  name = { fi: '', en: '', und: '' },
+  description = { fi: '', en: '', und: '' },
+  identifier = undefined,
+  relationType = RELATION_TYPE.RELATED_DATASET,
+  entityType = RESOURCE_ENTITY_TYPE.PUBLICATION,
+} = {}) => ({ uiid, name, description, identifier, relationType, entityType })
+
 class RelatedResources extends Field {
   constructor(Parent) {
     super(Parent, RelatedResource, RelatedResourceModel, 'relatedResources')
@@ -47,7 +62,9 @@ class RelatedResources extends Field {
 
   schema = relatedResourceSchema
 
-  @observable translationsRoot = 'qvain.history.relatedResource'
+  @observable translationsRoot = this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
+    ? 'qvain.publications'
+    : 'qvain.history.relatedResource'
 
   @action
   prefillInEdit = data => {
@@ -55,14 +72,8 @@ class RelatedResources extends Field {
       name: { fi: data.label, en: data.label },
       identifier: parseDoiUrl(data.DOI),
       description: { fi: data.abstract || '', en: data.abstract || '', und: data.abstract || '' },
-      entityType: {
-        label: { fi: 'Julkaisu', en: 'Publication', und: 'Julkaisu' },
-        url: 'http://uri.suomi.fi/codelist/fairdata/resource_type/code/publication',
-      },
-      relationType: {
-        label: { fi: 'Liittyvä aineisto', en: 'Related dataset', und: 'Liittyvä aineisto' },
-        url: 'http://purl.org/dc/terms/relation',
-      },
+      entityType: RESOURCE_ENTITY_TYPE.PUBLICATION,
+      relationType: RELATION_TYPE.RELATED_DATASET,
     }
 
     this.create(modifiedData)
@@ -88,6 +99,44 @@ class RelatedResources extends Field {
       })
     }
     this.fromBackendBase(dataset.relation, Qvain)
+  }
+
+  @action.bound createPublication() {
+    this.setChanged(false)
+    this.inEdit = Publication()
+  }
+
+  @action.bound createOtherResource() {
+    this.create()
+    this.inEdit.otherResource = true
+  }
+
+  @computed get publications() {
+    return this.storage.filter(
+      resource => resource.entityType?.url === RESOURCE_ENTITY_TYPE.PUBLICATION.url
+    )
+  }
+
+  @computed get otherResources() {
+    return this.storage.filter(
+      resource => resource.entityType?.url !== RESOURCE_ENTITY_TYPE.PUBLICATION.url
+    )
+  }
+
+  @computed get publicationInEdit() {
+    return (
+      this.inEdit &&
+      !this.inEdit.otherResource &&
+      this.inEdit.entityType?.url === RESOURCE_ENTITY_TYPE.PUBLICATION.url
+    )
+  }
+
+  @computed get otherResourceInEdit() {
+    return (
+      this.inEdit &&
+      (this.inEdit.otherResource ||
+        this.inEdit.entityType?.url !== RESOURCE_ENTITY_TYPE.PUBLICATION.url)
+    )
   }
 }
 

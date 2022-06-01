@@ -141,9 +141,12 @@ const validationMessages = {
       string: 'Nimen täytyy olla merkkijono.',
     },
     organization: {
-      name: 'Nimi on pakollinen tieto.',
-      email: 'Sähköpostiosoite ei kelpaa.',
-      min: 'Vähintään yksi organisaatio on pakollinen.',
+      mixed: '',
+      object: 'Valitun organisaation tulee olla olio.',
+      name: 'Organisaation nimi on pakollinen tieto.',
+      required: 'Organisaatio on pakollinen tieto.',
+      min: 'Projektissa täytyy olla vähintään yksi organisaatio.',
+      email: 'Organisaation sähköpostiosoite on viallinen.',
     },
     fundingAgency: {
       contributorType: {
@@ -170,6 +173,11 @@ const validationMessages = {
       startDateMissing: 'Alkamispäivämäärä puuttuu',
       endDateMissing: 'Loppumispäivämäärä puuttuu',
     },
+  },
+  publications: {
+    nameRequired: 'Nimitieto on pakollinen vähintään yhdellä kielellä.',
+    typeRequired: 'Viitteen tyyppi on pakollinen tieto.',
+    entityTypeRequired: 'Resurssin tyyppi pakollinen tieto.',
   },
 }
 

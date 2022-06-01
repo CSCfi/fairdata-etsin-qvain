@@ -139,9 +139,12 @@ const validationMessages = {
       string: 'The title must be a string value.',
     },
     organization: {
-      name: 'A name is required.',
-      email: 'A valid email address is required.',
-      min: 'At least one producer organization is required.',
+      mixed: '',
+      object: 'The selected organization should be an object.',
+      name: 'Organization name is required.',
+      required: 'Organization is required.',
+      min: 'Project must have at least one organization.',
+      email: 'Organization email is not valid.',
     },
     fundingAgency: {
       contributorType: {
@@ -168,6 +171,11 @@ const validationMessages = {
       startDateMissing: 'Start date missing.',
       endDateMissing: 'End date missing.',
     },
+  },
+  publications: {
+    nameRequired: 'Name is required in at least one language.',
+    typeRequired: 'Relation type is required.',
+    entityTypeRequired: 'Resource type is required',
   },
 }
 

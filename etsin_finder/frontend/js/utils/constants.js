@@ -21,14 +21,9 @@ export const DATA_CATALOG_IDENTIFIER = {
   DFT: 'urn:nbn:fi:att:data-catalog-dft',
 }
 
-export const REMOTE_RESOURCES_DATA_CATALOGS = [
-  DATA_CATALOG_IDENTIFIER.ATT,
-]
+export const REMOTE_RESOURCES_DATA_CATALOGS = [DATA_CATALOG_IDENTIFIER.ATT]
 
-export const FILES_DATA_CATALOGS = [
-  DATA_CATALOG_IDENTIFIER.IDA,
-  DATA_CATALOG_IDENTIFIER.PAS,
-]
+export const FILES_DATA_CATALOGS = [DATA_CATALOG_IDENTIFIER.IDA, DATA_CATALOG_IDENTIFIER.PAS]
 
 export const REMS_URL = 'https://vm1446.kaj.pouta.csc.fi'
 
@@ -193,4 +188,18 @@ export const DATASET_STATE = {
   UNPUBLISHED_DRAFT: 'UNPUBLISHED_DRAFT',
   PUBLISHED: 'PUBLISHED',
   UNKNOWN: 'UNKNOWN',
+}
+
+export const RESOURCE_ENTITY_TYPE = {
+  PUBLICATION: {
+    label: { fi: 'Julkaisu', en: 'Publication', und: 'Julkaisu' },
+    url: 'http://uri.suomi.fi/codelist/fairdata/resource_type/code/publication',
+  },
+}
+
+export const RELATION_TYPE = {
+  RELATED_DATASET: {
+    label: { fi: 'Liittyvä aineisto', en: 'Related dataset', und: 'Liittyvä aineisto' },
+    url: 'http://purl.org/dc/terms/relation',
+  },
 }

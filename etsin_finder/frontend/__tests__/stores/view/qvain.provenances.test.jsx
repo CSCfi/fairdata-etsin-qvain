@@ -1,34 +1,8 @@
 import 'chai/register-expect'
 import { makeObservable } from 'mobx'
 
-import Provenances, {
-  Provenance,
-  ProvenanceModel,
-} from '../../../js/stores/view/qvain/qvain.provenances'
-
-jest.mock('../../../js/stores/view/qvain/qvain.field', () => {
-  class mockField {
-    constructor(...args) {
-      this.constructorFunction(...args)
-    }
-
-    reset() {
-      this.parentReset()
-    }
-
-    setChanged = val => {
-      this.changed = val
-    }
-
-    parentReset = jest.fn()
-    fromBackendBase = jest.fn()
-    constructorFunction = jest.fn()
-
-    storage = []
-  }
-
-  return mockField
-})
+import { buildStores } from '@/stores'
+import Provenances, { Provenance, ProvenanceModel } from '@/stores/view/qvain/qvain.provenances'
 
 jest.mock('uuid')
 jest.mock('mobx')
@@ -36,15 +10,15 @@ jest.mock('mobx')
 describe('Provenances', () => {
   let provenances
 
-  const Qvain = {
-    Actors: {
-      actors: [],
-    },
+  const Stores = buildStores()
+  Stores.Qvain = {
+    ...Stores.Qvain,
     createLooseProvenancePromise: jest.fn(),
   }
+  const Qvain = Stores.Qvain
 
   beforeEach(() => {
-    provenances = new Provenances(Qvain)
+    provenances = Stores.Qvain.Provenances
   })
 
   describe('when calling constructor', () => {
@@ -52,16 +26,17 @@ describe('Provenances', () => {
       expect(makeObservable).to.have.beenCalledWith(provenances)
     })
 
-    test('should call Field.constructor with expectedProps', () => {
-      const expectedProps = [
-        Qvain,
-        Provenance,
-        ProvenanceModel,
-        'provenances',
-        ['associations', 'usedEntities', 'locations'],
-      ]
+    test('should Parent, Model, Template defined', () => {
+      const expectedProps = {
+        Model: ProvenanceModel,
+        Template: Provenance,
+        fieldName: 'provenances',
+        references: ['associations', 'usedEntities', 'locations'],
+      }
 
-      expect(provenances.constructorFunction).to.have.beenCalledWith(...expectedProps)
+      Object.keys(expectedProps).forEach(key => {
+        expect(provenances[key]).to.deep.equal(expectedProps[key])
+      })
     })
 
     describe('when calling saveAndClearLocations', () => {
@@ -82,8 +57,18 @@ describe('Provenances', () => {
         provenances.reset()
       })
 
-      test('should call parent reset', () => {
-        expect(provenances.parentReset).to.have.beenCalledWith()
+      test('should reset critical props', () => {
+        const expectedProps = {
+          storage: [],
+          hasChanged: false,
+          inEdit: undefined,
+          editMode: false,
+          validationError: undefined,
+        }
+
+        Object.keys(expectedProps).forEach(key => {
+          expect(provenances[key]).to.deep.equal(expectedProps[key])
+        })
       })
 
       test('should set selectedActor to undefined', () => {
@@ -97,12 +82,12 @@ describe('Provenances', () => {
 
     describe('when calling create', () => {
       beforeEach(() => {
-        provenances.changed = true
+        provenances.hasChanged = true
         provenances.create()
       })
 
       test('should set changed to false', () => {
-        provenances.changed.should.be.false
+        provenances.hasChanged.should.be.false
       })
 
       test('should set inEdit with new Provenance', () => {
@@ -202,6 +187,7 @@ describe('Provenances', () => {
       const Qvain = 'Qvain'
 
       beforeEach(() => {
+        provenances.fromBackendBase = jest.fn()
         provenances.provenancesWithNonExistingActors = 'some value'
         provenances.fromBackend(dataset, Qvain)
       })
@@ -232,7 +218,7 @@ describe('Provenances', () => {
         },
       ]
 
-      beforeEach(() => {
+      beforeEach(async () => {
         provenances.storage = storage
         provenances.checkActorFromRefs(actor)
       })
@@ -242,7 +228,7 @@ describe('Provenances', () => {
       })
 
       test('should call Qvain.createLooseProvenancePromise', () => {
-        expect(Qvain.createLooseProvenancePromise).to.have.beenCalledWith()
+        expect(provenances.provenancesWithNonExistingActors).to.deep.equal([storage[0]])
       })
     })
 

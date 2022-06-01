@@ -1,7 +1,7 @@
 import 'chai/register-expect'
 import { makeObservable } from 'mobx'
 
-import DatasetsV2 from '../../../js/stores/view/qvain/qvain.datasetsV2'
+import DatasetsV2 from '@/stores/view/qvain/qvain.datasetsV2'
 
 jest.mock('mobx')
 

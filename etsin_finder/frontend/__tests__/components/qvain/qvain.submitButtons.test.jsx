@@ -2,14 +2,14 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Harness from '../componentTestHarness'
 
-import { SubmitButtons } from '../../../js/components/qvain/views/editor/submitButtons'
-import { useStores } from '../../../js/stores/stores'
+import { SubmitButtons } from '@/components/qvain/views/headers/submitButtons'
+import { useStores } from '@/stores/stores'
 
 const mockSubmitDraft = jest.fn()
 const mockSubmitPublish = jest.fn()
 const mockGetQvainUrl = jest.fn()
 
-jest.mock('../../../js/stores/stores', () => {
+jest.mock('@/stores/stores', () => {
   return {
     useStores: jest.fn(),
   }

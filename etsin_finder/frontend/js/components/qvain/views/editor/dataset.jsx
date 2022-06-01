@@ -1,13 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import styled from 'styled-components'
 
 import { SkipToSubmitDataset, Form, SubmitContainer, DisableImplicitSubmit } from './editor.styled'
 import { ErrorContainer, ErrorLabel, ErrorContent, ErrorButtons } from '../../general/errors'
 import FlaggedComponent from '../../../general/flaggedComponent'
 import { Button } from '../../../general/button'
-import SubmitButtons from './submitButtons'
+import SubmitButtons from '../headers/submitButtons'
 
 import Unsupported from './unsupported'
 import RightsAndLicenses from '../../fields/licenses'
@@ -17,6 +16,7 @@ import Files from '../../fields/files'
 import TemporalAndSpatial from '../../fields/temporalAndSpatial'
 import History from '../../fields/history'
 import Project from '../../fields/project'
+import { Right } from '../DatasetEditorV2/editor.styled'
 
 export const Dataset = ({
   datasetError,
@@ -83,10 +83,5 @@ Dataset.defaultProps = {
   datasetErrorTitle: null,
   datasetErrorDetails: null,
 }
-
-const Right = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`
 
 export default Dataset

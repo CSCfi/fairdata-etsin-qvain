@@ -11,6 +11,8 @@ import {
   REMOTE_RESOURCES_DATA_CATALOGS,
   FILES_DATA_CATALOGS,
 } from '../../../utils/constants'
+import Sections from './qvain.sections'
+
 import Resources from './qvain.resources'
 import Files from './qvain.files'
 import Submit from './qvain.submit'
@@ -20,11 +22,12 @@ import queryParamEnabled from '@/utils/queryParamEnabled'
 
 class Qvain extends Resources {
   constructor(Env, Auth) {
-    super()
+    super(Env)
     makeObservable(this)
     this.Env = Env
+    this.Sections = new Sections({ parent: this })
     this.Files = new Files(this, Auth)
-    this.Submit = new Submit(this)
+    this.Submit = new Submit(this, Env)
     this.resetQvainStore()
     this.Lock = new Lock(this, Auth)
   }
@@ -62,6 +65,7 @@ class Qvain extends Resources {
     this.clearMetadataModalFile = undefined
     this.fixDeprecatedModalOpen = false
 
+    this.ExternalResources.reset()
     this.resources.forEach(r => r.reset())
 
     this.useDoi = false
@@ -113,7 +117,19 @@ class Qvain extends Resources {
 
     // Remove useDoi if dataCatalog is ATT
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
-      this.useDoi = false
+      this.setUseDoi(false)
+    }
+
+    if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
+      this.setUseDoi(true)
+    }
+
+    if (!FILES_DATA_CATALOGS.includes(selectedDataCatalog)) {
+      this.Files.reset()
+    }
+
+    if (!REMOTE_RESOURCES_DATA_CATALOGS.includes(selectedDataCatalog)) {
+      this.ExternalResources.reset()
     }
 
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
@@ -253,6 +269,7 @@ class Qvain extends Resources {
     this.original = { ...dataset }
     this.loadBasicFields(dataset)
     await this.loadStatusAndFileFields(dataset)
+    this.Sections.expandPopulatedSections(dataset.research_dataset)
   }
 
   @action resetWithTemplate = async dataset => {
@@ -260,6 +277,7 @@ class Qvain extends Resources {
     this.loadBasicFields(dataset)
     this.OtherIdentifiers.reset()
     this.ExternalResources.reset()
+    this.setChanged(true)
   }
 
   @action setOriginal = newOriginal => {
@@ -274,6 +292,11 @@ class Qvain extends Resources {
   setPreservationState = state => {
     this.preservationState = state
     this.changed = true
+  }
+
+  @computed
+  get isPreserved() {
+    return this.preservationState === 120
   }
 
   @computed
@@ -328,9 +351,27 @@ class Qvain extends Resources {
     return !!(this.hasBeenPublished && (hasDoi || draftOfHasDoi))
   }
 
+  @computed get hasSelectedFiles() {
+    return this.Files.hasSelectedItems
+  }
+
+  @computed get hasExternalResources() {
+    return !!this.ExternalResources?.storage?.length
+  }
+
   @computed
   get originalHasInfrastructures() {
     return (this.original?.research_dataset?.infrastructure || []).length > 0
+  }
+
+  @computed
+  get isDataCatalogDecided() {
+    const isDataCatalogNotDecided =
+      !this.original?.data_catalog ||
+      this.original?.data_catalog?.identifier === DATA_CATALOG_IDENTIFIER.DFT
+    return (
+      this.hasSelectedFiles || this.hasExternalResources || !isDataCatalogNotDecided || this.isPas
+    )
   }
 
   @computed

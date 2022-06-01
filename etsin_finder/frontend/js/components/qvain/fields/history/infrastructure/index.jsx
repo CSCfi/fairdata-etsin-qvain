@@ -2,7 +2,7 @@ import React from 'react'
 import Translate from 'react-translate-component'
 
 import InfrastructureSelection from './InfrastructureSelection'
-import { useStores } from '../../../utils/stores'
+import { useStores } from '@/stores/stores'
 import { withFieldErrorBoundary } from '../../../general/errors/fieldErrorBoundary'
 import { Field } from '../../../general/section'
 

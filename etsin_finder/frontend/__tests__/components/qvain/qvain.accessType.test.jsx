@@ -3,12 +3,13 @@ import { shallow } from 'enzyme'
 import axios from 'axios'
 import { configure } from 'mobx'
 
-import '../../../locale/translations'
-import { AccessType } from '../../../js/components/qvain/fields/licenses/accessType'
-import { ACCESS_TYPE_URL } from '../../../js/utils/constants'
-import { buildStores } from '../../../js/stores'
+import { AccessType } from '@/components/qvain/fields/licenses/accessType'
+import { ACCESS_TYPE_URL } from '@/utils/constants'
+import { buildStores } from '@/stores'
+import { onChange } from '@/components/qvain/utils/select'
+
 import accessTypeResponse from '../../__testdata__/accessTypes.data'
-import { onChange } from '../../../js/components/qvain/utils/select'
+import '../../../locale/translations'
 
 configure({
   safeDescriptors: false,
@@ -16,8 +17,8 @@ configure({
 
 jest.mock('axios')
 
-jest.mock('../../../js/components/qvain/utils/select', () => {
-  const actual = jest.requireActual('../../../js/components/qvain/utils/select')
+jest.mock('@/components/qvain/utils/select', () => {
+  const actual = jest.requireActual('@/components/qvain/utils/select')
   return {
     ...actual,
     onChange: jest.fn(() => () => {}),
@@ -32,7 +33,7 @@ describe('Qvain Access Type', () => {
     Stores = buildStores()
     Auth = Stores.Auth
     Qvain = Stores.Qvain
-    axios.get.mockReturnValueOnce(Promise.resolve({ data: accessTypeResponse }))
+    axios.get.mockReturnValue(Promise.resolve({ data: accessTypeResponse }))
   })
 
   afterEach(() => {

@@ -42,6 +42,13 @@ Jo tallennettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan k
     },
     name: {
       placeholder: {
+        // V1
+        organization: 'Nimi',
+        person: 'Etu- ja sukunimi',
+        manualOrganization: 'Syötä organisaation nimi',
+      },
+      infoText: {
+        // V2
         organization: 'Nimi',
         person: 'Etu- ja sukunimi',
         manualOrganization: 'Syötä organisaation nimi',
@@ -50,11 +57,17 @@ Jo tallennettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan k
     },
     email: {
       placeholder: 'Sähköposti',
+      infoText:
+        'Sähköposti. Käyttäjä voi lähettää viestin Etsimestä, mutta varsinaista osoitetta ei näytetä.',
       label: 'Sähköposti',
     },
     identifier: {
       label: 'Tunniste',
       placeholder: {
+        person: 'http://orcid.org',
+        organization: 'Esim. RAID-tunniste tai Y-tunnus',
+      },
+      infoText: {
         person: 'Esim. http://orcid.org',
         organization: 'Esim. RAID-tunniste tai Y-tunnus',
       },
@@ -62,12 +75,15 @@ Jo tallennettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan k
     organization: {
       label: 'Organisaatio',
       placeholder: 'Hae organisaatiota tai syötä uusi organisaatio',
+      infoText: 'Hae organisaatiota tai syötä uusi organisaatio',
       placeholderChild: '+ Lisää osasto tai yksikkö',
+      infoTextChild: '+ Lisää osasto tai yksikkö',
       loading: 'Ladataan organisaatioita...',
       labels: {
         name: 'Organisaation nimi',
         email: 'Organisaation sähköposti',
         identifier: 'Organisaation tunniste',
+        manualOrganization: 'Lisää uusi organisaatio',
       },
       options: {
         create: 'Lisää uusi organisaatio',
@@ -77,6 +93,9 @@ Jo tallennettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan k
     },
     save: {
       label: 'Lisää toimija',
+    },
+    edit: {
+      label: 'Vahvista muutokset',
     },
     cancel: {
       label: 'Peruuta',

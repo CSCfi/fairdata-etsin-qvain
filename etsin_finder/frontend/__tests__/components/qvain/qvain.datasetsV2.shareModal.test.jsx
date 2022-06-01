@@ -107,6 +107,7 @@ const wait = async cond => {
 
 beforeEach(async () => {
   jest.resetAllMocks()
+  jest.spyOn(console, 'warn').mockImplementation(() => {}) // to supress axios-mock-adapter 404 warnings
   mockAdapter = new MockAdapter(axios)
   mockAdapter.onGet(RegExp('^/api/ldap/users/testi$')).reply(200, searchResultsTesti)
   mockAdapter.onGet(RegExp('^/api/ldap/users/testinen$')).reply(200, searchResultsTestinen)

@@ -150,6 +150,33 @@ class Locale {
   @computed get langTabOrder() {
     return [this.lang, ...this.languages.filter(l => l !== this.lang)]
   }
+
+  getPreferredLang = item => {
+    // Get organization name based on which translations exist, with the following priority:
+    // - current language
+    // - languages in the order of Locale.languages
+    // - first language in the name object
+    // - if no translations exist, create new translation in the current language
+    if (!item || !item.name) {
+      return this.lang
+    }
+
+    if (item.name[this.lang] != null) {
+      return this.lang
+    }
+
+    for (const lang of languages) {
+      if (item.name[lang] != null) {
+        return lang
+      }
+    }
+
+    if (Object.keys(item.name).length > 0) {
+      return Object.keys(item.name)[0]
+    }
+
+    return this.lang
+  }
 }
 
 export default Locale

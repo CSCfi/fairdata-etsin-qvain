@@ -11,6 +11,7 @@ import Keywords from './qvain.keyword'
 import IssuedDate from './qvain.issuedDate'
 import AccessType from './qvain.accessType'
 import Projects from './qvain.project'
+import ProjectV2 from './qvain.projectV2'
 import Licenses from './qvain.license'
 import EmbargoExpDate from './qvain.embargoExpDate'
 import RestrictionGrounds from './qvain.restrictionGrounds'
@@ -20,7 +21,8 @@ import Description from './qvain.description'
 import ExternalResources from './qvain.externalResources'
 
 class Resources {
-  constructor() {
+  constructor(Env) {
+    this.Env = Env
     this.Title = new Title(this)
     this.Description = new Description(this)
     this.SubjectHeadings = new SubjectHeadings(this)
@@ -37,6 +39,7 @@ class Resources {
     this.IssuedDate = new IssuedDate(this)
     this.AccessType = new AccessType(this)
     this.Projects = new Projects(this)
+    this.ProjectV2 = new ProjectV2(this)
     this.Licenses = new Licenses(this)
     this.EmbargoExpDate = new EmbargoExpDate(this)
     this.RestrictionGrounds = new RestrictionGrounds(this)
@@ -58,6 +61,7 @@ class Resources {
       this.IssuedDate,
       this.AccessType,
       this.Projects,
+      this.ProjectV2,
       this.Licenses,
       this.EmbargoExpDate,
       this.RestrictionGrounds,

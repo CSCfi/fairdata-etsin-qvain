@@ -12,7 +12,13 @@ class ExternalResources extends Field {
     this.reset()
   }
 
+  translationsRoot = 'qvain.files.remoteResources'
+
+  // v1
   externalResourceSchema = externalResourceSchema
+
+  // v2
+  schema = externalResourceSchema
 
   @action
   fromBackend = (dataset, Qvain) => {
@@ -42,12 +48,20 @@ class ExternalResources extends Field {
   @override
   reset() {
     super.reset()
-    this.inEdit = ExternalResource()
+    if (!this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')) {
+      this.inEdit = ExternalResource()
+    }
   }
 
   @override clearInEdit() {
     super.clearInEdit()
-    this.inEdit = ExternalResource()
+    if (!this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')) {
+      this.inEdit = ExternalResource()
+    }
+  }
+
+  @override async validateAndSave() {
+    await super.validateAndSave()
   }
 
   @action setUseCategory = useCategory => {

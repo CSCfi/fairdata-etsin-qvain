@@ -224,7 +224,7 @@ const StyledDataset = styled.tr`
 
 const Cell = styled.td`
   vertical-align: middle;
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem 0.5rem;
   text-align: center;
 
   ${p => p.onClick && 'cursor: pointer; '}

@@ -7,7 +7,6 @@ import LocationInput from './locationInput'
 import ModalReferenceInput from '../../../../general/modal/modalReferenceInput'
 import { Outcome, Lifecycle } from '../../../../../../stores/view/qvain/qvain.provenances'
 import Separator from '../../../../general/modal/modalSeparator'
-import UsedEntityInput from './usedEntityInput'
 import ActorsInput from './actorsInput'
 import DurationPicker from '../../../../general/input/durationpicker'
 import { useStores } from '../../../../utils/stores'
@@ -43,8 +42,6 @@ const Form = ({ Field }) => {
         metaxIdentifier="event_outcome"
         model={Outcome}
       />
-      <Separator />
-      <UsedEntityInput />
       <Separator />
       <ActorsInput Field={Field} datum="actors" />
       <Separator />

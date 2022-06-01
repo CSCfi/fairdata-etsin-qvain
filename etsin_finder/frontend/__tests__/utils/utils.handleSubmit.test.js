@@ -74,6 +74,11 @@ describe('when calling handleSubmit with mockStores', () => {
       ExternalResources: {
         toBackend: jest.fn(() => 'externalResources'),
       },
+      Env: {
+        Flags: {
+          flagEnabled: jest.fn(false),
+        },
+      },
     },
   })
 

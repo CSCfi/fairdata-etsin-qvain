@@ -3,15 +3,17 @@ import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 import axios from 'axios'
 
-import { Qvain, ErrorTitle } from '../../../js/components/qvain/views/main'
-import Header from '../../../js/components/qvain/views/editor/header'
-import StickyHeader from '../../../js/components/qvain/views/editor/stickyHeader'
-import ErrorBoundary from '../../../js/components/general/errorBoundary'
-import Dataset from '../../../js/components/qvain/views/editor/dataset'
-import LooseActorDialog from '../../../js/components/qvain/views/editor/looseActorDialog'
-import LooseProvenanceDialog from '../../../js/components/qvain/views/editor/looseProvenanceDialog'
+import { Qvain, ErrorTitle } from '@/components/qvain/views/main'
+import Header from '@/components/qvain/views/headers/header'
+import StickyHeader from '@/components/qvain/views/headers/stickyHeader'
+import ErrorBoundary from '@/components/general/errorBoundary'
+import Dataset from '@/components/qvain/views/editor/dataset'
+import LooseActorDialog from '@/components/qvain/views/main/looseActorDialog'
+import LooseProvenanceDialog from '@/components/qvain/views/main/looseProvenanceDialog'
+import FlaggedComponent from '@/components/general/flaggedComponent'
 import { Prompt } from 'react-router'
-import urls from '../../../js/utils/urls'
+import urls from '@/utils/urls'
+import { useStores } from '@/stores/stores'
 
 jest.mock('axios')
 axios.get.mockReturnValue(
@@ -20,18 +22,30 @@ axios.get.mockReturnValue(
   })
 )
 
-jest.mock('../../../js/components/qvain/general/errors/fieldErrorBoundary', () => {
+jest.mock('@/components/qvain/general/errors/fieldErrorBoundary', () => {
   return {
     default: () => () => <>null</>,
     withFieldErrorBoundary: () => () => <>null</>,
   }
 })
 
-jest.mock('../../../js/stores/stores', () => {
+jest.mock('@/stores/stores', () => {
   return {
     withStores: () => () => <>null</>,
     useStores: jest.fn(),
   }
+})
+
+jest.mock('@/../static/images/data-ida.svg', () => {
+  return ''
+})
+
+jest.mock('@/../static/images/data-remote.svg', () => {
+  return ''
+})
+
+jest.mock('@/../static/images/data-pas.svg', () => {
+  return ''
 })
 
 describe('given required props', () => {
@@ -76,6 +90,10 @@ describe('given required props', () => {
 
   const harness = new Harness(Qvain, props)
 
+  beforeEach(() => {
+    useStores.mockReturnValue(mockStores)
+  })
+
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -94,7 +112,7 @@ describe('given required props', () => {
         { label: 'Header', findArgs: Header },
         { label: 'StickyHeader', findArgs: StickyHeader },
         { label: 'DatasetErrorBoundary', findArgs: ErrorBoundary },
-        { label: 'Dataset', findArgs: Dataset },
+        { label: 'Dataset', findArgs: FlaggedComponent },
         { label: 'LooseActorDialog', findArgs: LooseActorDialog },
         { label: 'LooseProvenanceDialog', findArgs: LooseProvenanceDialog },
         { label: 'UnsavedChangesPrompt', findType: 'prop', findArgs: ['component', Prompt] },
@@ -114,12 +132,14 @@ describe('given required props', () => {
           callback: harness.instance.enableRenderFailed,
         },
         Dataset: {
-          datasetError: false,
-          haveDataset: true,
-          datasetErrorDetails: null,
-          datasetErrorTitle: null,
-          handleRetry: harness.instance.handleRetry,
-          setFocusOnSubmitButton: harness.instance.setFocusOnSubmitButton,
+          whenDisabled: (
+            <Dataset
+              datasetError={false}
+              handleRetry={harness.instance.handleRetry}
+              haveDataset={true}
+              setFocusOnSubmitButton={harness.instance.setFocusOnSubmitButton}
+            />
+          ),
         },
         UnsavedChangesPrompt: {
           when: mockStores.Qvain.changed,
@@ -132,6 +152,11 @@ describe('given required props', () => {
   })
 
   describe('Dataset', () => {
+    beforeAll(() => {
+      harness.restoreWrapper('Dataset')
+      harness.dive()
+      harness.storeWrapper('Dataset')
+    })
     beforeEach(() => {
       harness.restoreWrapper('Dataset')
     })
@@ -164,7 +189,8 @@ describe('given required props', () => {
 
     describe('Dataset', () => {
       beforeEach(() => {
-        harness.find(Dataset)
+        harness.find(FlaggedComponent)
+        harness.dive()
       })
 
       describe('when calling handleRetry', () => {
@@ -187,7 +213,8 @@ describe('given required props', () => {
 
     describe('Dataset', () => {
       beforeEach(() => {
-        harness.find(Dataset)
+        harness.find(FlaggedComponent)
+        harness.dive()
       })
 
       describe('when calling handleRetry', () => {

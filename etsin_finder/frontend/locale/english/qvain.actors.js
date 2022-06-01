@@ -39,32 +39,52 @@ const actors = {
     },
     name: {
       placeholder: {
+        // V1
+        organization: 'Nimi',
+        person: 'Etu- ja sukunimi',
+        manualOrganization: 'Syötä organisaation nimi',
+      },
+      infoText: {
+        // V2
         organization: 'Name',
         person: 'First and last name',
-        manualOrganization: 'Enter name for organization',
+        manualOrganization: 'Enter name of the organization',
       },
       label: 'Name',
     },
     email: {
       placeholder: 'Email',
+      infoText:
+        'Email. Etsin users are able to send messages without seeing the actual email address.',
       label: 'Email',
     },
     identifier: {
       label: 'Identifier',
       placeholder: {
-        person: 'E.g. http://orcid.org',
+        // V1
+        person: 'E.g. http://orcid.org.',
         organization: 'E.g RAID-identifier or Business ID',
+      },
+      infoText: {
+        // V2
+        person:
+          'E.g. http://orcid.org. It is recommended to use persistent identifiers, if available',
+        organization:
+          'E.g RAID-identifier or Business ID. It is recommended to use persistent identifiers, if available',
       },
     },
     organization: {
       label: 'Organization',
       placeholder: 'Search by typing or add new organization',
       placeholderChild: '+ Add department or unit',
+      infoText: 'Search by typing or add new organization',
+      infoTextChild: '+ Add department or unit',
       loading: 'Loading organizations...',
       labels: {
         name: 'Organization name',
         email: 'Organization email',
         identifier: 'Organization identifier',
+        manualOrganization: 'Add new organization',
       },
       options: {
         create: 'Add new organization',
@@ -74,6 +94,9 @@ const actors = {
     },
     save: {
       label: 'Add actor',
+    },
+    edit: {
+      label: 'Apply changes',
     },
     cancel: {
       label: 'Cancel',

@@ -4,7 +4,7 @@ import 'chai/register-should'
 import { mount } from 'enzyme'
 
 // fills withFieldErrorBoundaryTranslationList as a side effect
-import '../../../js/components/qvain/views/main'
+import '@/components/qvain/views/main'
 
 import '../../../locale/translations'
 
@@ -13,7 +13,7 @@ translate.registerTranslations('en', { test: { dumbField: 'Dummy Field' } })
 import {
   FieldErrorBoundary,
   withFieldErrorBoundaryTranslationList,
-} from '../../../js/components/qvain/general/errors/fieldErrorBoundary'
+} from '@/components/qvain/general/errors/fieldErrorBoundary'
 
 describe('FieldErrorBoundary', () => {
   const DumbComponent = () => {

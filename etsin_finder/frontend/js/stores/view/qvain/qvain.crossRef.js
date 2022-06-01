@@ -1,10 +1,10 @@
 import { makeObservable, action, observable, computed } from 'mobx'
 import axios from 'axios'
-import translate from 'counterpart'
-import urls from '../../../utils/urls'
+import urls from '@/utils/urls'
 
 class CrossRef {
-  constructor() {
+  constructor(Env) {
+    this.Env = Env
     makeObservable(this)
   }
 
@@ -15,16 +15,14 @@ class CrossRef {
   @observable term = ''
 
   @computed get defaultOptions() {
-    return [
-      {
-        label: translate(this.translationPath('newRelation')),
-        value: 'create',
-      },
-    ]
+    return []
   }
 
   @action
-  translationPath = item => `qvain.history.relatedResource.select.${item}`
+  translationPath = item =>
+    this.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
+      ? `qvain.publications.search.${item}`
+      : `qvain.history.relatedResource.select.${item}`
 
   @action
   setTerm = term => {

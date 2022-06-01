@@ -1,34 +1,35 @@
 import React from 'react'
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
+import Translate from 'react-translate-component'
 
-import { Dataset } from '../../../js/components/qvain/views/editor/dataset'
-import Header from '../../../js/components/qvain/views/editor/header'
+import { Dataset } from '@/components/qvain/views/editor/dataset'
+import Header from '@/components/qvain/views/headers/header'
+import SubmitButtons from '@/components/qvain/views/headers/submitButtons'
 
 import {
   ErrorButtons,
   ErrorContainer,
   ErrorContent,
   ErrorLabel,
-} from '../../../js/components/qvain/general/errors'
-import Button from '../../../js/components/general/button'
+} from '@/components/qvain/general/errors'
+import Button from '@/components/general/button'
 import {
   DisableImplicitSubmit,
   SkipToSubmitDataset,
-} from '../../../js/components/qvain/views/editor/editor.styled'
-import Description from '../../../js/components/qvain/fields/description'
-import Actors from '../../../js/components/qvain/fields/actors'
-import RightsAndLicenses from '../../../js/components/qvain/fields/licenses'
-import TemporalAndSpatial from '../../../js/components/qvain/fields/temporalAndSpatial'
-import History from '../../../js/components/qvain/fields/history'
-import Project from '../../../js/components/qvain/fields/project'
-import Files from '../../../js/components/qvain/fields/files'
-import SubmitButtons from '../../../js/components/qvain/views/editor/submitButtons'
-import { useStores } from '../../../js/stores/stores'
-import Translate from 'react-translate-component'
-import { PageTitle } from '../../../js/components/qvain/general/card'
+} from '@/components/qvain/views/editor/editor.styled'
+import Description from '@/components/qvain/fields/description'
+import Actors from '@/components/qvain/fields/actors'
+import RightsAndLicenses from '@/components/qvain/fields/licenses'
+import TemporalAndSpatial from '@/components/qvain/fields/temporalAndSpatial'
+import History from '@/components/qvain/fields/history'
+import Project from '@/components/qvain/fields/project'
+import Files from '@/components/qvain/fields/files'
+import { PageTitle } from '@/components/qvain/general/card'
 
-jest.mock('../../../js/stores/stores', () => {
+import { useStores } from '@/stores/stores'
+
+jest.mock('@/stores/stores', () => {
   return {
     withStores: jest.fn(() => () => <>null</>),
     useStores: jest.fn(),

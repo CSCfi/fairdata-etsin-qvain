@@ -123,9 +123,9 @@
       "./__tests__/test-setup.js"
     ],
     "moduleNameMapper": {
-      "@/(.*)$": "<rootDir>/js/$1",
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
-      "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/__mocks__/imageMock.js"
+      "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/__mocks__/imageMock.js",
+      "@/(.*)$": "<rootDir>/js/$1"
     },
     "testPathIgnorePatterns": [
       "./__tests__/test-setup.js",

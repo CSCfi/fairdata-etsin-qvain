@@ -4,12 +4,12 @@ import cloneDeep from 'lodash.clonedeep'
 
 class Field {
   constructor(Parent, Template, Model, fieldName, references = []) {
+    makeObservable(this)
     this.Template = Template
     this.Model = Model
     this.fieldName = fieldName
     this.references = references
     this.Parent = Parent
-    makeObservable(this)
   }
 
   schema = yup.object()
@@ -43,13 +43,12 @@ class Field {
 
   @action.bound create(data = undefined) {
     if (data) {
-      this.setChanged(true)
       this.inEdit = this.Template(data)
     } else {
-      this.setChanged(false)
       this.inEdit = this.Template()
     }
 
+    this.setChanged(false)
     this.editMode = false
     this.validationError = undefined
   }
