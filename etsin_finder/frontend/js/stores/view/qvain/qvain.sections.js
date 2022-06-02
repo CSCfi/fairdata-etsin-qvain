@@ -36,6 +36,12 @@ class Sections {
       section.setExpanded(section.metaxFieldName && dataset[section.metaxFieldName])
     })
   }
+
+  @action.bound collapseAll() {
+    Object.values(this.all).forEach(section => {
+      section.setExpanded(false)
+    })
+  }
 }
 
 export default Sections

@@ -1,4 +1,4 @@
-import { makeObservable, observable, action, computed } from 'mobx'
+import { makeObservable, action, computed } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 
 import * as yup from 'yup'
@@ -62,9 +62,11 @@ class RelatedResources extends Field {
 
   schema = relatedResourceSchema
 
-  @observable translationsRoot = this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
-    ? 'qvain.publications'
-    : 'qvain.history.relatedResource'
+  @computed get translationsRoot() {
+    return this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
+      ? 'qvain.publications'
+      : 'qvain.history.relatedResource'
+  }
 
   @action
   prefillInEdit = data => {

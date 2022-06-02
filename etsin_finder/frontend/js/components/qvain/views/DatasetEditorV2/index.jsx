@@ -24,6 +24,7 @@ import TimePeriod from '../../sections/TimePeriod'
 import Infrastructure from '../../sections/Infrastructure'
 import History from '../../sections/History'
 import Project from '../../sections/Project'
+import FlaggedComponent from '@/components/general/flaggedComponent'
 
 export const Dataset = ({
   datasetError,
@@ -54,7 +55,9 @@ export const Dataset = ({
   return (
     <Form className="container">
       <DisableImplicitSubmit />
-      <Unsupported />
+      <FlaggedComponent flag="UI.SHOW_UNSUPPORTED">
+        <Unsupported />
+      </FlaggedComponent>
       <DataOrigin />
       <Description />
       <Actors />

@@ -74,6 +74,7 @@ class Qvain extends Resources {
     this.deprecated = false
 
     this.Submit.reset()
+    this.Sections.collapseAll()
   }
 
   @action

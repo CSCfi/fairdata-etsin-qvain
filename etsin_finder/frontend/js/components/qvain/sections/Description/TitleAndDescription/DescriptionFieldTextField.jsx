@@ -21,7 +21,6 @@ const DescriptionFieldTextField = ({ activeLang }) => {
       Description: { value, set, validate, validationError, charactersRemaining },
       readonly,
     },
-    Locale: { lang },
   } = useStores()
 
   const handleChange = e => {
@@ -53,7 +52,7 @@ const DescriptionFieldTextField = ({ activeLang }) => {
           component={InfoText}
           id="description-char-counter"
           content="qvain.description.charactersRemaining"
-          with={{ charactersRemaining: charactersRemaining[lang] }}
+          with={{ charactersRemaining: charactersRemaining[activeLang] }}
         />
       </span>
       <Translate

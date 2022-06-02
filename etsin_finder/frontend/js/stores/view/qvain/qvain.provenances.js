@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { observable, action, makeObservable, override } from 'mobx'
+import { observable, action, makeObservable, override, computed } from 'mobx'
 import * as yup from 'yup'
 
 import Locations from './qvain.provenances.locations'
@@ -140,13 +140,17 @@ class Provenances extends Field {
 
   schema = provenanceSchema
 
-  translationsRoot = this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
-    ? 'qvain.historyV2'
-    : 'qvain.history.provenance'
+  @computed get translationsRoot() {
+    return this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
+      ? 'qvain.historyV2'
+      : 'qvain.history.provenance'
+  }
 
-  associationsTranslationsRoot = this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
-    ? 'qvain.historyV2.actors'
-    : 'qvain.history.provenance.modal.actorsInput'
+  @computed get associationsTranslationsRoot() {
+    return this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
+      ? 'qvain.historyV2.actors'
+      : 'qvain.history.provenance.modal.actorsInput'
+  }
 }
 
 export const Outcome = (name, url) => ({
