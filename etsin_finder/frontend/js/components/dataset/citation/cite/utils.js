@@ -110,6 +110,20 @@ export const getAuthorsFull = (dataset, getTranslation, etAlThreshold, etAlCount
   return authors
 }
 
+export const getAuthorsFullBibtex = (dataset, getTranslation, etAlThreshold, etAlCount) => {
+  const authors = (dataset.research_dataset.creator || []).map(author => {
+    if (author['@type'] === 'Organization') {
+      return getTranslation(topOrg(author)?.name)
+    }
+    return getLastnameFirst(getTranslation(author.name))
+  })
+  if (authors.length > etAlThreshold) {
+    authors.splice(etAlCount)
+    authors[authors.length - 1] = `${authors[authors.length - 1]} and others`
+  }
+  return authors
+}
+
 export const addParens = string => {
   if (string === undefined) {
     return undefined
@@ -140,6 +154,14 @@ export const getYear = dataset => {
   return year
 }
 
+export const getMonth = dataset => {
+  const issued = dataset.research_dataset.issued
+  if (!issued) {
+    return undefined
+  }
+  return moment(issued).format('M')
+}
+
 export const getTitle = (dataset, getTranslation) => {
   if (!dataset.research_dataset.title) {
     return undefined
@@ -160,17 +182,22 @@ export const getVersion = (dataset, getTranslation) => {
   return getTranslation({ en: `Version ${version}`, fi: `versio ${version}` })
 }
 
-export const getIdentifier = dataset => {
-  const identifier = dataset.draft_of?.preferred_identifier || dataset.research_dataset.preferred_identifier
+export const getIdentifier = (dataset, short = false, draftIdentifier = undefined) => {
+  let identifier =
+    dataset.draft_of?.preferred_identifier || dataset.research_dataset.preferred_identifier
   if (!identifier) {
     return undefined
   }
   const url = idnToLink(identifier)
-  if (url) {
+  if (url && !short) {
     return url
   }
+  if (short && identifier.startsWith('doi:')) {
+    identifier = identifier.slice(4)
+  }
+  identifier = identifier.toLowerCase()
   if (dataset.state === 'draft') {
-    return undefined
+    return draftIdentifier
   }
   return identifier
 }

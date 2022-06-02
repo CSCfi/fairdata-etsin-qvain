@@ -31,10 +31,10 @@ const customStyles = {
   },
 }
 
-const Citation = ({ title, text }) => (
+const Citation = ({ title, text, className }) => (
   <>
     <h2>{title}</h2>
-    <p>{text}</p>
+    <p className={className}>{text}</p>
     <Justify>
       <CopyToClipboard
         content={text}
@@ -51,6 +51,7 @@ const Citation = ({ title, text }) => (
 Citation.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
 }
 
 const CitationModal = () => {
@@ -67,6 +68,7 @@ const CitationModal = () => {
   const apa = cite.apa(dataset)
   const chicago = cite.chicago(dataset)
   const mla = cite.mla(dataset)
+  const bibtex = cite.bibtex(dataset)
 
   return (
     <Modal
@@ -80,6 +82,7 @@ const CitationModal = () => {
         <Citation title="APA" text={apa} />
         <Citation title="Chicago" text={chicago} />
         <Citation title="MLA" text={mla} />
+        <StyledCitation title="BibTeX" text={bibtex} />
       </Grid>
       <hr />
       <Translate component={Warning} content="dataset.citation.warning" />
@@ -109,6 +112,10 @@ const Grid = styled.div`
 
 const Justify = styled.div`
   justify-self: right;
+`
+
+const StyledCitation = styled(Citation)`
+  white-space: pre-wrap;
 `
 
 export default observer(CitationModal)

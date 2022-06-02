@@ -30,6 +30,12 @@ const personDataset = {
   identifier: 'metax_identifier_for_this_dataset',
 }
 
+const draftDataset = {
+  ...personDataset,
+  state: 'draft',
+  identifier: undefined
+}
+
 const organizationDataset = {
   research_dataset: {
     creator: [
@@ -324,6 +330,61 @@ describe('Citation styles', () => {
       )
     })
   })
+  describe('BibTex', () => {
+    const c = cite.bibtex
+
+    it('should handle empty dataset', () => {
+      c(emptyDataset).should.eq('')
+    })
+
+    it('should render citation for dataset by a person', () => {
+      c(personDataset).should.eq(
+        '@misc{urn:nbn:fi:att:feedc0de,\nauthor = {von Sukunimi, Etunimi and Henkilö, Toinen},\ntitle = {Publication title},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\nnote = {Publisher}\n}'
+      )
+    })
+
+    it('should render citation for dataset by an organization', () => {
+      c(organizationDataset).should.eq(
+        '@misc{urn:nbn:fi:att:feedc0de,\nauthor = {Top organization},\ntitle = {Publication title},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\nnote = {Publisher}\n}'
+      )
+    })
+
+    it('should use URL also for capitalized URN:NBN:fi dataset', () => {
+      c(capitalizedUrnDataset).should.eq(
+        '@misc{urn:nbn:fi:att:d00d,\nauthor = {Top organization},\ntitle = {Publication title},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:d00d}},\nmonth = {2},\nyear = {2021},\nnote = {Publisher}\n}'
+      )
+    })
+
+    it('should use URL for DOI dataset', () => {
+      c(doiDataset).should.eq(
+        '@misc{10.234567/c4fef00f-1234-5678-9abcde-133753c19b7b,\nauthor = {Top organization},\ntitle = {Publication title},\nhowpublished = {\\url{https://doi.org/10.234567/c4fef00f-1234-5678-9abcde-133753c19b7b}},\nmonth = {2},\nyear = {2021},\nnote = {Publisher}\n}'
+      )
+    })
+
+    it('should use Finnish titles', () => {
+      stores.Locale.setLang('fi')
+      c(organizationDataset).should.eq(
+        '@misc{urn:nbn:fi:att:feedc0de,\nauthor = {Pääorganisaatio},\ntitle = {Julkaisun nimi},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\nnote = {Julkaisija}\n}'
+      )
+    })
+
+    it('should use and others for more than 10 creators', () => {
+      c(manyCreatorsDataset).should.eq(
+        '@misc{urn:nbn:fi:att:feedc0de,\nauthor = {Eka, Tyyppi and Toka, Tyyppi and Kolmas, Tyyppi and Neljäs, Tyyppi and Viides, Tyyppi and Kuudes, Tyyppi and Seitsemäs, Tyyppi and Kahdeksas, Tyyppi and Yhdeksäs, Tyyppi and Kymmenes, Tyyppi and others},\ntitle = {Publication title},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\nnote = {Publisher}\n}'
+      )
+    })
+
+    it('should render citation for dataset published by a suborganization', () => {
+      c(publisherSuborganizationDataset).should.eq(
+        '@misc{urn:nbn:fi:att:feedc0de,\nauthor = {Creator},\ntitle = {Publication title},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\nnote = {Top organization, Suborganization}\n}'
+      )
+    })
+
+    it('should render citation for draft dataset', () => {
+      c(draftDataset).should.eq('@misc{draft,\nauthor = {von Sukunimi, Etunimi and Henkilö, Toinen},\ntitle = {Publication title},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\nnote = {Publisher}\n}')
+    })
+
+  })
 })
 
 describe('Utils', () => {
@@ -435,30 +496,30 @@ describe('Utils', () => {
   describe('getIdentifier', () => {
     it('returns preferred identifier', () => {
       const dataset = {
-        research_dataset: { preferred_identifier: 'xyz'}
+        research_dataset: { preferred_identifier: 'xyz' },
       }
       expect(getIdentifier(dataset)).toEqual('xyz')
     })
 
     it('returns unefined for draft', () => {
       const dataset = {
-        research_dataset: { preferred_identifier: 'xyz'},
-        state: 'draft'
+        research_dataset: { preferred_identifier: 'xyz' },
+        state: 'draft',
       }
       expect(getIdentifier(dataset)).toEqual(undefined)
     })
 
     it('returns preferred identifier of published original', () => {
       const dataset = {
-        research_dataset: { preferred_identifier: 'draft-id'},
-        draft_of: { preferred_identifier: 'published-id'}
+        research_dataset: { preferred_identifier: 'draft-id' },
+        draft_of: { preferred_identifier: 'published-id' },
       }
       expect(getIdentifier(dataset)).toEqual('published-id')
     })
 
     it('returns doi url', () => {
       const dataset = {
-        research_dataset: { preferred_identifier: 'doi:xyz'}
+        research_dataset: { preferred_identifier: 'doi:xyz' },
       }
       expect(getIdentifier(dataset)).toEqual('https://doi.org/xyz')
     })
