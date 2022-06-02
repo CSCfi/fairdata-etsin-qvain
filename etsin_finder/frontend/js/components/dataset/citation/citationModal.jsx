@@ -107,6 +107,11 @@ const Grid = styled.div`
   }
   & p {
     margin-bottom: 0;
+    background: ${p => p.theme.color.superlightgray};
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    white-space: pre-line;
+    font-family: monospace;
   }
 `
 
