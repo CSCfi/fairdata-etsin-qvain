@@ -18,15 +18,12 @@ import { useStores } from '../../../utils/stores'
 const IssuedDateField = () => {
   const {
     Qvain: {
-      original,
-      useDoi,
       readonly,
       IssuedDate: { value: issuedDate, set: setIssuedDate, validationError, validate },
+      hasBeenPublishedWithDoi,
     },
     Locale: { lang },
   } = useStores()
-
-  const publishedWithDoi = !!(useDoi && original)
 
   return (
     <Card bottomContent>
@@ -57,7 +54,7 @@ const IssuedDateField = () => {
         locale={lang}
         placeholderText={translate('qvain.description.issuedDate.placeholder')}
         dateFormat={getDateFormatLocale(lang)}
-        disabled={readonly || publishedWithDoi}
+        disabled={readonly || hasBeenPublishedWithDoi}
         required
       />
       <>{validationError && <ValidationError>{validationError}</ValidationError>}</>

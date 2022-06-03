@@ -18,6 +18,7 @@ const files = {
     doiSelection:
       'Haluan julkaistulle aineistolleni DOI-tunnisteen (digital object identifier) URN-tunnisteen sijaan.',
     placeholder: 'Valitse vaihtoehto',
+    doi: 'DOI',
     ida: 'IDA',
     att: 'Ulkoinen lähde',
     pas: 'PAS',

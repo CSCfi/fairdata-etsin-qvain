@@ -24,15 +24,12 @@ import { useStores } from '@/stores/stores'
 const IssuedDateField = () => {
   const {
     Qvain: {
-      original,
-      useDoi,
       readonly,
       IssuedDate: { value: issuedDate, set: setIssuedDate, validationError, validate },
+      hasBeenPublishedWithDoi,
     },
     Locale: { lang },
   } = useStores()
-
-  const publishedWithDoi = !!(useDoi && original)
 
   return (
     <FieldGroup>
@@ -64,7 +61,7 @@ const IssuedDateField = () => {
           locale={lang}
           placeholderText={translate('qvain.description.issuedDate.placeholder')}
           dateFormat={getDateFormatLocale(lang)}
-          disabled={readonly || publishedWithDoi}
+          disabled={readonly || hasBeenPublishedWithDoi}
           required
         />
       </FieldWrapper>

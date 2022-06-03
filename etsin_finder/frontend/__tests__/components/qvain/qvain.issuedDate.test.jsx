@@ -26,6 +26,8 @@ describe('given mockStores (not published with doi)', () => {
         validationError: undefined,
         validate: jest.fn(),
       },
+      hasBeenPublishedWithDoi: false,
+      readonly: false,
     },
     Locale: {
       lang: 'en',
@@ -150,6 +152,8 @@ describe('given mockStores (published with doi and has validation error)', () =>
         validationError: 'validationError',
         validate: jest.fn(),
       },
+      hasBeenPublishedWithDoi: true,
+      readonly: false,
     },
     Locale: {
       lang: 'en',
