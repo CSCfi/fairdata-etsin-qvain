@@ -4,7 +4,7 @@ const sections = {
     buttons: {
       ida: {
         title: 'IDA',
-        description: 'Valitse "IDA" jos data on Fairdata IDA ‑palvelussa',
+        description: 'Valitse "IDA" jos datasi on Fairdata IDA ‑palvelussa',
       },
       att: {
         title: 'Ulkoinen lähde',
