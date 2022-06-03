@@ -54,7 +54,7 @@ const finnish = {
         placeholder: 'Anna sähköposti',
       },
       error: 'Virhe viestin lähetyksessä!',
-      errorInternal: 'Internal server error! Please contact our support',
+      errorInternal: 'Palvelinvirhe! Ota yhteyttä tukeen',
       message: {
         error: {
           required: 'Viesti vaaditaan!',
@@ -323,7 +323,7 @@ const finnish = {
     validationMessages: {
       email: {
         string: 'Sähköpostin pitää olla arvoltaan merkkijono.',
-        max: 'Sähköpostiosoite on liian pikä.',
+        max: 'Sähköpostiosoite on liian pitkä.',
         email: 'Lisää validi sähköpostiosoite.',
       },
     },

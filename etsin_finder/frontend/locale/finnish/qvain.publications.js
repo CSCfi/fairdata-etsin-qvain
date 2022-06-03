@@ -19,7 +19,7 @@ const publications = {
     title: 'Julkaisut',
     infoText:
       'Voit täyttää julkaisun tiedot joko manuaalisesti ao. kenttiin tai hakea tiedot Crossref -palvelusta (crossref.org).',
-    noItems: 'Viittauksia toisiin julkaisuihin ei oli lisätty.',
+    noItems: 'Viittauksia toisiin julkaisuihin ei ole lisätty.',
 
     name: {
       fi: {

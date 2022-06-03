@@ -20,7 +20,7 @@ const description = {
       placeholderEn: 'Otsikko (englanti)',
       infoText: {
         fi: 'Aineiston otsikko suomeksi',
-        en: 'Aineiston otsikko engalnniksi',
+        en: 'Aineiston otsikko englanniksi',
       },
     },
     description: {
@@ -48,7 +48,7 @@ const description = {
     Jos aineistolle kuitenkin on jo olemassaoleva tunniste, syötä se tähän.
     Tunnisteen pituus on oltava vähintään 10 merkkiä.`,
     instructions:
-      'Metadatan tunniste luodaan automaattisesti mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
+      'Metadatan tunniste luodaan automaattisesti, mutta jos on jo OLEMASSA OLEVA tunniste, syötä se tähän.',
     alreadyAdded: 'Tunniste on jo lisätty',
     addButton: 'Lisää tunniste',
     placeholder: 'Esim. https://doi.org/...',
@@ -70,7 +70,7 @@ const description = {
     title: 'Avainsanat',
     infoText: `Syötä aineistollesi sopivia avainsanoja. Näillä voit parantaa aineistosi löydettävyyttä.
     Käytä mahdollisimman tarkkoja termejä. Tässä kentässä ei ole automaattista käännöstä eri kielille.
-    Voit lisätä useamman avainsanan erottamalla ne pilkulla (,)`,
+    Voit lisätä useamman avainsanan erottamalla ne pilkulla (,).`,
     placeholder: 'Esim. taloustiede',
     alreadyAdded: 'Avainsana on jo lisätty',
     addButton: 'Lisää avainsana',

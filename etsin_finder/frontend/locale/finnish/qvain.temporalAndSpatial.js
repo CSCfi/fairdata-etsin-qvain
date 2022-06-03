@@ -5,16 +5,16 @@ const temporalAndSpatial = {
   tooltipContent: {
     spatial: {
       title: 'Maantieteellinen kattavuus',
-      paragraph: 'Alue jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja. ',
+      paragraph: 'Alue, jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja.',
     },
     temporal: {
       title: 'Ajallinen kattavuus',
-      paragraph: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
+      paragraph: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika, jolloin on tehty havaintoja.',
     },
   },
   spatial: {
     title: 'Maantieteellinen kattavuus',
-    description: 'Alue jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja. ',
+    description: 'Alue, jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja.',
     noItems: 'Maantieteellistä kattavuutta ei ole lisätty.',
     modal: {
       addButton: 'Lisää maantieteellinen alue',
@@ -52,8 +52,8 @@ const temporalAndSpatial = {
   },
   temporal: {
     title: 'Ajallinen kattavuus',
-    infoText: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
-    description: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
+    infoText: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika, jolloin on tehty havaintoja.',
+    description: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika, jolloin on tehty havaintoja.',
     addButton: 'Lisää ajanjakso',
     listItem: {
       bothDates: '%(startDate)s – %(endDate)s',

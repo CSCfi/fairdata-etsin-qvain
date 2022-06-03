@@ -56,7 +56,7 @@ const float = p =>
   `
 box-shadow: 0 3px 6px ${getOpacy(p)};
 border: 2px solid ${getOpacy(p)};
-color: ${p.disabled ? p.theme.color.midgray : p.theme.color.primaryDark};
+color: ${p.disabled ? p.theme.color.gray : p.theme.color.primaryDark};
 background: #fcfeff;
 position: relative;
 `

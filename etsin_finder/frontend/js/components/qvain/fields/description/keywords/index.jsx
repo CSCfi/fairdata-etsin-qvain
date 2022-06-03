@@ -21,7 +21,7 @@ const KeywordsField = () => (
         <Translate content="qvain.description.keywords.title" /> *
       </Translate>
     </LabelLarge>
-    <Translate component="p" content="qvain.description.keywords.help" />
+    <Translate component="p" content="qvain.description.keywords.infoText" />
     <StringArray id="keywords-input" fieldName="Keywords" addWithComma required />
   </Card>
 )

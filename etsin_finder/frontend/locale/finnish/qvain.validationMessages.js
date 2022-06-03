@@ -55,7 +55,7 @@ const validationMessages = {
     },
     email: {
       string: 'Sähköposti pitää olla arvoltaan merkkijono.',
-      max: 'Sähköposti on liian pikä.',
+      max: 'Sähköposti on liian pitkä.',
       email: 'Lisää validi sähköposti.',
       nullable: '',
     },
@@ -81,7 +81,7 @@ const validationMessages = {
   accessType: {
     string: 'Pääsyoikeus tulisi olla arvoltaan merkkijono.',
     url: 'Virhe pääsyoikeuden referenssiarvossa.',
-    required: 'Pääsyoikeus on pakollimen tieto.',
+    required: 'Pääsyoikeus on pakollinen tieto.',
   },
   restrictionGrounds: {
     string: 'Kentän arvo tulisi olla merkkijono.',

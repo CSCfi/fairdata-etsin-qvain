@@ -1,6 +1,6 @@
 const geographics = {
   infoText: {
-    section: 'Alue jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja. ',
+    section: 'Alue, jonka aineisto kattaa. Esimerkiksi paikat, joissa on tehty havaintoja.',
     geometry:
       'Jos valitset paikan, Qvain täyttää valinnan geometriatiedot automaattisesti tallennuksen yhteydessä. ' +
       'Etsin näyttää paikan karttapohjalla näiden geometriatietojen mukaan. ' +

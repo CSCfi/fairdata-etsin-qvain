@@ -185,7 +185,7 @@ IconButton.defaultProps = {
 }
 
 const onlyIconStyling = css`
-  border: solid ${props => props.theme.color.darkgray} 1.5px;
+  border: solid ${props => props.theme.color.gray} 1px;
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
   font-size: 12pt;

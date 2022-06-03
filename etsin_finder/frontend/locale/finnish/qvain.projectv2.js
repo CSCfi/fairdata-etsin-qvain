@@ -1,6 +1,6 @@
 const project = {
   noItems: 'Projekteja ei ole lisätty.',
-  infoText: 'Projekti jonka tuotoksena aineisto on luotu.',
+  infoText: 'Projekti, jonka tuotoksena aineisto on luotu.',
   modal: {
     title: {
       add: 'Lisää projekti ja rahoitus',
@@ -55,7 +55,7 @@ const project = {
     infoText: 'Projektin rahoitustyyppi',
   },
   funderOrganization: {
-    title: 'Rahoittajaorgnaisaatio',
+    title: 'Rahoittajaorganisaatio',
     infoText: 'Organisaatio joka rahoittaa projektia',
     organization: {
       infoText: 'Organisaatio',

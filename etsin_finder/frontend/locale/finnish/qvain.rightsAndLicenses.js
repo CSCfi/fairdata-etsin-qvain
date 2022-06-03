@@ -18,19 +18,19 @@ const rightsAndLicenses = {
     label: 'Embargo loppumispäivämäärä',
     placeholder: 'Päivämäärä',
     help:
-      'Jos päivämäärää ei aseteta, embargo ei lopu ja näin ollen tiedostot eivät koskaan tule ladattavaksi..',
+      'Jos päivämäärää ei aseteta, embargo ei lopu ja näin ollen tiedostot eivät koskaan tule ladattavaksi.',
   },
   restrictionGrounds: {
     title: 'Rajoituksen peruste',
     placeholder: 'Valitse vaihtoehto',
     text:
-      'Jos pääsyoikeus on jokin muu kuin "Avoin", valitse peruste tiedostojen lataamisen rajoittamiselle. ',
+      'Jos pääsyoikeus on jokin muu kuin "Avoin", valitse peruste tiedostojen lataamisen rajoittamiselle.',
   },
   license: {
     title: 'Lisenssi',
     infoText: `Lisenssillä määrittelet, miten aineistoa voi käyttää.
     Oletuksena on valittuna tutkimusaineistoille suositeltu CC BY 4.0.
-    Jos haluat määrittää lisenssin URL-osoitteen itse, kirjoita kenttään lisenssin verkko-osoite https:// -muodossa.`,
+    Jos haluat määrittää lisenssin URL-osoitteen itse, kirjoita kenttään lisenssin verkko-osoite https://-muodossa.`,
     placeholder: 'Valitse vaihtoehto',
     other: {
       label: 'URL',

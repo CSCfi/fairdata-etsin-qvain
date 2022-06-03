@@ -3,12 +3,12 @@ const sections = {
     title: 'Datalähde',
     buttons: {
       ida: {
-        title: 'Ida',
-        description: 'Valitse "Ida" jos data on Fairdata IDA palvelussa',
+        title: 'IDA',
+        description: 'Valitse "IDA" jos data on Fairdata IDA ‑palvelussa',
       },
       att: {
         title: 'Ulkoinen lähde',
-        description: 'Valitse "Ulkoinen lähde" data sijaitsee ulkoisessa ',
+        description: 'Valitse "ulkoinen lähde", jos datasi sijaitsee ulkopuolisessa palvelussa',
       },
       pas: {
         inProcess: {

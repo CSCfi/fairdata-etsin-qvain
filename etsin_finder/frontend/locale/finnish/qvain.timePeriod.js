@@ -1,6 +1,6 @@
 const timePeriod = {
   title: 'Ajanjakso',
-  infoText: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika jolloin on tehty havaintoja.',
+  infoText: 'Ajanjakso, minkä aineisto kattaa, esimerkiksi aika, jolloin on tehty havaintoja.',
   addButton: 'Lisää ajanjakso',
   listItem: {
     bothDates: '%(startDate)s – %(endDate)s',

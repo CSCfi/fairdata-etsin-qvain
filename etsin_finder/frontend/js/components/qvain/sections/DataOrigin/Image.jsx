@@ -36,6 +36,7 @@ const ImageWrapper = styled.div`
   > img {
     object-fit: contain;
     filter: grayscale(${p => (p.disabled ? '100%' : '0%')});
+    opacity: ${p => (p.disabled ? '25%' : '100%')};
   }
 `
 

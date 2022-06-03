@@ -25,9 +25,9 @@ const files = {
   cumulativeState: {
     label: 'Kasvava aineisto',
     radio: {
-      no: 'Ei. (Uusien tiedostojen tai kansioiden julkaistuun aineistoon vaatii, että aineistosta tehdään uusi versio.)',
+      no: 'Ei. (Uusien tiedostojen tai kansioiden lisääminen julkaistuun aineistoon vaatii, että aineistosta tehdään uusi versio.)',
       yes: 'Kyllä. (Tiedostoja tai kansioita tullaan lisäämään aineistoon. Lisäys onnistuu ilman uuden version luomista.)',
-      note: 'Huom! Julkaistua aineistoa ei voi muuttaa kasvavaksi ilman, että siitä tehdään uusi versio. Kasvavan aineiston muuttaminen ei-kasvavaksi on sen sijaan sallittua.',
+      note: 'Huom! Julkaistua ei-kasvavaa aineistoa ei voi muuttaa kasvavaksi ilman, että siitä tehdään uusi versio. Kasvavan aineiston muuttaminen ei-kasvavaksi on sen sijaan sallittua.',
     },
     enabled: {
       state: 'Tämä aineisto on merkitty kasvavaksi.',
@@ -249,8 +249,8 @@ const files = {
     sekä kerro, mistä tiedosto / sen lisenssitieto löytyvät (sivun URL).
     Voit antaa myös suoran latauslinkin, jos sellainen on.
     Tiedostoa ei ladata Qvaimeen, vaan antamasi sivun URL toimii linkkinä sivulle,
-    jossa tiedosto sijaitsee sekä tiedoston latauslinkin kauttaja
-     pääsee suoraan aloittamaan tiedoston lataamisen omalle koneelleen.
+    jossa tiedosto sijaitsee. Tiedoston latauslinkin kautta
+    pääsee suoraan aloittamaan tiedoston lataamisen omalle koneelleen.
     `,
     help: 'Lisää linkkejä ulkoisiin tiedostoihin:',
     button: {

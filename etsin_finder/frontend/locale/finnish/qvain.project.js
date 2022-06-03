@@ -1,11 +1,11 @@
 const project = {
   title: 'Projekti',
-  description: 'Projekti jonka tuotoksena aineisto on luotu',
+  description: 'Projekti, jonka tuotoksena aineisto on luotu',
   addButton: 'Lisää',
   editButton: 'Muokkaa',
   tooltipContent: {
     title: 'Projekti',
-    paragraph: 'Projekti jonka tuotoksena aineisto on luotu',
+    paragraph: 'Projekti, jonka tuotoksena aineisto on luotu',
   },
   organization: {
     title: 'Organisaatio *',

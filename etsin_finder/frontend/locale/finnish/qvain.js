@@ -22,12 +22,12 @@ const qvainFinnish = {
   saveDraft: 'Tallenna',
   submit: 'Julkaise',
   edit: 'Päivitä aineisto',
-  required: 'pakollinen. ',
+  required: 'Pakollinen. ',
   unsavedChanges:
     'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
   consent: `Käyttämällä Qvain -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen
     muiden henkilöiden henkilötietojen lisäämiseen kuvailutietoihin ja ilmoittanut
-    heille miten he voivat saada henkilötietonsa poistettua palvelusta.
+    heille, miten he voivat saada henkilötietonsa poistettua palvelusta.
     Käyttämällä Qvain -työkalua käyttäjä hyväksyy
     <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">käyttöehdot</a>.`,
   submitStatus: {
@@ -64,7 +64,7 @@ const qvainFinnish = {
   notCSCUser1:
     'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) niin saatat saada tämän ' +
     'virheilmoituksen, jos tilit eivät ole linkitetty. Linkityksen voi tehdä',
-  notCSCUserLink: ' CSC asiakas porttaalissa',
+  notCSCUserLink: ' CSC asiakasportaalissa',
   notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
   notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain -palvelua.',
   titleCreate: 'Lisää uusi aineisto',
