@@ -34,7 +34,7 @@ deploy:
   tags:
     - shell
   script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $DEPLOY_PLAYBOOK -e "build_id=$CI_COMMIT_REF_SLUG repo_version_app=$CI_COMMIT_REF_NAME"
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DEPLOY_PLAYBOOK -e "build_id=$CI_COMMIT_REF_SLUG repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
 
 # Test of application code
 test:
@@ -61,7 +61,7 @@ clean_test:
   tags:
     - shell
   script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "build_id=$CI_COMMIT_REF_SLUG repo_version_app=$CI_COMMIT_REF_NAME"
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "build_id=$CI_COMMIT_REF_SLUG repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: always
@@ -91,7 +91,7 @@ update_etsin_qvain:
   tags:
     - shell
   script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $UPDATE_PROXY_PLAYBOOK -e "build_id=$CI_COMMIT_REF_SLUG repo_version_app=$CI_COMMIT_REF_NAME"
+    - ansible-playbook -i $ANSIBLE_INVENTORY $UPDATE_PROXY_PLAYBOOK -e "build_id=$CI_COMMIT_REF_SLUG repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
   rules:
     - if: $CI_COMMIT_BRANCH =~ /^(demo|stable|staging|test)$/
       when: always
@@ -104,7 +104,7 @@ clean_previous_build:
   tags:
     - shell
   script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "build_id=${CI_COMMIT_BEFORE_SHA:0:8}"
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "build_id=${CI_COMMIT_BEFORE_SHA:0:8}" --vault-id $ANSIBLE_VAULT_FILE
   rules:
     - if: $CI_COMMIT_BRANCH =~ /^(demo|stable|staging|test)$/
       when: manual
