@@ -73,11 +73,6 @@ export default class Project extends Component {
               noMargin
               noPadding
               color="primary"
-              onMouseDown={e => {
-                // this prevents the popup not closing and opening
-                // when using this button to close
-                 e.preventDefault()
-              }}
               onClick={this.openModal}
               lang={lang}
             >

@@ -1,13 +1,36 @@
 // Helper extensions for enzyme and jest
 
 import { ReactWrapper, ShallowWrapper } from 'enzyme'
-import { roleElements } from 'aria-query'
+import { roleElements, elementRoles } from 'aria-query'
 
 import './test-helpers'
 import 'chai/register-should'
 import { toHaveNoViolations } from 'jest-axe'
 
 import '../js/utils/extendYup'
+
+const checkSingleHostNode = (wrapper, funcname) => {
+  const nodes = wrapper.hostNodes()
+  if (nodes.length != 1 || nodes.length != wrapper.length) {
+    throw new Error(
+      `Method "${funcname}" is meant to run on 1 host node. Found ${wrapper.length} total nodes, ${nodes.length} host nodes.`
+    )
+  }
+  const node = nodes.first()
+  return node
+}
+
+function getRoles() {
+  // Return explicit and implicit roles for DOM node
+  const node = checkSingleHostNode(this, 'getRoles')
+  return elementRoles.get({ name: node.name() }) || []
+}
+
+function hasRole(role) {
+  // Return true if DOM node has role, either explicit or implicit
+  checkSingleHostNode(this, 'hasRole')
+  return this.getRoles().includes(role)
+}
 
 function findByRole(role) {
   // Return DOM nodes that have a specific role, either explicitly or implicitly
@@ -54,10 +77,31 @@ const toBeAccessible = (results, options = { ignore: [] }) => {
   return toHaveNoViolations.toHaveNoViolations(strictResults)
 }
 
+export const wait = async cond => {
+  // Keep advancing timers, resolving promises and
+  // updating wrapper until condition is fulfilled.
+  let counter = 0
+  while (!cond()) {
+    counter += 1
+    if (counter > 100) {
+      throw new Error('Wait timed out')
+    }
+    jest.advanceTimersByTime(1000)
+    await Promise.resolve()
+    self.update()
+  }
+}
+
 export const registerHelpers = () => {
+  ShallowWrapper.prototype.getRoles = getRoles
+  ReactWrapper.prototype.getRoles = getRoles
+  ShallowWrapper.prototype.hasRole = hasRole
+  ReactWrapper.prototype.hasRole = hasRole
   ShallowWrapper.prototype.findByRole = findByRole
   ReactWrapper.prototype.findByRole = findByRole
   ShallowWrapper.prototype.leafHostNodes = leafHostNodes
   ReactWrapper.prototype.leafHostNodes = leafHostNodes
+  ShallowWrapper.prototype.wait = wait
+  ReactWrapper.prototype.wait = wait
   global.jestExpect.extend({ toBeAccessible })
 }

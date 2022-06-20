@@ -44,6 +44,7 @@ export const FAIRDATA_WEBSITE_URL = {
 
 export const LICENSE_URL = {
   CCBY4: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+  OTHER: 'http://uri.suomi.fi/codelist/fairdata/license/code/other',
 }
 
 export const USE_CATEGORY_URL = {

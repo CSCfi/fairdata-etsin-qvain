@@ -13,6 +13,7 @@ import qvain from './qvain'
 const finnish = {
   changepage: 'Siirryit sivulle: %(page)s',
   dataset: {
+    additionalInformation: 'Lisätietoja',
     access_login: 'Käyttöluvan hakeminen vaatii sisään kirjautumisen',
     access_unavailable: 'Ei käytettävissä',
     access_denied: 'Hakemus evätty',
@@ -282,6 +283,8 @@ const finnish = {
     keywords: 'Avainsanat',
     subjectHeading: 'Asiasanat',
     license: 'Lisenssi',
+    otherLicense:
+      'Aineiston lisenssiä ei ole selkeästi määritelty. Otathan yhteyttä aineiston omistajaan / oikeuksienhaltijaan saadaksesi lisätietoa.',
     loading: 'Ladataan aineistoa',
     go_to_original: 'Siirry alkuperäiseen',
     permanent_link: 'Pysyvä linkki tälle sivulle',

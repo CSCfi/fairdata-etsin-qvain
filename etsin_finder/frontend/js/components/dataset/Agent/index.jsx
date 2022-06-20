@@ -67,11 +67,6 @@ const Agent = ({ agent, first, inline, popupAlign }) => {
             noPadding
             color="primary"
             href="#0"
-            onMouseDown={e => {
-              // this prevents the popup not closing and opening
-              // when using this button to close
-              e.preventDefault()
-            }}
             onClick={popUpOpen ? closePopUp : openPopUp}
             lang={lang}
           >

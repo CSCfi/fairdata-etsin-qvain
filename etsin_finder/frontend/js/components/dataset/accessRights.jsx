@@ -23,6 +23,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import Translate from 'react-translate-component'
 
 import checkNested from '../../utils/checkNested'
 import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
@@ -148,7 +149,11 @@ class AccessRights extends Component {
               {this.state.description && (
                 // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 <div tabIndex="0">
-                  <FontAwesomeIcon icon={faInfoCircle} title="Additional information" />
+                  <Translate
+                    component={FontAwesomeIcon}
+                    icon={faInfoCircle}
+                    attributes={{ title: 'dataset.additionalInformation' }}
+                  />
                   <AccessLabel lang={getDataLang(this.state.description)}>
                     {checkDataLang(this.state.description)}
                   </AccessLabel>

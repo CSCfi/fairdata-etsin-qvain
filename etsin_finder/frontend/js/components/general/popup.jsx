@@ -79,7 +79,11 @@ export default class PopUp extends Component {
 
   render() {
     return (
-      <Relative>
+      <Relative
+        onMouseDown={
+          e => e.preventDefault() // prevent popup from closing and reopening again when its button is clicked
+        }
+      >
         {this.props.isOpen && (
           <PopContainer>
             <Pop
@@ -93,26 +97,7 @@ export default class PopUp extends Component {
             >
               {this.props.popUp}
             </Pop>
-            <Svg width="40px" height="20px" viewBox="0 0 20 20">
-              <defs>
-                <filter id="dropshadow" height="200%" width="200%">
-                  <feOffset dx="0" dy="3" result="offsetblur" />
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-                  <feComponentTransfer>
-                    <feFuncA type="linear" slope="0.6" />
-                  </feComponentTransfer>
-                  <feMerge>
-                    <feMergeNode />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <polygon
-                fill="white"
-                points="0,0 10,10 20,0"
-                style={{ filter: 'url(#dropshadow)' }}
-              />
-            </Svg>
+            <DownTriangle />
           </PopContainer>
         )}
         {this.props.children}
@@ -120,6 +105,25 @@ export default class PopUp extends Component {
     )
   }
 }
+
+const DownTriangle = () => (
+  <Svg width="40px" height="20px" viewBox="0 0 20 20">
+    <defs>
+      <filter id="dropshadow" height="200%" width="200%">
+        <feOffset dx="0" dy="3" result="offsetblur" />
+        <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+        <feComponentTransfer>
+          <feFuncA type="linear" slope="0.6" />
+        </feComponentTransfer>
+        <feMerge>
+          <feMergeNode />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+    <polygon fill="white" points="0,0 10,10 20,0" style={{ filter: 'url(#dropshadow)' }} />
+  </Svg>
+)
 
 const Relative = styled.span`
   position: initial;
@@ -216,6 +220,7 @@ const Pop = styled.div`
 `
 
 const Svg = styled.svg`
+  pointer-events: none;
   z-index: 2;
   top: initial;
   position: absolute;

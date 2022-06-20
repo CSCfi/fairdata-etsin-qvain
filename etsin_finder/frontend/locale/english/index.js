@@ -13,6 +13,7 @@ import qvain from './qvain'
 const english = {
   changepage: 'Navigated to page: %(page)s',
   dataset: {
+    additionalInformation: 'Additional information',
     access_login: 'Login to apply for access',
     access_unavailable: 'Unavailable',
     access_denied: 'Application denied',
@@ -280,6 +281,8 @@ const english = {
     keywords: 'Keywords',
     subjectHeading: 'Subject heading',
     license: 'License',
+    otherLicense:
+      'License information for this dataset is indistinct. Please contact the dataset owner / rights holder for more information.',
     loading: 'Loading dataset',
     harvested: 'Harvested',
     cumulative: 'Cumulative',
