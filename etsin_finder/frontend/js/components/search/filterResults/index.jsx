@@ -38,6 +38,7 @@ const FilterResults = () => {
       <span id="filterlabel" className="sr-only" aria-hidden>
         <Translate content="search.filter.filters" />
       </span>
+      <FilterSection aggregation="data_catalog" />
       <FilterSection aggregation="access_type" />
       <FilterSection aggregation="organization" />
       <FilterSection aggregation="creator" />
@@ -46,7 +47,6 @@ const FilterResults = () => {
       <FilterSection aggregation="infrastructure" />
       <FilterSection aggregation="project" filterOpen={projectIsOpen} />
       <FilterSection aggregation="file_type" />
-      <FilterSection aggregation="data_catalog" />
     </FilterContainer>
   )
 }
