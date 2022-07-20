@@ -67,14 +67,12 @@ class Content extends Component {
   showData() {
     // Hide data tab if
     // - it doesn't contain files or remote files
-    // - the dataset is harvested
-    // - the access_rights allow it
+    // - the access_rights disallow it
     // - the dataset in removed or deprecated
 
     const { Access } = this.props.Stores
     if (
       (!this.props.hasFiles && !this.props.hasRemote) ||
-      this.props.harvested ||
       this.props.isRemoved ||
       this.props.isDeprecated
     ) {
