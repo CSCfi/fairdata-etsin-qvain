@@ -72,10 +72,12 @@ class DatasetMetadataService(FlaskService):
 
         """
         if metadata_format == "metax":
-            url = format_url(self.HOST + "/rest/datasets/{}.json", cr_id)
+            url = format_url(
+                self.HOST + "/rest/datasets/{}.json?include_legacy=true", cr_id
+            )
         else:
             url = format_url(
-                self.HOST + "/rest/datasets/{}?dataset_format={}",
+                self.HOST + "/rest/datasets/{}?dataset_format={}&include_legacy=true",
                 cr_id,
                 metadata_format,
             )

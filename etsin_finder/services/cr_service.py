@@ -30,7 +30,7 @@ class MetaxAPIService(FlaskService):
         if metax_api_config:
             self.METAX_GET_CATALOG_RECORD_URL = (
                 "https://{0}/rest/v2/datasets".format(metax_api_config.get("HOST"))
-                + "/{0}?expand_relation=data_catalog"
+                + "/{0}?expand_relation=data_catalog&include_legacy=true"
             )
 
             self.METAX_GET_REMOVED_CATALOG_RECORD_URL = (
@@ -47,7 +47,7 @@ class MetaxAPIService(FlaskService):
             log.error("Unable to initialize MetaxAPIService due to missing config")
 
     def get_catalog_record(self, identifier):
-        """Get a catalog record with a given identifier from MetaX API v2.
+        """Get a catalog record with a given identifier from Metax API v2.
 
         Args:
             identifier (str): Catalog record identifier.
