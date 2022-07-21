@@ -20,7 +20,7 @@ import checkColor from '../../styles/styledUtils'
 export const Button = styled.button.attrs(props => ({
   padding: props.padding ? props.padding : '0.3em 0.6em 0.4em',
   margin: props.margin ? props.margin : '0.25em 0.25em',
-  type: 'button',
+  type: props.type || 'button',
 }))`
   cursor: pointer;
   width: ${props => (props.width ? props.width : '')};
