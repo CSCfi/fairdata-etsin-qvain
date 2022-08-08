@@ -144,6 +144,7 @@ export default class FormatSelect extends Component {
             background={this.state.background}
             isOpen={this.state.listOpen}
             onClick={this.toggleOpen}
+            disabled={this.props.disabled}
           >
             <Translate component={Text} content="dataset.datasetAsFile.open" />
           </Controller>
@@ -201,6 +202,7 @@ FormatSelect.defaultProps = {
   padding: '0.3em 0.6em',
   frontColor: undefined,
   width: '7em',
+  disabled: false
 }
 
 FormatSelect.propTypes = {
@@ -211,4 +213,5 @@ FormatSelect.propTypes = {
   padding: PropTypes.string,
   frontColor: PropTypes.string,
   width: PropTypes.string,
+  disabled: PropTypes.bool,
 }

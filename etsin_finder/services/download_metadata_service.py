@@ -87,7 +87,6 @@ class DatasetMetadataService(FlaskService):
                 stream=True,
                 timeout=30,
                 verify=self.verify_ssl,
-                auth=(self.user, self.password),
             )
             metax_response.raise_for_status()
         except requests.HTTPError:
