@@ -19,13 +19,11 @@ const DescriptionField = () => {
   const [activeLang, setActiveLang] = useState(getMatchingLang([titleValue, descriptionValue]))
 
   return (
-    <>
-      <TranslationTab language={activeLang} setLanguage={setActiveLang}>
-        <DescriptionFieldInput propName="title" fieldName="Title" activeLang={activeLang} />
-        <DescriptionFieldTextField activeLang={activeLang} />
-        <Translate component="div" content="qvain.description.description.instructions" />
-      </TranslationTab>
-    </>
+    <TranslationTab language={activeLang} setLanguage={setActiveLang} useTitleLanguages>
+      <DescriptionFieldInput propName="title" fieldName="Title" activeLang={activeLang} />
+      <DescriptionFieldTextField activeLang={activeLang} />
+      <Translate component="div" content="qvain.description.description.instructions" />
+    </TranslationTab>
   )
 }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
@@ -7,40 +7,33 @@ import { observer } from 'mobx-react'
 import { useStores } from '@/stores/stores'
 import { FieldGroup } from './index'
 
-const TranslationTab = ({ language, setLanguage, children }) => {
+const TranslationTab = ({ language, setLanguage, children, useTitleLanguages }) => {
   const {
-    Locale: { langTabOrder: languages },
+    Locale: { datasetTitleLanguageTabOrder, languageTabOrder },
   } = useStores()
 
-  const translations = {
-    fi: 'qvain.general.langFi',
-    en: 'qvain.general.langEn',
-  }
+  const languages = useTitleLanguages ? datasetTitleLanguageTabOrder : languageTabOrder
 
   return (
     <FieldGroup>
       <GapNegator>
         <LangButtonContainer>
-          <LangButton
-            id="primary-tab"
-            type="button"
-            active={language === languages[0]}
-            onClick={() => setLanguage(languages[0])}
-            language={languages[0]}
-          >
-            <Translate content={translations[languages[0]]} />
-          </LangButton>
-          <EmptyBlock width="2%" />
-          <LangButton
-            id="secondary-tab"
-            type="button"
-            active={language === languages[1]}
-            onClick={() => setLanguage(languages[1])}
-            language={languages[1]}
-          >
-            <Translate content={translations[languages[1]]} />
-          </LangButton>
-          <EmptyBlock width="50%" />
+          {languages.map((lang, index) => (
+            <Fragment key={lang}>
+              {index !== 0 && <EmptyBlock width="1%" />}
+              <LangButton
+                id={`tab-${lang}`}
+                type="button"
+                active={language === lang}
+                onClick={() => setLanguage(lang)}
+                language={lang}
+              >
+                <Translate content={`qvain.general.lang.${lang}`} />
+              </LangButton>
+            </Fragment>
+          ))}
+
+          <EmptyBlock width="25%" />
         </LangButtonContainer>
         <ContentCard>{children}</ContentCard>
       </GapNegator>
@@ -52,6 +45,11 @@ TranslationTab.propTypes = {
   language: PropTypes.string.isRequired,
   setLanguage: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
+  useTitleLanguages: PropTypes.bool,
+}
+
+TranslationTab.defaultProps = {
+  useTitleLanguages: false,
 }
 
 const ContentCard = styled.div`

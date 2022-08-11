@@ -90,8 +90,8 @@ const EtsinHeader = props => {
         {translate('general.state.changedLang', {
           lang:
             currentLang === 'fi'
-              ? translate('qvain.general.langFi')
-              : translate('qvain.general.langEn'),
+              ? translate('qvain.general.lang.fi')
+              : translate('qvain.general.lang.en'),
         })}
       </span>
     </Header>

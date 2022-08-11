@@ -63,13 +63,23 @@ describe('Locale store', () => {
     })
   })
 
-  describe('langTabOrder', () => {
+  describe('languageTabOrder', () => {
     it('shows current language in first tab', () => {
       Locale.setLang('fi')
-      expect(Locale.langTabOrder).toEqual(['fi', 'en'])
+      expect(Locale.languageTabOrder).toEqual(['fi', 'en'])
 
       Locale.setLang('en')
-      expect(Locale.langTabOrder).toEqual(['en', 'fi'])
+      expect(Locale.languageTabOrder).toEqual(['en', 'fi'])
+    })
+  })
+
+  describe('datasetTitleLanguageTabOrder', () => {
+    it('shows current language in first tab', () => {
+      Locale.setLang('fi')
+      expect(Locale.datasetTitleLanguageTabOrder).toEqual(['fi', 'en', 'sv'])
+
+      Locale.setLang('en')
+      expect(Locale.datasetTitleLanguageTabOrder).toEqual(['en', 'fi', 'sv'])
     })
   })
 })

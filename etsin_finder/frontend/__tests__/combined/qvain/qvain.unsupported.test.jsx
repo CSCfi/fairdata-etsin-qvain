@@ -110,7 +110,6 @@ test('it should list unsupported fields in dataset', () => {
       'curator.0.contributor_type.1.identifier',
       'http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Sponsor',
     ],
-    ['description.sv', 'Beskrivning på svenska.'],
     ['is_output_of.0.has_funding_agency.0.telephone', ''],
     ['is_output_of.0.has_funding_agency.0.telephone.0', '+358501232233'],
     ['is_output_of.0.source_organization.0.contributor_type', ''],
@@ -238,7 +237,6 @@ test('it should list unsupported fields in dataset', () => {
     ['rights_holder.0.telephone.0', '+358501231235'],
 
     ['temporal.1.temporal_coverage', '2011-2030'],
-    ['title.sv', 'Titel på svenska'],
     ['title.sw', 'Kichwa kwa kiswahili'],
     ['value', 0.111],
     ['version_info', '0.1.2'],

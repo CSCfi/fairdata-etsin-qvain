@@ -12,27 +12,33 @@ const description = {
   },
   charactersRemaining: '%(charactersRemaining)s characters remaining.',
   description: {
-    langEn: 'ENGLISH',
-    langFi: 'FINNISH',
     title: {
       label: 'Title',
-      placeholderEn: 'Title (English)',
-      placeholderFi: 'Title (Finnish)',
+      placeholder: {
+        en: 'Title (English)',
+        fi: 'Title (Finnish)',
+        sv: 'Title (Swedish)',
+      },
       infoText: {
-        fi: 'Title in English',
-        en: 'Title in Finnish',
+        fi: 'Title in English.',
+        en: 'Title in Finnish.',
+        sv: 'Title in Swedish. Not shown in Etsin. Can be seen via Metax API.',
       },
     },
     description: {
       label: 'Description',
-      placeholderEn: 'Description (English)',
-      placeholderFi: 'Description (Finnish)',
+      placeholder: {
+        en: 'Description (English)',
+        fi: 'Description (Finnish)',
+        sv: 'Description (Swedish)',
+      },
       infoText: {
-        fi: 'Describe dataset in Finnish',
-        en: 'Describe dataset in English',
+        fi: 'Describe dataset in Finnish.',
+        en: 'Describe dataset in English.',
+        sv: 'Describe dataset in Swedish. Not shown in Etsin. Can be seen via Metax API.',
       },
     },
-    instructions: 'Only one language is mandatory',
+    instructions: 'Title and Description in either Finnish or English is mandatory.',
   },
   issuedDate: {
     title: 'Issued date',

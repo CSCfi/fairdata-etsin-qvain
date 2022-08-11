@@ -12,8 +12,11 @@ const general = {
     confirm: 'Yes, remove actor from provenances',
     cancel: "No, don't remove actor",
   },
-  langFi: 'Finnish',
-  langEn: 'English',
+  lang: {
+    en: 'English',
+    fi: 'Finnish',
+    sv: 'Swedish',
+  },
   buttons: {
     edit: 'Edit',
     remove: 'Remove',

@@ -33,6 +33,7 @@ Object {
   "description": Object {
     "en": "",
     "fi": "Description",
+    "sv": "",
   },
   "field_of_science": Array [],
   "infrastructure": Array [],
@@ -142,6 +143,7 @@ Object {
   "title": Object {
     "en": "",
     "fi": "Title",
+    "sv": "",
   },
   "useDoi": false,
 }
@@ -180,6 +182,7 @@ Object {
   "description": Object {
     "en": "",
     "fi": "Description",
+    "sv": "",
   },
   "field_of_science": Array [],
   "infrastructure": Array [],
@@ -289,6 +292,7 @@ Object {
   "title": Object {
     "en": "",
     "fi": "Title",
+    "sv": "",
   },
   "useDoi": false,
 }
@@ -327,6 +331,7 @@ Object {
   "description": Object {
     "en": "",
     "fi": "Description",
+    "sv": "",
   },
   "field_of_science": Array [],
   "infrastructure": Array [],
@@ -436,6 +441,7 @@ Object {
   "title": Object {
     "en": "",
     "fi": "Title",
+    "sv": "",
   },
   "useDoi": false,
 }
@@ -474,6 +480,7 @@ Object {
   "description": Object {
     "en": "",
     "fi": "Description",
+    "sv": "",
   },
   "field_of_science": Array [],
   "infrastructure": Array [],
@@ -583,6 +590,7 @@ Object {
   "title": Object {
     "en": "",
     "fi": "Title",
+    "sv": "",
   },
   "useDoi": false,
 }
@@ -621,6 +629,7 @@ Object {
   "description": Object {
     "en": "",
     "fi": "Description",
+    "sv": "",
   },
   "field_of_science": Array [],
   "infrastructure": Array [],
@@ -730,6 +739,7 @@ Object {
   "title": Object {
     "en": "",
     "fi": "Title",
+    "sv": "",
   },
   "useDoi": false,
 }

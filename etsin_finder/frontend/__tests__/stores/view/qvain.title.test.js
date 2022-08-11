@@ -44,6 +44,8 @@ describe('Title', () => {
         title: {
           fi: 'fi_title',
           en: 'en_title',
+          sv: 'sv_title',
+          sw: 'swahili_title',
         },
       }
 
@@ -52,7 +54,7 @@ describe('Title', () => {
       })
 
       test('should assign value with dataset.title', () => {
-        title.value.should.eql({ en: 'en_title', fi: 'fi_title' })
+        title.value.should.eql({ en: 'en_title', fi: 'fi_title', sv: 'sv_title' })
       })
     })
 
@@ -64,7 +66,7 @@ describe('Title', () => {
       })
 
       test('should assign value with dataset.title', () => {
-        title.value.should.eql({ fi: '', en: '' })
+        title.value.should.eql({ fi: '', en: '', sv: '' })
       })
     })
   })

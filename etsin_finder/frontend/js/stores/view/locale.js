@@ -17,6 +17,8 @@ import urls from '../../utils/urls'
 
 const languages = ['en', 'fi']
 
+const datasetTitleLanguages = ['en', 'fi', 'sv']
+
 const getInitialLanguage = () =>
   languages.find(lang => lang === document.documentElement.lang) || languages[0]
 
@@ -57,6 +59,8 @@ class Locale {
   }
 
   @observable languages = languages
+
+  @observable datasetTitleLanguages = datasetTitleLanguages
 
   @action.bound saveLanguage() {
     return axios.post(urls.language(), { language: this.currentLang })
@@ -147,8 +151,12 @@ class Locale {
   getValueTranslation = (value, lang = this.currentLang) =>
     this.getValueTranslationWithLang(value, lang)[0]
 
-  @computed get langTabOrder() {
+  @computed get languageTabOrder() {
     return [this.lang, ...this.languages.filter(l => l !== this.lang)]
+  }
+
+  @computed get datasetTitleLanguageTabOrder() {
+    return [this.lang, ...this.datasetTitleLanguages.filter(l => l !== this.lang)]
   }
 
   getPreferredLang = item => {

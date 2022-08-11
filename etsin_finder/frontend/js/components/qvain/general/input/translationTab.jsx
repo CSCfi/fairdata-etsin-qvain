@@ -8,12 +8,12 @@ import { useStores } from '../../utils/stores'
 
 const TranslationTab = ({ language, setLanguage, children }) => {
   const {
-    Locale: { langTabOrder: languages },
+    Locale: { languageTabOrder: languages },
   } = useStores()
 
   const translations = {
-    fi: 'qvain.general.langFi',
-    en: 'qvain.general.langEn',
+    fi: 'qvain.general.lang.fi',
+    en: 'qvain.general.lang.en',
   }
 
   return (

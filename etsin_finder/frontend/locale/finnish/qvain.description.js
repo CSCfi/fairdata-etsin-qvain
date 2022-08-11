@@ -12,24 +12,30 @@ const description = {
   },
   charactersRemaining: '%(charactersRemaining)s merkkiä jäljellä.',
   description: {
-    langEn: 'ENGLANTI',
-    langFi: 'SUOMI',
     title: {
       label: 'Otsikko',
-      placeholderFi: 'Otsikko (suomi)',
-      placeholderEn: 'Otsikko (englanti)',
+      placeholder: {
+        en: 'Otsikko (englanti)',
+        fi: 'Otsikko (suomi)',
+        sv: 'Otsikko (ruotsi)',
+      },
       infoText: {
         fi: 'Aineiston otsikko suomeksi',
         en: 'Aineiston otsikko englanniksi',
+        sv: 'Aineiston otsikko ruotsiksi',
       },
     },
     description: {
       label: 'Kuvaus',
-      placeholderFi: 'Kuvaus (suomi)',
-      placeholderEn: 'Kuvaus (englanti)',
+      placeholder: {
+        en: 'Kuvaus (englanti)',
+        fi: 'Kuvaus (suomi)',
+        sv: 'Kuvaus (ruotsi)',
+      },
       infoText: {
         fi: 'Aineiston kuvaus suomeksi',
         en: 'Aineiston kuvaus englanniksi',
+        sv: 'Aineiston kuvaus ruotsiksi',
       },
     },
     instructions: 'Vain yksi kielivalinta on pakollinen',

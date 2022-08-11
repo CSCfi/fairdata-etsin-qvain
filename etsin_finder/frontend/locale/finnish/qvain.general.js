@@ -12,8 +12,11 @@ const general = {
     confirm: 'Kyllä, poista toimija ja sen viitteet',
     cancel: 'Ei, peru toimijan poistaminen',
   },
-  langFi: 'Suomi',
-  langEn: 'Englanti',
+  lang: {
+    en: 'Englanti',
+    fi: 'Suomi',
+    sv: 'Ruotsi',
+  },
   buttons: {
     edit: 'Muokkaa',
     remove: 'Poista',

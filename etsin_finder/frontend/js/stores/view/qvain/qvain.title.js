@@ -26,7 +26,11 @@ class Title extends MultiLanguageField {
   schema = titleSchema
 
   @action fromBackend = dataset => {
-    this.value = { en: dataset.title?.en || '', fi: dataset.title?.fi || '' }
+    this.value = {
+      en: dataset.title?.en || '',
+      fi: dataset.title?.fi || '',
+      sv: dataset.title?.sv || '',
+    }
   }
 }
 

@@ -12,6 +12,10 @@ const descriptionSchemaBase = yup.object().shape({
     .string()
     .typeError('qvain.validationMessages.description.string')
     .max(50000, 'qvain.validationMessages.description.max'),
+  sv: yup
+    .string()
+    .typeError('qvain.validationMessages.description.string')
+    .max(50000, 'qvain.validationMessages.description.max'),
 })
 
 export const descriptionSchema = descriptionSchemaBase
@@ -29,11 +33,19 @@ class Description extends MultiLanguageField {
 
   @action
   fromBackend = dataset => {
-    this.value = { en: dataset.description?.en || '', fi: dataset.description?.fi || '' }
+    this.value = {
+      en: dataset.description?.en || '',
+      fi: dataset.description?.fi || '',
+      sv: dataset.description?.sv || '',
+    }
   }
 
   @computed get charactersRemaining() {
-    return { fi: 50000 - this.value?.fi?.length, en: 50000 - this.value?.en?.length }
+    return {
+      fi: 50000 - (this.value?.fi?.length || 0),
+      en: 50000 - (this.value?.en?.length || 0),
+      sv: 50000 - (this.value?.sv?.length || 0),
+    }
   }
 
   schema = descriptionSchema

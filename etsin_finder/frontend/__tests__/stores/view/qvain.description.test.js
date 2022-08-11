@@ -44,6 +44,8 @@ describe('Description', () => {
         description: {
           fi: 'fi_desc',
           en: 'en_desc',
+          sv: 'sv_desc',
+          sw: 'swahili_desc',
         },
       }
 
@@ -52,7 +54,7 @@ describe('Description', () => {
       })
 
       test('should assign value with dataset.description', () => {
-        description.value.should.eql({ en: 'en_desc', fi: 'fi_desc' })
+        description.value.should.eql({ en: 'en_desc', fi: 'fi_desc', sv: 'sv_desc' })
       })
     })
 
@@ -64,7 +66,7 @@ describe('Description', () => {
       })
 
       test('should assign value with dataset.description', () => {
-        description.value.should.eql({ fi: '', en: '' })
+        description.value.should.eql({ fi: '', en: '', sv: '' })
       })
     })
   })

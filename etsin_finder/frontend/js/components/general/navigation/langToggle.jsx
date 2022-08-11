@@ -41,8 +41,8 @@ const LangToggle = ({ inverted, margin, mobile }) => {
         {translate('general.language.toggleLabel', {
           otherLang:
             Locale.currentLang === 'fi'
-              ? translate('qvain.general.langEn')
-              : translate('qvain.general.langFi'),
+              ? translate('qvain.general.lang.en')
+              : translate('qvain.general.lang.fi'),
         })}
       </span>
       {inverted ? (

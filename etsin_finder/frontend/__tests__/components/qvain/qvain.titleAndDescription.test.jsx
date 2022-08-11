@@ -149,7 +149,7 @@ describe('given required props and Stores (noValidationError)', () => {
           disabled: false,
           value: 'value',
           onBlur: Stores.Qvain.Title.validate,
-          attributes: { placeholder: 'qvain.description.description.title.placeholderEn' },
+          attributes: { placeholder: 'qvain.description.description.title.placeholder.en' },
           required: true,
         },
       }

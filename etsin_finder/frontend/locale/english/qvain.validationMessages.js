@@ -14,12 +14,12 @@ const validationMessages = {
   title: {
     string: 'The title must be a string value.',
     max: 'The title is too long.',
-    required: 'A title is required in at least one language.',
+    required: 'A title is required in Finnish or English.',
   },
   description: {
     string: 'The description must be a string value.',
     max: 'The description is too long.',
-    required: 'A description is required in at least one language.',
+    required: 'A description is required in Finnish or English.',
   },
   issuedDate: {
     requiredIfUseDoi: 'Issued date must be defined for DOI datasets',
@@ -167,7 +167,7 @@ const validationMessages = {
       typeRequired: 'Relation type is required.',
     },
     provenance: {
-      nameRequired: 'Name is required at least in one language.',
+      nameRequired: 'Name is required in at least in one language.',
       startDateMissing: 'Start date missing.',
       endDateMissing: 'End date missing.',
     },

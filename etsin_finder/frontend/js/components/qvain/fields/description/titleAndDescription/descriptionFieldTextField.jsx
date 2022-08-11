@@ -22,10 +22,7 @@ const DescriptionFieldTextField = ({ propName, fieldName, activeLang }) => {
     set(e.target.value, activeLang)
   }
 
-  const getPlaceholder = () => {
-    const stub = `qvain.description.description.${propName}.`
-    return activeLang === 'fi' ? `${stub}placeholderFi` : `${stub}placeholderEn`
-  }
+  const getPlaceholder = () => `qvain.description.description.${propName}.placeholder.${activeLang}`
 
   const id = `${propName}Input`
 

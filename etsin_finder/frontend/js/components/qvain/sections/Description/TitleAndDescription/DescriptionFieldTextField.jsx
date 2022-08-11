@@ -40,7 +40,7 @@ const DescriptionFieldTextField = ({ activeLang }) => {
           component={TextArea}
           id={id}
           disabled={readonly}
-          value={value[activeLang]}
+          value={value[activeLang] || ''}
           onChange={handleChange}
           onBlur={validate}
           required

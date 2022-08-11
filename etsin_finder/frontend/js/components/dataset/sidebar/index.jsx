@@ -254,7 +254,7 @@ class Sidebar extends Component {
             <SidebarItem trans="dataset.temporal_coverage" fallback="Temporal Coverage">
               {temporal &&
                 temporal.map(dates => (
-                  <TemporalCoverageItem>
+                  <TemporalCoverageItem key={`temporal-${dates.start_date}-${dates.end_date}`}>
                     {this.dateSeparator(dates.start_date, dates.end_date)}
                   </TemporalCoverageItem>
                 ))}
