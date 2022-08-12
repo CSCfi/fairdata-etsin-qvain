@@ -13,6 +13,10 @@ describe('idnToLink', () => {
     idnToLink('urn:nbn:fi:att:d00d').should.eql('http://urn.fi/urn:nbn:fi:att:d00d')
   })
 
+  test('should create Reportronic url', () => {
+    idnToLink('reportronic.fi/aineisto').should.eql('https://reportronic.fi/aineisto')
+  })
+
   test('should create URN url fom capitalized characters', () => {
     idnToLink('URN:NBN:fi:att:d00d').should.eql('http://urn.fi/urn:nbn:fi:att:d00d')
   })
