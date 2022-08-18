@@ -7,7 +7,7 @@
 #
 #include:
 #  - project: fairdata/fairdata-ci
-#    ref: staging
+#    ref: master
 #    file:
 #      - /templates/test.yml
 #
