@@ -19,8 +19,8 @@ import infrastructure from './qvain.infrastructure'
 import timePeriod from './qvain.timePeriod'
 
 const qvainEnglish = {
-  saveDraft: 'Save',
-  submit: 'Publish',
+  saveDraft: 'Save as draft',
+  submit: 'Save and Publish',
   edit: 'Update Dataset',
   required: 'Required.',
   unsavedChanges:

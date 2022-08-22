@@ -30,7 +30,7 @@ const project = {
   },
   identifier: {
     label: 'Project identifier',
-    infoText: 'Add project identifier. It is recommended to use general identifiers, if available',
+    infoText: 'Add project identifier. It is recommended to use persistent identifiers, if available',
   },
   organizations: {
     title: 'Participating organizations',

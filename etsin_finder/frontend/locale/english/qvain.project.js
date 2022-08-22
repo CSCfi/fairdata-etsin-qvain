@@ -27,7 +27,7 @@ const project = {
     },
     identifier: {
       label: 'Identifier',
-      description: 'It is recommended to use general identifiers, if available',
+      description: 'It is recommended to use persistent identifiers, if available',
       placeholder: 'Add identifier',
     },
     fundingIdentifier: {

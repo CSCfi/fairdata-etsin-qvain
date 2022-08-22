@@ -19,8 +19,8 @@ import infrastructure from './qvain.infrastructure'
 import timePeriod from './qvain.timePeriod'
 
 const qvainFinnish = {
-  saveDraft: 'Tallenna',
-  submit: 'Julkaise',
+  saveDraft: 'Tallenna luonnoksena',
+  submit: 'Tallenna ja julkaise',
   edit: 'Päivitä aineisto',
   required: 'Pakollinen. ',
   unsavedChanges:
