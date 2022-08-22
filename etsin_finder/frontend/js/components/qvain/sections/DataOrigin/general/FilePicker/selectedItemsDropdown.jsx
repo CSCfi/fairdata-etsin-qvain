@@ -4,11 +4,10 @@ import Translate from 'react-translate-component'
 import { faPen, faEye } from '@fortawesome/free-solid-svg-icons'
 import { observer } from 'mobx-react'
 
-import { Dropdown, DropdownItem } from '../../../../../general/dropdown'
-import { hasMetadata, hasPASMetadata } from '../../../../../../stores/view/common.files.items'
-import { isFile, ClickableIcon } from '../../../../../general/files/items'
-
-import { useStores } from '../../../../utils/stores'
+import { Dropdown, DropdownItem } from '@/components/general/dropdown'
+import { hasMetadata, hasPASMetadata } from '@/stores/view/common.files.items'
+import { isFile, ClickableIcon } from '@/components/general/files/items'
+import { useStores } from '@/stores/stores'
 
 const EditDropdown = ({ item, parentArgs }) => {
   const {

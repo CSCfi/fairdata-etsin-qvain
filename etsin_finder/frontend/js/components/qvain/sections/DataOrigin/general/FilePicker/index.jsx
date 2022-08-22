@@ -19,6 +19,7 @@ import AddItemsModal from './addItems'
 import FixDeprecatedModal from './fixDeprecatedModal'
 import FormModal from './forms/formModal'
 import { AddButton } from '@/components/qvain/general/V2/buttons'
+import MetadataModal from '../MetadataModal'
 
 export const FilePickerBase = () => {
   const {
@@ -138,6 +139,7 @@ export const FilePickerBase = () => {
       {error}
       <FixDeprecatedModal />
       <FormModal />
+      <MetadataModal />
     </FieldGroup>
   )
 }
