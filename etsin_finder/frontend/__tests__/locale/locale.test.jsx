@@ -4,11 +4,16 @@ import ElasticQueryClass from '../../js/stores/view/elasticquery'
 import LocaleClass from '../../js/stores/view/locale'
 import counterpart from 'counterpart'
 import moment from 'moment'
+import axios from 'axios'
+
+jest.mock('axios')
 
 const Env = new EnvClass()
 const Accessibility = new AccessibilityClass(Env)
 const ElasticQuery = new ElasticQueryClass(Env)
 const Locale = new LocaleClass(Accessibility, ElasticQuery)
+
+Env.history.location = { pathname: '/' }
 
 describe('Locale store', () => {
   describe('setLang', () => {
@@ -80,6 +85,17 @@ describe('Locale store', () => {
 
       Locale.setLang('en')
       expect(Locale.datasetTitleLanguageTabOrder).toEqual(['en', 'fi', 'sv'])
+    })
+  })
+
+  describe('toggleLang', () => {
+    it('sends language changes to backend', () => {
+      Locale.setLang('en')
+      Locale.toggleLang({ save: true })
+      expect(axios.post).toHaveBeenCalledWith('/api/language', { language: 'fi' })
+
+      Locale.toggleLang({ save: true })
+      expect(axios.post).toHaveBeenCalledWith('/api/language', { language: 'en' })
     })
   })
 })

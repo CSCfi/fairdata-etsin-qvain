@@ -85,7 +85,7 @@ class Locale {
   toggleLang = (options = {}) => {
     const { save } = options
     const current = counterpart.getLocale()
-    this.setLang(current === 'fi' ? 'en' : 'fi', save)
+    this.setLang(current === 'fi' ? 'en' : 'fi', { save })
 
     this.Accessibility.handleNavigation()
 
@@ -93,7 +93,7 @@ class Locale {
     // other things to do when language changes
     // removes all filters and queries new results after filters are removed
     // changes url only on /datasets/ page
-    const isSearch = this.Env.history.location.pathname === '/datasets/'
+    const isSearch = this.Env?.history?.location?.pathname === '/datasets/'
     if (isSearch) {
       // update url true
       const filtersChanged = this.ElasticQuery.clearFilters(true)
