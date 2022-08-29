@@ -1,116 +1,65 @@
-# Example connection to fairdata-ci (test)
-# To be added
-
-#variables:
-#  INSTANCE: etsin-qvain-$CI_COMMIT_REF_SLUG
-#  VERSION: $CI_COMMIT_BRANCH
+# Note: all "environment:" assignments in this file 
+# refers to gitlab-ci environments, which are:
 #
-#include:
-#  - project: fairdata/fairdata-ci
-#    ref: master
-#    file:
-#      - /templates/test.yml
+# - {{ feature_branch }}
+# - master
+# - release
 #
-#stages:
-#  - test
+# This "environment:" assignment is separate from 
+# Fairdata environments, which are:
+#
+# - staging
+# - test
+# - stable
+# - demo
 
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH =~ /^(master|demo|stable|staging|test)$/
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME !~ /^(demo|master|stable|staging|test)$/
+    - if: $CI_COMMIT_BRANCH =~ /^(master|release)$/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME !~ /^(master|release)$/
 
 stages:
+  - clean_previous_build
   - deploy
   - test
   - clean_test
   - clean_gitlab_env
   - update
-  - clean_previous_build
 
-# Deployment of application code
-deploy:
-  stage: deploy
-  environment: $CI_COMMIT_REF_NAME
-  tags:
-    - shell
-  script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $DEPLOY_PLAYBOOK -e "build_id=$CI_COMMIT_REF_SLUG repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
-
-# Test of application code
-test:
-  stage: test
-  tags:
-    - shell
-  script:
-      - python3.8 -m virtualenv venv
-      - source venv/bin/activate
-      - pip install -r requirements.txt
-      - pip install -r test_requirements.txt
-      - tox -e cicd
-      - cd etsin_finder/frontend
-      - npm install
-      - npm run lint
-      - npm run test
-
-# Clean test environment from test target server
-clean_test:
-  stage: clean_test
-  environment:
-    name: $CI_COMMIT_REF_NAME
-    on_stop: clean_gitlab_env
-  tags:
-    - shell
-  script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "build_id=$CI_COMMIT_REF_SLUG repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: always
-    - when: never
-
-# Clean deleted branches from environments
-clean_gitlab_env:
-  stage: clean_gitlab_env
-  variables:
-    GIT_STRATEGY: none
-  environment:
-    name: $CI_COMMIT_REF_NAME
-    action: stop
-  tags:
-    - shell
-  script:
-    - echo "Cleaning deleted branches from environments"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: manual
-    - when: never
-
-# Update nginx, socket, log configurations to correct version of Etsin-Qvain
-update_etsin_qvain:
-  stage: update
-  environment: $CI_COMMIT_REF_NAME
-  tags:
-    - shell
-  script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $UPDATE_PROXY_PLAYBOOK -e "build_id=$CI_COMMIT_REF_SLUG repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
-  rules:
-    - if: $CI_COMMIT_BRANCH =~ /^(demo|stable|staging|test)$/
-      when: always
-    - when: never
-
-# Clean previous build of appication code from target environment
-clean_previous_build:
+# Clean previous build of appication code
+job_clean_previous_build:
   stage: clean_previous_build
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(master|release)$/
   environment: $CI_COMMIT_REF_NAME
   tags:
     - shell
   script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "build_id=${CI_COMMIT_BEFORE_SHA:0:8}" --vault-id $ANSIBLE_VAULT_FILE
-  rules:
-    - if: $CI_COMMIT_BRANCH =~ /^(demo|stable|staging|test)$/
-      when: manual
-    - when: never
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
 
-sonarqube-check:
+# Deployment of [master/release] branch to [test/stable]
+job_deploy_protected_branch:
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(master|release)$/
+  environment: $CI_COMMIT_REF_NAME
+  tags:
+    - shell
+  script:
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DEPLOY_PLAYBOOK --vault-id $ANSIBLE_VAULT_FILE
+
+# Deployment of MR branch to test
+job_deploy_feature:
+  stage: deploy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME !~ /^(master|release)$/
+  environment: $CI_COMMIT_REF_NAME
+  tags:
+    - shell
+  script:
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DEPLOY_PLAYBOOK -e "repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
+
+job_sonarqube_check:
   stage: test
   tags:
     - docker
@@ -130,5 +79,61 @@ sonarqube-check:
   only:
     - merge_requests
     - master
-    - test
-    - staging
+    - release
+
+# Test of application code
+job_test:
+  stage: test
+  tags:
+    - shell
+  script:
+      - python3.8 -m virtualenv venv
+      - source venv/bin/activate
+      - pip install -r requirements.txt
+      - pip install -r test_requirements.txt
+      - tox -e cicd
+      - cd etsin_finder/frontend
+      - npm install
+      - npm run lint
+      - npm run test
+
+# Clean test environment from test target server
+job_clean_test:
+  stage: clean_test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    on_stop: job_clean_gitlab_env
+  tags:
+    - shell
+  script:
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
+
+# Clean deleted branches from environments
+job_clean_gitlab_env:
+  stage: clean_gitlab_env
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+    - when: never
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - shell
+  script:
+    - echo "Cleaning deleted branches from environments"
+
+# Update nginx, socket, log configurations to correct version of Etsin-Qvain for master
+job_update:
+  stage: update
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(master|release)$/
+  environment: $CI_COMMIT_REF_NAME
+  tags:
+    - shell
+  script:
+    - ansible-playbook -i $ANSIBLE_INVENTORY $UPDATE_PROXY_PLAYBOOK --vault-id $ANSIBLE_VAULT_FILE
