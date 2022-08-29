@@ -42,7 +42,7 @@ job_deploy_protected_branch:
   stage: deploy
   rules:
     - if: $CI_COMMIT_BRANCH =~ /^(master|release)$/
-  environment: $CI_COMMIT_REF_NAME
+  environment: $CI_COMMIT_BRANCH
   tags:
     - shell
   script:
@@ -132,7 +132,7 @@ job_update:
   stage: update
   rules:
     - if: $CI_COMMIT_BRANCH =~ /^(master|release)$/
-  environment: $CI_COMMIT_REF_NAME
+  environment: $CI_COMMIT_BRANCH
   tags:
     - shell
   script:
