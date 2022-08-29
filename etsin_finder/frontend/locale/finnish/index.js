@@ -222,7 +222,8 @@ const finnish = {
       cumulativeDatasetLabel: 'Huom: Aineisto on kasvava',
       cumulativeDatasetTooltip: {
         header: 'Kasvava aineisto',
-        info: 'Tämä on karttuva aineisto, johon mahdollisesti vielä lisätään tiedostoja. Huomio tämä kun käytät aineistoa tai viittaat siihen (esim. ajallinen kattavuus hyvä mainita). Aineistosta ei kuitenkaan voi poistaa tai muuttaa olemassa olevia tiedostoja.',
+        info:
+          'Tämä on karttuva aineisto, johon mahdollisesti vielä lisätään tiedostoja. Huomio tämä kun käytät aineistoa tai viittaat siihen (esim. ajallinen kattavuus hyvä mainita). Aineistosta ei kuitenkaan voi poistaa tai muuttaa olemassa olevia tiedostoja.',
       },
     },
     embargo_date: 'Embargo voimassa',
@@ -242,6 +243,11 @@ const finnish = {
         description: 'Kuvaus',
         deletionEvent: 'Aineiston poistaminen',
         deletionOfDatasetVersion: 'Poistettu aineistoversio: ',
+      },
+      deprecations: {
+        event: 'Vanhentunut (deprekoitunut)',
+        title: 'Data poistettu',
+        description: 'Alkuperäinen data poistettu Fairdata IDAsta',
       },
       other_idn: 'Muut tunnisteet',
       origin_identifier: 'Alkuperäisen aineiston tunniste',
@@ -467,7 +473,8 @@ const finnish = {
   footer: {
     fairdata: {
       title: 'Fairdata',
-      text: 'Fairdata-palvelut järjestää <strong>opetus- ja kulttuuriministeriö</strong> ja toimittaa <strong>CSC – Tieteen tietotekniikan keskus Oy</strong>',
+      text:
+        'Fairdata-palvelut järjestää <strong>opetus- ja kulttuuriministeriö</strong> ja toimittaa <strong>CSC – Tieteen tietotekniikan keskus Oy</strong>',
     },
     information: {
       title: 'Tietoa',

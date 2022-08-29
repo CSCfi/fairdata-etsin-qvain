@@ -27,6 +27,7 @@ const Events = props => {
     id,
     dataset: {
       identifier,
+      date_deprecated: dateDeprecated,
       dataset_version_set: datasetVersionSet = [],
       preservation_dataset_origin_version: preservationDatasetOriginVersion = undefined,
       research_dataset: {
@@ -90,7 +91,11 @@ const Events = props => {
 
   return (
     <Margin id={id}>
-      <EventList provenances={provenance} deletedVersions={deletedVersions} />
+      <EventList
+        provenances={provenance}
+        deletedVersions={deletedVersions}
+        dateDeprecated={dateDeprecated}
+      />
       <Identifiers title="dataset.events_idn.other_idn" identifiers={otherIdentifiers} />
       <Relations relation={relation} />
       <Identifiers title="dataset.events_idn.origin_identifier" identifiers={originIdentifier} />
@@ -107,6 +112,7 @@ Events.defaultProps = {
 Events.propTypes = {
   dataset: PropTypes.shape({
     identifier: PropTypes.string,
+    date_deprecated: PropTypes.string,
     dataset_version_set: PropTypes.array,
     preservation_dataset_origin_version: PropTypes.object,
     research_dataset: PropTypes.shape({

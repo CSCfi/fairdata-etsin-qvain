@@ -30,9 +30,9 @@ const printDate = temp => {
 }
 
 const EventList = props => {
-  const { deletedVersions, provenances } = props
+  const { deletedVersions, provenances, dateDeprecated } = props
 
-  if (!(hasProvenances(provenances) || deletedVersions?.length > 0)) {
+  if (!(hasProvenances(provenances) || deletedVersions?.length > 0 || dateDeprecated)) {
     return null
   }
 
@@ -113,6 +113,22 @@ const EventList = props => {
             ))
           }
 
+          {dateDeprecated && (
+            // Displaying deprecated datasets
+            <tr key={dateDeprecated}>
+              {/* Dataset deprecation as event */}
+              <Translate component="td" content="dataset.events_idn.deprecations.event" />
+              {/* Who (none), not recorded */}
+              <td>-</td>
+              {/* Date of deprecation */}
+              <td>{dateFormat(dateDeprecated)}</td>
+              {/* Event description as header */}
+              <Translate component="td" content="dataset.events_idn.deprecations.title" />
+              {/* Description */}
+              <Translate component="td" content="dataset.events_idn.deprecations.description" />
+            </tr>
+          )}
+
           {
             // Display deleted events
             deletedVersions.map(single => (
@@ -150,11 +166,13 @@ const EventList = props => {
 EventList.defaultProps = {
   provenances: [],
   deletedVersions: [],
+  dateDeprecated: '',
 }
 
 EventList.propTypes = {
   provenances: PropTypes.array,
   deletedVersions: PropTypes.array,
+  dateDeprecated: PropTypes.string,
 }
 
 const InlineUl = styled.ul`

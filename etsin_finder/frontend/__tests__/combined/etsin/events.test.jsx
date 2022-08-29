@@ -9,19 +9,19 @@ import '@/../locale/translations'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import dataset from '../../__testdata__/dataset.ida'
-import { versionTitles } from '../../__testdata__/dataset.ida'
+import { deprecatedDataset, versionTitles } from '../../__testdata__/dataset.ida'
 import Events from '@/components/dataset/events'
 import axios from 'axios'
 
 jest.mock('axios')
 
-dataset.preservation_dataset_origin_version = {
+deprecatedDataset.preservation_dataset_origin_version = {
   preferred_identifier: 'urn:nbn:fi:origin-of-preserved-dataset',
 }
 
 const datasetsCalls = observable.array([])
 
-const identifier = dataset.identifier
+const identifier = deprecatedDataset.identifier
 const path = `/dataset/${identifier}/events`
 
 const stores = buildStores()
@@ -54,7 +54,7 @@ describe('Events page', () => {
         <MemoryRouter initialEntries={[path]}>
           <ThemeProvider theme={etsinTheme}>
             <Route path="/dataset/:identifier/events">
-              <Events id="tab-events" dataset={dataset} versionTitles={versionTitles} />
+              <Events id="tab-events" dataset={deprecatedDataset} versionTitles={versionTitles} />
             </Route>
           </ThemeProvider>
         </MemoryRouter>
@@ -70,7 +70,7 @@ describe('Events page', () => {
     }, {})
   })
 
-  it('should render provenances and version deletions in events table', async () => {
+  it('should render provenances, deprecations and version deletions in events table', async () => {
     tableToObjects(sections['Events']).should.eql([
       {
         Event: 'Checked',
@@ -78,6 +78,13 @@ describe('Events page', () => {
         When: 'February 3, 2021, 02:00 AM – February 23, 2021, 02:00 AM',
         Title: 'Provenance name',
         Description: 'Provenance description',
+      },
+      {
+        Event: 'Deprecated',
+        Who: '-',
+        When: 'December 22, 2021, 02:29 PM',
+        Title: 'Data removed',
+        Description: 'Original data removed from Fairdata IDA',
       },
       {
         Event: 'Dataset deletion',

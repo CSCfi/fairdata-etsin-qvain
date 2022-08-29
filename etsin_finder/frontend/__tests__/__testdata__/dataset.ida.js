@@ -617,3 +617,9 @@ export const versionTitles = {
     fi: 'Finnish Title 4',
   },
 }
+
+export const deprecatedDataset = {
+  ...dataset,
+  date_deprecated: '2021-12-22T14:29:15+02:00',
+  deprecated: true,
+}

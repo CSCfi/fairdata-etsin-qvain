@@ -222,7 +222,8 @@ const english = {
       cumulativeDatasetLabel: 'Note: Dataset is growing',
       cumulativeDatasetTooltip: {
         header: 'Growing dataset',
-        info: 'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
+        info:
+          'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
       },
     },
     embargo_date: 'Embargo expires',
@@ -242,6 +243,11 @@ const english = {
         description: 'Description',
         deletionEvent: 'Dataset deletion',
         deletionOfDatasetVersion: 'Deleted dataset version: ',
+      },
+      deprecations: {
+        event: 'Deprecated',
+        title: 'Data removed',
+        description: 'Original data removed from Fairdata IDA',
       },
       other_idn: 'Other identifiers',
       origin_identifier: 'Origin dataset identifier',
@@ -468,7 +474,8 @@ const english = {
   footer: {
     fairdata: {
       title: 'Fairdata',
-      text: 'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
+      text:
+        'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
     },
     information: {
       title: 'Information',

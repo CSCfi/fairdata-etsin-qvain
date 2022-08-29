@@ -56,6 +56,7 @@ class Content extends Component {
       this.versionsExists() ||
       (this.props.dataset.research_dataset.provenance !== undefined &&
         this.props.dataset.research_dataset.provenance.length > 0) ||
+      this.props.dataset.date_deprecated !== undefined ||
       (this.props.dataset.research_dataset.other_identifier !== undefined &&
         this.props.dataset.research_dataset.other_identifier.length > 0) ||
       (this.props.dataset.research_dataset.relation !== undefined &&
