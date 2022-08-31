@@ -458,7 +458,7 @@ const english = {
   stsd: 'Skip to submit dataset',
   tombstone: {
     removedInfo: 'The dataset has been removed',
-    deprecatedInfo: 'The dataset has been deprecated',
+    deprecatedInfo: 'The dataset has been deprecated. This means that although the metadata of this dataset is still available, the data with which it was originally published does not exist any more.',
     urlToNew: 'A new version of this dataset is available.',
     urlToOld: 'An older (published) version of this dataset is available.',
     linkTextToNew: 'You can open the new version via this link.',

@@ -457,7 +457,7 @@ const finnish = {
   stsd: 'Siirry "Julkaise Aineisto"-nappiin',
   tombstone: {
     removedInfo: 'Aineisto on poistettu',
-    deprecatedInfo: 'Aineisto on vanhentunut',
+    deprecatedInfo: 'Aineisto on vanhentunut. Aineiston metatiedot ovat edelleen saatavilla, mutta aineistoon sen julkaisuvaiheessa liitetty data on poistettu.',
     urlToNew: 'Aineistosta on olemassa uudempi, julkaistu versio.',
     urlToOld: 'Aineistosta on olemassa vanhempi, julkaistu versio.',
     linkTextToNew: 'Saat avattua uuden version tästä.',

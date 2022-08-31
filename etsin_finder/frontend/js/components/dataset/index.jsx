@@ -38,6 +38,12 @@ const BackButton = styled(NavLink)`
   margin: 0 0 0.5em 0;
 `
 
+function StateInfo({ removed, deprecated, children }) {
+  if (removed) return <NoticeBar bg="error">{children}</NoticeBar>
+  if (deprecated) return <DraftInfo>{children}</DraftInfo>
+  return null
+}
+
 class Dataset extends React.Component {
   constructor(props) {
     super(props)
@@ -230,21 +236,20 @@ class Dataset extends React.Component {
           <div className="row">
             <div className="col-12">
               <div>
-                {(removed || deprecated) && (
-                  <NoticeBar bg="error">
-                    <Translate content={this.state.versionInfo.stateInfo} />
-                    <br />
-                    <Translate content={this.state.versionInfo.urlText} />
-                    <Link
-                      href={this.state.versionInfo.ID}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      content={'tombstone.link'}
-                    >
-                      <Translate content={this.state.versionInfo.linkToOtherVersion} />
-                    </Link>
-                  </NoticeBar>
-                )}
+                <StateInfo removed={removed} deprecated={deprecated}>
+                  <Translate content={this.state.versionInfo.stateInfo} />
+                  <br />
+                  <Translate content={this.state.versionInfo.urlText} />
+                  <Link
+                    href={this.state.versionInfo.ID}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    content={'tombstone.link'}
+                  >
+                    <Translate content={this.state.versionInfo.linkToOtherVersion} />
+                  </Link>
+                </StateInfo>
+                )
               </div>
               <BackButton
                 exact
@@ -316,6 +321,12 @@ Dataset.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+}
+
+StateInfo.propTypes = {
+  removed: PropTypes.bool.isRequired,
+  deprecated: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
 }
 
 export default withStores(observer(Dataset))
