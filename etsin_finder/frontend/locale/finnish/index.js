@@ -359,7 +359,7 @@ const finnish = {
       changedLang: 'Kieli vaihdettu kieleen: %(lang)s',
       inactiveLogout: 'Istunto aikakatkaistu. Sinut kirjattiin ulos.',
     },
-    qvainPageTitle: 'Qvain | Tutkimusaineiston metatietotyökalu',
+    qvainPageTitle: 'Qvain | Tutkimusaineistojen kuvailutyökalu',
     etsinPageTitles: {
       data: 'Data',
       events: 'Tunnisteet ja tapahtumat',

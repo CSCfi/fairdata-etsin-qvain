@@ -1,5 +1,5 @@
 const home = {
-  brief: 'Tutkimusaineiston metatietotyökalu',
+  brief: 'Tutkimusaineistojen kuvailutyökalu',
   howTo: 'Käytön aloitus ja käyttöoppaat',
   description: `Fairdata Qvain -työkalu tekee datasi kuvailun ja julkaisemisen helpoksi.
     Qvain tarjoaa selkeän lomakkeen, johon tiedot datasta täytetään.

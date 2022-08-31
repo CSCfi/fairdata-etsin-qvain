@@ -72,7 +72,7 @@ translations = {
             "Kuvailutietojen perusteella käyttäjät voivat etsiä aineistoja ja arvioida "
             "löytämiensä aineistojen käyttökelpoisuutta tarpeisiinsa."
         ),
-        "qvain.title": "Qvain | Tutkimusaineiston metatietotyökalu",
+        "qvain.title": "Qvain | Tutkimusaineistojen kuvailutyökalu",
         "qvain.description": (
             "Fairdata Qvain -työkalu tekee datasi "
             "kuvailun ja julkaisemisen helpoksi."
