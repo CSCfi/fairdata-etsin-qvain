@@ -249,7 +249,6 @@ class Dataset extends React.Component {
                     <Translate content={this.state.versionInfo.linkToOtherVersion} />
                   </Link>
                 </StateInfo>
-                )
               </div>
               <BackButton
                 exact
