@@ -22,7 +22,6 @@ import { mix } from 'polished'
 import checkDataLang from '../../../utils/checkDataLang'
 import FilterItem from './filterItem'
 import { TransparentLink } from '../../general/button'
-import PasCheckBox from './PasCheckBox'
 import { withStores } from '../../../stores/stores'
 
 export class FilterSection extends Component {
@@ -201,7 +200,6 @@ export class FilterSection extends Component {
               />
             ))}
           </ul>
-          <PasCheckBox aggr={this.props.aggregation} />
           {this.state.displayShowButton ? (
             <div>
               <hr />

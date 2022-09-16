@@ -396,7 +396,6 @@ const english = {
       fos: 'View fields of science in Search -page',
       research: 'View projects in Search -page',
     },
-    includePas: 'Include Fairdata DPS datasets',
   },
   nav: {
     login: 'Login',

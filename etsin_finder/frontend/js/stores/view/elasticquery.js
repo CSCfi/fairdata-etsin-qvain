@@ -61,8 +61,6 @@ class ElasticQuery {
 
   @observable perPage = 20
 
-  @observable includePasDatasets = false
-
   @observable aggregations = {
     access_type_fi: {
       terms: {
@@ -158,18 +156,6 @@ class ElasticQuery {
         field: 'data_catalog.en',
       },
     },
-  }
-
-  @action
-  setIncludePasDatasets = value => {
-    this.includePasDatasets = value
-    this.queryES(false)
-  }
-
-  @action
-  toggleIncludePasDatasets = () => {
-    this.includePasDatasets = !this.includePasDatasets
-    this.queryES(false)
   }
 
   // update query search term and url
@@ -278,13 +264,6 @@ class ElasticQuery {
       if ('p' in urlParams && urlParams.p) {
         this.updatePageNum(urlParams.p, false)
       }
-      if ('pas' in urlParams && urlParams.pas) {
-        if (urlParams.pas === 'true') {
-          this.setIncludePasDatasets(true)
-        } else if (urlParams.pas === 'false') {
-          this.setIncludePasDatasets(false)
-        }
-      }
     }
     return true
   }
@@ -302,14 +281,13 @@ class ElasticQuery {
     })
     urlParams.p = this.pageNum
     urlParams.sort = this.sorting
-    urlParams.pas = this.includePasDatasets
     this.Env.history.replace({ pathname: path, search: UrlParse.makeSearchParams(urlParams) })
     return { path, search: UrlParse.makeSearchParams(urlParams) }
   }
 
   // query elastic search with defined settings
   @action
-  queryES = (initial = false) => {
+  queryES = async (initial = false) => {
     // don't perform initial query on every componentMount
     if (initial && this.results.total !== 0) {
       return new Promise(resolve => resolve())
@@ -323,11 +301,6 @@ class ElasticQuery {
 
     // Filters
     const createFilters = () => {
-      // If includePasDatasets is not checked then check if the PAS filter is set
-      // and remove it if present.
-      if (!this.includePasDatasets) {
-        this.filter = this.filter.filter(obj => !obj.key.startsWith('Fairdata PAS'))
-      }
       const filters = this.filter.map(obj => ({ term: { [obj.term]: obj.key } }))
       return filters
     }
@@ -347,139 +320,110 @@ class ElasticQuery {
     }
 
     const createQuery = query => {
-      let queryObject
       const tQuery = transformQuery(query)
       const isUrnQ = isUrnQuery(query)
+      let match
+
       if (tQuery) {
-        queryObject = {
-          bool: {
-            must: [
-              {
-                multi_match: {
-                  query: tQuery,
-                  type: 'best_fields',
-                  minimum_should_match: isUrnQ ? '100%' : '25%',
-                  operator: isUrnQ ? 'and' : 'or',
-                  fields,
-                },
-              },
-            ],
-            must_not: [
-              {
-                term: {
-                  'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets',
-                },
-              },
-            ],
+        match = {
+          multi_match: {
+            query: tQuery,
+            type: 'best_fields',
+            minimum_should_match: isUrnQ ? '100%' : '25%',
+            operator: isUrnQ ? 'and' : 'or',
+            fields,
           },
         }
       } else {
-        queryObject = {
-          bool: {
-            must: [
-              {
-                match_all: {},
-              },
-            ],
-            must_not: [
-              {
-                term: {
-                  'data_catalog.en': this.includePasDatasets ? '' : 'Fairdata PAS datasets',
-                },
-              },
-            ],
-          },
+        match = {
+          match_all: {},
         }
       }
-      return queryObject
+
+      return {
+        bool: {
+          must: [match],
+          filter: createFilters(),
+        },
+      }
     }
 
-    return new Promise((resolve, reject) => {
-      const queryObject = createQuery(this.search)
-      const sorting = createSorting()
-      const aggregations = this.aggregations
-      const currentLang = counterpart.getLocale()
-      const filters = createFilters()
+    const queryObject = createQuery(this.search)
+    const sorting = createSorting()
+    const aggregations = this.aggregations
+    const currentLang = counterpart.getLocale()
 
-      // adding filters if they are set
-      if (filters.length > 0) {
-        queryObject.bool.filter = filters
-      }
+    // results for specific page
+    let from = this.pageNum * this.perPage
+    from -= this.perPage
 
+    const currentSearch = this.search
+    const currentFilters = this.filter.slice()
+    const currentSorting = this.sorting
+
+    try {
       // toggle loader
       this.loading = true
 
-      // results for specific page
-      let from = this.pageNum * this.perPage
-      from -= this.perPage
-
-      const currentSearch = this.search
-      const currentFilters = this.filter.slice()
-      const currentSorting = this.sorting
-
       // TODO: check cache for saved results
-      axios
-        .post('/es/metax/dataset/_search', {
-          size: this.perPage,
-          from,
-          query: queryObject,
-          sort: sorting,
-          // Return only the following fields in source attribute to minimize traffic
-          _source: [
-            'access_rights.*',
-            'data_catalog.*',
-            'description.*',
-            'identifier',
-            'preservation_state',
-            'title.*',
+      const res = await axios.post('/es/metax/dataset/_search', {
+        size: this.perPage,
+        from,
+        query: queryObject,
+        sort: sorting,
+        // Return only the following fields in source attribute to minimize traffic
+        _source: [
+          'access_rights.*',
+          'data_catalog.*',
+          'description.*',
+          'identifier',
+          'preservation_state',
+          'title.*',
 
-            // Fields needed for ATT/IDA <--> PAS link detection
-            'preservation_identifier',
-            'preservation_dataset_version',
-            'preservation_dataset_origin_version',
-            'data_catalog_identifier',
-          ],
-          highlight: {
-            // pre_tags: ['<b>'], # default is <em>
-            // post_tags: ['</b>'],
-            fields: {
-              'description.*': {},
-              'title.*': {},
-              // Add more fields if highlights from other fields are required
-            },
+          // Fields needed for ATT/IDA <--> PAS link detection
+          'preservation_identifier',
+          'preservation_dataset_version',
+          'preservation_dataset_origin_version',
+          'data_catalog_identifier',
+        ],
+        highlight: {
+          // pre_tags: ['<b>'], # default is <em>
+          // post_tags: ['</b>'],
+          fields: {
+            'description.*': {},
+            'title.*': {},
+            // Add more fields if highlights from other fields are required
           },
-          aggregations,
-        })
-        .then(res => {
-          // TODO: cache/save results
-          // Fixes race condition
-          if (
-            currentSearch !== this.search ||
-            !Helpers.isEqual(currentFilters, this.filter.slice()) ||
-            currentSorting !== this.sorting
-          ) {
-            resolve()
-          } else {
-            const aggr = `data_catalog_${currentLang}`
-            const bucketLengths = res.data.aggregations[aggr].buckets.map(
-              bucket => bucket.doc_count
-            )
-            const totalHits = bucketLengths.reduce((partialSum, a) => partialSum + a, 0)
-            runInAction(() => {
-              this.results = {
-                hits: res.data.hits.hits,
-                total: totalHits,
-                aggregations: res.data.aggregations,
-              }
-              this.loading = false
-            })
-            resolve(res)
-          }
-        })
-        .catch(err => {
-          reject(err)
-        })
-    })
+        },
+        aggregations,
+      })
+
+      // TODO: cache/save results
+      // Fixes race condition
+      if (
+        currentSearch !== this.search ||
+        !Helpers.isEqual(currentFilters, this.filter.slice()) ||
+        currentSorting !== this.sorting
+      ) {
+        return null
+      }
+
+      const aggr = `data_catalog_${currentLang}`
+      const bucketLengths = res.data.aggregations[aggr].buckets.map(bucket => bucket.doc_count)
+      const totalHits = bucketLengths.reduce((partialSum, a) => partialSum + a, 0)
+      runInAction(() => {
+        this.results = {
+          hits: res.data.hits.hits,
+          total: totalHits,
+          aggregations: res.data.aggregations,
+        }
+      })
+      return res
+    } finally {
+      runInAction(() => {
+        this.loading = false
+      })
+    }
   }
 }
 

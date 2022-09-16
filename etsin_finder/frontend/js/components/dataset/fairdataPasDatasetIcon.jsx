@@ -24,41 +24,29 @@ const FairdataPasDatasetIcon = props => {
     `${props.preservation_state}` > 0 &&
     `${props.data_catalog_identifier}` !== DATA_CATALOG_IDENTIFIER.PAS
   ) {
-    return (
-      <FairdataPasIconContainerEnteringPas>
-        <FairdataPasIconLabel>
-          <Translate content="dataset.enteringPas" />
-        </FairdataPasIconLabel>
-      </FairdataPasIconContainerEnteringPas>
-    )
+    return <Translate component={FairdataPasIconContainerEnteringPas} content="dataset.enteringPas" />
   }
-  return (
-    <FairdataPasIconContainerInPas>
-      <Translate component={FairdataPasIconLabel} content="dataset.fairdataPas" />
-    </FairdataPasIconContainerInPas>
-  )
+  return <Translate component={FairdataPasIconContainerInPas} content="dataset.fairdataPas" />
 }
 
 export default withStores(observer(FairdataPasDatasetIcon))
 export const undecorated = FairdataPasDatasetIcon
 
-const FairdataPasIconContainerInPas = styled.div`
+const FairdataPasIconContainer = styled.div`
   padding: 0.2em 0.9em;
-  background-color: #b3efb0;
   border-radius: 1em;
   margin-right: 5px;
-`
-
-const FairdataPasIconContainerEnteringPas = styled.div`
-  padding: 0.2em 0.9em;
-  background-color: #efe4b0;
-  border-radius: 1em;
-  margin-right: 5px;
-`
-
-const FairdataPasIconLabel = styled.div`
-  display: inline;
+  display: flex;
+  align-items: center;
   white-space: nowrap;
+`
+
+const FairdataPasIconContainerInPas = styled(FairdataPasIconContainer)`
+  background-color: #b3efb0;
+`
+
+const FairdataPasIconContainerEnteringPas = styled(FairdataPasIconContainer)`
+  background-color: #efe4b0;
 `
 
 FairdataPasDatasetIcon.defaultProps = {

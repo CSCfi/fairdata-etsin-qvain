@@ -6,7 +6,6 @@ import {
   Section,
   FilterItems,
 } from '../../../js/components/search/filterResults/filterSection'
-import { PasCheckBox } from '../../../js/components/search/filterResults/PasCheckBox'
 import EnvClass from '../../../js/stores/domain/env'
 import ElasticQueryClass from '../../../js/stores/view/elasticquery'
 
@@ -180,13 +179,5 @@ describe('FilterSection', () => {
   })
   it('should render <FilterItems />', () => {
     expect(wrapper.find(FilterItems).length).toBe(1)
-  })
-  it('should render <PasCheckBox />', () => {
-    const wrapper = shallow(<PasCheckBox aggr="data_catalog" Stores={stores} />)
-    expect(wrapper.find('#pasCheckbox').length).toBe(1)
-  })
-  it('should NOT render <PasCheckBox />', () => {
-    const wrapper = shallow(<PasCheckBox aggr="asd" Stores={stores} />)
-    expect(wrapper.find('#pasCheckbox').length).toBe(0)
   })
 })
