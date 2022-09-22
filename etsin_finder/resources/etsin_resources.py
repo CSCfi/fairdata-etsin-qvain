@@ -168,7 +168,8 @@ class DatasetMetadata(Resource):
         if not authorization.user_can_view_dataset(cr_id):
             abort(404)
 
-        return download_metadata(cr_id, metadata_format)
+        need_auth = cr_service.is_draft(cr)
+        return download_metadata(cr_id, metadata_format, need_auth=need_auth)
 
 
 class Files(Resource):

@@ -614,7 +614,7 @@ class QvainDatasetEditorPermissions(Resource):
         try:
             cr = cr_service.get_catalog_record(cr_id, False, False)
             if not cr:
-                log.warning(f"Notifications: Catalog record {cr_id} not found.")
+                log.warning(f"Notifications: Catalog record {cr_id} not found.")
                 abort(404, message="Catalog record not found")
             title = (
                 get_multilang_value(
@@ -643,7 +643,6 @@ class QvainDatasetEditorPermissions(Resource):
                     language, "qvain.share.notification.subject", context
                 )
                 body = translate(language, "qvain.share.notification.body", context)
-                print(body)
                 msg = Message(
                     recipients=[recipient.get("email")],
                     sender=sender,

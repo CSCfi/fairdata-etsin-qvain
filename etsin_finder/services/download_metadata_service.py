@@ -60,12 +60,13 @@ class DatasetMetadataService(FlaskService):
             return 'attachment; filename="metadata.xml"'
         return 'attachment; filename="metadata.json"'
 
-    def download_metadata(self, cr_id, metadata_format):
+    def download_metadata(self, cr_id, metadata_format, need_auth=False):
         """Stream metadata download of a dataset to frontend
 
         Arguments:
             cr_id (str): Identifier of dataset
             metadata_format (str): The format to download in
+            need_auth (bool): Set True to download with service credentials
 
         Returns:
             Returns a Flask.Response object streaming the response from metax
@@ -82,13 +83,14 @@ class DatasetMetadataService(FlaskService):
                 metadata_format,
             )
 
+        # auth should only be used for privileged users since the response may
+        # contain email addresses or other sensitive details
+        auth = (self.user, self.password) if need_auth else None
+
         log.info("Request dataset metadata from: {0}".format(url))
         try:
             metax_response = requests.get(
-                url,
-                stream=True,
-                timeout=30,
-                verify=self.verify_ssl,
+                url, stream=True, timeout=30, verify=self.verify_ssl, auth=auth
             )
             metax_response.raise_for_status()
         except requests.HTTPError:
@@ -141,7 +143,7 @@ class DatasetMetadataService(FlaskService):
             return response
 
 
-def download_metadata(cr_id, metadata_format):
+def download_metadata(cr_id, metadata_format, **kwargs):
     """Stream metadata download of a dataset to frontend"""
     metadata_api = DatasetMetadataService(current_app)
-    return metadata_api.download_metadata(cr_id, metadata_format)
+    return metadata_api.download_metadata(cr_id, metadata_format, **kwargs)

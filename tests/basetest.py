@@ -252,6 +252,22 @@ class BaseTest:
         )
 
     @pytest.fixture
+    def draft_catalog_record(self, monkeypatch):
+        """
+        Draft catalog record.
+
+        :param monkeypatch:
+        :return:
+        """
+        from etsin_finder.services import cr_service
+
+        monkeypatch.setattr(
+            cr_service,
+            "get_catalog_record",
+            lambda x, y, z=None: get_test_catalog_record("open", draft=True),
+        )
+
+    @pytest.fixture
     def login_catalog_record(self, monkeypatch):
         """
         Login access_type catalog record.

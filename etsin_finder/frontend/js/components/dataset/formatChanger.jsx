@@ -96,7 +96,6 @@ export class FormatChanger extends Component {
         width="fit-content"
         onChange={this.changeFormat}
         options={this.state.formats}
-        disabled={data.state === "draft"}
       />
     ) : null
   }

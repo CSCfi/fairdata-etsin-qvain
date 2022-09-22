@@ -12,10 +12,6 @@ Uses the requests_mock fixture provided by the requests-mock
 library for mocking the Download API endpoints.
 """
 
-import json
-import pytest
-import requests
-from flask_mail import email_dispatched
 
 from .basetest import BaseTest
 
@@ -25,14 +21,37 @@ class TestDownloadMetadataService(BaseTest):
 
     # GET requests
     @staticmethod
-    def get_matcher(body, headers):
+    def get_matcher(body, headers, require_auth=False):
         """Gets matcher that returns specific response body and response"""
 
         def _matcher(request, context):
+            if require_auth and not request.headers.get("Authorization"):
+                context.status_code = 401
+                return "Unauthorized"
             context.headers = headers
             return body
 
         return _matcher
+
+    def test_draft_auth(
+        self, authd_client, user_123_details, draft_catalog_record, requests_mock
+    ):
+        """Should use authentication when requesting a draft"""
+        matcher = self.get_matcher(
+            "<someXml>Hello</someXml>",
+            {
+                "Content-Type": "application/somefileformat",
+                "Content-Disposition": "content-disposition",
+                "Content-Length": "24",
+            },
+            require_auth=True,
+        )
+        requests_mock.get(
+            "https://mock-metax/rest/datasets/1.json", text=matcher, status_code=200
+        )
+
+        r = authd_client.get("/api/format?cr_id=1&format=metax")
+        assert r.status_code == 200
 
     def test_preserve_headers(self, unauthd_client, open_catalog_record, requests_mock):
         """Should preserve original Content-Type and Content-Disposition headers"""

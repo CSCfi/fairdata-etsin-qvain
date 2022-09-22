@@ -15,7 +15,7 @@ from etsin_finder.utils.constants import ACCESS_TYPES
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
-def get_test_catalog_record(access_type, embargo_passed=None):
+def get_test_catalog_record(access_type, embargo_passed=None, draft=False):
     """
     Get test catalog record from file
 
@@ -27,6 +27,9 @@ def get_test_catalog_record(access_type, embargo_passed=None):
 
     with open(dir_path + "/test_data.json") as f:
         cr_json = json.load(f)
+
+    if draft:
+        cr_json["state"] = "draft"
 
     cr_json["research_dataset"]["access_rights"]["access_type"][
         "identifier"
