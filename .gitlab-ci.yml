@@ -35,7 +35,7 @@ job_clean_previous_build:
   tags:
     - shell
   script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "repo_version=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
 
 # Deployment of [master/release] branch to [test/stable]
 job_deploy_protected_branch:
@@ -57,7 +57,7 @@ job_deploy_feature:
   tags:
     - shell
   script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $DEPLOY_PLAYBOOK -e "repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DEPLOY_PLAYBOOK -e "repo_version=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
 
 job_sonarqube_check:
   stage: test
@@ -108,7 +108,7 @@ job_clean_test:
   tags:
     - shell
   script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "repo_version_app=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
+    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "repo_version=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
 
 # Clean deleted branches from environments
 job_clean_gitlab_env:
