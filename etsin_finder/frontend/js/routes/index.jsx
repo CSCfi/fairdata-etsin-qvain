@@ -9,12 +9,10 @@
    * @license   MIT
    */
 }
-// ignore dependency cycles from preloading
-/* eslint-disable import/no-cycle */
 
 import loadable from '@loadable/component'
 
-export const Home = loadable(() => import('../components/frontpage'))
+export const Home = loadable(() => import('../components/frontpage' /* webpackPrefetch: true */))
 
 export const Dataset = loadable(() => import('../components/dataset' /* webpackPrefetch: true */))
 

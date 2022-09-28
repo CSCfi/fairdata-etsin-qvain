@@ -112,7 +112,6 @@ const EventList = props => {
               </tr>
             ))
           }
-
           {dateDeprecated && (
             // Displaying deprecated datasets
             <tr key={dateDeprecated}>

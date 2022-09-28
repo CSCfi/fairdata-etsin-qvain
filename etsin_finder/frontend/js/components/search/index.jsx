@@ -15,7 +15,6 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
-import { Dataset } from '../../routes'
 import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
@@ -46,8 +45,6 @@ class Search extends Component {
       this.setState({
         initialLoad: true,
       })
-      // preload dataset page
-      Dataset.preload()
     })
   }
 

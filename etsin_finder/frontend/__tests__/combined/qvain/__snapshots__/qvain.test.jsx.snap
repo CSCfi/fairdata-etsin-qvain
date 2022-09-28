@@ -9,9 +9,9 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "$$typeof": Symbol(react.forward_ref),
         "attrs": Array [],
         "componentStyle": e {
-          "baseHash": -291192186,
+          "baseHash": 257979906,
           "baseStyle": e {
-            "baseHash": 1387173706,
+            "baseHash": -87983794,
             "baseStyle": undefined,
             "componentId": "label__Label-sc-x0jqqw-0",
             "isStatic": false,
@@ -62,7 +62,7 @@ exports[`Qvain dataset list PreservationStates should render <TablePasState /> 1
         "$$typeof": Symbol(react.forward_ref),
         "attrs": Array [],
         "componentStyle": e {
-          "baseHash": 682788508,
+          "baseHash": 766802072,
           "baseStyle": undefined,
           "componentId": "tablePasState__PasText-sc-kh2b5p-1",
           "isStatic": false,
@@ -122,7 +122,7 @@ exports[`Qvain should render correctly 1`] = `
           },
         ],
         "componentStyle": e {
-          "baseHash": 1359012054,
+          "baseHash": -123141806,
           "baseStyle": undefined,
           "componentId": "errorBoundary__ErrorContainer-sc-kebdqo-0",
           "isStatic": false,

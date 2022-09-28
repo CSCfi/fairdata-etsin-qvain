@@ -18,7 +18,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { observer } from 'mobx-react'
 
-import { Search } from '../../routes'
 import ErrorBoundary from '../general/errorBoundary'
 import { withStores } from '../../stores/stores'
 
@@ -44,7 +43,6 @@ class SearchBar extends Component {
   }
 
   handleChange = event => {
-    Search.preload()
     this.setState({ query: event.target.value })
   }
 

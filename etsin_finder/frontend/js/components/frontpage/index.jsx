@@ -15,7 +15,6 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Search } from '../../routes'
 import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
 import KeyValues from './keyValues'
@@ -29,8 +28,6 @@ const FrontPage = () => {
 
   useEffect(() => {
     Accessibility.handleNavigation('home')
-    // preload search page
-    Search.preload()
 
     recordEvent('HOME')
     // eslint-disable-next-line react-hooks/exhaustive-deps

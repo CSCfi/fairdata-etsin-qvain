@@ -65,7 +65,7 @@ const Content = ({ contentRef }) => {
           <Qvain />
         </LoggedInRoute>
         <LoggedInRoute exact path={qvainPath('')} notLoggedIn={<QvainLandingPage />}>
-          <FlaggedComponent flag="UI.NEW_DATASETS_VIEW" whenDisabled={<QvainDatasets />} >
+          <FlaggedComponent flag="UI.NEW_DATASETS_VIEW" whenDisabled={<QvainDatasets />}>
             <QvainDatasetsV2 />
           </FlaggedComponent>
         </LoggedInRoute>
