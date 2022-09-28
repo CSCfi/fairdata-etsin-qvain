@@ -14,7 +14,10 @@ export default function idnToLink(identifier) {
   if (identifier.startsWith('doi:')) {
     return identifier.replace('doi:', 'https://doi.org/')
   }
-  if (identifier.startsWith('reportronic.fi/')) {
+  if (identifier.startsWith('reportronic.fi/') || identifier.startsWith('url:reportronic.fi/')) {
+    if (identifier.startsWith('url:reportronic.fi/')) {
+      return `https://${identifier.slice(4)}`
+    }
     return `https://${identifier}`
   }
   if (identifier.toLowerCase().startsWith('urn:nbn:fi:')) {
