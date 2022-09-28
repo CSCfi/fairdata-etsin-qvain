@@ -190,3 +190,4 @@ class DatasetValidationSchema(Schema):
     remote_resources = fields.List(fields.Nested(RemoteResourceValidationSchema))
     useDoi = fields.Boolean()
     is_output_of = fields.List(fields.Nested(ProjectValidationSchema))
+    modified = fields.DateTime(format="iso")

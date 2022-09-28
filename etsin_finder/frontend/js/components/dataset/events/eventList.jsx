@@ -166,7 +166,7 @@ const EventList = props => {
 EventList.defaultProps = {
   provenances: [],
   deletedVersions: [],
-  dateDeprecated: '',
+  dateDeprecated: null,
 }
 
 EventList.propTypes = {

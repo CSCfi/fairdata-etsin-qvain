@@ -24,10 +24,12 @@ import handleSubmitToBackend from '../../../js/components/qvain/utils/handleSubm
 import { get } from '../../__testdata__/qvain.files.data'
 import { useStores } from '../../../js/stores/stores'
 import { buildStores } from '../../../js/stores'
-import SelectedItemsDropdown from '../../../js/components/qvain/fields/files/ida/selectedItemsDropdown'
 import { runInAction } from 'mobx'
 
 jest.mock('axios')
+
+const fakeNow = new Date('2022-09-22T12:34:00.000Z')
+jest.useFakeTimers('modern').setSystemTime(fakeNow)
 
 jest.mock('../../../js/stores/stores', () => {
   const useStores = jest.fn()

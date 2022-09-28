@@ -8,7 +8,6 @@
 """Test Qvain dataset validation schema."""
 
 
-import json
 import pytest
 
 from .basetest import BaseTest

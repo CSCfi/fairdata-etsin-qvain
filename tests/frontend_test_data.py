@@ -205,6 +205,7 @@ expected_remote_resources = [
 ]
 
 original_complete_dataset = {
+    "modified": "2022-09-22T11:53:31.990Z",
     "title": {"en": "test", "fi": ""},
     "description": {"en": "desc", "fi": ""},
     "other_identifier": [{"notation": "https://doin.com/some_identifier"}, {"notation": "doi:10.23729/12345678-aaaa"}],
@@ -741,6 +742,7 @@ original_complete_dataset = {
 expected_complete_dataset = {
     "data_catalog": "urn:nbn:fi:att:data-catalog-att",
     "research_dataset": {
+        "modified": "2022-09-22T11:53:31.990Z",
         "title": {"en": "test"},
         "description": {"en": "desc"},
         "creator": [
@@ -955,6 +957,7 @@ expected_complete_dataset = {
 expected_edited_dataset = {
     "data_catalog": "urn:nbn:fi:att:data-catalog-att",
     "research_dataset": {
+        "modified": "2022-09-22T11:53:31.990Z",
         "theme": [{"identifier": "http://www.yso.fi/onto/koko/p46606"}],
         "title": {"en": "test"},
         "issued": "2021-06-23",

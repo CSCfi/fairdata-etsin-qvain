@@ -2,6 +2,9 @@ import 'chai/register-expect'
 
 import handleSubmit from '../../js/components/qvain/utils/handleSubmit'
 
+const fakeNow = new Date('2022-09-22T12:34:00.000Z')
+jest.useFakeTimers('modern').setSystemTime(fakeNow)
+
 describe('when calling handleSubmit with mockStores', () => {
   const getMockStores = dataCatalog => ({
     Qvain: {
@@ -112,6 +115,7 @@ describe('when calling handleSubmit with mockStores', () => {
     field_of_science: 'field_of_science',
     language: 'language',
     issued: 'issuedDate',
+    modified: fakeNow.toISOString(),
   }
 
   const expectedReturnATT = {

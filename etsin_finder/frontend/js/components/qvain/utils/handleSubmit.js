@@ -38,6 +38,8 @@ const handleSubmitToBackend = values => {
 
   const keywords = values.Keywords.toBackend()
 
+  const modified = new Date().toISOString()
+
   const obj = {
     title,
     description,
@@ -67,6 +69,7 @@ const handleSubmitToBackend = values => {
     field_of_science,
     language,
     issued,
+    modified
   }
 
   if (REMOTE_RESOURCES_DATA_CATALOGS.includes(values.dataCatalog)) {

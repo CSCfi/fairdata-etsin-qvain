@@ -72,26 +72,6 @@ const Controls = styled.div`
 `
 
 class Description extends Component {
-  constructor(props) {
-    super(props)
-    const {
-      creator,
-      contributor,
-      title,
-      issued,
-      modified,
-      description,
-    } = props.dataset.research_dataset
-    this.state = {
-      creator,
-      contributor,
-      title,
-      issued,
-      modified,
-      description,
-    }
-  }
-
   componentDidMount() {
     const {
       Matomo: { recordEvent },
@@ -108,6 +88,18 @@ class Description extends Component {
 
   render() {
     const { id } = this.props
+    const {
+      creator,
+      cumulative,
+      contributor,
+      harvested,
+      title,
+      issued,
+      modified,
+      description,
+      access_rights: accessRights,
+      preferred_identifier: preferredIdentifier,
+    } = this.props.dataset.research_dataset
     const versions = this.props.dataset.dataset_version_set
     const datasetIdentifier = this.props.dataset.identifier
     const isVersion =
@@ -140,7 +132,7 @@ class Description extends Component {
                     'access_rights',
                     'access_type'
                   )
-                    ? this.props.dataset.research_dataset.access_rights
+                    ? accessRights
                     : null
                 }
               />
@@ -192,42 +184,46 @@ class Description extends Component {
             )}
           </div>
           <div className="d-md-flex align-items-center dataset-title justify-content-between">
-            <Title lang={getDataLang(this.state.title)}>{checkDataLang(this.state.title)}</Title>
+            <Title lang={getDataLang(title)}>{checkDataLang(title)}</Title>
           </div>
           <div className="d-flex justify-content-between basic-info">
             <MainInfo>
               <ErrorBoundary>
-                <TogglableAgentList agents={this.state.creator} agentType="creator" />
+                <TogglableAgentList agents={creator} agentType="creator" />
               </ErrorBoundary>
               <ErrorBoundary>
-                <TogglableAgentList agents={this.state.contributor} agentType="contributor" />
+                <TogglableAgentList agents={contributor} agentType="contributor" />
               </ErrorBoundary>
-              {this.state.issued && (
-                <p lang={getDataLang(this.state.issued)}>
-                  <Translate content="dataset.issued" />
-                  {': '}
-                  {dateFormat(checkDataLang(this.state.issued))}
+              {issued && (
+                <p lang={getDataLang(issued)}>
+                  <Translate
+                    content="dataset.issued"
+                    with={{ date: dateFormat(checkDataLang(issued), { format: 'date' }) }}
+                  />
                   <br />
-                  <Translate content="dataset.modified" />
-                  {': '}
-                  {dateFormat(checkDataLang(this.state.modified))}
+                  {modified && (
+                    <Translate
+                      content="dataset.modified"
+                      with={{ date: dateFormat(checkDataLang(modified), { format: 'date' }) }}
+                    />
+                  )}
                 </p>
               )}
             </MainInfo>
           </div>
           <ErrorBoundary>
-            <DatasetDescription lang={getDataLang(this.state.description)}>
-              <CustomMarkdown source={checkDataLang(this.state.description)} />
+            <DatasetDescription lang={getDataLang(description)}>
+              <CustomMarkdown source={checkDataLang(description)} />
             </DatasetDescription>
           </ErrorBoundary>
-          {this.props.cumulative && (
+          {cumulative && (
             <Label color="error">
               <Translate content="dataset.cumulative" />
             </Label>
           )}
-          {this.props.harvested && (
+          {harvested && (
             <>
-              <GoToOriginal idn={this.props.dataset.research_dataset.preferred_identifier} />
+              <GoToOriginal idn={preferredIdentifier} />
               <label htmlFor="dataset-tags">
                 <Translate
                   id="dataset-tags"

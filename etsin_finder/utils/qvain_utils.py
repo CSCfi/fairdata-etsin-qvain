@@ -104,6 +104,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "infrastructure": data.get("infrastructure"),
             "spatial": data.get("spatial"),
             "temporal": data.get("temporal"),
+            "modified": data.get("modified"),
         },
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
@@ -251,6 +252,7 @@ def edited_data_to_metax(data, original):
             "relation": data.get("relation"),
             "provenance": data.get("provenance"),
             "temporal": data.get("temporal"),
+            "modified": data.get("modified"),
         }
     )
     edited_data = {
