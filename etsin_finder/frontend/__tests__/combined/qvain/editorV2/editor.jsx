@@ -101,6 +101,7 @@ describe('EditorV2', () => {
 
       describe('when de-selecting IDA catalog', () => {
         beforeAll(() => {
+          idaButtonWrapper = wrapper.find('CatalogButton#ida-catalog-btn')
           idaButtonWrapper.simulate('click')
         })
 
@@ -131,6 +132,7 @@ describe('EditorV2', () => {
 
       describe('when de-selecting ATT catalog', () => {
         beforeAll(() => {
+          attButtonWrapper = wrapper.find('CatalogButton#att-catalog-btn')
           attButtonWrapper.simulate('click')
         })
 

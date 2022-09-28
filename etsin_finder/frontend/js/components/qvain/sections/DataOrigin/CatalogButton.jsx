@@ -51,32 +51,21 @@ CatalogButton.defaultProps = {
 
 const getOpacy = p => opacify(-0.8, p.disabled ? p.theme.color.darkgray : p.theme.color.primary)
 
-const float = p =>
-  !p.selected &&
-  `
-box-shadow: 0 3px 6px ${getOpacy(p)};
-border: 2px solid ${getOpacy(p)};
-color: ${p.disabled ? p.theme.color.gray : p.theme.color.primaryDark};
-background: #fcfeff;
-position: relative;
-`
-
-const BoxButton = styled.button.attrs({
+const Button = styled.button.attrs({
   type: 'button',
 })`
-  color: inherit;
   line-height: inherit;
-  border: 2px solid ${p => p.theme.color.primary};
-  box-shadow: 0 3px 6px #00000027;
+  font-size: 14px;
   border-radius: 10px;
+  border: 2px solid;
   padding: 16px 16px;
   min-height: 6rem;
   display: flex;
   align-items: stretch;
-  font-size: 14px;
   width: 100%;
   flex-grow: 1;
   background: #fff;
+  cursor: pointer;
 
   @media screen and (max-width: ${p => p.theme.breakpoints.sm}) {
     justify-content: center;
@@ -89,9 +78,54 @@ const BoxButton = styled.button.attrs({
   @media screen and (max-width: ${p => p.theme.breakpoints.md}) {
     padding: 1rem 1.5rem;
   }
-
-  ${float}
 `
+
+const ActiveButton = styled(Button)`
+  color: inherit;
+  border-color: ${p => getOpacy(p)};
+
+  :hover {
+    box-shadow: 0 3px 6px ${p => getOpacy(p)};
+    border-color: ${p => p.theme.color.primary};
+    color: ${p => p.theme.color.primaryDark};
+    background: #fcfeff;
+  }
+`
+
+const SelectedButton = styled(Button)`
+  color: ${p => p.theme.color.primaryDark};
+  border-color: ${p => p.theme.color.primary};
+`
+
+const DisabledButton = styled(Button)`
+  color: ${p => p.theme.color.gray}
+  background-color: ${p => p.theme.color.lightGray};
+  border-color: ${p => p.theme.color.gray};
+  cursor: auto;
+`
+
+export function BoxButton({ children, selected, disabled, onClick }) {
+  if (disabled)
+    return (
+      <DisabledButton disabled onClick={onClick}>
+        {children}
+      </DisabledButton>
+    )
+  if (selected) return <SelectedButton onClick={onClick}>{children}</SelectedButton>
+  return <ActiveButton onClick={onClick}>{children}</ActiveButton>
+}
+
+BoxButton.propTypes = {
+  children: PropTypes.node.isRequired,
+  onClick: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
+  disabled: PropTypes.bool,
+}
+
+BoxButton.defaultProps = {
+  selected: false,
+  disabled: false,
+}
 
 const BoxTitle = styled.div`
   font-weight: bold;
