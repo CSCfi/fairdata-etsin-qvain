@@ -150,7 +150,9 @@ class TestUserHasDatasetEditorPermission(UserAccessBaseTest):
 
     def test_flag_disabled(self, unflagged_app, user_details, no_IDA_projects):
         """Return False when editor rights flag is disabled."""
-        assert authorization.user_has_dataset_editor_permission("editor_dataset") is False
+        assert (
+            authorization.user_has_dataset_editor_permission("editor_dataset") is False
+        )
 
 
 class TestUserHasEditAccess(UserAccessBaseTest):

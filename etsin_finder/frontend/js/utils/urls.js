@@ -16,6 +16,7 @@ export default {
   },
   common: {
     datasetProjects: dataset => `/api/common/datasets/${dataset}/projects`,
+    relatedDatasets: dataset => `/api/common/datasets/${dataset}/related`,
     datasetUserMetadata: dataset => `/api/common/datasets/${dataset}/user_metadata`,
     directoryFiles: directory => `/api/common/directories/${directory}/files`,
     projectFiles: project => `/api/common/projects/${project}/files`,

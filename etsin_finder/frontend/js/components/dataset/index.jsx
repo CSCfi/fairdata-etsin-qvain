@@ -18,7 +18,7 @@ import translate from 'counterpart'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation, useParams } from 'react-router-dom'
 
 import { opacify } from 'polished'
 import axios from 'axios'
@@ -28,7 +28,7 @@ import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
 import NoticeBar from '../general/noticeBar'
 import Loader from '../general/loader'
-import { withStores } from '../../stores/stores'
+import { withStores, useStores } from '@/stores/stores'
 import CitationModal from './citation/citationModal'
 import urls from '../../utils/urls'
 
@@ -37,12 +37,6 @@ const BackButton = styled(NavLink)`
   padding: 0;
   margin: 0 0 0.5em 0;
 `
-
-function StateInfo({ removed, deprecated, children }) {
-  if (removed) return <NoticeBar bg="error">{children}</NoticeBar>
-  if (deprecated) return <DraftInfo>{children}</DraftInfo>
-  return null
-}
 
 class Dataset extends React.Component {
   constructor(props) {
@@ -77,77 +71,121 @@ class Dataset extends React.Component {
     }
   }
 
-  async getAllVersions(data) {
-    const datasetVersionSet = data.dataset_version_set
-    let stateInfo = ''
+  async getRelatedDatasets(datasetId) {
+    try {
+      const res = await axios.get(urls.common.relatedDatasets(datasetId))
+      return res.data
+    } catch (e) {
+      console.error(e)
+      return null
+    }
+  }
 
-    let urlText = ''
-    let latestDate = ''
-    const currentDate = new Date(data.date_created)
-    let ID = ''
-    let linkToOtherVersion = ''
-    const versionTitles = {}
+  async getRelatedDatasetsInfo(data, datasetId) {
+    if (!data.removed) {
+      return null
+    }
+    const relatedDatasets = await this.getRelatedDatasets(datasetId)
+    if (!relatedDatasets?.length) {
+      return null
+    }
 
+    return relatedDatasets.reduce(
+      (obj, val) => {
+        if (val.type === 'other_identifier') {
+          obj.otherIdentifiers.push(val)
+        } else {
+          obj.relations.push(val)
+        }
+        return obj
+      },
+      { otherIdentifiers: [], relations: [] }
+    )
+  }
+
+  getStateInfo(data) {
     if (data.removed) {
-      stateInfo = 'tombstone.removedInfo'
-    } else if (data.deprecated) {
-      stateInfo = 'tombstone.deprecatedInfo'
+      return 'tombstone.removedInfo'
     }
 
+    if (data.deprecated) {
+      return 'tombstone.deprecatedInfo'
+    }
+
+    return null
+  }
+
+  async getVersionData(datasetVersionSet) {
     const promises = []
-
-    if (typeof datasetVersionSet !== 'undefined') {
-      // If there are more than 1 version
-      for (const k of datasetVersionSet.keys()) {
-        const versionUrl = urls.dataset(datasetVersionSet[k].identifier)
-        promises.push(axios.get(versionUrl))
-      }
-
-      const retval = await axios.all(promises) // will fetch all dataset versions
-      retval.forEach(response => {
-        const catalogRecord = response?.data?.catalog_record
-        if (catalogRecord) {
-          const title = catalogRecord.research_dataset.title
-          const identifier = catalogRecord.identifier
-          versionTitles[identifier] = title
-        }
-      })
-
-      latestDate = new Date(
-        Math.max.apply(
-          null,
-          retval // Date of the latest existing version
-            .filter(
-              version =>
-                !version.data.catalog_record.removed && !version.data.catalog_record.deprecated
-            )
-            .map(version => new Date(version.data.catalog_record.date_created))
-        )
-      )
-
-      if (latestDate.getTime() > currentDate.getTime()) {
-        urlText = 'tombstone.urlToNew'
-        linkToOtherVersion = 'tombstone.linkTextToNew'
-      } else if (latestDate.getTime() < currentDate.getTime()) {
-        urlText = 'tombstone.urlToOld'
-        linkToOtherVersion = 'tombstone.linkTextToOld'
-      }
-
-      for (const k of datasetVersionSet.keys()) {
-        if (new Date(datasetVersionSet[k].date_created).getTime() === latestDate.getTime()) {
-          ID = datasetVersionSet[k].identifier
-          break
-        }
-      }
+    if (datasetVersionSet === undefined) {
+      return []
     }
+
+    for (const k of datasetVersionSet.keys()) {
+      const versionUrl = urls.dataset(datasetVersionSet[k].identifier)
+      promises.push(axios.get(versionUrl))
+    }
+
+    return Promise.all(promises)
+  }
+
+  getVersionTitles(versions) {
+    const records = versions.map(response => response?.data?.catalog_record).filter(v => v)
+    return records.reduce((obj, val) => {
+      obj[val.identifier] = val.research_dataset.title
+      return obj
+    }, {})
+  }
+
+  getLatestVersionDate(versions) {
+    return new Date(
+      Math.max.apply(
+        null,
+        versions // Date of the latest existing version
+          .filter(
+            version =>
+              !version.data.catalog_record.removed && !version.data.catalog_record.deprecated
+          )
+          .map(version => new Date(version.data.catalog_record.date_created))
+      )
+    )
+  }
+
+  getLinkInfo(data, versions) {
+    if (!data.dataset_version_set) return {}
+    const latestDate = this.getLatestVersionDate(versions)
+    const currentDate = new Date(data.date_created)
+    const ID = Object.values(data.dataset_version_set).find(
+      val => new Date(val.date_created).getTime() === latestDate.getTime()
+    )
+
+    if (latestDate.getTime() > currentDate.getTime()) {
+      return { ID, urlText: 'tombstone.urlToNew', linkToOtherVersion: 'tombstone.linkTextToNew' }
+    }
+
+    if (latestDate.getTime() < currentDate.getTime()) {
+      return { ID, urlText: 'tombstone.urlToOld', linkToOtherVersion: 'tombstone.linkTextToOld' }
+    }
+
+    return { ID }
+  }
+
+  async getAllVersions(data) {
+    const stateInfo = this.getStateInfo(data)
+    const [versions, relatedDatasetsInfo] = await Promise.all([
+      this.getVersionData(data.dataset_version_set),
+      this.getRelatedDatasetsInfo(data, data.identifier),
+    ])
+    const versionTitles = this.getVersionTitles(versions)
+    const links = this.getLinkInfo(data, versions)
 
     this.setState({
       versionInfo: {
         stateInfo,
-        urlText,
-        ID,
-        linkToOtherVersion,
         versionTitles,
+        ...links,
+        relatedDatasetsInfo,
+        fetchingRelated: false,
       },
     })
   }
@@ -173,9 +211,13 @@ class Dataset extends React.Component {
     DatasetQuery.getData(identifier)
       .then(async result => {
         await DatasetQuery.fetchAndStoreFiles() // needed for API V2
-        this.setState({
+        this.setState(prevState => ({
           loaded: true,
-        })
+          versionInfo: {
+            ...prevState.versionInfo,
+            fetchingRelated: !!result.catalog_record.removed,
+          },
+        }))
         this.getAllVersions(result.catalog_record)
       })
       .catch(error => {
@@ -185,113 +227,227 @@ class Dataset extends React.Component {
   }
 
   render() {
-    const { Accessibility, DatasetQuery, Auth } = this.props.Stores
-    const { cscUserLogged } = Auth
-    const { location } = this.props
-    const { identifier } = this.props.match.params
+    const { DatasetQuery, Auth } = this.props.Stores
 
-    // CASE 1: Houston, we have a problem
     if (this.state.error !== false) {
-      // If preview query parameter is enabled, user should try logging in
-      if (location && location.search) {
-        const params = new URLSearchParams(location.search)
-        if (params.get('preview') === '1' && !cscUserLogged) {
-          return <ErrorPage error={{ type: 'cscloginrequired' }} />
-        }
-      }
-      return <ErrorPage error={{ type: 'notfound' }} />
-    }
-
-    const isDraft = DatasetQuery.results && DatasetQuery.results.state === 'draft'
-    let draftInfoText = null
-    if (isDraft) {
-      draftInfoText = DatasetQuery.results.draft_of
-        ? 'dataset.draftInfo.changes'
-        : 'dataset.draftInfo.draft'
+      return <DatasetError userLogged={!!Auth.cscUserLogged} />
     }
 
     if (!this.state.loaded || !DatasetQuery.results) {
-      return (
-        <LoadingSplash>
-          <Loader active />
-        </LoadingSplash>
-      )
+      return <DatasetLoadSpinner />
     }
 
-    const dataset = DatasetQuery.results
-    const cumulative = DatasetQuery.cumulative_state === 1
-    const emailInfo = DatasetQuery.emailInfo
-    const hasV2Files = DatasetQuery.Files.root && DatasetQuery.Files.root.directChildCount > 0
-    const hasFiles = hasV2Files || false
-    const hasRemote = dataset.research_dataset.remote_resources !== undefined
-    const harvested = dataset.data_catalog.catalog_json.harvested
-    const deprecated = dataset.deprecated
-    const removed = dataset.removed
-
-    // CASE 2: Business as usual
-    return (
-      <div>
-        <CitationModal />
-        <article className="container regular-row">
-          <div className="row">
-            <div className="col-12">
-              <div>
-                <StateInfo removed={removed} deprecated={deprecated}>
-                  <Translate content={this.state.versionInfo.stateInfo} />
-                  <br />
-                  <Translate content={this.state.versionInfo.urlText} />
-                  <Link
-                    href={this.state.versionInfo.ID}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    content={'tombstone.link'}
-                  >
-                    <Translate content={this.state.versionInfo.linkToOtherVersion} />
-                  </Link>
-                </StateInfo>
-              </div>
-              <BackButton
-                exact
-                to="/datasets"
-                onClick={() => {
-                  Accessibility.announce(
-                    translate('changepage', { page: translate('nav.datasets') })
-                  )
-                }}
-              >
-                <span aria-hidden>{'< '}</span>
-                <Translate content={'dataset.goBack'} />
-              </BackButton>
-            </div>
-          </div>
-          <div className="row">
-            {draftInfoText && (
-              <div className="col-12">
-                <Translate component={DraftInfo} content={draftInfoText} />
-              </div>
-            )}
-            <Content
-              identifier={identifier}
-              dataset={dataset}
-              harvested={harvested}
-              cumulative={cumulative}
-              hasFiles={hasFiles}
-              hasRemote={hasRemote}
-              isDeprecated={deprecated}
-              isRemoved={removed}
-              emails={emailInfo}
-              versionTitles={this.state.versionInfo.versionTitles}
-            />
-            <div className="col-lg-4">
-              <ErrorBoundary>
-                <Sidebar dataset={dataset} />
-              </ErrorBoundary>
-            </div>
-          </div>
-        </article>
-      </div>
-    )
+    return <DatasetView versionInfo={this.state.versionInfo} />
   }
+}
+
+function DatasetError({ userLogged }) {
+  // CASE 1: Houston, we have a problem
+  // If preview query parameter is enabled, user should try logging in
+  const location = useLocation()
+  if (location && location.search) {
+    const params = new URLSearchParams(location.search)
+    if (params.get('preview') === '1' && !userLogged) {
+      return <ErrorPage error={{ type: 'cscloginrequired' }} />
+    }
+  }
+  return <ErrorPage error={{ type: 'notfound' }} />
+}
+
+DatasetError.propTypes = {
+  userLogged: PropTypes.bool.isRequired,
+}
+
+function DatasetLoadSpinner() {
+  return (
+    <LoadingSplash>
+      <Loader active />
+    </LoadingSplash>
+  )
+}
+
+function RelatedDatasetLoadSpinner() {
+  return (
+    <LoadingSplash margin="1rem">
+      <Loader active color="white" />
+    </LoadingSplash>
+  )
+}
+
+function StateInfo({ children }) {
+  const {
+    DatasetQuery: {
+      results: { removed, deprecated },
+    },
+  } = useStores()
+  if (removed) return <NoticeBar bg="error">{children}</NoticeBar>
+  if (deprecated) return <DraftInfo>{children}</DraftInfo>
+  return null
+}
+
+function OtherIdentifiers({ identifiers }) {
+  return identifiers.map(identifier => (
+    <div key={identifier.identifier}>
+      <Translate
+        with={{ identifier: identifier.identifier }}
+        content="tombstone.urlToOtherIdentifier"
+      />
+      <> </>
+      <Translate
+        href={identifier.metax_identifier}
+        component={Link}
+        content="tombstone.linkTextToOtherIdentifier"
+      />
+    </div>
+  ))
+}
+
+OtherIdentifiers.propTypes = {
+  identifiers: PropTypes.array.isRequired,
+}
+
+function Relations({ relations }) {
+  const {
+    Locale: { lang },
+  } = useStores()
+
+  return relations.map(relation => (
+    <div key={relation.identifier}>
+      <Translate with={{ type: relation.type.pref_label[lang] }} content="tombstone.urlToRelated" />
+      <> </>
+      <Translate
+        href={relation.metax_identifier}
+        component={Link}
+        content="tombstone.linkTextToRelated"
+      />
+    </div>
+  ))
+}
+
+Relations.propTypes = {
+  relations: PropTypes.array.isRequired,
+}
+
+function RelatedDatasets({ relatedDatasetsInfo }) {
+  const {
+    DatasetQuery: {
+      results: { removed },
+    },
+  } = useStores()
+
+  if (!removed || !relatedDatasetsInfo) return null
+
+  return (
+    <>
+      <OtherIdentifiers identifiers={relatedDatasetsInfo.otherIdentifiers} />
+      <Relations relations={relatedDatasetsInfo.relations} />
+    </>
+  )
+}
+
+RelatedDatasets.propTypes = {
+  relatedDatasetsInfo: PropTypes.shape({
+    otherIdentifiers: PropTypes.array,
+    relations: PropTypes.array,
+  }),
+}
+
+RelatedDatasets.defaultProps = {
+  relatedDatasetsInfo: null,
+}
+
+function DatasetView({ versionInfo }) {
+  const {
+    Accessibility,
+    DatasetQuery: {
+      results: dataset,
+      emailInfo,
+      Files: { root },
+      cumulative_state: cumulativeState,
+    },
+  } = useStores()
+  const {
+    data_catalog: { catalog_json: catalogJson },
+  } = dataset
+
+  const { identifier } = useParams()
+
+  const harvested = catalogJson?.harvested
+  const cumulative = cumulativeState === 1
+  const hasV2Files = root?.directChildCount > 0
+  const hasFiles = !!hasV2Files
+  const hasRemote = dataset?.research_dataset.remote_resources !== undefined
+
+  const isDraft = dataset?.state === 'draft'
+  let draftInfoText = null
+  if (isDraft) {
+    draftInfoText = dataset.draft_of ? 'dataset.draftInfo.changes' : 'dataset.draftInfo.draft'
+  }
+
+  return (
+    <div>
+      <CitationModal />
+      <article className="container regular-row">
+        <div className="row">
+          <div className="col-12">
+            <div>
+              <StateInfo>
+                <Translate component="p" content={versionInfo.stateInfo} />
+                <Translate content={versionInfo.urlText} />
+                <> </>
+                <Link
+                  href={versionInfo.ID}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  content={'tombstone.link'}
+                >
+                  <Translate content={versionInfo.linkToOtherVersion} />
+                </Link>
+                <RelatedDatasets relatedDatasetsInfo={versionInfo.relatedDatasetsInfo} />
+                {versionInfo.fetchingRelated && <RelatedDatasetLoadSpinner />}
+              </StateInfo>
+            </div>
+            <BackButton
+              exact
+              to="/datasets"
+              onClick={() => {
+                Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
+              }}
+            >
+              <span aria-hidden>{'< '}</span>
+              <Translate content={'dataset.goBack'} />
+            </BackButton>
+          </div>
+        </div>
+        <div className="row">
+          {draftInfoText && (
+            <div className="col-12">
+              <Translate component={DraftInfo} content={draftInfoText} />
+            </div>
+          )}
+          <Content
+            identifier={identifier}
+            dataset={dataset}
+            harvested={harvested}
+            cumulative={cumulative}
+            hasFiles={hasFiles}
+            hasRemote={hasRemote}
+            emails={emailInfo}
+            versionTitles={versionInfo.versionTitles}
+          />
+          <div className="col-lg-4">
+            <ErrorBoundary>
+              <Sidebar dataset={dataset} />
+            </ErrorBoundary>
+          </div>
+        </div>
+      </article>
+    </div>
+  )
+}
+
+DatasetView.propTypes = {
+  versionInfo: PropTypes.object.isRequired,
 }
 
 const LoadingSplash = styled.div`
@@ -299,6 +455,7 @@ const LoadingSplash = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: ${({ margin = 0 }) => margin};
 `
 
 const Link = styled.a`
@@ -319,12 +476,9 @@ Dataset.propTypes = {
   Stores: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
 }
 
 StateInfo.propTypes = {
-  removed: PropTypes.bool.isRequired,
-  deprecated: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
 }
 

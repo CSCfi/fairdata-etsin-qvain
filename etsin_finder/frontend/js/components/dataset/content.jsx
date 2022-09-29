@@ -21,7 +21,7 @@ import Data from './data'
 import Events from './events'
 import Tabs from './tabs'
 import Maps from './maps'
-import { withStores } from '../../stores/stores'
+import { withStores } from '@/stores/stores'
 
 const MarginAfter = styled.div`
   margin-bottom: 3em;
@@ -70,13 +70,14 @@ class Content extends Component {
     // - it doesn't contain files or remote files
     // - the access_rights disallow it
     // - the dataset in removed or deprecated
+    const {
+      DatasetQuery: {
+        results: { removed, deprecated },
+      },
+    } = this.props.Stores
 
     const { Access } = this.props.Stores
-    if (
-      (!this.props.hasFiles && !this.props.hasRemote) ||
-      this.props.isRemoved ||
-      this.props.isDeprecated
-    ) {
+    if ((!this.props.hasFiles && !this.props.hasRemote) || removed || deprecated) {
       return false
     }
 
@@ -218,7 +219,5 @@ Content.propTypes = {
   hasFiles: PropTypes.bool.isRequired,
   hasRemote: PropTypes.bool.isRequired,
   identifier: PropTypes.string.isRequired,
-  isRemoved: PropTypes.bool.isRequired,
-  isDeprecated: PropTypes.bool.isRequired,
   versionTitles: PropTypes.object,
 }

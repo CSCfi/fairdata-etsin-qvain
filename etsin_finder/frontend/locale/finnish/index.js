@@ -222,8 +222,7 @@ const finnish = {
       cumulativeDatasetLabel: 'Huom: Aineisto on kasvava',
       cumulativeDatasetTooltip: {
         header: 'Kasvava aineisto',
-        info:
-          'Tämä on karttuva aineisto, johon mahdollisesti vielä lisätään tiedostoja. Huomio tämä kun käytät aineistoa tai viittaat siihen (esim. ajallinen kattavuus hyvä mainita). Aineistosta ei kuitenkaan voi poistaa tai muuttaa olemassa olevia tiedostoja.',
+        info: 'Tämä on karttuva aineisto, johon mahdollisesti vielä lisätään tiedostoja. Huomio tämä kun käytät aineistoa tai viittaat siihen (esim. ajallinen kattavuus hyvä mainita). Aineistosta ei kuitenkaan voi poistaa tai muuttaa olemassa olevia tiedostoja.',
       },
     },
     embargo_date: 'Embargo voimassa',
@@ -456,10 +455,17 @@ const finnish = {
   stsd: 'Siirry "Julkaise Aineisto"-nappiin',
   tombstone: {
     removedInfo: 'Aineisto on poistettu',
-    deprecatedInfo: 'Aineisto on vanhentunut. Aineiston metatiedot ovat edelleen saatavilla, mutta aineistoon sen julkaisuvaiheessa liitetty data on poistettu.',
+    deprecatedInfo:
+      'Aineisto on vanhentunut. Aineiston metatiedot ovat edelleen saatavilla, mutta aineistoon sen julkaisuvaiheessa liitetty data on poistettu.',
     urlToNew: 'Aineistosta on olemassa uudempi, julkaistu versio.',
     urlToOld: 'Aineistosta on olemassa vanhempi, julkaistu versio.',
+    urlToRelated:
+      'Aineistosta on viittaus toiseen julkaistuun aineistoon viittaustyypillä "%(type)s."',
+    urlToOtherIdentifier:
+      'Aineistolla on toinen olemassa oleva pysyvä tunniste Fairdata-palvelussa (%(identifier)s).',
     linkTextToNew: 'Saat avattua uuden version tästä.',
+    linkTextToRelated: 'Saat avattua viitatun aineiston tästä.',
+    linkTextToOtherIdentifier: 'Saat avattua viitatun aineiston tästä.',
     linkTextToOld: 'Saat avattua version tästä.',
   },
   loginError: {
@@ -472,8 +478,7 @@ const finnish = {
   footer: {
     fairdata: {
       title: 'Fairdata',
-      text:
-        'Fairdata-palvelut järjestää <strong>opetus- ja kulttuuriministeriö</strong> ja toimittaa <strong>CSC – Tieteen tietotekniikan keskus Oy</strong>',
+      text: 'Fairdata-palvelut järjestää <strong>opetus- ja kulttuuriministeriö</strong> ja toimittaa <strong>CSC – Tieteen tietotekniikan keskus Oy</strong>',
     },
     information: {
       title: 'Tietoa',

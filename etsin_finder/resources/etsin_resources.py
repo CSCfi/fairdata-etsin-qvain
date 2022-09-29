@@ -7,6 +7,7 @@
 
 """RESTful API endpoints, meant to be used by the frontend."""
 
+import re
 from flask import session, current_app
 from flask_mail import Message
 from flask_restful import abort, reqparse, Resource
@@ -17,6 +18,9 @@ from etsin_finder.auth import authorization
 from etsin_finder.services import cr_service
 from etsin_finder.services.download_metadata_service import download_metadata
 from etsin_finder.services import rems_service
+from etsin_finder.services.common_service import (
+    get_dataset_exists_by_preferred_identifier,
+)
 from etsin_finder.utils.contact_utils import (
     create_email_message_body,
     get_email_info,
@@ -155,7 +159,6 @@ class DatasetMetadata(Resource):
 
         Returns:
             obj: Returns a Flask.Response object streaming the response from metax
-
         """
         args = self.parser.parse_args()
         cr_id = args.get("cr_id")
@@ -170,6 +173,52 @@ class DatasetMetadata(Resource):
 
         need_auth = cr_service.is_draft(cr)
         return download_metadata(cr_id, metadata_format, need_auth=need_auth)
+
+
+def _transform_url_to_persistent_id(url):
+    doi_replaced = re.sub("^https://doi.org/", "doi:", url)
+    urn_replaced = re.sub("^http://urn.fi/", "", doi_replaced)
+    return urn_replaced
+
+
+class RelatedDatasets(Resource):
+    """RelatedDatasets."""
+
+    @log_request
+    def __init__(self):
+        """Create common arguments for all methods."""
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument("cr_id", type=str, required=True)
+
+    @log_request
+    def get(self, cr_id):
+        """Get all existing published dataset relations for a dataset.
+
+        Returns:
+            list: Returns a list of preferred identifiers of existing datasets.
+                  that has relation to this dataset.
+        """
+        cr = cr_service.get_catalog_record(cr_id, False, False)
+        if not cr:
+            abort(400, message="Unable to get catalog record")
+
+        if not authorization.user_can_view_dataset(cr_id):
+            abort(404)
+
+        identifiers = _get_catalog_record_relations_by_identifier(cr)
+        existing_ids = _get_existing_identifiers(cr_id, identifiers)
+
+        # map individual variations of identifiers into a list of dicts
+        # variation represents user created relation or other identifier in dataset
+        # one identifier can be mentioned multiple times in different context which makes this code
+        # more complicated.
+        response = [
+            variation
+            for variations in existing_ids.values()
+            for variation in variations
+        ]
+
+        return response, 200
 
 
 class Files(Resource):
@@ -572,3 +621,54 @@ class SupportedFlags(Resource):
 
         """
         return sorted(list(get_supported_flags(current_app)))
+
+
+_ENTITY_TYPE_DATASET = (
+    "http://uri.suomi.fi/codelist/fairdata/resource_type/code/dataset"
+)
+
+
+def _get_catalog_record_relations_by_identifier(cr):
+    dataset = cr.get("research_dataset", {})
+    relation_objs = dataset.get("relation", [])
+    relations = {}
+    for relation in relation_objs:
+        entity = relation.get("entity", {})
+        if entity.get("type", {}).get("identifier") == _ENTITY_TYPE_DATASET:
+            persistent_id = _transform_url_to_persistent_id(entity["identifier"])
+            relations[persistent_id] = relation
+
+    other_identifier_objs = dataset.get("other_identifier", [])
+    other_identifiers = [x.get("notation", None) for x in other_identifier_objs]
+    identifiers = {}
+    for other_id in other_identifiers:
+        persistent_id = _transform_url_to_persistent_id(other_id)
+        if other_id not in identifiers:
+            identifiers[persistent_id] = []
+        identifiers[persistent_id].append(
+            {"type": "other_identifier", "identifier": persistent_id}
+        )
+
+    for key, value in relations.items():
+        if key not in identifiers:
+            identifiers[key] = []
+        identifiers[key].append({"type": value["relation_type"], "identifier": key})
+
+    return identifiers
+
+
+def _get_existing_identifiers(cr_id, identifiers):
+    delete_items = []
+    for persistent_id, dataset in identifiers.items():
+        existing_id = get_dataset_exists_by_preferred_identifier(persistent_id)
+        if existing_id is None:
+            delete_items.append(persistent_id)
+        else:
+            for variations in identifiers.values():
+                for variation in variations:
+                    variation["metax_identifier"] = existing_id
+
+    for i in delete_items:
+        del identifiers[i]
+
+    return identifiers

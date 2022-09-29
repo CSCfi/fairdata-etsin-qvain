@@ -25,7 +25,7 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
     schema = MetaxServiceConfigurationSchema(unknown=marshmallow.RAISE)
 
-    DATASETS_RESEARCH_DATASET_FIELDS = 'title,preferred_identifier'
+    DATASETS_RESEARCH_DATASET_FIELDS = "title,preferred_identifier"
 
     @property
     def config(self):

@@ -17,6 +17,9 @@ from etsin_finder.utils.request_utils import make_request
 from etsin_finder.schemas.services import MetaxServiceConfigurationSchema
 from .base_service import BaseService, ConfigValidationMixin
 
+_REST_DIRECTORIES = "/rest/v2/directories"
+_REST_DATASETS = "/rest/v2/datasets"
+
 
 class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
     """Service for Metax API v2 requests used by both Etsin and Qvain."""
@@ -63,36 +66,40 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
     @property
     def _METAX_GET_DIRECTORY_FOR_PROJECT_URL(self):
         return (
-            self.metax_url("/rest/v2/directories")
+            self.metax_url(_REST_DIRECTORIES)
             + "/files?cr_identifier={0}&project={1}&path={2}&include_parent&pagination&limit=1"
         )
 
     @property
     def _METAX_GET_DIRECTORIES_FOR_PROJECT_URL(self):
         return (
-            self.metax_url("/rest/v2/directories")
+            self.metax_url(_REST_DIRECTORIES)
             + "/files?project={0}&path=%2F&include_parent"
         )
 
     @property
     def _METAX_GET_DIRECTORIES(self):
-        return self.metax_url("/rest/v2/directories") + "/{0}/files"
+        return self.metax_url(_REST_DIRECTORIES) + "/{0}/files"
 
     @property
     def _METAX_GET_DATASET_USER_METADATA(self):
-        return self.metax_url("/rest/v2/datasets") + "/{0}/files/user_metadata"
+        return self.metax_url(_REST_DATASETS) + "/{0}/files/user_metadata"
 
     @property
     def _METAX_PUT_DATASET_USER_METADATA(self):
         return self._METAX_GET_DATASET_USER_METADATA
 
     @property
+    def _METAX_GET_DATASET_BY_PREFERRED_IDENTIFIER(self):
+        return self.metax_url(_REST_DATASETS) + "/?preferred_identifier={0}"
+
+    @property
     def _METAX_GET_DATASET_PROJECTS(self):
-        return self.metax_url("/rest/v2/datasets") + "/{0}/projects"
+        return self.metax_url(_REST_DATASETS) + "/{0}/projects"
 
     @property
     def _METAX_DATASET_EDITOR_PERMISSIONS_USERS(self):
-        return self.metax_url("/rest/v2/datasets") + "/{0}/editor_permissions/users"
+        return self.metax_url(_REST_DATASETS) + "/{0}/editor_permissions/users"
 
     def _get_args(self, **kwargs):
         """Get default args for request, allow overriding with kwargs."""
@@ -257,6 +264,24 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
             log.warning("Failed to update user metadata for dataset {}".format(cr_id))
         return resp, status
 
+    def get_dataset_exists_by_preferred_identifier(self, preferred_identifier):
+        """
+        Get a simple list of existing datasets based on a list of urls.
+
+        Arguments:
+            identifier {string} -- preferred identifier.
+
+        Returns:
+            identifier (string) OR None - if dataset exists in Metax, returns identifier, otherwise returns None
+        """
+        req_url = format_url(
+            self._METAX_GET_DATASET_BY_PREFERRED_IDENTIFIER, preferred_identifier
+        )
+        resp, status, success = make_request(requests.get, req_url, **self._get_args())
+        if status == 200:
+            return resp["identifier"]
+        return None
+
 
 _service = MetaxCommonAPIService()
 get_directory_for_project_using_path = _service.get_directory_for_project_using_path
@@ -264,4 +289,7 @@ get_directories = _service.get_directories
 get_directories_for_project = _service.get_directories_for_project
 get_dataset_projects = _service.get_dataset_projects
 get_dataset_user_metadata = _service.get_dataset_user_metadata
+get_dataset_exists_by_preferred_identifier = (
+    _service.get_dataset_exists_by_preferred_identifier
+)
 update_dataset_user_metadata = _service.update_dataset_user_metadata

@@ -51,6 +51,7 @@ def add_restful_resources(app):
         Contact,
         Dataset,
         DatasetMetadata,
+        RelatedDatasets,
         User,
         Language,
         Session,
@@ -93,6 +94,7 @@ def add_restful_resources(app):
         DatasetUserMetadata, "/api/common/datasets/<id:cr_id>/user_metadata"
     )
     api.add_resource(DatasetProjects, "/api/common/datasets/<id:cr_id>/projects")
+    api.add_resource(RelatedDatasets, "/api/common/datasets/<id:cr_id>/related")
     api.add_resource(ProjectFiles, "/api/common/projects/<string:pid>/files")
     api.add_resource(DirectoryFiles, "/api/common/directories/<string:dir_id>/files")
 

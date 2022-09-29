@@ -35,7 +35,15 @@ def createMockLDAPIdmService(users=None, projects=None):
             for project in projects:
                 self._add_project(*project)
 
-        def _add_user(self, uid, given_name, surname, mail, nsAccountLock="false", csc_user_name=None):
+        def _add_user(
+            self,
+            uid,
+            given_name,
+            surname,
+            mail,
+            nsAccountLock="false",
+            csc_user_name=None,
+        ):
             self.connection.strategy.add_entry(
                 f"cn={uid},ou=Academic,ou=External,ou=Users,ou=idm,dc=csc,dc=fi",
                 {
@@ -76,7 +84,14 @@ MockLDAPIdmService = createMockLDAPIdmService(
         # locked account
         ("locked", "locked", "von ignoreme", "locked@example.com", "true"),
         # same CSCUserName but different uid
-        ("teppos_subaccount", "teppo", "von test", "teppo@example.com", "false", "teppo"),
+        (
+            "teppos_subaccount",
+            "teppo",
+            "von test",
+            "teppo@example.com",
+            "false",
+            "teppo",
+        ),
     ],
     projects=[("teppo_project", ["tt"]), ("all_project", ["tt", "kk"])],
 )

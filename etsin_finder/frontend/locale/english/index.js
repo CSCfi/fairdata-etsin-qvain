@@ -222,8 +222,7 @@ const english = {
       cumulativeDatasetLabel: 'Note: Dataset is growing',
       cumulativeDatasetTooltip: {
         header: 'Growing dataset',
-        info:
-          'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
+        info: 'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
       },
     },
     embargo_date: 'Embargo expires',
@@ -457,10 +456,17 @@ const english = {
   stsd: 'Skip to submit dataset',
   tombstone: {
     removedInfo: 'The dataset has been removed',
-    deprecatedInfo: 'The dataset has been deprecated. This means that although the metadata of this dataset is still available, the data with which it was originally published does not exist any more.',
+    deprecatedInfo:
+      'The dataset has been deprecated. This means that although the metadata of this dataset is still available, the data with which it was originally published does not exist any more.',
     urlToNew: 'A new version of this dataset is available.',
+    urlToRelated:
+      'A related available dataset has been linked to this dataset with relation type "%(type)s".',
+    urlToOtherIdentifier:
+      'The dataset has another available persistent identifier in Fairdata Service (%(identifier)s).',
     urlToOld: 'An older (published) version of this dataset is available.',
     linkTextToNew: 'You can open the new version via this link.',
+    linkTextToRelated: 'You can open the related dataset via this link.',
+    linkTextToOtherIdentifier: 'You can open that dataset via this link.',
     linkTextToOld: 'You can open the version via this link.',
   },
   loginError: {
@@ -473,8 +479,7 @@ const english = {
   footer: {
     fairdata: {
       title: 'Fairdata',
-      text:
-        'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
+      text: 'The Fairdata services are offered by the <strong>Ministry of Education and Culture</strong> and produced by <strong>CSC – IT Center for Science Ltd.</strong>',
     },
     information: {
       title: 'Information',

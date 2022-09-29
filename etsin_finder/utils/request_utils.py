@@ -56,7 +56,8 @@ def make_request(request_func, *args, error_to_response=None, **kwargs):
         return error_to_response(e, 503), 503, False
     except requests.HTTPError:
         log.warning(
-            f"\nResponse status code: {response.status_code}\nResponse text: {json_or_text(response)}\nWith payload {payload}")
+            f"\nResponse status code: {response.status_code}\nResponse text: {json_or_text(response)}\nWith payload {payload}"
+        )
 
     except Exception as e:
         log.error(f"Error {type(e)} at {url} with payload: {payload}\n{e}")

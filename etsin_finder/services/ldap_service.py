@@ -30,7 +30,9 @@ class LDAPIdmService(BaseService, ConfigValidationMixin):
     PROJECT_COMMON_FILTERS = "(objectClass=CSCProject)"
     USER_PATH = "ou=Academic,ou=External,ou=Users,ou=idm,dc=csc,dc=fi"
     USER_OUTPUT = ["givenName", "sn", "mail", "uid", "CSCUserName"]
-    USER_COMMON_FILTERS = "(&(objectClass=person)(!(nsAccountLock=true))(CSCUserName=*))"
+    USER_COMMON_FILTERS = (
+        "(&(objectClass=person)(!(nsAccountLock=true))(CSCUserName=*))"
+    )
 
     schema = LDAPIdmServiceConfigurationSchema(unknown=marshmallow.RAISE)
 

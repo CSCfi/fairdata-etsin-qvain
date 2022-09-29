@@ -39,4 +39,4 @@ AGENT_TYPE = {
     "CURATOR": "CURATOR",
 }
 
-PACKAGE_SIZE_LIMIT = 2.6 * 1024 ** 4 # download package generation size limit
+PACKAGE_SIZE_LIMIT = 2.6 * 1024**4  # download package generation size limit
