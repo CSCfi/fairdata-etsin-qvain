@@ -74,12 +74,12 @@ const BasicDataCatalog = observer(() => {
 
   const idaOnClick = () =>
     !isDataCatalogDecided && dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
-      ? setDataCatalog(null)
+      ? setDataCatalog(undefined)
       : setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
 
   const attOnClick = () =>
     !isDataCatalogDecided && dataCatalog === DATA_CATALOG_IDENTIFIER.ATT
-      ? setDataCatalog(null)
+      ? setDataCatalog(undefined)
       : setDataCatalog(DATA_CATALOG_IDENTIFIER.ATT)
 
   return (
