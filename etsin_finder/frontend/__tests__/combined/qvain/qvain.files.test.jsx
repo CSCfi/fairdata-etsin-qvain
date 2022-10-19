@@ -40,14 +40,20 @@ jest.mock('../../../js/stores/stores', () => {
   }
 })
 
-const flatten = dir => {
+const flatten = (dir, { onlyExisting = false } = {}) => {
   const flatItems = []
   const recurse = dir => {
     dir.directories.forEach(dir => {
+      if (onlyExisting && !(dir.added || dir.existing)) {
+        return
+      }
       flatItems.push(dir)
       recurse(dir)
     })
     dir.files.forEach(file => {
+      if (onlyExisting && !(file.added || file.existing)) {
+        return
+      }
       flatItems.push(file)
     })
   }
@@ -334,8 +340,25 @@ describe('Qvain.Files store', () => {
     }
 
     Files.setInEdit(file)
-    Files.applyInEdit(newMeta)
+    await Files.applyInEdit(newMeta)
     expect(file).toMatchObject(newMeta)
+    expect(Qvain.changed).toBe(true)
+  })
+
+  it('should copy use category to selected children', async () => {
+    const dir = await Files.getItemByPath('/data')
+    const newMeta = {
+      title: 'another_title',
+      description: 'New description',
+      useCategory: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/test',
+    }
+    Files.setInEdit(dir)
+    await Files.applyInEdit(newMeta, { applyToChildren: true })
+
+    expect(dir).toMatchObject(newMeta)
+    const children = flatten(dir, { onlyExisting: true })
+    expect(children.length).toBe(10)
+    children.forEach(child => expect(child.useCategory).toBe(newMeta.useCategory))
     expect(Qvain.changed).toBe(true)
   })
 
@@ -746,7 +769,7 @@ describe('Qvain.Files SelectedItemsTreeItem', () => {
     }
 
     if (pasAllowed) {
-      props.item.pasMeta = {'description': 'hello DPS'}
+      props.item.pasMeta = { description: 'hello DPS' }
     }
 
     it(`should allow removing ${type} from unpublished dataset`, async () => {
@@ -795,7 +818,9 @@ describe('Qvain.Files SelectedItemsTreeItem', () => {
           <SelectedItemsTreeItem {...props} />
         </ThemeProvider>
       )
-      expect(selectedWrapper.find('.remove-pas-metadata').hostNodes().length).toBe(pasAllowed ? 1 : 0)
+      expect(selectedWrapper.find('.remove-pas-metadata').hostNodes().length).toBe(
+        pasAllowed ? 1 : 0
+      )
     })
   })
 })

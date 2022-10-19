@@ -31,9 +31,7 @@ export const fileTitleSchema = yup
   .string()
   .required('qvain.validationMessages.files.file.title.required')
 
-export const fileDescriptionSchema = yup
-  .string()
-  .required('qvain.validationMessages.files.file.description.required')
+export const fileDescriptionSchema = yup.string()
 
 export const fileSchema = yup.object().shape({
   title: fileTitleSchema,
@@ -287,7 +285,8 @@ class Files extends FilesBase {
     clear(item)
   }
 
-  @action.bound applyInEdit(values) {
+  @action.bound async applyInEdit(values, { applyToChildren = false } = {}) {
+    this.Qvain.setChanged(true)
     this.inEdit.title = values.title
     this.inEdit.description = values.description
     this.inEdit.useCategory = values.useCategory
@@ -295,8 +294,55 @@ class Files extends FilesBase {
     if (this.inEdit.type === 'file') {
       this.inEdit.fileType = values.fileType
     }
-    this.inEdit = undefined
-    this.Qvain.setChanged(true)
+
+    if (applyToChildren) {
+      await this.copyUseCategoryToSelectedChildren(this.inEdit)
+    }
+    this.setInEdit(undefined)
+  }
+
+  @action loadSelectedChildDirectories = async dir => {
+    const recurse = async subDir =>
+      Promise.all(
+        subDir.directories
+          .filter(d => d.added || d.existing)
+          .map(async d => {
+            await itemLoaderAny.loadDirectory(this, d, 1e6)
+            return recurse(d)
+          })
+      )
+
+    await itemLoaderAny.loadDirectory(this, dir, 1e6)
+    return recurse(dir)
+  }
+
+  @action.bound async copyUseCategoryToSelectedChildren(dir) {
+    if (dir?.type === 'directory') {
+      await this.loadSelectedChildDirectories(dir)
+
+      const useCategory = dir.useCategory
+      const recurse = subDir => {
+        subDir.files
+          .filter(d => d.added || d.existing)
+          .forEach(
+            action(f => {
+              f.useCategory = useCategory
+              f.title = f.title || f.name
+            })
+          )
+        subDir.directories
+          .filter(d => d.added || d.existing)
+          .forEach(
+            action(subdir => {
+              subdir.useCategory = useCategory
+              subdir.title = subdir.title || subdir.name
+              recurse(subdir)
+            })
+          )
+      }
+      recurse(dir)
+      this.Qvain.setChanged(true)
+    }
   }
 
   @action setInEdit = selectedItem => {

@@ -194,7 +194,7 @@ class FileForm extends Component {
         />
         {titleError !== undefined && <ValidationErrors errors={titleError} />}
         <Label htmlFor="file-form-description">
-          <Translate content="qvain.files.selected.form.description.label" /> *
+          <Translate content="qvain.files.selected.form.description.label" />
         </Label>
         <Translate
           component={Textarea}

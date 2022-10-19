@@ -210,6 +210,7 @@ const files = {
       identifier: {
         label: 'Identifier',
       },
+      applyUseCategoryToChildren: 'Copy selected Use Category to all files and subfolders',
     },
   },
   existing: {

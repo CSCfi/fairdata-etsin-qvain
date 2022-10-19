@@ -207,6 +207,8 @@ const files = {
       identifier: {
         label: 'Tunniste',
       },
+      applyUseCategoryToChildren:
+        'Kopioi käyttökategoria myös hakemiston kaikille tiedostoille ja alihakemistoille',
     },
   },
   existing: {

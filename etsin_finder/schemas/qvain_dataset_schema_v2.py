@@ -120,7 +120,7 @@ class FileMetadataSchema(Schema):
     def require_if_check_required(self, data, **kwargs):
         """Require fields only if not deleting metadata"""
         if not data.get("delete"):
-            for field in ["title", "description", "use_category"]:
+            for field in ["title", "use_category"]:
                 if data.get(field) is None:
                     raise ValidationError("Missing required field", field_name=field)
 

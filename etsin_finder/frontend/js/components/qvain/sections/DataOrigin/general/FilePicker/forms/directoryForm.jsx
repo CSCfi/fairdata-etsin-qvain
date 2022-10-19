@@ -5,6 +5,10 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { SaveButton, CancelButton } from '../../../../../general/buttons'
 import { Label, CustomSelect, Input, Textarea } from '../../../../../general/modal/form'
+
+import { Checkbox } from '@/components/qvain/general/modal/form'
+import Loader from '@/components/general/loader'
+
 import { Container } from '../../../../../general/card'
 import { ValidationErrors } from '../../../../../general/errors/validationError'
 import { getLocalizedOptions } from '../../../../../utils/getReferenceData'
@@ -34,6 +38,8 @@ export class DirectoryFormBase extends Component {
     titleError: undefined,
     descriptionError: undefined,
     useCategoryError: undefined,
+    shouldApplyUseCategoryToChildren: false,
+    applyingUseCategory: false,
   }
 
   componentDidMount = () => {
@@ -80,20 +86,26 @@ export class DirectoryFormBase extends Component {
 
     directorySchema
       .validate(validationObj, { strict: true })
-      .then(() => {
-        this.setState({
+      .then(async () => {
+        this.setState(state => ({
           directoryError: undefined,
           useCategoryError: undefined,
-        })
-        this.props.Stores.Qvain.Files.applyInEdit({
-          title,
-          description,
-          useCategory: useCategory.value,
-        })
+          applyingUseCategory: state.shouldApplyUseCategoryToChildren,
+        }))
+        await this.props.Stores.Qvain.Files.applyInEdit(
+          {
+            title,
+            description,
+            useCategory: useCategory.value,
+          },
+          { applyToChildren: this.state.shouldApplyUseCategoryToChildren }
+        )
+        this.props.setChanged(false)
       })
       .catch(err => {
         this.setState({
           directoryError: err.errors,
+          applyingUseCategory: false,
         })
       })
   }
@@ -135,6 +147,12 @@ export class DirectoryFormBase extends Component {
           useCategoryError: err.errors,
         })
       })
+  }
+
+  toggleShouldApplyUseCategoryToChildren = () => {
+    this.setState(state => ({
+      shouldApplyUseCategoryToChildren: !state.shouldApplyUseCategoryToChildren,
+    }))
   }
 
   render() {
@@ -202,6 +220,22 @@ export class DirectoryFormBase extends Component {
           attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
           inputId="directory-form-use-category"
         />
+
+        <CheckboxRow>
+          <Checkbox
+            id="applyToChildrenCheckbox"
+            onChange={this.toggleShouldApplyUseCategoryToChildren}
+            disabled={readonly}
+            checked={this.state.shouldApplyUseCategoryToChildren}
+          />
+          <Translate
+            content="qvain.files.selected.form.applyUseCategoryToChildren"
+            component={CheckboxLabel}
+            htmlFor="applyToChildrenCheckbox"
+          />
+          {this.state.applyingUseCategory && <Loader active size="1.1em" spinnerSize="3px" />}
+        </CheckboxRow>
+
         {useCategoryError !== undefined && <ValidationErrors errors={useCategoryError} />}
         {directoryError !== undefined && <ValidationErrors errors={directoryError} />}
         <Buttons>
@@ -209,10 +243,11 @@ export class DirectoryFormBase extends Component {
             component={CancelButton}
             onClick={this.handleCancel}
             content="qvain.common.cancel"
+            disabled={this.state.applyingUseCategory}
           />
           <Translate
             component={SaveButton}
-            disabled={readonly}
+            disabled={readonly || this.state.applyingUseCategory}
             onClick={this.handleSave}
             content="qvain.common.save"
           />
@@ -237,6 +272,19 @@ const Buttons = styled.div`
     flex-grow: 1;
   }
   margin: -0.25rem;
+`
+
+const CheckboxRow = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: -0.5rem;
+  margin-bottom: 1.25rem;
+`
+
+const CheckboxLabel = styled.label`
+  margin-right: auto;
+  padding-left: 4px;
+  display: inline-block;
 `
 
 const getUseCategory = (directory, translations) =>
