@@ -116,7 +116,7 @@ class Field {
     this.Parent.setChanged(true)
   }
 
-  @action edit = uiid => {
+  @action.bound edit(uiid) {
     this.validationError = ''
     this.setChanged(false)
     this.editMode = true

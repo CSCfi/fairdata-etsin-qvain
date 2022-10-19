@@ -110,7 +110,7 @@ const ProjectTemplate = ({
   identifier = '',
   organizations = [],
   funderType = null,
-  funderOrganization = { organization: null },
+  funderOrganization = null,
   fundingIdentifier = '',
 }) => ({ uiid, name, identifier, organizations, funderType, funderOrganization, fundingIdentifier })
 
@@ -135,9 +135,7 @@ const ProjectModel = ({
     ? FunderTypeModel(funder_type.pref_label, funder_type.identifier)
     : undefined,
   fundingIdentifier: has_funder_identifier,
-  funderOrganization: has_funding_agency
-    ? parseOrgToEtsin(has_funding_agency[0])
-    : { organization: null },
+  funderOrganization: has_funding_agency ? parseOrgToEtsin(has_funding_agency[0]) : undefined,
 })
 
 class ProjectV2 extends Field {
@@ -171,7 +169,7 @@ class ProjectV2 extends Field {
         source_organization: project.organizations.map(org => prepareOrgToMetax(org)),
         has_funder_identifier: project.fundingIdentifier,
         funder_type: project.funderType?.url ? { identifier: project.funderType.url } : undefined,
-        has_funding_agency: project.funderOrganization.organization
+        has_funding_agency: project.funderOrganization?.organization
           ? [prepareOrgToMetax(project.funderOrganization)]
           : undefined,
       }
@@ -182,18 +180,18 @@ class ProjectV2 extends Field {
     })
 
   @override create(data) {
-    this.reset()
     super.create(data)
     this.setChanged(false)
     this.orgInEdit = { uiid: uuidv4(), organization: null }
     this.fetchAllOptions()
+    this.orgValidationError = null
   }
 
   @override edit(uiid) {
-    this.reset()
     super.edit(uiid)
     this.orgInEdit = { uiid: uuidv4(), organization: null }
     this.fetchAllOptions()
+    this.orgValidationError = null
   }
 
   @override reset() {
@@ -203,15 +201,29 @@ class ProjectV2 extends Field {
   }
 
   @action.bound changeOrgInEdit(dep, value) {
-    if (this.orgInEdit[dep] === value) return
-    this.orgInEdit[dep] = value
+    this.setChanged(true)
 
-    if (dep !== 'suborganization') {
-      this.orgInEdit.subDepartment = null
-    }
+    const org = { ...this.orgInEdit }
+
     if (dep === 'organization') {
-      this.orgInEdit.department = null
+      org.organization = value
+      org.department = undefined
+      org.subdepartment = undefined
+    } else if (dep === 'department') {
+      org.department = value
+      org.subdepartment = undefined
+    } else if (dep === 'subdepartment') {
+      org.subdepartment = value
+    } else {
+      console.warn(`invalid organization level: ${dep}`)
     }
+
+    if (org.organization) {
+      this.orgInEdit = org
+    } else {
+      this.orgInEdit = null
+    }
+
     this.fetchOrgOptions()
   }
 
@@ -233,6 +245,7 @@ class ProjectV2 extends Field {
   @action.bound validateOrg() {
     try {
       organizationObjectSchema.validateSync(this.orgInEdit, { strict: true })
+      this.orgValidationError = null
     } catch (error) {
       this.orgValidationError = error.message
       return false
@@ -290,26 +303,28 @@ class ProjectV2 extends Field {
     this.inEdit.organizations.splice(index, 1)
   }
 
-  @action.bound saveFunderOrg() {
-    this.inEdit.funderOrganization.name = parseOrgName(this.inEdit.funderOrganization)
-
-    if (this.funderOrgEditMode) {
-      const index = this.inEdit.organizations.findIndex(i => i.uiid === this.orgInEdit.uiid)
-      this.inEdit.organizations[index] = { ...this.orgInEdit }
-    } else {
-      this.inEdit.organizations.push({ ...this.orgInEdit })
-    }
-  }
-
   @action.bound changeFunderOrgInEdit(dep, value) {
     this.setChanged(true)
-    this.inEdit.funderOrganization[dep] = value
 
-    if (dep !== 'suborganization') {
-      this.inEdit.funderOrganization.subDepartment = null
-    }
+    const funderOrg = { ...this.inEdit.funderOrganization }
+
     if (dep === 'organization') {
-      this.inEdit.funderOrganization.department = null
+      funderOrg.organization = value
+      funderOrg.department = undefined
+      funderOrg.subdepartment = undefined
+    } else if (dep === 'department') {
+      funderOrg.department = value
+      funderOrg.subdepartment = undefined
+    } else if (dep === 'subdepartment') {
+      funderOrg.subdepartment = value
+    } else {
+      console.warn(`invalid organization level: ${dep}`)
+    }
+
+    if (funderOrg.organization) {
+      this.inEdit.funderOrganization = funderOrg
+    } else {
+      this.inEdit.funderOrganization = null
     }
 
     this.fetchFunderOrgOptions()
@@ -328,11 +343,11 @@ class ProjectV2 extends Field {
   }
 
   @computed get isFunderOrgDepartmentVisible() {
-    return !!this.inEdit.funderOrganization.organization
+    return !!this.inEdit.funderOrganization?.organization
   }
 
   @computed get isFunderOrgSubdepartmentVisible() {
-    return !!this.inEdit.funderOrganization.department
+    return !!this.inEdit.funderOrganization?.department
   }
 
   FunderTypeModel = FunderTypeModel
@@ -343,43 +358,49 @@ class ProjectV2 extends Field {
 }
 
 // PROJECT VALIDATION
-export const organizationSelectSchema = yup.object().shape({
-  name: yup.lazy(obj => {
-    if (!obj) {
-      return yup.object().required('qvain.validationMessages.projects.organization.name')
-    }
+export const organizationSelectSchema = yup
+  .object()
+  .shape({
+    name: yup.lazy(obj => {
+      if (!obj) {
+        return yup.object().required('qvain.validationMessages.projects.organization.name')
+      }
 
-    const langs = Object.keys(obj)
-    if (!langs.length) {
-      return yup
-        .object({
-          fi: yup.string(),
-          en: yup.string(),
-          und: yup.string(),
-        })
-        .required('qvain.validationMessages.projects.organization.name')
-    }
+      const langs = Object.keys(obj)
+      if (!langs.length) {
+        return yup
+          .object({
+            fi: yup.string().required('qvain.validationMessages.projects.organization.name'),
+            en: yup.string().required('qvain.validationMessages.projects.organization.name'),
+            und: yup.string().required('qvain.validationMessages.projects.organization.name'),
+          })
+          .required('qvain.validationMessages.projects.organization.name')
+      }
 
-    const shape = langs.reduce(
-      (schema, lang) => ({
-        ...schema,
-        [lang]: yup.string().required('qvain.validationMessages.projects.organization.name'),
-      }),
-      {}
-    )
-    return yup.object(shape).required('qvain.validationMessages.projects.organization.name')
-  }),
-  email: yup.string().email('qvain.validationMessages.projects.organization.email'),
-  identifier: yup.string(),
-})
+      const shape = langs.reduce(
+        (schema, lang) => ({
+          ...schema,
+          [lang]: yup.string().required('qvain.validationMessages.projects.organization.name'),
+        }),
+        {}
+      )
+      return yup.object(shape).required('qvain.validationMessages.projects.organization.name')
+    }),
+    email: yup.string().email('qvain.validationMessages.projects.organization.email'),
+    identifier: yup.string(),
+  })
+  .default(undefined)
 
-export const organizationObjectSchema = yup.object().shape({
-  organization: organizationSelectSchema
-    .nullable()
-    .required('qvain.validationMessages.projects.organization.required'),
-  department: organizationSelectSchema.nullable(),
-  subDepartment: organizationSelectSchema.nullable(),
-})
+export const organizationObjectSchema = yup
+  .object()
+  .shape({
+    organization: organizationSelectSchema.required(
+      'qvain.validationMessages.projects.organization.required'
+    ),
+    department: organizationSelectSchema.nullable().default(undefined),
+    subdepartment: organizationSelectSchema.nullable().default(undefined),
+  })
+  .default(undefined)
 
 export const contributorTypeSchema = yup.array().of(
   yup.object().shape({
@@ -390,22 +411,29 @@ export const contributorTypeSchema = yup.array().of(
 )
 
 export const projectSchema = yup.object().shape({
-  name: yup.object().shape({
-    fi: yup.mixed().when('en', {
-      is: val => Boolean(val),
-      then: yup.string().typeError('qvain.validationMessages.projects.title.string'),
-      otherwise: yup
-        .string()
-        .typeError('qvain.validationMessages.projects.title.string')
-        .required('qvain.validationMessages.projects.title.required'),
-    }),
-    en: yup.string().typeError('qvain.vaidationMessages.projects.title.string'),
-  }),
-  organizations: yup.array().min(1, 'qvain.validationMessages.projects.organization.min'),
+  name: yup
+    .object()
+    .shape({
+      fi: yup.mixed().when('en', {
+        is: val => Boolean(val),
+        then: yup.string().typeError('qvain.validationMessages.projects.title.string'),
+        otherwise: yup
+          .string()
+          .typeError('qvain.validationMessages.projects.title.string')
+          .required('qvain.validationMessages.projects.title.required'),
+      }),
+      en: yup.string().typeError('qvain.vaidationMessages.projects.title.string'),
+    })
+    .default(undefined)
+    .required('qvain.validationMessages.projects.title.required'),
+  organizations: yup
+    .array()
+    .min(1, 'qvain.validationMessages.projects.organization.min')
+    .required('qvain.validationMessages.projects.organization.min'),
   identifier: yup.string().nullable(),
-  funderType: yup.array().nullable(),
+  funderType: yup.object().shape({ url: yup.string() }).nullable(),
   fundingIdentifier: yup.string().nullable(),
-  fundingOrganization: organizationObjectSchema,
+  funderOrganization: organizationObjectSchema.nullable(),
 })
 
 export default ProjectV2

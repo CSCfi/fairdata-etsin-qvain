@@ -21,11 +21,14 @@ const OrgSelect = () => {
         isOrgSubdepartmentVisible,
         validateOrg,
         saveOrg,
+        orgValidationError,
       },
     },
   } = useStores()
-
   const { organization, department, subdepartment } = orgInEdit
+  const haveOrganization = Boolean(organization?.value || organization?.label)
+  const haveDepartment = Boolean(department?.value || department?.label)
+  const haveSubdepartment = Boolean(subdepartment?.value || subdepartment?.label)
 
   const inputId = 'project-select'
   return (
@@ -38,10 +41,10 @@ const OrgSelect = () => {
         onBlur={validateOrg}
         name={'project-organization-select'}
         inputId={`${inputId}-organization`}
-        value={organization}
+        value={organization || null}
         options={options?.organizations?.organization?.[lang] || []}
         creatable
-        allowReset={Boolean(organization?.value && !department?.value)}
+        allowReset={haveOrganization && !haveDepartment}
         attributes={{ ariaLabel: 'qvain.projectV2.organizations.organization.aria' }}
       />
       <Translate
@@ -58,10 +61,10 @@ const OrgSelect = () => {
             onBlur={validateOrg}
             name={'project-department-select'}
             inputId={`${inputId}-department`}
-            value={department}
+            value={department || null}
             options={options?.organizations?.department?.[lang] || []}
             creatable
-            allowReset={Boolean(department?.value && !subdepartment?.value)}
+            allowReset={haveDepartment && !haveSubdepartment}
             attributes={{ ariaLabel: 'qvain.projectV2.organizations.department.aria' }}
           />
           <Translate
@@ -78,10 +81,10 @@ const OrgSelect = () => {
                 onBlur={validateOrg}
                 name={'project-subdepartment-select'}
                 inputId={`${inputId}-subdepartment`}
-                value={subdepartment}
+                value={subdepartment || null}
                 options={options?.organizations?.subdepartment?.[lang] || []}
                 creatable
-                allowReset={Boolean(subdepartment?.value)}
+                allowReset={haveSubdepartment}
                 attributes={{ ariaLabel: 'qvain.projectV2.organizations.subdepartment.aria' }}
               />
               <Translate
@@ -94,7 +97,11 @@ const OrgSelect = () => {
       )}
       <Divider />
       <div>
-        <Button type="button" onClick={saveOrg} disabled={readonly}>
+        <Button
+          type="button"
+          onClick={saveOrg}
+          disabled={readonly || orgValidationError || !orgInEdit?.organization}
+        >
           <Translate content={'qvain.projectV2.organizations.buttons.save'} />
         </Button>
       </div>

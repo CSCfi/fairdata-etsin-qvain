@@ -100,7 +100,7 @@ const SelectedButton = styled(Button)`
 const DisabledButton = styled(Button)`
   color: ${p => p.theme.color.gray}
   background-color: ${p => p.theme.color.lightGray};
-  border-color: ${p => p.theme.color.gray};
+  border-color: ${p => p.theme.color.lightGray};
   cursor: auto;
 `
 

@@ -36,7 +36,7 @@ export const OrgSelectComponent = observer(
     ariaLabel,
   }) => {
     const {
-      Locale: { lang, getPreferredLang },
+      Locale: { getPreferredLang, getValueTranslation },
     } = useStores()
     /**
      * Open form if add manually is selected.
@@ -48,7 +48,6 @@ export const OrgSelectComponent = observer(
         onChange({
           value: '',
           name: { und: '' },
-          label: t('qvain.organizationSelect.label.addNew'),
           email: '',
           formIsOpen: true,
         })
@@ -107,12 +106,12 @@ export const OrgSelectComponent = observer(
      * Select option will have an additional form is open property
      * if organization for should be visible.
      */
-    const formIsOpen = () => (value ? value.formIsOpen : false)
+    const formIsOpen = value?.formIsOpen
 
     const preferredLang = getPreferredLang(value?.name)
 
     const renderForm = () => {
-      if (!formIsOpen()) return null
+      if (!formIsOpen) return null
       return (
         <AddOptionContainer>
           <Translate component={FieldLabel} content="qvain.organizationSelect.label.addNew" />
@@ -148,7 +147,7 @@ export const OrgSelectComponent = observer(
             <Translate component={Title} content="qvain.organizationSelect.label.identifier" />
             <Translate
               component={Input}
-              value={value ? value.value : ''}
+              value={value?.value || ''}
               onChange={onFormChange}
               onBlur={onBlur}
               name="identifier"
@@ -163,7 +162,6 @@ export const OrgSelectComponent = observer(
         </AddOptionContainer>
       )
     }
-
     return (
       <>
         <OrgItemContainer>
@@ -173,8 +171,10 @@ export const OrgSelectComponent = observer(
             inputId={inputId}
             isDisabled={readonly}
             onChange={onSelectChange}
-            getOptionLabel={option => (option.label ? option.label : option.name[lang])}
-            value={value}
+            getOptionLabel={option =>
+              option.label ? option.label : getValueTranslation(option.name) || ''
+            }
+            value={{ ...value, value: value?.value || '' }}
             className="basic-single"
             classNamePrefix="select"
             options={getOptions()}
@@ -203,7 +203,7 @@ const StyledSelect = styled(ReactSelect)`
 OrgSelectComponent.propTypes = {
   readonly: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
-  onBlur: PropTypes.func.isRequired,
+  onBlur: PropTypes.func,
   value: PropTypes.object,
   options: PropTypes.array,
   name: PropTypes.string.isRequired,
@@ -221,6 +221,7 @@ OrgSelectComponent.defaultProps = {
   allowReset: false,
   ariaLabel: undefined,
   readonly: false,
+  onBlur: undefined,
 }
 
 export const SelectContainer = styled.div`

@@ -16,7 +16,6 @@ const FunderTypeSelect = () => {
       model={Field.FunderTypeModel}
       metaxIdentifier="funder_type"
       translationsRoot="qvain.projectV2"
-      isMulti
       isClearable={false}
     />
   )

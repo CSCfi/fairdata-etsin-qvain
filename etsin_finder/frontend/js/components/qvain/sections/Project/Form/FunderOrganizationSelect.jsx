@@ -22,12 +22,14 @@ const FunderOrganizationSelect = () => {
         changeFunderOrgInEdit,
         isFunderOrgDepartmentVisible,
         isFunderOrgSubdepartmentVisible,
-        saveFunderOrg,
       },
     },
   } = useStores()
 
-  const { organization, department, subdepartment } = funderOrgInEdit
+  const { organization, department, subdepartment } = funderOrgInEdit || { organization: null }
+  const haveOrganization = Boolean(organization?.value || organization?.label)
+  const haveDepartment = Boolean(department?.value || department?.label)
+  const haveSubdepartment = Boolean(subdepartment?.value || subdepartment?.label)
 
   const inputId = 'project-funderorg-select'
   return (
@@ -46,13 +48,12 @@ const FunderOrganizationSelect = () => {
               component={Select}
               readonly={readonly}
               onChange={v => changeFunderOrgInEdit('organization', v)}
-              onBlur={saveFunderOrg}
-              name={'project-funder-organization-select'}
+              name="project-funder-organization-select"
               inputId={`${inputId}-organization`}
-              value={organization}
+              value={organization || null}
               options={options?.funderOrg?.organization?.[lang] || []}
               creatable
-              allowReset={Boolean(organization?.value && !department?.value)}
+              allowReset={haveOrganization && !haveDepartment}
               attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.organization' }}
             />
             <Translate
@@ -68,13 +69,12 @@ const FunderOrganizationSelect = () => {
                   readonly={readonly}
                   component={Select}
                   onChange={v => changeFunderOrgInEdit('department', v)}
-                  onBlur={saveFunderOrg}
-                  name={'project-funderdepartment-select'}
+                  name="project-funderdepartment-select"
                   inputId={`${inputId}-department`}
-                  value={department}
+                  value={department || null}
                   options={options?.funderOrg?.department?.[lang] || []}
                   creatable
-                  allowReset={Boolean(department?.value && !subdepartment?.value)}
+                  allowReset={haveDepartment && !haveSubdepartment}
                   attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.department' }}
                 />
                 <Translate
@@ -90,13 +90,12 @@ const FunderOrganizationSelect = () => {
                       readonly={readonly}
                       component={Select}
                       onChange={v => changeFunderOrgInEdit('subdepartment', v)}
-                      onBlur={saveFunderOrg}
                       name={'project-subdepartment-select'}
                       inputId={`${inputId}-subdepartment`}
-                      value={subdepartment}
+                      value={subdepartment || null}
                       options={options?.funderOrg?.subdepartment?.[lang] || []}
                       creatable
-                      allowReset={Boolean(subdepartment?.value)}
+                      allowReset={haveSubdepartment}
                       attributes={{
                         ariaLabel: 'qvain.project.inputs.organization.levels.subdepartment',
                       }}
