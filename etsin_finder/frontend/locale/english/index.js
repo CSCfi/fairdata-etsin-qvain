@@ -243,6 +243,18 @@ const english = {
         deletionEvent: 'Dataset deletion',
         deletionOfDatasetVersion: 'Deleted dataset version: ',
       },
+      preservationEvent: {
+        useCopy: {
+          title: 'Copy created into Digital Preservation',
+          descriptionDate: 'Copy created: %(date)s.',
+          descriptionLink: 'Click here to open the Digital Preservation Service version.',
+        },
+        preservedCopy: {
+          title: 'Created in Digital Preservation',
+          descriptionDate: 'Created: %(date)s.',
+          descriptionLink: 'You can open the use copy by clicking here.',
+        },
+      },
       deprecations: {
         event: 'Deprecated',
         title: 'Data removed',

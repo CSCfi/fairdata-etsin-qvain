@@ -243,6 +243,18 @@ const finnish = {
         deletionEvent: 'Aineiston poistaminen',
         deletionOfDatasetVersion: 'Poistettu aineistoversio: ',
       },
+      preservationEvent: {
+        useCopy: {
+          title: 'Aineistosta viety kopio pitkäaikaissäilytykseen',
+          descriptionDate: 'Kopio luotu: %(date)s.',
+          descriptionLink: 'Siirry pitkäaikaissäilytyksessä olevaan versioon tästä.',
+        },
+        preservedCopy: {
+          title: 'Viety pitkäaikaissäilytykseen',
+          descriptionDate: 'Luotu: %(date)s.',
+          descriptionLink: 'Käyttökopioon pääset tästä.',
+        },
+      },
       deprecations: {
         event: 'Vanhentunut (deprekoitunut)',
         title: 'Data poistettu',

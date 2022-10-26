@@ -183,6 +183,9 @@ export const PRESERVATION_STATE = {
   },
 }
 
+export const PRESERVATION_EVENT_CREATED =
+  'http://uri.suomi.fi/codelist/fairdata/preservation_event/code/cre'
+
 export const DATASET_STATE = {
   NEW: 'NEW',
   DRAFT: 'DRAFT',

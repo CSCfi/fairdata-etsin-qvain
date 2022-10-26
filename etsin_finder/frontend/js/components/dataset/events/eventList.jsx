@@ -11,23 +11,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
-import styled from 'styled-components'
 
-import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import dateFormat from '../../../utils/dateFormat'
-import Agent from '../Agent'
-import { hasProvenances, Table, IDLink, Margin } from './common'
-
-const printDate = temp => {
-  if (temp.start_date === temp.end_date) {
-    return dateFormat(temp.start_date)
-  }
-  return (
-    <span>
-      {dateFormat(temp.start_date)} &ndash; {dateFormat(temp.end_date)}
-    </span>
-  )
-}
+import { hasProvenances, Table, IDLink, Margin, PreservationInfo } from './common'
+import Event from './event'
+import checkDataLang from '@/utils/checkDataLang'
 
 const EventList = props => {
   const { deletedVersions, provenances, dateDeprecated } = props
@@ -65,51 +53,12 @@ const EventList = props => {
         <tbody>
           {
             // Displaying general events
-            provenances.map(single => (
-              <tr key={`provenance-${checkDataLang(single.title)}`}>
-                <td>
-                  {/* If this contains both lifecycle and preservation events, it will display both in one box */}
-                  {single.lifecycle_event !== undefined && (
-                    <span lang={getDataLang(single.lifecycle_event.pref_label)}>
-                      {checkDataLang(single.lifecycle_event.pref_label)}
-                    </span>
-                  )}
-                  {single.preservation_event && (
-                    <span lang={getDataLang(single.preservation_event.pref_label)}>
-                      {checkDataLang(single.preservation_event.pref_label)}
-                    </span>
-                  )}
-                </td>
-                <td>
-                  {single.was_associated_with &&
-                    single.was_associated_with.map((associate, i) => {
-                      if (associate.name) {
-                        return (
-                          <InlineUl key={`ul-${checkDataLang(associate.name)}`}>
-                            <Agent
-                              lang={getDataLang(associate)}
-                              key={checkDataLang(associate) || associate.name}
-                              first={i === 0}
-                              agent={associate}
-                            />
-                          </InlineUl>
-                        )
-                      }
-                      return ''
-                    })}
-                </td>
-                <td>
-                  {/* Some datasets have start_date and some startDate */}
-                  {single.temporal && printDate(single.temporal)}
-                </td>
-                <td>
-                  {/* Some datasets have start_date and some startDate */}
-                  {single.title && checkDataLang(single.title)}
-                </td>
-                <td lang={getDataLang(single.description)}>
-                  {single.description && checkDataLang(single.description)}
-                </td>
-              </tr>
+            provenances.map(event => (
+              <Event
+                key={`provenance-${checkDataLang(event.title)}`}
+                event={event}
+                preservationInfo={props.preservationInfo}
+              />
             ))
           }
           {dateDeprecated && (
@@ -166,18 +115,14 @@ EventList.defaultProps = {
   provenances: [],
   deletedVersions: [],
   dateDeprecated: null,
+  preservationInfo: undefined,
 }
 
 EventList.propTypes = {
   provenances: PropTypes.array,
   deletedVersions: PropTypes.array,
   dateDeprecated: PropTypes.string,
+  preservationInfo: PreservationInfo,
 }
-
-const InlineUl = styled.ul`
-  display: inline;
-  margin: 0;
-  padding: 0;
-`
 
 export default observer(EventList)

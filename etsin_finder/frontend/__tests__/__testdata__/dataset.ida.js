@@ -623,3 +623,71 @@ export const deprecatedDataset = {
   date_deprecated: '2021-12-22T14:29:15+02:00',
   deprecated: true,
 }
+
+const pasProvenanceEvent = {
+  description: {
+    en: 'Value unavailable, possibly unknown',
+  },
+  event_outcome: {
+    in_scheme: 'http://uri.suomi.fi/codelist/fairdata/event_outcome',
+    identifier: 'http://uri.suomi.fi/codelist/fairdata/event_outcome/code/unknown',
+    pref_label: {
+      en: 'Unknown',
+      fi: 'Tuntematon',
+      sv: 'Okänt',
+      und: 'Tuntematon',
+    },
+  },
+  preservation_event: {
+    in_scheme: 'http://uri.suomi.fi/codelist/fairdata/preservation_event',
+    identifier: 'http://uri.suomi.fi/codelist/fairdata/preservation_event/code/cre',
+    pref_label: {
+      en: 'Creation',
+      fi: 'Luonti',
+      und: 'Luonti',
+    },
+  },
+  outcome_description: {
+    en: 'Value unavailable, possibly unknown',
+  },
+}
+
+export const pasPreservationCopy = {
+  ...dataset,
+  research_dataset: {
+    ...dataset.research_dataset,
+    provenance: [pasProvenanceEvent],
+    preferred_identifier: 'doi:10.23729/urn:nbn:fi:att:data-catalog-pas/12345-abcd',
+  },
+  id: 1929,
+  identifier: '6d2cb5f5-4867-47f7-9874-09357f2901a3',
+  preservation_state: 120,
+  preservation_state_modified: '2022-10-13T08:21:49Z',
+  dataset_version_set: undefined,
+  preservation_dataset_origin_version: {
+    id: 1234,
+    identifier: '1aea5e4c-b5e5-482b-80e6-063a19150bc7',
+    preferred_identifier: 'doi:10.23729/urn:nbn:fi:att:data-catalog-pas/12345-xyz',
+  },
+}
+
+export const pasUseCopy = {
+  ...dataset,
+  research_dataset: {
+    ...dataset.research_dataset,
+    provenance: [pasProvenanceEvent],
+    preferred_identifier: 'doi:10.23729/urn:nbn:fi:att:data-catalog-pas/12345-xyz',
+  },
+  id: 1234,
+  identifier: '1aea5e4c-b5e5-482b-80e6-063a19150bc7',
+  preservation_state: 0,
+  preservation_state_modified: '2021-12-22T14:29:15+02:00',
+  preservation_dataset_version: {
+    id: 1929,
+    identifier: '6d2cb5f5-4867-47f7-9874-09357f2901a3',
+    preferred_identifier: 'doi:10.23729/urn:nbn:fi:att:data-catalog-pas/12345-abcd',
+    preservation_state: 120,
+    preservation_state_modified: '2022-10-13T08:21:49Z',
+  },
+  dataset_version_set: undefined,
+}

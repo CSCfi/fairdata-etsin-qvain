@@ -18,7 +18,7 @@ import Relations from './relations'
 import DeletedVersions from './deletedVersions'
 import Versions from './versions'
 import Identifiers from './identifiers'
-import { Margin } from './common'
+import { getPreservationInfo, Margin } from './common'
 import idnToLink from '../../../utils/idnToLink'
 
 const Events = props => {
@@ -30,6 +30,8 @@ const Events = props => {
       date_deprecated: dateDeprecated,
       dataset_version_set: datasetVersionSet = [],
       preservation_dataset_origin_version: preservationDatasetOriginVersion = undefined,
+      preservation_state_modified: preservationStateModified = undefined,
+      preservation_dataset_version: preservationDatasetVersion = undefined,
       research_dataset: {
         other_identifier: otherIdentifierObjects = [],
         relation = [],
@@ -88,6 +90,11 @@ const Events = props => {
 
   const otherIdentifiers = otherIdentifierObjects.map(v => v.notation)
   const originIdentifier = [preservationDatasetOriginVersion?.preferred_identifier].filter(v => v)
+  const preservationInfo = getPreservationInfo({
+    preservationDatasetOriginVersion,
+    preservationStateModified,
+    preservationDatasetVersion,
+  })
 
   return (
     <Margin id={id}>
@@ -95,6 +102,7 @@ const Events = props => {
         provenances={provenance}
         deletedVersions={deletedVersions}
         dateDeprecated={dateDeprecated}
+        preservationInfo={preservationInfo}
       />
       <Identifiers title="dataset.events_idn.other_idn" identifiers={otherIdentifiers} />
       <Relations relation={relation} />
@@ -115,6 +123,8 @@ Events.propTypes = {
     date_deprecated: PropTypes.string,
     dataset_version_set: PropTypes.array,
     preservation_dataset_origin_version: PropTypes.object,
+    preservation_dataset_version: PropTypes.object,
+    preservation_state_modified: PropTypes.string,
     research_dataset: PropTypes.shape({
       relation: PropTypes.array,
       provenance: PropTypes.array,

@@ -8,18 +8,19 @@ import etsinTheme from '@/styles/theme'
 import '@/../locale/translations'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
-import dataset from '../../__testdata__/dataset.ida'
-import { deprecatedDataset, versionTitles } from '../../__testdata__/dataset.ida'
+import {
+  deprecatedDataset,
+  versionTitles,
+  pasPreservationCopy,
+  pasUseCopy,
+} from '../../__testdata__/dataset.ida'
 import Events from '@/components/dataset/events'
-import axios from 'axios'
 
 jest.mock('axios')
 
 deprecatedDataset.preservation_dataset_origin_version = {
   preferred_identifier: 'urn:nbn:fi:origin-of-preserved-dataset',
 }
-
-const datasetsCalls = observable.array([])
 
 const identifier = deprecatedDataset.identifier
 const path = `/dataset/${identifier}/events`
@@ -46,7 +47,7 @@ const tableToObjects = tableWrapper => {
 describe('Events page', () => {
   let wrapper, sections
 
-  beforeAll(async () => {
+  const render = async (dataset = deprecatedDataset) => {
     jest.resetAllMocks()
 
     wrapper = mount(
@@ -54,7 +55,7 @@ describe('Events page', () => {
         <MemoryRouter initialEntries={[path]}>
           <ThemeProvider theme={etsinTheme}>
             <Route path="/dataset/:identifier/events">
-              <Events id="tab-events" dataset={deprecatedDataset} versionTitles={versionTitles} />
+              <Events id="tab-events" dataset={dataset} versionTitles={versionTitles} />
             </Route>
           </ThemeProvider>
         </MemoryRouter>
@@ -68,9 +69,10 @@ describe('Events page', () => {
       map[title] = content
       return map
     }, {})
-  })
+  }
 
   it('should render provenances, deprecations and version deletions in events table', async () => {
+    await render()
     tableToObjects(sections['Events']).should.eql([
       {
         Event: 'Checked',
@@ -97,6 +99,7 @@ describe('Events page', () => {
   })
 
   it('should render other identifiers', async () => {
+    await render()
     sections['Other identifiers']
       .find('li')
       .map(li => li.text())
@@ -104,6 +107,7 @@ describe('Events page', () => {
   })
 
   it('should render relations', async () => {
+    await render()
     tableToObjects(sections['Relations']).should.eql([
       {
         Identifier: 'Identifier:1234-aaaaa-tunniste',
@@ -114,6 +118,7 @@ describe('Events page', () => {
   })
 
   it('should render origin dataset identifier', async () => {
+    await render()
     sections['Origin dataset identifier']
       .find('li')
       .map(li => li.text())
@@ -121,6 +126,7 @@ describe('Events page', () => {
   })
 
   it('should render deleted versions', async () => {
+    await render()
     tableToObjects(sections['Deleted versions']).should.eql([
       {
         Version: '1',
@@ -131,6 +137,7 @@ describe('Events page', () => {
   })
 
   it('should render other existing versions', async () => {
+    await render()
     tableToObjects(sections['Versions']).should.eql([
       {
         Identifier: 'http://urn.fi/urn:nbn:fi:att:12345677-4867-47f7-9874-112233445566',
@@ -151,5 +158,34 @@ describe('Events page', () => {
         Type: 'Older',
       },
     ])
+  })
+
+  describe('digital preservation datasets', () => {
+    it('should render copy creation event for original version', async () => {
+      await render(pasUseCopy)
+      tableToObjects(sections['Events']).should.eql([
+        {
+          Description:
+            'Copy created: October 13, 2022. Click here to open the Digital Preservation Service version.',
+          Event: 'Copy created into Digital Preservation',
+          Title: '',
+          When: '',
+          Who: '',
+        },
+      ])
+    })
+
+    it('should render creation event for preservation version', async () => {
+      await render(pasPreservationCopy)
+      tableToObjects(sections['Events']).should.eql([
+        {
+          Description: 'Created: October 13, 2022. You can open the use copy by clicking here.',
+          Event: 'Created in Digital Preservation',
+          Title: '',
+          When: '',
+          Who: '',
+        },
+      ])
+    })
   })
 })
