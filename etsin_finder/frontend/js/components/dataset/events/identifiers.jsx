@@ -11,6 +11,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+
+import idnToLink from '@/utils/idnToLink'
+
 import { OtherID, Margin } from './common'
 
 const Events = ({ identifiers, title }) => {
@@ -18,14 +21,22 @@ const Events = ({ identifiers, title }) => {
     return null
   }
 
+  const links = identifiers.map(identifier => ({
+    url: idnToLink(identifier),
+    identifier,
+  }))
+
   return (
     <Margin>
       <h2>
         <Translate content={title} />
       </h2>
       <ul>
-        {identifiers.map(identifier => (
-          <OtherID key={identifier}>{identifier}</OtherID>
+        {links.map(link => (
+          <OtherID key={link.identifier}>
+            {link.url && <a href={link.url}>{link.identifier}</a>}
+            {!link.url && link.identifier}
+          </OtherID>
         ))}
       </ul>
     </Margin>
