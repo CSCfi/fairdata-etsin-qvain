@@ -1,12 +1,16 @@
 """Validation schemas for form data coming in from Qvain"""
 from marshmallow import (
     Schema,
+    ValidationError,
     fields,
     validate,
     INCLUDE,
+    validates_schema,
 )
 from marshmallow.validate import Length, OneOf
 from marshmallow_oneofschema import OneOfSchema
+
+from etsin_finder.utils.constants import ACCESS_TYPES
 
 data_catalog_matcher = "^urn:nbn:fi:att:data-catalog-(ida|att|pas|dft)$"
 
@@ -140,7 +144,23 @@ class AccessRightsValidationSchema(Schema):
     license = fields.List(fields.Nested(LicenseValidationSchema))
     available = fields.Str()  # Embargo date
     restriction_grounds = fields.List(fields.Nested(ReferenceObjectValidationSchema))
-    access_type = fields.Dict(required=True)
+    access_type = fields.Nested(ReferenceObjectValidationSchema, required=True)
+
+    @validates_schema
+    def retriction_grounds_for_non_open(self, data, **kwargs):
+        """Non-open access types should require restriction grounds."""
+        is_open = data["access_type"]["identifier"] == ACCESS_TYPES["open"]
+        has_restriction_grounds = len(data.get("restriction_grounds", [])) > 0
+        if is_open:
+            if has_restriction_grounds:
+                raise ValidationError(
+                    "Restriction grounds are not allowed for open access type"
+                )
+        else:
+            if not has_restriction_grounds:
+                raise ValidationError(
+                    "Restriction grounds are required for non-open access type"
+                )
 
 
 class DatasetValidationSchema(Schema):
@@ -182,7 +202,7 @@ class DatasetValidationSchema(Schema):
     infrastructure = fields.List(fields.Dict())
     spatial = fields.List(fields.Dict())
     temporal = fields.List(fields.Dict())
-    access_rights = fields.Nested(AccessRightsValidationSchema)
+    access_rights = fields.Nested(AccessRightsValidationSchema, required=True)
     dataCatalog = fields.Str(validate=validate.Regexp(data_catalog_matcher))
     cumulativeState = fields.Int(validate=OneOf([0, 1, 2]))
     files = fields.List(fields.Dict())

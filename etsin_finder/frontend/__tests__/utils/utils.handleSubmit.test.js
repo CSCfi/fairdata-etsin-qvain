@@ -1,12 +1,13 @@
 import 'chai/register-expect'
 
 import handleSubmit from '../../js/components/qvain/utils/handleSubmit'
+import { ACCESS_TYPE_URL } from '../../js/utils/constants'
 
 const fakeNow = new Date('2022-09-22T12:34:00.000Z')
 jest.useFakeTimers('modern').setSystemTime(fakeNow)
 
 describe('when calling handleSubmit with mockStores', () => {
-  const getMockStores = dataCatalog => ({
+  const getMockStores = ({ dataCatalog, accessType = ACCESS_TYPE_URL.OPEN }) => ({
     Qvain: {
       Title: {
         toBackend: jest.fn(() => 'title'),
@@ -48,7 +49,7 @@ describe('when calling handleSubmit with mockStores', () => {
         toBackend: jest.fn(() => 'issuedDate'),
       },
       AccessType: {
-        toBackend: jest.fn(() => 'accessType'),
+        toBackend: jest.fn(() => ({ identifier: accessType })),
       },
       Projects: {
         toBackend: jest.fn(() => 'projects'),
@@ -99,9 +100,8 @@ describe('when calling handleSubmit with mockStores', () => {
     infrastructure: 'infrastructures',
     access_rights: {
       license: 'license',
-      access_type: 'accessType',
+      access_type: { identifier: ACCESS_TYPE_URL.OPEN },
       available: 'embargoDate',
-      restriction_grounds: 'restrictionGrounds',
     },
     // remote_resources: undefined,
     // dataCatalog: 'dataCatalog',
@@ -129,13 +129,37 @@ describe('when calling handleSubmit with mockStores', () => {
     dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
   }
 
+  const expectedReturnRestricted = {
+    ...expectedReturnIDA,
+    access_rights: {
+      ...expectedReturnIDA.access_rights,
+      access_type: { identifier: ACCESS_TYPE_URL.RESTRICTED },
+      restriction_grounds: 'restrictionGrounds',
+    },
+    dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
+  }
+
   test('should return data with external resources', () => {
-    const returnValue = handleSubmit(getMockStores('urn:nbn:fi:att:data-catalog-att').Qvain)
+    const returnValue = handleSubmit(
+      getMockStores({ dataCatalog: 'urn:nbn:fi:att:data-catalog-att' }).Qvain
+    )
     returnValue.should.deep.eql(expectedReturnATT)
   })
 
   test('should return data without external resources', () => {
-    const returnValue = handleSubmit(getMockStores('urn:nbn:fi:att:data-catalog-ida').Qvain)
+    const returnValue = handleSubmit(
+      getMockStores({ dataCatalog: 'urn:nbn:fi:att:data-catalog-ida' }).Qvain
+    )
     returnValue.should.deep.eql(expectedReturnIDA)
+  })
+
+  test('should return data with restriction grounds', () => {
+    const returnValue = handleSubmit(
+      getMockStores({
+        dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
+        accessType: ACCESS_TYPE_URL.RESTRICTED,
+      }).Qvain
+    )
+    returnValue.should.deep.eql(expectedReturnRestricted)
   })
 })

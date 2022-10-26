@@ -1,4 +1,4 @@
-import { REMOTE_RESOURCES_DATA_CATALOGS } from '../../../utils/constants'
+import { REMOTE_RESOURCES_DATA_CATALOGS, ACCESS_TYPE_URL } from '../../../utils/constants'
 
 /* eslint-disable camelcase */
 const handleSubmitToBackend = values => {
@@ -55,7 +55,6 @@ const handleSubmitToBackend = values => {
     access_rights: {
       license,
       access_type: accessType,
-      restriction_grounds: restrictionGrounds,
       available: embargoDate,
     },
     dataCatalog: values.dataCatalog,
@@ -69,7 +68,11 @@ const handleSubmitToBackend = values => {
     field_of_science,
     language,
     issued,
-    modified
+    modified,
+  }
+
+  if (accessType?.identifier !== ACCESS_TYPE_URL.OPEN) {
+    obj.access_rights.restriction_grounds = restrictionGrounds
   }
 
   if (REMOTE_RESOURCES_DATA_CATALOGS.includes(values.dataCatalog)) {

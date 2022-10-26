@@ -13,12 +13,14 @@ import pytest
 from .basetest import BaseTest
 
 from etsin_finder.schemas.qvain_dataset_schema import (
+    AccessRightsValidationSchema,
     PersonValidationSchema,
     OrganizationValidationSchema,
     ActorValidationSchema,
     DatasetValidationSchema,
     OriginalDatasetSchema,
 )
+from etsin_finder.utils.constants import ACCESS_TYPES
 
 
 def getPerson(replace=None, delete=None):
@@ -48,6 +50,14 @@ def getOrganization():
             "identifier": "organization_identifier",
         },
     }
+
+
+def getAccessRights(access_type, restriction_grounds=None):
+    """Generate access rights dictionary."""
+    rights = {"access_type": {"identifier": access_type}}
+    if restriction_grounds:
+        rights["restriction_grounds"] = [{"identifier": restriction_grounds}]
+    return rights
 
 
 class TestQvainLightDatasetSchemaPerson(BaseTest):
@@ -342,3 +352,35 @@ class TestQvainDatasetOriginal(BaseTest):
         del original["research_dataset"]
         errors = self.schema.validate(original)
         assert errors
+
+
+class TestQvainAccessRights(BaseTest):
+    """Test access rights."""
+
+    schema = AccessRightsValidationSchema()
+
+    def test_open_without_restrictions(self):
+        """Test open dataset without restriction grounds"""
+        errors = self.schema.validate(getAccessRights(ACCESS_TYPES["open"]))
+        assert not errors
+
+    def test_open_with_restrictions(self):
+        """Test open dataset with restriction grounds"""
+        errors = self.schema.validate(
+            getAccessRights(ACCESS_TYPES["open"], "https://example.com/restriction")
+        )
+        assert errors
+
+    def test_restricted_without_restrictions(self):
+        """Test restricted dataset without restriction grounds"""
+        errors = self.schema.validate(getAccessRights(ACCESS_TYPES["restricted"]))
+        assert errors
+
+    def test_restricted_with_restrictions(self):
+        """Test restricted dataset with restriction grounds"""
+        errors = self.schema.validate(
+            getAccessRights(
+                ACCESS_TYPES["restricted"], "https://example.com/restriction"
+            )
+        )
+        assert not errors

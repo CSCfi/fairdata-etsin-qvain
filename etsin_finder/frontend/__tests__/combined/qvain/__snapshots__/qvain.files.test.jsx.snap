@@ -12,7 +12,6 @@ Object {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
       },
     ],
-    "restriction_grounds": undefined,
   },
   "contributor": undefined,
   "creator": Array [
@@ -162,7 +161,6 @@ Object {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
       },
     ],
-    "restriction_grounds": undefined,
   },
   "contributor": undefined,
   "creator": Array [
@@ -312,7 +310,6 @@ Object {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
       },
     ],
-    "restriction_grounds": undefined,
   },
   "contributor": undefined,
   "creator": Array [
@@ -462,7 +459,6 @@ Object {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
       },
     ],
-    "restriction_grounds": undefined,
   },
   "contributor": undefined,
   "creator": Array [
@@ -612,7 +608,6 @@ Object {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
       },
     ],
-    "restriction_grounds": undefined,
   },
   "contributor": undefined,
   "creator": Array [

@@ -17,6 +17,7 @@ import Project from './special/project'
 import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
 import { withStores } from '../../../stores/stores'
 import CitationButton from '../citation/citationButton'
+import { ACCESS_TYPE_URL } from '@/utils/constants'
 
 class Sidebar extends Component {
   dateSeparator(start, end) {
@@ -93,12 +94,14 @@ class Sidebar extends Component {
   }
 
   accessRights() {
+
     const researchDataset = this.props.dataset.research_dataset
     const accessRights = checkNested(researchDataset, 'access_rights')
       ? researchDataset.access_rights
       : false
 
-    if (accessRights.restriction_grounds?.length > 0) {
+    const isOpen = accessRights.access_type.identifier === ACCESS_TYPE_URL.OPEN
+    if (!isOpen && accessRights.restriction_grounds?.length > 0) {
       return accessRights.restriction_grounds.map(rg => (
         <ListItem key={`rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
           {checkDataLang(rg.pref_label)}
