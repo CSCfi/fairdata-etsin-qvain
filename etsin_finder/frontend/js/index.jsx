@@ -18,6 +18,7 @@ import ReactDOM from 'react-dom'
 import App from './app'
 
 import './index.css'
+import '../fairdata-ui/fairdata.css'
 
 global.Promise = require('bluebird')
 

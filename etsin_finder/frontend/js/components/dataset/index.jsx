@@ -1,16 +1,15 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable space-before-function-paren */
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
+
+/**
+ * This file is part of the Etsin service
+ *
+ * Copyright 2017-2018 Ministry of Education and Culture, Finland
+ *
+ *
+ * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+ * @license   MIT
+ */
 
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -19,14 +18,13 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import { NavLink, useLocation, useParams } from 'react-router-dom'
-
 import { opacify } from 'polished'
 import axios from 'axios'
+
 import Sidebar from './sidebar'
 import Content from './content'
 import ErrorPage from '../errorpage'
 import ErrorBoundary from '../general/errorBoundary'
-import NoticeBar from '../general/noticeBar'
 import Loader from '../general/loader'
 import { withStores, useStores } from '@/stores/stores'
 import CitationModal from './citation/citationModal'
@@ -280,7 +278,7 @@ function StateInfo({ children }) {
       results: { removed, deprecated },
     },
   } = useStores()
-  if (removed) return <NoticeBar bg="error">{children}</NoticeBar>
+  if (removed) return <div className="fd-alert fd-danger">{children}</div>
   if (deprecated) return <DraftInfo>{children}</DraftInfo>
   return null
 }
@@ -392,17 +390,21 @@ function DatasetView({ versionInfo }) {
           <div className="col-12">
             <div>
               <StateInfo>
-                <Translate component="p" content={versionInfo.stateInfo} />
-                <Translate content={versionInfo.urlText} />
-                <> </>
-                <Link
-                  href={versionInfo.ID}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  content={'tombstone.link'}
-                >
-                  <Translate content={versionInfo.linkToOtherVersion} />
-                </Link>
+                <Translate component={StateHeader} content={versionInfo.stateInfo} />
+                {versionInfo.urlText && <Translate content={versionInfo.urlText} />}
+                {versionInfo.ID && (
+                  <>
+                    <> </>
+                    <Link
+                      href={versionInfo.ID}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      content={'tombstone.link'}
+                    >
+                      <Translate content={versionInfo.linkToOtherVersion} />
+                    </Link>
+                  </>
+                )}
                 <RelatedDatasets relatedDatasetsInfo={versionInfo.relatedDatasetsInfo} />
                 {versionInfo.fetchingRelated && <RelatedDatasetLoadSpinner />}
               </StateInfo>
@@ -449,6 +451,13 @@ function DatasetView({ versionInfo }) {
 DatasetView.propTypes = {
   versionInfo: PropTypes.object.isRequired,
 }
+
+const StateHeader = styled.p`
+  font-weight: bold;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`
 
 const LoadingSplash = styled.div`
   flex: 1;
