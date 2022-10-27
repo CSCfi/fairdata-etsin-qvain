@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import * as yup from 'yup'
 import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from '../common.files.items'
-import { getAction } from '../common.files.utils'
+import { getAction, itemIsSelected } from '../common.files.utils'
 import { itemLoaderAny, itemLoaderPublic, FetchType } from '../common.files.loaders'
 import { AddItemsView, SelectedItemsView } from '../common.files.views'
 import urls from '../../../utils/urls'
@@ -322,8 +322,9 @@ class Files extends FilesBase {
 
       const useCategory = dir.useCategory
       const recurse = subDir => {
+        const parentAction = getAction(subDir)
         subDir.files
-          .filter(d => d.added || d.existing)
+          .filter(f => itemIsSelected(f, parentAction))
           .forEach(
             action(f => {
               f.useCategory = useCategory
@@ -331,7 +332,7 @@ class Files extends FilesBase {
             })
           )
         subDir.directories
-          .filter(d => d.added || d.existing)
+          .filter(d => itemIsSelected(d, parentAction))
           .forEach(
             action(subdir => {
               subdir.useCategory = useCategory
