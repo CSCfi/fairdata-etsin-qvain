@@ -20,12 +20,12 @@ const project = {
   // fields
   name: {
     en: {
-      label: 'Project name (in english)',
-      infoText: 'Name of the project in english',
+      label: 'Project name (in English)',
+      infoText: 'Name of the project in English',
     },
     fi: {
-      label: 'Project name (in finnish)',
-      infoText: 'Name of the project in finnish',
+      label: 'Project name (in Finnish)',
+      infoText: 'Name of the project in Finnish',
     },
   },
   identifier: {

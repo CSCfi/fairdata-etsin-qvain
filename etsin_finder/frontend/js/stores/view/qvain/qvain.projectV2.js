@@ -80,6 +80,8 @@ export const getOrganizationSearchUrl = parentId => {
     const match = codeRegExp.exec(parentId)
     if (match) {
       shortId = `organization_${match[1]}`
+    } else {
+      return null
     }
   }
   return `${METAX_FAIRDATA_ROOT_URL}/es/organization_data/organization/_search?size=3000&q=parent_id:"${shortId}"`
@@ -221,7 +223,7 @@ class ProjectV2 extends Field {
     if (org.organization) {
       this.orgInEdit = org
     } else {
-      this.orgInEdit = null
+      this.orgInEdit = { uiid: uuidv4(), organization: null }
     }
 
     this.fetchOrgOptions()
@@ -286,6 +288,9 @@ class ProjectV2 extends Field {
     }
 
     const url = parentId === 'all' ? getOrganizationSearchUrl() : getOrganizationSearchUrl(parentId)
+    if (!url) {
+      return []
+    }
     const response = await axios.get(url)
 
     if (response?.status !== 200) return null
