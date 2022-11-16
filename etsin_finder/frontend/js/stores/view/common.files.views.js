@@ -109,9 +109,9 @@ export class DirectoryView {
     await setChildrenOpen(this.Files.root)
   }
 
-  @observable defaultShowLimit = 20 // how many items to show
+  @observable defaultShowLimit = 100 // how many items to show
 
-  @observable showLimitIncrement = 20 // how many additional items to show when "show more" is clicked
+  @observable showLimitIncrement = 200 // how many additional items to show when "show more" is clicked
 
   @observable showLimitState = {}
 
