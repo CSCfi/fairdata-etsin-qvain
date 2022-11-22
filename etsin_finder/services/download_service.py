@@ -177,16 +177,9 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
 
         return resp, status
 
-    def get_download_url(self, token, dataset, file=None, package=None):
+    def get_download_url(self, token):
         """Create download URL from token"""
-        params = {"token": token, "dataset": dataset}
-        if file:
-            params["file"] = file
-        if package:
-            params["package"] = package
-
-        keyValues = "&".join("=".join(item) for item in params.items())
-        return f"{self.DOWNLOAD_URL}?{keyValues}"
+        return f"{self.DOWNLOAD_URL}?token={token}"
 
     def encode_notification(self, payload):
         """Encode payload dictionary as json and encrypt it"""

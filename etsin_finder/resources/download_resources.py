@@ -222,11 +222,7 @@ class Authorize(Resource):
         if not token:
             abort(500, message="Token missing from response")
 
-        return {
-            "url": download_service.get_download_url(
-                token, dataset=cr_id, file=file, package=package
-            )
-        }
+        return {"url": download_service.get_download_url(token)}
 
 
 class Subscriptions(Resource):

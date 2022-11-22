@@ -41,11 +41,11 @@ fakeToken = {
 }
 
 fakePackageDownloadUrl = {
-    "url": f"https://mock-download-public:2/download?token={fakeToken['token']}&dataset=1&package=x.zip",
+    "url": f"https://mock-download-public:2/download?token={fakeToken['token']}",
 }
 
 fakeFileDownloadUrl = {
-    "url": f"https://mock-download-public:2/download?token={fakeToken['token']}&dataset=1&file=/folder/filename.gif",
+    "url": f"https://mock-download-public:2/download?token={fakeToken['token']}",
 }
 
 
