@@ -1945,6 +1945,19 @@ const parseIntParam = param => {
   return val
 }
 
+const filter = (data, name) => {
+  if (!name) {
+    return data
+  }
+
+  const newData = {
+    ...data,
+    directories: data.directories.filter(d => d.directory_name.includes(name)),
+    files: data.files.filter(f => d.file_name.includes(name)),
+  }
+  return newData
+}
+
 // mock getter to replace axios.get
 export const get = rawURL => {
   const url = new URL(rawURL, 'https://localhost')
@@ -1953,6 +1966,7 @@ export const get = rawURL => {
   const pagination = searchParams.get('pagination') && searchParams.get('pagination') !== 'false'
   const offset = parseIntParam(searchParams.get('offset'))
   const limit = parseIntParam(searchParams.get('limit'))
+  const name = searchParams.get('name') || ''
   const crIdentifier = searchParams.get('cr_identifier')
   const notCRIdentifier = searchParams.get('not_cr_identifier')
   const dirID = searchParams.get('dir_id')
@@ -2050,9 +2064,9 @@ export const get = rawURL => {
       }
       dir = dir || { directories: [], files: [] }
       if (pagination) {
-        return Promise.resolve({ data: paginate(dir, offset, limit) })
+        return Promise.resolve({ data: filter(paginate(dir, offset, limit)) })
       }
-      return Promise.resolve({ data: dir })
+      return Promise.resolve({ data: filter(dir) })
     } else {
       const dir =
         directoriesById[directoryIdentifier] || directoriesByIdentifier[directoryIdentifier]
@@ -2060,9 +2074,9 @@ export const get = rawURL => {
         throw new Error(`Invalid directory ${path}`)
       }
       if (pagination) {
-        return Promise.resolve({ data: paginate(dir, offset, limit) })
+        return Promise.resolve({ data: filter(paginate(dir, offset, limit), name) })
       }
-      return Promise.resolve({ data: dir })
+      return Promise.resolve({ data: filter(dir, name) })
     }
   }
 

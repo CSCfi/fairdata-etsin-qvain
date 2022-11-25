@@ -105,6 +105,7 @@ class DirectoryFiles(Resource):
         self.parser.add_argument("include_parent", type=bool, required=False)
         self.parser.add_argument("offset", type=str, required=False)
         self.parser.add_argument("limit", type=str, required=False)
+        self.parser.add_argument("name", type=str, required=False)
         self.parser.add_argument(
             "directory_fields", type=str, action="append", required=False
         )
@@ -128,6 +129,7 @@ class DirectoryFiles(Resource):
         offset = args.get("offset", None)
         directory_fields = args.get("directory_fields", None)
         file_fields = args.get("file_fields", None)
+        name = args.get("name", None)
 
         # Unauthenticated users can only access files belonging to a published dataset
         if cr_identifier:
@@ -197,6 +199,9 @@ class DirectoryFiles(Resource):
             params["directory_fields"] = directory_fields
         if file_fields:
             params["file_fields"] = file_fields
+        if name:
+            params["file_name"] = name
+            params["directory_name"] = name
 
         resp, status = get_directories(dir_id, params)
         if status != 200:

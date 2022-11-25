@@ -8,6 +8,25 @@ import {
   itemLoaderPublic,
 } from '../../../js/stores/view/common.files.loaders'
 
+const testFilterItemsByName = (loader, fileProps = {}) => {
+  // filtering should be case insensitive
+  const dir = Directory(
+    {},
+    {
+      identifier: 'x',
+      directories: [],
+      files: [
+        File({ file_name: 'ABC' }, { index: 0, ...fileProps }),
+        File({ file_name: 'bcd' }, { index: 1, ...fileProps }),
+        File({ file_name: 'CDE' }, { index: 2, ...fileProps }),
+        File({ file_name: 'def' }, { index: 3, ...fileProps }),
+        File({ file_name: 'EFG' }, { index: 4, ...fileProps }),
+      ],
+    }
+  )
+  expect(loader.getOffset(dir, 'D')).toBe(3)
+}
+
 describe('common.files.ItemLoaderPublic', () => {
   it('counts existing directories until a nonloaded one is encountered', async () => {
     const dir = Directory(
@@ -167,6 +186,10 @@ describe('common.files.ItemLoaderPublic', () => {
     dir.pagination.offsets[paginationKey] = 4
     expect(itemLoaderPublic.getOffset(dir)).toBe(4)
   })
+
+  it('filters items by name when determining offset', () => {
+    testFilterItemsByName(itemLoaderPublic, { existing: true })
+  })
 })
 
 describe('common.files.ItemLoaderAny', () => {
@@ -325,6 +348,10 @@ describe('common.files.ItemLoaderAny', () => {
     const paginationKey = itemLoaderAny.getPaginationKey('')
     dir.pagination.offsets[paginationKey] = 3
     expect(itemLoaderAny.getOffset(dir)).toBe(3)
+  })
+
+  it('filters items by name when determining offset', () => {
+    testFilterItemsByName(itemLoaderAny)
   })
 })
 
@@ -486,6 +513,10 @@ describe('common.files.ItemLoaderExisting', () => {
     const paginationKey = itemLoaderExisting.getPaginationKey('')
     dir.pagination.offsets[paginationKey] = 4
     expect(itemLoaderExisting.getOffset(dir)).toBe(4)
+  })
+
+  it('filters items by name when determining offset', () => {
+    testFilterItemsByName(itemLoaderExisting, { existing: true })
   })
 })
 
@@ -669,6 +700,10 @@ describe('common.files.ItemLoaderNew', () => {
     const paginationKey = itemLoaderNew.getPaginationKey('')
     dir.pagination.offsets[paginationKey] = 4
     expect(itemLoaderNew.getOffset(dir)).toBe(4)
+  })
+
+  it('filters items by name when determining offset', () => {
+    testFilterItemsByName(itemLoaderNew)
   })
 })
 

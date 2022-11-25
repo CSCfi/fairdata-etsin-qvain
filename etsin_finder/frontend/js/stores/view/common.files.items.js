@@ -47,6 +47,7 @@ export const Directory = (metaxDir, args) => ({
   type: 'directory',
   directories: [],
   files: [],
+  filterText: '',
   ...args,
 })
 

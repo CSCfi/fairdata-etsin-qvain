@@ -3,6 +3,11 @@ const files = {
   infoTitle: 'Tiedostot info',
   infoText: 'Lisää texti',
   deletedLabel: 'Poistettu',
+  filterRow: {
+    filter: 'Rajaa',
+    placeholder: 'Rajaa kohteita nimellä',
+    noMatches: 'Hakuehtoa vastaavia kohteita ei löytynyt.',
+  },
   error: {
     title: 'Virhe ladattaessa tiedostoja',
     retry: 'Yritä uudelleen',

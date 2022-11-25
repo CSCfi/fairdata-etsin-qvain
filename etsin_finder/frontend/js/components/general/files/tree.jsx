@@ -5,6 +5,7 @@ import Translate from 'react-translate-component'
 import { LinkButton } from '../button'
 import { ItemRow, Items, ItemSpacer, isDirectory } from './items'
 import DefaultLoader from '../loader'
+import FilterRow from './FilterRow'
 
 // propagate properties from parent directories
 const getParentArgs = (directoryView, parent, parentArgs) => ({
@@ -44,11 +45,23 @@ const drawChildren = (treeProps, parent, level = 0, parentArgs = {}) => {
 
   const items = directoryView.getItems(parent).filter(filterFunc)
   const hasMore = directoryView.hasMore(parent)
+
   return (
     <>
+      <FilterRow
+        parent={parent}
+        items={items}
+        level={level + moreItemsLevel - 1}
+        directoryView={directoryView}
+      />
       {items.map(item => (
         <Fragment key={item.key}>
-          <Item treeProps={treeProps} item={item} level={level} parentArgs={newParentArgs} />
+          <Item
+            treeProps={treeProps}
+            item={item}
+            level={level}
+            parentArgs={newParentArgs}
+          />
           {isDirectory(item) &&
             directoryView.isOpen(item) &&
             drawChildren(treeProps, item, level + 1, newParentArgs)}

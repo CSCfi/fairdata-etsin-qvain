@@ -14,8 +14,8 @@ export class DirectoryView {
 
   constructor(Files) {
     this.Files = Files
-    if (typeof this.getItems !== 'function') {
-      throw new TypeError('Must override getItems')
+    if (typeof this.filterItem !== 'function') {
+      throw new TypeError('Must override filterItem')
     }
     if (typeof this.getItemLoader !== 'function') {
       throw new TypeError('Must override getItemLoader')
@@ -34,7 +34,17 @@ export class DirectoryView {
 
   @observable openState = {}
 
+  @observable directoryFilters = {}
+
   isOpen = dir => !!(this.openState[dir.key] || dir.type === 'project')
+
+  @action.bound setDirectoryFilter(dir, filter) {
+    this.directoryFilters[dir.identifier] = filter.toLowerCase()
+  }
+
+  getDirectoryFilter(dir) {
+    return this.directoryFilters[dir.identifier] || ''
+  }
 
   @action open = async dir => {
     if (!this.openState[dir.key] && !dir.loaded) {
@@ -45,7 +55,8 @@ export class DirectoryView {
             this.Files,
             dir,
             this.defaultShowLimit,
-            getCurrentCount
+            getCurrentCount,
+            this.getDirectoryFilter(dir)
           ))
         ) {
           return false
@@ -130,7 +141,8 @@ export class DirectoryView {
       this.Files,
       dir,
       newLimit,
-      getCurrentCount
+      getCurrentCount,
+      this.getDirectoryFilter(dir)
     )
 
     runInAction(() => {
@@ -142,14 +154,29 @@ export class DirectoryView {
     return success
   }
 
+  @action filter = async (dir, filter = '') => {
+    // Load directory using filter, apply filter to directory after load is complete
+    const getCurrentCount = () => this.getItems(dir, { filter }).length
+    const success = await this.getItemLoader(dir).loadDirectory(
+      this.Files,
+      dir,
+      this.getShowLimit(dir),
+      getCurrentCount,
+      filter
+    )
+    this.setDirectoryFilter(dir, filter)
+
+    return success
+  }
+
   hasMore(dir) {
+    const filter = this.getDirectoryFilter(dir)
     const showLimit = this.getShowLimit(dir)
     const loader = this.getItemLoader(dir)
-    const totalCount = this.getItems(dir, true).length
-    const paginationKey = loader.getPaginationKey('')
+    const totalCount = this.getItems(dir, { ignoreLimit: true }).length
+    const paginationKey = loader.getPaginationKey(filter)
     const count = dir.pagination.counts[paginationKey]
-
-    if (count == null) {
+    if (count == null && !dir.pagination.fullyLoaded) {
       return true
     }
 
@@ -157,7 +184,7 @@ export class DirectoryView {
       return true
     }
 
-    return loader.hasMore(dir, '')
+    return loader.hasMore(dir, filter)
   }
 
   @action setDefaultShowLimit = async (limit, increment) => {
@@ -208,6 +235,54 @@ export class DirectoryView {
   @action clearChecked = () => {
     this.checkedState = {}
   }
+
+  getItems(dir, { ignoreLimit = false, filter = '' } = {}) {
+    // Return up to directory showLimit items for directory.
+    //
+    // Even though more items may be loaded, only show items up to the point where there are
+    // no non-loaded items that might be missing. This way items from "Show more" always show up
+    // after the previously shown.
+    //
+    // As an example, when pagination offset is 5, it means at least the first 5 items relevant to
+    // loader have been loaded from Metax. After those first 5 items, a gap in indexes between items
+    // may contain items that need to be loaded before more items can be shown.
+    const items = [...dir.directories, ...dir.files]
+    const showLimit = this.getShowLimit(dir)
+    const filterText = filter || this.getDirectoryFilter(dir)
+    const loader = this.getItemLoader(dir)
+    const paginationKey = loader.getPaginationKey(filterText)
+    const loaderHasMore = loader.hasMore(dir, filterText)
+    const offset = dir.pagination.offsets[paginationKey] || 0
+    const dirAction = getAction(dir)
+
+    let counter = 0
+    let prevIndex = -1
+    const filtered = items.filter(item => {
+      const { index } = item
+      if (index - prevIndex > 1 && counter >= offset && loaderHasMore) {
+        return false // missing item, keep remaining ones hidden
+      }
+      prevIndex = index
+      if (filterText && !item.name.toLowerCase().includes(filterText)) {
+        return false
+      }
+
+      const itemAction = {
+        added: item.added || (!item.removed && dirAction.added),
+        removed: item.removed || (!item.added && dirAction.removed),
+      }
+
+      if (loader.filterItem(item)) {
+        counter += 1 // item counts towards pagination offset
+      }
+      return this.filterItem(item, itemAction) // view-specific filtering
+    })
+
+    if (!ignoreLimit && showLimit > 0 && filtered.length > showLimit) {
+      filtered.length = showLimit
+    }
+    return filtered
+  }
 }
 
 export class AddItemsView extends DirectoryView {
@@ -219,52 +294,24 @@ export class AddItemsView extends DirectoryView {
     return itemLoaderNew
   }
 
-  getItems(dir, ignoreLimit) {
-    const items = [...dir.directories, ...dir.files]
-    const showLimit = this.getShowLimit(dir)
-    const paginationKey = this.getItemLoader(dir).getPaginationKey()
-    const offset = dir.pagination.offsets[paginationKey] || 0
-    const dirAction = getAction(dir)
-
-    let counter = 0
-    let prevIndex = -1
-    const filtered = items.filter(item => {
-      const { index } = item
-      if (index - prevIndex > 1 && counter >= offset) {
-        return false // missing item, keep remaining ones hidden
-      }
-      prevIndex = index
-
-      const itemAction = {
-        added: item.added || (!item.removed && dirAction.added),
-        removed: item.removed || (!item.added && dirAction.removed),
-      }
-
-      if (itemAction.removed || (item.type === 'directory' && item.removedChildCount > 0)) {
-        counter += 1
-        return true
-      }
-
-      if (item.type === 'directory' && item.existing && item.existingFileCount >= item.fileCount) {
-        return false
-      }
-
-      if (item.type === 'file' && item.existing) {
-        return false
-      }
-
-      if (itemAction.added) {
-        return false
-      }
-
-      counter += 1
+  filterItem(item, itemAction) {
+    if (itemAction.removed || (item.type === 'directory' && item.removedChildCount > 0)) {
       return true
-    })
-
-    if (!ignoreLimit && showLimit > 0 && filtered.length > showLimit) {
-      filtered.length = showLimit
     }
-    return filtered
+
+    if (item.type === 'directory' && item.existing && item.existingFileCount >= item.fileCount) {
+      return false
+    }
+
+    if (item.type === 'file' && item.existing) {
+      return false
+    }
+
+    if (itemAction.added) {
+      return false
+    }
+
+    return true
   }
 }
 
@@ -300,62 +347,27 @@ export class SelectedItemsView extends DirectoryView {
     return itemLoaderExisting
   }
 
-  getItems(dir, ignoreLimit = false) {
-    const items = [...dir.directories, ...dir.files]
-    const showLimit = this.getShowLimit(dir)
+  filterItem(item, itemAction) {
+    if (itemAction.added || (item.type === 'directory' && item.addedChildCount > 0)) {
+      return true
+    }
 
-    const dirAction = getAction(dir)
+    if (this.hideRemoved && itemAction.removed) {
+      return false
+    }
 
-    const paginationKey = this.getItemLoader(dir).getPaginationKey()
-    const offset = dir.pagination.offsets[paginationKey] || 0
-    let counter = 0
+    if (!this.hideRemoved && item.existing && itemAction.removed) {
+      return true
+    }
 
-    let prevIndex = -1
-    const filtered = items.filter(item => {
-      const { index } = item
-      if (index - prevIndex > 1 && counter >= offset) {
-        return false // missing item, keep remaining ones hidden
-      }
-      prevIndex = index
-
-      const itemAction = {
-        added: item.added || (!item.removed && dirAction.added),
-        removed: item.removed || (!item.added && dirAction.removed),
-      }
-
-      if (itemAction.added || (item.type === 'directory' && item.addedChildCount > 0)) {
-        counter += 1
-        return true
-      }
-
-      if (this.hideRemoved && itemAction.removed) {
+    if (item.existing) {
+      if (item.type === 'directory' && item.addedChildCount === 0 && item.existingFileCount === 0) {
         return false
       }
 
-      if (!this.hideRemoved && item.existing && itemAction.removed) {
-        counter += 1
-        return true
-      }
-
-      if (item.existing) {
-        if (
-          item.type === 'directory' &&
-          item.addedChildCount === 0 &&
-          item.existingFileCount === 0
-        ) {
-          return false
-        }
-
-        counter += 1
-        return true
-      }
-      return false
-    })
-
-    if (!ignoreLimit && showLimit > 0 && filtered.length > showLimit) {
-      filtered.length = showLimit
+      return true
     }
-    return filtered
+    return false
   }
 }
 
@@ -364,31 +376,7 @@ export class PublicItemsView extends DirectoryView {
     return itemLoaderPublic
   }
 
-  getItems(dir, ignoreLimit = false) {
-    const items = [...dir.directories, ...dir.files]
-    const showLimit = this.getShowLimit(dir)
-
-    const paginationKey = this.getItemLoader(dir).getPaginationKey()
-    const offset = dir.pagination.offsets[paginationKey] || 0
-    let counter = 0
-
-    let prevIndex = -1
-    const filtered = items.filter(item => {
-      const { index } = item
-      if (index - prevIndex > 1 && counter >= offset) {
-        return false // missing item, keep remaining ones hidden
-      }
-      prevIndex = index
-      if (item.existing) {
-        counter += 1
-        return true
-      }
-      return false
-    })
-
-    if (!ignoreLimit && showLimit > 0 && filtered.length > showLimit) {
-      filtered.length = showLimit
-    }
-    return filtered
+  filterItem(item) {
+    return item.existing
   }
 }

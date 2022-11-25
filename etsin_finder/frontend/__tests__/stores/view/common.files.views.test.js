@@ -23,6 +23,24 @@ beforeEach(() => {
   SelectedItemsView.setHideRemoved(true)
 })
 
+const testFilterItemsByName = (view, fileProps = {}) => {
+    // filtering should be case insensitive
+  const dir = Directory(
+    {},
+    {
+      identifier: 'x',
+      directories: [],
+      files: [
+        File({ file_name: 'AB' }, { index: 0, ...fileProps }),
+        File({ file_name: 'bc' }, { index: 1, ...fileProps }),
+        File({ file_name: 'CD' }, { index: 2, ...fileProps }),
+      ],
+    }
+  )
+  view.setDirectoryFilter(dir, 'C')
+  expect(view.getItems(dir).map(i => i.name)).toEqual(['bc', 'CD'])
+}
+
 describe('common.files.AddItemsView', () => {
   it('shows new items', async () => {
     const dir = Directory(
@@ -656,6 +674,10 @@ describe('common.files.AddItemsView', () => {
     )
     expect(AddItemsView.getItemLoader(parentRemovedExistingDir)).toBe(itemLoaderAny)
   })
+
+  it('filters items by name', () => {
+    testFilterItemsByName(AddItemsView)
+  })
 })
 
 describe('common.files.SelectedItemsView', () => {
@@ -1275,6 +1297,10 @@ describe('common.files.SelectedItemsView', () => {
     )
     expect(SelectedItemsView.getItemLoader(parentAddedRemovedDir)).toBe(itemLoaderExisting)
   })
+
+  it('filters items by name', () => {
+    testFilterItemsByName(SelectedItemsView, { existing: true })
+  })
 })
 
 describe('common.files.PublicItemsView', () => {
@@ -1479,5 +1505,9 @@ describe('common.files.PublicItemsView', () => {
       { index: 3 },
       { index: 4 },
     ])
+  })
+
+  it('filters items by name', () => {
+    testFilterItemsByName(PublicItemsView, { existing: true })
   })
 })

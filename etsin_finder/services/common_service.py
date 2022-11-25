@@ -71,7 +71,7 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
         )
 
     @property
-    def _METAX_GET_DIRECTORIES_FOR_PROJECT_URL(self):
+    def _METAX_GET_ROOT_DIRECTORIES_FOR_PROJECT_URL(self):
         return (
             self.metax_url(_REST_DIRECTORIES)
             + "/files?project={0}&path=%2F&include_parent"
@@ -173,7 +173,7 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(
-            self._METAX_GET_DIRECTORIES_FOR_PROJECT_URL, project_identifier
+            self._METAX_GET_ROOT_DIRECTORIES_FOR_PROJECT_URL, project_identifier
         )
         resp, status, success = make_request(
             requests.get, req_url, params=params, **self._get_args()

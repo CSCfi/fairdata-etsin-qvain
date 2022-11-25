@@ -3,6 +3,11 @@ const files = {
   infoTitle: 'Files info',
   infoText: 'Add text',
   deletedLabel: 'Deleted',
+  filterRow: {
+    filter: 'Filter',
+    placeholder: 'Filter items by name',
+    noMatches: 'No matching items in folder.',
+  },
   error: {
     title: 'Error loading files',
     retry: 'Retry',

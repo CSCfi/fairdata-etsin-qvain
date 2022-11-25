@@ -20,6 +20,7 @@ import { observer } from 'mobx-react'
 
 import ErrorBoundary from '../general/errorBoundary'
 import { withStores } from '../../stores/stores'
+import Input from '../dataset/common/formItems'
 
 class SearchBar extends Component {
   // Handle possible empty initial query
@@ -71,7 +72,7 @@ class SearchBar extends Component {
                 size="2x"
                 transform="shrink-4"
               />
-              <input
+              <Input
                 id="searchBarInput"
                 placeholder={this.state.placeholder}
                 value={this.state.query}

@@ -694,6 +694,44 @@ describe('Qvain.Files tree', () => {
     expect(items.filter('[level=3]').length).toBe(4)
   })
 
+  it('filters files by name', async () => {
+    axios.get.mockClear() // clear call counts
+    const view = Files.SelectedItemsView
+    await view.setAllOpen(true)
+
+    const set = await Files.getItemByPath('/data/set1', true)
+    await view.filter(set, 'fil')
+
+    // check name is used in request parameters
+    const lastCall = axios.get.mock.calls.slice(-1)[0]
+    expect(new URL(lastCall[0]).searchParams.get('name')).toEqual('fil')
+
+    const wrapper = shallow(<SelectedItemsTree />)
+    const items = wrapper.find(SelectedItemsTreeItem)
+    const setItemPaths = items
+      .map(item => item.prop('item').path)
+      .filter(path => path.match(RegExp('^/data/set1/[^/]*$')))
+    expect(setItemPaths).toEqual(['/data/set1/file1.csv', '/data/set1/file2.csv'])
+  })
+
+  it('filters directories and files by name', async () => {
+    const view = Files.SelectedItemsView
+    await view.setAllOpen(true)
+    const set = await Files.getItemByPath('/data/set1', true)
+    await view.filter(set, 'e')
+
+    const wrapper = shallow(<SelectedItemsTree />)
+    const items = wrapper.find(SelectedItemsTreeItem)
+    const setItemPaths = items
+      .map(item => item.prop('item').path)
+      .filter(path => path.match(RegExp('^/data/set1/[^/]*$')))
+    expect(setItemPaths).toEqual([
+      '/data/set1/subset',
+      '/data/set1/file1.csv',
+      '/data/set1/file2.csv',
+    ])
+  })
+
   it('removes all files and directories', async () => {
     await Files.loadAllDirectories()
 
