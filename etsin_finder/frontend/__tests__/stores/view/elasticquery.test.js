@@ -1,7 +1,12 @@
+import MockAdapter from 'axios-mock-adapter'
 import createBrowserHistory from 'history/createBrowserHistory'
 import { syncHistoryWithStore } from 'mobx-react-router'
 import ElasticQueryClass from '../../../js/stores/view/elasticquery'
 import EnvClass from '../../../js/stores/domain/env'
+import queryData from '../../__testdata__/elasticQuery.data'
+import searchResults from '../../__testdata__/searchResults.data'
+import axios from 'axios'
+import { configure } from 'mobx'
 
 const Env = new EnvClass()
 const ElasticQuery = new ElasticQueryClass(Env)
@@ -71,19 +76,25 @@ describe('ElasticQuery', () => {
     })
   })
 
-  // ------ QUERY ES ------ write working test for querying
+  // ------ QUERY ES ------
 
-  // const mock = new MockAdapter(axios);
+  configure({ safeDescriptors: false })
+  const ElasticQuery = new ElasticQueryClass(Env)
+  configure({ safeDescriptors: true })
 
-  // mock.onGet('/es/metax/dataset/_search').reply(200, {
-  //   data: { hits: { hits: ['fake 500 hits'], total: 500 }, aggreagations: ['fake aggregations'] }
-  // });
+  ElasticQuery.queryES = jest.fn(ElasticQuery.queryES)
+  const axios = require('axios')
+  const MockAdapter = require('axios-mock-adapter')
 
-  // describe('QueryEs function', () => {
-  //   it('should return results', () => {
-  //     ElasticQuery.updateSearch('Helsinki')
-  //     ElasticQuery.queryES()
-  //     expect(ElasticQuery.results.total).toBeGreaterThan(0)
-  //   })
-  // })
+  describe('QueryEs function', () => {
+    it('should return results', async () => {
+      const mock = new MockAdapter(axios)
+      mock.onPost('/es/metax/dataset/_search').reply(200, searchResults)
+      ElasticQuery.updateSearch('Helsinki')
+      await ElasticQuery.queryES()
+      expect(ElasticQuery.results.total).toBeGreaterThan(0)
+      expect(mock.history.post.length).toBe(1)
+      expect(JSON.parse(mock.history.post[0].data)).toEqual(queryData)
+    })
+  })
 })

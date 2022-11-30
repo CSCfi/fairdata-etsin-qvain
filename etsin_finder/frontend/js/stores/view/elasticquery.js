@@ -320,18 +320,18 @@ class ElasticQuery {
     }
 
     const createQuery = query => {
-      const tQuery = transformQuery(query)
+      const tQuery = transformQuery(`${query}*`)
       const isUrnQ = isUrnQuery(query)
       let match
 
       if (tQuery) {
         match = {
-          multi_match: {
+          simple_query_string: {
             query: tQuery,
-            type: 'best_fields',
             minimum_should_match: isUrnQ ? '100%' : '25%',
-            operator: isUrnQ ? 'and' : 'or',
+            default_operator: isUrnQ ? 'and' : 'or',
             fields,
+            analyze_wildcard: true,
           },
         }
       } else {
