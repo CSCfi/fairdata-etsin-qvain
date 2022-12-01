@@ -9,21 +9,9 @@ default:
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 
 stages:
-  - clean-previous-build
   - deploy
   - test
-  - clean
   - update
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~
-
-clean-previous-build:
-  stage: clean-previous-build
-  environment: $GITLAB_ENV
-  script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK --vault-id $ANSIBLE_VAULT_FILE
-  rules:
-    - if: $CI_COMMIT_BRANCH =~ /^(master)$/
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -59,7 +47,6 @@ sonarqube:
       allow_failure: true
     - if: $CI_COMMIT_BRANCH =~ /^(master)$/ && $CI_PIPELINE_SOURCE !~ /^(web)$/
       allow_failure: true
-    - if: $CI_COMMIT_BRANCH =~ /^(release)$/
 
 etsin-qvain-tests:
   stage: test
@@ -76,30 +63,6 @@ etsin-qvain-tests:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH =~ /^(master)$/ && $CI_PIPELINE_SOURCE !~ /^(web)$/
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~
-
-clean-feature-code:
-  stage: clean
-  environment:
-    name: $GITLAB_ENV
-    on_stop: clean-gitlab-env
-  script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $DELETE_PLAYBOOK -e "repo_version=$CI_COMMIT_REF_NAME" --vault-id $ANSIBLE_VAULT_FILE
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME !~ /^(master|release)$/
-
-clean-gitlab-env:
-  stage: clean
-  environment:
-    name: $GITLAB_ENV
-    action: stop
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - echo 'Cleaning...'
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME !~ /^(master|release)$/
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 
