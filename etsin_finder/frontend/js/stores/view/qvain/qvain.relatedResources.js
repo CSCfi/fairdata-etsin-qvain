@@ -63,9 +63,7 @@ class RelatedResources extends Field {
   schema = relatedResourceSchema
 
   @computed get translationsRoot() {
-    return this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
-      ? 'qvain.publications'
-      : 'qvain.history.relatedResource'
+    return 'qvain.publications'
   }
 
   @action

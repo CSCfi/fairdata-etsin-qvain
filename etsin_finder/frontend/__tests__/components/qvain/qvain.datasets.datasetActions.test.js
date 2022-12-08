@@ -11,7 +11,7 @@ import {
   getRemoveAction,
   getDatasetActions,
   groupActions,
-} from '../../../js/components/qvain/views/datasets/datasetActions'
+} from '../../../js/components/qvain/views/datasetsV2/datasetActions'
 
 import { expect } from 'chai'
 jest.mock('axios')

@@ -22,10 +22,6 @@ export const Qvain = loadable(() =>
   import('../components/qvain/views/main' /* webpackPrefetch: true */)
 )
 
-export const QvainDatasets = loadable(() =>
-  import('../components/qvain/views/datasets' /* webpackPrefetch: true */)
-)
-
 export const QvainDatasetsV2 = loadable(() =>
   import('../components/qvain/views/datasetsV2' /* webpackPrefetch: true */)
 )

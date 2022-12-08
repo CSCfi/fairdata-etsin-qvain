@@ -22,7 +22,6 @@ default_supported_flags = {
     "PERMISSIONS.WRITE_LOCK",
     "MATOMO_TRACKING",
     "CROSSREF_API",
-    "QVAIN.EDITOR_V2",
 }
 
 # Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'

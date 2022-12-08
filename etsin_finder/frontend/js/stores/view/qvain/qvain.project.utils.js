@@ -1,29 +1,8 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import axios from 'axios'
 
-import Translate from 'react-translate-component'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
-import styled from 'styled-components'
-
-import { getOrganizationSearchUrl } from '../../../../stores/view/qvain/qvain.actors'
-import { touch } from '../../../../stores/view/qvain/track'
-import ValidationError from '../../general/errors/validationError'
-import { METAX_FAIRDATA_ROOT_URL } from '../../../../utils/constants'
-
-export const ErrorMessages = ({ errors }) => {
-  if (!errors.length) return null
-  return <ValidationError>{errors.map(error => error)}</ValidationError>
-}
-
-ErrorMessages.propTypes = {
-  errors: PropTypes.array,
-}
-
-ErrorMessages.defaultProps = {
-  errors: [],
-}
+import { getOrganizationSearchUrl } from './qvain.actors'
+import { touch } from './track'
+import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
 /**
  * Convert organization object from Metax to array.
@@ -171,64 +150,3 @@ function getOption(hit, language) {
   }
 }
 
-/**
- * Simple expand/collapse element, without any tooltip hassle.
- * TODO: Consider refactoring to a general component outside project scope.
- */
-export class Expand extends Component {
-  static propTypes = {
-    open: PropTypes.bool,
-    title: PropTypes.object.isRequired,
-    children: PropTypes.object.isRequired,
-  }
-
-  static defaultProps = { open: false }
-
-  state = { open: this.props.open }
-
-  render() {
-    const { title, children } = this.props
-    const { open } = this.state
-    return (
-      <Container>
-        <Title onClick={() => this.setState({ open: !open })}>
-          <Translate
-            component={NoStyleButton}
-            type="button"
-            attributes={{
-              'aria-label': open ? 'general.showLess' : 'general.showMore',
-            }}
-          >
-            {open ? <IconStyles icon={faMinus} /> : <IconStyles icon={faPlus} />}
-          </Translate>
-          {title}
-        </Title>
-        {open ? children : null}
-      </Container>
-    )
-  }
-}
-
-const Container = styled.div`
-  margin-top: 1.5rem;
-`
-
-const Title = styled.div`
-  display: flex;
-  cursor: pointer;
-  h3 {
-    margin: 0;
-  }
-`
-
-const IconStyles = styled(FontAwesomeIcon)`
-  color: ${props => props.theme.color.primary};
-  :hover {
-    color: #004d79;
-  }
-`
-
-const NoStyleButton = styled.button`
-  border: none;
-  background-color: unset;
-`

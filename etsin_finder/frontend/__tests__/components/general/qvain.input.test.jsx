@@ -1,17 +1,15 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import 'chai/register-should'
 import { expect as expectChai } from 'chai'
+import Translate from 'react-translate-component'
 
-import DurationPicker from '../../../js/components/qvain/general/input/durationpicker'
-import { useStores } from '../../../js/stores/stores'
-import {
-  handleDatePickerChange,
-  getDateFormatLocale,
-} from '../../../js/components/qvain/general/input/datepicker'
+import DurationPicker from '@/components/qvain/general/V2/Durationpicker'
+import { useStores } from '@/stores/stores'
 
-jest.mock('../../../js/stores/stores')
-jest.mock('../../../js/components/qvain/general/input/datepicker')
+import { DatePicker, getDateFormatLocale } from '@/components/qvain/general/V2/Datepicker'
+
+jest.mock('@/stores/stores')
 
 let Field = {
   inEdit: {
@@ -25,7 +23,7 @@ let Field = {
 let datum = 'datum'
 let id = 'id'
 
-const expectedLabelContent = 'translationsRoot.modal.datumInput.label'
+const expectedLabelContent = 'translationsRoot.datum.label'
 
 describe('DurationPicker', () => {
   let wrapper
@@ -41,8 +39,12 @@ describe('DurationPicker', () => {
 
   beforeEach(() => {
     useStores.mockReturnValue(Stores)
-    getDateFormatLocale.mockImplementation(lang => lang)
-    wrapper = shallow(<DurationPicker {...props} />)
+    wrapper = mount(<DurationPicker {...props} />)
+  })
+
+  afterEach(() => {
+    wrapper.unmount()
+    jest.clearAllMocks()
   })
 
   test('it renders', () => {
@@ -50,39 +52,25 @@ describe('DurationPicker', () => {
   })
 
   test('label should be parsed from given props', () => {
-    const label = wrapper.find('form__Label').children() // Translate component
+    const label = wrapper.find('label').find(Translate)
     expectChai(label.exists()).to.be.true
-    label.prop('content').should.be.string(expectedLabelContent)
+    label.prop('content').should.eql(expectedLabelContent)
   })
 
   describe('starting date DatePicker', () => {
     let datePicker
-    let mockDate
-    const placeholderText = 'translationsRoot.modal.datumInput.startPlaceholder'
-    const ariaLabel = placeholderText
     const expectedPropName = 'startDate'
 
     const expectedAttributes = {
-      placeholderText,
-      ariaLabel,
+      ariaLabel: 'translationsRoot.datum.startInfoText',
     }
 
     beforeEach(() => {
-      mockDate = jest.spyOn(global, 'Date')
-      Date.now = jest.fn()
-      datePicker = wrapper.find(`#${id}-start`)
-    })
-
-    afterEach(() => {
-      jest.clearAllMocks()
+      datePicker = wrapper.find(Translate).filter({ component: DatePicker, id: `${id}-start` })
     })
 
     test('it should exist', () => {
       expectChai(datePicker.exists()).to.be.true
-    })
-
-    test('maxDate should call new Date() eight times', () => {
-      expectChai(mockDate.mock.instances.length).to.eql(8)
     })
 
     test('should have correct attributes', () => {
@@ -90,7 +78,7 @@ describe('DurationPicker', () => {
     })
 
     test('should place getDateFormatLocale return value to dateFormat prop', () => {
-      datePicker.prop('dateFormat').should.be.string(Stores.Locale.lang)
+      datePicker.prop('dateFormat').should.eql(getDateFormatLocale(Stores.Locale.lang))
     })
 
     test('disabled should be same as readonly', () => {
@@ -98,11 +86,10 @@ describe('DurationPicker', () => {
     })
 
     describe('when triggering onChangeRaw', () => {
-      const event = { target: { value: 'value' } }
+      const event = { target: { value: '2022-12-24' } }
 
       beforeEach(() => {
-        handleDatePickerChange.mockImplementationOnce((value, cb) => cb(value))
-        datePicker.simulate('changeRaw', event)
+        datePicker.invoke('onChangeRaw')(event)
       })
 
       test('should call eventually changeAttribute via handleDateChangeRaw with propName and event.target.value', () => {
@@ -111,15 +98,14 @@ describe('DurationPicker', () => {
     })
 
     describe('when triggering onChange', () => {
-      const date = { toISOString: jest.fn(() => 'date') }
+      const date = { toISOString: jest.fn(() => '2022-12-23') }
 
       beforeEach(() => {
-        handleDatePickerChange.mockImplementationOnce((value, cb) => cb(value))
-        datePicker.simulate('change', date)
+        datePicker.invoke('onChange')(date)
       })
 
       test('should call eventually changeAttribute with propName and date', () => {
-        expect(Field.changeAttribute).toHaveBeenCalledWith(expectedPropName, 'date')
+        expect(Field.changeAttribute).toHaveBeenCalledWith(expectedPropName, '2022-12-23')
       })
     })
   })
@@ -127,31 +113,18 @@ describe('DurationPicker', () => {
   describe('ending date DatePicker', () => {
     let datePicker
     let mockDate
-    const placeholderText = 'translationsRoot.modal.datumInput.endPlaceholder'
-    const ariaLabel = placeholderText
     const expectedPropName = 'endDate'
 
     const expectedAttributes = {
-      placeholderText,
-      ariaLabel,
+      ariaLabel: 'translationsRoot.datum.endInfoText',
     }
 
     beforeEach(() => {
-      mockDate = jest.spyOn(global, 'Date')
-      Date.now = jest.fn()
-      datePicker = wrapper.find(`#${id}-end`)
-    })
-
-    afterEach(() => {
-      mockDate.mockClear()
+      datePicker = wrapper.find(Translate).filter({ component: DatePicker, id: `${id}-end` })
     })
 
     test('it should exist', () => {
       expectChai(datePicker.exists()).to.be.true
-    })
-
-    test('maxDate should call new Date() eight times', () => {
-      expectChai(mockDate.mock.instances.length).to.eql(8)
     })
 
     test('should have correct attributes', () => {
@@ -159,7 +132,7 @@ describe('DurationPicker', () => {
     })
 
     test('should place getDateFormatLocale return value to dateFormat prop', () => {
-      datePicker.prop('dateFormat').should.be.string(Stores.Locale.lang)
+      datePicker.prop('dateFormat').should.eql(getDateFormatLocale(Stores.Locale.lang))
     })
 
     test('disabled should be same as readonly', () => {
@@ -167,11 +140,10 @@ describe('DurationPicker', () => {
     })
 
     describe('when triggering onChangeRaw', () => {
-      const event = { target: { value: 'value' } }
+      const event = { target: { value: '2022-12-26' } }
 
       beforeEach(() => {
-        handleDatePickerChange.mockImplementationOnce((value, cb) => cb(value))
-        datePicker.simulate('changeRaw', event)
+        datePicker.invoke('onChangeRaw')(event)
       })
 
       test('should call eventually changeAttribute via handleDateChangeRaw with propName and event.target.value', () => {
@@ -180,15 +152,14 @@ describe('DurationPicker', () => {
     })
 
     describe('when triggering onChange', () => {
-      const date = { toISOString: jest.fn(() => 'date') }
+      const date = { toISOString: jest.fn(() => '2022-12-25') }
 
       beforeEach(() => {
-        handleDatePickerChange.mockImplementationOnce((value, cb) => cb(value))
-        datePicker.simulate('change', date)
+        datePicker.invoke('onChange')(date)
       })
 
       test('should call eventually changeAttribute with propName and date', () => {
-        expect(Field.changeAttribute).toHaveBeenCalledWith(expectedPropName, 'date')
+        expect(Field.changeAttribute).toHaveBeenCalledWith(expectedPropName, '2022-12-25')
       })
     })
   })

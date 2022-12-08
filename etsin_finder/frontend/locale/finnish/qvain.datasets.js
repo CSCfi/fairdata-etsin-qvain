@@ -144,6 +144,7 @@ const datasets = {
     },
     members: {
       roles: {
+        owner: 'Omistaja',
         creator: 'Luoja',
         editor: 'Muokkaaja',
       },

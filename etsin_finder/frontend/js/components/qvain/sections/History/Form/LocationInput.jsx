@@ -8,25 +8,22 @@ import FieldList from '@/components/qvain/general/V2/ModalFieldList'
 import FieldListAdd from '@/components/qvain/general/V2/ModalFieldListAdd'
 import Form from '@/components/qvain/sections/Geographics/Form'
 
-const Location = () => {
+const LocationInput = () => {
   const {
     Qvain: { Provenances: Store, readonly },
   } = useStores()
   const Field = Store.inEdit.locations
   if (!Field) return null
+  const root = Field.translationsRoot
 
   return (
     <FieldGroup>
-      <Translate
-        component={Title}
-        content={'qvain.historyV2.location.label'}
-        htmlFor="location-input"
-      />
+      <Translate component={Title} content={`${root}.label`} htmlFor="location-input" />
       <FieldList
         storage={Field.storage}
         edit={Field.edit}
         remove={Field.remove}
-        translationsRoot="qvain.historyV2.location"
+        translationsRoot={root}
         readonly={readonly}
         disableNoItemsText
       />
@@ -34,7 +31,7 @@ const Location = () => {
         Field={Field}
         form={{ Form, props: { Field } }}
         isOpen={!!Field.inEdit}
-        translationsRoot="qvain.historyV2.location"
+        translationsRoot={root}
         position="left"
         hideButton={!!Field.storage.length}
       />
@@ -42,4 +39,4 @@ const Location = () => {
   )
 }
 
-export default observer(Location)
+export default observer(LocationInput)

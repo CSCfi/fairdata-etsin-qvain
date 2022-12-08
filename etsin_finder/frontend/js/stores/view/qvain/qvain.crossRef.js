@@ -19,10 +19,7 @@ class CrossRef {
   }
 
   @action
-  translationPath = item =>
-    this.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
-      ? `qvain.publications.search.${item}`
-      : `qvain.history.relatedResource.select.${item}`
+  translationPath = item => `qvain.publications.search.${item}`
 
   @action
   setTerm = term => {

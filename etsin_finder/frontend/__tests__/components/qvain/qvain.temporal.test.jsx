@@ -1,14 +1,10 @@
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 
-import Temporal, { brief } from '../../../js/components/qvain/fields/temporalAndSpatial/temporal'
-import TemporalFieldContent from '../../../js/components/qvain/fields/temporalAndSpatial/temporal/temporalFieldContent'
+import TemporalFieldContent from '@/components/qvain/sections/TimePeriod/TemporalFieldContent'
+import TemporalList, { RemoveButton } from '@/components/qvain/sections/TimePeriod/TemporalList'
 import { useStores } from '../../../js/stores/stores'
-import Field from '../../../js/components/qvain/general/section/field'
-import TemporalList, {
-  RemoveButton,
-} from '../../../js/components/qvain/fields/temporalAndSpatial/temporal/TemporalList'
-import DurationPicker from '../../../js/components/qvain/general/input/durationpicker'
+import DurationPicker from '../../../js/components/qvain/general/V2/Durationpicker'
 import { AddNewButton } from '../../../js/components/qvain/general/buttons'
 import ValidationError from '../../../js/components/qvain/general/errors/validationError'
 import Label from '../../../js/components/qvain/general/card/label'
@@ -32,37 +28,6 @@ const mockStores = {
   },
 }
 
-describe('given mocked stores', () => {
-  const harness = new Harness(Temporal)
-
-  describe('Temporal', () => {
-    beforeEach(() => {
-      useStores.mockReturnValue(mockStores)
-      harness.shallow()
-      harness.diveInto('Temporal')
-    })
-
-    test('should exist', () => {
-      harness.shouldExist()
-    })
-
-    test('should find children with props', () => {
-      const children = [
-        { label: 'Field', findArgs: Field },
-        { label: 'FieldContent', findArgs: TemporalFieldContent },
-      ]
-
-      const props = {
-        Field: {
-          brief,
-        },
-      }
-
-      harness.shouldIncludeChildren(children, props)
-    })
-  })
-})
-
 describe('given required props', () => {
   const lang = 'lang'
 
@@ -70,6 +35,7 @@ describe('given required props', () => {
 
   describe('TemporalFieldContent', () => {
     beforeEach(() => {
+      useStores.mockReturnValue(mockStores)
       harness.shallow()
     })
 

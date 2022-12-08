@@ -6,9 +6,7 @@ class Locations extends Spatials {
     super(Parent, locations)
     this.Env = Env
 
-    this.translationsRoot = this.Env?.Flags?.flagEnabled?.('QVAIN.EDITOR_V2')
-      ? 'qvain.history.location'
-      : 'qvain.history.provenance.modal.locationInput'
+    this.translationsRoot = 'qvain.historyV2.location'
   }
 
   clone = () => {

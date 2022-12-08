@@ -51,7 +51,7 @@ describe('when calling handleSubmit with mockStores', () => {
       AccessType: {
         toBackend: jest.fn(() => ({ identifier: accessType })),
       },
-      Projects: {
+      ProjectV2: {
         toBackend: jest.fn(() => 'projects'),
       },
       Licenses: {

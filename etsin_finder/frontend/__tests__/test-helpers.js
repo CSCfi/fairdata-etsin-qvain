@@ -1,13 +1,10 @@
 // Helper extensions for enzyme and jest
 
+import counterpart from 'counterpart'
 import { ReactWrapper, ShallowWrapper } from 'enzyme'
 import { roleElements, elementRoles } from 'aria-query'
 
-import './test-helpers'
-import 'chai/register-should'
 import { toHaveNoViolations } from 'jest-axe'
-
-import '../js/utils/extendYup'
 
 const checkSingleHostNode = (wrapper, funcname) => {
   const nodes = wrapper.hostNodes()
@@ -104,4 +101,34 @@ export const registerHelpers = () => {
   ShallowWrapper.prototype.wait = wait
   ReactWrapper.prototype.wait = wait
   global.jestExpect.extend({ toBeAccessible })
+}
+
+export const failTestsWhenTranslationIsMissing = () => {
+  const missingTranslations = []
+  beforeEach(() => {
+    missingTranslations.length = 0
+  })
+
+  afterEach(() => {
+    expect().noMissingTranslations()
+  })
+
+  counterpart.onTranslationNotFound(function (locale, key, fallback, scope) {
+    missingTranslations.push(key)
+  })
+
+  global.jestExpect.extend({
+    noMissingTranslations(args) {
+      if (missingTranslations.length === 0) {
+        return {
+          pass: true,
+          message: () => 'Expected missing translations, none found',
+        }
+      }
+      return {
+        pass: false,
+        message: () => `Found missing translations:\n ${missingTranslations.join('\n')}`,
+      }
+    },
+  })
 }

@@ -141,15 +141,11 @@ class Provenances extends Field {
   schema = provenanceSchema
 
   @computed get translationsRoot() {
-    return this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
-      ? 'qvain.historyV2'
-      : 'qvain.history.provenance'
+    return 'qvain.historyV2'
   }
 
   @computed get associationsTranslationsRoot() {
-    return this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
-      ? 'qvain.historyV2.actors'
-      : 'qvain.history.provenance.modal.actorsInput'
+    return 'qvain.historyV2.actors'
   }
 }
 

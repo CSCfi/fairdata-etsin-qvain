@@ -29,7 +29,11 @@ const Form = ({ Field }) => {
     <FormContainer ref={ref}>
       <Translate component={ModalLabel} content="qvain.historyV2.title.general" />
       <FieldGroup>
-        <TranslationTab language={nameLanguage} setLanguage={setNameLanguage}>
+        <TranslationTab
+          language={nameLanguage}
+          setLanguage={setNameLanguage}
+          id="provenance-descriptions"
+        >
           <TabInput Field={Field} datum="name" language={nameLanguage} isRequired />
           <TabInput Field={Field} datum="description" language={nameLanguage} />
         </TranslationTab>

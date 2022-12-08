@@ -5,7 +5,7 @@ const useScrollToTop = () => {
   const ref = useRef()
   useEffect(() => {
     window.setTimeout(() => {
-      if (ref.current) {
+      if (ref.current?.scrollTo) {
         ref.current.scrollTo({ top: 0, behavior: 'instant' })
       }
     })

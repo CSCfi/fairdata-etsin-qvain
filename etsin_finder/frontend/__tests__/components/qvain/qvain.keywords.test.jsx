@@ -1,13 +1,13 @@
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 
-import Keywords, { keywordsSchema } from '../../../js/components/qvain/fields/description/keywords'
-import { useStores } from '../../../js/stores/stores'
-import { LabelLarge } from '../../../js/components/qvain/general/modal/form'
-import Tooltip from '../../../js/components/general/tooltipHover'
-import StringArray from '../../../js/components/qvain/general/input/stringArray'
+import Keywords from '@/components/qvain/sections/Description/Keywords'
+import { keywordsSchema } from '@/stores/view/qvain/qvain.keyword'
+import { useStores } from '@/stores/stores'
+import StringArray from '@/components/qvain/general/V2/StringArray'
+import { Title } from '@/components/qvain/general/V2'
 
-jest.mock('../../../js/stores/stores')
+jest.mock('@/stores/stores')
 
 describe('given mockStores', () => {
   const mockStores = {
@@ -50,8 +50,7 @@ describe('given mockStores', () => {
 
     test('should have children with expected properties', () => {
       const children = [
-        { label: 'Label', findArgs: LabelLarge },
-        { label: 'Tooltip', findType: 'prop', findArgs: ['component', Tooltip] },
+        { label: 'Label', findArgs: Title },
         {
           label: 'Title',
           findType: 'prop',
@@ -66,12 +65,6 @@ describe('given mockStores', () => {
       const props = {
         Label: {
           htmlFor: 'keywords-input',
-        },
-        Tooltip: {
-          position: 'right',
-          attributes: {
-            title: 'qvain.description.fieldHelpTexts.requiredToPublish',
-          },
         },
         KeywordsList: {
           id: 'keywords-input',

@@ -2,15 +2,14 @@ import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 import translate from 'counterpart'
 
-import TitleAndDescription from '../../../js/components/qvain/fields/description/titleAndDescription'
-import { useStores } from '../../../js/stores/stores'
-import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
-import DescriptionFieldInput from '../../../js/components/qvain/fields/description/titleAndDescription/descriptionFieldInput'
-import DescriptionFieldTextField from '../../../js/components/qvain/fields/description/titleAndDescription/descriptionFieldTextField'
-import Tooltip from '../../../js/components/general/tooltipHover'
-import '../../../locale/translations'
-import { Input, LabelLarge } from '../../../js/components/qvain/general/modal/form'
-import ValidationError from '../../../js/components/qvain/general/errors/validationError'
+import TitleAndDescription from '@/components/qvain/sections/Description/TitleAndDescription'
+import DescriptionFieldInput from '@/components/qvain/sections/Description/TitleAndDescription/DescriptionFieldInput'
+import DescriptionFieldTextField from '@/components/qvain/sections/Description/TitleAndDescription/DescriptionFieldTextField'
+import { useStores } from '@/stores/stores'
+import TranslationTab from '@/components/qvain/general/V2/TranslationTab'
+import { Title, FieldInput } from '@/components/qvain/general/V2'
+import '@/../locale/translations'
+import ValidationError from '@/components/qvain/general/errors/validationError'
 
 describe('given Stores with required data', () => {
   const harness = new Harness(TitleAndDescription)
@@ -68,8 +67,6 @@ describe('given Stores with required data', () => {
           activeLang: 'en',
         },
         DescriptionInput: {
-          propName: 'description',
-          fieldName: 'Description',
           activeLang: 'en',
         },
         Instructions: {
@@ -123,25 +120,18 @@ describe('given required props and Stores (noValidationError)', () => {
 
     test('should have children with expected properties', () => {
       const children = [
-        { label: 'Label', findArgs: LabelLarge },
-        { label: 'Tooltip', findArgs: Tooltip },
+        { label: 'Label', findArgs: Title },
         {
           label: 'LabelTranslation',
           findType: 'prop',
           findArgs: ['content', 'qvain.description.description.title.label'],
         },
-        { label: 'Input', findType: 'prop', findArgs: ['component', Input] },
+        { label: 'input', findArgs: '#titleInput' },
       ]
 
       const expectedProps = {
         Label: {
           htmlFor: 'titleInput',
-        },
-        Tooltip: {
-          title: translate('qvain.description.fieldHelpTexts.requiredForAll', {
-            locale: props.activeLang,
-          }),
-          position: 'right',
         },
         Input: {
           type: 'text',

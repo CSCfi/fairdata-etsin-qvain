@@ -32,17 +32,7 @@ describe('Locations', () => {
     expect(locations.mockConstructor).to.have.beenCalledWith(Parent, existingLocations)
   })
 
-  test('should have translationsRoot matched to V1', () => {
-    expect(locations.translationsRoot).to.equal('qvain.history.provenance.modal.locationInput')
-  })
-
-  describe('given QVAIN.EDITOR_V2 flag is enabled', () => {
-    beforeAll(() => {
-      Parent.Env.Flags.setFlag('QVAIN.EDITOR_V2', true)
-    })
-
-    test('should have translationsRoot matched with V2', () => {
-      expect(locations.translationsRoot).to.equal('qvain.history.location')
-    })
+  test('should have translationsRoot matched with V2', () => {
+    expect(locations.translationsRoot).to.equal('qvain.historyV2.location')
   })
 })

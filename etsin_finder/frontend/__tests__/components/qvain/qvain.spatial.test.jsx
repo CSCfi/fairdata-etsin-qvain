@@ -1,46 +1,13 @@
 import 'chai/register-expect'
 
 import Harness from '../componentTestHarness'
-import Spatials from '../../../js/components/qvain/fields/temporalAndSpatial/spatial'
-import SpatialFieldContent from '../../../js/components/qvain/fields/temporalAndSpatial/spatial/SpatialFieldContent'
-import Form from '../../../js/components/qvain/fields/temporalAndSpatial/spatial/form'
+import SpatialFieldContent from '@/components/qvain/sections/Geographics/SpatialFieldContent'
+import Form from '@/components/qvain/sections/Geographics/Form'
 
-import Field from '../../../js/components/qvain/general/section/field'
-import FieldList from '../../../js/components/qvain/general/section/fieldList'
-import FieldListAdd from '../../../js/components/qvain/general/section/fieldListAdd'
-import { Location } from '../../../js/stores/view/qvain/qvain.spatials'
-import { useStores } from '../../../js/stores/stores'
-
-describe('given required props', () => {
-  const harness = new Harness(Spatials)
-
-  describe('Spatials', () => {
-    beforeEach(() => {
-      harness.shallow()
-      harness.diveInto('Spatial')
-    })
-
-    test('should exist', () => {
-      harness.shouldExist()
-    })
-
-    test('should include children with properties', () => {
-      const children = [{ label: 'Field', findArgs: Field }]
-
-      const props = {
-        Field: {
-          brief: {
-            title: 'qvain.temporalAndSpatial.spatial.title',
-            description: 'qvain.temporalAndSpatial.spatial.description',
-          },
-          labelFor: 'spatial-coverage',
-        },
-      }
-
-      harness.shouldIncludeChildren(children, props)
-    })
-  })
-})
+import FieldList from '@/components/qvain/general/V2/FieldList'
+import FieldListAdd from '@/components/qvain/general/V2/FieldListAdd'
+import { Location } from '@/stores/view/qvain/qvain.spatials'
+import { useStores } from '@/stores/stores'
 
 describe('given mockStore in useStores', () => {
   const harness = new Harness(SpatialFieldContent)
@@ -70,19 +37,7 @@ describe('given mockStore in useStores', () => {
         { label: 'FieldList', findArgs: FieldList },
         { label: 'FieldListAdd', findArgs: FieldListAdd },
       ]
-
-      const props = {
-        FieldList: {
-          Field: mockStores.Qvain.Spatials,
-          disableNoItemsText: false,
-        },
-        FieldListAdd: {
-          Field: mockStores.Qvain.Spatials,
-          Form: Form,
-        },
-      }
-
-      harness.shouldIncludeChildren(children, props)
+      harness.shouldIncludeChildren(children)
     })
   })
 })

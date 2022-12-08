@@ -20,6 +20,7 @@ import FixDeprecatedModal from './fixDeprecatedModal'
 import FormModal from './forms/formModal'
 import { AddButton } from '@/components/qvain/general/V2/buttons'
 import MetadataModal from '../MetadataModal'
+import ClearMetadataModal from '../MetadataModal/clearMetadataModal'
 
 export const FilePickerBase = () => {
   const {
@@ -78,21 +79,21 @@ export const FilePickerBase = () => {
   if (!selectedProject && isLoadingProject) {
     return (
       <>
-        <Translate component={Title} content="qvain.files.selected.title" />
+        <Translate component={Title} as="h3" content="qvain.files.selected.title" />
         <Loader active />
       </>
     )
   }
 
   if (!canSelectFiles && !haveItems) {
-    return <Translate component={Title} content="qvain.files.selected.none" />
+    return <Translate component={Title} as="h3" content="qvain.files.selected.none" />
   }
 
   const title = canSelectFiles ? (
-    <Translate component={Title} content="qvain.files.selected.title" />
+    <Translate component={Title} as="h3" content="qvain.files.selected.title" />
   ) : (
     <Translate
-      component={Title}
+      component={Title} as="h3"
       content="qvain.files.selected.readonlyTitle"
       with={{ project: selectedProject }}
     />
@@ -133,13 +134,14 @@ export const FilePickerBase = () => {
 
   return (
     <FieldGroup>
-      {title}
       {content}
+      {title}
       <AddItemsModal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} />
       {error}
       <FixDeprecatedModal />
       <FormModal />
       <MetadataModal />
+      <ClearMetadataModal />
     </FieldGroup>
   )
 }

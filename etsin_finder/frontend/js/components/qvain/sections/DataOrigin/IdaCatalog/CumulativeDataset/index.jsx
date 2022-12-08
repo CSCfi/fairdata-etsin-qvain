@@ -10,7 +10,7 @@ import { FormField, RadioInput, Label, HelpField } from '@/components/qvain/gene
 import { Button } from '@/components/general/button'
 import { useStores } from '@/stores/stores'
 
-const CumulativeState = () => {
+const CumulativeDataset = () => {
   const {
     Qvain: {
       cumulativeState,
@@ -117,4 +117,4 @@ export const CumulativeStateButton = styled(Button)`
   margin-left: 0;
 `
 
-export default observer(CumulativeState)
+export default observer(CumulativeDataset)

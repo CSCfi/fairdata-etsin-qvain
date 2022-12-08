@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 
-import SearchSelect from '../input/searchSelect'
+import SearchSelect from './SearchSelect'
 import Select from './Select'
 import { Title, FieldGroup, InfoText, Required, RequiredText } from './index'
 

@@ -10,12 +10,15 @@ import { buildStores } from '../../../../js/stores'
 import '../../../../locale/translations'
 import etsinTheme from '../../../../js/styles/theme'
 import { ENTITY_TYPE } from '../../../../js/utils/constants'
-import ActorModal from '../../../../js/components/qvain/fields/actors/modal'
+import ActorModal from '../../../../js/components/qvain/sections/Actors/Modal'
 import { Actor } from '../../../../js/stores/view/qvain/qvain.actors'
 import organizationMockGet, {
   dataset as actorsDataset,
 } from '../../../__testdata__/qvain.actors.data'
 import { useStores, StoresProvider } from '../../../../js/stores/stores'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 // Make sure MobX store values are not mutated outside actions.
 configure({

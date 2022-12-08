@@ -6,7 +6,7 @@ import { observer } from 'mobx-react'
 
 import { useStores } from '@/stores/stores'
 import Card from './card'
-import { ExpandCollapse } from '../section/expand'
+import { ExpandCollapse } from './ExpandCollapse'
 
 const SectionContext = React.createContext()
 

@@ -30,7 +30,8 @@ const project = {
   },
   identifier: {
     label: 'Project identifier',
-    infoText: 'Add project identifier. It is recommended to use persistent identifiers, if available',
+    infoText:
+      'Add project identifier. It is recommended to use persistent identifiers, if available',
   },
   organizations: {
     title: 'Participating organizations',
@@ -70,6 +71,15 @@ const project = {
     label: 'Funding identifier',
     infoText:
       'Unique funding  (decision) identifier. It is recommended to use persistent identifiers, if available.',
+  },
+  inputs: {
+    organization: {
+      levels: {
+        organization: 'Organization',
+        department: 'Department',
+        subdepartment: 'Subdepartment',
+      },
+    },
   },
 }
 

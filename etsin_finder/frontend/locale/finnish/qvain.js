@@ -4,15 +4,12 @@ import description from './qvain.description'
 import files from './qvain.files'
 import general from './qvain.general'
 import geographics from './qvain.geographics'
-import history from './qvain.history'
 import historyV2 from './qvain.historyV2'
 import home from './qvain.home'
 import nav from './qvain.nav'
-import project from './qvain.project'
 import projectV2 from './qvain.projectv2'
 import publications from './qvain.publications'
 import rightsAndLicenses from './qvain.rightsAndLicenses'
-import temporalAndSpatial from './qvain.temporalAndSpatial'
 import validationMessages from './qvain.validationMessages'
 import sections from './qvain.sections'
 import infrastructure from './qvain.infrastructure'
@@ -131,15 +128,12 @@ const qvainFinnish = {
   files,
   general,
   geographics,
-  history,
   historyV2,
   home,
   nav,
-  project,
   projectV2,
   publications,
   rightsAndLicenses,
-  temporalAndSpatial,
   validationMessages,
   infrastructure,
   timePeriod,

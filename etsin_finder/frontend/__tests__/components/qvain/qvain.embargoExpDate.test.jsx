@@ -1,18 +1,13 @@
 import translate from 'counterpart'
 import 'chai/register-expect'
 import Harness from '../componentTestHarness'
-import EmbargoExpires, {
-  ExpirationLabel,
-} from '../../../js/components/qvain/fields/licenses/embargoExpires'
+import EmbargoExpires from '@/components/qvain/sections/DataOrigin/general/AccessType/EmbargoExpires'
 import '../../../locale/translations'
-import { Label } from '../../../js/components/qvain/general/modal/form'
-import DatePicker, {
-  getDateFormatLocale,
-} from '../../../js/components/qvain/general/input/datepicker'
-import { useStores } from '../../../js/stores/stores'
-import ValidationError from '../../../js/components/qvain/general/errors/validationError'
+import DatePicker, { getDateFormatLocale } from '@/components/qvain/general/V2/Datepicker'
+import { useStores } from '@/stores/stores'
+import ValidationError from '@/components/qvain/general/errors/validationError'
 
-jest.mock('../../../js/stores/stores')
+jest.mock('@/stores/stores')
 
 const harness = new Harness(EmbargoExpires)
 
@@ -46,7 +41,7 @@ describe('given useStores', () => {
 
     test('should have children with expected properties', () => {
       const children = [
-        { label: 'Label', findType: 'prop', findArgs: ['component', ExpirationLabel] },
+        { label: 'Label', findArgs: { content: 'qvain.rightsAndLicenses.embargoDate.label' } },
         { label: 'DatePicker', findArgs: DatePicker },
       ]
 

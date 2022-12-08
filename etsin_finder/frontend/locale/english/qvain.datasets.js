@@ -144,6 +144,7 @@ const datasets = {
     },
     members: {
       roles: {
+        owner: 'Owner',
         creator: 'Creator',
         editor: 'Editor',
       },

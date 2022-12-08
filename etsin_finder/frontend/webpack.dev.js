@@ -1,5 +1,6 @@
 const path = require('path')
 const { DefinePlugin } = require('webpack')
+const DeadCodePlugin = require('webpack-deadcode-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
@@ -67,7 +68,13 @@ const config = env => ({
       },
     ],
   },
+  optimization: {
+    usedExports: true,
+  },
   plugins: [
+    new DeadCodePlugin({
+      patterns: ['js/**/*.(js|jsx|css)'],
+    }),
     new ReactRefreshWebpackPlugin({
       overlay: {
         sockPort: 443,

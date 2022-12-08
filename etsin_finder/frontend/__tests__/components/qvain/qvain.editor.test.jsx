@@ -3,7 +3,7 @@ import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 import Translate from 'react-translate-component'
 
-import { Dataset } from '@/components/qvain/views/editor/dataset'
+import { Dataset } from '@/components/qvain/views/DatasetEditorV2'
 import Header from '@/components/qvain/views/headers/header'
 import SubmitButtons from '@/components/qvain/views/headers/submitButtons'
 
@@ -17,14 +17,14 @@ import Button from '@/components/general/button'
 import {
   DisableImplicitSubmit,
   SkipToSubmitDataset,
-} from '@/components/qvain/views/editor/editor.styled'
-import Description from '@/components/qvain/fields/description'
-import Actors from '@/components/qvain/fields/actors'
-import RightsAndLicenses from '@/components/qvain/fields/licenses'
-import TemporalAndSpatial from '@/components/qvain/fields/temporalAndSpatial'
-import History from '@/components/qvain/fields/history'
-import Project from '@/components/qvain/fields/project'
-import Files from '@/components/qvain/fields/files'
+} from '@/components/qvain/views/DatasetEditorV2/editor.styled'
+import Description from '@/components/qvain/sections/Description'
+import Actors from '@/components/qvain/sections/Actors'
+import DataOrigin from '@/components/qvain/sections/DataOrigin/'
+import Geographics from '@/components/qvain/sections/Geographics'
+import History from '@/components/qvain/sections/History'
+import Project from '@/components/qvain/sections/Project'
+import Files from '@/components/qvain/sections/DataOrigin/general/FilePicker'
 import { PageTitle } from '@/components/qvain/general/card'
 
 import { useStores } from '@/stores/stores'
@@ -158,13 +158,12 @@ describe('given haveDataset true', () => {
     test('should have children with expected props', () => {
       const children = [
         { label: 'DisableImplicitSubmit', findArgs: DisableImplicitSubmit },
+        { label: 'DataOrigin', findArgs: DataOrigin },
         { label: 'Description', findArgs: Description },
         { label: 'Actors', findArgs: Actors },
-        { label: 'RightsAndLicenses', findArgs: RightsAndLicenses },
-        { label: 'TemporalAndSpatial', findArgs: TemporalAndSpatial },
+        { label: 'Geographics', findArgs: Geographics },
         { label: 'History', findArgs: History },
         { label: 'Project', findArgs: Project },
-        { label: 'Files', findArgs: Files },
         { label: 'Consent', findType: 'prop', findArgs: ['content', 'qvain.consent'] },
         { label: 'BottomSubmitButtons', findArgs: SubmitButtons },
         { label: 'SkipToSubmitDataset', findArgs: SkipToSubmitDataset },
@@ -185,7 +184,6 @@ describe('given haveDataset true', () => {
           onClick: props.setFocusOnSubmitButton,
         },
       }
-
       harness.shouldIncludeChildren(children, expectedProps)
     })
   })

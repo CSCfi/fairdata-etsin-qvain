@@ -10,7 +10,7 @@ import translate from 'counterpart'
 
 import '../../../locale/translations.js'
 import etsinTheme from '../../../js/styles/theme'
-import MetadataModal from '../../../js/components/qvain/fields/files/metadataModal'
+import MetadataModal from '../../../js/components/qvain/sections/DataOrigin/general/MetadataModal'
 import { buildStores } from '../../../js/stores/'
 import { Project, File, Directory } from '../../../js/stores/view/common.files.items'
 

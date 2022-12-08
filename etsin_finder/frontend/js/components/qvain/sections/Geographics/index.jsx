@@ -6,7 +6,7 @@ import SpatialFieldContent from './SpatialFieldContent'
 
 const brief = {
   title: 'qvain.sections.geographics.title',
-  description: 'qvain.temporalAndSpatial.spatial.description',
+  description: 'qvain.sections.geographics.description',
 }
 
 const Spatial = () => (

@@ -21,7 +21,7 @@ import LoginButton from '../../../general/navigation/loginButton'
 import { FAIRDATA_WEBSITE_URL } from '../../../../utils/constants'
 import Header, { NaviContainer, Right } from '../../../general/header'
 import { MobileOnly, DesktopOnly } from '../../../general/header/mediaHelpers'
-import { Qvain, QvainDatasets } from '../../../../routes'
+import { Qvain, QvainDatasetsV2 } from '../../../../routes'
 import { useStores } from '../../utils/stores'
 
 const QvainHeader = () => {
@@ -32,7 +32,7 @@ const QvainHeader = () => {
 
   const routes = [
     {
-      loadableComponent: QvainDatasets,
+      loadableComponent: QvainDatasetsV2,
       label: 'qvain.nav.home',
       path: '/',
       exact: true,

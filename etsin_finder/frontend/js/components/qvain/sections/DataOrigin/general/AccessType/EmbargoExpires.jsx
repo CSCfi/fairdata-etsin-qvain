@@ -6,7 +6,7 @@ import {
   DatePicker,
   handleDatePickerChange,
   getDateFormatLocale,
-} from '@/components/qvain/general/input/datepicker'
+} from '@/components/qvain/general/V2/Datepicker'
 import { Title, InfoText, FieldGroup } from '@/components/qvain/general/V2'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 import { useStores } from '@/stores/stores'

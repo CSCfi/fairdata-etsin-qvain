@@ -54,7 +54,7 @@ const FunderOrganizationSelect = () => {
               options={options?.funderOrg?.organization?.[lang] || []}
               creatable
               allowReset={haveOrganization && !haveDepartment}
-              attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.organization' }}
+              attributes={{ "ariaLabel": 'qvain.projectV2.inputs.organization.levels.organization' }}
             />
             <Translate
               component={InfoText}
@@ -75,7 +75,7 @@ const FunderOrganizationSelect = () => {
                   options={options?.funderOrg?.department?.[lang] || []}
                   creatable
                   allowReset={haveDepartment && !haveSubdepartment}
-                  attributes={{ ariaLabel: 'qvain.project.inputs.organization.levels.department' }}
+                  attributes={{ ariaLabel: 'qvain.projectV2.inputs.organization.levels.department' }}
                 />
                 <Translate
                   component={InfoText}
@@ -97,7 +97,7 @@ const FunderOrganizationSelect = () => {
                       creatable
                       allowReset={haveSubdepartment}
                       attributes={{
-                        ariaLabel: 'qvain.project.inputs.organization.levels.subdepartment',
+                        ariaLabel: 'qvain.projectV2.inputs.organization.levels.subdepartment',
                       }}
                     />
                     <Translate

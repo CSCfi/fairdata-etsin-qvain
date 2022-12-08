@@ -1,16 +1,10 @@
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 import '../../../locale/translations'
-import translate from 'counterpart'
 
-import IssuedDate from '../../../js/components/qvain/fields/description/issuedDate'
+import IssuedDate from '@/components/qvain/sections/Description/IssuedDate'
 import { useStores } from '../../../js/stores/stores'
-import { LabelLarge } from '../../../js/components/qvain/general/modal/form'
-import Tooltip from '../../../js/components/general/tooltipHover'
-import DatePicker, {
-  getDateFormatLocale,
-  handleDatePickerChange,
-} from '../../../js/components/qvain/general/input/datepicker'
+import DatePicker from '../../../js/components/qvain/general/V2/Datepicker'
 import ValidationError from '../../../js/components/qvain/general/errors/validationError'
 
 jest.mock('../../../js/stores/stores')
@@ -38,71 +32,27 @@ describe('given mockStores (not published with doi)', () => {
 
   beforeEach(() => {
     useStores.mockReturnValue(mockStores)
+    harness.mount()
   })
 
   afterEach(() => {
     jest.clearAllMocks()
+    harness.unmount()
   })
 
   describe('IssuedDate', () => {
-    beforeEach(() => {
-      harness.shallow()
-      harness.diveInto('IssuedDateField')
-    })
-
     test('should exist', () => {
       harness.shouldExist()
     })
 
-    test('should have children with expected properties', () => {
-      const children = [
-        { label: 'Label', findArgs: LabelLarge },
-        { label: 'Tooltip', findType: 'prop', findArgs: ['component', Tooltip] },
-        {
-          label: 'Title',
-          findType: 'prop',
-          findArgs: ['content', 'qvain.description.issuedDate.title'],
-        },
-        {
-          label: 'InfoText',
-          findType: 'prop',
-          findArgs: ['content', 'qvain.description.issuedDate.infoText'],
-        },
-        { label: 'DatePicker', findArgs: DatePicker },
-      ]
-
-      const props = {
-        Label: {
-          htmlFor: 'issuedDateInput',
-        },
-        Tooltip: {
-          position: 'right',
-          attributes: {
-            title: 'qvain.description.fieldHelpTexts.requiredToPublish',
-          },
-        },
-        InfoText: {
-          component: 'p',
-        },
-        DatePicker: {
-          id: 'issuedDateInput',
-          strictParsing: true,
-          selected: new Date(1),
-          locale: 'en',
-          placeholderText: translate('qvain.description.issuedDate.placeholder'),
-          dateFormat: getDateFormatLocale('en'),
-          disabled: false,
-          required: true,
-        },
-      }
-
-      harness.shouldIncludeChildren(children, props)
+    test('should have title', () => {
+      expect(harness.wrapper.leafHostNodes().first().text()).to.equal('Issued date')
     })
   })
 
   describe('DatePicker', () => {
     beforeEach(() => {
-      harness.restoreWrapper('DatePicker')
+      harness.find(DatePicker)
     })
 
     describe('when onChangeRaw is called', () => {
@@ -122,7 +72,8 @@ describe('given mockStores (not published with doi)', () => {
 
   describe('DatePicker', () => {
     beforeEach(() => {
-      harness.restoreWrapper('DatePicker')
+      harness.mount()
+      harness.find(DatePicker)
     })
 
     describe('when onChange is called', () => {
@@ -164,12 +115,17 @@ describe('given mockStores (published with doi and has validation error)', () =>
 
   beforeEach(() => {
     useStores.mockReturnValue(mockStores)
+    harness.mount()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+    harness.unmount()
   })
 
   describe('IssuedDate', () => {
     beforeEach(() => {
-      harness.shallow()
-      harness.diveInto('IssuedDateField')
+      harness.find(IssuedDate)
     })
 
     test('should exist', () => {

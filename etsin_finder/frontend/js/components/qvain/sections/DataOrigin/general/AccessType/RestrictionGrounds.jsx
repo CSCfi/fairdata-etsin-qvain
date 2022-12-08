@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
 import { Title, InfoText, FieldGroup } from '@/components/qvain/general/V2'
-import Select from '@/components/qvain/general/input/select'
+import Select from '@/components/qvain/general/V2/Select'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 import { useStores } from '@/stores/stores'
 
@@ -27,7 +27,8 @@ const RestrictionGrounds = () => {
         htmlFor="restrictionGrounds-select"
         content="qvain.rightsAndLicenses.restrictionGrounds.title"
       />
-      <Select
+      <Translate
+        component={Select}
         name="restrictionGrounds"
         metaxIdentifier="restriction_grounds"
         placeholder="qvain.rightsAndLicenses.restrictionGrounds.placeholder"
@@ -36,6 +37,9 @@ const RestrictionGrounds = () => {
         setter={setRestrictionGrounds}
         onBlur={validate}
         aria-autocomplete="list"
+        attributes={{
+          'aria-label': 'qvain.rightsAndLicenses.accessType.placeholder',
+        }}
       />
       {validationError && <ValidationError>{validationError}</ValidationError>}
       <Translate component={InfoText} content="qvain.rightsAndLicenses.restrictionGrounds.text" />

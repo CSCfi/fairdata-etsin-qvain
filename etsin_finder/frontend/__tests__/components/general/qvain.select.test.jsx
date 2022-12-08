@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import 'chai/register-expect'
 import ReactSelect from 'react-select'
 
-import Select from '../../../js/components/qvain/general/input/select'
+import Select from '../../../js/components/qvain/general/V2/Select'
 import {
   getCurrentOption,
   getOptionLabel,
@@ -90,7 +90,7 @@ describe('Select', () => {
     test('props should include expectedProps (parsed from props and imports)', () => {
       const expectedProps = {
         component: ReactSelect,
-        attributes: { placeholder: 'qvain.select.placeholder' },
+        attributes: { placeholder: '' },
         isDisabled: mockStores.Qvain.readonly,
         value: getCurrentOptionReturnValue,
         classNamePrefix: 'select',
@@ -222,19 +222,6 @@ describe('Select', () => {
         test('should call modifyOptionLabel with optionLabelFuncReturnValue and option', () => {
           expect()
         })
-      })
-    })
-
-    describe('when calling styles.placeholder', () => {
-      let returnValue
-
-      beforeEach(() => {
-        returnValue = select.props().styles.placeholder()
-      })
-
-      test('should return {color: theme.color.gray}', () => {
-        const expectedValue = { color: etsinTheme.color.gray }
-        returnValue.should.deep.eql(expectedValue)
       })
     })
   })

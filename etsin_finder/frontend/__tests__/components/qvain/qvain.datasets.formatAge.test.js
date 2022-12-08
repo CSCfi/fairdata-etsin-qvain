@@ -1,6 +1,6 @@
 import '../../../locale/translations'
 import moment from 'moment'
-import formatAge from '../../../js/components/qvain/views/datasets/formatAge'
+import formatAge from '../../../js/components/qvain/views/datasetsV2/formatAge'
 
 const now = moment('2021-06-09')
 test.each([

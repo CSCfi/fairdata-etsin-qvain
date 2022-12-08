@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
-import Unsupported from '@/components/qvain/views/editor/unsupported'
+import Unsupported from '@/components/qvain/views/DatasetEditorV2/Unsupported'
 import theme from '@/styles/theme'
 import { useStores } from '@/stores/stores'
 import { buildStores } from '@/stores'

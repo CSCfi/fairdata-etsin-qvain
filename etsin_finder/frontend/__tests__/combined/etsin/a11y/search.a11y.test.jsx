@@ -12,6 +12,9 @@ import { StoresProvider } from '../../../../js/stores/stores'
 import searchResults from '../../../__testdata__/searchResults.data'
 import Search from '../../../../js/components/search'
 import axios from 'axios'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
 

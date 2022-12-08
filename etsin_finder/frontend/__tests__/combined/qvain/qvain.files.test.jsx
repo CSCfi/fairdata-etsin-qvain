@@ -5,25 +5,25 @@ import { ThemeProvider } from 'styled-components'
 import '@/../locale/translations'
 
 import etsinTheme from '@/styles/theme'
-import { sortFunc } from '../../../js/stores/view/common.files.utils'
+import { sortFunc } from '@/stores/view/common.files.utils'
 import {
   itemLoaderNew,
   itemLoaderAny,
   itemLoaderExisting,
-} from '../../../js/stores/view/common.files.loaders'
-import urls from '../../../js/utils/urls'
+} from '@/stores/view/common.files.loaders'
+import urls from '@/utils/urls'
 
-import { ShowMore } from '../../../js/components/general/files/tree'
-import SelectedItemsTree from '../../../js/components/qvain/fields/files/ida/selectedItemsTree'
-import SelectedItemsTreeItem from '../../../js/components/qvain/fields/files/ida/selectedItemsTreeItem'
-import AddItemsTree from '../../../js/components/qvain/fields/files/ida/addItemsTree'
-import AddItemsTreeItem from '../../../js/components/qvain/fields/files/ida/addItemsTreeItem'
+import { ShowMore } from '@/components/general/files/tree'
+import SelectedItemsTree from '@/components/qvain/sections/DataOrigin/general/FilePicker/selectedItemsTree'
+import SelectedItemsTreeItem from '@/components/qvain/sections/DataOrigin/general/FilePicker/selectedItemsTreeItem'
+import AddItemsTree from '@/components/qvain/sections/DataOrigin/general/FilePicker/addItemsTree'
+import AddItemsTreeItem from '@/components/qvain/sections/DataOrigin/general/FilePicker/addItemsTreeItem'
 
-import handleSubmitToBackend from '../../../js/components/qvain/utils/handleSubmit'
+import handleSubmitToBackend from '@/components/qvain/utils/handleSubmit'
 
 import { get } from '../../__testdata__/qvain.files.data'
-import { useStores } from '../../../js/stores/stores'
-import { buildStores } from '../../../js/stores'
+import { useStores } from '@/stores/stores'
+import { buildStores } from '@/stores'
 import { runInAction } from 'mobx'
 
 jest.mock('axios')
@@ -31,11 +31,11 @@ jest.mock('axios')
 const fakeNow = new Date('2022-09-22T12:34:00.000Z')
 jest.useFakeTimers('modern').setSystemTime(fakeNow)
 
-jest.mock('../../../js/stores/stores', () => {
+jest.mock('@/stores/stores', () => {
   const useStores = jest.fn()
 
   return {
-    ...jest.requireActual('../../../js/stores/stores'),
+    ...jest.requireActual('@/stores/stores'),
     useStores,
   }
 })

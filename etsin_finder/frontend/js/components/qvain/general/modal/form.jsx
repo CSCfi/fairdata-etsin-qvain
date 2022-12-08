@@ -50,13 +50,6 @@ export const NestedLabel = styled.label`
   }
 `
 
-export const LabelLarge = styled.label`
-  font-size: 1.2em;
-  line-height: calc(1.5 * 1.2em);
-  font-weight: 700;
-  display: block;
-`
-
 export const CheckboxStyles = styled.input`
   width: 18px;
   height: 18px;

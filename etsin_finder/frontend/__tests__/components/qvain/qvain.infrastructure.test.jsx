@@ -1,15 +1,13 @@
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
-import { useStores } from '../../../js/stores/stores'
-import { buildStores } from '../../../js/stores'
+import { useStores } from '@/stores/stores'
+import { buildStores } from '@/stores'
 
-import Infrastructure from '../../../js/components/qvain/fields/history/infrastructure'
-import { Field } from '../../../js/components/qvain/general/section'
-import InfrastructureSelection from '../../../js/components/qvain/fields/history/infrastructure/InfrastructureSelection'
+import Infrastructure from '@/components/qvain/sections/Infrastructure'
+import InfrastructureSelection from '@/components/qvain/sections/Infrastructure/InfrastructureSelection'
+import Select from '@/components/qvain/general/V2/Select'
 
-import Select from '../../../js/components/qvain/general/input/select'
-
-jest.mock('../../../js/stores/stores', () => ({
+jest.mock('@/stores/stores', () => ({
   withStores: Component => props => <Component Stores={mockStores} {...props} />,
   useStores: jest.fn(),
 }))
@@ -32,22 +30,8 @@ describe('Infrastructure', () => {
     })
 
     test('should render children with properties', () => {
-      const children = [
-        { label: 'Field', findArgs: Field },
-        { label: 'InfrastructureSelection', findArgs: InfrastructureSelection },
-      ]
-
-      const props = {
-        Field: {
-          brief: {
-            title: 'qvain.history.infrastructure.title',
-            description: 'qvain.history.infrastructure.description',
-          },
-          labelFor: 'infrastructure-select',
-        },
-      }
-
-      harness.shouldIncludeChildren(children, props)
+      const children = [{ label: 'InfrastructureSelection', findArgs: InfrastructureSelection }]
+      harness.shouldIncludeChildren(children)
     })
 
     describe('InfrastructureSelection', () => {
@@ -60,7 +44,7 @@ describe('Infrastructure', () => {
       })
 
       test('should have select with expected properties', () => {
-        const select = { label: 'Select', findArgs: Select }
+        const select = { label: 'Select', findArgs: { component: Select } }
 
         const props = {
           inputId: 'infrastructure-select',

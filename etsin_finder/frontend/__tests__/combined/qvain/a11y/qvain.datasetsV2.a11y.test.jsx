@@ -13,6 +13,9 @@ import datasets from '../../../__testdata__/qvain.datasets'
 import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
 import DatasetsV2 from '@/components/qvain/views/datasetsV2'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 let stores
 

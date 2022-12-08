@@ -5,7 +5,7 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
-import Select from '@/components/qvain/general/input/searchSelect'
+import Select from '@/components/qvain/general/V2/SearchSelect'
 import { useStores } from '@/stores/stores'
 import { FieldGroup, FieldWrapper, Title, InfoText } from '@/components/qvain/general/V2'
 

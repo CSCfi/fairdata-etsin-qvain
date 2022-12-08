@@ -14,13 +14,12 @@ import React, { useEffect } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import { Home, Search, Dataset, Qvain, QvainDatasets, QvainDatasetsV2 } from '../routes'
+import { Home, Search, Dataset, Qvain, QvainDatasetsV2 } from '../routes'
 import ErrorPage from '../components/errorpage'
 
 import QvainLandingPage from '../components/qvain/views/landingPage'
 import { useStores } from '../utils/stores'
 import LoggedInRoute from './loggedInRoute'
-import FlaggedComponent from '../components/general/flaggedComponent'
 
 const Content = ({ contentRef }) => {
   const {
@@ -65,9 +64,7 @@ const Content = ({ contentRef }) => {
           <Qvain />
         </LoggedInRoute>
         <LoggedInRoute exact path={qvainPath('')} notLoggedIn={<QvainLandingPage />}>
-          <FlaggedComponent flag="UI.NEW_DATASETS_VIEW" whenDisabled={<QvainDatasets />}>
-            <QvainDatasetsV2 />
-          </FlaggedComponent>
+          <QvainDatasetsV2 />
         </LoggedInRoute>
         <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
       </Switch>

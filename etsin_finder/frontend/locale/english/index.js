@@ -8,6 +8,7 @@
  * @license   MIT
  */
 
+import track from '@/stores/view/qvain/track'
 import qvain from './qvain'
 
 const english = {

@@ -11,12 +11,10 @@
   "license": "ISC",
   "scripts": {
     "build": "webpack --mode production --config webpack.prod.js --node-env production",
-    "dev-build": "webpack --config webpack.config.js --node-env development",
+    "dev-build": "webpack --config webpack.dev.js --node-env development",
     "lint": "eslint js --ext .jsx,.js",
-    "start": "webpack --progress --config webpack.config.js --watch --node-env development",
     "test": "jest",
     "coverage": "jest --collect-coverage --collect-coverage-from=\"js/**\"",
-    "watch": "webpack --config webpack.config.js --watch --node-env development",
     "dev": "webpack serve --config webpack.dev.js --node-env development"
   },
   "dependencies": {
@@ -110,6 +108,7 @@
     "ts-node": "^10.9.1",
     "typescript": "^4.8.2",
     "webpack-cli": "^4.10.0",
+    "webpack-deadcode-plugin": "^0.1.17",
     "webpack-dev-middleware": "^5.3.3",
     "webpack-dev-server": "^4.10.1",
     "webpack-hot-middleware": "^2.25.2",

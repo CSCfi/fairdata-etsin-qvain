@@ -41,14 +41,7 @@ Jo tallennettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan k
       provenance: 'Provenienssi',
     },
     name: {
-      placeholder: {
-        // V1
-        organization: 'Nimi',
-        person: 'Etu- ja sukunimi',
-        manualOrganization: 'Syötä organisaation nimi',
-      },
       infoText: {
-        // V2
         organization: 'Nimi',
         person: 'Etu- ja sukunimi',
         manualOrganization: 'Syötä organisaation nimi',
@@ -63,10 +56,6 @@ Jo tallennettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan k
     },
     identifier: {
       label: 'Tunniste',
-      placeholder: {
-        person: 'http://orcid.org',
-        organization: 'Esim. RAID-tunniste tai Y-tunnus',
-      },
       infoText: {
         person: 'Esim. http://orcid.org',
         organization: 'Esim. RAID-tunniste tai Y-tunnus',

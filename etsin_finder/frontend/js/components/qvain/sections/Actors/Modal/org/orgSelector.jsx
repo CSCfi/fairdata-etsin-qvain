@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
 import { useStores } from '../../../../utils/stores'
-import { DeleteButton } from '../../../../general/buttons'
+import { DeleteButton } from '../../../../general/V2/buttons'
 import ValidationError from '../../../../general/errors/validationError'
 import { getOrganizationName } from '../../common'
 import { FieldGroup, InfoText } from '@/components/qvain/general/V2'

@@ -9,7 +9,7 @@ import Loader from '../../../../general/loader'
 import { useStores } from '../../../utils/stores'
 import { Dropdown, DropdownItem } from '../../../../general/dropdown'
 import { HelpIcon } from '../../../../general/form'
-import Tooltip from '../../../general/section/tooltip'
+import Tooltip from '../../../general/V2/Tooltip'
 import getPersonLabel from './getPersonLabel'
 
 const getRoleKey = role => `qvain.datasets.share.members.roles.${role}`

@@ -1,26 +1,23 @@
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 import Select from 'react-select/async'
-import Translate from 'react-translate-component'
 
-import { useStores } from '../../../js/stores/stores'
-import RelatedResource from '../../../js/components/qvain/fields/history/relatedResource'
-import RelatedResourceContent from '../../../js/components/qvain/fields/history/relatedResource/relatedResourceContent'
-import { Field } from '../../../js/components/qvain/general/section'
-import FieldList from '../../../js/components/qvain/general/section/fieldList'
-import Form from '../../../js/components/qvain/fields/history/relatedResource/form'
-import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
-import ModalInput from '../../../js/components/qvain/general/modal/modalInput'
-import { RelationType } from '../../../js/stores/view/qvain/qvain.relatedResources'
-import modalSeparator from '../../../js/components/qvain/general/modal/modalSeparator'
+import { useStores } from '@/stores/stores'
 
-import ResourcesSearchField from '../../../js/components/qvain/fields/history/relatedResource/resourceSearchField'
-import FieldListAdd from '../../../js/components/qvain/general/section/fieldListAdd'
-import FlaggedComponent from '../../../js/components/general/flaggedComponent'
+import RelatedResource from '@/components/qvain/sections/Publications'
+import RelatedResourceContent from '@/components/qvain/sections/Publications/RelatedResourceContent'
+import ResourcesSearchField from '@/components/qvain/sections/Publications/PublicationForm/ResourceSearchField'
+import PublicationForm from '@/components/qvain/sections/Publications/PublicationForm'
+import PublicationDetails from '@/components/qvain/sections/Publications/PublicationForm/PublicationDetails'
+import OtherResourceForm from '@/components/qvain/sections/Publications/OtherResourceForm'
 
-jest.mock('../../../js/stores/stores')
+import TranslationTab from '@/components/qvain/general/V2/TranslationTab'
+import { RelationType } from '@/stores/view/qvain/qvain.relatedResources'
+import { Title } from '@/components/qvain/general/V2'
 
-jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas')
+jest.mock('@/stores/stores')
+
+jest.mock('@/stores/view/qvain/qvain.submit.schemas')
 
 const flushPromises = () => new Promise(setImmediate)
 
@@ -29,7 +26,9 @@ describe('given mockStores', () => {
     Qvain: {
       RelatedResources: {
         inEdit: { name: { en: 'name' }, description: { en: 'description' }, relationType: {} },
+        edit: jest.fn(),
         save: jest.fn(),
+        remove: jest.fn(),
         clearInEdit: jest.fn(),
         setValidationError: jest.fn(),
         typeSchema: {
@@ -41,6 +40,11 @@ describe('given mockStores', () => {
         prefillInEdit: jest.fn(),
         create: jest.fn(),
         translationsRoot: 'translationsRoot',
+        publications: [],
+        otherResources: [],
+        readonly: false,
+        createPublication: jest.fn(),
+        createOtherResource: jest.fn(),
       },
     },
     CrossRef: {
@@ -83,10 +87,7 @@ describe('given mockStores', () => {
     })
 
     test('should have children with expected properties', () => {
-      const children = [
-        { label: 'Field', findArgs: Field },
-        { label: 'Content', findArgs: RelatedResourceContent },
-      ]
+      const children = [{ label: 'Content', findArgs: RelatedResourceContent }]
 
       const props = {
         Field: {
@@ -101,163 +102,212 @@ describe('given mockStores', () => {
     })
 
     describe('RelatedResourceContent', () => {
-      beforeEach(() => {
-        harness.restoreWrapper('Content')
-        harness.dive()
+      beforeEach(async () => {
+        harness.shallow()
+        await flushPromises()
+        harness.diveInto('RelatedResource')
+        harness.diveInto(RelatedResourceContent)
       })
 
       test('should have children with expected properties', () => {
+        const { RelatedResources } = mockStores.Qvain
         const children = [
-          { label: 'FieldList', findArgs: FieldList },
-          { label: 'FlaggedComponent', findArgs: FlaggedComponent },
-          { label: 'FieldListAdd', findArgs: FieldListAdd },
+          {
+            label: 'FieldListPublications',
+            findArgs: { storage: RelatedResources.publications },
+          },
+          {
+            label: 'FieldListAddPublication',
+            findArgs: { onClick: RelatedResources.createPublication },
+          },
+          {
+            label: 'FieldListOther',
+            findArgs: { storage: RelatedResources.otherResources },
+          },
+          {
+            label: 'FieldListAddOther',
+            findArgs: { onClick: RelatedResources.createOtherResource },
+          },
         ]
-
-        const props = {
-          FieldList: {
-            Field: mockStores.Qvain.RelatedResources,
-          },
-          FieldListAdd: {
-            Field: mockStores.Qvain.RelatedResources,
-            Form,
-            hideButton: true,
-          },
-        }
-
-        harness.shouldIncludeChildren(children, props)
-      })
-    })
-
-    describe('FlaggedComponent', () => {
-      beforeEach(() => {
-        harness.restoreWrapper('FlaggedComponent')
-      })
-
-      test('should include children', () => {
-        const children = [{ label: 'ResourceSearchField', findArgs: ResourcesSearchField }]
 
         harness.shouldIncludeChildren(children)
       })
     })
 
-    describe('ResourceSearchField', () => {
-      beforeEach(() => {
-        harness.restoreWrapper('ResourceSearchField')
-        harness.dive()
+    describe('PublicationForm', () => {
+      const props = {
+        Field: mockStores.Qvain.RelatedResources,
+        translationsRoot: 'root',
+      }
+
+      const harness = new Harness(PublicationForm, props)
+
+      beforeEach(async () => {
+        harness.shallow()
+        await flushPromises()
       })
 
-      test('should include children with properties', () => {
-        const children = [{ label: 'TranslatedSelect', findArgs: Translate }]
+      test('should exist', () => {
+        harness.shouldExist()
+      })
+
+      test('should have children with expected properties', () => {
+        harness.diveInto(PublicationDetails)
+        const children = [
+          { label: 'TranslationsTab', findArgs: TranslationTab },
+          { label: 'NameTab', findArgs: { datum: 'name' } },
+          { label: 'DescriptionTab', findArgs: { datum: 'description' } },
+          { label: 'RelationType', findArgs: { datum: 'relationType' } },
+        ]
 
         const props = {
-          TranslatedSelect: {
-            component: Select,
-            loadOptions: mockStores.CrossRef.search,
-            onInputChange: mockStores.CrossRef.setTerm,
-            defaultOptions: mockStores.CrossRef.defaultOptions,
-            attributes: { placeholder: 'placeholder' },
-            value: mockStores.CrossRef.term,
-            isClearable: true,
+          TranslationsTab: {
+            language: 'en',
+          },
+          NameTab: {
+            ...props,
+            language: 'en',
+            isRequired: true,
+          },
+          DescriptionTab: {
+            ...props,
+            language: 'en',
+          },
+          Identifier: {
+            ...props,
+            datum: 'identifier',
+          },
+          EntityType: {
+            ...props,
+            datum: 'entityType',
+            metaxIdentifier: 'resource_type',
+            model: RelationType,
+          },
+          RelationType: {
+            ...props,
+            datum: 'relationType',
+            metaxIdentifier: 'relation_type',
+            model: RelationType,
+            isRequired: true,
           },
         }
 
         harness.shouldIncludeChildren(children, props)
       })
 
-      describe("when triggering onChange with selection.value of 'create'", () => {
+      describe('ResourceSearchField', () => {
         beforeEach(() => {
-          harness.trigger('change', { value: 'create' })
+          harness.diveInto(ResourcesSearchField)
         })
 
-        test('should call RelatedResource.create', () => {
-          expect(mockStores.Qvain.RelatedResources.create).to.have.beenCalledWith()
-        })
-      })
+        test('should include children with properties', () => {
+          const children = [
+            { label: 'Title', findArgs: { component: Title } },
+            { label: 'TranslatedSelect', findArgs: { component: Select } },
+          ]
 
-      describe('when triggering onChange with selection.value of {}', () => {
-        beforeEach(() => {
-          harness.trigger('change', { value: {} })
+          const props = {
+            TranslatedSelect: {
+              component: Select,
+              loadOptions: mockStores.CrossRef.search,
+              onInputChange: mockStores.CrossRef.setTerm,
+              defaultOptions: mockStores.CrossRef.defaultOptions,
+              value: mockStores.CrossRef.term,
+              isClearable: true,
+            },
+          }
+
+          harness.shouldIncludeChildren(children, props)
         })
 
-        test('should call RelatedResource.prefillInEdit', () => {
-          expect(mockStores.Qvain.RelatedResources.prefillInEdit).to.have.beenCalledWith({})
-        })
-      })
+        describe('when triggering onChange with a selection', () => {
+          beforeEach(() => {
+            harness.diveInto({ component: Select })
+            harness.wrapper.invoke('onChange')({ value: 'something' })
+          })
 
-      describe('when triggering onChange without selection', () => {
-        beforeEach(() => {
-          harness.trigger('change')
+          test('should call RelatedResource.prefillInEdit', () => {
+            expect(mockStores.Qvain.RelatedResources.prefillInEdit).to.have.beenCalledWith(
+              'something'
+            )
+          })
         })
 
-        test('should not call RelatedResource.prefillInEdit or RelatedResource.create', () => {
-          expect(mockStores.Qvain.RelatedResources.create).to.not.have.beenCalled()
-          expect(mockStores.Qvain.RelatedResources.prefillInEdit).to.not.have.beenCalled()
+        describe('when triggering onChange without selection', () => {
+          beforeEach(() => {
+            harness.diveInto({ component: Select })
+            harness.wrapper.invoke('onChange')()
+          })
+
+          test('should not call RelatedResource.prefillInEdit or RelatedResource.create', () => {
+            expect(mockStores.Qvain.RelatedResources.create).to.not.have.beenCalled()
+            expect(mockStores.Qvain.RelatedResources.prefillInEdit).to.not.have.beenCalled()
+          })
         })
       })
     })
-  })
 
-  describe('Form', () => {
-    const props = {
-      Field: mockStores.Qvain.RelatedResources,
-      translationsRoot: 'root',
-    }
-
-    const harness = new Harness(Form, props)
-
-    beforeEach(async () => {
-      harness.shallow()
-      await flushPromises()
-    })
-
-    test('should exist', () => {
-      harness.shouldExist()
-    })
-
-    test('should have children with expected properties', () => {
-      const children = [
-        { label: 'TranslationsTab', findArgs: TranslationTab },
-        { label: 'NameTab', findType: 'prop', findArgs: ['datum', 'name'] },
-        { label: 'DescriptionTab', findType: 'prop', findArgs: ['datum', 'description'] },
-        { label: 'Identifier', findArgs: ModalInput },
-        { label: 'Separator', findArgs: modalSeparator },
-        { label: 'EntityType', findType: 'prop', findArgs: ['datum', 'entityType'] },
-        { label: 'RelationType', findType: 'prop', findArgs: ['datum', 'relationType'] },
-      ]
-
+    describe('OtherResourceForm', () => {
       const props = {
-        TranslationsTab: {
-          language: 'en',
-        },
-        NameTab: {
-          ...props,
-          language: 'en',
-          isRequired: true,
-        },
-        DescriptionTab: {
-          ...props,
-          language: 'en',
-        },
-        Identifier: {
-          ...props,
-          datum: 'identifier',
-        },
-        EntityType: {
-          ...props,
-          datum: 'entityType',
-          metaxIdentifier: 'resource_type',
-          model: RelationType,
-        },
-        RelationType: {
-          ...props,
-          datum: 'relationType',
-          metaxIdentifier: 'relation_type',
-          model: RelationType,
-          isRequired: true,
-        },
+        Field: mockStores.Qvain.RelatedResources,
+        translationsRoot: 'root',
       }
 
-      harness.shouldIncludeChildren(children, props)
+      const harness = new Harness(OtherResourceForm, props)
+
+      beforeEach(async () => {
+        harness.shallow()
+        await flushPromises()
+      })
+
+      test('should exist', () => {
+        harness.shouldExist()
+      })
+
+      test('should have children with expected properties', () => {
+        const children = [
+          { label: 'TranslationsTab', findArgs: TranslationTab },
+          { label: 'NameTab', findArgs: { datum: 'name' } },
+          { label: 'DescriptionTab', findArgs: { datum: 'description' } },
+          { label: 'Identifier', findArgs: { datum: 'identifier' } },
+          { label: 'EntityType', findArgs: { datum: 'entityType' } },
+          { label: 'RelationType', findArgs: { datum: 'relationType' } },
+        ]
+
+        const props = {
+          TranslationsTab: {
+            language: 'en',
+          },
+          NameTab: {
+            ...props,
+            language: 'en',
+            isRequired: true,
+          },
+          DescriptionTab: {
+            ...props,
+            language: 'en',
+          },
+          Identifier: {
+            ...props,
+            datum: 'identifier',
+          },
+          EntityType: {
+            ...props,
+            datum: 'entityType',
+            metaxIdentifier: 'resource_type',
+            model: RelationType,
+          },
+          RelationType: {
+            ...props,
+            datum: 'relationType',
+            metaxIdentifier: 'relation_type',
+            model: RelationType,
+            isRequired: true,
+          },
+        }
+
+        harness.shouldIncludeChildren(children, props)
+      })
     })
   })
 })

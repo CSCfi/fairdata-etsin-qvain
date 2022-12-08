@@ -1,9 +1,9 @@
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 
-import FieldOfScienceField from '../../../js/components/qvain/fields/description/fieldOfScience'
+import FieldOfScienceField from '../../../js/components/qvain/sections/Description/FieldOfScience'
 import { useStores } from '../../../js/stores/stores'
-import { LabelLarge } from '../../../js/components/qvain/general/modal/form'
+import { Title } from '../../../js/components/qvain/general/V2'
 
 jest.mock('../../../js/stores/stores', () => ({
   withStores: Component => props => <Component Stores={mockStores} {...props} />,
@@ -36,18 +36,16 @@ describe('given mockStores', () => {
 
     test('should have children with expected properties', () => {
       const children = [
-        { label: 'Label', findArgs: LabelLarge },
+        { label: 'Label', findArgs: Title },
         {
           label: 'Title',
-          findType: 'prop',
-          findArgs: ['content', 'qvain.description.fieldOfScience.title'],
+          findArgs: { content: 'qvain.description.fieldOfScience.title' },
         },
         {
-          label: 'HelpText',
-          findType: 'prop',
-          findArgs: ['content', 'qvain.description.fieldOfScience.help'],
+          label: 'InfoText',
+          findArgs: { content: 'qvain.description.fieldOfScience.infoText' },
         },
-        { label: 'Select', findType: 'prop', findArgs: ['name', 'fieldOfScience'] },
+        { label: 'Select', findArgs: { name: 'fieldOfScience' } },
       ]
 
       const props = {
@@ -57,7 +55,6 @@ describe('given mockStores', () => {
         Select: {
           name: 'fieldOfScience',
           metaxIdentifier: 'field_of_science',
-          placeholder: 'qvain.description.fieldOfScience.placeholder',
           isMulti: true,
           model: mockStores.Qvain.FieldOfSciences.Model,
           getter: mockStores.Qvain.FieldOfSciences.storage,

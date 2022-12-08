@@ -1,9 +1,9 @@
 import Harness from '../componentTestHarness'
 
-import LanguageField from '../../../js/components/qvain/fields/description/language'
+import LanguageField from '../../../js/components/qvain/sections/Description/Language'
 import { useStores } from '../../../js/stores/stores'
-import { LabelLarge } from '../../../js/components/qvain/general/modal/form'
-import Select from '../../../js/components/qvain/general/input/searchSelect'
+import { Title, InfoText } from '@/components/qvain/general/V2'
+import Select from '../../../js/components/qvain/general/V2/SearchSelect'
 
 jest.mock('../../../js/stores/stores')
 
@@ -36,16 +36,14 @@ describe('given mockStores', () => {
 
     test('should have children with expected properties', () => {
       const children = [
-        { label: 'Label', findArgs: LabelLarge },
+        { label: 'Label', findArgs: Title },
         {
           label: 'LabelContent',
-          findType: 'prop',
-          findArgs: ['content', 'qvain.description.datasetLanguage.title'],
+          findArgs: { content: 'qvain.description.datasetLanguage.title' },
         },
         {
-          label: 'HelpText',
-          findType: 'prop',
-          findArgs: ['content', 'qvain.description.datasetLanguage.help'],
+          label: 'InfoText',
+          findArgs: { content: 'qvain.description.datasetLanguage.infoText' },
         },
         {
           label: 'Select',
@@ -69,7 +67,6 @@ describe('given mockStores', () => {
           isClearable: false,
           model: mockStores.Qvain.DatasetLanguages.Model,
           metaxIdentifier: 'language',
-          placeholder: 'qvain.description.datasetLanguage.placeholder',
           search: true,
         },
       }

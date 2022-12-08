@@ -179,7 +179,7 @@ export const OrgSelectComponent = observer(
             classNamePrefix="select"
             options={getOptions()}
             placeholder=""
-            ariaLabel={ariaLabel}
+            aria-label={ariaLabel}
             ariaAutocomplete="list"
           />
           {allowReset && !readonly ? (
@@ -250,6 +250,6 @@ export const AddOptionContainer = styled.div`
 
 export const BoxedContainer = styled.div`
   border: 1px solid;
-  border-color: ${({ theme }) => theme.color.darkgrey};
+  border-color: ${({ theme }) => theme.color.darkgray};
   padding: 1rem;
 `

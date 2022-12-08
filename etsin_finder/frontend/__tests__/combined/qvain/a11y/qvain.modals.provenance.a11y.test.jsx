@@ -12,9 +12,12 @@ import etsinTheme from '../../../../js/styles/theme'
 import dataset from '../../../__testdata__/dataset.att'
 import { getReferenceData } from '../../../__testdata__/referenceData.data'
 import { useStores, StoresProvider } from '../../../../js/stores/stores'
-import Provenance from '../../../../js/components/qvain/fields/history/provenance/ProvenanceFieldContent'
-import { EditButton } from '../../../../js/components/qvain/general/buttons/iconButtons'
+import Provenance from '../../../../js/components/qvain/sections/History'
+import { EditButton } from '../../../../js/components/qvain/general/V2/buttons'
 import Modal from '../../../../js/components/general/modal'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 // Make sure MobX store values are not mutated outside actions.
 configure({

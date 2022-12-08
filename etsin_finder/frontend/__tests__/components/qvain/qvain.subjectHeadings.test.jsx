@@ -1,10 +1,10 @@
 import 'chai/register-expect'
 import Harness from '../componentTestHarness'
 
-import SubjectHeadings from '../../../js/components/qvain/fields/description/subjectHeadings'
+import SubjectHeadings from '../../../js/components/qvain/sections/Description/SubjectHeadings'
 import { useStores } from '../../../js/stores/stores'
-import { LabelLarge } from '../../../js/components/qvain/general/modal/form'
-import SearchSelect from '../../../js/components/qvain/general/input/searchSelect'
+import SearchSelect from '../../../js/components/qvain/general/V2/SearchSelect'
+import { Title } from '../../../js/components/qvain/general/V2'
 
 jest.mock('../../../js/stores/stores')
 
@@ -33,9 +33,9 @@ describe('given required mocked Stores', () => {
       harness.shouldExist()
     })
 
-    describe('LabelLarge', () => {
+    describe('Title', () => {
       beforeEach(() => {
-        harness.find(LabelLarge)
+        harness.find(Title)
       })
 
       test('should exist', () => {
@@ -59,9 +59,9 @@ describe('given required mocked Stores', () => {
       })
     })
 
-    describe('<Translate component="p" content="qvain.description.subjectHeadings.help" />', () => {
+    describe('Infotext', () => {
       beforeEach(() => {
-        harness.findWithProp('content', 'qvain.description.subjectHeadings.help')
+        harness.findWithProp('content', 'qvain.description.subjectHeadings.infoText')
       })
       test('should exist', () => {
         harness.shouldExist()
@@ -80,7 +80,6 @@ describe('given required mocked Stores', () => {
       test('should include expected props', () => {
         const expectedProps = {
           metaxIdentifier: 'keyword',
-          placeholder: 'qvain.description.subjectHeadings.placeholder',
           isMulti: true,
           isClearable: false,
           model: mockStores.Qvain.SubjectHeadings.Model,

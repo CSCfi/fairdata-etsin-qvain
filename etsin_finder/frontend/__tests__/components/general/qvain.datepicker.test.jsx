@@ -7,7 +7,7 @@ import '../../../locale/translations'
 import etsinTheme from '../../../js/styles/theme'
 import DatePicker, {
   StyledCustomDatePicker,
-} from '../../../js/components/qvain/general/input/datepicker'
+} from '../../../js/components/qvain/general/V2/Datepicker'
 import LocaleStore from '../../../js/stores/view/locale'
 
 const getStores = () => {

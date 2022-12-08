@@ -2,10 +2,10 @@ import { shallow } from 'enzyme'
 import React from 'react'
 import 'chai/register-expect'
 
-import ModalReferenceInput from '../../../js/components/qvain/general/modal/modalReferenceInput'
-import { Label } from '../../../js/components/qvain/general/modal/form'
-import Select from '../../../js/components/qvain/general/input/select'
-import SearchSelect from '../../../js/components/qvain/general/input/searchSelect'
+import ModalReferenceInput from '@/components/qvain/general/V2/ModalReferenceInput'
+import { Title, Required } from '@/components/qvain/general/V2'
+import Select from '@/components/qvain/general/V2/Select'
+import SearchSelect from '@/components/qvain/general/V2/SearchSelect'
 
 const Field = {
   changeAttribute: jest.fn(),
@@ -26,8 +26,8 @@ describe('ModalRefenceInput', function () {
   let wrapper
 
   const getTranslations = props => ({
-    label: `${Field.translationsRoot}.modal.${props.datum}Input.label`,
-    placeholder: `${Field.translationsRoot}.modal.${props.datum}Input.placeholder`,
+    label: `${Field.translationsRoot}.${props.datum}.label`,
+    infoText: `${Field.translationsRoot}.${props.datum}.infoText`,
   })
 
   const render = extraProps => {
@@ -41,7 +41,6 @@ describe('ModalRefenceInput', function () {
     getter: {},
     model: props.model,
     metaxIdentifier: 'metaxIdentifier',
-    placeholder: getTranslations(props).placeholder,
     inModal: true,
     isClearable: true,
   }
@@ -59,7 +58,7 @@ describe('ModalRefenceInput', function () {
       let label
 
       beforeEach(() => {
-        label = wrapper.find(Label)
+        label = wrapper.find(Title)
       })
 
       test('should have htmlFor: datum-input', () => {
@@ -67,9 +66,7 @@ describe('ModalRefenceInput', function () {
       })
 
       test('should have Translate content="translations.label"', () => {
-        const translation = label.findWhere(
-          elem => elem.props().content === getTranslations(props).label
-        )
+        const translation = label.find({ content: getTranslations(props).label })
         translation.exists().should.be.true
       })
     })
@@ -141,14 +138,8 @@ describe('ModalRefenceInput', function () {
     })
 
     describe('Label', () => {
-      let label
-
-      beforeEach(() => {
-        label = wrapper.find(Label)
-      })
-
-      test("should render '*'", () => {
-        label.text().should.include('*')
+      test("should render '<Required />'", () => {
+        wrapper.find('Required').should.have.lengthOf(1)
       })
     })
   })

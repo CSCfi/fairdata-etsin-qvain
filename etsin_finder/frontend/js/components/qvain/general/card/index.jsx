@@ -1,12 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { keyframes } from 'styled-components'
-
-const Card = ({ children, bottomContent, className }) => (
-  <Container bottomContent={bottomContent} className={className}>
-    {children}
-  </Container>
-)
+import styled from 'styled-components'
 
 export const Container = styled.div`
   padding-left: 45px;
@@ -20,28 +14,11 @@ export const Container = styled.div`
   overflow: visible;
 `
 
-export const ContainerLight = styled.div`
-  margin-bottom: 15px;
-`
-
-export const ContainerSubsection = styled.div`
-  padding: 25px 45px 56px 45px;
-  border: 1px solid #cccccc;
-  min-height: 150px;
-  background-color: #fff;
-  overflow: visible;
-`
-
-export const ContainerSubsectionBottom = styled.div`
-  padding: 25px 45px 56px 45px;
-  border-top: 0px;
-  border-left: 1px solid #cccccc;
-  border-right: 1px solid #cccccc;
-  border-bottom: 1px solid #cccccc;
-  min-height: 150px;
-  background-color: #fff;
-  overflow: visible;
-`
+const Card = ({ children, bottomContent, className }) => (
+  <Container bottomContent={bottomContent} className={className}>
+    {children}
+  </Container>
+)
 
 export const QvainContainer = styled.div`
   background-color: #fafafa;
@@ -92,34 +69,6 @@ export const StickySubHeaderResponse = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-`
-
-export const FileContainer = styled(Container)`
-  padding: 35px 24px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.13);
-  margin-bottom: 69px;
-  margin-top: 0px;
-`
-
-const slide = keyframes`
-  from {
-    transform: translate(0, -100px);
-    opacity: 0;
-    z-index: -1;
-  }
-  to {
-    transform: translate(0, 0);
-    opacity: 1;
-  }
-`
-
-export const SlidingContent = styled.div`
-  padding-top: 20px;
-  position: relative;
-  flex: auto;
-  width: 100%;
-  animation: ${slide} 0.2s ease-in;
-  ${props => (props.open ? 'display: inline-block;' : 'display: none;')}
 `
 
 Card.propTypes = {

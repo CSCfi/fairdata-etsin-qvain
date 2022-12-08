@@ -8,35 +8,36 @@ import { components as selectComponents } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 
 import '../../../locale/translations'
-import etsinTheme from '../../../js/styles/theme'
-import { ENTITY_TYPE, ROLE } from '../../../js/utils/constants'
-import { ActorsBase } from '../../../js/components/qvain/fields/actors'
-import { ActorTypeSelectBase } from '../../../js/components/qvain/fields/actors/modal/actorTypeSelect'
-import ActorRoles from '../../../js/components/qvain/fields/actors/modal/actorRoles'
-import AddedActors from '../../../js/components/qvain/fields/actors/field/addedActors'
-import ActorModal, { ActorModalBase } from '../../../js/components/qvain/fields/actors/modal'
-import OrgInfo from '../../../js/components/qvain/fields/actors/modal/org/orgInfo'
-import OrgForm from '../../../js/components/qvain/fields/actors/modal/org/orgForm'
-import { ButtonGroup, DeleteButton } from '../../../js/components/qvain/general/buttons'
-import EnvClass from '../../../js/stores/domain/env'
-import QvainClass from '../../../js/stores/view/qvain'
-import ElasticQueryClass from '../../../js/stores/view/elasticquery'
+import etsinTheme from '@/styles/theme'
+import { ENTITY_TYPE, ROLE } from '@/utils/constants'
+import { ActorsBase } from '@/components/qvain/sections/Actors'
+import { ActorTypeSelectBase } from '@/components/qvain/sections/Actors/Modal/actorTypeSelect'
+import ActorRoles from '@/components/qvain/sections/Actors/Modal/actorRoles'
+import AddedActors from '@/components/qvain/sections/Actors/Field/addedActors'
+import ActorItem from '@/components/qvain/sections/Actors/Field/actorItem'
+import ActorModal, { ActorModalBase } from '@/components/qvain/sections/Actors/Modal'
+import OrgInfo from '@/components/qvain/sections/Actors/Modal/org/orgInfo'
+import OrgForm from '@/components/qvain/sections/Actors/Modal/org/orgForm'
+import { DeleteButton } from '@/components/qvain/general/V2/buttons'
+import EnvClass from '@/stores/domain/env'
+import QvainClass from '@/stores/view/qvain'
+import ElasticQueryClass from '@/stores/view/elasticquery'
 import {
   Actor,
   Organization,
   Person,
   maybeReference,
-} from '../../../js/stores/view/qvain/qvain.actors'
-import LocaleClass from '../../../js/stores/view/locale'
-import AccessibilityClass from '../../../js/stores/view/accessibility'
+} from '@/stores/view/qvain/qvain.actors'
+import LocaleClass from '@/stores/view/locale'
+import AccessibilityClass from '@/stores/view/accessibility'
 import organizationMockGet, {
   dataset,
   AaltoIdentifier,
   AaltoDepartmentOfMediaIdentifier,
   NotReallyReferenceIdentifier,
 } from '../../__testdata__/qvain.actors.data'
-import { useStores, StoresProvider } from '../../../js/stores/stores'
-import removeEmpty from '../../../js/utils/removeEmpty'
+import { useStores, StoresProvider } from '@/stores/stores'
+import removeEmpty from '@/utils/removeEmpty'
 
 // Make sure MobX store values are not mutated outside actions.
 configure({
@@ -45,11 +46,11 @@ configure({
 
 jest.mock('axios')
 
-jest.mock('../../../js/stores/stores', () => {
+jest.mock('@/stores/stores', () => {
   const useStores = jest.fn()
 
   return {
-    ...jest.requireActual('../../../js/stores/stores'),
+    ...jest.requireActual('@/stores/stores'),
     useStores,
   }
 })
@@ -93,7 +94,7 @@ describe('Qvain.Actors', () => {
         </ThemeProvider>
       </StoresProvider>
     )
-    expect(addedActors.find(ButtonGroup).length).toBe(0)
+    expect(addedActors.find(ActorItem).length).toBe(0)
     stores.Qvain.Actors.saveActor(
       Actor({
         type: ENTITY_TYPE.ORGANIZATION,
@@ -164,7 +165,7 @@ describe('Qvain.Actors', () => {
       })
     )
     addedActors.update()
-    expect(addedActors.find(ButtonGroup).length).toBe(4)
+    expect(addedActors.find(ActorItem).length).toBe(4)
   })
 })
 

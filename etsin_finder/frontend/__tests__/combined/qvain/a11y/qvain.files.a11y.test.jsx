@@ -7,19 +7,22 @@ import { axe } from 'jest-axe'
 import { ThemeProvider } from 'styled-components'
 import Translate from 'react-translate-component'
 
-import { buildStores } from '../../../../js/stores'
-import '../../../../locale/translations'
-import FilePicker from '../../../../js/components/qvain/fields/files/ida'
-import AddItemsModal from '../../../../js/components/qvain/fields/files/ida/addItems'
-import UserMetadataModal from '../../../../js/components/qvain/fields/files/ida/forms/formModal'
-import PASModal from '../../../../js/components/qvain/fields/files/metadataModal'
-import etsinTheme from '../../../../js/styles/theme'
-import urls from '../../../../js/utils/urls'
+import { buildStores } from '@/stores'
+import '@/../locale/translations'
+import FilePicker from '@/components/qvain/sections/DataOrigin/general/FilePicker'
+import AddItemsModal from '@/components/qvain/sections/DataOrigin/general/FilePicker/addItems'
+import UserMetadataModal from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/formModal'
+import SelectedItemsTreeItem from '@/components/qvain/sections/DataOrigin/general/FilePicker/selectedItemsTreeItem'
+import MetadataModal from '@/components/qvain/sections/DataOrigin/general/MetadataModal'
+import etsinTheme from '@/styles/theme'
+import urls from '@/utils/urls'
 
 import { get } from '../../../__testdata__/qvain.files.data'
-import { StoresProvider, useStores } from '../../../../js/stores/stores'
-import Modal from '../../../../js/components/general/modal'
-import SelectedItemsTreeItem from '../../../../js/components/qvain/fields/files/ida/selectedItemsTreeItem'
+import { StoresProvider, useStores } from '@/stores/stores'
+import Modal from '@/components/general/modal'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 jest.setTimeout(25000) // the default 5000ms timeout is not always enough here
 
@@ -87,7 +90,6 @@ describe('Qvain filepicker', () => {
           <ThemeProvider theme={etsinTheme}>
             <main>
               <FilePicker />
-              <PASModal />
             </main>
           </ThemeProvider>
         </BrowserRouter>
@@ -153,7 +155,7 @@ describe('Qvain filepicker', () => {
         .find('button')
         .simulate('click')
 
-      modal = wrapper.find(PASModal).find(Modal)
+      modal = wrapper.find(MetadataModal).find(Modal)
     })
 
     it('is open', async () => {
@@ -197,7 +199,7 @@ describe('Qvain filepicker', () => {
     let modal
     beforeAll(async () => {
       await render()
-      wrapper.find('button#show-add-items').simulate('click')
+      wrapper.find('button[aria-label="Add"]').simulate('click')
       await Qvain.Files.AddItemsView.setAllOpen(true)
       wrapper.update()
       modal = wrapper.find(AddItemsModal).find(Modal)

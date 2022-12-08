@@ -10,10 +10,10 @@ function Infrastructure() {
     Qvain: { originalHasInfrastructures },
   } = useStores()
 
-  return originalHasInfrastructures ? <Selection /> : null
-}
+  if (!originalHasInfrastructures) {
+    return null
+  }
 
-function Selection() {
   return (
     <Section sectionName="Infrastructure">
       <InfrastructureSelection />

@@ -19,6 +19,9 @@ import { StoresProvider, useStores } from '../../../../js/stores/stores'
 import FilesClass from '../../../../js/stores/view/files'
 import Modal from '../../../../js/components/general/modal'
 import { DownloadButton } from '../../../../js/components/dataset/data/idaResources/fileTreeItem'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 jest.setTimeout(25000) // the default 5000ms timeout is not always enough here
 

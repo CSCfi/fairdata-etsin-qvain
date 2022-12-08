@@ -2,17 +2,14 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import 'chai/register-expect'
 
-import ModalButtons from '../../../js/components/qvain/general/modal/modalButtons'
-import ValidationError from '../../../js/components/qvain/general/errors/validationError'
-import { CancelButton, SaveButton } from '../../../js/components/qvain/general/buttons'
+import ModalButtons from '@/components/qvain/general/V2/ModalButtons'
+import ValidationError from '@/components/qvain/general/errors/validationError'
+import { CancelButton, SaveButton } from '@/components/qvain/general/buttons'
 
 const Field = {
   validationError: [],
   editMode: false,
-}
-
-const translations = {
-  buttons: { save: 'save', cancel: 'cancel', editSave: 'editSave' },
+  validateAndSave: jest.fn(),
 }
 
 describe('ModalButtons', () => {
@@ -20,9 +17,8 @@ describe('ModalButtons', () => {
 
   const props = {
     Field,
-    handleSave: jest.fn(),
     handleRequestClose: jest.fn(),
-    translations,
+    translationsRoot: 'someField',
   }
 
   const render = extraProps => {
@@ -62,8 +58,8 @@ describe('ModalButtons', () => {
         cancelButton.exists().should.be.true
       })
 
-      test('should have content: translations.buttons.cancel', () => {
-        cancelButton.prop('content').should.eql(translations.buttons.cancel)
+      test('should have cancel text', () => {
+        cancelButton.prop('content').should.eql('someField.modal.buttons.cancel')
       })
 
       describe('when triggering onClick', () => {
@@ -88,8 +84,8 @@ describe('ModalButtons', () => {
         saveButton.exists().should.be.true
       })
 
-      test('should have content: translations.buttons.save', () => {
-        saveButton.prop('content').should.eql(translations.buttons.save)
+      test('should have save text', () => {
+        saveButton.prop('content').should.eql('someField.modal.buttons.save')
       })
 
       test('should have disabled: undefined', () => {
@@ -97,12 +93,9 @@ describe('ModalButtons', () => {
       })
 
       describe('when triggering onClick', () => {
-        beforeEach(() => {
+        test('should call validateAndSave', () => {
           saveButton.simulate('click')
-        })
-
-        test('should call handleSave', () => {
-          expect(props.handleSave).to.have.beenCalledTimes(1)
+          expect(Field.validateAndSave).to.have.beenCalledTimes(1)
         })
       })
     })
@@ -110,18 +103,18 @@ describe('ModalButtons', () => {
 
   describe('given Field.editMode: true and readonly: true', () => {
     beforeEach(() => {
-      render({ Field: { ...Field, editMode: true }, readonly: true })
+      render({ Field: { ...Field, editMode: true, readonly: true } })
     })
 
     describe('SaveButton', () => {
       let saveButton
 
       beforeEach(() => {
-        saveButton = wrapper.findWhere(elem => elem.prop('component') === SaveButton)
+        saveButton = wrapper.find({ component: SaveButton })
       })
 
-      test('should have content: translations.buttons.editSave', () => {
-        saveButton.prop('content').should.eql(translations.buttons.editSave)
+      test('should have editSave text', () => {
+        saveButton.prop('content').should.eql('someField.modal.buttons.editSave')
       })
 
       test('should have disabled: true', () => {

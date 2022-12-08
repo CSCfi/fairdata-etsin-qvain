@@ -6,7 +6,7 @@ import {
   ExpandCollapse,
   IconStyles,
   NoStyleButton,
-} from '../../../js/components/qvain/general/section/expand'
+} from '../../../js/components/qvain/general/V2/ExpandCollapse'
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 describe('ExpandCollapse', () => {

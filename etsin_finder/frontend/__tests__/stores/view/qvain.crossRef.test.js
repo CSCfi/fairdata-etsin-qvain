@@ -114,7 +114,7 @@ describe('CrossRef', () => {
     })
 
     test('should return parsed translationPath', () => {
-      returnValue.should.eql(`qvain.history.relatedResource.select.${testArg}`)
+      returnValue.should.eql(`qvain.publications.search.${testArg}`)
     })
   })
 

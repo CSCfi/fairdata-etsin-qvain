@@ -1,10 +1,9 @@
 import 'chai/register-expect'
 import Harness from '../componentTestHarness'
 
-import OtherIdentifier from '../../../js/components/qvain/fields/description/otherIdentifier'
+import OtherIdentifier from '../../../js/components/qvain/sections/Description/OtherIdentifier'
 import { useStores } from '../../../js/utils/stores'
-import { LabelLarge } from '../../../js/components/qvain/general/modal/form'
-import StringArray from '../../../js/components/qvain/general/input/stringArray'
+import StringArray from '../../../js/components/qvain/general/V2/StringArray'
 
 jest.mock('../../../js/stores/stores')
 
@@ -44,7 +43,6 @@ describe('given mockStores', () => {
 
     test('should have children with expected properties', () => {
       const children = [
-        { label: 'Label', findArgs: LabelLarge },
         {
           label: 'Title',
           findType: 'prop',
@@ -61,9 +59,6 @@ describe('given mockStores', () => {
       const props = {
         Label: {
           htmlFor: 'other-identifiers-input',
-        },
-        Instructions: {
-          component: 'p',
         },
         OtherIdentifiersList: {
           id: 'other-identifiers-input',

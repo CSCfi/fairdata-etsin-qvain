@@ -92,7 +92,7 @@ const Table = () => {
   )
 }
 
-const MoreButton = styled.button`
+export const MoreButton = styled.button`
   border: none;
   background: transparent;
   height: 3rem;

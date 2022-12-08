@@ -1,9 +1,9 @@
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 
-import { useStores, withStores } from '../../../js/stores/stores'
-import RestrictionGrounds from '../../../js/components/qvain/fields/licenses/restrictionGrounds'
-import { LabelLarge } from '../../../js/components/qvain/general/modal/form'
+import { useStores } from '@/stores/stores'
+import RestrictionGrounds from '@/components/qvain/sections/DataOrigin/general/AccessType/RestrictionGrounds'
+import { Title } from '@/components/qvain/general/V2'
 
 const mockStores = {
   Qvain: {
@@ -16,11 +16,10 @@ const mockStores = {
   },
 }
 
-jest.mock('../../../js/stores/stores', () => ({
+jest.mock('@/stores/stores', () => ({
   withStores: Component => props => <Component Stores={mockStores} {...props} />,
   useStores: jest.fn(),
 }))
-
 
 describe('given mockStores', () => {
   const harness = new Harness(RestrictionGrounds)
@@ -40,8 +39,8 @@ describe('given mockStores', () => {
 
     test('should render children with expected properties', () => {
       const children = [
-        { label: 'Label', findType: 'prop', findArgs: ['component', LabelLarge] },
-        { label: 'Select', findType: 'prop', findArgs: ['name', 'restrictionGrounds'] },
+        { label: 'Label', findArgs: { component: Title } },
+        { label: 'Select', findArgs: { name: 'restrictionGrounds' } },
         {
           label: 'InfoText',
           findType: 'prop',

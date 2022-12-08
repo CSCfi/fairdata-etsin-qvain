@@ -1,7 +1,7 @@
 import { observable, action, toJS, makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
-import { parseOrganization } from '../../../components/qvain/fields/project/utils'
+import { parseOrganization } from './qvain.project.utils'
 import { organizationArrayToMetax } from './qvain.actors'
 import { touch } from './track'
 

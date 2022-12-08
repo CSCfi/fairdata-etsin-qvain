@@ -7,10 +7,9 @@ import { Qvain, ErrorTitle } from '@/components/qvain/views/main'
 import Header from '@/components/qvain/views/headers/header'
 import StickyHeader from '@/components/qvain/views/headers/stickyHeader'
 import ErrorBoundary from '@/components/general/errorBoundary'
-import Dataset from '@/components/qvain/views/editor/dataset'
+import DatasetEditorV2 from '@/components/qvain/views/DatasetEditorV2'
 import LooseActorDialog from '@/components/qvain/views/main/looseActorDialog'
 import LooseProvenanceDialog from '@/components/qvain/views/main/looseProvenanceDialog'
-import FlaggedComponent from '@/components/general/flaggedComponent'
 import { Prompt } from 'react-router'
 import urls from '@/utils/urls'
 import { useStores } from '@/stores/stores'
@@ -112,7 +111,7 @@ describe('given required props', () => {
         { label: 'Header', findArgs: Header },
         { label: 'StickyHeader', findArgs: StickyHeader },
         { label: 'DatasetErrorBoundary', findArgs: ErrorBoundary },
-        { label: 'Dataset', findArgs: FlaggedComponent },
+        { label: 'Dataset', findArgs: DatasetEditorV2},
         { label: 'LooseActorDialog', findArgs: LooseActorDialog },
         { label: 'LooseProvenanceDialog', findArgs: LooseProvenanceDialog },
         { label: 'UnsavedChangesPrompt', findType: 'prop', findArgs: ['component', Prompt] },
@@ -131,16 +130,6 @@ describe('given required props', () => {
           title: ErrorTitle(),
           callback: harness.instance.enableRenderFailed,
         },
-        Dataset: {
-          whenDisabled: (
-            <Dataset
-              datasetError={false}
-              handleRetry={harness.instance.handleRetry}
-              haveDataset={true}
-              setFocusOnSubmitButton={harness.instance.setFocusOnSubmitButton}
-            />
-          ),
-        },
         UnsavedChangesPrompt: {
           when: mockStores.Qvain.changed,
           attributes: { message: 'qvain.unsavedChanges' },
@@ -152,13 +141,9 @@ describe('given required props', () => {
   })
 
   describe('Dataset', () => {
-    beforeAll(() => {
-      harness.restoreWrapper('Dataset')
-      harness.dive()
-      harness.storeWrapper('Dataset')
-    })
     beforeEach(() => {
-      harness.restoreWrapper('Dataset')
+      harness.shallow()
+      harness.find(DatasetEditorV2)
     })
 
     describe('when calling handleRetry', () => {
@@ -189,8 +174,7 @@ describe('given required props', () => {
 
     describe('Dataset', () => {
       beforeEach(() => {
-        harness.find(FlaggedComponent)
-        harness.dive()
+        harness.find(DatasetEditorV2)
       })
 
       describe('when calling handleRetry', () => {
@@ -213,8 +197,7 @@ describe('given required props', () => {
 
     describe('Dataset', () => {
       beforeEach(() => {
-        harness.find(FlaggedComponent)
-        harness.dive()
+        harness.find(DatasetEditorV2)
       })
 
       describe('when calling handleRetry', () => {

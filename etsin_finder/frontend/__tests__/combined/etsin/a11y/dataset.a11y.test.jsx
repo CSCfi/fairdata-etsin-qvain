@@ -17,6 +17,9 @@ import Maps from '../../../../js/components/dataset/maps'
 import Events from '../../../../js/components/dataset/events'
 import ExternalResources from '../../../../js/components/dataset/data/externalResources'
 import axios from 'axios'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 jest.mock('@/components/dataset/sidebar/special/importImages')
 

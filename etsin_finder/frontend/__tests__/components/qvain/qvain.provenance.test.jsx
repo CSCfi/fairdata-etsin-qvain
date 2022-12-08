@@ -3,30 +3,23 @@ import 'chai/register-expect'
 import ReactSelect from 'react-select'
 import translate from 'counterpart'
 
-import Provenance from '../../../js/components/qvain/fields/history/provenance'
-import ProvenanceFieldContent from '../../../js/components/qvain/fields/history/provenance/ProvenanceFieldContent'
-import { useStores } from '../../../js/stores/stores'
-import FieldList from '../../../js/components/qvain/general/section/fieldList'
-import FieldListAdd from '../../../js/components/qvain/general/section/fieldListAdd'
-import Form from '../../../js/components/qvain/fields/history/provenance/form'
-import SpatialsForm from '../../../js/components/qvain/fields/temporalAndSpatial/spatial/form'
-import UsedEntitiesForm from '../../../js/components/qvain/fields/history/relatedResource/form'
-import {
-  provenanceNameSchema,
-  provenanceDateSchema,
-} from '../../../js/stores/view/qvain/qvain.submit.schemas'
-import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
-import Durationpicker from '../../../js/components/qvain/general/input/durationpicker'
-import ActorsInput, {
-  CustomOption,
-} from '../../../js/components/qvain/fields/history/provenance/form/actorsInput'
-import LocationInput from '../../../js/components/qvain/fields/history/provenance/form/locationInput'
-import { Lifecycle, Outcome } from '../../../js/stores/view/qvain/qvain.provenances'
-import { Label } from '../../../js/components/qvain/general/modal/form'
-import ActorsList from '../../../js/components/qvain/fields/history/provenance/form/actorsList'
-import { ROLE } from '../../../js/utils/constants'
+import { Lifecycle, Outcome } from '@/stores/view/qvain/qvain.provenances'
+import { ROLE } from '@/utils/constants'
+import { Title } from '@/components/qvain/general/V2'
+import { useStores } from '@/stores/stores'
+import ActorsInput from '@/components/qvain/sections/History/Form/ActorsInput'
+import ActorsList from '@/components/qvain/sections/History/Form/ActorsList'
+import Durationpicker from '@/components/qvain/general/V2/Durationpicker'
+import FieldList from '@/components/qvain/general/V2/FieldList'
+import FieldListAdd from '@/components/qvain/general/V2/FieldListAdd'
+import Form from '@/components/qvain/sections/History/Form'
+import LocationInput from '@/components/qvain/sections/History/Form/LocationInput'
+import ModalFieldList from '@/components/qvain/general/V2/ModalFieldList'
+import ModalFieldListAdd from '@/components/qvain/general/V2/ModalFieldListAdd'
+import Provenance from '@/components/qvain/sections/History'
+import ProvenanceFieldContent from '@/components/qvain/sections/History/ProvenanceFieldContent'
 
-jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas', () => {
+jest.mock('@/stores/view/qvain/qvain.submit.schemas', () => {
   return {
     provenanceNameSchema: {
       validate: jest.fn(),
@@ -52,6 +45,10 @@ describe('Provenance', () => {
           },
           startDate: 'startDate',
           endDate: 'endDate',
+          locations: {
+            storage: [],
+            translationsRoot: 'locations translationsRoot',
+          },
         },
         save: jest.fn(),
         clearInEdit: jest.fn(),
@@ -104,16 +101,14 @@ describe('Provenance', () => {
 
       const props = {
         FieldList: {
-          Field: mockStores.Qvain.Provenances,
+          fieldName: 'Provenances',
           lang: 'en',
         },
         FieldListAdd: {
-          Store: mockStores.Qvain,
-          Field: mockStores.Qvain.Provenances,
-          Form,
+          fieldName: 'Provenances',
+          form: { Form, props: { Field: mockStores.Qvain.Provenances } },
         },
       }
-
       harness.shouldIncludeChildren(children, props)
     })
   })
@@ -140,6 +135,8 @@ describe('given required props and mockStores', () => {
           locations: {
             storage: [],
             translationsRoot: 'locations translationsRoot',
+            edit: () => {},
+            remove: () => {},
           },
           usedEntities: {
             storage: [],
@@ -187,7 +184,7 @@ describe('given required props and mockStores', () => {
 
     test('should have children with expected props', () => {
       const children = [
-        { label: 'TranslationTab', findArgs: TranslationTab },
+        { label: 'TranslationTab', findArgs: '#provenance-descriptions' },
         { label: 'NameTab', findType: 'prop', findArgs: ['datum', 'name'] },
         { label: 'DescriptionTab', findType: 'prop', findArgs: ['datum', 'description'] },
         {
@@ -228,7 +225,7 @@ describe('given required props and mockStores', () => {
         DurationPicker: {
           ...props,
           datum: 'periodOfTime',
-          language,
+          language: 'en',
           id: 'provenance-period',
         },
         OutcomeInput: {
@@ -253,15 +250,15 @@ describe('given required props and mockStores', () => {
 
   describe('LocationInput', () => {
     beforeEach(() => {
-      harness.restoreWrapper('LocationInput')
-      harness.dive()
+      harness.shallow()
+      harness.diveInto(LocationInput)
     })
 
     test('should have children with expected props', () => {
       const children = [
-        { label: 'LocationLabel', findType: 'prop', findArgs: ['component', Label] },
-        { label: 'LocationFieldList', findArgs: FieldList },
-        { label: 'LocationFieldListAdd', findArgs: FieldListAdd },
+        { label: 'LocationLabel', findType: 'prop', findArgs: ['component', Title] },
+        { label: 'LocationFieldList', findArgs: ModalFieldList },
+        { label: 'LocationFieldListAdd', findArgs: ModalFieldListAdd },
       ]
 
       const translationsRoot = 'locations translationsRoot'
@@ -270,16 +267,6 @@ describe('given required props and mockStores', () => {
         LocationLabel: {
           content: `${translationsRoot}.label`,
           htmlFor: 'location-input',
-        },
-        LocationFieldList: {
-          Field: mockStores.Qvain.Provenances.inEdit.locations,
-          disableNoItemsText: true,
-        },
-        LocationFieldListAdd: {
-          Field: mockStores.Qvain.Provenances.inEdit.locations,
-          Form: SpatialsForm,
-          position: 'left',
-          hideButton: false,
         },
       }
 
@@ -291,45 +278,23 @@ describe('given required props and mockStores', () => {
     const createButtonTranslation = 'createButton translation'
     beforeEach(() => {
       translate.mockReturnValue(createButtonTranslation)
-      harness.restoreWrapper('ActorsInput')
-      harness.dive()
+      harness.shallow()
+      harness.diveInto(ActorsInput)
     })
 
     test('should have children with expected props', () => {
       const children = [
-        { label: 'ActorsLabel', findType: 'prop', findArgs: ['component', Label] },
+        { label: 'ActorsLabel', findType: 'prop', findArgs: ['component', Title] },
         { label: 'ActorsList', findArgs: ActorsList },
         { label: 'ActorsSelect', findType: 'prop', findArgs: ['component', ReactSelect] },
       ]
 
-      const { inEdit, associationsTranslationsRoot } = mockStores.Qvain.Provenances
+      const { associationsTranslationsRoot } = mockStores.Qvain.Provenances
 
       const expectedProps = {
         ActorsLabel: {
           content: `${associationsTranslationsRoot}.label`,
           htmlFor: 'actors-input',
-        },
-        ActorsList: {
-          language: 'en',
-          actors: inEdit.associations,
-          items: [],
-        },
-        ActorsSelect: {
-          inputId: 'actors-select',
-          attributes: { placeholder: `${associationsTranslationsRoot}.placeholder` },
-          options: [
-            {
-              label: createButtonTranslation,
-              value: 'create-actor',
-            },
-          ],
-          components: { Option: CustomOption },
-          value: inEdit.selectedActor,
-          menuPlacement: 'auto',
-          menuPosition: 'fixed',
-          menuShouldScrollIntoView: false,
-          isClearable: true,
-          isDisabled: false,
         },
       }
 
@@ -339,7 +304,9 @@ describe('given required props and mockStores', () => {
 
   describe('ActorsSelect', () => {
     beforeEach(() => {
-      harness.restoreWrapper('ActorsSelect')
+      harness.shallow()
+      harness.diveInto(ActorsInput)
+      harness.diveInto({ component: ReactSelect })
     })
 
     describe('when triggering onChange with create-actor', () => {

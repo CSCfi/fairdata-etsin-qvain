@@ -12,8 +12,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useStores } from '@/stores/stores'
-import formatAge from '../datasets/formatAge'
-import { getDatasetActionsV2 } from '../datasets/datasetActions'
+import formatAge from './formatAge'
+import { getDatasetActionsV2 } from './datasetActions'
 import { Dropdown, DropdownItem } from '@/components/general/dropdown'
 import { DatasetStateTag } from './tags'
 

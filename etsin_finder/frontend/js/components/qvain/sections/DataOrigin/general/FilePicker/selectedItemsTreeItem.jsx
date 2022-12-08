@@ -102,6 +102,7 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
           icon={faTimes}
           color={removeColor}
           onClick={removeAction}
+          className="remove-item"
           attributes={{ 'aria-label': `qvain.files.selected.buttons.${removeAriaLabel}` }}
           with={{ name }}
         />

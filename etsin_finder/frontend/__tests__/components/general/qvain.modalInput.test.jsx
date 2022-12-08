@@ -5,8 +5,8 @@ import 'chai/register-expect'
 import ModalInput, {
   ModalError,
   ModalInputElem,
-} from '../../../js/components/qvain/general/modal/modalInput'
-import { Label } from '../../../js/components/qvain/general/modal/form'
+} from '@/components/qvain/general/V2/ModalInput'
+import { Required, Title } from '@/components/qvain/general/V2'
 
 describe('ModalInput', () => {
   let wrapper
@@ -21,8 +21,7 @@ describe('ModalInput', () => {
   }
 
   const getTranslations = props => ({
-    label: `${props.translationsRoot}.modal.${props.datum}Input.label`,
-    placeholder: `${props.translationsRoot}.modal.${props.datum}Input.placeholder`,
+    label: `${props.translationsRoot}.datum.label`,
   })
 
   const render = extraProps => {
@@ -41,11 +40,11 @@ describe('ModalInput', () => {
       wrapper.exists().should.be.true
     })
 
-    describe('Label', () => {
+    describe('Title', () => {
       let label
 
       beforeEach(() => {
-        label = wrapper.find(Label)
+        label = wrapper.find(Title)
       })
 
       test('should have <Translate content={translations.label} />', () => {
@@ -68,9 +67,8 @@ describe('ModalInput', () => {
       test('should have expectedProps', () => {
         const expectedProps = {
           type: 'text',
-          id: `${props.datum}Field`,
+          id: `${props.datum}-field`,
           autoFocus: true,
-          attributes: { placeholder: getTranslations(props).placeholder },
           disabled: undefined,
           value: '',
         }
@@ -128,15 +126,15 @@ describe('ModalInput', () => {
       render({ isRequired })
     })
 
-    describe('Label', () => {
+    describe('Title', () => {
       let label
 
       beforeEach(() => {
-        label = wrapper.find(Label)
+        label = wrapper.find(Title)
       })
 
       test("should render '*'", () => {
-        label.text().should.include('*')
+        label.find(Required).should.exist
       })
     })
   })

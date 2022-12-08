@@ -11,10 +11,13 @@ import etsinTheme from '../../../../js/styles/theme'
 import dataset from '../../../__testdata__/dataset.att'
 import { getReferenceData } from '../../../__testdata__/referenceData.data'
 import { useStores, StoresProvider } from '../../../../js/stores/stores'
-import Spatial from '../../../../js/components/qvain/fields/temporalAndSpatial/spatial/SpatialFieldContent'
+import Spatial from '../../../../js/components/qvain/sections/Geographics/SpatialFieldContent'
 import Modal from '../../../../js/components/general/modal'
-import { EditButton } from '../../../../js/components/qvain/general/buttons/iconButtons'
+import { EditButton } from '../../../../js/components/qvain/general/V2/buttons'
 import { buildStores } from '../../../../js/stores'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 // Make sure MobX store values are not mutated outside actions.
 configure({

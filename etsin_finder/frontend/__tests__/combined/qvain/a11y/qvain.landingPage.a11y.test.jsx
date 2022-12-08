@@ -9,6 +9,9 @@ import '../../../../locale/translations'
 import stores from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import LandingPage from '../../../../js/components/qvain/views/landingPage/index.jsx'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 describe('Qvain landing page', () => {
   let wrapper

@@ -7,13 +7,7 @@ exports[`Qvain.Actors should render correctly 1`] = `
       "tooltipContent": [Function],
     }
   }
-  isRequired={true}
-  translations={
-    Object {
-      "title": "qvain.actors.title",
-      "tooltip": "qvain.actors.infoTitle",
-    }
-  }
+  sectionName="Actors"
 >
   <ActorModalBase />
   <withFieldErrorBoundary(ActorsField) />

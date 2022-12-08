@@ -38,14 +38,7 @@ const actors = {
       provenance: 'Provenance',
     },
     name: {
-      placeholder: {
-        // V1
-        organization: 'Nimi',
-        person: 'Etu- ja sukunimi',
-        manualOrganization: 'Syötä organisaation nimi',
-      },
       infoText: {
-        // V2
         organization: 'Name',
         person: 'First and last name',
         manualOrganization: 'Enter name of the organization',
@@ -60,13 +53,7 @@ const actors = {
     },
     identifier: {
       label: 'Identifier',
-      placeholder: {
-        // V1
-        person: 'E.g. http://orcid.org.',
-        organization: 'E.g RAID-identifier or Business ID',
-      },
       infoText: {
-        // V2
         person:
           'E.g. http://orcid.org. It is recommended to use persistent identifiers, if available',
         organization:

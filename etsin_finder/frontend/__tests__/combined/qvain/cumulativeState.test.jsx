@@ -13,9 +13,10 @@ import QvainClass from '../../../js/stores/view/qvain'
 import LocaleClass from '../../../js/stores/view/locale'
 import AccessibilityClass from '../../../js/stores/view/accessibility'
 import ElasticQueryClass from '../../../js/stores/view/elasticquery'
-import CumulativeState, {
+
+import CumulativeDataset, {
   CumulativeStateButton,
-} from '../../../js/components/qvain/fields/files/cumulativeState'
+} from '../../../js/components/qvain/sections/DataOrigin/IdaCatalog/CumulativeDataset'
 import { useStores, StoresProvider } from '../../../js/stores/stores'
 
 jest.mock('axios')
@@ -75,14 +76,14 @@ const dataset = {
   },
 }
 
-describe('Qvain CumulativeState', () => {
+describe('Qvain CumulativeDataset', () => {
   beforeEach(() => {
     useStores.mockReturnValue(stores)
     Qvain.resetQvainStore()
   })
 
   it('shows radio buttons for new dataset', () => {
-    const component = shallow(<CumulativeState />, <StoresProvider store={stores} />)
+    const component = shallow(<CumulativeDataset />, <StoresProvider store={stores} />)
     expect(component.find('#cumulativeStateNo').prop('checked')).toBe(true)
     expect(component.find('#cumulativeStateYes').prop('checked')).toBe(false)
   })
@@ -90,7 +91,7 @@ describe('Qvain CumulativeState', () => {
   it('shows radio buttons with state set to false for draft', async () => {
     const { editDataset } = Qvain
     await editDataset(dataset)
-    const component = shallow(<CumulativeState />, <StoresProvider store={stores} />)
+    const component = shallow(<CumulativeDataset />, <StoresProvider store={stores} />)
     expect(component.find('#cumulativeStateNo').prop('checked')).toBe(true)
     expect(component.find('#cumulativeStateYes').prop('checked')).toBe(false)
   })
@@ -98,7 +99,7 @@ describe('Qvain CumulativeState', () => {
   it('shows radio buttons with state set to true for draft', async () => {
     const { editDataset } = Qvain
     await editDataset({ ...dataset, cumulative_state: CUMULATIVE_STATE.YES })
-    const component = shallow(<CumulativeState />, <StoresProvider store={stores} />)
+    const component = shallow(<CumulativeDataset />, <StoresProvider store={stores} />)
     expect(component.find('#cumulativeStateNo').prop('checked')).toBe(false)
     expect(component.find('#cumulativeStateYes').prop('checked')).toBe(true)
   })
@@ -110,7 +111,7 @@ describe('Qvain CumulativeState', () => {
       cumulative_state: CUMULATIVE_STATE.NO,
       draft_of: { identifier: 1 },
     })
-    const component = shallow(<CumulativeState />, <StoresProvider store={stores} />)
+    const component = shallow(<CumulativeDataset />, <StoresProvider store={stores} />)
     expect(component.find(CumulativeStateButton).length).toBe(0)
 
     await editDataset({
@@ -133,7 +134,7 @@ describe('Qvain CumulativeState', () => {
       <StoresProvider store={stores}>
         <BrowserRouter>
           <ThemeProvider theme={etsinTheme}>
-            <CumulativeState />
+            <CumulativeDataset />
           </ThemeProvider>
         </BrowserRouter>
       </StoresProvider>

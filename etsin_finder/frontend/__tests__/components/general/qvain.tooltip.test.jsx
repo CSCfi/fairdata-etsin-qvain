@@ -10,7 +10,7 @@ import Tooltip, {
   TooltipArrowUp,
   TooltipDown,
   TooltipArrowDown,
-} from '../../../js/components/qvain/general/section/tooltip'
+} from '../../../js/components/qvain/general/V2/Tooltip'
 import 'chai/register-expect'
 
 jest.spyOn(window, 'addEventListener')

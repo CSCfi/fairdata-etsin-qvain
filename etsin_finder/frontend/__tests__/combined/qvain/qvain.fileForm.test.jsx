@@ -5,15 +5,15 @@ import axios from 'axios'
 import { configure } from 'mobx'
 
 import '../../../locale/translations'
-import { buildStores } from '../../../js/stores'
+import { buildStores } from '@/stores'
 import { getReferenceData } from '../../__testdata__/referenceData.data'
-import { StoresProvider } from '../../../js/stores/stores'
-import etsinTheme from '../../../js/styles/theme'
-import FileForm from '../../../js/components/qvain/fields/files/ida/forms/fileForm'
-import DirectoryForm from '../../../js/components/qvain/fields/files/ida/forms/directoryForm'
-import { File, Directory, Project } from '../../../js/stores/view/common.files.items'
-import { SaveButton } from '../../../js/components/qvain/general/buttons'
-import { ValidationErrors } from '../../../js/components/qvain/general/errors/validationError'
+import { StoresProvider } from '@/stores/stores'
+import etsinTheme from '@/styles/theme'
+import FileForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/fileForm'
+import DirectoryForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/directoryForm'
+import { File, Directory, Project } from '@/stores/view/common.files.items'
+import { SaveButton } from '@/components/qvain/general/buttons'
+import { ValidationErrors } from '@/components/qvain/general/errors/validationError'
 
 const getStores = () => {
   configure({ safeDescriptors: false })

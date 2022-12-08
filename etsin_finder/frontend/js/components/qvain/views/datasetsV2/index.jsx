@@ -10,7 +10,7 @@ import { SaveButton } from '../../general/buttons'
 import NoticeBar from '../../../general/noticeBar'
 import Tabs from './tabs'
 import Table from './table'
-import RemoveModal from '../datasets/removeModal'
+import RemoveModal from './removeModal'
 import ShareModal from './ShareModal'
 import Search from './search'
 

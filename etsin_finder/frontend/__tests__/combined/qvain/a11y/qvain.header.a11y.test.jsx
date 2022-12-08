@@ -9,6 +9,9 @@ import '../../../../locale/translations'
 import stores from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import QvainHeader from '../../../../js/components/qvain/general/header'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 describe('Qvain header', () => {
   let wrapper

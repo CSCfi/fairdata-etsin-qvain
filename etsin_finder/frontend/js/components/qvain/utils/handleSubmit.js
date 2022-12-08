@@ -26,9 +26,7 @@ const handleSubmitToBackend = values => {
 
   const accessType = values.AccessType.toBackend()
 
-  const projects = values.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')
-    ? values.ProjectV2.toBackend()
-    : values.Projects.toBackend()
+  const projects = values.ProjectV2.toBackend()
 
   const license = values.Licenses.toBackend()
 

@@ -16,7 +16,7 @@ import { darken } from 'polished'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { HelpIcon } from '../qvain/general/modal/form'
-import Tooltip from '../qvain/general/section/tooltip'
+import Tooltip from '../qvain/general/V2/Tooltip'
 import Button from '../general/button'
 
 const Wrapper = styled.div`

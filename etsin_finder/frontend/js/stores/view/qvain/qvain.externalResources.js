@@ -14,10 +14,6 @@ class ExternalResources extends Field {
 
   translationsRoot = 'qvain.files.remoteResources'
 
-  // v1
-  externalResourceSchema = externalResourceSchema
-
-  // v2
   schema = externalResourceSchema
 
   @action
@@ -48,16 +44,10 @@ class ExternalResources extends Field {
   @override
   reset() {
     super.reset()
-    if (!this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')) {
-      this.inEdit = ExternalResource()
-    }
   }
 
   @override clearInEdit() {
     super.clearInEdit()
-    if (!this.Parent.Env.Flags.flagEnabled('QVAIN.EDITOR_V2')) {
-      this.inEdit = ExternalResource()
-    }
   }
 
   @override async validateAndSave() {

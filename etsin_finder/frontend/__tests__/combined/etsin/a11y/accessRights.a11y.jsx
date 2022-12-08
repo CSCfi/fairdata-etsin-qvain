@@ -11,6 +11,9 @@ import { StoresProvider } from '../../../../js/stores/stores'
 import dataset from '../../../__testdata__/dataset.att'
 import AccessRights from '../../../../js/components/dataset/accessRights'
 import Modal from '../../../../js/components/general/modal'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 jest.mock('../../../../js/stores/view/accessibility')
 

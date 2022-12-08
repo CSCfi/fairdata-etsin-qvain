@@ -17,7 +17,7 @@ import {
   DatePicker,
   handleDatePickerChange,
   getDateFormatLocale,
-} from '@/components/qvain/general/input/datepicker'
+} from '@/components/qvain/general/V2/Datepicker'
 import Tooltip from '@/components/general/tooltipHover'
 import { useStores } from '@/stores/stores'
 

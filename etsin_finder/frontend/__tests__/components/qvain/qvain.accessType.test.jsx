@@ -1,15 +1,17 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import axios from 'axios'
 import { configure } from 'mobx'
+import Select, { Option } from 'react-select'
 
-import { AccessType } from '@/components/qvain/fields/licenses/accessType'
+import AccessType from '@/components/qvain/sections/DataOrigin/general/AccessType'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { buildStores } from '@/stores'
 import { onChange } from '@/components/qvain/utils/select'
 
 import accessTypeResponse from '../../__testdata__/accessTypes.data'
 import '../../../locale/translations'
+import { StoresProvider } from '../../../js/stores/stores'
 
 configure({
   safeDescriptors: false,
@@ -27,7 +29,12 @@ jest.mock('@/components/qvain/utils/select', () => {
 
 describe('Qvain Access Type', () => {
   let Stores, Auth, Qvain
-  let component, options
+  let component
+
+  const getOptions = () => {
+    component.update()
+    return component.find('Select').first().prop('options')
+  }
 
   beforeEach(() => {
     Stores = buildStores()
@@ -42,9 +49,11 @@ describe('Qvain Access Type', () => {
 
   const setAuthUserAndRender = async (userSettings = {}) => {
     Auth.setUser({ ...Auth.user, ...userSettings })
-    component = shallow(<AccessType Stores={Stores} />)
-    await Promise.resolve()
-    options = component.instance().state.options
+    component = mount(
+      <StoresProvider store={Stores}>
+        <AccessType />
+      </StoresProvider>
+    )
   }
 
   describe('given AccessType is OPEN and isUsingRems is false ', () => {
@@ -54,6 +63,7 @@ describe('Qvain Access Type', () => {
     })
 
     it('restricts which access types are shown', async () => {
+      const options = getOptions()
       expect(options.length).toBe(4)
       expect(options.filter(opt => opt.url === ACCESS_TYPE_URL.PERMIT).length).toBe(0)
     })
@@ -71,12 +81,13 @@ describe('Qvain Access Type', () => {
     })
 
     it('always allows the current access type', async () => {
+      const options = getOptions()
       expect(options.length).toBe(5)
       expect(options.filter(opt => opt.url === ACCESS_TYPE_URL.PERMIT).length).toBe(1)
     })
 
     it('renders permitInfo', () => {
-      const permitInfo = component.find('accessType__PermitHelp')
+      const permitInfo = component.find('AccessType__PermitHelp')
       expect(permitInfo.exists()).toBe(true)
     })
   })
@@ -88,6 +99,7 @@ describe('Qvain Access Type', () => {
     })
 
     it('shows all access type options', async () => {
+      const options = getOptions()
       expect(options.length).toBe(5)
       expect(options.filter(opt => opt.url === ACCESS_TYPE_URL.PERMIT).length).toBe(1)
     })
@@ -112,12 +124,12 @@ describe('Qvain Access Type', () => {
       Qvain.AccessType.setValidationError = jest.fn()
       Qvain.AccessType.validate = jest.fn()
       await setAuthUserAndRender()
-      select = component.find('Translate').at(1) // aka Select
+      select = component.find(Select).find('input#accessTypeSelect')
     })
 
     describe('when triggering onChange', () => {
       beforeEach(() => {
-        select.simulate('change')
+        component.find('Select').instance().selectOption({ label: '...', value: 50 })
       })
 
       it('should call onChange', () => {

@@ -9,6 +9,9 @@ import '../../../../locale/translations'
 import dataset from '../../../__testdata__/dataset.att'
 import Contact from '../../../../js/components/dataset/contact'
 import Modal from '../../../../js/components/general/modal'
+import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+failTestsWhenTranslationIsMissing()
 
 const emailInfo = {
   CONTRIBUTOR: true,

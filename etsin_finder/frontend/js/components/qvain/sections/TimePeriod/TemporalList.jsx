@@ -25,11 +25,11 @@ const getTranslationItem = (item, lang) => ({
 
 const getTranslationPath = item => {
   if (item.startDate && !item.endDate)
-    return 'qvain.temporalAndSpatial.temporal.listItem.startDateOnly'
+    return 'qvain.timePeriod.listItem.startDateOnly'
   if (!item.startDate && item.endDate)
-    return 'qvain.temporalAndSpatial.temporal.listItem.endDateOnly'
+    return 'qvain.timePeriod.listItem.endDateOnly'
 
-  return 'qvain.temporalAndSpatial.temporal.listItem.bothDates'
+  return 'qvain.timePeriod.listItem.bothDates'
 }
 
 const TemporalList = ({ temporals, lang, remove, readonly }) =>

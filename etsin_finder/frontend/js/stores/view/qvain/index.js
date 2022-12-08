@@ -3,7 +3,6 @@ import {
   cumulativeStateSchema,
   useDoiSchema,
   dataCatalogSchema,
-  externalResourceSchema,
 } from './qvain.dataCatalog.schemas'
 import {
   CUMULATIVE_STATE,
@@ -37,8 +36,6 @@ class Qvain extends Resources {
   useDoiSchema = useDoiSchema
 
   dataCatalogSchema = dataCatalogSchema
-
-  externalResourceSchema = externalResourceSchema
 
   @observable original = undefined // used if editing, otherwise undefined
 

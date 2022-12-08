@@ -2,12 +2,12 @@ import React from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-export const ModalHeader = styled.h3`
+export const ModalHeader = styled.h2`
   display: flex;
   justify-content: center;
   line-height: 1.25;
 `
-export const ModalLabel = styled.h4`
+export const ModalLabel = styled.h3`
   font-weight: 700;
   font-size: 1.125rem;
   line-height: 1rem;
@@ -15,7 +15,7 @@ export const ModalLabel = styled.h4`
   margin-bottom: 0;
 `
 
-export const Title = styled.h4`
+export const Title = styled.label`
   font-size: 1.125rem;
   font-style: normal;
   font-weight: 400;

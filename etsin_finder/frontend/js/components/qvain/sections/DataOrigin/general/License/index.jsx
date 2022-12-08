@@ -140,7 +140,9 @@ export class License extends Component {
           onChange={this.onChange}
           createOptionPosition="first"
           getNewOptionData={this.createLicense}
-          attributes={{ placeholder: 'qvain.rightsAndLicenses.license.placeholder' }}
+          attributes={{
+            placeholder: 'qvain.rightsAndLicenses.license.placeholder',
+          }}
           styles={styles}
           aria-autocomplete="list"
         />

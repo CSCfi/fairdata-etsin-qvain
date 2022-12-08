@@ -5,17 +5,11 @@ import axios from 'axios'
 
 import etsinTheme from '@/styles/theme'
 import PasState from '@/components/qvain/views/headers/pasState'
-import DescriptionField from '@/components/qvain/fields/description/titleAndDescription'
-import OtherIdentifierField from '@/components/qvain/fields/description/otherIdentifier'
-import FieldOfScienceField from '@/components/qvain/fields/description/fieldOfScience'
-import KeywordsField from '@/components/qvain/fields/description/keywords'
-import License from '@/components/qvain/fields/licenses/licenses'
-import AccessType from '@/components/qvain/fields/licenses/accessType'
-import FileForm from '@/components/qvain/fields/files/ida/forms/fileForm'
-import DirectoryForm from '@/components/qvain/fields/files/ida/forms/directoryForm'
+import FileForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/fileForm'
+import DirectoryForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/directoryForm'
 import { File, Directory, Project } from '@/stores/view/common.files.items'
 
-import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
+import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { metaxResponses } from '../../__testdata__/qvainPas.data'
 import '../../../locale/translations'
 
@@ -78,91 +72,6 @@ describe('Qvain.PasState', () => {
     wrapper = render(stores)
     expect(wrapper.find(PasState).text().includes('80:')).toBe(false)
     expect(wrapper.find(PasState).text().includes('0:')).toBe(true)
-  })
-})
-
-describe('Qvain.Description', () => {
-  const render = stores => {
-    stores.Qvain.Keywords.set(['key', 'word'])
-    return mount(
-      <StoresProvider store={stores}>
-        <ThemeProvider theme={etsinTheme}>
-          <>
-            <DescriptionField />
-            <OtherIdentifierField />
-            <FieldOfScienceField />
-            <KeywordsField />
-          </>
-        </ThemeProvider>
-      </StoresProvider>
-    )
-  }
-
-  it('prevents editing of description fields', () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(80)
-
-    wrapper = render(stores)
-    const inputs = wrapper.find('input').not('[type="hidden"]')
-    expect(inputs.length).toBe(4)
-    inputs.forEach(c => expect(c.props().disabled).toBe(true))
-    wrapper.unmount()
-  })
-
-  it('allows editing of description fields', () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(0)
-
-    wrapper = render(stores)
-    const inputs = wrapper.find('input').not('[type="hidden"]')
-    expect(inputs.length).toBe(4)
-    inputs.forEach(c => expect(c.props().disabled).toBe(false))
-  })
-})
-
-describe('Qvain.RightsAndLicenses', () => {
-  const render = stores => {
-    stores.Qvain.Licenses.set([
-      stores.Qvain.Licenses.Model({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'other'),
-    ])
-    stores.Qvain.AccessType.set(
-      stores.Qvain.AccessType.Model({ en: 'Embargo' }, ACCESS_TYPE_URL.EMBARGO)
-    )
-    const wrapper = mount(
-      <StoresProvider store={stores}>
-        <ThemeProvider theme={etsinTheme}>
-          <>
-            <License />
-            <AccessType />
-          </>
-        </ThemeProvider>
-      </StoresProvider>
-    )
-    return wrapper
-  }
-
-  it('prevents editing of rights and license fields', () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(80)
-
-    wrapper = render(stores)
-    const inputs = wrapper.find('input').not('[type="hidden"]')
-
-    // Expect inputs: license, access type, restriction grounds, embargo expires
-    expect(inputs.length).toBe(4)
-    inputs.forEach(c => expect(c.props().disabled).toBe(true))
-  })
-
-  it('allows editing of rights and license fields', () => {
-    const stores = getStores()
-    stores.Qvain.setPreservationState(130)
-
-    wrapper = render(stores)
-    const inputs = wrapper.find('input').not('[type="hidden"]')
-
-    // Expect inputs: license, access type, restriction grounds, embargo expires
-    expect(inputs.length).toBe(4)
-    inputs.forEach(c => expect(c.props().disabled).toBe(false))
   })
 })
 
@@ -264,7 +173,7 @@ describe('Qvain.Files', () => {
     wrapper = render(stores, true)
 
     const inputs = wrapper.find('input').not('[type="hidden"]')
-    expect(inputs.length).toBe(2)
+    expect(inputs.length).toBe(3)
     inputs.forEach(c => expect(c.props().disabled).toBe(true))
 
     const textareas = wrapper.find('textarea').not('[type="hidden"]')
@@ -279,7 +188,7 @@ describe('Qvain.Files', () => {
     wrapper = render(stores, true)
 
     const inputs = wrapper.find('input').not('[type="hidden"]')
-    expect(inputs.length).toBe(2)
+    expect(inputs.length).toBe(3)
     inputs.forEach(c => expect(c.props().disabled).toBe(false))
 
     const textareas = wrapper.find('textarea').not('[type="hidden"]')

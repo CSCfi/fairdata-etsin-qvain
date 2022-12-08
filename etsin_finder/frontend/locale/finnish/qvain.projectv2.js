@@ -72,6 +72,15 @@ const project = {
     infoText:
       'Uniikki rahoitustunniste (tai rahoituspäätöksen tunniste). On suositeltavaa käyttää pysyviä tunnisteita, jos saatavilla.',
   },
+  inputs: {
+    organization: {
+      levels: {
+        organization: 'Organisaatio',
+        department: 'Yksikkö',
+        subdepartment: 'Aliyksikkö',
+      },
+    },
+  },
 }
 
 export default project

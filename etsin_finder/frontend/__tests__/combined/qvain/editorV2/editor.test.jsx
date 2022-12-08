@@ -43,7 +43,6 @@ describe('EditorV2', () => {
 
   beforeAll(() => {
     stores = buildStores()
-    stores.Env.Flags.setFlag('QVAIN.EDITOR_V2', true)
   })
 
   beforeEach(() => {

@@ -28,11 +28,12 @@ export default class ComponentTestHarness {
         <this.Component {...parsedProps} />
       </ThemeProvider>
     )
+    this.wrappers.root = this.wrapper
     return this
   }
 
-  unmount = async () => {
-    this.wrapper.unmount()
+  unmount = () => {
+    this.wrappers.root.unmount()
     return this
   }
 

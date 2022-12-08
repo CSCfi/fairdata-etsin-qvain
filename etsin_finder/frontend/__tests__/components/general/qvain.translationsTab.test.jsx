@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import 'chai/register-expect'
 
-import TranslationTab from '../../../js/components/qvain/general/input/translationTab'
+import TranslationTab from '../../../js/components/qvain/general/V2/TranslationTab'
 import { buildStores } from '../../../js/stores'
 import { useStores } from '../../../js/stores/stores'
 
@@ -31,7 +31,7 @@ describe('TranslationsTab', () => {
 
     describe('primary tab', () => {
       beforeEach(() => {
-        tab = wrapper.find('#primary-tab')
+        tab = wrapper.find('#tab-en')
       })
 
       test('should exist', () => {
@@ -61,7 +61,7 @@ describe('TranslationsTab', () => {
 
     describe('secondary tab', () => {
       beforeEach(() => {
-        tab = wrapper.find('#secondary-tab')
+        tab = wrapper.find('#tab-fi')
       })
 
       test('should exist', () => {

@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import 'chai/register-should'
 
-import SearchSelect from '../../../js/components/qvain/general/input/searchSelect'
+import SearchSelect from '../../../js/components/qvain/general/V2/SearchSelect'
 import { useStores } from '../../../js/stores/stores'
 import {
   onChange,
@@ -58,7 +58,6 @@ describe('SearchSelect', () => {
   test('props should include expectedProps', () => {
     const expectedProps = {
       inputId: `${name}-select`,
-      placeholder: 'qvain.select.searchPlaceholder',
       isDisabled: Stores.Qvain.readonly,
       value: undefined,
     }
@@ -68,11 +67,6 @@ describe('SearchSelect', () => {
 
   test('given isMulti is false (set by defaultProps), onChange should have been called with setter', () => {
     expect(onChange).toHaveBeenCalledWith(setter)
-  })
-
-  test('when called prop styles.placeholder should return {color: etsinTheme.color.gray}', () => {
-    const returnValue = select.prop('styles').placeholder()
-    returnValue.should.eql({ color: etsinTheme.color.gray })
   })
 
   test('getOptionLabel should have been called with model and Stores.Locale.lang', () => {

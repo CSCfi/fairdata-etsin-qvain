@@ -12,7 +12,7 @@ import {
 } from './buttons'
 import { useStores } from '@/stores/stores'
 
-const FieldList = ({ storage, edit, remove, readonly, translationsRoot, disableNoItemsText }) => {
+const ModalFieldList = ({ storage, edit, remove, readonly, translationsRoot, disableNoItemsText }) => {
   const {
     Locale: { getValueTranslation, lang },
   } = useStores()
@@ -45,7 +45,7 @@ const FieldList = ({ storage, edit, remove, readonly, translationsRoot, disableN
   ))
 }
 
-FieldList.propTypes = {
+ModalFieldList.propTypes = {
   storage: PropTypes.array.isRequired,
   edit: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
@@ -54,7 +54,7 @@ FieldList.propTypes = {
   disableNoItemsText: PropTypes.bool,
 }
 
-FieldList.defaultProps = {
+ModalFieldList.defaultProps = {
   disableNoItemsText: false,
 }
 
@@ -71,4 +71,4 @@ export const FieldListLabel = styled(ButtonLabel)`
   word-break: break-word;
 `
 
-export default observer(FieldList)
+export default observer(ModalFieldList)

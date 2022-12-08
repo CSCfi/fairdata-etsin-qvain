@@ -14,12 +14,10 @@ import ErrorBoundary from '../../../general/errorBoundary'
 import urls from '@/utils/urls'
 import Header from '../headers/header'
 import StickyHeader from '../headers/stickyHeader'
-import Dataset from '../editor/dataset'
 import DatasetEditorV2 from '../DatasetEditorV2'
 import LooseActorDialog from './looseActorDialog'
 import LooseProvenanceDialog from './looseProvenanceDialog'
 import { withStores } from '@/stores/stores'
-import FlaggedComponent from '@/components/general/flaggedComponent'
 
 // Event handler to prevent page reload
 const confirmReload = e => {
@@ -255,12 +253,7 @@ export class Qvain extends Component {
         <StickyHeader {...this.getStickyHeaderProps()} datasetLoading />
 
         <ErrorBoundary title={ErrorTitle()} callback={this.enableRenderFailed}>
-          <FlaggedComponent
-            flag="QVAIN.EDITOR_V2"
-            whenDisabled={<Dataset {...this.getDatasetProps()} />}
-          >
-            <DatasetEditorV2 {...this.getDatasetProps()} />
-          </FlaggedComponent>
+          <DatasetEditorV2 {...this.getDatasetProps()} />
         </ErrorBoundary>
         <LooseActorDialog />
         <LooseProvenanceDialog />

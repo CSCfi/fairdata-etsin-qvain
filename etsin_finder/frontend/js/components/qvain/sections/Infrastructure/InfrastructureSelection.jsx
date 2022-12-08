@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import Select from '@/components/qvain/general/input/select'
+import Select from '@/components/qvain/general/V2/Select'
 
 import { useStores } from '@/stores/stores'
 import { FieldGroup, InfoText, InfoTextLarge } from '@/components/qvain/general/V2'
@@ -22,7 +22,8 @@ const InfrastructureSelection = () => {
   return (
     <FieldGroup>
       <Translate component={InfoTextLarge} content="qvain.infrastructure.addingDisabled" />
-      <Select
+      <Translate
+        component={Select}
         inputId="infrastructure-select"
         name="infrastructure"
         getter={storage}
@@ -32,6 +33,7 @@ const InfrastructureSelection = () => {
         model={Model}
         metaxIdentifier="research_infra"
         filterFunc={usedInfrasFilter}
+        attributes={{ 'aria-label': 'qvain.infrastructure.selectInfoText' }}
       />
       <Translate component={InfoText} content="qvain.infrastructure.selectInfoText" />
     </FieldGroup>
