@@ -1,2 +1,4 @@
-__tests__/**
+__tests__/**/*.js
+__tests__/**/*.jsx
+!/__tests__/**/*.rtl.*
 static/**

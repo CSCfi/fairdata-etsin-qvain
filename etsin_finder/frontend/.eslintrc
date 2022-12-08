@@ -67,5 +67,11 @@
     "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
   },
   "extends": ["airbnb", "prettier"],
-  "globals": { "BUILD": "readonly" }
+  "globals": { "BUILD": "readonly" },
+  "overrides": [
+    {
+      "files": ["**/__tests__/**/*.[jt]s?(x)"],
+      "extends": ["plugin:testing-library/react"]
+    }
+  ]
 }
