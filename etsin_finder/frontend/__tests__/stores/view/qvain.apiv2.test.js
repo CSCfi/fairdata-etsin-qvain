@@ -1,5 +1,5 @@
 /*
- * @jest-environment node
+ * @jest-environment ./__tests__/timezonedNodeEnvironment.js
  */
 
 /*
