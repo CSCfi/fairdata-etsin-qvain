@@ -10,12 +10,11 @@
 
 import axios from 'axios'
 import { action, computed, makeObservable, observable } from 'mobx'
-import { RouterStore } from 'mobx-react-router'
+import RouterStore from '@/utils/RouterStore'
 
 import Flags from './env.flags'
 
 import { getCookieValue } from '../../utils/cookies'
-
 
 async function importValuesAsync() {
   const response = await axios.get('/api/app_config')
@@ -26,9 +25,7 @@ class Env {
   constructor() {
     makeObservable(this)
     this.Flags = new Flags()
-
-    // using makeObservable for RouterStore fixes missing mobx 6 support in mobx-react-router
-    this.history = makeObservable(new RouterStore())
+    this.history = new RouterStore()
   }
 
   @observable etsinHost = ''

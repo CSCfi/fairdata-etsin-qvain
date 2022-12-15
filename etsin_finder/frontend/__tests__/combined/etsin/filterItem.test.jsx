@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom' // eslint-disable-line no-unused-vars
 import { mount } from 'enzyme'
 import { MemoryRouter } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
-import { syncHistoryWithStore } from 'mobx-react-router'
 
 import FilterItem from '../../../js/components/search/filterResults/filterItem'
 import { buildStores } from '../../../js/stores'
@@ -12,7 +11,7 @@ const mockStores = buildStores()
 
 // Syncing history with store
 const browserHistory = createBrowserHistory()
-const history = syncHistoryWithStore(browserHistory, mockStores.Env.history)
+mockStores.Env.history.syncWithHistory(browserHistory)
 
 jest.mock('../../../js/stores/stores', () => ({
   withStores: Component => props => <Component Stores={mockStores} {...props} />,

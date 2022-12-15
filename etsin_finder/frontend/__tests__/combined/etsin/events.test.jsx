@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { observable } from 'mobx'
 
+import dateFormat from '@/utils/dateFormat'
 import etsinTheme from '@/styles/theme'
 import '@/../locale/translations'
 import { buildStores } from '@/stores'
@@ -77,21 +78,21 @@ describe('Events page', () => {
       {
         Event: 'Checked',
         Who: 'Aalto University',
-        When: 'February 3, 2021, 02:00 AM – February 23, 2021, 02:00 AM',
+        When: `${dateFormat('2021-02-03T00:00Z')} – ${dateFormat('2021-02-23T00:00Z')}`,
         Title: 'Provenance name',
         Description: 'Provenance description',
       },
       {
         Event: 'Deprecated',
         Who: '-',
-        When: 'December 22, 2021, 02:29 PM',
+        When: dateFormat('2021-12-22T14:29:15+02:00'),
         Title: 'Data removed',
         Description: 'Original data removed from Fairdata IDA',
       },
       {
         Event: 'Dataset deletion',
         Who: '-',
-        When: 'December 20, 2021, 02:28 PM',
+        When: dateFormat('2021-12-20T14:28:54+02:00'),
         Title: 'Deleted dataset version: 1',
         Description: '/dataset/1af9f528-e7a7-43e4-9051-b5d07e889cde',
       },

@@ -1,5 +1,5 @@
 import 'chai/register-should'
-import { RouterStore } from 'mobx-react-router'
+import { RouterStore } from '@/utils/RouterStore'
 import axios from 'axios'
 
 import EnvClass from '../../../js/stores/domain/env'

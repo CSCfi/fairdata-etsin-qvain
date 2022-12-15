@@ -35,7 +35,7 @@ etsin-qvain-tests:
     - echo -e "\e[0Ksection_start:`date +%s`:dependency_section[collapsed=true]\r\e[0KInstalling dependencies"
     # ------------------------
     - apt-get update && apt-get install -y libxmlsec1 libxmlsec1-dev npm
-    - curl -fsSL https://deb.nodesource.com/setup_12.x | bash - && apt-get install -y nodejs
+    - curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs
     - /usr/local/bin/python -m pip install --upgrade pip
     - pip install -r requirements.txt
     - pip install -r test_requirements.txt

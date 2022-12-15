@@ -13,7 +13,6 @@
 import React, { useState, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Router } from 'react-router-dom'
-import { syncHistoryWithStore } from 'mobx-react-router'
 
 import { registerLocale } from 'react-datepicker'
 import fi from 'date-fns/locale/fi'
@@ -46,7 +45,7 @@ if (BUILD === 'test') {
 }
 
 // Syncing history with store
-const history = syncHistoryWithStore(browserHistory, Env.history)
+const history = Env.history.syncWithHistory(browserHistory)
 
 const hideSpinner = () => {
   const spinner = document.getElementById('app-spinner')

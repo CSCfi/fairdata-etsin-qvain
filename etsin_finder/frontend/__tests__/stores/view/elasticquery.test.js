@@ -1,6 +1,5 @@
 import MockAdapter from 'axios-mock-adapter'
 import createBrowserHistory from 'history/createBrowserHistory'
-import { syncHistoryWithStore } from 'mobx-react-router'
 import ElasticQueryClass from '../../../js/stores/view/elasticquery'
 import EnvClass from '../../../js/stores/domain/env'
 import queryData from '../../__testdata__/elasticQuery.data'
@@ -11,7 +10,7 @@ import { configure } from 'mobx'
 const Env = new EnvClass()
 const ElasticQuery = new ElasticQueryClass(Env)
 const browserHistory = createBrowserHistory()
-const history = syncHistoryWithStore(browserHistory, Env.history)
+const history = Env.history.syncWithHistory(browserHistory)
 
 describe('ElasticQuery', () => {
   // ------ UPDATE SEARCH ------
@@ -83,8 +82,6 @@ describe('ElasticQuery', () => {
   configure({ safeDescriptors: true })
 
   ElasticQuery.queryES = jest.fn(ElasticQuery.queryES)
-  const axios = require('axios')
-  const MockAdapter = require('axios-mock-adapter')
 
   describe('QueryEs function', () => {
     it('should return results', async () => {
