@@ -19,40 +19,14 @@ include:
     file:
       - /templates/deploy/deploy-jobs.yaml
       - /templates/test/test-jobs.yaml
+      - /templates/test/etsin-qvain-tests.yaml
 
 # ------------------------
 
 etsin-qvain-tests:
   stage: test
-  tags:
-    - docker
-  image:
-    name: python:3.8
-  interruptible: true
-  variables:
-    TZ: Europe/Helsinki
-  before_script:
-    - echo -e "\e[0Ksection_start:`date +%s`:dependency_section[collapsed=true]\r\e[0KInstalling dependencies"
-    # ------------------------
-    - apt-get update && apt-get install -y libxmlsec1 libxmlsec1-dev npm
-    - curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs
-    - /usr/local/bin/python -m pip install --upgrade pip
-    - pip install -r requirements.txt
-    - pip install -r test_requirements.txt
-    # ------------------------
-    - echo -e "\e[0Ksection_end:`date +%s`:dependency_section\r\e[0K"
-    - npm --version
-    - node --version
-    - /usr/local/bin/python --version
-    - /usr/local/bin/python -m pip --version
-  script:
-    - tox -e cicd
-    - cd etsin_finder/frontend
-    - npm install
-    - npm run lint
-    - npm run test
+  extends: .etsin-qvain-tests-docker
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ /^(web)$/
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 sonarqube:
