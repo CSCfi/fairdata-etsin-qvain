@@ -65,13 +65,14 @@ class SearchBar extends Component {
               <label htmlFor="searchBarInput" className="sr-only">
                 {counterpart('search.name')}
               </label>
-              <CustomFontAwesomeIcon
-                onClick={this.handleSubmit}
-                icon={faSearch}
-                title="Search"
-                size="2x"
-                transform="shrink-4"
-              />
+              <IconContainer>
+                <CustomFontAwesomeIcon
+                  onClick={this.handleSubmit}
+                  icon={faSearch}
+                  title="Search"
+                  transform="shrink-4"
+                />
+              </IconContainer>
               <Input
                 id="searchBarInput"
                 placeholder={this.state.placeholder}
@@ -101,13 +102,18 @@ const SearchContainer = styled.div`
   justify-content: center;
 `
 
+const IconContainer = styled.div`
+  height: 100%;
+  padding: 0.25rem;
+  position: absolute;
+  right: 0px;
+  padding-bottom: 0.8em;
+`
+
 const CustomFontAwesomeIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
-  position: absolute;
   color: ${props => props.theme.color.primary};
   height: 100%;
-  margin: 0 0.3em;
-  right: 0px;
   transition: 0.1s ease;
   &:active {
     transform: scale(0.9);

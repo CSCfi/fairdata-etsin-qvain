@@ -17,7 +17,7 @@ import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
 
-jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
+jest.setTimeout(30000) // the default 5000ms timeout is not always enough here
 
 jest.mock('../../../../js/stores/view/accessibility')
 

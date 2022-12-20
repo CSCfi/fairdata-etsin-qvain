@@ -12,7 +12,7 @@
 
 import React, { useState } from 'react'
 import Translate from 'react-translate-component'
-import { observer } from 'mobx-react-lite'
+import { observer } from 'mobx-react'
 
 import Modal from '../components/general/modal'
 import { useStores } from '../stores/stores'

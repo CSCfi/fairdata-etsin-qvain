@@ -1,5 +1,5 @@
 const path = require('path')
-const { DefinePlugin } = require('webpack')
+const { DefinePlugin, ProvidePlugin } = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
@@ -46,6 +46,9 @@ const config = env => ({
       filename: 'index.html',
       template: 'static/index.template.ejs',
       favicon: 'static/images/favicon.png',
+    }),
+    new ProvidePlugin({
+      process: 'process/browser',
     }),
     new DefinePlugin({
       BUILD: JSON.stringify(env.BUILD || process.env.NODE_ENV || 'production'),

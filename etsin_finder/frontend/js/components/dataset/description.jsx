@@ -16,6 +16,8 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Link } from 'react-router-dom'
+import ReactMarkdown from 'react-markdown'
+
 import AccessRights from './accessRights'
 import FairdataPasDatasetIcon from './fairdataPasDatasetIcon'
 import AskForAccess from './askForAccess'
@@ -31,8 +33,6 @@ import checkNested from '../../utils/checkNested'
 import dateFormat from '../../utils/dateFormat'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
 import { withStores } from '../../utils/stores'
-
-const ReactMarkdown = require('react-markdown')
 
 const Labels = styled.div`
   display: flex;
@@ -213,7 +213,7 @@ class Description extends Component {
           </div>
           <ErrorBoundary>
             <DatasetDescription lang={getDataLang(description)}>
-              <CustomMarkdown source={checkDataLang(description)} />
+              <CustomMarkdown>{checkDataLang(description)}</CustomMarkdown>
             </DatasetDescription>
           </ErrorBoundary>
           {cumulative && (

@@ -16,6 +16,8 @@ import Modal from '../../../../js/components/general/modal'
 import { useStores } from '../../../../js/stores/stores'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
+jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
+
 failTestsWhenTranslationIsMissing()
 
 jest.mock('../../../../js/stores/stores', () => {

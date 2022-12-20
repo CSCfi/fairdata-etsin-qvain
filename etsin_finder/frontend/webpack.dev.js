@@ -1,5 +1,5 @@
 const path = require('path')
-const { DefinePlugin } = require('webpack')
+const { DefinePlugin, ProvidePlugin } = require('webpack')
 const DeadCodePlugin = require('webpack-deadcode-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -74,6 +74,7 @@ const config = env => ({
   plugins: [
     new DeadCodePlugin({
       patterns: ['js/**/*.(js|jsx|css)'],
+      detectUnusedExport: false, // disable as too noisy
     }),
     new ReactRefreshWebpackPlugin({
       overlay: {
@@ -91,6 +92,9 @@ const config = env => ({
     }),
     new DefinePlugin({
       BUILD: JSON.stringify(env.BUILD || process.env.NODE_ENV || 'production'),
+    }),
+    new ProvidePlugin({
+      process: 'process/browser.js',
     }),
   ],
   watchOptions: {
