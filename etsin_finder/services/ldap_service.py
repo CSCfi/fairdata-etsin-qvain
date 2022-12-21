@@ -7,13 +7,14 @@
 
 """Service for LDAP idm. Mainly used by Qvain."""
 
-from flask_restful import abort
 from ldap3.core.exceptions import LDAPInvalidFilterError
 import marshmallow
 from ldap3 import Server, Connection, SYNC, MOCK_SYNC
 from ldap3.utils.conv import escape_filter_chars
 from ldap3.utils.dn import parse_dn
 from flask import current_app
+
+from etsin_finder.utils.abort import abort
 from etsin_finder.schemas.services import LDAPIdmServiceConfigurationSchema
 from etsin_finder.services.base_service import BaseService, ConfigValidationMixin
 from etsin_finder.app_config import get_ldap_config

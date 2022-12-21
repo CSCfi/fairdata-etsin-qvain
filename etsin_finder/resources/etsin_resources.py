@@ -8,10 +8,13 @@
 """RESTful API endpoints, meant to be used by the frontend."""
 
 import re
-from flask import session, current_app
+from flask import session, current_app, request
+from flask.views import MethodView
 from flask_mail import Message
-from flask_restful import abort, reqparse, Resource
+from webargs import fields, validate
 
+from etsin_finder.utils.abort import abort
+from etsin_finder.utils.parser import parser
 from etsin_finder.auth import authentication
 from etsin_finder.auth import authentication_direct_proxy
 from etsin_finder.auth import authorization
@@ -41,7 +44,7 @@ from etsin_finder.app_config import (
 )
 
 
-class Dataset(Resource):
+class Dataset(MethodView):
     """Dataset related REST endpoints for frontend."""
 
     @log_request
@@ -98,7 +101,7 @@ class Dataset(Resource):
         return ret_obj, 200
 
 
-class V2Dataset(Resource):
+class V2Dataset(MethodView):
     """Metax API v2 dataset related REST endpoints for frontend."""
 
     @log_request
@@ -144,14 +147,8 @@ class V2Dataset(Resource):
         return ret_obj, 200
 
 
-class DatasetMetadata(Resource):
+class DatasetMetadata(MethodView):
     """DatasetMetadata."""
-
-    def __init__(self):
-        """Init DatasetMetadata endpoint."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("cr_id", type=str, required=True)
-        self.parser.add_argument("format", type=str, required=True)
 
     @log_request
     def get(self):
@@ -160,7 +157,13 @@ class DatasetMetadata(Resource):
         Returns:
             obj: Returns a Flask.Response object streaming the response from metax
         """
-        args = self.parser.parse_args()
+        args = parser.parse(
+            {
+                "cr_id": fields.Str(required=True, validate=validate.Length(min=1)),
+                "format": fields.Str(required=True, validate=validate.Length(min=1)),
+            },
+            request,
+        )
         cr_id = args.get("cr_id")
         metadata_format = args.get("format")
 
@@ -181,14 +184,8 @@ def _transform_url_to_persistent_id(url):
     return urn_replaced
 
 
-class RelatedDatasets(Resource):
+class RelatedDatasets(MethodView):
     """RelatedDatasets."""
-
-    @log_request
-    def __init__(self):
-        """Create common arguments for all methods."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("cr_id", type=str, required=True)
 
     @log_request
     def get(self, cr_id):
@@ -221,15 +218,8 @@ class RelatedDatasets(Resource):
         return response, 200
 
 
-class Files(Resource):
+class Files(MethodView):
     """File/directory related REST endpoints for frontend."""
-
-    def __init__(self):
-        """Init file endpoints."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("dir_id", required=True, type=str)
-        self.parser.add_argument("file_fields", required=False, type=str)
-        self.parser.add_argument("directory_fields", required=False, type=str)
 
     @log_request
     def get(self, cr_id):
@@ -242,7 +232,14 @@ class Files(Resource):
             tuple: Payload and status code.
 
         """
-        args = self.parser.parse_args()
+        args = parser.parse(
+            {
+                "dir_id": fields.Str(required=True, validate=validate.Length(min=1)),
+                "file_fields": fields.Str(),
+                "directory_fields": fields.Str(),
+            },
+            request,
+        )
         dir_id = args.get("dir_id")
         file_fields = args.get("file_fields", None)
         directory_fields = args.get("directory_fields", None)
@@ -270,24 +267,8 @@ class Files(Resource):
         return "", 404
 
 
-class Contact(Resource):
+class Contact(MethodView):
     """Contact form related REST endpoints for frontend."""
-
-    def __init__(self):
-        """Init endpoints."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument(
-            "user_email", required=True, help="user_email cannot be empty"
-        )
-        self.parser.add_argument(
-            "user_subject", required=True, help="user_subject cannot be empty"
-        )
-        self.parser.add_argument(
-            "user_body", required=True, help="user_body cannot be empty"
-        )
-        self.parser.add_argument(
-            "agent_type", required=True, help="agent_type cannot be empty"
-        )
 
     @log_request
     def post(self, cr_id):
@@ -307,11 +288,22 @@ class Contact(Resource):
             tuple: Payload and status code. If success, empty payload, else, an error message.
 
         """
-        # if not request.is_json or not request.json:
-        #     abort(400, message="Request is not json")
-
         # Check request query parameters are present
-        args = self.parser.parse_args()
+        args = parser.parse(
+            {
+                "user_email": fields.Str(
+                    required=True, validate=validate.Length(min=1)
+                ),
+                "user_subject": fields.Str(
+                    required=True, validate=validate.Length(min=1)
+                ),
+                "user_body": fields.Str(required=True, validate=validate.Length(min=1)),
+                "agent_type": fields.Str(
+                    required=True, validate=validate.Length(min=1)
+                ),
+            },
+            request,
+        )
         # Extract user's email address to be used as reply-to address
         user_email = args.get("user_email")
         # Extract user's message subject to be used as part of the email body to be sent
@@ -382,7 +374,7 @@ class Contact(Resource):
         return "", 204
 
 
-class User(Resource):
+class User(MethodView):
     """Saml attributes: https://wiki.eduuni.fi/pages/viewpage.action?spaceKey=cscfairdata&title=Proxy+Attributes."""
 
     @log_request
@@ -421,7 +413,7 @@ class User(Resource):
         return user_info, 200
 
 
-class REMSApplyForPermission(Resource):
+class REMSApplyForPermission(MethodView):
     """REMS Apply for permission."""
 
     @log_request
@@ -533,7 +525,7 @@ class REMSApplyForPermission(Resource):
             return application_id, 200
 
 
-class Session(Resource):
+class Session(MethodView):
     """Session related endpoints."""
 
     @log_request
@@ -561,7 +553,7 @@ class Session(Resource):
         return not authentication.is_authenticated(), 200
 
 
-class Language(Resource):
+class Language(MethodView):
     """Language setting endpoints."""
 
     @log_request
@@ -572,16 +564,19 @@ class Language(Resource):
     @log_request
     def post(self):
         """Set language for current session."""
-        parser = reqparse.RequestParser()
-        parser.add_argument("language", type=str, required=True)
-        args = parser.parse_args()
+        args = parser.parse(
+            {
+                "language": fields.Str(required=True, validate=validate.Length(min=1)),
+            },
+            request,
+        )
         language = args.get("language")
         if set_language(language):
             return "", 200
         return "Unsupported language", 404
 
 
-class AppConfig(Resource):
+class AppConfig(MethodView):
     """Dataset related REST endpoints for frontend."""
 
     @log_request
@@ -607,7 +602,7 @@ class AppConfig(Resource):
         }
 
 
-class SupportedFlags(Resource):
+class SupportedFlags(MethodView):
     """Supported flags endpoint."""
 
     @log_request

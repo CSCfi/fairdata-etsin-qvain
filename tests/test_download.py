@@ -185,7 +185,7 @@ class TestDownloadResourcesRequests(RequestMocks):
         self, unauthd_client, open_catalog_record, mock_requests, mock_byte_size_root
     ):
         """Successful POST."""
-        r = unauthd_client.post("/api/download/requests", json={"cr_id": 1})
+        r = unauthd_client.post("/api/download/requests", json={"cr_id": "1"})
 
         assert r.status_code == 200
         assert r.json == fakePackage
@@ -195,28 +195,35 @@ class TestDownloadResourcesRequests(RequestMocks):
     ):
         """Successful POST with scope."""
         r = unauthd_client.post(
-            "/api/download/requests", json={"cr_id": 1, "scope": ["/hei", "/moro"]}
+            "/api/download/requests", json={"cr_id": "1", "scope": ["/hei", "/moro"]}
         )
         assert r.status_code == 200
         assert r.json == fakePackage
 
+    def test_requests_post_invalid_cr_type(self, unauthd_client, open_catalog_record):
+        """Failed POST with unknown parameter"""
+        r = unauthd_client.post(
+            "/api/download/requests", json={"cr_id": "1", "sadness": True}
+        )
+        assert r.status_code == 400
+
     def test_requests_post_invalid_param(self, unauthd_client, open_catalog_record):
         """Failed POST with unknown parameter"""
         r = unauthd_client.post(
-            "/api/download/requests", json={"cr_id": 1, "sadness": True}
+            "/api/download/requests", json={"cr_id": "1", "sadness": True}
         )
         assert r.status_code == 400
 
     def test_requests_post_forbidden(self, unauthd_client, login_catalog_record):
         """Failed POST, login required"""
-        r = unauthd_client.post("/api/download/requests", json={"cr_id": 1})
+        r = unauthd_client.post("/api/download/requests", json={"cr_id": "1"})
         assert r.status_code == 403
 
     def test_requests_post_logged_in_ok(
         self, authd_client, login_catalog_record, mock_requests, mock_byte_size_root
     ):
         """Succesful POST for dataset requiring login"""
-        r = authd_client.post("/api/download/requests", json={"cr_id": 1})
+        r = authd_client.post("/api/download/requests", json={"cr_id": "1"})
         assert r.status_code == 200
 
     def test_requests_post_not_found(
@@ -229,7 +236,7 @@ class TestDownloadResourcesRequests(RequestMocks):
     ):
         """Failed POST, dataset not found"""
         requests_mock.post("https://mock-download:1/requests", status_code=404)
-        r = unauthd_client.post("/api/download/requests", json={"cr_id": 1})
+        r = unauthd_client.post("/api/download/requests", json={"cr_id": "1"})
         assert r.status_code == 404
 
     def test_requests_post_error(
@@ -244,7 +251,7 @@ class TestDownloadResourcesRequests(RequestMocks):
         requests_mock.post(
             "https://mock-download:1/requests", exc=requests.exceptions.ConnectTimeout
         )
-        r = unauthd_client.post("/api/download/requests", json={"cr_id": 1})
+        r = unauthd_client.post("/api/download/requests", json={"cr_id": "1"})
         assert r.status_code == 503
 
 
@@ -266,7 +273,7 @@ class TestDownloadResourcesAuthorize(RequestMocks):
     ):
         """Authorize file"""
         r = unauthd_client.post(
-            "/api/download/authorize", json={"cr_id": 1, "file": "/folder/filename.gif"}
+            "/api/download/authorize", json={"cr_id": "1", "file": "/folder/filename.gif"}
         )
         assert r.status_code == 200
         assert r.json == fakeFileDownloadUrl
@@ -276,7 +283,7 @@ class TestDownloadResourcesAuthorize(RequestMocks):
     ):
         """Authorize package"""
         r = unauthd_client.post(
-            "/api/download/authorize", json={"cr_id": 1, "package": "x.zip"}
+            "/api/download/authorize", json={"cr_id": "1", "package": "x.zip"}
         )
         assert r.status_code == 200
         assert r.json == fakePackageDownloadUrl
@@ -285,7 +292,7 @@ class TestDownloadResourcesAuthorize(RequestMocks):
         """Fail due to unknown parameter"""
         r = unauthd_client.post(
             "/api/download/authorize",
-            json={"cr_id": 1, "package": "x.zip", "extra": True},
+            json={"cr_id": "1", "package": "x.zip", "extra": True},
         )
         assert r.status_code == 400
 
@@ -295,14 +302,14 @@ class TestDownloadResourcesAuthorize(RequestMocks):
         """Fail due to mutually exclusive parameters"""
         r = unauthd_client.post(
             "/api/download/authorize",
-            json={"cr_id": 1, "file": "/folder/filename.gif", "package": "x.zip"},
+            json={"cr_id": "1", "file": "/folder/filename.gif", "package": "x.zip"},
         )
         assert r.status_code == 400
 
     def test_authorize_forbidden(self, unauthd_client, login_catalog_record):
         """Require login"""
         r = unauthd_client.post(
-            "/api/download/authorize", json={"cr_id": 1, "file": "/folder/filename.gif"}
+            "/api/download/authorize", json={"cr_id": "1", "file": "/folder/filename.gif"}
         )
         assert r.status_code == 403
 
@@ -311,7 +318,7 @@ class TestDownloadResourcesAuthorize(RequestMocks):
     ):
         """User logged in, can access dataset"""
         r = authd_client.post(
-            "/api/download/authorize", json={"cr_id": 1, "file": "/folder/filename.gif"}
+            "/api/download/authorize", json={"cr_id": "1", "file": "/folder/filename.gif"}
         )
         assert r.status_code == 200
 
@@ -321,7 +328,7 @@ class TestDownloadResourcesAuthorize(RequestMocks):
             "https://mock-download:1/authorize", exc=requests.exceptions.ConnectTimeout
         )
         r = unauthd_client.post(
-            "/api/download/authorize", json={"cr_id": 1, "package": "x.zip"}
+            "/api/download/authorize", json={"cr_id": "1", "package": "x.zip"}
         )
         assert r.status_code == 503
 
@@ -338,7 +345,7 @@ class TestDownloadResourcesSubscriptions(BaseTest):
         """Subscribe to email notification"""
         r = authd_client.post(
             "/api/download/subscriptions",
-            json={"email": "email@example.com", "cr_id": 1},
+            json={"email": "email@example.com", "cr_id": "1"},
         )
         assert r.status_code == 200
         assert subscribe_mock.called
@@ -347,7 +354,7 @@ class TestDownloadResourcesSubscriptions(BaseTest):
         """Subscribe to email notification with scope"""
         r = authd_client.post(
             "/api/download/subscriptions",
-            json={"email": "email@example.com", "cr_id": 1, "scope": ["/path"]},
+            json={"email": "email@example.com", "cr_id": "1", "scope": ["/path"]},
         )
         assert r.status_code == 200
         assert subscribe_mock.called
@@ -356,7 +363,7 @@ class TestDownloadResourcesSubscriptions(BaseTest):
         self, authd_client, login_catalog_record, subscribe_mock
     ):
         """Fail to subscribe to email notification, missing email"""
-        r = authd_client.post("/api/download/subscriptions", json={"cr_id": 1})
+        r = authd_client.post("/api/download/subscriptions", json={"cr_id": "1"})
         assert r.status_code == 400
 
     def test_subscribe_no_cr(self, authd_client, login_catalog_record, subscribe_mock):
@@ -381,7 +388,7 @@ class TestDownloadResourcesNotifications(BaseTest):
         """Send email notification"""
         authd_client.post(
             "/api/download/subscriptions",
-            json={"email": "email@example.com", "cr_id": 1},
+            json={"email": "email@example.com", "cr_id": "1"},
         )
         req_json = subscribe_mock.request_history[0].json()
         notification = {"subscriptionData": req_json["subscriptionData"]}
@@ -396,7 +403,7 @@ class TestDownloadResourcesNotifications(BaseTest):
         """Fail to send email notification, invalid subscriptionData"""
         authd_client.post(
             "/api/download/subscriptions",
-            json={"email": "email@example.com", "cr_id": 1},
+            json={"email": "email@example.com", "cr_id": "1"},
         )
         req_json = subscribe_mock.request_history[0].json()
 

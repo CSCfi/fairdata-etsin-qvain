@@ -10,9 +10,12 @@
 from etsin_finder.services.qvain_lock_service import QvainLockService
 from marshmallow import ValidationError
 from flask import request, current_app
-from flask_restful import reqparse, Resource, abort, inputs
+from flask.views import MethodView
 from flask_mail import Message
+from webargs import fields
 
+from etsin_finder.utils.abort import abort
+from etsin_finder.utils.parser import parser
 from etsin_finder.auth import authentication
 from etsin_finder.log import log
 from etsin_finder.utils.localization import get_language, translate, get_multilang_value
@@ -46,12 +49,8 @@ from etsin_finder.services.common_service import MetaxCommonAPIService
 from etsin_finder.utils.log_utils import log_request
 
 
-class FileCharacteristics(Resource):
+class FileCharacteristics(MethodView):
     """REST endpoint for updating file_characteristics of a file."""
-
-    def __init__(self):
-        """Init arguments."""
-        self.parser = reqparse.RequestParser()
 
     def _update_characteristics(self, file_id, replace=False):
         """Update file_characteristics of a file.
@@ -125,13 +124,8 @@ class FileCharacteristics(Resource):
         return self._update_characteristics(file_id)
 
 
-class QvainDatasets(Resource):
+class QvainDatasets(MethodView):
     """Listing and creating Metax datasets for logged in user in Qvain."""
-
-    def __init__(self):
-        """Init required utils for dataset metadata handling."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("draft", type=inputs.boolean, required=False)
 
     def _get_datasets_from_response(self, response, status, source):
         """Get datasets from response dict, add source information."""
@@ -175,12 +169,14 @@ class QvainDatasets(Resource):
         service = MetaxQvainAPIService()
         if not flag_enabled("PERMISSIONS.EDITOR_RIGHTS"):
             # Datasets listing parameters
-            self.parser.add_argument("limit", type=str, required=False)
-            self.parser.add_argument("offset", type=str, required=False)
-            self.parser.add_argument(
-                "no_pagination", type=inputs.boolean, required=False
+            args = parser.parse(
+                {
+                    "limit": fields.Str(),
+                    "offset": fields.Str(),
+                    "no_pagination": fields.Boolean(),
+                },
+                request,
             )
-            args = self.parser.parse_args(strict=True)
             limit = args.get("limit", None)
             offset = args.get("offset", None)
             no_pagination = args.get("no_pagination", None)
@@ -239,7 +235,8 @@ class QvainDatasets(Resource):
             return error
 
         params = {}
-        args = self.parser.parse_args()
+
+        args = parser.parse({"draft": fields.Boolean()}, request, location="query")
         draft = args.get("draft")
         if draft:
             params["draft"] = "true"
@@ -271,7 +268,7 @@ class QvainDatasets(Resource):
         return metax_response
 
 
-class QvainDataset(Resource):
+class QvainDataset(MethodView):
     """Single Qvain dataset."""
 
     @log_request
@@ -360,7 +357,7 @@ class QvainDataset(Resource):
         return metax_response
 
 
-class QvainDatasetFiles(Resource):
+class QvainDatasetFiles(MethodView):
     """Update files of a dataset."""
 
     def __init__(self):
@@ -407,7 +404,7 @@ class QvainDatasetFiles(Resource):
         return response, status
 
 
-class QvainDatasetLock(Resource):
+class QvainDatasetLock(MethodView):
     """Endpoints for handling dataset write locks."""
 
     def __init__(self):
@@ -432,9 +429,10 @@ class QvainDatasetLock(Resource):
         if error is not None:
             return error
 
-        parser = reqparse.RequestParser()
-        parser.add_argument("force", type=bool, required=False)
-        args = parser.parse_args()
+        args = parser.parse(
+            {"force": fields.Boolean()},
+            request,
+        )
         force = args.get("force", None)
 
         lock_service = QvainLockService()
@@ -460,7 +458,7 @@ class QvainDatasetLock(Resource):
         return "", 200
 
 
-class QvainDatasetEditorPermissions(Resource):
+class QvainDatasetEditorPermissions(MethodView):
     """Endpoints for dataset editor permissions."""
 
     def __init__(self):
@@ -548,10 +546,10 @@ class QvainDatasetEditorPermissions(Resource):
         if error is not None:
             return error
 
-        parser = reqparse.RequestParser()
-        parser.add_argument("users", type=str, required=True, action="append")
-        parser.add_argument("message", type=str, required=False, default="")
-        args = parser.parse_args()
+        args = parser.parse(
+            {"users": fields.List(fields.Str()), "message": fields.Str()},
+            request,
+        )
         users = args.get("users")
         message = args.get("message")
 
@@ -655,7 +653,7 @@ class QvainDatasetEditorPermissions(Resource):
                 raise Exception
 
 
-class QvainDatasetEditorPermissionsUser(Resource):
+class QvainDatasetEditorPermissionsUser(MethodView):
     """Endpoints for single user editor permission."""
 
     @log_request

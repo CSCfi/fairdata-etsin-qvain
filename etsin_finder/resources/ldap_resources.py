@@ -4,13 +4,14 @@ from etsin_finder.utils.qvain_utils import (
     check_authentication,
 )
 from flask import current_app
-from flask_restful import Resource, abort
+from flask.views import MethodView
 
+from etsin_finder.utils.abort import abort
 from etsin_finder.utils.log_utils import log_request
 from etsin_finder.utils.flags import flag_enabled
 
 
-class SearchUser(Resource):
+class SearchUser(MethodView):
     """Rest endpoint to get user details for inviting person to edit dataset."""
 
     def __init__(self):
@@ -39,4 +40,5 @@ class SearchUser(Resource):
                 current_app.logger.warning(
                     f"Status {status} in LDAP search: {response}"
                 )
+                abort(status, message=response)
             return response, status

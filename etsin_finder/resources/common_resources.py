@@ -9,8 +9,10 @@
 
 from marshmallow import ValidationError
 from flask import request
-from flask_restful import reqparse, Resource
+from flask.views import MethodView
+from webargs import fields
 
+from etsin_finder.utils.parser import parser
 from etsin_finder.auth import authentication
 from etsin_finder.auth import authorization
 from etsin_finder.log import log
@@ -29,13 +31,8 @@ from etsin_finder.services.common_service import (
 from etsin_finder.utils.log_utils import log_request
 
 
-class ProjectFiles(Resource):
+class ProjectFiles(MethodView):
     """File/directory related REST endpoints for getting project directory."""
-
-    def __init__(self):
-        """Init of file endpoints."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("cr_identifier", type=str, required=False)
 
     @log_request
     def get(self, pid):
@@ -51,7 +48,7 @@ class ProjectFiles(Resource):
         """
         # If cr_identifier is set, retrieve only project files that belong to dataset
         params = {}
-        args = self.parser.parse_args()
+        args = parser.parse({"cr_identifier": fields.Str()}, request)
         cr_identifier = args.get("cr_identifier", None)
 
         # Unauthenticated users can only access files belonging to a published dataset
@@ -93,24 +90,23 @@ class ProjectFiles(Resource):
         return "", 404
 
 
-class DirectoryFiles(Resource):
+class DirectoryFiles(MethodView):
     """File/directory related REST endpoints for getting a directory."""
 
-    def __init__(self):
-        """Init of file endpoints."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("not_cr_identifier", type=str, required=False)
-        self.parser.add_argument("cr_identifier", type=str, required=False)
-        self.parser.add_argument("pagination", type=bool, required=False)
-        self.parser.add_argument("include_parent", type=bool, required=False)
-        self.parser.add_argument("offset", type=str, required=False)
-        self.parser.add_argument("limit", type=str, required=False)
-        self.parser.add_argument("name", type=str, required=False)
-        self.parser.add_argument(
-            "directory_fields", type=str, action="append", required=False
-        )
-        self.parser.add_argument(
-            "file_fields", type=str, action="append", required=False
+    def _get_args(self):
+        return parser.parse(
+            {
+                "cr_identifier": fields.Str(),
+                "not_cr_identifier": fields.Str(),
+                "pagination": fields.Boolean(),
+                "include_parent": fields.Boolean(),
+                "offset": fields.Str(),
+                "limit": fields.Str(),
+                "name": fields.Str(),
+                "directory_fields": fields.DelimitedList(fields.Str()),
+                "file_fields": fields.DelimitedList(fields.Str()),
+            },
+            request,
         )
 
     @log_request
@@ -121,7 +117,7 @@ class DirectoryFiles(Resource):
         :param dir_id:
         :return:
         """
-        args = self.parser.parse_args()
+        args = self._get_args()
         not_cr_identifier = args.get("not_cr_identifier", None)
         cr_identifier = args.get("cr_identifier", None)
         pagination = args.get("pagination", None)
@@ -143,41 +139,37 @@ class DirectoryFiles(Resource):
                 )
 
         if file_fields is None:
-            file_fields = ",".join(
-                [
-                    "file_name",
-                    "project_identifier",
-                    "file_characteristics",
-                    "id",
-                    "identifier",
-                    "file_path",
-                    "description",
-                    "use_category",
-                    "title",
-                    "file_type",
-                    "byte_size",
-                    "checksum_value",
-                    "checksum_algorithm",
-                    "service_created",
-                ]
-            )
+            file_fields = [
+                "file_name",
+                "project_identifier",
+                "file_characteristics",
+                "id",
+                "identifier",
+                "file_path",
+                "description",
+                "use_category",
+                "title",
+                "file_type",
+                "byte_size",
+                "checksum_value",
+                "checksum_algorithm",
+                "service_created",
+            ]
 
         if directory_fields is None:
-            directory_fields = ",".join(
-                [
-                    "directory_name",
-                    "project_identifier",
-                    "id",
-                    "identifier",
-                    "directory_path",
-                    "file_count",
-                    "description",
-                    "use_category",
-                    "title",
-                    "byte_size",
-                    "service_created",
-                ]
-            )
+            directory_fields = [
+                "directory_name",
+                "project_identifier",
+                "id",
+                "identifier",
+                "directory_path",
+                "file_count",
+                "description",
+                "use_category",
+                "title",
+                "byte_size",
+                "service_created",
+            ]
 
         if cr_identifier is not None and not_cr_identifier is not None:
             return "Parameters cr_identifier and not_cr_identifier are exclusive", 400
@@ -196,9 +188,9 @@ class DirectoryFiles(Resource):
         if offset is not None:
             params["offset"] = offset
         if directory_fields:
-            params["directory_fields"] = directory_fields
+            params["directory_fields"] = ",".join(directory_fields)
         if file_fields:
-            params["file_fields"] = file_fields
+            params["file_fields"] = ",".join(file_fields)
         if name:
             params["file_name"] = name
             params["directory_name"] = name
@@ -224,7 +216,7 @@ class DirectoryFiles(Resource):
         return "", 404
 
 
-class DatasetProjects(Resource):
+class DatasetProjects(MethodView):
     """Get list of dataset IDA projects."""
 
     @log_request
@@ -247,7 +239,7 @@ class DatasetProjects(Resource):
         return metax_response
 
 
-class DatasetUserMetadata(Resource):
+class DatasetUserMetadata(MethodView):
     """Get user metadata for a single dataset."""
 
     def __init__(self):

@@ -4,8 +4,8 @@ import re
 from copy import deepcopy
 from datetime import date
 from etsin_finder import auth
-from flask_restful import abort
 
+from etsin_finder.utils.abort import abort
 from etsin_finder.utils.constants import DATA_CATALOG_IDENTIFIERS, ACCESS_TYPES
 from etsin_finder.services import cr_service, qvain_lock_service
 from etsin_finder.utils.flags import flag_enabled

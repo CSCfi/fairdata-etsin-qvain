@@ -7,8 +7,13 @@
 
 """RPC API endpoints, meant to be used by the Qvain form"""
 
-from flask_restful import reqparse, Resource
+from flask import request
+from flask.views import MethodView
+from flask_mail import Message
+from webargs import fields, validate
 
+from etsin_finder.utils.abort import abort
+from etsin_finder.utils.parser import parser
 from etsin_finder.services.qvain_service import MetaxQvainAPIService
 from etsin_finder.utils.log_utils import log_request
 from etsin_finder.utils.qvain_utils import (
@@ -17,14 +22,18 @@ from etsin_finder.utils.qvain_utils import (
 )
 
 
-class QvainDatasetChangeCumulativeState(Resource):
-    """Metax RPC for changing cumulative_state of a dataset."""
+def get_rpc_args(extra_args=None):
+    """Returns parsed arguments for RPC APIs."""
+    args = {
+        "identifier": fields.Str(required=True, validate=validate.Length(min=1)),
+    }
+    if extra_args:
+        args.update(extra_args)
+    return parser.parse(args)
 
-    def __init__(self):
-        """Setup endpoints"""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("identifier", type=str, required=True)
-        self.parser.add_argument("cumulative_state", type=int, required=True)
+
+class QvainDatasetChangeCumulativeState(MethodView):
+    """Metax RPC for changing cumulative_state of a dataset."""
 
     @log_request
     def post(self):
@@ -38,7 +47,11 @@ class QvainDatasetChangeCumulativeState(Resource):
             Metax response.
 
         """
-        args = self.parser.parse_args()
+        args = get_rpc_args(
+            extra_args={
+                "cumulative_state": fields.Integer(required=True),
+            }
+        )
         cr_id = args.get("identifier")
         cumulative_state = args.get("cumulative_state")
         error = check_dataset_edit_permission_and_lock(cr_id)
@@ -49,13 +62,8 @@ class QvainDatasetChangeCumulativeState(Resource):
         return metax_response
 
 
-class QvainDatasetCreateNewVersion(Resource):
+class QvainDatasetCreateNewVersion(MethodView):
     """Metax RPC for creating a new dataset version draft."""
-
-    def __init__(self):
-        """Setup endpoints"""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("identifier", type=str, required=True)
 
     @log_request
     def post(self):
@@ -70,7 +78,7 @@ class QvainDatasetCreateNewVersion(Resource):
             Metax response.
 
         """
-        args = self.parser.parse_args()
+        args = get_rpc_args()
         cr_id = args.get("identifier")
         err = check_dataset_edit_permission(cr_id)
         if err is not None:
@@ -80,13 +88,8 @@ class QvainDatasetCreateNewVersion(Resource):
         return metax_response
 
 
-class QvainDatasetCreateDraft(Resource):
+class QvainDatasetCreateDraft(MethodView):
     """Metax RPC for creating a draft from a published dataset."""
-
-    def __init__(self):
-        """Setup endpoints"""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("identifier", type=str, required=True)
 
     @log_request
     def post(self):
@@ -99,7 +102,7 @@ class QvainDatasetCreateDraft(Resource):
             Metax response.
 
         """
-        args = self.parser.parse_args()
+        args = get_rpc_args()
         cr_id = args.get("identifier")
         err = check_dataset_edit_permission(cr_id)
         if err is not None:
@@ -109,13 +112,8 @@ class QvainDatasetCreateDraft(Resource):
         return metax_response
 
 
-class QvainDatasetMergeDraft(Resource):
+class QvainDatasetMergeDraft(MethodView):
     """Metax RPC for merging draft changes to a published dataset."""
-
-    def __init__(self):
-        """Setup endpoints"""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("identifier", type=str, required=True)
 
     @log_request
     def post(self):
@@ -128,7 +126,7 @@ class QvainDatasetMergeDraft(Resource):
             Metax response.
 
         """
-        args = self.parser.parse_args()
+        args = get_rpc_args()
         cr_id = args.get("identifier")
         err = check_dataset_edit_permission_and_lock(cr_id)
         if err is not None:
@@ -138,13 +136,8 @@ class QvainDatasetMergeDraft(Resource):
         return metax_response
 
 
-class QvainDatasetPublishDataset(Resource):
+class QvainDatasetPublishDataset(MethodView):
     """Metax RPC for publishing an unpublished draft dataset."""
-
-    def __init__(self):
-        """Setup endpoints"""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("identifier", type=str, required=True)
 
     @log_request
     def post(self):
@@ -157,7 +150,7 @@ class QvainDatasetPublishDataset(Resource):
             Metax response.
 
         """
-        args = self.parser.parse_args()
+        args = get_rpc_args()
         cr_id = args.get("identifier")
         err = check_dataset_edit_permission_and_lock(cr_id)
         if err is not None:

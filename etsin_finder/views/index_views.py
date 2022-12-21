@@ -17,8 +17,8 @@ from flask import (
     current_app,
 )
 import requests
-from flask_restful import abort
 
+from etsin_finder.utils.abort import abort
 from etsin_finder.auth.authentication import is_authenticated
 from etsin_finder.auth.authentication_direct_proxy import (
     is_authenticated_through_direct_proxy,

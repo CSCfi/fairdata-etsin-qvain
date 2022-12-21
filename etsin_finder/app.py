@@ -13,11 +13,19 @@ from etsin_finder.utils.utils import executing_cicd, get_log_config
 from etsin_finder.utils.converters import IdentifierConverter
 from etsin_finder.utils.flags import validate_flags, initialize_supported_flags
 
-from flask_restful import Api
 from etsin_finder.utils.flags import flag_enabled
 
 
-def add_download_resources(api):
+def get_add_resource(app):
+    """Return function for registering MethodView to a URL."""
+
+    def add_resource(view, url, **kwargs):
+        app.add_url_rule(url, view_func=view.as_view(view.__name__), **kwargs)
+
+    return add_resource
+
+
+def add_download_resources(app):
     """Set download API endpoints"""
     from etsin_finder.resources.download_resources import (
         Requests,
@@ -26,14 +34,15 @@ def add_download_resources(api):
         Notifications,
     )
 
-    api.add_resource(Requests, "/api/download/requests", endpoint="dl_requests")
-    api.add_resource(Authorize, "/api/download/authorize", endpoint="dl_download")
+    add_resource = get_add_resource(app)
+    add_resource(Requests, "/api/download/requests", endpoint="dl_requests")
+    add_resource(Authorize, "/api/download/authorize", endpoint="dl_download")
 
-    if flag_enabled("DOWNLOAD_API_V2.EMAIL.BACKEND", api.app):
-        api.add_resource(
+    if flag_enabled("DOWNLOAD_API_V2.EMAIL.BACKEND", app):
+        add_resource(
             Subscriptions, "/api/download/subscriptions", endpoint="dl_subscriptions"
         )
-        api.add_resource(
+        add_resource(
             Notifications, "/api/download/notifications", endpoint="dl_notifications"
         )
 
@@ -45,7 +54,7 @@ def add_restful_resources(app):
         app (object): flask.Flask object instance.
 
     """
-    api = Api(app)
+    add_resource = get_add_resource(app)
     from etsin_finder.resources.etsin_resources import (
         REMSApplyForPermission,
         Contact,
@@ -87,61 +96,57 @@ def add_restful_resources(app):
 
     from etsin_finder.resources.ldap_resources import SearchUser
 
-    add_download_resources(api)
+    add_download_resources(app)
 
     # Common Qvain and Etsin endpoints
-    api.add_resource(
-        DatasetUserMetadata, "/api/common/datasets/<id:cr_id>/user_metadata"
-    )
-    api.add_resource(DatasetProjects, "/api/common/datasets/<id:cr_id>/projects")
-    api.add_resource(RelatedDatasets, "/api/common/datasets/<id:cr_id>/related")
-    api.add_resource(ProjectFiles, "/api/common/projects/<string:pid>/files")
-    api.add_resource(DirectoryFiles, "/api/common/directories/<string:dir_id>/files")
+    add_resource(DatasetUserMetadata, "/api/common/datasets/<id:cr_id>/user_metadata")
+    add_resource(DatasetProjects, "/api/common/datasets/<id:cr_id>/projects")
+    add_resource(RelatedDatasets, "/api/common/datasets/<id:cr_id>/related")
+    add_resource(ProjectFiles, "/api/common/projects/<string:pid>/files")
+    add_resource(DirectoryFiles, "/api/common/directories/<string:dir_id>/files")
 
     # Qvain API endpoints
-    api.add_resource(
+    add_resource(
         FileCharacteristics, "/api/qvain/files/<string:file_id>/file_characteristics"
     )
-    api.add_resource(QvainDatasets, "/api/qvain/datasets")
-    api.add_resource(QvainDataset, "/api/qvain/datasets/<id:cr_id>")
-    api.add_resource(QvainDatasetFiles, "/api/qvain/datasets/<id:cr_id>/files")
-    api.add_resource(QvainDatasetLock, "/api/qvain/datasets/<id:cr_id>/lock")
-    api.add_resource(
+    add_resource(QvainDatasets, "/api/qvain/datasets")
+    add_resource(QvainDataset, "/api/qvain/datasets/<id:cr_id>")
+    add_resource(QvainDatasetFiles, "/api/qvain/datasets/<id:cr_id>/files")
+    add_resource(QvainDatasetLock, "/api/qvain/datasets/<id:cr_id>/lock")
+    add_resource(
         QvainDatasetEditorPermissions,
         "/api/qvain/datasets/<id:cr_id>/editor_permissions",
     )
-    api.add_resource(
+    add_resource(
         QvainDatasetEditorPermissionsUser,
         "/api/qvain/datasets/<id:cr_id>/editor_permissions/<string:user_id>",
     )
 
     # Qvain API RPC endpoints
-    api.add_resource(
+    add_resource(
         QvainDatasetChangeCumulativeState, "/api/rpc/datasets/change_cumulative_state"
     )
-    api.add_resource(
-        QvainDatasetCreateNewVersion, "/api/rpc/datasets/create_new_version"
-    )
-    api.add_resource(QvainDatasetCreateDraft, "/api/rpc/datasets/create_draft")
-    api.add_resource(QvainDatasetPublishDataset, "/api/rpc/datasets/publish_dataset")
-    api.add_resource(QvainDatasetMergeDraft, "/api/rpc/datasets/merge_draft")
+    add_resource(QvainDatasetCreateNewVersion, "/api/rpc/datasets/create_new_version")
+    add_resource(QvainDatasetCreateDraft, "/api/rpc/datasets/create_draft")
+    add_resource(QvainDatasetPublishDataset, "/api/rpc/datasets/publish_dataset")
+    add_resource(QvainDatasetMergeDraft, "/api/rpc/datasets/merge_draft")
 
     # Etsin API endpoints
-    api.add_resource(Dataset, "/api/dataset/<id:cr_id>")
-    api.add_resource(DatasetMetadata, "/api/format")
-    api.add_resource(Files, "/api/files/<id:cr_id>")
-    api.add_resource(Contact, "/api/email/<id:cr_id>")
-    api.add_resource(User, "/api/user")
-    api.add_resource(Language, "/api/language")
-    api.add_resource(Session, "/api/session")
-    api.add_resource(AppConfig, "/api/app_config")
-    api.add_resource(SupportedFlags, "/api/supported_flags")
+    add_resource(Dataset, "/api/dataset/<id:cr_id>")
+    add_resource(DatasetMetadata, "/api/format")
+    add_resource(Files, "/api/files/<id:cr_id>")
+    add_resource(Contact, "/api/email/<id:cr_id>")
+    add_resource(User, "/api/user")
+    add_resource(Language, "/api/language")
+    add_resource(Session, "/api/session")
+    add_resource(AppConfig, "/api/app_config")
+    add_resource(SupportedFlags, "/api/supported_flags")
 
     # REMS API endpoints
-    api.add_resource(REMSApplyForPermission, "/api/rems/<id:cr_id>")
+    add_resource(REMSApplyForPermission, "/api/rems/<id:cr_id>")
 
     # LDAP API endpoints
-    api.add_resource(SearchUser, "/api/ldap/users/<string:name>")
+    add_resource(SearchUser, "/api/ldap/users/<string:name>")
 
 
 def add_views(app):
@@ -218,7 +223,6 @@ def create_app(testing=None):
         testing = bool(os.environ.get("TESTING", False))
 
     app = Flask(__name__, template_folder="./frontend/build")
-
     app.config.update(load_app_config(testing))
     initialize_supported_flags(app)
     if not app.testing and not executing_cicd():

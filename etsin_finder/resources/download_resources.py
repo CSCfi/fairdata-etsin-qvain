@@ -7,13 +7,14 @@
 
 """Download API endpoints."""
 
-import json
 from flask_mail import Message
-from dateutil import parser
 
-from flask_restful import abort, reqparse, Resource
-from flask import current_app
+from flask import current_app, request, make_response
+from flask.views import MethodView
+from webargs import fields, validate
 
+from etsin_finder.utils.parser import parser
+from etsin_finder.utils.abort import abort
 from etsin_finder.log import log
 from etsin_finder.auth import authentication
 from etsin_finder.auth import authorization
@@ -90,7 +91,7 @@ def check_download_permission(cr_id):
 
     cr = cr_service.get_catalog_record(cr_id, False, False)
     if not cr:
-        abort(400, message="Unable to get catalog record")
+        abort(400, description="Unable to get catalog record")
 
     allowed, reason = authorization.user_is_allowed_to_download_from_ida(
         cr, authentication.is_authenticated()
@@ -100,13 +101,8 @@ def check_download_permission(cr_id):
     return True
 
 
-class Requests(Resource):
+class Requests(MethodView):
     """Class for generating and retrieving download package requests."""
-
-    def __init__(self):
-        """Set up endpoint."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("cr_id", type=str, required=True, nullable=False)
 
     @log_request
     def get(self):
@@ -119,7 +115,10 @@ class Requests(Resource):
             Response from download service.
 
         """
-        args = self.parser.parse_args(strict=True)
+        args = parser.parse(
+            {"cr_id": fields.Str(required=True, validate=validate.Length(min=1))},
+            request,
+        )
         cr_id = args.get("cr_id")
         check_download_permission(cr_id)
         download_service = DownloadAPIService(current_app)
@@ -137,8 +136,13 @@ class Requests(Resource):
             Response from download service.
 
         """
-        self.parser.add_argument("scope", type=str, action="append", required=False)
-        args = self.parser.parse_args(strict=True)
+        args = parser.parse(
+            {
+                "cr_id": fields.Str(required=True, validate=validate.Length(min=1)),
+                "scope": fields.List(fields.Str()),
+            },
+            request,
+        )
         cr_id = args.get("cr_id")
         check_download_permission(cr_id)
 
@@ -177,15 +181,8 @@ class Requests(Resource):
         return download_service.post_request(cr_id, path)
 
 
-class Authorize(Resource):
+class Authorize(MethodView):
     """Class for requesting download authorizations."""
-
-    def __init__(self):
-        """Set up endpoint."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("cr_id", type=str, required=True, nullable=False)
-        self.parser.add_argument("file", type=str, required=False)  # file path
-        self.parser.add_argument("package", type=str, required=False)  # package name
 
     @log_request
     def post(self):
@@ -201,12 +198,22 @@ class Authorize(Resource):
             Object with the dowload URL, or error from download service.
 
         """
-        args = self.parser.parse_args(strict=True)
+        args = parser.parse(
+            {
+                "cr_id": fields.Str(required=True, validate=validate.Length(min=1)),
+                "file": fields.Str(),
+                "package": fields.Str(),
+            },
+            request,
+        )
         file = args.get("file")
         package = args.get("package")
 
         if not (file or package):
-            abort(400, message="Either 'file' or 'package' query parameter required")
+            abort(
+                400,
+                message="Either 'file' or 'package' json_or_query parameter required",
+            )
         if file and package:
             abort(400, message="Specify either 'file' or 'package', not both")
 
@@ -225,15 +232,8 @@ class Authorize(Resource):
         return {"url": download_service.get_download_url(token)}
 
 
-class Subscriptions(Resource):
+class Subscriptions(MethodView):
     """Class for subscribing to package creation emails."""
-
-    def __init__(self):
-        """Set up endpoint."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("cr_id", type=str, required=True, nullable=False)
-        self.parser.add_argument("scope", type=str, action="append", required=False)
-        self.parser.add_argument("email", type=str, required=True)
 
     @log_request
     def post(self):
@@ -248,7 +248,14 @@ class Subscriptions(Resource):
             Empty response, or error if unsuccessful.
 
         """
-        args = self.parser.parse_args(strict=True)
+        args = parser.parse(
+            {
+                "cr_id": fields.Str(required=True, validate=validate.Length(min=1)),
+                "scope": fields.List(fields.Str()),
+                "email": fields.Email(required=True),
+            },
+            request,
+        )
         cr_id = args.get("cr_id")
         check_download_permission(cr_id)
 
@@ -282,13 +289,8 @@ class Subscriptions(Resource):
         return resp, status
 
 
-class Notifications(Resource):
+class Notifications(MethodView):
     """Email notification sending."""
-
-    def __init__(self):
-        """Set up endpoint."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument("subscriptionData", type=str, required=True)
 
     @log_request
     def post(self):
@@ -301,7 +303,12 @@ class Notifications(Resource):
             Empty response, or error if unsuccessful.
 
         """
-        args = self.parser.parse_args(strict=True)
+        args = parser.parse(
+            {
+                "subscriptionData": fields.Str(required=True),
+            },
+            request,
+        )
         payload_encoded = args.get("subscriptionData")
         try:
             download_service = DownloadAPIService(current_app)

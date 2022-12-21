@@ -123,7 +123,7 @@ class TestCommonResource(BaseTest):
         """Return empty error message and status code 404."""
         dir_id = "id"
 
-        with app.test_request_context(data={"cr_identifier": "cr_id"}):
+        with app.test_request_context(json={"cr_identifier": "cr_id"}):
             directory_files_class = DirectoryFiles()
             response, status = directory_files_class.get(dir_id)
 
@@ -142,7 +142,7 @@ class TestCommonResource(BaseTest):
         )
 
         with app.test_request_context(
-            data={"cr_identifier": "cr_id"}, headers={"COOKIE": sso_cookie}
+            json={"cr_identifier": "cr_id"}, headers={"COOKIE": sso_cookie}
         ):
             directory_files_class = DirectoryFiles()
             response, status = directory_files_class.get(dir_id)
@@ -181,7 +181,7 @@ class TestCommonResource(BaseTest):
         )
 
         with app.test_request_context(
-            data={"cr_identifier": "cr_id"}, headers={"COOKIE": sso_cookie}
+            json={"cr_identifier": "cr_id"}, headers={"COOKIE": sso_cookie}
         ):
             directory_files_class = DirectoryFiles()
             response, status = directory_files_class.get(dir_id)
@@ -214,7 +214,7 @@ class TestCommonResource(BaseTest):
             return_value=False,
         )
 
-        with app.test_request_context(data={"cr_identifier": "cr_id"}):
+        with app.test_request_context(json={"cr_identifier": "cr_id"}):
             dataset_projects = DatasetProjects()
             response, status = dataset_projects.get("IDA01:project")
             assert response == ""
@@ -227,7 +227,7 @@ class TestCommonResource(BaseTest):
             return_value=("dataset_projects", 200, True),
         )
 
-        with app.test_request_context(data={"cr_identifier": "cr_id"}):
+        with app.test_request_context(json={"cr_identifier": "cr_id"}):
             dataset_projects = DatasetProjects()
             response, status = dataset_projects.get("IDA01:project")
             assert response == "dataset_projects"
@@ -252,7 +252,7 @@ class TestCommonResource(BaseTest):
             return_value=False,
         )
 
-        with app.test_request_context(data={"cr_identifier": "cr_id"}):
+        with app.test_request_context(json={"cr_identifier": "cr_id"}):
             dataset_user_metadata = DatasetUserMetadata()
             response, status = dataset_user_metadata.get("IDA01:project")
             assert response == ""
@@ -265,7 +265,7 @@ class TestCommonResource(BaseTest):
             return_value=("dataset_user_meta", 200, True),
         )
 
-        with app.test_request_context(data={"cr_identifier": "cr_id"}):
+        with app.test_request_context(json={"cr_identifier": "cr_id"}):
             dataset_user_metadata = DatasetUserMetadata()
             response, status = dataset_user_metadata.get("IDA01:project")
             assert response == "dataset_user_meta"
@@ -286,9 +286,9 @@ class TestCommonResource(BaseTest):
     def test_dataset_user_metadata_put_not_logged_in(self, app):
         """Return error and 401."""
         with app.test_request_context(
-            data={
+            json={
                 "cr_identifier": "cr_id",
-            }
+            },
         ):
             dataset_user_metadata = DatasetUserMetadata()
             response, status = dataset_user_metadata.put("IDA=!")
@@ -299,7 +299,7 @@ class TestCommonResource(BaseTest):
         """Return error and 403."""
         with app.test_request_context(
             headers={"COOKIE": sso_cookie},
-            data={
+            json={
                 "cr_identifier": "cr_id",
             },
         ):

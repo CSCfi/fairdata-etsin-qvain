@@ -341,7 +341,7 @@ class TestLDAPResources(LDAPTestBase):
     def test_ldap_get_user_fail(self, authd_client, mock_ldap_fail):
         """Should return error."""
         resp = authd_client.get("/api/ldap/users/teppo")
-        assert resp.json == "Search failed due to an error."
+        assert resp.json == {"message": "Search failed due to an error."}
         assert resp.status_code == 500
 
     def test_ldap_unauthd(self, unauthd_client, mock_ldap):

@@ -10,6 +10,7 @@ from etsin_finder.resources.qvain_resources import (
     QvainDatasets,
 )
 from etsin_finder.utils.flags import set_flags
+from werkzeug.exceptions import HTTPException
 
 from .basetest import BaseTest, make_sso_cookie
 from .test_ldap import createMockLDAPIdmService, MockLDAPIdmServiceFail
@@ -925,7 +926,11 @@ class TestQvainDatasetsGetLegacy(BaseTest):
             )
 
         with app.test_request_context(**context_details):
-            response, status = test_details.get("call")()
+            try:
+                response, status = test_details.get("call")()
+            except HTTPException as e:
+                response, status = e.response.json, e.response.status_code
+
             assert response == expected.get("response")
             assert status == expected.get("status")
             for call in mock_requests.get("metax_calls", []):
@@ -1146,5 +1151,5 @@ class TestQvainDatasetsEditorPermissions(BaseTest):
         r = authd_client.delete(
             "/api/qvain/datasets/1/editor_permissions/editori", json=data
         )
+        assert r.json is None
         assert r.status_code == 200
-        assert r.json == ""
