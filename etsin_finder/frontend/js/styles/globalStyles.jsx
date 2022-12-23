@@ -322,7 +322,7 @@ const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     color: ${etsinTheme.color.primary};
     &:hover {
-      color: ${etsinTheme.color.primaryDark};
+      text-decoration: underline;
     }
   }
 

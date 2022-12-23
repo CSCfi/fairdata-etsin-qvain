@@ -339,7 +339,7 @@ const english = {
     pasDatasetVersionExists:
       "This is a use copy of this dataset. A copy is also stored in Fairdata's Digital Preservation Service. ",
     originalDatasetVersionExists: 'There is an existing use copy of the dataset. ',
-    linkToPasDataset: "Click here to open the Digial preservation Service's version",
+    linkToPasDataset: "Click here to open the Digital preservation Service's version",
     linkToOriginalDataset: 'You can open the use copy by clicking here',
     enteringPas: 'Entering DPS',
     dataInPasDatasetsCanNotBeDownloaded: 'DPS dataset data cannot be downloaded',
@@ -395,7 +395,7 @@ const english = {
     para1:
       'Etsin enables you to find research datasets from all fields of science. Etsin contains information about the datasets and metadata in the national Finnish Fairdata services. We also currently harvest information from the Language Bank of Finland, the Finnish Social Science Data archive and the Finnish Environmental Institute, and new sources will be included.',
     para2:
-      'The published metadata on the dataset is open to everyone. The data owner decides how and by whom the underlying research data can be accessed. Etsin works independently of actual data storage location and contains no research datasets. Datasets can be described and published through the <a href="https://qvain.fairdata.fi">Qvain service.</a><br><br>Read more about the Finnish Fairdata services on the <a href="https://fairdata.fi">Fairdata.fi</a> pages.',
+      'The published metadata on the dataset is open to everyone. The data owner decides how and by whom the underlying research data can be accessed. Etsin works independently of actual data storage location and contains no research datasets. Datasets can be described and published through the <a href="https://qvain.fairdata.fi">Qvain service</a>.<br><br>Read more about the Finnish Fairdata services on the <a href="https://fairdata.fi">Fairdata.fi</a> pages.',
     key: {
       dataset: 'datasets',
       keywords: 'keywords',
