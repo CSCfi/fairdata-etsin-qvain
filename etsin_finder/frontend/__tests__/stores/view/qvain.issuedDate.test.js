@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 import moment from 'moment'
 import { makeObservable } from 'mobx'
 

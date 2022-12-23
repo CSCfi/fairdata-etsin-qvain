@@ -1,6 +1,5 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import 'chai/register-should'
 
 import SearchSelect from '../../../js/components/qvain/general/V2/SearchSelect'
 import { useStores } from '../../../js/stores/stores'

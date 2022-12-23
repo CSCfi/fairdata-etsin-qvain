@@ -2,7 +2,6 @@ import React from 'react'
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
 import { shallow, mount } from 'enzyme'
-import 'chai/register-should'
 import { ThemeProvider } from 'styled-components'
 import '../../../locale/translations'
 

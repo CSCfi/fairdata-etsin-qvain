@@ -1,5 +1,4 @@
 import { buildStores } from '../../../js/stores'
-import 'chai/register-should'
 
 jest.mock('../../../js/stores/stores')
 

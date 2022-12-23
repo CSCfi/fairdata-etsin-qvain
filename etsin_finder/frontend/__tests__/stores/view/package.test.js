@@ -1,4 +1,3 @@
-import 'chai/register-should'
 import axios from 'axios'
 import Packages from '../../../js/stores/view/packages'
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../js/utils/constants'
@@ -137,9 +136,15 @@ describe('Packages', () => {
 
   describe('when calling clearPollTimeout', () => {
     const pollTimeout = 'timeout'
+    const clearTimeout = jest.spyOn(global, 'clearTimeout')
+
     beforeEach(() => {
       packages.pollTimeout = pollTimeout
       packages.clearPollTimeout()
+    })
+
+    afterEach(() => {
+      clearTimeout.mockClear()
     })
 
     test('should call clearTimeout', () => {
@@ -154,6 +159,17 @@ describe('Packages', () => {
   describe('when calling setPollTimeout', () => {
     const timeoutFunction = () => {}
     const pollInterval = 1
+    const setTimeout = jest.spyOn(global, 'setTimeout')
+    const pollTimeout = 'timeout'
+
+    beforeEach(() => {
+      packages.pollTimeout = pollTimeout
+      packages.clearPollTimeout()
+    })
+
+    afterEach(() => {
+      setTimeout.mockClear()
+    })
 
     beforeEach(() => {
       packages.pollInterval = pollInterval
@@ -353,7 +369,6 @@ describe('Packages', () => {
       }
       packages.packageIsTooLarge(tooLargeDatasetFiles).should.be.true
     })
-
 
     test('should allow large file', () => {
       const largeFile = {

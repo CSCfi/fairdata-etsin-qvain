@@ -9,7 +9,7 @@ import {
   sortGroups,
 } from '../../js/components/qvain/utils/select'
 import axios from 'axios'
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 import { METAX_FAIRDATA_ROOT_URL } from '../../js/utils/constants'
 

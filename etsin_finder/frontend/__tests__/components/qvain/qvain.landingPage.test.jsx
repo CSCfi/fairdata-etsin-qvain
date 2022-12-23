@@ -1,5 +1,5 @@
 import Harness from '../componentTestHarness'
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 import LandingPage from '../../../js/components/qvain/views/landingPage'
 import { useStores } from '../../../js/stores/stores'

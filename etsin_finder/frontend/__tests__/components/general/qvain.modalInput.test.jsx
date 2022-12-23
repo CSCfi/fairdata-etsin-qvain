@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme'
 import React from 'react'
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 import ModalInput, {
   ModalError,

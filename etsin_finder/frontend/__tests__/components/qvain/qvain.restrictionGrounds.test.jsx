@@ -1,5 +1,5 @@
 import Harness from '../componentTestHarness'
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 import { useStores } from '@/stores/stores'
 import RestrictionGrounds from '@/components/qvain/sections/DataOrigin/general/AccessType/RestrictionGrounds'

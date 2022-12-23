@@ -1,5 +1,5 @@
 import Harness from '../componentTestHarness'
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 import Keywords from '@/components/qvain/sections/Description/Keywords'
 import { keywordsSchema } from '@/stores/view/qvain/qvain.keyword'

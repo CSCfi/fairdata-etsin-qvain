@@ -1,9 +1,9 @@
-const JSDOMEnvironment = require('jest-environment-jsdom')
+import JSDOMEnvironment from 'jest-environment-jsdom'
 
-module.exports = class TimezonedJSDOMEnvironment extends JSDOMEnvironment {
-  constructor(config) {
+export default class TimezonedJSDOMEnvironment extends JSDOMEnvironment {
+  constructor(config, options) {
     // Set specific timezone for tests so they don't depend on server timezone
     process.env.TZ = process.env.TZ || 'Europe/Helsinki'
-    super(config)
+    super(config, options)
   }
 }

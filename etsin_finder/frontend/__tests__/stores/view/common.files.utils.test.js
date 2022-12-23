@@ -1,4 +1,3 @@
-import 'chai/register-should'
 import {
   assignDefined,
   ChildItemCounter,

@@ -1,6 +1,5 @@
 import { configure } from 'mobx'
 import Field from '../../../js/stores/view/qvain/qvain.field'
-import 'chai/register-should'
 
 const readonly = 'read only'
 const testUiid = 'uiid'

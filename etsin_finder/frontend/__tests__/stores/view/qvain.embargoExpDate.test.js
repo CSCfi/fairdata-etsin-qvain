@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 import EmbargoExpDate, {
   embargoExpDateSchema,
 } from '../../../js/stores/view/qvain/qvain.embargoExpDate'

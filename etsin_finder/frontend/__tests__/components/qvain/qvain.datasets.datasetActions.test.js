@@ -1,4 +1,3 @@
-import 'chai/register-should'
 import { configure } from 'mobx'
 
 import { buildStores } from '../../../js/stores'

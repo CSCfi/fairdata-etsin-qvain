@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 import Harness from '../componentTestHarness'
 
 import OtherIdentifier from '../../../js/components/qvain/sections/Description/OtherIdentifier'

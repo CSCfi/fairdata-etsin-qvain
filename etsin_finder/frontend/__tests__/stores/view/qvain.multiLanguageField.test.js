@@ -1,5 +1,4 @@
 import MultiLanguageField from '../../../js/stores/view/qvain/qvain.multiLanguageField'
-import 'chai/register-should'
 
 const defaultValue = { fi: '', en: '' }
 const expectedTestValue = { fi: 'test value', en: '' }

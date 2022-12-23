@@ -1,5 +1,3 @@
-import 'chai/register-should'
-
 import { buildStores } from '../../js/stores'
 import Cite from '../../js/components/dataset/citation/cite'
 import CitationBuilder from '../../js/components/dataset/citation/cite/citationBuilder'
@@ -10,7 +8,6 @@ import {
   getVersion,
   getIdentifier,
 } from '../../js/components/dataset/citation/cite/utils'
-import { externalResourceUseCategorySchema } from '../../js/stores/view/qvain/qvain.dataCatalog.schemas'
 
 const stores = buildStores()
 const cite = new Cite(stores.Locale.getValueTranslation)

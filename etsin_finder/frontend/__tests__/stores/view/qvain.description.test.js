@@ -1,5 +1,5 @@
 import Description from '../../../js/stores/view/qvain/qvain.description'
-import 'chai/register-expect'
+import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
 jest.mock('../../../js/stores/view/qvain/qvain.multiLanguageField', () => {

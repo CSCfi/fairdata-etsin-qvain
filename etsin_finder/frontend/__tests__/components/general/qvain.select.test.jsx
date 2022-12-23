@@ -1,7 +1,8 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import 'chai/register-expect'
+import { expect } from 'chai'
 import ReactSelect from 'react-select'
+import { setImmediate } from 'timers'
 
 import Select from '../../../js/components/qvain/general/V2/Select'
 import {
@@ -12,7 +13,6 @@ import {
   onChange,
 } from '../../../js/components/qvain/utils/select'
 import getReferenceData from '../../../js/components/qvain/utils/getReferenceData'
-import etsinTheme from '../../../js/styles/theme'
 
 const mockStores = {
   Qvain: { readonly: 'readonly' },

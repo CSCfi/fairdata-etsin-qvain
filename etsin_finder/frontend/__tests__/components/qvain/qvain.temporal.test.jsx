@@ -1,5 +1,5 @@
 import Harness from '../componentTestHarness'
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 import TemporalFieldContent from '@/components/qvain/sections/TimePeriod/TemporalFieldContent'
 import TemporalList, { RemoveButton } from '@/components/qvain/sections/TimePeriod/TemporalList'

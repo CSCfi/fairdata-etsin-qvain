@@ -1,4 +1,3 @@
-import 'chai/register-should'
 import PromiseManager from '../../js/utils/promiseManager'
 
 describe('common.files.utils', () => {

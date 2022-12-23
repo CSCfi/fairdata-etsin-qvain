@@ -1,6 +1,5 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import 'chai/register-should'
 import Translate from 'react-translate-component'
 
 import ValidationError, {

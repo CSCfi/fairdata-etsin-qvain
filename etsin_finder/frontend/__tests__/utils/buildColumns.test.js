@@ -1,4 +1,3 @@
-import 'chai/register-should'
 import buildColumns from '../../js/utils/buildColumns'
 
 describe('buildColumns', () => {

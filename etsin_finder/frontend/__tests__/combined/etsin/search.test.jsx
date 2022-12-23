@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { observable } from 'mobx'
 import MockAdapter from 'axios-mock-adapter'
+import { setImmediate } from 'timers'
 
 import etsinTheme from '@/styles/theme'
 import '@/../locale/translations'

@@ -1,4 +1,3 @@
-import 'chai/register-should'
 import AccessType from '../../../js/stores/view/qvain/qvain.accessType'
 import { ACCESS_TYPE_URL } from '../../../js/utils/constants'
 

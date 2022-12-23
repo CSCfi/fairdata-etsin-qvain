@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { computed, observable, makeObservable, override, runInAction, when, action } from 'mobx'

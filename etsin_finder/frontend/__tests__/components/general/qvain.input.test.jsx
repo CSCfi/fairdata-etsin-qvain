@@ -1,6 +1,5 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import 'chai/register-should'
 import { expect as expectChai } from 'chai'
 import Translate from 'react-translate-component'
 

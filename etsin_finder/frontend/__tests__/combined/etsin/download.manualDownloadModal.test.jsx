@@ -1,11 +1,10 @@
-import 'chai/register-should'
-
 import React, { useState } from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import ReactModal from 'react-modal'
 import axios from 'axios'
+import { setImmediate } from 'timers'
 
 import etsinTheme from '../../../js/styles/theme'
 import '../../../locale/translations'

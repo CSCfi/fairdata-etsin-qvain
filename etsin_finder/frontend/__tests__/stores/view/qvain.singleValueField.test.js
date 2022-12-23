@@ -1,5 +1,4 @@
 import SingleValueField from '../../../js/stores/view/qvain/qvain.singleValueField'
-import 'chai/register-should'
 
 const testValue = 'test value'
 const defaultValue = 'default value'

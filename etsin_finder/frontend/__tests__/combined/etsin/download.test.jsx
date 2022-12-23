@@ -2,6 +2,7 @@ import React from 'react'
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
 import { shallow } from 'enzyme'
+import { setImmediate } from 'timers'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../js/utils/constants'
 import EnvClass from '../../../js/stores/domain/env'
@@ -29,10 +30,7 @@ jest.mock('../../../js/components/dataset/data/idaResources/download', () => {
 
 const { PENDING, STARTED, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
 
-// Enable fake timers. Use 'legacy' explicitly because
-// jest 27 will change the default to 'modern' which will
-// require some changes.
-jest.useFakeTimers('legacy')
+jest.useFakeTimers()
 
 const Env = new EnvClass()
 

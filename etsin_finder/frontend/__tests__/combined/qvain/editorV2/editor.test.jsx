@@ -176,7 +176,7 @@ describe('EditorV2', () => {
       })
 
       afterAll(() => {
-        stores.Qvain.resetDataset()
+        stores.Qvain.resetQvainStore()
       })
 
       test('should decrease the number of remaining characters', () => {

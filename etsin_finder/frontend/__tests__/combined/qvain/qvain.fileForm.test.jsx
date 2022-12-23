@@ -3,6 +3,7 @@ import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import axios from 'axios'
 import { configure } from 'mobx'
+import { setImmediate } from 'timers'
 
 import '../../../locale/translations'
 import { buildStores } from '@/stores'

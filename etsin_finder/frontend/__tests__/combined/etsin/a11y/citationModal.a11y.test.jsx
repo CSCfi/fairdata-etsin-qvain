@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 import axios from 'axios'
+import { setImmediate } from 'timers'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'

@@ -1,6 +1,7 @@
 import Harness from '../componentTestHarness'
-import 'chai/register-expect'
+import { expect } from 'chai'
 import Select from 'react-select/async'
+import { setImmediate } from 'timers'
 
 import { useStores } from '@/stores/stores'
 

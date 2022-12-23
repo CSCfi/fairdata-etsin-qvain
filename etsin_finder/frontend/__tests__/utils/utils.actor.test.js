@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 import actorFunc from '../../js/components/qvain/utils/actor'
 

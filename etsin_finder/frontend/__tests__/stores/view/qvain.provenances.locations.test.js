@@ -1,5 +1,5 @@
 import Locations from '@/stores/view/qvain/qvain.provenances.locations'
-import 'chai/register-expect'
+import { expect } from 'chai'
 import EnvClass from '@/stores/domain/env'
 
 const Parent = {

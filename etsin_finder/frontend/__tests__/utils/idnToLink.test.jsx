@@ -1,5 +1,3 @@
-import 'chai/register-should'
-
 import idnToLink from '../../js/utils/idnToLink'
 
 describe('idnToLink', () => {

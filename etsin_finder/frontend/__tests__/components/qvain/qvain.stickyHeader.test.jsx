@@ -1,6 +1,6 @@
 import React, { createRef } from 'react'
 import Harness from '../componentTestHarness'
-import 'chai/register-expect'
+import { expect } from 'chai'
 import axios from 'axios'
 import { configure } from 'mobx'
 import Translate from 'react-translate-component'
@@ -9,7 +9,6 @@ import StickyHeader, { DatasetState } from '@/components/qvain/views/headers/sti
 import SubmitResponse from '@/components/qvain/views/headers/submitResponse'
 import { useStores } from '@/stores/stores'
 import { buildStores } from '@/stores'
-import { expect } from 'chai'
 
 jest.mock('axios')
 axios.get.mockReturnValue(

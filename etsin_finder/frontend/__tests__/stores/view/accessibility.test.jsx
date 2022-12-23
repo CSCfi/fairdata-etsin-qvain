@@ -1,6 +1,5 @@
 import EnvClass from '../../../js/stores/domain/env'
 import AccessibilityClass from '../../../js/stores/view/accessibility'
-import 'chai/register-should'
 
 describe('Accessibility Store', () => {
   let Accessibility

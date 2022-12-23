@@ -1,6 +1,5 @@
 import React from 'react'
 import translate from 'counterpart'
-import 'chai/register-should'
 import { mount } from 'enzyme'
 
 // fills withFieldErrorBoundaryTranslationList as a side effect

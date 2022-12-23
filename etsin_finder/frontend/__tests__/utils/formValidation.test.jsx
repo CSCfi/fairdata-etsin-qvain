@@ -1,4 +1,3 @@
-import 'chai/register-should'
 import * as yup from 'yup'
 
 describe('date string validation', () => {

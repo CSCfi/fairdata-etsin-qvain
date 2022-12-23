@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 import handleSubmit from '../../js/components/qvain/utils/handleSubmit'
 import { ACCESS_TYPE_URL } from '../../js/utils/constants'

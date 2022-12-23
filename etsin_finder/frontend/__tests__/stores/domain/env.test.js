@@ -1,4 +1,3 @@
-import 'chai/register-should'
 import { RouterStore } from '@/utils/RouterStore'
 import axios from 'axios'
 

@@ -11,7 +11,7 @@ import Tooltip, {
   TooltipDown,
   TooltipArrowDown,
 } from '../../../js/components/qvain/general/V2/Tooltip'
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 jest.spyOn(window, 'addEventListener')
 jest.spyOn(document, 'addEventListener')

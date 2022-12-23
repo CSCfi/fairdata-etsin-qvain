@@ -5,8 +5,6 @@ import { shallow, mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import ReactModal from 'react-modal'
 
-import 'chai/register-should'
-
 import { buildStores } from '../../../js/stores'
 import Packages from '../../../js/stores/view/packages'
 import { StoresProvider, useStores } from '../../../js/stores/stores'
@@ -44,12 +42,6 @@ const { PENDING, STARTED, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
 
 const mockAdapter = new MockAdapter(axios)
 applyMockAdapter(mockAdapter)
-
-// Wait until ms milliseconds have passed and execute all pending promises
-const wait = async ms => {
-  jest.advanceTimersByTime(ms)
-  await new Promise(setImmediate)
-}
 
 describe('PackageModal', () => {
   let wrapper

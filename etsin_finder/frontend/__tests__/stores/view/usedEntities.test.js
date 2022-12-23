@@ -2,7 +2,7 @@ import UsedEntities, {
   UsedEntityTemplate,
   UsedEntityModel,
 } from '../../../js/stores/view/qvain/qvain.usedEntities'
-import 'chai/register-expect'
+import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
 jest.mock('../../../js/stores/view/qvain/qvain.field', () => {

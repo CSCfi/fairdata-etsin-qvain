@@ -1,7 +1,8 @@
 import Harness from '../componentTestHarness'
-import 'chai/register-expect'
+import { expect } from 'chai'
 import ReactSelect from 'react-select'
 import translate from 'counterpart'
+import { setImmediate } from 'timers'
 
 import { Lifecycle, Outcome } from '@/stores/view/qvain/qvain.provenances'
 import { ROLE } from '@/utils/constants'

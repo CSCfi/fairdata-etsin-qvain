@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
 import Datasets from '../../../js/stores/view/qvain/qvain.datasets'

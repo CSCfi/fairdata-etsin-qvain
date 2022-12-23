@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 import * as mobx from 'mobx'
 import ProjectV2, { projectSchema } from '../../../js/stores/view/qvain/qvain.projectV2'
 

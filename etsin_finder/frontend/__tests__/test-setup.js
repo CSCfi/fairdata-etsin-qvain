@@ -4,7 +4,17 @@ import Adapter from 'enzyme-adapter-react-16'
 import { registerHelpers } from './test-helpers'
 import chai from 'chai'
 import chaiJestMocks from 'chai-jest-mocks'
-import 'chai/register-should'
+chai.should() // register .should to Object.prototype
+
+// isMockFunction is no longer in 'jest-mock' in jest 27 but chai-jest-mocks requires it
+import * as jestMock from 'jest-mock'
+jestMock.isMockFunction = jest.isMockFunction
+
+// uuid library needs crypto.getRandomValues which is not available in jest by default
+import { randomFillSync } from 'crypto'
+global.crypto = {
+  getRandomValues: buffer => randomFillSync(buffer),
+}
 
 import '../js/utils/extendYup'
 import '../js/utils/extendPromise'

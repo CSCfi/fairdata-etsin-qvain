@@ -1,5 +1,5 @@
 import Harness from '../componentTestHarness'
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 import FieldOfScienceField from '../../../js/components/qvain/sections/Description/FieldOfScience'
 import { useStores } from '../../../js/stores/stores'

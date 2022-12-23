@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { axe } from 'jest-axe'
 import { observable } from 'mobx'
+import { setImmediate } from 'timers'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'

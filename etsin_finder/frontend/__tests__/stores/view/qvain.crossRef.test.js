@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 import CrossRef from '@/stores/view/qvain/qvain.crossRef'
 import EnvClass from '@/stores/domain/env'
 import axios from 'axios'

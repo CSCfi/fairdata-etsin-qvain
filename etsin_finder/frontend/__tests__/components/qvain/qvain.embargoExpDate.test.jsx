@@ -1,5 +1,5 @@
 import translate from 'counterpart'
-import 'chai/register-expect'
+import { expect } from 'chai'
 import Harness from '../componentTestHarness'
 import EmbargoExpires from '@/components/qvain/sections/DataOrigin/general/AccessType/EmbargoExpires'
 import '../../../locale/translations'

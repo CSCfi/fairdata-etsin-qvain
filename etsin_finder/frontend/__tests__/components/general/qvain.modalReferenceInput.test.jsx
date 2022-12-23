@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme'
 import React from 'react'
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 import ModalReferenceInput from '@/components/qvain/general/V2/ModalReferenceInput'
 import { Title, Required } from '@/components/qvain/general/V2'

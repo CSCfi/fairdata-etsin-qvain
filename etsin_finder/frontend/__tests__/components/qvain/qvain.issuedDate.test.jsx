@@ -1,5 +1,5 @@
 import Harness from '../componentTestHarness'
-import 'chai/register-expect'
+import { expect } from 'chai'
 import '../../../locale/translations'
 
 import IssuedDate from '@/components/qvain/sections/Description/IssuedDate'

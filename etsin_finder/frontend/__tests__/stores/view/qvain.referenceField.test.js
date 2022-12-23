@@ -1,6 +1,5 @@
 import ReferenceField from '../../../js/stores/view/qvain/qvain.referenceField'
-import 'chai/register-expect'
-import 'chai/register-should'
+import { expect } from 'chai'
 
 const testStr = 'testStr'
 const testStr2 = 'testStr2'

@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 import { ActorsRef } from '../../../js/stores/view/qvain/qvain.actors'
 
 describe('ActorsRef', () => {

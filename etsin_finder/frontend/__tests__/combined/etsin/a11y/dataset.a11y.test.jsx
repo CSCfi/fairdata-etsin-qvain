@@ -6,6 +6,7 @@ import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 import { observable, when } from 'mobx'
 import MockAdapter from 'axios-mock-adapter'
+import { setImmediate } from 'timers'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'

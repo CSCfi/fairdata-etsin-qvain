@@ -1,5 +1,5 @@
 import Harness from '../componentTestHarness'
-import 'chai/register-expect'
+import { expect } from 'chai'
 import { useStores } from '@/stores/stores'
 import { buildStores } from '@/stores'
 

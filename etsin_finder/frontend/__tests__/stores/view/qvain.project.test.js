@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 import { v4 as uuidv4 } from 'uuid'
 import { makeObservable } from 'mobx'
 import Projects from '../../../js/stores/view/qvain/qvain.project'

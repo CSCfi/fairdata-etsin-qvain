@@ -1,6 +1,6 @@
 import React from 'react'
 import Harness from '../componentTestHarness'
-import 'chai/register-expect'
+import { expect } from 'chai'
 import Translate from 'react-translate-component'
 
 import { Dataset } from '@/components/qvain/views/DatasetEditorV2'

@@ -1,4 +1,4 @@
-import 'chai/register-expect'
+import { expect } from 'chai'
 
 import DatasetLanguage from '../../../js/stores/view/qvain/qvain.datasetLanguage'
 
