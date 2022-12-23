@@ -1,10 +1,10 @@
-import axios from 'axios'
 import { computed, observable, action, makeObservable } from 'mobx'
 import PromiseManager from '../../../utils/promiseManager'
 import Modal from './modal'
 import urls from '../../../utils/urls'
 
 import { filterGroups, groupDatasetsByVersionSet } from './qvain.datasets.filters'
+import AbortClient, { isAbort } from '@/utils/AbortClient'
 
 class QvainDatasets {
   constructor() {
@@ -12,6 +12,7 @@ class QvainDatasets {
     this.promiseManager = new PromiseManager()
     this.removeModal = new Modal()
     this.shareModal = new Modal()
+    this.client = new AbortClient()
   }
 
   @observable datasets = []
@@ -35,9 +36,9 @@ class QvainDatasets {
     this.error = null
     this.page = 1
     this.publishedDataset = null
-    this.promiseManager.reset()
     this.removeModal.close()
     this.shareModal.close()
+    this.client.abort()
   }
 
   @action.bound setDatasets(datasets) {
@@ -140,7 +141,7 @@ class QvainDatasets {
     try {
       const url = urls.qvain.datasets()
       const response = await this.promiseManager.add(
-        axios.get(url, { params: { no_pagination: true } }),
+        this.client.get(url, { params: { no_pagination: true } }),
         'datasets'
       )
       const data = response.data || []
@@ -150,7 +151,10 @@ class QvainDatasets {
       this.setDatasets(datasets)
       this.setPage(1)
     } catch (error) {
-      this.setError(error?.response?.data || error)
+      if (!isAbort(error)) {
+        console.error(error)
+        this.setError(error?.response?.data || error)
+      }
     }
   }
 }

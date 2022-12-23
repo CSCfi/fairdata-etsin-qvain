@@ -1,13 +1,11 @@
 import { action, computed, reaction, makeObservable, observable, runInAction } from 'mobx'
-import axios from 'axios'
 
+import AbortClient, { isAbort } from '@/utils/AbortClient'
 import PromiseManager from '../../../utils/promiseManager'
 import urls from '../../../utils/urls'
 
 import Modal from './modal'
 import Tabs from './tabs'
-
-const CancelToken = axios.CancelToken
 
 const sortOpts = { numeric: true, sensitivity: 'base' }
 const nameCompare = (a, b) => (a.name || '').localeCompare(b.name || '', undefined, sortOpts)
@@ -30,6 +28,7 @@ class Share {
     this.isUpdatingUserPermission = this.isUpdatingUserPermission.bind(this)
     this.isRemovingUserPermission = this.isRemovingUserPermission.bind(this)
     reaction(() => this.modal.isOpen, this.handleToggle)
+    this.client = new AbortClient()
   }
 
   @observable searchError = undefined
@@ -127,40 +126,38 @@ class Share {
 
   @action.bound
   async searchUsers(str) {
-    this.promiseManager.reset('search')
+    this.client.abort('search')
     if (!str) {
       this.setSearchResults([])
       return []
     }
-    const cancelSource = CancelToken.source()
-    const cancelToken = cancelSource.token
     const search = async () => {
       try {
         this.setSearchError(undefined)
         await Promise.delay(300)
-        const resp = await axios.get(urls.ldap.searchUser(str), { cancelToken, timeout })
+        const resp = await this.client.get(urls.ldap.searchUser(str), { timeout, tag: 'search' })
 
         const options = resp.data
         this.setSearchResults(options)
         return options
       } catch (e) {
-        if (!axios.isCancel(e)) {
+        if (!isAbort(e)) {
           console.error(e)
           this.setSearchError(e)
         }
         return []
       }
     }
-    return this.promiseManager.add(search(), 'search', { onCancel: cancelSource.cancel })
+    return this.promiseManager.add(search(), 'search')
   }
 
   @action.bound
   async sendInvite() {
     const invite = async () => {
-      const resp = await axios.post(
+      const resp = await this.client.post(
         urls.qvain.datasetEditorPermissions(this.datasetIdentifier),
         { users: this.selectedUsers.map(u => u.uid), message: this.inviteMessage },
-        { timeout }
+        { timeout, tag: 'send-invite' }
       )
       this.setInviteResults(resp.data)
       this.fetchPermissions() // fetch in background
@@ -180,9 +177,13 @@ class Share {
   async fetchPermissions() {
     const fetchPerms = async () => {
       try {
-        const resp = await axios.get(urls.qvain.datasetEditorPermissions(this.datasetIdentifier), {
-          timeout,
-        })
+        const resp = await this.client.get(
+          urls.qvain.datasetEditorPermissions(this.datasetIdentifier),
+          {
+            timeout,
+            tag: 'fetch-permissions',
+          }
+        )
         const users = (resp.data.users || []).map(user => ({
           uid: user.uid,
           name: user.name,
@@ -196,6 +197,9 @@ class Share {
         this.setProject(resp.data.project)
         this.removeAddedUsersFromSelected()
       } catch (err) {
+        if (isAbort(err)) {
+          return
+        }
         this.setUserPermissions([])
         console.error(err)
         runInAction(() => {
@@ -219,9 +223,9 @@ class Share {
   async removeUserPermission(user) {
     const remove = async () => {
       try {
-        await axios.delete(
+        await this.client.delete(
           urls.qvain.datasetEditorPermissionsUser(this.datasetIdentifier, user.uid),
-          { timeout }
+          { timeout, tag: 'delete' }
         )
 
         const perms = [...this.userPermissions]

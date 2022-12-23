@@ -6,6 +6,7 @@ import '../../../locale/translations'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
 import etsinTheme from '../../../js/styles/theme'
+import MockAdapter from 'axios-mock-adapter'
 
 import { CUMULATIVE_STATE } from '../../../js/utils/constants'
 import EnvClass from '../../../js/stores/domain/env'
@@ -19,8 +20,8 @@ import CumulativeDataset, {
 } from '../../../js/components/qvain/sections/DataOrigin/IdaCatalog/CumulativeDataset'
 import { useStores, StoresProvider } from '../../../js/stores/stores'
 
-jest.mock('axios')
-axios.get.mockImplementation((...args) => {})
+const mockAdapter = new MockAdapter(axios)
+mockAdapter.onGet().reply(200, {})
 
 jest.mock('../../../js/stores/stores', () => {
   const useStores = jest.fn()

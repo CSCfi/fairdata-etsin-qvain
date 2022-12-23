@@ -22,9 +22,10 @@ import { withStores } from '@/stores/stores'
 import RestrictionGrounds from './RestrictionGrounds'
 import EmbargoExpires from './EmbargoExpires'
 import { handleAccessTypeReferenceDataResponse } from '../../IdaCatalog/componentHelpers'
+import AbortClient, { isAbort } from '@/utils/AbortClient'
 
 export class AccessType extends Component {
-  promises = []
+  client = new AbortClient()
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -35,30 +36,31 @@ export class AccessType extends Component {
   }
 
   componentDidMount = () => {
-    this.promises.push(
-      getReferenceData('access_type')
-        .then(res => {
-          handleAccessTypeReferenceDataResponse(res, this.props.Stores, this)
-        })
-        .catch(error => {
-          if (error.response) {
-            // Error response from Metax
-            console.log(error.response.data)
-            console.log(error.response.status)
-            console.log(error.response.headers)
-          } else if (error.request) {
-            // No response from Metax
-            console.log(error.request)
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message)
-          }
-        })
-    )
+    getReferenceData('access_type', { client: this.client })
+      .then(res => {
+        handleAccessTypeReferenceDataResponse(res, this.props.Stores, this)
+      })
+      .catch(error => {
+        if (isAbort(error)) {
+          return
+        }
+        if (error.response) {
+          // Error response from Metax
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          // No response from Metax
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message)
+        }
+      })
   }
 
   componentWillUnmount() {
-    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+    this.client.abort()
   }
 
   handleChange = selection => {

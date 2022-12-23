@@ -1,16 +1,17 @@
-import axios from 'axios'
 import { observable, action, runInAction, computed, makeObservable } from 'mobx'
 
 import urls from '../../utils/urls'
 import { Project, dirIdentifierKey, fileIdentifierKey } from './common.files.items'
 import PromiseManager from '../../utils/promiseManager'
 import { itemLoaderPublic } from './common.files.loaders'
+import AbortClient, { isAbort } from '@/utils/AbortClient'
 
 class Files {
   // Base class for file hierarchies.
 
   constructor() {
     this.promiseManager = new PromiseManager()
+    this.client = new AbortClient()
     Files.prototype.reset.call(this)
     makeObservable(this)
   }
@@ -39,7 +40,7 @@ class Files {
 
   @observable initialLoadCount = 200
 
-  @action reset() {
+  @action async reset() {
     this.datasetIdentifier = null
     this.draftOfHasProject = null
     this.root = null
@@ -47,27 +48,10 @@ class Files {
     this.cache = {}
     this.originalMetadata = {}
     this.projectLocked = false
-
-    if (this.loadingProjectInfo?.promise?.cancel) {
-      this.loadingProjectInfo.promise.cancel()
-    }
     this.loadingProjectInfo = null
-
-    if (this.loadingMetadata?.promise?.cancel) {
-      this.loadingMetadata.promise.cancel()
-    }
     this.loadingMetadata = null
-
-    if (this.loadingProjectRoot?.promise?.cancel) {
-      this.loadingProjectRoot.promise.cancel()
-    }
     this.loadingProjectRoot = null
-    this.promiseManager.reset()
-
-    if (this.loadingDraftOfProjects?.promise?.cancel) {
-      this.loadingDraftOfProjects.promise.cancel()
-    }
-    this.loadingDraftOfProjects = null
+    this.client.abort()
   }
 
   @action loadProjectInfo = async () => {
@@ -78,14 +62,11 @@ class Files {
       return
     }
 
-    const loadingAnotherProject =
-      this.loadingProjectInfo && this.loadingProjectInfo.promise && !this.loadingProjectInfo.error
-    if (loadingAnotherProject) {
-      this.loadingProjectInfo.promise.cancel()
-    }
-
     const load = async () => {
-      const { data } = await axios.get(urls.common.datasetProjects(identifier))
+      await this.client.abort('load-project-info')
+      const { data } = await this.client.get(urls.common.datasetProjects(identifier), {
+        tag: 'load-project-info',
+      })
       runInAction(() => {
         if (data.length > 0) {
           this.selectedProject = data[0]
@@ -96,22 +77,27 @@ class Files {
       })
     }
 
+    let promise
     try {
+      promise = load()
       this.loadingProjectInfo = {
         identifier,
-        promise: load(this.selectedProject),
+        promise,
         error: null,
         done: false,
       }
-      await this.loadingProjectInfo.promise
+      await promise
     } catch (error) {
+      if (isAbort(error)) {
+        throw error
+      }
       runInAction(() => {
         this.selectedProject = undefined
         this.loadingProjectInfo.error = error
       })
     } finally {
       runInAction(() => {
-        if (this.loadingProjectInfo) {
+        if (this.loadingProjectInfo?.promise === promise) {
           this.loadingProjectInfo.done = true
         }
       })
@@ -127,12 +113,11 @@ class Files {
       return
     }
 
-    if (this.loadingMetadata && this.loadingMetadata.promise && !this.loadingMetadata.error) {
-      this.loadingMetadata.promise.cancel()
-    }
-
     const load = async () => {
-      const { data } = await axios.get(urls.common.datasetUserMetadata(identifier))
+      await this.client.abort('load-metadata')
+      const { data } = await this.client.get(
+        urls.common.datasetUserMetadata(identifier, { tag: 'load-metadata' })
+      )
       runInAction(() => {
         // Load metadata for files and directories selected in the dataset.
         const dsFiles = data.files || []
@@ -182,21 +167,26 @@ class Files {
       })
     }
 
+    let promise
     try {
+      promise = load()
       this.loadingMetadata = {
         identifier,
-        promise: load(this.selectedProject),
+        promise,
         error: null,
         done: false,
       }
       await this.loadingMetadata.promise
     } catch (error) {
+      if (isAbort(error)) {
+        throw error
+      }
       runInAction(() => {
         this.loadingMetadata.error = error
       })
     } finally {
       runInAction(() => {
-        if (this.loadingMetadata) {
+        if (this.loadingMetadata?.promise === promise) {
           this.loadingMetadata.done = true
         }
       })
@@ -204,41 +194,24 @@ class Files {
   }
 
   @action checkDraftOfProjects = async dataset => {
+    // If dataset is a draft of another dataset, check if the original had a selected project
     const draftOf = dataset.draft_of?.identifier
     if (draftOf) {
-      if (this.loadingDraftOfProjects?.promise) {
-        this.loadingDraftOfProjects.promise.cancel()
-      }
-
-      const run = async () => {
-        const { data } = await axios.get(urls.common.datasetProjects(draftOf))
-        runInAction(() => {
-          this.draftOfHasProject = !!(data && data.length > 0)
-        })
-      }
-      try {
-        this.loadingDraftOfProjects = {
-          identifier: draftOf,
-          promise: run(),
-          error: null,
-          done: false,
-        }
-        await this.loadingDraftOfProjects.promise
-      } catch (err) {
-        runInAction(() => {
-          this.loadingDraftOfProjects.error = err
-        })
-      } finally {
-        runInAction(() => {
-          this.loadingDraftOfProjects = null
-        })
-      }
+      await this.client.abort('check-draft-of-project')
+      const { data } = await this.client.get(urls.common.datasetProjects(draftOf), {
+        tag: 'check-draft-of-project',
+      })
+      runInAction(() => {
+        this.draftOfHasProject = !!(data && data.length > 0)
+      })
     }
   }
 
   @action openDataset = async dataset => {
     this.reset()
-    this.datasetIdentifier = dataset.identifier
+    runInAction(() => {
+      this.datasetIdentifier = dataset.identifier
+    })
     await Promise.all([
       this.loadProjectInfo(),
       this.loadMetadata(),
@@ -262,17 +235,21 @@ class Files {
     return itemLoaderPublic.loadDirectory(this, dir, this.initialLoadCount)
   }
 
-  @action changeProject = projectId => {
+  @action changeProject = async projectId => {
     Files.prototype.reset.call(this)
-    this.selectedProject = projectId
-    this.promiseManager.reset()
+    runInAction(() => {
+      this.selectedProject = projectId
+    })
     return this.loadProjectRoot()
   }
 
   fetchRootIdentifier = async projectIdentifier => {
     // Public access to projects is only through published datasets.
     // To access user projects, overload this and remove cr_identifier from the request.
-    const { data } = await axios.get(urls.common.projectFiles(projectIdentifier), {
+
+    await this.client.abort('fetch-root-identifier')
+    const { data } = await this.client.get(urls.common.projectFiles(projectIdentifier), {
+      tag: 'fetch-root-identifier',
       params: {
         cr_identifier: this.datasetIdentifier,
       },
@@ -290,9 +267,6 @@ class Files {
     if (!this.selectedProject) {
       return
     }
-    if (this.loadingProjectRoot && !this.loadingProjectRoot.error) {
-      this.loadingProjectRoot.promise.cancel()
-    }
 
     const loadRoot = async projectIdentifier => {
       const rootIdentifier = await this.fetchRootIdentifier(projectIdentifier)
@@ -303,23 +277,27 @@ class Files {
       })
     }
 
+    let promise
     try {
+      promise = loadRoot(this.selectedProject)
       this.loadingProjectRoot = {
         identifier: this.selectedProject,
-        promise: loadRoot(this.selectedProject),
+        promise,
         error: null,
         done: false,
-        random: Math.random(),
       }
       await this.loadingProjectRoot.promise
     } catch (error) {
+      if (isAbort(error)) {
+        throw error
+      }
       runInAction(() => {
         this.root = null
         this.loadingProjectRoot.error = error
       })
     } finally {
       runInAction(() => {
-        if (this.loadingProjectRoot) {
+        if (this.loadingProjectRoot?.promise === promise) {
           this.loadingProjectRoot.done = true
         }
       })

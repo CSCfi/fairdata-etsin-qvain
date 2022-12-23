@@ -1,7 +1,7 @@
-import axios from 'axios'
-import { observable, action, computed, makeObservable, reaction } from 'mobx'
+import { observable, action, computed, makeObservable, reaction, runInAction } from 'mobx'
 import PromiseManager from '../../../utils/promiseManager'
 import urls from '../../../utils/urls'
+import AbortClient, { isAbort } from '@/utils/AbortClient'
 
 class Lock {
   constructor(Qvain, Auth) {
@@ -13,6 +13,7 @@ class Lock {
     this.handleDatasetChange = this.handleDatasetChange.bind(this)
     this.unload = this.unload.bind(this)
     reaction(() => this.Qvain.datasetIdentifier, this.handleDatasetChange)
+    this.client = new AbortClient()
   }
 
   pollInterval = 30000
@@ -29,7 +30,7 @@ class Lock {
 
   pollTimeoutId = null
 
-  pollingEnabled = false
+  @observable pollingEnabled = false
 
   handleDatasetChange(newIdentifier, oldIdentifier) {
     if (!this.enabled) {
@@ -53,7 +54,9 @@ class Lock {
 
   @action async disable() {
     await this.stopPoll()
-    this.enabled = false
+    runInAction(() => {
+      this.enabled = false
+    })
   }
 
   @computed get haveLock() {
@@ -103,7 +106,7 @@ class Lock {
     this.pollingEnabled = false
     this.setInitialLoad(false)
     this.clearPollTimeout()
-    this.promiseManager.promises.forEach(p => p.cancel())
+    this.client.abort()
     await this.release()
   }
 
@@ -137,11 +140,14 @@ class Lock {
       const data = { force: !!force }
       let responseData
       try {
-        const resp = await axios.put(urls.qvain.datasetLock(dataset), data, {
+        const resp = await this.client.put(urls.qvain.datasetLock(dataset), data, {
           timeout: this.requestTimeout,
         })
         responseData = resp?.data
       } catch (err) {
+        if (isAbort(err)) {
+          return
+        }
         if (!err.response) {
           console.warn(err)
         }
@@ -170,9 +176,16 @@ class Lock {
     const dataset = this.lockData?.dataset
     this.setLockData(undefined, undefined)
     if (dataset) {
-      await axios.delete(urls.qvain.datasetLock(dataset), {
-        timeout: this.requestTimeout,
-      })
+      try {
+        await this.client.delete(urls.qvain.datasetLock(dataset), {
+          timeout: this.requestTimeout,
+        })
+      } catch (err) {
+        if (isAbort(err)) {
+          return
+        }
+        throw err
+      }
     }
   }
 
@@ -183,6 +196,7 @@ class Lock {
     }
     const dataset = this.lockData?.dataset
     if (dataset && window.fetch) {
+      // use fetch because of the keepalive option that allows the request to outlive the page
       window.fetch(urls.qvain.datasetLock(dataset), {
         keepalive: true,
         method: 'DELETE',

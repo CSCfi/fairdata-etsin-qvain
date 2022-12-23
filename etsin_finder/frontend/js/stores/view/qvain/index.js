@@ -232,8 +232,7 @@ class Qvain extends Resources {
     this.deprecated = dataset.deprecated
 
     // Load data catalog
-    this.dataCatalog =
-      dataset.data_catalog !== undefined ? dataset.data_catalog.identifier : undefined
+    this.dataCatalog = dataset.data_catalog?.identifier
 
     const researchDataset = dataset.research_dataset
 

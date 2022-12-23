@@ -217,16 +217,22 @@ describe('Qvain.MetadataModal', () => {
     expect(instance.state.csvHasHeader).toBe(false)
 
     // Mock the put request used by save
-    axios.put.mockImplementationOnce((url, data) => ({
-      data: {
-        ...testFile,
-        file_characteristics: {
-          ...testFile.file_characteristics,
-          ...data,
+    axios.put.mockImplementationOnce((url, data) => {
+      return Promise.resolve({
+        data: {
+          ...testFile,
+          file_characteristics: {
+            ...testFile.file_characteristics,
+            ...data,
+          },
         },
-      },
-    }))
+      })
+    })
     await instance.saveChanges()
+    await Promise.resolve()
+    await Promise.resolve()
+    await Promise.resolve()
+
     expect(file.pasMeta.csvHasHeader).toBe(false)
   })
 

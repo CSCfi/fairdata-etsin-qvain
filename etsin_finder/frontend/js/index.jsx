@@ -20,13 +20,6 @@ import App from './app'
 import './index.css'
 import '../fairdata-ui/fairdata.css'
 
-global.Promise = require('bluebird')
-
-Promise.config({
-  warnings: false,
-  cancellation: true,
-})
-
 if (BUILD === 'development') {
   // REACT-AXE: Disabled for now, since it outputs a lot of error messages to the console
   // eslint-disable-next-line global-require

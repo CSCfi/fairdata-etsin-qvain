@@ -2,6 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 
 import etsinTheme from '@/styles/theme'
 import PasState from '@/components/qvain/views/headers/pasState'
@@ -16,10 +17,6 @@ import '../../../locale/translations'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 
-Promise.config({
-  cancellation: true,
-})
-
 const stores = buildStores()
 
 const getStores = () => {
@@ -27,15 +24,14 @@ const getStores = () => {
   return stores
 }
 
-jest.mock('axios')
-axios.get.mockImplementation(url => {
+const mockAdapter = new MockAdapter(axios)
+mockAdapter.onGet().reply(async ({ url }) => {
   const path = new URL(url).pathname
   if (!metaxResponses[path]) {
     console.error(`Error: no mock response for ${path}`)
   }
-  return Promise.resolve({
-    data: metaxResponses[path],
-  })
+  await Promise.delay(0)
+  return [200, metaxResponses[path]]
 })
 
 // Unmount mounted components after each test to avoid tests affecting each other.
@@ -46,6 +42,7 @@ afterEach(() => {
     wrapper = null
   }
 })
+
 
 describe('Qvain.PasState', () => {
   const render = stores => {

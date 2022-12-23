@@ -2,7 +2,6 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
-import { observable } from 'mobx'
 
 import dateFormat from '@/utils/dateFormat'
 import etsinTheme from '@/styles/theme'
@@ -16,8 +15,6 @@ import {
   pasUseCopy,
 } from '../../__testdata__/dataset.ida'
 import Events from '@/components/dataset/events'
-
-jest.mock('axios')
 
 deprecatedDataset.preservation_dataset_origin_version = {
   preferred_identifier: 'urn:nbn:fi:origin-of-preserved-dataset',

@@ -12,12 +12,12 @@
 
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
 
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import ContentBox from '../general/contentBox'
 import { withStores } from '../../stores/stores'
+import AbortClient, { isAbort } from '@/utils/AbortClient'
 import FilterValue, { ValueList } from './FilterValue'
 
 class KeyValues extends Component {
@@ -33,7 +33,7 @@ class KeyValues extends Component {
       error: false,
     }
 
-    this.promises = []
+    this.client = new AbortClient()
   }
 
   componentDidMount() {
@@ -41,17 +41,17 @@ class KeyValues extends Component {
   }
 
   componentWillUnmount() {
-    this.promises.forEach(promise => promise.cancel())
+    this.client.abort()
   }
 
   getValues() {
-    const datasets = axios.get('/es/metax/dataset/_count', {
+    const datasets = this.client.get('/es/metax/dataset/_count', {
       query: {
         match_all: {},
       },
     })
 
-    const es = axios.post('/es/metax/dataset/_search', {
+    const es = this.client.post('/es/metax/dataset/_search', {
       aggs: {
         // label.en and label.fi always have same cardinality
         // for keywords, use the english field
@@ -64,7 +64,6 @@ class KeyValues extends Component {
     })
 
     const allLoaded = Promise.all([datasets, es])
-    this.promises.push(allLoaded)
     allLoaded
       .then(res => {
         this.setState({
@@ -76,6 +75,10 @@ class KeyValues extends Component {
         })
       })
       .catch(err => {
+        console.log(err)
+        if (isAbort(err)) {
+          return
+        }
         console.error('Error loading keyvalues')
         this.setState({
           error: err,

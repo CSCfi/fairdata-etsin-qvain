@@ -2,6 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { when } from 'mobx'
 import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { ThemeProvider } from 'styled-components'
@@ -15,20 +16,18 @@ import datasets from '../../__testdata__/qvain.datasets'
 import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
 import DatasetsV2 from '@/components/qvain/views/datasetsV2'
+import { after } from 'lodash'
 
 jest.useFakeTimers('modern')
 jest.setSystemTime(new Date('2021-05-07T10:00:00Z'))
 
-jest.mock('axios')
+const mockAdapter = new MockAdapter(axios)
 
 let stores, wrapper, helper, testLocation
 
 beforeEach(() => {
-  axios.get.mockReturnValue(
-    Promise.resolve({
-      data: datasets,
-    })
-  )
+  mockAdapter.reset()
+  mockAdapter.onGet().reply(200, datasets)
 })
 
 const wait = async cond => {
@@ -102,9 +101,15 @@ const findDatasetWithTitleExact = title => {
 
 describe('DatasetsV2', () => {
   describe('given error', () => {
+    let spy
     beforeEach(async () => {
-      axios.get.mockReturnValueOnce(Promise.reject('this is not supposed to happen'))
+      spy = jest.spyOn(console, 'error').mockImplementation(() => {})
+      mockAdapter.onGet().reply(500, 'this is not supposed to happen')
       await render()
+    })
+
+    afterEach(() => {
+      spy.mockRestore?.()
     })
 
     it('should show error', async () => {
@@ -112,6 +117,7 @@ describe('DatasetsV2', () => {
     })
 
     it('should reload datasets when button is clicked', async () => {
+      mockAdapter.onGet().reply(200, datasets)
       wrapper.find('button[children="Reload"]').simulate('click')
       await wait(() => wrapper.find('tbody').length > 0)
       wrapper.find('tbody').length.should.eql(7)

@@ -3,6 +3,9 @@ import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
+import { MemoryRouter } from 'react-router-dom'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
@@ -12,6 +15,16 @@ import FrontPage from '../../../../js/components/frontpage'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
+
+const mockAdapter = new MockAdapter(axios)
+mockAdapter.onGet().reply(200, { count: 1 })
+mockAdapter.onPost().reply(200, {
+  aggregations: {
+    distinct_keywords: { value: 2 },
+    distinct_fieldsofscience: { value: 3 },
+    distinct_projects: { value: 4 },
+  },
+})
 
 jest.mock('../../../../js/stores/view/accessibility')
 const mockLocation = {
@@ -28,11 +41,13 @@ describe('Etsin frontpage', () => {
 
     wrapper = mount(
       <StoresProvider store={stores}>
-        <ThemeProvider theme={etsinTheme}>
-          <main>
-            <FrontPage location={mockLocation} />
-          </main>
-        </ThemeProvider>
+        <MemoryRouter>
+          <ThemeProvider theme={etsinTheme}>
+            <main>
+              <FrontPage location={mockLocation} />
+            </main>
+          </ThemeProvider>
+        </MemoryRouter>
       </StoresProvider>,
       { attachTo: helper }
     )

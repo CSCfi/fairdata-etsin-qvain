@@ -5,6 +5,7 @@ import { MemoryRouter, Route } from 'react-router-dom'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 import { observable, when } from 'mobx'
+import MockAdapter from 'axios-mock-adapter'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
@@ -25,27 +26,25 @@ jest.mock('@/components/dataset/sidebar/special/importImages')
 
 jest.mock('../../../../js/stores/view/accessibility')
 
-jest.mock('axios')
-
 const datasetsCalls = observable.array([])
 
-const mockGet = () => {
-  axios.get = jest.fn((...args) => {
-    datasetsCalls.push(JSON.parse(JSON.stringify(args)))
-    return Promise.resolve({
-      data: {
-        catalog_record: dataset,
-        email_info: {
-          CONTRIBUTOR: false,
-          CREATOR: false,
-          CURATOR: false,
-          PUBLISHER: false,
-          RIGHTS_HOLDER: false,
-        },
+const mockAdapter = new MockAdapter(axios)
+mockAdapter.onGet().reply((args) => {
+  datasetsCalls.push(JSON.parse(JSON.stringify(args)))
+  return [
+    200,
+    {
+      catalog_record: dataset,
+      email_info: {
+        CONTRIBUTOR: false,
+        CREATOR: false,
+        CURATOR: false,
+        PUBLISHER: false,
+        RIGHTS_HOLDER: false,
       },
-    })
-  })
-}
+    },
+  ]
+})
 
 const identifier = dataset.identifier
 const path = `/dataset/${identifier}`
@@ -61,7 +60,6 @@ describe('Etsin dataset page', () => {
   beforeAll(async () => {
     jest.resetAllMocks()
     datasetsCalls.clear()
-    mockGet()
 
     helper = document.createElement('div')
     document.body.appendChild(helper)

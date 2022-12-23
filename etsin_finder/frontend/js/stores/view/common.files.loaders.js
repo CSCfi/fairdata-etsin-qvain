@@ -1,6 +1,6 @@
-import axios from 'axios'
 import { observable, action, runInAction, when } from 'mobx'
 
+import { isAbort } from '@/utils/AbortClient'
 import urls from '../../utils/urls'
 
 import {
@@ -57,8 +57,11 @@ const fetchExistingChildDataForDirectory = async (
 
   const url = getChildDataUrl(dir)
   url.searchParams.set('cr_identifier', datasetIdentifier)
-  const resp = ignoreNotFound(axios.get(url.href), emptyDirectoryResponse)
-  const { data } = await Files.cancelOnReset(resp)
+  const resp = ignoreNotFound(
+    Files.client.get(url.href, { tag: 'fetch-existing-child-data' }),
+    emptyDirectoryResponse
+  )
+  const { data } = await resp
 
   const cache = Files.cache
   data.directories.forEach((newDir, index) => {
@@ -110,8 +113,8 @@ const fetchAnyChildDataForDirectory = async (Files, dir, defaults = {}) => {
   // - total file count and byte count for each subdirectory
 
   const url = getChildDataUrl(dir)
-  const resp = axios.get(url.href)
-  const { data } = await Files.cancelOnReset(resp)
+  const resp = Files.client.get(url.href, { tag: 'fetch-any-child-data' })
+  const { data } = await resp
 
   const cache = Files.cache
   data.directories.forEach((newDir, index) => {
@@ -156,7 +159,11 @@ const fetchChildData = action((Files, dir, type) => {
     dir.pagination.fileCountsPromise = fetchAnyChildDataForDirectory(Files, dir).catch(
       action(err => {
         dir.pagination.fileCountsPromise = null
-        console.error(err)
+        if (isAbort(err)) {
+          throw err
+        } else {
+          console.error(err)
+        }
       })
     )
   }
@@ -170,8 +177,13 @@ const fetchChildData = action((Files, dir, type) => {
         datasetIdentifier,
         true
       ).catch(
-        action(() => {
+        action(err => {
           dir.pagination.fileCountsPromise = null
+          if (isAbort(err)) {
+            throw err
+          } else {
+            console.error(err)
+          }
         })
       )
     }
@@ -187,8 +199,13 @@ const fetchChildData = action((Files, dir, type) => {
         datasetIdentifier,
         false
       ).catch(
-        action(() => {
+        action(err => {
           dir.pagination.existingFileCountsPromise = null
+          if (isAbort(err)) {
+            throw err
+          } else {
+            console.error(err)
+          }
         })
       )
     }
@@ -222,9 +239,11 @@ const fetchItems = async (Files, dir, offset, limit, type, filterStr = '') => {
   if (!datasetIdentifier && type === FetchType.EXISTING) {
     promise = Promise.resolve(emptyDirectoryResponse)
   } else {
-    promise = Files.cancelOnReset(ignoreNotFound(axios.get(url.href), emptyDirectoryResponse))
+    promise = ignoreNotFound(
+      Files.client.get(url.href, { tag: 'fetch-items' }),
+      emptyDirectoryResponse
+    )
   }
-
   await Promise.all([
     promise,
     dir.pagination.fileCountsPromise,
@@ -337,8 +356,9 @@ class ItemLoader {
     // Wait for any existing loading for the current directory to finish, set loading to true.
     while (dir.loading) {
       // loop needed to make sure only one is released at a time
+      // TODO: use signal from AbortClient in when (needs mobx 6.7.0)
       // eslint-disable-next-line no-await-in-loop
-      await Files.cancelOnReset(when(() => !dir.loading).catch(() => {}))
+      await when(() => !dir.loading)
     }
     runInAction(() => {
       dir.loading = true
@@ -361,6 +381,7 @@ class ItemLoader {
     //   totalLimit: how many items we want to be shown in total
     //   getCurrentCount: function that returns number of items currently being shown in view
     //   filter: filter by file name or directory name
+
 
     if (!Object.values(FetchType).includes(this.fetchType)) {
       throw new TypeError(`Invalid fetchType, fetchType = ${this.fetchType}`)
@@ -402,9 +423,7 @@ class ItemLoader {
       }
 
       fetchChildData(Files, dir, this.fetchType)
-      const newItems = await Files.cancelOnReset(
-        fetchItems(Files, dir, offset, limit, this.fetchType, filter)
-      )
+      const newItems = await fetchItems(Files, dir, offset, limit, this.fetchType, filter)
 
       const counts = await dir.pagination.fileCountsPromise
       const existingCounts = await dir.pagination.existingFileCountsPromise

@@ -6,6 +6,7 @@ import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
 import { components as selectComponents } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
+import MockAdapter from 'axios-mock-adapter'
 
 import '../../../locale/translations'
 import etsinTheme from '@/styles/theme'
@@ -44,7 +45,7 @@ configure({
   enforceActions: 'always',
 })
 
-jest.mock('axios')
+const mockAdapter = new MockAdapter(axios)
 
 jest.mock('@/stores/stores', () => {
   const useStores = jest.fn()
@@ -68,7 +69,7 @@ const stores = {
 }
 
 beforeEach(() => {
-  axios.get.mockReset()
+  mockAdapter.reset()
   stores.Qvain.resetQvainStore()
   stores.Qvain.Actors.clearReferenceOrganizations()
   useStores.mockReturnValue(stores)
@@ -173,10 +174,9 @@ describe('Qvain.Actors modal', () => {
   let helper, wrapper
 
   beforeEach(async () => {
-    axios.get.mockImplementation(organizationMockGet)
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
     await stores.Qvain.editDataset(dataset)
     stores.Qvain.Actors.editActor(Actor())
-
     useStores.mockReturnValue(stores)
 
     helper = document.createElement('div')
@@ -189,6 +189,8 @@ describe('Qvain.Actors modal', () => {
       </StoresProvider>,
       { attachTo: helper }
     )
+
+    await Promise.delay(0) // wait for reference data to get loaded
   })
 
   afterEach(() => {
@@ -377,7 +379,7 @@ describe('Qvain.Actors modal', () => {
     expect(actorInEdit.organizations[0].isReference).toBe(true)
   })
 
-  it('adds child organization when clicked', () => {
+  it('adds child organization when clicked', async () => {
     const { actors, editActor, setActorOrganizations } = stores.Qvain.Actors
     const { allOrganizationsFlat } = stores.Qvain.Actors
     const aalto = allOrganizationsFlat.find(org => org.name.en === 'Aalto University')
@@ -553,8 +555,11 @@ describe('Qvain.Actors modal', () => {
 })
 
 describe('Qvain.Actors reference organizations', () => {
+  beforeEach(() => {
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
+  })
+
   it('fetches reference organizations', async () => {
-    axios.get.mockImplementation(organizationMockGet)
     const orgs = await stores.Qvain.Actors.fetchReferenceOrganizations()
     expect(orgs.length).toBe(2)
     const testOrg = orgs[0]
@@ -563,8 +568,7 @@ describe('Qvain.Actors reference organizations', () => {
   })
 
   it('fails to fetch reference organizations', async () => {
-    const err = new Error('Oops. Fail.')
-    axios.get.mockImplementation(() => Promise.reject(err))
+    mockAdapter.onGet().reply(400, 'Oops. Fail.')
 
     const { referenceOrganizations, referenceOrganizationErrors, fetchReferenceOrganizations } =
       stores.Qvain.Actors
@@ -573,21 +577,21 @@ describe('Qvain.Actors reference organizations', () => {
     try {
       await fetchReferenceOrganizations()
     } catch (error) {
-      expect(error).toBe(err)
+      expect(error.response.data).toBe('Oops. Fail.')
     }
     expect(Object.values(referenceOrganizations).length).toBe(0)
     expect(Object.values(referenceOrganizationErrors).length).toBe(1)
   })
 
   it('clears error after fetching succesfully', async () => {
-    const err = new Error('Oops. Fail.')
-    axios.get.mockImplementation(organizationMockGet)
-    axios.get.mockImplementationOnce(() => Promise.reject(err))
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
+
+    mockAdapter.onGet().replyOnce(200, 'Oops. Fail.')
 
     const { referenceOrganizations, referenceOrganizationErrors, fetchReferenceOrganizations } =
       stores.Qvain.Actors
 
-    expect.assertions(3)
+    expect.assertions(2)
     try {
       await fetchReferenceOrganizations()
     } catch (error) {
@@ -599,7 +603,7 @@ describe('Qvain.Actors reference organizations', () => {
   })
 
   it('identifies actor being edited as a reference organization', async () => {
-    axios.get.mockImplementation(organizationMockGet)
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
     const { editActor, referenceOrganizations, fetchReferenceOrganizations } = stores.Qvain.Actors
     editActor(
       Actor({
@@ -631,7 +635,7 @@ describe('Qvain.Actors reference organizations', () => {
   })
 
   it('uses cached reference organizations when fetching again', async () => {
-    axios.get.mockImplementation(organizationMockGet)
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
     const orgs = await stores.Qvain.Actors.fetchReferenceOrganizations()
     expect(await stores.Qvain.Actors.fetchReferenceOrganizations()).toBe(orgs)
   })
@@ -647,7 +651,7 @@ describe('Qvain.Actors reference organizations', () => {
   })
 
   it('fetches child reference organizations', async () => {
-    axios.get.mockImplementation(organizationMockGet)
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
     const orgs = await stores.Qvain.Actors.fetchReferenceOrganizations()
     const testOrg = orgs[0]
     const childOrgs = await stores.Qvain.Actors.fetchReferenceOrganizations(testOrg)
@@ -655,18 +659,18 @@ describe('Qvain.Actors reference organizations', () => {
   })
 
   it('fetches reference organizations only once', async () => {
-    axios.get.mockImplementation(organizationMockGet)
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
     const promise1 = stores.Qvain.Actors.fetchReferenceOrganizations()
     const promise2 = stores.Qvain.Actors.fetchReferenceOrganizations()
     const orgs1 = await promise1
     const orgs2 = await promise2
     expect(orgs1.length).toBe(2)
     expect(orgs2).toEqual(orgs1)
-    expect(axios.get.mock.calls.length).toBe(1)
+    expect(mockAdapter.history.get.length).toBe(1)
   })
 
   it('fetches child reference organizations only once', async () => {
-    axios.get.mockImplementation(organizationMockGet)
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
     const orgs = await stores.Qvain.Actors.fetchReferenceOrganizations()
     const testOrg = orgs[0]
 
@@ -676,11 +680,11 @@ describe('Qvain.Actors reference organizations', () => {
     const orgs2 = await promise2
     expect(orgs1.length).toBe(6)
     expect(orgs2).toEqual(orgs1)
-    expect(axios.get.mock.calls.length).toBe(2)
+    expect(mockAdapter.history.get.length).toBe(2)
   })
 
   it('determines which organizations are reference organizations', async () => {
-    axios.get.mockImplementation(organizationMockGet)
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
     const { actors, fetchAllDatasetReferenceOrganizations } = stores.Qvain.Actors
     stores.Qvain.editDataset(dataset)
 
@@ -711,7 +715,7 @@ describe('Qvain.Actors reference organizations', () => {
   })
 
   it('fetches reference organizations for actor', async () => {
-    axios.get.mockImplementation(organizationMockGet)
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
     const { fetchReferenceOrganizations, getReferenceOrganizationsForActor } = stores.Qvain.Actors
     const orgs = await fetchReferenceOrganizations()
     const aalto = orgs.find(org => org.identifier === AaltoIdentifier)
@@ -733,10 +737,10 @@ describe('Qvain.Actors reference organizations', () => {
 
   it('fetches reference organizations for actor', async () => {
     const { fetchReferenceOrganizations, getReferenceOrganizationsForActor } = stores.Qvain.Actors
-    axios.get.mockImplementationOnce(organizationMockGet)
+    mockAdapter.onGet().replyOnce(({ url }) => [200, organizationMockGet(url)])
     const orgs = await fetchReferenceOrganizations()
     const aalto = orgs.find(org => org.identifier === AaltoIdentifier)
-    axios.get.mockImplementationOnce(organizationMockGet)
+    mockAdapter.onGet().replyOnce(({ url }) => [200, organizationMockGet(url)])
     const childOrgs = await fetchReferenceOrganizations(aalto)
 
     const actor = Actor({
@@ -755,7 +759,7 @@ describe('Qvain.Actors reference organizations', () => {
 
   it('return 0 reference child organizations for manually added organization', async () => {
     const { fetchReferenceOrganizations, getReferenceOrganizationsForActor } = stores.Qvain.Actors
-    axios.get.mockImplementationOnce(organizationMockGet)
+    mockAdapter.onGet().replyOnce(({ url }) => [200, organizationMockGet(url)])
     const orgs = await fetchReferenceOrganizations()
     const someOrg = orgs.find(org => org.name.en === 'Some Organization')
 
@@ -824,7 +828,7 @@ describe('Qvain.Actors store', () => {
     stores.Qvain.editDataset(dataset)
     const { actors, referenceOrganizations } = stores.Qvain.Actors
 
-    axios.get.mockImplementationOnce(organizationMockGet)
+    mockAdapter.onGet().replyOnce(({ url }) => [200, organizationMockGet(url)])
     await stores.Qvain.Actors.fetchReferenceOrganizations()
     const aalto = referenceOrganizations[''].find(org => org.name.en === 'Aalto University')
     const aaltoUIID = aalto.uiid
@@ -846,12 +850,12 @@ describe('Qvain.Actors store', () => {
     stores.Qvain.editDataset(dataset)
     const { actors, referenceOrganizations } = stores.Qvain.Actors
 
-    axios.get.mockImplementationOnce(organizationMockGet)
+    mockAdapter.onGet().replyOnce(({ url }) => [200, organizationMockGet(url)])
     await stores.Qvain.Actors.fetchReferenceOrganizations()
     const aalto = referenceOrganizations[''].find(org => org.name.en === 'Aalto University')
 
     let count = 0
-    axios.get.mockImplementationOnce(organizationMockGet)
+    mockAdapter.onGet().replyOnce(({ url }) => [200, organizationMockGet(url)])
     await stores.Qvain.Actors.fetchReferenceOrganizations(aalto)
     const department = referenceOrganizations[AaltoIdentifier].find(
       org => org.name.en === 'Department of Media'
@@ -879,7 +883,7 @@ describe('Qvain.Actors store', () => {
       mergeActorsOrganizationsWithReferences,
       setActors,
     } = stores.Qvain.Actors
-    axios.get.mockImplementation(organizationMockGet)
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
     await fetchReferenceOrganizations()
     const actor = Actor({
       type: ENTITY_TYPE.ORGANIZATION,

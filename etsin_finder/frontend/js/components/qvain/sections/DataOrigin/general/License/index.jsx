@@ -18,9 +18,10 @@ import {
 } from '@/components/qvain/utils/select'
 import { ValidationError } from '@/components/qvain/general/errors/validationError'
 import { withStores } from '@/stores/stores'
+import AbortClient, { isAbort } from '@/utils/AbortClient'
 
 export class License extends Component {
-  promises = []
+  client = new AbortClient()
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -35,36 +36,37 @@ export class License extends Component {
   componentDidMount = () => {
     const { Model } = this.props.Stores.Qvain.Licenses
     const { lang } = this.props.Stores.Locale
-    this.promises.push(
-      getReferenceData('license')
-        .then(res => {
-          const list = res.data.hits.hits
-          const options = list.map(ref => Model(ref._source.label, ref._source.uri))
-          sortOptions(Model, lang, options)
-          this.setState({
-            options,
-          })
-          autoSortOptions(this, this.props.Stores.Locale, Model)
+    getReferenceData('license', { client: this.client })
+      .then(res => {
+        const list = res.data.hits.hits
+        const options = list.map(ref => Model(ref._source.label, ref._source.uri))
+        sortOptions(Model, lang, options)
+        this.setState({
+          options,
         })
-        .catch(error => {
-          if (error.response) {
-            // Error response from Metax
-            console.log(error.response.data)
-            console.log(error.response.status)
-            console.log(error.response.headers)
-          } else if (error.request) {
-            // No response from Metax
-            console.log(error.request)
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message)
-          }
-        })
-    )
+        autoSortOptions(this, this.props.Stores.Locale, Model)
+      })
+      .catch(error => {
+        if (isAbort(error)) {
+          return
+        }
+        if (error.response) {
+          // Error response from Metax
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          // No response from Metax
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message)
+        }
+      })
   }
 
   componentWillUnmount() {
-    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+    this.client.abort()
   }
 
   removeLicense = license => {

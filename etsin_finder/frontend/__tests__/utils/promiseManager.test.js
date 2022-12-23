@@ -36,22 +36,6 @@ describe('common.files.utils', () => {
       })
     })
 
-    describe('when calling reset', () => {
-      beforeEach(() => {
-        testPromise = promiseManager.add(new Promise(() => {}))
-        testPromise.cancel = jest.fn()
-        promiseManager.reset()
-      })
-
-      test('should clear promises', () => {
-        promiseManager.promises.should.eql([])
-      })
-
-      test('should call cancel on promises', () => {
-        expect(testPromise.cancel).toHaveBeenCalledTimes(1)
-      })
-    })
-
     describe('given tagged promises', () => {
       const resolvers = []
 

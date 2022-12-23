@@ -65,7 +65,7 @@ const render = async () => {
     document.body.removeChild(helper)
     helper = null
   }
-  stores?.QvainDatasetsV2?.share?.promiseManager?.reset()
+  stores?.QvainDatasetsV2?.share?.client.abort()
   stores = buildStores()
   stores.Auth.setUser({
     name: 'teppo',

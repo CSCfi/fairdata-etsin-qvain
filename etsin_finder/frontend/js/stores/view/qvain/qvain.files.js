@@ -1,5 +1,4 @@
 import { observable, action, makeObservable, override, computed } from 'mobx'
-import axios from 'axios'
 
 import * as yup from 'yup'
 import { hasMetadata, dirIdentifierKey, fileIdentifierKey } from '../common.files.items'
@@ -108,12 +107,10 @@ class Files extends FilesBase {
     return this.Auth.user.idaProjects.includes(this.selectedProject)
   }
 
-  cancelOnReset = promise => this.promiseManager.add(promise)
-
   @override async loadDirectory(dir) {
-    if (this.userHasRightsToEditProject)
+    if (this.userHasRightsToEditProject) {
       return itemLoaderAny.loadDirectory(this, dir, this.initialLoadCount)
-
+    }
     return itemLoaderPublic.loadDirectory(this, dir, this.initialLoadCount)
   }
 
@@ -121,12 +118,16 @@ class Files extends FilesBase {
     // when the user is not in project, send datasetIdentifier
     // when the user is in project, don't send datasetIdentifier
 
+    await this.client.abort('fetch-root-identifier')
     if (this.userHasRightsToEditProject) {
-      const { data } = await axios.get(urls.common.projectFiles(projectIdentifier))
+      const { data } = await this.client.get(urls.common.projectFiles(projectIdentifier), {
+        tag: 'fetch-root-identifier',
+      })
       return data.identifier
     }
 
-    const { data } = await axios.get(urls.common.projectFiles(projectIdentifier), {
+    const { data } = await this.client.get(urls.common.projectFiles(projectIdentifier), {
+      tag: 'fetch-root-identifier',
       params: {
         cr_identifier: this.datasetIdentifier,
       },
@@ -138,7 +139,6 @@ class Files extends FilesBase {
     super.reset.call(this)
     this.SelectedItemsView.reset()
     this.AddItemsView.reset()
-    this.promiseManager.reset()
     this.refreshModalDirectory = null
     this.inEdit = undefined
   }

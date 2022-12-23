@@ -19,7 +19,6 @@ import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import { NavLink, useLocation, useParams } from 'react-router-dom'
 import { opacify } from 'polished'
-import axios from 'axios'
 
 import Sidebar from './sidebar'
 import Content from './content'
@@ -29,6 +28,7 @@ import Loader from '../general/loader'
 import { withStores, useStores } from '@/stores/stores'
 import CitationModal from './citation/citationModal'
 import urls from '../../utils/urls'
+import AbortClient, { isAbort } from '@/utils/AbortClient'
 
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
@@ -48,6 +48,7 @@ class Dataset extends React.Component {
 
     this.query = this.query.bind(this)
     this.goBack = this.goBack.bind(this)
+    this.client = new AbortClient()
   }
 
   componentDidMount() {
@@ -71,9 +72,12 @@ class Dataset extends React.Component {
 
   async getRelatedDatasets(datasetId) {
     try {
-      const res = await axios.get(urls.common.relatedDatasets(datasetId))
+      const res = await this.client.get(urls.common.relatedDatasets(datasetId))
       return res.data
     } catch (e) {
+      if (isAbort(e)) {
+        throw e
+      }
       console.error(e)
       return null
     }
@@ -121,7 +125,7 @@ class Dataset extends React.Component {
 
     for (const k of datasetVersionSet.keys()) {
       const versionUrl = urls.dataset(datasetVersionSet[k].identifier)
-      promises.push(axios.get(versionUrl))
+      promises.push(this.client.get(versionUrl))
     }
 
     return Promise.all(promises)
@@ -219,6 +223,9 @@ class Dataset extends React.Component {
         this.getAllVersions(result.catalog_record)
       })
       .catch(error => {
+        if (isAbort(error)) {
+          return
+        }
         console.log(error)
         this.setState({ error })
       })

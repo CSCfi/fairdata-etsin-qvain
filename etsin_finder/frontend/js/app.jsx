@@ -27,6 +27,7 @@ import browserHistory from './browserHistory'
 import '../fairdata-ui/footer.css'
 import 'react-datepicker/dist/react-datepicker.css'
 import './utils/extendYup'
+import './utils/extendPromise'
 
 import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'

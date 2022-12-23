@@ -1,10 +1,13 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 import { configure } from 'mobx'
 import Select, { Option } from 'react-select'
 
-import AccessType from '@/components/qvain/sections/DataOrigin/general/AccessType'
+import AccessType, {
+  AccessType as AccessTypeBase,
+} from '@/components/qvain/sections/DataOrigin/general/AccessType'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { buildStores } from '@/stores'
 import { onChange } from '@/components/qvain/utils/select'
@@ -17,7 +20,8 @@ configure({
   safeDescriptors: false,
 })
 
-jest.mock('axios')
+const mockAdapter = new MockAdapter(axios)
+mockAdapter.onGet().reply(200, accessTypeResponse)
 
 jest.mock('@/components/qvain/utils/select', () => {
   const actual = jest.requireActual('@/components/qvain/utils/select')
@@ -40,14 +44,13 @@ describe('Qvain Access Type', () => {
     Stores = buildStores()
     Auth = Stores.Auth
     Qvain = Stores.Qvain
-    axios.get.mockReturnValue(Promise.resolve({ data: accessTypeResponse }))
   })
 
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  const setAuthUserAndRender = async (userSettings = {}) => {
+  const setAuthUserAndRender = (userSettings = {}) => {
     Auth.setUser({ ...Auth.user, ...userSettings })
     component = mount(
       <StoresProvider store={Stores}>
@@ -87,7 +90,9 @@ describe('Qvain Access Type', () => {
     })
 
     it('renders permitInfo', () => {
-      const permitInfo = component.find('AccessType__PermitHelp')
+      const permitInfo = component.find({
+        content: 'qvain.rightsAndLicenses.accessType.permitInfo',
+      })
       expect(permitInfo.exists()).toBe(true)
     })
   })

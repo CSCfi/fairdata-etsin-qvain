@@ -446,7 +446,9 @@ const notFound = {
 const reParentId = RegExp('^parent_id:"(.*)"')
 
 // https://metax.csc.local/es/organization_data/organization/_search?size=3000&q=parent_id:%22%22
-// mock getter to replace axios.get
+// mock response data
+// example usage:
+//   mockAdapter.onGet().reply(({ url }) => [200, get(url)])
 export const get = path => {
   const url = new URL(path)
   if (url.pathname === '/es/organization_data/organization/_search') {
@@ -460,9 +462,9 @@ export const get = path => {
     }
     const parentId = matchParentId[1]
     if (!orgsResponsesByParentId[parentId]) {
-      return Promise.resolve({ data: notFound })
+      return notFound
     }
-    return Promise.resolve({ data: orgsResponsesByParentId[parentId] })
+    return orgsResponsesByParentId[parentId]
   }
   throw new Error(`Invalid URL, ${path}`)
 }

@@ -5,6 +5,7 @@ import Translate from 'react-translate-component'
 import Select from 'react-select'
 import styled from 'styled-components'
 import { useStores } from '../../../../utils/stores'
+import { ignoreAbort } from '@/utils/AbortClient'
 
 export const ProjectSelectorBase = ({ disabled }) => {
   const {
@@ -29,7 +30,7 @@ export const ProjectSelectorBase = ({ disabled }) => {
   }
 
   const handleOnChange = selectedOption => {
-    changeProject(selectedOption.value)
+    ignoreAbort(() => changeProject(selectedOption.value))
   }
 
   const options = getOptions()

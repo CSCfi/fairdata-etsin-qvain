@@ -26,10 +26,6 @@ failTestsWhenTranslationIsMissing()
 
 jest.setTimeout(25000) // the default 5000ms timeout is not always enough here
 
-Promise.config({
-  cancellation: true,
-})
-
 jest.mock('axios')
 
 jest.mock('../../../../js/stores/stores', () => {

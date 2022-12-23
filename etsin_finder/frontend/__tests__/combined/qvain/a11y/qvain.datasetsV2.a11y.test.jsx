@@ -2,6 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { when } from 'mobx'
 import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 
 import { axe } from 'jest-axe'
 import { ThemeProvider } from 'styled-components'
@@ -18,6 +19,7 @@ import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 failTestsWhenTranslationIsMissing()
 
 let stores
+const mockAdapter = new MockAdapter(axios)
 
 jest.setTimeout(50000) // the default 5000ms timeout is not always enough here
 
@@ -29,12 +31,7 @@ beforeEach(() => {
   stores.Env.Flags.setFlag('UI.NEW_DATASETS_VIEW', true)
 })
 
-jest.mock('axios')
-axios.get = jest.fn((...args) => {
-  return Promise.resolve({
-    data: datasets,
-  })
-})
+mockAdapter.onGet().reply(200, datasets)
 
 describe('DatasetsV2', () => {
   let wrapper

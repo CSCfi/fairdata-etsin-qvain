@@ -234,18 +234,6 @@ describe('Qvain.Files store', () => {
     expect(axios.get.mock.calls.length).toBe(3)
   })
 
-  it('cancels promises when dataset is reset', async () => {
-    const dir = root.directories.find(d => d.name === 'data')
-
-    Files.loadDirectory(dir)
-    Files.loadDirectory(dir)
-    Files.loadDirectory(dir)
-    Files.loadDirectory(dir)
-    expect(Qvain.Files.promiseManager.promises.length > 0).toBe(true)
-    Qvain.Files.reset()
-    expect(Qvain.Files.promiseManager.promises.length).toBe(0)
-  })
-
   it('has correct file properties', async () => {
     await Files.loadAllDirectories()
     expect(root.directories[0].parent).toBe(root)

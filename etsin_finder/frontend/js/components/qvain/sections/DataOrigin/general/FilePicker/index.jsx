@@ -46,7 +46,7 @@ export const FilePickerBase = () => {
 
   const isEmptyProject = loadingProjectError?.response?.status === 404
 
-  if (loadingProjectError) {
+  if (loadingProjectError && !isEmptyProject) {
     console.error(loadingProjectError)
   }
 

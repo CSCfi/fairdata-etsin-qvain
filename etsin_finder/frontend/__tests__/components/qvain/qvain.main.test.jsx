@@ -2,6 +2,7 @@ import React from 'react'
 import Harness from '../componentTestHarness'
 import 'chai/register-expect'
 import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 
 import { Qvain, ErrorTitle } from '@/components/qvain/views/main'
 import Header from '@/components/qvain/views/headers/header'
@@ -14,12 +15,8 @@ import { Prompt } from 'react-router'
 import urls from '@/utils/urls'
 import { useStores } from '@/stores/stores'
 
-jest.mock('axios')
-axios.get.mockReturnValue(
-  Promise.resolve({
-    data: {},
-  })
-)
+const mockAdapter = new MockAdapter(axios)
+mockAdapter.onGet().reply(200, {})
 
 jest.mock('@/components/qvain/general/errors/fieldErrorBoundary', () => {
   return {
@@ -94,6 +91,7 @@ describe('given required props', () => {
   })
 
   afterEach(() => {
+    mockAdapter.resetHistory()
     jest.clearAllMocks()
   })
 
@@ -206,7 +204,7 @@ describe('given required props', () => {
         })
 
         test('should call axios get', () => {
-          expect(axios.get).to.have.beenCalledWith(urls.qvain.dataset('identifier2'))
+          expect(mockAdapter.history.get[0].url).to.equal(urls.qvain.dataset('identifier2'))
         })
 
         test('should call resetQvainStore', () => {

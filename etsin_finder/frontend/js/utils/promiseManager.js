@@ -48,22 +48,4 @@ export default class PromiseManager {
     this.promisesWithTags.push({ promise: promiseWithFinally, tags: tagsArray, onCancel })
     return promiseWithFinally
   }
-
-  @action.bound reset(tag = undefined) {
-    const promisesWithTags = tag
-      ? this.promisesWithTags.filter(({ tags }) => tags.includes(tag))
-      : this.promisesWithTags
-
-    promisesWithTags.forEach(({ promise, onCancel }) => {
-      // mobx.when adds a cancel function to promises it returns
-      // to call the original bluebird cancel, we need to access it using the prototype
-      onCancel?.()
-      const prototypeCancel = Object.getPrototypeOf(promise).cancel
-      if (prototypeCancel !== promise.cancel) {
-        prototypeCancel.call(promise)
-      }
-      promise.cancel()
-    })
-    this.promisesWithTags.length = 0
-  }
 }

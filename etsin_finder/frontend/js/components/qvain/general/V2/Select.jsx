@@ -17,9 +17,10 @@ import {
 } from '@/components/qvain/utils/select'
 import getReferenceData from '@/components/qvain/utils/getReferenceData'
 import { withStores } from '@/stores/stores'
+import AbortClient, { isAbort } from '@/utils/AbortClient'
 
 class Select extends Component {
-  promises = []
+  client = new AbortClient()
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -55,15 +56,13 @@ class Select extends Component {
   }
 
   componentDidMount = () => {
-    this.promises.push(
-      getReferenceData(this.props.metaxIdentifier)
-        .then(this.resolveRefData)
-        .catch(this.rejectRefData)
-    )
+    getReferenceData(this.props.metaxIdentifier, { client: this.client })
+      .then(this.resolveRefData)
+      .catch(this.rejectRefData)
   }
 
   componentWillUnmount() {
-    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+    this.client.abort()
   }
 
   resolveRefData = res => {
@@ -88,6 +87,9 @@ class Select extends Component {
   }
 
   rejectRefData = error => {
+    if (isAbort(error)) {
+      return
+    }
     if (error.response) {
       // Error response from Metax
       console.log(error.response.data)

@@ -2,6 +2,8 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import ReactModal from 'react-modal'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 
 import '@/../locale/translations'
 import etsinTheme from '@/styles/theme'
@@ -9,11 +11,8 @@ import { StoresProvider } from '@/stores/stores'
 import LoginErrorModal from '@/layout/LoginErrorModal'
 import { buildStores } from '@/stores'
 
-import axios from 'axios'
+const mockAdapter = new MockAdapter(axios)
 
-jest.mock('axios')
-
-axios.get.mockReturnValue(Promise.resolve({}))
 const mockLocation = {
   pathname: '/',
 }
@@ -43,6 +42,10 @@ const noUserName = { ...authenticated, user_csc_name: null }
 
 const noOrganizationId = { ...authenticated, home_organization_id: null }
 
+beforeEach(() => {
+  mockAdapter.reset()
+})
+
 describe('Etsin frontpage', () => {
   let wrapper, helper
 
@@ -67,19 +70,19 @@ describe('Etsin frontpage', () => {
   beforeAll(async () => {})
 
   it('should not show modal for successful login', async () => {
-    axios.get.mockReturnValueOnce(Promise.resolve({ data: authenticated }))
+    mockAdapter.onGet().reply(200, authenticated)
     await render()
     wrapper.find(LoginErrorModal).children().should.have.lengthOf(0)
   })
 
   it('should not show modal for unauthenticated user', async () => {
-    axios.get.mockReturnValueOnce(Promise.resolve({ data: unauthenticated }))
+    mockAdapter.onGet().reply(200, unauthenticated)
     await render()
     wrapper.find(LoginErrorModal).children().should.have.lengthOf(0)
   })
 
   it('should show modal for login with missing username', async () => {
-    axios.get.mockReturnValueOnce(Promise.resolve({ data: noUserName }))
+    mockAdapter.onGet().reply(200, noUserName)
     await render()
     wrapper
       .find('[aria-modal]')
@@ -88,7 +91,7 @@ describe('Etsin frontpage', () => {
   })
 
   it('should show modal for login with missing home organization', async () => {
-    axios.get.mockReturnValueOnce(Promise.resolve({ data: noOrganizationId }))
+    mockAdapter.onGet().reply(200, noOrganizationId)
     await render()
     wrapper
       .find('[aria-modal]')
@@ -97,13 +100,13 @@ describe('Etsin frontpage', () => {
   })
 
   it('should delete session when modal is closed', async () => {
-    axios.delete.mockClear()
-    axios.get.mockReturnValueOnce(Promise.resolve({ data: noOrganizationId }))
+    mockAdapter.onDelete().reply(200, '')
+    mockAdapter.onGet().reply(200, noOrganizationId)
     await render()
     wrapper.find('[aria-modal]').should.have.lengthOf(1)
     wrapper.find('button[aria-label="Close"]').simulate('click')
     wrapper.find('[aria-modal]').should.have.lengthOf(0)
-    expect(axios.delete.mock.calls).toHaveLength(1)
+    expect(mockAdapter.history.delete).toHaveLength(1)
   })
 
   afterAll(() => {

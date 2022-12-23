@@ -1,6 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 import ReactModal from 'react-modal'
 
 import { axe } from 'jest-axe'
@@ -29,15 +30,11 @@ beforeEach(() => {
   stores.Env.Flags.setFlag('UI.NEW_DATASETS_VIEW', true)
   stores.Env.Flags.setFlag('UI.SHARE_PROJECT', true)
   stores.QvainDatasetsV2.share.modal.open({ dataset: { identifier: 'xyz' } })
-  stores.QvainDatasetsV2.share.promiseManager.reset()
+  stores.QvainDatasetsV2.share.client.abort()
 })
 
-jest.mock('axios')
-axios.get = jest.fn((...args) => {
-  return Promise.resolve({
-    data: datasets,
-  })
-})
+const mockAdapter = new MockAdapter(axios)
+mockAdapter.onGet().reply(200, datasets)
 
 describe('ShareModal', () => {
   let wrapper, helper

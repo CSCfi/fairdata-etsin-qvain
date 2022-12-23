@@ -19,12 +19,9 @@ class Files extends FilesBase {
 
   @observable inInfo = null
 
-  cancelOnReset = promise => this.promiseManager.add(promise)
-
   @override reset() {
     super.reset.call(this)
     this.View.reset()
-    this.promiseManager.reset()
     this.inInfo = null
   }
 

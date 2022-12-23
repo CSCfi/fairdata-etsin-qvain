@@ -5,6 +5,7 @@ import axios from 'axios'
 import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
+import MockAdapter from 'axios-mock-adapter'
 
 import { buildStores } from '../../../../js/stores'
 import '../../../../locale/translations'
@@ -20,12 +21,14 @@ import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
 
+jest.setTimeout(10000)
+
+const mockAdapter = new MockAdapter(axios)
+
 // Make sure MobX store values are not mutated outside actions.
 configure({
   enforceActions: 'always',
 })
-
-jest.mock('axios')
 
 jest.mock('../../../../js/stores/stores', () => {
   const useStores = jest.fn()
@@ -39,7 +42,6 @@ jest.mock('../../../../js/stores/stores', () => {
 const stores = buildStores()
 
 beforeEach(() => {
-  axios.get.mockReset()
   stores.Qvain.resetQvainStore()
   stores.Qvain.Actors.clearReferenceOrganizations()
   useStores.mockReturnValue(stores)
@@ -49,7 +51,9 @@ describe('Qvain.Actors modal', () => {
   let helper, wrapper
 
   beforeEach(async () => {
-    axios.get.mockImplementation(organizationMockGet)
+    mockAdapter.onGet().reply(({ url }) => {
+      return [200, organizationMockGet(url)]
+    })
     await stores.Qvain.editDataset(actorsDataset)
     stores.Qvain.Actors.editActor(Actor())
 

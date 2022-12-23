@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import translate from 'counterpart'
 import { autorun } from 'mobx'
 import { observer } from 'mobx-react'
-import axios from 'axios'
+
 import { withRouter } from 'react-router-dom'
 import { Prompt } from 'react-router'
 import Translate from 'react-translate-component'
@@ -18,6 +18,7 @@ import DatasetEditorV2 from '../DatasetEditorV2'
 import LooseActorDialog from './looseActorDialog'
 import LooseProvenanceDialog from './looseProvenanceDialog'
 import { withStores } from '@/stores/stores'
+import AbortClient, { ignoreAbort, isAbort } from '@/utils/AbortClient'
 
 // Event handler to prevent page reload
 const confirmReload = e => {
@@ -26,7 +27,7 @@ const confirmReload = e => {
 }
 
 export class Qvain extends Component {
-  promises = []
+  client = new AbortClient()
 
   disposeConfirmReload = null
 
@@ -80,7 +81,7 @@ export class Qvain extends Component {
 
   componentWillUnmount() {
     this.props.Stores.Qvain.resetQvainStore()
-    this.promises.forEach(promise => promise.cancel())
+    this.client.abort()
     if (this.disposeConfirmReload) {
       this.disposeConfirmReload()
     }
@@ -144,7 +145,7 @@ export class Qvain extends Component {
     } = this.props.Stores.Env
 
     const url = urls.qvain.dataset(identifier)
-    const promise = axios
+    const promise = this.client
       .get(url)
       .then(async result => {
         resetQvainStore()
@@ -159,7 +160,7 @@ export class Qvain extends Component {
         if (isTemplate) {
           resetWithTemplate(result.data)
         } else {
-          editDataset(result.data)
+          ignoreAbort(() => editDataset(result.data))
 
           if (flagEnabled('PERMISSIONS.WRITE_LOCK')) {
             try {
@@ -171,6 +172,9 @@ export class Qvain extends Component {
         this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
       })
       .catch(e => {
+        if (isAbort(e)) {
+          return
+        }
         const status = e.response.status
 
         let errorTitle, errorDetails
@@ -204,7 +208,6 @@ export class Qvain extends Component {
           haveDataset: false,
         })
       })
-    this.promises.push(promise)
     return promise
   }
 

@@ -1,3 +1,5 @@
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
@@ -9,16 +11,19 @@ import { buildStores } from '@/stores'
 import '../../../locale/translations'
 import maximalDataset from '../../__testdata__/qvain.maximalDataset'
 
+const mockAdapter = new MockAdapter(axios)
+mockAdapter.onGet().reply(200, '')
+
 jest.mock('@/stores/stores')
 
 beforeEach(() => {
   jest.resetAllMocks()
 })
 
-const render = unsupported => {
+const render = async unsupported => {
   let Stores = buildStores()
   const Qvain = Stores.Qvain
-  Qvain.editDataset(maximalDataset)
+  await Qvain.editDataset(maximalDataset)
   useStores.mockReturnValue({
     ...Stores,
     Qvain: {
@@ -35,12 +40,12 @@ const render = unsupported => {
 }
 
 describe('Unsupported', () => {
-  test('unsupported fields', () => {
+  test('unsupported fields', async () => {
     const expectedFields = [
       ['field.subfield', 'value_of_subfield'],
       ['other_field.subfield', 'other_value'],
     ]
-    const wrapper = render(expectedFields)
+    const wrapper = await render(expectedFields)
     wrapper.find('button').simulate('click', {})
     const fields = wrapper
       .find('ul')
@@ -49,9 +54,9 @@ describe('Unsupported', () => {
     expect(fields).toEqual(expectedFields)
   })
 
-  test('no unsupported fields', () => {
+  test('no unsupported fields', async () => {
     const expectedFields = []
-    const wrapper = render(expectedFields)
+    const wrapper = await render(expectedFields)
     expect(wrapper.isEmptyRender()).toBe(true)
   })
 })

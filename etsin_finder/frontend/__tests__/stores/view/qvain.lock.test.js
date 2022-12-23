@@ -1,10 +1,11 @@
 import 'chai/register-expect'
 import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 import { computed, observable, makeObservable, override, runInAction, when, action } from 'mobx'
 
 import LockClass from '../../../js/stores/view/qvain/qvain.lock'
 
-jest.mock('axios')
+const mockAdapter = new MockAdapter(axios)
 window.fetch = jest.fn()
 
 class FakeQvainClass {
@@ -31,31 +32,24 @@ describe('things', () => {
     jest.clearAllMocks()
     jest.clearAllTimers()
     jest.useFakeTimers('modern')
+    mockAdapter.reset()
+    mockAdapter.onDelete().reply(200, {})
     const Qvain = new FakeQvainClass()
     const Lock = new LockClass(Qvain, Auth)
     return { Qvain, Lock }
   }
 
   const mockRequestLock = data => {
-    axios.put.mockReturnValue(
-      Promise.resolve({
-        data,
-      })
-    )
+    mockAdapter.onPut().reply(200, data)
   }
 
   const mockRequestLockReject = (data, forceData) => {
-    axios.put.mockImplementation(async (url, { force }, hmm) => {
+    mockAdapter.onPut().reply(request => {
+      const force = JSON.parse(request.data).force
       if (force) {
-        return Promise.resolve({
-          data: forceData,
-        })
+        return [200, forceData]
       }
-      throw {
-        response: {
-          data,
-        },
-      }
+      return [400, data]
     })
   }
 
@@ -80,14 +74,14 @@ describe('things', () => {
 
     it('should keep polling', async () => {
       const { Lock } = await setupLockAvailable()
-      axios.put.should.have.beenCalledTimes(1)
+      mockAdapter.history.put.length.should.eqls(1)
 
       for (let i = 2; i < 10; i++) {
         Lock.isPolling.should.be.false
         jest.advanceTimersByTime(Lock.pollInterval)
         Lock.isPolling.should.be.true
         await when(() => !Lock.isPolling)
-        axios.put.should.have.beenCalledTimes(i)
+        mockAdapter.history.put.length.should.eqls(i)
       }
     })
   })
@@ -119,12 +113,12 @@ describe('things', () => {
 
     it('should keep polling', async () => {
       const { Lock } = await setupAnotherUserHasLock()
-      axios.put.should.have.beenCalledTimes(1)
+      mockAdapter.history.put.length.should.eqls(1)
 
       for (let i = 2; i < 10; i++) {
         jest.advanceTimersByTime(Lock.pollInterval)
         await when(() => !Lock.isPolling)
-        axios.put.should.have.beenCalledTimes(i)
+        mockAdapter.history.put.length.should.eqls(i)
       }
     })
 
@@ -143,9 +137,7 @@ describe('things', () => {
       Lock.setLockData('datasetti', 'test_user')
       Lock.enable()
       Qvain.setDatasetIdentifier(undefined)
-      axios.delete.should.have.beenCalledWith('/api/qvain/datasets/datasetti/lock', {
-        timeout: Lock.requestTimeout,
-      })
+      mockAdapter.history.delete[0].url.should.eql('/api/qvain/datasets/datasetti/lock')
       Lock.lockData.should.eqls({ dataset: undefined, user: undefined })
     })
 
@@ -157,11 +149,8 @@ describe('things', () => {
       }
       Lock.enable()
       Qvain.setDatasetIdentifier('datasetti')
-      axios.put.should.have.beenCalledWith(
-        '/api/qvain/datasets/datasetti/lock',
-        { force: false },
-        { timeout: Lock.requestTimeout }
-      )
+      mockAdapter.history.put[0].url.should.eql('/api/qvain/datasets/datasetti/lock')
+      mockAdapter.history.put[0].data.should.eql(JSON.stringify({ force: false }))
     })
 
     it('should release lock with fetch when unload is called', () => {
@@ -182,8 +171,8 @@ describe('things', () => {
       Lock.enable()
       jest.advanceTimersByTime(Lock.pollInterval * 100)
       Lock.pollingEnabled.should.be.false
-      axios.put.should.have.beenCalledTimes(0)
-      axios.delete.should.have.beenCalledTimes(0)
+      mockAdapter.history.put.length.should.eql(0)
+      mockAdapter.history.delete.length.should.eql(0)
     })
 
     it('should not call fetch when unload is called', () => {

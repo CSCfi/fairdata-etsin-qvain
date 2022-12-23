@@ -4,7 +4,6 @@ import translate from 'counterpart'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import axios from 'axios'
 import { observable, action, autorun } from 'mobx'
 
 import Modal from '@/components/general/modal'
@@ -20,12 +19,13 @@ import { getOptions, getDefaultOptions, makeOption, findOption } from './options
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
 import urls from '@/utils/urls'
 import { withStores } from '@/stores/stores'
+import AbortClient, { isAbort } from '@/utils/AbortClient'
 
 export class MetadataModal extends Component {
   @observable
   formatFetchStatus = 'loading'
 
-  promises = []
+  client = new AbortClient()
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,
@@ -65,7 +65,7 @@ export class MetadataModal extends Component {
   }
 
   async componentWillUnmount() {
-    this.promises.forEach(promise => promise && promise.cancel && promise.cancel())
+    this.client.abort()
     if (this.autorunDisposer) {
       this.autorunDisposer()
     }
@@ -93,11 +93,17 @@ export class MetadataModal extends Component {
 
   patchFileCharacteristics = (identifier, data) => {
     const url = urls.qvain.fileCharacteristics(identifier)
-    return axios.put(url, data, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    return this.client
+      .put(url, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .catch(error => {
+        if (!isAbort(error)) {
+          throw error
+        }
+      })
   }
 
   setFormatVersion = versionOption => {
@@ -231,7 +237,6 @@ export class MetadataModal extends Component {
       }
 
       const patchPromise = this.patchFileCharacteristics(this.state.fileIdentifier, characteristics)
-      this.promises.push(patchPromise)
       const response = await patchPromise
 
       // Update file hierarchy with response data, close modal

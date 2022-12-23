@@ -19,6 +19,7 @@ import {
 } from '@/components/qvain/utils/select'
 import { UseCategory } from '@/stores/view/qvain/qvain.externalResources'
 import { useStores } from '@/stores/stores'
+import AbortClient from '@/utils/AbortClient'
 
 export const ExternalFileFormBase = () => {
   const {
@@ -31,13 +32,11 @@ export const ExternalFileFormBase = () => {
   const [useCategoryOptions, setUseCategoryOptions] = useState([])
 
   useEffect(() => {
-    const promises = []
-    promises.push(
-      getAllOptions(UseCategory, 'use_category').then(opts => setUseCategoryOptions(opts))
-    )
+    const client = new AbortClient()
+    getAllOptions(UseCategory, 'use_category', { client }).then(opts => setUseCategoryOptions(opts))
 
     return () => {
-      promises.forEach(promise => promise.cancel())
+      client.abort()
     }
   }, [])
 

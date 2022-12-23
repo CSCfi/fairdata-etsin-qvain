@@ -73,22 +73,22 @@ export const getOptionValue = model => {
 }
 
 // Fetch options for a given search string
-export const getOptions = async (model, ref, inputValue) => {
+export const getOptions = async (model, ref, inputValue, { client = axios } = {}) => {
   if (!inputValue) return []
-  const api = refDataApi(ref)
+  const api = refDataApi(ref, { client })
   const response = await api.get(`_search?size=100&q=*${inputValue}*`)
   return parseRefResponse(response, model)
 }
 
 // Fetch all options
-export const getAllOptions = async (model, ref) => {
-  const api = refDataApi(ref)
+export const getAllOptions = async (model, ref, { client = axios } = {}) => {
+  const api = refDataApi(ref, { client })
   const response = await api.get(`_search?size=1000`)
   return parseRefResponse(response, model)
 }
 
-const refDataApi = ref =>
-  axios.create({
+const refDataApi = (ref, { client = axios } = {}) =>
+  client.create({
     baseURL: `${METAX_FAIRDATA_ROOT_URL}/es/reference_data/${ref}/`,
   })
 
