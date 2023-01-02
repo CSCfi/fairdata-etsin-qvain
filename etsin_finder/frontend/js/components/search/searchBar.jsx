@@ -108,12 +108,14 @@ const IconContainer = styled.div`
   position: absolute;
   right: 0px;
   padding-bottom: 0.8em;
+  display: flex;
+  align-items: center;
 `
 
 const CustomFontAwesomeIcon = styled(FontAwesomeIcon)`
+  font-size: 2.4rem;
   cursor: pointer;
   color: ${props => props.theme.color.primary};
-  height: 100%;
   transition: 0.1s ease;
   &:active {
     transform: scale(0.9);
