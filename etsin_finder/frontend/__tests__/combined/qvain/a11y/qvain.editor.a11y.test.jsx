@@ -20,6 +20,8 @@ global.fdweRecordEvent = () => {}
 
 jest.mock('axios')
 
+jest.setTimeout(25000) // the default 5000ms timeout is not always enough here
+
 axios.get.mockReturnValue(
   Promise.resolve({
     data: {
