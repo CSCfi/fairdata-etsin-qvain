@@ -1,6 +1,27 @@
----
+workflow:
+  name: '$PIPELINE_NAME'
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ /^(web)$/
+      variables:
+        PIPELINE_NAME: 'Manual pipeline to $GITLAB_ENV'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      variables:
+        PIPELINE_NAME: 'MR pipeline'
+    - if: $CI_COMMIT_BRANCH =~ /^(master)$/
+      variables:
+        PIPELINE_NAME: 'Commit pipeline'
+
+# ------------------------
+
 variables:
-  GITLAB_ENV: test
+  GITLAB_ENV:
+    description: 'Which environment do you want to deploy to?'
+    value: 'test'
+    options:
+      - 'staging'
+      - 'test'
+      - 'demo'
+      - 'stable'
   SERVICE: ${SERVICE}
 
 default:
@@ -34,6 +55,7 @@ sonarqube:
   extends: .sonarqube-job
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH =~ /^(master)$/ && $CI_PIPELINE_SOURCE !~ /^(web)$/
 
 # ------------------------
 
