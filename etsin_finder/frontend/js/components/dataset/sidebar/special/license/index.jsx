@@ -46,7 +46,7 @@ License.propTypes = {
   data: PropTypes.shape({
     license: PropTypes.string,
     title: PropTypes.object,
-    identifier: PropTypes.string.isRequired,
+    identifier: PropTypes.string, // custom license might not have an identifier
     description: PropTypes.object,
   }).isRequired,
 }

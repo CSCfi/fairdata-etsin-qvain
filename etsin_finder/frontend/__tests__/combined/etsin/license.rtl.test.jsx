@@ -31,6 +31,10 @@ const licenseWithoutDescription = {
   identifier: 'https://example.com/license',
 }
 
+const customLicense = {
+  license: 'https://example.com/license',
+}
+
 describe('License', () => {
   const renderLicense = async licenseData => {
     const stores = buildStores()
@@ -72,6 +76,12 @@ describe('License', () => {
   it('does not show popup for license without description', async () => {
     renderLicense(licenseWithoutDescription)
     expect(screen.getByText('Another license')).toBeInTheDocument()
+    expect(screen.queryByText('Additional information')).not.toBeInTheDocument()
+  })
+
+  it('shows custom license', async () => {
+    renderLicense(customLicense)
+    expect(screen.getByText('https://example.com/license')).toBeInTheDocument()
     expect(screen.queryByText('Additional information')).not.toBeInTheDocument()
   })
 })

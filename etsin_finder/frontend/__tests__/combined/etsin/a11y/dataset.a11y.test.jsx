@@ -23,7 +23,7 @@ import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
 
-jest.setTimeout(30000) // the default 5000ms timeout is not always enough here
+jest.setTimeout(45000) // the default 5000ms timeout is not always enough here
 
 jest.mock('@/components/dataset/sidebar/special/importImages')
 

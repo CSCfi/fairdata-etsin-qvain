@@ -1,1 +1,2 @@
-export default identifier => identifier.startsWith('http://') || identifier.startsWith('https://')
+export default identifier =>
+  identifier && (identifier.startsWith('http://') || identifier.startsWith('https://'))
