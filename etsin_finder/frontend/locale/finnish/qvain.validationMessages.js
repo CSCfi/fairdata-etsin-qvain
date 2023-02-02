@@ -14,12 +14,12 @@ const validationMessages = {
   title: {
     string: 'Otsikon tulisi olla arvoltaan merkkijono.',
     max: 'Otsikko on liian pitkä.',
-    required: 'Otsikko on pakollinen vähintään yhdellä kielellä.',
+    required: 'Otsikko on pakollinen vähintään joko suomeksi tai englanniksi.',
   },
   description: {
     string: 'Kuvaus tulisi olla arvoltaan merkkijono.',
     max: 'Kuvaus on liian pitkä.',
-    required: 'Kuvaus on pakollinen vähintään yhdellä kielellä.',
+    required: 'Kuvaus on pakollinen vähintään joko suomeksi tai englanniksi.',
   },
   issuedDate: {
     requiredIfUseDoi: 'Julkaisupäivämäärä on pakollinen tieto jos haluat käyttää DOI -tunnistetta.',

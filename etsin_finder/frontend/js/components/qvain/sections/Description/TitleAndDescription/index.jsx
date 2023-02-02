@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
@@ -22,7 +21,6 @@ const DescriptionField = () => {
     <TranslationTab language={activeLang} setLanguage={setActiveLang} useTitleLanguages>
       <DescriptionFieldInput propName="title" fieldName="Title" activeLang={activeLang} />
       <DescriptionFieldTextField activeLang={activeLang} />
-      <Translate component="div" content="qvain.description.description.instructions" />
     </TranslationTab>
   )
 }

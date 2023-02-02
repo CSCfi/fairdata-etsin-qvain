@@ -54,7 +54,6 @@ describe('given Stores with required data', () => {
         { label: 'TranslationTab', findArgs: TranslationTab },
         { label: 'TitleInput', findArgs: DescriptionFieldInput },
         { label: 'DescriptionInput', findArgs: DescriptionFieldTextField },
-        { label: 'Instructions', findType: 'prop', findArgs: ['component', 'div'] },
       ]
 
       const props = {

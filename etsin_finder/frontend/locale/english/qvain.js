@@ -20,6 +20,7 @@ const qvainEnglish = {
   submit: 'Save and Publish',
   edit: 'Update Dataset',
   required: 'Required.',
+  requiredTitleOrDescription: 'Required in either Finnish or English.',
   unsavedChanges:
     'Leaving the editor will discard your unsaved changes. Are you sure you want to leave the editor?',
   consent: `By using Qvain the user agrees to obtain prior consent from all persons whose personal

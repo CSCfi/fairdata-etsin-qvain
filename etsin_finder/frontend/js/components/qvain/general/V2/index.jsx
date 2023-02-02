@@ -120,6 +120,10 @@ export function RequiredText(props) {
   return <Translate {...props} component={InfoText} content="qvain.required" />
 }
 
+export function RequiredTextTitleOrDescription(props) {
+  return <Translate {...props} component={InfoText} content="qvain.requiredTitleOrDescription" />
+}
+
 export const TextArea = styled.textarea`
   width: 100%;
   border-radius: 3px;

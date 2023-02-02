@@ -10,7 +10,7 @@ import {
   InfoText,
   TextArea,
   Required,
-  RequiredText,
+  RequiredTextTitleOrDescription,
 } from '@/components/qvain/general/V2'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 import { useStores } from '@/stores/stores'
@@ -47,7 +47,7 @@ const DescriptionFieldTextField = ({ activeLang }) => {
         />
       </FieldWrapper>
       <span>
-        <RequiredText />{' '}
+        <RequiredTextTitleOrDescription />{' '}
         <Translate
           component={InfoText}
           id="description-char-counter"

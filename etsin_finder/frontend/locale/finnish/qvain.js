@@ -20,6 +20,7 @@ const qvainFinnish = {
   submit: 'Tallenna ja julkaise',
   edit: 'Päivitä aineisto',
   required: 'Pakollinen. ',
+  requiredTitleOrDescription: 'Pakollinen vähintään joko suomeksi tai englanniksi.',
   unsavedChanges:
     'Sinulla on tallentamattomia muutoksia. Oletko varma että haluat poistua sivulta?',
   consent: `Käyttämällä Qvain -työkalua käyttäjä vakuuttaa, että hän on saanut suostumuksen

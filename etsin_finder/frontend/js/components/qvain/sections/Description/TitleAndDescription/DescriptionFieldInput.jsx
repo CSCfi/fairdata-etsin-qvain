@@ -9,7 +9,7 @@ import {
   FieldGroup,
   FieldWrapper,
   Required,
-  RequiredText,
+  RequiredTextTitleOrDescription,
   InfoText,
 } from '@/components/qvain/general/V2'
 import { Input } from '@/components/qvain/general/modal/form'
@@ -47,7 +47,7 @@ const DescriptionFieldInput = ({ propName, fieldName, activeLang }) => {
           placeholder=""
           required
         />
-        <RequiredText />
+        <RequiredTextTitleOrDescription />
         <Translate
           component={InfoText}
           content={`qvain.description.description.title.infoText.${activeLang}`}
