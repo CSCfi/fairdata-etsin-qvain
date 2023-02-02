@@ -618,19 +618,15 @@ class SupportedFlags(MethodView):
         return sorted(list(get_supported_flags(current_app)))
 
 
-_ENTITY_TYPE_DATASET = (
-    "http://uri.suomi.fi/codelist/fairdata/resource_type/code/dataset"
-)
-
-
 def _get_catalog_record_relations_by_identifier(cr):
     dataset = cr.get("research_dataset", {})
     relation_objs = dataset.get("relation", [])
     relations = {}
     for relation in relation_objs:
         entity = relation.get("entity", {})
-        if entity.get("type", {}).get("identifier") == _ENTITY_TYPE_DATASET:
-            persistent_id = _transform_url_to_persistent_id(entity["identifier"])
+        identifier = entity.get("identifier", None)
+        if identifier is not None:
+            persistent_id = _transform_url_to_persistent_id(identifier)
             relations[persistent_id] = relation
 
     other_identifier_objs = dataset.get("other_identifier", [])
