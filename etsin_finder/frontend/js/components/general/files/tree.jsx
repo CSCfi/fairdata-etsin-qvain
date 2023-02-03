@@ -56,12 +56,7 @@ const drawChildren = (treeProps, parent, level = 0, parentArgs = {}) => {
       />
       {items.map(item => (
         <Fragment key={item.key}>
-          <Item
-            treeProps={treeProps}
-            item={item}
-            level={level}
-            parentArgs={newParentArgs}
-          />
+          <Item treeProps={treeProps} item={item} level={level} parentArgs={newParentArgs} />
           {isDirectory(item) &&
             directoryView.isOpen(item) &&
             drawChildren(treeProps, item, level + 1, newParentArgs)}

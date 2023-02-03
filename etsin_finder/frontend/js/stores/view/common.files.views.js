@@ -5,6 +5,7 @@ import {
   itemLoaderAny,
   itemLoaderPublic,
 } from './common.files.loaders'
+import Sort from './common.files.sort'
 import { getAction } from './common.files.utils'
 
 export class DirectoryView {
@@ -36,6 +37,8 @@ export class DirectoryView {
 
   @observable directoryFilters = {}
 
+  @observable directorySort = {}
+
   isOpen = dir => !!(this.openState[dir.key] || dir.type === 'project')
 
   @action.bound setDirectoryFilter(dir, filter) {
@@ -46,18 +49,32 @@ export class DirectoryView {
     return this.directoryFilters[dir.identifier] || ''
   }
 
+  @action.bound setDirectorySort(dir, sort) {
+    this.directorySort[dir.identifier] = sort
+  }
+
+  getDirectorySort(dir) {
+    return this.directorySort[dir.identifier]
+  }
+
+  @action.bound getOrCreateDirectorySort(dir) {
+    if (!this.directorySort[dir.identifier]) this.setDirectorySort(dir, new Sort())
+    return this.directorySort[dir.identifier]
+  }
+
   @action open = async dir => {
     if (!this.openState[dir.key] && !dir.loaded) {
       const getCurrentCount = () => this.getItems(dir).length
       if (!dir.loaded || getCurrentCount() < this.defaultShowLimit) {
         if (
-          !(await this.getItemLoader(dir).loadDirectory(
-            this.Files,
+          !(await this.getItemLoader(dir).loadDirectory({
+            Files: this.Files,
             dir,
-            this.defaultShowLimit,
+            totalLimit: this.defaultShowLimit,
+            sort: this.getOrCreateDirectorySort(dir),
             getCurrentCount,
-            this.getDirectoryFilter(dir)
-          ))
+            filter: this.getDirectoryFilter(dir),
+          }))
         ) {
           return false
         }
@@ -137,13 +154,14 @@ export class DirectoryView {
   @action showMore = async dir => {
     const newLimit = this.getShowLimit(dir) + this.showLimitIncrement
     const getCurrentCount = () => this.getItems(dir).length
-    const success = await this.getItemLoader(dir).loadDirectory(
-      this.Files,
+    const success = await this.getItemLoader(dir).loadDirectory({
+      Files: this.Files,
       dir,
-      newLimit,
+      totalLimit: newLimit,
+      sort: this.getOrCreateDirectorySort(dir),
       getCurrentCount,
-      this.getDirectoryFilter(dir)
-    )
+      filter: this.getDirectoryFilter(dir),
+    })
 
     runInAction(() => {
       this.showLimitState[dir.key] = Math.max(
@@ -157,13 +175,14 @@ export class DirectoryView {
   @action filter = async (dir, filter = '') => {
     // Load directory using filter, apply filter to directory after load is complete
     const getCurrentCount = () => this.getItems(dir, { filter }).length
-    const success = await this.getItemLoader(dir).loadDirectory(
-      this.Files,
+    const success = await this.getItemLoader(dir).loadDirectory({
+      Files: this.Files,
       dir,
-      this.getShowLimit(dir),
+      totalLimit: this.getShowLimit(dir),
+      sort: this.getOrCreateDirectorySort(dir),
       getCurrentCount,
-      filter
-    )
+      filter,
+    })
     this.setDirectoryFilter(dir, filter)
 
     return success
@@ -174,7 +193,8 @@ export class DirectoryView {
     const showLimit = this.getShowLimit(dir)
     const loader = this.getItemLoader(dir)
     const totalCount = this.getItems(dir, { ignoreLimit: true }).length
-    const paginationKey = loader.getPaginationKey(filter)
+    const sort = this.getOrCreateDirectorySort(dir)
+    const paginationKey = loader.getPaginationKey(filter, sort)
     const count = dir.pagination.counts[paginationKey]
     if (count == null && !dir.pagination.fullyLoaded) {
       return true
@@ -184,7 +204,7 @@ export class DirectoryView {
       return true
     }
 
-    return loader.hasMore(dir, filter)
+    return loader.hasMore({ dir, sort, filter })
   }
 
   @action setDefaultShowLimit = async (limit, increment) => {
@@ -246,19 +266,21 @@ export class DirectoryView {
     // As an example, when pagination offset is 5, it means at least the first 5 items relevant to
     // loader have been loaded from Metax. After those first 5 items, a gap in indexes between items
     // may contain items that need to be loaded before more items can be shown.
-    const items = [...dir.directories, ...dir.files]
+    const loader = this.getItemLoader(dir)
+    const sort = this.getOrCreateDirectorySort(dir)
+    const items = sort.getSortedItems(dir)
     const showLimit = this.getShowLimit(dir)
     const filterText = filter || this.getDirectoryFilter(dir)
-    const loader = this.getItemLoader(dir)
-    const paginationKey = loader.getPaginationKey(filterText)
-    const loaderHasMore = loader.hasMore(dir, filterText)
+    const paginationKey = loader.getPaginationKey(filterText, sort)
+    const loaderHasMore = loader.hasMore({ dir, sort, filter: filterText })
     const offset = dir.pagination.offsets[paginationKey] || 0
     const dirAction = getAction(dir)
 
     let counter = 0
     let prevIndex = -1
+
     const filtered = items.filter(item => {
-      const { index } = item
+      const index = item.index[sort.paginationKey]
       if (index - prevIndex > 1 && counter >= offset && loaderHasMore) {
         return false // missing item, keep remaining ones hidden
       }

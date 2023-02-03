@@ -9,6 +9,7 @@ import {
   itemLoaderAny,
   itemLoaderExisting,
 } from '../../../js/stores/view/common.files.loaders'
+import Sort from '@/stores/view/common.files.sort'
 
 const AddItemsView = new AddItemsViewClass()
 const SelectedItemsView = new SelectedItemsViewClass()
@@ -24,16 +25,16 @@ beforeEach(() => {
 })
 
 const testFilterItemsByName = (view, fileProps = {}) => {
-    // filtering should be case insensitive
+  // filtering should be case insensitive
   const dir = Directory(
     {},
     {
       identifier: 'x',
       directories: [],
       files: [
-        File({ file_name: 'AB' }, { index: 0, ...fileProps }),
-        File({ file_name: 'bc' }, { index: 1, ...fileProps }),
-        File({ file_name: 'CD' }, { index: 2, ...fileProps }),
+        File({ file_name: 'AB' }, { index: { name: 0 }, ...fileProps }),
+        File({ file_name: 'bc' }, { index: { name: 1 }, ...fileProps }),
+        File({ file_name: 'CD' }, { index: { name: 2 }, ...fileProps }),
       ],
     }
   )
@@ -52,7 +53,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -63,7 +64,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: false,
@@ -75,7 +76,7 @@ describe('common.files.AddItemsView', () => {
       }
     )
     const items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 1 } }])
   })
 
   it('does not show added items', async () => {
@@ -88,7 +89,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: true,
               removed: false,
               existing: false,
@@ -99,7 +100,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: false,
@@ -111,7 +112,7 @@ describe('common.files.AddItemsView', () => {
       }
     )
     const items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 1 } }])
   })
 
   it('does not show existing items unless they have new child items', async () => {
@@ -124,7 +125,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -135,7 +136,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: true,
@@ -146,7 +147,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: false,
               existing: true,
@@ -158,7 +159,7 @@ describe('common.files.AddItemsView', () => {
       }
     )
     const items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 1 } }])
   })
 
   it('shows removed items', async () => {
@@ -172,7 +173,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: true,
               existing: true,
@@ -183,7 +184,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: true,
@@ -195,7 +196,7 @@ describe('common.files.AddItemsView', () => {
       }
     )
     const items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 1 } }])
   })
 
   it('does not show children of added parent', async () => {
@@ -209,7 +210,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -220,7 +221,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: true,
@@ -245,7 +246,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -256,7 +257,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: true,
@@ -268,7 +269,7 @@ describe('common.files.AddItemsView', () => {
       }
     )
     const items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 1 } }])
   })
 
   it('shows removed children of added parent', async () => {
@@ -282,7 +283,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -293,7 +294,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: true,
@@ -305,7 +306,7 @@ describe('common.files.AddItemsView', () => {
       }
     )
     const items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 1 } }])
   })
 
   it('does not show item if there may be previous items that should be loaded first ', async () => {
@@ -319,7 +320,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -330,7 +331,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: false,
               existing: true,
@@ -342,7 +343,7 @@ describe('common.files.AddItemsView', () => {
       }
     )
     const items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }])
   })
 
   it('allows skipping non-loaded item if its known not to be relevant for the view', async () => {
@@ -356,7 +357,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -367,7 +368,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: false,
               existing: true,
@@ -378,10 +379,10 @@ describe('common.files.AddItemsView', () => {
         ],
       }
     )
-    const paginationKey = itemLoaderNew.getPaginationKey('')
+    const paginationKey = itemLoaderNew.getPaginationKey('', new Sort())
     dir.pagination.offsets[paginationKey] = 2
     const items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 2 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 2 } }])
   })
 
   it('shows new or removed or existing directories with new children', async () => {
@@ -395,7 +396,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -406,7 +407,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: false,
@@ -417,7 +418,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: true,
               existing: true,
@@ -428,7 +429,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 3,
+              index: { name: 3 },
               added: false,
               removed: false,
               existing: true,
@@ -440,7 +441,11 @@ describe('common.files.AddItemsView', () => {
       }
     )
     const items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 1 }, { index: 2 }, { index: 3 }])
+    expect(items).toMatchObject([
+      { index: { name: 1 } },
+      { index: { name: 2 } },
+      { index: { name: 3 } },
+    ])
   })
 
   it('shows directories with removed children', async () => {
@@ -454,7 +459,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -467,7 +472,7 @@ describe('common.files.AddItemsView', () => {
       }
     )
     const items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }])
   })
 
   it('respects showLimit', async () => {
@@ -482,7 +487,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -493,7 +498,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: true,
               removed: false,
               existing: false,
@@ -504,7 +509,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: true,
               existing: true,
@@ -515,7 +520,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 3,
+              index: { name: 3 },
               added: false,
               removed: false,
               existing: false,
@@ -526,7 +531,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 4,
+              index: { name: 4 },
               added: false,
               removed: false,
               existing: false,
@@ -538,11 +543,20 @@ describe('common.files.AddItemsView', () => {
       }
     )
     let items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 2 }, { index: 3 }])
+    expect(items).toMatchObject([
+      { index: { name: 0 } },
+      { index: { name: 2 } },
+      { index: { name: 3 } },
+    ])
 
     AddItemsView.setDefaultShowLimit(5, 5)
     items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 2 }, { index: 3 }, { index: 4 }])
+    expect(items).toMatchObject([
+      { index: { name: 0 } },
+      { index: { name: 2 } },
+      { index: { name: 3 } },
+      { index: { name: 4 } },
+    ])
   })
 
   it('shows files', async () => {
@@ -556,7 +570,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -567,7 +581,7 @@ describe('common.files.AddItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: true,
@@ -577,14 +591,19 @@ describe('common.files.AddItemsView', () => {
           ),
         ],
         files: [
-          File({}, { index: 2, added: false, removed: false, existing: false }),
-          File({}, { index: 3, added: false, removed: true, existing: true }),
-          File({}, { index: 4, added: false, removed: false, existing: false }),
+          File({}, { index: { name: 2 }, added: false, removed: false, existing: false }),
+          File({}, { index: { name: 3 }, added: false, removed: true, existing: true }),
+          File({}, { index: { name: 4 }, added: false, removed: false, existing: false }),
         ],
       }
     )
     let items = AddItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 2 }, { index: 3 }, { index: 4 }])
+    expect(items).toMatchObject([
+      { index: { name: 0 } },
+      { index: { name: 2 } },
+      { index: { name: 3 } },
+      { index: { name: 4 } },
+    ])
   })
 
   it('uses correct loaders', async () => {
@@ -691,7 +710,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -702,7 +721,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: true,
@@ -714,7 +733,7 @@ describe('common.files.SelectedItemsView', () => {
       }
     )
     const items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 1 } }])
   })
 
   it('does not show removed items', async () => {
@@ -728,7 +747,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -739,7 +758,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: true,
@@ -751,7 +770,7 @@ describe('common.files.SelectedItemsView', () => {
       }
     )
     const items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }])
   })
 
   it('shows removed items', async () => {
@@ -765,7 +784,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -776,7 +795,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: true,
@@ -788,7 +807,7 @@ describe('common.files.SelectedItemsView', () => {
       }
     )
     const items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 1 } }])
   })
 
   it('does not show existing children of removed parent', async () => {
@@ -802,7 +821,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -813,7 +832,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: true,
@@ -838,7 +857,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: true,
               removed: false,
               existing: false,
@@ -849,7 +868,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: true,
               removed: false,
               existing: true,
@@ -861,7 +880,7 @@ describe('common.files.SelectedItemsView', () => {
       }
     )
     const items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 1 } }])
   })
 
   it('shows added children of removed parent', async () => {
@@ -875,7 +894,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -886,7 +905,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: true,
               removed: false,
               existing: true,
@@ -898,7 +917,7 @@ describe('common.files.SelectedItemsView', () => {
       }
     )
     const items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 1 } }])
   })
 
   it('does not show item if there may be previous items that should be loaded first ', async () => {
@@ -912,7 +931,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -923,7 +942,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: false,
               existing: true,
@@ -935,7 +954,7 @@ describe('common.files.SelectedItemsView', () => {
       }
     )
     const items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }])
   })
 
   it('allows skipping non-loaded item if its known not to be relevant for the view', async () => {
@@ -949,7 +968,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -960,7 +979,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: false,
               existing: true,
@@ -971,10 +990,10 @@ describe('common.files.SelectedItemsView', () => {
         ],
       }
     )
-    const paginationKey = itemLoaderExisting.getPaginationKey('')
+    const paginationKey = itemLoaderExisting.getPaginationKey('', new Sort())
     dir.pagination.offsets[paginationKey] = 2
     const items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 2 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 2 } }])
   })
 
   it('shows added or existing directories', async () => {
@@ -988,7 +1007,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: true,
               removed: false,
               existing: false,
@@ -999,7 +1018,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: false,
@@ -1010,7 +1029,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: false,
               existing: true,
@@ -1022,7 +1041,7 @@ describe('common.files.SelectedItemsView', () => {
       }
     )
     const items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 2 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 2 } }])
   })
 
   it('shows directories with added children', async () => {
@@ -1036,7 +1055,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: true,
               removed: false,
               existing: false,
@@ -1047,7 +1066,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: false,
@@ -1060,7 +1079,7 @@ describe('common.files.SelectedItemsView', () => {
       }
     )
     const items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 1 } }])
   })
 
   it('respects showLimit', async () => {
@@ -1075,7 +1094,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: true,
               removed: false,
               existing: false,
@@ -1086,7 +1105,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: false,
@@ -1097,7 +1116,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: true,
               removed: false,
               existing: true,
@@ -1108,7 +1127,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 3,
+              index: { name: 3 },
               added: false,
               removed: false,
               existing: true,
@@ -1119,7 +1138,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 4,
+              index: { name: 4 },
               added: true,
               removed: false,
               existing: false,
@@ -1131,11 +1150,20 @@ describe('common.files.SelectedItemsView', () => {
       }
     )
     let items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 2 }, { index: 3 }])
+    expect(items).toMatchObject([
+      { index: { name: 0 } },
+      { index: { name: 2 } },
+      { index: { name: 3 } },
+    ])
 
     SelectedItemsView.setDefaultShowLimit(5, 5)
     items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 2 }, { index: 3 }, { index: 4 }])
+    expect(items).toMatchObject([
+      { index: { name: 0 } },
+      { index: { name: 2 } },
+      { index: { name: 3 } },
+      { index: { name: 4 } },
+    ])
   })
 
   it('shows files', async () => {
@@ -1149,7 +1177,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: true,
               removed: false,
               existing: false,
@@ -1160,7 +1188,7 @@ describe('common.files.SelectedItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: false,
@@ -1170,14 +1198,19 @@ describe('common.files.SelectedItemsView', () => {
           ),
         ],
         files: [
-          File({}, { index: 2, added: true, removed: false, existing: true }),
-          File({}, { index: 3, added: false, removed: false, existing: true }),
-          File({}, { index: 4, added: true, removed: false, existing: false }),
+          File({}, { index: { name: 2 }, added: true, removed: false, existing: true }),
+          File({}, { index: { name: 3 }, added: false, removed: false, existing: true }),
+          File({}, { index: { name: 4 }, added: true, removed: false, existing: false }),
         ],
       }
     )
     let items = SelectedItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 2 }, { index: 3 }, { index: 4 }])
+    expect(items).toMatchObject([
+      { index: { name: 0 } },
+      { index: { name: 2 } },
+      { index: { name: 3 } },
+      { index: { name: 4 } },
+    ])
   })
 
   it('uses correct loaders', async () => {
@@ -1314,7 +1347,7 @@ describe('common.files.PublicItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -1325,7 +1358,7 @@ describe('common.files.PublicItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: true,
@@ -1337,7 +1370,7 @@ describe('common.files.PublicItemsView', () => {
       }
     )
     const items = PublicItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 1 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }, { index: { name: 1 } }])
   })
 
   it('does not show item if there may be previous items that should be loaded first ', async () => {
@@ -1351,7 +1384,7 @@ describe('common.files.PublicItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -1362,7 +1395,7 @@ describe('common.files.PublicItemsView', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: false,
               existing: true,
@@ -1374,7 +1407,7 @@ describe('common.files.PublicItemsView', () => {
       }
     )
     const items = PublicItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }])
+    expect(items).toMatchObject([{ index: { name: 0 } }])
   })
 
   it('respects showLimit', async () => {
@@ -1389,7 +1422,7 @@ describe('common.files.PublicItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: true,
               removed: false,
               existing: true,
@@ -1400,7 +1433,7 @@ describe('common.files.PublicItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: true,
@@ -1411,7 +1444,7 @@ describe('common.files.PublicItemsView', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: true,
               removed: false,
               existing: true,
@@ -1422,7 +1455,7 @@ describe('common.files.PublicItemsView', () => {
           Directory(
             {},
             {
-              index: 3,
+              index: { name: 3 },
               added: false,
               removed: false,
               existing: true,
@@ -1433,7 +1466,7 @@ describe('common.files.PublicItemsView', () => {
           Directory(
             {},
             {
-              index: 4,
+              index: { name: 4 },
               added: true,
               removed: false,
               existing: true,
@@ -1445,17 +1478,21 @@ describe('common.files.PublicItemsView', () => {
       }
     )
     let items = PublicItemsView.getItems(dir)
-    expect(items).toMatchObject([{ index: 0 }, { index: 1 }, { index: 2 }])
+    expect(items).toMatchObject([
+      { index: { name: 0 } },
+      { index: { name: 1 } },
+      { index: { name: 2 } },
+    ])
 
     PublicItemsView.setDefaultShowLimit(5, 5)
     items = PublicItemsView.getItems(dir)
 
     expect(items).toMatchObject([
-      { index: 0 },
-      { index: 1 },
-      { index: 2 },
-      { index: 3 },
-      { index: 4 },
+      { index: { name: 0 } },
+      { index: { name: 1 } },
+      { index: { name: 2 } },
+      { index: { name: 3 } },
+      { index: { name: 4 } },
     ])
   })
 
@@ -1470,7 +1507,7 @@ describe('common.files.PublicItemsView', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: true,
               removed: false,
               existing: true,
@@ -1481,7 +1518,7 @@ describe('common.files.PublicItemsView', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: false,
               existing: true,
@@ -1491,19 +1528,19 @@ describe('common.files.PublicItemsView', () => {
           ),
         ],
         files: [
-          File({}, { index: 2, added: true, removed: false, existing: true }),
-          File({}, { index: 3, added: false, removed: false, existing: true }),
-          File({}, { index: 4, added: true, removed: false, existing: true }),
+          File({}, { index: { name: 2 }, added: true, removed: false, existing: true }),
+          File({}, { index: { name: 3 }, added: false, removed: false, existing: true }),
+          File({}, { index: { name: 4 }, added: true, removed: false, existing: true }),
         ],
       }
     )
     let items = PublicItemsView.getItems(dir)
     expect(items).toMatchObject([
-      { index: 0 },
-      { index: 1 },
-      { index: 2 },
-      { index: 3 },
-      { index: 4 },
+      { index: { name: 0 } },
+      { index: { name: 1 } },
+      { index: { name: 2 } },
+      { index: { name: 3 } },
+      { index: { name: 4 } },
     ])
   })
 

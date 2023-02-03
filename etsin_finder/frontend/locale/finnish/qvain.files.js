@@ -302,6 +302,11 @@ const files = {
       },
     },
   },
+  sort: {
+    label: 'Järjestä',
+    date: 'Päivämäärä',
+    name: 'Nimi',
+  },
 }
 
 export default files

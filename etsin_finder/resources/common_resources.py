@@ -105,6 +105,8 @@ class DirectoryFiles(MethodView):
                 "name": fields.Str(),
                 "directory_fields": fields.DelimitedList(fields.Str()),
                 "file_fields": fields.DelimitedList(fields.Str()),
+                "file_ordering": fields.DelimitedList(fields.Str()),
+                "directory_ordering": fields.DelimitedList(fields.Str()),
             },
             request,
         )
@@ -126,6 +128,8 @@ class DirectoryFiles(MethodView):
         directory_fields = args.get("directory_fields", None)
         file_fields = args.get("file_fields", None)
         name = args.get("name", None)
+        file_ordering = args.get("file_ordering", "file_path")
+        directory_ordering = args.get("directory_ordering", "directory_path")
 
         # Unauthenticated users can only access files belonging to a published dataset
         if cr_identifier:
@@ -175,7 +179,9 @@ class DirectoryFiles(MethodView):
             return "Parameters cr_identifier and not_cr_identifier are exclusive", 400
 
         params = {
-            "include_parent": "true"  # always include parent so we can check the parent directory project_identifier
+            "include_parent": "true",  # always include parent so we can check the parent directory project_identifier
+            "file_ordering": file_ordering,
+            "directory_ordering": directory_ordering,
         }
         if cr_identifier:
             params["cr_identifier"] = cr_identifier
@@ -196,6 +202,7 @@ class DirectoryFiles(MethodView):
             params["directory_name"] = name
 
         resp, status = get_directories(dir_id, params)
+
         if status != 200:
             return resp, status
 

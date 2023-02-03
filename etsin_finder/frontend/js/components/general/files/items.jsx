@@ -200,7 +200,7 @@ export const ItemSpacer = styled.div`
   width: ${props => props.level * 1.3}em;
   margin: 0;
   padding: 0;
-  flex-shrink: 0;
+  flex-shrink: ${props => (props.shrink ? 1 : 0)};
 `
 
 export const GrowSpacer = styled.div`

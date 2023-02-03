@@ -300,6 +300,11 @@ const files = {
       },
     },
   },
+  sort: {
+    label: 'Sort by',
+    date: 'Date',
+    name: 'Name',
+  },
 }
 
 export default files

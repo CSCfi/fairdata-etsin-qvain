@@ -159,6 +159,8 @@ class TestCommonResource(BaseTest):
                 },
                 params={
                     "include_parent": "true",
+                    "file_ordering": "file_path",
+                    "directory_ordering": "directory_path",
                     "cr_identifier": "cr_id",
                     "directory_fields": "directory_name,project_identifier,id,identifier,directory_path,file_count,description,use_category,title,byte_size,service_created",
                     "file_fields": "file_name,project_identifier,file_characteristics,id,identifier,file_path,description,use_category,title,file_type,byte_size,checksum_value,checksum_algorithm,service_created",
@@ -198,6 +200,8 @@ class TestCommonResource(BaseTest):
                 },
                 params={
                     "include_parent": "true",
+                    "file_ordering": "file_path",
+                    "directory_ordering": "directory_path",
                     "cr_identifier": "cr_id",
                     "directory_fields": "directory_name,project_identifier,id,identifier,directory_path,file_count,description,use_category,title,byte_size,service_created",
                     "file_fields": "file_name,project_identifier,file_characteristics,id,identifier,file_path,description,use_category,title,file_type,byte_size,checksum_value,checksum_algorithm,service_created",

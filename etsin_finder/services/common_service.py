@@ -155,6 +155,7 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
         resp, status, success = make_request(
             requests.get, req_url, params=params, **self._get_args()
         )
+
         if not success:
             log.warning("Failed to get directory {}".format(dir_identifier))
             return resp, status

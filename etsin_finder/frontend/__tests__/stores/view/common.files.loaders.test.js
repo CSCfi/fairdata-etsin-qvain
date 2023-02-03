@@ -1,6 +1,7 @@
 import { observable, runInAction, when } from 'mobx'
 
 import { Directory, File } from '../../../js/stores/view/common.files.items'
+import Sort from '@/stores/view/common.files.sort'
 import {
   itemLoaderNew,
   itemLoaderAny,
@@ -16,15 +17,15 @@ const testFilterItemsByName = (loader, fileProps = {}) => {
       identifier: 'x',
       directories: [],
       files: [
-        File({ file_name: 'ABC' }, { index: 0, ...fileProps }),
-        File({ file_name: 'bcd' }, { index: 1, ...fileProps }),
-        File({ file_name: 'CDE' }, { index: 2, ...fileProps }),
-        File({ file_name: 'def' }, { index: 3, ...fileProps }),
-        File({ file_name: 'EFG' }, { index: 4, ...fileProps }),
+        File({ file_name: 'ABC' }, { index: { name: 0 }, ...fileProps }),
+        File({ file_name: 'bcd' }, { index: { name: 1 }, ...fileProps }),
+        File({ file_name: 'CDE' }, { index: { name: 2 }, ...fileProps }),
+        File({ file_name: 'def' }, { index: { name: 3 }, ...fileProps }),
+        File({ file_name: 'EFG' }, { index: { name: 4 }, ...fileProps }),
       ],
     }
   )
-  expect(loader.getOffset(dir, 'D')).toBe(3)
+  expect(loader.getOffset({ dir, filter: 'D', sort: new Sort() })).toBe(3)
 }
 
 describe('common.files.ItemLoaderPublic', () => {
@@ -36,7 +37,7 @@ describe('common.files.ItemLoaderPublic', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -47,7 +48,7 @@ describe('common.files.ItemLoaderPublic', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: true,
@@ -58,7 +59,7 @@ describe('common.files.ItemLoaderPublic', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: false,
               existing: true,
@@ -69,7 +70,7 @@ describe('common.files.ItemLoaderPublic', () => {
           Directory(
             {},
             {
-              index: 3,
+              index: { name: 3 },
               added: true,
               removed: false,
               existing: false,
@@ -80,7 +81,7 @@ describe('common.files.ItemLoaderPublic', () => {
           Directory(
             {},
             {
-              index: 5,
+              index: { name: 5 },
               added: true,
               removed: false,
               existing: true,
@@ -91,7 +92,7 @@ describe('common.files.ItemLoaderPublic', () => {
         ],
       }
     )
-    expect(itemLoaderPublic.getOffset(dir)).toBe(2)
+    expect(itemLoaderPublic.getOffset({ dir, sort: new Sort() })).toBe(2)
 
     // 'load' missing directory
     dir.directories.splice(
@@ -100,7 +101,7 @@ describe('common.files.ItemLoaderPublic', () => {
       Directory(
         {},
         {
-          index: 4,
+          index: { name: 4 },
           added: false,
           removed: false,
           existing: false,
@@ -109,7 +110,7 @@ describe('common.files.ItemLoaderPublic', () => {
         }
       )
     )
-    expect(itemLoaderPublic.getOffset(dir)).toBe(3)
+    expect(itemLoaderPublic.getOffset({ dir, sort: new Sort() })).toBe(3)
   })
 
   it('counts files', async () => {
@@ -120,7 +121,7 @@ describe('common.files.ItemLoaderPublic', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -130,12 +131,12 @@ describe('common.files.ItemLoaderPublic', () => {
           ),
         ],
         files: [
-          File({}, { index: 1, added: false, removed: false, existing: false }),
-          File({}, { index: 2, added: false, removed: false, existing: true }),
+          File({}, { index: { name: 1 }, added: false, removed: false, existing: false }),
+          File({}, { index: { name: 2 }, added: false, removed: false, existing: true }),
         ],
       }
     )
-    expect(itemLoaderPublic.getOffset(dir)).toBe(2)
+    expect(itemLoaderPublic.getOffset({ dir, sort: new Sort() })).toBe(2)
   })
 
   it('uses cached offset', async () => {
@@ -148,7 +149,7 @@ describe('common.files.ItemLoaderPublic', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -159,7 +160,7 @@ describe('common.files.ItemLoaderPublic', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: true,
@@ -170,7 +171,7 @@ describe('common.files.ItemLoaderPublic', () => {
           Directory(
             {},
             {
-              index: 5,
+              index: { name: 5 },
               added: true,
               removed: false,
               existing: true,
@@ -181,10 +182,11 @@ describe('common.files.ItemLoaderPublic', () => {
         ],
       }
     )
-    expect(itemLoaderPublic.getOffset(dir)).toBe(2)
-    const paginationKey = itemLoaderPublic.getPaginationKey('')
+    const sort = new Sort()
+    expect(itemLoaderPublic.getOffset({ dir, sort })).toBe(2)
+    const paginationKey = itemLoaderPublic.getPaginationKey('', sort)
     dir.pagination.offsets[paginationKey] = 4
-    expect(itemLoaderPublic.getOffset(dir)).toBe(4)
+    expect(itemLoaderPublic.getOffset({ dir, sort })).toBe(4)
   })
 
   it('filters items by name when determining offset', () => {
@@ -201,7 +203,7 @@ describe('common.files.ItemLoaderAny', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -212,7 +214,7 @@ describe('common.files.ItemLoaderAny', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: true,
@@ -223,7 +225,7 @@ describe('common.files.ItemLoaderAny', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: false,
               existing: true,
@@ -234,7 +236,7 @@ describe('common.files.ItemLoaderAny', () => {
           Directory(
             {},
             {
-              index: 3,
+              index: { name: 3 },
               added: true,
               removed: false,
               existing: false,
@@ -245,7 +247,7 @@ describe('common.files.ItemLoaderAny', () => {
           Directory(
             {},
             {
-              index: 5,
+              index: { name: 5 },
               added: true,
               removed: false,
               existing: false,
@@ -256,7 +258,7 @@ describe('common.files.ItemLoaderAny', () => {
         ],
       }
     )
-    expect(itemLoaderAny.getOffset(dir)).toBe(4)
+    expect(itemLoaderAny.getOffset({ dir, sort: new Sort() })).toBe(4)
 
     // 'load' missing directory
     dir.directories.splice(
@@ -265,7 +267,7 @@ describe('common.files.ItemLoaderAny', () => {
       Directory(
         {},
         {
-          index: 4,
+          index: { name: 4 },
           added: true,
           removed: false,
           existing: false,
@@ -274,7 +276,7 @@ describe('common.files.ItemLoaderAny', () => {
         }
       )
     )
-    expect(itemLoaderAny.getOffset(dir)).toBe(6)
+    expect(itemLoaderAny.getOffset({ dir, sort: new Sort() })).toBe(6)
   })
 
   it('counts files', async () => {
@@ -285,7 +287,7 @@ describe('common.files.ItemLoaderAny', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -295,12 +297,12 @@ describe('common.files.ItemLoaderAny', () => {
           ),
         ],
         files: [
-          File({}, { index: 1, added: false, removed: false, existing: true }),
-          File({}, { index: 2, added: false, removed: false, existing: false }),
+          File({}, { index: { name: 1 }, added: false, removed: false, existing: true }),
+          File({}, { index: { name: 2 }, added: false, removed: false, existing: false }),
         ],
       }
     )
-    expect(itemLoaderAny.getOffset(dir)).toBe(3)
+    expect(itemLoaderAny.getOffset({ dir, sort: new Sort() })).toBe(3)
   })
 
   it('uses cached offset', async () => {
@@ -311,7 +313,7 @@ describe('common.files.ItemLoaderAny', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -322,7 +324,7 @@ describe('common.files.ItemLoaderAny', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: true,
@@ -333,7 +335,7 @@ describe('common.files.ItemLoaderAny', () => {
           Directory(
             {},
             {
-              index: 5,
+              index: { name: 5 },
               added: true,
               removed: false,
               existing: false,
@@ -344,10 +346,11 @@ describe('common.files.ItemLoaderAny', () => {
         ],
       }
     )
-    expect(itemLoaderAny.getOffset(dir)).toBe(2)
-    const paginationKey = itemLoaderAny.getPaginationKey('')
+    const sort = new Sort()
+    expect(itemLoaderAny.getOffset({ dir, sort })).toBe(2)
+    const paginationKey = itemLoaderAny.getPaginationKey('', sort)
     dir.pagination.offsets[paginationKey] = 3
-    expect(itemLoaderAny.getOffset(dir)).toBe(3)
+    expect(itemLoaderAny.getOffset({ dir, sort })).toBe(3)
   })
 
   it('filters items by name when determining offset', () => {
@@ -364,7 +367,7 @@ describe('common.files.ItemLoaderExisting', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -375,7 +378,7 @@ describe('common.files.ItemLoaderExisting', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: true,
@@ -386,7 +389,7 @@ describe('common.files.ItemLoaderExisting', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: false,
               existing: true,
@@ -397,7 +400,7 @@ describe('common.files.ItemLoaderExisting', () => {
           Directory(
             {},
             {
-              index: 3,
+              index: { name: 3 },
               added: true,
               removed: false,
               existing: false,
@@ -408,7 +411,7 @@ describe('common.files.ItemLoaderExisting', () => {
           Directory(
             {},
             {
-              index: 5,
+              index: { name: 5 },
               added: true,
               removed: false,
               existing: true,
@@ -419,7 +422,7 @@ describe('common.files.ItemLoaderExisting', () => {
         ],
       }
     )
-    expect(itemLoaderExisting.getOffset(dir)).toBe(2)
+    expect(itemLoaderExisting.getOffset({ dir, sort: new Sort() })).toBe(2)
 
     // 'load' missing directory
     dir.directories.splice(
@@ -428,7 +431,7 @@ describe('common.files.ItemLoaderExisting', () => {
       Directory(
         {},
         {
-          index: 4,
+          index: { name: 4 },
           added: false,
           removed: false,
           existing: false,
@@ -437,7 +440,7 @@ describe('common.files.ItemLoaderExisting', () => {
         }
       )
     )
-    expect(itemLoaderExisting.getOffset(dir)).toBe(3)
+    expect(itemLoaderExisting.getOffset({ dir, sort: new Sort() })).toBe(3)
   })
 
   it('counts files', async () => {
@@ -448,7 +451,7 @@ describe('common.files.ItemLoaderExisting', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -458,12 +461,12 @@ describe('common.files.ItemLoaderExisting', () => {
           ),
         ],
         files: [
-          File({}, { index: 1, added: false, removed: false, existing: false }),
-          File({}, { index: 2, added: false, removed: false, existing: true }),
+          File({}, { index: { name: 1 }, added: false, removed: false, existing: false }),
+          File({}, { index: { name: 2 }, added: false, removed: false, existing: true }),
         ],
       }
     )
-    expect(itemLoaderExisting.getOffset(dir)).toBe(2)
+    expect(itemLoaderExisting.getOffset({ dir, sort: new Sort() })).toBe(2)
   })
 
   it('uses cached offset', async () => {
@@ -476,7 +479,7 @@ describe('common.files.ItemLoaderExisting', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: true,
@@ -487,7 +490,7 @@ describe('common.files.ItemLoaderExisting', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: true,
@@ -498,7 +501,7 @@ describe('common.files.ItemLoaderExisting', () => {
           Directory(
             {},
             {
-              index: 5,
+              index: { name: 5 },
               added: true,
               removed: false,
               existing: true,
@@ -509,10 +512,11 @@ describe('common.files.ItemLoaderExisting', () => {
         ],
       }
     )
-    expect(itemLoaderExisting.getOffset(dir)).toBe(2)
-    const paginationKey = itemLoaderExisting.getPaginationKey('')
+    const sort = new Sort()
+    expect(itemLoaderExisting.getOffset({ dir, sort })).toBe(2)
+    const paginationKey = itemLoaderExisting.getPaginationKey('', sort)
     dir.pagination.offsets[paginationKey] = 4
-    expect(itemLoaderExisting.getOffset(dir)).toBe(4)
+    expect(itemLoaderExisting.getOffset({ dir, sort })).toBe(4)
   })
 
   it('filters items by name when determining offset', () => {
@@ -529,7 +533,7 @@ describe('common.files.ItemLoaderNew', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -540,7 +544,7 @@ describe('common.files.ItemLoaderNew', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: false,
@@ -551,7 +555,7 @@ describe('common.files.ItemLoaderNew', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: false,
               existing: true,
@@ -562,7 +566,7 @@ describe('common.files.ItemLoaderNew', () => {
           Directory(
             {},
             {
-              index: 3,
+              index: { name: 3 },
               added: true,
               removed: false,
               existing: true,
@@ -573,7 +577,7 @@ describe('common.files.ItemLoaderNew', () => {
           Directory(
             {},
             {
-              index: 6,
+              index: { name: 6 },
               added: true,
               removed: false,
               existing: false,
@@ -584,7 +588,7 @@ describe('common.files.ItemLoaderNew', () => {
         ],
       }
     )
-    expect(itemLoaderNew.getOffset(dir)).toBe(3)
+    expect(itemLoaderNew.getOffset({ dir, sort: new Sort() })).toBe(3)
 
     // 'load' missing directory
     dir.directories.splice(
@@ -593,7 +597,7 @@ describe('common.files.ItemLoaderNew', () => {
       Directory(
         {},
         {
-          index: 4,
+          index: { name: 4 },
           added: false,
           removed: false,
           existing: false,
@@ -604,7 +608,7 @@ describe('common.files.ItemLoaderNew', () => {
       Directory(
         {},
         {
-          index: 5,
+          index: { name: 5 },
           added: false,
           removed: false,
           existing: true,
@@ -613,7 +617,7 @@ describe('common.files.ItemLoaderNew', () => {
         }
       )
     )
-    expect(itemLoaderNew.getOffset(dir)).toBe(5)
+    expect(itemLoaderNew.getOffset({ dir, sort: new Sort() })).toBe(5)
   })
 
   it('counts files', async () => {
@@ -624,7 +628,7 @@ describe('common.files.ItemLoaderNew', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -634,12 +638,12 @@ describe('common.files.ItemLoaderNew', () => {
           ),
         ],
         files: [
-          File({}, { index: 1, added: false, removed: false, existing: false }),
-          File({}, { index: 2, added: false, removed: true, existing: true }),
+          File({}, { index: { name: 1 }, added: false, removed: false, existing: false }),
+          File({}, { index: { name: 2 }, added: false, removed: true, existing: true }),
         ],
       }
     )
-    expect(itemLoaderNew.getOffset(dir)).toBe(2)
+    expect(itemLoaderNew.getOffset({ dir, sort: new Sort() })).toBe(2)
   })
 
   it('uses cached offset', async () => {
@@ -652,7 +656,7 @@ describe('common.files.ItemLoaderNew', () => {
           Directory(
             {},
             {
-              index: 0,
+              index: { name: 0 },
               added: false,
               removed: false,
               existing: false,
@@ -663,7 +667,7 @@ describe('common.files.ItemLoaderNew', () => {
           Directory(
             {},
             {
-              index: 1,
+              index: { name: 1 },
               added: false,
               removed: true,
               existing: true,
@@ -674,7 +678,7 @@ describe('common.files.ItemLoaderNew', () => {
           Directory(
             {},
             {
-              index: 2,
+              index: { name: 2 },
               added: false,
               removed: true,
               existing: true,
@@ -685,7 +689,7 @@ describe('common.files.ItemLoaderNew', () => {
           Directory(
             {},
             {
-              index: 5,
+              index: { name: 5 },
               added: true,
               removed: false,
               existing: true,
@@ -696,10 +700,11 @@ describe('common.files.ItemLoaderNew', () => {
         ],
       }
     )
-    expect(itemLoaderNew.getOffset(dir)).toBe(2)
-    const paginationKey = itemLoaderNew.getPaginationKey('')
+    const sort = new Sort()
+    expect(itemLoaderNew.getOffset({ dir, sort })).toBe(2)
+    const paginationKey = itemLoaderNew.getPaginationKey('', sort)
     dir.pagination.offsets[paginationKey] = 4
-    expect(itemLoaderNew.getOffset(dir)).toBe(4)
+    expect(itemLoaderNew.getOffset({ dir, sort })).toBe(4)
   })
 
   it('filters items by name when determining offset', () => {

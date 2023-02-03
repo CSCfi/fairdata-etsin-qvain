@@ -109,9 +109,19 @@ class Files extends FilesBase {
 
   @override async loadDirectory(dir) {
     if (this.userHasRightsToEditProject) {
-      return itemLoaderAny.loadDirectory(this, dir, this.initialLoadCount)
+      return itemLoaderAny.loadDirectory({
+        Files: this,
+        dir,
+        totalLimit: this.initialLoadCount,
+        sort: this.SelectedItemsView.getOrCreateDirectorySort(dir),
+      })
     }
-    return itemLoaderPublic.loadDirectory(this, dir, this.initialLoadCount)
+    return itemLoaderPublic.loadDirectory({
+      Files: this,
+      dir,
+      totalLimit: this.initialLoadCount,
+      sort: this.SelectedItemsView.getOrCreateDirectorySort(dir),
+    })
   }
 
   fetchRootIdentifier = async projectIdentifier => {
@@ -307,12 +317,22 @@ class Files extends FilesBase {
         subDir.directories
           .filter(d => d.added || d.existing)
           .map(async d => {
-            await itemLoaderAny.loadDirectory(this, d, 1e6)
+            await itemLoaderAny.loadDirectory({
+              Files: this,
+              dir: d,
+              totalLimit: 1e6,
+              sort: this.SelectedItemsView.getOrCreateDirectorySort(d),
+            })
             return recurse(d)
           })
       )
 
-    await itemLoaderAny.loadDirectory(this, dir, 1e6)
+    await itemLoaderAny.loadDirectory({
+      Files: this,
+      dir,
+      totalLimit: 1e6,
+      sort: this.SelectedItemsView.getOrCreateDirectorySort(dir),
+    })
     return recurse(dir)
   }
 

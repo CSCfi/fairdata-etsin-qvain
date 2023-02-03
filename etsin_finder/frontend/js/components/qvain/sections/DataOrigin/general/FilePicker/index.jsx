@@ -93,7 +93,8 @@ export const FilePickerBase = () => {
     <Translate component={Title} as="h3" content="qvain.files.selected.title" />
   ) : (
     <Translate
-      component={Title} as="h3"
+      component={Title}
+      as="h3"
       content="qvain.files.selected.readonlyTitle"
       with={{ project: selectedProject }}
     />
@@ -134,8 +135,8 @@ export const FilePickerBase = () => {
 
   return (
     <FieldGroup>
-      {content}
       {title}
+      {content}
       <AddItemsModal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} />
       {error}
       <FixDeprecatedModal />

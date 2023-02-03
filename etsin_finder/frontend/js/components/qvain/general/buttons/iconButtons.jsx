@@ -102,6 +102,7 @@ export const DeleteButton = props => (
 export const SortDirectionButton = props => (
   <Translate
     component={SortButtonStyles}
+    type="button"
     attributes={{
       'aria-label': `qvain.general.sort.${props.descending ? 'descending' : 'ascending'}`,
     }}

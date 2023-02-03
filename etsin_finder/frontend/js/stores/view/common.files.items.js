@@ -7,6 +7,7 @@ export const fileIdentifierKey = file => `file:${file.identifier}`
 
 // properties common to directories and files
 const Item = metaxItem => ({
+  id: metaxItem.id, // internal metax id
   identifier: metaxItem.identifier,
   key: null,
   title: metaxItem.title || '',
@@ -137,4 +138,15 @@ export const hasPASMetadata = file => {
     return true
   }
   return false
+}
+
+export const getItemsByKey = dir => {
+  const itemsByKey = {}
+  for (const d of dir.directories) {
+    itemsByKey[dirKey(d)] = d
+  }
+  for (const f of dir.files) {
+    itemsByKey[fileKey(f)] = f
+  }
+  return itemsByKey
 }

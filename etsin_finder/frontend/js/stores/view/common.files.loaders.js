@@ -1,4 +1,4 @@
-import { observable, action, runInAction, when } from 'mobx'
+import { observable, action, runInAction, when, makeObservable } from 'mobx'
 
 import { isAbort } from '@/utils/AbortClient'
 import urls from '../../utils/urls'
@@ -10,6 +10,7 @@ import {
   fileKey,
   dirIdentifierKey,
   fileIdentifierKey,
+  getItemsByKey,
 } from './common.files.items'
 import { ignoreNotFound, emptyDirectoryResponse, assignDefined } from './common.files.utils'
 
@@ -26,7 +27,7 @@ export const FetchType = {
   PUBLIC: 'public',
 }
 
-const getChildDataUrl = dir => {
+const getChildDataUrl = (dir, sort) => {
   // Return URL object for getting basic data on direct children for directory.
   const url = new URL(urls.common.directoryFiles(dir.identifier), document.location.origin)
   url.searchParams.set('file_fields', 'id')
@@ -35,27 +36,69 @@ const getChildDataUrl = dir => {
     ['id', 'file_count', 'byte_size', 'service_created'].join(',')
   )
   url.searchParams.set('include_parent', true)
+  url.searchParams.set('directory_ordering', sort.directoryOrdering)
+  url.searchParams.set('file_ordering', sort.fileOrdering)
   return url
 }
 
-const fetchExistingChildDataForDirectory = async (
+const cacheDirectories = ({ Files, dir, data, defaults, fetchType, sort }) => {
+  runInAction(() => {
+    const cache = Files.cache
+    const itemsByKey = getItemsByKey(dir)
+
+    data.directories.forEach((newDir, index) => {
+      const key = dirKey(newDir)
+      cache[key] = {
+        ...defaults,
+        ...cache[key],
+      }
+
+      const cacheMethods = {
+        [FetchType.PUBLIC]: () => {
+          cache[key].existingFileCount = newDir.file_count
+          cache[key].existing = true
+          cache[key].fileCount = newDir.file_count
+          cache[key].index = { ...cache[key].index, [sort.paginationKey]: index }
+        },
+        [FetchType.ANY]: () => {
+          cache[key].byteSize = newDir.byte_size
+          cache[key].fileCount = newDir.file_count
+          cache[key].index = { ...cache[key].index, [sort.paginationKey]: index }
+        },
+        default: () => {},
+      }
+
+      const cacheMethod = cacheMethods[fetchType] || cacheMethods.default
+      cacheMethod()
+
+      if (itemsByKey[key]) {
+        itemsByKey[key].index = { ...itemsByKey[key].index, [sort.paginationKey]: index }
+      }
+    })
+  })
+}
+
+const fetchExistingChildDataForDirectory = async ({
   Files,
   dir,
   datasetIdentifier,
+  fetchType,
   onlyPublic = false,
-  defaults = {}
-) => {
+  defaults = {},
+  sort,
+}) => {
   // Fetch data for the existing direct children of a directory.
   // - number of direct children for dataset
   // - dataset file count and byte count for each subdirectory
   // Also, when onlyPublic is enabled
   // - index (sorting position) and id for each file and directory
   // - use dataset file/byte count as the total count
+
   if (!datasetIdentifier) {
     return {}
   }
 
-  const url = getChildDataUrl(dir)
+  const url = getChildDataUrl(dir, sort)
   url.searchParams.set('cr_identifier', datasetIdentifier)
   const resp = ignoreNotFound(
     Files.client.get(url.href, { tag: 'fetch-existing-child-data' }),
@@ -64,29 +107,54 @@ const fetchExistingChildDataForDirectory = async (
   const { data } = await resp
 
   const cache = Files.cache
-  data.directories.forEach((newDir, index) => {
-    const key = dirKey(newDir)
-    cache[key] = {
-      ...defaults,
-      ...cache[key],
-    }
-    cache[key].existingFileCount = newDir.file_count
-    cache[key].existing = true
-    if (onlyPublic) {
-      cache[key].fileCount = newDir.file_count
-      cache[key].index = index
-    }
+  const itemsByKey = getItemsByKey(dir)
+
+  cacheDirectories({ Files, dir, data, defaults, fetchType, sort })
+
+  runInAction(() => {
+    data.directories.forEach((newDir, index) => {
+      const key = dirKey(newDir)
+      cache[key] = {
+        ...defaults,
+        ...cache[key],
+      }
+
+      cache[key].existingFileCount = newDir.file_count
+      cache[key].existing = true
+
+      if (onlyPublic) {
+        cache[key].fileCount = newDir.file_count
+        cache[key].index = { ...cache[key].index, [sort.paginationKey]: index }
+      }
+
+      if (itemsByKey[key]) {
+        itemsByKey[key].index = { ...itemsByKey[key].index, [sort.paginationKey]: index }
+      }
+    })
   })
-  data.files.forEach((newFile, index) => {
-    const key = fileKey(newFile)
-    cache[key] = {
-      ...defaults,
-      ...cache[key],
-    }
-    cache[key].existing = true
-    if (onlyPublic) {
-      cache[key].index = index + data.directories.length
-    }
+
+  runInAction(() => {
+    data.files.forEach((newFile, index) => {
+      const key = fileKey(newFile)
+      cache[key] = {
+        ...defaults,
+        ...cache[key],
+      }
+      cache[key].existing = true
+      if (onlyPublic) {
+        cache[key].index = {
+          ...cache[key].index,
+          [sort.paginationKey]: index + data.directories.length,
+        }
+      }
+
+      if (itemsByKey[key]) {
+        itemsByKey[key].index = {
+          ...itemsByKey[key].index,
+          [sort.paginationKey]: index + data.directories.length,
+        }
+      }
+    })
   })
 
   const counts = {
@@ -106,34 +174,57 @@ const fetchExistingChildDataForDirectory = async (
   return counts
 }
 
-const fetchAnyChildDataForDirectory = async (Files, dir, defaults = {}) => {
+const fetchAnyChildDataForDirectory = async ({ Files, dir, defaults = {}, sort }) => {
   // Fetch data for the direct children of a directory.
   // - number of direct children
-  // - index (sorting position) and id for each file and directory
   // - total file count and byte count for each subdirectory
 
-  const url = getChildDataUrl(dir)
+  const url = getChildDataUrl(dir, sort)
   const resp = Files.client.get(url.href, { tag: 'fetch-any-child-data' })
   const { data } = await resp
 
   const cache = Files.cache
-  data.directories.forEach((newDir, index) => {
-    const key = dirKey(newDir)
-    cache[key] = {
-      ...defaults,
-      ...cache[key],
-    }
-    cache[key].fileCount = newDir.file_count
-    cache[key].byteSize = newDir.byte_size
-    cache[key].index = index
+  const itemsByKey = getItemsByKey(dir)
+
+  cacheDirectories({ Files, dir, data, defaults, sort })
+  runInAction(() => {
+    data.directories.forEach((newDir, index) => {
+      const key = dirKey(newDir)
+      cache[key] = {
+        ...defaults,
+        ...cache[key],
+      }
+
+      cache[key].fileCount = newDir.file_count
+      cache[key].byteSize = newDir.byte_size
+      cache[key].index = { ...cache[key].index, [sort.paginationKey]: index }
+
+      if (itemsByKey[key]) {
+        itemsByKey[key].index = { ...itemsByKey[key].index, [sort.paginationKey]: index }
+      }
+    })
   })
-  data.files.forEach((newFile, index) => {
-    const key = fileKey(newFile)
-    cache[key] = {
-      ...defaults,
-      ...cache[key],
-    }
-    cache[key].index = index + data.directories.length
+
+  runInAction(() => {
+    data.files.forEach((newFile, index) => {
+      const key = fileKey(newFile)
+      cache[key] = {
+        ...defaults,
+        ...cache[key],
+      }
+
+      cache[key].index = {
+        ...cache[key].index,
+        [sort.paginationKey]: index + data.directories.length,
+      }
+
+      if (itemsByKey[key]) {
+        itemsByKey[key].index = {
+          ...itemsByKey[key].index,
+          [sort.paginationKey]: index + data.directories.length,
+        }
+      }
+    })
   })
 
   return {
@@ -143,7 +234,7 @@ const fetchAnyChildDataForDirectory = async (Files, dir, defaults = {}) => {
   }
 }
 
-const fetchChildData = action((Files, dir, type) => {
+const fetchChildData = action(({ Files, dir, type, sort }) => {
   // Fetch data on all direct children of dir, including
   // * file counts of directories
   // * id of items
@@ -152,11 +243,10 @@ const fetchChildData = action((Files, dir, type) => {
   const { datasetIdentifier, userHasRightsToEditProject } = Files
 
   if (
-    !dir.pagination.fileCountsPromise &&
-    type !== FetchType.PUBLIC &&
-    userHasRightsToEditProject
+    sort.hasChanged ||
+    (!dir.pagination.fileCountsPromise && type !== FetchType.PUBLIC && userHasRightsToEditProject)
   ) {
-    dir.pagination.fileCountsPromise = fetchAnyChildDataForDirectory(Files, dir).catch(
+    dir.pagination.fileCountsPromise = fetchAnyChildDataForDirectory({ Files, dir, sort }).catch(
       action(err => {
         dir.pagination.fileCountsPromise = null
         if (isAbort(err)) {
@@ -171,12 +261,13 @@ const fetchChildData = action((Files, dir, type) => {
   if (type === FetchType.PUBLIC) {
     // Fetch only items belonging to a dataset.
     if (!dir.pagination.fileCountsPromise) {
-      dir.pagination.fileCountsPromise = fetchExistingChildDataForDirectory(
+      dir.pagination.fileCountsPromise = fetchExistingChildDataForDirectory({
         Files,
         dir,
         datasetIdentifier,
-        true
-      ).catch(
+        onlyPublic: true,
+        sort,
+      }).catch(
         action(err => {
           dir.pagination.fileCountsPromise = null
           if (isAbort(err)) {
@@ -193,12 +284,13 @@ const fetchChildData = action((Files, dir, type) => {
     // With other fetch types, the file counts are loaded when individual items are load due to use of (not_)cr_identifier,
     // but here we need to fetch them in a separate request.
     if (!dir.pagination.existingFileCountsPromise) {
-      dir.pagination.existingFileCountsPromise = fetchExistingChildDataForDirectory(
+      dir.pagination.existingFileCountsPromise = fetchExistingChildDataForDirectory({
         Files,
         dir,
         datasetIdentifier,
-        false
-      ).catch(
+        onlyPublic: false,
+        sort,
+      }).catch(
         action(err => {
           dir.pagination.existingFileCountsPromise = null
           if (isAbort(err)) {
@@ -212,7 +304,7 @@ const fetchChildData = action((Files, dir, type) => {
   }
 })
 
-const fetchItems = async (Files, dir, offset, limit, type, filterStr = '') => {
+const fetchItems = async ({ Files, dir, offset, limit, type, sort, filter = '' }) => {
   const { datasetIdentifier } = Files
 
   const url = new URL(urls.common.directoryFiles(dir.identifier), document.location.origin)
@@ -220,8 +312,10 @@ const fetchItems = async (Files, dir, offset, limit, type, filterStr = '') => {
   url.searchParams.set('offset', offset)
   url.searchParams.set('limit', limit)
   url.searchParams.set('include_parent', true)
-  const filterText = filterStr
-  if (filterStr) {
+  url.searchParams.set('directory_ordering', sort.directoryOrdering)
+  url.searchParams.set('file_ordering', sort.fileOrdering)
+  const filterText = filter
+  if (filter) {
     url.searchParams.set('name', filterText)
   }
 
@@ -270,6 +364,7 @@ const fetchItems = async (Files, dir, offset, limit, type, filterStr = '') => {
     // Use data existing in cache, check with both id and identifier
     return observable(
       Directory(newDir, {
+        index: { ...cache[key].index, [sort.paginationKey]: newDir.id },
         parent: dir,
         existing: type === FetchType.EXISTING,
         existingFileCount,
@@ -287,6 +382,7 @@ const fetchItems = async (Files, dir, offset, limit, type, filterStr = '') => {
     // Use data existing in cache, check with both id and identifier
     return observable(
       File(newFile, {
+        index: { ...cache[key].index, [sort.paginationKey]: newFile.id },
         parent: dir,
         existing: type === FetchType.EXISTING,
         byteSize: newFile.byte_size,
@@ -324,27 +420,31 @@ class ItemLoader {
   fetchType = FetchType.ANY
 
   constructor() {
+    makeObservable(this)
     if (typeof this.filterItem !== 'function') {
       throw new TypeError('Must override filterItem')
     }
   }
 
-  getPaginationKey(filter = '') {
-    return `${this.fetchType}${filter && '-'}${filter.toLowerCase()}`
+  getPaginationKey(filter = '', sort) {
+    return `${this.fetchType}${filter && '-'}${filter.toLowerCase()}-${sort.paginationKey}`
   }
 
-  hasMore(dir, filter = '') {
+  @action.bound
+  hasMore({ dir, sort, filter = '' }) {
     if (dir.pagination.fullyLoaded) {
       return false
     }
+
     const items = [...dir.directories, ...dir.files]
-    const paginationKey = this.getPaginationKey(filter)
+    const paginationKey = this.getPaginationKey(filter, sort)
     const count = dir.pagination.counts[paginationKey]
     const offset = dir.pagination.offsets[paginationKey] || 0
 
     if (count != null && offset >= count) {
       return false
     }
+
     if (dir.directChildCount != null && items.length >= dir.directChildCount) {
       return false
     }
@@ -369,7 +469,7 @@ class ItemLoader {
     }
   }
 
-  async loadDirectory(Files, dir, totalLimit, getCurrentCount = null, filter = '') {
+  async loadDirectory({ Files, dir, totalLimit, sort, getCurrentCount = null, filter = '' }) {
     // Load directory files from Metax.
     //
     // Loaded directories are added to dir.directories and dir.files arrays while avoiding duplicates.
@@ -382,7 +482,6 @@ class ItemLoader {
     //   getCurrentCount: function that returns number of items currently being shown in view
     //   filter: filter by file name or directory name
 
-
     if (!Object.values(FetchType).includes(this.fetchType)) {
       throw new TypeError(`Invalid fetchType, fetchType = ${this.fetchType}`)
     }
@@ -391,30 +490,26 @@ class ItemLoader {
       // Keep only one active loading at a time.
       await this.getLoadingLock(Files, dir)
 
-      if (!this.hasMore(dir, filter)) {
-        return true // everything is already loaded
-      }
-
-      // Offset tells how many successive items starting from item 0 have been loaded.
-      const offset = this.getOffset(dir, filter)
-
-      // The getCurrentCount function should return the total number of items
-      // we are able to show without loading more from Metax. If the function is missing,
-      // use the offset value that does not take into account items from other sources.
-      let currentCount
-      if (getCurrentCount) {
-        currentCount = getCurrentCount()
-      } else {
-        currentCount = offset
-      }
-
+      const offset = this.getOffset({ dir, filter, sort })
+      let currentCount = offset
       const limit = totalLimit - currentCount
+      const paginationKey = this.getPaginationKey(filter, sort)
+      const count = dir.pagination.counts[paginationKey]
+
+      if (!sort.hasChanged) {
+        if (!this.hasMore({ dir, sort, filter })) {
+          return true // everything is already loaded
+        }
+
+        if (getCurrentCount) {
+          currentCount = getCurrentCount()
+        }
+      }
+
       if (limit <= 0) {
         return true
       }
 
-      const paginationKey = this.getPaginationKey(filter)
-      const count = dir.pagination.counts[paginationKey]
       if (count !== undefined && offset >= count) {
         runInAction(() => {
           dir.pagination.offsets[paginationKey] = offset
@@ -422,53 +517,71 @@ class ItemLoader {
         return true
       }
 
-      fetchChildData(Files, dir, this.fetchType)
-      const newItems = await fetchItems(Files, dir, offset, limit, this.fetchType, filter)
-
-      const counts = await dir.pagination.fileCountsPromise
-      const existingCounts = await dir.pagination.existingFileCountsPromise
-      runInAction(() => {
-        // Assign file counts and byte sizes
-        assignDefined(dir, counts)
-        if (existingCounts) {
-          assignDefined(dir, existingCounts)
-        }
-
-        // Ignore items that have already been loaded
-        const oldDirs = new Set(dir.directories.map(d => d.identifier))
-        const oldFiles = new Set(dir.files.map(f => f.identifier))
-
-        dir.directories.splice(
-          dir.directories.length,
-          0,
-          ...newItems.directories.filter(d => !oldDirs.has(d.identifier))
-        )
-        dir.files.splice(
-          dir.files.length,
-          0,
-          ...newItems.files.filter(f => !oldFiles.has(f.identifier))
-        )
-
-        dir.directories.replace(dir.directories.slice().sort((a, b) => a.index - b.index))
-        dir.files.replace(dir.files.slice().sort((a, b) => a.index - b.index))
-
-        const newItemsLength = newItems.directories.length + newItems.files.length
-        dir.pagination.offsets[paginationKey] = offset + newItemsLength
-        dir.pagination.counts[paginationKey] = newItems.count
-
-        this.updatePagination(dir)
+      fetchChildData({ Files, dir, type: this.fetchType, sort })
+      const newItems = await fetchItems({
+        Files,
+        dir,
+        offset,
+        limit,
+        type: this.fetchType,
+        sort,
+        filter,
       })
+
+      await this.updateDirectoriesAndFiles({ dir, newItems, paginationKey, offset, sort })
     } finally {
       // Always set loading to false before returning
       runInAction(() => {
         dir.loading = false
+        sort.hasChanged = false
       })
     }
     return true
   }
 
-  @action
-  updatePagination(dir) {
+  @action.bound
+  async updateDirectoriesAndFiles({ dir, newItems, paginationKey, offset }) {
+    await this.updateFileDetails(dir)
+    this.updateFiles(dir, newItems)
+    this.updatePagination(dir, newItems, paginationKey, offset)
+  }
+
+  @action.bound
+  async updateFileDetails(dir) {
+    const counts = await dir.pagination.fileCountsPromise
+    const existingCounts = await dir.pagination.existingFileCountsPromise
+    // Assign file counts and byte sizes
+    runInAction(() => {
+      assignDefined(dir, counts)
+      if (existingCounts) {
+        assignDefined(dir, existingCounts)
+      }
+    })
+  }
+
+  @action.bound
+  updateFiles(dir, newItems) {
+    // Ignore items that have already been loaded
+    const oldDirs = new Set(dir.directories.map(d => d.identifier))
+    const oldFiles = new Set(dir.files.map(f => f.identifier))
+
+    dir.directories.splice(
+      dir.directories.length,
+      0,
+      ...newItems.directories.filter(d => !oldDirs.has(d.identifier))
+    )
+    dir.files.splice(
+      dir.files.length,
+      0,
+      ...newItems.files.filter(f => !oldFiles.has(f.identifier))
+    )
+  }
+
+  @action.bound
+  updatePagination(dir, newItems, paginationKey, offset) {
+    const newItemsLength = newItems.directories.length + newItems.files.length
+    dir.pagination.offsets[paginationKey] = offset + newItemsLength
+    dir.pagination.counts[paginationKey] = newItems.count
     const directChildCount = dir.directChildCount
     dir.pagination.counts[FetchType.ANY] = directChildCount
 
@@ -491,20 +604,22 @@ class ItemLoader {
     }
   }
 
-  getOffset(dir, filter = '') {
+  @action.bound
+  getOffset({ dir, sort, filter = '' }) {
     // Determine pagination offset required to get more data from metax.
-    const items = [...dir.directories, ...dir.files]
+    const items = sort.getSortedItems(dir)
     const filterStr = filter.toLowerCase()
-    const paginationKey = this.getPaginationKey(filterStr)
+    const paginationKey = this.getPaginationKey(filterStr, sort)
     const oldOffset = dir.pagination.offsets[paginationKey] || 0
 
     let offset = 0
-    let index = -1
+    let lastIndex = -1
     for (const item of items) {
-      if (item.index - index > 1) {
+      const currentIndex = item.index[sort.paginationKey]
+      if (currentIndex === undefined || currentIndex - lastIndex > 1) {
         break
       }
-      index = item.index
+      lastIndex = currentIndex
 
       if (this.filterItem(item)) {
         if (!filterStr || item.name.toLowerCase().includes(filterStr)) {

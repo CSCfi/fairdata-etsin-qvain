@@ -11,6 +11,7 @@ import {
   itemLoaderAny,
   itemLoaderExisting,
 } from '@/stores/view/common.files.loaders'
+import Sort from '@/stores/view/common.files.sort'
 import urls from '@/utils/urls'
 
 import { ShowMore } from '@/components/general/files/tree'
@@ -1265,54 +1266,94 @@ describe('Qvain.Files pagination', () => {
   it('respects limit for any items', async () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
     expect(subset.files.length + subset.directories.length).toBe(0)
-    await itemLoaderAny.loadDirectory(Files, subset, 1)
+    await itemLoaderAny.loadDirectory({ Files, dir: subset, totalLimit: 1, sort: new Sort() })
     expect(subset.files.length + subset.directories.length).toBe(1)
-    await itemLoaderAny.loadDirectory(Files, subset, 2)
+    await itemLoaderAny.loadDirectory({ Files, dir: subset, totalLimit: 2, sort: new Sort() })
     expect(subset.files.length + subset.directories.length).toBe(2)
-    await itemLoaderAny.loadDirectory(Files, subset, 4)
+    await itemLoaderAny.loadDirectory({ Files, dir: subset, totalLimit: 4, sort: new Sort() })
     expect(subset.files.length + subset.directories.length).toBe(4)
-    await itemLoaderAny.loadDirectory(Files, subset, 5)
+    await itemLoaderAny.loadDirectory({ Files, dir: subset, totalLimit: 5, sort: new Sort() })
     expect(subset.files.length + subset.directories.length).toBe(5)
-    await itemLoaderAny.loadDirectory(Files, subset, 100)
+    await itemLoaderAny.loadDirectory({
+      Files,
+      dir: subset,
+      totalLimit: 100,
+      sort: new Sort(),
+    })
     expect(subset.files.length + subset.directories.length).toBe(5)
   })
 
   it('respects limit for selected items', async () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
     expect(subset.files.length + subset.directories.length).toBe(0)
-    await itemLoaderExisting.loadDirectory(Files, subset, 1)
+    await itemLoaderExisting.loadDirectory({
+      Files,
+      dir: subset,
+      totalLimit: 1,
+      sort: new Sort(),
+    })
     expect(subset.files.length + subset.directories.length).toBe(1)
-    await itemLoaderExisting.loadDirectory(Files, subset, 2)
+    await itemLoaderExisting.loadDirectory({
+      Files,
+      dir: subset,
+      totalLimit: 2,
+      sort: new Sort(),
+    })
     expect(subset.files.length + subset.directories.length).toBe(2)
-    await itemLoaderExisting.loadDirectory(Files, subset, 3)
+    await itemLoaderExisting.loadDirectory({
+      Files,
+      dir: subset,
+      totalLimit: 3,
+      sort: new Sort(),
+    })
     expect(subset.files.length + subset.directories.length).toBe(3)
-    await itemLoaderExisting.loadDirectory(Files, subset, 4)
+    await itemLoaderExisting.loadDirectory({
+      Files,
+      dir: subset,
+      totalLimit: 4,
+      sort: new Sort(),
+    })
     expect(subset.files.length + subset.directories.length).toBe(4)
-    await itemLoaderExisting.loadDirectory(Files, subset, 100)
+    await itemLoaderExisting.loadDirectory({
+      Files,
+      dir: subset,
+      totalLimit: 100,
+      sort: new Sort(),
+    })
     expect(subset.files.length + subset.directories.length).toBe(4)
   })
 
   it('respects limit for new items', async () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
     expect(subset.files.length + subset.directories.length).toBe(0)
-    await itemLoaderNew.loadDirectory(Files, subset, 1)
+    await itemLoaderNew.loadDirectory({ Files, dir: subset, totalLimit: 1, sort: new Sort() })
     expect(subset.files.length + subset.directories.length).toBe(1)
-    await itemLoaderNew.loadDirectory(Files, subset, 2)
+    await itemLoaderNew.loadDirectory({ Files, dir: subset, totalLimit: 2, sort: new Sort() })
     expect(subset.files.length + subset.directories.length).toBe(1)
   })
 
   it('respects limit for mixed items', async () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
     expect(subset.files.length + subset.directories.length).toBe(0)
-    await itemLoaderNew.loadDirectory(Files, subset, 1)
+    await itemLoaderNew.loadDirectory({ Files, dir: subset, totalLimit: 1, sort: new Sort() })
     expect(subset.files.length + subset.directories.length).toBe(1)
-    await itemLoaderExisting.loadDirectory(Files, subset, 1)
+    await itemLoaderExisting.loadDirectory({
+      Files,
+      dir: subset,
+      totalLimit: 1,
+      sort: new Sort(),
+    })
     expect(subset.files.length + subset.directories.length).toBe(2)
   })
 
   it('preserves Metax item order when loading any files', async () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
-    await itemLoaderAny.loadDirectory(Files, subset, 10)
+    await itemLoaderAny.loadDirectory({
+      Files,
+      dir: subset,
+      totalLimit: 10,
+      sort: new Sort(),
+    })
     expect(subset.files.map(item => item.path)).toEqual([
       '/data/set1/subset/file1.csv',
       '/data/set1/subset/file10.csv',
@@ -1330,8 +1371,13 @@ describe('Qvain.Files pagination', () => {
 
   it('preserves Metax item order with mixed file loads', async () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
-    await itemLoaderExisting.loadDirectory(Files, subset, 2)
-    await itemLoaderNew.loadDirectory(Files, subset, 1)
+    await itemLoaderExisting.loadDirectory({
+      Files,
+      dir: subset,
+      totalLimit: 2,
+      sort: new Sort(),
+    })
+    await itemLoaderNew.loadDirectory({ Files, dir: subset, totalLimit: 1, sort: new Sort() })
 
     expect(subset.files.map(item => item.path)).toEqual([
       '/data/set1/subset/file1.csv',
@@ -1343,11 +1389,21 @@ describe('Qvain.Files pagination', () => {
   it('does not load same file again', async () => {
     const subset = await Files.getItemByPath('/data/set1/subset', true)
     axios.get.mockClear()
-    await itemLoaderAny.loadDirectory(Files, subset, 3)
+    await itemLoaderAny.loadDirectory({ Files, dir: subset, totalLimit: 3, sort: new Sort() })
     expect(axios.get.mock.calls.length).toBe(3)
-    await itemLoaderNew.loadDirectory(Files, subset, 10000)
+    await itemLoaderNew.loadDirectory({
+      Files,
+      dir: subset,
+      totalLimit: 10000,
+      sort: new Sort(),
+    })
     expect(axios.get.mock.calls.length).toBe(4)
-    await itemLoaderNew.loadDirectory(Files, subset, 10000)
+    await itemLoaderNew.loadDirectory({
+      Files,
+      dir: subset,
+      totalLimit: 10000,
+      sort: new Sort(),
+    })
     expect(axios.get.mock.calls.length).toBe(4)
     expect(subset.files.map(item => item.path)).toEqual([
       '/data/set1/subset/file1.csv',

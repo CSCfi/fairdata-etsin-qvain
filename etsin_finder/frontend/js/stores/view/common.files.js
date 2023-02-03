@@ -5,6 +5,7 @@ import { Project, dirIdentifierKey, fileIdentifierKey } from './common.files.ite
 import PromiseManager from '../../utils/promiseManager'
 import { itemLoaderPublic } from './common.files.loaders'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
+import Sort from './common.files.sort'
 
 class Files {
   // Base class for file hierarchies.
@@ -232,7 +233,12 @@ class Files {
   }
 
   @action.bound async loadDirectory(dir) {
-    return itemLoaderPublic.loadDirectory(this, dir, this.initialLoadCount)
+    return itemLoaderPublic.loadDirectory({
+      Files: this,
+      dir,
+      totalLimit: this.initialLoadCount,
+      sort: new Sort(),
+    })
   }
 
   @action changeProject = async projectId => {
@@ -291,6 +297,8 @@ class Files {
       if (isAbort(error)) {
         throw error
       }
+      console.error(error)
+
       runInAction(() => {
         this.root = null
         this.loadingProjectRoot.error = error
