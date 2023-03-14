@@ -304,7 +304,7 @@ const files = {
   },
   sort: {
     label: 'Järjestä',
-    date: 'Päivämäärä',
+    date: 'Jäädytysaika',
     name: 'Nimi',
   },
 }

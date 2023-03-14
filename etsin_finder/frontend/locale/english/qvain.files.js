@@ -302,7 +302,7 @@ const files = {
   },
   sort: {
     label: 'Sort by',
-    date: 'Date',
+    date: 'Freeze Time',
     name: 'Name',
   },
 }
