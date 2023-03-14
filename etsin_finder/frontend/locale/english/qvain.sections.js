@@ -4,7 +4,7 @@ const sections = {
     buttons: {
       ida: {
         title: 'Ida',
-        description: 'Choose "Ida" if the data is stored in Fairdata IDA service',
+        description: 'Choose "IDA" if the data is stored in Fairdata IDA service',
       },
       att: {
         title: 'Remote resources',
@@ -21,6 +21,7 @@ const sections = {
         },
       },
     },
+    infoText: 'Note! Once the dataset has been saved (drafted/published), you cannot change the Data Origin any more.',
   },
   description: {
     title: 'Description',

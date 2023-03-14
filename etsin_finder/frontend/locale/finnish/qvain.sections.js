@@ -21,6 +21,7 @@ const sections = {
         },
       },
     },
+    infoText: 'Huom! Et voi muuttaa Datalähdettä enää tallennuksen (luonnos/julkaisu) jälkeen.',
   },
   description: {
     title: 'Kuvaus',
