@@ -67,8 +67,11 @@ const files = {
       save: 'Lisää tiedostot',
       close: 'Sulje',
     },
-    versionInfo:
-      'Tiedostojen tai hakemistojen lisääminen tai poistaminen synnyttää julkaistusta aineistosta uuden version kun muutokset julkaistaan. Vanha versio pysyy muuttumattomana ja siihen lisätään "vanha"-tagi.',
+    versionInfo:{
+      published: 'Huom! Kasvavaan aineistoon voi lisätä tiedostoja vapaasti, mutta tiedostojen poistaminen ei ole sallittua ilman, että aineistosta tehdään uusi versio.',
+      draft: `Huom! Niin kauan, kun aineisto on tallennettu vain luonnoksena, tiedostoja voi muuttaa vapaasti.
+      Julkaistun aineiston tiedostoja ei voi enää muuttaa ilman, että siitä tehdään uusi versio. Julkaistuun kasvavaan aineistoon voi lisätä tiedostoja.`,
+    },
   },
   refreshModal: {
     header: 'Päivitä kansion tiedostot',

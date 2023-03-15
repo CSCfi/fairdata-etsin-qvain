@@ -34,7 +34,14 @@ export const AddFilesModal = ({ isOpen, onRequestClose }) => {
     onRequestClose()
   }
 
-  const isPublished = !!original
+  const getDatasetEditingInfoTranslation = dataset => {
+    if (!dataset) return ''
+    if (isCumulative) {
+      return 'qvain.files.addItemsModal.versionInfo.published'
+    }
+    return 'qvain.files.addItemsModal.versionInfo.draft'
+  }
+
   const projectChosen =
     projectLocked || (root && (root.addedChildCount > 0 || root.removedChildCount > 0))
   const haveNewFiles = Object.values(checkedState).some(item => item)
@@ -53,9 +60,7 @@ export const AddFilesModal = ({ isOpen, onRequestClose }) => {
       <TreeWrapper>
         <AddItemsTree onRequestClose={onRequestClose} />
       </TreeWrapper>
-      {isPublished && !isCumulative && (
-        <Translate component={HelpField} content="qvain.files.addItemsModal.versionInfo" />
-      )}
+      <Translate component={HelpField} content={getDatasetEditingInfoTranslation(original)} />
       <Buttons>
         <SaveButton onClick={saveAddedItems} disabled={!haveNewFiles}>
           <Translate content={'qvain.files.addItemsModal.buttons.save'} />

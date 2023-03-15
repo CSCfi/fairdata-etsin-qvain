@@ -70,8 +70,11 @@ const files = {
       save: 'Add files',
       close: 'Close',
     },
-    versionInfo:
-      'Adding/removing files or folders will create a new version of this dataset when the changes are published. The old version will be tagged as "Old" and the files linked to it will remain untouched.',
+    versionInfo:{
+      published: 'Note! Cumulative dataset allows you to add files to it but you cannot remove existing files. Removing the data is only possible by creating a new version of the dataset.',
+      draft: `Note! While the dataset is saved as a draft, data can be changed freely.
+      Once the dataset has been published, data cannot be changed without creating a new version of the dataset. Files can be added to published cumulative datasets.`,
+    },
   },
   refreshModal: {
     header: 'Refresh folder content',
