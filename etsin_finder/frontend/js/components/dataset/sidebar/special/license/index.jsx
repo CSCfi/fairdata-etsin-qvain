@@ -11,7 +11,7 @@ const License = props => {
   const {
     data: { license, title, description, identifier },
   } = props
-  const licenseIsUrl = license && isUrl(identifier)
+  const licenseIsUrl = isUrl(license)
 
   let info
   if (identifier === LICENSE_URL.OTHER) {
