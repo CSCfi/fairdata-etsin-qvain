@@ -26,5 +26,8 @@ export default function idnToLink(identifier) {
   if (identifier.startsWith('http:') || identifier.startsWith('https:')) {
     return identifier
   }
+  if (identifier.startsWith('url:')) {
+    return identifier.replace('url:', '')
+  }
   return ''
 }

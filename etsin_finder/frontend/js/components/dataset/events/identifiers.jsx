@@ -27,19 +27,23 @@ const Events = ({ identifiers, title }) => {
   }))
 
   return (
-    <Margin>
+    <Translate component={Margin}>
       <h2>
         <Translate content={title} />
       </h2>
       <ul>
         {links.map(link => (
-          <OtherID key={link.identifier}>
-            {link.url && <a href={link.url}>{link.identifier}</a>}
+          <OtherID key={link.identifier} data-testid={`other-identifier-${link.identifier}`}>
+            {link.url && (
+              <a data-testid={`other-identifier-link-${link.identifier}`} href={link.url}>
+                {link.identifier}
+              </a>
+            )}
             {!link.url && link.identifier}
           </OtherID>
         ))}
       </ul>
-    </Margin>
+    </Translate>
   )
 }
 
