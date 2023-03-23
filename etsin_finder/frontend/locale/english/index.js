@@ -214,7 +214,7 @@ const english = {
       name: 'Name',
       size: 'Size',
       remote: 'Remote resources',
-      checksum: 'Checksum',
+      checksum: 'Checksum (%(insertable)s)',
       id: 'ID',
       title: 'Title',
       type: 'Type',

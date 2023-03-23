@@ -29,17 +29,6 @@ const customStyles = {
   },
 }
 
-const formatChecksum = checksum => {
-  if (!checksum || !checksum.value) {
-    return ''
-  }
-  const parts = [checksum.value]
-  if (checksum.algorithm) {
-    parts.push(`(${checksum.algorithm})`)
-  }
-  return parts.join(' ')
-}
-
 const Info = ({
   name,
   id,
@@ -75,7 +64,11 @@ const Info = ({
           {id && <InfoItem translation="dataset.dl.id" content={id} />}
           {size && <InfoItem translation="dataset.dl.size" content={size} />}
           {checksum && (
-            <InfoItem translation="dataset.dl.checksum" content={formatChecksum(checksum)} />
+            <InfoItem
+              translation="dataset.dl.checksum"
+              content={checksum.value ? checksum.value : ''}
+              insertable={checksum.algorithm ? checksum.algorithm : ''}
+            />
           )}
         </tbody>
       </InfoTable>
@@ -118,14 +111,12 @@ const HeaderIcon = styled(FontAwesomeIcon)`
   margin-right: 0.5em;
 `
 
-
 const ModalLayout = styled.div`
   display: flex;
   margin-bottom: 0.5em;
   flex-direction: column;
   padding: 0 1rem;
 `
-
 
 const InfoTable = styled.table`
   width: 100%;
@@ -152,13 +143,13 @@ Info.defaultProps = {
 
 Info.propTypes = {
   name: PropTypes.string.isRequired,
+  open: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
   id: PropTypes.string,
   title: PropTypes.string,
   size: PropTypes.string,
   category: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   type: PropTypes.oneOfType([PropTypes.string, TypeConcept]),
-  open: PropTypes.bool.isRequired,
-  closeModal: PropTypes.func.isRequired,
   description: PropTypes.string,
   checksum: TypeChecksum,
   headerContent: PropTypes.string,

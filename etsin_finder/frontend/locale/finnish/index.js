@@ -213,7 +213,7 @@ const finnish = {
       name: 'Nimi',
       size: 'Koko',
       remote: 'Ulkoinen lähde',
-      checksum: 'Checksum',
+      checksum: 'Checksum (%(insertable)s)',
       id: 'ID',
       title: 'Otsikko',
       type: 'Tyyppi',

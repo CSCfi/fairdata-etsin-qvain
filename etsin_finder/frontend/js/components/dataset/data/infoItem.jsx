@@ -7,7 +7,7 @@ import Stores from '../../../stores'
 const InfoItem = props => (
   <tr>
     <th scope="row">
-      <Translate content={props.translation} />
+      <Translate content={props.translation} with={{ insertable: props.insertable }}/>
     </th>
     <InfoCell lang={props.lang}>{props.content}</InfoCell>
   </tr>
@@ -20,12 +20,14 @@ const InfoCell = styled.td`
 
 InfoItem.defaultProps = {
   lang: Stores.Locale.currentLang,
+  insertable: '',
 }
 
 InfoItem.propTypes = {
   translation: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   lang: PropTypes.string,
+  insertable: PropTypes.string,
 }
 
 export default InfoItem

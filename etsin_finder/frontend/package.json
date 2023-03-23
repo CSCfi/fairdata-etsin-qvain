@@ -138,7 +138,8 @@
       "./__tests__/timezonedNodeEnvironment.js",
       "./__tests__/__testdata__",
       "./__tests__/__utils__",
-      "./__tests__/components/componentTestHarness.jsx"
+      "./__tests__/components/componentTestHarness.jsx",
+      "./__tests__/components/etsin/etsinHarness.jsx"
     ],
     "testEnvironmentOptions": {
       "url": "http://localhost"
