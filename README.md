@@ -1,12 +1,12 @@
-# etsin-finder
+# fairdata-etsin-qvain
 
 This repository contains code for the Fairdata platforms Etsin and Qvain. This repository has been developed using React, MobX, and Flask.
 
 ## Development setup
 
-This repository functions as part of the Etsin-Qvain setup, together with `etsin-finder-search` (github.com/CSCfi/etsin-finder-search).
+This repository functions as part of the Etsin-Qvain setup, together with `fairdata-etsin-search` (github.com/CSCfi/etsin-finder-search).
 
-For a development setup of Etsin-Qvain using Docker, see repository https://gitlab.ci.csc.fi/fairdata/fairdata-docker
+For a development setup of Etsin-Qvain using Docker, see repository https://gitlab.ci.csc.fi/fairdata/fairdata-secrets
 
 # Updating docker images
 
