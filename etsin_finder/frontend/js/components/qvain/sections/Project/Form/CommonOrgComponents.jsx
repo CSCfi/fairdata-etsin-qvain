@@ -7,7 +7,7 @@ import t from 'counterpart'
 import ReactSelect from 'react-select'
 
 import { Input } from '@/components/qvain/general/modal/form'
-import { DeleteButton } from '@/components/qvain/general/buttons'
+import { DeleteButton } from '@/components/qvain/general/V2/buttons'
 import { useStores } from '@/stores/stores'
 import {
   InfoText,
@@ -186,7 +186,7 @@ export const OrgSelectComponent = observer(
             <DeleteButton
               type="button"
               onClick={onReset}
-              style={{ margin: '0 0 0 .5rem', width: 38, height: 38 }}
+              style={{ margin: '0 0 0 .25rem', height: 38 }}
             />
           ) : null}
         </OrgItemContainer>

@@ -116,7 +116,7 @@ export const OrgSelectorBase = ({
   const identifier = (organization || {}).identifier
 
   const isLast = level === organizations.length - 1
-  const deleteButtonStyle = isLast ? null : { visibility: 'hidden' }
+  const deleteButtonStyle = isLast ? null : { display: 'none' }
 
   const styles = {
     option: style => ({
@@ -235,7 +235,6 @@ const OrganizationLevel = styled.div`
 
   & button {
     height: 38px;
-    width: 38px;
     margin: 0 0 0 4px;
   }
 `
