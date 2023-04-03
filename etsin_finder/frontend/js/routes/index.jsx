@@ -14,7 +14,7 @@ import loadable from '@loadable/component'
 
 export const Home = loadable(() => import('../components/frontpage' /* webpackPrefetch: true */))
 
-export const Dataset = loadable(() => import('../components/dataset' /* webpackPrefetch: true */))
+export const Dataset = loadable(() => import('../components/etsin/views/Dataset' /* webpackPrefetch: true */))
 
 export const Search = loadable(() => import('../components/search' /* webpackPrefetch: true */))
 
