@@ -6,7 +6,7 @@ import { ThemeProvider } from 'styled-components'
 import theme from '@/styles/theme'
 import '@/../locale/translations'
 
-export const etsinHarness = (Component, props) => {
+export const ComponentHarness = (Component, props) => {
   return render(
     <ThemeProvider theme={theme}>
       <Component {...props}></Component>
@@ -14,4 +14,4 @@ export const etsinHarness = (Component, props) => {
   )
 }
 
-export default etsinHarness
+export default ComponentHarness

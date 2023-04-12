@@ -38,9 +38,8 @@ describe('Spatials store', () => {
   })
 
   describe('given trivial args', () => {
+    const expectedArgs = [parent, Spatial, SpatialModel, 'spatials']
     test('should call super.construction with expectedArgs', () => {
-      const expectedArgs = [parent, Spatial, SpatialModel, 'spatials']
-
       expect(spatials.constructorFunction).to.have.beenCalledWith(...expectedArgs)
     })
 
@@ -122,9 +121,29 @@ describe('Spatials store', () => {
         altitude: 'altitude',
         address: 'address',
       }
+
       beforeEach(() => {
-        const spatial = Spatial(...Object.values(obj))
+        const spatial = Spatial(obj)
         spatials.storage = [spatial]
+      })
+
+      describe('when editing and saving', () => {
+        beforeEach(() => {
+          const ActualField = jest.requireActual('@/stores/view/qvain/qvain.field').default
+          const ActualSpatials = ActualField.bind(Spatials)
+          const spatials = new ActualSpatials(parent, [])
+          const f = new ActualField(...expectedArgs)
+          spatials.Parent.setChanged = f.setChanged.bind(spatials)
+          spatials.edit = f.edit.bind(spatials)
+          spatials.save = f.edit.bind(spatials)
+          spatials.storage = [obj]
+          spatials.edit(obj.uiid)
+          spatials.save()
+        })
+
+        it('should have only one obj in storage', () => {
+          expect(spatials.storage).to.have.lengthOf(1)
+        })
       })
 
       describe('when calling toBackend', () => {

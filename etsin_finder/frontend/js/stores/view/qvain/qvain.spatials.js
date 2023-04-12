@@ -29,14 +29,14 @@ export const spatialSchema = yup.object().shape({
   altitude: spatialAltitudeSchema,
 })
 
-export const Spatial = (
+export const Spatial = ({
   uiid = uuidv4(),
   name = '',
   altitude = '',
   address = '',
   geometry = [],
-  location = undefined
-) => ({
+  location = undefined,
+} = {}) => ({
   uiid,
   name,
   altitude: numberToString(altitude),

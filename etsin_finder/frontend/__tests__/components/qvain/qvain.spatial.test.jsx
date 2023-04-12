@@ -1,5 +1,3 @@
-import { expect } from 'chai'
-
 import Harness from '../componentTestHarness'
 import SpatialFieldContent from '@/components/qvain/sections/Geographics/SpatialFieldContent'
 import Form from '@/components/qvain/sections/Geographics/Form'

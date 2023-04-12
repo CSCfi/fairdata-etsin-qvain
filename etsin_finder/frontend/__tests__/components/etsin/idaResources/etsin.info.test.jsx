@@ -1,4 +1,4 @@
-import etsinHarness from '../etsinHarness'
+import ComponentHarness from '@/../__tests__/ComponentHarness'
 import { cleanup, screen } from '@testing-library/react'
 import Info from '@/components/dataset/data/idaResources/info.jsx'
 
@@ -21,7 +21,7 @@ describe('Info', () => {
         },
       }
 
-      etsinHarness(Info, props)
+      ComponentHarness(Info, props)
     })
 
     it('renders text in InfoItem', () => {
