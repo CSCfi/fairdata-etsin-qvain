@@ -72,7 +72,6 @@ export default class Project extends Component {
         <InlineTransparentLink
           noMargin
           noPadding
-          color="primary"
           onClick={this.openModal}
           lang={lang}
         >

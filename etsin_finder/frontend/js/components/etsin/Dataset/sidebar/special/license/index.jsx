@@ -52,7 +52,6 @@ License.propTypes = {
 }
 
 const MainLink = styled.a`
-  color: 'lightblue';
   margin-right: 0.2em;
 `
 

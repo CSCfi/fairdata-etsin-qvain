@@ -71,18 +71,20 @@ const IdnSpan = styled.div`
 
 // prettier-ignore
 const IdnLink = styled(Link)`
-  margin-right: 0.25rem;
-  background-color: ${props => props.theme.color.primary};
-  border: ${props => props.theme.color.primary};
-  width: fit-content;
-  max-width: 100%;
-  color: white;
-  border-radius: 0.25em;
-  border: none;
-  display: flex;
-  padding: 0;
-  align-items: center;
-  font-size: 0.875em;
+  && {
+    margin-right: 0.25rem;
+    background-color: ${props => props.theme.color.primary};
+    border: ${props => props.theme.color.primary};
+    width: fit-content;
+    max-width: 100%;
+    color: white;
+    border-radius: 0.25em;
+    border: none;
+    display: flex;
+    padding: 0;
+    align-items: center;
+    font-size: 0.875em;
+  }
   &:hover {
     color: white;
   }

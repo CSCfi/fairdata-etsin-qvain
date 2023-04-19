@@ -15,7 +15,7 @@ const SidebarItem = props => {
           <Translate content={props.trans} fallback={props.fallback} />
         </DT>
       )}
-      <DD lineAfter={props.lineAfter}>{props.children}</DD>
+      <DD>{props.children}</DD>
     </>
   )
 }
@@ -26,29 +26,26 @@ SidebarItem.defaultProps = {
   fallback: undefined,
   children: undefined,
   trans: undefined,
-  lineAfter: false,
 }
 
 SidebarItem.propTypes = {
   children: PropTypes.node,
   trans: PropTypes.string,
   fallback: PropTypes.string,
-  lineAfter: PropTypes.bool,
 }
 
 const DT = styled.dt`
+  font-size: 1.12em;
+  color: black;
   margin-bottom: 0;
-  padding: 0 1.5rem;
+  padding: 1rem 1.5rem 0.5rem;
 `
 
 const DD = styled.dd`
-  margin-bottom: 1rem;
+  color: black;
   padding: 0 1.5rem;
-  ${p =>
-    p.lineAfter &&
-    `
-    border-bottom: 1px solid ${p.theme.color.lightgray};
-    padding-bottom: 1.25rem;
-    margin-bottom: 1.25rem;
-  `}
+
+  a {
+    color: ${p => p.theme.color.linkColorUIV2};
+  }
 `

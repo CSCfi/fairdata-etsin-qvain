@@ -160,7 +160,10 @@ class Sidebar extends Component {
     return (
       <SidebarContainer>
         <ErrorBoundary>
-          <dl>
+
+          {/* DATA CATALOG INFORMATION AREA */}
+
+          <SidebarArea>
             {/* DATA CATALOG LOGO */}
             {logo && (
               <SidebarItem>
@@ -180,14 +183,15 @@ class Sidebar extends Component {
               component="dd"
               trans="dataset.catalog_publisher"
               lang={getDataLang(catalogPublisher)}
-              lineAfter
             >
               {catalogPublisher && checkDataLang(catalogPublisher)}
             </SidebarItem>
+          </SidebarArea>
 
-            {/* PREFERRED IDENTIFIER */}
+          {/* PREFERRED IDENTIFIER AREA */}
 
-            <SidebarItem component="dd" trans="dataset.identifier" lineAfter>
+          <SidebarArea>
+            <SidebarItem component="dd" trans="dataset.identifier">
               {this.identifier()}
 
               {
@@ -199,13 +203,19 @@ class Sidebar extends Component {
                 )
               }
             </SidebarItem>
+          </SidebarArea>
 
-            <SidebarItem trans="dataset.citation.titleShort" lineAfter>
+          {/* CITE AREA */}
+
+          <SidebarArea>
+            <SidebarItem trans="dataset.citation.titleShort">
               <CitationButton setShowCitationModal={setShowCitationModal} />
             </SidebarItem>
+          </SidebarArea>
 
-            {/* FIELD OF SCIENCE */}
+          {/* FIELD OF SCIENCE AREA */}
 
+          <SidebarArea>
             <SidebarItem trans="dataset.field_of_science" fallback="Field of Science">
               <List>
                 {field &&
@@ -262,8 +272,14 @@ class Sidebar extends Component {
                   </TemporalCoverageItem>
                 ))}
             </SidebarItem>
+          </SidebarArea>
+
+          {/* RIGHTS AREA */}
+
+          <SidebarArea>
 
             {/* LICENSE */}
+
             <SidebarItem trans="dataset.license">
               <List>
                 {license &&
@@ -282,6 +298,11 @@ class Sidebar extends Component {
                 <List>{this.accessRights()}</List>
               </SidebarItem>
             )}
+          </SidebarArea>
+
+          {/* ACTORS AREA */}
+
+          <SidebarArea>
 
             {/* PROJECTS */}
 
@@ -361,20 +382,23 @@ class Sidebar extends Component {
                 </List>
               )}
             </SidebarItem>
+          </SidebarArea>
 
-            {/* INFRASTRUCTURE */}
+          {/* INFRASTRUCTURE AREA */}
 
-            <SidebarItem trans="dataset.infrastructure">
-              <List>
-                {infrastructure &&
-                  infrastructure.map(entity => (
+          {infrastructure && (
+            <SidebarArea>
+              <SidebarItem trans="dataset.infrastructure">
+                <List>
+                  {infrastructure.map(entity => (
                     <ListItem key={entity.identifier} lang={getDataLang(entity.pref_label)}>
                       {checkDataLang(entity.pref_label)}
                     </ListItem>
                   ))}
-              </List>
-            </SidebarItem>
-          </dl>
+                </List>
+              </SidebarItem>
+            </SidebarArea>
+          )}
         </ErrorBoundary>
       </SidebarContainer>
     )
@@ -387,7 +411,6 @@ Sidebar.propTypes = {
 }
 
 const SidebarContainer = styled.div`
-  border: 2px solid rgb(231, 233, 237);
   word-wrap: break-word;
   word-break: break-word;
   -webkit-hyphens: auto;
@@ -401,6 +424,12 @@ const TemporalCoverageItem = styled.div``
 
 const SidebarContainerForCumulativeInfo = styled.div`
   padding: 0.5em 0em 0em 0em;
+`
+
+const SidebarArea = styled.dl`
+background-color: ${p => p.theme.color.bgGreen};
+margin-bottom: 0.5em;
+padding-bottom: 1.25em;
 `
 
 const SubjectHeaderLink = styled.a`

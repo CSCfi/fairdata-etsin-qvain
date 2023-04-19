@@ -65,7 +65,6 @@ const Agent = ({ agent, first, inline, popupAlign }) => {
           <InlineTransparentLink
             noMargin
             noPadding
-            color="primary"
             href="#0"
             onClick={popUpOpen ? closePopUp : openPopUp}
             lang={lang}
