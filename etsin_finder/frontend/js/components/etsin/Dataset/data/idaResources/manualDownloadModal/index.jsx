@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
-import Modal from '../../../../../general/modal'
+import Modal from '@/components/general/modal'
 import Content from './content'
 
 const ManualDownloadModal = ({ Packages }) => (

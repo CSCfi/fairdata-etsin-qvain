@@ -18,7 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import InfoItem from '../infoItem'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
-import Modal from '../../../../general/modal'
+import Modal from '@/components/general/modal'
 import { TypeConcept, TypeChecksum } from '@/utils/propTypes'
 
 const customStyles = {

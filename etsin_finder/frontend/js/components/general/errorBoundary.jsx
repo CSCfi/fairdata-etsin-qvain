@@ -83,7 +83,7 @@ export default class ErrorBoundary extends Component {
 }
 
 ErrorBoundary.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   title: PropTypes.node,
   ContainerComponent: PropTypes.elementType,
   callback: PropTypes.func,
@@ -102,6 +102,7 @@ ErrorBoundary.defaultProps = {
   title: <Translate component="h2" content="error.undefined" />,
   ContainerComponent: ErrorContainer,
   callback: null,
+  children: null,
 }
 
 const ErrorDetails = styled.p`

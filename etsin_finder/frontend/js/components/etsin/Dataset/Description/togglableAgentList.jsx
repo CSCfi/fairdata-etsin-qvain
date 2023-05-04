@@ -15,9 +15,9 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import Agent from './Agent'
+import Agent from '../Agent'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
-import { LinkButton } from '../general/button'
+import { LinkButton } from '@/components/etsin/general/button'
 
 export default class TogglableAgentList extends Component {
   constructor(props) {

@@ -16,60 +16,24 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Link } from 'react-router-dom'
-import ReactMarkdown from 'react-markdown'
 
-import AccessRights from './accessRights'
-import FairdataPasDatasetIcon from './fairdataPasDatasetIcon'
+import CustomMarkdown from './customMarkdown'
+import AccessRights from '../accessRights'
+import FairdataPasDatasetIcon from '../fairdataPasDatasetIcon'
 import AskForAccess from './askForAccess'
-import Contact from './contact'
-import ErrorBoundary from '../../general/errorBoundary'
+import Contact from '../contact'
+import ErrorBoundary from '@/components/general/errorBoundary'
 import GoToOriginal from './goToOriginal'
-import Label from '../../general/label'
+import Label from '@/components/general/label'
 import TogglableAgentList from './togglableAgentList'
 import VersionChanger from './versionChanger'
 import FormatChanger from './formatChanger'
+import DatasetInfoItem from '../DatasetInfoItem'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import checkNested from '@/utils/checkNested'
-import dateFormat from '@/utils/dateFormat'
+import dateFormat, { dateSeparator } from '@/utils/dateFormat'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { withStores } from '@/utils/stores'
-
-const Labels = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-bottom: 0.5em;
-`
-
-const Flex = styled.div`
-  display: flex;
-  align-items: stretch;
-  > * {
-    margin: 0.25rem;
-  }
-`
-
-const MarginAfter = styled.div`
-  display: flex;
-  align-items: stretch;
-`
-
-const Controls = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  flex-grow: 1;
-  margin: -0.25rem;
-  > * {
-    margin: 0.25rem;
-  }
-  > ${Flex} {
-    margin: 0;
-  }
-  > ${MarginAfter} {
-    margin-right: auto;
-  }
-`
 
 class Description extends Component {
   componentDidMount() {
@@ -79,6 +43,68 @@ class Description extends Component {
     } = this.props.Stores
     Accessibility.handleNavigation('dataset', false)
     recordEvent(`DETAILS / ${this.props.dataset.identifier}`)
+  }
+
+  getSpatialCoverage(locations) {
+    return locations && (
+      <ul>
+        {locations.map((location) => {
+          if (
+            location.geographic_name &&
+            checkNested(location, 'place_uri', 'pref_label') &&
+            location.geographic_name !== checkDataLang(location.place_uri.pref_label)
+          ) {
+            return (
+              <li key={location.geographic_name} lang={getDataLang(location.place_uri.pref_label)}>
+                {checkDataLang(location.place_uri.pref_label)} <span>({location.geographic_name})</span>
+              </li>
+            )
+          }
+          if (location.geographic_name) {
+            return <li key={location.geographic_name}>{location.geographic_name}</li>
+          }
+          return null
+        })}
+      </ul>
+    )
+  }
+
+  getTemporalCoverage(temporal) {
+    return temporal && (
+      <ul>
+        {temporal.map(dates => (
+        <li key={`temporal-${dates.start_date}-${dates.end_date}`}>
+          {dateSeparator(dates.start_date, dates.end_date)}
+        </li>
+      ))}
+      </ul>
+    )
+  }
+
+  getLanguages(languages) {
+    if (languages) {
+      const infoArray = []
+      {languages.map(language => 
+        infoArray.push(checkDataLang(language.title))
+      )}
+      return this.formatDatasetInfoArray(infoArray)
+    }
+    return null
+  }
+
+  getFieldsOfScience(fields) {
+    if (fields) {
+      const infoArray = []
+      {fields.map(field => 
+        infoArray.push(checkDataLang(field.pref_label))
+      )}
+      return this.formatDatasetInfoArray(infoArray)
+    }
+    return null
+  }
+
+  formatDatasetInfoArray(array) {
+    return array?.join(', ') || null
   }
 
   checkEmails(obj) {
@@ -99,7 +125,12 @@ class Description extends Component {
       description,
       access_rights: accessRights,
       preferred_identifier: preferredIdentifier,
+      field_of_science: field,
+      keyword,
+      language,
     } = this.props.dataset.research_dataset
+    const location = checkNested(this.props.dataset.research_dataset, 'spatial') ? this.props.dataset.research_dataset.spatial : false
+    const temporal = checkNested(this.props.dataset.research_dataset, 'temporal') ? this.props.dataset.research_dataset.temporal : false
     const versions = this.props.dataset.dataset_version_set
     const datasetIdentifier = this.props.dataset.identifier
     const isVersion =
@@ -211,11 +242,54 @@ class Description extends Component {
               )}
             </MainInfo>
           </div>
-          <ErrorBoundary>
-            <DatasetDescription lang={getDataLang(description)}>
-              <CustomMarkdown>{checkDataLang(description)}</CustomMarkdown>
-            </DatasetDescription>
-          </ErrorBoundary>
+          <DescriptionArea>
+            
+            {/* DESCRIPTION */}
+
+            <DatasetInfoItem
+              lang={getDataLang(description)}
+              itemTitle={"dataset.description"}>
+              {description && <CustomMarkdown>{checkDataLang(description)}</CustomMarkdown>}
+            </DatasetInfoItem>
+
+            {/* FIELD OF SCIENCE */}
+
+            <DatasetInfoItem
+              itemTitle={"dataset.field_of_science"}>
+                {this.getFieldsOfScience(field)}
+            </DatasetInfoItem>
+
+            {/* KEYWORDS */}
+
+            <DatasetInfoItem
+              itemTitle={"dataset.keywords"}>
+                {this.formatDatasetInfoArray(keyword)}
+            </DatasetInfoItem>
+
+            {/* LANGUAGES */}
+
+            <DatasetInfoItem
+              itemTitle={"dataset.language"}>
+                {this.getLanguages(language)}
+            </DatasetInfoItem>
+
+            {/* SPATIAL COVERAGE */}
+
+            <DatasetInfoItem
+              itemTitle={"dataset.spatial_coverage"}>
+                {this.getSpatialCoverage(location)}
+            </DatasetInfoItem>
+
+            {/* TEMPORAL COVERAGE */}
+
+            <DatasetInfoItem
+              itemTitle={"dataset.temporal_coverage"}>
+                {this.getTemporalCoverage(temporal)}
+            </DatasetInfoItem>
+            
+
+          </DescriptionArea>
+
           {cumulative && (
             <Label color="error">
               <Translate content="dataset.cumulative" />
@@ -279,6 +353,7 @@ const MainInfo = styled.div`
   color: ${p => p.theme.color.darkgray};
   font-size: 0.9em;
   word-break: break-word;
+  margin-bottom: 1em;
 `
 
 const PasInfo = styled.div`
@@ -288,435 +363,54 @@ const PasInfo = styled.div`
   padding-bottom: 5px;
 `
 
-const DatasetDescription = styled.div`
-  padding: 0.5em 1em;
-  margin-bottom: 1em;
-  /* background-color: ${p => p.theme.color.superlightgray}; */
-  border-left: 2px solid ${p => p.theme.color.primary};
-  @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
-    padding: 1em 2em;
-  }
-  p:last-of-type {
-    margin-bottom: 0;
+const Labels = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 0.5em;
+`
+
+const Flex = styled.div`
+  display: flex;
+  align-items: stretch;
+  > * {
+    margin: 0.25rem;
   }
 `
 
-const CustomMarkdown = styled(ReactMarkdown)`
+const MarginAfter = styled.div`
+  display: flex;
+  align-items: stretch;
+`
+
+const Controls = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  margin: -0.25rem;
   > * {
-    &:first-child {
-      margin-top: 0 !important;
-    }
-    &:last-child {
-      margin-bottom: 0 !important;
-    }
+    margin: 0.25rem;
   }
-
-  a {
-    color: ${p => p.theme.color.primary};
-    text-decoration: none;
-    &.absent {
-      color: ${p => p.theme.color.error};
-    }
-    &.anchor {
-      display: block;
-      padding-left: 30px;
-      margin-left: -30px;
-      cursor: pointer;
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-    }
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 20px 0 10px;
-    padding: 0;
-    font-weight: bold;
-    -webkit-font-smoothing: antialiased;
-    cursor: text;
-    position: relative;
-  }
-
-  h2:first-child {
-    margin-top: 0;
-    padding-top: 0;
-  }
-
-  h1:first-child {
-    margin-top: 0;
-    padding-top: 0;
-    + h2 {
-      margin-top: 0;
-      padding-top: 0;
-    }
-  }
-
-  h3:first-child,
-  h4:first-child,
-  h5:first-child,
-  h6:first-child {
-    margin-top: 0;
-    padding-top: 0;
-  }
-
-  h1:hover a.anchor,
-  h2:hover a.anchor,
-  h3:hover a.anchor,
-  h4:hover a.anchor,
-  h5:hover a.anchor,
-  h6:hover a.anchor {
-    text-decoration: none;
-  }
-
-  h1 {
-    tt,
-    code {
-      font-size: inherit;
-    }
-  }
-
-  h2 {
-    tt,
-    code {
-      font-size: inherit;
-    }
-  }
-
-  h3 {
-    tt,
-    code {
-      font-size: inherit;
-    }
-  }
-
-  h4 {
-    tt,
-    code {
-      font-size: inherit;
-    }
-  }
-
-  h5 {
-    tt,
-    code {
-      font-size: inherit;
-    }
-  }
-
-  h6 {
-    tt,
-    code {
-      font-size: inherit;
-    }
-  }
-
-  h1 {
-    font-size: 28px;
-    color: black;
-  }
-
-  h2 {
-    font-size: 24px;
-    border-bottom: 1px solid ${p => p.theme.color.medgray};
-    color: black;
-  }
-
-  h3 {
-    font-size: 18px;
-  }
-
-  h4 {
-    font-size: 16px;
-  }
-
-  h5 {
-    font-size: 14px;
-  }
-
-  h6 {
-    color: ${p => p.theme.color.darkgray};
-    font-size: 14px;
-  }
-
-  p,
-  blockquote,
-  ul,
-  ol,
-  dl,
-  li,
-  table,
-  pre {
-    margin: 15px 0;
-  }
-
-  hr {
-    border: 0 none;
-    color: ${p => p.theme.color.medgray};
-    height: 4px;
-    padding: 0;
-  }
-
-  body > {
-    h2:first-child {
-      margin-top: 0;
-      padding-top: 0;
-    }
-    h1:first-child {
-      margin-top: 0;
-      padding-top: 0;
-      + h2 {
-        margin-top: 0;
-        padding-top: 0;
-      }
-    }
-    h3:first-child,
-    h4:first-child,
-    h5:first-child,
-    h6:first-child {
-      margin-top: 0;
-      padding-top: 0;
-    }
-  }
-
-  a:first-child {
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      margin-top: 0;
-      padding-top: 0;
-    }
-  }
-
-  h1 p,
-  h2 p,
-  h3 p,
-  h4 p,
-  h5 p,
-  h6 p {
-    margin-top: 0;
-  }
-
-  li p.first {
-    display: inline-block;
-  }
-
-  ul,
-  ol {
-    padding-left: 30px;
-    list-style: initial;
-  }
-
-  ul :first-child,
-  ol :first-child {
-    margin-top: 0;
-  }
-
-  ul :last-child,
-  ol :last-child {
-    margin-bottom: 0;
-  }
-
-  dl {
-    padding: 0;
-    dt {
-      font-size: 14px;
-      font-weight: bold;
-      font-style: italic;
-      padding: 0;
-      margin: 15px 0 5px;
-      &:first-child {
-        padding: 0;
-      }
-      > {
-        :first-child {
-          margin-top: 0;
-        }
-        :last-child {
-          margin-bottom: 0;
-        }
-      }
-    }
-    dd {
-      margin: 0 0 15px;
-      padding: 0 15px;
-      > {
-        :first-child {
-          margin-top: 0;
-        }
-        :last-child {
-          margin-bottom: 0;
-        }
-      }
-    }
-  }
-
-  blockquote {
-    border-left: 4px solid ${p => p.theme.color.medgray};
-    padding: 0 15px;
-    color: ${p => p.theme.color.darkgray};
-    > {
-      :first-child {
-        margin-top: 0;
-      }
-      :last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  table {
-    padding: 0;
-    tr {
-      border-top: 1px solid ${p => p.theme.color.medgray};
-      background-color: white;
-      margin: 0;
-      padding: 0;
-      &:nth-child(2n) {
-        background-color: ${p => p.theme.color.superlightgray};
-      }
-      th {
-        font-weight: bold;
-        border: 1px solid ${p => p.theme.color.medgray};
-        text-align: left;
-        margin: 0;
-        padding: 6px 13px;
-      }
-      td {
-        border: 1px solid ${p => p.theme.color.medgray};
-        text-align: left;
-        margin: 0;
-        padding: 6px 13px;
-      }
-      th :first-child,
-      td :first-child {
-        margin-top: 0;
-      }
-      th :last-child,
-      td :last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  img {
-    max-width: 100%;
-  }
-
-  span {
-    &.frame {
-      display: block;
-      overflow: hidden;
-      > span {
-        border: 1px solid ${p => p.theme.color.medgray};
-        display: block;
-        float: left;
-        overflow: hidden;
-        margin: 13px 0 0;
-        padding: 7px;
-        width: auto;
-      }
-      span {
-        img {
-          display: block;
-          float: left;
-        }
-        span {
-          clear: both;
-          color: #333333;
-          display: block;
-          padding: 5px 0 0;
-        }
-      }
-    }
-    &.align-center {
-      display: block;
-      overflow: hidden;
-      clear: both;
-      > span {
-        display: block;
-        overflow: hidden;
-        margin: 13px auto 0;
-        text-align: center;
-      }
-      span img {
-        margin: 0 auto;
-        text-align: center;
-      }
-    }
-    &.align-right {
-      display: block;
-      overflow: hidden;
-      clear: both;
-      > span {
-        display: block;
-        overflow: hidden;
-        margin: 13px 0 0;
-        text-align: right;
-      }
-      span img {
-        margin: 0;
-        text-align: right;
-      }
-    }
-    &.float-left {
-      display: block;
-      margin-right: 13px;
-      overflow: hidden;
-      float: left;
-      span {
-        margin: 13px 0 0;
-      }
-    }
-    &.float-right {
-      display: block;
-      margin-left: 13px;
-      overflow: hidden;
-      float: right;
-      > span {
-        display: block;
-        overflow: hidden;
-        margin: 13px auto 0;
-        text-align: right;
-      }
-    }
-  }
-  code,
-  tt {
-    margin: 0 2px;
-    padding: 0 5px;
-    white-space: nowrap;
-    background-color: ${p => p.theme.color.superlightgray};
-    border-radius: 3px;
-  }
-  pre code {
+  > ${Flex} {
     margin: 0;
-    line-height: 1em;
-    padding: 0;
-    white-space: pre;
-    border: none;
-    background: transparent;
+  }
+  > ${MarginAfter} {
+    margin-right: auto;
+  }
+`
+const DescriptionArea = styled.dl`
+  > * {
+    padding: 1.5rem;
+    border-left: 2px solid ${p => p.theme.color.primary};
+    @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
+      padding: 0em 1.5rem;
+    }
   }
 
-  pre {
-    background-color: ${p => p.theme.color.superlightgray};
-    overflow: auto;
-    padding: 9px 15px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-
-  pre code,
-  pre tt {
-    background-color: transparent;
-    border: none;
+  > dd {
+    margin-bottom: 2em;
+    padding-top: 0.7em;
+    padding-bottom: 0.1em;
   }
 `

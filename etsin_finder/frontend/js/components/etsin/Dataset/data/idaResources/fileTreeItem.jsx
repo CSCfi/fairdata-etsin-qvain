@@ -17,12 +17,12 @@ import {
   ItemTitle,
   Icon,
   NoIcon,
-} from '../../../../general/files/items'
+} from '@/components/general/files/items'
 import getDownloadAction from './downloadActions'
 import IconButton from '../common/iconButton'
-import FlaggedComponent from '../../../../general/flaggedComponent'
+import FlaggedComponent from '@/components/general/flaggedComponent'
 import { MoreButton, SplitButtonContainer } from './splitButton'
-import TooltipHover from '../../../../general/tooltipHover'
+import TooltipHover from '@/components/general/tooltipHover'
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const { Files, directoryView, extraProps } = treeProps

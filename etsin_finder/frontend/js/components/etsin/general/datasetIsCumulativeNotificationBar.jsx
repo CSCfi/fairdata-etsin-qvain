@@ -17,7 +17,7 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
 import TooltipClick from './tooltipClick'
-import { HelpIcon } from '../../general/form'
+import { HelpIcon } from '@/components/general/form'
 import CumulativeDatasetInfo from './cumulativeDatasetInfoText'
 
 const DatasetIsCumulativeNotificationBar = props => {

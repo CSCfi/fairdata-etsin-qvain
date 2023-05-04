@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PropTypes from 'prop-types'
 
-import Button, { InvertedButton, Link, InvertedLink } from '../../../general/button'
+import Button, { InvertedButton, Link, InvertedLink } from '@/components/etsin/general/button'
 
 const IconButton = ({
   icon,

@@ -287,6 +287,7 @@ const finnish = {
       alt: 'Korkeus (m)',
     },
     doi: 'DOI',
+    description: 'Kuvaus',
     field_of_science: 'Tieteenala',
     funder: 'Rahoittaja',
     goBack: 'Palaa takaisin',

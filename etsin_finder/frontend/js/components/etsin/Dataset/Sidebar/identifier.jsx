@@ -14,9 +14,9 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Link, Prefix } from '../general/button'
+import { Link, Prefix } from '@/components/etsin/general/button'
 import idnToLink from '@/utils/idnToLink'
-import CopyToClipboard from './copyToClipboard'
+import CopyToClipboard from '../copyToClipboard'
 
 const Identifier = ({ idn }) => {
   const setPrefix = idnText => {

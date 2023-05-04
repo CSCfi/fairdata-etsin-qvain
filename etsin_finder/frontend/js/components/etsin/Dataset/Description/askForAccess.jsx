@@ -5,7 +5,7 @@ import translate from 'counterpart'
 import { observer } from 'mobx-react'
 import axios from 'axios'
 
-import Button from '../general/button'
+import Button from '@/components/etsin/general/button'
 import REMSButton from './REMSButton'
 import { REMS_URL } from '@/utils/constants'
 import { withStores } from '@/utils/stores'

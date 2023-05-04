@@ -2,9 +2,9 @@ import React from 'react'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
-import Button from '../general/button'
+import Button from '@/components/etsin/general/button'
 import etsinTheme from '@/styles/theme'
-import Loader from '../../general/loader'
+import Loader from '@/components/general/loader'
 
 const REMSButton = props => {
   let button

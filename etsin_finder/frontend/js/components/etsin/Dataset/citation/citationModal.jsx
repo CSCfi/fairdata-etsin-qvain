@@ -17,7 +17,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
-import Modal from '../../../general/modal'
+import Modal from '@/components/general/modal'
 import { useStores } from '@/utils/stores'
 import Cite from './cite'
 import CopyToClipboard from '../copyToClipboard'

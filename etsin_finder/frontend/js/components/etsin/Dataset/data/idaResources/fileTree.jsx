@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import { withRouter } from 'react-router-dom'
 
 import FileTreeItem from './fileTreeItem'
-import { useRenderTree } from '../../../../general/files/tree'
+import { useRenderTree } from '@/components/general/files/tree'
 import { withStores } from '@/stores/stores'
 
 export function FileTree(props) {

@@ -19,7 +19,7 @@ import translate from 'counterpart'
 import Translate from 'react-translate-component'
 
 import { Button } from '../general/button'
-import TooltipHover from '../../general/tooltipHover'
+import TooltipHover from '@/components/general/tooltipHover'
 import { useStores } from '@/utils/stores'
 
 const CopyToClipboard = ({

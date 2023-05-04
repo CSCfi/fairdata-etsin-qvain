@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { faQuoteRight } from '@fortawesome/free-solid-svg-icons'
 import Translate from 'react-translate-component'
 
-import Button, { Prefix } from '../../general/button'
+import Button, { Prefix } from '@/components/etsin/general/button'
 import { useStores } from '@/utils/stores'
 
 const CitationButton = props => {

@@ -16,7 +16,7 @@ import { withRouter } from 'react-router-dom'
 import { withTheme } from 'styled-components'
 import { observer } from 'mobx-react'
 
-import FormatSelect from './formatselect'
+import FormatSelect from '../formatselect'
 import { withStores } from '@/stores/stores'
 import urls from '@/utils/urls'
 

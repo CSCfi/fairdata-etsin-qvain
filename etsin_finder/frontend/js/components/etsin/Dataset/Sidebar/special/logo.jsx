@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import importImages from './importImages'
-import Image from '../../../general/image'
+import Image from '@/components/etsin/general/image'
 
 export default class Logo extends Component {
   static propTypes = {

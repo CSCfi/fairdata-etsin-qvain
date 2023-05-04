@@ -16,10 +16,10 @@ import styled from 'styled-components'
 import translate from 'counterpart'
 import Translate from 'react-translate-component'
 
-import { InvertedButton } from '../../general/button'
-import Splash from '../../general/splash'
+import { InvertedButton } from '@/components/etsin/general/button'
+import Splash from '@/components/etsin/general/splash'
 import ContactForm from './contactForm'
-import Modal from '../../../general/modal'
+import Modal from '@/components/general/modal'
 
 const Notice = styled.p`
   margin-bottom: 0;

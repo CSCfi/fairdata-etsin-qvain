@@ -10,6 +10,7 @@
    */
 }
 
+import React from 'react'
 import Stores from '../stores'
 
 const { Locale } = Stores
@@ -90,6 +91,15 @@ const dateFormat = (date, { shortMonth = false, format } = {}) => {
     formats.datetime[Locale.currentLang].lang,
     formats.datetime[Locale.currentLang].options
   )
+}
+
+export function dateSeparator(start, end) {
+  if (start || end) {
+    return (start === end) 
+      ? <>{dateFormat(start, { format: 'date' })}</> 
+      : <>{`${dateFormat(start, { format: 'date' })} - ${dateFormat(end, { format: 'date' })}`}</>
+  }
+  return null
 }
 
 export default dateFormat

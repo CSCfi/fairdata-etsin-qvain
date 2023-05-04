@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
 import { Input } from '../../../common/formItems'
-import FlaggedComponent from '../../../../../general/flaggedComponent'
+import FlaggedComponent from '@/components/general/flaggedComponent'
 
 const NotificationEmail = ({ Packages }) => (
   <FlaggedComponent flag="DOWNLOAD_API_V2.EMAIL.FRONTEND">

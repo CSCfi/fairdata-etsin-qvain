@@ -15,7 +15,7 @@ import styled from 'styled-components'
 import { darken } from 'polished'
 import PropTypes from 'prop-types'
 
-import Button from '../general/button'
+import Button from '@/components/etsin/general/button'
 import etsinTheme from '@/styles/theme'
 
 const SelectContainer = styled.div`

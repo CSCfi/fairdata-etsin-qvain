@@ -16,7 +16,7 @@ import { Route, Redirect, Switch, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 
-import Description from './description'
+import Description from './Description'
 import Data from './data'
 import Events from './events'
 import Tabs from './tabs'

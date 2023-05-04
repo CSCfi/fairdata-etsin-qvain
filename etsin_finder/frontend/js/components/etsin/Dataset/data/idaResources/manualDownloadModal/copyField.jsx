@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
 import CopyToClipboard from '../../../copyToClipboard'
-import Loader from '../../../../../general/loader'
+import Loader from '@/components/general/loader'
 
 const Display = styled.input.attrs({
   type: 'text',

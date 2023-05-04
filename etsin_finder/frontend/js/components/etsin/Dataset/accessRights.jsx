@@ -29,7 +29,7 @@ import checkNested from '@/utils/checkNested'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import dateFormat from '@/utils/dateFormat'
 import Button from '../general/button'
-import Modal from '../../general/modal'
+import Modal from '@/components/general/modal'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { withStores } from '@/utils/stores'
 

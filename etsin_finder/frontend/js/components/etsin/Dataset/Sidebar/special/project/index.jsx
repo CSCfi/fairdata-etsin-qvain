@@ -16,8 +16,8 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
 import ProjectForm from './projectForm'
-import { TransparentLink } from '../../../../general/button'
-import Modal from '../../../../../general/modal'
+import { TransparentLink } from '@/components/etsin/general/button'
+import Modal from '@/components/general/modal'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 
 

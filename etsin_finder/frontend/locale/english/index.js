@@ -288,6 +288,7 @@ const english = {
       alt: 'Altitude (m)',
     },
     doi: 'DOI',
+    description: 'Description',
     field_of_science: 'Field of science',
     funder: 'Funder',
     goBack: 'Go back',

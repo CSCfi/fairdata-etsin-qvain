@@ -16,8 +16,8 @@ import PackageModal from './packageModal'
 import ManualDownloadModal from './manualDownloadModal'
 import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
 import { SplitButtonContainer, MoreButton } from './splitButton'
-import FlaggedComponent from '../../../../general/flaggedComponent'
-import TooltipHover from '../../../../general/tooltipHover'
+import FlaggedComponent from '@/components/general/flaggedComponent'
+import TooltipHover from '@/components/general/tooltipHover'
 
 function IdaResources(props) {
   const { restrictions } = props.Stores.Access

@@ -5,7 +5,7 @@ import Translate from 'react-translate-component'
 
 import NotificationEmail from './notificationEmail'
 import { Header, Buttons, CloseButton, SubmitEmailButton } from './common'
-import FlaggedComponent from '../../../../../general/flaggedComponent'
+import FlaggedComponent from '@/components/general/flaggedComponent'
 
 const PackageCreate = ({ Packages }) => (
   <>

@@ -16,11 +16,11 @@ import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as yup from 'yup'
 import axios from 'axios'
-import Select from '../../general/select'
+import Select from '@/components/etsin/general/select'
 
 import Input, { InputArea } from '../common/formItems'
-import { InvertedButton } from '../../general/button'
-import ErrorBoundary from '../../../general/errorBoundary'
+import { InvertedButton } from '@/components/etsin/general/button'
+import ErrorBoundary from '@/components/general/errorBoundary'
 import urls from '@/utils/urls'
 
 const InnerForm = props => {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import { DOWNLOAD_API_REQUEST_STATUS } from '@/utils/constants'
 
-import Modal from '../../../../../general/modal'
+import Modal from '@/components/general/modal'
 import PackageCreate from './packageCreate'
 import PackagePending from './packagePending'
 import PackageSuccess from './packageSuccess'

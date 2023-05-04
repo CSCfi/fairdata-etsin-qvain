@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
-import Button, { InvertedButton } from '../../../../general/button'
+import Button, { InvertedButton } from '@/components/etsin/general/button'
 
 const createPackage = async Packages => {
   Packages.Notifications.validateEmail()
