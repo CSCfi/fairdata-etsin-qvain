@@ -20,8 +20,8 @@ const description = {
         sv: 'Title (Swedish)',
       },
       infoText: {
-        fi: 'Title in English.',
-        en: 'Title in Finnish.',
+        fi: 'Title in Finnish.',
+        en: 'Title in English.',
         sv: 'Title in Swedish. Not shown in Etsin. Can be seen via Metax API.',
       },
     },
