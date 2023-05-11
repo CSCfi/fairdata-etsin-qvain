@@ -328,7 +328,7 @@ class Qvain extends Resources {
 
   @computed
   get canRemoveFiles() {
-    return this.canSelectFiles && (!this.hasBeenPublished || !this.isCumulative)
+    return this.canSelectFiles && (!this.hasBeenPublished || !this.isCumulative || this.isNewVersion)
   }
 
   @computed

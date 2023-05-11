@@ -18,6 +18,7 @@ const CumulativeDataset = () => {
       newCumulativeState,
       setCumulativeState,
       setNewCumulativeState,
+      isNewVersion,
       hasBeenPublished,
       original,
     },
@@ -100,7 +101,7 @@ const CumulativeDataset = () => {
     )
   }
 
-  const content = hasBeenPublished ? getPublishedContent() : getUnpublishedContent()
+  const content = (hasBeenPublished && !isNewVersion) ? getPublishedContent() : getUnpublishedContent()
 
   return (
     <FieldGroup>
