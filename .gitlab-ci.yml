@@ -18,10 +18,11 @@ variables:
     description: 'Which environment do you want to deploy to?'
     value: 'test'
     options:
+      - 'demo'
+      - 'rework'
+      - 'stable'
       - 'staging'
       - 'test'
-      - 'demo'
-      - 'stable'
   SERVICE: ${SERVICE}
 
 default:
