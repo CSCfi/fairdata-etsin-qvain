@@ -42,6 +42,7 @@ include:
       - /templates/deploy/deploy-jobs.yaml
       - /templates/test/test-jobs.yaml
       - /templates/test/etsin-qvain-tests.yaml
+      - /templates/deploy/etsin-deploy-jobs.yaml
 
 # ------------------------
 
@@ -66,8 +67,17 @@ deploy:
     - if: $CI_COMMIT_BRANCH =~ /^(master)$/
     - if: $CI_PIPELINE_SOURCE =~ /^(web)$/
 
+deploy-rework:
+  extends: .deploy-job
+  variables:
+    GITLAB_ENV: 'rework'
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(master)$/
+
 deploy-feature:
   extends: .deploy-feature-job
+  variables:
+    GITLAB_ENV: 'staging'
   stage: deploy
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -75,19 +85,21 @@ deploy-feature:
 # ------------------------
 
 update-proxy:
-  stage: update
-  environment: $GITLAB_ENV
-  script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $UPDATE_PROXY_PLAYBOOK --vault-id $ANSIBLE_VAULT_FILE
+  extends: .update-proxy-job
+  environment: test
   rules:
     - if: $CI_COMMIT_BRANCH =~ /^(master)$/
     - if: $CI_PIPELINE_SOURCE =~ /^(web)$/
 
+update-proxy-rework:
+  extends: .update-proxy-job
+  environment: rework
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(master)$/
+
 update-proxy-feature:
-  stage: update
+  extends: .update-proxy-job
   environment: staging
-  script:
-    - ansible-playbook -i $ANSIBLE_INVENTORY $UPDATE_PROXY_PLAYBOOK --vault-id $ANSIBLE_VAULT_FILE
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
