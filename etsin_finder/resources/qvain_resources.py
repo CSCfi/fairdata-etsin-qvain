@@ -333,6 +333,10 @@ class QvainDataset(MethodView):
             metax_ready_data, cr_id, last_edit, params
         )
         log.debug("METAX RESPONSE: \n{0}".format(metax_response))
+
+        # clear dataset from cache
+        current_app.cr_cache.delete(cr_id)
+        current_app.cr_permission_cache.delete(cr_id)
         return metax_response
 
     @log_request
@@ -354,6 +358,10 @@ class QvainDataset(MethodView):
 
         service = MetaxQvainAPIService()
         metax_response = service.delete_dataset(cr_id)
+
+        # clear dataset from cache
+        current_app.cr_cache.delete(cr_id)
+        current_app.cr_permission_cache.delete(cr_id)
         return metax_response
 
 
@@ -400,6 +408,7 @@ class QvainDatasetFiles(MethodView):
             return response, status
 
         # adding or removing files may change permissions, clear them from cache
+        current_app.cr_cache.delete(cr_id)
         current_app.cr_permission_cache.delete(cr_id)
         return response, status
 
@@ -597,6 +606,7 @@ class QvainDatasetEditorPermissions(MethodView):
                 log.error(f"Failed to send share notification email: {repr(e)}")
 
         # clear permissions cache
+        current_app.cr_cache.delete(cr_id)
         current_app.cr_permission_cache.delete(cr_id)
         return {"users": user_data, "email": {"success": email_success}}, 200
 
@@ -677,5 +687,6 @@ class QvainDatasetEditorPermissionsUser(MethodView):
             cr_id, user_id
         )
         # clear permissions cache
+        current_app.cr_cache.delete(cr_id)
         current_app.cr_permission_cache.delete(cr_id)
         return response, status

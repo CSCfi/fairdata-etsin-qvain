@@ -7,7 +7,7 @@
 
 """RPC API endpoints, meant to be used by the Qvain form"""
 
-from flask import request
+from flask import request, current_app
 from flask.views import MethodView
 from flask_mail import Message
 from webargs import fields, validate
@@ -59,6 +59,10 @@ class QvainDatasetChangeCumulativeState(MethodView):
             return error
         service = MetaxQvainAPIService()
         metax_response = service.change_cumulative_state(cr_id, cumulative_state)
+
+        # clear dataset from cache
+        current_app.cr_cache.delete(cr_id)
+        current_app.cr_permission_cache.delete(cr_id)
         return metax_response
 
 
@@ -133,6 +137,10 @@ class QvainDatasetMergeDraft(MethodView):
             return err
         service = MetaxQvainAPIService()
         metax_response = service.merge_draft(cr_id)
+
+        # clear dataset from cache
+        current_app.cr_cache.delete(cr_id)
+        current_app.cr_permission_cache.delete(cr_id)
         return metax_response
 
 
@@ -157,4 +165,8 @@ class QvainDatasetPublishDataset(MethodView):
             return err
         service = MetaxQvainAPIService()
         metax_response = service.publish_dataset(cr_id)
+
+        # clear dataset from permission cache
+        current_app.cr_cache.delete(cr_id)
+        current_app.cr_permission_cache.delete(cr_id)
         return metax_response
