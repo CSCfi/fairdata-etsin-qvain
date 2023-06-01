@@ -74,7 +74,6 @@ const TooltipDownV2 = styled.div`
   color: ${props => props.theme.color.white};
   border-radius: 5px;
   display: inline-block;
-  margin-top: -5px;
   left: -15em;
   top: 30px;
 `
@@ -83,6 +82,7 @@ const TooltipArrowDown = styled.div`
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-bottom: 10px solid #6e6e6e;
+  margin-top: -2px;
   margin-left: 150px;
   width: 0;
   height: 0;

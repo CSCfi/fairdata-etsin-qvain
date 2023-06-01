@@ -7,6 +7,7 @@ const submitButton = css`
   font-size: 1.3em;
   font-weight: 700;
   padding: 0.25rem 2rem;
+  margin-bottom: 0;
 `
 
 export const PublishButton = styled(Button)`
