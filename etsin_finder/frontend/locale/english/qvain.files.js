@@ -279,6 +279,10 @@ const files = {
         label: 'Use Category',
         placeholder: 'Select option',
       },
+      fileType: {
+        label: 'File Type',
+        placeholder: 'Select option',
+      },
       accessUrl: {
         label: 'Access URL',
         placeholder: 'https://',

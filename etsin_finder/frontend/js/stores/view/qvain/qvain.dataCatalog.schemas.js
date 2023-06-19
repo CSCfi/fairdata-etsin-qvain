@@ -36,6 +36,12 @@ export const externalResourceUseCategorySchema = yup
   .typeError('qvain.validationMessages.externalResources.useCategory.required')
   .required('qvain.validationMessages.externalResources.useCategory.required')
 
+export const externalResourceFileTypeSchema = yup
+  .object()
+  .shape({
+    url: yup.string(),
+  })
+
 export const externalResourceAccessUrlSchema = yup
   .string()
   .url('qvain.validationMessages.externalResources.accessUrl.validFormat')
@@ -49,4 +55,5 @@ export const externalResourceSchema = yup.object().shape({
   useCategory: externalResourceUseCategorySchema,
   accessUrl: externalResourceAccessUrlSchema,
   downloadUrl: externalResourceDownloadUrlSchema,
+  fileType: externalResourceFileTypeSchema,
 })

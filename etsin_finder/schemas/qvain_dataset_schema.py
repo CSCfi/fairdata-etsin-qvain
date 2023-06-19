@@ -51,6 +51,7 @@ class RemoteResourceValidationSchema(Schema):
 
     title = fields.String(required=True)
     use_category = fields.Nested(ReferenceObjectValidationSchema, required=True)
+    file_type = fields.Nested(RemoteResourceDocumentValidationSchema)
     download_url = fields.Nested(RemoteResourceDocumentValidationSchema)
     access_url = fields.Nested(RemoteResourceDocumentValidationSchema)
 

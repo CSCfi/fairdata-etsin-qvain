@@ -17,7 +17,7 @@ import {
   getOptionValue,
   getAllOptions,
 } from '@/components/qvain/utils/select'
-import { UseCategory } from '@/stores/view/qvain/qvain.externalResources'
+import { UseCategory, FileType } from '@/stores/view/qvain/qvain.externalResources'
 import { useStores } from '@/stores/stores'
 import AbortClient from '@/utils/AbortClient'
 
@@ -25,15 +25,18 @@ export const ExternalFileFormBase = () => {
   const {
     Qvain: {
       readonly,
-      ExternalResources: { inEdit: externalResource, setUseCategory },
+      ExternalResources: { inEdit: externalResource, setUseCategory, setFileType },
     },
     Locale: { lang },
   } = useStores()
+
   const [useCategoryOptions, setUseCategoryOptions] = useState([])
+  const [useFileTypeOptions, setFileTypeOptions] = useState([])
 
   useEffect(() => {
     const client = new AbortClient()
     getAllOptions(UseCategory, 'use_category', { client }).then(opts => setUseCategoryOptions(opts))
+    getAllOptions(FileType, 'file_type', { client }).then(opts => setFileTypeOptions(opts))
 
     return () => {
       client.abort()
@@ -77,6 +80,28 @@ export const ExternalFileFormBase = () => {
           }}
         />
       </FieldGroup>
+
+      <FieldGroup>
+        <Title htmlFor="fileTypeInput">
+          <Translate content="qvain.files.external.form.fileType.label" />
+        </Title>
+        <Translate
+          component={Select}
+          inputId="fileTypeInput"
+          name="fileType"
+          options={useFileTypeOptions}
+          clearable
+          isDisabled={readonly}
+          value={getCurrentOption(FileType, useFileTypeOptions, externalResource.fileType)}
+          onChange={val => onChange(setFileType)(val)}
+          getOptionLabel={getOptionLabel(FileType, lang)}
+          getOptionValue={getOptionValue(FileType)}
+          attributes={{
+            placeholder: 'qvain.files.external.form.fileType.placeholder',
+          }}
+        />
+      </FieldGroup>
+
       <FieldGroup>
         <FieldWrapper>
           <Title htmlFor="accessUrlInput">

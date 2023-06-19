@@ -21,6 +21,7 @@ class ExternalResources extends Field {
     if (dataset.remote_resources) {
       dataset.remote_resources.forEach(res => {
         touch(res.use_category)
+        touch(res.file_type)
       })
     }
     this.fromBackendBase(dataset.remote_resources, Qvain)
@@ -32,6 +33,9 @@ class ExternalResources extends Field {
       title: p.title,
       use_category: {
         identifier: p.useCategory.url,
+      },
+      file_type: {
+        identifier: p.fileType.url || undefined,
       },
       access_url: {
         identifier: p.accessUrl || undefined,
@@ -58,6 +62,10 @@ class ExternalResources extends Field {
     this.inEdit.useCategory = useCategory
   }
 
+  @action setFileType = fileType => {
+    this.inEdit.fileType = fileType
+  }
+
   @computed
   get resourceExists() {
     return !!this.storage.find(item => item.uiid === this.inEdit?.uiid)
@@ -65,6 +73,11 @@ class ExternalResources extends Field {
 }
 
 export const UseCategory = (name, url) => ({
+  name,
+  url,
+})
+
+export const FileType = (name, url) => ({
   name,
   url,
 })
@@ -77,6 +90,9 @@ export const ExternalResourceModel = data => ({
   useCategory: data.use_category
     ? UseCategory(data.use_category.pref_label, data.use_category.identifier)
     : null,
+  fileType: data.file_type
+    ? FileType(data.file_type.pref_label, data.file_type.identifier)
+    : null,
 })
 
 export const ExternalResource = ({
@@ -84,12 +100,14 @@ export const ExternalResource = ({
   accessUrl = '',
   downloadUrl = '',
   useCategory = null,
+  fileType = null,
 } = {}) =>
   ExternalResourceModel({
     title,
     access_url: accessUrl,
     download_url: downloadUrl,
     use_category: useCategory,
+    file_type: fileType,
   })
 
 export default ExternalResources

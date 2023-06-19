@@ -280,6 +280,10 @@ const files = {
         label: 'Käyttökategoria',
         placeholder: 'Valitse vaihtoehto',
       },
+      fileType: {
+        label: 'Tiedostotyyppi',
+        placeholder: 'Valitse vaihtoehto',
+      },
       accessUrl: {
         label: 'Sivun URL',
         placeholder: 'https://',
