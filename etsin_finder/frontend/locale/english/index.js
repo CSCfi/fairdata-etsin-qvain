@@ -354,9 +354,10 @@ const english = {
   },
   error: {
     cscLoginRequired: 'This page requires you to be logged in with a CSC account.',
-    notFound:
+    notFound: "Sorry! The page couldn't be found.",
+    notLoaded:
       'Sorry, we are having some technical difficulties at the moment. Please, try again later.',
-    notLoaded: "Sorry! The page couldn't be found.",
+    invalidIdentifier: 'Invalid identifier',
     undefined: 'Sorry! An error occurred.',
     details: {
       showDetails: 'Show details',
@@ -418,6 +419,7 @@ const english = {
     dataset: 'Dataset',
     datasets: 'Datasets',
     events: 'Identifiers and events',
+    maps: 'Maps',
     help: 'Help',
     home: 'Home',
     organizations: 'Organizations',

@@ -19,6 +19,10 @@ class Files extends FilesBase {
 
   @observable inInfo = null
 
+  @observable files = []
+
+  @observable directories = []
+
   @override reset() {
     super.reset.call(this)
     this.View.reset()

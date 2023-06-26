@@ -32,61 +32,75 @@ import DatasetInfoItem from '../DatasetInfoItem'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import checkNested from '@/utils/checkNested'
 import dateFormat, { dateSeparator } from '@/utils/dateFormat'
-import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { withStores } from '@/utils/stores'
 
 class Description extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     const {
       Matomo: { recordEvent },
       Accessibility,
+      Etsin: {
+        fetchVersions,
+        isLoading,
+        EtsinDataset: { identifier, versions },
+      },
     } = this.props.Stores
+
+    if (versions.length === 0 && !isLoading.versions) await fetchVersions()
     Accessibility.handleNavigation('dataset', false)
-    recordEvent(`DETAILS / ${this.props.dataset.identifier}`)
+    recordEvent(`DETAILS / ${identifier}`)
   }
 
   getSpatialCoverage(locations) {
-    return locations && (
-      <ul>
-        {locations.map((location) => {
-          if (
-            location.geographic_name &&
-            checkNested(location, 'place_uri', 'pref_label') &&
-            location.geographic_name !== checkDataLang(location.place_uri.pref_label)
-          ) {
-            return (
-              <li key={location.geographic_name} lang={getDataLang(location.place_uri.pref_label)}>
-                {checkDataLang(location.place_uri.pref_label)} <span>({location.geographic_name})</span>
-              </li>
-            )
-          }
-          if (location.geographic_name) {
-            return <li key={location.geographic_name}>{location.geographic_name}</li>
-          }
-          return null
-        })}
-      </ul>
+    return (
+      locations && (
+        <ul>
+          {locations.map(location => {
+            if (
+              location.geographic_name &&
+              checkNested(location, 'place_uri', 'pref_label') &&
+              location.geographic_name !== checkDataLang(location.place_uri.pref_label)
+            ) {
+              return (
+                <li
+                  key={location.geographic_name}
+                  lang={getDataLang(location.place_uri.pref_label)}
+                >
+                  {checkDataLang(location.place_uri.pref_label)}{' '}
+                  <span>({location.geographic_name})</span>
+                </li>
+              )
+            }
+            if (location.geographic_name) {
+              return <li key={location.geographic_name}>{location.geographic_name}</li>
+            }
+            return null
+          })}
+        </ul>
+      )
     )
   }
 
   getTemporalCoverage(temporal) {
-    return temporal && (
-      <ul>
-        {temporal.map(dates => (
-        <li key={`temporal-${dates.start_date}-${dates.end_date}`}>
-          {dateSeparator(dates.start_date, dates.end_date)}
-        </li>
-      ))}
-      </ul>
+    return (
+      temporal && (
+        <ul>
+          {temporal.map(dates => (
+            <li key={`temporal-${dates.start_date}-${dates.end_date}`}>
+              {dateSeparator(dates.start_date, dates.end_date)}
+            </li>
+          ))}
+        </ul>
+      )
     )
   }
 
   getLanguages(languages) {
     if (languages) {
       const infoArray = []
-      {languages.map(language => 
-        infoArray.push(checkDataLang(language.title))
-      )}
+      {
+        languages.map(language => infoArray.push(checkDataLang(language.title)))
+      }
       return this.formatDatasetInfoArray(infoArray)
     }
     return null
@@ -95,9 +109,9 @@ class Description extends Component {
   getFieldsOfScience(fields) {
     if (fields) {
       const infoArray = []
-      {fields.map(field => 
-        infoArray.push(checkDataLang(field.pref_label))
-      )}
+      {
+        fields.map(field => infoArray.push(checkDataLang(field.pref_label)))
+      }
       return this.formatDatasetInfoArray(infoArray)
     }
     return null
@@ -113,191 +127,156 @@ class Description extends Component {
   }
 
   render() {
-    const { id } = this.props
     const {
-      creator,
-      cumulative,
-      contributor,
-      harvested,
-      title,
-      issued,
-      modified,
-      description,
-      access_rights: accessRights,
-      preferred_identifier: preferredIdentifier,
-      field_of_science: field,
-      keyword,
-      language,
-    } = this.props.dataset.research_dataset
-    const location = checkNested(this.props.dataset.research_dataset, 'spatial') ? this.props.dataset.research_dataset.spatial : false
-    const temporal = checkNested(this.props.dataset.research_dataset, 'temporal') ? this.props.dataset.research_dataset.temporal : false
-    const versions = this.props.dataset.dataset_version_set
-    const datasetIdentifier = this.props.dataset.identifier
+      Etsin: {
+        EtsinDataset: {
+          dataCatalog,
+          catalogRecord,
+          dataset,
+          identifier,
+          versions,
+          emailInfo,
+          isHarvested,
+          isCumulative,
+          isPas,
+        },
+      },
+    } = this.props.Stores
+
+    const { id } = this.props
     const isVersion =
-      versions &&
-      versions.length > 0 &&
-      versions.some(version => version.identifier === datasetIdentifier)
+      versions && versions.length > 0 && versions.some(version => version.identifier === identifier)
 
     return (
       <div className="dsContent" id={id}>
         <Labels>
           <Controls>
-            {this.props.dataset.data_catalog.catalog_json.dataset_versioning && isVersion && (
-              <VersionChanger versionSet={versions} idn={datasetIdentifier} />
-            )}
-            {(this.props.dataset.data_catalog.catalog_json.identifier ===
-              DATA_CATALOG_IDENTIFIER.PAS ||
-              this.props.dataset.preservation_state === 80) && (
-                <FairdataPasDatasetIcon
-                  preservation_state={this.props.dataset.preservation_state}
-                  data_catalog_identifier={this.props.dataset.data_catalog.catalog_json.identifier}
-                />
-              )}
+            {dataCatalog.dataset_versioning && isVersion && <VersionChanger />}
+            {(isPas || catalogRecord.preservation_state === 80) && <FairdataPasDatasetIcon />}
             <MarginAfter>
-              <AccessRights
-                button
-                access_rights={
-                  checkNested(
-                    this.props.dataset,
-                    'research_dataset',
-                    'access_rights',
-                    'access_type'
-                  )
-                    ? accessRights
-                    : null
-                }
-              />
+              <AccessRights button />
             </MarginAfter>
-            <FormatChanger idn={this.props.match.params.identifier} />
+            <FormatChanger />
             <Flex>
               <ErrorBoundary>
-                {this.checkEmails(this.props.emails) && !this.props.harvested && (
-                  <Contact
-                    datasetID={datasetIdentifier}
-                    emails={this.props.emails}
-                    // TEMPORARY: rems check won't be needed in contact later.
-                    isRems={
-                      this.props.dataset.research_dataset.access_rights.access_type.identifier ===
-                      ACCESS_TYPE_URL.PERMIT
-                    }
-                  />
-                )}
+                {this.checkEmails(emailInfo) && !isHarvested && <Contact />}
               </ErrorBoundary>
-              <AskForAccess cr_id={datasetIdentifier} />
+              <AskForAccess />
             </Flex>
           </Controls>
         </Labels>
+
         <section>
           <div>
-            {this.props.dataset.data_catalog.catalog_json.identifier ===
-              DATA_CATALOG_IDENTIFIER.PAS && (
-                <PasInfo>
-                  <Translate content="dataset.storedInPas" />
-                </PasInfo>
-              )}
-            {this.props.dataset.preservation_dataset_origin_version && (
+            {isPas && (
+              <PasInfo>
+                <Translate content="dataset.storedInPas" />
+              </PasInfo>
+            )}
+            {catalogRecord.preservation_dataset_origin_version && (
               <PasInfo>
                 <Translate content="dataset.originalDatasetVersionExists" />
                 <Link
-                  to={`/dataset/${this.props.dataset.preservation_dataset_origin_version.identifier}`}
+                  to={`/dataset/${catalogRecord.preservation_dataset_origin_version.identifier}`}
                 >
                   <Translate content="dataset.linkToOriginalDataset" />
                 </Link>
               </PasInfo>
             )}
-            {this.props.dataset.preservation_dataset_version && (
+            {catalogRecord.preservation_dataset_version && (
               <PasInfo>
                 <Translate content="dataset.pasDatasetVersionExists" />
-                <Link to={`/dataset/${this.props.dataset.preservation_dataset_version.identifier}`}>
+                <Link to={`/dataset/${catalogRecord.preservation_dataset_version.identifier}`}>
                   <Translate content="dataset.linkToPasDataset" />
                 </Link>
               </PasInfo>
             )}
           </div>
+
           <div className="d-md-flex align-items-center dataset-title justify-content-between">
-            <Title lang={getDataLang(title)}>{checkDataLang(title)}</Title>
+            <Title lang={getDataLang(dataset.title)}>{checkDataLang(dataset.title)}</Title>
           </div>
+
           <div className="d-flex justify-content-between basic-info">
             <MainInfo>
               <ErrorBoundary>
-                <TogglableAgentList agents={creator} agentType="creator" />
+                <TogglableAgentList agents={dataset.creator} agentType="creator" />
               </ErrorBoundary>
               <ErrorBoundary>
-                <TogglableAgentList agents={contributor} agentType="contributor" />
+                <TogglableAgentList agents={dataset.contributor} agentType="contributor" />
               </ErrorBoundary>
-              {issued && (
-                <p lang={getDataLang(issued)}>
+              {dataset.issued && (
+                <p lang={getDataLang(dataset.issued)}>
                   <Translate
                     content="dataset.issued"
-                    with={{ date: dateFormat(checkDataLang(issued), { format: 'date' }) }}
+                    with={{ date: dateFormat(checkDataLang(dataset.issued), { format: 'date' }) }}
                   />
                   <br />
-                  {modified && (
+                  {dataset.modified && (
                     <Translate
                       content="dataset.modified"
-                      with={{ date: dateFormat(checkDataLang(modified), { format: 'date' }) }}
+                      with={{
+                        date: dateFormat(checkDataLang(dataset.modified), { format: 'date' }),
+                      }}
                     />
                   )}
                 </p>
               )}
             </MainInfo>
           </div>
+
           <DescriptionArea>
-            
             {/* DESCRIPTION */}
 
             <DatasetInfoItem
-              lang={getDataLang(description)}
-              itemTitle={"dataset.description"}>
-              {description && <CustomMarkdown>{checkDataLang(description)}</CustomMarkdown>}
+              lang={getDataLang(dataset.description)}
+              itemTitle={'dataset.description'}
+            >
+              {dataset.description && (
+                <CustomMarkdown>{checkDataLang(dataset.description)}</CustomMarkdown>
+              )}
             </DatasetInfoItem>
 
             {/* FIELD OF SCIENCE */}
 
-            <DatasetInfoItem
-              itemTitle={"dataset.field_of_science"}>
-                {this.getFieldsOfScience(field)}
+            <DatasetInfoItem itemTitle={'dataset.field_of_science'}>
+              {this.getFieldsOfScience(dataset.field_of_science)}
             </DatasetInfoItem>
 
             {/* KEYWORDS */}
 
-            <DatasetInfoItem
-              itemTitle={"dataset.keywords"}>
-                {this.formatDatasetInfoArray(keyword)}
+            <DatasetInfoItem itemTitle={'dataset.keywords'}>
+              {this.formatDatasetInfoArray(dataset.keyword)}
             </DatasetInfoItem>
 
             {/* LANGUAGES */}
 
-            <DatasetInfoItem
-              itemTitle={"dataset.language"}>
-                {this.getLanguages(language)}
+            <DatasetInfoItem itemTitle={'dataset.language'}>
+              {this.getLanguages(dataset.language)}
             </DatasetInfoItem>
 
             {/* SPATIAL COVERAGE */}
 
-            <DatasetInfoItem
-              itemTitle={"dataset.spatial_coverage"}>
-                {this.getSpatialCoverage(location)}
+            <DatasetInfoItem itemTitle={'dataset.spatial_coverage'}>
+              {this.getSpatialCoverage(dataset.spatial)}
             </DatasetInfoItem>
 
             {/* TEMPORAL COVERAGE */}
 
-            <DatasetInfoItem
-              itemTitle={"dataset.temporal_coverage"}>
-                {this.getTemporalCoverage(temporal)}
+            <DatasetInfoItem itemTitle={'dataset.temporal_coverage'}>
+              {this.getTemporalCoverage(dataset.temporal)}
             </DatasetInfoItem>
-            
-
           </DescriptionArea>
 
-          {cumulative && (
+          {isCumulative && (
             <Label color="error">
               <Translate content="dataset.cumulative" />
             </Label>
           )}
-          {harvested && (
+
+          {isHarvested && (
             <>
-              <GoToOriginal idn={preferredIdentifier} />
+              <GoToOriginal />
               <label htmlFor="dataset-tags">
                 <Translate
                   id="dataset-tags"
@@ -322,24 +301,6 @@ export default withStores(observer(Description))
 
 Description.propTypes = {
   Stores: PropTypes.object.isRequired,
-  dataset: PropTypes.object.isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-  }).isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      identifier: PropTypes.string,
-    }),
-  }).isRequired,
-  emails: PropTypes.shape({
-    CONTRIBUTOR: PropTypes.bool,
-    CREATOR: PropTypes.bool,
-    CURATOR: PropTypes.bool,
-    PUBLISHER: PropTypes.bool,
-    RIGHTS_HOLDER: PropTypes.bool,
-  }).isRequired,
-  harvested: PropTypes.bool.isRequired,
-  cumulative: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
 }
 

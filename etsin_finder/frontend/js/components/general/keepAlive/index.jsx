@@ -42,7 +42,7 @@ export default class KeepAlive extends Component {
 
   componentDidMount() {
     this.setState({
-      loggedInThroughService: this.props.loginThroughService
+      loggedInThroughService: this.props.loginThroughService,
     })
   }
 
@@ -61,11 +61,6 @@ export default class KeepAlive extends Component {
     // user moved after being idle for custom time and is logged in
     if (!idle && Auth.userLogged) {
       clearTimeout(this.timeout)
-    }
-
-    // user was idle for custom time but is not logged in
-    if (idle && !Auth.userLogged) {
-      // console.log('user idle')
     }
   }
 

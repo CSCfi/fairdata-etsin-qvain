@@ -66,7 +66,7 @@ const actionCreatePackage = (Packages, path) => ({
 })
 
 const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
-  const isFile = item && item.type === 'file'
+  const isFile = item?.type === 'file'
   let path = '/'
   if (item) {
     path = isFile ? Files.getItemPath(item) : Files.getEquivalentItemScope(item)

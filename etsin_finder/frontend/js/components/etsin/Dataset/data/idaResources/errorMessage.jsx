@@ -32,10 +32,10 @@ const ErrorMessage = ({ error, clear }) => {
         return 'idaUnavailable'
       }
       case 503: {
-        return 'unknownError'
+        return 'serviceUnavailable'
       }
       default: {
-        return 'serviceUnavailable'
+        return 'unknownError'
       }
     }
   }

@@ -7,7 +7,6 @@ import Translate from 'react-translate-component'
 import { Popup } from 'react-leaflet'
 import { observer } from 'mobx-react'
 
-import { TypeLocation } from '@/utils/propTypes'
 import MyMap from './map'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import { withStores } from '@/stores/stores'
@@ -54,7 +53,6 @@ class Maps extends Component {
         identifier: PropTypes.string,
       }),
     }).isRequired,
-    spatial: TypeLocation.isRequired,
     id: PropTypes.string.isRequired,
   }
 
@@ -66,6 +64,12 @@ class Maps extends Component {
   }
 
   render() {
+    const {
+      Etsin: {
+        EtsinDataset: { dataset },
+      },
+    } = this.props.Stores
+
     return (
       <div id={this.props.id}>
         {/* Map details in a table list (this is not the actual map) */}
@@ -87,7 +91,7 @@ class Maps extends Component {
 
           {/* Table body */}
           <tbody>
-            {this.props.spatial.map(spatial => (
+            {dataset.spatial.map(spatial => (
               <tr key={spatial.geographic_name}>
                 <td>
                   {
@@ -121,21 +125,22 @@ class Maps extends Component {
         </Table>
 
         {/* The actual map */}
-        {this.props.spatial.map(spatial => {
+        {dataset.spatial.map(spatial => {
           // Map shown only if either map coordinate(s) or map location is defined
           if (spatial.as_wkt !== undefined || spatial.place_uri !== undefined) {
             return (
               <MyMap
-                key={`${spatial.as_wkt && spatial.as_wkt[0]}-${spatial.place_uri && spatial.place_uri.identifier
-                  }`}
+                key={`${spatial.as_wkt && spatial.as_wkt[0]}-${
+                  spatial.place_uri && spatial.place_uri.identifier
+                }`}
                 geometry={spatial.as_wkt}
                 place_uri={spatial.place_uri && spatial.place_uri.pref_label}
               >
                 {/* Map popup, hidden if it contains no information */}
                 {spatial.place_uri ||
-                  spatial.geographic_name ||
-                  spatial.full_address ||
-                  spatial.alt ? (
+                spatial.geographic_name ||
+                spatial.full_address ||
+                spatial.alt ? (
                   <CustomPopup>
                     {spatial.place_uri && (
                       <h2 lang={getDataLang(spatial.place_uri.pref_label)}>

@@ -79,7 +79,7 @@ class Accessibility {
     }
   }
 
-  @action
+  @action.bound
   handleNavigation(location, resetFocus = true) {
     if (this.Env.isQvain) {
       this.setQvainPageTitle(translate('general.qvainPageTitle'))

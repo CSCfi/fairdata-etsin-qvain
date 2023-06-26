@@ -8,7 +8,7 @@ import { useRenderTree } from '@/components/general/files/tree'
 import { withStores } from '@/stores/stores'
 
 export function FileTree(props) {
-  const { Files, Packages } = props.Stores.DatasetQuery
+  const { files: Files, packages: Packages } = props.Stores.Etsin.EtsinDataset
   const { View } = Files
   const { allowDownload } = props
 

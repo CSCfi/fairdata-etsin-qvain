@@ -351,9 +351,10 @@ const finnish = {
   },
   error: {
     cscLoginRequired: 'Tämä sivu vaatii kirjautumisen CSC-tunnuksella.',
-    notFound:
+    notFound: 'Hups! Sivua ei löytynyt.',
+    notLoaded:
       'Olemme pahoillamme, nyt sattui häiriötilanne. Ole hyvä ja yritä hetken päästä uudelleen.',
-    notLoaded: 'Hups! Sivua ei löytynyt.',
+    invalidIdentifier: 'Epäkelpo tunniste',
     undefined: 'Hups! Tapahtui virhe.',
     details: {
       showDetails: 'Näytä tiedot',
@@ -416,6 +417,7 @@ const finnish = {
     dataset: 'Aineisto',
     datasets: 'Aineistot',
     events: 'Tunnisteet ja tapahtumat',
+    maps: 'Kartat',
     help: 'Ohjeet',
     home: 'Koti',
     organizations: 'Organisaatiot',

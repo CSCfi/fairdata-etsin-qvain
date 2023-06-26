@@ -18,9 +18,14 @@ export class AskForAccess extends Component {
   }
 
   onClick = () => {
+    const {
+      Etsin: {
+        EtsinDataset: { identifier },
+      },
+    } = this.props.Stores
     this.setState({ loading: true })
     axios
-      .get(urls.rems(this.props.cr_id))
+      .get(urls.rems(identifier))
       .then(res => {
         console.log(res)
         window.open(`${REMS_URL}/application/${res.data}`, '_blank')
@@ -56,7 +61,6 @@ export class AskForAccess extends Component {
 }
 
 AskForAccess.propTypes = {
-  cr_id: PropTypes.string.isRequired,
   Stores: PropTypes.object.isRequired,
 }
 

@@ -22,24 +22,31 @@ import { getPreservationInfo, Margin } from './common'
 import idnToLink from '@/utils/idnToLink'
 
 const Events = props => {
-  const { Accessibility, Locale, Matomo } = useStores()
   const {
-    id,
-    dataset: {
-      identifier,
-      date_deprecated: dateDeprecated,
-      dataset_version_set: datasetVersionSet = [],
-      preservation_dataset_origin_version: preservationDatasetOriginVersion = undefined,
-      preservation_state_modified: preservationStateModified = undefined,
-      preservation_dataset_version: preservationDatasetVersion = undefined,
-      research_dataset: {
-        other_identifier: otherIdentifierObjects = [],
-        relation = [],
-        provenance = [],
+    Accessibility,
+    Locale,
+    Matomo,
+    Etsin: {
+      EtsinDataset: {
+        catalogRecord,
+        dataset,
+        identifier,
+        dateDeprecated,
+        datasetVersions = [],
+        versionTitles,
       },
     },
-    versionTitles,
-  } = props
+  } = useStores()
+
+  const { id } = props
+
+  const {
+    preservation_dataset_origin_version: preservationDatasetOriginVersion = undefined,
+    preservation_state_modified: preservationStateModified = undefined,
+    preservation_dataset_version: preservationDatasetVersion = undefined,
+  } = catalogRecord
+
+  const { other_identifier: otherIdentifierObjects = [], relation = [], provenance = [] } = dataset
 
   const match = useRouteMatch()
 
@@ -49,7 +56,7 @@ const Events = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const deletedVersions = datasetVersionSet
+  const deletedVersions = datasetVersions
     .filter(v => v.removed)
     .map((single, i, set) => ({
       dateRemoved: single.date_removed ? /[^T]*/.exec(single.date_removed.toString()) : '',
@@ -58,7 +65,7 @@ const Events = props => {
       url: `/dataset/${single.identifier}`,
     }))
 
-  const currentIndex = datasetVersionSet.findIndex(version => version.identifier === identifier)
+  const currentIndex = datasetVersions.findIndex(version => version.identifier === identifier)
 
   const findType = i => {
     let type
@@ -75,7 +82,7 @@ const Events = props => {
 
   const getTitle = single => Locale.getValueTranslation(versionTitles?.[single.identifier])
 
-  const versions = datasetVersionSet
+  const versions = datasetVersions
     .map((single, i, set) => ({
       label: set.length - i,
       identifier: single.identifier,
@@ -113,27 +120,8 @@ const Events = props => {
   )
 }
 
-Events.defaultProps = {
-  versionTitles: undefined,
-}
-
 Events.propTypes = {
-  dataset: PropTypes.shape({
-    identifier: PropTypes.string,
-    date_deprecated: PropTypes.string,
-    dataset_version_set: PropTypes.array,
-    preservation_dataset_origin_version: PropTypes.object,
-    preservation_dataset_version: PropTypes.object,
-    preservation_state_modified: PropTypes.string,
-    research_dataset: PropTypes.shape({
-      relation: PropTypes.array,
-      provenance: PropTypes.array,
-      other_identifier: PropTypes.array,
-      title: PropTypes.object,
-    }).isRequired,
-  }).isRequired,
   id: PropTypes.string.isRequired,
-  versionTitles: PropTypes.object,
 }
 
 export default observer(Events)

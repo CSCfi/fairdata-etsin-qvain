@@ -16,6 +16,7 @@ import DatasetQueryClass from './view/datasetquery'
 import AccessibilityClass from './view/accessibility'
 import MapClass from './view/map'
 import QvainClass from './view/qvain'
+import EtsinClass from './view/etsin'
 import QvainDatasetsClass from './view/qvain/qvain.datasets'
 import QvainDatasetsV2Class from './view/qvain/qvain.datasetsV2'
 import AccessClass from './view/access'
@@ -35,6 +36,7 @@ export const buildStores = () => {
   const Access = new AccessClass(Auth)
   const Qvain = new QvainClass(Env, Auth)
   const DatasetQuery = new DatasetQueryClass(Env, Access)
+  const Etsin = new EtsinClass({ Env, Access, Accessibility })
   const Map = new MapClass(Locale)
   const Matomo = new MatomoClass(Env)
   const CrossRef = new CrossRefClass(Env)
@@ -42,6 +44,7 @@ export const buildStores = () => {
   return {
     Env,
     Qvain,
+    Etsin,
     Accessibility,
     Locale,
     ElasticQuery,

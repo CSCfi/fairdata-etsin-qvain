@@ -198,7 +198,6 @@ const ContactForm = withFormik({
   displayName: 'ContactForm', // helps with React DevTools
 })(InnerForm)
 
-/* eslint react/forbid-prop-types: 0 */
 ContactForm.propTypes = {
   recipientsList: PropTypes.array,
   translations: PropTypes.object,

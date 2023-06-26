@@ -15,7 +15,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { Home, Search, Dataset, Qvain, QvainDatasetsV2 } from '../routes'
-import ErrorPage from '../components/errorpage'
+import ErrorPage from '@/components/general/errorpage'
 
 import QvainLandingPage from '../components/qvain/views/landingPage'
 import { useStores } from '../utils/stores'

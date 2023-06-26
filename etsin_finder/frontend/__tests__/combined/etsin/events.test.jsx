@@ -2,6 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
+import { configure } from 'mobx'
 
 import dateFormat from '@/utils/dateFormat'
 import etsinTheme from '@/styles/theme'
@@ -23,7 +24,9 @@ deprecatedDataset.preservation_dataset_origin_version = {
 const identifier = deprecatedDataset.identifier
 const path = `/dataset/${identifier}/events`
 
+configure({safeDescriptors: false})
 const stores = buildStores()
+configure({safeDescriptors: true})
 stores.Accessibility.handleNavigation = jest.fn()
 
 const tableToObjects = tableWrapper => {

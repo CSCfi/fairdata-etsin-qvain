@@ -13,18 +13,21 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
-import { withStores } from '@/utils/stores'
+import { withStores, useStores } from '@/utils/stores'
 
-const FairdataPasDatasetIcon = props => {
-  if (
-    `${props.preservation_state}` > 0 &&
-    `${props.data_catalog_identifier}` !== DATA_CATALOG_IDENTIFIER.PAS
-  ) {
-    return <Translate component={FairdataPasIconContainerEnteringPas} content="dataset.enteringPas" />
+const FairdataPasDatasetIcon = () => {
+  const {
+    Etsin: {
+      EtsinDataset: { catalogRecord, isPas },
+    },
+  } = useStores()
+
+  if (`${catalogRecord.preservation_state}` > 0 && !isPas) {
+    return (
+      <Translate component={FairdataPasIconContainerEnteringPas} content="dataset.enteringPas" />
+    )
   }
   return <Translate component={FairdataPasIconContainerInPas} content="dataset.fairdataPas" />
 }
@@ -48,13 +51,3 @@ const FairdataPasIconContainerInPas = styled(FairdataPasIconContainer)`
 const FairdataPasIconContainerEnteringPas = styled(FairdataPasIconContainer)`
   background-color: #efe4b0;
 `
-
-FairdataPasDatasetIcon.defaultProps = {
-  preservation_state: undefined,
-  data_catalog_identifier: undefined,
-}
-
-FairdataPasDatasetIcon.propTypes = {
-  preservation_state: PropTypes.number,
-  data_catalog_identifier: PropTypes.string,
-}

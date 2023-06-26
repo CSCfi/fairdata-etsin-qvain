@@ -10,7 +10,9 @@ import { useStores } from '@/utils/stores'
 
 const CitationButton = props => {
   const {
-    DatasetQuery: { setShowCitationModal },
+    Etsin: {
+      EtsinDataset: { setShowCitationModal },
+    },
   } = useStores()
 
   return (

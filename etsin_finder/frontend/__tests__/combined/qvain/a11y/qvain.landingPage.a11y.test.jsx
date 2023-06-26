@@ -3,21 +3,28 @@ import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
 import { axe } from 'jest-axe'
+import {configure} from 'mobx'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
-import stores from '../../../../js/stores'
+import {buildStores} from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import LandingPage from '../../../../js/components/qvain/views/landingPage/index.jsx'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
 
+
 describe('Qvain landing page', () => {
   let wrapper
+  let stores
 
   beforeAll(async () => {
+    configure({ safeDescriptors: false })
+    stores = buildStores()
+    configure({ safeDescriptors: true })
     stores.Accessibility.handleNavigation = jest.fn()
+    
     wrapper = mount(
       <StoresProvider store={stores}>
         <BrowserRouter>

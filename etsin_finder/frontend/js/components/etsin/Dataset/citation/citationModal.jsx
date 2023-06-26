@@ -55,10 +55,12 @@ Citation.propTypes = {
 
 const CitationModal = () => {
   const {
-    DatasetQuery: { results, showCitationModal, setShowCitationModal },
+    Etsin: {
+      EtsinDataset: { catalogRecord, showCitationModal, setShowCitationModal },
+    },
     Locale: { getValueTranslation },
   } = useStores()
-  const dataset = toJS(results)
+  const dataset = toJS(catalogRecord)
   const cite = new Cite(getValueTranslation)
   if (!dataset) {
     return null

@@ -11,35 +11,44 @@
 }
 
 import React, { Component } from 'react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import translate from 'counterpart'
 import { withTheme } from 'styled-components'
 import VersionSelect from './versionselect'
+import { withStores } from '@/utils/stores'
 
 class VersionChanger extends Component {
   constructor(props) {
     super(props)
-    const versions = this.versionLabels(props.versionSet)
+    const {
+      Etsin: {
+        EtsinDataset: { catalogRecord, datasetVersions },
+      },
+    } = this.props.Stores
+    const versions = this.versionLabels(datasetVersions)
 
     this.state = {
       versions,
-      selected: versions.filter(single => single.value === props.idn)[0],
+      selected: versions.filter(single => single.value === catalogRecord.identifier)[0],
     }
   }
 
-  versionLabels = set => set
-    .map((single, i) => {
+  versionLabels = set =>
+    set.map((single, i) => {
       const old = i > 0
       return {
-        label: `${translate('dataset.version.number', { number: set.length - i })} ${old ? translate('dataset.version.old') : ''}`,
+        label: `${translate('dataset.version.number', { number: set.length - i })} ${
+          old ? translate('dataset.version.old') : ''
+        }`,
         value: single.identifier,
         removed: single.removed,
         old,
       }
     })
 
-  changeVersion = (value) => {
+  changeVersion = value => {
     this.setState(
       {
         selected: value,
@@ -75,16 +84,14 @@ class VersionChanger extends Component {
         options={this.state.versions.filter(single => !single.removed)}
         error={this.props.theme.color.error}
       />
-    )
-      : null
+    ) : null
   }
 }
 
 VersionChanger.propTypes = {
-  versionSet: PropTypes.array.isRequired,
-  idn: PropTypes.string.isRequired,
+  Stores: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 }
 
-export default withRouter(withTheme(VersionChanger))
+export default withRouter(withTheme(withStores(observer(VersionChanger))))

@@ -54,17 +54,24 @@ class AccessRights extends Component {
     let url = ''
     let id = ''
     let embargoDate = ''
-    if (props.access_rights !== undefined && props.access_rights !== null) {
-      if (checkNested(props.access_rights, 'access_type', 'pref_label')) {
-        title = props.access_rights.access_type.pref_label
+
+    const {
+      Etsin: {
+        EtsinDataset: { accessRights },
+      },
+    } = this.props.Stores
+
+    if (accessRights !== undefined && accessRights !== null) {
+      if (checkNested(accessRights, 'access_type', 'pref_label')) {
+        title = accessRights.access_type.pref_label
       }
-      identifier = props.access_rights.access_type.identifier
+      identifier = accessRights.access_type.identifier
       id = Object.keys(ACCESS_TYPE_URL).find(key => ACCESS_TYPE_URL[key] === identifier)
       description = translate(
         `dataset.access_rights_description.${id !== undefined ? id.toLowerCase() : ''}`
       )
-      url = props.access_rights.access_url
-      embargoDate = props.access_rights.available
+      url = accessRights.access_url
+      embargoDate = accessRights.available
     }
     this.state = {
       title,
@@ -72,9 +79,9 @@ class AccessRights extends Component {
       url,
       embargoDate,
       restriction_grounds:
-        props.access_rights.restriction_grounds !== undefined &&
-        props.access_rights.restriction_grounds.length > 0 &&
-        props.access_rights.restriction_grounds,
+        accessRights.restriction_grounds !== undefined &&
+        accessRights.restriction_grounds.length > 0 &&
+        accessRights.restriction_grounds,
       modalIsOpen: false,
     }
 
@@ -120,6 +127,12 @@ class AccessRights extends Component {
   }
 
   render() {
+    const {
+      Etsin: {
+        EtsinDataset: { accessRights },
+      },
+    } = this.props.Stores
+
     // display button on dataset page
     if (this.props.button) {
       return (
@@ -135,7 +148,7 @@ class AccessRights extends Component {
               lang={getDataLang(this.state.description)}
               title={checkDataLang(this.state.description)}
             >
-              {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
+              {accessRightsBool(accessRights) ? this.openAccess() : this.restricted()}
             </Inner>
           </CustomButton>
           {/* POPUP modal */}
@@ -145,7 +158,7 @@ class AccessRights extends Component {
             contentLabel="Access Modal"
           >
             <ModalInner>
-              {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
+              {accessRightsBool(accessRights) ? this.openAccess() : this.restricted()}
               {this.state.description && (
                 // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 <div tabIndex="0">
@@ -202,7 +215,7 @@ class AccessRights extends Component {
           title={checkDataLang(this.state.description)}
           lang={getDataLang(this.state.description)}
         >
-          {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
+          {accessRightsBool(accessRights) ? this.openAccess() : this.restricted()}
         </Inner>
       </Access>
     )
@@ -263,22 +276,10 @@ const RestrictedButton = styled.div`
 `
 
 AccessRights.defaultProps = {
-  access_rights: undefined,
   button: false,
 }
 
 AccessRights.propTypes = {
   button: PropTypes.bool,
-  access_rights: PropTypes.shape({
-    description: PropTypes.object,
-    access_url: PropTypes.object,
-    available: PropTypes.string,
-    access_type: PropTypes.shape({
-      identifier: PropTypes.string.isRequired,
-      pref_label: PropTypes.objectOf(PropTypes.string),
-    }),
-    restriction_grounds: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    license: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-  }),
   Stores: PropTypes.object.isRequired,
 }

@@ -35,17 +35,20 @@ export class FormatChanger extends Component {
   }
 
   checkFields = () => {
-    const { DatasetQuery } = this.props.Stores
-    const data = DatasetQuery.results
-    const rd = data.research_dataset
-    const prefId = rd.preferred_identifier
+    const {
+      Etsin: {
+        EtsinDataset: { catalogRecord, dataset },
+      },
+    } = this.props.Stores
+
+    const prefId = dataset.preferred_identifier
     let dataciteExists = false
     let fields = {}
 
     // Check that doi exists in one of the identifiers
     if (
-      (typeof data.preservation_identifier !== 'undefined' &&
-        data.preservation_identifier.includes('doi')) ||
+      (typeof catalogRecord.preservation_identifier !== 'undefined' &&
+        catalogRecord.preservation_identifier.includes('doi')) ||
       (typeof prefId !== 'undefined' && prefId.includes('doi'))
     ) {
       dataciteExists = true
@@ -65,10 +68,16 @@ export class FormatChanger extends Component {
   }
 
   changeFormat = format => {
+    const {
+      Etsin: {
+        EtsinDataset: { identifier },
+      },
+    } = this.props.Stores
+
     if (this.state.formats.some(field => field.value === format.value)) {
       this.setState(
         {
-          url: urls.format(this.props.idn, format.value),
+          url: urls.format(identifier, format.value),
         },
         () => {
           this.openFormat(this.state.url)
@@ -85,9 +94,13 @@ export class FormatChanger extends Component {
   }
 
   render() {
-    const { DatasetQuery } = this.props.Stores
-    const data = DatasetQuery.results
-    return !data.removed ? (
+    const {
+      Etsin: {
+        EtsinDataset: { isRemoved },
+      },
+    } = this.props.Stores
+
+    return !isRemoved ? (
       <FormatSelect
         background={this.props.theme.color.primary}
         newestColor={this.props.theme.color.white}
@@ -102,7 +115,6 @@ export class FormatChanger extends Component {
 }
 
 FormatChanger.propTypes = {
-  idn: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired,
   Stores: PropTypes.object.isRequired,
 }

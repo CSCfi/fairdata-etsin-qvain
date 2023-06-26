@@ -21,25 +21,25 @@ import { withStores } from '@/stores/stores'
 class Data extends Component {
   componentDidMount() {
     const {
-      DatasetQuery,
       Matomo: { recordEvent },
       Accessibility,
     } = this.props.Stores
 
     Accessibility.handleNavigation('data', false)
-
-    if (!DatasetQuery.isDraft && !this.props.hasRemote) {
-      DatasetQuery.fetchPackages()
-    }
-
     recordEvent(`DATA / ${this.props.match?.params?.identifier}`)
   }
 
   render() {
+    const {
+      Etsin: {
+        EtsinDataset: { hasRemoteResources },
+      },
+    } = this.props.Stores
+
     return (
       <div id={this.props.id}>
-        {!this.props.hasRemote && <IdaResources />}
-        {this.props.hasRemote && <ExternalResources />}
+        {!hasRemoteResources && <IdaResources />}
+        {hasRemoteResources && <ExternalResources />}
       </div>
     )
   }
@@ -55,7 +55,6 @@ Data.propTypes = {
       identifier: PropTypes.string,
     }),
   }).isRequired,
-  hasRemote: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
 }
 

@@ -17,18 +17,17 @@ import translate from 'counterpart'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
-import { NavLink, useLocation, useParams } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { opacify } from 'polished'
 
-import Sidebar from './Sidebar'
-import Content from './content'
-import ErrorPage from '@/components/errorpage'
+import { withStores, useStores } from '@/stores/stores'
+import ErrorPage from '@/components/general/errorpage'
 import ErrorBoundary from '@/components/general/errorBoundary'
 import Loader from '@/components/general/loader'
-import { withStores, useStores } from '@/stores/stores'
+
 import CitationModal from './citation/citationModal'
-import urls from '@/utils/urls'
-import AbortClient, { isAbort } from '@/utils/AbortClient'
+import Sidebar from './Sidebar'
+import Content from './content'
 
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
@@ -40,15 +39,7 @@ class Dataset extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      error: false,
-      versionInfo: {},
-      loaded: false,
-    }
-
     this.query = this.query.bind(this)
-    this.goBack = this.goBack.bind(this)
-    this.client = new AbortClient()
   }
 
   componentDidMount() {
@@ -59,213 +50,80 @@ class Dataset extends React.Component {
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(newProps) {
     if (this.props.match.params.identifier !== newProps.match.params.identifier) {
-      this.setState(
-        {
-          loaded: false,
-        },
-        () => {
-          this.query(newProps.match.params.identifier)
-        }
-      )
+      this.query(newProps.match.params.identifier)
     }
   }
 
-  async getRelatedDatasets(datasetId) {
-    try {
-      const res = await this.client.get(urls.common.relatedDatasets(datasetId))
-      return res.data
-    } catch (e) {
-      if (isAbort(e)) {
-        throw e
-      }
-      console.error(e)
-      return null
-    }
-  }
-
-  async getRelatedDatasetsInfo(data, datasetId) {
-    if (!data.removed) {
-      return null
-    }
-    const relatedDatasets = await this.getRelatedDatasets(datasetId)
-    if (!relatedDatasets?.length) {
-      return null
-    }
-
-    return relatedDatasets.reduce(
-      (obj, val) => {
-        if (val.type === 'other_identifier') {
-          obj.otherIdentifiers.push(val)
-        } else {
-          obj.relations.push(val)
-        }
-        return obj
-      },
-      { otherIdentifiers: [], relations: [] }
-    )
-  }
-
-  getStateInfo(data) {
-    if (data.removed) {
-      return 'tombstone.removedInfo'
-    }
-
-    if (data.deprecated) {
-      return 'tombstone.deprecatedInfo'
-    }
-
-    return null
-  }
-
-  async getVersionData(datasetVersionSet) {
-    const promises = []
-    if (datasetVersionSet === undefined) {
-      return []
-    }
-
-    for (const k of datasetVersionSet.keys()) {
-      const versionUrl = urls.dataset(datasetVersionSet[k].identifier)
-      promises.push(this.client.get(versionUrl))
-    }
-
-    return Promise.all(promises)
-  }
-
-  getVersionTitles(versions) {
-    const records = versions.map(response => response?.data?.catalog_record).filter(v => v)
-    return records.reduce((obj, val) => {
-      obj[val.identifier] = val.research_dataset.title
-      return obj
-    }, {})
-  }
-
-  getLatestVersionDate(versions) {
-    return new Date(
-      Math.max.apply(
-        null,
-        versions // Date of the latest existing version
-          .filter(
-            version =>
-              !version.data.catalog_record.removed && !version.data.catalog_record.deprecated
-          )
-          .map(version => new Date(version.data.catalog_record.date_created))
-      )
-    )
-  }
-
-  getLinkInfo(data, versions) {
-    if (!data.dataset_version_set) return {}
-    const latestDate = this.getLatestVersionDate(versions)
-    const currentDate = new Date(data.date_created)
-    const ID = Object.values(data.dataset_version_set).find(
-      val => new Date(val.date_created).getTime() === latestDate.getTime()
-    )
-
-    if (latestDate.getTime() > currentDate.getTime()) {
-      return { ID, urlText: 'tombstone.urlToNew', linkToOtherVersion: 'tombstone.linkTextToNew' }
-    }
-
-    if (latestDate.getTime() < currentDate.getTime()) {
-      return { ID, urlText: 'tombstone.urlToOld', linkToOtherVersion: 'tombstone.linkTextToOld' }
-    }
-
-    return { ID }
-  }
-
-  async getAllVersions(data) {
-    const stateInfo = this.getStateInfo(data)
-    const [versions, relatedDatasetsInfo] = await Promise.all([
-      this.getVersionData(data.dataset_version_set),
-      this.getRelatedDatasetsInfo(data, data.identifier),
-    ])
-    const versionTitles = this.getVersionTitles(versions)
-    const links = this.getLinkInfo(data, versions)
-
-    this.setState({
-      versionInfo: {
-        stateInfo,
-        versionTitles,
-        ...links,
-        relatedDatasetsInfo,
-        fetchingRelated: false,
-      },
-    })
-  }
-
-  // goes back to previous page, which might be outside
-  goBack() {
-    this.props.history.goBack()
+  componentDidUpdate() {
+    window.onbeforeunload = this.props.Stores.Etsin.reset
   }
 
   query(customId) {
-    const { Accessibility, DatasetQuery } = this.props.Stores
+    const {
+      Etsin: { fetchData, setCustomError },
+    } = this.props.Stores
     let identifier = this.props.match.params.identifier
     if (customId !== undefined) {
       identifier = customId
     }
+
+    // in production integer based identifiers are not permitted.
     if (BUILD === 'production' && /^\d+$/.test(identifier)) {
       console.log('Using integer as identifier not permitted')
-      this.setState({ error: 'wrong identifier', loaded: true })
+      setCustomError('error.invalidIdentifier')
       return
     }
-    Accessibility.announcePolite(translate('dataset.loading'))
 
-    DatasetQuery.getData(identifier)
-      .then(async result => {
-        await DatasetQuery.fetchAndStoreFiles() // needed for API V2
-        this.setState(prevState => ({
-          loaded: true,
-          versionInfo: {
-            ...prevState.versionInfo,
-            fetchingRelated: !!result.catalog_record.removed,
-          },
-        }))
-        this.getAllVersions(result.catalog_record)
-      })
-      .catch(error => {
-        if (isAbort(error)) {
-          return
-        }
-        console.log(error)
-        this.setState({ error })
-      })
+    fetchData(identifier)
   }
 
   render() {
-    const { DatasetQuery, Auth } = this.props.Stores
+    const {
+      Etsin: {
+        isLoading,
+        allErrors,
+        EtsinDataset: { dataset },
+      },
+    } = this.props.Stores
 
-    if (this.state.error !== false) {
-      return <DatasetError userLogged={!!Auth.cscUserLogged} />
+    if (allErrors.length) {
+      return <DatasetError />
     }
 
-    if (!this.state.loaded || !DatasetQuery.results) {
+    if (
+      !dataset ||
+      isLoading.dataset ||
+      isLoading.versions ||
+      isLoading.relations ||
+      isLoading.files
+    ) {
       return <DatasetLoadSpinner />
     }
 
-    return <DatasetView versionInfo={this.state.versionInfo} />
+    return <DatasetView />
   }
 }
 
-function DatasetError({ userLogged }) {
-  // CASE 1: Houston, we have a problem
-  // If preview query parameter is enabled, user should try logging in
+function DatasetError() {
+  const {
+    Auth: { cscUserLogged },
+    Etsin: { errors },
+  } = useStores()
   const location = useLocation()
+
+  // If url has preview (etsin.fairdata.fi?preview=1), the User must be logged in.
   if (location && location.search) {
     const params = new URLSearchParams(location.search)
-    if (params.get('preview') === '1' && !userLogged) {
-      return <ErrorPage error={{ type: 'cscloginrequired' }} />
+    if (params.get('preview') === '1' && !cscUserLogged) {
+      return <ErrorPage loginRequired errors={[{ translation: 'error.cscLoginRequired' }]} />
     }
   }
-  return <ErrorPage error={{ type: 'notfound' }} />
-}
-
-DatasetError.propTypes = {
-  userLogged: PropTypes.bool.isRequired,
+  return <ErrorPage errors={errors.dataset} />
 }
 
 function DatasetLoadSpinner() {
   return (
-    <LoadingSplash>
+    <LoadingSplash margin="2rem">
       <Loader active />
     </LoadingSplash>
   )
@@ -281,17 +139,24 @@ function RelatedDatasetLoadSpinner() {
 
 function StateInfo({ children }) {
   const {
-    DatasetQuery: {
-      results: { removed, deprecated },
+    Etsin: {
+      EtsinDataset: { isRemoved, isDeprecated },
     },
   } = useStores()
-  if (removed) return <div className="fd-alert fd-danger">{children}</div>
-  if (deprecated) return <DraftInfo>{children}</DraftInfo>
+  if (isRemoved) return <div className="fd-alert fd-danger">{children}</div>
+  if (isDeprecated) return <DraftInfo>{children}</DraftInfo>
   return null
 }
 
-function OtherIdentifiers({ identifiers }) {
-  return identifiers.map(identifier => (
+function OtherIdentifiers() {
+  const {
+    Etsin: {
+      EtsinDataset: {
+        groupedRelations: { otherIdentifiers },
+      },
+    },
+  } = useStores()
+  return otherIdentifiers.map(identifier => (
     <div key={identifier.identifier}>
       <Translate
         with={{ identifier: identifier.identifier }}
@@ -307,13 +172,14 @@ function OtherIdentifiers({ identifiers }) {
   ))
 }
 
-OtherIdentifiers.propTypes = {
-  identifiers: PropTypes.array.isRequired,
-}
-
-function Relations({ relations }) {
+function Relations() {
   const {
     Locale: { lang },
+    Etsin: {
+      EtsinDataset: {
+        groupedRelations: { relations },
+      },
+    },
   } = useStores()
 
   return relations.map(relation => (
@@ -329,65 +195,37 @@ function Relations({ relations }) {
   ))
 }
 
-Relations.propTypes = {
-  relations: PropTypes.array.isRequired,
-}
-
-function RelatedDatasets({ relatedDatasetsInfo }) {
+function RelatedDatasets() {
   const {
-    DatasetQuery: {
-      results: { removed },
+    Etsin: {
+      EtsinDataset: { groupedRelations },
     },
   } = useStores()
 
-  if (!removed || !relatedDatasetsInfo) return null
+  if (!groupedRelations) return null
 
   return (
     <>
-      <OtherIdentifiers identifiers={relatedDatasetsInfo.otherIdentifiers} />
-      <Relations relations={relatedDatasetsInfo.relations} />
+      <OtherIdentifiers identifiers={groupedRelations.otherIdentifiers} />
+      <Relations relations={groupedRelations.relations} />
     </>
   )
 }
 
-RelatedDatasets.propTypes = {
-  relatedDatasetsInfo: PropTypes.shape({
-    otherIdentifiers: PropTypes.array,
-    relations: PropTypes.array,
-  }),
-}
-
-RelatedDatasets.defaultProps = {
-  relatedDatasetsInfo: null,
-}
-
-function DatasetView({ versionInfo }) {
+function DatasetView() {
   const {
     Accessibility,
-    DatasetQuery: {
-      results: dataset,
-      emailInfo,
-      Files: { root },
-      cumulative_state: cumulativeState,
+    Etsin: {
+      EtsinDataset: {
+        latestExistingVersionInfotext,
+        latestExistingVersionId,
+        tombstoneInfotext,
+        isDraft,
+        draftInfotext,
+      },
+      isLoading,
     },
   } = useStores()
-  const {
-    data_catalog: { catalog_json: catalogJson },
-  } = dataset
-
-  const { identifier } = useParams()
-
-  const harvested = catalogJson?.harvested
-  const cumulative = cumulativeState === 1
-  const hasV2Files = root?.directChildCount > 0
-  const hasFiles = !!hasV2Files
-  const hasRemote = dataset?.research_dataset.remote_resources !== undefined
-
-  const isDraft = dataset?.state === 'draft'
-  let draftInfoText = null
-  if (isDraft) {
-    draftInfoText = dataset.draft_of ? 'dataset.draftInfo.changes' : 'dataset.draftInfo.draft'
-  }
 
   return (
     <div>
@@ -397,23 +235,25 @@ function DatasetView({ versionInfo }) {
           <div className="col-12">
             <div>
               <StateInfo>
-                <Translate component={StateHeader} content={versionInfo.stateInfo} />
-                {versionInfo.urlText && <Translate content={versionInfo.urlText} />}
-                {versionInfo.ID && (
+                <Translate component={StateHeader} content={tombstoneInfotext} />
+                {latestExistingVersionInfotext?.urlText && (
+                  <Translate content={latestExistingVersionInfotext?.urlText} />
+                )}
+                {latestExistingVersionId && (
                   <>
                     <> </>
                     <Link
-                      href={versionInfo.ID}
+                      href={latestExistingVersionId}
                       target="_blank"
                       rel="noopener noreferrer"
                       content={'tombstone.link'}
                     >
-                      <Translate content={versionInfo.linkToOtherVersion} />
+                      <Translate content={latestExistingVersionInfotext?.linkToOtherVersion} />
                     </Link>
                   </>
                 )}
-                <RelatedDatasets relatedDatasetsInfo={versionInfo.relatedDatasetsInfo} />
-                {versionInfo.fetchingRelated && <RelatedDatasetLoadSpinner />}
+                <RelatedDatasets />
+                {isLoading.relations && <RelatedDatasetLoadSpinner />}
               </StateInfo>
             </div>
             <BackButton
@@ -429,34 +269,21 @@ function DatasetView({ versionInfo }) {
           </div>
         </div>
         <div className="row">
-          {draftInfoText && (
+          {isDraft && (
             <div className="col-12">
-              <Translate component={DraftInfo} content={draftInfoText} />
+              <Translate component={DraftInfo} content={draftInfotext} />
             </div>
           )}
-          <Content
-            identifier={identifier}
-            dataset={dataset}
-            harvested={harvested}
-            cumulative={cumulative}
-            hasFiles={hasFiles}
-            hasRemote={hasRemote}
-            emails={emailInfo}
-            versionTitles={versionInfo.versionTitles}
-          />
+          <Content />
           <div className="col-lg-4">
             <ErrorBoundary>
-              <Sidebar dataset={dataset} />
+              <Sidebar />
             </ErrorBoundary>
           </div>
         </div>
       </article>
     </div>
   )
-}
-
-DatasetView.propTypes = {
-  versionInfo: PropTypes.object.isRequired,
 }
 
 const StateHeader = styled.p`
@@ -490,7 +317,6 @@ const DraftInfo = styled.div`
 
 Dataset.propTypes = {
   Stores: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 }
 

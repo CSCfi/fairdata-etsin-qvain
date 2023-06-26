@@ -22,21 +22,21 @@ import ResourceItem from './resourceItem'
 
 const ExternalResources = () => {
   const {
-    DatasetQuery: { results },
+    Etsin: {
+      EtsinDataset: { remoteResources },
+    },
   } = useStores()
-  if (!results) {
+
+  if (!remoteResources) {
     return null
   }
 
-  const remote = results.research_dataset.remote_resources
-  if (!remote) {
-    return null
-  }
-
-  const totalCount = remote.length
-  const accessUrls = new Set(remote.map(resource => resource.access_url?.identifier).filter(v => v))
+  const totalCount = remoteResources.length
+  const accessUrls = new Set(
+    remoteResources.map(resource => resource.access_url?.identifier).filter(v => v)
+  )
   const hasAccess = accessUrls.size > 0
-  const hasDownload = !!remote.find(resource => resource.download_url?.identifier)
+  const hasDownload = !!remoteResources.find(resource => resource.download_url?.identifier)
 
   return (
     <DataTable>
@@ -48,7 +48,7 @@ const ExternalResources = () => {
       </Header>
 
       <Grid showAccess={hasAccess} hasDownload={hasDownload}>
-        {remote.map(resource => (
+        {remoteResources.map(resource => (
           <ResourceItem
             key={`resource-${resource.identifier}-${resource.title}`}
             resource={resource}
