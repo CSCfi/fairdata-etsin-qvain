@@ -117,6 +117,23 @@ class Description extends Component {
     return null
   }
 
+  getFileTypes(dataInfo) {
+    let dataFileTypes
+    if (dataInfo.hasFiles) {
+      dataFileTypes = Object.values(dataInfo.files.originalMetadata).map(file =>
+        file.fileTypeLabel ? checkDataLang(file.fileTypeLabel) : null
+      )
+    }
+
+    if (dataInfo.hasRemoteResources) {
+      dataFileTypes = dataInfo.remoteResources.map(resource =>
+        resource.file_type ? checkDataLang(resource.file_type.pref_label) : null
+      )
+    }
+    const fileTypeList = [...new Set(dataFileTypes)].filter(type => type).sort()
+    return this.formatDatasetInfoArray(fileTypeList)
+  }
+
   formatDatasetInfoArray(array) {
     return array?.join(', ') || null
   }
@@ -139,10 +156,15 @@ class Description extends Component {
           isHarvested,
           isCumulative,
           isPas,
+          hasFiles,
+          hasRemoteResources,
+          files,
+          remoteResources,
         },
       },
     } = this.props.Stores
 
+    const dataInfo = { hasFiles, hasRemoteResources, files, remoteResources }
     const { id } = this.props
     const isVersion =
       versions && versions.length > 0 && versions.some(version => version.identifier === identifier)
@@ -235,6 +257,12 @@ class Description extends Component {
               {dataset.description && (
                 <CustomMarkdown>{checkDataLang(dataset.description)}</CustomMarkdown>
               )}
+            </DatasetInfoItem>
+
+            {/* FILE TYPE */}
+
+            <DatasetInfoItem itemTitle={'dataset.file_types'}>
+              {this.getFileTypes(dataInfo)}
             </DatasetInfoItem>
 
             {/* FIELD OF SCIENCE */}

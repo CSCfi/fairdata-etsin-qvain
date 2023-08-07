@@ -66,7 +66,7 @@ const Content = ({ contentRef }) => {
         <LoggedInRoute exact path={qvainPath('')} notLoggedIn={<QvainLandingPage />}>
           <QvainDatasetsV2 />
         </LoggedInRoute>
-        <Route render={() => <ErrorPage error={{ type: 'error' }} />} />
+        <Route render={() => <ErrorPage error={{type: "error"}} />} />
       </Switch>
     </main>
   )
