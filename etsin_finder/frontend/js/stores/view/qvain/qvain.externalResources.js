@@ -35,7 +35,7 @@ class ExternalResources extends Field {
         identifier: p.useCategory.url,
       },
       file_type: {
-        identifier: p.fileType.url || undefined,
+        identifier: p.fileType?.url || undefined,
       },
       access_url: {
         identifier: p.accessUrl || undefined,
