@@ -44,7 +44,10 @@ const Agent = ({ agent, first, inline, popupAlign }) => {
   const [nameTranslation, lang] = getValueTranslationWithLang(name)
   let names
   if (agent.is_part_of) {
-    names = [...orgs.map(org => org.name).map(getValueTranslation), nameTranslation]
+    names = [
+      ...orgs.map(org => org.name).map(orgName => getValueTranslation(orgName)),
+      nameTranslation,
+    ]
   } else {
     names = [nameTranslation]
   }
