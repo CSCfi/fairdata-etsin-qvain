@@ -199,6 +199,7 @@ const english = {
       infoHeaders: {
         file: 'File information',
         directory: 'Folder information',
+        external: 'Resource information',
       },
       infoModalButton: {
         directory: {
@@ -209,6 +210,7 @@ const english = {
           general: 'File %(name)s information',
           custom: 'File %(name)s information and metadata',
         },
+        external: 'Resource Information',
       },
       item: 'item %(item)s',
       name: 'Name',
@@ -216,6 +218,8 @@ const english = {
       remote: 'Remote resources',
       checksum: 'Checksum (%(insertable)s)',
       id: 'ID',
+      accessUrl: 'Access URL',
+      downloadUrl: 'Download URL',
       title: 'Title',
       type: 'Type',
       go_to_original: 'Go to original',

@@ -293,7 +293,6 @@ class Description extends Component {
               {this.getTemporalCoverage(dataset.temporal)}
             </DatasetInfoItem>
           </DescriptionArea>
-
           {isCumulative && (
             <Label color="error">
               <Translate content="dataset.cumulative" />

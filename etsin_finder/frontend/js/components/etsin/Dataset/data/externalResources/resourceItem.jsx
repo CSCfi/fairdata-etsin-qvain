@@ -2,16 +2,24 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
-import { faFile, faExternalLinkAlt, faDownload } from '@fortawesome/free-solid-svg-icons'
+import {
+  faFile,
+  faExternalLinkAlt,
+  faDownload,
+  faInfoCircle,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { observer } from 'mobx-react'
 
 import { useStores } from '@/stores/stores'
 import IconButton from '../common/iconButton'
 
-const ResourceItem = ({ resource, hideAccess, noButtons }) => {
+const ResourceItem = ({ resource, hideAccess }) => {
   const {
     Locale: { getValueTranslation },
+    Etsin: {
+      EtsinDataset: { setInInfo },
+    },
   } = useStores()
 
   return (
@@ -20,9 +28,18 @@ const ResourceItem = ({ resource, hideAccess, noButtons }) => {
         <ResourceIcon resource={resource} />
         {getValueTranslation(resource.title)}
       </Name>
-      <Category noButtons={noButtons}>
-        {getValueTranslation(resource.use_category?.pref_label)}
-      </Category>
+
+      <InfoColumn>
+        <Translate
+          component={InfoButton}
+          fontSize="11pt"
+          content="dataset.dl.info"
+          onClick={() => setInInfo(resource)}
+          attributes={{
+            'aria-label': `dataset.dl.infoModalButton.external`,
+          }}
+        />
+      </InfoColumn>
 
       {resource.access_url && !hideAccess && (
         <LinkButtonColumn>
@@ -50,12 +67,10 @@ const ResourceItem = ({ resource, hideAccess, noButtons }) => {
 ResourceItem.propTypes = {
   resource: PropTypes.object.isRequired,
   hideAccess: PropTypes.bool,
-  noButtons: PropTypes.bool,
 }
 
 ResourceItem.defaultProps = {
   hideAccess: false,
-  noButtons: false,
 }
 
 export const Name = styled.span`
@@ -64,20 +79,6 @@ export const Name = styled.span`
   text-overflow: ellipsis;
   display: block;
   overflow: hidden;
-`
-
-export const Category = styled.div`
-  grid-column: 2/3;
-  width: max-content;
-
-  ${p => p.noButtons && 'justify-self: end; '}
-
-  ${p =>
-    !p.noButtons &&
-    `
-  @media (max-width: ${p.theme.breakpoints.sm}) {
-    display: none;
-  }`}
 `
 
 const ResourceIcon = styled(FontAwesomeIcon).attrs({
@@ -92,6 +93,19 @@ const ResourceButton = styled(IconButton)`
   margin-left: 0;
   margin-right: 0;
   margin: 0;
+`
+
+const InfoButton = styled(ResourceButton).attrs({
+  flexGrow: 1,
+  icon: faInfoCircle,
+  invert: true,
+  color: 'darkgray',
+})``
+
+const InfoColumn = styled.div`
+  grid-column: info-start/info-end;
+  display: flex;
+  align-self: stretch;
 `
 
 export const LinkButton = styled(ResourceButton).attrs({

@@ -198,6 +198,7 @@ const finnish = {
       infoHeaders: {
         file: 'Tiedoston tiedot',
         directory: 'Kansion tiedot',
+        external: 'Lähteen tiedot',
       },
       infoModalButton: {
         directory: {
@@ -208,6 +209,7 @@ const finnish = {
           general: 'Tiedoston %(name)s tiedot',
           custom: 'Tiedoston %(name)s tiedot ja metatiedot',
         },
+        external: 'Lähteen tiedot',
       },
       item: 'aineisto %(item)s',
       name: 'Nimi',
@@ -215,6 +217,8 @@ const finnish = {
       remote: 'Ulkoinen lähde',
       checksum: 'Checksum (%(insertable)s)',
       id: 'ID',
+      accessUrl: 'Lähdesivu',
+      downloadUrl: 'Latauslinkki',
       title: 'Otsikko',
       type: 'Tyyppi',
       go_to_original: 'Siirry sivulle',

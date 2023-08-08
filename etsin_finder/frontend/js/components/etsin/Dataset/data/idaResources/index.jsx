@@ -5,7 +5,7 @@ import Translate from 'react-translate-component'
 import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons'
 
 import Tree from './fileTree'
-import Info from './info'
+import Info from '../info'
 import sizeParse from '@/utils/sizeParse'
 import { useStores } from '@/stores/stores'
 import getDownloadAction from './downloadActions'

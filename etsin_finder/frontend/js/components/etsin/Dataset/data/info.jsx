@@ -16,7 +16,7 @@ import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import InfoItem from '../infoItem'
+import InfoItem from './infoItem'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import Modal from '@/components/general/modal'
 import { TypeConcept, TypeChecksum } from '@/utils/propTypes'
@@ -36,6 +36,8 @@ const Info = ({
   size,
   category,
   type,
+  accessUrl,
+  downloadUrl,
   open,
   closeModal,
   description,
@@ -60,16 +62,16 @@ const Info = ({
       )}
       <InfoTable>
         <tbody>
-          {name && <InfoItem translation="dataset.dl.name" content={name} />}
-          {id && <InfoItem translation="dataset.dl.id" content={id} />}
-          {size && <InfoItem translation="dataset.dl.size" content={size} />}
-          {checksum && (
-            <InfoItem
-              translation="dataset.dl.checksum"
-              content={checksum.value ? checksum.value : ''}
-              insertable={checksum.algorithm ? checksum.algorithm : ''}
-            />
-          )}
+          <InfoItem translation="dataset.dl.name" content={name} />
+          <InfoItem translation="dataset.dl.id" content={id} />
+          <InfoItem translation="dataset.dl.size" content={size} />
+          <InfoItem
+            translation="dataset.dl.checksum"
+            content={checksum?.value ? checksum.value : null}
+            insertable={checksum?.algorithm ? checksum.algorithm : ''}
+          />
+          <InfoItem translation="dataset.dl.accessUrl" content={accessUrl} />
+          <InfoItem translation="dataset.dl.downloadUrl" content={downloadUrl} />
         </tbody>
       </InfoTable>
 
@@ -78,16 +80,16 @@ const Info = ({
           <Translate component={SubHeader} content="dataset.dl.customMetadata" />
           <InfoTable>
             <tbody>
-              {type && type !== 'dir' && (
+              <InfoItem translation="dataset.dl.title" content={title} />
+              {type !== 'dir' && (
                 <InfoItem
                   translation="dataset.dl.type"
-                  content={checkDataLang(type.pref_label) || type}
-                  lang={getDataLang(type.pref_label)}
+                  content={checkDataLang(type?.pref_label) || type}
+                  lang={getDataLang(type?.pref_label)}
                 />
               )}
-              {title && <InfoItem translation="dataset.dl.title" content={title} />}
-              {category && <InfoItem translation="dataset.dl.category" content={category} />}
-              {description && <InfoItem translation="general.description" content={description} />}
+              <InfoItem translation="dataset.dl.category" content={category} />
+              <InfoItem translation="general.description" content={description} />
             </tbody>
           </InfoTable>
         </>
@@ -139,6 +141,8 @@ Info.defaultProps = {
   size: null,
   headerContent: '',
   headerIcon: null,
+  accessUrl: null,
+  downloadUrl: null,
 }
 
 Info.propTypes = {
@@ -154,4 +158,6 @@ Info.propTypes = {
   checksum: TypeChecksum,
   headerContent: PropTypes.string,
   headerIcon: PropTypes.object,
+  accessUrl: PropTypes.string,
+  downloadUrl: PropTypes.string,
 }

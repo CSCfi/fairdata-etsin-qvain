@@ -4,14 +4,15 @@ import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import Stores from '@/stores'
 
-const InfoItem = props => (
-  <tr>
-    <th scope="row">
-      <Translate content={props.translation} with={{ insertable: props.insertable }} />
-    </th>
-    <InfoCell lang={props.lang}>{props.content}</InfoCell>
-  </tr>
-)
+const InfoItem = props =>
+  props.content ? (
+    <tr>
+      <th scope="row">
+        <Translate content={props.translation} with={{ insertable: props.insertable }} />
+      </th>
+      <InfoCell lang={props.lang}>{props.content}</InfoCell>
+    </tr>
+  ) : null
 
 const InfoCell = styled.td`
   word-break: normal;
@@ -19,13 +20,14 @@ const InfoCell = styled.td`
 `
 
 InfoItem.defaultProps = {
+  content: undefined,
   lang: Stores.Locale.currentLang,
   insertable: '',
 }
 
 InfoItem.propTypes = {
   translation: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
+  content: PropTypes.string,
   lang: PropTypes.string,
   insertable: PropTypes.string,
 }

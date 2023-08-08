@@ -23,8 +23,14 @@ class EtsinDataset {
 
   @observable showCitationModal = false
 
+  @observable inInfo = null
+
   @action setShowCitationModal = value => {
     this.showCitationModal = value
+  }
+
+  @action setInInfo = resource => {
+    this.inInfo = resource
   }
 
   @computed get dataCatalog() {
