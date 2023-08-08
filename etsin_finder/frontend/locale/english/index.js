@@ -331,7 +331,7 @@ const english = {
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
     tags: 'Dataset tags',
-    version: { number: 'Version %(number)s', old: '(Old)' },
+    version: { number: 'Version %(number)s', old: '(Old)', label: 'Dataset version selector'},
     agent: {
       contributor_role: 'Contributor role',
       contributor_type: 'Contributor type',

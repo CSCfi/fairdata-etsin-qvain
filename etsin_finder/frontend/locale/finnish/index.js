@@ -330,7 +330,7 @@ const finnish = {
     spatial_coverage: 'Maantieteellinen kattavuus',
     temporal_coverage: 'Ajallinen kattavuus',
     tags: 'Aineiston tägit',
-    version: { number: 'Versio %(number)s', old: '(Vanha)' },
+    version: { number: 'Versio %(number)s', old: '(Vanha)', label: 'Aineiston version valinta'},
     agent: {
       contributor_role: 'Rooli',
       contributor_type: 'Tyyppi',

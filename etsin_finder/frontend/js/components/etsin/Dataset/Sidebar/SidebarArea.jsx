@@ -3,20 +3,19 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { hasChildren } from '@/utils/helpers'
 
-const SidebarArea = ({children}) => hasChildren(children) && <Area>{children}</Area>
+const SidebarArea = ({ children }) => hasChildren(children) && <Area>{children}</Area>
 
 export default SidebarArea
 
 SidebarArea.propTypes = {
-    children: PropTypes.node,
+  children: PropTypes.node,
 }
 
 SidebarArea.defaultProps = {
-    children: undefined,
+  children: undefined,
 }
 
 const Area = styled.dl`
-background-color: ${p => p.theme.color.bgGreen};
-margin-bottom: 0.5em;
-padding-bottom: 1.25em;
+  background-color: ${p => p.theme.color.bgGreen};
+  padding-bottom: 1.25em;
 `

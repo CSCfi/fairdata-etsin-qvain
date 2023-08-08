@@ -4,6 +4,10 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { useStores } from '@/stores/stores'
 
+import { ACCESS_TYPE_URL } from '@/utils/constants'
+import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
+import checkNested from '@/utils/checkNested'
+
 import Agent from '../Agent'
 import CitationButton from '../citation/citationButton'
 import DatasetInfoItem from '../DatasetInfoItem'
@@ -13,9 +17,7 @@ import License from './special/license'
 import Logo from './special/logo'
 import Project from './special/project'
 import SidebarArea from './SidebarArea'
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
-import checkNested from '@/utils/checkNested'
-import { ACCESS_TYPE_URL } from '@/utils/constants'
+import VersionChanger from './versionChanger'
 
 const Sidebar = () => {
   const {
@@ -23,15 +25,18 @@ const Sidebar = () => {
       EtsinDataset: {
         dataCatalog,
         dataset,
+        identifier,
         isDraft,
         isCumulative,
         isRemoved,
         accessRights,
+        versions,
         metadataFormats,
       },
     },
   } = useStores()
 
+  const isVersion = versions?.some(version => version.identifier === identifier)
   const catalogPublisher = dataCatalog?.publisher
   const catalogPublisherLang = getDataLang(catalogPublisher?.name)
   const catalogPublisherHomepage = checkNested(dataCatalog, 'publisher', 'homepage')
@@ -57,7 +62,7 @@ const Sidebar = () => {
     )
   }
 
-  function identifier() {
+  function identifierInfo() {
     if (isDraft && !dataset.draftOf) {
       return <Translate content="dataset.draftIdentifierInfo" />
     }
@@ -110,6 +115,7 @@ const Sidebar = () => {
 
   return (
     <SidebarContainer id="sidebar">
+      {dataCatalog.dataset_versioning && isVersion && <VersionChanger />}
       <SidebarArea id="data-catalog-area">
         {dataCatalog?.logo && (
           <DatasetInfoItem id="catalog-logo">
@@ -138,7 +144,7 @@ const Sidebar = () => {
           itemTitle="dataset.identifier"
           tooltip={identifierTooltip()}
         >
-          {identifier()}
+          {identifierInfo()}
           {isCumulative && <Translate content="dataset.dl.cumulativeDatasetLabel" />}
         </DatasetInfoItem>
       </SidebarArea>
@@ -288,6 +294,10 @@ const SidebarContainer = styled.div`
   -ms-hyphens: auto;
   hyphens: auto;
   padding: 20px 0 0 0;
+
+  > * {
+    margin-bottom: 0.5em;
+  }
 `
 
 const SubjectHeaderLink = styled.a`

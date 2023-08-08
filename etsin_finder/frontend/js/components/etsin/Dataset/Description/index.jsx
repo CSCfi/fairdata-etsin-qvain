@@ -17,21 +17,22 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Link } from 'react-router-dom'
 
-import CustomMarkdown from './customMarkdown'
-import AccessRights from '../accessRights'
-import FairdataPasDatasetIcon from '../fairdataPasDatasetIcon'
-import AskForAccess from './askForAccess'
-import Contact from '../contact'
-import ErrorBoundary from '@/components/general/errorBoundary'
-import GoToOriginal from './goToOriginal'
-import Label from '@/components/general/label'
-import TogglableAgentList from './togglableAgentList'
-import VersionChanger from './versionChanger'
-import DatasetInfoItem from '../DatasetInfoItem'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import checkNested from '@/utils/checkNested'
 import dateFormat, { dateSeparator } from '@/utils/dateFormat'
+import ErrorBoundary from '@/components/general/errorBoundary'
+import Label from '@/components/general/label'
 import { withStores } from '@/utils/stores'
+
+import AccessRights from '../accessRights'
+import Contact from '../contact'
+import DatasetInfoItem from '../DatasetInfoItem'
+import FairdataPasDatasetIcon from '../fairdataPasDatasetIcon'
+
+import CustomMarkdown from './customMarkdown'
+import AskForAccess from './askForAccess'
+import GoToOriginal from './goToOriginal'
+import TogglableAgentList from './togglableAgentList'
 
 class Description extends Component {
   async componentDidMount() {
@@ -146,11 +147,8 @@ class Description extends Component {
     const {
       Etsin: {
         EtsinDataset: {
-          dataCatalog,
           catalogRecord,
           dataset,
-          identifier,
-          versions,
           emailInfo,
           isHarvested,
           isCumulative,
@@ -165,14 +163,11 @@ class Description extends Component {
 
     const dataInfo = { hasFiles, hasRemoteResources, files, remoteResources }
     const { id } = this.props
-    const isVersion =
-      versions && versions.length > 0 && versions.some(version => version.identifier === identifier)
 
     return (
       <div className="dsContent tabContent" id={id}>
         <Labels>
           <Controls>
-            {dataCatalog.dataset_versioning && isVersion && <VersionChanger />}
             {(isPas || catalogRecord.preservation_state === 80) && <FairdataPasDatasetIcon />}
             <MarginAfter>
               <AccessRights button />
