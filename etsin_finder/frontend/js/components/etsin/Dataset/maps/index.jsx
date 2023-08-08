@@ -71,7 +71,7 @@ class Maps extends Component {
     } = this.props.Stores
 
     return (
-      <div id={this.props.id}>
+      <div className="tabContent" id={this.props.id}>
         {/* Map details in a table list (this is not the actual map) */}
         <Table>
           {/* Table header */}

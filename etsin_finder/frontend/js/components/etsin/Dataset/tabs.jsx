@@ -114,53 +114,48 @@ Tabs.propTypes = {
   }).isRequired,
 }
 
-/* prettier-ignore */
 const EtsinTabs = styled.ul`
   display: flex;
   flex-wrap: nowrap;
-  padding-left: 0;
-  margin-bottom: 1em;
   list-style: none;
-  border-bottom: 1px solid ${props => props.theme.color.primary};
-  margin-top: 5px;
+  border-bottom: 0.3rem solid #e0e0e0;
   overflow-x: overlay;
   overflow-y: hidden;
   @media screen and (min-width: ${p => p.theme.breakpoints.md}) {
     overflow: initial;
   }
   .nav-item {
-    margin-bottom: -1px;
-    &:first-of-type {
-      margin-left: 1em;
-    }
+    margin-bottom: -0.25rem;
   }
   .nav-link {
     display: block;
-    padding: 0.5rem 1rem;
-    border: 1px solid transparent;
-    border-top-right-radius: 0.5em;
-    border-top-left-radius: 0.5em;
+    font-size: 1.1em;
+    padding: 0.7rem 2.5rem;
+    border-radius: 0.5rem 0.5rem 0rem 0rem;
     transition: all ease-out 0.3s;
     white-space: nowrap;
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       text-decoration: none;
     }
     &:not(.active) {
       background-color: transparent;
-      color: ${props => props.theme.color.darkgray};
-      &:hover {
-        background-color: ${props => props.theme.color.primary};
-        color: white;
+      color: ${props => props.theme.color.superdarkgray};
+      &:hover,
+      &:focus {
+        background-color: rgba(234, 244, 248, 0.4);
+        border-bottom: 0.3rem solid ${props => props.theme.color.primary};
+        transition: ease-out 0s;
       }
     }
     &.active,
     &:hover,
     &:focus {
-      color: ${props => props.theme.color.primary};
-      border-color: ${props => props.theme.color.primary} ${props => props.theme.color.primary} transparent ${props => props.theme.color.primary};
+      color: black;
     }
     &.active {
-      background-color: white;
+      background-color: ${props => props.theme.color.primaryLight};
+      border-bottom: 0.3rem solid ${props => props.theme.color.primary};
     }
   }
 `

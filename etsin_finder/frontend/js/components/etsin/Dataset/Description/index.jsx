@@ -169,7 +169,7 @@ class Description extends Component {
       versions && versions.length > 0 && versions.some(version => version.identifier === identifier)
 
     return (
-      <div className="dsContent" id={id}>
+      <div className="dsContent tabContent" id={id}>
         <Labels>
           <Controls>
             {dataCatalog.dataset_versioning && isVersion && <VersionChanger />}

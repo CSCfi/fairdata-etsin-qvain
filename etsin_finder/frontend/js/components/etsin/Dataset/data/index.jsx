@@ -37,7 +37,7 @@ class Data extends Component {
     } = this.props.Stores
 
     return (
-      <div id={this.props.id}>
+      <div className="tabContent" id={this.props.id}>
         {!hasRemoteResources && <IdaResources />}
         {hasRemoteResources && <ExternalResources />}
       </div>

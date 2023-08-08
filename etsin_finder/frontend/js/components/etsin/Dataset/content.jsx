@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom'
 import { useStores } from '@/stores/stores'
+import etsinTheme from '@/styles/theme'
 
 import Description from './Description'
 import Data from './data'
@@ -92,7 +93,15 @@ const Content = props => {
 export default withRouter(observer(Content))
 
 const MarginAfter = styled.div`
+  padding: 0;
   margin-bottom: 3em;
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+  box-shadow: 0px 4px 7px 3px ${etsinTheme.color.primaryLight};
+  height: 100%;
+
+  & .tabContent {
+    margin: 2em 1.5em;
+  }
 `
 
 Content.propTypes = {

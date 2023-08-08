@@ -104,7 +104,7 @@ const Events = props => {
   })
 
   return (
-    <Margin id={id}>
+    <Margin className="tabContent" id={id}>
       <EventList
         provenances={provenance}
         deletedVersions={deletedVersions}
