@@ -89,6 +89,16 @@ class EtsinDataset {
       : null
   }
 
+  @computed get metadataFormats() {
+    if(this.catalogRecord?.preservation_identifier?.includes('doi') || this.dataset?.preferred_identifier?.includes('doi')){
+      return [{ value: 'metax' }, { value: 'datacite' }]
+    }
+    if(this.dataset?.preferred_identifier?.startsWith('urn:nbn:fi:att:') || this.dataset?.preferred_identifier?.startsWith('urn:nbn:fi:csc')){
+      return [{ value: 'metax' }, { value: 'fairdata_datacite' }]
+    }
+    return [{ value: 'metax' }]
+  }
+
   @computed get hasFiles() {
     return Boolean(this.files?.root?.directChildCount)
   }

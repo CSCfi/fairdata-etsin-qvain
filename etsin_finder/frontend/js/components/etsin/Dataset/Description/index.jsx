@@ -27,7 +27,6 @@ import GoToOriginal from './goToOriginal'
 import Label from '@/components/general/label'
 import TogglableAgentList from './togglableAgentList'
 import VersionChanger from './versionChanger'
-import FormatChanger from './formatChanger'
 import DatasetInfoItem from '../DatasetInfoItem'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import checkNested from '@/utils/checkNested'
@@ -178,7 +177,6 @@ class Description extends Component {
             <MarginAfter>
               <AccessRights button />
             </MarginAfter>
-            <FormatChanger />
             <Flex>
               <ErrorBoundary>
                 {this.checkEmails(emailInfo) && !isHarvested && <Contact />}

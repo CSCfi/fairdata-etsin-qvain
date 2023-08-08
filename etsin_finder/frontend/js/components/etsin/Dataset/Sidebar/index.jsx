@@ -7,7 +7,7 @@ import { useStores } from '@/stores/stores'
 import Agent from '../Agent'
 import CitationButton from '../citation/citationButton'
 import DatasetInfoItem from '../DatasetInfoItem'
-import DatasetIsCumulativeNotificationBar from '@/components/etsin/general/datasetIsCumulativeNotificationBar'
+import FormatChanger from './formatChanger'
 import Identifier from './identifier'
 import License from './special/license'
 import Logo from './special/logo'
@@ -20,7 +20,15 @@ import { ACCESS_TYPE_URL } from '@/utils/constants'
 const Sidebar = () => {
   const {
     Etsin: {
-      EtsinDataset: { dataCatalog, dataset, isDraft, isCumulative, accessRights },
+      EtsinDataset: {
+        dataCatalog,
+        dataset,
+        isDraft,
+        isCumulative,
+        isRemoved,
+        accessRights,
+        metadataFormats,
+      },
     },
   } = useStores()
 
@@ -82,6 +90,24 @@ const Sidebar = () => {
     return labels
   }
 
+  const metadataTooltip = () => {
+    if (metadataFormats.some(format => format.value === 'fairdata_datacite')) {
+      return {
+        infoText: 'dataset.datasetAsFile.infoText',
+        infoAriaLabel: 'dataset.datasetAsFile.infoLabel',
+      }
+    }
+    return null
+  }
+
+  const identifierTooltip = () =>
+    isCumulative
+      ? {
+          infoText: 'dataset.dl.cumulativeDatasetTooltip.info',
+          infoAriaLabel: 'dataset.dl.cumulativeDatasetTooltip.header',
+        }
+      : null
+
   return (
     <SidebarContainer id="sidebar">
       <SidebarArea id="data-catalog-area">
@@ -107,13 +133,13 @@ const Sidebar = () => {
       </SidebarArea>
 
       <SidebarArea id="identifier-area">
-        <DatasetInfoItem id="dataset-identifier" itemTitle="dataset.identifier">
+        <DatasetInfoItem
+          id="dataset-identifier"
+          itemTitle="dataset.identifier"
+          tooltip={identifierTooltip()}
+        >
           {identifier()}
-          {isCumulative && (
-            <SidebarContainerForCumulativeInfo>
-              <DatasetIsCumulativeNotificationBar directionToDisplayTooltip="Left" />
-            </SidebarContainerForCumulativeInfo>
-          )}
+          {isCumulative && <Translate content="dataset.dl.cumulativeDatasetLabel" />}
         </DatasetInfoItem>
       </SidebarArea>
 
@@ -122,6 +148,18 @@ const Sidebar = () => {
           <CitationButton />
         </DatasetInfoItem>
       </SidebarArea>
+
+      {!isRemoved && (
+        <SidebarArea id="metadata-area">
+          <DatasetInfoItem
+            id="metadata-download"
+            itemTitle="dataset.metadata"
+            tooltip={metadataTooltip()}
+          >
+            <FormatChanger />
+          </DatasetInfoItem>
+        </SidebarArea>
+      )}
 
       <SidebarArea id="subject-heading-area">
         <DatasetInfoItem id="dataset-theme" itemTitle="dataset.subjectHeading">
@@ -250,10 +288,6 @@ const SidebarContainer = styled.div`
   -ms-hyphens: auto;
   hyphens: auto;
   padding: 20px 0 0 0;
-`
-
-const SidebarContainerForCumulativeInfo = styled.div`
-  padding: 0.5em 0em 0em 0em;
 `
 
 const SubjectHeaderLink = styled.a`

@@ -94,7 +94,7 @@ const finnish = {
       open: 'Lataa aineiston metatiedot',
       infoLabel: 'Formaatin tiedot',
       infoText:
-        'Datacite without validation: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
+        'Validoimaton Datacite: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
       datacite: 'Datacite tietomallissa (XML)',
       fairdata_datacite: 'Ei validoituna Datacite tietomallissa (XML)',
       metax: 'Metax tietomallissa (JSON)',
@@ -219,7 +219,7 @@ const finnish = {
       type: 'Tyyppi',
       go_to_original: 'Siirry sivulle',
       sliced: 'Joitain tiedostoja ei näytetä tässä näkymässä tiedostojen suuren lukumäärän vuoksi',
-      cumulativeDatasetLabel: 'Huom: Aineisto on kasvava',
+      cumulativeDatasetLabel: 'Aineisto on kasvava',
       cumulativeDatasetTooltip: {
         header: 'Kasvava aineisto',
         info: 'Tämä on karttuva aineisto, johon mahdollisesti vielä lisätään tiedostoja. Huomio tämä kun käytät aineistoa tai viittaat siihen (esim. ajallinen kattavuus hyvä mainita). Aineistosta ei kuitenkaan voi poistaa tai muuttaa olemassa olevia tiedostoja.',
@@ -296,6 +296,7 @@ const finnish = {
     catalog_alt_text: '%(title)s logo, linkki vie katalogin julkaisijan verkkosivuille',
     infrastructure: 'Infrastruktuuri',
     issued: 'Julkaisupäivämäärä: %(date)s',
+    metadata: 'Aineiston metatiedot',
     modified: 'Aineiston muokkauspäivämäärä: %(date)s',
     harvested: 'Haravoitu',
     cumulative: 'Kumulatiivinen',

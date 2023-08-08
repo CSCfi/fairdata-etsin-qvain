@@ -220,7 +220,7 @@ const english = {
       type: 'Type',
       go_to_original: 'Go to original',
       sliced: 'Some files are not displayed in this view due to large amount of files',
-      cumulativeDatasetLabel: 'Note: Dataset is growing',
+      cumulativeDatasetLabel: 'Dataset is growing',
       cumulativeDatasetTooltip: {
         header: 'Growing dataset',
         info: 'This dataset is still growing, be aware of this when you cite it or use it. Temporal coverage should be mentioned. No existing files can, however, be removed or changed.',
@@ -297,6 +297,7 @@ const english = {
     catalog_alt_text: 'Logo for %(title)s, link takes you to catalog publisher website',
     infrastructure: 'Infrastructure',
     issued: 'Release date: %(date)s',
+    metadata: 'Dataset metadata',
     modified: 'Dataset modification date: %(date)s',
     keywords: 'Keywords',
     subjectHeading: 'Subject heading',
