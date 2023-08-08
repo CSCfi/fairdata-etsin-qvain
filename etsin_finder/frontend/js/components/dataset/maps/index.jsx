@@ -65,6 +65,38 @@ class Maps extends Component {
     Matomo.recordEvent(`MAPS / ${this.props.match.params.identifier}`)
   }
 
+  buildLocationRow(spatial) {
+    // Datasets submitted via API don't require geographic name for location, in which case the name comes from place_uri
+    const locationName = spatial.geographic_name || checkDataLang(spatial.place_uri?.pref_label)
+
+    return (
+      <tr key={`location-${locationName}`}>
+        <td>
+          {
+            // Display if geographic_name exists, otherwise display '-'
+            locationName ? <span>{locationName}</span> : <span>-</span>
+          }
+        </td>
+        <td>
+          {
+            // Display if full_address exists, otherwise display '-'
+            spatial.full_address !== undefined ? (
+              <span>{spatial.full_address}</span>
+            ) : (
+              <span>-</span>
+            )
+          }
+        </td>
+        <td>
+          {
+            // Display if alt exists, otherwise display '-'
+            spatial.alt !== undefined ? <span>{spatial.alt}</span> : <span>-</span>
+          }
+        </td>
+      </tr>
+    )
+  }
+
   render() {
     return (
       <div id={this.props.id}>
@@ -86,38 +118,7 @@ class Maps extends Component {
           </thead>
 
           {/* Table body */}
-          <tbody>
-            {this.props.spatial.map(spatial => (
-              <tr key={spatial.geographic_name}>
-                <td>
-                  {
-                    // Display if geographic_name exists, otherwise display '-'
-                    spatial.geographic_name !== undefined ? (
-                      <span>{spatial.geographic_name}</span>
-                    ) : (
-                      <span>-</span>
-                    )
-                  }
-                </td>
-                <td>
-                  {
-                    // Display if full_address exists, otherwise display '-'
-                    spatial.full_address !== undefined ? (
-                      <span>{spatial.full_address}</span>
-                    ) : (
-                      <span>-</span>
-                    )
-                  }
-                </td>
-                <td>
-                  {
-                    // Display if alt exists, otherwise display '-'
-                    spatial.alt !== undefined ? <span>{spatial.alt}</span> : <span>-</span>
-                  }
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          <tbody>{this.props.spatial.map(spatial => this.buildLocationRow(spatial))}</tbody>
         </Table>
 
         {/* The actual map */}
