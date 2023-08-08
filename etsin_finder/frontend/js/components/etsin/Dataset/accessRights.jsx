@@ -14,13 +14,7 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import translate from 'counterpart'
-import {
-  faLock,
-  faLockOpen,
-  faInfoCircle,
-  faExclamationTriangle,
-  faGlobe,
-} from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle, faExclamationTriangle, faGlobe } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
@@ -93,7 +87,6 @@ class AccessRights extends Component {
     return (
       <>
         <RestrictedButton>
-          <FontAwesomeIcon icon={faLock} title="Closed lock" />
           <div>
             <AccessLabel lang={getDataLang(this.state.title)}>
               {checkDataLang(this.state.title)}
@@ -110,7 +103,6 @@ class AccessRights extends Component {
   openAccess() {
     return (
       <>
-        <FontAwesomeIcon icon={faLockOpen} title="Lock open" />
         <AccessLabel lang={getDataLang(this.state.title)}>
           {checkDataLang(this.state.title)}
         </AccessLabel>
@@ -139,7 +131,7 @@ class AccessRights extends Component {
         <>
           <CustomButton
             onClick={this.openModal}
-            color="lightgray"
+            color="#e0e0e0"
             padding="0.2em 0.9em"
             noMargin
             {...this.props}
@@ -232,6 +224,7 @@ const Access = styled.div`
 `
 
 const CustomButton = styled(Button)`
+  margin: 0rem 0.5rem;
   border-radius: 1em;
   color: ${p => p.theme.color.dark};
 `

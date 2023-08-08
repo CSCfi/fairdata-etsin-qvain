@@ -28,6 +28,7 @@ import Loader from '@/components/general/loader'
 import CitationModal from './citation/citationModal'
 import Sidebar from './Sidebar'
 import Content from './content'
+import TitleContainer from './TitleContainer'
 
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
@@ -274,17 +275,24 @@ function DatasetView() {
               <Translate component={DraftInfo} content={draftInfotext} />
             </div>
           )}
-          <Content />
-          <div className="col-lg-4">
+          <MarginAfter className="col-lg-8">
+            <TitleContainer />
+            <Content />
+          </MarginAfter>
+          <MarginAfter className="col-lg-4">
             <ErrorBoundary>
               <Sidebar />
             </ErrorBoundary>
-          </div>
+          </MarginAfter>
         </div>
       </article>
     </div>
   )
 }
+
+const MarginAfter = styled.div`
+  margin-bottom: 1em;
+`
 
 const StateHeader = styled.p`
   font-weight: bold;

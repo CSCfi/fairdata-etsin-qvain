@@ -26,7 +26,7 @@ const Content = props => {
   }
 
   return (
-    <MarginAfter className="col-lg-8">
+    <MarginAfter>
       <Tabs
         location={props.location}
         showData={hasData}
@@ -93,14 +93,14 @@ const Content = props => {
 export default withRouter(observer(Content))
 
 const MarginAfter = styled.div`
-  padding: 0;
+  padding-bottom: 1.5rem;
   margin-bottom: 3em;
   border-radius: 0.5rem 0.5rem 0rem 0rem;
   box-shadow: 0px 4px 7px 3px ${etsinTheme.color.primaryLight};
-  height: 100%;
+  height: auto;
 
   & .tabContent {
-    margin: 2em 1.5em;
+    margin: 1.5em;
   }
 `
 
