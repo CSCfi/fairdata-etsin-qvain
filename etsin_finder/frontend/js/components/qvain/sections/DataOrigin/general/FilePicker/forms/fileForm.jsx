@@ -8,7 +8,6 @@ import { SaveButton, CancelButton } from '../../../../../general/buttons'
 import { Label, Input, Textarea, CustomSelect } from '../../../../../general/modal/form'
 import { Container } from '../../../../../general/card'
 import { ValidationErrors } from '../../../../../general/errors/validationError'
-import { getLocalizedOptions } from '../../../../../utils/getReferenceData'
 import { withStores } from '../../../../../utils/stores'
 
 class FileForm extends Component {
@@ -41,7 +40,8 @@ class FileForm extends Component {
   }
 
   componentDidMount = () => {
-    getLocalizedOptions('file_type').then(translations => {
+    this.props.Stores.Qvain.ReferenceData.getLocalizedOptions('file_type').then(translations => {
+
       this.setState((state, props) => ({
         fileTypesEn: translations.en,
         fileTypesFi: translations.fi,
@@ -50,7 +50,7 @@ class FileForm extends Component {
         ),
       }))
     })
-    getLocalizedOptions('use_category').then(translations => {
+    this.props.Stores.Qvain.ReferenceData.getLocalizedOptions('use_category').then(translations => {
       this.setState({
         useCategoriesEn: translations.en,
         useCategoriesFi: translations.fi,

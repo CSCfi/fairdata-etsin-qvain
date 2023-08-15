@@ -11,21 +11,22 @@ import {
   getOptionValue,
   getGroupLabel,
   onChange,
+  optionsToModels
 } from '../../../js/components/qvain/utils/select'
-import getReferenceData from '../../../js/components/qvain/utils/getReferenceData'
+
+const mockOptions = [{ value: 'value', label: 'label' }]
+const modelMockOptions = [{ uri: 'value', label: 'label' }]
+const getOptions = jest.fn(() => Promise.resolve(mockOptions))
 
 const mockStores = {
-  Qvain: { readonly: 'readonly' },
+  Qvain: { readonly: 'readonly', ReferenceData: { getOptions } },
   Locale: { lang: 'fi' },
 }
-
-const flushPromises = () => new Promise(setImmediate)
 
 jest.mock('../../../js/stores/stores', () => ({
   withStores: Component => props => <Component Stores={mockStores} {...props} />,
 }))
 jest.mock('../../../js/components/qvain/utils/select')
-jest.mock('../../../js/components/qvain/utils/getReferenceData')
 
 describe('Select', () => {
   let wrapper, select
@@ -48,7 +49,6 @@ describe('Select', () => {
     getCurrentOption.mockReturnValue(getCurrentOptionReturnValue)
     onChange.mockReturnValue(onChangeReturnValue)
     getOptionValue.mockReturnValue(getOptionValueReturnValue)
-    getReferenceData.mockReturnValue(Promise.resolve(emptyGetReferenceDataRes))
 
     wrapper = shallow(<Select {...props} />)
   })
@@ -98,7 +98,7 @@ describe('Select', () => {
         isClearable: true,
         isMulti: false,
         getOptionValue: getOptionValueReturnValue,
-        options: [],
+        options: modelMockOptions,
       }
 
       select.props().should.deep.include(expectedProps)
@@ -119,49 +119,6 @@ describe('Select', () => {
         }
 
         select.props().should.include(expectedProps)
-      })
-    })
-
-    describe('given some valid data from getReferenceData', () => {
-      const res = {
-        data: {
-          hits: {
-            hits: [
-              {
-                _source: {
-                  label: 'label',
-                  uri: 'uri',
-                },
-              },
-            ],
-          },
-        },
-      }
-
-      beforeEach(async () => {
-        getReferenceData.mockReturnValue(Promise.resolve(res))
-        wrapper = shallow(<Select {...props} />)
-        await flushPromises()
-        select = wrapper.dive()
-      })
-
-      test('options should be expectedOptions', () => {
-        const expectedOptions = [{ label: 'label', uri: 'uri' }]
-
-        select.prop('options').should.deep.eql(expectedOptions)
-      })
-
-      describe('given getRefGroups', () => {
-        beforeEach(async () => {
-          props.getRefGroups = jest.fn(() => [])
-          wrapper = shallow(<Select {...props} />)
-          await flushPromises()
-          select = wrapper.dive()
-        })
-
-        test('should call getRefGroups with repsonse', () => {
-          expect(props.getRefGroups).to.have.beenCalledWith(res.data.hits.hits)
-        })
       })
     })
 

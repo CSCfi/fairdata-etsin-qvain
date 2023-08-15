@@ -138,7 +138,6 @@ describe('given mockStores', () => {
     describe('PublicationForm', () => {
       const props = {
         Field: mockStores.Qvain.RelatedResources,
-        translationsRoot: 'root',
       }
 
       const harness = new Harness(PublicationForm, props)
@@ -161,7 +160,7 @@ describe('given mockStores', () => {
           { label: 'RelationType', findArgs: { datum: 'relationType' } },
         ]
 
-        const props = {
+        const expectedProps = {
           TranslationsTab: {
             language: 'en',
           },
@@ -193,7 +192,7 @@ describe('given mockStores', () => {
           },
         }
 
-        harness.shouldIncludeChildren(children, props)
+        harness.shouldIncludeChildren(children, expectedProps)
       })
 
       describe('ResourceSearchField', () => {
@@ -251,7 +250,6 @@ describe('given mockStores', () => {
     describe('OtherResourceForm', () => {
       const props = {
         Field: mockStores.Qvain.RelatedResources,
-        translationsRoot: 'root',
       }
 
       const harness = new Harness(OtherResourceForm, props)
@@ -275,7 +273,7 @@ describe('given mockStores', () => {
           { label: 'RelationType', findArgs: { datum: 'relationType' } },
         ]
 
-        const props = {
+        const expectedProps = {
           TranslationsTab: {
             language: 'en',
           },
@@ -307,7 +305,7 @@ describe('given mockStores', () => {
           },
         }
 
-        harness.shouldIncludeChildren(children, props)
+        harness.shouldIncludeChildren(children, expectedProps)
       })
     })
   })

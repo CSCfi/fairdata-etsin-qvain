@@ -1,8 +1,5 @@
-import axios from 'axios'
 import { autorun } from 'mobx'
 import { disposeOnUnmount } from 'mobx-react'
-
-import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
 // If label is missing from selected option, use one from the options if available.
 // Allows having default options without requiring hardcoded labels.
@@ -50,9 +47,6 @@ export const onChangeMulti = callback => selection => {
 }
 
 // Get label for option, assumes that first key of model corresponds to label
-export const getGroupLabel = lang => group => group?.label[lang]
-
-// Get label for option, assumes that first key of model corresponds to label
 export const getOptionLabel = (model, lang) => {
   const [labelKey, urlKey] = Object.keys(model())
   return opt => {
@@ -66,41 +60,27 @@ export const getOptionLabel = (model, lang) => {
   }
 }
 
+// Get label for option, assumes that first key of model corresponds to label
+export const getGroupLabel = (model, lang) => getOptionLabel(model, lang)
+
 // Get label for option, assumes that second key of model corresponds to url
 export const getOptionValue = model => {
   const urlKey = Object.keys(model())[1]
   return opt => opt[urlKey]
 }
 
-// Fetch options for a given search string
-export const getOptions = async (model, ref, inputValue, { client = axios } = {}) => {
-  if (!inputValue) return []
-  const api = refDataApi(ref, { client })
-  const response = await api.get(`_search?size=100&q=*${inputValue}*`)
-  return parseRefResponse(response, model)
-}
-
-// Fetch all options
-export const getAllOptions = async (model, ref, { client = axios } = {}) => {
-  const api = refDataApi(ref, { client })
-  const response = await api.get(`_search?size=1000`)
-  return parseRefResponse(response, model)
-}
-
-const refDataApi = (ref, { client = axios } = {}) =>
-  client.create({
-    baseURL: `${METAX_FAIRDATA_ROOT_URL}/es/reference_data/${ref}/`,
-  })
-
-const parseRefResponse = (res, model) => {
-  const hits = res.data.hits.hits
-  return hits.map(hit => model(hit._source.label, hit._source.uri))
+export const optionsToModels = (model, options) => {
+  if (Array.isArray(options)) {
+    return options.map(opt => model(opt.label, opt.value))
+  }
+  return model(options.label, options.value)
 }
 
 const getCollator = lang => new Intl.Collator(lang, { numeric: true, sensitivity: 'base' })
 
 // Sort groups array and their options in-place according to lang
 export const sortGroups = async (model, lang, groups, sortFunc = null) => {
+  const labelKey = Object.keys(model())[0]
   groups.forEach(group => {
     if (group.options.length > 0) {
       sortOptions(model, lang, group.options, sortFunc)
@@ -110,7 +90,7 @@ export const sortGroups = async (model, lang, groups, sortFunc = null) => {
     groups.sort(sortFunc)
   } else {
     const collator = getCollator(lang)
-    groups.sort((a, b) => collator.compare(a.label[lang], b.label[lang]))
+    groups.sort((a, b) => collator.compare(a[labelKey][lang], b[labelKey][lang]))
   }
 }
 

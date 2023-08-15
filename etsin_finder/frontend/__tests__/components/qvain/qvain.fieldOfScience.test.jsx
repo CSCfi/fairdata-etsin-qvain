@@ -70,28 +70,20 @@ describe('given mockStores', () => {
 
       const list = [
         {
-          _id: 'parent id',
-          _source: {
-            parent_ids: [],
-            label: 'parent',
-            uri: 'parent url',
-          },
+          id: 'parent id',
+          parents: [],
+          label: 'parent',
+          value: 'parent url',
         },
-
         {
-          _source: {
-            parent_ids: ['parent id'],
-            label: 'child',
-            uri: 'child url',
-          },
+          parents: ['parent id'],
+          label: 'child',
+          value: 'child url',
         },
-
         {
           label: 'not in group',
-          uri: 'not in group url',
-          _source: {
-            parent_ids: ['some other id'],
-          },
+          value: 'not in group url',
+          parents: ['some other id'],
         },
       ]
 
@@ -104,7 +96,7 @@ describe('given mockStores', () => {
       test('should return groups', () => {
         const expectedReturn = [
           {
-            label: 'parent',
+            name: 'parent',
             url: 'parent url',
             options: [
               {

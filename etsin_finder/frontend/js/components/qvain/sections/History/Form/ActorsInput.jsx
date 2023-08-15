@@ -56,16 +56,17 @@ const ActorsInput = () => {
   }
 
   const handleSelect = selection => {
-    if ((selection || {}).value === 'create-actor') {
+    const id = selection?.value
+    if (id === 'create-actor') {
       createActor()
       setSelectedActor(null)
       return
     }
-
-    const id = selection.value
-    Provenances.inEdit.associations.addActorWithId(id)
-    Provenances.inEdit.associations.addRole(id, ROLE.PROVENANCE)
-    setSelectedActor(undefined)
+    if (id) {
+      Provenances.inEdit.associations.addActorWithId(id)
+      Provenances.inEdit.associations.addRole(id, ROLE.PROVENANCE)
+      setSelectedActor(undefined)
+    }
   }
 
   const setSelectedActor = value => {

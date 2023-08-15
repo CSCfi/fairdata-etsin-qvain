@@ -12,6 +12,7 @@ import {
 } from '../../../utils/constants'
 import Sections from './qvain.sections'
 
+import ReferenceData from './qvain.referenceData'
 import Resources from './qvain.resources'
 import Files from './qvain.files'
 import Submit from './qvain.submit'
@@ -24,6 +25,7 @@ class Qvain extends Resources {
     super(Env)
     makeObservable(this)
     this.Env = Env
+    this.ReferenceData = new ReferenceData(this)
     this.Sections = new Sections({ parent: this })
     this.Files = new Files(this, Auth)
     this.Submit = new Submit(this, Env)

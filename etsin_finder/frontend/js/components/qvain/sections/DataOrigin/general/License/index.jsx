@@ -7,14 +7,13 @@ import CreatableSelect from 'react-select/creatable'
 
 import { FieldGroup, Title, InfoText } from '@/components/qvain/general/V2'
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
-import getReferenceData from '@/components/qvain/utils/getReferenceData'
 import {
   onChangeMulti,
-  getCurrentOption,
   getOptionLabel,
   getOptionValue,
   sortOptions,
   autoSortOptions,
+  getCurrentOption,
 } from '@/components/qvain/utils/select'
 import { ValidationError } from '@/components/qvain/general/errors/validationError'
 import { withStores } from '@/stores/stores'
@@ -36,10 +35,9 @@ export class License extends Component {
   componentDidMount = () => {
     const { Model } = this.props.Stores.Qvain.Licenses
     const { lang } = this.props.Stores.Locale
-    getReferenceData('license', { client: this.client })
-      .then(res => {
-        const list = res.data.hits.hits
-        const options = list.map(ref => Model(ref._source.label, ref._source.uri))
+    this.props.Stores.Qvain.ReferenceData.getOptions('license', { client: this.client })
+      .then(opts => {
+        const options = opts.map(ref => Model(ref.label, ref.value))
         sortOptions(Model, lang, options)
         this.setState({
           options,

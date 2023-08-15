@@ -7,15 +7,14 @@ import { observer } from 'mobx-react'
 import {
   onChange,
   onChangeMulti,
-  getCurrentOption,
   getGroupLabel,
   getOptionLabel,
   getOptionValue,
   sortGroups,
   sortOptions,
   autoSortOptions,
+  getCurrentOption,
 } from '@/components/qvain/utils/select'
-import getReferenceData from '@/components/qvain/utils/getReferenceData'
 import { withStores } from '@/stores/stores'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
 
@@ -56,7 +55,9 @@ class Select extends Component {
   }
 
   componentDidMount = () => {
-    getReferenceData(this.props.metaxIdentifier, { client: this.client })
+    this.props.Stores.Qvain.ReferenceData.getOptions(this.props.metaxIdentifier, {
+      client: this.client,
+    })
       .then(this.resolveRefData)
       .catch(this.rejectRefData)
   }
@@ -65,22 +66,21 @@ class Select extends Component {
     this.client.abort()
   }
 
-  resolveRefData = res => {
-    const list = res.data.hits.hits
+  resolveRefData = options => {
     const { model, getRefGroups, Stores, sortFunc } = this.props
     const { lang } = Stores.Locale
 
     if (getRefGroups) {
-      const groups = getRefGroups(list)
+      const groups = getRefGroups(options)
       sortGroups(model, lang, groups)
       this.setState({
         options: groups,
       })
     } else {
-      const options = list.map(ref => model(ref._source.label, ref._source.uri))
-      sortOptions(model, lang, options, sortFunc)
+      const mappedOptions = options.map(ref => model(ref.label, ref.value))
+      sortOptions(model, lang, mappedOptions, sortFunc)
       this.setState({
-        options,
+        options: mappedOptions,
       })
     }
     autoSortOptions(this, this.props.Stores.Locale, model, sortFunc)
@@ -92,15 +92,15 @@ class Select extends Component {
     }
     if (error.response) {
       // Error response from Metax
-      console.log(error.response.data)
-      console.log(error.response.status)
-      console.log(error.response.headers)
+      console.error(error.response.data)
+      console.error(error.response.status)
+      console.error(error.response.headers)
     } else if (error.request) {
       // No response from Metax
-      console.log(error.request)
+      console.error(error.request)
     } else {
       // Something happened in setting up the request that triggered an Error
-      console.log('Error', error.message)
+      console.error('Error', error.message)
     }
   }
 
@@ -121,7 +121,7 @@ class Select extends Component {
     const { options } = this.state
     const { lang } = this.props.Stores.Locale
 
-    const groupLabelFunc = getGroupLabel(lang)
+    const groupLabelFunc = getGroupLabel(model, lang)
     const optionLabelFunc = getOptionLabel(model, lang)
 
     const props = {

@@ -26,14 +26,13 @@ const FieldOfScienceField = () => {
     },
   } = useStores()
 
-  const getRefGroups = list => {
-    const parentItems = list.filter(ref => ref._source.parent_ids.length === 0)
+  const getRefGroups = options => {
+    const parentItems = options.filter(opt => opt.parents.length === 0)
     return parentItems.map(group => ({
-      label: group._source.label,
-      url: group._source.uri,
-      options: list
-        .filter(ref => ref._source.parent_ids?.[0] === group._id)
-        .map(ref => Model(ref._source.label, ref._source.uri)),
+      ...Model(group.label, group.value),
+      options: options
+        .filter(opt => opt.parents?.[0] === group.id)
+        .map(opt => Model(opt.label, opt.value)),
     }))
   }
 

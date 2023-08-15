@@ -11,7 +11,6 @@ import Loader from '@/components/general/loader'
 
 import { Container } from '../../../../../general/card'
 import { ValidationErrors } from '../../../../../general/errors/validationError'
-import { getLocalizedOptions } from '../../../../../utils/getReferenceData'
 import { withStores } from '../../../../../utils/stores'
 
 export class DirectoryFormBase extends Component {
@@ -44,7 +43,7 @@ export class DirectoryFormBase extends Component {
 
   componentDidMount = () => {
     const { inEdit } = this.props.Stores.Qvain.Files
-    getLocalizedOptions('use_category').then(translations => {
+    this.props.Stores.Qvain.ReferenceData.getLocalizedOptions('use_category').then(translations => {
       this.setState((state, props) => ({
         useCategoriesEn: translations.en,
         useCategoriesFi: translations.fi,

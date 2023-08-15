@@ -12,10 +12,10 @@ import {
 } from '@/components/qvain/general/V2'
 import {
   onChange,
-  getCurrentOption,
   getOptionLabel,
   getOptionValue,
-  getAllOptions,
+  optionsToModels,
+  getCurrentOption,
 } from '@/components/qvain/utils/select'
 import { UseCategory, FileType } from '@/stores/view/qvain/qvain.externalResources'
 import { useStores } from '@/stores/stores'
@@ -26,6 +26,7 @@ export const ExternalFileFormBase = () => {
     Qvain: {
       readonly,
       ExternalResources: { inEdit: externalResource, setUseCategory, setFileType },
+      ReferenceData: { getOptions },
     },
     Locale: { lang },
   } = useStores()
@@ -35,12 +36,17 @@ export const ExternalFileFormBase = () => {
 
   useEffect(() => {
     const client = new AbortClient()
-    getAllOptions(UseCategory, 'use_category', { client }).then(opts => setUseCategoryOptions(opts))
-    getAllOptions(FileType, 'file_type', { client }).then(opts => setFileTypeOptions(opts))
+    getOptions('use_category', { client })
+      .then(opts => optionsToModels(UseCategory, opts))
+      .then(opts => setUseCategoryOptions(opts))
+    getOptions('file_type', { client })
+      .then(opts => optionsToModels(FileType, opts))
+      .then(opts => setFileTypeOptions(opts))
 
     return () => {
       client.abort()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -71,7 +77,11 @@ export const ExternalFileFormBase = () => {
           options={useCategoryOptions}
           clearable
           isDisabled={readonly}
-          value={getCurrentOption(UseCategory, useCategoryOptions, externalResource.useCategory)}
+          value={getCurrentOption(
+            UseCategory,
+            useCategoryOptions,
+            externalResource.useCategory
+          )}
           onChange={val => onChange(setUseCategory)(val)}
           getOptionLabel={getOptionLabel(UseCategory, lang)}
           getOptionValue={getOptionValue(UseCategory)}

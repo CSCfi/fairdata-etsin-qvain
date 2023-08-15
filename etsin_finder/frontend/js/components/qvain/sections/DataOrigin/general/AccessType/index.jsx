@@ -8,13 +8,12 @@ import styled from 'styled-components'
 import { Title, FieldGroup, Divider } from '@/components/qvain/general/V2'
 
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
-import getReferenceData from '@/components/qvain/utils/getReferenceData'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 import {
   onChange,
-  getCurrentOption,
   getOptionLabel,
   getOptionValue,
+  getCurrentOption,
 } from '@/components/qvain/utils/select'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { HelpField } from '@/components/qvain/general/modal/form'
@@ -35,28 +34,29 @@ export class AccessType extends Component {
     options: [],
   }
 
-  componentDidMount = () => {
-    getReferenceData('access_type', { client: this.client })
-      .then(res => {
-        handleAccessTypeReferenceDataResponse(res, this.props.Stores, this)
+  componentDidMount = async () => {
+    try {
+      const res = await this.props.Stores.Qvain.ReferenceData.getOptions('access_type', {
+        client: this.client,
       })
-      .catch(error => {
-        if (isAbort(error)) {
-          return
-        }
-        if (error.response) {
-          // Error response from Metax
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-        } else if (error.request) {
-          // No response from Metax
-          console.log(error.request)
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message)
-        }
-      })
+      handleAccessTypeReferenceDataResponse(res, this.props.Stores, this)
+    } catch (error) {
+      if (isAbort(error)) {
+        return
+      }
+      if (error.response) {
+        // Error response from Metax
+        console.log(error.response.data)
+        console.log(error.response.status)
+        console.log(error.response.headers)
+      } else if (error.request) {
+        // No response from Metax
+        console.log(error.request)
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message)
+      }
+    }
   }
 
   componentWillUnmount() {

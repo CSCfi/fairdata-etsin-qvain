@@ -1,13 +1,11 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { mount } from 'enzyme'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { configure } from 'mobx'
-import Select, { Option } from 'react-select'
+import Select from 'react-select'
 
-import AccessType, {
-  AccessType as AccessTypeBase,
-} from '@/components/qvain/sections/DataOrigin/general/AccessType'
+import AccessType from '@/components/qvain/sections/DataOrigin/general/AccessType'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { buildStores } from '@/stores'
 import { onChange } from '@/components/qvain/utils/select'
@@ -60,9 +58,9 @@ describe('Qvain Access Type', () => {
   }
 
   describe('given AccessType is OPEN and isUsingRems is false ', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       Qvain.AccessType.set({ url: ACCESS_TYPE_URL.OPEN })
-      await setAuthUserAndRender({ isUsingRems: false })
+      setAuthUserAndRender({ isUsingRems: false })
     })
 
     it('restricts which access types are shown', async () => {

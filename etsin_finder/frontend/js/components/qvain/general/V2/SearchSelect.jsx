@@ -7,10 +7,10 @@ import { toJS } from 'mobx'
 import {
   onChange,
   onChangeMulti,
-  getOptions,
   getOptionLabel,
   getOptionValue,
   sortOptions,
+  optionsToModels,
 } from '@/components/qvain/utils/select'
 import { useStores } from '@/stores/stores'
 
@@ -18,7 +18,10 @@ const SearchSelect = props => {
   const { metaxIdentifier, getter, setter, model, name, inModal, isMulti } = props
 
   const {
-    Qvain: { readonly },
+    Qvain: {
+      readonly,
+      ReferenceData: { getOptions },
+    },
     Locale: { lang },
   } = useStores()
 
@@ -35,7 +38,10 @@ const SearchSelect = props => {
     getOptionLabel: getOptionLabel(model, lang),
     getOptionValue: getOptionValue(model),
     loadOptions: async inputValue => {
-      const opts = await getOptions(model, metaxIdentifier, inputValue)
+      const opts = optionsToModels(
+        model,
+        await getOptions(metaxIdentifier, { searchText: inputValue })
+      )
       sortOptions(model, lang, opts)
       return opts
     },

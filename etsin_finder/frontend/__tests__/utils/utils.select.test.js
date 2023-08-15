@@ -5,7 +5,6 @@ import {
   getGroupLabel,
   getOptionLabel,
   getOptionValue,
-  getOptions,
   sortGroups,
 } from '../../js/components/qvain/utils/select'
 import axios from 'axios'
@@ -234,7 +233,7 @@ describe('when calling getGroupLabel only with lang', () => {
   let returnValue
 
   beforeEach(() => {
-    returnValue = getGroupLabel('en')()
+    returnValue = getGroupLabel(model, 'en')()
   })
 
   test('should return undefined', () => {
@@ -251,7 +250,7 @@ describe('when calling getGroupLabel with group lang', () => {
   }
 
   beforeEach(() => {
-    returnValue = getGroupLabel('en')(group)
+    returnValue = getGroupLabel(model, 'en')(group)
   })
 
   test('should return label corresponding to lang', () => {
@@ -320,72 +319,6 @@ describe('when calling getOptionValue with model. Calling following function wit
 
   test('should return opt.url', () => {
     returnValue.should.eql(opt.uri)
-  })
-})
-
-describe('whaen calling getOptions without inputValue', () => {
-  let returnValue
-
-  beforeEach(async () => {
-    returnValue = await getOptions()
-  })
-
-  test('should return emptyString', () => {
-    returnValue.should.eql([])
-  })
-})
-
-describe('when calling getOptions with model, ref, inputValue', () => {
-  let returnValue
-  const ref = 'ref'
-  const inputValue = 'inputValue'
-
-  const axiosReturn = {
-    data: {
-      hits: {
-        hits: [
-          {
-            _source: {
-              label: 'label',
-              uri: 'uri',
-            },
-          },
-        ],
-      },
-    },
-  }
-
-  const api = {
-    get: jest.fn(() => axiosReturn),
-  }
-
-  beforeEach(async () => {
-    axios.create.mockReturnValue(api)
-
-    returnValue = await getOptions(model, ref, inputValue)
-  })
-
-  test('should call axios.create with expected object', () => {
-    const expectedBaseURL = `${METAX_FAIRDATA_ROOT_URL}/es/reference_data/${ref}/`
-
-    expect(axios.create).to.have.beenCalledWith({ baseURL: expectedBaseURL })
-  })
-
-  test('should call api.get with expected string', () => {
-    const expectedString = `_search?size=100&q=*${inputValue}*`
-
-    expect(api.get).to.have.beenCalledWith(expectedString)
-  })
-
-  test('should return modeled response of axios.create return object', () => {
-    const expectedReturn = [
-      {
-        label: 'label',
-        uri: 'uri',
-      },
-    ]
-
-    returnValue.should.eql(expectedReturn)
   })
 })
 

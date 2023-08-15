@@ -4,11 +4,10 @@ import translate from 'counterpart'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import { observable, action, autorun } from 'mobx'
+import { makeObservable, observable, action, autorun } from 'mobx'
 
 import Modal from '@/components/general/modal'
 import { ConfirmClose } from '@/components/qvain/general/modal/confirmClose'
-import getReferenceData from '@/components/qvain/utils/getReferenceData'
 import { getResponseError } from '@/components/qvain/utils/responseError'
 import { Label, HelpField, Input } from '@/components/qvain/general/modal/form'
 import { DangerButton, TableButton } from '@/components/qvain/general/buttons'
@@ -48,6 +47,11 @@ export class MetadataModal extends Component {
     csvRecordSeparator: undefined,
     csvQuotingChar: undefined,
     csvHasHeader: undefined,
+  }
+
+  constructor() {
+    super()
+    makeObservable(this)
   }
 
   async componentDidMount() {
@@ -267,20 +271,19 @@ export class MetadataModal extends Component {
     this.setFormatFetchStatus('loading')
     try {
       // Create a list of available versions for each supported file format.
-      const resp = await getReferenceData('file_format_version')
-
-      const fileFormatVersions = resp.data.hits.hits.map(v => v._source)
+      const fileFormatVersions = await this.props.Stores.Qvain.ReferenceData.getOptions(
+        'file_format_version',
+        { client: this.client }
+      )
 
       // get array of available versions for each file format
       const formatVersionsMap = {}
       fileFormatVersions.forEach(formatVersion => {
-        if (formatVersionsMap[formatVersion.input_file_format] === undefined) {
-          formatVersionsMap[formatVersion.input_file_format] = []
+        if (formatVersionsMap[formatVersion.inputFileFormat] === undefined) {
+          formatVersionsMap[formatVersion.fileFormat] = []
         }
-        if (formatVersion.output_format_version !== '') {
-          formatVersionsMap[formatVersion.input_file_format].push(
-            formatVersion.output_format_version
-          )
+        if (formatVersion.formatVersion !== '') {
+          formatVersionsMap[formatVersion.fileFormat].push(formatVersion.formatVersion)
         }
       })
 
@@ -297,14 +300,16 @@ export class MetadataModal extends Component {
 
       this.setFormatFetchStatus('done')
     } catch (e) {
-      this.setState({
-        criticalError: true,
-        response: {
-          error: translate('qvain.files.metadataModal.errors.loadingFileFormats'),
-        },
-      })
-
+      if (!isAbort(e)) {
+        this.setState({
+          criticalError: true,
+          response: {
+            error: translate('qvain.files.metadataModal.errors.loadingFileFormats'),
+          },
+        })
+      }
       this.setFormatFetchStatus('error')
+      throw e
     }
   }
 

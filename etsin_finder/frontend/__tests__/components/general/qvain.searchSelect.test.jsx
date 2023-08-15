@@ -2,16 +2,15 @@ import React from 'react'
 import { shallow } from 'enzyme'
 
 import SearchSelect from '../../../js/components/qvain/general/V2/SearchSelect'
-import { useStores } from '../../../js/stores/stores'
+import { useStores, buildStores } from '../../../js/stores/stores'
 import {
   onChange,
   onChangeMulti,
-  getOptions,
   getOptionLabel,
   getOptionValue,
   sortOptions,
+  optionsToModels,
 } from '../../../js/components/qvain/utils/select'
-import etsinTheme from '../../../js/styles/theme'
 
 jest.mock('../../../js/stores/stores')
 jest.mock('../../../js/components/qvain/utils/select')
@@ -20,10 +19,12 @@ describe('SearchSelect', () => {
   let wrapper
   let select
 
-  const modelReturnValue = {}
   const metaxIdentifier = 'metaxIdentifier'
   const setter = jest.fn()
-  const model = jest.fn(() => modelReturnValue)
+  const model = (label, value) => ({
+    label,
+    value,
+  })
   const name = 'name'
 
   const props = {
@@ -33,7 +34,10 @@ describe('SearchSelect', () => {
     name,
   }
 
-  const Stores = { Qvain: { readonly: 'readonly' }, Locale: { lang: 'fi' } }
+  const Stores = {
+    Qvain: { readonly: 'readonly', ReferenceData: { getOptions: jest.fn() } },
+    Locale: { lang: 'fi' },
+  }
 
   const createWrapperWithProps = (customProps = {}) => {
     useStores.mockReturnValue(Stores)
@@ -44,6 +48,7 @@ describe('SearchSelect', () => {
 
   beforeEach(() => {
     createWrapperWithProps()
+    optionsToModels.mockImplementation((model, v) => v)
   })
 
   afterEach(() => {
@@ -78,16 +83,18 @@ describe('SearchSelect', () => {
 
   describe('when loadOptions is called', () => {
     const inputValue = 'inputValue'
-    const opts = 'opts'
+    const opts = [{ value: 'value', label: 'label' }]
     let returnValue
 
     beforeEach(async () => {
-      getOptions.mockReturnValue(opts)
+      Stores.Qvain.ReferenceData.getOptions.mockReturnValue(Promise.resolve(opts))
       returnValue = await select.prop('loadOptions')(inputValue)
     })
 
     test('should call getOptions with model, metaxIdentifier, inputValue', () => {
-      expect(getOptions).toHaveBeenCalledWith(model, metaxIdentifier, inputValue)
+      expect(Stores.Qvain.ReferenceData.getOptions).toHaveBeenCalledWith(metaxIdentifier, {
+        searchText: inputValue,
+      })
     })
 
     test('should call sortOptions with model, Stores.Locale.lang and opts (from getOptions)', () => {

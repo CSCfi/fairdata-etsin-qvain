@@ -42,9 +42,7 @@ describe('given mockStore in useStores', () => {
 
 describe('given required props', () => {
   const props = {
-    Store: { value: 'some value' },
     Field: { value: 'some value' },
-    translationsRoot: 'translationsRoot',
   }
 
   const harness = new Harness(Form, props)
@@ -67,7 +65,7 @@ describe('given required props', () => {
         { label: 'InputLocation', findType: 'prop', findArgs: ['datum', 'location'] },
       ]
 
-      const props = {
+      const expectedProps = {
         InputLocation: {
           ...props,
           model: Location,
@@ -76,7 +74,7 @@ describe('given required props', () => {
         },
       }
 
-      harness.shouldIncludeChildren(children, props)
+      harness.shouldIncludeChildren(children, expectedProps)
     })
   })
 })

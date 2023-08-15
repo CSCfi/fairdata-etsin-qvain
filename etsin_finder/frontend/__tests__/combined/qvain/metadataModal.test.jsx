@@ -145,14 +145,14 @@ describe('Qvain.MetadataModal', () => {
       const file = await Files.getItemByPath(path)
       stores.Qvain.setMetadataModalFile(file)
       mountWrapper()
-      await when(() => ref.formatFetchStatus !== 'loading')
+      await when(() => ref.current.formatFetchStatus !== 'loading')
       res(file)
     })
   }
 
   beforeEach(() => {
     // Mock file format list request
-    axios.get.mockReturnValue(fileFormats)
+    axios.get.mockReturnValue(Promise.resolve(fileFormats))
 
     stores = getStores()
 

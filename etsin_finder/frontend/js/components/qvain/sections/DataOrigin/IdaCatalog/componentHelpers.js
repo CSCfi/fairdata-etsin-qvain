@@ -1,7 +1,7 @@
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { sortOptions, autoSortOptions } from '@/components/qvain/utils/select'
 
-export const handleAccessTypeReferenceDataResponse = (response, Stores, component) => {
+export const handleAccessTypeReferenceDataResponse = (options, Stores, component) => {
   const {
     Auth: { user },
     Locale,
@@ -10,16 +10,14 @@ export const handleAccessTypeReferenceDataResponse = (response, Stores, componen
     },
   } = Stores
 
-  const list = response.data.hits.hits
-  let options = list.map(ref => Model(ref._source.label, ref._source.uri))
-
+  let mappedOptions = options.map(ref => Model(ref.label, ref.value))
   if (!user.isUsingRems && !(accessType && accessType.url === ACCESS_TYPE_URL.PERMIT)) {
-    options = options.filter(ref => ref.url !== ACCESS_TYPE_URL.PERMIT)
+    mappedOptions = mappedOptions.filter(ref => ref.url !== ACCESS_TYPE_URL.PERMIT)
   }
 
-  sortOptions(Model, Locale.lang, options)
+  sortOptions(Model, Locale.lang, mappedOptions)
   component.setState({
-    options,
+    options: mappedOptions,
   })
 
   autoSortOptions(component, Locale, Model)
