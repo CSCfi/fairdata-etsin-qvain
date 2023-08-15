@@ -40,4 +40,11 @@ export default {
     search: term =>
       `https://api.crossref.org/works?order=desc&rows=5&mailto=fairdata@csc.fi&select=author,title,DOI,score,abstract&query.bibliographic=${term}`,
   },
+  metaxV3: {
+    dataset: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}`,
+    datasets: metaxV3 => `${metaxV3}/v3/datasets`,
+    datasetData: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/data`,
+    directories: metaxV3 => `${metaxV3}/v3/directories`,
+    referenceData: (metaxV3, referenceData) => `${metaxV3}/v3/reference-data/${referenceData}`,
+  },
 }

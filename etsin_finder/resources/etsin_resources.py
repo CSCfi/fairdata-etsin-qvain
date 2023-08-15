@@ -592,6 +592,7 @@ class AppConfig(MethodView):
         sso_cookie_domain = sso_config.get("COOKIE_DOMAIN") or app_config.get(
             "SESSION_COOKIE_DOMAIN", ""
         )
+        metax_v3_config = app_config.get("METAX_V3_API", {})
         return {
             "SERVER_ETSIN_DOMAIN_NAME": app_config.get("SERVER_ETSIN_DOMAIN_NAME", ""),
             "SERVER_QVAIN_DOMAIN_NAME": app_config.get("SERVER_QVAIN_DOMAIN_NAME", ""),
@@ -599,6 +600,8 @@ class AppConfig(MethodView):
             "SSO_PREFIX": sso_config.get("PREFIX", ""),
             "SSO_COOKIE_DOMAIN": sso_cookie_domain,
             "PACKAGE_SIZE_LIMIT": PACKAGE_SIZE_LIMIT,
+            "METAX_V3_DOMAIN_NAME": metax_v3_config.get("HOST"),
+            "METAX_V3_PORT": metax_v3_config.get("PORT", 443)
         }
 
 

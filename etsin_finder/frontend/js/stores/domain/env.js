@@ -15,6 +15,7 @@ import RouterStore from '@/utils/RouterStore'
 import Flags from './env.flags'
 
 import { getCookieValue } from '../../utils/cookies'
+import urls from '@/utils/urls'
 
 async function importValuesAsync() {
   const response = await axios.get('/api/app_config')
@@ -26,7 +27,14 @@ class Env {
     makeObservable(this)
     this.Flags = new Flags()
     this.history = new RouterStore()
+    this.metaxV3Url = this.metaxV3Url.bind(this)
   }
+
+  metaxV3Url(endpoint, ...args) {
+    return urls.metaxV3[endpoint](`https://${this.metaxV3Host}`, ...args)
+  }
+
+  @observable metaxV3Host = ''
 
   @observable etsinHost = ''
 
@@ -44,6 +52,7 @@ class Env {
 
   async fetchAppConfig() {
     const values = await importValuesAsync()
+    this.setMetaxV3Host(values.METAX_V3_DOMAIN_NAME, values.METAX_V3_PORT)
     this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
     this.setQvainHost(values.SERVER_QVAIN_DOMAIN_NAME)
     this.Flags.setFlags(values.FLAGS)
@@ -70,6 +79,10 @@ class Env {
 
   @action setAppConfigLoaded(value) {
     this.appConfigLoaded = value
+  }
+
+  @action setMetaxV3Host(host, port) {
+    this.metaxV3Host = `${host}:${port}`
   }
 
   @action setEtsinHost(host) {

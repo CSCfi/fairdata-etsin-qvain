@@ -111,6 +111,10 @@ def _get_test_app_config():
             "HOST": "fake host",
             "HTTPS_PROXY": "proxy",
         },
+        "METAX_V3_API": {
+            "HOST": "fake host",
+            "PORT": 443,
+        },
     }
 
 
