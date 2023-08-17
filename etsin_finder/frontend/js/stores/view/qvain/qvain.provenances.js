@@ -84,7 +84,7 @@ class Provenances extends Field {
   @override create() {
     this.setChanged(false)
     this.editMode = false
-    this.inEdit = new Provenance({
+    this.inEdit = Provenance({
       associations: new ActorsRef({
         actors: this.Qvain.Actors,
       }),

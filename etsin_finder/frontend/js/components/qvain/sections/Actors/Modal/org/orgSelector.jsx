@@ -87,9 +87,9 @@ export const OrgSelectorBase = ({
   const { readonly } = Stores.Qvain
   const { lang } = Stores.Locale
 
+  const isNew = level >= organizations.length
   const isReference = organization?.isReference
   const isEditable = organization?.isReference === false && !isNew
-  const isNew = level >= organizations.length
   const hideDropdown = !isNew
 
   let referenceOptions = []
@@ -100,6 +100,8 @@ export const OrgSelectorBase = ({
     referenceOptions = getOrgOptionsWithLang(referenceOrganizations, lang)
     infoTextKey = level === 0 ? 'infoText' : 'infoTextChild'
   }
+
+  const identifier = (organization || {}).identifier
 
   let selectedOption =
     (identifier && referenceOptions.find(opt => opt.value.identifier === identifier)) || null
@@ -113,7 +115,6 @@ export const OrgSelectorBase = ({
 
   const options = getOptionsWithLang(datasetOptions, referenceOptions, lang)
 
-  const identifier = (organization || {}).identifier
 
   const isLast = level === organizations.length - 1
   const deleteButtonStyle = isLast ? null : { display: 'none' }

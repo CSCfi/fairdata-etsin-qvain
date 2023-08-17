@@ -133,7 +133,7 @@ export const actorSchema = yup.object().shape({
 
 const metaxOrganizationSchema = organizationSchema.shape({
   '@type': yup.string().oneOf([ENTITY_TYPE.ORGANIZATION]),
-  is_part_of: metaxOrganizationSchema,
+  is_part_of: yup.lazy(() => metaxOrganizationSchema.default(undefined)),
 })
 
 const metaxPersonSchema = personSchema.shape({
