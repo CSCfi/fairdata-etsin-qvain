@@ -10,7 +10,7 @@ import AccessRights from './accessRights'
 const TitleContainer = () => {
   const {
     Etsin: {
-      EtsinDataset: { dataset, isCumulative, isHarvested },
+      EtsinDataset: { catalogRecord, dataset, isCumulative, isHarvested, isPas },
     },
   } = useStores()
 
@@ -21,12 +21,26 @@ const TitleContainer = () => {
         <span aria-hidden> </span>
         <Translate id="dataset-tags" content="dataset.tags" className="sr-only" element="span" />
         <Tags id="tags">
+          {/* Access type */}
           <AccessRights button />
+          {/* PAS */}
+          {catalogRecord.preservation_state > 0 && !isPas && (
+            <EnteringPASLabel>
+              <Translate component="span" content="dataset.enteringPas" />
+            </EnteringPASLabel>
+          )}
+          {catalogRecord.preservation_state > 0 && isPas && (
+            <PASLabel>
+              <Translate component="span" content="dataset.fairdataPas" />
+            </PASLabel>
+          )}
+          {/* Cumulative */}
           {isCumulative && (
             <Label>
               <Translate content="dataset.cumulative" />
             </Label>
           )}
+          {/* Harvested */}
           {isHarvested && (
             <Label>
               <Translate content="dataset.harvested" />
@@ -41,7 +55,7 @@ const TitleContainer = () => {
 export default observer(TitleContainer)
 
 const Container = styled.div`
-  margin: 1.3em 0;
+  margin: 0 0 1.3em 0;
   }
 `
 
@@ -73,4 +87,12 @@ const Label = styled.div`
   border-radius: 1em;
   max-width: max-content;
   }
+`
+
+const EnteringPASLabel = styled(Label)`
+  background-color: #efe4b0;
+`
+
+const PASLabel = styled(Label)`
+  background-color: #b3efb0;
 `

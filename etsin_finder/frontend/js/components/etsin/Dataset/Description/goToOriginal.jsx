@@ -30,7 +30,7 @@ function GoToOriginal() {
     return (
       <Link
         margin="0em 0em 0.7em 0em"
-        width="100%"
+        width="50%"
         color="primary"
         href={link}
         title={link}

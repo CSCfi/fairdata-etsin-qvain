@@ -28,6 +28,7 @@ import Loader from '@/components/general/loader'
 import CitationModal from './citation/citationModal'
 import Sidebar from './Sidebar'
 import Content from './content'
+import PreservationInfo from './Description/PreservationInfo'
 import TitleContainer from './TitleContainer'
 
 const BackButton = styled(NavLink)`
@@ -218,6 +219,7 @@ function DatasetView() {
     Accessibility,
     Etsin: {
       EtsinDataset: {
+        catalogRecord,
         latestExistingVersionInfotext,
         latestExistingVersionId,
         tombstoneInfotext,
@@ -277,6 +279,8 @@ function DatasetView() {
           )}
           <MarginAfter className="col-lg-8">
             <TitleContainer />
+            {catalogRecord.preservation_state > 0 && <PreservationInfo />}
+
             <Content />
           </MarginAfter>
           <MarginAfter className="col-lg-4">
@@ -291,7 +295,7 @@ function DatasetView() {
 }
 
 const MarginAfter = styled.div`
-  margin-bottom: 1em;
+  margin: 0.8em 0 1em 0;
 `
 
 const StateHeader = styled.p`
@@ -311,6 +315,7 @@ const LoadingSplash = styled.div`
 
 const Link = styled.a`
   font-size: 0.9em;
+  color: ${p => p.theme.color.linkColorUIV2};
 `
 
 const DraftInfo = styled.div`

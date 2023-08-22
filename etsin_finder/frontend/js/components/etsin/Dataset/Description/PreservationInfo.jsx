@@ -13,7 +13,7 @@ const PreservationInfo = () => {
   } = useStores()
 
   return (
-    <>
+    <Container>
       {isPas && (
         <PasInfo>
           <Translate content="dataset.storedInPas" />
@@ -35,15 +35,21 @@ const PreservationInfo = () => {
           </Link>
         </PasInfo>
       )}
-    </>
+    </Container>
   )
 }
 
 const PasInfo = styled.div`
   color: ${p => p.theme.color.gray};
   font-size: 0.9em;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 0.3em 0;
+  > a {
+    color: ${p => p.theme.color.linkColorUIV2};
+  }
+`
+
+const Container = styled.div`
+  margin-bottom: 2em;
 `
 
 export default observer(PreservationInfo)

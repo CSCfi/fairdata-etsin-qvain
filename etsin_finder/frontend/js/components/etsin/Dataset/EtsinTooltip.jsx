@@ -4,9 +4,8 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
 import { HelpIcon } from '@/components/qvain/general/modal/form'
-import etsinTheme from '@/styles/theme'
 
-const EtsinTooltip = ({ tooltip }) => {
+const EtsinTooltip = ({ tooltip, inverted, withMargin }) => {
   const [tooltipOpen, setTooltipOpen] = useState(false)
   const tooltipRef = useRef(null)
 
@@ -27,7 +26,7 @@ const EtsinTooltip = ({ tooltip }) => {
   )
 
   return (
-    <Wrapper ref={tooltipRef}>
+    <Wrapper ref={tooltipRef} inverted={inverted} withMargin={withMargin}>
       <Translate
         component={HelpIcon}
         attributes={{
@@ -47,9 +46,28 @@ export default EtsinTooltip
 
 EtsinTooltip.propTypes = {
   tooltip: PropTypes.object.isRequired,
+  inverted: PropTypes.bool,
+  withMargin: PropTypes.bool,
 }
 
-const Wrapper = styled.span``
+EtsinTooltip.defaultProps = {
+  inverted: false,
+  withMargin: false,
+}
+
+// reaching for the tooltip help icon here
+const Wrapper = styled.span`
+  > * {
+    > * {
+      cursor: pointer;
+      margin: ${p => (p.withMargin ? '0 0 0 0.2em' : '0')};
+      color: ${p => (p.inverted ? p.theme.color.primary : 'black')};
+      :hover {
+        color: ${p => (p.inverted ? 'black' : p.theme.color.primary)};
+      }
+    }
+  }
+`
 
 const Tooltip = styled.div`
   z-index: 10;
@@ -57,14 +75,14 @@ const Tooltip = styled.div`
   bottom: 2.1em;
   left: 5%;
   width: 90%;
-  opacity: 90%;
-  visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
-  background-color: ${etsinTheme.color.darker};
-  padding: 0.5em;
+  visibility: ${p => (p.isOpen ? 'visible' : 'hidden')};
+  background-color: white;
+  padding: 0.7em;
+  box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
 
   > span {
-    color: white;
+    color: ${p => p.theme.color.darker};
     font-size: 0.9em;
     font-weight: normal;
   }

@@ -15,9 +15,10 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import Agent from '../Agent'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import { LinkButton } from '@/components/etsin/general/button'
+
+import Agent from '../Agent'
 
 export default class TogglableAgentList extends Component {
   constructor(props) {
@@ -88,16 +89,15 @@ export default class TogglableAgentList extends Component {
               }
               return ''
             })}
-          {/* Show Button to open rest */}
-          {' '}
+          {/* Show Button to open rest */}{' '}
           {this.props.agents.length > 3 && (
-            <LinkButton onClick={this.toggleOpen}>
+            <AgentListLinkButton onClick={this.toggleOpen}>
               {this.state.open ? (
                 <Translate content="general.showLess" />
               ) : (
                 <Translate content="general.showMore" />
               )}
-            </LinkButton>
+            </AgentListLinkButton>
           )}
         </InlineUl>
       </AgentsCont>
@@ -123,4 +123,9 @@ const InlineUl = styled.ul`
   display: inline;
   margin: 0;
   padding: 0;
+`
+
+const AgentListLinkButton = styled(LinkButton)`
+  color: ${p => p.theme.color.linkColorUIV2};
+  text-decoration: underline;
 `

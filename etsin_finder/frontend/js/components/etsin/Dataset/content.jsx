@@ -94,13 +94,14 @@ export default withRouter(observer(Content))
 
 const MarginAfter = styled.div`
   padding-bottom: 1.5rem;
-  margin-bottom: 3em;
+  margin-bottom: 1em;
   border-radius: 0.5rem 0.5rem 0rem 0rem;
   box-shadow: 0px 4px 7px 3px ${etsinTheme.color.primaryLight};
   height: auto;
 
   & .tabContent {
     margin: 1.5em;
+    margin-bottom: 0.5em;
   }
 `
 

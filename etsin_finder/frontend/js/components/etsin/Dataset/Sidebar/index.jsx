@@ -11,7 +11,6 @@ import checkNested from '@/utils/checkNested'
 import Agent from '../Agent'
 import CitationButton from '../citation/citationButton'
 import DatasetInfoItem from '../DatasetInfoItem'
-import FormatChanger from './formatChanger'
 import Identifier from './identifier'
 import License from './special/license'
 import Logo from './special/logo'
@@ -28,10 +27,8 @@ const Sidebar = () => {
         identifier,
         isDraft,
         isCumulative,
-        isRemoved,
         accessRights,
         versions,
-        metadataFormats,
       },
     },
   } = useStores()
@@ -95,16 +92,6 @@ const Sidebar = () => {
     return labels
   }
 
-  const metadataTooltip = () => {
-    if (metadataFormats.some(format => format.value === 'fairdata_datacite')) {
-      return {
-        infoText: 'dataset.datasetAsFile.infoText',
-        infoAriaLabel: 'dataset.datasetAsFile.infoLabel',
-      }
-    }
-    return null
-  }
-
   const identifierTooltip = () =>
     isCumulative
       ? {
@@ -154,18 +141,6 @@ const Sidebar = () => {
           <CitationButton />
         </DatasetInfoItem>
       </SidebarArea>
-
-      {!isRemoved && (
-        <SidebarArea id="metadata-area">
-          <DatasetInfoItem
-            id="metadata-download"
-            itemTitle="dataset.metadata"
-            tooltip={metadataTooltip()}
-          >
-            <FormatChanger />
-          </DatasetInfoItem>
-        </SidebarArea>
-      )}
 
       <SidebarArea id="subject-heading-area">
         <DatasetInfoItem id="dataset-theme" itemTitle="dataset.subjectHeading">
@@ -293,7 +268,7 @@ const SidebarContainer = styled.div`
   -moz-hyphens: auto;
   -ms-hyphens: auto;
   hyphens: auto;
-  padding: 20px 0 0 0;
+  padding: 1em 0 0 0;
 
   > * {
     margin-bottom: 0.5em;

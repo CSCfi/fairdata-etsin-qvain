@@ -1,16 +1,13 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import Select, { components } from 'react-select'
+import Select from 'react-select'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFileLines } from '@fortawesome/free-solid-svg-icons'
 import { useStores } from '@/stores/stores'
 import urls from '@/utils/urls'
-import Button, { Prefix } from '@/components/etsin/general/button'
 
+import EtsinTooltip from '../EtsinTooltip'
 import formatChangerStyles from './formatChangerStyles'
 
 const FormatChanger = () => {
@@ -19,6 +16,13 @@ const FormatChanger = () => {
       EtsinDataset: { identifier, metadataFormats },
     },
   } = useStores()
+
+  const tooltip = metadataFormats.some(format => format.value === 'fairdata_datacite')
+    ? {
+        infoText: 'dataset.datasetAsFile.infoText',
+        infoAriaLabel: 'dataset.datasetAsFile.infoLabel',
+      }
+    : null
 
   const selectLabel = { label: <Translate content="dataset.datasetAsFile.open" /> }
 
@@ -38,46 +42,30 @@ const FormatChanger = () => {
   }
 
   return (
-    <Select
-      id="metadataFormat"
-      styles={formatChangerStyles()}
-      value={selectLabel}
-      onChange={chooseFormat}
-      options={options}
-      isClearable={false}
-      isSearchable={false}
-      components={{ Control }}
-    />
+    <Container>
+      <Select
+        id="metadataFormat"
+        classNamePrefix="format"
+        styles={formatChangerStyles()}
+        value={selectLabel}
+        onChange={chooseFormat}
+        options={options}
+        isClearable={false}
+        isSearchable={false}
+      />
+      {tooltip ? <EtsinTooltip tooltip={tooltip} inverted withMargin /> : null}
+    </Container>
   )
 }
 
-const Control = ({ children, ...props }) => (
-  <components.Control {...props}>
-    <MetadataControl>
-      <ButtonPrefix>
-        <FontAwesomeIcon icon={faFileLines} size="lg" />
-      </ButtonPrefix>
-      {children}
-    </MetadataControl>
-  </components.Control>
-)
-
-Control.propTypes = {
-  children: PropTypes.node.isRequired,
-}
-
-const MetadataControl = styled(Button)`
+const Container = styled.div`
+  position: relative;
   display: flex;
-  border: none;
   align-items: center;
-  justify-content: center;
-  padding: 0;
-  width: 100%;
-  margin: 0;
-`
-
-const ButtonPrefix = styled(Prefix)`
-  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.3em;
+  > * {
+    flex-basis: 50%;
+  }
 `
 
 export default observer(FormatChanger)

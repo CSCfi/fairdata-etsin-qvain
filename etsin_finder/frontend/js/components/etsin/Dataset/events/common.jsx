@@ -51,6 +51,7 @@ export const ID = styled.span`
 export const IDLink = styled.a`
   margin-left: 0.2em;
   font-size: 0.9em;
+  color: ${p => p.theme.color.linkColorUIV2};
 `
 
 export const OtherID = styled.li`

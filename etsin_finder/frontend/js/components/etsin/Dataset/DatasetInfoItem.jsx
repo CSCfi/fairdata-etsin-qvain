@@ -17,9 +17,7 @@ const DatasetInfoItem = props =>
       {props.itemTitle && (
         <DT lang={Locale.currentLang} className="heading4">
           <Translate content={props.itemTitle} />
-          {props.tooltip ? (
-            <EtsinTooltip tooltip={props.tooltip} itemTitle={props.itemTitle} />
-          ) : null}
+          {props.tooltip ? <EtsinTooltip tooltip={props.tooltip} /> : null}
         </DT>
       )}
       <DD>{props.children}</DD>

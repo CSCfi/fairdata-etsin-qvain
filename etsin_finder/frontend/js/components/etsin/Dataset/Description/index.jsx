@@ -13,8 +13,8 @@ import Controls from './Controls'
 import CustomMarkdown from './customMarkdown'
 import DatasetDateInfo from './DatasetDateInfo'
 import GoToOriginal from './goToOriginal'
-import PreservationInfo from './PreservationInfo'
 import TogglableAgentList from './togglableAgentList'
+import FormatChanger from '../Sidebar/formatChanger'
 
 const Description = ({ id }) => {
   const {
@@ -26,6 +26,7 @@ const Description = ({ id }) => {
       EtsinDataset: {
         dataset,
         identifier,
+        isRemoved,
         isHarvested,
         hasFiles,
         hasRemoteResources,
@@ -108,11 +109,9 @@ const Description = ({ id }) => {
 
   return (
     <div className="dsContent tabContent" id={id}>
-      <Controls />
       <section>
-        <PreservationInfo />
-        <div className="d-flex justify-content-between basic-info">
-          <MainInfo>
+        <MainInfo id="main-info">
+          <TextInfo>
             <ErrorBoundary>
               <TogglableAgentList agents={dataset.creator} agentType="creator" />
             </ErrorBoundary>
@@ -120,8 +119,9 @@ const Description = ({ id }) => {
               <TogglableAgentList agents={dataset.contributor} agentType="contributor" />
             </ErrorBoundary>
             <DatasetDateInfo />
-          </MainInfo>
-        </div>
+          </TextInfo>
+          <Controls />
+        </MainInfo>
 
         <DescriptionArea>
           <DatasetInfoItem
@@ -154,6 +154,7 @@ const Description = ({ id }) => {
           </DatasetInfoItem>
         </DescriptionArea>
 
+        {!isRemoved && <FormatChanger />}
         {isHarvested && <GoToOriginal />}
       </section>
     </div>
@@ -167,9 +168,15 @@ Description.propTypes = {
 }
 
 const MainInfo = styled.div`
+  display: flex;
   color: black;
-  word-break: break-word;
-  margin: 1em 0;
+  line-height: 1.5;
+  margin-bottom: 1.5em;
+`
+
+const TextInfo = styled.div`
+  display: block;
+  padding-right: 1.2rem;
 `
 
 const DescriptionArea = styled.dl`

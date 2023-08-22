@@ -2,9 +2,21 @@ import etsinTheme from '@/styles/theme'
 
 const versionChangerStyles = () => ({
   // the dropdown button area (includes valueContainer + dropdownIndicator)
-  control: baseStyles => ({
+  control: (baseStyles, state) => ({
     ...baseStyles,
-    border: 'none',
+    border: `2px solid ${etsinTheme.color.primary}`,
+    backgroundColor: state.isFocused ? etsinTheme.color.primary : 'white',
+    '.format__single-value': { color: state.isFocused ? 'white' : etsinTheme.color.primary },
+    '.format__dropdown-indicator': {
+      color: state.isFocused ? 'white' : etsinTheme.color.primary,
+    },
+    ':hover': {
+      backgroundColor: etsinTheme.color.primary,
+      border: `2px solid ${etsinTheme.color.primary}`,
+      cursor: 'pointer',
+      '.format__single-value': { color: 'white' },
+      '.format__dropdown-indicator': { color: 'white' },
+    },
   }),
   // the container of currently selected label (includes singleValue)
   valueContainer: baseStyles => ({
@@ -15,16 +27,9 @@ const versionChangerStyles = () => ({
   singleValue: baseStyles => ({
     ...baseStyles,
     paddingLeft: '1em',
-    color: etsinTheme.color.primaryLight,
   }),
   // separator between valuecontainer and dropdownIndicator
   indicatorSeparator: () => ({ display: 'none' }),
-  // the chevron
-  dropdownIndicator: baseStyles => ({
-    ...baseStyles,
-    color: etsinTheme.color.primaryLight,
-    ':hover': {},
-  }),
   // the container for options
   menuList: baseStyles => ({
     ...baseStyles,
