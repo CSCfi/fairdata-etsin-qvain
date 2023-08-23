@@ -23,10 +23,11 @@ function IdaResources() {
     Locale: { lang },
     Access: { restrictions },
     Etsin: {
-      EtsinDataset: { files, packages, isDownloadAllowed, downloadAllInfotext, identifier },
+      EtsinDataset: { files, isDownloadAllowed, downloadAllInfotext, identifier },
+      filesProcessor: { Packages },
     },
   } = useStores()
-  const action = getDownloadAction(identifier, null, packages, files)
+  const action = getDownloadAction(identifier, null, Packages, files)
   const { moreFunc, moreAriaLabel } = action
   const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel, root } = files
   const fileCount = root?.existingFileCount || 0
@@ -61,7 +62,7 @@ function IdaResources() {
     attributes: {
       tooltip: action.tooltip,
     },
-    disabled: action.disabled || isDownloadAllowed,
+    disabled: action.disabled || !isDownloadAllowed,
     onClick: action.func,
   }
 
@@ -105,12 +106,12 @@ function IdaResources() {
         </Translate>
       </Header>
 
-      <ErrorMessage error={packages.error} clear={packages.clearError} />
+      <ErrorMessage error={Packages.error} clear={Packages.clearError} />
 
       <Tree allowDownload={isDownloadAllowed} />
       {inInfo && <Info {...infoProps} />}
-      <PackageModal Packages={packages} />
-      <ManualDownloadModal Packages={packages} />
+      <PackageModal Packages={Packages} />
+      <ManualDownloadModal Packages={Packages} />
     </>
   )
 }

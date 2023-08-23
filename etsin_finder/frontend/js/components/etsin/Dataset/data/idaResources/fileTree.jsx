@@ -8,9 +8,17 @@ import { useRenderTree } from '@/components/general/files/tree'
 import { withStores } from '@/stores/stores'
 
 export function FileTree(props) {
-  const { files: Files, packages: Packages } = props.Stores.Etsin.EtsinDataset
+  const {
+    allowDownload,
+    Stores: {
+      Etsin: {
+        EtsinDataset: { files: Files },
+        filesProcessor: { Packages },
+      },
+    },
+  } = props
+
   const { View } = Files
-  const { allowDownload } = props
 
   // Open directories so items specified by query parameters are visible,
   // e.g. ?show=/path/subpath will open /path.
