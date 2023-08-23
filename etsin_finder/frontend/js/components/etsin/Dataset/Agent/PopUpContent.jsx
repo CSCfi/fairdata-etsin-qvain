@@ -92,6 +92,7 @@ const Name = styled.h4`
 const IdentifierLink = styled.a`
   font-size: 0.9em;
   word-break: break-word;
+  color: ${p => p.theme.color.linkColorUIV2};
 `
 
 const IdentifierText = styled.div`

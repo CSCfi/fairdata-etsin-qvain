@@ -12,7 +12,9 @@ const PreservationInfo = () => {
     },
   } = useStores()
 
-  return (
+  return isPas ||
+    catalogRecord.preservation_dataset_origin_version ||
+    catalogRecord.preservation_dataset_version ? (
     <Container>
       {isPas && (
         <PasInfo>
@@ -36,7 +38,7 @@ const PreservationInfo = () => {
         </PasInfo>
       )}
     </Container>
-  )
+  ) : null
 }
 
 const PasInfo = styled.div`
@@ -49,7 +51,7 @@ const PasInfo = styled.div`
 `
 
 const Container = styled.div`
-  margin-bottom: 2em;
+  margin: 0.7em 0;
 `
 
 export default observer(PreservationInfo)

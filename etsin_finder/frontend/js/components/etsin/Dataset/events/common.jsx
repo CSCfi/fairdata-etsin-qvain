@@ -56,6 +56,9 @@ export const IDLink = styled.a`
 
 export const OtherID = styled.li`
   margin: 0;
+  > a {
+    color: ${p => p.theme.color.linkColorUIV2};
+  }
 `
 
 export const Margin = styled.section`

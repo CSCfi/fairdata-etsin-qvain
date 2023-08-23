@@ -219,7 +219,6 @@ function DatasetView() {
     Accessibility,
     Etsin: {
       EtsinDataset: {
-        catalogRecord,
         latestExistingVersionInfotext,
         latestExistingVersionId,
         tombstoneInfotext,
@@ -279,7 +278,7 @@ function DatasetView() {
           )}
           <MarginAfter className="col-lg-8">
             <TitleContainer />
-            {catalogRecord.preservation_state > 0 && <PreservationInfo />}
+            <PreservationInfo />
 
             <Content />
           </MarginAfter>

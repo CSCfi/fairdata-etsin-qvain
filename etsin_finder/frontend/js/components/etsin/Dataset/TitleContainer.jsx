@@ -55,12 +55,10 @@ const TitleContainer = () => {
 export default observer(TitleContainer)
 
 const Container = styled.div`
-  margin: 0 0 1.3em 0;
   }
 `
 
 const Title = styled.h1`
-  margin: 0.5rem 0.5rem 0.5rem 0;
   word-break: break-word;
   color: ${p => p.theme.color.superdarkgray};
 `
