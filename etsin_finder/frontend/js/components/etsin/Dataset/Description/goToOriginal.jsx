@@ -25,7 +25,7 @@ function GoToOriginal() {
     },
   } = useStores()
 
-  const link = idnToLink(dataset.preferredIdentifier)
+  const link = idnToLink(dataset.preferred_identifier)
   if (link) {
     return (
       <Link

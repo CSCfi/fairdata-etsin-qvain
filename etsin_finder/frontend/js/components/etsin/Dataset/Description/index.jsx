@@ -71,7 +71,10 @@ const Description = ({ id }) => {
       <ul>
         {dataset.spatial.map(location => {
           if (!location.geographic_name) return null
-          if (location.geographic_name !== checkDataLang(location?.place_uri?.pref_label)) {
+          if (
+            location.place_uri &&
+            location.geographic_name !== checkDataLang(location?.place_uri?.pref_label)
+          ) {
             return (
               <li key={location.geographic_name} lang={getDataLang(location.place_uri.pref_label)}>
                 {checkDataLang(location.place_uri.pref_label)}{' '}
