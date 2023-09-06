@@ -28,7 +28,7 @@ import Loader from '@/components/general/loader'
 import CitationModal from './citation/citationModal'
 import Sidebar from './Sidebar'
 import Content from './content'
-import PreservationInfo from './Description/PreservationInfo'
+import PreservationInfo from './PreservationInfo'
 import TitleContainer from './TitleContainer'
 
 const BackButton = styled(NavLink)`

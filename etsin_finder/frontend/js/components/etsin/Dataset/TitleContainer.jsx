@@ -24,11 +24,6 @@ const TitleContainer = () => {
           {/* Access type */}
           <AccessRights button />
           {/* PAS */}
-          {catalogRecord.preservation_state > 0 && !isPas && (
-            <EnteringPASLabel>
-              <Translate component="span" content="dataset.enteringPas" />
-            </EnteringPASLabel>
-          )}
           {catalogRecord.preservation_state > 0 && isPas && (
             <PASLabel>
               <Translate component="span" content="dataset.fairdataPas" />
@@ -85,10 +80,6 @@ const Label = styled.div`
   border-radius: 1em;
   max-width: max-content;
   }
-`
-
-const EnteringPASLabel = styled(Label)`
-  background-color: #efe4b0;
 `
 
 const PASLabel = styled(Label)`
