@@ -109,7 +109,7 @@ const Sidebar = () => {
             <Translate
               component={Logo}
               attributes={{ alt: 'dataset.catalog_alt_text' }}
-              with={{ catalogTitle }}
+              with={{ title: catalogTitle }}
               file={dataCatalog.logo}
               url={catalogPublisherHomepage}
             />

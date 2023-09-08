@@ -128,8 +128,7 @@ class EtsinDataset {
       this.dataset.provenance?.length || 
       this.isDeprecated || 
       this.dataset.other_identifier?.length || 
-      this.relations?.length || 
-      this.isPas
+      this.relations?.length
     )
   }
 

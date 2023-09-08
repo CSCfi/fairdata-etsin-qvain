@@ -21,8 +21,6 @@ const Description = ({ id }) => {
     Matomo: { recordEvent },
     Accessibility,
     Etsin: {
-      fetchVersions,
-      isLoading,
       EtsinDataset: {
         dataset,
         identifier,
@@ -32,20 +30,14 @@ const Description = ({ id }) => {
         hasRemoteResources,
         files,
         remoteResources,
-        versions,
       },
     },
   } = useStores()
 
   useEffect(() => {
-    const versionFetchFunction = async () => {
-      await fetchVersions()
-    }
-
-    if (versions.length === 0 && !isLoading.versions) versionFetchFunction()
     Accessibility.handleNavigation('dataset', false)
     recordEvent(`DETAILS / ${identifier}`)
-  }, [versions, isLoading, identifier, Accessibility, fetchVersions, recordEvent])
+  }, [identifier, Accessibility, recordEvent])
 
   const formatDatasetInfoArray = array => array?.join(', ') || null
 

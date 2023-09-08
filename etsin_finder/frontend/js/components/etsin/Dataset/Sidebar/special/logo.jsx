@@ -37,5 +37,5 @@ export default class Logo extends Component {
 
 const Cont = styled.div`
   text-align: center;
-  padding-top: 0.5rem;
+  padding-top: 1.5rem;
 `

@@ -132,6 +132,7 @@ class Etsin {
     this.reset()
     this.setLoadingOn()
     await this.fetchDataset(id)
+    await this.fetchVersions()
     await this.fetchFiles()
     await this.fetchPackages()
     this.requests = {}
@@ -155,7 +156,6 @@ class Etsin {
 
   @action
   fetchFiles = async () => {
-    this.isLoading.files = true
     this.requests.files = [this.filesProcessor.fetch({
       catalogRecord: this.EtsinDataset.catalogRecord,
       resolved: this.constructResolvedCb('files'),
@@ -181,12 +181,11 @@ class Etsin {
   @action
   fetchVersions = async () => {
     if (!this.EtsinDataset.datasetVersions) {
+      this.isLoading.versions = false
       return []
     }
 
     runInAction(() => {
-      this.isLoading.versions = true
-
       this.requests.versions = Object.values(this.EtsinDataset.datasetVersions).map(version =>
         this.datasetProcessor.fetch({
           id: version.identifier,
@@ -212,6 +211,8 @@ class Etsin {
     this.Accessibility.announcePolite(translate('dataset.loading'))
     this.isLoading.dataset = true
     this.isLoading.relations = true
+    this.isLoading.versions = true
+    this.isLoading.files = true
   }
 }
 

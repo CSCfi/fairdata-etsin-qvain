@@ -38,6 +38,10 @@ export const Table = styled.table`
     td {
       overflow-wrap: break-word;
       padding: 0.75rem;
+      vertical-align: middle;
+      a {
+        color: ${props => props.theme.color.linkColorUIV2};
+      }
     }
   }
 `
