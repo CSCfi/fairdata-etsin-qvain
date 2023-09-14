@@ -13,7 +13,7 @@ import { useStores } from '@/stores/stores'
 const Contact = () => {
   const {
     Etsin: {
-      EtsinDataset: { catalogRecord, emailInfo, isRems },
+      EtsinDataset: { identifier, emailInfo, isRems },
     },
   } = useStores()
 
@@ -76,7 +76,7 @@ const Contact = () => {
         )}
         <ContactForm
           close={closeModal}
-          datasetID={catalogRecord.identifier}
+          datasetID={identifier}
           recipientsList={recipients}
           translations={translate('dataset.contact')}
         />

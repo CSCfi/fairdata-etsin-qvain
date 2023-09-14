@@ -1,19 +1,16 @@
-/* Etsin stores
-  This class stores the dataset for Etsin React components
-*/
 import { makeObservable, observable, action, computed } from 'mobx'
 import { DATA_CATALOG_IDENTIFIER, ACCESS_TYPE_URL } from '@/utils/constants'
 import Cite from './cite'
 
-class EtsinDatasetV2 {
+class EtsinDatasetV3 {
   constructor({ Access, Locale }) {
-    makeObservable(this)
     this.Access = Access
     this.Locale = Locale
     this.citations = new Cite({ Stores: this, Locale })
+    makeObservable(this)
   }
 
-  @observable catalogRecord = null // V2 only
+  @observable dataset = null
 
   @observable relations = null
 
@@ -28,36 +25,39 @@ class EtsinDatasetV2 {
   @observable inInfo = null
 
   @computed get dataCatalog() {
-    return this.catalogRecord?.data_catalog?.catalog_json
-  } // shapeDataCatalog action will be needed later
+    // waiting for V3 implementation, this is a placeholder
+    return {
+      identifier: this.dataset?.data_catalog,
+      title: {en: "placeholder"},
+      publisher: {
+        name: {en: "Placeholder Publisher"},
+        homepage: [{ identifier: 'https://example.com' }],
+      },
+    } 
+  }
 
-  @computed get dataset() {
-    return this.catalogRecord?.research_dataset
-  } // V2 only
-  
   @computed get persistentIdentifier() {
-    return this.dataset?.persistent_identifier || this.dataset?.preferred_identifier
+    return this.dataset?.persistent_identifier || this.identifier
   }
 
   @computed get identifier() {
-    return this.catalogRecord?.identifier
+    return this.dataset?.id
   }
 
   @computed get accessRights() {
-    const accessRights = { ...this.dataset.access_rights }
-    const license = this.dataset.access_rights?.license?.map(l => this.shapeLicense(l))
-    const type = this.shapeAccessType(this.dataset.access_rights?.access_type)
-    accessRights.license = license
-    accessRights.access_type = type
-    return accessRights || null
+    return this.dataset?.access_rights
   }
 
   @computed get draftOf() {
-    return this.dataset?.draft_of
+    // waiting for V3 implementation
+    console.warn('no draft implementation yet in metax V3')
+    return null
   }
 
   @computed get isDraft() {
-    return Boolean(this.draftOf) || this.catalogRecord?.state === 'draft'
+    // waiting for V3 implementation
+    console.warn('no draft implementation yet in metax V3')
+    return false
   }
 
   @computed get isPublished() {
@@ -73,62 +73,68 @@ class EtsinDatasetV2 {
   }
 
   @computed get isCumulative() {
-    return this.catalogRecord?.cumulative_state === 1
+    // waiting for V3 implementation?
+    return Boolean(this.dataset?.cumulation_started)
   }
 
   @computed get isHarvested() {
-    return this.dataCatalog?.harvested
+    console.warn('no harvested info implementation yet in metax V3')
+    return false
   }
-
+  
   @computed get isRemoved() {
-    return Boolean(this.catalogRecord?.removed)
+    return Boolean(this.dataset?.is_removed)
   }
 
   @computed get isDeprecated() {
-    return Boolean(this.catalogRecord?.deprecated)
+    return Boolean(this.dataset?.is_deprecated)
   }
 
   @computed get dateDeprecated() {
-    return this.catalogRecord?.date_deprecated
+    console.warn('no deprecation date implementation yet in metax V3')
+    return null
   }
 
   @computed get isRems() {
-    return this.accessRights?.access_type?.identifier === ACCESS_TYPE_URL.PERMIT
+    return this.accessRights.access_type.url === ACCESS_TYPE_URL.PERMIT
   }
 
   @computed get datasetMetadata() {
     return {
-      releaseDate: this.dataset.issued,
-      modified: this.dataset.modified,
-      title: this.dataset.title,
-      description: this.dataset.description,
-      fieldOfScience: this.dataset.field_of_science,
-      subjectHeading: this.shapeThemes(this.dataset.theme),
-      keywords: this.dataset.keyword,
-      language: this.shapeLanguages(this.dataset.language),
-      spatial: this.shapeSpatial(this.dataset.spatial),
-      temporal: this.dataset.temporal,
-      projects: this.shapeProjects(this.dataset.is_output_of),
-      infrastructure: this.dataset.infrastructure,
+      releaseDate: this.dataset?.issued,
+      modified: this.dataset?.modified,
+      title: this.dataset?.title,
+      description: this.dataset?.description || undefined,
+      fieldOfScience: this.dataset?.field_of_science,
+      subjectHeading: this.dataset?.theme,
+      keywords: this.dataset?.keyword,
+      language: this.dataset?.language,
+      spatial: this.dataset?.spatial,
+      temporal: undefined, // waiting for V3 implementation
+      projects: undefined, // waiting for V3 implementation
+      infrastructure: undefined, // waiting for V3 implementation
     }
   }
 
   @computed get provenance() {
-    return this.dataset.provenance
+    // waiting for V3 implementation
+    return undefined
   }
 
   @computed get preservation() {
+    // waiting for V3 implementation
     return {
-      identifier: this.catalogRecord.preservation_identifier,
-      state: this.catalogRecord.preservation_state,
-      stateModified: this.catalogRecord.preservation_state_modified,
-      datasetOriginVersion: this.catalogRecord.preservation_dataset_origin_version,
-      datasetVersion: this.catalogRecord.preservation_dataset_version,
+      identifier: undefined,
+      state: undefined,
+      stateModified: undefined,
+      datasetOriginVersion: undefined,
+      datasetVersion: undefined,
     }
   }
 
   @computed get emailInfo() {
-    return this.catalogRecord?.email_info
+    // waiting for V3 implementation
+    return null
   }
 
   @computed get metadataFormats() {
@@ -152,11 +158,13 @@ class EtsinDatasetV2 {
   }
 
   @computed get hasRemoteResources() {
-    return this.dataset?.remote_resources !== undefined
+    // waiting for V3 implementation
+    return false
   }
 
   @computed get remoteResources() {
-    return this.dataset?.remote_resources
+    // waiting for V3 implementation
+    return null
   }
 
   @computed get hasData() {
@@ -174,16 +182,19 @@ class EtsinDatasetV2 {
 
   @computed get hasEvents() {
     return Boolean(
-      this.hasVersion || 
-      this.dataset.provenance?.length || 
-      this.isDeprecated || 
-      this.dataset.other_identifier?.length || 
-      this.relations?.length
+      this.hasVersion ||
+      this.provenance?.length ||
+      this.isDeprecated ||
+      this.dataset?.other_identifier?.length || // other identifier missing
+      this.relations?.length ||
+      this.isPas
     )
   }
 
   @computed get hasMapData() {
-    return Boolean(this.dataset?.spatial)
+    // Map tab not implemented yet
+    return false
+    // return Boolean(this.datasetMetadata?.spatial)
   }
 
   @computed get isDownloadAllowed() {
@@ -195,7 +206,8 @@ class EtsinDatasetV2 {
   }
 
   @computed get datasetVersions() {
-    return this.catalogRecord?.dataset_version_set
+    // waiting for V3 implementation
+    return null
   }
 
   @computed get hasVersion() {
@@ -222,6 +234,7 @@ class EtsinDatasetV2 {
   }
 
   @computed get groupedRelations() {
+    // waiting for V3 implementation
     if (!this.relations?.length) {
       return null
     }
@@ -240,17 +253,18 @@ class EtsinDatasetV2 {
   }
 
   @computed get currentVersionDate() {
-    return new Date(this.catalogRecord?.date_created)
+    return new Date(this.dataset?.created)
   }
 
   @computed get latestExistingVersionDate() {
     const existingVersions = (this.versions || []).filter(
-      version => !version.catalogRecord.removed && !version.catalogRecord.deprecated
+      version => !version.isRemoved && !version.isDeprecated
     )
     return new Date(Math.max(existingVersions.map(version => version.currentVersionDate)))
   }
 
   @computed get latestExistingVersionId() {
+    // waiting for V3 dataset_version_set implementation
     if (!this.datasetVersions) return null
     return Object.values(this.datasetVersions).find(
       val => new Date(val.date_created).getTime() === this.latestExistingVersionDate.getTime()
@@ -298,36 +312,38 @@ class EtsinDatasetV2 {
   }
 
   @computed get creators() {
-    if (!this.dataset.creator) return []
-    return this.dataset.creator.map(c => this.shapeActor(c, 'creator'))
+    return this.dataset?.actors.filter(actor => actor.role === 'creator')
   }
 
   @computed get contributors() {
-    if (!this.dataset.contributor) return []
-    return this.dataset.contributor?.map(c => this.shapeActor(c, 'contributor'))
+    return this.dataset?.actors.filter(actor => actor.role === 'contributor')
   }
 
   @computed get curators() {
-    if (!this.dataset.curator) return []
-    return this.dataset.curator?.map(c => this.shapeActor(c, 'curator'))
+    return this.dataset?.actors.filter(actor => actor.role === 'curator')
   }
 
   @computed get publisher() {
-    return this.shapeActor(this.dataset.publisher, 'publisher')
+    const publishers = this.dataset?.actors.filter(actor => actor.role === 'publisher')
+
+    if (publishers.length > 0) {
+      return publishers[0]
+    }
+
+    return null
   }
 
   @computed get rightsHolders() {
-    if (!this.dataset.rights_holder) return []
-    return this.dataset.rights_holder.map(r => this.shapeActor(r, 'rights_holder'))
+    return this.dataset?.actors.filter(actor => actor.role==="rights_holder")
   }
 
-  @computed get actors() {
+  @computed get actors(){
     return {
       creators: this.creators,
       contributors: this.contributors,
       curators: this.curators,
       publisher: this.publisher,
-      rightsHolders: this.rightsHolders,
+      rightsHolders: this.rightsHolders
     }
   }
 
@@ -341,15 +357,12 @@ class EtsinDatasetV2 {
 
   @action.bound set(field, data) {
     const createVersion = _data => {
-      const ds = new EtsinDatasetV2({ Access: this.Access, Locale: this.Locale })
+      const ds = new EtsinDatasetV3({ Access: this.Access, Locale: this.Locale })
       ds.set('dataset', _data)
       this.versions.push(ds)
     }
 
     switch (field) {
-      case 'dataset':
-        this.catalogRecord = data.catalog_record
-        break
       case 'versions':
         createVersion(data)
         break
@@ -357,111 +370,6 @@ class EtsinDatasetV2 {
         this[field] = data
     }
   }
-
-  @action shapeLanguages(languages) {
-    if (!languages) return null
-    return languages.map(language => ({
-      id: null,
-      url: language.identifier,
-      in_scheme: null,
-      pref_label: language.title,
-      broader: null,
-      narrower: null,
-    }))
-  }
-
-  @action shapeActor(actor, role) {
-    if (!actor) return null
-
-    let person = null
-    let organization = null
-
-    if (actor['@type'] === 'Person') {
-      person = {
-        name: actor.name,
-        email: null,
-        external_id: null,
-      }
-      organization = mapOrgV2ToV3(actor.member_of)
-    } else {
-      organization = mapOrgV2ToV3(actor)
-    }
-
-    return {
-      role,
-      actor: {
-        organization,
-        person,
-      },
-    }
-  }
-
-  @action shapeThemes(themes) {
-    return themes?.map(theme => ({
-      id: null,
-      url: theme.identifier,
-      in_scheme: theme.in_scheme,
-      pref_label: theme.pref_label,
-    }))
-  }
-
-  @action shapeAccessType(type) {
-    return {
-      id: null,
-      url: type.identifier,
-      in_scheme: type.in_scheme,
-      pref_label: type.pref_label,
-    }
-  }
-
-  @action shapeLicense(license) {
-    return {
-      custom_url: license.license,
-      url: license.identifier,
-      pref_label: license.title,
-      description: null,
-      id: null,
-      in_scheme: null,
-    }
-  }
-
-  @action shapeSpatial(spatial) {
-    return spatial?.map(location => ({
-      url: location.place_uri?.identifier,
-      pref_label: location.place_uri?.pref_label,
-      in_scheme: location.place_uri?.in_scheme,
-      full_address: location.full_address,
-      geographic_name: location.geographic_name,
-      altitude_in_meters: undefined, // need to check this?
-      dataset: null,
-      id: null,
-      as_wkt: location.as_wkt ? location.as_wkt[0] : undefined,
-    }))
-  }
-
-  @action shapeProjects(projects) {
-    return projects?.map(project => {
-      const shapedProject = { ...project }
-      shapedProject.source_organization = shapedProject.source_organization?.map(org =>
-        this.shapeActor(org)
-      )
-      shapedProject.has_funding_agency = shapedProject.has_funding_agency?.map(org =>
-        this.shapeActor(org)
-      )
-      return shapedProject
-    })
-  }
 }
 
-function mapOrgV2ToV3(orig) {
-  if (!orig) return null
-
-  return {
-    pref_label: orig.name,
-    homepage: orig.homepage,
-    url: orig.identifier,
-    parent: mapOrgV2ToV3(orig.is_part_of),
-  }
-}
-
-export default EtsinDatasetV2
+export default EtsinDatasetV3

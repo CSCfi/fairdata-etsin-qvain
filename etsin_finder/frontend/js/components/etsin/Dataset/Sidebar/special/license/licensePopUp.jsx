@@ -16,7 +16,7 @@ const LicensePopUp = ({ license, title, description, info }) => {
   const togglePopup = () => setPopUpOpen(!popUpOpen)
   const closePopUp = () => setPopUpOpen(false)
 
-  if (!(description || info)) {
+  if (!description && !info) {
     return null
   }
 

@@ -19,7 +19,6 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-import checkNested from '@/utils/checkNested'
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import dateFormat from '@/utils/dateFormat'
 import Button from '../general/button'
@@ -27,22 +26,10 @@ import Modal from '@/components/general/modal'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { withStores } from '@/utils/stores'
 
-export const accessRightsBool = accessRights => {
-  if (accessRights !== undefined && accessRights !== null) {
-    // check access_type
-    if (checkNested(accessRights, 'access_type')) {
-      if (accessRights.access_type.identifier === ACCESS_TYPE_URL.OPEN) {
-        return true
-      }
-    }
-  }
-  return false
-}
-
 class AccessRights extends Component {
   constructor(props) {
     super(props)
-    let title = { en: 'Restricted Access', fi: 'Rajoitettu käyttöoikeus' }
+    let title = ''
     let description = ''
     let identifier = ''
     let url = ''
@@ -55,32 +42,31 @@ class AccessRights extends Component {
       },
     } = this.props.Stores
 
-    if (accessRights !== undefined && accessRights !== null) {
-      if (checkNested(accessRights, 'access_type', 'pref_label')) {
-        title = accessRights.access_type.pref_label
-      }
-      identifier = accessRights.access_type.identifier
-      id = Object.keys(ACCESS_TYPE_URL).find(key => ACCESS_TYPE_URL[key] === identifier)
-      description = translate(
-        `dataset.access_rights_description.${id !== undefined ? id.toLowerCase() : ''}`
-      )
-      url = accessRights.access_url
-      embargoDate = accessRights.available
+    title = accessRights?.access_type?.pref_label || {
+      en: 'Restricted Access',
+      fi: 'Rajoitettu käyttöoikeus',
     }
+    identifier = accessRights?.access_type.url
+    id = Object.keys(ACCESS_TYPE_URL).find(key => ACCESS_TYPE_URL[key] === identifier)
+    description = translate(
+      `dataset.access_rights_description.${id !== undefined ? id.toLowerCase() : ''}`
+    )
+    url = accessRights?.access_url
+    embargoDate = id === ACCESS_TYPE_URL.EMBARGO ? accessRights?.available : undefined
+
     this.state = {
       title,
       description,
       url,
       embargoDate,
-      restriction_grounds:
-        accessRights.restriction_grounds !== undefined &&
-        accessRights.restriction_grounds.length > 0 &&
-        accessRights.restriction_grounds,
+      restriction_grounds: accessRights?.restriction_grounds,
       modalIsOpen: false,
     }
 
     this.openModal = this.openModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
+
+    this.hasOpenAccess = accessRights?.access_type?.url === ACCESS_TYPE_URL.OPEN
   }
 
   restricted() {
@@ -119,12 +105,6 @@ class AccessRights extends Component {
   }
 
   render() {
-    const {
-      Etsin: {
-        EtsinDataset: { accessRights },
-      },
-    } = this.props.Stores
-
     // display button on dataset page
     if (this.props.button) {
       return (
@@ -140,7 +120,7 @@ class AccessRights extends Component {
               lang={getDataLang(this.state.description)}
               title={checkDataLang(this.state.description)}
             >
-              {accessRightsBool(accessRights) ? this.openAccess() : this.restricted()}
+              {this.hasOpenAccess ? this.openAccess() : this.restricted()}
             </Inner>
           </CustomButton>
           {/* POPUP modal */}
@@ -150,7 +130,7 @@ class AccessRights extends Component {
             contentLabel="Access Modal"
           >
             <ModalInner>
-              {accessRightsBool(accessRights) ? this.openAccess() : this.restricted()}
+              {this.hasOpenAccess ? this.openAccess() : this.restricted()}
               {this.state.description && (
                 // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 <div tabIndex="0">
@@ -207,7 +187,7 @@ class AccessRights extends Component {
           title={checkDataLang(this.state.description)}
           lang={getDataLang(this.state.description)}
         >
-          {accessRightsBool(accessRights) ? this.openAccess() : this.restricted()}
+          {this.hasOpenAccess ? this.openAccess() : this.restricted()}
         </Inner>
       </Access>
     )

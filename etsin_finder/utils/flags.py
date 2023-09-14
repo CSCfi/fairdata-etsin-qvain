@@ -23,6 +23,7 @@ default_supported_flags = {
     "MATOMO_TRACKING",
     "CROSSREF_API",
     "ETSIN.UI.V2",
+    "ETSIN.METAX_V3.FRONTEND"
 }
 
 # Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'

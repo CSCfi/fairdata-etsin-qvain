@@ -27,6 +27,7 @@ function IdaResources() {
       filesProcessor: { Packages },
     },
   } = useStores()
+
   const action = getDownloadAction(identifier, null, Packages, files)
   const { moreFunc, moreAriaLabel } = action
   const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel, root } = files

@@ -49,7 +49,8 @@ export default class TogglableAgentList extends Component {
   }
 
   render() {
-    return this.props.agents ? (
+    if (!this.props.agents?.length) return null
+    return (
       <AgentsCont>
         {this.props.agents.length > 1 ? (
           <Translate content={`dataset.${this.state.agentType}.plrl`} />
@@ -60,14 +61,18 @@ export default class TogglableAgentList extends Component {
         <InlineUl>
           {/* Show first three */}
           {this.state.firstThree.map((agent, i) => {
-            if (agent.name) {
+            if (agent.actor.person?.name || agent.actor.organization.pref_label) {
               return (
                 <Agent
                   inline
-                  lang={getDataLang(agent.name)}
-                  key={checkDataLang(agent.name)}
+                  lang={getDataLang(
+                    agent.actor.person?.name || agent.actor.organization.pref_label
+                  )}
+                  key={checkDataLang(
+                    agent.actor.person?.name || agent.actor.organization.pref_label
+                  )}
                   first={i === 0}
-                  agent={agent}
+                  agent={agent.actor}
                 />
               )
             }
@@ -77,13 +82,17 @@ export default class TogglableAgentList extends Component {
           {this.props.agents.length > 3 &&
             this.state.open &&
             this.state.rest.map(agent => {
-              if (agent.name) {
+              if (agent.actor.person?.name || agent.actor.organization.pref_label) {
                 return (
                   <Agent
                     inline
-                    lang={getDataLang(agent.name)}
-                    key={checkDataLang(agent.name)}
-                    agent={agent}
+                    lang={getDataLang(
+                      agent.actor.person?.name || agent.actor.organization.pref_label
+                    )}
+                    key={checkDataLang(
+                      agent.actor.person?.name || agent.actor.organization.pref_label
+                    )}
+                    agent={agent.actor}
                   />
                 )
               }
@@ -101,7 +110,7 @@ export default class TogglableAgentList extends Component {
           )}
         </InlineUl>
       </AgentsCont>
-    ) : null
+    )
   }
 }
 

@@ -23,12 +23,15 @@ const Sidebar = () => {
     Etsin: {
       EtsinDataset: {
         dataCatalog,
-        dataset,
         identifier,
+        datasetMetadata,
+        draftOf,
         isDraft,
         isCumulative,
         accessRights,
         versions,
+        persistentIdentifier,
+        actors,
       },
     },
   } = useStores()
@@ -36,9 +39,7 @@ const Sidebar = () => {
   const isVersion = versions?.some(version => version.identifier === identifier)
   const catalogPublisher = dataCatalog?.publisher
   const catalogPublisherLang = getDataLang(catalogPublisher?.name)
-  const catalogPublisherHomepage = checkNested(dataCatalog, 'publisher', 'homepage')
-    ? dataCatalog.publisher.homepage[0].identifier
-    : ''
+  const catalogPublisherHomepage = catalogPublisher.homepage?.[0].identifier || ''
   const catalogTitle = dataCatalog?.title[catalogPublisherLang]
 
   function getAccessRights() {
@@ -60,36 +61,36 @@ const Sidebar = () => {
   }
 
   function identifierInfo() {
-    if (isDraft && !dataset.draftOf) {
+    if (isDraft && !draftOf) {
       return <Translate content="dataset.draftIdentifierInfo" />
     }
 
-    if (dataset.draftOf) {
-      return <Identifier idn={dataset.draftOf.preferred_identifier} />
+    if (draftOf) {
+      return <Identifier idn={draftOf.preferred_identifier} />
     }
 
-    const pid = dataset.preferred_identifier
-    return <Identifier idn={pid} />
+    return <Identifier idn={persistentIdentifier} />
   }
 
   function subjectHeading() {
-    const labels = []
-    if (dataset.theme) {
-      labels.push(
-        ...dataset.theme.map(theme => (
-          <SubjectHeaderLink
-            key={theme.identifier}
-            href={theme.identifier}
-            target="_blank"
-            rel="noopener noreferrer"
-            title={theme.identifier}
-          >
-            {checkDataLang(theme.pref_label)}
-          </SubjectHeaderLink>
-        ))
+    if (datasetMetadata.subjectHeading) {
+      return (
+        <List>
+          {datasetMetadata.subjectHeading.map(theme => (
+            <SubjectHeaderLink
+              key={Object.values(theme.pref_label)[0]}
+              href={theme.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={theme.url}
+            >
+              {checkDataLang(theme.pref_label)}
+            </SubjectHeaderLink>
+          ))}
+        </List>
       )
     }
-    return labels
+    return null
   }
 
   const identifierTooltip = () =>
@@ -152,9 +153,9 @@ const Sidebar = () => {
         <DatasetInfoItem id="dataset-license" itemTitle="dataset.license">
           <List>
             {accessRights?.license &&
-              accessRights.license.map(rights => (
-                <ListItem key={rights.identifier}>
-                  <License data={rights} />
+              accessRights.license.map(l => (
+                <ListItem key={l.url}>
+                  <License license={l} />
                 </ListItem>
               ))}
           </List>
@@ -170,8 +171,8 @@ const Sidebar = () => {
       <SidebarArea id="actors-area">
         <DatasetInfoItem id="dataset-project" itemTitle="dataset.project.project">
           <List>
-            {dataset?.is_output_of &&
-              dataset.is_output_of.map(item => {
+            {datasetMetadata.projects &&
+              datasetMetadata.projects.map(item => {
                 const projectName = checkDataLang(item.name)
                 return (
                   <ListItem key={`li-${projectName}`} lang={getDataLang(item.name)}>
@@ -183,13 +184,16 @@ const Sidebar = () => {
         </DatasetInfoItem>
 
         <DatasetInfoItem id="dataset-publisher" itemTitle="dataset.publisher">
-          {dataset.publisher && (
+          {actors.publisher && (
             <List>
               <Agent
-                lang={getDataLang(dataset.publisher.name)}
-                key={checkDataLang(dataset.publisher) || dataset.publisher.name}
+                lang={getDataLang(actors.publisher.actor.organization?.pref_label)}
+                key={
+                  actors.publisher.actor.person?.name ||
+                  checkDataLang(actors.publisher.actor.organization?.pref_label)
+                }
                 first
-                agent={dataset.publisher}
+                agent={actors.publisher.actor}
                 popupAlign="sidebar"
               />
             </List>
@@ -198,18 +202,17 @@ const Sidebar = () => {
 
         <DatasetInfoItem id="dataset-curator" itemTitle="dataset.curator">
           <List>
-            {dataset.curator &&
-              dataset.curator.map(actor => {
-                let curatorName = checkDataLang(actor.name)
-                if (curatorName === '') {
-                  curatorName = actor.name
-                }
+            {actors.curators &&
+              actors.curators.map(curator => {
+                const curatorName =
+                  curator.actor.person?.name ||
+                  checkDataLang(curator.actor.organization?.pref_label)
                 return (
                   <Agent
                     key={`li-${curatorName}`}
-                    lang={getDataLang(actor.name)}
+                    lang={getDataLang(curator.actor.organization?.pref_label)}
                     first
-                    agent={actor}
+                    agent={curator.actor}
                     popupAlign="sidebar"
                   />
                 )
@@ -218,19 +221,17 @@ const Sidebar = () => {
         </DatasetInfoItem>
 
         <DatasetInfoItem id="dataset-rights-holder" itemTitle="dataset.rights_holder">
-          {dataset.rights_holder && (
+          {actors.rightsHolders && (
             <List>
-              {dataset.rights_holder.map(actor => {
-                let rightsHolderName = checkDataLang(actor.name)
-                if (rightsHolderName === '') {
-                  rightsHolderName = actor.name
-                }
+              {actors.rightsHolders.map(rh => {
+                const rightsHolderName =
+                  rh.actor.person?.name || checkDataLang(rh.actor.organization?.pref_label)
                 return (
                   <Agent
                     key={`li-${rightsHolderName}`}
-                    lang={getDataLang(actor.name)}
+                    lang={getDataLang(rh.actor.organization?.pref_label)}
                     first
-                    agent={actor}
+                    agent={rh.actor}
                     popupAlign="sidebar"
                   />
                 )
@@ -243,7 +244,7 @@ const Sidebar = () => {
       <SidebarArea id="infrastructure-area">
         <DatasetInfoItem id="dataset-infrastructure" itemTitle="dataset.infrastructure">
           <List>
-            {dataset?.infrastructure?.map(entity => (
+            {datasetMetadata.infrastructure?.map(entity => (
               <ListItem key={entity.identifier} lang={getDataLang(entity.pref_label)}>
                 {checkDataLang(entity.pref_label)}
               </ListItem>

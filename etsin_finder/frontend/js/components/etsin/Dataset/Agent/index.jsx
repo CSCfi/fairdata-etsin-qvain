@@ -33,24 +33,22 @@ const Agent = ({ agent, first, inline, popupAlign }) => {
   const openPopUp = () => setPopupOpen(true)
   const closePopUp = () => setPopupOpen(false)
 
-  const { name } = agent
+  const name = agent.person?.name || agent.organization.pref_label
+
   if (!name) {
     return ''
   }
 
-  const shouldHavePopup = agent.identifier || hasExtraInfo(agent)
+  const shouldHavePopup = hasExtraInfo(agent)
 
   const orgs = flatParentOrgs(agent)
 
   const [nameTranslation, lang] = getValueTranslationWithLang(name)
   let names
-  if (agent.is_part_of) {
-    names = [
-      ...orgs.map(org => org.name).map(orgName => getValueTranslation(orgName)),
-      nameTranslation,
-    ]
-  } else {
+  if (agent.person) {
     names = [nameTranslation]
+  } else {
+    names = [...orgs.map(org => org.pref_label).map(orgName => getValueTranslation(orgName))]
   }
 
   return (

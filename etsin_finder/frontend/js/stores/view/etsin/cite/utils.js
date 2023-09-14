@@ -2,8 +2,8 @@ import moment from 'moment'
 import idnToLink from '@/utils/idnToLink'
 
 const topOrg = org => {
-  if (org.is_part_of) {
-    return topOrg(org.is_part_of)
+  if (org.parent) {
+    return topOrg(org.parent)
   }
   return org
 }
@@ -76,12 +76,13 @@ export const getLastnameFirst = name => {
 }
 
 export const getAuthorsInitial = (dataset, getTranslation, etAlThreshold) => {
-  const authors = (dataset.research_dataset.creator || []).map(author => {
-    if (author['@type'] === 'Organization') {
-      return getTranslation(topOrg(author)?.name)
+  const authors = dataset.creators.map(author => {
+    if (!author.actor.person) {
+      return getTranslation(topOrg(author.actor.organization)?.pref_label)
     }
-    return getNameInitials(getTranslation(author.name))
+    return getNameInitials(getTranslation(author.actor.person))
   })
+
   if (authors.length > etAlThreshold) {
     authors.splice(etAlThreshold - 1, authors.length - etAlThreshold)
     authors[authors.length - 1] = `. . . ${authors[authors.length - 1]}`
@@ -92,14 +93,14 @@ export const getAuthorsInitial = (dataset, getTranslation, etAlThreshold) => {
 }
 
 export const getAuthorsFull = (dataset, getTranslation, etAlThreshold, etAlCount) => {
-  const authors = (dataset.research_dataset.creator || []).map((author, index) => {
-    if (author['@type'] === 'Organization') {
-      return getTranslation(topOrg(author)?.name)
+  const authors = dataset.creators.map((author, index) => {
+    if (!author.actor.person) {
+      return getTranslation(topOrg(author.actor.organization)?.pref_label)
     }
     if (index === 0) {
-      return getLastnameFirst(getTranslation(author.name))
+      return getLastnameFirst(getTranslation(author.actor.person))
     }
-    return getTranslation(author.name)
+    return getTranslation(author.actor.person)
   })
   if (authors.length > etAlThreshold) {
     authors.splice(etAlCount)
@@ -111,11 +112,11 @@ export const getAuthorsFull = (dataset, getTranslation, etAlThreshold, etAlCount
 }
 
 export const getAuthorsFullBibtex = (dataset, getTranslation, etAlThreshold, etAlCount) => {
-  const authors = (dataset.research_dataset.creator || []).map(author => {
-    if (author['@type'] === 'Organization') {
-      return getTranslation(topOrg(author)?.name)
+  const authors = dataset.creators.map(author => {
+    if (!author.actor.person) {
+      return getTranslation(topOrg(author.actor.organization)?.pref_label)
     }
-    return getLastnameFirst(getTranslation(author.name))
+    return getLastnameFirst(getTranslation(author.actor.person))
   })
   if (authors.length > etAlThreshold) {
     authors.splice(etAlCount)
@@ -146,7 +147,7 @@ export const capitalizeFirst = string => {
 }
 
 export const getYear = dataset => {
-  const issued = dataset.research_dataset.issued
+  const issued = dataset.datasetMetadata.issued
   if (!issued) {
     return undefined
   }
@@ -155,7 +156,7 @@ export const getYear = dataset => {
 }
 
 export const getMonth = dataset => {
-  const issued = dataset.research_dataset.issued
+  const issued = dataset.datasetMetadata.issued
   if (!issued) {
     return undefined
   }
@@ -163,28 +164,29 @@ export const getMonth = dataset => {
 }
 
 export const getTitle = (dataset, getTranslation) => {
-  if (!dataset.research_dataset.title) {
+  if (!dataset.datasetMetadata.title) {
     return undefined
   }
-  return getTranslation(dataset.research_dataset.title)
+  return getTranslation(dataset.datasetMetadata.title)
 }
 
 export const getVersion = (dataset, getTranslation) => {
-  if (!dataset.dataset_version_set) {
+  if (!dataset.datasetVersions) {
     return undefined
   }
   const identifier = dataset.identifier
-  const versionIndex = dataset.dataset_version_set.findIndex(v => v.identifier === identifier)
+  const versionIndex = dataset.datasetVersions.findIndex(v => v.identifier === identifier)
+
   if (versionIndex < 0) {
     return undefined
   }
-  const version = dataset.dataset_version_set.length - versionIndex
+
+  const version = dataset.datasetVersions.length - versionIndex
   return getTranslation({ en: `Version ${version}`, fi: `versio ${version}` })
 }
 
 export const getIdentifier = (dataset, short = false, draftIdentifier = undefined) => {
-  let identifier =
-    dataset.draft_of?.preferred_identifier || dataset.research_dataset.preferred_identifier
+  let identifier = dataset.draft_of?.preferred_identifier || dataset.persistentIdentifier
   if (!identifier) {
     return undefined
   }
@@ -203,13 +205,13 @@ export const getIdentifier = (dataset, short = false, draftIdentifier = undefine
 }
 
 export const getPublisher = (dataset, getTranslation) => {
-  const pub = dataset.research_dataset.publisher
+  const pub = dataset.publisher?.actor.organization
   if (pub) {
     const top = topOrg(pub)
     if (top !== pub) {
-      return `${getTranslation(top.name)}, ${getTranslation(pub.name)}`
+      return `${getTranslation(top.pref_label)}, ${getTranslation(pub.pref_label)}`
     }
-    return getTranslation(pub.name)
+    return getTranslation(pub.pref_label)
   }
   return undefined
 }

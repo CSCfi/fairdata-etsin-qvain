@@ -23,33 +23,35 @@ import { Info, InfoItem, InfoLink } from './Info'
 import { hasExtraInfo, flatParentOrgs, getOrgKey, getRefDataKey } from './utils'
 
 const PopupContent = ({ agent }) => {
-  const { name, identifier, contributor_role, contributor_type, homepage, is_part_of } = agent
+  const { organization, person, contributor_role, contributor_type, homepage } = agent
+  const name = person?.name || organization.pref_label
 
-  const orgRelation = is_part_of ? 'is_part_of' : 'member_of'
-
-  const orgs = flatParentOrgs(agent)
+  let orgs = flatParentOrgs(agent)
+  if (!agent.person) {
+    orgs = orgs.slice(0, -1)
+  }
 
   return (
     <PopUpContainer>
       {name && <Name lang={getDataLang(name)}>{checkDataLang(name)}</Name>}
-      {identifier?.startsWith('http') && (
+      {organization.url?.startsWith('http') && (
         // TODO: fix screenreader reading the link url when the popup is focused. It does not read the content.
         <IdentifierLink
-          href={identifier}
+          href={organization.url}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={translate('dataset.identifier')}
         >
-          <IdentifierText>{identifier}</IdentifierText>
+          <IdentifierText>{organization.url}</IdentifierText>
         </IdentifierLink>
       )}
-      {!identifier?.startsWith('http') && <IdentifierText>{identifier}</IdentifierText>}
+      {!organization.url?.startsWith('http') && <IdentifierText>{organization.url}</IdentifierText>}
       {hasExtraInfo(agent) && (
         <dl>
           {orgs?.length > 0 && (
-            <Info icon={faUniversity} title={`dataset.agent.${orgRelation}`}>
+            <Info icon={faUniversity} title={`dataset.agent.parent`}>
               {orgs.map(org => (
-                <InfoItem content={org.name} key={getOrgKey(org)} />
+                <InfoItem content={org.pref_label} key={getOrgKey(org)} />
               ))}
             </Info>
           )}

@@ -1,29 +1,39 @@
 import { action, observable, computed, makeObservable, runInAction } from 'mobx'
 import translate from 'counterpart'
-import {isAbort} from "@/utils/AbortClient"
-import Files from '../files'
-import EtsinDataset from './etsin.stores'
-import DatasetProcessorV2 from './processor/etsin.dataset'
+import { isAbort } from '@/utils/AbortClient'
+import EtsinDatasetV2 from './etsin.stores'
+import EtsinDatasetV3 from './etsin.storesV3'
+import DatasetProcessorV2, { DatasetProcessorV3 } from './processor/etsin.dataset'
 import RelationsProcessor from './processor/etsin.relations'
 import FilesProcessor from './processor/etsin.files'
 
 const errorTranslations = {
   dataset: {
-    404: "error.notFound",
-    503: "error.notLoaded"
-  }
+    404: 'error.notFound',
+    503: 'error.notLoaded',
+  },
 }
 
 class Etsin {
-  constructor({ Env, Access, Accessibility }) {
-    this.Env = Env
+  constructor({ Env, Access, Accessibility, Locale }) {
+    this.env = Env
     this.Access = Access
-    this.Accessibility = Accessibility
-    this.Files = new Files()
-    this.EtsinDataset = new EtsinDataset(Access)
-    this.datasetProcessor = new DatasetProcessorV2()
-    this.relationsProcessor = new RelationsProcessor()
-    this.filesProcessor = new FilesProcessor(Env)
+    this.accessibility = Accessibility
+    this.Locale = Locale
+    this.useDatasetV3 = this.env.Flags.flagEnabled('ETSIN.METAX_V3.FRONTEND')
+
+    if (this.useDatasetV3) {
+      this.EtsinDatasetClass = EtsinDatasetV3
+      this.DatasetProcessorClass = DatasetProcessorV3
+    } else {
+      this.EtsinDatasetClass = EtsinDatasetV2
+      this.DatasetProcessorClass = DatasetProcessorV2
+    }
+
+    this.EtsinDataset = new this.EtsinDatasetClass({ Access, Locale })
+    this.datasetProcessor = new this.DatasetProcessorClass(this.env)
+    this.relationsProcessor = new RelationsProcessor(this.env)
+    this.filesProcessor = new FilesProcessor(this.env)
     makeObservable(this)
   }
 
@@ -39,6 +49,8 @@ class Etsin {
     relations: [],
     versions: [],
     custom: [],
+    Access: this.Access,
+    Locale: this.Locale,
   }
 
   @observable isLoading = {
@@ -62,15 +74,14 @@ class Etsin {
 
   @action.bound reset() {
     this.abortAllRequests()
-    this.Files = new Files()
-    this.EtsinDataset = new EtsinDataset(this.Access)
-  
+    this.EtsinDataset = new this.EtsinDatasetClass({ Access: this.Access, Locale: this.Locale })
+
     this.requests = {
       dataset: [],
       relations: [],
       versions: [],
     }
-  
+
     this.errors = {
       dataset: [],
       relations: [],
@@ -82,8 +93,8 @@ class Etsin {
       dataset: false,
       relations: false,
       versions: false,
-      files: false
-    }  
+      files: false,
+    }
   }
 
   @action.bound setCustomError(message) {
@@ -91,12 +102,16 @@ class Etsin {
   }
 
   @action.bound abortAllRequests() {
-    Object.values(this.requests).forEach(component => component.forEach(r => {r.abort()}))
+    Object.values(this.requests).forEach(component =>
+      component.forEach(r => {
+        r.abort()
+      })
+    )
   }
 
   @action.bound abortRequest(component, id) {
     const request = this.requests[component].find(p => p.id === id)
-    if(request) request.abort()
+    if (request) request.abort()
   }
 
   constructResolvedCb(component, cb) {
@@ -110,18 +125,25 @@ class Etsin {
   constructRejectedCb(component) {
     return action((error, translationFunction) => {
       this.isLoading[component] = false
-      if(isAbort(error)) {
+      if (isAbort(error)) {
         return
       }
-      if(error.response) {
-        this.errors[component] = [...this.errors[component], {
-          ...error, 
-          translation: translationFunction?.(error) || 
-          errorTranslations?.[component]?.[error.response.status] || 
-          "error.undefined"
-        }]
+      if (error.response) {
+        this.errors[component] = [
+          ...this.errors[component],
+          {
+            ...error,
+            translation:
+              translationFunction?.(error) ||
+              errorTranslations?.[component]?.[error.response.status] ||
+              'error.undefined',
+          },
+        ]
       } else {
-        this.errors[component] = [...this.errors[component], {error, translation: translationFunction?.(error) || "error.undefined"}]
+        this.errors[component] = [
+          ...this.errors[component],
+          { error, translation: translationFunction?.(error) || 'error.undefined' },
+        ]
       }
       console.error(`Error when fetching ${component}:`, error)
     })
@@ -132,25 +154,46 @@ class Etsin {
     this.reset()
     this.setLoadingOn()
     await this.fetchDataset(id)
-    await this.fetchVersions()
-    await this.fetchFiles()
+    if (!this.useDatasetV3) {
+      await this.fetchVersions()
+    } else runInAction(() => {this.isLoading.versions = false})
+
+    if (!this.useDatasetV3) {
+      await this.fetchFiles()
+    } else runInAction(() => {this.isLoading.files = false})
+
     await this.fetchPackages()
     this.requests = {}
   }
 
-  @action fetchDataset = async (id) => {
-    this.requests.dataset = [this.datasetProcessor.fetch({
-      id,
-      resolved: this.constructResolvedCb('dataset', this.updateAccess),
-      rejected: this.constructRejectedCb('dataset'),
-    })]
-    this.requests.relations = [this.relationsProcessor.fetch({
-      id,
-      resolved: this.constructResolvedCb('relations'),
-      rejected: this.constructRejectedCb('relations'),
-    })]
+  @action fetchDataset = async id => {
+    this.requests.dataset = [
+      this.datasetProcessor.fetch({
+        id,
+        resolved: this.constructResolvedCb('dataset', this.updateAccess),
+        rejected: this.constructRejectedCb('dataset'),
+      }),
+    ]
 
-    const promises = [...this.requests.dataset.map(r => r.promise), ...this.requests.relations.map(r => r.promise)]
+    const bypassRelations = () => {
+      this.isLoading.relations = false
+      return []
+    }
+
+    this.requests.relations = this.useDatasetV3
+      ? bypassRelations()
+      : [
+          this.relationsProcessor.fetch({
+            id,
+            resolved: this.constructResolvedCb('relations'),
+            rejected: this.constructRejectedCb('relations'),
+          }),
+        ]
+
+    const promises = [
+      ...this.requests.dataset.map(r => r.promise),
+      ...this.requests.relations.map(r => r.promise),
+    ]
     return Promise.all(promises)
   }
 
@@ -170,11 +213,13 @@ class Etsin {
     if (!this.EtsinDataset.isDownloadAllowed) return null
 
     this.isLoading.packages = true
-    this.requests.packages = [this.filesProcessor.fetchPackages({
-      catalogRecord: this.EtsinDataset.catalogRecord,
-      resolved: this.constructResolvedCb("packages"),
-      rejected: this.constructRejectedCb("packages"),
-    })]
+    this.requests.packages = [
+      this.filesProcessor.fetchPackages({
+        catalogRecord: this.EtsinDataset.catalogRecord,
+        resolved: this.constructResolvedCb('packages'),
+        rejected: this.constructRejectedCb('packages'),
+      }),
+    ]
     return this.requests.packages[0].promise
   }
 
@@ -200,15 +245,19 @@ class Etsin {
   }
 
   @action updateAccess = data => {
+    const accessRights = this.useDatasetV3
+      ? data.access_rights
+      : data.catalog_record.research_dataset.access_rights
+    console.log(data)
     this.Access.updateAccess(
-      data.catalog_record.research_dataset.access_rights,
+      accessRights,
       data.has_permit || false,
       data.application_state || undefined
     )
   }
 
   @action.bound setLoadingOn() {
-    this.Accessibility.announcePolite(translate('dataset.loading'))
+    this.accessibility.announcePolite(translate('dataset.loading'))
     this.isLoading.dataset = true
     this.isLoading.relations = true
     this.isLoading.versions = true

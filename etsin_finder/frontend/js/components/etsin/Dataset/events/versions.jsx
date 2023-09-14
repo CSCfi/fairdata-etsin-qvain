@@ -11,11 +11,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+
 import { Table, ID, IDLink, Margin } from './common'
 
-const Versions = props => {
-  const { versions } = props
-
+const Versions = ({ versions }) => {
   if (!(versions?.length > 0)) {
     return null
   }

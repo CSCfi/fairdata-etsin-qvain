@@ -22,7 +22,7 @@ const Description = ({ id }) => {
     Accessibility,
     Etsin: {
       EtsinDataset: {
-        dataset,
+        datasetMetadata,
         identifier,
         isRemoved,
         isHarvested,
@@ -30,6 +30,8 @@ const Description = ({ id }) => {
         hasRemoteResources,
         files,
         remoteResources,
+        creators,
+        contributors,
       },
     },
   } = useStores()
@@ -59,18 +61,17 @@ const Description = ({ id }) => {
   }
 
   const getSpatialCoverage = () =>
-    dataset.spatial && (
+    datasetMetadata.spatial && (
       <ul>
-        {dataset.spatial.map(location => {
+        {datasetMetadata.spatial.map(location => {
           if (!location.geographic_name) return null
           if (
-            location.place_uri &&
-            location.geographic_name !== checkDataLang(location?.place_uri?.pref_label)
+            location.pref_label &&
+            location.geographic_name !== checkDataLang(location.pref_label)
           ) {
             return (
-              <li key={location.geographic_name} lang={getDataLang(location.place_uri.pref_label)}>
-                {checkDataLang(location.place_uri.pref_label)}{' '}
-                <span>({location.geographic_name})</span>
+              <li key={location.geographic_name} lang={getDataLang(location.pref_label)}>
+                {checkDataLang(location.pref_label)} <span>({location.geographic_name})</span>
               </li>
             )
           }
@@ -80,9 +81,9 @@ const Description = ({ id }) => {
     )
 
   const getTemporalCoverage = () =>
-    dataset.temporal && (
+    datasetMetadata.temporal && (
       <ul>
-        {dataset.temporal.map(dates => (
+        {datasetMetadata.temporal.map(dates => (
           <li key={`temporal-${dates.start_date}-${dates.end_date}`}>
             {dateSeparator(dates.start_date, dates.end_date)}
           </li>
@@ -91,14 +92,14 @@ const Description = ({ id }) => {
     )
 
   const getLanguages = () => {
-    if (!dataset.language) return null
-    const infoArray = dataset.language.map(language => checkDataLang(language.title))
+    if (!datasetMetadata.language) return null
+    const infoArray = datasetMetadata.language.map(language => checkDataLang(language.pref_label))
     return formatDatasetInfoArray(infoArray)
   }
 
   const getFieldsOfScience = () => {
-    if (!dataset.field_of_science) return null
-    const infoArray = dataset.field_of_science.map(field => checkDataLang(field.pref_label))
+    if (!datasetMetadata.fieldOfScience) return null
+    const infoArray = datasetMetadata.fieldOfScience.map(field => checkDataLang(field.pref_label))
     return formatDatasetInfoArray(infoArray)
   }
 
@@ -108,10 +109,10 @@ const Description = ({ id }) => {
         <MainInfo id="main-info">
           <TextInfo>
             <ErrorBoundary>
-              <TogglableAgentList agents={dataset.creator} agentType="creator" />
+              <TogglableAgentList agents={creators} agentType="creator" />
             </ErrorBoundary>
             <ErrorBoundary>
-              <TogglableAgentList agents={dataset.contributor} agentType="contributor" />
+              <TogglableAgentList agents={contributors} agentType="contributor" />
             </ErrorBoundary>
             <DatasetDateInfo />
           </TextInfo>
@@ -120,11 +121,11 @@ const Description = ({ id }) => {
 
         <DescriptionArea>
           <DatasetInfoItem
-            lang={getDataLang(dataset.description)}
+            lang={getDataLang(datasetMetadata.description)}
             itemTitle={'dataset.description'}
           >
-            {dataset.description && (
-              <CustomMarkdown>{checkDataLang(dataset.description)}</CustomMarkdown>
+            {datasetMetadata.description && (
+              <CustomMarkdown>{checkDataLang(datasetMetadata.description)}</CustomMarkdown>
             )}
           </DatasetInfoItem>
 
@@ -135,7 +136,7 @@ const Description = ({ id }) => {
           </DatasetInfoItem>
 
           <DatasetInfoItem itemTitle={'dataset.keywords'}>
-            {formatDatasetInfoArray(dataset.keyword)}
+            {formatDatasetInfoArray(datasetMetadata.keywords)}
           </DatasetInfoItem>
 
           <DatasetInfoItem itemTitle={'dataset.language'}>{getLanguages()}</DatasetInfoItem>

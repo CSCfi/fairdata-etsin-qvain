@@ -14,6 +14,7 @@ import styled from 'styled-components'
 
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import dateFormat from '@/utils/dateFormat'
+import { useStores } from '@/stores/stores'
 import Agent from '../Agent'
 import getPreservationEvent from './getPreservationEvent'
 import { PreservationInfo } from './common'
@@ -31,6 +32,11 @@ const printDate = temp => {
 
 const Event = props => {
   const { event, preservationInfo } = props
+  const {
+    Etsin: {
+      EtsinDataset: { shapeActor },
+    },
+  } = useStores()
 
   const { title: preservationEventTitle, description: preservationEventDescription } =
     getPreservationEvent({
@@ -51,16 +57,15 @@ const Event = props => {
       </td>
       <td>
         {event.was_associated_with &&
-          event.was_associated_with.map((associate, i) => {
-            if (associate.name) {
+          event.was_associated_with.map((v2Associate, i) => {
+            const associate = shapeActor(v2Associate)
+            const name =
+              associate.actor.person?.name || checkDataLang(associate.actor.organization.pref_label)
+            const lang = getDataLang(associate)
+            if (name) {
               return (
-                <InlineUl key={`ul-${checkDataLang(associate.name)}`}>
-                  <Agent
-                    lang={getDataLang(associate)}
-                    key={checkDataLang(associate) || associate.name}
-                    first={i === 0}
-                    agent={associate}
-                  />
+                <InlineUl key={`ul-${name}`}>
+                  <Agent lang={lang} key={name} first={i === 0} agent={associate.actor} />
                 </InlineUl>
               )
             }

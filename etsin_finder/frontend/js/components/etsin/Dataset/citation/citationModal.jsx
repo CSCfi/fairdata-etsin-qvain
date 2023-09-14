@@ -12,14 +12,12 @@
 
 import React from 'react'
 import { observer } from 'mobx-react'
-import { toJS } from 'mobx'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 
 import Modal from '@/components/general/modal'
 import { useStores } from '@/utils/stores'
-import Cite from './cite'
 import CopyToClipboard from '../copyToClipboard'
 
 const customStyles = {
@@ -56,20 +54,18 @@ Citation.propTypes = {
 const CitationModal = () => {
   const {
     Etsin: {
-      EtsinDataset: { catalogRecord, showCitationModal, setShowCitationModal },
+      EtsinDataset: {
+        dataset,
+        showCitationModal,
+        setShowCitationModal,
+        citations: { apa, bibtex, chicago, mla },
+      },
     },
-    Locale: { getValueTranslation },
   } = useStores()
-  const dataset = toJS(catalogRecord)
-  const cite = new Cite(getValueTranslation)
+
   if (!dataset) {
     return null
   }
-
-  const apa = cite.apa(dataset)
-  const chicago = cite.chicago(dataset)
-  const mla = cite.mla(dataset)
-  const bibtex = cite.bibtex(dataset)
 
   return (
     <Modal

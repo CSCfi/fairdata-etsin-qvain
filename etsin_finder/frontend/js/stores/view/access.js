@@ -43,7 +43,7 @@ class Access {
   }
 
   updateAccess(access, hasPermit, state) {
-    switch (access.access_type.identifier) {
+    switch (access?.access_type?.identifier) {
       case accessTypes.open:
         this.open()
         break

@@ -3,9 +3,12 @@
 
 */
 import { makeObservable, action } from 'mobx'
+import AbortClient from '@/utils/AbortClient'
 
 class EtsinProcessor {
-  constructor() {
+  constructor(Env) {
+    this.Env = Env
+    this.client = new AbortClient()
     makeObservable(this)
   }
 

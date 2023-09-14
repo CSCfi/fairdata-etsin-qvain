@@ -20,7 +20,7 @@ const QueryFields = {
 
 class FilesProcessor extends EtsinProcessor {
   constructor(Env) {
-    super()
+    super(Env)
     makeObservable(this)
     this.Packages = new Packages(Env)
     this.Files = new Files()
@@ -29,23 +29,25 @@ class FilesProcessor extends EtsinProcessor {
 
   @override
   async fetch({ catalogRecord, resolved, rejected }) {
-    if(!catalogRecord) return null
+    if (!catalogRecord) return null
     this.Packages.clearPackages()
     const id = catalogRecord.identifier
-    const promise = this.Files.openDataset(catalogRecord).then(() => {
-      if(resolved) resolved(this.Files)
-    }).catch(rej => {
-      if (rejected) rejected(rej)
-    })
-    return {id, promise, abort: () => this.client.abort()}
+    const promise = this.Files.openDataset(catalogRecord)
+      .then(() => {
+        if (resolved) resolved(this.Files)
+      })
+      .catch(rej => {
+        if (rejected) rejected(rej)
+      })
+    return { id, promise, abort: () => this.client.abort() }
   }
 
   @action.bound
-  async fetchPackages({catalogRecord, resolved, rejected}) {
+  async fetchPackages({ catalogRecord, resolved, rejected }) {
     try {
       await this.Packages.fetch(catalogRecord.identifier)
       if (resolved) resolved(this.Packages)
-    } catch(e) {
+    } catch (e) {
       console.log('failed to fetch packages:', e)
       if (rejected) rejected(e)
     }
@@ -70,7 +72,6 @@ class FilesProcessor extends EtsinProcessor {
         })
     })
   }
-
 }
 
 export default FilesProcessor

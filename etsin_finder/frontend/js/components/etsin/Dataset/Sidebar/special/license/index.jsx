@@ -7,46 +7,40 @@ import { LICENSE_URL } from '@/utils/constants'
 import isUrl from '@/utils/isUrl'
 import LicensePopUp from './licensePopUp'
 
-const License = props => {
-  const {
-    data: { license, title, description, identifier },
-  } = props
-  const licenseIsUrl = isUrl(license)
+const License = ({ license }) => {
+  const licenseIsUrl = isUrl(license.custom_url)
 
   let info
-  if (identifier === LICENSE_URL.OTHER) {
+  if (license.url === LICENSE_URL.OTHER) {
     info = 'dataset.otherLicense'
   }
+
+  const lang = getDataLang(license.pref_label)
+  const name = checkDataLang(license.pref_label, lang) || checkDataLang(license.custom_url, lang)
 
   return (
     <span>
       {licenseIsUrl && (
-        <MainLink
-          href={license}
-          target="_blank"
-          rel="noopener noreferrer"
-          lang={getDataLang(title)}
-        >
-          {checkDataLang(title)}
-          {!checkDataLang(title) && checkDataLang(license)}
+        <MainLink href={license.custom_url} target="_blank" rel="noopener noreferrer" lang={lang}>
+          {name}
         </MainLink>
       )}
-      {!licenseIsUrl && (
-        <Title lang={getDataLang(title)}>
-          {checkDataLang(title)}
-          {!checkDataLang(title) && checkDataLang(license)}
-        </Title>
-      )}
-      <LicensePopUp license={license} title={title} description={description} info={info} />
+      {!licenseIsUrl && <Title lang={lang}>{name}</Title>}
+      <LicensePopUp
+        license={license.custom_url}
+        title={license.pref_label}
+        description={license.description}
+        info={info}
+      />
     </span>
   )
 }
 
 License.propTypes = {
-  data: PropTypes.shape({
-    license: PropTypes.string,
-    title: PropTypes.object,
-    identifier: PropTypes.string, // custom license might not have an identifier
+  license: PropTypes.shape({
+    custom_url: PropTypes.string,
+    pref_label: PropTypes.object,
+    url: PropTypes.string, // custom license might not have a url
     description: PropTypes.object,
   }).isRequired,
 }

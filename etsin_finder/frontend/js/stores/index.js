@@ -36,7 +36,7 @@ export const buildStores = () => {
   const Access = new AccessClass(Auth)
   const Qvain = new QvainClass(Env, Auth)
   const DatasetQuery = new DatasetQueryClass(Env, Access)
-  const Etsin = new EtsinClass({ Env, Access, Accessibility })
+  const Etsin = new EtsinClass({ Env, Access, Accessibility, Locale })
   const Map = new MapClass(Locale)
   const Matomo = new MatomoClass(Env)
   const CrossRef = new CrossRefClass(Env)

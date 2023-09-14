@@ -1,0 +1,605 @@
+{
+  "catalog_record": {
+    "access_granter": {
+      "name": "fd_user5_first fd_user5_l\u00e4st",
+      "userid": "fd_user5"
+    },
+    "api_meta": {
+      "version": 2
+    },
+    "cumulative_state": 1,
+    "data_catalog": {
+      "catalog_json": {
+        "access_rights": {
+          "access_type": [
+            {
+              "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+              "pref_label": {
+                "en": "Open",
+                "fi": "Avoin",
+                "und": "Avoin"
+              }
+            }
+          ],
+          "description": {
+            "en": "Datasets stored in the IDA service",
+            "fi": "IDA-palvelussa s\u00e4ilytett\u00e4v\u00e4t aineistot"
+          },
+          "license": [
+            {
+              "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC0-1.0",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "title": {
+                "en": "Creative Commons CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
+                "fi": "Creative Commons Yleismaailmallinen (CC0 1.0) Public Domain -lausuma",
+                "und": "Creative Commons Yleismaailmallinen (CC0 1.0) Public Domain -lausuma"
+              }
+            }
+          ]
+        },
+        "dataset_versioning": true,
+        "harvested": false,
+        "identifier": "urn:nbn:fi:att:data-catalog-ida",
+        "language": [
+          {
+            "identifier": "http://lexvo.org/id/iso639-3/fin",
+            "title": {
+              "en": "Finnish language",
+              "fi": "Suomen kieli",
+              "sv": "finska",
+              "und": "Suomen kieli"
+            }
+          },
+          {
+            "identifier": "http://lexvo.org/id/iso639-3/eng",
+            "title": {
+              "en": "English language",
+              "fi": "Englannin kieli",
+              "sv": "engelska",
+              "und": "Englannin kieli"
+            }
+          }
+        ],
+        "logo": "fairdata_tree_logo.svg",
+        "publisher": {
+          "homepage": [
+            {
+              "identifier": "https://www.fairdata.fi",
+              "title": {
+                "en": "Fairdata.fi",
+                "fi": "Fairdata.fi"
+              }
+            }
+          ],
+          "name": {
+            "en": "Ministry of Education and Culture, Finland",
+            "fi": "Opetus- ja kulttuuriministeri\u00f6"
+          }
+        },
+        "research_dataset_schema": "ida",
+        "title": {
+          "en": "Fairdata IDA datasets",
+          "fi": "Fairdata IDA-aineistot",
+          "sv": "Fairdata forskningsdata"
+        }
+      },
+      "catalog_record_services_create": "ida,metax,qvain,qvain-light,tpas",
+      "catalog_record_services_edit": "ida,metax,qvain,qvain-light,tpas",
+      "catalog_record_services_read": "ida,metax,qvain,qvain-light,etsin,tpas,download",
+      "date_created": "2023-06-12T21:10:59.670716+03:00",
+      "id": 9,
+      "publish_to_etsin": true,
+      "publish_to_ttv": true,
+      "removed": false
+    },
+    "dataset_version_set": [
+      {
+        "date_created": "2023-07-20T08:49:20+03:00",
+        "identifier": "bc6f748d-e801-4a7c-a248-9d44fc34df25",
+        "preferred_identifier": "doi:10.23729/9b63437f-978b-4e46-9205-a6f9260fc206",
+        "removed": false
+      },
+      {
+        "date_created": "2023-06-28T10:16:22+03:00",
+        "identifier": "fcabb947-0880-4e0f-a280-0bdb174defb7",
+        "preferred_identifier": "doi:10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5",
+        "removed": false
+      },
+      {
+        "date_created": "2023-06-28T10:14:36+03:00",
+        "identifier": "bcd958e4-676d-4832-be40-fa12d5799a69",
+        "preferred_identifier": "doi:10.23729/383c86c4-3eb4-4b6d-9161-ed96bc799814",
+        "removed": false
+      }
+    ],
+    "date_created": "2023-07-20T08:49:20+03:00",
+    "date_cumulation_started": "2023-07-20T08:49:20+03:00",
+    "date_modified": "2023-07-20T08:49:21+03:00",
+    "deprecated": false,
+    "id": 269,
+    "identifier": "bc6f748d-e801-4a7c-a248-9d44fc34df25",
+    "metadata_owner_org": "csc.fi",
+    "metadata_provider_org": "csc.fi",
+    "metadata_provider_user": "fd_user5",
+    "preservation_identifier": "doi:10.23729/9b63437f-978b-4e46-9205-a6f9260fc206",
+    "preservation_state": 0,
+    "previous_dataset_version": {
+      "id": 122,
+      "identifier": "fcabb947-0880-4e0f-a280-0bdb174defb7",
+      "preferred_identifier": "doi:10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5"
+    },
+    "removed": false,
+    "research_dataset": {
+      "access_rights": {
+        "access_type": {
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/access_type",
+          "pref_label": {
+            "en": "Open",
+            "fi": "Avoin",
+            "und": "Avoin"
+          }
+        },
+        "license": [
+          {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
+            "license": "https://creativecommons.org/licenses/by/4.0/",
+            "title": {
+              "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+              "fi": "Creative Commons Nime\u00e4 4.0 Kansainv\u00e4linen (CC BY 4.0)",
+              "und": "Creative Commons Nime\u00e4 4.0 Kansainv\u00e4linen (CC BY 4.0)"
+            }
+          },
+          {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/other-open",
+            "title": {
+              "en": "Other (Open)",
+              "fi": "Muu (Avoin)",
+              "und": "Muu (Avoin)"
+            }
+          }
+        ]
+      },
+      "contributor": [
+        {
+          "@type": "Person",
+          "member_of": {
+            "@type": "Organization",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02536",
+            "name": {
+              "en": "Centria University of Applied Sciences",
+              "fi": "Centria-ammattikorkeakoulu",
+              "sv": "Centria-ammattikorkeakoulu",
+              "und": "Centria-ammattikorkeakoulu"
+            }
+          },
+          "name": "Kuvitteellinen Henkil\u00f6"
+        },
+        {
+          "@type": "Person",
+          "member_of": {
+            "@type": "Organization",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02536",
+            "name": {
+              "en": "Centria University of Applied Sciences",
+              "fi": "Centria-ammattikorkeakoulu",
+              "sv": "Centria-ammattikorkeakoulu",
+              "und": "Centria-ammattikorkeakoulu"
+            }
+          },
+          "name": "Olemassaolematon Henkil\u00f6"
+        },
+        {
+          "@type": "Person",
+          "member_of": {
+            "@type": "Organization",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02135371",
+            "name": {
+              "en": "Kone Foundation",
+              "fi": "Koneen S\u00e4\u00e4ti\u00f6",
+              "sv": "Koneen s\u00e4\u00e4ti\u00f6",
+              "und": "Koneen S\u00e4\u00e4ti\u00f6"
+            }
+          },
+          "name": "Unexisting Entity"
+        },
+        {
+          "@type": "Person",
+          "member_of": {
+            "@type": "Organization",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02469",
+            "name": {
+              "en": "Karelia University of Applied Sciences",
+              "fi": "Karelia",
+              "und": "Karelia"
+            }
+          },
+          "name": "Missing Existence"
+        }
+      ],
+      "creator": [
+        {
+          "@type": "Person",
+          "member_of": {
+            "@type": "Organization",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02536",
+            "name": {
+              "en": "Centria University of Applied Sciences",
+              "fi": "Centria-ammattikorkeakoulu",
+              "sv": "Centria-ammattikorkeakoulu",
+              "und": "Centria-ammattikorkeakoulu"
+            }
+          },
+          "name": "Kuvitteellinen Henkil\u00f6"
+        },
+        {
+          "@type": "Organization",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10065-449",
+          "is_part_of": {
+            "@type": "Organization",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10065",
+            "name": {
+              "en": "Metropolia University of Applied Sciences",
+              "fi": "Metropolia ammattikorkeakoulu",
+              "sv": "Metropolia ammattikorkeakoulu",
+              "und": "Metropolia ammattikorkeakoulu"
+            }
+          },
+          "name": {
+            "fi": "Kiinteist\u00f6- ja rakennusala",
+            "und": "Kiinteist\u00f6- ja rakennusala"
+          }
+        }
+      ],
+      "curator": [
+        {
+          "@type": "Person",
+          "member_of": {
+            "@type": "Organization",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02135371",
+            "name": {
+              "en": "Kone Foundation",
+              "fi": "Koneen S\u00e4\u00e4ti\u00f6",
+              "sv": "Koneen s\u00e4\u00e4ti\u00f6",
+              "und": "Koneen S\u00e4\u00e4ti\u00f6"
+            }
+          },
+          "name": "Unexisting Entity"
+        }
+      ],
+      "description": {
+        "en": "This dataset is used for testing all fields in the Etsin dataset page. Description, Data, Identifiers and Events, and Maps -tabs are included in this test as well. Another version was made to test the version picker as well. Another another version was made to test the version picker further.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "fi": "T\u00e4ll\u00e4 aineistolla testataan kaikkia Etsimen aineistosivulta l\u00f6ytyvi\u00e4 kentti\u00e4. Aineisto, Data, Tunnisteet ja Tapahtumat, sek\u00e4 Kartat -v\u00e4lilehdet kuuluvat my\u00f6s t\u00e4h\u00e4n testiin. Uusi versio tehtiin, jotta version valinta -painiketta voidaan testata.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+      },
+      "field_of_science": [
+        {
+          "identifier": "http://www.yso.fi/onto/okm-tieteenala/ta113",
+          "in_scheme": "http://www.yso.fi/onto/okm-tieteenala/conceptscheme",
+          "pref_label": {
+            "en": "Computer and information sciences",
+            "fi": "Tietojenk\u00e4sittely ja informaatiotieteet",
+            "sv": "Data- och informationsvetenskap",
+            "und": "Tietojenk\u00e4sittely ja informaatiotieteet"
+          }
+        }
+      ],
+      "is_output_of": [
+        {
+          "funder_type": {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/funder_type/code/eu-other",
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/funder_type",
+            "pref_label": {
+              "en": "EU other funding",
+              "fi": "EU muu rahoitus",
+              "und": "EU muu rahoitus"
+            }
+          },
+          "has_funder_identifier": "funding_identifier",
+          "has_funding_agency": [
+            {
+              "@type": "Organization",
+              "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
+              "name": {
+                "en": "Aalto University",
+                "fi": "Aalto-yliopisto",
+                "sv": "Aalto-universitetet",
+                "und": "Aalto-yliopisto"
+              }
+            }
+          ],
+          "identifier": "This is an identifier for a project",
+          "name": {
+            "en": "Test Project"
+          },
+          "source_organization": [
+            {
+              "@type": "Organization",
+              "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/24053596",
+              "name": {
+                "en": "Agency for Rural Affairs in Finland",
+                "fi": "Maaseutuvirasto",
+                "sv": "Landsbygdsverket",
+                "und": "Maaseutuvirasto"
+              }
+            },
+            {
+              "@type": "Organization",
+              "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/06794809",
+              "name": {
+                "en": "Oulu University Hospital Catchment Area",
+                "fi": "Oulun yliopistollisen sairaalan erityisvastuualue",
+                "sv": "Ule\u00e5borg universitetssjukhus specialupptagningsomr\u00e5de",
+                "und": "Oulun yliopistollisen sairaalan erityisvastuualue"
+              }
+            }
+          ]
+        }
+      ],
+      "issued": "2023-06-28",
+      "keyword": [
+        "test",
+        "software development",
+        "web-development",
+        "testi",
+        "ohjelmistokehitys",
+        "web-kehitys"
+      ],
+      "language": [
+        {
+          "identifier": "http://lexvo.org/id/iso639-3/eng",
+          "title": {
+            "en": "English",
+            "fi": "englanti",
+            "sv": "engelska",
+            "und": "englanti"
+          }
+        },
+        {
+          "identifier": "http://lexvo.org/id/iso639-3/fin",
+          "title": {
+            "en": "Finnish",
+            "fi": "suomi",
+            "sv": "finska",
+            "und": "suomi"
+          }
+        }
+      ],
+      "metadata_version_identifier": "23b33e36-9490-40f4-88a6-a3095d735161",
+      "modified": "2023-07-20T05:49:20.227Z",
+      "other_identifier": [
+        {
+          "notation": "thisIsAnotherIdentifierForThisDataset"
+        }
+      ],
+      "preferred_identifier": "doi:10.23729/9b63437f-978b-4e46-9205-a6f9260fc206",
+      "provenance": [
+        {
+          "description": {
+            "en": "And it was great"
+          },
+          "event_outcome": {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/event_outcome/code/success",
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/event_outcome",
+            "pref_label": {
+              "en": "Success",
+              "fi": "Onnistunut",
+              "sv": "Framg\u00e5ngsrik",
+              "und": "Onnistunut"
+            }
+          },
+          "lifecycle_event": {
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event/code/destroyed",
+            "in_scheme": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event",
+            "pref_label": {
+              "en": "Destroyed",
+              "fi": "Tuhottu",
+              "und": "Tuhottu"
+            }
+          },
+          "outcome_description": {
+            "en": "Destruction complete"
+          },
+          "spatial": {
+            "full_address": "Annankatu 5",
+            "geographic_name": "Random Test Location"
+          },
+          "temporal": {
+            "end_date": "2023-06-20T00:00:00.000Z",
+            "start_date": "2023-06-19T00:00:00.000Z"
+          },
+          "title": {
+            "en": "This thing happened"
+          },
+          "was_associated_with": [
+            {
+              "@type": "Person",
+              "member_of": {
+                "@type": "Organization",
+                "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02135371",
+                "name": {
+                  "en": "Kone Foundation",
+                  "fi": "Koneen S\u00e4\u00e4ti\u00f6",
+                  "sv": "Koneen s\u00e4\u00e4ti\u00f6",
+                  "und": "Koneen S\u00e4\u00e4ti\u00f6"
+                }
+              },
+              "name": "Unexisting Entity"
+            }
+          ]
+        }
+      ],
+      "publisher": {
+        "@type": "Person",
+        "member_of": {
+          "@type": "Organization",
+          "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02536",
+          "name": {
+            "en": "Centria University of Applied Sciences",
+            "fi": "Centria-ammattikorkeakoulu",
+            "sv": "Centria-ammattikorkeakoulu",
+            "und": "Centria-ammattikorkeakoulu"
+          }
+        },
+        "name": "Olemassaolematon Henkil\u00f6"
+      },
+      "relation": [
+        {
+          "entity": {
+            "description": {
+              "en": "This is a test",
+              "fi": "T\u00e4m\u00e4 on testiaineisto"
+            },
+            "identifier": "test identifier",
+            "title": {
+              "en": "Another Dataset",
+              "fi": "Toinen Aineisto"
+            },
+            "type": {
+              "identifier": "http://uri.suomi.fi/codelist/fairdata/resource_type/code/publication",
+              "in_scheme": "http://uri.suomi.fi/codelist/fairdata/resource_type",
+              "pref_label": {
+                "en": "Publication",
+                "fi": "Julkaisu",
+                "und": "Julkaisu"
+              }
+            }
+          },
+          "relation_type": {
+            "identifier": "http://www.w3.org/2002/07/owl#sameAs",
+            "pref_label": {
+              "en": "Is identical to",
+              "fi": "Identtinen aineisto",
+              "und": "Identtinen aineisto"
+            }
+          }
+        },
+        {
+          "entity": {
+            "description": {
+              "en": "This is a test description",
+              "fi": "T\u00e4m\u00e4 on testikuvaus"
+            },
+            "identifier": "testidentifierYetAgain",
+            "title": {
+              "en": "This is a test",
+              "fi": "T\u00e4m\u00e4 on testi"
+            },
+            "type": {
+              "identifier": "http://uri.suomi.fi/codelist/fairdata/resource_type/code/image",
+              "in_scheme": "http://uri.suomi.fi/codelist/fairdata/resource_type",
+              "pref_label": {
+                "en": "Image",
+                "fi": "Kuva",
+                "und": "Kuva"
+              }
+            }
+          },
+          "relation_type": {
+            "identifier": "http://purl.org/spar/cito/isCitedBy",
+            "pref_label": {
+              "en": "Is cited by",
+              "fi": "Viitattu",
+              "und": "Viitattu"
+            }
+          }
+        }
+      ],
+      "rights_holder": [
+        {
+          "@type": "Person",
+          "member_of": {
+            "@type": "Organization",
+            "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/02469",
+            "name": {
+              "en": "Karelia University of Applied Sciences",
+              "fi": "Karelia",
+              "und": "Karelia"
+            }
+          },
+          "name": "Missing Existence"
+        }
+      ],
+      "spatial": [
+        {
+          "full_address": "Unioninkatu 6, Helsinki",
+          "geographic_name": "Random Address in Helsinki",
+          "place_uri": {
+            "identifier": "http://www.yso.fi/onto/yso/p189359",
+            "in_scheme": "http://www.yso.fi/onto/yso/places",
+            "pref_label": {
+              "en": "Unioninkatu",
+              "fi": "Unioninkatu (Helsinki)",
+              "sv": "Unionsgatan (Helsingfors)",
+              "und": "Unioninkatu (Helsinki)"
+            }
+          }
+        },
+        {
+          "as_wkt": ["POINT(24.80634 60.17653)"],
+          "full_address": "It\u00e4tuulenkuja 3, Espoo",
+          "geographic_name": "Another Random Address in Espoo",
+          "place_uri": {
+            "identifier": "http://www.yso.fi/onto/yso/p105747",
+            "in_scheme": "http://www.yso.fi/onto/yso/places",
+            "pref_label": {
+              "en": "Tapiola",
+              "fi": "Tapiola (Espoo)",
+              "sv": "Hagalund (Esbo)",
+              "und": "Tapiola (Espoo)"
+            }
+          }
+        }
+      ],
+      "temporal": [
+        {
+          "end_date": "2023-08-15T00:00:00.000Z",
+          "start_date": "2023-06-30T00:00:00.000Z"
+        },
+        {
+          "end_date": "2023-07-04T00:00:00.000Z",
+          "start_date": "2023-06-08T00:00:00.000Z"
+        }
+      ],
+      "theme": [
+        {
+          "identifier": "http://www.yso.fi/onto/koko/p53359",
+          "in_scheme": "http://www.yso.fi/onto/koko/",
+          "pref_label": {
+            "en": "software development",
+            "fi": "ohjelmistokehitys",
+            "sv": "programutveckling",
+            "und": "ohjelmistokehitys"
+          }
+        },
+        {
+          "identifier": "http://www.yso.fi/onto/koko/p35020",
+          "in_scheme": "http://www.yso.fi/onto/koko/",
+          "pref_label": {
+            "en": "web pages",
+            "fi": "WWW-sivut",
+            "se": "WWW-siiddut",
+            "sv": "webbsidor",
+            "und": "WWW-sivut"
+          }
+        }
+      ],
+      "title": {
+        "en": "All Fields Test Dataset",
+        "fi": "Kaikkien kenttien testiaineisto testi"
+      },
+      "total_files_byte_size": 1024
+    },
+    "service_created": "qvain-light",
+    "service_modified": "qvain-light",
+    "state": "published",
+    "user_created": "fd_user5",
+    "user_modified": "fd_user5"
+  },
+  "email_info": {
+    "CONTRIBUTOR": true,
+    "CREATOR": true,
+    "CURATOR": true,
+    "PUBLISHER": true,
+    "RIGHTS_HOLDER": true
+  }
+}

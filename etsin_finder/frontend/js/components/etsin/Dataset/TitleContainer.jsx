@@ -10,21 +10,21 @@ import AccessRights from './accessRights'
 const TitleContainer = () => {
   const {
     Etsin: {
-      EtsinDataset: { catalogRecord, dataset, isCumulative, isHarvested, isPas },
+      EtsinDataset: { datasetMetadata, preservation, isCumulative, isHarvested, isPas },
     },
   } = useStores()
 
   return (
     <Container className="d-md-flex dataset-title">
-      <Title lang={getDataLang(dataset.title)}>
-        {checkDataLang(dataset.title)}
+      <Title lang={getDataLang(datasetMetadata.title)}>
+        {checkDataLang(datasetMetadata.title)}
         <span aria-hidden> </span>
         <Translate id="dataset-tags" content="dataset.tags" className="sr-only" element="span" />
         <Tags id="tags">
           {/* Access type */}
           <AccessRights button />
           {/* PAS */}
-          {catalogRecord.preservation_state > 0 && isPas && (
+          {preservation.state > 0 && isPas && (
             <PASLabel>
               <Translate component="span" content="dataset.fairdataPas" />
             </PASLabel>

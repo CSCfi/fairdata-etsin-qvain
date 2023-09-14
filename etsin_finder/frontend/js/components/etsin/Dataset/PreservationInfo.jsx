@@ -8,31 +8,29 @@ import { useStores } from '@/utils/stores'
 const PreservationInfo = () => {
   const {
     Etsin: {
-      EtsinDataset: { catalogRecord, isPas },
+      EtsinDataset: { isPas, preservation },
     },
   } = useStores()
 
-  return isPas ||
-    catalogRecord.preservation_dataset_origin_version ||
-    catalogRecord.preservation_dataset_version ? (
+  return isPas || preservation.datasetOriginVersion || preservation.datasetVersion ? (
     <Container>
       {isPas && (
         <PasInfo>
           <Translate content="dataset.storedInPas" />
         </PasInfo>
       )}
-      {catalogRecord.preservation_dataset_origin_version && (
+      {preservation.datasetOriginVersion && (
         <PasInfo>
           <Translate content="dataset.originalDatasetVersionExists" />
-          <Link to={`/dataset/${catalogRecord.preservation_dataset_origin_version.identifier}`}>
+          <Link to={`/dataset/${preservation.datasetOriginVersion.identifier}`}>
             <Translate content="dataset.linkToOriginalDataset" />
           </Link>
         </PasInfo>
       )}
-      {catalogRecord.preservation_dataset_version && (
+      {preservation.datasetVersion && (
         <PasInfo>
           <Translate content="dataset.pasDatasetVersionExists" />
-          <Link to={`/dataset/${catalogRecord.preservation_dataset_version.identifier}`}>
+          <Link to={`/dataset/${preservation.datasetVersion.identifier}`}>
             <Translate content="dataset.linkToPasDataset" />
           </Link>
         </PasInfo>
