@@ -2,6 +2,7 @@ import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
+import ReactModal from 'react-modal'
 
 import { MemoryRouter, Route } from 'react-router-dom'
 
@@ -44,6 +45,7 @@ const renderQvain = async () => {
       </MemoryRouter>
     </ThemeProvider>
   )
+  ReactModal.setAppElement(document.createElement('div'))
   await waitForElementToBeRemoved(() => screen.queryByText('Loading dataset'))
 }
 
@@ -120,12 +122,12 @@ describe('Qvain with an opened IDA dataset', () => {
       // redundant reference data
       /\.in_scheme$/,
       /\.pref_label\..+/,
+      /\.reference\.as_wkt$/,
       // fields not yet supported
       /^actors\./,
       /^access_rights\.description/,
       /license\.\d+\.custom_url$/,
       /license\.\d+\.description$/,
-      /spatial\.\d+\..+/,
       /temporal\.\d+\..+/,
       /provenance\.\d+\..+/,
       // special handling
@@ -154,5 +156,32 @@ describe('Qvain with an opened IDA dataset', () => {
     const flatSubmit = removeMatchingKeys(flatten(submitData), expectedExtra)
 
     expect(flatDataset).toEqual(flatSubmit)
+  })
+
+  it('shows spatial in modal', async () => {
+    // check spatials are present
+    const section = await renderSection('Geographical area')
+    expect(within(section).getByText('Random Address in Helsinki')).toBeInTheDocument()
+
+    const espooAddress = within(section).getByText('Another Random Address in Espoo')
+    expect(espooAddress).toBeInTheDocument()
+
+    // open modal
+    const editButton = within(espooAddress.closest('div')).getByRole('button', { name: 'Edit' })
+    await userEvent.click(editButton)
+    const modal = screen.getByRole('dialog')
+    expect(within(modal).getByRole('heading', { name: 'Edit Geographical area' })).toBeInTheDocument()
+
+    // check input values are present
+    expect(within(modal).getByLabelText('Name*').value).toEqual('Another Random Address in Espoo')
+    expect(within(modal).getByLabelText('Address').value).toEqual('Itätuulenkuja 3, Espoo')
+    expect(within(modal).getByLabelText('Altitude').value).toEqual('1337')
+
+    expect(within(document.getElementById('location-input')).getByText('Tapiola')).toBeInTheDocument()
+
+    const customGeometry = within(modal)
+      .getByText('Add geometry using WKT format in WGS84 coordinate system')
+      .closest('div')
+    expect(within(customGeometry).getByDisplayValue('POINT(22 61)')).toBeInTheDocument()
   })
 })

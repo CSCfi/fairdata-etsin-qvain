@@ -173,13 +173,16 @@ const dataset = {
       title: { en: 'This thing happened' },
       description: { en: 'And it was great' },
       spatial: {
-        url: 'http://www.yso.fi/onto/yso/p189359',
-        pref_label: {
-          en: 'Unioninkatu',
-          fi: 'Unioninkatu (Helsinki)',
-          sv: 'Unionsgatan (Helsingfors)',
+        reference: {
+          url: 'http://www.yso.fi/onto/yso/p189359',
+          pref_label: {
+            en: 'Unioninkatu',
+            fi: 'Unioninkatu (Helsinki)',
+            sv: 'Unionsgatan (Helsingfors)',
+          },
+          in_scheme: 'http://www.yso.fi/onto/yso/places',
+          as_wkt: '',
         },
-        in_scheme: 'http://www.yso.fi/onto/yso/places',
         full_address: 'Annankatu 5',
         geographic_name: 'Random Test Location',
         altitude_in_meters: null,
@@ -205,30 +208,33 @@ const dataset = {
   ],
   spatial: [
     {
-      url: 'http://www.yso.fi/onto/yso/p189359',
-      pref_label: {
-        en: 'Unioninkatu',
-        fi: 'Unioninkatu (Helsinki)',
-        sv: 'Unionsgatan (Helsingfors)',
+      reference: {
+        url: 'http://www.yso.fi/onto/yso/p189359',
+        pref_label: {
+          en: 'Unioninkatu',
+          fi: 'Unioninkatu (Helsinki)',
+          sv: 'Unionsgatan (Helsingfors)',
+        },
+        in_scheme: 'http://www.yso.fi/onto/yso/places',
+        as_wkt: '',
       },
-      in_scheme: 'http://www.yso.fi/onto/yso/places',
+      altitude_in_meters: null,
       full_address: 'Unioninkatu 6, Helsinki',
       geographic_name: 'Random Address in Helsinki',
-      altitude_in_meters: null,
-      dataset: '4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0',
       id: 'c3d7beac-6724-412b-8365-9efa39d9b21b',
-      as_wkt: '',
     },
     {
-      url: 'http://www.yso.fi/onto/yso/p105747',
-      pref_label: { en: 'Tapiola', fi: 'Tapiola (Espoo)', sv: 'Hagalund (Esbo)' },
-      in_scheme: 'http://www.yso.fi/onto/yso/places',
+      reference: {
+        url: 'http://www.yso.fi/onto/yso/p105747',
+        pref_label: { en: 'Tapiola', fi: 'Tapiola (Espoo)', sv: 'Hagalund (Esbo)' },
+        in_scheme: 'http://www.yso.fi/onto/yso/places',
+        as_wkt: 'POINT(24.80634 60.17653)',
+      },
       full_address: 'Itätuulenkuja 3, Espoo',
       geographic_name: 'Another Random Address in Espoo',
-      altitude_in_meters: null,
-      dataset: '4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0',
+      altitude_in_meters: 1337,
       id: 'c04c4768-515e-463d-a3d8-f75b2f532acc',
-      as_wkt: 'POINT(24.80634 60.17653)',
+      custom_wkt: ['POINT(22 61)'],
     },
   ],
   other_identifiers: [

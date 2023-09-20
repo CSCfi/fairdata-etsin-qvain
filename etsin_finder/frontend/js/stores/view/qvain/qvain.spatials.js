@@ -63,6 +63,8 @@ class Spatials extends Field {
     place_uri: spatial.location ? { identifier: spatial.location.url } : { identifier: undefined },
   })
 
+  getItemLabel = spatial => spatial.name || spatial.location.name
+
   toBackend = () => this.storage.map(this.spatialToBackend)
 
   fromBackend = (dataset, Qvain) => {

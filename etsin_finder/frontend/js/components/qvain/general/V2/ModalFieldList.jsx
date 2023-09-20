@@ -12,7 +12,15 @@ import {
 } from './buttons'
 import { useStores } from '@/stores/stores'
 
-const ModalFieldList = ({ storage, edit, remove, readonly, translationsRoot, disableNoItemsText }) => {
+const ModalFieldList = ({
+  storage,
+  edit,
+  remove,
+  readonly,
+  translationsRoot,
+  disableNoItemsText,
+  nameGetter,
+}) => {
   const {
     Locale: { getValueTranslation, lang },
   } = useStores()
@@ -24,7 +32,7 @@ const ModalFieldList = ({ storage, edit, remove, readonly, translationsRoot, dis
 
   return storage.map(item => (
     <FieldListContainer key={item.uiid}>
-      <FieldListLabel>{getValueTranslation(item.name || item.title, lang)}</FieldListLabel>
+      <FieldListLabel>{getValueTranslation(nameGetter(item), lang)}</FieldListLabel>
       <ListItemButtonContainer>
         <Translate
           component={EditButton}
@@ -52,10 +60,12 @@ ModalFieldList.propTypes = {
   readonly: PropTypes.bool.isRequired,
   translationsRoot: PropTypes.string.isRequired,
   disableNoItemsText: PropTypes.bool,
+  nameGetter: PropTypes.func,
 }
 
 ModalFieldList.defaultProps = {
   disableNoItemsText: false,
+  nameGetter: v => v.name || v.title,
 }
 
 export const FieldListContainer = styled(ButtonGroup)`

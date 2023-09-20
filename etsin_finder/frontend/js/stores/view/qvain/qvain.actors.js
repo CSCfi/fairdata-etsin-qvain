@@ -521,7 +521,7 @@ class Actors {
     if ('creator' in researchDataset) {
       researchDataset.creator.forEach(creator => actors.push(createActor(creator, [ROLE.CREATOR])))
     }
-    if ('publisher' in researchDataset) {
+    if (researchDataset.publisher) {
       actors.push(createActor(researchDataset.publisher, [ROLE.PUBLISHER]))
     }
     if ('curator' in researchDataset) {

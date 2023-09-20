@@ -6,6 +6,8 @@ class Adapter {
     this.Qvain = Qvain
     this.convertQvainV2ToV3 = this.convertQvainV2ToV3.bind(this)
     this.convertV3ToV2 = this.convertV3ToV2.bind(this)
+    this.spatialV3ToV2 = this.spatialV3ToV2.bind(this)
+    this.spatialV2ToV3 = this.spatialV2ToV3.bind(this)
   }
 
   refdataV3ToV2(value) {
@@ -28,6 +30,22 @@ class Adapter {
       return value.map(this.otherIdentifierV3ToV2)
     }
     return { notation: value.notation }
+  }
+
+  spatialV3ToV2(value) {
+    if (!value) {
+      return value
+    }
+    if (Array.isArray(value)) {
+      return value.map(this.spatialV3ToV2)
+    }
+    return {
+      geographic_name: value.geographic_name,
+      alt: (value.altitude_in_meters || '').toString(),
+      as_wkt: value.custom_wkt,
+      place_uri: this.refdataV3ToV2(value.reference),
+      full_address: value.full_address,
+    }
   }
 
   accessRightsV3ToV2(value) {
@@ -58,6 +76,7 @@ class Adapter {
         theme: this.refdataV3ToV2(dataset.theme),
         other_identifier: this.otherIdentifierV3ToV2(dataset.other_identifiers),
         access_rights: this.accessRightsV3ToV2(dataset.access_rights),
+        spatial: this.spatialV3ToV2(dataset.spatial),
       },
       state: 'draft',
     }
@@ -92,6 +111,22 @@ class Adapter {
     return { notation: value.notation }
   }
 
+  spatialV2ToV3(value) {
+    if (!value) {
+      return value
+    }
+    if (Array.isArray(value)) {
+      return value.map(this.spatialV2ToV3)
+    }
+    return {
+      geographic_name: value.geographic_name,
+      altitude_in_meters: parseInt(value.alt, 10),
+      custom_wkt: value.as_wkt,
+      reference: this.refdataV2ToV3(value.place_uri),
+      full_address: value.full_address,
+    }
+  }
+
   accessRightsV2ToV3(value) {
     if (!value) {
       return value
@@ -118,6 +153,7 @@ class Adapter {
       theme: this.refdataV2ToV3(dataset.theme),
       other_identifiers: this.otherIdentifierV2ToV3(dataset.other_identifier),
       access_rights: this.accessRightsV2ToV3(dataset.access_rights),
+      spatial: this.spatialV2ToV3(dataset.spatial),
     }
 
     // include v3 fileset object as it is

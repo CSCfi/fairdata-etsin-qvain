@@ -7,7 +7,7 @@ import ModalFieldList from './ModalFieldList'
 const FieldList = ({ fieldName, disableNoItemsText }) => {
   const {
     Qvain: {
-      [fieldName]: { remove, edit, storage, readonly, translationsRoot },
+      [fieldName]: { remove, edit, storage, readonly, translationsRoot, getItemLabel },
     },
   } = useStores()
 
@@ -19,6 +19,7 @@ const FieldList = ({ fieldName, disableNoItemsText }) => {
       readonly={readonly}
       translationsRoot={translationsRoot}
       disableNoItemsText={disableNoItemsText}
+      nameGetter={getItemLabel}
     />
   )
 }
