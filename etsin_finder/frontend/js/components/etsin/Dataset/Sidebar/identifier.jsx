@@ -34,7 +34,7 @@ const Identifier = ({ idn }) => {
 
   const url = idnToLink(idn)
   const prefix = setPrefix(idn)
-  const text = prefix === 'doi' ? idn.substring(4) : idn
+  const text = prefix === 'doi' || idn.startsWith('url:') ? idn.substring(4) : idn
 
   // display as text if not of type doi or urn
   if (!url) {
