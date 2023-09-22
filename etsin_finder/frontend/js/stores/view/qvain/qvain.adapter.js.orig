@@ -5,6 +5,12 @@ class Adapter {
   constructor(Qvain) {
     this.Qvain = Qvain
     this.convertV3ToV2 = this.convertV3ToV2.bind(this)
+<<<<<<< HEAD
+    this.spatialV3ToV2 = this.spatialV3ToV2.bind(this)
+    this.spatialV2ToV3 = this.spatialV2ToV3.bind(this)
+    this.temporalV2ToV3 = this.temporalV2ToV3.bind(this)
+    this.temporalV3ToV2 = this.temporalV3ToV2.bind(this)
+=======
     this.convertQvainV2ToV3 = this.convertQvainV2ToV3.bind(this)
     this.makeBoundAdapterFunc = this.makeBoundAdapterFunc.bind(this)
 
@@ -19,8 +25,6 @@ class Adapter {
       this.remoteResourceV3ToV2,
       this.spatialV2ToV3,
       this.spatialV3ToV2,
-      this.temporalV2ToV3,
-      this.temporalV3ToV2,
     ]
     adapterFuncs.forEach(this.makeBoundAdapterFunc)
   }
@@ -41,8 +45,7 @@ class Adapter {
       return boundFunc(value)
     }
     this[func.name] = adapterFunc
-    this.temporalV2ToV3 = this.temporalV2ToV3.bind(this)
-    this.temporalV3ToV2 = this.temporalV3ToV2.bind(this)
+>>>>>>> a63016f7 (Support Metax V3 remote resources in Qvain)
   }
 
   refdataV3ToV2(value) {
@@ -74,6 +77,16 @@ class Adapter {
     }
   }
 
+<<<<<<< HEAD
+  temporalV3ToV2(value) {
+    if (!value) {
+      return value
+    }
+    if (Array.isArray(value)) {
+      return value.map(this.temporalV2ToV3)
+    }
+    return { ...value }
+=======
   getSingleTranslation(value) {
     if (!value) {
       return value
@@ -94,10 +107,7 @@ class Adapter {
         identifier: value.download_url || undefined,
       },
     }
-  }
-
-  temporalV3ToV2(value) {
-    return { ...value }
+>>>>>>> a63016f7 (Support Metax V3 remote resources in Qvain)
   }
 
   convertV3ToV2(dataset) {
@@ -117,8 +127,11 @@ class Adapter {
         other_identifier: this.otherIdentifierV3ToV2(dataset.other_identifiers),
         access_rights: this.accessRightsV3ToV2(dataset.access_rights),
         spatial: this.spatialV3ToV2(dataset.spatial),
+<<<<<<< HEAD
         temporal: this.temporalV3ToV2(dataset.temporal),
+=======
         remote_resources: this.remoteResourceV3ToV2(dataset.remote_resources),
+>>>>>>> a63016f7 (Support Metax V3 remote resources in Qvain)
       },
       state: 'draft',
     }
@@ -161,14 +174,19 @@ class Adapter {
     }
   }
 
+<<<<<<< HEAD
   temporalV2ToV3(value) {
+    if (!value) {
+      return value
+    }
+    if (Array.isArray(value)) {
+      return value.map(this.temporalV2ToV3)
+    }
     return {
       ...value,
       start_date: value.start_date && format(parseDateISO(value.start_date), 'yyyy-MM-dd'),
       end_date: value.end_date && format(parseDateISO(value.end_date), 'yyyy-MM-dd'),
-    }
-  }
-
+=======
   remoteResourceV2ToV3(value) {
     return {
       title: { en: value.title },
@@ -177,6 +195,7 @@ class Adapter {
       file_type: this.refdataV2ToV3(value.file_type),
       access_url: value.access_url?.identifier,
       download_url: value.download_url?.identifier,
+>>>>>>> a63016f7 (Support Metax V3 remote resources in Qvain)
     }
   }
 
@@ -195,8 +214,11 @@ class Adapter {
       other_identifiers: this.otherIdentifierV2ToV3(dataset.other_identifier),
       access_rights: this.accessRightsV2ToV3(dataset.access_rights),
       spatial: this.spatialV2ToV3(dataset.spatial),
+<<<<<<< HEAD
       temporal: this.temporalV2ToV3(dataset.temporal),
+=======
       remote_resources: this.remoteResourceV2ToV3(dataset.remote_resources),
+>>>>>>> a63016f7 (Support Metax V3 remote resources in Qvain)
     }
 
     // include v3 fileset object as it is

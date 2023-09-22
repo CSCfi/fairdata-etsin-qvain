@@ -23,8 +23,6 @@ import { flatten, removeMatchingKeys } from '@/utils/flatten'
 // axios mocks
 const mockAdapter = new MockAdapter(axios)
 mockAdapter.onGet(new RegExp('/v3/reference-data/.*')).reply(200, [])
-mockAdapter.onGet(`https://metaxv3:443/v3/datasets/${dataset.id}`).reply(200, dataset)
-mockAdapter.onPut(`https://metaxv3:443/v3/datasets/${dataset.id}`).reply(200, dataset)
 beforeEach(() => {
   mockAdapter.resetHistory()
 })
@@ -32,13 +30,18 @@ beforeEach(() => {
 // rendering helpers
 const getSection = name => screen.getByRole('heading', { name }).parentElement
 
-const renderQvain = async () => {
+const renderQvain = async (overrides = {}) => {
+  const metaxDataset = { ...dataset, ...overrides }
+  mockAdapter.onGet(`https://metaxv3:443/v3/datasets/${metaxDataset.id}`).reply(200, metaxDataset)
+  mockAdapter.onPut(`https://metaxv3:443/v3/datasets/${metaxDataset.id}`).reply(200, metaxDataset)
+
   const stores = buildStores()
   stores.Env.Flags.setFlag('QVAIN.METAX_V3.FRONTEND', true)
   stores.Env.setMetaxV3Host('metaxv3', 443)
+
   render(
     <ThemeProvider theme={etsinTheme}>
-      <MemoryRouter initialEntries={[`/dataset/${dataset.id}`]}>
+      <MemoryRouter initialEntries={[`/dataset/${metaxDataset.id}`]}>
         <StoresProvider store={stores}>
           <Route path="/dataset/:identifier" component={Qvain} />
         </StoresProvider>
@@ -49,13 +52,13 @@ const renderQvain = async () => {
   await waitForElementToBeRemoved(() => screen.queryByText('Loading dataset'))
 }
 
-const renderSection = async name => {
-  await renderQvain()
+const renderSection = async (name, overrides) => {
+  await renderQvain(overrides)
   return getSection(name)
 }
 
-describe('Qvain with an opened IDA dataset', () => {
-  it('shows IDA catalog as selected', async () => {
+describe('Qvain with an opened dataset', () => {
+  it('shows IDA catalog as selected for IDA dataset', async () => {
     await renderQvain()
     const idaButton = screen.getByText('Choose "IDA"', { exact: false }).closest('button')
     expect(idaButton).toHaveClass('selected')
@@ -135,6 +138,7 @@ describe('Qvain with an opened IDA dataset', () => {
       /license\.\d+\.description$/,
       /provenance\.\d+\..+/,
       // special handling
+      /remote_resources\.\d+\..+/, // not supported for ida dataset
       'issued', // exact value may change
     ]
 
@@ -164,8 +168,34 @@ describe('Qvain with an opened IDA dataset', () => {
       flatten(submitData, { normalizeDates: true }),
       expectedExtra
     )
+    expect(flatSubmit).toEqual(flatDataset)
+  })
 
-    expect(flatDataset).toEqual(flatSubmit)
+  it('when submit draft is clicked, submits remote resources for ATT dataset', async () => {
+    // fields not expected to be present in the submitted data
+    const expectedMissing = [
+      // id not supported
+      /\.id$/,
+      // redundant reference data
+      /\.in_scheme$/,
+      /\.pref_label\..+/,
+      /\.reference\.as_wkt$/,
+      // remote resource fields unsupported in qvain
+      /^\d+\.description\.\w+$/,
+      /^\d+\.checksum$/,
+      /^\d+\.mediatype$/,
+    ]
+
+    // fields missing from original that may be added to submit data
+    const expectedExtra = []
+
+    await renderQvain({ data_catalog: 'urn:nbn:fi:att:data-catalog-att' })
+    const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    await userEvent.click(submitButton) // should submit data to metax
+    const submitResources = JSON.parse(mockAdapter.history.put[0].data).remote_resources
+    const flatResources = removeMatchingKeys(flatten(dataset.remote_resources), expectedMissing)
+    const flatSubmitResources = removeMatchingKeys(flatten(submitResources), expectedExtra)
+    expect(flatSubmitResources).toEqual(flatResources)
   })
 
   it('shows spatial in modal', async () => {
@@ -180,18 +210,55 @@ describe('Qvain with an opened IDA dataset', () => {
     const editButton = within(espooAddress.closest('div')).getByRole('button', { name: 'Edit' })
     await userEvent.click(editButton)
     const modal = screen.getByRole('dialog')
-    expect(within(modal).getByRole('heading', { name: 'Edit Geographical area' })).toBeInTheDocument()
+    expect(
+      within(modal).getByRole('heading', { name: 'Edit Geographical area' })
+    ).toBeInTheDocument()
 
     // check input values are present
     expect(within(modal).getByLabelText('Name*').value).toEqual('Another Random Address in Espoo')
     expect(within(modal).getByLabelText('Address').value).toEqual('Itätuulenkuja 3, Espoo')
     expect(within(modal).getByLabelText('Altitude').value).toEqual('1337')
 
-    expect(within(document.getElementById('location-input')).getByText('Tapiola')).toBeInTheDocument()
+    expect(
+      within(document.getElementById('location-input')).getByText('Tapiola')
+    ).toBeInTheDocument()
 
     const customGeometry = within(modal)
       .getByText('Add geometry using WKT format in WGS84 coordinate system')
       .closest('div')
     expect(within(customGeometry).getByDisplayValue('POINT(22 61)')).toBeInTheDocument()
+  })
+
+  it('shows remote resources in modal', async () => {
+    const section = await renderSection('Data Origin', {
+      data_catalog: 'urn:nbn:fi:att:data-catalog-att',
+    })
+
+    // "Remote Resources" should be selected
+    const attButton = within(section)
+      .getByText('Choose "Remote Resources"', { exact: false })
+      .closest('button')
+    expect(attButton).toHaveClass('selected')
+
+    // open modal
+    const remoteResource = within(section).getByText('Dataset Remote Resource')
+    const editButton = within(remoteResource.closest('div')).getByRole('button', { name: 'Edit' })
+    await userEvent.click(editButton)
+    const modal = screen.getByRole('dialog')
+    expect(within(modal).getByRole('heading', { name: 'Edit remote resource' })).toBeInTheDocument()
+
+    // check input values are present
+    expect(within(modal).getByLabelText('Title', { exact: false }).value).toEqual(
+      'Dataset Remote Resource'
+    )
+    expect(within(modal).getByLabelText('Access URL').value).toEqual('https://access.url')
+    expect(within(modal).getByLabelText('Download URL').value).toEqual('https://download.url')
+
+    expect(
+      within(within(modal).getByText('Use Category').closest('div')).getByText('Source material')
+    ).toBeInTheDocument()
+    expect(
+      within(within(modal).getByText('File Type').closest('div')).getByText('Audiovisual')
+    ).toBeInTheDocument()
   })
 })
