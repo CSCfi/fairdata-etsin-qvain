@@ -12,7 +12,7 @@ const mockV2 = (url, search) => {
       hits: [
         {
           _source: {
-            _id: 1,
+            id: 1,
             uri: 'uri',
             label: {
               fi: 'fi_label',

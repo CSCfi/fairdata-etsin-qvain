@@ -35,7 +35,7 @@ class ReferenceData {
     return hits.map(hit => ({
       value: hit._source.uri,
       label: hit._source.label,
-      id: hit._source._id,
+      id: hit._source.id,
       parents: hit._source.parent_ids || [],
       fileFormat: hit._source.input_file_format,
       formatVersion: hit._source.output_format_version,
