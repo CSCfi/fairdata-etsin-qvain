@@ -260,15 +260,15 @@ class EtsinDatasetV3 {
     const existingVersions = (this.versions || []).filter(
       version => !version.isRemoved && !version.isDeprecated
     )
-    return new Date(Math.max(existingVersions.map(version => version.currentVersionDate)))
+    return new Date(Math.max(...existingVersions.map(version => version.currentVersionDate)))
   }
 
   @computed get latestExistingVersionId() {
-    // waiting for V3 dataset_version_set implementation
     if (!this.datasetVersions) return null
-    return Object.values(this.datasetVersions).find(
+    const latestVersion = Object.values(this.datasetVersions).find(
       val => new Date(val.date_created).getTime() === this.latestExistingVersionDate.getTime()
     )
+    return latestVersion?.identifier
   }
 
   @computed get latestExistingVersionInfotext() {

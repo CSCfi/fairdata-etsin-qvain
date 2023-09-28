@@ -245,20 +245,21 @@ class EtsinDatasetV2 {
 
   @computed get latestExistingVersionDate() {
     const existingVersions = (this.versions || []).filter(
-      version => !version.catalogRecord.removed && !version.catalogRecord.deprecated
+      version => !version.isRemoved && !version.isDeprecated
     )
-    return new Date(Math.max(existingVersions.map(version => version.currentVersionDate)))
+    return new Date(Math.max(...existingVersions.map(version => version.currentVersionDate)))
   }
 
   @computed get latestExistingVersionId() {
     if (!this.datasetVersions) return null
-    return Object.values(this.datasetVersions).find(
+    const latestVersion = Object.values(this.datasetVersions).find(
       val => new Date(val.date_created).getTime() === this.latestExistingVersionDate.getTime()
     )
+    return latestVersion?.identifier
   }
 
   @computed get latestExistingVersionInfotext() {
-    if (!this.datasetVersions) return null
+    if (!this.datasetVersions || !this.hasExistingVersion) return null
 
     if (this.latestExistingVersionDate.getTime() > this.currentVersionDate.getTime()) {
       return {
