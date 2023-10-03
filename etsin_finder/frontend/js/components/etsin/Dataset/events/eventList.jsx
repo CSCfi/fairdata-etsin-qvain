@@ -8,19 +8,23 @@
  * @license   MIT
  */
 import React from 'react'
-import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 
-import dateFormat from '@/utils/dateFormat'
-import { hasProvenances, Table, IDLink, Margin, PreservationInfo } from './common'
-import Event from './event'
 import checkDataLang from '@/utils/checkDataLang'
+import { useStores } from '@/stores/stores'
+import dateFormat from '@/utils/dateFormat'
+import { hasProvenances, Table, IDLink, Margin } from './common'
+import Event from './event'
 
-const EventList = props => {
-  const { deletedVersions, provenances, dateDeprecated } = props
+const EventList = () => {
+  const {
+    Etsin: {
+      EtsinDataset: { deletedVersions, provenance, dateDeprecated },
+    },
+  } = useStores()
 
-  if (!(hasProvenances(provenances) || deletedVersions?.length > 0 || dateDeprecated)) {
+  if (!(hasProvenances(provenance) || deletedVersions?.length > 0 || dateDeprecated)) {
     return null
   }
 
@@ -53,12 +57,8 @@ const EventList = props => {
         <tbody>
           {
             // Displaying general events
-            provenances.map(event => (
-              <Event
-                key={`provenance-${checkDataLang(event.title)}`}
-                event={event}
-                preservationInfo={props.preservationInfo}
-              />
+            provenance.map(event => (
+              <Event event={event} key={`event-${checkDataLang(event.title)}`} />
             ))
           }
           {dateDeprecated && (
@@ -98,7 +98,7 @@ const EventList = props => {
                 <td>
                   {
                     <IDLink href={single.url} rel="noopener noreferrer" target="_blank">
-                      {single.url}
+                      {single.identifier}
                     </IDLink>
                   }
                 </td>
@@ -109,20 +109,6 @@ const EventList = props => {
       </Table>
     </Margin>
   )
-}
-
-EventList.defaultProps = {
-  provenances: [],
-  deletedVersions: [],
-  dateDeprecated: null,
-  preservationInfo: undefined,
-}
-
-EventList.propTypes = {
-  provenances: PropTypes.array,
-  deletedVersions: PropTypes.array,
-  dateDeprecated: PropTypes.string,
-  preservationInfo: PreservationInfo,
 }
 
 export default observer(EventList)

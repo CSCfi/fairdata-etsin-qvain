@@ -27,13 +27,13 @@ class EtsinDatasetV2 {
 
   @observable inInfo = null
 
-  @computed get dataCatalog() {
-    return this.catalogRecord?.data_catalog?.catalog_json
-  } // shapeDataCatalog action will be needed later
-
   @computed get dataset() {
     return this.catalogRecord?.research_dataset
   } // V2 only
+
+  @computed get dataCatalog() {
+    return this.catalogRecord?.data_catalog?.catalog_json
+  } // shapeDataCatalog action will be needed later
   
   @computed get persistentIdentifier() {
     return this.dataset?.persistent_identifier || this.dataset?.preferred_identifier
@@ -41,6 +41,10 @@ class EtsinDatasetV2 {
 
   @computed get identifier() {
     return this.catalogRecord?.identifier
+  }
+
+  @computed get otherIdentifiers() {
+    return this.dataset?.other_identifier
   }
 
   @computed get accessRights() {
@@ -114,7 +118,7 @@ class EtsinDatasetV2 {
   }
 
   @computed get provenance() {
-    return this.dataset.provenance
+    return this.shapeProvenance(this.dataset?.provenance)
   }
 
   @computed get preservation() {
@@ -122,8 +126,8 @@ class EtsinDatasetV2 {
       identifier: this.catalogRecord.preservation_identifier,
       state: this.catalogRecord.preservation_state,
       stateModified: this.catalogRecord.preservation_state_modified,
-      datasetOriginVersion: this.catalogRecord.preservation_dataset_origin_version,
-      datasetVersion: this.catalogRecord.preservation_dataset_version,
+      useCopy: this.catalogRecord.preservation_dataset_origin_version,
+      preservedCopy: this.catalogRecord.preservation_dataset_version,
     }
   }
 
@@ -174,10 +178,10 @@ class EtsinDatasetV2 {
 
   @computed get hasEvents() {
     return Boolean(
-      this.hasVersion || 
-      this.dataset.provenance?.length || 
-      this.isDeprecated || 
-      this.dataset.other_identifier?.length || 
+      this.hasVersion ||
+      this.provenance?.length ||
+      this.isDeprecated ||
+      this.otherIdentifiers?.length ||
       this.relations?.length
     )
   }
@@ -214,11 +218,27 @@ class EtsinDatasetV2 {
     )
   }
 
+  @computed get deletedVersions() {
+    if (!this.datasetVersions) return []
+    return this.datasetVersions
+      .map((single, i, set) => ({
+        removed: single.removed,
+        dateRemoved: single.date_removed ? /[^T]*/.exec(single.date_removed.toString()) : '',
+        label: set.length - i,
+        identifier: single.identifier,
+        url: `/dataset/${single.identifier}`,
+      })).filter(v => v.removed)
+  }
+
   @computed get versionTitles() {
     return this.versions.reduce((obj, val) => {
       obj[val.identifier] = val.datasetMetadata.title
       return obj
     }, {})
+  }
+
+  @computed get datasetRelations() {
+    return this.dataset?.relation
   }
 
   @computed get groupedRelations() {
@@ -438,6 +458,22 @@ class EtsinDatasetV2 {
       id: null,
       as_wkt: location.as_wkt ? location.as_wkt[0] : undefined,
     }))
+  }
+
+  @action shapeProvenance(provenance) {
+    if (!provenance) return []
+
+    return provenance?.map(event => {
+      const shapedEvent = {...event}
+      if (shapedEvent.event_outcome){
+        shapedEvent.event_outcome.url = event.event_outcome?.identifier
+      }
+      if (shapedEvent.lifecycle_event) {
+        shapedEvent.lifecycle_event.url = event.lifecycle_event?.identifier
+      }
+      shapedEvent.is_associated_with = event.was_associated_with?.map(actor => this.shapeActor(actor))
+      return shapedEvent
+    })
   }
 
   @action shapeProjects(projects) {

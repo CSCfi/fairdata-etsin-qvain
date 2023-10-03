@@ -12,25 +12,25 @@ const PreservationInfo = () => {
     },
   } = useStores()
 
-  return isPas || preservation.datasetOriginVersion || preservation.datasetVersion ? (
+  return isPas || preservation.useCopy || preservation.preservedCopy ? (
     <Container>
       {isPas && (
         <PasInfo>
           <Translate content="dataset.storedInPas" />
         </PasInfo>
       )}
-      {preservation.datasetOriginVersion && (
+      {preservation.useCopy && (
         <PasInfo>
           <Translate content="dataset.originalDatasetVersionExists" />
-          <Link to={`/dataset/${preservation.datasetOriginVersion.identifier}`}>
+          <Link to={`/dataset/${preservation.useCopy.identifier}`}>
             <Translate content="dataset.linkToOriginalDataset" />
           </Link>
         </PasInfo>
       )}
-      {preservation.datasetVersion && (
+      {preservation.preservedCopy && (
         <PasInfo>
           <Translate content="dataset.pasDatasetVersionExists" />
-          <Link to={`/dataset/${preservation.datasetVersion.identifier}`}>
+          <Link to={`/dataset/${preservation.preservedCopy.identifier}`}>
             <Translate content="dataset.linkToPasDataset" />
           </Link>
         </PasInfo>

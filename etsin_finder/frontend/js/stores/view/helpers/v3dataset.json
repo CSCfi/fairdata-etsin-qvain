@@ -9,7 +9,10 @@
         "id": "20fe1678-9e2f-4be1-a2fb-13e5f2940de0",
         "url": "http://uri.suomi.fi/codelist/fairdata/license/code/other-open",
         "in_scheme": "http://uri.suomi.fi/codelist/fairdata/license",
-        "pref_label": { "en": "Other (Open)", "fi": "Muu (Avoin)" }
+        "pref_label": {
+          "en": "Other (Open)",
+          "fi": "Muu (Avoin)"
+        }
       },
       {
         "custom_url": "https://creativecommons.org/licenses/by/4.0/",
@@ -27,7 +30,10 @@
       "id": "6b475ced-86e6-44e3-985d-ab2c040638af",
       "url": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
       "in_scheme": "http://uri.suomi.fi/codelist/fairdata/access_type",
-      "pref_label": { "en": "Open", "fi": "Avoin" }
+      "pref_label": {
+        "en": "Open",
+        "fi": "Avoin"
+      }
     }
   },
   "actors": [
@@ -48,7 +54,11 @@
           "in_scheme": "http://uri.suomi.fi/codelist/fairdata/organization",
           "homepage": null
         },
-        "person": { "name": "Unexisting Entity", "email": null, "external_id": null },
+        "person": {
+          "name": "Unexisting Entity",
+          "email": null,
+          "external_id": null
+        },
         "id": 22
       }
     },
@@ -58,13 +68,19 @@
       "actor": {
         "organization": {
           "id": "aedcdcdb-68a9-4400-8b4e-60ca908f24ea",
-          "pref_label": { "en": "test dept." },
+          "pref_label": {
+            "en": "test dept."
+          },
           "url": null,
           "code": null,
           "in_scheme": "http://uri.suomi.fi/codelist/fairdata/organization",
           "homepage": null
         },
-        "person": { "name": "Kuvitteellinen Henkilö", "email": null, "external_id": null },
+        "person": {
+          "name": "Kuvitteellinen Henkilö",
+          "email": null,
+          "external_id": null
+        },
         "id": 23
       }
     },
@@ -74,7 +90,9 @@
       "actor": {
         "organization": {
           "id": "bf5ad8e7-04d7-40ca-94dd-5a05d4748c57",
-          "pref_label": { "en": "teste" },
+          "pref_label": {
+            "en": "teste"
+          },
           "url": null,
           "code": null,
           "in_scheme": "http://uri.suomi.fi/codelist/fairdata/organization",
@@ -101,11 +119,164 @@
           "in_scheme": "http://uri.suomi.fi/codelist/fairdata/organization",
           "homepage": null
         },
-        "person": { "name": "Unexisting Entity", "email": null, "external_id": null },
+        "person": {
+          "name": "Unexisting Entity",
+          "email": null,
+          "external_id": null
+        },
         "id": 25
+      }
+    },
+    {
+      "id": "6d3035a9-381e-466d-90bc-d7419c9b344b",
+      "role": "contributor",
+      "actor": {
+        "organization": {
+          "id": "c5e518ae-b29a-4204-9eb7-5f7ebbc09415",
+          "pref_label": {
+            "en": "Centria University of Applied Sciences",
+            "fi": "Centria-ammattikorkeakoulu",
+            "sv": "Centria-ammattikorkeakoulu",
+            "und": "Centria-ammattikorkeakoulu"
+          },
+          "url": "http://uri.suomi.fi/codelist/fairdata/organization/code/02536",
+          "code": null,
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/organization",
+          "homepage": null
+        },
+        "person": {
+          "name": "Kuvitteellinen Henkilö",
+          "email": null,
+          "external_id": null
+        },
+        "id": 26
+      }
+    },
+    {
+      "id": "da6d694c-90e0-4819-8d87-503176191310",
+      "role": "contributor",
+      "actor": {
+        "organization": {
+          "id": "0b536a16-f0ad-426f-9e0f-207e11aa1518",
+          "pref_label": {
+            "en": "Centria University of Applied Sciences",
+            "fi": "Centria-ammattikorkeakoulu",
+            "sv": "Centria-ammattikorkeakoulu",
+            "und": "Centria-ammattikorkeakoulu"
+          },
+          "url": "http://uri.suomi.fi/codelist/fairdata/organization/code/02536",
+          "code": null,
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/organization",
+          "homepage": null
+        },
+        "person": {
+          "name": "Olemassaolematon Henkilö",
+          "email": null,
+          "external_id": null
+        },
+        "id": 28
+      }
+    },
+    {
+      "id": "cc71cba7-1755-4bd6-ae11-bc2fb5eb0edd",
+      "role": "contributor",
+      "actor": {
+        "organization": {
+          "id": "d9fef790-390e-45b0-8784-c2267ea58450",
+          "pref_label": {
+            "en": "Kone Foundation",
+            "fi": "Koneen Säätiö",
+            "sv": "Koneen säätiö",
+            "und": "Koneen Säätiö"
+          },
+          "url": "http://uri.suomi.fi/codelist/fairdata/organization/code/02135371",
+          "code": null,
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/organization",
+          "homepage": null
+        },
+        "person": {
+          "name": "Unexisting Entity",
+          "email": null,
+          "external_id": null
+        },
+        "id": 29
+      }
+    },
+    {
+      "id": "966d5618-26df-440a-9a34-0a5d060a6de8",
+      "role": "contributor",
+      "actor": {
+        "organization": {
+          "id": "d51b11b2-6052-43fe-b898-9e34e0464c9f",
+          "pref_label": {
+            "en": "Karelia University of Applied Sciences",
+            "fi": "Karelia",
+            "und": "Karelia"
+          },
+          "url": "http://uri.suomi.fi/codelist/fairdata/organization/code/02469",
+          "code": null,
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/organization",
+          "homepage": null
+        },
+        "person": {
+          "name": "Missing Existence",
+          "email": null,
+          "external_id": null
+        },
+        "id": 30
+      }
+    },
+    {
+      "id": "6a5c128f-2603-4451-a366-3d63e890539c",
+      "role": "rights_holder",
+      "actor": {
+        "organization": {
+          "id": "a28dfe72-7dac-430c-ae7b-3cd73fd0fce7",
+          "pref_label": {
+            "en": "Karelia University of Applied Sciences",
+            "fi": "Karelia",
+            "und": "Karelia"
+          },
+          "url": "http://uri.suomi.fi/codelist/fairdata/organization/code/02469",
+          "code": null,
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/organization",
+          "homepage": null
+        },
+        "person": {
+          "name": "Missing Existence",
+          "email": null,
+          "external_id": null
+        },
+        "id": 31
+      }
+    },
+    {
+      "id": "a858b9f6-77ed-4ecd-a830-04bcc1eeca10",
+      "role": "provenance",
+      "actor": {
+        "organization": {
+          "id": "cae6ccba-c7c5-4085-ad6b-b02faf9e6cc7",
+          "pref_label": {
+            "en": "Kone Foundation",
+            "fi": "Koneen Säätiö",
+            "sv": "Koneen säätiö",
+            "und": "Koneen Säätiö"
+          },
+          "url": "http://uri.suomi.fi/codelist/fairdata/organization/code/02135371",
+          "code": null,
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/organization",
+          "homepage": null
+        },
+        "person": {
+          "name": "Unexisting Entity",
+          "email": null,
+          "external_id": null
+        },
+        "id": 33
       }
     }
   ],
+  "cumulative_state": 1,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": {
     "en": "This dataset is used for testing all fields in the Etsin dataset page. Description, Data, Identifiers and Events, and Maps -tabs are included in this test as well. Another version was made to test the version picker as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -123,6 +294,12 @@
       }
     }
   ],
+  "data": {
+    "storage_service": "ida",
+    "project_identifier": "fd_teppo3_project",
+    "total_files_count": 9,
+    "total_files_byte_size": 11
+  },
   "issued": "2023-06-28T00:00:00+03:00",
   "keyword": [
     "test",
@@ -137,16 +314,30 @@
       "id": "14af5a93-d8be-472b-a40c-77fe41159d06",
       "url": "http://lexvo.org/id/iso639-3/fin",
       "in_scheme": "http://lexvo.org/id/",
-      "pref_label": { "fi": "suomi", "en": "Finnish", "sv": "finska" }
+      "pref_label": {
+        "fi": "suomi",
+        "en": "Finnish",
+        "sv": "finska"
+      }
     },
     {
       "id": "6e5789d3-6e33-459c-8b1d-3041eaf7c29d",
       "url": "http://lexvo.org/id/iso639-3/eng",
       "in_scheme": "http://lexvo.org/id/",
-      "pref_label": { "fi": "englanti", "en": "English", "sv": "engelska" }
+      "pref_label": {
+        "fi": "englanti",
+        "en": "English",
+        "sv": "engelska"
+      }
     }
   ],
-  "metadata_owner": { "id": 3, "user": { "username": "fd_user5" }, "organization": "csc.fi" },
+  "metadata_owner": {
+    "id": 3,
+    "user": {
+      "username": "fd_user5"
+    },
+    "organization": "csc.fi"
+  },
   "persistent_identifier": "doi:10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5",
   "theme": [
     {
@@ -163,15 +354,27 @@
       "id": "45f4ef1e-53ea-4b0b-9453-de9e297e12e3",
       "url": "http://www.yso.fi/onto/koko/p35020",
       "in_scheme": "http://www.yso.fi/onto/koko/",
-      "pref_label": { "en": "web pages", "fi": "WWW-sivut", "se": "WWW-siiddut", "sv": "webbsidor" }
+      "pref_label": {
+        "en": "web pages",
+        "fi": "WWW-sivut",
+        "se": "WWW-siiddut",
+        "sv": "webbsidor"
+      }
     }
   ],
-  "title": { "en": "All Fields Test Dataset", "fi": "Kaikkien kenttien testiaineisto testi" },
+  "title": {
+    "en": "All Fields Test Dataset",
+    "fi": "Kaikkien kenttien testiaineisto testi"
+  },
   "provenance": [
     {
       "id": 2,
-      "title": { "en": "This thing happened" },
-      "description": { "en": "And it was great" },
+      "title": {
+        "en": "This thing happened"
+      },
+      "description": {
+        "en": "And it was great"
+      },
       "spatial": {
         "url": "http://www.yso.fi/onto/yso/p189359",
         "pref_label": {
@@ -191,15 +394,24 @@
         "id": "51779aac-ea09-436b-a8e7-0419066c1cd1",
         "url": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event/code/destroyed",
         "in_scheme": "http://uri.suomi.fi/codelist/fairdata/lifecycle_event",
-        "pref_label": { "en": "Destroyed", "fi": "Tuhottu" }
+        "pref_label": {
+          "en": "Destroyed",
+          "fi": "Tuhottu"
+        }
       },
       "event_outcome": {
         "id": "509ee605-7a85-4d09-98e9-f4c96efae4e8",
         "url": "http://uri.suomi.fi/codelist/fairdata/event_outcome/code/success",
         "in_scheme": "http://uri.suomi.fi/codelist/fairdata/event_outcome",
-        "pref_label": { "en": "Success", "fi": "Onnistunut", "sv": "Framgångsrik" }
+        "pref_label": {
+          "en": "Success",
+          "fi": "Onnistunut",
+          "sv": "Framgångsrik"
+        }
       },
-      "outcome_description": { "en": "Destruction complete" },
+      "outcome_description": {
+        "en": "Destruction complete"
+      },
       "is_associated_with": []
     }
   ],
@@ -221,7 +433,11 @@
     },
     {
       "url": "http://www.yso.fi/onto/yso/p105747",
-      "pref_label": { "en": "Tapiola", "fi": "Tapiola (Espoo)", "sv": "Hagalund (Esbo)" },
+      "pref_label": {
+        "en": "Tapiola",
+        "fi": "Tapiola (Espoo)",
+        "sv": "Hagalund (Esbo)"
+      },
       "in_scheme": "http://www.yso.fi/onto/yso/places",
       "full_address": "Itätuulenkuja 3, Espoo",
       "geographic_name": "Another Random Address in Espoo",
@@ -238,7 +454,7 @@
   "is_deprecated": false,
   "is_removed": false,
   "last": null,
-  "modified": "2023-08-11T14:46:00.140339+03:00",
+  "modified": "2023-08-17T15:38:25.532442+03:00",
   "previous": null,
   "removal_date": null,
   "replaces": null

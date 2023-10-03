@@ -252,12 +252,12 @@ const english = {
         useCopy: {
           title: 'Copy created into Digital Preservation',
           descriptionDate: 'Copy created: %(date)s.',
-          descriptionLink: 'Click here to open the Digital Preservation Service version.',
+          descriptionLink: 'Click here to open the Digital Preservation Service version',
         },
         preservedCopy: {
           title: 'Created in Digital Preservation',
           descriptionDate: 'Created: %(date)s.',
-          descriptionLink: 'You can open the use copy by clicking here.',
+          descriptionLink: 'Click here to open the use copy',
         },
       },
       deprecations: {
@@ -346,8 +346,8 @@ const english = {
     pasDatasetVersionExists:
       "This is a use copy of this dataset. A copy is also stored in Fairdata's Digital Preservation Service. ",
     originalDatasetVersionExists: 'There is an existing use copy of the dataset. ',
-    linkToPasDataset: "Click here to open the Digital preservation Service's version",
-    linkToOriginalDataset: 'You can open the use copy by clicking here',
+    linkToPasDataset: "Click here to open the Digital preservation Service's version.",
+    linkToOriginalDataset: 'Click here to open the use copy.',
     enteringPas: 'Entering DPS',
     dataInPasDatasetsCanNotBeDownloaded: 'DPS dataset data cannot be downloaded',
     validationMessages: {

@@ -8,20 +8,24 @@
  * @license   MIT
  */
 import React from 'react'
-import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
+import { useStores } from '@/stores/stores'
 import { Table, ID, IDLink, Margin } from './common'
 
 const relationIdentifierIsUrl = identifier =>
   identifier.startsWith('http://') || identifier.startsWith('https://')
 
-const Relations = props => {
-  const { relation } = props
+const Relations = () => {
+  const {
+    Etsin: {
+      EtsinDataset: { datasetRelations },
+    },
+  } = useStores()
 
-  if (!(relation?.length > 0)) {
+  if (!(datasetRelations?.length > 0)) {
     return null
   }
 
@@ -45,7 +49,7 @@ const Relations = props => {
           </tr>
         </thead>
         <tbody>
-          {relation.map(single => (
+          {datasetRelations.map(single => (
             <tr key={single.entity.identifier || ''}>
               <td lang={getDataLang(single.relation_type.pref_label)}>
                 {checkDataLang(single.relation_type.pref_label)}
@@ -71,14 +75,6 @@ const Relations = props => {
       </Table>
     </Margin>
   )
-}
-
-Relations.defaultProps = {
-  relation: [],
-}
-
-Relations.propTypes = {
-  relation: PropTypes.array,
 }
 
 export default observer(Relations)

@@ -1,105 +1,93 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2021 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
 import React from 'react'
-import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import styled from 'styled-components'
+import PropTypes from 'prop-types'
+import Translate from 'react-translate-component'
+import { Link } from 'react-router-dom'
 
 import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
-import dateFormat from '@/utils/dateFormat'
 import { useStores } from '@/stores/stores'
+import { PRESERVATION_EVENT_CREATED } from '@/utils/constants'
+import dateFormat, { dateSeparator } from '@/utils/dateFormat'
+
 import Agent from '../Agent'
-import getPreservationEvent from './getPreservationEvent'
-import { PreservationInfo } from './common'
 
-const printDate = temp => {
-  if (temp.start_date === temp.end_date) {
-    return dateFormat(temp.start_date)
-  }
-  return (
-    <span>
-      {dateFormat(temp.start_date)} &ndash; {dateFormat(temp.end_date)}
-    </span>
-  )
-}
-
-const Event = props => {
-  const { event, preservationInfo } = props
+const Event = ({ event }) => {
   const {
     Etsin: {
-      EtsinDataset: { shapeActor },
+      EtsinDataset: { isPas, preservation },
     },
   } = useStores()
 
-  const { title: preservationEventTitle, description: preservationEventDescription } =
-    getPreservationEvent({
-      event,
-      preservationInfo,
-    })
+  const preservationTranslationRoot = isPas
+    ? 'dataset.events_idn.preservationEvent.preservedCopy'
+    : 'dataset.events_idn.preservationEvent.useCopy'
+
+  const showPreservationEvent = event.preservation_event?.identifier === PRESERVATION_EVENT_CREATED
+
+  if (event.preservation_event && !showPreservationEvent) return null
 
   return (
     <tr key={`provenance-${checkDataLang(event.title)}`}>
+      {/* EVENT */}
       <td>
-        {/* If this contains both lifecycle and preservation events, it will display both in one box */}
-        {event.lifecycle_event !== undefined && (
+        {event.lifecycle_event && (
           <span lang={getDataLang(event.lifecycle_event.pref_label)}>
             {checkDataLang(event.lifecycle_event.pref_label)}
           </span>
         )}
-        {preservationEventTitle}
+        {showPreservationEvent && <Translate content={`${preservationTranslationRoot}.title`} />}
       </td>
+
+      {/* WHO */}
       <td>
-        {event.was_associated_with &&
-          event.was_associated_with.map((v2Associate, i) => {
-            const associate = shapeActor(v2Associate)
-            const name =
-              associate.actor.person?.name || checkDataLang(associate.actor.organization.pref_label)
-            const lang = getDataLang(associate)
+        {event.is_associated_with &&
+          event.is_associated_with.map((associate, i) => {
+            const name = associate.actor?.person?.name || associate.actor?.organization.pref_label
             if (name) {
               return (
-                <InlineUl key={`ul-${name}`}>
-                  <Agent lang={lang} key={name} first={i === 0} agent={associate.actor} />
-                </InlineUl>
+                <Agent
+                  lang={getDataLang(associate)}
+                  key={name}
+                  first={i === 0}
+                  agent={associate.actor}
+                />
               )
             }
             return ''
           })}
       </td>
+
+      {/* WHEN */}
       <td>
-        {/* Some datasets have start_date and some startDate */}
-        {event.temporal && printDate(event.temporal)}
+        {event.lifecycle_event &&
+          dateSeparator(event.temporal?.start_date, event.temporal?.end_date)}
+        {showPreservationEvent && dateFormat(preservation.stateModified, { format: 'date' })}
       </td>
+
+      {/* TITLE */}
+      <td>{event.title && checkDataLang(event.title)}</td>
+
+      {/* DESCRIPTION */}
       <td>
-        {/* Some datasets have start_date and some startDate */}
-        {event.title && checkDataLang(event.title)}
-      </td>
-      <td>
-        {preservationEventDescription || (event.description && checkDataLang(event.description))}
+        {event.description && !showPreservationEvent && checkDataLang(event.description)}
+        {showPreservationEvent && (
+          <Link
+            to={`/dataset/${
+              preservation.useCopy
+                ? preservation.useCopy.identifier
+                : preservation.preservedCopy.identifier
+            }`}
+          >
+            <Translate content={`${preservationTranslationRoot}.descriptionLink`} />
+          </Link>
+        )}
       </td>
     </tr>
   )
 }
 
-Event.defaultProps = {
-  preservationInfo: undefined,
-}
-
 Event.propTypes = {
   event: PropTypes.object.isRequired,
-  preservationInfo: PreservationInfo,
 }
-
-const InlineUl = styled.ul`
-  display: inline;
-  margin: 0;
-  padding: 0;
-`
 
 export default observer(Event)

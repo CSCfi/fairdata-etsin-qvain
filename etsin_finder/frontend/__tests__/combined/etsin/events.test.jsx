@@ -24,9 +24,9 @@ deprecatedDataset.preservation_dataset_origin_version = {
 const identifier = deprecatedDataset.identifier
 const path = `/dataset/${identifier}/events`
 
-configure({safeDescriptors: false})
+configure({ safeDescriptors: false })
 const stores = buildStores()
-configure({safeDescriptors: true})
+configure({ safeDescriptors: true })
 stores.Accessibility.handleNavigation = jest.fn()
 
 const tableToObjects = tableWrapper => {
@@ -167,7 +167,7 @@ describe('Events page', () => {
       tableToObjects(sections['Events']).should.eql([
         {
           Description:
-            'Copy created: October 13, 2022. Click here to open the Digital Preservation Service version.',
+            'Copy created: October 13, 2022. Click here to open the Digital Preservation Service version',
           Event: 'Copy created into Digital Preservation',
           Title: '',
           When: '',
@@ -180,7 +180,7 @@ describe('Events page', () => {
       await render(pasPreservationCopy)
       tableToObjects(sections['Events']).should.eql([
         {
-          Description: 'Created: October 13, 2022. You can open the use copy by clicking here.',
+          Description: 'Created: October 13, 2022. Click here to open the use copy',
           Event: 'Created in Digital Preservation',
           Title: '',
           When: '',

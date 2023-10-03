@@ -153,6 +153,7 @@ class Etsin {
   fetchData = async id => {
     this.reset()
     this.setLoadingOn()
+
     await this.fetchDataset(id)
     if (!this.useDatasetV3) {
       await this.fetchVersions()
@@ -163,6 +164,7 @@ class Etsin {
     } else runInAction(() => {this.isLoading.files = false})
 
     await this.fetchPackages()
+    
     this.requests = {}
   }
 

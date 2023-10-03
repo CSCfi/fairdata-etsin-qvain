@@ -8,8 +8,6 @@
  * @license   MIT
  */
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import dateFormat from '@/utils/dateFormat'
 
 export const Table = styled.table`
   overflow-x: scroll;
@@ -74,41 +72,6 @@ export const InlineUl = styled.ul`
   margin: 0;
   padding: 0;
 `
-
-export const PreservationInfo = PropTypes.shape({
-  isUseCopy: PropTypes.bool.isRequired,
-  copyIdentifier: PropTypes.string, // identifier of the corresponding copy
-  modified: PropTypes.string, // preservation_state_modified of the preservation version
-  translationRoot: PropTypes.string,
-})
-
-export const getPreservationInfo = ({
-  preservationDatasetOriginVersion,
-  preservationStateModified,
-  preservationDatasetVersion,
-}) => {
-  let translationRoot, modified, copyIdentifier
-  const isUseCopy = !preservationDatasetOriginVersion?.identifier
-  if (isUseCopy) {
-    translationRoot = 'dataset.events_idn.preservationEvent.useCopy'
-    copyIdentifier = preservationDatasetVersion?.identifier
-    modified = dateFormat(preservationDatasetVersion?.preservation_state_modified, {
-      format: 'date',
-    })
-  } else {
-    translationRoot = 'dataset.events_idn.preservationEvent.preservedCopy'
-    copyIdentifier = preservationDatasetOriginVersion?.identifier
-    modified = dateFormat(preservationStateModified, {
-      format: 'date',
-    })
-  }
-  return {
-    isUseCopy,
-    modified,
-    copyIdentifier,
-    translationRoot,
-  }
-}
 
 export const hasProvenances = provenances => {
   if (provenances) {

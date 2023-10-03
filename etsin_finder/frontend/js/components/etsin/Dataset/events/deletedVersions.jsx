@@ -8,14 +8,19 @@
  * @license   MIT
  */
 import React from 'react'
-import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 
+import { useStores } from '@/stores/stores'
+
 import { Table, IDLink, Margin } from './common'
 
-const DeletedVersions = props => {
-  const { deletedVersions } = props
+const DeletedVersions = () => {
+  const {
+    Etsin: {
+      EtsinDataset: { deletedVersions },
+    },
+  } = useStores()
 
   if (!(deletedVersions?.length > 0)) {
     return null
@@ -48,7 +53,7 @@ const DeletedVersions = props => {
               <td>
                 {
                   <IDLink href={single.url} rel="noopener noreferrer" target="_blank">
-                    {single.url}
+                    {single.identifier}
                   </IDLink>
                 }
               </td>
@@ -58,14 +63,6 @@ const DeletedVersions = props => {
       </Table>
     </Margin>
   )
-}
-
-DeletedVersions.defaultProps = {
-  deletedVersions: [],
-}
-
-DeletedVersions.propTypes = {
-  deletedVersions: PropTypes.array,
 }
 
 export default observer(DeletedVersions)

@@ -44,6 +44,10 @@ class EtsinDatasetV3 {
     return this.dataset?.id
   }
 
+  @computed get otherIdentifiers() {
+    return this.dataset?.other_identifiers
+  }
+
   @computed get accessRights() {
     return this.dataset?.access_rights
   }
@@ -73,8 +77,7 @@ class EtsinDatasetV3 {
   }
 
   @computed get isCumulative() {
-    // waiting for V3 implementation?
-    return Boolean(this.dataset?.cumulation_started)
+    return this.dataset?.cumulative_state === 1
   }
 
   @computed get isHarvested() {
@@ -117,8 +120,7 @@ class EtsinDatasetV3 {
   }
 
   @computed get provenance() {
-    // waiting for V3 implementation
-    return undefined
+    return this.dataset?.provenance
   }
 
   @computed get preservation() {
@@ -127,8 +129,8 @@ class EtsinDatasetV3 {
       identifier: undefined,
       state: undefined,
       stateModified: undefined,
-      datasetOriginVersion: undefined,
-      datasetVersion: undefined,
+      useCopy: undefined,
+      preservedCopy: undefined,
     }
   }
 
@@ -185,9 +187,8 @@ class EtsinDatasetV3 {
       this.hasVersion ||
       this.provenance?.length ||
       this.isDeprecated ||
-      this.dataset?.other_identifier?.length || // other identifier missing
-      this.relations?.length ||
-      this.isPas
+      this.otherIdentifiers?.length ||
+      this.relations?.length
     )
   }
 
@@ -226,11 +227,28 @@ class EtsinDatasetV3 {
     )
   }
 
+  @computed get deletedVersions() {
+    if (!this.datasetVersions) return []
+    return this.datasetVersions
+      .map((single, i, set) => ({
+        removed: single.removed,
+        dateRemoved: single.date_removed ? /[^T]*/.exec(single.date_removed.toString()) : '',
+        label: set.length - i,
+        identifier: single.identifier,
+        url: `/dataset/${single.identifier}`,
+      })).filter(v => v.removed)
+  }
+
   @computed get versionTitles() {
     return this.versions.reduce((obj, val) => {
       obj[val.identifier] = val.datasetMetadata.title
       return obj
     }, {})
+  }
+
+  @computed get datasetRelations() {
+    // waiting for V3 implementation
+    return []
   }
 
   @computed get groupedRelations() {

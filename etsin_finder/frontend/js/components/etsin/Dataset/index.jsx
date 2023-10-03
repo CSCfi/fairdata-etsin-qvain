@@ -94,10 +94,10 @@ class Dataset extends React.Component {
 
     if (
       !dataset ||
-      isLoading.dataset ||
-      isLoading.versions ||
+      isLoading.files ||
       isLoading.relations ||
-      isLoading.files
+      isLoading.versions ||
+      isLoading.dataset
     ) {
       return <DatasetLoadSpinner />
     }

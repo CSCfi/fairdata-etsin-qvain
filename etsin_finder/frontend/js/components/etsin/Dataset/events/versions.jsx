@@ -8,16 +8,55 @@
  * @license   MIT
  */
 import React from 'react'
-import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 
+import idnToLink from '@/utils/idnToLink'
+import { useStores } from '@/stores/stores'
+
 import { Table, ID, IDLink, Margin } from './common'
 
-const Versions = ({ versions }) => {
-  if (!(versions?.length > 0)) {
+const Versions = () => {
+  const {
+    Locale,
+    Etsin: {
+      EtsinDataset: { identifier, datasetVersions, versionTitles },
+    },
+  } = useStores()
+
+  if (!(datasetVersions?.length > 1)) {
     return null
   }
+
+  const currentIndex = datasetVersions.findIndex(version => version.identifier === identifier)
+
+  const findType = i => {
+    let type
+    if (i > currentIndex) {
+      type = 'older'
+    } else if (i === 0) {
+      type = 'latest'
+    } else {
+      type = 'newer'
+    }
+
+    return type
+  }
+
+  const getTitle = single => Locale.getValueTranslation(versionTitles?.[single.identifier])
+
+  const versions = datasetVersions
+    .map((single, i, set) => ({
+      label: set.length - i,
+      identifier: single.identifier,
+      preferredIdentifier: single.preferred_identifier,
+      url: idnToLink(single.preferred_identifier),
+      title: getTitle(single),
+      type: findType(i),
+      removed: single.removed,
+    }))
+    .filter(v => !v.removed)
+    .filter(v => v.identifier !== identifier)
 
   return (
     <Margin>
@@ -65,14 +104,6 @@ const Versions = ({ versions }) => {
       </Table>
     </Margin>
   )
-}
-
-Versions.defaultProps = {
-  versions: [],
-}
-
-Versions.propTypes = {
-  versions: PropTypes.array,
 }
 
 export default observer(Versions)

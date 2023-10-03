@@ -49,9 +49,7 @@ const TitleContainer = () => {
 
 export default observer(TitleContainer)
 
-const Container = styled.div`
-  }
-`
+const Container = styled.div``
 
 const Title = styled.h1`
   word-break: break-word;
@@ -79,7 +77,6 @@ const Label = styled.div`
   background-color: #e0e0e0;
   border-radius: 1em;
   max-width: max-content;
-  }
 `
 
 const PASLabel = styled(Label)`
