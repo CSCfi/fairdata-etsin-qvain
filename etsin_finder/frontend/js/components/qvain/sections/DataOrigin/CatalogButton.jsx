@@ -92,7 +92,7 @@ const ActiveButton = styled(Button)`
   }
 `
 
-const SelectedButton = styled(Button)`
+const SelectedButton = styled(Button).attrs({ className: 'selected' })`
   color: ${p => p.theme.color.primaryDark};
   border-color: ${p => p.theme.color.primary};
 `

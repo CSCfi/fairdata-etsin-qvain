@@ -80,8 +80,8 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
     dataset_data = {
         "metadata_provider_org": metadata_provider_org,
         "metadata_provider_user": metadata_provider_user,
-        "data_catalog": data.get("dataCatalog"),
-        "cumulative_state": data.get("cumulativeState"),
+        "data_catalog": data.get("data_catalog"),
+        "cumulative_state": data.get("cumulative_state"),
         "research_dataset": {
             "title": data.get("title"),
             "description": data.get("description"),
@@ -94,7 +94,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "other_identifier": data.get("other_identifier"),
             "field_of_science": data.get("field_of_science"),
             "language": data.get("language"),
-            "keyword": data.get("keywords"),
+            "keyword": data.get("keyword"),
             "theme": data.get("theme"),
             "access_rights": data.get("access_rights"),
             "remote_resources": data.get("remote_resources"),
@@ -242,7 +242,7 @@ def edited_data_to_metax(data, original):
             "other_identifier": data.get("other_identifier"),
             "field_of_science": data.get("field_of_science"),
             "language": data.get("language"),
-            "keyword": data.get("keywords"),
+            "keyword": data.get("keyword"),
             "theme": data.get("theme"),
             "access_rights": data.get("access_rights"),
             "remote_resources": data.get("remote_resources"),
@@ -256,12 +256,12 @@ def edited_data_to_metax(data, original):
         }
     )
     edited_data = {
-        "data_catalog": data.get("dataCatalog", None),
+        "data_catalog": data.get("data_catalog", None),
         "research_dataset": research_dataset,
-        "use_doi_for_published": data.get("useDoi"),
+        "use_doi_for_published": data.get("use_doi"),
     }
     if "cumulativeState" in data:
-        edited_data["cumulative_state"] = data.get("cumulativeState")
+        edited_data["cumulative_state"] = data.get("cumulative_state")
     return clean_empty_keyvalues_from_dict(edited_data)
 
 

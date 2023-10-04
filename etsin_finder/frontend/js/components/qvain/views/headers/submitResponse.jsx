@@ -17,12 +17,10 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
   } = useStores()
 
   const getPreferredIdentifier = () => {
-    let identifier
     if (response.state === 'published') {
-      identifier = response.research_dataset && response.research_dataset.preferred_identifier
+      return response.research_dataset?.preferred_identifier
     }
-    identifier = identifier || response.identifier
-    return identifier
+    return null
   }
 
   let goToEtsin = <Translate content="qvain.datasets.actions.goToEtsin" />
@@ -33,22 +31,17 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
     goToEtsinQuery = '?preview=1'
   }
 
+  const identifier = response.identifier || response.id
+  const isNew = response.is_new
+  const isDraft = response.state === 'draft'
+
   // If a new dataset or draft has been created successfully.
-  if (
-    response &&
-    typeof response === 'object' &&
-    'identifier' in response &&
-    !('new_version_created' in response) &&
-    (response.is_new || response.is_draft)
-  ) {
-    const identifier = response.identifier
+  if (identifier && isNew) {
     return (
       <ResponseContainerSuccess>
         <ResponseContainerContent>
           <ResponseLabel success>
-            <Translate
-              content={`qvain.submitStatus.${response.is_draft ? 'draftSuccess' : 'success'}`}
-            />
+            <Translate content={`qvain.submitStatus.${isDraft ? 'draftSuccess' : 'success'}`} />
           </ResponseLabel>
           <LinkToEtsin
             onClick={() =>
@@ -57,7 +50,7 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
           >
             {goToEtsin}
           </LinkToEtsin>
-          <p>Identifier: {getPreferredIdentifier()}</p>
+          <p>Identifier: {getPreferredIdentifier() || identifier}</p>
         </ResponseContainerContent>
         <ResponseContainerCloseButtonContainer>
           <LinkButtonDarkGray type="button" onClick={clearSubmitResponse}>
@@ -67,19 +60,9 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
       </ResponseContainerSuccess>
     )
   }
+
   // If an existing datasets metadata has successfully been updated.
-  if (
-    response &&
-    typeof response === 'object' &&
-    'identifier' in response &&
-    !('new_version_created' in response) &&
-    original !== undefined &&
-    response.research_dataset !== undefined &&
-    'metadata_version_identifier' in response.research_dataset &&
-    'metadata_version_identifier' in original.research_dataset &&
-    response.metadata_version_identifier !== original.research_dataset.metadata_version_identifier
-  ) {
-    const identifier = response.identifier
+  if (identifier) {
     return (
       <ResponseContainerSuccess>
         <ResponseContainerContent>
@@ -99,7 +82,7 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
           >
             {goToEtsin}
           </LinkToEtsin>
-          <p>Identifier: {getPreferredIdentifier()}</p>
+          <p>Identifier: {getPreferredIdentifier() || identifier}</p>
         </ResponseContainerContent>
         <ResponseContainerCloseButtonContainer>
           <LinkButtonDarkGray type="button" onClick={clearSubmitResponse}>

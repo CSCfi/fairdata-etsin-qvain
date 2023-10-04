@@ -94,7 +94,9 @@ class Files {
       }
       runInAction(() => {
         this.selectedProject = undefined
-        this.loadingProjectInfo.error = error
+        if (this.loadingProjectInfo) {
+          this.loadingProjectInfo.error = error
+        }
       })
     } finally {
       runInAction(() => {
@@ -183,7 +185,9 @@ class Files {
         throw error
       }
       runInAction(() => {
-        this.loadingMetadata.error = error
+        if (this.loadingMetadata) {
+          this.loadingMetadata.error = error
+        }
       })
     } finally {
       runInAction(() => {

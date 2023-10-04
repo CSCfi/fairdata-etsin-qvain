@@ -9,6 +9,9 @@ jest.useFakeTimers('modern').setSystemTime(fakeNow)
 describe('when calling handleSubmit with mockStores', () => {
   const getMockStores = ({ dataCatalog, accessType = ACCESS_TYPE_URL.OPEN }) => ({
     Qvain: {
+      Files: {
+        useV3: false,
+      },
       Title: {
         toBackend: jest.fn(() => 'title'),
       },
@@ -90,7 +93,7 @@ describe('when calling handleSubmit with mockStores', () => {
     title: 'title',
     description: 'description',
     other_identifier: 'otherIdentifiers',
-    keywords: 'keywords',
+    keyword: 'keywords',
     theme: 'theme',
     creator: 'creator',
     publisher: 'publisher',
@@ -104,9 +107,9 @@ describe('when calling handleSubmit with mockStores', () => {
       available: 'embargoDate',
     },
     // remote_resources: undefined,
-    // dataCatalog: 'dataCatalog',
-    cumulativeState: 'cumulativeState',
-    useDoi: 'useDoi',
+    // data_catalog: 'dataCatalog',
+    cumulative_state: 'cumulativeState',
+    use_doi: 'useDoi',
     is_output_of: 'projects',
     spatial: 'spatial',
     temporal: 'temporal',
@@ -121,12 +124,12 @@ describe('when calling handleSubmit with mockStores', () => {
   const expectedReturnATT = {
     ...expectedReturnCommon,
     remote_resources: 'externalResources',
-    dataCatalog: 'urn:nbn:fi:att:data-catalog-att',
+    data_catalog: 'urn:nbn:fi:att:data-catalog-att',
   }
 
   const expectedReturnIDA = {
     ...expectedReturnCommon,
-    dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
+    data_catalog: 'urn:nbn:fi:att:data-catalog-ida',
   }
 
   const expectedReturnRestricted = {
@@ -136,7 +139,7 @@ describe('when calling handleSubmit with mockStores', () => {
       access_type: { identifier: ACCESS_TYPE_URL.RESTRICTED },
       restriction_grounds: 'restrictionGrounds',
     },
-    dataCatalog: 'urn:nbn:fi:att:data-catalog-ida',
+    data_catalog: 'urn:nbn:fi:att:data-catalog-ida',
   }
 
   test('should return data with external resources', () => {

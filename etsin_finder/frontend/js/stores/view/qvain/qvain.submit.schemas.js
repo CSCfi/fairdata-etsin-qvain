@@ -50,15 +50,15 @@ const accessRightsSchema = yup
 const qvainFormSchema = yup.object().shape({
   title: titleSchema,
   description: descriptionSchema,
-  issued: yup.mixed().when('useDoi', {
+  issued: yup.mixed().when('use_doi', {
     is: true,
     then: yup.string().date().required('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
     otherwise: yup.string().date().nullable(),
   }),
   access_rights: accessRightsSchema,
   field_of_science: fieldsOfScienceSchema,
-  keywords: keywordsArraySchema,
-  otherIdentifiers: otherIdentifiersArraySchema,
+  keyword: keywordsArraySchema,
+  otheridentifiers: otherIdentifiersArraySchema,
   creator: metaxActorsSchema
     .min(1, 'qvain.validationMessages.actors.requiredActors.creator')
     .required('qvain.validationMessages.actors.requiredActors.creator'),
@@ -68,11 +68,11 @@ const qvainFormSchema = yup.object().shape({
   rights_holder: metaxActorsSchema,
   curator: metaxActorsSchema,
   contributor: metaxActorsSchema,
-  dataCatalog: dataCatalogSchema,
-  cumulativeState: cumulativeStateSchema,
+  data_catalog: dataCatalogSchema,
+  cumulative_state: cumulativeStateSchema,
   files: filesSchema,
   directories: directoriesSchema,
-  useDoi: useDoiSchema,
+  use_doi: useDoiSchema,
 })
 
 // Entire form validation for draft
@@ -81,19 +81,19 @@ const qvainFormDraftSchema = yup.object().shape({
   description: descriptionDraftSchema,
   issued: yup.string().date().nullable(),
   field_of_science: fieldsOfScienceSchema,
-  keywords: keywordsDraftSchema,
-  otherIdentifiers: otherIdentifiersArraySchema,
+  keyword: keywordsDraftSchema,
+  other_identifiers: otherIdentifiersArraySchema,
   access_rights: accessRightsDraftSchema,
   creator: metaxActorsSchema,
   publisher: metaxActorSchema,
   rights_holder: metaxActorsSchema,
   curator: metaxActorsSchema,
   contributor: metaxActorsSchema,
-  dataCatalog: dataCatalogDraftSchema,
-  cumulativeState: cumulativeStateSchema,
+  data_catalog: dataCatalogDraftSchema,
+  cumulative_state: cumulativeStateSchema,
   files: filesSchema,
   directories: directoriesSchema,
-  useDoi: useDoiSchema,
+  use_doi: useDoiSchema,
 })
 
 export { qvainFormSchema, qvainFormDraftSchema }

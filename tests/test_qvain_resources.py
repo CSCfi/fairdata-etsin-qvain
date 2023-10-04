@@ -579,7 +579,7 @@ class TestQvainDatasetsGetLegacy(BaseTest):
                     "headers": {"COOKIE": sso_cookie_login()},
                     "json": {
                         "title": {"fi": "Otsikko", "en": "Title"},
-                        "useDoi": False,
+                        "use_doi": False,
                     },
                 },
                 {"metax_responses": [(None, 123, False)]},
@@ -596,7 +596,7 @@ class TestQvainDatasetsGetLegacy(BaseTest):
                     "headers": {"COOKIE": sso_cookie_login()},
                     "json": {
                         "title": {"fi": "Otsikko", "en": "Title"},
-                        "useDoi": False,
+                        "use_doi": False,
                     },
                 },
                 {

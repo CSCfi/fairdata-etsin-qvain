@@ -26,9 +26,9 @@ Object {
       },
     },
   ],
-  "cumulativeState": 0,
+  "cumulative_state": 0,
   "curator": undefined,
-  "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -38,7 +38,7 @@ Object {
   "infrastructure": Array [],
   "is_output_of": Array [],
   "issued": undefined,
-  "keywords": Array [
+  "keyword": Array [
     "keyword",
   ],
   "language": Array [],
@@ -145,7 +145,7 @@ Object {
     "fi": "Title",
     "sv": "",
   },
-  "useDoi": false,
+  "use_doi": false,
 }
 `;
 
@@ -175,9 +175,9 @@ Object {
       },
     },
   ],
-  "cumulativeState": 0,
+  "cumulative_state": 0,
   "curator": undefined,
-  "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -187,7 +187,7 @@ Object {
   "infrastructure": Array [],
   "is_output_of": Array [],
   "issued": undefined,
-  "keywords": Array [
+  "keyword": Array [
     "keyword",
   ],
   "language": Array [],
@@ -294,7 +294,7 @@ Object {
     "fi": "Title",
     "sv": "",
   },
-  "useDoi": false,
+  "use_doi": false,
 }
 `;
 
@@ -324,9 +324,9 @@ Object {
       },
     },
   ],
-  "cumulativeState": 0,
+  "cumulative_state": 0,
   "curator": undefined,
-  "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -336,7 +336,7 @@ Object {
   "infrastructure": Array [],
   "is_output_of": Array [],
   "issued": undefined,
-  "keywords": Array [
+  "keyword": Array [
     "keyword",
   ],
   "language": Array [],
@@ -443,7 +443,7 @@ Object {
     "fi": "Title",
     "sv": "",
   },
-  "useDoi": false,
+  "use_doi": false,
 }
 `;
 
@@ -473,9 +473,9 @@ Object {
       },
     },
   ],
-  "cumulativeState": 0,
+  "cumulative_state": 0,
   "curator": undefined,
-  "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -485,7 +485,7 @@ Object {
   "infrastructure": Array [],
   "is_output_of": Array [],
   "issued": undefined,
-  "keywords": Array [
+  "keyword": Array [
     "keyword",
   ],
   "language": Array [],
@@ -592,7 +592,7 @@ Object {
     "fi": "Title",
     "sv": "",
   },
-  "useDoi": false,
+  "use_doi": false,
 }
 `;
 
@@ -622,9 +622,9 @@ Object {
       },
     },
   ],
-  "cumulativeState": 0,
+  "cumulative_state": 0,
   "curator": undefined,
-  "dataCatalog": "urn:nbn:fi:att:data-catalog-ida",
+  "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": Object {
     "en": "",
     "fi": "Description",
@@ -634,7 +634,7 @@ Object {
   "infrastructure": Array [],
   "is_output_of": Array [],
   "issued": undefined,
-  "keywords": Array [
+  "keyword": Array [
     "keyword",
   ],
   "language": Array [],
@@ -741,6 +741,6 @@ Object {
     "fi": "Title",
     "sv": "",
   },
-  "useDoi": false,
+  "use_doi": false,
 }
 `;

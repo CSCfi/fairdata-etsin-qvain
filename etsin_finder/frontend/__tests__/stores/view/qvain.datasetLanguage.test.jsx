@@ -11,7 +11,7 @@ describe('DatasetLanguage', () => {
 
   describe('when calling fromBackend with dataset.language: [item]', () => {
     const item = {
-      title: 'title',
+      pref_label: 'title',
       identifier: 'identifier',
     }
 

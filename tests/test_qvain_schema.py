@@ -265,35 +265,35 @@ class TestQvainDatasetDataCatalog(BaseTest):
     def test_ida(self):
         """IDA catalog is allowed"""
         errors = self.schema.validate(
-            {"dataCatalog": "urn:nbn:fi:att:data-catalog-ida"}
+            {"data_catalog": "urn:nbn:fi:att:data-catalog-ida"}
         )
         assert not errors
 
     def test_att(self):
         """ATT catalog is allowed"""
         errors = self.schema.validate(
-            {"dataCatalog": "urn:nbn:fi:att:data-catalog-att"}
+            {"data_catalog": "urn:nbn:fi:att:data-catalog-att"}
         )
         assert not errors
 
     def test_pas(self):
         """PAS catalog is allowed"""
         errors = self.schema.validate(
-            {"dataCatalog": "urn:nbn:fi:att:data-catalog-pas"}
+            {"data_catalog": "urn:nbn:fi:att:data-catalog-pas"}
         )
         assert not errors
 
     def test_dft(self):
         """DFT catalog is allowed"""
         errors = self.schema.validate(
-            {"dataCatalog": "urn:nbn:fi:att:data-catalog-dft"}
+            {"data_catalog": "urn:nbn:fi:att:data-catalog-dft"}
         )
         assert not errors
 
     def test_invalid_catalog(self):
         """Unknown catalog is not allowed"""
         errors = self.schema.validate(
-            {"dataCatalog": "urn:nbn:fi:att:data-catalog-attenborough"}
+            {"data_catalog": "urn:nbn:fi:att:data-catalog-attenborough"}
         )
         assert errors
 

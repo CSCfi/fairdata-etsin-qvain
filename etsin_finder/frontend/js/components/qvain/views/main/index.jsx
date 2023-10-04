@@ -122,6 +122,48 @@ export class Qvain extends Component {
     }
   }
 
+  handleGetDatasetError(e) {
+    if (isAbort(e)) {
+      return
+    }
+    const status = e.response.status
+
+    let errorTitle, errorDetails
+    if (status === 401 || status === 403) {
+      errorTitle = translate('qvain.error.permission')
+    } else if (status === 404) {
+      errorTitle = translate('qvain.error.missing')
+    } else {
+      errorTitle = translate('qvain.error.default')
+    }
+
+    if (typeof e.response.data === 'object') {
+      const values = Object.values(e.response.data)
+      if (values.length === 1) {
+        errorDetails = values[0]
+      } else {
+        errorDetails = JSON.stringify(e.response.data, null, 2)
+      }
+    } else {
+      errorDetails = e.response.data
+    }
+    if (!errorDetails) {
+      errorDetails = e.message
+    }
+
+    this.setState({
+      datasetLoading: false,
+      datasetError: true,
+      datasetErrorTitle: errorTitle,
+      datasetErrorDetails: errorDetails,
+      haveDataset: false,
+    })
+  }
+
+  getTemplateIdentifier() {
+    return queryParam(this.props.Stores.Env.history.location, 'template')
+  }
+
   setFocusOnSubmitButton(event) {
     const buttons = this.submitButtonsRef.current
     if (buttons && buttons.firstElementChild) {
@@ -130,19 +172,43 @@ export class Qvain extends Component {
     event.preventDefault()
   }
 
-  getTemplateIdentifier() {
-    return queryParam(this.props.Stores.Env.history.location, 'template')
+  async getDatasetV3(identifier, { isTemplate = false } = {}) {
+    const { metaxV3Url } = this.props.Stores.Env
+    this.setState({ datasetLoading: true, datasetError: false })
+    const { resetQvainStore, editDataset, resetWithTemplate } = this.props.Stores.Qvain
+
+    const url = metaxV3Url('dataset', identifier)
+    try {
+      const result = await this.client.get(url)
+      resetQvainStore()
+
+      if (isTemplate) {
+        resetWithTemplate(result.data)
+      } else {
+        ignoreAbort(() => editDataset(result.data))
+      }
+      this.setState({ datasetError: false, haveDataset: true })
+    } catch (e) {
+      this.handleGetDatasetError(e)
+    } finally {
+      this.setState({
+        datasetLoading: false,
+      })
+    }
   }
 
   getDataset(identifier, { isTemplate = false } = {}) {
-    this.setState({ datasetLoading: true, datasetError: false })
-
-    const { resetQvainStore, editDataset, resetWithTemplate } = this.props.Stores.Qvain
-
     const {
       getQvainUrl,
       Flags: { flagEnabled },
     } = this.props.Stores.Env
+
+    if (flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
+      return this.getDatasetV3(identifier, { isTemplate })
+    }
+
+    this.setState({ datasetLoading: true, datasetError: false })
+    const { resetQvainStore, editDataset, resetWithTemplate } = this.props.Stores.Qvain
 
     const url = urls.qvain.dataset(identifier)
     const promise = this.client
@@ -171,43 +237,7 @@ export class Qvain extends Component {
         }
         this.setState({ datasetLoading: false, datasetError: false, haveDataset: true })
       })
-      .catch(e => {
-        if (isAbort(e)) {
-          return
-        }
-        const status = e.response.status
-
-        let errorTitle, errorDetails
-        if (status === 401 || status === 403) {
-          errorTitle = translate('qvain.error.permission')
-        } else if (status === 404) {
-          errorTitle = translate('qvain.error.missing')
-        } else {
-          errorTitle = translate('qvain.error.default')
-        }
-
-        if (typeof e.response.data === 'object') {
-          const values = Object.values(e.response.data)
-          if (values.length === 1) {
-            errorDetails = values[0]
-          } else {
-            errorDetails = JSON.stringify(e.response.data, null, 2)
-          }
-        } else {
-          errorDetails = e.response.data
-        }
-        if (!errorDetails) {
-          errorDetails = e.message
-        }
-
-        this.setState({
-          datasetLoading: false,
-          datasetError: true,
-          datasetErrorTitle: errorTitle,
-          datasetErrorDetails: errorDetails,
-          haveDataset: false,
-        })
-      })
+      .catch(e => this.handleGetDatasetError(e))
     return promise
   }
 

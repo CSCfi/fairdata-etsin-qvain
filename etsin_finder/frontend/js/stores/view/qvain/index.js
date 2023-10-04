@@ -1,9 +1,5 @@
 import { observable, action, computed, makeObservable, toJS } from 'mobx'
-import {
-  cumulativeStateSchema,
-  useDoiSchema,
-  dataCatalogSchema,
-} from './qvain.dataCatalog.schemas'
+import { cumulativeStateSchema, useDoiSchema, dataCatalogSchema } from './qvain.dataCatalog.schemas'
 import {
   CUMULATIVE_STATE,
   DATA_CATALOG_IDENTIFIER,
@@ -16,9 +12,11 @@ import ReferenceData from './qvain.referenceData'
 import Resources from './qvain.resources'
 import Files from './qvain.files'
 import Submit from './qvain.submit'
+import SubmitV3 from './qvain.submit.v3'
 import Lock from './qvain.lock'
 import track, { touch } from './track'
 import queryParamEnabled from '@/utils/queryParamEnabled'
+import Adapter from './qvain.adapter'
 
 class Qvain extends Resources {
   constructor(Env, Auth) {
@@ -26,11 +24,20 @@ class Qvain extends Resources {
     makeObservable(this)
     this.Env = Env
     this.ReferenceData = new ReferenceData(this)
+    this.SubmitV2 = new Submit(this, this.Env)
+    this.SubmitV3 = new SubmitV3(this, this.Env)
     this.Sections = new Sections({ parent: this })
     this.Files = new Files(this, Auth)
-    this.Submit = new Submit(this, Env)
+    this.Adapter = new Adapter(this)
     this.resetQvainStore()
     this.Lock = new Lock(this, Auth)
+  }
+
+  @computed get Submit() {
+    if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
+      return this.SubmitV3
+    }
+    return this.SubmitV2
   }
 
   cumulativeStateSchema = cumulativeStateSchema
@@ -257,23 +264,31 @@ class Qvain extends Resources {
       this.useDoi = false
     }
 
-    // Load v2 files
+    // Load files
     await this.Files.openDataset(dataset)
   }
 
   @action editDataset = async dataset => {
     this.resetQvainStore()
     this.Submit.reset()
+    let v2Dataset = dataset
+    if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
+      v2Dataset = this.Adapter.convertV3ToV2(dataset)
+    }
     this.setChanged(false)
-    this.original = { ...dataset }
-    this.loadBasicFields(dataset)
-    await this.loadStatusAndFileFields(dataset)
-    this.Sections.expandPopulatedSections(dataset.research_dataset)
+    this.original = { ...v2Dataset }
+    this.loadBasicFields(v2Dataset)
+    await this.loadStatusAndFileFields(v2Dataset)
+    this.Sections.expandPopulatedSections(v2Dataset.research_dataset)
   }
 
   @action resetWithTemplate = async dataset => {
     this.resetQvainStore()
-    this.loadBasicFields(dataset)
+    let v2Dataset = dataset
+    if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
+      v2Dataset = this.Adapter.convertV3ToV2(dataset)
+    }
+    this.loadBasicFields(v2Dataset)
     this.OtherIdentifiers.reset()
     this.ExternalResources.reset()
     this.setChanged(true)
@@ -330,7 +345,9 @@ class Qvain extends Resources {
 
   @computed
   get canRemoveFiles() {
-    return this.canSelectFiles && (!this.hasBeenPublished || !this.isCumulative || this.isNewVersion)
+    return (
+      this.canSelectFiles && (!this.hasBeenPublished || !this.isCumulative || this.isNewVersion)
+    )
   }
 
   @computed

@@ -61,7 +61,10 @@ const App = () => {
   // Load runtime config
   const configure = async () => {
     await Env.fetchAppConfig()
-    if (Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK')) {
+    if (
+      Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK') &&
+      !Env?.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')
+    ) {
       Stores.Qvain.Lock.enable()
     }
     Locale.loadLang()
@@ -74,7 +77,7 @@ const App = () => {
     configure()
   }, [])
 
-  if (!initialized) {
+  if (!initialized || !Env.appConfigLoaded) {
     return null
   }
 

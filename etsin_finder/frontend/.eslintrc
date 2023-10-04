@@ -70,8 +70,17 @@
   "globals": { "BUILD": "readonly" },
   "overrides": [
     {
+      // eslint configuration specific for testing
       "files": ["**/__tests__/**/*.[jt]s?(x)"],
-      "extends": ["plugin:testing-library/react"]
+      "extends": ["plugin:testing-library/react"],
+      "rules": {
+        // Allow e.g. selecting a section based on a heading it contains
+        // See https://stackoverflow.com/questions/62770973/parent-node-in-react-testing-library
+        "testing-library/no-node-access": 0,
+        // Rule disallowing `wrapper = render(...)` style assignments is too sensitive
+        // and matches all assignments that contain `render` e.g. `thing = thingThatWasRendered`
+        "testing-library/render-result-naming-convention": 0
+      }
     }
   ]
 }

@@ -212,7 +212,7 @@ original_complete_dataset = {
         {"notation": "https://doin.com/some_identifier"},
         {"notation": "doi:10.23729/12345678-aaaa"},
     ],
-    "keywords": ["qwe"],
+    "keyword": ["qwe"],
     "theme": [{"identifier": "http://www.yso.fi/onto/koko/p46606"}],
     "access_rights": {
         "license": [
@@ -336,9 +336,9 @@ original_complete_dataset = {
             },
         }
     ],
-    "dataCatalog": "urn:nbn:fi:att:data-catalog-att",
-    "cumulativeState": 0,
-    "useDoi": False,
+    "data_catalog": "urn:nbn:fi:att:data-catalog-att",
+    "cumulative_state": 0,
+    "use_doi": False,
     "is_output_of": [
         {
             "name": {"en": "qwe", "fi": "qweqwe"},

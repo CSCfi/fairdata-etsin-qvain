@@ -256,7 +256,7 @@ class QvainDatasets(MethodView):
                 "PermissionError": "The Metadata provider is not found in login information."
             }, 401
 
-        if data["useDoi"] is True:
+        if data["use_doi"] is True:
             params["pid_type"] = "doi"
 
         metax_ready_data = data_to_metax(

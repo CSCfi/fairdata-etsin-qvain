@@ -63,7 +63,7 @@ jest.mock('lodash.debounce', () => {
 
 const errors = {
   missingFileOrigin: 'qvain.validationMessages.files.dataCatalog.required',
-  wrongFileOrigin: 'Doi can be used only with Ida datasets.',
+  wrongFileOrigin: 'DOI can be used only with IDA datasets.',
 }
 
 const testOrganization = {
@@ -81,7 +81,7 @@ const generateDefaultDatasetForPublish = settings => ({
   title: { fi: 'otsikko', en: 'title' },
   description: { fi: 'kuvailu', en: 'description' },
   issued: moment().format('YYYY-MM-DD'), // needs to be mocked if using snapshots
-  keywords: ['key', 'words'],
+  keyword: ['key', 'words'],
   creator: [testOrganization],
   publisher: testOrganization,
   license: [
@@ -97,17 +97,17 @@ const generateDefaultDatasetForPublish = settings => ({
   access_rights: {
     access_type: { identifier: ACCESS_TYPE_URL.OPEN },
   },
-  cumulativeState: CUMULATIVE_STATE.NO,
-  useDoi: false,
-  dataCatalog: DATA_CATALOG_IDENTIFIER.IDA,
+  cumulative_state: CUMULATIVE_STATE.NO,
+  use_doi: false,
+  data_catalog: DATA_CATALOG_IDENTIFIER.IDA,
   ...settings,
 })
 
 const generateDefaultDatasetForDraft = settings => ({
   title: { fi: 'otsikko', en: 'title' },
   description: { fi: '', en: '' },
-  cumulativeState: CUMULATIVE_STATE.NO,
-  accessType: { url: ACCESS_TYPE_URL.OPEN },
+  cumulative_state: CUMULATIVE_STATE.NO,
+  access_type: { url: ACCESS_TYPE_URL.OPEN },
   ...settings,
 })
 
@@ -381,12 +381,12 @@ describe('create new draft', () => {
   })
 
   test('cases 1-3: no file origin, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined })
+    const dataset = generateDefaultDatasetForDraft({ data_catalog: undefined })
     await expectNoError(dataset)
   })
 
   test('cases 4-6: no file origin, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined, useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ data_catalog: undefined, use_doi: true })
 
     await expectNoError(dataset)
   })
@@ -398,27 +398,27 @@ describe('create new draft', () => {
   })
 
   test('case 8: Ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.YES })
+    const dataset = generateDefaultDatasetForDraft({ cumulative_state: CUMULATIVE_STATE.YES })
 
     await expectNoError(dataset)
   })
 
   test('case 9: Ida, urn, cumulative state closed', async () => {
-    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+    const dataset = generateDefaultDatasetForDraft({ cumulative_state: CUMULATIVE_STATE.CLOSED })
 
     await expectNoError(dataset)
   })
 
   test('case 10: Ida, doi, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForDraft({ useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ use_doi: true })
 
     await expectNoError(dataset)
   })
 
   test('case 11: Ida, doi, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      useDoi: true,
-      cumulativeState: CUMULATIVE_STATE.YES,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.YES,
     })
 
     await expectNoError(dataset)
@@ -426,8 +426,8 @@ describe('create new draft', () => {
 
   test('case 12: Ida, doi, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      useDoi: true,
-      cumulativeState: CUMULATIVE_STATE.CLOSED,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.CLOSED,
     })
 
     await expectNoError(dataset)
@@ -435,7 +435,7 @@ describe('create new draft', () => {
 
   test('case 13: remote resources, urn, cumulative state no', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
     })
 
     await expectNoError(dataset)
@@ -443,8 +443,8 @@ describe('create new draft', () => {
 
   test('case 14: remote resources, urn, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      cumulativeState: CUMULATIVE_STATE.YES,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
+      cumulative_state: CUMULATIVE_STATE.YES,
     })
 
     await expectNoError(dataset)
@@ -452,8 +452,8 @@ describe('create new draft', () => {
 
   test('case 15: remote resources, urn, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      cumulativeState: CUMULATIVE_STATE.CLOSED,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
+      cumulative_state: CUMULATIVE_STATE.CLOSED,
     })
 
     await expectNoError(dataset)
@@ -462,8 +462,8 @@ describe('create new draft', () => {
   // Ui doesn't allow these, doi can be activated only for ida
   test('case 16-18: remote resources, doi, cumulative state', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      useDoi: true,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
+      use_doi: true,
     })
 
     await expectError(dataset, errors.wrongFileOrigin)
@@ -534,13 +534,13 @@ describe('publish new dataset', () => {
   })
 
   test('case 19-21: no file origin, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: undefined })
 
     await expectError(dataset, errors.missingFileOrigin)
   })
 
   test('case 22-24: no file origin, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: undefined, use_doi: true })
 
     await expectError(dataset, errors.missingFileOrigin)
   })
@@ -552,27 +552,27 @@ describe('publish new dataset', () => {
   })
 
   test('case 26: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+    const dataset = generateDefaultDatasetForPublish({ cumulative_state: CUMULATIVE_STATE.YES })
 
     await expectNoError(dataset)
   })
 
   test('case 27: ida, urn, cumulative state closed', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+    const dataset = generateDefaultDatasetForPublish({ cumulative_state: CUMULATIVE_STATE.CLOSED })
 
     await expectNoError(dataset)
   })
 
   test('case 28: ida, doi, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+    const dataset = generateDefaultDatasetForPublish({ use_doi: true })
 
     await expectNoError(dataset)
   })
 
   test('case 29: ida, doi, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      cumulativeState: CUMULATIVE_STATE.YES,
-      useDoi: true,
+      cumulative_state: CUMULATIVE_STATE.YES,
+      use_doi: true,
     })
 
     await expectNoError(dataset)
@@ -580,23 +580,23 @@ describe('publish new dataset', () => {
 
   test('case 30: ida, doi, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      cumulativeState: CUMULATIVE_STATE.CLOSED,
-      useDoi: true,
+      cumulative_state: CUMULATIVE_STATE.CLOSED,
+      use_doi: true,
     })
 
     await expectNoError(dataset)
   })
 
   test('case 31: external resources, urn, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: DATA_CATALOG_IDENTIFIER.ATT })
 
     await expectNoError(dataset)
   })
 
   test('case 32: external resources, urn, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      cumulativeState: CUMULATIVE_STATE.YES,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
+      cumulative_state: CUMULATIVE_STATE.YES,
     })
 
     await expectNoError(dataset)
@@ -604,8 +604,8 @@ describe('publish new dataset', () => {
 
   test('case 33: external resources, urn, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      cumulativeState: CUMULATIVE_STATE.CLOSED,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
+      cumulative_state: CUMULATIVE_STATE.CLOSED,
     })
 
     await expectNoError(dataset)
@@ -613,8 +613,8 @@ describe('publish new dataset', () => {
 
   test('cases 34-36: external resources, doi, cumulative state no', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      useDoi: true,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
+      use_doi: true,
     })
 
     await expectError(dataset, errors.wrongFileOrigin)
@@ -668,13 +668,13 @@ describe('edit existing draft dataset', () => {
   })
 
   test('cases 37-39: no file origin, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined })
+    const dataset = generateDefaultDatasetForDraft({ data_catalog: undefined })
 
     await expectNoError(dataset)
   })
 
   test('cases 40-42: no file origin, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined, useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ data_catalog: undefined, use_doi: true })
 
     await expectError(dataset)
   })
@@ -686,27 +686,27 @@ describe('edit existing draft dataset', () => {
   })
 
   test('case 44: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.YES })
+    const dataset = generateDefaultDatasetForDraft({ cumulative_state: CUMULATIVE_STATE.YES })
 
     await expectNoError(dataset)
   })
 
   test('case 45: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+    const dataset = generateDefaultDatasetForDraft({ cumulative_state: CUMULATIVE_STATE.CLOSED })
 
     await expectNoError(dataset)
   })
 
   test('case 46: ida, doi, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForDraft({ useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ use_doi: true })
 
     await expectNoError(dataset)
   })
 
   test('case 47: ida, doi, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      useDoi: true,
-      cumultaiveState: CUMULATIVE_STATE.YES,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.YES,
     })
 
     await expectNoError(dataset)
@@ -714,23 +714,23 @@ describe('edit existing draft dataset', () => {
 
   test('case 48: ida, doi, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      useDoi: true,
-      cumulativeState: CUMULATIVE_STATE.CLOSED,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.CLOSED,
     })
 
     await expectNoError(dataset)
   })
 
   test('case 49-51: ext resources, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForDraft({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+    const dataset = generateDefaultDatasetForDraft({ data_catalog: DATA_CATALOG_IDENTIFIER.ATT })
 
     await expectNoError(dataset)
   })
 
   test('case 52-54: ext resources, doi, cumulative state any', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      useDoi: true,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
+      use_doi: true,
     })
 
     await expectError(dataset, errors.wrongFileOrigin)
@@ -796,13 +796,13 @@ describe('publish existing draft dataset', () => {
   })
 
   test('cases 55-57: no file origin, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: undefined })
 
     await expectError(dataset, errors.missingFileOrigin)
   })
 
   test('cases 58-60: no file origin, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: undefined, use_doi: true })
 
     await expectError(dataset, errors.missingFileOrigin)
   })
@@ -814,27 +814,27 @@ describe('publish existing draft dataset', () => {
   })
 
   test('case 62: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+    const dataset = generateDefaultDatasetForPublish({ cumulative_state: CUMULATIVE_STATE.YES })
 
     await expectNoError(dataset)
   })
 
   test('case 63: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+    const dataset = generateDefaultDatasetForPublish({ cumulative_state: CUMULATIVE_STATE.CLOSED })
 
     await expectNoError(dataset)
   })
 
   test('case 64: ida, doi, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+    const dataset = generateDefaultDatasetForPublish({ use_doi: true })
 
     await expectNoError(dataset)
   })
 
   test('case 65: ida, doi, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      useDoi: true,
-      cumulativeState: CUMULATIVE_STATE.YES,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.YES,
     })
 
     await expectNoError(dataset)
@@ -842,23 +842,23 @@ describe('publish existing draft dataset', () => {
 
   test('case 66: ida, doi, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      useDoi: true,
-      cumultaiveState: CUMULATIVE_STATE.CLOSED,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.CLOSED,
     })
 
     await expectNoError(dataset)
   })
 
   test('case 67-69: ext resources, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: DATA_CATALOG_IDENTIFIER.ATT })
 
     await expectNoError(dataset)
   })
 
   test('case 70-72: ext resources, doi, cumulative state any', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      useDoi: true,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
+      use_doi: true,
     })
 
     await expectError(dataset, errors.wrongFileOrigin)
@@ -931,13 +931,13 @@ describe('save published dataset as draft', () => {
   })
 
   test('cases 73-75: no file origin, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined })
+    const dataset = generateDefaultDatasetForDraft({ data_catalog: undefined })
 
     await expectNoError(dataset)
   })
 
   test('cases 76-78: no file origin, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForDraft({ dataCatalog: undefined, useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ data_catalog: undefined, use_doi: true })
 
     await expectNoError(dataset)
   })
@@ -949,27 +949,27 @@ describe('save published dataset as draft', () => {
   })
 
   test('case 80: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.YES })
+    const dataset = generateDefaultDatasetForDraft({ cumulative_state: CUMULATIVE_STATE.YES })
 
     await expectNoError(dataset)
   })
 
   test('case 81: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForDraft({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+    const dataset = generateDefaultDatasetForDraft({ cumulative_state: CUMULATIVE_STATE.CLOSED })
 
     await expectNoError(dataset)
   })
 
   test('case 82: ida, doi, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForDraft({ useDoi: true })
+    const dataset = generateDefaultDatasetForDraft({ use_doi: true })
 
     await expectNoError(dataset)
   })
 
   test('case 83: ida, doi, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      useDoi: true,
-      cumulativeState: CUMULATIVE_STATE.YES,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.YES,
     })
 
     await expectNoError(dataset)
@@ -977,23 +977,23 @@ describe('save published dataset as draft', () => {
 
   test('case 84: ida, doi, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      useDoi: true,
-      cumulativeState: CUMULATIVE_STATE.CLOSED,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.CLOSED,
     })
 
     await expectNoError(dataset)
   })
 
   test('case 85-87: ext resources, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForDraft({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+    const dataset = generateDefaultDatasetForDraft({ data_catalog: DATA_CATALOG_IDENTIFIER.ATT })
 
     await expectNoError(dataset)
   })
 
   test('case 88-90: ext resources, doi, cumulative state any', async () => {
     const dataset = generateDefaultDatasetForDraft({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      useDoi: true,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
+      use_doi: true,
     })
 
     await expectError(dataset, errors.wrongFileOrigin)
@@ -1063,13 +1063,13 @@ describe('republish dataset', () => {
   })
 
   test('cases 91-93: no file origin, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: undefined })
 
     await expectError(dataset, errors.missingFileOrigin)
   })
 
   test('cases 94-96: no file origin, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: undefined, use_doi: true })
 
     await expectError(dataset, errors.missingFileOrigin)
   })
@@ -1081,27 +1081,27 @@ describe('republish dataset', () => {
   })
 
   test('case 98: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+    const dataset = generateDefaultDatasetForPublish({ cumulative_state: CUMULATIVE_STATE.YES })
 
     await expectNoError(dataset)
   })
 
   test('case 99: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+    const dataset = generateDefaultDatasetForPublish({ cumulative_state: CUMULATIVE_STATE.CLOSED })
 
     await expectNoError(dataset)
   })
 
   test('case 100: ida, doi, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+    const dataset = generateDefaultDatasetForPublish({ use_doi: true })
 
     await expectNoError(dataset)
   })
 
   test('case 101: ida, doi, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      useDoi: true,
-      cumultaiveState: CUMULATIVE_STATE.YES,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.YES,
     })
 
     await expectNoError(dataset)
@@ -1109,23 +1109,23 @@ describe('republish dataset', () => {
 
   test('case 102: ida, doi, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      useDoi: true,
-      cumultaiveState: CUMULATIVE_STATE.CLOSED,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.CLOSED,
     })
 
     await expectNoError(dataset)
   })
 
   test('case 103-105: ext resources, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: DATA_CATALOG_IDENTIFIER.ATT })
 
     await expectNoError(dataset)
   })
 
   test('case 106-108: ext resources, doi, cumulative state any', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      useDoi: true,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
+      use_doi: true,
     })
 
     await expectError(dataset, errors.wrongFileOrigin)
@@ -1213,13 +1213,13 @@ describe('publish unpublished dataset', () => {
   })
 
   test('cases 127-129: no file origin, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: undefined })
 
     await expectError(dataset, errors.missingFileOrigin)
   })
 
   test('cases 130-132: no file origin, doi, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: undefined, useDoi: true })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: undefined, use_doi: true })
 
     await expectError(dataset, errors.missingFileOrigin)
   })
@@ -1231,27 +1231,27 @@ describe('publish unpublished dataset', () => {
   })
 
   test('case 134: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.YES })
+    const dataset = generateDefaultDatasetForPublish({ cumulative_state: CUMULATIVE_STATE.YES })
 
     await expectNoError(dataset)
   })
 
   test('case 135: ida, urn, cumulative state yes', async () => {
-    const dataset = generateDefaultDatasetForPublish({ cumulativeState: CUMULATIVE_STATE.CLOSED })
+    const dataset = generateDefaultDatasetForPublish({ cumulative_state: CUMULATIVE_STATE.CLOSED })
 
     await expectNoError(dataset)
   })
 
   test('case 136: ida, doi, cumulative state no', async () => {
-    const dataset = generateDefaultDatasetForPublish({ useDoi: true })
+    const dataset = generateDefaultDatasetForPublish({ use_doi: true })
 
     await expectNoError(dataset)
   })
 
   test('case 137: ida, doi, cumulative state yes', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      useDoi: true,
-      cumultaiveState: CUMULATIVE_STATE.YES,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.YES,
     })
 
     await expectNoError(dataset)
@@ -1259,23 +1259,23 @@ describe('publish unpublished dataset', () => {
 
   test('case 138: ida, doi, cumulative state closed', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      useDoi: true,
-      cumultaiveState: CUMULATIVE_STATE.CLOSED,
+      use_doi: true,
+      cumulative_state: CUMULATIVE_STATE.CLOSED,
     })
 
     await expectNoError(dataset)
   })
 
   test('case 139-141: ext resources, urn, cumulative state any', async () => {
-    const dataset = generateDefaultDatasetForPublish({ dataCatalog: DATA_CATALOG_IDENTIFIER.ATT })
+    const dataset = generateDefaultDatasetForPublish({ data_catalog: DATA_CATALOG_IDENTIFIER.ATT })
 
     await expectNoError(dataset)
   })
 
   test('case 142-144: ext resources, doi, cumulative state any', async () => {
     const dataset = generateDefaultDatasetForPublish({
-      dataCatalog: DATA_CATALOG_IDENTIFIER.ATT,
-      useDoi: true,
+      data_catalog: DATA_CATALOG_IDENTIFIER.ATT,
+      use_doi: true,
     })
 
     await expectError(dataset, errors.wrongFileOrigin)
@@ -1317,7 +1317,7 @@ describe('required fields', () => {
 
   describe('published', () => {
     it('should require data catalog', async () => {
-      expectPublishErrors({ dataCatalog: undefined }, [
+      expectPublishErrors({ data_catalog: undefined }, [
         'qvain.validationMessages.files.dataCatalog.required',
       ])
     })
@@ -1341,11 +1341,11 @@ describe('required fields', () => {
     })
 
     it('should require keywords array', async () => {
-      expectPublishErrors({ keywords: undefined }, ['qvain.validationMessages.keywords.required'])
+      expectPublishErrors({ keyword: undefined }, ['qvain.validationMessages.keywords.required'])
     })
 
     it('should require keywords array to not be empty', async () => {
-      expectPublishErrors({ keywords: [] }, ['qvain.validationMessages.keywords.required'])
+      expectPublishErrors({ keyword: [] }, ['qvain.validationMessages.keywords.required'])
     })
 
     it('should require creator array', async () => {

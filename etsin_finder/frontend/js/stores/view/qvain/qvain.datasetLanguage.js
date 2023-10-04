@@ -12,7 +12,9 @@ class DatasetLanguages extends ReferenceField {
   @action fromBackend = dataset => {
     if (dataset.language !== undefined) {
       touch(dataset.language)
-      this.storage = dataset.language.map(element => this.Model(element.title, element.identifier))
+      this.storage = dataset.language.map(element =>
+        this.Model(element.pref_label, element.identifier)
+      )
     }
   }
 

@@ -136,15 +136,17 @@ class Submit {
     return data
   }
 
-  @action exec = async (submitFunction, schema = qvainFormSchema) => {
+  @action.bound async exec(submitFunction, schema = qvainFormSchema) {
     const {
       OtherIdentifiers: { cleanupBeforeBackend },
       editDataset,
       setChanged,
       Lock,
+      original,
     } = this.Qvain
     this.response = undefined
     this.error = undefined
+    const isNew = !!original
 
     if (this.isLoading) {
       return
@@ -223,7 +225,7 @@ class Submit {
         }
         this.Qvain.setOriginal(dataset.original)
         await editDataset(dataset.original)
-        this.setResponse(dataset.original)
+        this.setResponse({ ...dataset.original, is_new: isNew })
         this.clearError()
       } catch (error) {
         this.setError(getResponseError(error))
@@ -310,12 +312,11 @@ class Submit {
     return true
   }
 
-  @action prepareDataset = () => {
-    const dataset = handleSubmitToBackend(this.Qvain)
-    return dataset
+  @action.bound prepareDataset() {
+    return handleSubmitToBackend(this.Qvain)
   }
 
-  @action prepareActions = () => {
+  @action.bound prepareActions() {
     const {
       original,
       Files,
@@ -382,9 +383,9 @@ class Submit {
 
   checkDoiCompability = payload =>
     new Promise((res, rej) => {
-      if (!payload.useDoi) res()
-      if (payload.useDoi && payload.dataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
-        rej(new ValidationError('Doi can be used only with Ida datasets.'))
+      if (!payload.use_doi) res()
+      if (payload.use_doi && payload.data_catalog === DATA_CATALOG_IDENTIFIER.ATT) {
+        rej(new ValidationError('DOI can be used only with IDA datasets.'))
       }
       res()
     })
