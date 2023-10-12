@@ -17,6 +17,8 @@ class Adapter {
       this.refdataV3ToV2,
       this.remoteResourceV2ToV3,
       this.remoteResourceV3ToV2,
+      this.relationV2ToV3,
+      this.relationV3ToV2,
       this.spatialV2ToV3,
       this.spatialV3ToV2,
       this.temporalV2ToV3,
@@ -41,8 +43,6 @@ class Adapter {
       return boundFunc(value)
     }
     this[func.name] = adapterFunc
-    this.temporalV2ToV3 = this.temporalV2ToV3.bind(this)
-    this.temporalV3ToV2 = this.temporalV3ToV2.bind(this)
   }
 
   refdataV3ToV2(value) {
@@ -70,7 +70,18 @@ class Adapter {
       access_type: this.refdataV3ToV2(value.access_type),
       restriction_grounds: this.refdataV3ToV2(value.restriction_grounds),
       license: this.refdataV3ToV2(value.license),
-      // available: // TODO
+    }
+  }
+
+  relationV3ToV2(value) {
+    return {
+      entity: value.entity && {
+        title: value.entity.title,
+        description: value.entity.description || {},
+        type: this.refdataV3ToV2(value.entity.type),
+        identifier: value.entity.entity_identifier,
+      },
+      relation_type: this.refdataV3ToV2(value.relation_type),
     }
   }
 
@@ -117,6 +128,7 @@ class Adapter {
         other_identifier: this.otherIdentifierV3ToV2(dataset.other_identifiers),
         access_rights: this.accessRightsV3ToV2(dataset.access_rights),
         spatial: this.spatialV3ToV2(dataset.spatial),
+        relation: this.relationV3ToV2(dataset.relation),
         temporal: this.temporalV3ToV2(dataset.temporal),
         remote_resources: this.remoteResourceV3ToV2(dataset.remote_resources),
       },
@@ -169,6 +181,18 @@ class Adapter {
     }
   }
 
+  relationV2ToV3(value) {
+    return {
+      entity: value.entity && {
+        title: value.entity.title,
+        description: value.entity.description,
+        type: this.refdataV2ToV3(value.entity.type),
+        entity_identifier: value.entity.identifier,
+      },
+      relation_type: this.refdataV2ToV3(value.relation_type),
+    }
+  }
+
   remoteResourceV2ToV3(value) {
     return {
       title: { en: value.title },
@@ -195,6 +219,7 @@ class Adapter {
       other_identifiers: this.otherIdentifierV2ToV3(dataset.other_identifier),
       access_rights: this.accessRightsV2ToV3(dataset.access_rights),
       spatial: this.spatialV2ToV3(dataset.spatial),
+      relation: this.relationV2ToV3(dataset.relation),
       temporal: this.temporalV2ToV3(dataset.temporal),
       remote_resources: this.remoteResourceV2ToV3(dataset.remote_resources),
     }

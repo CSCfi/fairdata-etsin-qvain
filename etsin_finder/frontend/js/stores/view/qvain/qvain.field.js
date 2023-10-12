@@ -135,8 +135,8 @@ class Field {
     this.validationError = error
   }
 
-  @action
-  fromBackendBase = (data, Qvain) => {
+  @action.bound
+  fromBackendBase(data, Qvain) {
     this.reset()
     if (data !== undefined) {
       data.forEach(element => {

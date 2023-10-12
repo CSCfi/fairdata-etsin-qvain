@@ -146,6 +146,7 @@ describe('Qvain with an opened dataset', () => {
     const expectedExtra = [
       'title.sv',
       'description.sv',
+      /\.und$/,
       // special handling
       'issued', // exact value may change
     ]
@@ -227,6 +228,36 @@ describe('Qvain with an opened dataset', () => {
       .getByText('Add geometry using WKT format in WGS84 coordinate system')
       .closest('div')
     expect(within(customGeometry).getByDisplayValue('POINT(22 61)')).toBeInTheDocument()
+  })
+
+  it('shows relation in modal', async () => {
+    // check that relations are present
+    const section = await renderSection('Related publications and other material')
+
+    const relationItem = within(section).getByText('Related dataset')
+    expect(relationItem).toBeInTheDocument()
+
+    // open modal
+    const editButton = within(relationItem.closest('div')).getByRole('button', { name: 'Edit' })
+    await userEvent.click(editButton)
+    const modal = screen.getByRole('dialog')
+    expect(
+      within(modal).getByRole('heading', { name: 'Edit reference to other material' })
+    ).toBeInTheDocument()
+
+    // check that input values are present
+    expect(
+      within(document.getElementById('entityType-input')).getByText('Dataset')
+    ).toBeInTheDocument()
+    expect(
+      within(document.getElementById('relationType-input')).getByText('Cites')
+    ).toBeInTheDocument()
+
+    expect(within(modal).getByLabelText('Name', { exact: false }).value).toEqual('Related dataset')
+    expect(within(modal).getByLabelText('Description').value).toEqual(
+      'This is the description of a dataset.'
+    )
+    expect(within(modal).getByLabelText('Identifier').value).toEqual('doi:some_dataset')
   })
 
   it('shows remote resources in modal', async () => {

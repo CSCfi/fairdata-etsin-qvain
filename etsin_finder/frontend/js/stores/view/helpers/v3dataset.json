@@ -415,6 +415,37 @@
       "is_associated_with": []
     }
   ],
+  "relation": [
+    {
+      "entity": {
+        "title": {
+          "en": "Related dataset"
+        },
+        "description": {
+          "en": "This is the description of a dataset."
+        },
+        "entity_identifier": "doi:some_dataset",
+        "type": {
+          "id": "b7f4d810-cc97-4da5-bf81-84c475a060eb",
+          "url": "http://uri.suomi.fi/codelist/fairdata/resource_type/code/dataset",
+          "in_scheme": "http://uri.suomi.fi/codelist/fairdata/resource_type",
+          "pref_label": {
+            "en": "Dataset",
+            "fi": "Tutkimusaineisto"
+          }
+        }
+      },
+      "relation_type": {
+        "id": "9efe61b9-635c-4cbe-abfe-09697eb220cd",
+        "url": "http://purl.org/spar/cito/cites",
+        "in_scheme": "http://uri.suomi.fi/codelist/fairdata/relation_type",
+        "pref_label": {
+          "en": "Cites",
+          "fi": "Viittaa"
+        }
+      }
+    }
+  ],
   "spatial": [
     {
       "url": "http://www.yso.fi/onto/yso/p189359",
