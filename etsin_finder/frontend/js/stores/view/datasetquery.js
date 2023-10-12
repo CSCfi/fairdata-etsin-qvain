@@ -11,7 +11,7 @@
 import { observable, computed, action, makeObservable } from 'mobx'
 import axios from 'axios'
 
-import Files from './files'
+import createFilesStore from './etsin/etsin.files'
 import Packages from './packages'
 import urls from '../../utils/urls'
 
@@ -33,7 +33,7 @@ const QueryFields = {
 class DatasetQuery {
   constructor(Env, Access) {
     this.Env = Env
-    this.Files = new Files()
+    this.Files = createFilesStore(Env)
     this.Packages = new Packages(Env)
     this.Access = Access
     makeObservable(this)

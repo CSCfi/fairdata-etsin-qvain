@@ -95,9 +95,11 @@ const dateFormat = (date, { shortMonth = false, format } = {}) => {
 
 export function dateSeparator(start, end) {
   if (start || end) {
-    return (start === end) 
-      ? <>{dateFormat(start, { format: 'date' })}</> 
-      : <>{`${dateFormat(start, { format: 'date' })} - ${dateFormat(end, { format: 'date' })}`}</>
+    return start === end ? (
+      <>{dateFormat(start, { format: 'date' })}</>
+    ) : (
+      <>{`${dateFormat(start, { format: 'date' })} - ${dateFormat(end, { format: 'date' })}`}</>
+    )
   }
   return null
 }

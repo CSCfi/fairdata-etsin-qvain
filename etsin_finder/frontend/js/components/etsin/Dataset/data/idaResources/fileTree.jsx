@@ -5,18 +5,15 @@ import { withRouter } from 'react-router-dom'
 
 import FileTreeItem from './fileTreeItem'
 import { useRenderTree } from '@/components/general/files/tree'
-import { withStores } from '@/stores/stores'
+import { useStores } from '@/stores/stores'
 
-export function FileTree(props) {
+export const FileTree = ({ location }) => {
   const {
-    allowDownload,
-    Stores: {
-      Etsin: {
-        EtsinDataset: { files: Files },
-        filesProcessor: { Packages },
-      },
+    Etsin: {
+      EtsinDataset: { files: Files, isDownloadAllowed },
+      filesProcessor: { Packages },
     },
-  } = props
+  } = useStores()
 
   const { View } = Files
 
@@ -24,11 +21,11 @@ export function FileTree(props) {
   // e.g. ?show=/path/subpath will open /path.
   // Supports multiple paths, e.g. ?show=/path1/item&show=/path2/item.
   useEffect(() => {
-    const params = new URLSearchParams(props.location.search)
+    const params = new URLSearchParams(location.search)
     const paths = params.getAll('show')
     Files.View.openPaths(paths, true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.location.search])
+  }, [location.search])
 
   const { renderTree } = useRenderTree(
     {
@@ -38,7 +35,7 @@ export function FileTree(props) {
       moreItemsLevel: 2,
     },
     {
-      allowDownload,
+      isDownloadAllowed,
       Packages,
     }
   )
@@ -47,11 +44,9 @@ export function FileTree(props) {
 }
 
 FileTree.propTypes = {
-  Stores: PropTypes.object.isRequired,
-  allowDownload: PropTypes.bool.isRequired,
   location: PropTypes.shape({
     search: PropTypes.string,
   }).isRequired,
 }
 
-export default withRouter(withStores(observer(FileTree)))
+export default withRouter(observer(FileTree))

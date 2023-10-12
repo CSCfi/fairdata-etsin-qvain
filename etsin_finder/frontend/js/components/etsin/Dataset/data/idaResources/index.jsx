@@ -2,28 +2,30 @@ import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons'
 
-import Tree from './fileTree'
-import Info from '../info'
-import sizeParse from '@/utils/sizeParse'
-import { useStores } from '@/stores/stores'
-import getDownloadAction from './downloadActions'
-import dateFormat from '@/utils/dateFormat'
-import ErrorMessage from './errorMessage'
-import PackageModal from './packageModal'
-import ManualDownloadModal from './manualDownloadModal'
-import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
-import { SplitButtonContainer, MoreButton } from './splitButton'
+import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons'
 import FlaggedComponent from '@/components/general/flaggedComponent'
 import TooltipHover from '@/components/general/tooltipHover'
+import sizeParse from '@/utils/sizeParse'
+import { useStores } from '@/stores/stores'
+import dateFormat from '@/utils/dateFormat'
+
+import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
+import Info from '../info'
+
+import ErrorMessage from './errorMessage'
+import getDownloadAction from './downloadActions'
+import ManualDownloadModal from './manualDownloadModal'
+import PackageModal from './packageModal'
+import { SplitButtonContainer, MoreButton } from './splitButton'
+import Tree from './fileTree'
 
 function IdaResources() {
   const {
     Locale: { lang },
     Access: { restrictions },
     Etsin: {
-      EtsinDataset: { files, isDownloadAllowed, downloadAllInfotext, identifier },
+      EtsinDataset: { useV3, identifier, files, isDownloadAllowed, downloadAllInfotext },
       filesProcessor: { Packages },
     },
   } = useStores()
@@ -31,7 +33,7 @@ function IdaResources() {
   const action = getDownloadAction(identifier, null, Packages, files)
   const { moreFunc, moreAriaLabel } = action
   const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel, root } = files
-  const fileCount = root?.existingFileCount || 0
+  const fileCount = root?.existingDirectChildCount || 0
   const totalSize = root?.existingByteSize || 0
 
   if (fileCount === 0) {
@@ -40,11 +42,18 @@ function IdaResources() {
 
   const translateLabel = label => label?.[lang] || label?.und
 
+  let shapedChecksum
+  if (inInfo?.checksum) {
+    shapedChecksum = useV3
+      ? inInfo.checksum
+      : `${inInfo.checksum.algorithm}:${inInfo.checksum.value}`
+  }
+
   const infoProps = inInfo && {
     open: true,
     name: inInfo.name,
-    id: inInfo.identifier,
-    checksum: inInfo.checksum,
+    id: useV3 && inInfo.type === 'directory' ? null : inInfo.identifier,
+    checksum: shapedChecksum,
     title: inInfo.title,
     size: sizeParse(inInfo.existingByteSize || inInfo.byteSize),
     category: translateLabel(getUseCategoryLabel(inInfo)),

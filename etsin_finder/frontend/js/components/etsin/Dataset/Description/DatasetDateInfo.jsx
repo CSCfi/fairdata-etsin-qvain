@@ -10,24 +10,24 @@ import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 const DatasetDateInfo = () => {
   const {
     Etsin: {
-      EtsinDataset: { dataset },
+      EtsinDataset: { datasetMetadata },
     },
   } = useStores()
 
   return (
     <DateInfo>
-      {dataset.issued && (
-        <p lang={getDataLang(dataset.issued)}>
+      {datasetMetadata.issued && (
+        <p lang={getDataLang(datasetMetadata.issued)}>
           <Translate
             content="dataset.issued"
-            with={{ date: dateFormat(checkDataLang(dataset.issued), { format: 'date' }) }}
+            with={{ date: dateFormat(checkDataLang(datasetMetadata.issued), { format: 'date' }) }}
           />
           <br />
-          {dataset.modified && (
+          {datasetMetadata.modified && (
             <Translate
               content="dataset.modified"
               with={{
-                date: dateFormat(checkDataLang(dataset.modified), { format: 'date' }),
+                date: dateFormat(checkDataLang(datasetMetadata.modified), { format: 'date' }),
               }}
             />
           )}

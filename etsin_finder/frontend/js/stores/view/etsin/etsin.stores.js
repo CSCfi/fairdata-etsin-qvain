@@ -13,6 +13,8 @@ class EtsinDatasetV2 {
     this.citations = new Cite({ Stores: this, Locale })
   }
 
+  useV3 = false
+
   @observable catalogRecord = null // V2 only
 
   @observable relations = null
@@ -102,7 +104,7 @@ class EtsinDatasetV2 {
 
   @computed get datasetMetadata() {
     return {
-      releaseDate: this.dataset.issued,
+      issued: this.dataset.issued,
       modified: this.dataset.modified,
       title: this.dataset.title,
       description: this.dataset.description,

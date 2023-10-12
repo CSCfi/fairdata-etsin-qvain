@@ -28,6 +28,7 @@ class SubmitV3 extends Submit {
       Lock,
       Adapter: { convertQvainV2ToV3 },
       original,
+      Files,
     } = this.Qvain
 
     const isNew = !!original
@@ -66,6 +67,7 @@ class SubmitV3 extends Submit {
 
       try {
         this.setLoading(true)
+        dataset.fileset = Files.actionsToMetax()
         const v3Dataset = convertQvainV2ToV3(dataset)
 
         const updatedDataset = await draftFunction(v3Dataset)

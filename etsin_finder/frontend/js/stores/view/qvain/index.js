@@ -10,7 +10,7 @@ import Sections from './qvain.sections'
 
 import ReferenceData from './qvain.referenceData'
 import Resources from './qvain.resources'
-import Files from './qvain.files'
+import createQvainFilesStore from './qvain.files'
 import Submit from './qvain.submit'
 import SubmitV3 from './qvain.submit.v3'
 import Lock from './qvain.lock'
@@ -27,7 +27,7 @@ class Qvain extends Resources {
     this.SubmitV2 = new Submit(this, this.Env)
     this.SubmitV3 = new SubmitV3(this, this.Env)
     this.Sections = new Sections({ parent: this })
-    this.Files = new Files(this, Auth)
+    this.Files = createQvainFilesStore(this, Auth)
     this.Adapter = new Adapter(this)
     this.resetQvainStore()
     this.Lock = new Lock(this, Auth)

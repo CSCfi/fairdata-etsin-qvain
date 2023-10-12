@@ -10,6 +10,8 @@ class EtsinDatasetV3 {
     makeObservable(this)
   }
 
+  useV3 = true
+
   @observable dataset = null
 
   @observable relations = null
@@ -28,12 +30,12 @@ class EtsinDatasetV3 {
     // waiting for V3 implementation, this is a placeholder
     return {
       identifier: this.dataset?.data_catalog,
-      title: {en: "placeholder"},
+      title: { en: 'placeholder' },
       publisher: {
-        name: {en: "Placeholder Publisher"},
+        name: { en: 'Placeholder Publisher' },
         homepage: [{ identifier: 'https://example.com' }],
       },
-    } 
+    }
   }
 
   @computed get persistentIdentifier() {
@@ -104,7 +106,7 @@ class EtsinDatasetV3 {
 
   @computed get datasetMetadata() {
     return {
-      releaseDate: this.dataset?.issued,
+      issued: this.dataset?.issued,
       modified: this.dataset?.modified,
       title: this.dataset?.title,
       description: this.dataset?.description || undefined,
@@ -156,7 +158,7 @@ class EtsinDatasetV3 {
   }
 
   @computed get hasFiles() {
-    return Boolean(this.files?.root?.directChildCount)
+    return Boolean(this.files?.root?.existingDirectChildCount)
   }
 
   @computed get hasRemoteResources() {
@@ -352,16 +354,16 @@ class EtsinDatasetV3 {
   }
 
   @computed get rightsHolders() {
-    return this.dataset?.actors.filter(actor => actor.role==="rights_holder")
+    return this.dataset?.actors.filter(actor => actor.role === 'rights_holder')
   }
 
-  @computed get actors(){
+  @computed get actors() {
     return {
       creators: this.creators,
       contributors: this.contributors,
       curators: this.curators,
       publisher: this.publisher,
-      rightsHolders: this.rightsHolders
+      rightsHolders: this.rightsHolders,
     }
   }
 

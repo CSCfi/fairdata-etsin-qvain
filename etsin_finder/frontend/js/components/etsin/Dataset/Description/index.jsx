@@ -46,8 +46,8 @@ const Description = ({ id }) => {
   const getFileTypes = () => {
     let dataFileTypes
     if (hasFiles) {
-      dataFileTypes = Object.values(files.originalMetadata).map(file =>
-        file.fileTypeLabel ? checkDataLang(file.fileTypeLabel) : null
+      dataFileTypes = files.root.files.map(file =>
+        file.fileType ? checkDataLang(file.fileType.pref_label) : null
       )
     }
 

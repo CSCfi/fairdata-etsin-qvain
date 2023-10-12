@@ -4,6 +4,7 @@ import { isAbort } from '@/utils/AbortClient'
 import EtsinDatasetV2 from './etsin.stores'
 import EtsinDatasetV3 from './etsin.storesV3'
 import DatasetProcessorV2, { DatasetProcessorV3 } from './processor/etsin.dataset'
+import createFilesStore from './etsin.files'
 import RelationsProcessor from './processor/etsin.relations'
 import FilesProcessor from './processor/etsin.files'
 
@@ -75,6 +76,7 @@ class Etsin {
   @action.bound reset() {
     this.abortAllRequests()
     this.EtsinDataset = new this.EtsinDatasetClass({ Access: this.Access, Locale: this.Locale })
+    this.Files = createFilesStore(this.env)
 
     this.requests = {
       dataset: [],
@@ -157,14 +159,14 @@ class Etsin {
     await this.fetchDataset(id)
     if (!this.useDatasetV3) {
       await this.fetchVersions()
-    } else runInAction(() => {this.isLoading.versions = false})
+    } else
+      runInAction(() => {
+        this.isLoading.versions = false
+      })
 
-    if (!this.useDatasetV3) {
-      await this.fetchFiles()
-    } else runInAction(() => {this.isLoading.files = false})
+    await this.fetchFiles()
 
-    await this.fetchPackages()
-    
+
     this.requests = {}
   }
 
@@ -201,11 +203,13 @@ class Etsin {
 
   @action
   fetchFiles = async () => {
-    this.requests.files = [this.filesProcessor.fetch({
-      catalogRecord: this.EtsinDataset.catalogRecord,
-      resolved: this.constructResolvedCb('files'),
-      rejected: this.constructRejectedCb('files'),
-    })]
+    this.requests.files = [
+      this.filesProcessor.fetch({
+        dataset: this.EtsinDataset,
+        resolved: this.constructResolvedCb('files'),
+        rejected: this.constructRejectedCb('files'),
+      }),
+    ]
 
     return this.requests.files[0].promise
   }
@@ -250,7 +254,6 @@ class Etsin {
     const accessRights = this.useDatasetV3
       ? data.access_rights
       : data.catalog_record.research_dataset.access_rights
-    console.log(data)
     this.Access.updateAccess(
       accessRights,
       data.has_permit || false,

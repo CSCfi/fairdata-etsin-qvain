@@ -5,6 +5,13 @@ export const FILE_NAME = 'file_path'
 export const DIRECTORY_DATE = 'date_created'
 export const FILE_DATE = 'file_frozen'
 
+const sortingV2ToV3Mapping = {
+  [DIRECTORY_NAME]: 'name',
+  [FILE_NAME]: 'filename',
+  [DIRECTORY_DATE]: 'created',
+  [FILE_DATE]: 'frozen',
+}
+
 const nameOption = { value: { file: FILE_NAME, directory: DIRECTORY_NAME }, option: 'name' }
 const dateOption = { value: { file: FILE_DATE, directory: DIRECTORY_DATE }, option: 'date' }
 
@@ -51,6 +58,14 @@ class Sort {
 
   @computed get directoryOrdering() {
     return this.sortReverse + this.currentOption.value.directory
+  }
+
+  @computed get fileOrderingV3() {
+    return this.sortReverse + sortingV2ToV3Mapping[this.currentOption.value.file]
+  }
+
+  @computed get directoryOrderingV3() {
+    return this.sortReverse + sortingV2ToV3Mapping[this.currentOption.value.directory]
   }
 
   @computed get sortReverse() {

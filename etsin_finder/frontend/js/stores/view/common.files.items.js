@@ -1,35 +1,39 @@
+// TODO: always create observables for Directory, File, Project?
+
 // Create prefixed keys from file/directory identifiers. Makes it possible to have
 // files and directories in the same array without risk of id conflicts.
-export const dirKey = dir => `dir:${dir.id}`
+export const dirKey = dir => `dir:${dir.id || dir.directory_path || dir.pathname}` // v2 || v2 alternative || v3
 export const fileKey = file => `file:${file.id}`
-export const dirIdentifierKey = dir => `dir:${dir.identifier}`
+export const dirIdentifierKey = dir => `dir:${dir.identifier || dir.directory_path || dir.pathname}` // v2 || v2 alternative || v3
 export const fileIdentifierKey = file => `file:${file.identifier}`
 
 // properties common to directories and files
 const Item = metaxItem => ({
   id: metaxItem.id, // internal metax id
-  identifier: metaxItem.identifier,
+  identifier: metaxItem.identifier || metaxItem.file_storage_identifier || metaxItem.id, // v2 || v3
   key: null,
-  title: metaxItem.title || '',
-  description: metaxItem.description,
-  useCategory: metaxItem.use_category && metaxItem.use_category.identifier,
-  serviceCreated: metaxItem.service_created,
+  title: metaxItem.title || metaxItem.dataset_metadata?.title || '', // v2 || v3
+  description: metaxItem.description || metaxItem.dataset_metadata?.description, // v2 || v3
+  useCategory: metaxItem.dataset_metadata?.use_category?.url, // v3
+  serviceCreated: metaxItem.service_created || metaxItem.storage_service, // v2 || v3
   parent: null,
   path: null,
   index: null, // sorting index of item
   byteSize: 0,
-
   added: false,
   removed: false,
   existing: false,
   error: false,
+  originalMetadata: metaxItem.dataset_metadata, // v3
 })
 
 export const Directory = (metaxDir, args) => ({
   ...Item(metaxDir),
+  id: metaxDir.id || metaxDir.directory_path, // v2 || v3,
+  identifier: metaxDir.identifier || metaxDir.pathname, // v2 || v3,
   key: dirKey(metaxDir),
-  name: metaxDir.directory_name, // actual directory name
-  path: metaxDir.directory_path,
+  name: metaxDir.directory_name || metaxDir.name, // actual directory name, v2 || v3
+  path: metaxDir.directory_path || metaxDir.pathname, // v2 || v3
   fileCount: metaxDir.file_count,
   existingByteSize: 0,
   existingFileCount: 0,
@@ -83,10 +87,11 @@ export const getPASMeta = metaxFile => {
 export const File = (metaxFile, args) => ({
   ...Item(metaxFile),
   key: fileKey(metaxFile),
-  name: metaxFile.file_name, // actual filename
-  path: metaxFile.file_path,
+  name: metaxFile.file_name || metaxFile.filename, // actual filename, v2 || v3
+  path: metaxFile.file_path || metaxFile.pathname, // v2 || v3
   checksum: metaxFile.checksum,
   type: 'file',
+  fileType: metaxFile.dataset_metadata?.file_type?.url, // v3
   pasMeta: getPASMeta(metaxFile),
   ...args,
 })

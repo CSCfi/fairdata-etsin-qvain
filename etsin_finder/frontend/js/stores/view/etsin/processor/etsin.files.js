@@ -1,38 +1,23 @@
 import { makeObservable, override, action } from 'mobx'
 import Packages from '../../packages'
-import Files from '../../files'
+import createFilesStore from '../etsin.files'
 import EtsinProcessor from '.'
-
-const QueryFields = {
-  file: [
-    'file_path',
-    'file_name',
-    'file_format',
-    'identifier',
-    'byte_size',
-    'open_access',
-    'file_format',
-    'file_characteristics',
-    'checksum_value',
-  ],
-  directory: ['directory_path', 'directory_name', 'identifier', 'file_count', 'byte_size'],
-}
 
 class FilesProcessor extends EtsinProcessor {
   constructor(Env) {
     super(Env)
     makeObservable(this)
     this.Packages = new Packages(Env)
-    this.Files = new Files()
+    this.Files = createFilesStore(Env)
     this.client = this.Files
   }
 
   @override
-  async fetch({ catalogRecord, resolved, rejected }) {
-    if (!catalogRecord) return null
+  async fetch({ dataset, resolved, rejected }) {
+    if (!dataset.identifier) return null
     this.Packages.clearPackages()
-    const id = catalogRecord.identifier
-    const promise = this.Files.openDataset(catalogRecord)
+    const id = dataset.identifier
+    const promise = this.Files.openDataset(dataset)
       .then(() => {
         if (resolved) resolved(this.Files)
       })
@@ -51,26 +36,6 @@ class FilesProcessor extends EtsinProcessor {
       console.log('failed to fetch packages:', e)
       if (rejected) rejected(e)
     }
-  }
-
-  @action.bound
-  fetchFolderData(id, crID) {
-    const fileFields = QueryFields.file.join(',')
-    const dirFields = QueryFields.directory.join(',')
-    return new Promise((resolve, reject) => {
-      this.client
-        .get(
-          `/api/files/${crID}?dir_id=${id}&file_fields=${fileFields}&directory_fields=${dirFields}`
-        )
-        .then(res => {
-          this.Files.directories.push({ id, results: res.data })
-          resolve(res.data)
-        })
-        .catch(error => {
-          this.Files.directories.push({ id, error })
-          reject(error)
-        })
-    })
   }
 }
 

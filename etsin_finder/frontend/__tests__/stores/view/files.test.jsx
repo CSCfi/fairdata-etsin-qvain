@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import FilesBase from '../../../js/stores/view/files'
+import { EtsinFilesV2 as FilesBase } from '../../../js/stores/view/etsin/etsin.files'
 import urls from '../../../js/utils/urls'
 import { get } from '../../__testdata__/qvain.files.data'
 

@@ -16,7 +16,7 @@ import {
   dataCatalogSchema,
   dataCatalogDraftSchema,
 } from './qvain.dataCatalog.schemas'
-import { filesSchema, directoriesSchema } from './qvain.files'
+import { filesSchema, directoriesSchema } from './qvain.files.schemas'
 import { embargoExpDateSchema } from './qvain.embargoExpDate'
 
 const accessRightsDraftSchema = yup

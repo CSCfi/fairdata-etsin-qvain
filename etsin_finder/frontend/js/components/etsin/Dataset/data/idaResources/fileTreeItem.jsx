@@ -26,12 +26,12 @@ import TooltipHover from '@/components/general/tooltipHover'
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const { Files, directoryView, extraProps } = treeProps
-  const { allowDownload, Packages } = extraProps
+  const { isDownloadAllowed, Packages } = extraProps
   const { setInInfo, datasetIdentifier } = Files
   let content = null
   const name = item.name
 
-  const fileCount = item.existingFileCount && `${item.existingFileCount} files`
+  const fileCount = item.existingdirectChildCount && `${item.existingFileCount} files`
   const size = sizeParse(item.byteSize || item.existingByteSize)
   const tagText = [fileCount, size].filter(v => v).join(', ')
   const sizeTag = tagText ? <PlainTag nowrap>{tagText}</PlainTag> : null
@@ -100,7 +100,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       color={downloadButtonColor}
       icon={downloadIcon}
       spin={downloadIconSpin}
-      disabled={downloadDisabled || !allowDownload}
+      disabled={downloadDisabled || !isDownloadAllowed}
       onClick={downloadFunc}
       with={{ name }}
     />
@@ -114,7 +114,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
           <Translate
             component={MoreButton}
             color={downloadButtonColor}
-            disabled={downloadDisabled || !allowDownload}
+            disabled={downloadDisabled || !isDownloadAllowed}
             onClick={moreFunc}
             attributes={{ 'aria-label': moreAriaLabel }}
           />

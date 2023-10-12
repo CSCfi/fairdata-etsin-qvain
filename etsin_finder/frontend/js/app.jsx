@@ -13,6 +13,7 @@
 import React, { useState, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Router } from 'react-router-dom'
+import { observer } from 'mobx-react'
 
 import { registerLocale } from 'react-datepicker'
 import fi from 'date-fns/locale/fi'
@@ -97,7 +98,7 @@ const App = () => {
   )
 }
 
-export default App
+export default observer(App)
 
 // setup tabbing
 Accessibility.initialLoad()

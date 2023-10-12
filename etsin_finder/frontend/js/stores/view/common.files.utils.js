@@ -101,3 +101,4 @@ export const assignDefined = (obj, values) => {
 
 export const itemIsSelected = (i, parentAction) =>
   i.added || ((i.existing || parentAction.added) && !i.removed && !parentAction.removed)
+
