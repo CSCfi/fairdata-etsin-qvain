@@ -122,7 +122,7 @@ class Adapter {
       geographic_name: value.geographic_name,
       altitude_in_meters: parseInt(value.alt, 10),
       custom_wkt: value.as_wkt,
-      reference: this.refdataV2ToV3(value.place_uri),
+      reference: this.refdataV2ToV3(value.place_uri?.identifier && value.place_uri),
       full_address: value.full_address,
     }
   }

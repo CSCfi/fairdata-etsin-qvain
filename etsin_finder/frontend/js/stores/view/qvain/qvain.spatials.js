@@ -59,7 +59,7 @@ class Spatials extends Field {
     geographic_name: spatial.name,
     alt: spatial.altitude,
     full_address: spatial.address,
-    as_wkt: spatial.geometry.map(geo => geo.value),
+    as_wkt: spatial.geometry.map(geo => geo.value).filter(value => value),
     place_uri: spatial.location ? { identifier: spatial.location.url } : { identifier: undefined },
   })
 
