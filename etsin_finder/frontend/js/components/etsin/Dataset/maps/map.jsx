@@ -30,14 +30,14 @@ class MyMap extends Component {
   static propTypes = {
     Stores: PropTypes.object.isRequired,
     geometry: PropTypes.arrayOf(PropTypes.string),
-    place_uri: PropTypes.objectOf(PropTypes.string),
+    location: PropTypes.objectOf(PropTypes.string),
     children: PropTypes.element,
     theme: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
     geometry: undefined,
-    place_uri: undefined,
+    location: undefined,
     children: null,
   }
 
@@ -69,7 +69,7 @@ class MyMap extends Component {
 
   initMap = () => {
     const { Map: MapStore } = this.props.Stores
-    MapStore.makeGeometry(this.props.geometry, this.props.place_uri).then(geometry => {
+    MapStore.makeGeometry(this.props.geometry, this.props.location).then(geometry => {
       // TODO: use all geometries to calculate bounds
       const bounds = geometry[0].bounds
       const layers = this.makeLayers(geometry)

@@ -10,14 +10,14 @@ import versionChangerStyles from './versionChangerStyles'
 const VersionChanger = props => {
   const {
     Etsin: {
-      EtsinDataset: { catalogRecord, datasetVersions, hasExistingVersion },
+      EtsinDataset: { identifier, datasetVersions, hasExistingVersion },
     },
   } = useStores()
 
   const versions = versionLabels(datasetVersions)
 
   const [selected, setSelected] = useState(
-    versions.filter(single => single.value === catalogRecord.identifier)[0]
+    versions.filter(single => single.value === identifier)[0]
   )
 
   function versionLabels(versionSet) {

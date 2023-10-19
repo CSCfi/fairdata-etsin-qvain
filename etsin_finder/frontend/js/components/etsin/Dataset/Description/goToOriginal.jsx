@@ -21,11 +21,11 @@ import idnToLink from '@/utils/idnToLink'
 function GoToOriginal() {
   const {
     Etsin: {
-      EtsinDataset: { dataset },
+      EtsinDataset: { persistentIdentifier },
     },
   } = useStores()
 
-  const link = idnToLink(dataset.preferred_identifier)
+  const link = idnToLink(persistentIdentifier)
   if (link) {
     return (
       <Link

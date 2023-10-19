@@ -106,7 +106,7 @@ class EtsinDatasetV3 {
 
   @computed get datasetMetadata() {
     return {
-      issued: this.dataset?.issued,
+      releaseDate: this.dataset?.issued,
       modified: this.dataset?.modified,
       title: this.dataset?.title,
       description: this.dataset?.description || undefined,
@@ -114,7 +114,7 @@ class EtsinDatasetV3 {
       subjectHeading: this.dataset?.theme,
       keywords: this.dataset?.keyword,
       language: this.dataset?.language,
-      spatial: this.dataset?.spatial,
+      spatial: this.shapeSpatial(this.dataset?.spatial),
       temporal: undefined, // waiting for V3 implementation
       projects: undefined, // waiting for V3 implementation
       infrastructure: undefined, // waiting for V3 implementation
@@ -195,9 +195,7 @@ class EtsinDatasetV3 {
   }
 
   @computed get hasMapData() {
-    // Map tab not implemented yet
-    return false
-    // return Boolean(this.datasetMetadata?.spatial)
+    return Boolean(this.datasetMetadata?.spatial)
   }
 
   @computed get isDownloadAllowed() {
@@ -389,6 +387,19 @@ class EtsinDatasetV3 {
       default:
         this[field] = data
     }
+  }
+
+  @action shapeSpatial(spatial) {
+    if (!spatial) return null
+
+    return spatial.map(location => {
+      let referenceWKT
+      if (location.reference?.as_wkt && location.reference?.as_wkt !== ''){
+        referenceWKT = [location.reference.as_wkt]
+      }
+      location.wkt = location.custom_wkt || referenceWKT
+      return location
+    })
   }
 }
 

@@ -66,12 +66,13 @@ const Description = ({ id }) => {
         {datasetMetadata.spatial.map(location => {
           if (!location.geographic_name) return null
           if (
-            location.pref_label &&
-            location.geographic_name !== checkDataLang(location.pref_label)
+            location.reference?.pref_label &&
+            location.geographic_name !== checkDataLang(location.reference.pref_label)
           ) {
             return (
-              <li key={location.geographic_name} lang={getDataLang(location.pref_label)}>
-                {checkDataLang(location.pref_label)} <span>({location.geographic_name})</span>
+              <li key={location.geographic_name} lang={getDataLang(location.reference.pref_label)}>
+                {checkDataLang(location.reference.pref_label)}{' '}
+                <span>({location.geographic_name})</span>
               </li>
             )
           }

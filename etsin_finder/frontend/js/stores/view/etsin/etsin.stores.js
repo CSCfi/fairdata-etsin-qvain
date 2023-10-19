@@ -104,7 +104,7 @@ class EtsinDatasetV2 {
 
   @computed get datasetMetadata() {
     return {
-      issued: this.dataset.issued,
+      releaseDate: this.dataset.issued,
       modified: this.dataset.modified,
       title: this.dataset.title,
       description: this.dataset.description,
@@ -449,16 +449,19 @@ class EtsinDatasetV2 {
   }
 
   @action shapeSpatial(spatial) {
-    return spatial?.map(location => ({
-      url: location.place_uri?.identifier,
-      pref_label: location.place_uri?.pref_label,
-      in_scheme: location.place_uri?.in_scheme,
+    if (!spatial) return null
+
+    return spatial.map(location => ({
       full_address: location.full_address,
       geographic_name: location.geographic_name,
-      altitude_in_meters: undefined, // need to check this?
-      dataset: null,
-      id: null,
-      as_wkt: location.as_wkt ? location.as_wkt[0] : undefined,
+      altitude_in_meters: location.alt,
+      wkt: location.as_wkt,
+      reference : {
+        id: null,
+        url: location.place_uri?.identifier,
+        in_scheme: location.place_uri?.in_scheme,
+        pref_label: location.place_uri?.pref_label,
+      }
     }))
   }
 

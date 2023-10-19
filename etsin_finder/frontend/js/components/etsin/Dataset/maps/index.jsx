@@ -16,7 +16,7 @@ const Maps = props => {
     Accessibility,
     Matomo,
     Etsin: {
-      EtsinDataset: { dataset },
+      EtsinDataset: { datasetMetadata },
     },
   } = useStores()
 
@@ -27,7 +27,7 @@ const Maps = props => {
 
   const buildLocationRow = spatial => {
     // Datasets submitted via API don't require geographic name for location, in which case the name comes from place_uri
-    const locationName = spatial.geographic_name || checkDataLang(spatial.place_uri?.pref_label)
+    const locationName = spatial.geographic_name || checkDataLang(spatial.reference?.pref_label)
 
     return (
       <tr key={`location-${locationName}`}>
@@ -40,17 +40,13 @@ const Maps = props => {
         <td>
           {
             // Display if full_address exists, otherwise display '-'
-            spatial.full_address !== undefined ? (
-              <span>{spatial.full_address}</span>
-            ) : (
-              <span>-</span>
-            )
+            spatial.full_address ? <span>{spatial.full_address}</span> : <span>-</span>
           }
         </td>
         <td>
           {
             // Display if alt exists, otherwise display '-'
-            spatial.alt !== undefined ? <span>{spatial.alt}</span> : <span>-</span>
+            spatial.altitude_in_meters ? <span>{spatial.altitude_in_meters}</span> : <span>-</span>
           }
         </td>
       </tr>
@@ -77,30 +73,28 @@ const Maps = props => {
         </thead>
 
         {/* Table body */}
-        <tbody>{dataset.spatial.map(spatial => buildLocationRow(spatial))}</tbody>
+        <tbody>{datasetMetadata.spatial.map(spatial => buildLocationRow(spatial))}</tbody>
       </Table>
 
       {/* The actual map */}
-      {dataset.spatial.map(spatial => {
+      {datasetMetadata.spatial.map(spatial => {
         // Map shown only if either map coordinate(s) or map location is defined
-        if (spatial.as_wkt !== undefined || spatial.place_uri !== undefined) {
+        if (spatial.wkt?.length > 0 || spatial.reference?.pref_label) {
           return (
             <MyMap
-              key={`${spatial.as_wkt && spatial.as_wkt[0]}-${
-                spatial.place_uri && spatial.place_uri.identifier
-              }`}
-              geometry={spatial.as_wkt}
-              place_uri={spatial.place_uri && spatial.place_uri.pref_label}
+              key={`${spatial.wkt}-${spatial.reference.url}-${spatial.geographic_name}`}
+              geometry={spatial.wkt}
+              location={spatial.reference?.pref_label}
             >
               {/* Map popup, hidden if it contains no information */}
-              {spatial.place_uri ||
+              {spatial.reference?.pref_label ||
               spatial.geographic_name ||
               spatial.full_address ||
-              spatial.alt ? (
+              spatial.altitude_in_meters ? (
                 <CustomPopup>
-                  {spatial.place_uri && (
-                    <h2 lang={getDataLang(spatial.place_uri.pref_label)}>
-                      {checkDataLang(spatial.place_uri.pref_label)}
+                  {spatial.reference && (
+                    <h2 lang={getDataLang(spatial.reference.pref_label)}>
+                      {checkDataLang(spatial.reference.pref_label)}
                     </h2>
                   )}
                   {spatial.geographic_name && <h3>{spatial.geographic_name}</h3>}
@@ -110,10 +104,10 @@ const Maps = props => {
                       <i>{spatial.full_address}</i>
                     </p>
                   )}
-                  {spatial.alt && (
+                  {spatial.altitude_in_meters && (
                     <p>
                       <FontAwesomeIcon icon={faExpandArrowsAlt} />
-                      Altitude: {spatial.alt}
+                      Altitude: {spatial.altitude_in_meters}
                     </p>
                   )}
                 </CustomPopup>

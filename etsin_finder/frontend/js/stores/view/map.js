@@ -48,13 +48,13 @@ class Map {
     ]
   }
 
-  makeGeometry(geometry, placeUri) {
-    if (geometry) {
+  makeGeometry(geometry, location) {
+    if (geometry?.length > 0) {
       return new Promise(resolve => {
         resolve(this.makeGeometryFromWKT(geometry))
       })
     }
-    return this.makeGeometryFromPlace(placeUri)
+    return this.makeGeometryFromPlace(location)
   }
 
   makeGeometryFromWKT = wkt => {
@@ -70,10 +70,10 @@ class Map {
 
   // converts place name to latitude and longitude
   // coordinate format is [lat, lng]
-  makeGeometryFromPlace = placeUri => {
+  makeGeometryFromPlace = location => {
     const provider = new OpenStreetMapProvider()
     return provider
-      .search({ query: this.checkDataLang(placeUri) })
+      .search({ query: this.checkDataLang(location) })
       .then(results => [
         { type: 'Rectangle', coordinates: [results[0].bounds], bounds: results[0].bounds },
       ])

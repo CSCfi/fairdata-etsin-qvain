@@ -16,11 +16,13 @@ const DatasetDateInfo = () => {
 
   return (
     <DateInfo>
-      {datasetMetadata.issued && (
-        <p lang={getDataLang(datasetMetadata.issued)}>
+      {datasetMetadata.releaseDate && (
+        <p lang={getDataLang(datasetMetadata.releaseDate)}>
           <Translate
             content="dataset.issued"
-            with={{ date: dateFormat(checkDataLang(datasetMetadata.issued), { format: 'date' }) }}
+            with={{
+              date: dateFormat(checkDataLang(datasetMetadata.releaseDate), { format: 'date' }),
+            }}
           />
           <br />
           {datasetMetadata.modified && (
