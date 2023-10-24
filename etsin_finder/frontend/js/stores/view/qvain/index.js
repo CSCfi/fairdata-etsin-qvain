@@ -23,6 +23,7 @@ class Qvain extends Resources {
     super(Env)
     makeObservable(this)
     this.Env = Env
+    this.Auth = Auth
     this.ReferenceData = new ReferenceData(this)
     this.SubmitV2 = new Submit(this, this.Env)
     this.SubmitV3 = new SubmitV3(this, this.Env)

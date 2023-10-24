@@ -62,6 +62,8 @@ const App = () => {
   // Load runtime config
   const configure = async () => {
     await Env.fetchAppConfig()
+    Auth.enableRequestInterceptor()
+    Auth.checkLogin()
     if (
       Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK') &&
       !Env?.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')
@@ -74,7 +76,6 @@ const App = () => {
   }
 
   useEffect(() => {
-    Auth.checkLogin()
     configure()
   }, [])
 

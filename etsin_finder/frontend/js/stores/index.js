@@ -26,7 +26,7 @@ import CrossRefClass from './view/qvain/qvain.crossRef'
 
 export const buildStores = () => {
   const Env = new EnvClass()
-  const Auth = new AuthClass()
+  const Auth = new AuthClass(Env)
   const Accessibility = new AccessibilityClass(Env)
   const ElasticQuery = new ElasticQueryClass(Env)
   const Locale = new LocaleClass(Accessibility, ElasticQuery)

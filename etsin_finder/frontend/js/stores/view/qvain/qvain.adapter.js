@@ -160,6 +160,12 @@ class Adapter {
     if (dataset.fileset) {
       d.fileset = dataset.fileset
     }
+
+    d.metadata_owner = {
+      user: { username: this.Qvain.Auth.user.name },
+      organization: this.Qvain.Auth.user.homeOrganizationId,
+    }
+
     return d
   }
 }

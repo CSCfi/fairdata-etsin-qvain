@@ -2,8 +2,9 @@ import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
 
 import AuthClass from '../../../js/stores/domain/auth'
+import EnvClass from '../../../js/stores/domain/env'
 
-const Auth = new AuthClass()
+const Auth = new AuthClass(new EnvClass())
 
 // This sets the mock adapter on the default instance
 const mock = new MockAdapter(axios)

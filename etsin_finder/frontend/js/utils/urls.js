@@ -46,5 +46,7 @@ export default {
     datasetData: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/data`,
     directories: metaxV3 => `${metaxV3}/v3/directories`,
     referenceData: (metaxV3, referenceData) => `${metaxV3}/v3/reference-data/${referenceData}`,
+    user: metaxV3 => `${metaxV3}/auth/user`,
+    '': metaxV3 => `${metaxV3}`,
   },
 }

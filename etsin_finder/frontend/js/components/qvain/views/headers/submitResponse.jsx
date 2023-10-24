@@ -44,9 +44,8 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
             <Translate content={`qvain.submitStatus.${isDraft ? 'draftSuccess' : 'success'}`} />
           </ResponseLabel>
           <LinkToEtsin
-            onClick={() =>
-              window.open(getEtsinUrl(`/dataset/${identifier}${goToEtsinQuery}`), '_blank')
-            }
+            href={getEtsinUrl(`/dataset/${identifier}${goToEtsinQuery}`)}
+            target="_blank"
           >
             {goToEtsin}
           </LinkToEtsin>
@@ -76,9 +75,8 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
             />
           </ResponseLabel>
           <LinkToEtsin
-            onClick={() =>
-              window.open(getEtsinUrl(`/dataset/${identifier}${goToEtsinQuery}`), '_blank')
-            }
+            href={getEtsinUrl(`/dataset/${identifier}${goToEtsinQuery}`)}
+            target="_blank"
           >
             {goToEtsin}
           </LinkToEtsin>
@@ -128,7 +126,7 @@ SubmitResponse.defaultProps = {
   response: null,
 }
 
-const LinkToEtsin = styled.button`
+const LinkToEtsin = styled.a`
   color: green;
   display: inline-block;
   vertical-align: top;
