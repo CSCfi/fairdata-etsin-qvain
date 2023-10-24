@@ -226,7 +226,7 @@ class EtsinDatasetV3 {
       this.provenance?.length ||
       this.isDeprecated ||
       this.otherIdentifiers?.length ||
-      this.relations?.length
+      this.datasetRelations?.length
     )
   }
 

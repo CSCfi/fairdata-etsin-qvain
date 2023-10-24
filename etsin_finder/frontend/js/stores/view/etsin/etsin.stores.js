@@ -192,7 +192,7 @@ class EtsinDatasetV2 {
   }
 
   @computed get hasRemoteResources() {
-    return this.dataset?.remote_resources !== undefined
+    return this.remoteResources !== undefined && this.remoteResources?.length > 0
   }
 
   @computed get remoteResources() {
@@ -218,7 +218,7 @@ class EtsinDatasetV2 {
       this.provenance?.length ||
       this.isDeprecated ||
       this.otherIdentifiers?.length ||
-      this.relations?.length
+      this.datasetRelations?.length
     )
   }
 
