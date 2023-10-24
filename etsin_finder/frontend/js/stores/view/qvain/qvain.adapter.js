@@ -8,6 +8,8 @@ class Adapter {
     this.convertV3ToV2 = this.convertV3ToV2.bind(this)
     this.spatialV3ToV2 = this.spatialV3ToV2.bind(this)
     this.spatialV2ToV3 = this.spatialV2ToV3.bind(this)
+    this.temporalV2ToV3 = this.temporalV2ToV3.bind(this)
+    this.temporalV3ToV2 = this.temporalV3ToV2.bind(this)
   }
 
   refdataV3ToV2(value) {
@@ -60,6 +62,16 @@ class Adapter {
     }
   }
 
+  temporalV3ToV2(value) {
+    if (!value) {
+      return value
+    }
+    if (Array.isArray(value)) {
+      return value.map(this.temporalV2ToV3)
+    }
+    return { ...value }
+  }
+
   convertV3ToV2(dataset) {
     // Convert Metax V3 object to V2-style input object.
     const d = {
@@ -70,13 +82,14 @@ class Adapter {
         title: dataset.title,
         description: dataset.description,
         keyword: dataset.keyword,
-        issued: (dataset.issued && format(parseDateISO(dataset.issued), 'yyyy-MM-dd')) || undefined,
+        issued: dataset.issued,
         language: this.refdataV3ToV2(dataset.language),
         field_of_science: this.refdataV3ToV2(dataset.field_of_science),
         theme: this.refdataV3ToV2(dataset.theme),
         other_identifier: this.otherIdentifierV3ToV2(dataset.other_identifiers),
         access_rights: this.accessRightsV3ToV2(dataset.access_rights),
         spatial: this.spatialV3ToV2(dataset.spatial),
+        temporal: this.temporalV3ToV2(dataset.temporal),
       },
       state: 'draft',
     }
@@ -139,6 +152,20 @@ class Adapter {
     }
   }
 
+  temporalV2ToV3(value) {
+    if (!value) {
+      return value
+    }
+    if (Array.isArray(value)) {
+      return value.map(this.temporalV2ToV3)
+    }
+    return {
+      ...value,
+      start_date: value.start_date && format(parseDateISO(value.start_date), 'yyyy-MM-dd'),
+      end_date: value.end_date && format(parseDateISO(value.end_date), 'yyyy-MM-dd'),
+    }
+  }
+
   convertQvainV2ToV3(dataset) {
     // Convert Qvain front->backend V2 format to Metax V3 format
     const d = {
@@ -147,13 +174,14 @@ class Adapter {
       title: dataset.title,
       description: dataset.description,
       keyword: dataset.keyword,
-      issued: parseDateISO(dataset.issued),
+      issued: dataset.issued,
       language: this.refdataV2ToV3(dataset.language),
       field_of_science: this.refdataV2ToV3(dataset.field_of_science),
       theme: this.refdataV2ToV3(dataset.theme),
       other_identifiers: this.otherIdentifierV2ToV3(dataset.other_identifier),
       access_rights: this.accessRightsV2ToV3(dataset.access_rights),
       spatial: this.spatialV2ToV3(dataset.spatial),
+      temporal: this.temporalV2ToV3(dataset.temporal),
     }
 
     // include v3 fileset object as it is

@@ -123,7 +123,7 @@ const dataset = {
       },
     },
   ],
-  issued: '2023-06-28T00:00:00+03:00',
+  issued: '2023-06-28',
   keyword: [
     'test',
     'software development',
@@ -240,6 +240,12 @@ const dataset = {
   other_identifiers: [
     {
       notation: 'https://www.example.com',
+    },
+  ],
+  temporal: [
+    {
+      start_date: '2023-09-20',
+      end_date: '2023-11-25',
     },
   ],
   created: '2023-06-28T10:16:22+03:00',

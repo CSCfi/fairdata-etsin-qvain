@@ -84,6 +84,11 @@ describe('Qvain with an opened IDA dataset', () => {
     expect(within(section).getByDisplayValue('06/28/2023')).toBeInTheDocument()
   })
 
+  it('shows time period', async () => {
+    const section = await renderSection('Time period')
+    expect(within(section).getByText('2023-09-20 – 2023-11-25')).toBeInTheDocument()
+  })
+
   it.each([
     ['Keywords', dataset.keyword],
     ['Subject Headings', ['software development']],
@@ -128,7 +133,6 @@ describe('Qvain with an opened IDA dataset', () => {
       /^access_rights\.description/,
       /license\.\d+\.custom_url$/,
       /license\.\d+\.description$/,
-      /temporal\.\d+\..+/,
       /provenance\.\d+\..+/,
       // special handling
       'issued', // exact value may change
@@ -152,8 +156,14 @@ describe('Qvain with an opened IDA dataset', () => {
     const submitIssued = parseDateISO(submitData.issued).getTime()
     expect(datasetIssued).toEqual(submitIssued)
 
-    const flatDataset = removeMatchingKeys(flatten(dataset), expectedMissing)
-    const flatSubmit = removeMatchingKeys(flatten(submitData), expectedExtra)
+    const flatDataset = removeMatchingKeys(
+      flatten(dataset, { normalizeDates: true }),
+      expectedMissing
+    )
+    const flatSubmit = removeMatchingKeys(
+      flatten(submitData, { normalizeDates: true }),
+      expectedExtra
+    )
 
     expect(flatDataset).toEqual(flatSubmit)
   })

@@ -1,14 +1,28 @@
 // Utilities for comparing nested objects as flattened representation
 
 // Convert nested values to dotted paths, e.g. {a:{b:'value'}} to {a.b:'value'}
-export const flatten = root => {
+
+import parseDateISO from 'date-fns/parseISO'
+import formatDate from 'date-fns/format'
+import isValid from 'date-fns/isValid'
+
+export const flatten = (root, { normalizeDates = false } = {}) => {
   const flat = {}
   const recurse = (obj, path) => {
-    for (const [key, value] of Object.entries(obj)) {
+    for (const entry of Object.entries(obj)) {
+      const key = entry[0]
+      let value = entry[1]
       const newPath = path ? `${path}.${key}` : key
       if (value && typeof value === 'object') {
         recurse(value, newPath)
       } else {
+        if (normalizeDates) {
+          // Round dates to milliseconds to avoid small rounding errors from breaking comparisons
+          const date = parseDateISO(value)
+          if (isValid(date)) {
+            value = formatDate(date, "yyyy-MM-dd'T'HH:mm:ssSSSXXX")
+          }
+        }
         flat[newPath] = value
       }
     }
