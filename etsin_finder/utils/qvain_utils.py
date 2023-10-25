@@ -260,7 +260,7 @@ def edited_data_to_metax(data, original):
         "research_dataset": research_dataset,
         "use_doi_for_published": data.get("use_doi"),
     }
-    if "cumulativeState" in data:
+    if "cumulative_state" in data:
         edited_data["cumulative_state"] = data.get("cumulative_state")
     return clean_empty_keyvalues_from_dict(edited_data)
 
