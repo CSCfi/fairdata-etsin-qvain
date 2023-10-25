@@ -12,7 +12,7 @@ import CustomMarkdown from './customMarkdown'
 import DatasetDateInfo from './DatasetDateInfo'
 import GoToOriginal from './goToOriginal'
 import TogglableAgentList from './togglableAgentList'
-import FormatChanger from '../Sidebar/formatChanger'
+import FormatChanger from './formatChanger'
 
 const Description = ({ id }) => {
   const {

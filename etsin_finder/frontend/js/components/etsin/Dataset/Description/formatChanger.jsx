@@ -12,8 +12,9 @@ import formatChangerStyles from './formatChangerStyles'
 
 const FormatChanger = () => {
   const {
+    Env: { metaxV3Url },
     Etsin: {
-      EtsinDataset: { identifier, metadataFormats },
+      EtsinDataset: { useV3, identifier, metadataFormats },
     },
   } = useStores()
 
@@ -33,9 +34,11 @@ const FormatChanger = () => {
 
   const chooseFormat = format => {
     if (metadataFormats.some(field => field.value === format.value)) {
-      const url = urls.format(identifier, format.value)
-      const win = window.open(url, '_blank')
-      win.focus()
+      const V3Format = format.value === 'metax' ? 'json' : format.value
+      const url = useV3
+        ? metaxV3Url('datasetFormat', identifier, V3Format)
+        : urls.format(identifier, format.value)
+      window.open(url, '_blank').focus()
     } else {
       console.log(`Invalid value selected for dataset format: ${format.value}`)
     }
