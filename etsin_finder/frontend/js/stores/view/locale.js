@@ -22,12 +22,71 @@ const datasetTitleLanguages = ['en', 'fi', 'sv']
 const getInitialLanguage = () =>
   languages.find(lang => lang === document.documentElement.lang) || languages[0]
 
+const getDateFormats = shortMonth => ({
+  datetime: {
+    fi: {
+      lang: 'fi-FI',
+      options: {
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        seconds: '2-digit',
+      },
+    },
+    en: {
+      lang: 'en-US',
+      options: {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        seconds: '2-digit',
+      },
+    },
+  },
+  date: {
+    fi: {
+      lang: 'fi-FI',
+      options: {
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
+      },
+    },
+    en: {
+      lang: 'en-US',
+      options: {
+        year: 'numeric',
+        month: shortMonth ? 'short' : 'long',
+        day: 'numeric',
+      },
+    },
+  },
+})
+
+const getDefaultDateFormat = date => {
+  if (typeof date === 'string' || date instanceof String) {
+    if (date.length === 4) {
+      return 'year'
+    }
+    if (date.length <= 10) {
+      return 'date'
+    }
+  }
+  return 'datetime'
+}
+
 class Locale {
   constructor(Accessibility, ElasticQuery) {
     this.Accessibility = Accessibility
     this.Env = Accessibility.Env
     this.ElasticQuery = ElasticQuery
     makeObservable(this)
+    this.dateFormat = this.dateFormat.bind(this)
+    this.dateSeparator = this.dateSeparator.bind(this)
 
     if (BUILD !== 'production') {
       window.setLang = lang => this.setLang(lang, { save: true })
@@ -160,13 +219,13 @@ class Locale {
   }
 
   getPreferredLang = item => {
-    // Get organization name based on which translations exist, with the following priority:
+    // Get preferred language for a translation object based on which translations exist, with the following priority:
     // - current language
     // - languages in the order of Locale.languages
     // - first language in the name object
-    // - if no translations exist, create new translation in the current language
+    // - if no translations were found return undefined
     if (!item || !item.name) {
-      return this.lang
+      return undefined
     }
 
     if (item.name[this.lang] != null) {
@@ -183,7 +242,40 @@ class Locale {
       return Object.keys(item.name)[0]
     }
 
-    return this.lang
+    return undefined
+  }
+
+  dateFormat = (date, { shortMonth = false, format } = {}) => {
+    const formats = getDateFormats(shortMonth)
+    if (!date) {
+      return ''
+    }
+    const outputFormat = format || getDefaultDateFormat(date)
+    if (outputFormat === 'year') {
+      return new Date(date).getFullYear().toString()
+    }
+    if (outputFormat === 'date') {
+      return new Date(date).toLocaleDateString(
+        formats.date[this.currentLang].lang,
+        formats.date[this.currentLang].options
+      )
+    }
+    return new Date(date).toLocaleString(
+      formats.datetime[this.currentLang].lang,
+      formats.datetime[this.currentLang].options
+    )
+  }
+
+  dateSeparator(start, end) {
+    if (start || end) {
+      if (start === end) {
+        return this.dateFormat(start, { format: 'date' })
+      }
+      return `${this.dateFormat(start, { format: 'date' })} &ndash; ${this.dateFormat(end, {
+        format: 'date',
+      })}`
+    }
+    return null
   }
 }
 

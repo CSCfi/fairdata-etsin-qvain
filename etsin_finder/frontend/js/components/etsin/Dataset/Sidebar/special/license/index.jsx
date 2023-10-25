@@ -2,12 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import { LICENSE_URL } from '@/utils/constants'
 import isUrl from '@/utils/isUrl'
 import LicensePopUp from './licensePopUp'
+import { useStores } from '@/stores/stores'
 
 const License = ({ license }) => {
+  const {
+    Locale: { getPreferredLang, getValueTranslation },
+  } = useStores()
   const licenseIsUrl = isUrl(license.custom_url)
 
   let info
@@ -15,8 +18,9 @@ const License = ({ license }) => {
     info = 'dataset.otherLicense'
   }
 
-  const lang = getDataLang(license.pref_label)
-  const name = checkDataLang(license.pref_label, lang) || checkDataLang(license.custom_url, lang)
+  const lang = getPreferredLang(license.pref_label)
+  const name =
+    getValueTranslation(license.pref_label, lang) || getValueTranslation(license.custom_url, lang)
 
   return (
     <span>

@@ -19,13 +19,12 @@ import { observer } from 'mobx-react'
 import { TransparentLink } from '../../general/button'
 import PopUp from '../../general/popup'
 import PopUpContent from './PopUpContent'
-import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import { useStores } from '../../../stores/stores'
 import { hasExtraInfo, flatParentOrgs } from './utils'
 
 const Agent = ({ agent, first, inline, popupAlign }) => {
   const {
-    Locale: { getValueTranslationWithLang, getValueTranslation },
+    Locale: { getValueTranslationWithLang, getPreferredLang, getValueTranslation },
   } = useStores()
 
   const [popUpOpen, setPopupOpen] = useState(false)
@@ -56,7 +55,9 @@ const Agent = ({ agent, first, inline, popupAlign }) => {
     <AgentListItem inline={inline}>
       {first ? '' : ' & '}
       {!shouldHavePopup ? (
-        <TextWithoutPopup lang={getDataLang(name)}>{checkDataLang(name)}</TextWithoutPopup>
+        <TextWithoutPopup lang={getPreferredLang(name)}>
+          {getValueTranslation(name)}
+        </TextWithoutPopup>
       ) : (
         <PopUp
           isOpen={popUpOpen}

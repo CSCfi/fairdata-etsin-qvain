@@ -9,7 +9,6 @@
  */
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import dateFormat from '@/utils/dateFormat'
 
 export const Table = styled.table`
   overflow-x: scroll;
@@ -74,11 +73,11 @@ export const PreservationInfo = PropTypes.shape({
   translationRoot: PropTypes.string,
 })
 
-export const getPreservationInfo = ({
-  preservationDatasetOriginVersion,
-  preservationStateModified,
-  preservationDatasetVersion,
-}) => {
+export const getPreservationInfo = (
+  Locale,
+  { preservationDatasetOriginVersion, preservationStateModified, preservationDatasetVersion }
+) => {
+  const { dateFormat } = Locale
   let translationRoot, modified, copyIdentifier
   const isUseCopy = !preservationDatasetOriginVersion?.identifier
   if (isUseCopy) {

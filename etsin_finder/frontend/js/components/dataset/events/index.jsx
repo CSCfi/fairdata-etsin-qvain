@@ -90,7 +90,7 @@ const Events = props => {
 
   const otherIdentifiers = otherIdentifierObjects.map(v => v.notation)
   const originIdentifier = [preservationDatasetOriginVersion?.preferred_identifier].filter(v => v)
-  const preservationInfo = getPreservationInfo({
+  const preservationInfo = getPreservationInfo(Locale, {
     preservationDatasetOriginVersion,
     preservationStateModified,
     preservationDatasetVersion,

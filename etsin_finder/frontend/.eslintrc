@@ -21,6 +21,7 @@
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": 0,
     "import/no-named-as-default": "off",
+    "import/prefer-default-export": 0,
     "indent": 0,
     "max-len": ["warn", { "code": 150 }],
     "max-classes-per-file": "off",

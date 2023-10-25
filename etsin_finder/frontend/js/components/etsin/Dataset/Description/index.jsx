@@ -3,8 +3,6 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
-import { dateSeparator } from '@/utils/dateFormat'
 import ErrorBoundary from '@/components/general/errorBoundary'
 import { useStores } from '@/utils/stores'
 
@@ -34,6 +32,7 @@ const Description = ({ id }) => {
         contributors,
       },
     },
+    Locale: { dateSeparator, getPreferredLang, getValueTranslation },
   } = useStores()
 
   useEffect(() => {
@@ -47,13 +46,13 @@ const Description = ({ id }) => {
     let dataFileTypes
     if (hasFiles) {
       dataFileTypes = files.root.files.map(file =>
-        file.fileType ? checkDataLang(file.fileType.pref_label) : null
+        file.fileType ? getValueTranslation(file.fileType.pref_label) : null
       )
     }
 
     if (hasRemoteResources) {
       dataFileTypes = remoteResources.map(resource =>
-        resource.file_type ? checkDataLang(resource.file_type.pref_label) : null
+        resource.file_type ? getValueTranslation(resource.file_type.pref_label) : null
       )
     }
     const fileTypeList = [...new Set(dataFileTypes)].filter(type => type).sort()
@@ -67,11 +66,14 @@ const Description = ({ id }) => {
           if (!location.geographic_name) return null
           if (
             location.reference?.pref_label &&
-            location.geographic_name !== checkDataLang(location.reference.pref_label)
+            location.geographic_name !== getValueTranslation(location.reference.pref_label)
           ) {
             return (
-              <li key={location.geographic_name} lang={getDataLang(location.reference.pref_label)}>
-                {checkDataLang(location.reference.pref_label)}{' '}
+              <li
+                key={location.geographic_name}
+                lang={getPreferredLang(location.reference.pref_label)}
+              >
+                {getValueTranslation(location.reference.pref_label)}{' '}
                 <span>({location.geographic_name})</span>
               </li>
             )
@@ -94,13 +96,17 @@ const Description = ({ id }) => {
 
   const getLanguages = () => {
     if (!datasetMetadata.language) return null
-    const infoArray = datasetMetadata.language.map(language => checkDataLang(language.pref_label))
+    const infoArray = datasetMetadata.language.map(language =>
+      getValueTranslation(language.pref_label)
+    )
     return formatDatasetInfoArray(infoArray)
   }
 
   const getFieldsOfScience = () => {
     if (!datasetMetadata.fieldOfScience) return null
-    const infoArray = datasetMetadata.fieldOfScience.map(field => checkDataLang(field.pref_label))
+    const infoArray = datasetMetadata.fieldOfScience.map(field =>
+      getValueTranslation(field.pref_label)
+    )
     return formatDatasetInfoArray(infoArray)
   }
 
@@ -122,11 +128,11 @@ const Description = ({ id }) => {
 
         <DescriptionArea>
           <DatasetInfoItem
-            lang={getDataLang(datasetMetadata.description)}
+            lang={getPreferredLang(datasetMetadata.description)}
             itemTitle={'dataset.description'}
           >
             {datasetMetadata.description && (
-              <CustomMarkdown>{checkDataLang(datasetMetadata.description)}</CustomMarkdown>
+              <CustomMarkdown>{getValueTranslation(datasetMetadata.description)}</CustomMarkdown>
             )}
           </DatasetInfoItem>
 

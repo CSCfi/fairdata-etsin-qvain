@@ -9,12 +9,14 @@ import { setImmediate } from 'timers'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
-import stores from '../../../../js/stores'
+import { buildStores } from '../../../../js/stores'
 import dataset from '../../../__testdata__/dataset.att'
 import ManualDownloadModal from '../../../../js/components/dataset/data/idaResources/manualDownloadModal'
 import Modal from '../../../../js/components/general/modal'
 import { useStores } from '../../../../js/stores/stores'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+const stores = buildStores()
 
 jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
 

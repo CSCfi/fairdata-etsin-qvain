@@ -12,13 +12,17 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 
-import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import { Table, ID, IDLink, Margin } from './common'
+import { useStores } from '@/stores/stores'
 
 const relationIdentifierIsUrl = identifier =>
   identifier.startsWith('http://') || identifier.startsWith('https://')
 
 const Relations = props => {
+  const {
+    Locale: { getPreferredLang, getValueTranslation },
+  } = useStores()
+
   const { relation } = props
 
   if (!(relation?.length > 0)) {
@@ -47,10 +51,12 @@ const Relations = props => {
         <tbody>
           {relation.map(single => (
             <tr key={single.entity.identifier || ''}>
-              <td lang={getDataLang(single.relation_type.pref_label)}>
-                {checkDataLang(single.relation_type.pref_label)}
+              <td lang={getPreferredLang(single.relation_type.pref_label)}>
+                {getValueTranslation(single.relation_type.pref_label)}
               </td>
-              <td lang={getDataLang(single.entity.title)}>{checkDataLang(single.entity.title)}</td>
+              <td lang={getPreferredLang(single.entity.title)}>
+                {getValueTranslation(single.entity.title)}
+              </td>
               <td>
                 <span className="sr-only">Identifier:</span>
                 {relationIdentifierIsUrl(single.entity.identifier || '') ? (

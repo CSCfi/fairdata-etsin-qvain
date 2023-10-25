@@ -18,12 +18,18 @@ import styled from 'styled-components'
 import { faGlobe, faUniversity, faUser } from '@fortawesome/free-solid-svg-icons'
 import { observer } from 'mobx-react'
 
-import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import { Info, InfoItem, InfoLink } from './Info'
 import { hasExtraInfo, flatParentOrgs, getOrgKey, getRefDataKey } from './utils'
+import { useStores } from '@/stores/stores'
 
 const PopupContent = ({ agent }) => {
+  const {
+    Locale: { getValueTranslationWithLang },
+  } = useStores()
+
   const { name, identifier, contributor_role, contributor_type, homepage, is_part_of } = agent
+
+  const [nameTranslation, lang] = getValueTranslationWithLang(name)
 
   const orgRelation = is_part_of ? 'is_part_of' : 'member_of'
 
@@ -31,7 +37,7 @@ const PopupContent = ({ agent }) => {
 
   return (
     <PopUpContainer>
-      {name && <Name lang={getDataLang(name)}>{checkDataLang(name)}</Name>}
+      {name && <Name lang={lang}>{nameTranslation}</Name>}
       {identifier?.startsWith('http') && (
         // TODO: fix screenreader reading the link url when the popup is focused. It does not read the content.
         <IdentifierLink

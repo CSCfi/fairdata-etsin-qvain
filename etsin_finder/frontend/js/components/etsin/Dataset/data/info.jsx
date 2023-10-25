@@ -17,9 +17,9 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import InfoItem from './infoItem'
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import Modal from '@/components/general/modal'
 import { TypeConcept } from '@/utils/propTypes'
+import { useStores } from '@/stores/stores'
 
 const customStyles = {
   content: {
@@ -45,6 +45,10 @@ const Info = ({
   headerContent,
   headerIcon,
 }) => {
+  const {
+    Locale: { getPreferredLang, getValueTranslation },
+  } = useStores()
+
   let checksumParts, checksumAlgorithm, checksumValue
   if (checksum) {
     checksumParts = checksum.split(':')
@@ -92,8 +96,8 @@ const Info = ({
                 {type !== 'dir' && (
                   <InfoItem
                     translation="dataset.dl.type"
-                    content={checkDataLang(type?.pref_label) || type}
-                    lang={getDataLang(type?.pref_label)}
+                    lang={getPreferredLang(type?.pref_label)}
+                    content={getValueTranslation(type?.pref_label) || type}
                   />
                 )}
                 <InfoItem translation="dataset.dl.category" content={category} />

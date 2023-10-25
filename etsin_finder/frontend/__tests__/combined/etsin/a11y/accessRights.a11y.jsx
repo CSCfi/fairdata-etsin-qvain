@@ -6,7 +6,7 @@ import ReactModal from 'react-modal'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
-import stores from '../../../../js/stores'
+import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import dataset from '../../../__testdata__/dataset.att'
 import AccessRights from '../../../../js/components/dataset/accessRights'
@@ -16,6 +16,7 @@ import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 failTestsWhenTranslationIsMissing()
 
 jest.mock('../../../../js/stores/view/accessibility')
+const stores = buildStores()
 
 describe('Etsin access rights modal', () => {
   let wrapper, helper

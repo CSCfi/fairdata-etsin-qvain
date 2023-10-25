@@ -28,9 +28,7 @@ import Label from '../general/label'
 import TogglableAgentList from './togglableAgentList'
 import VersionChanger from './versionChanger'
 import FormatChanger from './formatChanger'
-import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import checkNested from '../../utils/checkNested'
-import dateFormat from '../../utils/dateFormat'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../utils/constants'
 import { withStores } from '../../utils/stores'
 
@@ -87,6 +85,9 @@ class Description extends Component {
   }
 
   render() {
+    const {
+      Locale: { dateFormat, getPreferredLang, getValueTranslation },
+    } = this.props.Stores
     const { id } = this.props
     const {
       creator,
@@ -184,7 +185,7 @@ class Description extends Component {
             )}
           </div>
           <div className="d-md-flex align-items-center dataset-title justify-content-between">
-            <Title lang={getDataLang(title)}>{checkDataLang(title)}</Title>
+            <Title lang={getPreferredLang(title)}>{getValueTranslation(title)}</Title>
           </div>
           <div className="d-flex justify-content-between basic-info">
             <MainInfo>
@@ -195,16 +196,16 @@ class Description extends Component {
                 <TogglableAgentList agents={contributor} agentType="contributor" />
               </ErrorBoundary>
               {issued && (
-                <p lang={getDataLang(issued)}>
+                <p lang={getPreferredLang(issued)}>
                   <Translate
                     content="dataset.issued"
-                    with={{ date: dateFormat(checkDataLang(issued), { format: 'date' }) }}
+                    with={{ date: dateFormat(getValueTranslation(issued), { format: 'date' }) }}
                   />
                   <br />
                   {modified && (
                     <Translate
                       content="dataset.modified"
-                      with={{ date: dateFormat(checkDataLang(modified), { format: 'date' }) }}
+                      with={{ date: dateFormat(getValueTranslation(modified), { format: 'date' }) }}
                     />
                   )}
                 </p>
@@ -212,8 +213,8 @@ class Description extends Component {
             </MainInfo>
           </div>
           <ErrorBoundary>
-            <DatasetDescription lang={getDataLang(description)}>
-              <CustomMarkdown>{checkDataLang(description)}</CustomMarkdown>
+            <DatasetDescription lang={getPreferredLang(description)}>
+              <CustomMarkdown>{getValueTranslation(description)}</CustomMarkdown>
             </DatasetDescription>
           </ErrorBoundary>
           {cumulative && (

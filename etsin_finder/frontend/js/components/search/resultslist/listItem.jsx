@@ -16,16 +16,15 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import translate from 'counterpart'
 
-import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import ErrorBoundary from '../../general/errorBoundary'
 import AccessRights from '../../dataset/accessRights'
 import FairdataPasDatasetIcon from '../../dataset/fairdataPasDatasetIcon'
 import ContentBox from '../../general/contentBox'
 import { DATA_CATALOG_IDENTIFIER, ACCESS_TYPE_URL } from '../../../utils/constants'
+import { withStores } from '@/stores/stores'
 
-
-export default class ListItem extends Component {
-  datasetAvailability = (accessRights) => {
+class ListItem extends Component {
+  datasetAvailability = accessRights => {
     let identifier = null
     let id = null
     let description = null
@@ -51,42 +50,36 @@ export default class ListItem extends Component {
   }
 
   render() {
+    const {
+      Locale: { getPreferredLang, getValueTranslation },
+    } = this.props.Stores
+
     return (
       <Item>
         <ErrorBoundary>
           <Link
             to={`/dataset/${this.props.catId}`}
             aria-label={`
-              ${checkDataLang(this.props.item.title)}: 
-              ${this.datasetAvailability(this.props.item.access_rights)}: 
-              ${this.shortDescription(checkDataLang(this.props.item.description)
-            )}`}
-            lang={getDataLang(this.props.item.title)}
+              ${getValueTranslation(this.props.item.title)}:
+              ${this.datasetAvailability(this.props.item.access_rights)}:
+              ${this.shortDescription(getValueTranslation(this.props.item.description))}`}
+            lang={getPreferredLang(this.props.item.title)}
           >
             <ContentBox>
               <ErrorBoundary>
                 <ItemHeader>
-                  <h2 className="title" lang={getDataLang(this.props.item.title)}>
-                    {checkDataLang(this.props.item.title)}
+                  <h2 className="title" lang={getPreferredLang(this.props.item.title)}>
+                    {getValueTranslation(this.props.item.title)}
                   </h2>
                   <WrapperDivRight>
-                    {
-                      (
-                        (this.props.item.data_catalog_identifier === DATA_CATALOG_IDENTIFIER.PAS)
-                        ||
-                        (this.props.item.preservation_state === 80)
-                      )
-                      &&
-                      (
-                        <FairdataPasDatasetIcon
-                          preservation_state={this.props.item.preservation_state}
-                          data_catalog_identifier={this.props.item.data_catalog_identifier}
-                        />
-                      )
-                    }
-                    <AccessRights
-                      access_rights={this.props.item.access_rights}
-                    />
+                    {(this.props.item.data_catalog_identifier === DATA_CATALOG_IDENTIFIER.PAS ||
+                      this.props.item.preservation_state === 80) && (
+                      <FairdataPasDatasetIcon
+                        preservation_state={this.props.item.preservation_state}
+                        data_catalog_identifier={this.props.item.data_catalog_identifier}
+                      />
+                    )}
+                    <AccessRights access_rights={this.props.item.access_rights} />
                   </WrapperDivRight>
                 </ItemHeader>
               </ErrorBoundary>
@@ -95,8 +88,8 @@ export default class ListItem extends Component {
                   <div className="basic-info">
                     <p>
                       {this.props.item.field_of_science.map(field => (
-                        <span lang={getDataLang(field.pref_label)}>
-                          checkDataLang(field.pref_label)
+                        <span lang={getPreferredLang(field.pref_label)}>
+                          {getValueTranslation(field.pref_label)}
                         </span>
                       ))}
                     </p>
@@ -104,8 +97,8 @@ export default class ListItem extends Component {
                 )}
               </ErrorBoundary>
               <ErrorBoundary>
-                <p lang={getDataLang(this.props.item.description)}>
-                  {this.shortDescription(checkDataLang(this.props.item.description))}
+                <p lang={getPreferredLang(this.props.item.description)}>
+                  {this.shortDescription(getValueTranslation(this.props.item.description))}
                 </p>
               </ErrorBoundary>
             </ContentBox>
@@ -125,8 +118,9 @@ ListItem.propTypes = {
     field_of_science: PropTypes.array,
     description: PropTypes.object.isRequired,
     data_catalog: PropTypes.object,
-    data_catalog_identifier: PropTypes.string
+    data_catalog_identifier: PropTypes.string,
   }).isRequired,
+  Stores: PropTypes.object.isRequired,
 }
 
 const ItemHeader = styled.div`
@@ -170,3 +164,5 @@ const Item = styled.article`
     }
   }
 `
+
+export default withStores(ListItem)

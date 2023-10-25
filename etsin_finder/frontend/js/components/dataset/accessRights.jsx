@@ -26,8 +26,6 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
 import checkNested from '../../utils/checkNested'
-import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
-import dateFormat from '../../utils/dateFormat'
 import Button from '../general/button'
 import Modal from '../general/modal'
 import { ACCESS_TYPE_URL } from '../../utils/constants'
@@ -83,13 +81,17 @@ class AccessRights extends Component {
   }
 
   restricted() {
+    const {
+      Locale: { dateFormat, getPreferredLang, getValueTranslation },
+    } = this.props.Stores
+
     return (
       <>
         <RestrictedButton>
           <FontAwesomeIcon icon={faLock} title="Closed lock" />
           <div>
-            <AccessLabel lang={getDataLang(this.state.title)}>
-              {checkDataLang(this.state.title)}
+            <AccessLabel lang={getPreferredLang(this.state.title)}>
+              {getValueTranslation(this.state.title)}
             </AccessLabel>
             {this.state.embargoDate && (
               <Date>{dateFormat(this.state.embargoDate, { shortMonth: true })} </Date>
@@ -101,12 +103,13 @@ class AccessRights extends Component {
   }
 
   openAccess() {
+    const [translation, lang] = this.props.Stores.Locale.getValueTranslationWithLang(
+      this.state.title
+    )
     return (
       <>
         <FontAwesomeIcon icon={faLockOpen} title="Lock open" />
-        <AccessLabel lang={getDataLang(this.state.title)}>
-          {checkDataLang(this.state.title)}
-        </AccessLabel>
+        <AccessLabel lang={lang}>{translation}</AccessLabel>
       </>
     )
   }
@@ -120,7 +123,11 @@ class AccessRights extends Component {
   }
 
   render() {
-    // display button on dataset page
+    // display button on dataset
+    const {
+      Locale: { getPreferredLang, getValueTranslation },
+    } = this.props.Stores
+
     if (this.props.button) {
       return (
         <>
@@ -132,8 +139,8 @@ class AccessRights extends Component {
             {...this.props}
           >
             <Inner
-              lang={getDataLang(this.state.description)}
-              title={checkDataLang(this.state.description)}
+              lang={getPreferredLang(this.state.description)}
+              title={getValueTranslation(this.state.description)}
             >
               {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
             </Inner>
@@ -154,8 +161,8 @@ class AccessRights extends Component {
                     icon={faInfoCircle}
                     attributes={{ title: 'dataset.additionalInformation' }}
                   />
-                  <AccessLabel lang={getDataLang(this.state.description)}>
-                    {checkDataLang(this.state.description)}
+                  <AccessLabel lang={getPreferredLang(this.state.description)}>
+                    {getValueTranslation(this.state.description)}
                   </AccessLabel>
                 </div>
               )}
@@ -166,9 +173,9 @@ class AccessRights extends Component {
                   <AccessUrl
                     href={this.state.url.identifier}
                     title={this.state.url.identifier}
-                    lang={getDataLang(this.state.url.title)}
+                    lang={getPreferredLang(this.state.url.title)}
                   >
-                    {checkDataLang(this.state.url.title)}
+                    {getValueTranslation(this.state.url.title)}
                   </AccessUrl>
                 </div>
               )}
@@ -183,10 +190,10 @@ class AccessRights extends Component {
                     />
                     <AccessLabel
                       key={`al-rg-${rg.identifier}`}
-                      lang={getDataLang(rg.pref_label)}
+                      lang={getPreferredLang(rg.pref_label)}
                       tabIndex="0"
                     >
-                      {checkDataLang(rg.pref_label)}
+                      {getValueTranslation(rg.pref_label)}
                     </AccessLabel>
                   </div>
                 ))}
@@ -199,8 +206,8 @@ class AccessRights extends Component {
     return (
       <Access {...this.props}>
         <Inner
-          title={checkDataLang(this.state.description)}
-          lang={getDataLang(this.state.description)}
+          title={getValueTranslation(this.state.description)}
+          lang={getPreferredLang(this.state.description)}
         >
           {accessRightsBool(this.props.access_rights) ? this.openAccess() : this.restricted()}
         </Inner>

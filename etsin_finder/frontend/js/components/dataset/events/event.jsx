@@ -12,13 +12,13 @@ import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
-import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
-import dateFormat from '../../../utils/dateFormat'
 import Agent from '../Agent'
 import getPreservationEvent from './getPreservationEvent'
 import { PreservationInfo } from './common'
+import { useStores } from '@/stores/stores'
 
-const printDate = temp => {
+const printDate = (Locale, temp) => {
+  const { dateFormat } = Locale
   if (temp.start_date === temp.end_date) {
     return dateFormat(temp.start_date)
   }
@@ -30,6 +30,8 @@ const printDate = temp => {
 }
 
 const Event = props => {
+  const { Locale } = useStores()
+  const { getValueTranslation, getPreferredLang } = Locale
   const { event, preservationInfo } = props
 
   const { title: preservationEventTitle, description: preservationEventDescription } =
@@ -39,12 +41,12 @@ const Event = props => {
     })
 
   return (
-    <tr key={`provenance-${checkDataLang(event.title)}`}>
+    <tr key={`provenance-${getValueTranslation(event.title)}`}>
       <td>
         {/* If this contains both lifecycle and preservation events, it will display both in one box */}
         {event.lifecycle_event !== undefined && (
-          <span lang={getDataLang(event.lifecycle_event.pref_label)}>
-            {checkDataLang(event.lifecycle_event.pref_label)}
+          <span lang={getPreferredLang(event.lifecycle_event.pref_label)}>
+            {getValueTranslation(event.lifecycle_event.pref_label)}
           </span>
         )}
         {preservationEventTitle}
@@ -54,10 +56,10 @@ const Event = props => {
           event.was_associated_with.map((associate, i) => {
             if (associate.name) {
               return (
-                <InlineUl key={`ul-${checkDataLang(associate.name)}`}>
+                <InlineUl key={`ul-${getValueTranslation(associate.name)}`}>
                   <Agent
-                    lang={getDataLang(associate)}
-                    key={checkDataLang(associate) || associate.name}
+                    lang={getPreferredLang(associate, undefined)}
+                    key={getValueTranslation(associate) || associate.name}
                     first={i === 0}
                     agent={associate}
                   />
@@ -69,14 +71,12 @@ const Event = props => {
       </td>
       <td>
         {/* Some datasets have start_date and some startDate */}
-        {event.temporal && printDate(event.temporal)}
+        {event.temporal && printDate(Locale, event.temporal)}
       </td>
+      <td>{event.title && getValueTranslation(event.title)}</td>
       <td>
-        {/* Some datasets have start_date and some startDate */}
-        {event.title && checkDataLang(event.title)}
-      </td>
-      <td>
-        {preservationEventDescription || (event.description && checkDataLang(event.description))}
+        {preservationEventDescription ||
+          (event.description && getValueTranslation(event.description))}
       </td>
     </tr>
   )

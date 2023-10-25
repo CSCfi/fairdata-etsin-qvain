@@ -12,12 +12,14 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 
-import dateFormat from '../../../utils/dateFormat'
 import { hasProvenances, Table, IDLink, Margin, PreservationInfo } from './common'
 import Event from './event'
-import checkDataLang from '@/utils/checkDataLang'
+import { useStores } from '@/stores/stores'
 
 const EventList = props => {
+  const {
+    Locale: { dateFormat, getValueTranslation },
+  } = useStores()
   const { deletedVersions, provenances, dateDeprecated } = props
 
   if (!(hasProvenances(provenances) || deletedVersions?.length > 0 || dateDeprecated)) {
@@ -55,7 +57,7 @@ const EventList = props => {
             // Displaying general events
             provenances.map(event => (
               <Event
-                key={`provenance-${checkDataLang(event.title)}`}
+                key={`provenance-${getValueTranslation(event.title)}`}
                 event={event}
                 preservationInfo={props.preservationInfo}
               />

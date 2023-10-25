@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import { useStores } from '@/stores/stores'
 
 import AccessRights from './accessRights'
@@ -12,12 +11,13 @@ const TitleContainer = () => {
     Etsin: {
       EtsinDataset: { datasetMetadata, preservation, isCumulative, isHarvested, isPas },
     },
+    Locale: { getPreferredLang, getValueTranslation },
   } = useStores()
 
   return (
     <Container className="d-md-flex dataset-title">
-      <Title lang={getDataLang(datasetMetadata.title)}>
-        {checkDataLang(datasetMetadata.title)}
+      <Title lang={getPreferredLang(datasetMetadata.title)}>
+        {getValueTranslation(datasetMetadata.title)}
         <span aria-hidden> </span>
         <Translate id="dataset-tags" content="dataset.tags" className="sr-only" element="span" />
         <Tags id="tags">

@@ -16,10 +16,10 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import Agent from './Agent'
-import checkDataLang, { getDataLang } from '../../utils/checkDataLang'
 import { LinkButton } from '../general/button'
+import { withStores } from '../qvain/utils/stores'
 
-export default class TogglableAgentList extends Component {
+class TogglableAgentList extends Component {
   constructor(props) {
     super(props)
 
@@ -48,6 +48,10 @@ export default class TogglableAgentList extends Component {
   }
 
   render() {
+    const {
+      Locale: { getPreferredLang, getValueTranslation },
+    } = this.props.Stores
+
     return this.props.agents ? (
       <AgentsCont>
         {this.props.agents.length > 1 ? (
@@ -63,8 +67,8 @@ export default class TogglableAgentList extends Component {
               return (
                 <Agent
                   inline
-                  lang={getDataLang(agent.name)}
-                  key={checkDataLang(agent.name)}
+                  lang={getPreferredLang(agent.name)}
+                  key={getValueTranslation(agent.name)}
                   first={i === 0}
                   agent={agent}
                 />
@@ -80,16 +84,15 @@ export default class TogglableAgentList extends Component {
                 return (
                   <Agent
                     inline
-                    lang={getDataLang(agent.name)}
-                    key={checkDataLang(agent.name)}
+                    lang={getPreferredLang(agent.name)}
+                    key={getValueTranslation(agent.name)}
                     agent={agent}
                   />
                 )
               }
               return ''
             })}
-          {/* Show Button to open rest */}
-          {' '}
+          {/* Show Button to open rest */}{' '}
           {this.props.agents.length > 3 && (
             <LinkButton onClick={this.toggleOpen}>
               {this.state.open ? (
@@ -113,6 +116,7 @@ TogglableAgentList.defaultProps = {
 TogglableAgentList.propTypes = {
   agents: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   agentType: PropTypes.string,
+  Stores: PropTypes.object.isRequired,
 }
 
 const AgentsCont = styled.div`
@@ -124,3 +128,5 @@ const InlineUl = styled.ul`
   margin: 0;
   padding: 0;
 `
+
+export default withStores(TogglableAgentList)

@@ -2,12 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import { LICENSE_URL } from '@/utils/constants'
 import isUrl from '@/utils/isUrl'
 import LicensePopUp from './licensePopUp'
+import { useStores } from '@/stores/stores'
 
 const License = props => {
+  const {
+    Locale: { getPreferredLang, getValueTranslation },
+  } = useStores()
   const {
     data: { license, title, description, identifier },
   } = props
@@ -25,16 +28,16 @@ const License = props => {
           href={license}
           target="_blank"
           rel="noopener noreferrer"
-          lang={getDataLang(title)}
+          lang={getPreferredLang(title)}
         >
-          {checkDataLang(title)}
-          {!checkDataLang(title) && checkDataLang(license)}
+          {getValueTranslation(title)}
+          {!getValueTranslation(title) && getValueTranslation(license)}
         </MainLink>
       )}
       {!licenseIsUrl && (
-        <Title lang={getDataLang(title)}>
-          {checkDataLang(title)}
-          {!checkDataLang(title) && checkDataLang(license)}
+        <Title lang={getPreferredLang(title)}>
+          {getValueTranslation(title)}
+          {!getValueTranslation(title) && getValueTranslation(license)}
         </Title>
       )}
       <LicensePopUp license={license} title={title} description={description} info={info} />

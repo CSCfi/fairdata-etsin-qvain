@@ -4,10 +4,8 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Link } from 'react-router-dom'
 
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import { useStores } from '@/stores/stores'
 import { PRESERVATION_EVENT_CREATED } from '@/utils/constants'
-import dateFormat, { dateSeparator } from '@/utils/dateFormat'
 
 import Agent from '../Agent'
 
@@ -16,6 +14,7 @@ const Event = ({ event }) => {
     Etsin: {
       EtsinDataset: { isPas, preservation },
     },
+    Locale: { dateFormat, dateSeparator, getPreferredLang, getValueTranslation },
   } = useStores()
 
   const preservationTranslationRoot = isPas
@@ -27,12 +26,12 @@ const Event = ({ event }) => {
   if (event.preservation_event && !showPreservationEvent) return null
 
   return (
-    <tr key={`provenance-${checkDataLang(event.title)}`}>
+    <tr key={`provenance-${getValueTranslation(event.title)}`}>
       {/* EVENT */}
       <td>
         {event.lifecycle_event && (
-          <span lang={getDataLang(event.lifecycle_event.pref_label)}>
-            {checkDataLang(event.lifecycle_event.pref_label)}
+          <span lang={getPreferredLang(event.lifecycle_event.pref_label)}>
+            {getValueTranslation(event.lifecycle_event.pref_label)}
           </span>
         )}
         {showPreservationEvent && <Translate content={`${preservationTranslationRoot}.title`} />}
@@ -46,7 +45,7 @@ const Event = ({ event }) => {
             if (name) {
               return (
                 <Agent
-                  lang={getDataLang(associate)}
+                  lang={getPreferredLang(associate)}
                   key={name}
                   first={i === 0}
                   agent={associate.actor}
@@ -65,11 +64,11 @@ const Event = ({ event }) => {
       </td>
 
       {/* TITLE */}
-      <td>{event.title && checkDataLang(event.title)}</td>
+      <td>{event.title && getValueTranslation(event.title)}</td>
 
       {/* DESCRIPTION */}
       <td>
-        {event.description && !showPreservationEvent && checkDataLang(event.description)}
+        {event.description && !showPreservationEvent && getValueTranslation(event.description)}
         {showPreservationEvent && (
           <Link
             to={`/dataset/${

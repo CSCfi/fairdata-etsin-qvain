@@ -4,7 +4,6 @@ import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { configure } from 'mobx'
 
-import dateFormat from '@/utils/dateFormat'
 import etsinTheme from '@/styles/theme'
 import '@/../locale/translations'
 import { buildStores } from '@/stores'
@@ -26,6 +25,9 @@ const path = `/dataset/${identifier}/events`
 
 configure({ safeDescriptors: false })
 const stores = buildStores()
+
+const { dateFormat } = stores.Locale
+
 configure({ safeDescriptors: true })
 stores.Accessibility.handleNavigation = jest.fn()
 

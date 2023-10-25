@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
-
 import Agent from '../../../Agent'
+import { useStores } from '@/stores/stores'
 
 const ProjectForm = ({ project, lang }) => {
+  const {
+    Locale: { getPreferredLang, getValueTranslation },
+  } = useStores()
   const hasFunderInfo = Boolean(
     project.has_funder_identifier || project.funder_type || project.has_funding_agency
   )
@@ -19,7 +21,7 @@ const ProjectForm = ({ project, lang }) => {
           <Key>
             <Translate content="dataset.project.name" />
           </Key>
-          <Value>{checkDataLang(project.name)}</Value>
+          <Value>{getValueTranslation(project.name)}</Value>
           {project.identifier && (
             <div>
               <Key>
@@ -44,11 +46,11 @@ const ProjectForm = ({ project, lang }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   lang={lang}
-                  title={checkDataLang(project.homepage.title) || project.homepage.identifier}
+                  title={getValueTranslation(project.homepage.title) || project.homepage.identifier}
                 >
                   {project.homepage.title ? (
-                    <span lang={getDataLang(project.homepage.title)}>
-                      {checkDataLang(project.homepage.title)}
+                    <span lang={getPreferredLang(project.homepage.title)}>
+                      {getValueTranslation(project.homepage.title)}
                     </span>
                   ) : (
                     project.homepage.identifier
@@ -60,7 +62,7 @@ const ProjectForm = ({ project, lang }) => {
                   <Key>
                     <Translate content="dataset.project.homepageDescr" />
                   </Key>
-                  <Value>{checkDataLang(project.homepage.description)}</Value>
+                  <Value>{getValueTranslation(project.homepage.description)}</Value>
                 </div>
               )}
             </List>
@@ -73,7 +75,7 @@ const ProjectForm = ({ project, lang }) => {
             </Topic>
             <OrgList>
               {project.source_organization.map(org => (
-                <dd key={checkDataLang(org.actor.organization.pref_label)}>
+                <dd key={getValueTranslation(org.actor.organization.pref_label)}>
                   <Agent lang={lang} first agent={org.actor} popupAlign="left-fit-content" />
                 </dd>
               ))}
@@ -99,12 +101,12 @@ const ProjectForm = ({ project, lang }) => {
                   <Key>
                     <Translate content="dataset.project.funder_type" />
                   </Key>
-                  <Value>{checkDataLang(project.funder_type.pref_label)}</Value>
+                  <Value>{getValueTranslation(project.funder_type.pref_label)}</Value>
                 </div>
               )}
               {project.has_funding_agency &&
                 project.has_funding_agency.map(agency => (
-                  <div key={checkDataLang(agency.pref_label)}>
+                  <div key={getValueTranslation(agency.pref_label)}>
                     <Key>
                       <Translate content="dataset.project.funder" />
                     </Key>

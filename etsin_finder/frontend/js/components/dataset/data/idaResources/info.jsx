@@ -17,9 +17,9 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import InfoItem from '../infoItem'
-import checkDataLang, { getDataLang } from '../../../../utils/checkDataLang'
 import Modal from '../../../general/modal'
 import { TypeConcept, TypeChecksum } from '../../../../utils/propTypes'
+import { useStores } from '@/stores/stores'
 
 const customStyles = {
   content: {
@@ -42,59 +42,67 @@ const Info = ({
   checksum,
   headerContent,
   headerIcon,
-}) => (
-  <Modal
-    isOpen={open}
-    onRequestClose={closeModal}
-    customStyles={customStyles}
-    contentLabel="Object info"
-  >
-    <ModalLayout>
-      {headerContent ? (
-        <Header>
-          {headerIcon && <HeaderIcon icon={headerIcon} />}
-          <Translate content={headerContent} />
-        </Header>
-      ) : (
-        <Translate className="sr-only" content="dataset.dl.info_header" />
-      )}
-      <InfoTable>
-        <tbody>
-          {name && <InfoItem translation="dataset.dl.name" content={name} />}
-          {id && <InfoItem translation="dataset.dl.id" content={id} />}
-          {size && <InfoItem translation="dataset.dl.size" content={size} />}
-          {checksum && (
-            <InfoItem
-              translation="dataset.dl.checksum"
-              content={checksum.value ? checksum.value : ''}
-              insertable={checksum.algorithm ? checksum.algorithm : ''}
-            />
-          )}
-        </tbody>
-      </InfoTable>
+}) => {
+  const {
+    Locale: { getPreferredLang, getValueTranslation },
+  } = useStores()
 
-      {(type || title || category || description) && (
-        <>
-          <Translate component={SubHeader} content="dataset.dl.customMetadata" />
-          <InfoTable>
-            <tbody>
-              {type && type !== 'dir' && (
-                <InfoItem
-                  translation="dataset.dl.type"
-                  content={checkDataLang(type.pref_label) || type}
-                  lang={getDataLang(type.pref_label)}
-                />
-              )}
-              {title && <InfoItem translation="dataset.dl.title" content={title} />}
-              {category && <InfoItem translation="dataset.dl.category" content={category} />}
-              {description && <InfoItem translation="general.description" content={description} />}
-            </tbody>
-          </InfoTable>
-        </>
-      )}
-    </ModalLayout>
-  </Modal>
-)
+  return (
+    <Modal
+      isOpen={open}
+      onRequestClose={closeModal}
+      customStyles={customStyles}
+      contentLabel="Object info"
+    >
+      <ModalLayout>
+        {headerContent ? (
+          <Header>
+            {headerIcon && <HeaderIcon icon={headerIcon} />}
+            <Translate content={headerContent} />
+          </Header>
+        ) : (
+          <Translate className="sr-only" content="dataset.dl.info_header" />
+        )}
+        <InfoTable>
+          <tbody>
+            {name && <InfoItem translation="dataset.dl.name" content={name} />}
+            {id && <InfoItem translation="dataset.dl.id" content={id} />}
+            {size && <InfoItem translation="dataset.dl.size" content={size} />}
+            {checksum && (
+              <InfoItem
+                translation="dataset.dl.checksum"
+                content={checksum.value ? checksum.value : ''}
+                insertable={checksum.algorithm ? checksum.algorithm : ''}
+              />
+            )}
+          </tbody>
+        </InfoTable>
+
+        {(type || title || category || description) && (
+          <>
+            <Translate component={SubHeader} content="dataset.dl.customMetadata" />
+            <InfoTable>
+              <tbody>
+                {type && type !== 'dir' && (
+                  <InfoItem
+                    translation="dataset.dl.type"
+                    lang={getPreferredLang(type.pref_label)}
+                    content={getValueTranslation(type.pref_label) || type}
+                  />
+                )}
+                {title && <InfoItem translation="dataset.dl.title" content={title} />}
+                {category && <InfoItem translation="dataset.dl.category" content={category} />}
+                {description && (
+                  <InfoItem translation="general.description" content={description} />
+                )}
+              </tbody>
+            </InfoTable>
+          </>
+        )}
+      </ModalLayout>
+    </Modal>
+  )
+}
 
 export default Info
 

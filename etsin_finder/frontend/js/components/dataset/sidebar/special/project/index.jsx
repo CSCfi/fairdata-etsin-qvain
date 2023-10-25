@@ -1,13 +1,13 @@
 {
-    /**
-     * This file is part of the Etsin service
-     *
-     * Copyright 2017-2018 Ministry of Education and Culture, Finland
-     *
-     *
-     * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-     * @license   MIT
-     */
+  /**
+   * This file is part of the Etsin service
+   *
+   * Copyright 2017-2018 Ministry of Education and Culture, Finland
+   *
+   *
+   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
+   * @license   MIT
+   */
 }
 
 import React, { Component } from 'react'
@@ -18,8 +18,7 @@ import Translate from 'react-translate-component'
 import ProjectForm from './projectForm'
 import { TransparentLink } from '../../../../general/button'
 import Modal from '../../../../general/modal'
-import checkDataLang, { getDataLang } from '../../../../../utils/checkDataLang'
-
+import { withStores } from '@/stores/stores'
 
 const customStyles = {
   content: {
@@ -29,71 +28,74 @@ const customStyles = {
   },
 }
 
-export default class Project extends Component {
-    constructor(props) {
-        super(props)
+class Project extends Component {
+  constructor(props) {
+    super(props)
 
-        const project = props.project
+    const project = props.project
 
-        this.state = {
-            open: false,
-            project,
-        }
-
-        this.openModal = this.openModal.bind(this)
-        this.closeModal = this.closeModal.bind(this)
+    this.state = {
+      open: false,
+      project,
     }
 
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps(newProps) {
-        const project = newProps.project
-        this.setState({
-            project
-        })
-    }
+    this.openModal = this.openModal.bind(this)
+    this.closeModal = this.closeModal.bind(this)
+  }
 
-    openModal() {
-        this.setState({
-            open: true,
-        })
-    }
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
+    const project = newProps.project
+    this.setState({
+      project,
+    })
+  }
 
-    closeModal() {
-        this.setState({
-            open: false,
-        })
-    }
+  openModal() {
+    this.setState({
+      open: true,
+    })
+  }
 
-    render() {
-        const lang = getDataLang(this.state.project.name)
+  closeModal() {
+    this.setState({
+      open: false,
+    })
+  }
 
-        return (
-          <div>
-            <InlineTransparentLink
-              noMargin
-              noPadding
-              color="primary"
-              onClick={this.openModal}
-              lang={lang}
-            >
-              {checkDataLang(this.state.project.name)}
-            </InlineTransparentLink>
+  render() {
+    const {
+      Locale: { getPreferredLang, getValueTranslation },
+    } = this.props.Stores
+    const lang = getPreferredLang(this.state.project.name)
 
-            <Modal
-              isOpen={this.state.open}
-              onRequestClose={this.closeModal}
-              customStyles={customStyles}
-              contentLabel="Project"
-            >
-              <h2>
-                <Translate content="dataset.project.project" />
-              </h2>
+    return (
+      <div>
+        <InlineTransparentLink
+          noMargin
+          noPadding
+          color="primary"
+          onClick={this.openModal}
+          lang={lang}
+        >
+          {getValueTranslation(this.state.project.name)}
+        </InlineTransparentLink>
 
-              <ProjectForm close={this.closeModal} project={this.state.project} lang={lang} />
-            </Modal>
-          </div>
-        )
-    }
+        <Modal
+          isOpen={this.state.open}
+          onRequestClose={this.closeModal}
+          customStyles={customStyles}
+          contentLabel="Project"
+        >
+          <h2>
+            <Translate content="dataset.project.project" />
+          </h2>
+
+          <ProjectForm close={this.closeModal} project={this.state.project} lang={lang} />
+        </Modal>
+      </div>
+    )
+  }
 }
 
 const InlineTransparentLink = styled(TransparentLink)`
@@ -101,5 +103,8 @@ const InlineTransparentLink = styled(TransparentLink)`
 `
 
 Project.propTypes = {
-    project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  Stores: PropTypes.object.isRequired,
 }
+
+export default withStores(Project)

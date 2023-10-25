@@ -5,12 +5,15 @@ import Translate from 'react-translate-component'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import PopUp from '@/components/general/popup'
 import { LinkButton } from '@/components/general/button'
 import isUrl from '@/utils/isUrl'
+import { useStores } from '@/stores/stores'
 
 const LicensePopUp = ({ license, title, description, info }) => {
+  const {
+    Locale: { getPreferredLang, getValueTranslation },
+  } = useStores()
   const [popUpOpen, setPopUpOpen] = useState(false)
 
   const togglePopup = () => setPopUpOpen(!popUpOpen)
@@ -27,9 +30,11 @@ const LicensePopUp = ({ license, title, description, info }) => {
 
   const popUpContent = (
     <div>
-      {title && <Name lang={getDataLang(title)}>{checkDataLang(title)}</Name>}
+      {title && <Name lang={getPreferredLang(title)}>{getValueTranslation(title)}</Name>}
       {description && (
-        <Description lang={getDataLang(description)}>{checkDataLang(description)}</Description>
+        <Description lang={getPreferredLang(description)}>
+          {getValueTranslation(description)}
+        </Description>
       )}
       {info && <Translate component={Description} content={info} />}
 

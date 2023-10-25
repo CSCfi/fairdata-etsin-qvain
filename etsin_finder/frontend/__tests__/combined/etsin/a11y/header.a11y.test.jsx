@@ -6,12 +6,13 @@ import { axe } from 'jest-axe'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
-import stores from '../../../../js/stores'
+import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import EtsinHeader from '../../../../js/components/header'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
+const stores = buildStores()
 
 describe('Etsin header', () => {
   let wrapper

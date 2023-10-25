@@ -33,8 +33,9 @@ const FLAG_SUPPORT = {
 }
 
 class Flags {
-  constructor() {
+  constructor(Env) {
     makeObservable(this)
+    this.Env = Env
     if (BUILD !== 'production') {
       // Global flag helpers for front-end development. The functions do not modify
       // flags directly but instead the values are kept in the overrides object.
@@ -201,6 +202,11 @@ class Flags {
   flagEnabled = flagPath => {
     if (this.supportedFlags && this.validateFlagPath(flagPath) !== FLAG_SUPPORT.FULL) {
       console.warn(`flagEnabled called with unsupported flag: ${flagPath}`)
+    }
+    if (BUILD !== 'production' && BUILD !== 'test') {
+      if (this.Env?.appConfigLoaded === false) {
+        console.warn(`flagEnabled called before app config has been loaded, flag: ${flagPath}`)
+      }
     }
 
     let path = flagPath

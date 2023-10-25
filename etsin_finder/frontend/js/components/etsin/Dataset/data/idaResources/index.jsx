@@ -8,7 +8,6 @@ import FlaggedComponent from '@/components/general/flaggedComponent'
 import TooltipHover from '@/components/general/tooltipHover'
 import sizeParse from '@/utils/sizeParse'
 import { useStores } from '@/stores/stores'
-import dateFormat from '@/utils/dateFormat'
 
 import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
 import Info from '../info'
@@ -22,7 +21,7 @@ import Tree from './fileTree'
 
 function IdaResources() {
   const {
-    Locale: { lang },
+    Locale: { lang, dateFormat },
     Access: { restrictions },
     Etsin: {
       EtsinDataset: { useV3, identifier, files, isDownloadAllowed, downloadAllInfotext },

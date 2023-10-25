@@ -6,10 +6,12 @@ import { axe } from 'jest-axe'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
-import stores from '../../../../js/stores'
+import {buildStores} from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import QvainHeader from '../../../../js/components/qvain/general/header'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+
+const stores = buildStores()
 
 failTestsWhenTranslationIsMissing()
 

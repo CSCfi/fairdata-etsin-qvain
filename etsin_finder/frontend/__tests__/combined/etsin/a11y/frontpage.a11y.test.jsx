@@ -9,12 +9,13 @@ import { MemoryRouter } from 'react-router-dom'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
-import stores from '../../../../js/stores'
+import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import FrontPage from '../../../../js/components/frontpage'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
+const stores = buildStores()
 
 const mockAdapter = new MockAdapter(axios)
 mockAdapter.onGet().reply(200, { count: 1 })

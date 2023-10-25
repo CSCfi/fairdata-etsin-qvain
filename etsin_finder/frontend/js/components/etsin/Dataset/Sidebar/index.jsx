@@ -5,7 +5,6 @@ import Translate from 'react-translate-component'
 import { useStores } from '@/stores/stores'
 
 import { ACCESS_TYPE_URL } from '@/utils/constants'
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import checkNested from '@/utils/checkNested'
 
 import Agent from '../Agent'
@@ -34,11 +33,13 @@ const Sidebar = () => {
         actors,
       },
     },
+
+    Locale: { getPreferredLang, getValueTranslation },
   } = useStores()
 
   const isVersion = versions?.some(version => version.identifier === identifier)
   const catalogPublisher = dataCatalog?.publisher
-  const catalogPublisherLang = getDataLang(catalogPublisher?.name)
+  const catalogPublisherLang = getPreferredLang(catalogPublisher?.name)
   const catalogPublisherHomepage = catalogPublisher.homepage?.[0].identifier || ''
   const catalogTitle = dataCatalog?.title[catalogPublisherLang]
 
@@ -46,15 +47,15 @@ const Sidebar = () => {
     const isOpen = accessRights?.access_type.identifier === ACCESS_TYPE_URL.OPEN
     if (!isOpen && accessRights?.restriction_grounds?.length > 0) {
       return accessRights.restriction_grounds.map(rg => (
-        <ListItem key={`rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
-          {checkDataLang(rg.pref_label)}
+        <ListItem key={`rg-${rg.identifier}`} lang={getPreferredLang(rg.pref_label)}>
+          {getValueTranslation(rg.pref_label)}
         </ListItem>
       ))
     }
     return (
       checkNested(accessRights, 'access_type', 'pref_label') && (
-        <ListItem lang={getDataLang(accessRights.access_type.pref_label)}>
-          {checkDataLang(accessRights.access_type.pref_label)}
+        <ListItem lang={getPreferredLang(accessRights.access_type.pref_label)}>
+          {getValueTranslation(accessRights.access_type.pref_label)}
         </ListItem>
       )
     )
@@ -84,7 +85,7 @@ const Sidebar = () => {
               rel="noopener noreferrer"
               title={theme.url}
             >
-              {checkDataLang(theme.pref_label)}
+              {getValueTranslation(theme.pref_label)}
             </SubjectHeaderLink>
           ))}
         </List>
@@ -122,7 +123,7 @@ const Sidebar = () => {
           itemTitle="dataset.catalog_publisher"
           lang={catalogPublisherLang}
         >
-          {catalogPublisher.name && checkDataLang(catalogPublisher.name)}
+          {catalogPublisher.name && getValueTranslation(catalogPublisher.name)}
         </DatasetInfoItem>
       </SidebarArea>
 
@@ -173,9 +174,9 @@ const Sidebar = () => {
           <List>
             {datasetMetadata.projects &&
               datasetMetadata.projects.map(item => {
-                const projectName = checkDataLang(item.name)
+                const projectName = getValueTranslation(item.name)
                 return (
-                  <ListItem key={`li-${projectName}`} lang={getDataLang(item.name)}>
+                  <ListItem key={`li-${projectName}`} lang={getPreferredLang(item.name)}>
                     <Project project={item} />
                   </ListItem>
                 )
@@ -187,10 +188,10 @@ const Sidebar = () => {
           {actors.publisher && (
             <List>
               <Agent
-                lang={getDataLang(actors.publisher.actor.organization?.pref_label)}
+                lang={getPreferredLang(actors.publisher.actor.organization?.pref_label)}
                 key={
                   actors.publisher.actor.person?.name ||
-                  checkDataLang(actors.publisher.actor.organization?.pref_label)
+                  getValueTranslation(actors.publisher.actor.organization?.pref_label)
                 }
                 first
                 agent={actors.publisher.actor}
@@ -206,11 +207,11 @@ const Sidebar = () => {
               actors.curators.map(curator => {
                 const curatorName =
                   curator.actor.person?.name ||
-                  checkDataLang(curator.actor.organization?.pref_label)
+                  getValueTranslation(curator.actor.organization?.pref_label)
                 return (
                   <Agent
                     key={`li-${curatorName}`}
-                    lang={getDataLang(curator.actor.organization?.pref_label)}
+                    lang={getPreferredLang(curator.actor.organization?.pref_label)}
                     first
                     agent={curator.actor}
                     popupAlign="sidebar"
@@ -225,11 +226,11 @@ const Sidebar = () => {
             <List>
               {actors.rightsHolders.map(rh => {
                 const rightsHolderName =
-                  rh.actor.person?.name || checkDataLang(rh.actor.organization?.pref_label)
+                  rh.actor.person?.name || getValueTranslation(rh.actor.organization?.pref_label)
                 return (
                   <Agent
                     key={`li-${rightsHolderName}`}
-                    lang={getDataLang(rh.actor.organization?.pref_label)}
+                    lang={getPreferredLang(rh.actor.organization?.pref_label)}
                     first
                     agent={rh.actor}
                     popupAlign="sidebar"
@@ -245,8 +246,8 @@ const Sidebar = () => {
         <DatasetInfoItem id="dataset-infrastructure" itemTitle="dataset.infrastructure">
           <List>
             {datasetMetadata.infrastructure?.map(entity => (
-              <ListItem key={entity.identifier} lang={getDataLang(entity.pref_label)}>
-                {checkDataLang(entity.pref_label)}
+              <ListItem key={entity.identifier} lang={getPreferredLang(entity.pref_label)}>
+                {getValueTranslation(entity.pref_label)}
               </ListItem>
             ))}
           </List>

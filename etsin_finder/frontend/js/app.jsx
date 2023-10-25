@@ -19,7 +19,8 @@ import { registerLocale } from 'react-datepicker'
 import fi from 'date-fns/locale/fi'
 import en from 'date-fns/locale/en-GB'
 
-import Stores from '@/stores'
+import EnvClass from '@/stores/domain/env'
+import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import '../locale/translations'
 import Layout from './layout'
@@ -33,7 +34,7 @@ import './utils/extendPromise'
 import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
 
-const { Env, Locale, Auth, Accessibility } = Stores
+const Env = new EnvClass()
 
 registerLocale('fi', fi)
 registerLocale('en', en)
@@ -58,12 +59,19 @@ const hideSpinner = () => {
 
 const App = () => {
   const [initialized, setInitialized] = useState(false)
+  const [stores, setStores] = useState()
+
+  // setup tabbing
 
   // Load runtime config
   const configure = async () => {
-    await Env.fetchAppConfig()
+    await Env.fetchAppConfig()  
+    const Stores = buildStores({ Env })
+    setStores(Stores)
+    const { Accessibility, Auth, Locale } = Stores
     Auth.enableRequestInterceptor()
     Auth.checkLogin()
+    Accessibility.initialLoad()
     if (
       Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK') &&
       !Env?.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')
@@ -85,7 +93,7 @@ const App = () => {
 
   return (
     <div className="app">
-      <StoresProvider store={Stores}>
+      <StoresProvider store={stores}>
         <Router history={history}>
           <ThemeProvider theme={etsinTheme}>
             <>
@@ -100,6 +108,3 @@ const App = () => {
 }
 
 export default observer(App)
-
-// setup tabbing
-Accessibility.initialLoad()

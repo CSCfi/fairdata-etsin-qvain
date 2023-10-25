@@ -3,21 +3,25 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import Modal from '@/components/general/modal'
 import { TransparentLink } from '@/components/etsin/general/button'
 
 import ProjectForm from './projectForm'
+import { useStores } from '@/stores/stores'
 
 const Project = ({ project }) => {
+  const {
+    Locale: { getPreferredLang, getValueTranslation },
+  } = useStores()
+
   const [modalOpen, setModalOpen] = useState(false)
 
-  const lang = getDataLang(project.name)
+  const lang = getPreferredLang(project.name)
 
   return (
     <>
       <InlineTransparentLink noMargin noPadding onClick={() => setModalOpen(true)} lang={lang}>
-        {checkDataLang(project.name)}
+        {getValueTranslation(project.name)}
       </InlineTransparentLink>
 
       <Modal

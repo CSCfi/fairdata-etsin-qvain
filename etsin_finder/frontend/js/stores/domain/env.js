@@ -25,7 +25,7 @@ async function importValuesAsync() {
 class Env {
   constructor() {
     makeObservable(this)
-    this.Flags = new Flags()
+    this.Flags = new Flags(this)
     this.history = new RouterStore()
     this.metaxV3Url = this.metaxV3Url.bind(this)
   }

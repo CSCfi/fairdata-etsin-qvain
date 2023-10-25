@@ -8,7 +8,7 @@ import { setImmediate } from 'timers'
 
 import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
-import stores from '../../../../js/stores'
+import { buildStores } from '../../../../js/stores'
 import dataset from '../../../__testdata__/dataset.att'
 import CitationModal from '../../../../js/components/dataset/citation/citationModal'
 import Modal from '../../../../js/components/general/modal'
@@ -16,6 +16,8 @@ import { useStores } from '../../../../js/stores/stores'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
+
+const stores = buildStores()
 
 jest.mock('../../../../js/stores/stores', () => {
   const useStores = jest.fn()

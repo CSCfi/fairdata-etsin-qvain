@@ -19,8 +19,6 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
-import dateFormat from '@/utils/dateFormat'
 import Button from '../general/button'
 import Modal from '@/components/general/modal'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
@@ -70,12 +68,16 @@ class AccessRights extends Component {
   }
 
   restricted() {
+    const {
+      Locale: { dateFormat, getPreferredLang, getValueTranslation },
+    } = this.props.Stores
+
     return (
       <>
         <RestrictedButton>
           <div>
-            <AccessLabel lang={getDataLang(this.state.title)}>
-              {checkDataLang(this.state.title)}
+            <AccessLabel lang={getPreferredLang(this.state.title)}>
+              {getValueTranslation(this.state.title)}
             </AccessLabel>
             {this.state.embargoDate && (
               <Date>{dateFormat(this.state.embargoDate, { shortMonth: true })} </Date>
@@ -87,10 +89,13 @@ class AccessRights extends Component {
   }
 
   openAccess() {
+    const {
+      Locale: { getPreferredLang, getValueTranslation },
+    } = this.props.Stores
     return (
       <>
-        <AccessLabel lang={getDataLang(this.state.title)}>
-          {checkDataLang(this.state.title)}
+        <AccessLabel lang={getPreferredLang(this.state.title)}>
+          {getValueTranslation(this.state.title)}
         </AccessLabel>
       </>
     )
@@ -105,6 +110,10 @@ class AccessRights extends Component {
   }
 
   render() {
+    const {
+      Locale: { getPreferredLang, getValueTranslation },
+    } = this.props.Stores
+
     // display button on dataset page
     if (this.props.button) {
       return (
@@ -117,8 +126,8 @@ class AccessRights extends Component {
             {...this.props}
           >
             <Inner
-              lang={getDataLang(this.state.description)}
-              title={checkDataLang(this.state.description)}
+              lang={getPreferredLang(this.state.description)}
+              title={getValueTranslation(this.state.description)}
             >
               {this.hasOpenAccess ? this.openAccess() : this.restricted()}
             </Inner>
@@ -139,8 +148,8 @@ class AccessRights extends Component {
                     icon={faInfoCircle}
                     attributes={{ title: 'dataset.additionalInformation' }}
                   />
-                  <AccessLabel lang={getDataLang(this.state.description)}>
-                    {checkDataLang(this.state.description)}
+                  <AccessLabel lang={getPreferredLang(this.state.description)}>
+                    {getValueTranslation(this.state.description)}
                   </AccessLabel>
                 </div>
               )}
@@ -151,9 +160,9 @@ class AccessRights extends Component {
                   <AccessUrl
                     href={this.state.url.identifier}
                     title={this.state.url.identifier}
-                    lang={getDataLang(this.state.url.title)}
+                    lang={getPreferredLang(this.state.url.title)}
                   >
-                    {checkDataLang(this.state.url.title)}
+                    {getValueTranslation(this.state.url.title)}
                   </AccessUrl>
                 </div>
               )}
@@ -168,10 +177,10 @@ class AccessRights extends Component {
                     />
                     <AccessLabel
                       key={`al-rg-${rg.identifier}`}
-                      lang={getDataLang(rg.pref_label)}
+                      lang={getPreferredLang(rg.pref_label)}
                       tabIndex="0"
                     >
-                      {checkDataLang(rg.pref_label)}
+                      {getValueTranslation(rg.pref_label)}
                     </AccessLabel>
                   </div>
                 ))}
@@ -184,8 +193,8 @@ class AccessRights extends Component {
     return (
       <Access {...this.props}>
         <Inner
-          title={checkDataLang(this.state.description)}
-          lang={getDataLang(this.state.description)}
+          title={getValueTranslation(this.state.description)}
+          lang={getPreferredLang(this.state.description)}
         >
           {this.hasOpenAccess ? this.openAccess() : this.restricted()}
         </Inner>

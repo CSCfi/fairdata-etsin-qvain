@@ -9,7 +9,6 @@ import { observer } from 'mobx-react'
 
 import { TypeLocation } from '../../../utils/propTypes'
 import MyMap from './map'
-import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import { withStores } from '../../../stores/stores'
 
 const Table = styled.table`
@@ -66,8 +65,12 @@ class Maps extends Component {
   }
 
   buildLocationRow(spatial) {
+    const {
+      Locale: { getPreferredLang },
+    } = this.props.Stores
+
     // Datasets submitted via API don't require geographic name for location, in which case the name comes from place_uri
-    const locationName = spatial.geographic_name || checkDataLang(spatial.place_uri?.pref_label)
+    const locationName = spatial.geographic_name || getPreferredLang(spatial.place_uri?.pref_label)
 
     return (
       <tr key={`location-${locationName}`}>
@@ -98,6 +101,10 @@ class Maps extends Component {
   }
 
   render() {
+    const {
+      Locale: { getPreferredLang, getValueTranslation },
+    } = this.props.Stores
+
     return (
       <div id={this.props.id}>
         {/* Map details in a table list (this is not the actual map) */}
@@ -140,8 +147,8 @@ class Maps extends Component {
                 spatial.alt ? (
                   <CustomPopup>
                     {spatial.place_uri && (
-                      <h2 lang={getDataLang(spatial.place_uri.pref_label)}>
-                        {checkDataLang(spatial.place_uri.pref_label)}
+                      <h2 lang={getPreferredLang(spatial.place_uri.pref_label)}>
+                        {getValueTranslation(spatial.place_uri.pref_label)}
                       </h2>
                     )}
                     {spatial.geographic_name && <h3>{spatial.geographic_name}</h3>}

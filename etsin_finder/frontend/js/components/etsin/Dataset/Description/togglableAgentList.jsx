@@ -15,12 +15,12 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import { LinkButton } from '@/components/etsin/general/button'
 
 import Agent from '../Agent'
+import { withStores } from '@/stores/stores'
 
-export default class TogglableAgentList extends Component {
+class TogglableAgentList extends Component {
   constructor(props) {
     super(props)
 
@@ -49,6 +49,10 @@ export default class TogglableAgentList extends Component {
   }
 
   render() {
+    const {
+      Locale: { getPreferredLang, getValueTranslation },
+    } = this.props.Stores
+
     if (!this.props.agents?.length) return null
     return (
       <AgentsCont>
@@ -65,10 +69,10 @@ export default class TogglableAgentList extends Component {
               return (
                 <Agent
                   inline
-                  lang={getDataLang(
+                  lang={getPreferredLang(
                     agent.actor.person?.name || agent.actor.organization.pref_label
                   )}
-                  key={checkDataLang(
+                  key={getValueTranslation(
                     agent.actor.person?.name || agent.actor.organization.pref_label
                   )}
                   first={i === 0}
@@ -86,10 +90,10 @@ export default class TogglableAgentList extends Component {
                 return (
                   <Agent
                     inline
-                    lang={getDataLang(
+                    lang={getPreferredLang(
                       agent.actor.person?.name || agent.actor.organization.pref_label
                     )}
-                    key={checkDataLang(
+                    key={getValueTranslation(
                       agent.actor.person?.name || agent.actor.organization.pref_label
                     )}
                     agent={agent.actor}
@@ -122,6 +126,7 @@ TogglableAgentList.defaultProps = {
 TogglableAgentList.propTypes = {
   agents: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   agentType: PropTypes.string,
+  Stores: PropTypes.object.isRequired,
 }
 
 const AgentsCont = styled.div`
@@ -138,3 +143,5 @@ const AgentListLinkButton = styled(LinkButton)`
   color: ${p => p.theme.color.linkColorUIV2};
   text-decoration: underline;
 `
+
+export default withStores(TogglableAgentList)

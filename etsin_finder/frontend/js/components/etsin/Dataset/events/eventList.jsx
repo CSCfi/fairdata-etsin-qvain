@@ -11,9 +11,7 @@ import React from 'react'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 
-import checkDataLang from '@/utils/checkDataLang'
 import { useStores } from '@/stores/stores'
-import dateFormat from '@/utils/dateFormat'
 import { hasProvenances, Table, IDLink, Margin } from './common'
 import Event from './event'
 
@@ -22,6 +20,7 @@ const EventList = () => {
     Etsin: {
       EtsinDataset: { deletedVersions, provenance, dateDeprecated },
     },
+    Locale: { dateFormat, getValueTranslation },
   } = useStores()
 
   if (!(hasProvenances(provenance) || deletedVersions?.length > 0 || dateDeprecated)) {
@@ -58,7 +57,7 @@ const EventList = () => {
           {
             // Displaying general events
             provenance.map(event => (
-              <Event event={event} key={`event-${checkDataLang(event.title)}`} />
+              <Event event={event} key={`event-${getValueTranslation(event.title)}`} />
             ))
           }
           {dateDeprecated && (

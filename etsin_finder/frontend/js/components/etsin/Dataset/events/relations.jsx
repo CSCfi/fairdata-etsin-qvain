@@ -11,7 +11,6 @@ import React from 'react'
 import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 import { useStores } from '@/stores/stores'
 import { Table, ID, IDLink, Margin } from './common'
 
@@ -23,6 +22,7 @@ const Relations = () => {
     Etsin: {
       EtsinDataset: { datasetRelations },
     },
+    Locale: { getPreferredLang, getValueTranslation },
   } = useStores()
 
   if (!(datasetRelations?.length > 0)) {
@@ -51,10 +51,12 @@ const Relations = () => {
         <tbody>
           {datasetRelations.map(single => (
             <tr key={single.entity.identifier || ''}>
-              <td lang={getDataLang(single.relation_type.pref_label)}>
-                {checkDataLang(single.relation_type.pref_label)}
+              <td lang={getPreferredLang(single.relation_type.pref_label)}>
+                {getValueTranslation(single.relation_type.pref_label)}
               </td>
-              <td lang={getDataLang(single.entity.title)}>{checkDataLang(single.entity.title)}</td>
+              <td lang={getPreferredLang(single.entity.title)}>
+                {getValueTranslation(single.entity.title)}
+              </td>
               <td>
                 <span className="sr-only">Identifier:</span>
                 {relationIdentifierIsUrl(single.entity.identifier || '') ? (

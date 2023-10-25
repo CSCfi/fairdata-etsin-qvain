@@ -4,24 +4,23 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import { useStores } from '@/utils/stores'
-import dateFormat from '@/utils/dateFormat'
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 
 const DatasetDateInfo = () => {
   const {
     Etsin: {
       EtsinDataset: { datasetMetadata },
     },
+    Locale: { dateFormat, getPreferredLang, getValueTranslation },
   } = useStores()
 
   return (
     <DateInfo>
       {datasetMetadata.releaseDate && (
-        <p lang={getDataLang(datasetMetadata.releaseDate)}>
+        <p lang={getValueTranslation(datasetMetadata.releaseDate)}>
           <Translate
             content="dataset.issued"
             with={{
-              date: dateFormat(checkDataLang(datasetMetadata.releaseDate), { format: 'date' }),
+              date: dateFormat(getPreferredLang(datasetMetadata.releaseDate), { format: 'date' }),
             }}
           />
           <br />
@@ -29,7 +28,7 @@ const DatasetDateInfo = () => {
             <Translate
               content="dataset.modified"
               with={{
-                date: dateFormat(checkDataLang(datasetMetadata.modified), { format: 'date' }),
+                date: dateFormat(getPreferredLang(datasetMetadata.modified), { format: 'date' }),
               }}
             />
           )}

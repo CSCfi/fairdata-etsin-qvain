@@ -24,8 +24,8 @@ import SearchFiltersClass from './view/searchfilters'
 import MatomoClass from './tracking'
 import CrossRefClass from './view/qvain/qvain.crossRef'
 
-export const buildStores = () => {
-  const Env = new EnvClass()
+export const buildStores = (options = {}) => {
+  const Env = options.Env || new EnvClass()
   const Auth = new AuthClass(Env)
   const Accessibility = new AccessibilityClass(Env)
   const ElasticQuery = new ElasticQueryClass(Env)
@@ -59,5 +59,3 @@ export const buildStores = () => {
     CrossRef,
   }
 }
-
-export default buildStores()

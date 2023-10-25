@@ -7,6 +7,7 @@ import {
   FilterItems,
 } from '../../../js/components/search/filterResults/filterSection'
 import EnvClass from '../../../js/stores/domain/env'
+import LocaleClass from '../../../js/stores/view/locale'
 import ElasticQueryClass from '../../../js/stores/view/elasticquery'
 
 const Env = new EnvClass()
@@ -14,6 +15,7 @@ const mockElasticQuery = new ElasticQueryClass(Env)
 
 const getStores = () => ({
   ElasticQuery: mockElasticQuery,
+  Locale: new LocaleClass({ Env }, mockElasticQuery),
 })
 
 jest.mock('../../../js/stores/stores', () => {

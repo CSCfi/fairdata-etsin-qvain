@@ -3,26 +3,29 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
-import Stores from '@/stores'
 import { hasChildren } from '@/utils/helpers'
 import ErrorBoundary from '@/components/general/errorBoundary'
 
 import EtsinTooltip from './EtsinTooltip'
+import { useStores } from '@/stores/stores'
 
-const { Locale } = Stores
+const DatasetInfoItem = props => {
+  const { Locale } = useStores()
 
-const DatasetInfoItem = props =>
-  hasChildren(props.children) && (
-    <ErrorBoundary title={`Error in ${props.itemTitle}`}>
-      {props.itemTitle && (
-        <DT lang={Locale.currentLang} className="heading4">
-          <Translate content={props.itemTitle} />
-          {props.tooltip ? <EtsinTooltip tooltip={props.tooltip} /> : null}
-        </DT>
-      )}
-      <DD>{props.children}</DD>
-    </ErrorBoundary>
+  return (
+    hasChildren(props.children) && (
+      <ErrorBoundary title={`Error in ${props.itemTitle}`}>
+        {props.itemTitle && (
+          <DT lang={Locale.currentLang} className="heading4">
+            <Translate content={props.itemTitle} />
+            {props.tooltip ? <EtsinTooltip tooltip={props.tooltip} /> : null}
+          </DT>
+        )}
+        <DD>{props.children}</DD>
+      </ErrorBoundary>
+    )
   )
+}
 
 DatasetInfoItem.propTypes = {
   itemTitle: PropTypes.string,

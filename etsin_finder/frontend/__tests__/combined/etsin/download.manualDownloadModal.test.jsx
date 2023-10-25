@@ -8,7 +8,7 @@ import { setImmediate } from 'timers'
 
 import etsinTheme from '../../../js/styles/theme'
 import '../../../locale/translations'
-import stores from '../../../js/stores'
+import { buildStores } from '../../../js/stores'
 import dataset from '../../__testdata__/dataset.att'
 import ManualDownloadModal from '../../../js/components/dataset/data/idaResources/manualDownloadModal'
 import { ErrorDiv } from '../../../js/components/dataset/data/idaResources/manualDownloadModal/content'
@@ -17,6 +17,8 @@ import { useStores } from '../../../js/stores/stores'
 import CopyField, {
   LoaderWrapper,
 } from '../../../js/components/dataset/data/idaResources/manualDownloadModal/copyField'
+
+const stores = buildStores()
 
 jest.mock('../../../js/stores/stores', () => {
   const useStores = jest.fn()

@@ -7,7 +7,6 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Popup } from 'react-leaflet'
 import { useStores } from '@/utils/stores'
-import checkDataLang, { getDataLang } from '@/utils/checkDataLang'
 
 import MyMap from './map'
 
@@ -18,6 +17,7 @@ const Maps = props => {
     Etsin: {
       EtsinDataset: { datasetMetadata },
     },
+    Locale: { getPreferredLang, getValueTranslation },
   } = useStores()
 
   useEffect(() => {
@@ -27,7 +27,8 @@ const Maps = props => {
 
   const buildLocationRow = spatial => {
     // Datasets submitted via API don't require geographic name for location, in which case the name comes from place_uri
-    const locationName = spatial.geographic_name || checkDataLang(spatial.reference?.pref_label)
+    const locationName =
+      spatial.geographic_name || getValueTranslation(spatial.reference?.pref_label)
 
     return (
       <tr key={`location-${locationName}`}>
@@ -93,8 +94,8 @@ const Maps = props => {
               spatial.altitude_in_meters ? (
                 <CustomPopup>
                   {spatial.reference && (
-                    <h2 lang={getDataLang(spatial.reference.pref_label)}>
-                      {checkDataLang(spatial.reference.pref_label)}
+                    <h2 lang={getPreferredLang(spatial.reference.pref_label)}>
+                      {getValueTranslation(spatial.reference.pref_label)}
                     </h2>
                   )}
                   {spatial.geographic_name && <h3>{spatial.geographic_name}</h3>}

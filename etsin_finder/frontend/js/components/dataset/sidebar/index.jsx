@@ -4,9 +4,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
-import checkDataLang, { getDataLang } from '../../../utils/checkDataLang'
 import checkNested from '../../../utils/checkNested'
-import dateFormat from '../../../utils/dateFormat'
 import SidebarItem from './sidebarItem'
 import Identifier from '../identifier'
 import Logo from './special/logo'
@@ -20,24 +18,19 @@ import CitationButton from '../citation/citationButton'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 
 class Sidebar extends Component {
-  dateSeparator(start, end) {
-    return (
-      (start || end) &&
-      (start === end
-        ? dateFormat(start, { format: 'date' })
-        : `${dateFormat(start, { format: 'date' })} - ${dateFormat(end, { format: 'date' })}`)
-    )
-  }
-
   spatial(item) {
+    const {
+      Locale: { getPreferredLang, getValueTranslation },
+    } = this.props.Stores
+
     if (
       item.geographic_name &&
       checkNested(item, 'place_uri', 'pref_label') &&
-      item.geographic_name !== checkDataLang(item.place_uri.pref_label)
+      item.geographic_name !== getValueTranslation(item.place_uri.pref_label)
     ) {
       return (
-        <ListItem key={item.geographic_name} lang={getDataLang(item.place_uri.pref_label)}>
-          {checkDataLang(item.place_uri.pref_label)} <span>({item.geographic_name})</span>
+        <ListItem key={item.geographic_name} lang={getPreferredLang(item.place_uri.pref_label)}>
+          {getValueTranslation(item.place_uri.pref_label)} <span>({item.geographic_name})</span>
         </ListItem>
       )
     }
@@ -57,6 +50,10 @@ class Sidebar extends Component {
   }
 
   subjectHeading() {
+    const {
+      Locale: { getValueTranslation },
+    } = this.props.Stores
+
     const researchDataset = this.props.dataset.research_dataset
     const labels = []
     if (researchDataset.theme) {
@@ -69,7 +66,7 @@ class Sidebar extends Component {
             rel="noopener noreferrer"
             title={theme.identifier}
           >
-            {checkDataLang(theme.pref_label)}
+            {getValueTranslation(theme.pref_label)}
           </SubjectHeaderLink>
         ))
       )
@@ -94,6 +91,9 @@ class Sidebar extends Component {
   }
 
   accessRights() {
+    const {
+      Locale: { getPreferredLang, getValueTranslation },
+    } = this.props.Stores
 
     const researchDataset = this.props.dataset.research_dataset
     const accessRights = checkNested(researchDataset, 'access_rights')
@@ -103,21 +103,23 @@ class Sidebar extends Component {
     const isOpen = accessRights.access_type.identifier === ACCESS_TYPE_URL.OPEN
     if (!isOpen && accessRights.restriction_grounds?.length > 0) {
       return accessRights.restriction_grounds.map(rg => (
-        <ListItem key={`rg-${rg.identifier}`} lang={getDataLang(rg.pref_label)}>
-          {checkDataLang(rg.pref_label)}
+        <ListItem key={`rg-${rg.identifier}`} lang={getPreferredLang(rg.pref_label)}>
+          {getValueTranslation(rg.pref_label)}
         </ListItem>
       ))
     }
     return (
       checkNested(accessRights, 'access_type', 'pref_label') && (
-        <ListItem lang={getDataLang(accessRights.access_type.pref_label)}>
-          {checkDataLang(accessRights.access_type.pref_label)}
+        <ListItem lang={getPreferredLang(accessRights.access_type.pref_label)}>
+          {getValueTranslation(accessRights.access_type.pref_label)}
         </ListItem>
       )
     )
   }
 
   render() {
+    const { Locale } = this.props.Stores
+    const { getPreferredLang, getValueTranslation } = Locale
     const { setShowCitationModal } = this.props.Stores.DatasetQuery
     const dataCatalog = this.props.dataset.data_catalog
     const researchDataset = this.props.dataset.research_dataset
@@ -155,7 +157,7 @@ class Sidebar extends Component {
     const infrastructure = checkNested(researchDataset, 'infrastructure')
       ? researchDataset.infrastructure
       : false
-    const title = catalogTitle[getDataLang(catalogPublisher)]
+    const title = catalogTitle[getPreferredLang(catalogPublisher)]
 
     return (
       <SidebarContainer>
@@ -179,10 +181,10 @@ class Sidebar extends Component {
             <SidebarItem
               component="dd"
               trans="dataset.catalog_publisher"
-              lang={getDataLang(catalogPublisher)}
+              lang={getPreferredLang(catalogPublisher)}
               lineAfter
             >
-              {catalogPublisher && checkDataLang(catalogPublisher)}
+              {catalogPublisher && getValueTranslation(catalogPublisher)}
             </SidebarItem>
 
             {/* PREFERRED IDENTIFIER */}
@@ -210,8 +212,8 @@ class Sidebar extends Component {
               <List>
                 {field &&
                   field.map(f => (
-                    <ListItem key={f.identifier} lang={getDataLang(f.pref_label)}>
-                      {checkDataLang(f.pref_label)}
+                    <ListItem key={f.identifier} lang={getPreferredLang(f.pref_label)}>
+                      {getValueTranslation(f.pref_label)}
                     </ListItem>
                   ))}
               </List>
@@ -231,13 +233,13 @@ class Sidebar extends Component {
               <List>
                 {language &&
                   language.map((languages, i) => {
-                    let lang = checkDataLang(languages.title)
+                    let lang = getValueTranslation(languages.title)
                     if (lang === '') {
                       lang = languages.title
                     }
                     return (
                       /* eslint-disable react/no-array-index-key */
-                      <ListItem key={`${lang}-${i}`} lang={getDataLang(languages.title)}>
+                      <ListItem key={`${lang}-${i}`} lang={getPreferredLang(languages.title)}>
                         {lang}
                       </ListItem>
                       /* eslint-enable react/no-array-index-key */
@@ -258,7 +260,7 @@ class Sidebar extends Component {
               {temporal &&
                 temporal.map(dates => (
                   <TemporalCoverageItem key={`temporal-${dates.start_date}-${dates.end_date}`}>
-                    {this.dateSeparator(dates.start_date, dates.end_date)}
+                    {Locale.dateSeparator(dates.start_date, dates.end_date)}
                   </TemporalCoverageItem>
                 ))}
             </SidebarItem>
@@ -289,9 +291,9 @@ class Sidebar extends Component {
               <List>
                 {isOutputOf &&
                   isOutputOf.map(item => {
-                    const projectName = checkDataLang(item.name)
+                    const projectName = getValueTranslation(item.name)
                     return (
-                      <ListItem key={`li-${projectName}`} lang={getDataLang(item.name)}>
+                      <ListItem key={`li-${projectName}`} lang={getPreferredLang(item.name)}>
                         <Project project={item} />
                       </ListItem>
                     )
@@ -305,8 +307,8 @@ class Sidebar extends Component {
               {publisher && (
                 <List>
                   <Agent
-                    lang={getDataLang(publisher.name)}
-                    key={checkDataLang(publisher) || publisher.name}
+                    lang={getPreferredLang(publisher.name)}
+                    key={getValueTranslation(publisher) || publisher.name}
                     first
                     agent={publisher}
                     popupAlign="sidebar"
@@ -321,14 +323,14 @@ class Sidebar extends Component {
               <List>
                 {curator &&
                   curator.map(actor => {
-                    let curatorName = checkDataLang(actor.name)
+                    let curatorName = getValueTranslation(actor.name)
                     if (curatorName === '') {
                       curatorName = actor.name
                     }
                     return (
                       <Agent
                         key={`li-${curatorName}`}
-                        lang={getDataLang(actor.name)}
+                        lang={getPreferredLang(actor.name)}
                         first
                         agent={actor}
                         popupAlign="sidebar"
@@ -344,14 +346,14 @@ class Sidebar extends Component {
               {rightsHolder && (
                 <List>
                   {rightsHolder.map(actor => {
-                    let rightsHolderName = checkDataLang(actor.name)
+                    let rightsHolderName = getValueTranslation(actor.name)
                     if (rightsHolderName === '') {
                       rightsHolderName = actor.name
                     }
                     return (
                       <Agent
                         key={`li-${rightsHolderName}`}
-                        lang={getDataLang(actor.name)}
+                        lang={getPreferredLang(actor.name)}
                         first
                         agent={actor}
                         popupAlign="sidebar"
@@ -368,8 +370,8 @@ class Sidebar extends Component {
               <List>
                 {infrastructure &&
                   infrastructure.map(entity => (
-                    <ListItem key={entity.identifier} lang={getDataLang(entity.pref_label)}>
-                      {checkDataLang(entity.pref_label)}
+                    <ListItem key={entity.identifier} lang={getPreferredLang(entity.pref_label)}>
+                      {getValueTranslation(entity.pref_label)}
                     </ListItem>
                   ))}
               </List>

@@ -17,25 +17,6 @@ class Map {
     this.Locale = Locale
   }
 
-  // to prevent dependency cycle checkDataLang is copy-pasted here.
-  checkDataLang = (object, lang) => {
-    let language = lang
-    if (!lang) {
-      language = this.Locale.currentLang
-    }
-    if (typeof object === 'undefined' || Object.keys(object).length === 0) {
-      return ''
-    }
-    if (typeof object === 'string') {
-      return object
-    }
-    if (object[language]) return object[language]
-    if (object.und) {
-      return object.und
-    }
-    return object[Object.keys(object)[0]]
-  }
-
   createBounds = minmax => {
     const minY = minmax[0]
     const minX = minmax[1]
@@ -73,7 +54,7 @@ class Map {
   makeGeometryFromPlace = location => {
     const provider = new OpenStreetMapProvider()
     return provider
-      .search({ query: this.checkDataLang(location) })
+      .search({ query: this.Locale.checkDataLang(location) })
       .then(results => [
         { type: 'Rectangle', coordinates: [results[0].bounds], bounds: results[0].bounds },
       ])

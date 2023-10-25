@@ -19,7 +19,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mix } from 'polished'
 
-import checkDataLang from '../../../utils/checkDataLang'
 import FilterItem from './filterItem'
 import { TransparentLink } from '../../general/button'
 import { withStores } from '../../../stores/stores'
@@ -154,17 +153,19 @@ export class FilterSection extends Component {
 
   // Code that needs to be run before render()
   prepareForRender() {
+    const {
+      Locale: { getValueTranslation },
+    } = this.props.Stores
     if (this.aggregations[this.props.aggregation] !== undefined) {
       const { title, aggregation, term } = this.aggregations[this.props.aggregation]
-      this.titleName = checkDataLang(title)
-      this.aggregationName = checkDataLang(aggregation)
-      this.termName = checkDataLang(term)
+      this.titleName = getValueTranslation(title)
+      this.aggregationName = getValueTranslation(aggregation)
+      this.termName = getValueTranslation(term)
       this.titleNameEn = title.en
     }
 
-    this.state.aggregateItems = this.props.Stores.ElasticQuery.results.aggregations[
-      this.aggregationName
-    ].buckets
+    this.state.aggregateItems =
+      this.props.Stores.ElasticQuery.results.aggregations[this.aggregationName].buckets
     this.state.displayShowButton = this.state.aggregateItems.length > this.cutoff
     if (!this.state.show) {
       this.state.aggregateItems = this.state.aggregateItems.slice(0, this.cutoff)

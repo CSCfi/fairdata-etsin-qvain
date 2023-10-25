@@ -15,7 +15,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
-import checkDataLang from '@/utils/checkDataLang'
 
 import buildColumns from '@/utils/buildColumns'
 import { useStores } from '@/stores/stores'
@@ -28,6 +27,7 @@ const ExternalResources = () => {
     Etsin: {
       EtsinDataset: { remoteResources, inInfo, setInInfo },
     },
+    Locale: { getValueTranslation },
   } = useStores()
 
   if (!remoteResources) {
@@ -46,7 +46,7 @@ const ExternalResources = () => {
     name: inInfo.title,
     accessUrl: inInfo.access_url?.identifier,
     downloadUrl: inInfo.download_url?.identifier,
-    category: checkDataLang(inInfo.use_category?.pref_label),
+    category: getValueTranslation(inInfo.use_category?.pref_label),
     type: inInfo.file_type,
     headerContent: `dataset.dl.infoHeaders.external`,
     headerIcon: faFile,
