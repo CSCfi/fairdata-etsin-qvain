@@ -41,14 +41,14 @@ const Event = ({ event }) => {
       <td>
         {event.is_associated_with &&
           event.is_associated_with.map((associate, i) => {
-            const name = associate.actor?.person?.name || associate.actor?.organization.pref_label
+            const name = associate.person?.name || associate.organization.pref_label
             if (name) {
               return (
                 <Agent
                   lang={getPreferredLang(associate)}
                   key={name}
                   first={i === 0}
-                  agent={associate.actor}
+                  agent={associate}
                 />
               )
             }

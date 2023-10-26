@@ -115,14 +115,50 @@ class EtsinDatasetV3 {
       keywords: this.dataset?.keyword,
       language: this.dataset?.language,
       spatial: this.shapeSpatial(this.dataset?.spatial),
-      temporal: undefined, // waiting for V3 implementation
+      temporal: this.dataset?.temporal,
       projects: undefined, // waiting for V3 implementation
-      infrastructure: undefined, // waiting for V3 implementation
+      infrastructure: this.dataset?.infrastructure
     }
   }
 
   @computed get provenance() {
     return this.dataset?.provenance
+  }
+
+  @computed get creators() {
+    return this.dataset?.actors.filter(actor => actor.roles.some(role => role === 'creator'))
+  }
+
+  @computed get contributors() {
+    return this.dataset?.actors.filter(actor => actor.roles.some(role => role === 'contributor'))
+  }
+
+  @computed get curators() {
+    return this.dataset?.actors.filter(actor => actor.roles.some(role => role === 'curator'))
+  }
+
+  @computed get publisher() {
+    const publishers = this.dataset?.actors.filter(actor => actor.roles.some(role => role === 'publisher'))
+
+    if (publishers.length > 0) {
+      return publishers[0]
+    }
+
+    return null
+  }
+
+  @computed get rightsHolders() {
+    return this.dataset?.actors.filter(actor => actor.roles.some(role => role === 'rights_holder'))
+  }
+
+  @computed get actors(){
+    return {
+      creators: this.creators,
+      contributors: this.contributors,
+      curators: this.curators,
+      publisher: this.publisher,
+      rightsHolders: this.rightsHolders
+    }
   }
 
   @computed get preservation() {
@@ -327,42 +363,6 @@ class EtsinDatasetV3 {
     }
 
     return null
-  }
-
-  @computed get creators() {
-    return this.dataset?.actors.filter(actor => actor.role === 'creator')
-  }
-
-  @computed get contributors() {
-    return this.dataset?.actors.filter(actor => actor.role === 'contributor')
-  }
-
-  @computed get curators() {
-    return this.dataset?.actors.filter(actor => actor.role === 'curator')
-  }
-
-  @computed get publisher() {
-    const publishers = this.dataset?.actors.filter(actor => actor.role === 'publisher')
-
-    if (publishers.length > 0) {
-      return publishers[0]
-    }
-
-    return null
-  }
-
-  @computed get rightsHolders() {
-    return this.dataset?.actors.filter(actor => actor.role === 'rights_holder')
-  }
-
-  @computed get actors() {
-    return {
-      creators: this.creators,
-      contributors: this.contributors,
-      curators: this.curators,
-      publisher: this.publisher,
-      rightsHolders: this.rightsHolders,
-    }
   }
 
   @action setShowCitationModal = value => {

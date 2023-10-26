@@ -16,11 +16,11 @@ const DatasetDateInfo = () => {
   return (
     <DateInfo>
       {datasetMetadata.releaseDate && (
-        <p lang={getValueTranslation(datasetMetadata.releaseDate)}>
+        <p lang={getPreferredLang(datasetMetadata.releaseDate)}>
           <Translate
             content="dataset.issued"
             with={{
-              date: dateFormat(getPreferredLang(datasetMetadata.releaseDate), { format: 'date' }),
+              date: dateFormat(getValueTranslation(datasetMetadata.releaseDate), { format: 'date' }),
             }}
           />
           <br />
@@ -28,7 +28,7 @@ const DatasetDateInfo = () => {
             <Translate
               content="dataset.modified"
               with={{
-                date: dateFormat(getPreferredLang(datasetMetadata.modified), { format: 'date' }),
+                date: dateFormat(getValueTranslation(datasetMetadata.modified), { format: 'date' }),
               }}
             />
           )}

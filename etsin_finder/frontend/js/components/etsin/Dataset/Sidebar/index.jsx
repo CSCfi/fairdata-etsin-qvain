@@ -188,13 +188,13 @@ const Sidebar = () => {
           {actors.publisher && (
             <List>
               <Agent
-                lang={getPreferredLang(actors.publisher.actor.organization?.pref_label)}
+                lang={getPreferredLang(actors.publisher.organization?.pref_label)}
                 key={
-                  actors.publisher.actor.person?.name ||
-                  getValueTranslation(actors.publisher.actor.organization?.pref_label)
+                  actors.publisher.person?.name ||
+                  getValueTranslation(actors.publisher.organization?.pref_label)
                 }
                 first
-                agent={actors.publisher.actor}
+                agent={actors.publisher}
                 popupAlign="sidebar"
               />
             </List>
@@ -206,14 +206,14 @@ const Sidebar = () => {
             {actors.curators &&
               actors.curators.map(curator => {
                 const curatorName =
-                  curator.actor.person?.name ||
-                  getValueTranslation(curator.actor.organization?.pref_label)
+                  curator.person?.name ||
+                  getValueTranslation(curator.organization?.pref_label)
                 return (
                   <Agent
                     key={`li-${curatorName}`}
-                    lang={getPreferredLang(curator.actor.organization?.pref_label)}
+                    lang={getPreferredLang(curator.organization?.pref_label)}
                     first
-                    agent={curator.actor}
+                    agent={curator}
                     popupAlign="sidebar"
                   />
                 )
@@ -226,13 +226,13 @@ const Sidebar = () => {
             <List>
               {actors.rightsHolders.map(rh => {
                 const rightsHolderName =
-                  rh.actor.person?.name || getValueTranslation(rh.actor.organization?.pref_label)
+                  rh.person?.name || getValueTranslation(rh.organization?.pref_label)
                 return (
                   <Agent
                     key={`li-${rightsHolderName}`}
-                    lang={getPreferredLang(rh.actor.organization?.pref_label)}
+                    lang={getPreferredLang(rh.organization?.pref_label)}
                     first
-                    agent={rh.actor}
+                    agent={rh}
                     popupAlign="sidebar"
                   />
                 )
@@ -246,7 +246,7 @@ const Sidebar = () => {
         <DatasetInfoItem id="dataset-infrastructure" itemTitle="dataset.infrastructure">
           <List>
             {datasetMetadata.infrastructure?.map(entity => (
-              <ListItem key={entity.identifier} lang={getPreferredLang(entity.pref_label)}>
+              <ListItem key={entity.id} lang={getPreferredLang(entity.pref_label)}>
                 {getValueTranslation(entity.pref_label)}
               </ListItem>
             ))}

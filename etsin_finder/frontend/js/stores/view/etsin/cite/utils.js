@@ -77,10 +77,10 @@ export const getLastnameFirst = name => {
 
 export const getAuthorsInitial = (dataset, getTranslation, etAlThreshold) => {
   const authors = dataset.creators.map(author => {
-    if (!author.actor.person) {
-      return getTranslation(topOrg(author.actor.organization)?.pref_label)
+    if (!author.person) {
+      return getTranslation(topOrg(author.organization)?.pref_label)
     }
-    return getNameInitials(getTranslation(author.actor.person))
+    return getNameInitials(getTranslation(author.person))
   })
 
   if (authors.length > etAlThreshold) {
@@ -94,13 +94,13 @@ export const getAuthorsInitial = (dataset, getTranslation, etAlThreshold) => {
 
 export const getAuthorsFull = (dataset, getTranslation, etAlThreshold, etAlCount) => {
   const authors = dataset.creators.map((author, index) => {
-    if (!author.actor.person) {
-      return getTranslation(topOrg(author.actor.organization)?.pref_label)
+    if (!author.person) {
+      return getTranslation(topOrg(author.organization)?.pref_label)
     }
     if (index === 0) {
-      return getLastnameFirst(getTranslation(author.actor.person))
+      return getLastnameFirst(getTranslation(author.person))
     }
-    return getTranslation(author.actor.person)
+    return getTranslation(author.person)
   })
   if (authors.length > etAlThreshold) {
     authors.splice(etAlCount)
@@ -113,10 +113,10 @@ export const getAuthorsFull = (dataset, getTranslation, etAlThreshold, etAlCount
 
 export const getAuthorsFullBibtex = (dataset, getTranslation, etAlThreshold, etAlCount) => {
   const authors = dataset.creators.map(author => {
-    if (!author.actor.person) {
-      return getTranslation(topOrg(author.actor.organization)?.pref_label)
+    if (!author.person) {
+      return getTranslation(topOrg(author.organization)?.pref_label)
     }
-    return getLastnameFirst(getTranslation(author.actor.person))
+    return getLastnameFirst(getTranslation(author.person))
   })
   if (authors.length > etAlThreshold) {
     authors.splice(etAlCount)
@@ -205,7 +205,7 @@ export const getIdentifier = (dataset, short = false, draftIdentifier = undefine
 }
 
 export const getPublisher = (dataset, getTranslation) => {
-  const pub = dataset.publisher?.actor.organization
+  const pub = dataset.publisher?.organization
   if (pub) {
     const top = topOrg(pub)
     if (top !== pub) {

@@ -65,18 +65,18 @@ class TogglableAgentList extends Component {
         <InlineUl>
           {/* Show first three */}
           {this.state.firstThree.map((agent, i) => {
-            if (agent.actor.person?.name || agent.actor.organization.pref_label) {
+            if (agent.person?.name || agent.organization.pref_label) {
               return (
                 <Agent
                   inline
                   lang={getPreferredLang(
-                    agent.actor.person?.name || agent.actor.organization.pref_label
+                    agent.person?.name || agent.organization.pref_label
                   )}
                   key={getValueTranslation(
-                    agent.actor.person?.name || agent.actor.organization.pref_label
+                    agent.person?.name || agent.organization.pref_label
                   )}
                   first={i === 0}
-                  agent={agent.actor}
+                  agent={agent}
                 />
               )
             }
@@ -86,17 +86,17 @@ class TogglableAgentList extends Component {
           {this.props.agents.length > 3 &&
             this.state.open &&
             this.state.rest.map(agent => {
-              if (agent.actor.person?.name || agent.actor.organization.pref_label) {
+              if (agent.person?.name || agent.organization.pref_label) {
                 return (
                   <Agent
                     inline
                     lang={getPreferredLang(
-                      agent.actor.person?.name || agent.actor.organization.pref_label
+                      agent.person?.name || agent.organization.pref_label
                     )}
                     key={getValueTranslation(
-                      agent.actor.person?.name || agent.actor.organization.pref_label
+                      agent.person?.name || agent.organization.pref_label
                     )}
-                    agent={agent.actor}
+                    agent={agent}
                   />
                 )
               }

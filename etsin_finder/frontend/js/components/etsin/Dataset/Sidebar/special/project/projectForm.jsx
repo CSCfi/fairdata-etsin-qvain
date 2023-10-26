@@ -75,8 +75,8 @@ const ProjectForm = ({ project, lang }) => {
             </Topic>
             <OrgList>
               {project.source_organization.map(org => (
-                <dd key={getValueTranslation(org.actor.organization.pref_label)}>
-                  <Agent lang={lang} first agent={org.actor} popupAlign="left-fit-content" />
+                <dd key={getValueTranslation(org.organization.pref_label)}>
+                  <Agent lang={lang} first agent={org} popupAlign="left-fit-content" />
                 </dd>
               ))}
             </OrgList>
@@ -111,7 +111,7 @@ const ProjectForm = ({ project, lang }) => {
                       <Translate content="dataset.project.funder" />
                     </Key>
                     <Value>
-                      <Agent lang={lang} first agent={agency.actor} popupAlign="left-fit-content" />
+                      <Agent lang={lang} first agent={agency} popupAlign="left-fit-content" />
                     </Value>
                   </div>
                 ))}

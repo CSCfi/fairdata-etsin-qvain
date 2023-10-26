@@ -115,12 +115,46 @@ class EtsinDatasetV2 {
       spatial: this.shapeSpatial(this.dataset.spatial),
       temporal: this.dataset.temporal,
       projects: this.shapeProjects(this.dataset.is_output_of),
-      infrastructure: this.dataset.infrastructure,
+      infrastructure: this.shapeInfrastructure(this.dataset.infrastructure),
     }
   }
 
   @computed get provenance() {
     return this.shapeProvenance(this.dataset?.provenance)
+  }
+
+  @computed get creators() {
+    if (!this.dataset.creator) return []
+    return this.dataset.creator.map(c => this.shapeActor(c, 'creator'))
+  }
+
+  @computed get contributors() {
+    if (!this.dataset.contributor) return []
+    return this.dataset.contributor?.map(c => this.shapeActor(c, 'contributor'))
+  }
+
+  @computed get curators() {
+    if (!this.dataset.curator) return []
+    return this.dataset.curator?.map(c => this.shapeActor(c, 'curator'))
+  }
+
+  @computed get publisher() {
+    return this.shapeActor(this.dataset.publisher, 'publisher')
+  }
+
+  @computed get rightsHolders() {
+    if (!this.dataset.rights_holder) return []
+    return this.dataset.rights_holder.map(r => this.shapeActor(r, 'rights_holder'))
+  }
+
+  @computed get actors() {
+    return {
+      creators: this.creators,
+      contributors: this.contributors,
+      curators: this.curators,
+      publisher: this.publisher,
+      rightsHolders: this.rightsHolders,
+    }
   }
 
   @computed get preservation() {
@@ -320,40 +354,6 @@ class EtsinDatasetV2 {
     return null
   }
 
-  @computed get creators() {
-    if (!this.dataset.creator) return []
-    return this.dataset.creator.map(c => this.shapeActor(c, 'creator'))
-  }
-
-  @computed get contributors() {
-    if (!this.dataset.contributor) return []
-    return this.dataset.contributor?.map(c => this.shapeActor(c, 'contributor'))
-  }
-
-  @computed get curators() {
-    if (!this.dataset.curator) return []
-    return this.dataset.curator?.map(c => this.shapeActor(c, 'curator'))
-  }
-
-  @computed get publisher() {
-    return this.shapeActor(this.dataset.publisher, 'publisher')
-  }
-
-  @computed get rightsHolders() {
-    if (!this.dataset.rights_holder) return []
-    return this.dataset.rights_holder.map(r => this.shapeActor(r, 'rights_holder'))
-  }
-
-  @computed get actors() {
-    return {
-      creators: this.creators,
-      contributors: this.contributors,
-      curators: this.curators,
-      publisher: this.publisher,
-      rightsHolders: this.rightsHolders,
-    }
-  }
-
   @action setShowCitationModal = value => {
     this.showCitationModal = value
   }
@@ -412,10 +412,8 @@ class EtsinDatasetV2 {
 
     return {
       role,
-      actor: {
-        organization,
-        person,
-      },
+      organization,
+      person,
     }
   }
 
@@ -491,6 +489,14 @@ class EtsinDatasetV2 {
         this.shapeActor(org)
       )
       return shapedProject
+    })
+  }
+
+  @action shapeInfrastructure(infrastructure) {
+    if (!infrastructure) return null
+    return infrastructure.map(infra => {
+      infra.id = infra.identifier
+      return infra
     })
   }
 }
