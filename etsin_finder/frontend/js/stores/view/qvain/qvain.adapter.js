@@ -116,7 +116,7 @@ class Adapter {
     const d = {
       id: dataset.id,
       identifier: dataset.id,
-      data_catalog: { identifier: dataset.data_catalog },
+      data_catalog: dataset.data_catalog && { identifier: dataset.data_catalog },
       research_dataset: {
         title: dataset.title,
         description: dataset.description,
