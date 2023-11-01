@@ -9,7 +9,7 @@ class FilesProcessor extends EtsinProcessor {
     makeObservable(this)
     this.Packages = new Packages(Env)
     this.Files = createFilesStore(Env)
-    this.client = this.Files
+    this.client = this.Files.client
   }
 
   @override

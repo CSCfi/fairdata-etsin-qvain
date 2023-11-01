@@ -119,14 +119,12 @@ class Etsin {
   constructResolvedCb(component, cb) {
     return action(data => {
       this.EtsinDataset.set(component, data)
-      this.isLoading[component] = false
       if (cb) cb(data)
     })
   }
 
   constructRejectedCb(component) {
     return action((error, translationFunction) => {
-      this.isLoading[component] = false
       if (isAbort(error)) {
         return
       }
@@ -157,17 +155,29 @@ class Etsin {
     this.setLoadingOn()
 
     await this.fetchDataset(id)
+
+    let promises
     if (!this.useDatasetV3) {
-      await this.fetchVersions()
-    } else
+      promises = [
+        this.fetchVersions(),
+        this.fetchRelations(id),
+        this.fetchFiles()
+      ]
+    }
+    else {
       runInAction(() => {
         this.isLoading.versions = false
+        this.isLoading.relations = false
       })
+      promises = [
+        this.fetchFiles()
+      ]
+    }
 
-    await this.fetchFiles()
-
-
-    this.requests = {}
+    return Promise.all(promises)
+      .finally(() => {
+        this.requests = {}
+      })
   }
 
   @action fetchDataset = async id => {
@@ -179,26 +189,9 @@ class Etsin {
       }),
     ]
 
-    const bypassRelations = () => {
-      this.isLoading.relations = false
-      return []
-    }
-
-    this.requests.relations = this.useDatasetV3
-      ? bypassRelations()
-      : [
-          this.relationsProcessor.fetch({
-            id,
-            resolved: this.constructResolvedCb('relations'),
-            rejected: this.constructRejectedCb('relations'),
-          }),
-        ]
-
-    const promises = [
-      ...this.requests.dataset.map(r => r.promise),
-      ...this.requests.relations.map(r => r.promise),
-    ]
+    const promises = [...this.requests.dataset.map(r => r.promise)]
     return Promise.all(promises)
+      .finally(this.setLoadingOff('dataset'))
   }
 
   @action
@@ -211,7 +204,8 @@ class Etsin {
       }),
     ]
 
-    return this.requests.files[0].promise
+    return Promise.resolve(this.requests.files[0].promise)
+      .finally(this.setLoadingOff('files'))
   }
 
   @action
@@ -226,28 +220,59 @@ class Etsin {
         rejected: this.constructRejectedCb('packages'),
       }),
     ]
-    return this.requests.packages[0].promise
+
+    return Promise.resolve(this.requests.packages[0].promise)
+      .finally(this.setLoadingOff('packages'))
   }
 
   @action
   fetchVersions = async () => {
     if (!this.EtsinDataset.datasetVersions) {
-      this.isLoading.versions = false
+      this.setLoadingOff('versions')
       return []
     }
 
     runInAction(() => {
-      this.requests.versions = Object.values(this.EtsinDataset.datasetVersions).map(version =>
-        this.datasetProcessor.fetch({
+      this.requests.versions = Object.values(this.EtsinDataset.datasetVersions).map(version => {
+        if(version.identifier === this.EtsinDataset.identifier) return null
+        return this.datasetProcessor.fetch({
           id: version.identifier,
           resolved: this.constructResolvedCb('versions'),
           rejected: this.constructRejectedCb('versions'),
         })
-      )
+      })
     })
 
-    const promises = this.requests.versions.map(r => r.promise)
+    const promises = this.requests.versions.filter(r => r).map(r => r.promise)
     return Promise.all(promises)
+      .finally(() => {
+        runInAction(() => {
+          this.EtsinDataset.versions.push(this.EtsinDataset)
+        })
+        this.setLoadingOff('versions')
+      })
+  }
+
+  @action
+  fetchRelations = async id => {
+    if (this.EtsinDataset.isRemoved || this.EtsinDataset.isDeprecated) {
+      runInAction(() => {
+        this.requests.relations = [
+          this.relationsProcessor.fetch({
+            id,
+            resolved: this.constructResolvedCb('relations'),
+            rejected: this.constructRejectedCb('relations'),
+          }),
+        ]
+      })
+
+      const promises = [...this.requests.relations.map(r => r.promise)]
+      return Promise.all(promises)
+        .finally(this.setLoadingOff('relations'))
+    }
+
+    this.setLoadingOff('relations')
+    return []
   }
 
   @action updateAccess = data => {
@@ -267,6 +292,10 @@ class Etsin {
     this.isLoading.relations = true
     this.isLoading.versions = true
     this.isLoading.files = true
+  }
+
+  @action.bound setLoadingOff(component) {
+    this.isLoading[component] = false
   }
 }
 

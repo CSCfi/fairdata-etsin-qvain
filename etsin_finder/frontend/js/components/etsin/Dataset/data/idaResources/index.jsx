@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
@@ -26,6 +26,7 @@ function IdaResources() {
     Etsin: {
       EtsinDataset: { useV3, identifier, files, isDownloadAllowed, downloadAllInfotext },
       filesProcessor: { Packages },
+      fetchPackages,
     },
   } = useStores()
 
@@ -34,6 +35,10 @@ function IdaResources() {
   const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel, root } = files
   const fileCount = root?.existingDirectChildCount || 0
   const totalSize = root?.existingByteSize || 0
+
+  useEffect(() => {
+    fetchPackages()
+  }, [fetchPackages])
 
   if (fileCount === 0) {
     return null
