@@ -2,16 +2,19 @@ import React from 'react'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
+import { useStores } from '@/stores/stores'
 
-const InfoItem = props =>
-  props.content ? (
+const InfoItem = props => {
+  const { Locale } = useStores()
+  return props.content ? (
     <tr>
       <th scope="row">
         <Translate content={props.translation} with={{ insertable: props.insertable }} />
       </th>
-      <InfoCell lang={props.lang || props.Stores.Locale.currentLang}>{props.content}</InfoCell>
+      <InfoCell lang={props.lang || Locale.currentLang}>{props.content}</InfoCell>
     </tr>
   ) : null
+}
 
 const InfoCell = styled.td`
   word-break: normal;
@@ -25,7 +28,6 @@ InfoItem.defaultProps = {
 }
 
 InfoItem.propTypes = {
-  Stores: PropTypes.object.isRequired,
   translation: PropTypes.string.isRequired,
   content: PropTypes.string,
   lang: PropTypes.string,

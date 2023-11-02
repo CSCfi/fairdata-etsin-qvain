@@ -94,8 +94,8 @@ class Auth {
     if (this.user.loggedIn) {
       // load v3 auth info
       const v3Enabled =
-        this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND') ||
-        this.Env.Flags.flagEnabled('ETSIN.METAX_V3.FRONTEND')
+        (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND') && this.Env.isQvain) ||
+        (this.Env.Flags.flagEnabled('ETSIN.METAX_V3.FRONTEND') && this.Env.isEtsin)
       if (v3Enabled) {
         const csrfRes = await axios.get(this.Env.metaxV3Url('user'), {
           withCredentials: true,

@@ -54,7 +54,7 @@ class Map {
   makeGeometryFromPlace = location => {
     const provider = new OpenStreetMapProvider()
     return provider
-      .search({ query: this.Locale.checkDataLang(location) })
+      .search({ query: this.Locale.getValueTranslation(location) })
       .then(results => [
         { type: 'Rectangle', coordinates: [results[0].bounds], bounds: results[0].bounds },
       ])

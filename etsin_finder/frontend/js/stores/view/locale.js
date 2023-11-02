@@ -224,22 +224,27 @@ class Locale {
     // - languages in the order of Locale.languages
     // - first language in the name object
     // - if no translations were found return undefined
-    if (!item || !item.name) {
+
+    if (!item) {
       return undefined
     }
 
-    if (item.name[this.lang] != null) {
+    if (typeof item !== 'object') {
+      return undefined
+    }
+
+    if (item[this.lang] != null) {
       return this.lang
     }
 
     for (const lang of languages) {
-      if (item.name[lang] != null) {
+      if (item[lang] != null) {
         return lang
       }
     }
 
-    if (Object.keys(item.name).length > 0) {
-      return Object.keys(item.name)[0]
+    if (Object.keys(item).length > 0) {
+      return Object.keys(item)[0]
     }
 
     return undefined
@@ -271,7 +276,7 @@ class Locale {
       if (start === end) {
         return this.dateFormat(start, { format: 'date' })
       }
-      return `${this.dateFormat(start, { format: 'date' })} &ndash; ${this.dateFormat(end, {
+      return `${this.dateFormat(start, { format: 'date' })} – ${this.dateFormat(end, {
         format: 'date',
       })}`
     }

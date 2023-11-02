@@ -10,17 +10,17 @@ const DatasetDateInfo = () => {
     Etsin: {
       EtsinDataset: { datasetMetadata },
     },
-    Locale: { dateFormat, getPreferredLang, getValueTranslation },
+    Locale: { dateFormat, lang },
   } = useStores()
 
   return (
     <DateInfo>
       {datasetMetadata.releaseDate && (
-        <p lang={getPreferredLang(datasetMetadata.releaseDate)}>
+        <p lang={lang}>
           <Translate
             content="dataset.issued"
             with={{
-              date: dateFormat(getValueTranslation(datasetMetadata.releaseDate), { format: 'date' }),
+              date: dateFormat(datasetMetadata.releaseDate, { format: 'date' }),
             }}
           />
           <br />
@@ -28,7 +28,7 @@ const DatasetDateInfo = () => {
             <Translate
               content="dataset.modified"
               with={{
-                date: dateFormat(getValueTranslation(datasetMetadata.modified), { format: 'date' }),
+                date: dateFormat(datasetMetadata.modified, { format: 'date' }),
               }}
             />
           )}

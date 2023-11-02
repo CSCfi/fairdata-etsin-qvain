@@ -24,7 +24,7 @@ const printDate = (Locale, temp) => {
   }
   return (
     <span>
-      {dateFormat(temp.start_date)} &ndash; {dateFormat(temp.end_date)}
+      {dateFormat(temp.start_date)} – {dateFormat(temp.end_date)}
     </span>
   )
 }
@@ -58,8 +58,8 @@ const Event = props => {
               return (
                 <InlineUl key={`ul-${getValueTranslation(associate.name)}`}>
                   <Agent
-                    lang={getPreferredLang(associate, undefined)}
-                    key={getValueTranslation(associate) || associate.name}
+                    lang={getPreferredLang(associate.name)}
+                    key={getValueTranslation(associate.name) || associate.name}
                     first={i === 0}
                     agent={associate}
                   />

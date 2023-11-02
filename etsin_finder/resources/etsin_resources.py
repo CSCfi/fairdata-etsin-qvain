@@ -195,7 +195,7 @@ class RelatedDatasets(MethodView):
             list: Returns a list of preferred identifiers of existing datasets.
                   that has relation to this dataset.
         """
-        cr = cr_service.get_catalog_record(cr_id, False, False)
+        cr = cr_service.get_catalog_record(cr_id, True, False)
         if not cr:
             abort(400, message="Unable to get catalog record")
 

@@ -45,7 +45,7 @@ const Event = ({ event }) => {
             if (name) {
               return (
                 <Agent
-                  lang={getPreferredLang(associate)}
+                  lang={getPreferredLang(name)}
                   key={name}
                   first={i === 0}
                   agent={associate}

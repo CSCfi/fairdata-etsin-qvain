@@ -66,11 +66,11 @@ class Maps extends Component {
 
   buildLocationRow(spatial) {
     const {
-      Locale: { getPreferredLang },
+      Locale: { getValueTranslation },
     } = this.props.Stores
 
     // Datasets submitted via API don't require geographic name for location, in which case the name comes from place_uri
-    const locationName = spatial.geographic_name || getPreferredLang(spatial.place_uri?.pref_label)
+    const locationName = spatial.geographic_name || getValueTranslation(spatial.place_uri?.pref_label)
 
     return (
       <tr key={`location-${locationName}`}>
