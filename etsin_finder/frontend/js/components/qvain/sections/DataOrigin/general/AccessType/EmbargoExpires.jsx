@@ -27,8 +27,13 @@ const EmbargoExpires = () => {
 
   return (
     <FieldGroup>
-      <Translate component={Title} content="qvain.rightsAndLicenses.embargoDate.label" />
+      <Translate
+        component={Title}
+        content="qvain.rightsAndLicenses.embargoDate.label"
+        htmlFor="embargo-date"
+      />
       <DatePicker
+        id="embargo-date"
         strictParsing
         selected={embargoExpDate ? new Date(embargoExpDate) : null}
         onChangeRaw={e => e && handleDatePickerChange(e.target.value, setEmbargoExpDate)}

@@ -70,6 +70,7 @@ class Adapter {
       access_type: this.refdataV3ToV2(value.access_type),
       restriction_grounds: this.refdataV3ToV2(value.restriction_grounds),
       license: this.refdataV3ToV2(value.license),
+      available: value.available,
     }
   }
 
@@ -169,7 +170,7 @@ class Adapter {
       access_type: this.refdataV2ToV3(value.access_type),
       restriction_grounds: this.refdataV2ToV3(value.restriction_grounds),
       license: this.refdataV2ToV3(value.license),
-      // available: // TODO
+      available: value.available,
     }
   }
 

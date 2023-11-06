@@ -16,7 +16,7 @@ import etsinTheme from '@/styles/theme'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 
-import dataset from '../../__testdata__/v3dataset.data'
+import dataset, { accessRightsEmbargo } from '../../__testdata__/v3dataset.data'
 import Qvain from '@/components/qvain/views/main'
 import { flatten, removeMatchingKeys } from '@/utils/flatten'
 
@@ -291,5 +291,48 @@ describe('Qvain with an opened dataset', () => {
     expect(
       within(within(modal).getByText('File Type').closest('div')).getByText('Audiovisual')
     ).toBeInTheDocument()
+  })
+
+  it('shows embargo date and restriction grounds', async () => {
+    const section = await renderSection('Data Origin', {
+      access_rights: accessRightsEmbargo,
+    })
+
+    expect(within(section).getByLabelText('Embargo expiration date').value).toEqual('12/24/2023')
+
+    expect(
+      within(within(section).getByText('Restriction Grounds').closest('div')).getByText(
+        'Restriced access for research based on contract'
+      )
+    ).toBeInTheDocument()
+  })
+
+  it('when submit draft is clicked, submits restriction grounds and embargo date', async () => {
+    // fields not expected to be present in the submitted data
+    const expectedMissing = [
+      // id not supported
+      /id$/,
+      // redundant reference data
+      /\.in_scheme$/,
+      /\.pref_label\..+/,
+      /\.reference\.as_wkt$/,
+      // not supported yet
+      "description",
+      /license\.\d+\.custom_url$/,
+      /license\.\d+\.description$/,
+    ]
+
+    // fields missing from original that may be added to submit data
+    const expectedExtra = []
+
+    await renderQvain({
+      access_rights: accessRightsEmbargo,
+    })
+    const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    await userEvent.click(submitButton) // should submit data to metax
+    const submitRights = JSON.parse(mockAdapter.history.put[0].data).access_rights
+    const flatRights = removeMatchingKeys(flatten(accessRightsEmbargo), expectedMissing)
+    const flatSubmitResources = removeMatchingKeys(flatten(submitRights), expectedExtra)
+    expect(flatSubmitResources).toEqual(flatRights)
   })
 })

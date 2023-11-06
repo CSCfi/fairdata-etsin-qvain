@@ -326,4 +326,26 @@ const dataset = {
   replaces: null,
 }
 
+export const accessRightsEmbargo = {
+  ...dataset.access_rights,
+  access_type: {
+    url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/embargo',
+    in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
+    pref_label: { en: 'Embargo', fi: 'Embargo' },
+  },
+  restriction_grounds: [
+    {
+      "id": "6cedbc74-0b3a-41f1-91ae-fd1f4cbcbe1c",
+      "url": "http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/research",
+      "in_scheme": "http://uri.suomi.fi/codelist/fairdata/restriction_grounds",
+      "pref_label": {
+        "en": "Restriced access for research based on contract",
+        "fi": "Saatavuutta rajoitettu sopimuksen perusteella vain tutkimuskäyttöön",
+        "sv": "Begränsad åtkomst på bas av kontrakt ändast för forskningsändamål"
+      }
+    }
+  ],
+  available: '2023-12-24',
+}
+
 export default dataset
