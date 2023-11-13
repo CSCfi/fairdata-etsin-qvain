@@ -9,11 +9,12 @@ class FilesProcessor extends EtsinProcessor {
     makeObservable(this)
     this.Packages = new Packages(Env)
     this.Files = createFilesStore(Env)
-    this.client = this.Files.client
+    this.filesClient = this.Files.client
+    this.packagesClient = this.Packages.client
   }
 
   @override
-  async fetch({ dataset, resolved, rejected }) {
+  fetch({ dataset, resolved, rejected }) {
     if (!dataset.identifier) return null
     this.Packages.clearPackages()
     const id = dataset.identifier
@@ -24,18 +25,21 @@ class FilesProcessor extends EtsinProcessor {
       .catch(rej => {
         if (rejected) rejected(rej)
       })
-    return { id, promise, abort: () => this.client.abort() }
+    return { id, promise, abort: () => this.filesClient.abort() }
   }
 
   @action.bound
-  async fetchPackages({ catalogRecord, resolved, rejected }) {
-    try {
-      await this.Packages.fetch(catalogRecord.identifier)
-      if (resolved) resolved(this.Packages)
-    } catch (e) {
-      console.log('failed to fetch packages:', e)
-      if (rejected) rejected(e)
-    }
+  fetchPackages({ dataset, resolved, rejected }) {
+    const id = dataset.identifier
+    const promise = this.Packages.fetch(id)
+      .then(() => {
+        if (resolved) resolved(this.Packages)
+      })
+      .catch(e => {
+        console.log('failed to fetch packages:', e)
+        if (rejected) rejected(e)
+      })
+    return { id, promise, abort: () => this.packagesClient.abort() }
   }
 }
 

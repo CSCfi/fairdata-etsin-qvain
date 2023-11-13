@@ -69,7 +69,7 @@ const Event = ({ event }) => {
       {/* DESCRIPTION */}
       <td>
         {event.description && !showPreservationEvent && getValueTranslation(event.description)}
-        {showPreservationEvent && (
+        {showPreservationEvent && (preservation.useCopy || preservation.preservedCopy) && (
           <Link
             to={`/dataset/${
               preservation.useCopy

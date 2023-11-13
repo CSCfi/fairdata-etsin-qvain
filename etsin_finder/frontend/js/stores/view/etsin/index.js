@@ -82,6 +82,7 @@ class Etsin {
       dataset: [],
       relations: [],
       versions: [],
+      custom: [],
     }
 
     this.errors = {
@@ -215,7 +216,7 @@ class Etsin {
     this.isLoading.packages = true
     this.requests.packages = [
       this.filesProcessor.fetchPackages({
-        catalogRecord: this.EtsinDataset.catalogRecord,
+        dataset: this.EtsinDataset,
         resolved: this.constructResolvedCb('packages'),
         rejected: this.constructRejectedCb('packages'),
       }),

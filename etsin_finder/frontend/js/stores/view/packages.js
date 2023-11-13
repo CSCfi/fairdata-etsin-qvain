@@ -1,9 +1,9 @@
 import { observable, action, makeObservable, runInAction, computed } from 'mobx'
-import axios from 'axios'
 import urls from '../../utils/urls'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../utils/constants'
 import Notifications from './packages.notifications'
+import AbortClient from '@/utils/AbortClient'
 
 class Packages {
   // Download API package handling
@@ -11,6 +11,7 @@ class Packages {
   constructor(Env) {
     this.Env = Env
     this.Notifications = new Notifications(this)
+    this.client = new AbortClient()
     makeObservable(this)
   }
 
@@ -138,7 +139,7 @@ class Packages {
       scope.forEach(path => {
         this.setRequestingPackageCreation(path, true)
       })
-      const resp = await axios.post(urls.dl.packages(), params)
+      const resp = await this.client.post(urls.dl.packages(), params)
       const { partial, ...full } = resp.data
 
       this.Notifications.subscribe(params)
@@ -200,7 +201,7 @@ class Packages {
       let response
       try {
         const url = `${urls.dl.packages()}?cr_id=${datasetIdentifier}`
-        response = await axios.get(url)
+        response = await this.client.get(url)
         this.clearError()
       } catch (err) {
         this.clearPackages()

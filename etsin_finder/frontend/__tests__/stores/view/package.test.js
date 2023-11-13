@@ -243,7 +243,7 @@ describe('Packages', () => {
     })
 
     test('should call axios.post with correct url and params', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), params)
+      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), params, {"signal": expect.any(AbortSignal)})
     })
   })
 
@@ -258,7 +258,7 @@ describe('Packages', () => {
     })
 
     test('should eventially call axios.post with expectedParams', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), expectedParams)
+      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), expectedParams, {"signal": expect.any(AbortSignal)})
     })
   })
 
@@ -273,7 +273,7 @@ describe('Packages', () => {
     })
 
     test('should eventially call axios.post with expectedParams', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), expectedParams)
+      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), expectedParams, {"signal": expect.any(AbortSignal)})
     })
   })
 
@@ -319,7 +319,7 @@ describe('Packages', () => {
     })
 
     test('should call axios.get', () => {
-      expect(axios.get).toHaveBeenCalledWith('/api/download/requests?cr_id=identifier')
+      expect(axios.get).toHaveBeenCalledWith('/api/download/requests?cr_id=identifier', {"signal": expect.any(AbortSignal)})
     })
 
     test('should set datasetIdentifier', () => {
