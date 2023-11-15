@@ -107,7 +107,7 @@ class Etsin {
   @action.bound abortAllRequests() {
     Object.values(this.requests).forEach(component =>
       component.forEach(r => {
-        r.abort()
+        r?.abort()
       })
     )
   }
@@ -156,6 +156,8 @@ class Etsin {
     this.setLoadingOn()
 
     await this.fetchDataset(id)
+
+    if (!this.EtsinDataset.identifier) return []
 
     let promises
     if (!this.useDatasetV3) {
