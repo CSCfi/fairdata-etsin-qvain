@@ -104,7 +104,7 @@ const Sidebar = () => {
 
   return (
     <SidebarContainer id="sidebar">
-      {dataCatalog.dataset_versioning && isVersion && <VersionChanger />}
+      {dataCatalog.dataset_versioning && !isDraft && isVersion && <VersionChanger />}
       <SidebarArea id="data-catalog-area">
         {dataCatalog?.logo && (
           <DatasetInfoItem id="catalog-logo">

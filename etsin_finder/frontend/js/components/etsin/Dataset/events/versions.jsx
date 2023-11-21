@@ -20,11 +20,11 @@ const Versions = () => {
   const {
     Locale,
     Etsin: {
-      EtsinDataset: { identifier, datasetVersions, versionTitles },
+      EtsinDataset: { identifier, hasVersion, datasetVersions, versionTitles },
     },
   } = useStores()
 
-  if (!(datasetVersions?.length > 1)) {
+  if (!hasVersion) {
     return null
   }
 
