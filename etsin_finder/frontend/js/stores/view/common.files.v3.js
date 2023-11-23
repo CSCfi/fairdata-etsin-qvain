@@ -9,7 +9,7 @@ class FilesBaseV3 extends FilesBase {
     this.reset()
     this.datasetIdentifier = dataset.identifier
     const datasetContent = dataset.dataset || dataset
-    this.selectedProject = datasetContent.fileset?.project
+    this.selectedProject = datasetContent.fileset?.csc_project
     if (this.selectedProject) {
       this.projectLocked = true
     }

@@ -90,7 +90,7 @@ class QvainFilesV3 extends QvainFilesMixin(FilesBaseV3) {
       directory_actions: actions.directories,
       file_actions: actions.files,
       storage_service: 'ida',
-      project: this.selectedProject,
+      csc_project: this.selectedProject,
     }
   }
 }

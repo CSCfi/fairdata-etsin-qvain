@@ -34,7 +34,7 @@ const getChildDataUrl = (Files, dir, sort) => {
   if (Files.useV3) {
     url = new URL(Files.Env.metaxV3Url('directories'))
     url.searchParams.set('storage_service', 'ida')
-    url.searchParams.set('project', Files.selectedProject)
+    url.searchParams.set('csc_project', Files.selectedProject)
     url.searchParams.set('path', dir.identifier || dir.path)
     url.searchParams.set('directory_fields', ['pathname', 'file_count', 'size'].join(','))
     url.searchParams.set('directory_ordering', sort.directoryOrderingV3)
@@ -337,7 +337,7 @@ const fetchItems = async ({ Files, dir, offset, limit, type, sort, filter = '' }
     url = new URL(Files.Env.metaxV3Url('directories'))
     url.searchParams.set('path', dir.identifier || dir.path)
     url.searchParams.set('storage_service', 'ida')
-    url.searchParams.set('project', Files.selectedProject)
+    url.searchParams.set('csc_project', Files.selectedProject)
   }
 
   url.searchParams.set('pagination', true)
