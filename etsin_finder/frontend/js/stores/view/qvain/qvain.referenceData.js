@@ -5,7 +5,7 @@ import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
 // Mapping for reference types that aren't a direct '_' -> '-' change
 const v2ToV3Mapping = {
-  keyword: 'theme',
+  keyword: 'themes',
   field_of_science: 'fields-of-science',
   use_category: 'use-categories',
 }
@@ -27,7 +27,7 @@ class ReferenceData {
   }
 
   getV3ReferenceDataType(referenceData) {
-    return v2ToV3Mapping[referenceData] || referenceData.replaceAll('_', '-')
+    return v2ToV3Mapping[referenceData] || `${referenceData.replaceAll('_', '-')}s`
   }
 
   esReferenceDataToOptions(data) {

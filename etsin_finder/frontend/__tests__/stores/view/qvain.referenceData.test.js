@@ -80,7 +80,7 @@ describe.each([
   [
     'file_format_version',
     'https://metax.fairdata.fi/es/reference_data/file_format_version/_search',
-    'https://metaxv3host:443/v3/reference-data/file-format-version',
+    'https://metaxv3host:443/v3/reference-data/file-format-versions',
     [
       {
         id: 1,
