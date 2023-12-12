@@ -34,7 +34,7 @@ const ActorItem = ({ actor }) => {
 
   return (
     <FieldListContainer>
-      <FieldListLabel>
+      <FieldListLabel className='actor-label'>
         <ActorIcon actor={actor} style={{ marginRight: '8px' }} />
         {getActorName(actor, lang)}
         {actor.roles.map(translateRole)}

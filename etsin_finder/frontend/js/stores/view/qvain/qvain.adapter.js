@@ -1,5 +1,6 @@
 import parseDateISO from 'date-fns/parseISO'
 import format from 'date-fns/format'
+import { ENTITY_TYPE } from '@/utils/constants'
 
 class Adapter {
   constructor(Qvain) {
@@ -23,6 +24,8 @@ class Adapter {
       this.spatialV3ToV2,
       this.temporalV2ToV3,
       this.temporalV3ToV2,
+      this.orgV3ToV2,
+      this.actorV3ToV2,
     ]
     adapterFuncs.forEach(this.makeBoundAdapterFunc)
   }
@@ -112,6 +115,39 @@ class Adapter {
     return { ...value }
   }
 
+  orgV3ToV2(value) {
+    return {
+      '@type': ENTITY_TYPE.ORGANIZATION,
+      name: value.pref_label,
+      is_part_of: this.orgV3ToV2(value.parent),
+      identifier: value.external_identifier,
+      url: value.url,
+      email: value.email,
+      homepage: value.homepage,
+      is_reference: !!value.url,
+      id: value.id,
+    }
+  }
+
+  actorV3ToV2(actor) {
+    let obj
+    if (actor.person) {
+      obj = {
+        '@type': ENTITY_TYPE.PERSON,
+        name: actor.person.name,
+        member_of: this.orgV3ToV2(actor.organization),
+        id: actor.person.id,
+        email: actor.person.email,
+        identifier: actor.person.external_identifier,
+      }
+    } else {
+      obj = this.orgV3ToV2(actor.organization)
+    }
+    obj.roles = actor.roles || []
+    obj.actor_id = actor.id
+    return obj
+  }
+
   convertV3ToV2(dataset) {
     // Convert Metax V3 object to V2-style input object.
     const d = {
@@ -132,6 +168,7 @@ class Adapter {
         relation: this.relationV3ToV2(dataset.relation),
         temporal: this.temporalV3ToV2(dataset.temporal),
         remote_resources: this.remoteResourceV3ToV2(dataset.remote_resources),
+        actors: this.actorV3ToV2(dataset.actors), // needs v3 actors store
       },
       state: 'draft',
     }
@@ -223,6 +260,7 @@ class Adapter {
       relation: this.relationV2ToV3(dataset.relation),
       temporal: this.temporalV2ToV3(dataset.temporal),
       remote_resources: this.remoteResourceV2ToV3(dataset.remote_resources),
+      actors: dataset.actors, // conversion done in actors store
     }
 
     // include v3 fileset object as it is

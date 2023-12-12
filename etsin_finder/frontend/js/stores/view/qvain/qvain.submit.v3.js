@@ -94,7 +94,7 @@ class SubmitV3 extends Submit {
 
   updateDataset = async dataset => {
     const url = this.Qvain.Env.metaxV3Url('dataset', dataset.id)
-    const { data } = await axios.put(url, dataset)
+    const { data } = await axios.patch(url, dataset)
     return data
   }
 

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { ActorsRef } from '../../../js/stores/view/qvain/qvain.actors'
+import { ActorsRef, isEqual } from '../../../js/stores/view/qvain/qvain.actors'
 
 describe('ActorsRef', () => {
   describe('given existing actors', () => {
@@ -9,6 +9,7 @@ describe('ActorsRef', () => {
         { uiid: 1, roles: ['mother', 'Ph.D. in Math'], isReference: false },
         { uiid: 2, roles: ['father', 'cleaner'], isReference: false },
       ],
+      isActorEqual: (org1, org2) => isEqual(org1, org2, ['uiid', 'roles', 'isReference']),
     }
     const actorsFromBackend = []
     const roles = []

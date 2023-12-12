@@ -65,7 +65,7 @@ const App = () => {
 
   // Load runtime config
   const configure = async () => {
-    await Env.fetchAppConfig()  
+    await Env.fetchAppConfig()
     const Stores = buildStores({ Env })
     setStores(Stores)
     const { Accessibility, Auth, Locale } = Stores

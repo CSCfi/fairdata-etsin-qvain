@@ -26,7 +26,7 @@ const ActorsList = ({ actors, items, language }) => {
     const name = `${actorName} / ${rolesStr.join(' / ')}`
     return (
       <ButtonGroup tabIndex="0" key={actor.value}>
-        <ActorLabel>{name}</ActorLabel>
+        <ActorLabel className="actor-label">{name}</ActorLabel>
         <ListItemButtonContainer>
           {!readonly && (
             <Translate

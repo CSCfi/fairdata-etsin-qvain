@@ -8,7 +8,10 @@ const handleSubmitToBackend = Qvain => {
 
   const theme = Qvain.SubjectHeadings.toBackend()
 
-  const { creator, publisher, curator, rights_holder, contributor } = Qvain.Actors.toBackend()
+
+  // in v2 { creator, publisher, rights_holder, curator, contributor }
+  // in v3 { actors }
+  const actors = Qvain.Actors.toBackend()
 
   const spatial = Qvain.Spatials.toBackend()
 
@@ -44,11 +47,7 @@ const handleSubmitToBackend = Qvain => {
     other_identifier: Qvain.OtherIdentifiers.toBackend(),
     keyword,
     theme,
-    creator,
-    publisher,
-    rights_holder,
-    curator,
-    contributor,
+    ...actors,
     infrastructure: Qvain.Infrastructures.toBackend(),
     access_rights: {
       license,

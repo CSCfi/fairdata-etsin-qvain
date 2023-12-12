@@ -163,7 +163,7 @@ export const metaxActorsSchema = yup.array().of(metaxActorSchema)
 // HELPERS
 
 // Returns a Actor.
-const createActor = (actorJson, roles) => {
+export const createActor = (actorJson, roles) => {
   const entityType = actorJson['@type']
 
   const flattenOrganizations = org => {
@@ -176,7 +176,10 @@ const createActor = (actorJson, roles) => {
           name: { ...currentOrg.name },
           email: currentOrg.email,
           identifier: currentOrg.identifier,
-          isReference: null, // null here means we aren't sure yet
+          isReference: currentOrg.is_reference ?? null, // null here means we are not sure yet
+          uiid: currentOrg.id,
+          url: currentOrg.url,
+          homepage: currentOrg.homepage,
         })
       )
       currentOrg = currentOrg.is_part_of
@@ -191,6 +194,7 @@ const createActor = (actorJson, roles) => {
       name: actorJson.name,
       email: actorJson.email,
       identifier: actorJson.identifier,
+      uiid: actorJson.id,
     })
     organizations = flattenOrganizations(actorJson.member_of)
   }
@@ -204,6 +208,7 @@ const createActor = (actorJson, roles) => {
     person,
     roles,
     organizations,
+    uiid: actorJson.actor_id,
   })
 }
 
@@ -260,13 +265,9 @@ const actorToMetax = origActor => {
   return person
 }
 
-const isActorEqual = (org1, org2) => isEqual(org1, org2, ['uiid', 'roles', 'isReference'])
-
-const isOrganizationEqual = (org1, org2) => isEqual(org1, org2, ['uiid', 'isReference'])
-
 // Compare two objects to see if they are the same.
 // Optionally ignore specific keys (e.g. uiid).
-const isEqual = (a1, a2, ignore = []) => {
+export const isEqual = (a1, a2, ignore = []) => {
   const isDifferent = (a, b) => {
     if (a && b && typeof a === 'object' && typeof b === 'object') {
       return Object.keys(a).some(key => !ignore.includes(key) && isDifferent(a[key], b[key]))
@@ -284,13 +285,19 @@ const isEqual = (a1, a2, ignore = []) => {
 let actorUIIDCounter = 0
 export const createActorUIID = () => {
   actorUIIDCounter += 1
-  return actorUIIDCounter
+  return `#${actorUIIDCounter}`
 }
 
 let orgUIIDCounter = 0
 export const createOrgUIID = () => {
   orgUIIDCounter += 1
-  return orgUIIDCounter
+  return `#${orgUIIDCounter}`
+}
+
+let personUIIDCounter = 0
+export const createPersonUIID = () => {
+  personUIIDCounter += 1
+  return `#${personUIIDCounter}`
 }
 
 export const Actor = ({
@@ -307,10 +314,16 @@ export const Actor = ({
   uiid,
 })
 
-export const Person = ({ name = '', email = '', identifier = '' } = {}) => ({
+export const Person = ({
+  name = '',
+  email = '',
+  identifier = '',
+  uiid = createPersonUIID(),
+} = {}) => ({
   name,
   email,
   identifier,
+  uiid,
 })
 
 export const Organization = ({
@@ -318,6 +331,8 @@ export const Organization = ({
   email = '',
   identifier = '',
   isReference = false,
+  url = null,
+  homepage = null,
   uiid = createOrgUIID(),
 } = {}) => ({
   name,
@@ -325,6 +340,8 @@ export const Organization = ({
   identifier, // Organization URI
   isReference,
   uiid,
+  url,
+  homepage,
 })
 
 class Actors {
@@ -374,6 +391,10 @@ class Actors {
     this.loadingReferenceOrganizations = {}
     this.referenceOrganizationErrors = {}
   }
+
+  isActorEqual = (org1, org2) => isEqual(org1, org2, ['uiid', 'roles', 'isReference'])
+
+  isOrganizationEqual = (org1, org2) => isEqual(org1, org2, ['uiid', 'isReference'])
 
   getReferenceOrganizations = parent => {
     if (parent && !maybeReference(parent.identifier)) {
@@ -459,7 +480,7 @@ class Actors {
     await this.mergeActorsOrganizationsWithReferences()
   }
 
-  @action fetchReferenceOrganizations = async parent => {
+  @action.bound async fetchReferenceOrganizations(parent) {
     // Fetch child reference organizations of parent organization,
     // or all top-level organizations if no parent is defined.
     if (parent && !maybeReference(parent.identifier)) {
@@ -513,8 +534,8 @@ class Actors {
     this.onSuccessfulCreationCallbacks = []
   }
 
-  @action
-  fromBackend = researchDataset => {
+  @action.bound
+  fromBackend(researchDataset) {
     // Load actors
     this.orphanActors = []
     const actors = []
@@ -599,7 +620,7 @@ class Actors {
         if (!refs) {
           return // references not loaded yet
         }
-        const match = refs.find(refOrg => isOrganizationEqual(org, refOrg))
+        const match = refs.find(refOrg => this.isOrganizationEqual(org, refOrg))
         if (match) {
           if (actor === this.actorInEdit) {
             // actorInEdit should remain a copy until it is saved
@@ -620,7 +641,7 @@ class Actors {
     this.actors.forEach(actor => {
       actor.organizations.forEach((org, index) => {
         for (const otherOrg of orgs) {
-          if (isOrganizationEqual(org, otherOrg)) {
+          if (this.isOrganizationEqual(org, otherOrg)) {
             actor.organizations[index] = otherOrg
             return
           }
@@ -642,7 +663,7 @@ class Actors {
         if (actor1 === actor2) {
           return
         }
-        if (isActorEqual(actor1, actor2)) {
+        if (this.isActorEqual(actor1, actor2)) {
           actor1.roles = [...new Set([...actor1.roles, ...actor2.roles])]
           delete actors[index]
         }
@@ -759,7 +780,7 @@ class Actors {
     return existingRoles.has(role)
   }
 
-  toBackend = () => {
+  toBackend() {
     const roles = ['creator', 'publisher', 'curator', 'rights_holder', 'contributor']
     const result = {}
 
@@ -801,15 +822,15 @@ export class ActorsRef {
 
   @observable actorsRef = {}
 
-  @action clone = () => {
+  @action.bound clone() {
     const ref = new ActorsRef({ actors: this.actors, roles: this.roles })
     ref.actorsRef = { ...this.actorsRef }
     return ref
   }
 
-  @action setActorsRef = (afbs, roles) => {
+  @action.bound setActorsRef(afbs, roles) {
     const actorsRefArray = this.actors.actors.filter(actor =>
-      afbs.find(afb => isActorEqual(afb, actor))
+      afbs.find(afb => this.actors.isActorEqual(afb, actor))
     )
 
     this.actorsRef = actorsRefArray.reduce((obj, ref) => {
@@ -820,9 +841,9 @@ export class ActorsRef {
     roles.forEach(role => this.addRoleForAll(role))
   }
 
-  @action addRefsOnlyToActors = afbs => {
+  @action.bound addRefsOnlyToActors(afbs) {
     afbs.forEach(afb => {
-      const isInActors = this.actors.actors.find(actor => isActorEqual(afb, actor))
+      const isInActors = this.actors.actors.find(actor => this.actors.isActorEqual(afb, actor))
       if (!isInActors) {
         this.actors.actors.push(afb)
       }

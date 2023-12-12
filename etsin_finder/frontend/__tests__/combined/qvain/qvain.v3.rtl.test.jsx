@@ -14,6 +14,7 @@ import parseDateISO from 'date-fns/parseISO'
 import '../../../locale/translations'
 import etsinTheme from '@/styles/theme'
 import { buildStores } from '@/stores'
+import EnvClass from '@/stores/domain/env'
 import { StoresProvider } from '@/stores/stores'
 
 import dataset, { accessRightsEmbargo } from '../../__testdata__/v3dataset.data'
@@ -23,6 +24,7 @@ import { flatten, removeMatchingKeys } from '@/utils/flatten'
 // axios mocks
 const mockAdapter = new MockAdapter(axios)
 mockAdapter.onGet(new RegExp('/v3/reference-data/.*')).reply(200, [])
+mockAdapter.onGet(new RegExp('/v3/organizations')).reply(200, [])
 beforeEach(() => {
   mockAdapter.resetHistory()
 })
@@ -33,11 +35,12 @@ const getSection = name => screen.getByRole('heading', { name }).parentElement
 const renderQvain = async (overrides = {}) => {
   const metaxDataset = { ...dataset, ...overrides }
   mockAdapter.onGet(`https://metaxv3:443/v3/datasets/${metaxDataset.id}`).reply(200, metaxDataset)
-  mockAdapter.onPut(`https://metaxv3:443/v3/datasets/${metaxDataset.id}`).reply(200, metaxDataset)
+  mockAdapter.onPatch(`https://metaxv3:443/v3/datasets/${metaxDataset.id}`).reply(200, metaxDataset)
 
-  const stores = buildStores()
-  stores.Env.Flags.setFlag('QVAIN.METAX_V3.FRONTEND', true)
-  stores.Env.setMetaxV3Host('metaxv3', 443)
+  const Env = new EnvClass()
+  Env.Flags.setFlag('QVAIN.METAX_V3.FRONTEND', true)
+  Env.setMetaxV3Host('metaxv3', 443)
+  const stores = buildStores({ Env })
 
   render(
     <ThemeProvider theme={etsinTheme}>
@@ -87,6 +90,36 @@ describe('Qvain with an opened dataset', () => {
     expect(within(section).getByDisplayValue('06/28/2023')).toBeInTheDocument()
   })
 
+  it('adds actor in modal', async () => {
+    const section = await renderSection('Actors')
+    const getActorLabels = elem =>
+      Array.from(elem.getElementsByClassName('actor-label')).map(v => v.textContent)
+    expect(getActorLabels(section)).toEqual([
+      'Kone Foundation / Creator / Curator',
+      'Kuvitteellinen Henkilö / Creator',
+      'Test org, Test dept / Publisher',
+    ])
+
+    // const actor = within(section).getByText('Kuvitteellinen Henkilö / Creator').parentElement
+    // const editButton = within(actor).getByLabelText('Edit')
+    await userEvent.click(within(section).getByText('Add new actor')) // should open modal
+
+    const modal = screen.getByRole('dialog')
+    expect(within(modal).getByRole('heading', { name: 'Edit actor' })).toBeInTheDocument()
+    await userEvent.click(within(modal).getByLabelText('Rights holder'))
+    await userEvent.type(within(modal).getByLabelText('Name', { exact: false }), 'Teppo Testaaja')
+    await userEvent.click(modal.querySelector('#orgField'))
+    await userEvent.click(within(modal).getByText('Test org, Test dept'))
+    await userEvent.click(within(modal).getByText('Apply changes'))
+
+    expect(getActorLabels(section)).toEqual([
+      'Kone Foundation / Creator / Curator',
+      'Kuvitteellinen Henkilö / Creator',
+      'Test org, Test dept / Publisher',
+      'Teppo Testaaja / Rights holder',
+    ])
+  })
+
   it('shows time period', async () => {
     const section = await renderSection('Time period')
     expect(within(section).getByText('2023-09-20 – 2023-11-25')).toBeInTheDocument()
@@ -125,14 +158,13 @@ describe('Qvain with an opened dataset', () => {
       'persistent_identifier',
       'cumulation_started',
       /^metadata_owner\..+/,
-      // id not supported
-      /\.id$/,
+      // id not supported outside actors
+      /^(?!actors\.).*.id$/,
       // redundant reference data
       /\.in_scheme$/,
       /\.pref_label\..+/,
       /\.reference\.as_wkt$/,
       // fields not yet supported
-      /^actors\./,
       /^access_rights\.description/,
       /license\.\d+\.custom_url$/,
       /license\.\d+\.description$/,
@@ -147,6 +179,10 @@ describe('Qvain with an opened dataset', () => {
       'title.sv',
       'description.sv',
       /\.und$/,
+      // actor related
+      /\.pref_label\..+/,
+      /\.person\.id$/,
+      /\.person\.external_id$/,
       // special handling
       'issued', // exact value may change
     ]
@@ -154,7 +190,7 @@ describe('Qvain with an opened dataset', () => {
     await renderQvain()
     const submitButton = screen.getByRole('button', { name: 'Save as draft' })
     await userEvent.click(submitButton) // should submit data to metax
-    const submitData = JSON.parse(mockAdapter.history.put[0].data)
+    const submitData = JSON.parse(mockAdapter.history.patch[0].data)
 
     // issued date might not have same timezone but should represent same date
     const datasetIssued = parseDateISO(dataset.issued).getTime()
@@ -193,7 +229,7 @@ describe('Qvain with an opened dataset', () => {
     await renderQvain({ data_catalog: 'urn:nbn:fi:att:data-catalog-att' })
     const submitButton = screen.getByRole('button', { name: 'Save as draft' })
     await userEvent.click(submitButton) // should submit data to metax
-    const submitResources = JSON.parse(mockAdapter.history.put[0].data).remote_resources
+    const submitResources = JSON.parse(mockAdapter.history.patch[0].data).remote_resources
     const flatResources = removeMatchingKeys(flatten(dataset.remote_resources), expectedMissing)
     const flatSubmitResources = removeMatchingKeys(flatten(submitResources), expectedExtra)
     expect(flatSubmitResources).toEqual(flatResources)
@@ -317,7 +353,7 @@ describe('Qvain with an opened dataset', () => {
       /\.pref_label\..+/,
       /\.reference\.as_wkt$/,
       // not supported yet
-      "description",
+      'description',
       /license\.\d+\.custom_url$/,
       /license\.\d+\.description$/,
     ]
@@ -330,7 +366,7 @@ describe('Qvain with an opened dataset', () => {
     })
     const submitButton = screen.getByRole('button', { name: 'Save as draft' })
     await userEvent.click(submitButton) // should submit data to metax
-    const submitRights = JSON.parse(mockAdapter.history.put[0].data).access_rights
+    const submitRights = JSON.parse(mockAdapter.history.patch[0].data).access_rights
     const flatRights = removeMatchingKeys(flatten(accessRightsEmbargo), expectedMissing)
     const flatSubmitResources = removeMatchingKeys(flatten(submitRights), expectedExtra)
     expect(flatSubmitResources).toEqual(flatRights)

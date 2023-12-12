@@ -1,3 +1,5 @@
+import { computed } from 'mobx'
+
 import Actors from './qvain.actors'
 import Spatials from './qvain.spatials'
 import Provenances from './qvain.provenances'
@@ -19,6 +21,7 @@ import Title from './qvain.title'
 import SubjectHeadings from './qvain.subjectHeadings'
 import Description from './qvain.description'
 import ExternalResources from './qvain.externalResources'
+import ActorsV3 from './qvain.actors.v3'
 
 class Resources {
   constructor(Env) {
@@ -26,7 +29,8 @@ class Resources {
     this.Title = new Title(this)
     this.Description = new Description(this)
     this.SubjectHeadings = new SubjectHeadings(this)
-    this.Actors = new Actors(this)
+    this.ActorsV2 = new Actors(this)
+    this.ActorsV3 = new ActorsV3(this)
     this.Spatials = new Spatials(this)
     this.Temporals = new Temporals(this)
     this.Provenances = new Provenances(this)
@@ -67,6 +71,13 @@ class Resources {
       this.RestrictionGrounds,
       this.ExternalResources,
     ]
+  }
+
+  @computed get Actors() {
+    if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
+      return this.ActorsV3
+    }
+    return this.ActorsV2
   }
 }
 

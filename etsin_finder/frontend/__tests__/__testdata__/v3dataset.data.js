@@ -33,77 +33,60 @@ const dataset = {
   actors: [
     {
       id: '2356c755-c2cb-4cdc-9db1-380b7d025fd8',
-      role: 'curator',
-      actor: {
-        organization: {
-          id: 'c3ae0bec-444f-4ef3-adc9-c4d814ff9d7c',
-          pref_label: {
-            en: 'Kone Foundation',
-            fi: 'Koneen Säätiö',
-            sv: 'Koneen säätiö',
-            und: 'Koneen Säätiö',
-          },
-          url: 'http://uri.suomi.fi/codelist/fairdata/organization/code/02135371',
-          code: null,
-          in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
-          homepage: null,
+      roles: ['creator', 'curator'],
+      organization: {
+        id: 'c3ae0bec-444f-4ef3-adc9-c4d814ff9d7c',
+        pref_label: {
+          en: 'Kone Foundation',
+          fi: 'Koneen Säätiö',
+          sv: 'Koneen säätiö',
+          und: 'Koneen Säätiö',
         },
-        person: { name: 'Unexisting Entity', email: null, external_id: null },
-        id: 22,
+        url: 'http://uri.suomi.fi/codelist/fairdata/organization/code/02135371',
+        in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
+        email: null,
+        homepage: null,
+        external_identifier: null,
       },
+      person: null,
     },
     {
       id: 'd08d3810-34e0-4c91-a901-7751758d7c5b',
-      role: 'creator',
-      actor: {
-        organization: {
-          id: 'aedcdcdb-68a9-4400-8b4e-60ca908f24ea',
-          pref_label: { en: 'test dept.' },
-          url: null,
-          code: null,
-          in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
-          homepage: null,
-        },
-        person: { name: 'Kuvitteellinen Henkilö', email: null, external_id: null },
-        id: 23,
+      roles: ['creator'],
+      organization: {
+        id: 'aedcdcdb-68a9-4400-8b4e-60ca908f24ea',
+        pref_label: { en: 'Test org' },
+        url: null,
+        homepage: null,
+        email: 'test@test.org',
+        external_identifier: 'https://test.org',
+      },
+      person: {
+        name: 'Kuvitteellinen Henkilö',
+        email: 'kuvi@example.com',
+        external_identifier: 'http://example.com/kuvi',
       },
     },
     {
       id: '30dc590c-21ca-4e06-bf88-ecccf20082cc',
-      role: 'creator',
-      actor: {
-        organization: {
-          id: 'bf5ad8e7-04d7-40ca-94dd-5a05d4748c57',
-          pref_label: { en: 'teste' },
+      roles: ['publisher'],
+      organization: {
+        id: 'bf5ad8e7-04d7-40ca-94dd-5a05d4748c57',
+        pref_label: { en: 'Test dept' },
+        url: null,
+        email: null,
+        homepage: null,
+        parent: {
+          id: 'aedcdcdb-68a9-4400-8b4e-60ca908f24ea',
+          pref_label: { en: 'Test org' },
           url: null,
-          code: null,
-          in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
+          email: 'test@test.org',
           homepage: null,
+          external_identifier: 'https://test.org',
         },
-        person: null,
-        id: 24,
+        external_identifier: null,
       },
-    },
-    {
-      id: '93cac2d6-5457-4981-b733-98d60f2f520e',
-      role: 'creator',
-      actor: {
-        organization: {
-          id: '02cd12da-cbb3-4265-9536-9f79ae3c1b60',
-          pref_label: {
-            en: 'Kone Foundation',
-            fi: 'Koneen Säätiö',
-            sv: 'Koneen säätiö',
-            und: 'Koneen Säätiö',
-          },
-          url: 'http://uri.suomi.fi/codelist/fairdata/organization/code/02135371',
-          code: null,
-          in_scheme: 'http://uri.suomi.fi/codelist/fairdata/organization',
-          homepage: null,
-        },
-        person: { name: 'Unexisting Entity', email: null, external_id: null },
-        id: 25,
-      },
+      person: null,
     },
   ],
   data_catalog: 'urn:nbn:fi:att:data-catalog-ida',
@@ -335,15 +318,15 @@ export const accessRightsEmbargo = {
   },
   restriction_grounds: [
     {
-      "id": "6cedbc74-0b3a-41f1-91ae-fd1f4cbcbe1c",
-      "url": "http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/research",
-      "in_scheme": "http://uri.suomi.fi/codelist/fairdata/restriction_grounds",
-      "pref_label": {
-        "en": "Restriced access for research based on contract",
-        "fi": "Saatavuutta rajoitettu sopimuksen perusteella vain tutkimuskäyttöön",
-        "sv": "Begränsad åtkomst på bas av kontrakt ändast för forskningsändamål"
-      }
-    }
+      id: '6cedbc74-0b3a-41f1-91ae-fd1f4cbcbe1c',
+      url: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/research',
+      in_scheme: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds',
+      pref_label: {
+        en: 'Restriced access for research based on contract',
+        fi: 'Saatavuutta rajoitettu sopimuksen perusteella vain tutkimuskäyttöön',
+        sv: 'Begränsad åtkomst på bas av kontrakt ändast för forskningsändamål',
+      },
+    },
   ],
   available: '2023-12-24',
 }

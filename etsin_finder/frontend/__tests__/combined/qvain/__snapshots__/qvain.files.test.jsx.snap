@@ -13,7 +13,6 @@ Object {
       },
     ],
   },
-  "contributor": undefined,
   "creator": Array [
     Object {
       "@type": "Organization",
@@ -27,7 +26,6 @@ Object {
     },
   ],
   "cumulative_state": 0,
-  "curator": undefined,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": Object {
     "en": "",
@@ -134,9 +132,7 @@ Object {
   },
   "other_identifier": Array [],
   "provenance": Array [],
-  "publisher": undefined,
   "relation": Array [],
-  "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
   "theme": Array [],
@@ -162,7 +158,6 @@ Object {
       },
     ],
   },
-  "contributor": undefined,
   "creator": Array [
     Object {
       "@type": "Organization",
@@ -176,7 +171,6 @@ Object {
     },
   ],
   "cumulative_state": 0,
-  "curator": undefined,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": Object {
     "en": "",
@@ -283,9 +277,7 @@ Object {
   },
   "other_identifier": Array [],
   "provenance": Array [],
-  "publisher": undefined,
   "relation": Array [],
-  "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
   "theme": Array [],
@@ -311,7 +303,6 @@ Object {
       },
     ],
   },
-  "contributor": undefined,
   "creator": Array [
     Object {
       "@type": "Organization",
@@ -325,7 +316,6 @@ Object {
     },
   ],
   "cumulative_state": 0,
-  "curator": undefined,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": Object {
     "en": "",
@@ -432,9 +422,7 @@ Object {
   },
   "other_identifier": Array [],
   "provenance": Array [],
-  "publisher": undefined,
   "relation": Array [],
-  "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
   "theme": Array [],
@@ -460,7 +448,6 @@ Object {
       },
     ],
   },
-  "contributor": undefined,
   "creator": Array [
     Object {
       "@type": "Organization",
@@ -474,7 +461,6 @@ Object {
     },
   ],
   "cumulative_state": 0,
-  "curator": undefined,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": Object {
     "en": "",
@@ -581,9 +567,7 @@ Object {
   },
   "other_identifier": Array [],
   "provenance": Array [],
-  "publisher": undefined,
   "relation": Array [],
-  "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
   "theme": Array [],
@@ -609,7 +593,6 @@ Object {
       },
     ],
   },
-  "contributor": undefined,
   "creator": Array [
     Object {
       "@type": "Organization",
@@ -623,7 +606,6 @@ Object {
     },
   ],
   "cumulative_state": 0,
-  "curator": undefined,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": Object {
     "en": "",
@@ -730,9 +712,7 @@ Object {
   },
   "other_identifier": Array [],
   "provenance": Array [],
-  "publisher": undefined,
   "relation": Array [],
-  "rights_holder": undefined,
   "spatial": Array [],
   "temporal": Array [],
   "theme": Array [],
