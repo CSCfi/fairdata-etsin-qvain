@@ -245,7 +245,7 @@ function DatasetView() {
                   <>
                     <> </>
                     <Link
-                      href={latestExistingVersionId}
+                      href={`/dataset/${latestExistingVersionId}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       content={'tombstone.link'}

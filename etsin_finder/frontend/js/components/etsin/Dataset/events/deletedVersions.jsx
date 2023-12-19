@@ -18,11 +18,13 @@ import { Table, IDLink, Margin } from './common'
 const DeletedVersions = () => {
   const {
     Etsin: {
-      EtsinDataset: { deletedVersions },
+      EtsinDataset: { identifier, deletedVersions, hasRemovedVersion },
     },
   } = useStores()
 
-  if (!(deletedVersions?.length > 0)) {
+  const otherDeletedVersions = deletedVersions.filter(v => v.identifier !== identifier)
+
+  if (!hasRemovedVersion) {
     return null
   }
 
@@ -46,7 +48,7 @@ const DeletedVersions = () => {
           </tr>
         </thead>
         <tbody>
-          {deletedVersions.map(single => (
+          {otherDeletedVersions.map(single => (
             <tr key={single.identifier}>
               <td lang={single.label}>{single.label}</td>
               <td lang={single.dateRemoved}>{single.dateRemoved}</td>

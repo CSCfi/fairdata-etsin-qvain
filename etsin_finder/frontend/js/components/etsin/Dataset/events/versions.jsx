@@ -20,15 +20,15 @@ const Versions = () => {
   const {
     Locale,
     Etsin: {
-      EtsinDataset: { identifier, hasVersion, datasetVersions, versionTitles },
+      EtsinDataset: { identifier, datasetVersions, hasExistingVersion },
     },
   } = useStores()
 
-  if (!hasVersion) {
+  if (!hasExistingVersion) {
     return null
   }
 
-  const currentIndex = datasetVersions.findIndex(version => version.identifier === identifier)
+  const currentIndex = datasetVersions.findIndex(version => version.id === identifier)
 
   const findType = i => {
     let type
@@ -43,15 +43,13 @@ const Versions = () => {
     return type
   }
 
-  const getTitle = single => Locale.getValueTranslation(versionTitles?.[single.identifier])
-
   const versions = datasetVersions
-    .map((single, i, set) => ({
-      label: set.length - i,
-      identifier: single.identifier,
-      preferredIdentifier: single.preferred_identifier,
-      url: idnToLink(single.preferred_identifier),
-      title: getTitle(single),
+    .map((single, i) => ({
+      label: single.version,
+      identifier: single.id,
+      preferredIdentifier: single.persistent_identifier,
+      url: idnToLink(single.persistent_identifier),
+      title: Locale.getValueTranslation(single.title),
       type: findType(i),
       removed: single.removed,
     }))

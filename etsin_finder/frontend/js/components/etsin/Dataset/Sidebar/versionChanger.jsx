@@ -14,39 +14,34 @@ const VersionChanger = props => {
     },
   } = useStores()
 
-  const versions = versionLabels(datasetVersions)
+  const versions = datasetVersions.map((single, i) => {
+    const old = i > 0
+    return {
+      label: (
+        <>
+          <Translate
+            content={'dataset.version.number'}
+            with={{ number: single.version }}
+          />
+          {old ? (
+            <>
+              <span> </span>
+              <Translate content={'dataset.version.old'} />
+            </>
+          ) : (
+            ''
+          )}
+        </>
+      ),
+      value: single.id,
+      removed: single.removed,
+      old,
+    }
+  })
 
   const [selected, setSelected] = useState(
     versions.filter(single => single.value === identifier)[0]
   )
-
-  function versionLabels(versionSet) {
-    const labels = versionSet.map((single, i) => {
-      const old = i > 0
-      return {
-        label: (
-          <>
-            <Translate
-              content={'dataset.version.number'}
-              with={{ number: versionSet.length - i }}
-            />
-            {old ? (
-              <>
-                <span> </span>
-                <Translate content={'dataset.version.old'} />
-              </>
-            ) : (
-              ''
-            )}
-          </>
-        ),
-        value: single.identifier,
-        removed: single.removed,
-        old,
-      }
-    })
-    return labels
-  }
 
   const changeVersion = value => {
     setSelected(value)

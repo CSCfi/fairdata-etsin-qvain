@@ -22,13 +22,11 @@ const Sidebar = () => {
     Etsin: {
       EtsinDataset: {
         dataCatalog,
-        identifier,
         datasetMetadata,
         draftOf,
         isDraft,
         isCumulative,
         accessRights,
-        versions,
         persistentIdentifier,
         actors,
       },
@@ -37,7 +35,6 @@ const Sidebar = () => {
     Locale: { getPreferredLang, getValueTranslation },
   } = useStores()
 
-  const isVersion = versions?.some(version => version.identifier === identifier)
   const catalogPublisher = dataCatalog?.publisher
   const catalogPublisherLang = getPreferredLang(catalogPublisher?.name)
   const catalogPublisherHomepage = catalogPublisher.homepage?.[0].identifier || ''
@@ -104,7 +101,7 @@ const Sidebar = () => {
 
   return (
     <SidebarContainer id="sidebar">
-      {dataCatalog.dataset_versioning && !isDraft && isVersion && <VersionChanger />}
+      {!isDraft && <VersionChanger />}
       <SidebarArea id="data-catalog-area">
         {dataCatalog?.logo && (
           <DatasetInfoItem id="catalog-logo">

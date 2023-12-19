@@ -36,7 +36,7 @@ class EtsinDatasetV2 {
   @computed get dataCatalog() {
     return this.catalogRecord?.data_catalog?.catalog_json
   } // shapeDataCatalog action will be needed later
-  
+
   @computed get persistentIdentifier() {
     return this.dataset?.persistent_identifier || this.dataset?.preferred_identifier
   }
@@ -215,10 +215,10 @@ class EtsinDatasetV2 {
   @computed get hasEvents() {
     return Boolean(
       this.hasVersion ||
-      this.provenance?.length ||
-      this.isDeprecated ||
-      this.otherIdentifiers?.length ||
-      this.datasetRelations?.length
+        this.provenance?.length ||
+        this.isDeprecated ||
+        this.otherIdentifiers?.length ||
+        this.datasetRelations?.length
     )
   }
 
@@ -234,43 +234,37 @@ class EtsinDatasetV2 {
     )
   }
 
-  @computed get datasetVersions() {
+  @computed get v2VersionSet() {
     return this.catalogRecord?.dataset_version_set
   }
 
+  @computed get datasetVersions() {
+    return this.shapeVersionSet(this.v2VersionSet)
+  }
+
   @computed get hasVersion() {
-    return this.versions.some(version => version.identifier !== this.identifier)
+    return this.datasetVersions.some(version => version.id !== this.identifier)
   }
 
   @computed get hasExistingVersion() {
-    return this.versions.some(
-      version => !version.isRemoved && version.identifier !== this.identifier
-    )
+    return this.datasetVersions.some(version => !version.removed && version.id !== this.identifier)
   }
 
   @computed get hasRemovedVersion() {
-    return this.versions.some(
-      version => version.isRemoved && version.identifier !== this.identifier
-    )
+    return this.datasetVersions.some(version => version.removed && version.id !== this.identifier)
   }
 
   @computed get deletedVersions() {
     if (!this.datasetVersions) return []
     return this.datasetVersions
-      .map((single, i, set) => ({
-        removed: single.removed,
-        dateRemoved: single.date_removed ? /[^T]*/.exec(single.date_removed.toString()) : '',
-        label: set.length - i,
-        identifier: single.identifier,
-        url: `/dataset/${single.identifier}`,
-      })).filter(v => v.removed)
-  }
-
-  @computed get versionTitles() {
-    return this.versions.reduce((obj, val) => {
-      obj[val.identifier] = val.datasetMetadata.title
-      return obj
-    }, {})
+      .map(single => ({
+        removed: Boolean(single.removed),
+        dateRemoved: single.removed ? /[^T]*/.exec(single.removed.toString()) : '',
+        label: single.version,
+        identifier: single.id,
+        url: `/dataset/${single.id}`,
+      }))
+      .filter(v => v.removed)
   }
 
   @computed get datasetRelations() {
@@ -300,22 +294,20 @@ class EtsinDatasetV2 {
   }
 
   @computed get latestExistingVersionDate() {
-    const existingVersions = (this.versions || []).filter(
-      version => !version.isRemoved && !version.isDeprecated
-    )
-    return new Date(Math.max(...existingVersions.map(version => version.currentVersionDate)))
+    const existingVersions = (this.datasetVersions || []).filter(version => !version.removed)
+    return new Date(Math.max(...existingVersions.map(version => Date.parse(version.created))))
   }
 
   @computed get latestExistingVersionId() {
-    if (!this.datasetVersions) return null
+    if (!this.hasExistingVersion) return null
     const latestVersion = Object.values(this.datasetVersions).find(
-      val => new Date(val.date_created).getTime() === this.latestExistingVersionDate.getTime()
+      val => new Date(val.created).getTime() === this.latestExistingVersionDate.getTime()
     )
-    return latestVersion?.identifier
+    return latestVersion?.id
   }
 
   @computed get latestExistingVersionInfotext() {
-    if (!this.datasetVersions || !this.hasExistingVersion) return null
+    if (!this.hasExistingVersion) return null
 
     if (this.latestExistingVersionDate.getTime() > this.currentVersionDate.getTime()) {
       return {
@@ -454,12 +446,12 @@ class EtsinDatasetV2 {
       geographic_name: location.geographic_name,
       altitude_in_meters: location.alt,
       wkt: location.as_wkt,
-      reference : {
+      reference: {
         id: null,
         url: location.place_uri?.identifier,
         in_scheme: location.place_uri?.in_scheme,
         pref_label: location.place_uri?.pref_label,
-      }
+      },
     }))
   }
 
@@ -467,14 +459,16 @@ class EtsinDatasetV2 {
     if (!provenance) return []
 
     return provenance?.map(event => {
-      const shapedEvent = {...event}
-      if (shapedEvent.event_outcome){
+      const shapedEvent = { ...event }
+      if (shapedEvent.event_outcome) {
         shapedEvent.event_outcome.url = event.event_outcome?.identifier
       }
       if (shapedEvent.lifecycle_event) {
         shapedEvent.lifecycle_event.url = event.lifecycle_event?.identifier
       }
-      shapedEvent.is_associated_with = event.was_associated_with?.map(actor => this.shapeActor(actor))
+      shapedEvent.is_associated_with = event.was_associated_with?.map(actor =>
+        this.shapeActor(actor)
+      )
       return shapedEvent
     })
   }
@@ -497,6 +491,25 @@ class EtsinDatasetV2 {
     return infrastructure.map(infra => {
       infra.id = infra.identifier
       return infra
+    })
+  }
+
+  @action shapeVersionSet(versionSet) {
+    if (!versionSet) return []
+    return versionSet.map((version, i, set) => {
+      const versionInstance = this.versions.find(v => v.identifier === version.identifier)
+      const title = versionInstance?.datasetMetadata?.title
+      const removed = versionInstance?.catalogRecord?.date_removed
+      const deprecated = versionInstance?.catalogRecord?.deprecated
+      return {
+        id: version.identifier,
+        title,
+        persistent_identifier: version.preferred_identifier,
+        created: version.date_created,
+        removed: removed || null,
+        is_deprecated: deprecated,
+        version: set.length - i,
+      }
     })
   }
 }

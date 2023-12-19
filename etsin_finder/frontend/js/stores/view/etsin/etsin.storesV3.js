@@ -20,8 +20,6 @@ class EtsinDatasetV3 {
 
   @observable files = null
 
-  @observable versions = []
-
   @observable showCitationModal = false
 
   @observable inInfo = null
@@ -88,7 +86,7 @@ class EtsinDatasetV3 {
   }
   
   @computed get isRemoved() {
-    return Boolean(this.dataset?.is_removed)
+    return Boolean(this.dataset?.removed)
   }
 
   @computed get isDeprecated() {
@@ -231,7 +229,7 @@ class EtsinDatasetV3 {
   }
 
   @computed get hasMapData() {
-    return Boolean(this.datasetMetadata?.spatial)
+    return Boolean(this.datasetMetadata?.spatial.length)
   }
 
   @computed get isDownloadAllowed() {
@@ -243,43 +241,35 @@ class EtsinDatasetV3 {
   }
 
   @computed get datasetVersions() {
-    // waiting for V3 implementation
-    return null
+    return this.dataset.dataset_versions.toReversed()
   }
 
   @computed get hasVersion() {
-    return this.versions.some(version => version.identifier !== this.identifier)
+    return this.datasetVersions.some(version => version.id !== this.identifier)
   }
 
   @computed get hasExistingVersion() {
-    return this.versions.some(
-      version => !version.isRemoved && version.identifier !== this.identifier
+    return this.datasetVersions.some(
+      version => !version.removed && version.id !== this.identifier
     )
   }
 
   @computed get hasRemovedVersion() {
-    return this.versions.some(
-      version => version.isRemoved && version.identifier !== this.identifier
+    return this.datasetVersions.some(
+      version => version.removed && version.id !== this.identifier
     )
   }
 
   @computed get deletedVersions() {
     if (!this.datasetVersions) return []
     return this.datasetVersions
-      .map((single, i, set) => ({
-        removed: single.removed,
-        dateRemoved: single.date_removed ? /[^T]*/.exec(single.date_removed.toString()) : '',
-        label: set.length - i,
-        identifier: single.identifier,
-        url: `/dataset/${single.identifier}`,
+      .map((single) => ({
+        removed: Boolean(single.removed),
+        dateRemoved: single.removed ? /[^T]*/.exec(single.removed.toString()) : '',
+        label: single.version,
+        identifier: single.id,
+        url: `/dataset/${single.id}`,
       })).filter(v => v.removed)
-  }
-
-  @computed get versionTitles() {
-    return this.versions.reduce((obj, val) => {
-      obj[val.identifier] = val.datasetMetadata.title
-      return obj
-    }, {})
   }
 
   @computed get datasetRelations() {
@@ -311,22 +301,22 @@ class EtsinDatasetV3 {
   }
 
   @computed get latestExistingVersionDate() {
-    const existingVersions = (this.versions || []).filter(
-      version => !version.isRemoved && !version.isDeprecated
+    const existingVersions = (this.datasetVersions || []).filter(
+      version => !version.removed && !version.deprecated
     )
-    return new Date(Math.max(...existingVersions.map(version => version.currentVersionDate)))
+    return new Date(Math.max(...existingVersions.map(version => Date.parse(version.created))))
   }
 
   @computed get latestExistingVersionId() {
-    if (!this.datasetVersions) return null
+    if (!this.hasExistingVersion) return null
     const latestVersion = Object.values(this.datasetVersions).find(
-      val => new Date(val.date_created).getTime() === this.latestExistingVersionDate.getTime()
+      val => new Date(val.created).getTime() === this.latestExistingVersionDate.getTime()
     )
-    return latestVersion?.identifier
+    return latestVersion?.id
   }
 
   @computed get latestExistingVersionInfotext() {
-    if (!this.datasetVersions) return null
+    if (!this.hasExistingVersion) return null
 
     if (this.latestExistingVersionDate.getTime() > this.currentVersionDate.getTime()) {
       return {

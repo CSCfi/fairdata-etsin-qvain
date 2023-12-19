@@ -230,13 +230,13 @@ class Etsin {
 
   @action
   fetchVersions = async () => {
-    if (!this.EtsinDataset.datasetVersions) {
+    if (!this.EtsinDataset.v2VersionSet) {
       this.setLoadingOff('versions')
       return []
     }
 
     runInAction(() => {
-      this.requests.versions = Object.values(this.EtsinDataset.datasetVersions).map(version => {
+      this.requests.versions = Object.values(this.EtsinDataset.v2VersionSet).map(version => {
         if(version.identifier === this.EtsinDataset.identifier) return null
         return this.datasetProcessor.fetch({
           id: version.identifier,
