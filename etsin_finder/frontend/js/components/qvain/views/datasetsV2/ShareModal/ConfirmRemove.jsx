@@ -15,7 +15,7 @@ import { Checkbox } from '../../../general/modal/form'
 export const ShareModal = () => {
   const {
     Auth: { userName },
-    QvainDatasetsV2: {
+    QvainDatasets: {
       share: {
         userPermissionToRemove,
         cancelRemoveUserPermission,

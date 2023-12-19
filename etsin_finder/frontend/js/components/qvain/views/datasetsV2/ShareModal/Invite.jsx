@@ -46,7 +46,7 @@ Control.propTypes = {
 
 const Invite = () => {
   const {
-    QvainDatasetsV2: {
+    QvainDatasets: {
       share: {
         searchUsers,
         selectedUsers,

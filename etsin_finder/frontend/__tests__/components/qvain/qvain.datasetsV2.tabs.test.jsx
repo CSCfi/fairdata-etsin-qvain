@@ -22,7 +22,7 @@ counterpart.registerTranslations('en', {
 
 beforeEach(() => {
   stores = buildStores()
-  stores.QvainDatasetsV2.tabs = new TabsStore({ all: 'test.tabs.all', another: 'test.tabs.another' }, 'all')
+  stores.QvainDatasets.tabs = new TabsStore({ all: 'test.tabs.all', another: 'test.tabs.another' }, 'all')
 })
 
 describe('Datasets Tabs', () => {

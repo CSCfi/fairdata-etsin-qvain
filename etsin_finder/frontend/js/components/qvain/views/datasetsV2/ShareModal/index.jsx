@@ -63,7 +63,7 @@ const getModalContent = ({ share }) => {
 
 export const ShareModal = () => {
   const {
-    QvainDatasetsV2: { share },
+    QvainDatasets: { share },
   } = useStores()
 
   const { modal, requestCloseModal } = share

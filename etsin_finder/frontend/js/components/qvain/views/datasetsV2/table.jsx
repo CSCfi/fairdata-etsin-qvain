@@ -10,21 +10,28 @@ import { InvertedButton } from '../../../general/button'
 
 const Table = () => {
   const {
-    QvainDatasets: { count, error, loadDatasets, isLoadingDatasets, reset, searchTerm },
-    QvainDatasetsV2: { filteredGroups, showMore, moreAvailable, reset: resetV2 },
+    QvainDatasets: {
+      error,
+      loadDatasets,
+      isLoadingDatasets,
+      reset,
+      searchTerm,
+      filteredGroups,
+      showMore,
+      moreAvailable,
+    },
   } = useStores()
 
   useEffect(() => {
     loadDatasets()
     return () => {
       reset()
-      resetV2()
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const noDatasets = !isLoadingDatasets && !error && count === 0
+  const noDatasets = !isLoadingDatasets && !error && filteredGroups.length === 0
 
   if (isLoadingDatasets) {
     return (

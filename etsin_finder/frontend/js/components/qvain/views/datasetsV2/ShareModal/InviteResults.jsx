@@ -9,7 +9,7 @@ import getPersonLabel from './getPersonLabel'
 
 const InviteResults = () => {
   const {
-    QvainDatasetsV2: {
+    QvainDatasets: {
       share: { inviteSuccessUsers, inviteFailUsers, requestCloseModal },
     },
   } = useStores()

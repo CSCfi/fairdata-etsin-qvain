@@ -65,7 +65,7 @@ const render = async () => {
     document.body.removeChild(helper)
     helper = null
   }
-  stores?.QvainDatasetsV2?.share?.client.abort()
+  stores?.QvainDatasets?.share?.client.abort()
   stores = buildStores()
   stores.Auth.setUser({
     name: 'teppo',
@@ -73,9 +73,9 @@ const render = async () => {
   stores.Env.Flags.setFlag('UI.NEW_DATASETS_VIEW', true)
 
   const dataset = { identifier: 'jeejee' }
-  stores.QvainDatasetsV2.share.modal.open({ dataset })
+  stores.QvainDatasets.share.modal.open({ dataset })
 
-  await when(() => !stores.QvainDatasetsV2.share.isLoadingPermissions)
+  await when(() => !stores.QvainDatasets.share.isLoadingPermissions)
 
   helper = document.createElement('div')
   document.body.appendChild(helper)
@@ -149,7 +149,7 @@ describe('ShareModal', () => {
       option.simulate('click')
 
       wrapper.find(components.MultiValue).should.have.lengthOf(1)
-      stores.QvainDatasetsV2.share.selectedUsers.should.eql([testUser])
+      stores.QvainDatasets.share.selectedUsers.should.eql([testUser])
 
       input.instance().value = 'testi'
       input.simulate('change')
@@ -159,7 +159,7 @@ describe('ShareModal', () => {
       option2.simulate('click')
 
       wrapper.find(components.MultiValue).should.have.lengthOf(2)
-      stores.QvainDatasetsV2.share.selectedUsers.should.eql([testUser, otherTestUser])
+      stores.QvainDatasets.share.selectedUsers.should.eql([testUser, otherTestUser])
     })
 
     it('should show results for current input', async () => {
@@ -209,7 +209,7 @@ describe('ShareModal', () => {
       wrapper
         .find('textarea[placeholder*="message"]')
         .simulate('change', { target: { value: 'This is a message' } })
-      stores.QvainDatasetsV2.share.inviteMessage.should.eql('This is a message')
+      stores.QvainDatasets.share.inviteMessage.should.eql('This is a message')
     })
 
     describe('given no selected users', () => {
@@ -226,7 +226,7 @@ describe('ShareModal', () => {
     describe('given selected users', () => {
       describe('close confirmation', () => {
         beforeEach(() => {
-          stores.QvainDatasetsV2.share.setSelectedUsers([testUser])
+          stores.QvainDatasets.share.setSelectedUsers([testUser])
         })
 
         it('should allow canceling confirmation', async () => {
@@ -256,13 +256,13 @@ describe('ShareModal', () => {
       })
 
       it('should enable "invite" button', async () => {
-        stores.QvainDatasetsV2.share.setSelectedUsers([testUser])
+        stores.QvainDatasets.share.setSelectedUsers([testUser])
         wrapper.update()
         getInviteButton().prop('disabled').should.be.false
       })
 
       it('should show successful share', async () => {
-        stores.QvainDatasetsV2.share.setSelectedUsers([testUser])
+        stores.QvainDatasets.share.setSelectedUsers([testUser])
         wrapper
           .find('textarea[placeholder*="message"]')
           .simulate('change', { target: { value: 'This is a message' } })
@@ -280,7 +280,7 @@ describe('ShareModal', () => {
       })
 
       it('should show failed shares', async () => {
-        stores.QvainDatasetsV2.share.setSelectedUsers([testUser, failTestUser])
+        stores.QvainDatasets.share.setSelectedUsers([testUser, failTestUser])
         wrapper
           .find('textarea[placeholder*="message"]')
           .simulate('change', { target: { value: 'This is a message' } })
@@ -303,7 +303,7 @@ describe('ShareModal', () => {
             },
           ],
         })
-        stores.QvainDatasetsV2.share.setSelectedUsers([testUser, failTestUser])
+        stores.QvainDatasets.share.setSelectedUsers([testUser, failTestUser])
         wrapper
           .find('textarea[placeholder*="message"]')
           .simulate('change', { target: { value: 'This is a message' } })
@@ -313,11 +313,11 @@ describe('ShareModal', () => {
         )
         wrapper.find('button[aria-label="Close"]').simulate('click')
         await wait(() => wrapper.find('input#search-users-input').length === 1)
-        stores.QvainDatasetsV2.share.selectedUsers.should.eql([failTestUser])
+        stores.QvainDatasets.share.selectedUsers.should.eql([failTestUser])
       })
 
       it('should not allow closing modal while sending invitation', async () => {
-        stores.QvainDatasetsV2.share.setSelectedUsers([testUser])
+        stores.QvainDatasets.share.setSelectedUsers([testUser])
         wrapper
           .find('textarea[placeholder*="message"]')
           .simulate('change', { target: { value: 'This is a message' } })
@@ -371,7 +371,7 @@ describe('ShareModal', () => {
         ],
         project: 'some_project',
       })
-      await stores.QvainDatasetsV2.share.fetchPermissions()
+      await stores.QvainDatasets.share.fetchPermissions()
       wrapper.find('button.tab-members').simulate('click')
     })
 
@@ -380,7 +380,7 @@ describe('ShareModal', () => {
     })
 
     it('should show loader while loading permissions', async () => {
-      const promise = stores.QvainDatasetsV2.share.fetchPermissions()
+      const promise = stores.QvainDatasets.share.fetchPermissions()
       wrapper.update()
       wrapper.find('.loader-active').hostNodes().should.have.lengthOf(1)
       await promise
@@ -391,7 +391,7 @@ describe('ShareModal', () => {
     it('should show error when loading permissions fails', async () => {
       jest.spyOn(console, 'error').mockImplementationOnce(() => {})
       mockAdapter.onGet(RegExp('^/api/qvain/datasets/jeejee/editor_permissions$')).reply(400, '')
-      stores.QvainDatasetsV2.share.fetchPermissions()
+      stores.QvainDatasets.share.fetchPermissions()
       await wait(() => wrapper.find('div[children*="Error retrieving data"]').length > 0)
       expect(console.error.mock.calls.length).toBe(1)
     })

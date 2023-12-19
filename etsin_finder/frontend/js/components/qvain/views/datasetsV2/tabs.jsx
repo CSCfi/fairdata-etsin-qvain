@@ -6,7 +6,7 @@ import { Tab, TabRow } from './common'
 
 export const Tabs = () => {
   const {
-    QvainDatasetsV2: { tabs },
+    QvainDatasets: { tabs },
   } = useStores()
 
   return (

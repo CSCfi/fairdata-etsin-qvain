@@ -170,6 +170,7 @@ class Adapter {
         remote_resources: this.remoteResourceV3ToV2(dataset.remote_resources),
         actors: this.actorV3ToV2(dataset.actors), // needs v3 actors store
       },
+      date_created: dataset.created,
       state: 'draft',
     }
 

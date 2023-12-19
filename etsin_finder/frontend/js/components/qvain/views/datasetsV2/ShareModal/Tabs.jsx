@@ -9,7 +9,7 @@ import { Tab, TabRow } from '../common'
 
 export const Tabs = () => {
   const {
-    QvainDatasetsV2: {
+    QvainDatasets: {
       share: { tabs, getTabItemCount },
     },
   } = useStores()

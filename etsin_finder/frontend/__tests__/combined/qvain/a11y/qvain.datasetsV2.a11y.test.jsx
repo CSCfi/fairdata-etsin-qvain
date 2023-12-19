@@ -53,7 +53,7 @@ describe('DatasetsV2', () => {
 
   it('is accessible', async () => {
     // wait until datasets have been fetched
-    await when(() => stores.QvainDatasets.datasetGroupsOnPage.length > 0)
+    await when(() => stores.QvainDatasets.datasetGroups.length > 0)
     wrapper.update()
 
     const results = await axe(wrapper.getDOMNode(), { rules: { region: { enabled: false } } })

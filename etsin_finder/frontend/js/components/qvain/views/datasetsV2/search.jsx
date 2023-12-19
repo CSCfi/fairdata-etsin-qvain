@@ -15,8 +15,7 @@ const getOptionLabel = option => <Translate content={`qvain.datasets.sort.${opti
 
 const Invite = () => {
   const {
-    QvainDatasets: { searchTerm, setSearchTerm },
-    QvainDatasetsV2: { sort },
+    QvainDatasets: { searchTerm, setSearchTerm, sort },
   } = useStores()
 
   return (

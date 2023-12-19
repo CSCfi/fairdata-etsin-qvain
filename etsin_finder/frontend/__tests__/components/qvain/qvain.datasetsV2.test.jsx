@@ -16,7 +16,6 @@ import datasets from '../../__testdata__/qvain.datasets'
 import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
 import DatasetsV2 from '@/components/qvain/views/datasetsV2'
-import { after } from 'lodash'
 
 jest.useFakeTimers('modern')
 jest.setSystemTime(new Date('2021-05-07T10:00:00Z'))
@@ -80,7 +79,7 @@ const render = async () => {
 
   // wait until datasets have been fetched
   await when(
-    () => stores.QvainDatasets.datasetGroupsOnPage.length > 0 || stores.QvainDatasets.error
+    () => stores.QvainDatasets.datasetGroups.length > 0 || stores.QvainDatasets.error
   )
   wrapper.update()
 }
@@ -161,7 +160,7 @@ describe('DatasetsV2', () => {
     it('should show more datasets', async () => {
       await render()
       const getMoreBtn = () => wrapper.find('span[children*="Show more"]').closest('button')
-      stores.QvainDatasetsV2.setShowCount({ initial: 4, current: 4, increment: 2 })
+      stores.QvainDatasets.setShowCount({ initial: 4, current: 4, increment: 2 })
       wrapper.update()
       wrapper.find('tbody').length.should.eql(4)
       getMoreBtn().simulate('click')
@@ -335,7 +334,7 @@ describe('DatasetsV2', () => {
 
     it('should sort datasets by title', async () => {
       await sortBy('Title')
-      stores.QvainDatasetsV2.sort.type.should.eql('title')
+      stores.QvainDatasets.sort.type.should.eql('title')
       getColumns('.dataset-title').should.eql([
         ['Changes here'],
         ['Draft 2'],
@@ -350,7 +349,7 @@ describe('DatasetsV2', () => {
     it('should sort datasets by active language', async () => {
       await sortBy('Title')
       stores.Locale.setLang('fi')
-      stores.QvainDatasetsV2.sort.type.should.eql('title')
+      stores.QvainDatasets.sort.type.should.eql('title')
       getColumns('.dataset-title').should.eql([
         ['Changes here'],
         ['Draft 2 suomeksi'],
@@ -366,7 +365,7 @@ describe('DatasetsV2', () => {
       await sortBy('Title')
       wrapper.find(`button.sort-direction`).simulate('click')
 
-      stores.QvainDatasetsV2.sort.type.should.eql('title')
+      stores.QvainDatasets.sort.type.should.eql('title')
       getColumns('.dataset-title').should.eql([
         ['IDA dataset version 2'],
         ['Draft dataset'],
@@ -380,7 +379,7 @@ describe('DatasetsV2', () => {
 
     it('should sort datasets by creation date', async () => {
       await sortBy('Date')
-      stores.QvainDatasetsV2.sort.type.should.eql('dateCreated')
+      stores.QvainDatasets.sort.type.should.eql('dateCreated')
       getColumns('.dataset-title', '.dataset-created').should.eql([
         ['Draft 3 by me and project', '5 days ago'],
         ['Changes here', '6 days ago'],
@@ -394,7 +393,7 @@ describe('DatasetsV2', () => {
 
     it('should sort datasets by owner', async () => {
       await sortBy('Owner')
-      stores.QvainDatasetsV2.sort.type.should.eql('owner')
+      stores.QvainDatasets.sort.type.should.eql('owner')
       getColumns('.dataset-title', '.dataset-owner').should.eql([
         ['Changes here', 'Me'],
         ['Draft 3 by me and project', 'Me'],
@@ -408,7 +407,7 @@ describe('DatasetsV2', () => {
 
     it('should sort datasets by status', async () => {
       await sortBy('Status')
-      stores.QvainDatasetsV2.sort.type.should.eql('status')
+      stores.QvainDatasets.sort.type.should.eql('status')
       getColumns('.dataset-title', '.dataset-state').should.eql([
         ['IDA dataset version 2', 'Published'],
         ['Changes here', 'Unpublished changes'],
@@ -455,7 +454,7 @@ describe('DatasetsV2', () => {
     it('should not clear filter when resetting datasets list', async () => {
       await filterBy('search string')
       stores.QvainDatasets.reset()
-      stores.QvainDatasetsV2.reset()
+      stores.QvainDatasets.reset()
       const input = wrapper.find('input#search-datasets-input')
       input.instance().value.should.eql('search string')
     })
@@ -480,7 +479,7 @@ describe('DatasetsV2', () => {
 
     it('should not show "Show more" when no more matches are available', async () => {
       await filterBy('Draft')
-      stores.QvainDatasetsV2.setShowCount({ initial: 5, current: 5, increment: 2 })
+      stores.QvainDatasets.setShowCount({ initial: 5, current: 5, increment: 2 })
       wrapper.update()
       wrapper.find('tbody').length.should.eql(5)
       wrapper.find('span[children*="Show more"]').should.have.lengthOf(0)

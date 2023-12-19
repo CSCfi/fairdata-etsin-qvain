@@ -40,7 +40,7 @@ const Check = styled(FontAwesomeIcon).attrs({ icon: faCheck })`
 
 export const Members = () => {
   const {
-    QvainDatasetsV2: {
+    QvainDatasets: {
       share: {
         userPermissions,
         project,

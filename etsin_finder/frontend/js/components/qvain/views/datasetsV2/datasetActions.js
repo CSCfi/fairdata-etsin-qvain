@@ -64,7 +64,7 @@ export const getShareAction = (Stores, dataset) => {
   const identifier = dataset.identifier
   const {
     share: { modal },
-  } = Stores.QvainDatasetsV2
+  } = Stores.QvainDatasets
 
   return {
     text: `qvain.datasets.actions.share`,

@@ -29,8 +29,8 @@ beforeEach(() => {
   })
   stores.Env.Flags.setFlag('UI.NEW_DATASETS_VIEW', true)
   stores.Env.Flags.setFlag('UI.SHARE_PROJECT', true)
-  stores.QvainDatasetsV2.share.modal.open({ dataset: { identifier: 'xyz' } })
-  stores.QvainDatasetsV2.share.client.abort()
+  stores.QvainDatasets.share.modal.open({ dataset: { identifier: 'xyz' } })
+  stores.QvainDatasets.share.client.abort()
 })
 
 const mockAdapter = new MockAdapter(axios)
@@ -61,15 +61,15 @@ describe('ShareModal', () => {
   })
 
   test('invite tab should be accessible', async () => {
-    stores.QvainDatasetsV2.share.tabs.setActive('invite')
+    stores.QvainDatasets.share.tabs.setActive('invite')
     wrapper.update()
     const results = await axe(helper)
     expect(results).toBeAccessible({ ignore: ['aria-hidden-focus'] })
   })
 
   test('members tab should be accessible', async () => {
-    stores.QvainDatasetsV2.share.tabs.setActive('members')
-    stores.QvainDatasetsV2.share.setUserPermissions([
+    stores.QvainDatasets.share.tabs.setActive('members')
+    stores.QvainDatasets.share.setUserPermissions([
       {
         uid: 'teppo',
         name: 'teppo testaaja',
