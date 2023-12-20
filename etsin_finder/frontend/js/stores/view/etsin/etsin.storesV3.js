@@ -84,7 +84,7 @@ class EtsinDatasetV3 {
     console.warn('no harvested info implementation yet in metax V3')
     return false
   }
-  
+
   @computed get isRemoved() {
     return Boolean(this.dataset?.removed)
   }
@@ -115,7 +115,7 @@ class EtsinDatasetV3 {
       spatial: this.shapeSpatial(this.dataset?.spatial),
       temporal: this.dataset?.temporal,
       projects: undefined, // waiting for V3 implementation
-      infrastructure: this.dataset?.infrastructure
+      infrastructure: this.dataset?.infrastructure,
     }
   }
 
@@ -136,7 +136,9 @@ class EtsinDatasetV3 {
   }
 
   @computed get publisher() {
-    const publishers = this.dataset?.actors.filter(actor => actor.roles.some(role => role === 'publisher'))
+    const publishers = this.dataset?.actors.filter(actor =>
+      actor.roles.some(role => role === 'publisher')
+    )
 
     if (publishers.length > 0) {
       return publishers[0]
@@ -149,25 +151,27 @@ class EtsinDatasetV3 {
     return this.dataset?.actors.filter(actor => actor.roles.some(role => role === 'rights_holder'))
   }
 
-  @computed get actors(){
+  @computed get actors() {
     return {
       creators: this.creators,
       contributors: this.contributors,
       curators: this.curators,
       publisher: this.publisher,
-      rightsHolders: this.rightsHolders
+      rightsHolders: this.rightsHolders,
     }
   }
 
   @computed get preservation() {
-    // waiting for V3 implementation
-    return {
-      identifier: undefined,
-      state: undefined,
-      stateModified: undefined,
-      useCopy: undefined,
-      preservedCopy: undefined,
-    }
+    const preservationObject = this.dataset?.preservation
+
+    if (!preservationObject)
+      return {
+        state: -1,
+      }
+
+    preservationObject.useCopy = preservationObject.dataset_origin_version
+    preservationObject.preservedCopy = preservationObject.dataset_version
+    return preservationObject
   }
 
   @computed get emailInfo() {
@@ -221,10 +225,11 @@ class EtsinDatasetV3 {
   @computed get hasEvents() {
     return Boolean(
       this.hasVersion ||
-      this.provenance?.length ||
-      this.isDeprecated ||
-      this.otherIdentifiers?.length ||
-      this.datasetRelations?.length
+        this.provenance?.length ||
+        this.isDeprecated ||
+        this.otherIdentifiers?.length ||
+        this.datasetRelations?.length ||
+        this.preservation?.useCopy?.persistent_identifier
     )
   }
 
@@ -241,35 +246,32 @@ class EtsinDatasetV3 {
   }
 
   @computed get datasetVersions() {
-    return this.dataset.dataset_versions.toReversed()
+    return this.dataset.dataset_versions?.toReversed()
   }
 
   @computed get hasVersion() {
-    return this.datasetVersions.some(version => version.id !== this.identifier)
+    return this.datasetVersions?.some(version => version.id !== this.identifier)
   }
 
   @computed get hasExistingVersion() {
-    return this.datasetVersions.some(
-      version => !version.removed && version.id !== this.identifier
-    )
+    return this.datasetVersions?.some(version => !version.removed && version.id !== this.identifier)
   }
 
   @computed get hasRemovedVersion() {
-    return this.datasetVersions.some(
-      version => version.removed && version.id !== this.identifier
-    )
+    return this.datasetVersions?.some(version => version.removed && version.id !== this.identifier)
   }
 
   @computed get deletedVersions() {
     if (!this.datasetVersions) return []
     return this.datasetVersions
-      .map((single) => ({
+      .map(single => ({
         removed: Boolean(single.removed),
         dateRemoved: single.removed ? /[^T]*/.exec(single.removed.toString()) : '',
         label: single.version,
         identifier: single.id,
         url: `/dataset/${single.id}`,
-      })).filter(v => v.removed)
+      }))
+      .filter(v => v.removed)
   }
 
   @computed get datasetRelations() {
@@ -384,7 +386,7 @@ class EtsinDatasetV3 {
 
     return spatial.map(location => {
       let referenceWKT
-      if (location.reference?.as_wkt && location.reference?.as_wkt !== ''){
+      if (location.reference?.as_wkt && location.reference?.as_wkt !== '') {
         referenceWKT = [location.reference.as_wkt]
       }
       location.wkt = location.custom_wkt || referenceWKT

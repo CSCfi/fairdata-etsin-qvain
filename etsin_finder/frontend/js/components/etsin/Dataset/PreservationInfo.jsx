@@ -22,7 +22,7 @@ const PreservationInfo = () => {
       {preservation.useCopy && (
         <PasInfo>
           <Translate content="dataset.originalDatasetVersionExists" />
-          <Link to={`/dataset/${preservation.useCopy.identifier}`}>
+          <Link to={`/dataset/${preservation.useCopy.id}`}>
             <Translate content="dataset.linkToOriginalDataset" />
           </Link>
         </PasInfo>
@@ -30,7 +30,7 @@ const PreservationInfo = () => {
       {preservation.preservedCopy && (
         <PasInfo>
           <Translate content="dataset.pasDatasetVersionExists" />
-          <Link to={`/dataset/${preservation.preservedCopy.identifier}`}>
+          <Link to={`/dataset/${preservation.preservedCopy.id}`}>
             <Translate content="dataset.linkToPasDataset" />
           </Link>
         </PasInfo>

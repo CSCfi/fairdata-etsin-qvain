@@ -14,15 +14,12 @@ const VersionChanger = props => {
     },
   } = useStores()
 
-  const versions = datasetVersions.map((single, i) => {
+  const versions = datasetVersions?.map((single, i) => {
     const old = i > 0
     return {
       label: (
         <>
-          <Translate
-            content={'dataset.version.number'}
-            with={{ number: single.version }}
-          />
+          <Translate content={'dataset.version.number'} with={{ number: single.version }} />
           {old ? (
             <>
               <span> </span>
@@ -40,7 +37,7 @@ const VersionChanger = props => {
   })
 
   const [selected, setSelected] = useState(
-    versions.filter(single => single.value === identifier)[0]
+    versions?.filter(single => single.value === identifier)[0]
   )
 
   const changeVersion = value => {

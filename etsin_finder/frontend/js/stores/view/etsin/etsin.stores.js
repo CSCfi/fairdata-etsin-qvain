@@ -158,12 +158,24 @@ class EtsinDatasetV2 {
   }
 
   @computed get preservation() {
+    const useCopy = this.catalogRecord.preservation_dataset_origin_version
+    const preservedCopy = this.catalogRecord.preservation_dataset_version
+    if (useCopy) {
+      useCopy.id = useCopy.identifier
+      useCopy.persistent_identifier = useCopy.preferred_identifier
+    }
+    if (preservedCopy) {
+      preservedCopy.id = preservedCopy.identifier
+      preservedCopy.persistent_identifier = preservedCopy.preferred_identifier
+    }
     return {
-      identifier: this.catalogRecord.preservation_identifier,
+      id: this.catalogRecord.preservation_identifier,
       state: this.catalogRecord.preservation_state,
-      stateModified: this.catalogRecord.preservation_state_modified,
-      useCopy: this.catalogRecord.preservation_dataset_origin_version,
-      preservedCopy: this.catalogRecord.preservation_dataset_version,
+      modified: this.catalogRecord.preservation_state_modified,
+      useCopy,
+      preservedCopy,
+      // v3 also includes contract, description, and reason_description
+      // but these are not used by Etsin
     }
   }
 
@@ -218,7 +230,8 @@ class EtsinDatasetV2 {
         this.provenance?.length ||
         this.isDeprecated ||
         this.otherIdentifiers?.length ||
-        this.datasetRelations?.length
+        this.datasetRelations?.length ||
+        this.preservation?.useCopy?.persistent_identifier
     )
   }
 
@@ -465,6 +478,9 @@ class EtsinDatasetV2 {
       }
       if (shapedEvent.lifecycle_event) {
         shapedEvent.lifecycle_event.url = event.lifecycle_event?.identifier
+      }
+      if (shapedEvent.preservation_event) {
+        shapedEvent.preservation_event.url = event.preservation_event?.identifier
       }
       shapedEvent.is_associated_with = event.was_associated_with?.map(actor =>
         this.shapeActor(actor)

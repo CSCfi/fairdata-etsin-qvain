@@ -57,7 +57,7 @@ const EventList = () => {
           {
             // Displaying general events
             provenance.map(event => (
-              <Event event={event} key={`event-${getValueTranslation(event.title)}`} />
+              <Event event={event} key={`event-${getValueTranslation(event.title || undefined)}`} />
             ))
           }
           {dateDeprecated && (

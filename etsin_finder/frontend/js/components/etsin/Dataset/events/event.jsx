@@ -21,12 +21,12 @@ const Event = ({ event }) => {
     ? 'dataset.events_idn.preservationEvent.preservedCopy'
     : 'dataset.events_idn.preservationEvent.useCopy'
 
-  const showPreservationEvent = event.preservation_event?.identifier === PRESERVATION_EVENT_CREATED
+  const showPreservationEvent = event.preservation_event?.url === PRESERVATION_EVENT_CREATED
 
   if (event.preservation_event && !showPreservationEvent) return null
 
   return (
-    <tr key={`provenance-${getValueTranslation(event.title)}`}>
+    <tr key={`provenance-${getValueTranslation(event.title || undefined)}`}>
       {/* EVENT */}
       <td>
         {event.lifecycle_event && (
@@ -60,7 +60,7 @@ const Event = ({ event }) => {
       <td>
         {event.lifecycle_event &&
           dateSeparator(event.temporal?.start_date, event.temporal?.end_date)}
-        {showPreservationEvent && dateFormat(preservation.stateModified, { format: 'date' })}
+        {showPreservationEvent && dateFormat(preservation.modified, { format: 'date' })}
       </td>
 
       {/* TITLE */}
@@ -73,8 +73,8 @@ const Event = ({ event }) => {
           <Link
             to={`/dataset/${
               preservation.useCopy
-                ? preservation.useCopy.identifier
-                : preservation.preservedCopy.identifier
+                ? preservation.useCopy.id
+                : preservation.preservedCopy.id
             }`}
           >
             <Translate content={`${preservationTranslationRoot}.descriptionLink`} />

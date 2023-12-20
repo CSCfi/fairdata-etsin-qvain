@@ -29,7 +29,7 @@ const Events = ({ id }) => {
     },
   } = useStores()
 
-  const originIdentifier = [preservation.useCopy?.preferred_identifier].filter(v => v)
+  const originIdentifier = [preservation.useCopy?.persistent_identifier].filter(v => v)
 
   const match = useRouteMatch()
 
