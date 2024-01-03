@@ -120,6 +120,40 @@ describe('Qvain with an opened dataset', () => {
     ])
   })
 
+  it('adds provenance in modal', async () => {
+    const section = await renderSection('History and events (provenance)')
+    const getLabels = elem =>
+      Array.from(elem.getElementsByClassName('item-label')).map(v => v.textContent)
+    expect(getLabels(section)).toEqual(['This thing happened'])
+
+    await userEvent.click(within(section).getByText('Add Provenance')) // should open modal
+
+    const modal = screen.getByRole('dialog')
+    expect(within(modal).getByRole('heading', { name: 'Add Provenance' })).toBeInTheDocument()
+    await userEvent.type(within(modal).getByLabelText('Name', { exact: false }), 'New event')
+    await userEvent.type(within(modal).getByLabelText('Description'), 'Description of event')
+
+    // const section = await renderSection('Geographical area')
+    await userEvent.click(within(modal).getByRole('button', { name: 'Add location' })) // should open location modal
+
+    // open nested location modal, add location
+    const location = screen.getByRole('dialog', { name: 'Add location' })
+    await userEvent.type(
+      within(location).getByLabelText('Name', { exact: false }),
+      'Great location'
+    )
+    await userEvent.click(within(location).getByRole('button', { name: 'Add location to event' }))
+    expect(within(modal).getByText('Great location')).toBeInTheDocument()
+
+    // add person that already exists in the dataset
+    await userEvent.click(document.getElementById('actors-select'))
+    await userEvent.click(within(modal).getByText('Kuvitteellinen Henkilö / Creator'))
+    expect(within(modal).getByText('Kuvitteellinen Henkilö / Creator')).toBeInTheDocument()
+
+    await userEvent.click(within(modal).getByRole('button', { name: 'Add Provenance' }))
+    expect(getLabels(section)).toEqual(['This thing happened', 'New event'])
+  })
+
   it('shows time period', async () => {
     const section = await renderSection('Time period')
     expect(within(section).getByText('2023-09-20 – 2023-11-25')).toBeInTheDocument()
@@ -168,7 +202,6 @@ describe('Qvain with an opened dataset', () => {
       /^access_rights\.description/,
       /license\.\d+\.custom_url$/,
       /license\.\d+\.description$/,
-      /provenance\.\d+\..+/,
       // special handling
       /remote_resources\.\d+\..+/, // not supported for ida dataset
       'issued', // exact value may change

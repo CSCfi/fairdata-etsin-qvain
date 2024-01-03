@@ -60,12 +60,14 @@ export default class Modal extends Component {
     onRequestClose: PropTypes.func,
     contentLabel: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
+    labelledBy: PropTypes.string,
   }
 
   static defaultProps = {
     customStyles: {},
     onAfterOpen: () => {},
     onRequestClose: () => {},
+    labelledBy: undefined,
   }
 
   state = {
@@ -101,6 +103,7 @@ export default class Modal extends Component {
         onRequestClose={this.requestClose}
         style={this.getStyles()}
         contentLabel={this.props.contentLabel}
+        aria={{ labelledby: this.props.labelledBy }}
       >
         <Translate
           component={CloseButton}

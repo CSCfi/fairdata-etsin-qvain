@@ -10,6 +10,7 @@ import { modalStyle } from './index'
 
 const ModalFieldListAdd = ({
   Field,
+  fieldName,
   form,
   contentLabel,
   position,
@@ -52,9 +53,11 @@ const ModalFieldListAdd = ({
           onRequestClose={confirmClose}
           contentLabel={contentLabel}
           customStyles={modalStyle}
+          labelledBy={`modal-header-${fieldName}`}
         >
           <ModalContent
             Field={Field}
+            fieldName={fieldName}
             handleSave={Field.validateAndSave}
             form={form}
             modalControls={{
@@ -84,6 +87,7 @@ const ModalFieldListAdd = ({
 
 ModalFieldListAdd.propTypes = {
   Field: PropTypes.object.isRequired,
+  fieldName: PropTypes.string.isRequired,
   hideButton: PropTypes.bool,
   form: PropTypes.shape({
     Form: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,

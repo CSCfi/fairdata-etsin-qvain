@@ -247,7 +247,7 @@ export const organizationArrayToMetax = orgs => {
   return org
 }
 
-const actorToMetax = origActor => {
+export const actorToMetax = origActor => {
   const actor = toJS(origActor)
   const org = organizationArrayToMetax(actor.organizations)
 
@@ -780,6 +780,10 @@ class Actors {
     return existingRoles.has(role)
   }
 
+  actorToBackend(actor) {
+    return actorToMetax(actor)
+  }
+
   toBackend() {
     const roles = ['creator', 'publisher', 'curator', 'rights_holder', 'contributor']
     const result = {}
@@ -787,7 +791,7 @@ class Actors {
     for (const role of roles) {
       const roleActors = this.actors
         .filter(actor => actor.roles.includes(role))
-        .map(actor => actorToMetax(actor))
+        .map(actor => this.actorToBackend(actor))
       if (roleActors.length > 0) {
         if (role === 'publisher') {
           result[role] = roleActors[0]
@@ -861,7 +865,8 @@ export class ActorsRef {
 
   @computed get toBackend() {
     // makes a list of names to be stored to metax
-    return Object.values(this.actorsRef).map(actorToMetax)
+    const refs = Object.values(this.actorsRef) || []
+    return refs.map(this.actors.actorToBackend)
   }
 
   @action addActorRef = actor => {

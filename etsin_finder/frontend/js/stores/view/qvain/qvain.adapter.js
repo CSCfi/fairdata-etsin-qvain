@@ -22,10 +22,13 @@ class Adapter {
       this.relationV3ToV2,
       this.spatialV2ToV3,
       this.spatialV3ToV2,
+      this.provenanceV2ToV3,
+      this.provenanceV3ToV2,
       this.temporalV2ToV3,
       this.temporalV3ToV2,
       this.orgV3ToV2,
       this.actorV3ToV2,
+      this.provenanceActorV2ToV3,
     ]
     adapterFuncs.forEach(this.makeBoundAdapterFunc)
   }
@@ -36,16 +39,29 @@ class Adapter {
     // - falsy values are returned as such
     // - arrays are processed one-by-one
     const boundFunc = func.bind(this)
-    const adapterFunc = value => {
+    const adapterFunc = (value, ...args) => {
       if (!value) {
         return value
       }
       if (Array.isArray(value)) {
-        return value.map(boundFunc)
+        return value.map(v => boundFunc(v, ...args))
       }
       return boundFunc(value)
     }
     this[func.name] = adapterFunc
+  }
+
+  removeMissingTranslations(value) {
+    // Clear empty values from translations, return
+    // undefined if no translations are found, e.g. {fi: ""} --> undefined
+    if (!value) {
+      return value
+    }
+    const entries = Object.entries(value).filter(([, trans]) => !!trans)
+    if (entries.length === 0) {
+      return undefined
+    }
+    return Object.fromEntries(entries)
   }
 
   refdataV3ToV2(value) {
@@ -65,6 +81,20 @@ class Adapter {
       as_wkt: value.custom_wkt,
       place_uri: this.refdataV3ToV2(value.reference),
       full_address: value.full_address,
+    }
+  }
+
+  provenanceV3ToV2(value) {
+    return {
+      title: value.title,
+      description: value.description,
+      outcome_description: value.outcome_description,
+      spatial: this.spatialV3ToV2(value.spatial),
+      temporal: this.temporalV3ToV2(value.temporal),
+      was_associated_with: this.actorV3ToV2(value.is_associated_with, { includeRoles: false }),
+      lifecycle_event: this.refdataV3ToV2(value.lifecycle_event),
+      preservation_event: this.refdataV3ToV2(value.preservation_event),
+      event_outcome: this.refdataV3ToV2(value.event_outcome),
     }
   }
 
@@ -129,7 +159,7 @@ class Adapter {
     }
   }
 
-  actorV3ToV2(actor) {
+  actorV3ToV2(actor, { includeRoles = true } = {}) {
     let obj
     if (actor.person) {
       obj = {
@@ -143,7 +173,9 @@ class Adapter {
     } else {
       obj = this.orgV3ToV2(actor.organization)
     }
-    obj.roles = actor.roles || []
+    if (includeRoles) {
+      obj.roles = actor.roles || []
+    }
     obj.actor_id = actor.id
     return obj
   }
@@ -169,6 +201,7 @@ class Adapter {
         temporal: this.temporalV3ToV2(dataset.temporal),
         remote_resources: this.remoteResourceV3ToV2(dataset.remote_resources),
         actors: this.actorV3ToV2(dataset.actors), // needs v3 actors store
+        provenance: this.provenanceV3ToV2(dataset.provenance),
       },
       date_created: dataset.created,
       state: 'draft',
@@ -209,6 +242,27 @@ class Adapter {
       restriction_grounds: this.refdataV2ToV3(value.restriction_grounds),
       license: this.refdataV2ToV3(value.license),
       available: value.available,
+    }
+  }
+
+  provenanceActorV2ToV3(value) {
+    const actor = { ...value }
+    delete actor.roles
+    return actor
+  }
+
+  provenanceV2ToV3(value) {
+    return {
+      title: this.removeMissingTranslations(value.title),
+      // TODO: Remove `|| {}` after making description optional in Metax
+      description: this.removeMissingTranslations(value.description) || {},
+      outcome_description: this.removeMissingTranslations(value.outcome_description),
+      spatial: this.spatialV2ToV3(value.spatial),
+      temporal: this.temporalV2ToV3(value.temporal),
+      is_associated_with: this.provenanceActorV2ToV3(value.was_associated_with),
+      lifecycle_event: this.refdataV2ToV3(value.lifecycle_event),
+      preservation_event: this.refdataV2ToV3(value.preservation_event),
+      event_outcome: this.refdataV2ToV3(value.event_outcome),
     }
   }
 
@@ -258,6 +312,7 @@ class Adapter {
       other_identifiers: this.otherIdentifierV2ToV3(dataset.other_identifier),
       access_rights: this.accessRightsV2ToV3(dataset.access_rights),
       spatial: this.spatialV2ToV3(dataset.spatial),
+      provenance: this.provenanceV2ToV3(dataset.provenance),
       relation: this.relationV2ToV3(dataset.relation),
       temporal: this.temporalV2ToV3(dataset.temporal),
       remote_resources: this.remoteResourceV2ToV3(dataset.remote_resources),

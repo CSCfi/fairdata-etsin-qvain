@@ -7,6 +7,7 @@ import ModalButtons from './ModalButtons'
 
 const ModalContent = ({
   Field,
+  fieldName,
   translationsRoot: componentTranslationsRoot,
   editMode,
   form: { Form, props: formProps },
@@ -24,7 +25,11 @@ const ModalContent = ({
 
   return (
     <>
-      <Translate component={ModalHeader} content={translations.title} />
+      <Translate
+        id={`modal-header-${fieldName}`}
+        component={ModalHeader}
+        content={translations.title}
+      />
       <ModalDivider />
       <Form {...formProps} />
       <ModalDivider />
@@ -40,6 +45,7 @@ const ModalContent = ({
 
 ModalContent.propTypes = {
   Field: PropTypes.object.isRequired,
+  fieldName: PropTypes.string.isRequired,
   translationsRoot: PropTypes.string,
   editMode: PropTypes.bool,
   form: PropTypes.object.isRequired,

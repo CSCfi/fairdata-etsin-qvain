@@ -2,6 +2,7 @@ import axios from 'axios'
 import { override, runInAction } from 'mobx'
 import Actors, { Organization, createActor } from './qvain.actors'
 import { ENTITY_TYPE } from '@/utils/constants'
+import symmetricDifference from '@/components/qvain/utils/symmetricDifference'
 
 class ActorsV3 extends Actors {
   @override
@@ -21,7 +22,8 @@ class ActorsV3 extends Actors {
   isOrganizationEqual = (org1, org2) => org1.uiid === org2.uiid
 
   actorToBackend(actor) {
-    const obj = { id: actor.uiid, roles: actor.roles, person: null }
+    const roles = actor.roles?.filter(v => v !== 'provenance')
+    const obj = { id: actor.uiid, roles, person: null }
     if (actor.type === ENTITY_TYPE.PERSON && actor.person) {
       obj.person = {
         id: actor.person.uiid,
@@ -49,7 +51,12 @@ class ActorsV3 extends Actors {
   }
 
   toBackend() {
-    return { actors: this.actors.map(actor => this.actorToBackend(actor)) }
+    return {
+      actors: this.actors
+        // avoid adding actors that are only in provenance to actors list
+        .filter(actor => symmetricDifference(actor.roles, ['provenance']).length !== 0)
+        .map(actor => this.actorToBackend(actor)),
+    }
   }
 
   getOrganizationSearchUrl(parent) {

@@ -169,9 +169,8 @@ const dataset = {
         full_address: 'Annankatu 5',
         geographic_name: 'Random Test Location',
         altitude_in_meters: null,
-        dataset: null,
         id: 'c3d7beac-6724-412b-8365-9efa39d9b21b',
-        as_wkt: '',
+        custom_wkt: ['POINT (1.0 1.0)'],
       },
       lifecycle_event: {
         id: '51779aac-ea09-436b-a8e7-0419066c1cd1',

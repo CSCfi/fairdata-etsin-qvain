@@ -32,7 +32,7 @@ const ModalFieldList = ({
 
   return storage.map(item => (
     <FieldListContainer key={item.uiid}>
-      <FieldListLabel>{getValueTranslation(nameGetter(item), lang)}</FieldListLabel>
+      <FieldListLabel className="item-label">{getValueTranslation(nameGetter(item), lang)}</FieldListLabel>
       <ListItemButtonContainer>
         <Translate
           component={EditButton}

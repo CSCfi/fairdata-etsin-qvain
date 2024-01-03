@@ -93,9 +93,9 @@ class Provenances extends Field {
     })
   }
 
-  @action
-  toBackend = () =>
-    this.storage.map(p => ({
+  @action.bound
+  toBackend() {
+    return this.storage.map(p => ({
       title: p.name,
       description: p.description,
       outcome_description: p.outcomeDescription,
@@ -112,9 +112,10 @@ class Provenances extends Field {
       was_associated_with: p.associations.toBackend,
       lifecycle_event: { identifier: (p.lifecycle || {}).url },
     }))
+  }
 
-  @action
-  fromBackend = (dataset, Qvain) => {
+  @action.bound
+  fromBackend(dataset, Qvain) {
     this.provenancesWithNonExistingActors = []
     if (dataset.provenance) {
       dataset.provenance.forEach(prov => {

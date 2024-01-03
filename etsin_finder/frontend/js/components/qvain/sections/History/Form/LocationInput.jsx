@@ -29,6 +29,7 @@ const LocationInput = () => {
       />
       <FieldListAdd
         Field={Field}
+        fieldName="Location"
         form={{ Form, props: { Field } }}
         isOpen={!!Field.inEdit}
         translationsRoot={root}

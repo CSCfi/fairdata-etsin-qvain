@@ -44,6 +44,7 @@ const RelatedResourceContent = () => {
       />
       <ModalFieldListAdd
         Field={Field}
+        fieldName="RelatedResources"
         form={{ Form: PublicationForm, props: { Field } }}
         onClick={createPublication}
         isOpen={publicationInEdit}
@@ -60,6 +61,7 @@ const RelatedResourceContent = () => {
       />
       <ModalFieldListAdd
         Field={Field}
+        fieldName="RelatedResources"
         form={{ Form: OtherResourceForm, props: { Field } }}
         onClick={createOtherResource}
         isOpen={otherResourceInEdit}

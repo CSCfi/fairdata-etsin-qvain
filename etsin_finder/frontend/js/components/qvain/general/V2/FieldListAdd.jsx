@@ -48,8 +48,14 @@ const FieldListAdd = ({ fieldName, form, styling: { contentLabel, position, hide
           onRequestClose={requestClose}
           contentLabel={contentLabel}
           customStyles={modalStyle}
+          labelledBy={`modal-header-${fieldName}`}
         >
-          <ModalContent Field={Field} form={form} modalControls={modalControls} />
+          <ModalContent
+            Field={Field}
+            fieldName={fieldName}
+            form={form}
+            modalControls={modalControls}
+          />
         </Modal>
       )}
       {!hideButton && (
