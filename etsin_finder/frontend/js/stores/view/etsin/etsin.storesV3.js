@@ -200,12 +200,13 @@ class EtsinDatasetV3 {
   }
 
   @computed get hasRemoteResources() {
-    // waiting for V3 implementation
-    return false
+    return Boolean(this.dataset?.remote_resources?.length)
   }
 
   @computed get remoteResources() {
-    // waiting for V3 implementation
+    if (this.hasRemoteResources) {
+      return this.dataset.remote_resources
+    }
     return null
   }
 

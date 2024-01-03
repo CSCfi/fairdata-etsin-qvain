@@ -80,7 +80,7 @@ export const getAuthorsInitial = (dataset, getTranslation, etAlThreshold) => {
     if (!author.person) {
       return getTranslation(topOrg(author.organization)?.pref_label)
     }
-    return getNameInitials(getTranslation(author.person))
+    return getNameInitials(getTranslation(author.person.name))
   })
 
   if (authors.length > etAlThreshold) {
@@ -98,9 +98,9 @@ export const getAuthorsFull = (dataset, getTranslation, etAlThreshold, etAlCount
       return getTranslation(topOrg(author.organization)?.pref_label)
     }
     if (index === 0) {
-      return getLastnameFirst(getTranslation(author.person))
+      return getLastnameFirst(getTranslation(author.person.name))
     }
-    return getTranslation(author.person)
+    return getTranslation(author.person.name)
   })
   if (authors.length > etAlThreshold) {
     authors.splice(etAlCount)
@@ -116,7 +116,7 @@ export const getAuthorsFullBibtex = (dataset, getTranslation, etAlThreshold, etA
     if (!author.person) {
       return getTranslation(topOrg(author.organization)?.pref_label)
     }
-    return getLastnameFirst(getTranslation(author.person))
+    return getLastnameFirst(getTranslation(author.person.name))
   })
   if (authors.length > etAlThreshold) {
     authors.splice(etAlCount)

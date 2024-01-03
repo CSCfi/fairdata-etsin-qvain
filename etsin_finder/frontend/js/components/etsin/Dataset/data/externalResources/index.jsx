@@ -35,19 +35,19 @@ const ExternalResources = () => {
   }
 
   const totalCount = remoteResources.length
-  const accessUrls = new Set(
-    remoteResources.map(resource => resource.access_url?.identifier).filter(v => v)
-  )
+  const accessUrls = new Set(remoteResources.map(resource => resource.access_url).filter(v => v))
   const hasAccess = accessUrls.size > 0
-  const hasDownload = !!remoteResources.find(resource => resource.download_url?.identifier)
+  const hasDownload = !!remoteResources.find(resource => resource.download_url)
 
   const infoProps = inInfo && {
     open: true,
-    name: inInfo.title,
-    accessUrl: inInfo.access_url?.identifier,
-    downloadUrl: inInfo.download_url?.identifier,
+    name: getValueTranslation(inInfo.title),
+    description: inInfo.description ? getValueTranslation(inInfo.description) : null,
+    accessUrl: inInfo.access_url,
+    downloadUrl: inInfo.download_url,
     category: getValueTranslation(inInfo.use_category?.pref_label),
     type: inInfo.file_type,
+    checksum: inInfo.checksum,
     headerContent: `dataset.dl.infoHeaders.external`,
     headerIcon: faFile,
     closeModal: () => setInInfo(null),
@@ -65,7 +65,7 @@ const ExternalResources = () => {
       <Grid showAccess={hasAccess} hasDownload={hasDownload}>
         {remoteResources.map(resource => (
           <ResourceItem
-            key={`resource-${resource.identifier}-${resource.title}`}
+            key={`resource-${resource.identifier}-${getValueTranslation(resource.title)}`}
             resource={resource}
             hideAccess={!hasAccess}
             noButtons={!hasAccess && !hasDownload}

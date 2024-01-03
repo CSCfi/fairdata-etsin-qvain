@@ -92,7 +92,7 @@ const Info = ({
             <Translate component={SubHeader} content="dataset.dl.customMetadata" />
             <InfoTable>
               <tbody>
-                <InfoItem translation="dataset.dl.title" content={title} />
+                <InfoItem translation="dataset.dl.title" content={getValueTranslation(title)} />
                 {type !== 'dir' && (
                   <InfoItem
                     translation="dataset.dl.type"

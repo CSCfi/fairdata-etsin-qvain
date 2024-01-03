@@ -204,11 +204,14 @@ class EtsinDatasetV2 {
   }
 
   @computed get hasRemoteResources() {
-    return this.remoteResources !== undefined && this.remoteResources?.length > 0
+    return Boolean(this.dataset?.remote_resources?.length)
   }
 
   @computed get remoteResources() {
-    return this.dataset?.remote_resources
+    if (this.hasRemoteResources) {
+      return this.shapeRemoteResources(this.dataset.remote_resources)
+    }
+    return null
   }
 
   @computed get hasData() {
@@ -526,6 +529,31 @@ class EtsinDatasetV2 {
         is_deprecated: deprecated,
         version: set.length - i,
       }
+    })
+  }
+
+  @action shapeRemoteResources(resources) {
+    if (!resources) return null
+    return resources.map(resource => {
+      const shapedResource = {
+        title: { und: resource.title },
+        description: null,
+        use_category: resource.use_category,
+        access_url: resource.access_url?.identifier,
+        download_url: resource.download_url?.identifier,
+        checksum: null,
+        file_type: resource.file_type,
+        mediatype: null,
+      }
+
+      if (shapedResource.use_category) {
+        shapedResource.use_category.url = shapedResource.use_category.identifier
+      }
+      if (shapedResource.file_type) {
+        shapedResource.file_type.url = shapedResource.file_type.identifier
+      }
+
+      return shapedResource
     })
   }
 }

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 
 export const TypeConcept = PropTypes.shape({
-  identifier: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
   pref_label: PropTypes.objectOf(PropTypes.string),
   definition: PropTypes.objectOf(PropTypes.string),
   in_scheme: PropTypes.string,

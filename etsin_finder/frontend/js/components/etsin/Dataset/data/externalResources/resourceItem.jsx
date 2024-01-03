@@ -46,7 +46,7 @@ const ResourceItem = ({ resource, hideAccess }) => {
           <Translate
             component={LinkButton}
             content="dataset.dl.source"
-            href={resource.access_url.identifier}
+            href={resource.access_url}
           />
         </LinkButtonColumn>
       )}
@@ -56,7 +56,7 @@ const ResourceItem = ({ resource, hideAccess }) => {
           <Translate
             component={DownloadButton}
             content="dataset.dl.download"
-            href={resource.download_url.identifier}
+            href={resource.download_url}
           />
         </DownloadButtonColumn>
       )}
