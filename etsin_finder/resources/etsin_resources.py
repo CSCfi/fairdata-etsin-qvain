@@ -658,9 +658,8 @@ def _get_existing_identifiers(cr_id, identifiers):
         if existing_id is None:
             delete_items.append(persistent_id)
         else:
-            for variations in identifiers.values():
-                for variation in variations:
-                    variation["metax_identifier"] = existing_id
+            for variations in dataset:
+                variations["metax_identifier"] = existing_id
 
     for i in delete_items:
         del identifiers[i]

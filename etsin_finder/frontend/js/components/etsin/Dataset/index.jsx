@@ -28,6 +28,7 @@ import Loader from '@/components/general/loader'
 import CitationModal from './citation/citationModal'
 import Sidebar from './Sidebar'
 import Content from './content'
+import StateInfo from './StateInfo'
 import PreservationInfo from './PreservationInfo'
 import TitleContainer from './TitleContainer'
 
@@ -92,13 +93,7 @@ class Dataset extends React.Component {
       return <DatasetError />
     }
 
-    if (
-      !dataset ||
-      isLoading.files ||
-      isLoading.relations ||
-      isLoading.versions ||
-      isLoading.dataset
-    ) {
+    if (!dataset || isLoading.files || isLoading.versions || isLoading.dataset) {
       return <DatasetLoadSpinner />
     }
 
@@ -131,101 +126,11 @@ function DatasetLoadSpinner() {
   )
 }
 
-function RelatedDatasetLoadSpinner() {
-  return (
-    <LoadingSplash margin="1rem">
-      <Loader active color="white" />
-    </LoadingSplash>
-  )
-}
-
-function StateInfo({ children }) {
-  const {
-    Etsin: {
-      EtsinDataset: { isRemoved, isDeprecated },
-    },
-  } = useStores()
-  if (isRemoved) return <div className="fd-alert fd-danger">{children}</div>
-  if (isDeprecated) return <DraftInfo>{children}</DraftInfo>
-  return null
-}
-
-function OtherIdentifiers() {
-  const {
-    Etsin: {
-      EtsinDataset: {
-        groupedRelations: { otherIdentifiers },
-      },
-    },
-  } = useStores()
-  return otherIdentifiers.map(identifier => (
-    <div key={identifier.identifier}>
-      <Translate
-        with={{ identifier: identifier.identifier }}
-        content="tombstone.urlToOtherIdentifier"
-      />
-      <> </>
-      <Translate
-        href={identifier.metax_identifier}
-        component={Link}
-        content="tombstone.linkTextToOtherIdentifier"
-      />
-    </div>
-  ))
-}
-
-function Relations() {
-  const {
-    Locale: { lang },
-    Etsin: {
-      EtsinDataset: {
-        groupedRelations: { relations },
-      },
-    },
-  } = useStores()
-
-  return relations.map(relation => (
-    <div key={relation.identifier}>
-      <Translate with={{ type: relation.type.pref_label[lang] }} content="tombstone.urlToRelated" />
-      <> </>
-      <Translate
-        href={relation.metax_identifier}
-        component={Link}
-        content="tombstone.linkTextToRelated"
-      />
-    </div>
-  ))
-}
-
-function RelatedDatasets() {
-  const {
-    Etsin: {
-      EtsinDataset: { groupedRelations },
-    },
-  } = useStores()
-
-  if (!groupedRelations) return null
-
-  return (
-    <>
-      <OtherIdentifiers identifiers={groupedRelations.otherIdentifiers} />
-      <Relations relations={groupedRelations.relations} />
-    </>
-  )
-}
-
 function DatasetView() {
   const {
     Accessibility,
     Etsin: {
-      EtsinDataset: {
-        latestExistingVersionInfotext,
-        latestExistingVersionId,
-        tombstoneInfotext,
-        isDraft,
-        draftInfotext,
-      },
-      isLoading,
+      EtsinDataset: { isDraft, draftInfotext },
     },
   } = useStores()
 
@@ -235,29 +140,7 @@ function DatasetView() {
       <article className="container regular-row">
         <div className="row">
           <div className="col-12">
-            <div>
-              <StateInfo>
-                <Translate component={StateHeader} content={tombstoneInfotext} />
-                {latestExistingVersionInfotext?.urlText && (
-                  <Translate content={latestExistingVersionInfotext?.urlText} />
-                )}
-                {latestExistingVersionId && (
-                  <>
-                    <> </>
-                    <Link
-                      href={`/dataset/${latestExistingVersionId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      content={'tombstone.link'}
-                    >
-                      <Translate content={latestExistingVersionInfotext?.linkToOtherVersion} />
-                    </Link>
-                  </>
-                )}
-                <RelatedDatasets />
-                {isLoading.relations && <RelatedDatasetLoadSpinner />}
-              </StateInfo>
-            </div>
+            <StateInfo />
             <BackButton
               exact
               to="/datasets"
@@ -297,24 +180,12 @@ const MarginAfter = styled.div`
   margin: 0.8em 0 1em 0;
 `
 
-const StateHeader = styled.p`
-  font-weight: bold;
-  &:last-child {
-    margin-bottom: 0;
-  }
-`
-
 const LoadingSplash = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: ${({ margin = 0 }) => margin};
-`
-
-const Link = styled.a`
-  font-size: 0.9em;
-  color: ${p => p.theme.color.linkColorUIV2};
 `
 
 const DraftInfo = styled.div`
@@ -330,10 +201,6 @@ const DraftInfo = styled.div`
 Dataset.propTypes = {
   Stores: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-}
-
-StateInfo.propTypes = {
-  children: PropTypes.node.isRequired,
 }
 
 export default withStores(observer(Dataset))

@@ -161,26 +161,18 @@ class Etsin {
 
     let promises
     if (!this.useDatasetV3) {
-      promises = [
-        this.fetchVersions(),
-        this.fetchRelations(id),
-        this.fetchFiles()
-      ]
-    }
-    else {
+      promises = [this.fetchVersions(), this.fetchRelations(id), this.fetchFiles()]
+    } else {
       runInAction(() => {
         this.isLoading.versions = false
         this.isLoading.relations = false
       })
-      promises = [
-        this.fetchFiles()
-      ]
+      promises = [this.fetchFiles()]
     }
 
-    return Promise.all(promises)
-      .finally(() => {
-        this.requests = {}
-      })
+    return Promise.all(promises).finally(() => {
+      this.requests = {}
+    })
   }
 
   @action fetchDataset = async id => {
@@ -193,8 +185,9 @@ class Etsin {
     ]
 
     const promises = [...this.requests.dataset.map(r => r.promise)]
-    return Promise.all(promises)
-      .finally(this.setLoadingOff('dataset'))
+    return Promise.all(promises).finally(() => {
+      this.setLoadingOff('dataset')
+    })
   }
 
   @action
@@ -207,8 +200,9 @@ class Etsin {
       }),
     ]
 
-    return Promise.resolve(this.requests.files[0].promise)
-      .finally(this.setLoadingOff('files'))
+    return Promise.resolve(this.requests.files[0].promise).finally(() => {
+      this.setLoadingOff('files')
+    })
   }
 
   @action
@@ -224,8 +218,9 @@ class Etsin {
       }),
     ]
 
-    return Promise.resolve(this.requests.packages[0].promise)
-      .finally(this.setLoadingOff('packages'))
+    return Promise.resolve(this.requests.packages[0].promise).finally(() => {
+      this.setLoadingOff('packages')
+    })
   }
 
   @action
@@ -237,7 +232,7 @@ class Etsin {
 
     runInAction(() => {
       this.requests.versions = Object.values(this.EtsinDataset.v2VersionSet).map(version => {
-        if(version.identifier === this.EtsinDataset.identifier) return null
+        if (version.identifier === this.EtsinDataset.identifier) return null
         return this.datasetProcessor.fetch({
           id: version.identifier,
           resolved: this.constructResolvedCb('versions'),
@@ -247,13 +242,12 @@ class Etsin {
     })
 
     const promises = this.requests.versions.filter(r => r).map(r => r.promise)
-    return Promise.all(promises)
-      .finally(() => {
-        runInAction(() => {
-          this.EtsinDataset.versions.push(this.EtsinDataset)
-        })
-        this.setLoadingOff('versions')
+    return Promise.all(promises).finally(() => {
+      runInAction(() => {
+        this.EtsinDataset.versions.push(this.EtsinDataset)
       })
+      this.setLoadingOff('versions')
+    })
   }
 
   @action
@@ -270,8 +264,7 @@ class Etsin {
       })
 
       const promises = [...this.requests.relations.map(r => r.promise)]
-      return Promise.all(promises)
-        .finally(this.setLoadingOff('relations'))
+      return Promise.all(promises).finally(() => this.setLoadingOff('relations'))
     }
 
     this.setLoadingOff('relations')

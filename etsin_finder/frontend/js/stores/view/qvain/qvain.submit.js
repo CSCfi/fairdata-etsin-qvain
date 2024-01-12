@@ -191,7 +191,7 @@ class Submit {
           const newVersion = await this.createNewVersion(dataset)
           dataset = {
             ...dataset,
-            cumulativeState: newVersion.cumulative_state,
+            cumulative_state: newVersion.cumulative_state,
             original: newVersion,
           }
         }
