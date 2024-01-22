@@ -1,76 +1,79 @@
 # fairdata-etsin-qvain
 
-This repository contains code for the Fairdata platforms Etsin and Qvain. This repository has been developed using React, MobX, and Flask.
+* This repository contains code for the Fairdata platforms Etsin and Qvain
+* Developed using React, MobX, and Flask
 
-## Development setup
+## Docker development setup
 
-This repository functions as part of the Etsin-Qvain setup, together with `fairdata-etsin-search` (github.com/CSCfi/etsin-finder-search).
+* This repository functions as part of the Etsin-Qvain setup, together with `fairdata-etsin-search` (github.com/CSCfi/etsin-finder-search).
+* For a development setup of Etsin-Qvain using Docker, see repository https://gitlab.ci.csc.fi/fairdata/fairdata-docker
 
-For a development setup of Etsin-Qvain using Docker, see repository https://gitlab.ci.csc.fi/fairdata/fairdata-secrets
+### Run tox syntax checks in Docker
 
-# Updating docker images
+```bash
+docker exec $(docker ps -q -f name=metax-etsin-qvain-dev_etsin-qvain-flask) tox
+```
 
-Two of the four Docker images are built (and can thus be edited) manually: webpack (frontend) and flask (backend)
+### Update Docker images to Artifactory
 
-First, login:
-`docker login fairdata-docker.artifactory.ci.csc.fi`
+* When there are updates to e.g. npm packages, you should build, tag, and push the `fairdata-etsin-qvain-webpack` image
+* When there are updates to python packages, you will need to build, tag, and push the `fairdata-etsin-qvain-flask` image
 
-Then, the service specific images can be pushed (see below)
+```bash
+# Login
+docker login fairdata-docker.artifactory.ci.csc.fi
 
-## Updating etsin-qvain-webpack
+# Update images
+docker build -f etsin_finder/frontend/webpack.dockerfile -t etsin-qvain-webpack etsin_finder/frontend
+docker build -f flask.dockerfile -t etsin-qvain-flask .
 
-When there are updates to npm packages, you will need to build, tag, and push the image again.
+# Tag images
+docker tag etsin-qvain-webpack fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack
+docker tag etsin-qvain-flask fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask
 
-1 Build image:
-- `docker build -f etsin_finder/frontend/webpack.dockerfile -t etsin-qvain-webpack etsin_finder/frontend`
+# Push images
+docker push fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack
+docker push fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask
+```
 
-2 Tag image:
-- `docker tag etsin-qvain-webpack fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack`
+## Poetry: python dependency management
 
-3 Push image:
-- `docker push fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-webpack`
+* Python dependencies are managed with Poetry. 
+* https://python-poetry.org/docs/
 
-## Updating etsin-qvain-flask
+Installation:
 
-When there are updates to python packages, you will need to build, tag, and push the image again.
+```bash
+# Installing Poetry requirement pipx
+https://github.com/pypa/pipx
 
-1 Build image:
-- `docker build -f flask.dockerfile -t etsin-qvain-flask .`
+# Then, install Poetry
+pipx install poetry
+```
 
-2 Tag image:
-- `docker tag etsin-qvain-flask fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask`
+Usage:
 
-3 Push image:
-- `docker push fairdata-docker.artifactory.ci.csc.fi/fairdata-etsin-qvain-flask`
+```bash
+# Install dependencies
+poetry install
 
-## Updating Python dependencies
+# Add dependencies
+poetry add <dependency>
 
-Python dependencies are managed with Poetry. 
+# Update dependencies according to pyproject.toml
+poetry update
+poetry export --without-hashes -o requirements.txt
 
-Add dependencies with `poetry add <dependency>`. 
+# Add new development dependencies using -D option
+poetry add -D tox
 
-Add development dependencies using -D option, e.g. `poetry add -D tox`. 
+# After poetry commands, update requirements.txt
+poetry export --without-hashes -o requirements.txt
 
-After poetry commands, update requirements.txt with `poetry export --without-hashes -o requirements.txt`, you can include dev dependencies with `--dev` option.
+# After poetry commands, update dev dependencies with dev dependencies with 
+poetry export --without-hashes --dev -o requirements.txt
+```
 
-For full documentation of Poetry, visit the [official documentation](https://python-poetry.org/docs/)
-
-### Installing Poetry
-
-First, install [pipx](https://github.com/pypa/pipx), with pipx installed, install Poetry with `pipx install poetry`. 
-
-### Installing dependencies
-
-you can install project dependencies with `poetry install`
-
-### Updating dependencies 
-
-To update dependencies according to `pyproject.toml` file constrains, run `poetry update`, followed by `poetry export --without-hashes -o requirements.txt`.
-
-## Running syntax checks
-
-1 Running tox:
-- `docker exec $(docker ps -q -f name=metax-etsin-qvain-dev_etsin-qvain-flask) tox`
 
 License
 -------
