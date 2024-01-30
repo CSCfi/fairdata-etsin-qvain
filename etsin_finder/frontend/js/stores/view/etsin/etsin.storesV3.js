@@ -228,11 +228,7 @@ class EtsinDatasetV3 {
   }
 
   @computed get isDownloadAllowed() {
-    return (
-      this.isPublished &&
-      (this.isIda || this.isPas) &&
-      this.Access.restrictions?.allowDataIdaDownloadButton
-    )
+    return this.dataset?.allowed_actions.download
   }
 
   @computed get datasetVersions() {
