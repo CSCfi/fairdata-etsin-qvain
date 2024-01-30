@@ -37,7 +37,7 @@ const Sidebar = () => {
 
   const catalogPublisher = dataCatalog?.publisher
   const catalogPublisherLang = getPreferredLang(catalogPublisher?.name)
-  const catalogPublisherHomepage = catalogPublisher.homepage?.[0].identifier || ''
+  const catalogPublisherHomepage = catalogPublisher.homepage?.[0].url || ''
   const catalogTitle = dataCatalog?.title[catalogPublisherLang]
 
   function getAccessRights() {
@@ -203,8 +203,7 @@ const Sidebar = () => {
             {actors.curators &&
               actors.curators.map(curator => {
                 const curatorName =
-                  curator.person?.name ||
-                  getValueTranslation(curator.organization?.pref_label)
+                  curator.person?.name || getValueTranslation(curator.organization?.pref_label)
                 return (
                   <Agent
                     key={`li-${curatorName}`}

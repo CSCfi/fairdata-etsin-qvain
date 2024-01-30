@@ -23,15 +23,7 @@ class EtsinDatasetV3 {
   @observable inInfo = null
 
   @computed get dataCatalog() {
-    // waiting for V3 implementation, this is a placeholder
-    return {
-      identifier: this.dataset?.data_catalog,
-      title: { en: 'placeholder' },
-      publisher: {
-        name: { en: 'Placeholder Publisher' },
-        homepage: [{ identifier: 'https://example.com' }],
-      },
-    }
+    return this.dataset?.data_catalog
   }
 
   @computed get persistentIdentifier() {
@@ -67,11 +59,11 @@ class EtsinDatasetV3 {
   }
 
   @computed get isIda() {
-    return this.dataCatalog?.identifier === DATA_CATALOG_IDENTIFIER.IDA
+    return this.dataCatalog?.id === DATA_CATALOG_IDENTIFIER.IDA
   }
 
   @computed get isPas() {
-    return this.dataCatalog?.identifier === DATA_CATALOG_IDENTIFIER.PAS
+    return this.dataCatalog?.id === DATA_CATALOG_IDENTIFIER.PAS
   }
 
   @computed get isCumulative() {
@@ -79,8 +71,7 @@ class EtsinDatasetV3 {
   }
 
   @computed get isHarvested() {
-    console.warn('no harvested info implementation yet in metax V3')
-    return false
+    return this.dataCatalog?.harvested
   }
 
   @computed get isRemoved() {

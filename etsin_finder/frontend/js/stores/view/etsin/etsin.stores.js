@@ -34,8 +34,8 @@ class EtsinDatasetV2 {
   } // V2 only
 
   @computed get dataCatalog() {
-    return this.catalogRecord?.data_catalog?.catalog_json
-  } // shapeDataCatalog action will be needed later
+    return this.shapeDataCatalog(this.catalogRecord?.data_catalog?.catalog_json)
+  }
 
   @computed get persistentIdentifier() {
     return this.dataset?.persistent_identifier || this.dataset?.preferred_identifier
@@ -71,11 +71,11 @@ class EtsinDatasetV2 {
   }
 
   @computed get isIda() {
-    return this.dataCatalog?.identifier === DATA_CATALOG_IDENTIFIER.IDA
+    return this.dataCatalog?.id === DATA_CATALOG_IDENTIFIER.IDA
   }
 
   @computed get isPas() {
-    return this.dataCatalog?.identifier === DATA_CATALOG_IDENTIFIER.PAS
+    return this.dataCatalog?.id === DATA_CATALOG_IDENTIFIER.PAS
   }
 
   @computed get isCumulative() {
@@ -555,6 +555,16 @@ class EtsinDatasetV2 {
 
       return shapedResource
     })
+  }
+
+  @action shapeDataCatalog(catalog) {
+    if (!catalog) return null
+
+    catalog.id = catalog.identifier
+    for (const page of catalog.publisher?.homepage) {
+      page.url = page.identifier
+    }
+    return catalog
   }
 
   @action shapeRelations(relations) {
