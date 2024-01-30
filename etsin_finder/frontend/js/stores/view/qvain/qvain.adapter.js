@@ -70,6 +70,17 @@ class Adapter {
     return v
   }
 
+  licenseV3toV2(value) {
+    return value.map(l => {
+      if (l.custom_url) {
+        return {
+          license: l.custom_url,
+        }
+      }
+      return this.refdataV3ToV2(l)
+    })
+  }
+
   otherIdentifierV3ToV2(value) {
     return { notation: value.notation }
   }
@@ -102,7 +113,7 @@ class Adapter {
     return {
       access_type: this.refdataV3ToV2(value.access_type),
       restriction_grounds: this.refdataV3ToV2(value.restriction_grounds),
-      license: this.refdataV3ToV2(value.license),
+      license: this.licenseV3toV2(value.license),
       available: value.available,
     }
   }
@@ -222,6 +233,15 @@ class Adapter {
     return { url: value.identifier }
   }
 
+  licenseV2toV3(value) {
+    return value.map(l => {
+      if (l.license) {
+        return { custom_url: l.license }
+      }
+      return this.refdataV2ToV3(l)
+    })
+  }
+
   otherIdentifierV2ToV3(value) {
     return { notation: value.notation }
   }
@@ -240,7 +260,7 @@ class Adapter {
     return {
       access_type: this.refdataV2ToV3(value.access_type),
       restriction_grounds: this.refdataV2ToV3(value.restriction_grounds),
-      license: this.refdataV2ToV3(value.license),
+      license: this.licenseV2toV3(value.license),
       available: value.available,
     }
   }

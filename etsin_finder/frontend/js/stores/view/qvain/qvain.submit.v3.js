@@ -86,9 +86,7 @@ class SubmitV3 extends Submit {
 
   createNewDraft = async dataset => {
     const url = this.Qvain.Env.metaxV3Url('datasets')
-    const { data } = await axios.post(url, dataset, {
-      params: { draft: true },
-    })
+    const { data } = await axios.post(url, dataset)
     return data
   }
 

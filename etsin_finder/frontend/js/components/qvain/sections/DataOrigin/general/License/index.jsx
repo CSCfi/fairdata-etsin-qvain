@@ -91,11 +91,13 @@ export class License extends Component {
     this.validateLicenses()
   }
 
-  createLicense = url =>
-    this.props.Stores.Qvain.Licenses.CustomLicenseModel(
+  createLicense = url => {
+    const custom = this.props.Stores.Qvain.Licenses.CustomLicenseModel(
       { fi: `Muu (URL): ${url}`, en: `Other (URL): ${url}` },
       url
     )
+    return { ...custom, identifier: url }
+  }
 
   render() {
     const { options, licenseErrors } = this.state

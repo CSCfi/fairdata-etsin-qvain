@@ -79,7 +79,7 @@ class Licenses extends ReferenceField {
 
   toBackend = () =>
     this.storage.map(lic =>
-      lic.identifier ? { identifier: lic.identifier } : { license: lic.otherLicenseUrl }
+      lic.otherLicenseUrl ? { license: lic.otherLicenseUrl } : { identifier: lic.identifier }
     )
 
   Model = Model

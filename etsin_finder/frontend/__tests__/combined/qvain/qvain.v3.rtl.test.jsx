@@ -200,11 +200,12 @@ describe('Qvain with an opened dataset', () => {
       /\.reference\.as_wkt$/,
       // fields not yet supported
       /^access_rights\.description/,
-      /license\.\d+\.custom_url$/,
       /license\.\d+\.description$/,
       // special handling
       /remote_resources\.\d+\..+/, // not supported for ida dataset
       'issued', // exact value may change
+      /license\.0.custom_url$/, // license-0 has no custom url
+      /license\.1.url$/, // license-1 has custom url so url is hidden
     ]
 
     // fields missing from original that may be added to submit data
@@ -387,8 +388,9 @@ describe('Qvain with an opened dataset', () => {
       /\.reference\.as_wkt$/,
       // not supported yet
       'description',
-      /license\.\d+\.custom_url$/,
       /license\.\d+\.description$/,
+      /license\.0.custom_url$/, // license-0 has no custom url
+      /license\.1.url$/, // license-1 has custom url so url is hidden
     ]
 
     // fields missing from original that may be added to submit data
