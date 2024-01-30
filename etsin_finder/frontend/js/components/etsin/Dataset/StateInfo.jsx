@@ -15,7 +15,7 @@ const RelatedDatasetLoadSpinner = () => (
 
 const OtherIdentifiers = otherIdentifiers =>
   otherIdentifiers.identifiers.map(identifier => (
-    <div key={identifier.identifier}>
+    <div key={identifier.metax_identifier}>
       <Translate
         with={{ identifier: identifier.identifier }}
         content="tombstone.urlToOtherIdentifier"
@@ -35,7 +35,7 @@ const Relations = observer(relations => {
   } = useStores()
 
   return relations.relations.map(relation => (
-    <div key={relation.identifier}>
+    <div key={relation.metax_identifier}>
       <Translate with={{ type: relation.type.pref_label[lang] }} content="tombstone.urlToRelated" />
       <> </>
       <Translate
@@ -54,7 +54,7 @@ const StateDescription = observer(() => {
         tombstoneInfotext,
         latestExistingVersionInfotext,
         latestExistingVersionId,
-        groupedRelations,
+        metaxRelations,
       },
       isLoading,
     },
@@ -82,10 +82,10 @@ const StateDescription = observer(() => {
 
       {isLoading.relations && <RelatedDatasetLoadSpinner />}
 
-      {groupedRelations && (
+      {metaxRelations && (
         <>
-          <OtherIdentifiers identifiers={groupedRelations.otherIdentifiers} />
-          <Relations relations={groupedRelations.relations} />
+          <OtherIdentifiers identifiers={metaxRelations.otherIdentifiers} />
+          <Relations relations={metaxRelations.relations} />
         </>
       )}
     </>

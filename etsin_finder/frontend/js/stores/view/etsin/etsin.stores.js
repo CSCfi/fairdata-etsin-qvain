@@ -284,10 +284,10 @@ class EtsinDatasetV2 {
   }
 
   @computed get datasetRelations() {
-    return this.dataset?.relation
+    return this.shapeRelations(this.dataset?.relation)
   }
 
-  @computed get groupedRelations() {
+  @computed get metaxRelations() {
     if (!this.relations?.length) {
       return null
     }
@@ -554,6 +554,15 @@ class EtsinDatasetV2 {
       }
 
       return shapedResource
+    })
+  }
+
+  @action shapeRelations(relations) {
+    if (!relations) return null
+
+    return relations.map(relation => {
+      relation.entity.entity_identifier = relation.entity.identifier
+      return relation
     })
   }
 }

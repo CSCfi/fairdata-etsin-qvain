@@ -14,8 +14,6 @@ class EtsinDatasetV3 {
 
   @observable dataset = null
 
-  @observable relations = null
-
   @observable packages = null
 
   @observable files = null
@@ -276,27 +274,41 @@ class EtsinDatasetV3 {
   }
 
   @computed get datasetRelations() {
-    // waiting for V3 implementation
-    return []
+    return this.dataset?.relation
   }
 
-  @computed get groupedRelations() {
-    // waiting for V3 implementation
-    if (!this.relations?.length) {
+  @computed get metaxRelations() {
+    if (!this.datasetRelations.length && !this.otherIdentifiers) {
       return null
     }
 
-    return this.relations.reduce(
-      (obj, val) => {
-        if (val.type === 'other_identifier') {
-          obj.otherIdentifiers.push(val)
-        } else {
-          obj.relations.push(val)
+    const otherIdentifiers = this.dataset.other_identifiers.reduce((idList, identifier) => {
+      if (identifier.metax_ids) {
+        for (const metaxId of identifier.metax_ids) {
+          idList.push({
+            type: 'other_identifier',
+            identifier: identifier.notation,
+            metax_identifier: metaxId,
+          })
         }
-        return obj
-      },
-      { otherIdentifiers: [], relations: [] }
-    )
+      }
+      return idList
+    }, [])
+
+    const relations = this.dataset.relation.reduce((relationList, relation) => {
+      if (relation.metax_ids) {
+        for (const metaxId of relation.metax_ids) {
+          relationList.push({
+            type: relation.relation_type,
+            identifier: relation.entity.entity_identifier,
+            metax_identifier: metaxId,
+          })
+        }
+      }
+      return relationList
+    }, [])
+
+    return { otherIdentifiers, relations }
   }
 
   @computed get currentVersionDate() {

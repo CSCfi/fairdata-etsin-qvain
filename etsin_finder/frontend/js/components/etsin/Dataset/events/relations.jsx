@@ -50,7 +50,7 @@ const Relations = () => {
         </thead>
         <tbody>
           {datasetRelations.map(single => (
-            <tr key={single.entity.identifier || ''}>
+            <tr key={single.entity.entity_identifier || ''}>
               <td lang={getPreferredLang(single.relation_type.pref_label)}>
                 {getValueTranslation(single.relation_type.pref_label)}
               </td>
@@ -59,16 +59,16 @@ const Relations = () => {
               </td>
               <td>
                 <span className="sr-only">Identifier:</span>
-                {relationIdentifierIsUrl(single.entity.identifier || '') ? (
+                {relationIdentifierIsUrl(single.entity.entity_identifier || '') ? (
                   <IDLink
-                    href={single.entity.identifier || ''}
+                    href={single.entity.entity_identifier || ''}
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    {single.entity.identifier || ''}
+                    {single.entity.entity_identifier || ''}
                   </IDLink>
                 ) : (
-                  <ID>{single.entity.identifier || ''}</ID>
+                  <ID>{single.entity.entity_identifier || ''}</ID>
                 )}
               </td>
             </tr>
