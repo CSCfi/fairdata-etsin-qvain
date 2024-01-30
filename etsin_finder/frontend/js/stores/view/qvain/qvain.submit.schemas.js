@@ -18,6 +18,7 @@ import {
 } from './qvain.dataCatalog.schemas'
 import { filesSchema, directoriesSchema } from './qvain.files.schemas'
 import { embargoExpDateSchema } from './qvain.embargoExpDate'
+import { actorsSchemaV3 } from './qvain.actors.v3'
 
 const accessRightsDraftSchema = yup
   .object()
@@ -47,7 +48,7 @@ const accessRightsSchema = yup
   .required('qvain.validationMessages.accessType.required')
 
 // Entire form validation for normal dataset
-const qvainFormSchema = yup.object().shape({
+const qvainFormSchemaShape = {
   title: titleSchema,
   description: descriptionSchema,
   issued: yup.mixed().when('use_doi', {
@@ -73,7 +74,29 @@ const qvainFormSchema = yup.object().shape({
   files: filesSchema,
   directories: directoriesSchema,
   use_doi: useDoiSchema,
-})
+}
+const qvainFormSchema = yup.object().shape(qvainFormSchemaShape)
+
+// V3 validation uses style for actors
+const qvainFormSchemaShapeV3 = {
+  ...qvainFormSchemaShape,
+  actors: actorsSchemaV3
+    .test(
+      'require-creator',
+      'qvain.validationMessages.actors.requiredActors.creator',
+      value => value.filter(v => v.roles.includes('creator')).length > 0
+    )
+    .test(
+      'require-publisher',
+      'qvain.validationMessages.actors.requiredActors.publisher',
+      value => value.filter(v => v.roles.includes('publisher')).length === 1
+    ),
+}
+delete qvainFormSchemaShapeV3.creator
+delete qvainFormSchemaShapeV3.publisher
+delete qvainFormSchemaShapeV3.curator
+delete qvainFormSchemaShapeV3.contributor
+const qvainFormSchemaV3 = yup.object().shape(qvainFormSchemaShapeV3)
 
 // Entire form validation for draft
 const qvainFormDraftSchema = yup.object().shape({
@@ -96,4 +119,4 @@ const qvainFormDraftSchema = yup.object().shape({
   use_doi: useDoiSchema,
 })
 
-export { qvainFormSchema, qvainFormDraftSchema }
+export { qvainFormSchema, qvainFormDraftSchema, qvainFormSchemaV3 }

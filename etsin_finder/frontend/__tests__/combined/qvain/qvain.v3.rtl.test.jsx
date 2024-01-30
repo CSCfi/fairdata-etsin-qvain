@@ -4,7 +4,7 @@ import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
 import ReactModal from 'react-modal'
 
-import { MemoryRouter, Route } from 'react-router-dom'
+import { MemoryRouter, Route, useLocation } from 'react-router-dom'
 
 import { screen, render, within, waitForElementToBeRemoved } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -34,11 +34,46 @@ beforeEach(() => {
 // rendering helpers
 const getSection = name => screen.getByRole('heading', { name }).parentElement
 
-const renderQvain = async (overrides = {}) => {
+let routerLocation
+
+const Location = () => {
+  // Helper component to keep track of router location
+  const loc = useLocation()
+  routerLocation = loc
+  return null
+}
+
+const renderQvain = async (overrides = {}, { initialPath } = {}) => {
   const metaxDataset = { ...dataset, ...overrides }
+  const publishedDataset = { ...dataset, ...overrides, state: 'published' }
+  const linkedDatasetDraft = {
+    ...metaxDataset,
+    id: 'linked-draft-id',
+    draft_of: {
+      id: metaxDataset.id,
+    },
+  }
   mockAdapter.onGet(`https://metaxv3:443/v3/datasets/${metaxDataset.id}`).reply(200, metaxDataset)
   mockAdapter.onPatch(`https://metaxv3:443/v3/datasets/${metaxDataset.id}`).reply(200, metaxDataset)
+  mockAdapter
+    .onPost(`https://metaxv3:443/v3/datasets/${metaxDataset.id}/publish`)
+    .reply(200, publishedDataset)
 
+  // Linked draft
+  mockAdapter
+    .onPost(`https://metaxv3:443/v3/datasets/${metaxDataset.id}/create-draft`)
+    .reply(201, linkedDatasetDraft)
+  mockAdapter
+    .onGet(`https://metaxv3:443/v3/datasets/${linkedDatasetDraft.id}`)
+    .reply(200, linkedDatasetDraft)
+  mockAdapter
+    .onPatch(`https://metaxv3:443/v3/datasets/${linkedDatasetDraft.id}`)
+    .reply(200, linkedDatasetDraft)
+  mockAdapter
+    .onPost(`https://metaxv3:443/v3/datasets/${linkedDatasetDraft.id}/publish`)
+    .reply(200, publishedDataset)
+
+  document.cookie = 'etsin_app=qvain' // sets etsin_app
   const Env = new EnvClass()
   Env.Flags.setFlag('QVAIN.METAX_V3.FRONTEND', true)
   Env.setMetaxV3Host('metaxv3', 443)
@@ -46,8 +81,9 @@ const renderQvain = async (overrides = {}) => {
 
   render(
     <ThemeProvider theme={etsinTheme}>
-      <MemoryRouter initialEntries={[`/dataset/${metaxDataset.id}`]}>
+      <MemoryRouter initialEntries={[initialPath || `/dataset/${metaxDataset.id}`]}>
         <StoresProvider store={stores}>
+          <Location />
           <Route path="/dataset/:identifier" component={Qvain} />
         </StoresProvider>
       </MemoryRouter>
@@ -177,7 +213,7 @@ describe('Qvain with an opened dataset', () => {
     }
   })
 
-  it('when submit draft is clicked, submits all supported fields from dataset', async () => {
+  it('when submit is clicked, submits all supported fields from dataset', async () => {
     // fields not expected to be present in the submitted data
     const expectedMissing = [
       // non-writable fields
@@ -193,6 +229,7 @@ describe('Qvain with an opened dataset', () => {
       'removal_date',
       'persistent_identifier',
       'cumulation_started',
+      'state',
       /^metadata_owner\..+/,
       // id not supported outside actors
       /^(?!actors\.).*.id$/,
@@ -212,6 +249,7 @@ describe('Qvain with an opened dataset', () => {
 
     // fields missing from original that may be added to submit data
     const expectedExtra = [
+      'pid_type', // determined from use_doi_for_published
       'title.sv',
       'description.sv',
       /\.und$/,
@@ -244,7 +282,7 @@ describe('Qvain with an opened dataset', () => {
     expect(flatSubmit).toEqual(flatDataset)
   })
 
-  it('when submit draft is clicked, submits remote resources for ATT dataset', async () => {
+  it('when submit is clicked, submits remote resources for ATT dataset', async () => {
     // fields not expected to be present in the submitted data
     const expectedMissing = [
       // id not supported
@@ -269,6 +307,70 @@ describe('Qvain with an opened dataset', () => {
     const flatResources = removeMatchingKeys(flatten(dataset.remote_resources), expectedMissing)
     const flatSubmitResources = removeMatchingKeys(flatten(submitResources), expectedExtra)
     expect(flatSubmitResources).toEqual(flatResources)
+  })
+
+  describe('when saving draft', () => {
+    const saveDraft = async (overrides = {}) => {
+      await renderQvain(overrides)
+      const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+      await userEvent.click(submitButton)
+    }
+
+    it('given draft, should update dataset directly', async () => {
+      await saveDraft({ state: 'draft' })
+      expect(mockAdapter.history.patch[0].url).toBe(`https://metaxv3:443/v3/datasets/${dataset.id}`)
+      expect(mockAdapter.history.post.length).toBe(0)
+      expect(routerLocation.pathname).toBe(`/dataset/${dataset.id}`)
+    })
+
+    it('given published, should create linked draft', async () => {
+      await saveDraft({ state: 'published' })
+      expect(mockAdapter.history.post.length).toBe(1)
+      expect(mockAdapter.history.post[0].url).toBe(
+        `https://metaxv3:443/v3/datasets/${dataset.id}/create-draft`
+      )
+      expect(mockAdapter.history.patch[0].url).toBe(
+        `https://metaxv3:443/v3/datasets/linked-draft-id`
+      )
+      // qvain should be redirected to linked draft
+      expect(routerLocation.pathname).toBe(`/dataset/linked-draft-id`)
+    })
+  })
+
+  describe('when publishing', () => {
+    const publish = async (overrides = {}, options = {}) => {
+      await renderQvain(overrides, options)
+      const submitButton = screen.getByRole('button', { name: 'Save and Publish' })
+      await userEvent.click(submitButton)
+    }
+
+    it('given new draft, should update and publish dataset', async () => {
+      await publish({ state: 'draft' })
+      expect(mockAdapter.history.patch[0].url).toBe(`https://metaxv3:443/v3/datasets/${dataset.id}`)
+      expect(mockAdapter.history.post[0].url).toBe(
+        `https://metaxv3:443/v3/datasets/${dataset.id}/publish`
+      )
+      expect(routerLocation.pathname).toBe(`/dataset/${dataset.id}`)
+    })
+
+    it('given linked draft, should update and publish dataset', async () => {
+      await publish({ state: 'draft' }, { initialPath: '/dataset/linked-draft-id' })
+      expect(mockAdapter.history.patch[0].url).toBe(
+        `https://metaxv3:443/v3/datasets/linked-draft-id`
+      )
+      expect(mockAdapter.history.post[0].url).toBe(
+        `https://metaxv3:443/v3/datasets/linked-draft-id/publish`
+      )
+      // qvain should be redirected to original dataset
+      expect(routerLocation.pathname).toBe(`/dataset/${dataset.id}`)
+    })
+
+    it('given published, should update dataset directly', async () => {
+      await publish({ state: 'published' })
+      expect(mockAdapter.history.post.length).toBe(0)
+      expect(mockAdapter.history.patch[0].url).toBe(`https://metaxv3:443/v3/datasets/${dataset.id}`)
+      expect(routerLocation.pathname).toBe(`/dataset/${dataset.id}`)
+    })
   })
 
   it('shows spatial in modal', async () => {

@@ -14,6 +14,7 @@ import { remote_resource_a } from '../refs/remote_resources.data'
 import { data_catalog_ida } from '../refs/data_catalogs.data'
 
 const dataset_open_a = {
+  state: 'draft',
   access_rights: access_rights_open_a,
   actors: [
     {

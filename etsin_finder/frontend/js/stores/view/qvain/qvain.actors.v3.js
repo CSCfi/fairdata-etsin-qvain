@@ -1,8 +1,17 @@
+import * as yup from 'yup'
 import axios from 'axios'
 import { override, runInAction } from 'mobx'
 import Actors, { Organization, createActor } from './qvain.actors'
 import { ENTITY_TYPE } from '@/utils/constants'
 import symmetricDifference from '@/components/qvain/utils/symmetricDifference'
+
+export const actorsSchemaV3 = yup.array().of(
+  yup.object().shape({
+    roles: yup.array().of(yup.string()),
+    person: yup.object().nullable(),
+    organization: yup.object().required('qvain.validationMessages.actors.organization.required'),
+  })
+)
 
 class ActorsV3 extends Actors {
   @override
@@ -95,7 +104,7 @@ class ActorsV3 extends Actors {
             Organization({
               uiid: org.id,
               name: org.pref_label,
-              identifier: org.url,
+              url: org.url,
               isReference: true,
             })
           )

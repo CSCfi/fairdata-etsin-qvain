@@ -113,9 +113,8 @@ export class Qvain extends Component {
         recordEvent('DATASET')
       }
     }
-
     // Test if we need to load a dataset or do we use the one currently in store
-    if (identifier && !(original && original.identifier === identifier)) {
+    if (identifier && !(original?.identifier === identifier)) {
       await this.getDataset(identifier, { isTemplate })
     } else {
       this.setState({ datasetLoading: false, haveDataset: true })
@@ -173,7 +172,7 @@ export class Qvain extends Component {
   }
 
   async getDatasetV3(identifier, { isTemplate = false } = {}) {
-    const { metaxV3Url } = this.props.Stores.Env
+    const { metaxV3Url, getQvainUrl } = this.props.Stores.Env
     this.setState({ datasetLoading: true, datasetError: false })
     const { resetQvainStore, editDataset, resetWithTemplate } = this.props.Stores.Qvain
 
@@ -181,6 +180,14 @@ export class Qvain extends Component {
     try {
       const result = await this.client.get(url)
       resetQvainStore()
+
+      // Open draft instead if it exists
+      const nextDraft = result.data.next_draft?.id
+      if (nextDraft && !isTemplate) {
+        // Use timeout so `state.datasetLoading` has time to become false
+        // before `handleIdentifierChanged` is called
+        window.setTimeout(() => this.props.history.replace(getQvainUrl(`/dataset/${nextDraft}`)), 0)
+      }
 
       if (isTemplate) {
         resetWithTemplate(result.data)

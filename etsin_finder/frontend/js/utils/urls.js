@@ -42,6 +42,9 @@ export default {
   },
   metaxV3: {
     dataset: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}`,
+    datasetPublish: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/publish`,
+    datasetCreateDraft: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/create-draft`,
+    datasetNewVersion: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/new-version`,
     datasets: metaxV3 => `${metaxV3}/v3/datasets`,
     datasetData: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/data`,
     datasetFormat: (metaxV3, dataset, format) =>

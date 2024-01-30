@@ -37,7 +37,7 @@ const Sidebar = () => {
 
   const catalogPublisher = dataCatalog?.publisher
   const catalogPublisherLang = getPreferredLang(catalogPublisher?.name)
-  const catalogPublisherHomepage = catalogPublisher.homepage?.[0].url || ''
+  const catalogPublisherHomepage = catalogPublisher?.homepage?.[0].url || ''
   const catalogTitle = dataCatalog?.title[catalogPublisherLang]
 
   function getAccessRights() {
@@ -120,7 +120,7 @@ const Sidebar = () => {
           itemTitle="dataset.catalog_publisher"
           lang={catalogPublisherLang}
         >
-          {catalogPublisher.name && getValueTranslation(catalogPublisher.name)}
+          {catalogPublisher?.name && getValueTranslation(catalogPublisher.name)}
         </DatasetInfoItem>
       </SidebarArea>
 

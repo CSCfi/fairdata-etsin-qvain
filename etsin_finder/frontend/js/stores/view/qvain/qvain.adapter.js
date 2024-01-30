@@ -29,6 +29,7 @@ class Adapter {
       this.orgV3ToV2,
       this.actorV3ToV2,
       this.provenanceActorV2ToV3,
+      this.relatedDraftV3ToV2,
     ]
     adapterFuncs.forEach(this.makeBoundAdapterFunc)
   }
@@ -191,6 +192,13 @@ class Adapter {
     return obj
   }
 
+  relatedDraftV3ToV2(draft) {
+    return {
+      ...draft,
+      identifier: draft.id,
+    }
+  }
+
   convertV3ToV2(dataset) {
     // Convert Metax V3 object to V2-style input object.
     const d = {
@@ -215,7 +223,10 @@ class Adapter {
         provenance: this.provenanceV3ToV2(dataset.provenance),
       },
       date_created: dataset.created,
-      state: 'draft',
+      state: dataset.state,
+      use_doi_for_published: dataset.pid_type === 'DOI',
+      draft_of: this.relatedDraftV3ToV2(dataset.draft_of),
+      next_draft: this.relatedDraftV3ToV2(dataset.next_draft),
     }
 
     // include v3 fileset object as it is
@@ -274,8 +285,7 @@ class Adapter {
   provenanceV2ToV3(value) {
     return {
       title: this.removeMissingTranslations(value.title),
-      // TODO: Remove `|| {}` after making description optional in Metax
-      description: this.removeMissingTranslations(value.description) || {},
+      description: this.removeMissingTranslations(value.description),
       outcome_description: this.removeMissingTranslations(value.outcome_description),
       spatial: this.spatialV2ToV3(value.spatial),
       temporal: this.temporalV2ToV3(value.temporal),
@@ -297,8 +307,8 @@ class Adapter {
   relationV2ToV3(value) {
     return {
       entity: value.entity && {
-        title: value.entity.title,
-        description: value.entity.description,
+        title: this.removeMissingTranslations(value.entity.title),
+        description: this.removeMissingTranslations(value.entity.description),
         type: this.refdataV2ToV3(value.entity.type),
         entity_identifier: value.entity.identifier,
       },
@@ -308,8 +318,8 @@ class Adapter {
 
   remoteResourceV2ToV3(value) {
     return {
-      title: { en: value.title },
-      description: { en: value.description },
+      title: this.removeMissingTranslations({ en: value.title }),
+      description: this.removeMissingTranslations({ en: value.description }),
       use_category: this.refdataV2ToV3(value.use_category),
       file_type: this.refdataV2ToV3(value.file_type),
       access_url: value.access_url?.identifier,
@@ -322,8 +332,8 @@ class Adapter {
     const d = {
       id: dataset.original?.id,
       data_catalog: dataset.data_catalog,
-      title: dataset.title,
-      description: dataset.description,
+      title: this.removeMissingTranslations(dataset.title),
+      description: this.removeMissingTranslations(dataset.description),
       keyword: dataset.keyword,
       issued: dataset.issued,
       language: this.refdataV2ToV3(dataset.language),
@@ -337,6 +347,7 @@ class Adapter {
       temporal: this.temporalV2ToV3(dataset.temporal),
       remote_resources: this.remoteResourceV2ToV3(dataset.remote_resources),
       actors: dataset.actors, // conversion done in actors store
+      pid_type: dataset.use_doi ? 'DOI' : 'URN',
     }
 
     // include v3 fileset object as it is

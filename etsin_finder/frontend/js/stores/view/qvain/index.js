@@ -17,6 +17,7 @@ import Lock from './qvain.lock'
 import track, { touch } from './track'
 import queryParamEnabled from '@/utils/queryParamEnabled'
 import Adapter from './qvain.adapter'
+import remapActorIdentifiers from '@/utils/remapActorIdentifiers'
 
 class Qvain extends Resources {
   constructor(Env, Auth) {
@@ -276,6 +277,7 @@ class Qvain extends Resources {
     this.resetQvainStore()
     let v2Dataset = dataset
     if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
+      remapActorIdentifiers(dataset) // can't reuse actor ids in new dataset
       v2Dataset = this.Adapter.convertV3ToV2(dataset)
     }
     this.loadBasicFields(v2Dataset)

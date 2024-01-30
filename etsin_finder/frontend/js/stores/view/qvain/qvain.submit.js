@@ -17,6 +17,10 @@ class Submit {
     makeObservable(this)
   }
 
+  qvainFormDraftSchema = qvainFormDraftSchema
+
+  qvainFormSchema = qvainFormSchema
+
   @observable isLoading = false
 
   @observable error = undefined
@@ -405,13 +409,13 @@ class Submit {
     const dataset = this.prepareDataset()
 
     try {
-      await qvainFormSchema.validate(dataset, { abortEarly: false, strict: true })
+      await this.qvainFormSchema.validate(dataset, { abortEarly: false, strict: true })
     } catch (error) {
       this.setPublishValidationError(error)
     }
 
     try {
-      await qvainFormDraftSchema.validate(dataset, { abortEarly: false, strict: true })
+      await this.qvainFormDraftSchema.validate(dataset, { abortEarly: false, strict: true })
     } catch (error) {
       this.setDraftValidationError(error)
     }
