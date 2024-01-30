@@ -16,7 +16,6 @@ import { Button } from '@/components/general/button'
 import { useStores } from '@/stores/stores'
 import SelectedItems from './selectedItems'
 import AddItemsModal from './addItems'
-import FixDeprecatedModal from './fixDeprecatedModal'
 import FormModal from './forms/formModal'
 import { AddButton } from '@/components/qvain/general/V2/buttons'
 import MetadataModal from '../MetadataModal'
@@ -139,7 +138,6 @@ export const FilePickerBase = () => {
       {content}
       <AddItemsModal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} />
       {error}
-      <FixDeprecatedModal />
       <FormModal />
       <MetadataModal />
       <ClearMetadataModal />

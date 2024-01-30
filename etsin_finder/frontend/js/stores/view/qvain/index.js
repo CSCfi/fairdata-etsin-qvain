@@ -70,7 +70,6 @@ class Qvain extends Resources {
 
     this.metadataModalFile = undefined
     this.clearMetadataModalFile = undefined
-    this.fixDeprecatedModalOpen = false
 
     this.ExternalResources.reset()
     this.resources.forEach(r => r.reset())
@@ -109,8 +108,6 @@ class Qvain extends Resources {
   @observable metadataModalFile = undefined
 
   @observable clearMetadataModalFile = undefined
-
-  @observable fixDeprecatedModalOpen = false
 
   @observable promptLooseActors = undefined
 
@@ -210,14 +207,6 @@ class Qvain extends Resources {
     this.metadataModalFile = file
   }
 
-  @action showFixDeprecatedModal = () => {
-    this.fixDeprecatedModalOpen = true
-  }
-
-  @action closeFixDeprecatedModal = () => {
-    this.fixDeprecatedModalOpen = false
-  }
-
   @computed
   get getInEdit() {
     return this.inEdit
@@ -239,7 +228,7 @@ class Qvain extends Resources {
 
   // load fields that won't be duplicated by template copy
   @action loadStatusAndFileFields = async dataset => {
-    this.deprecated = dataset.deprecated
+    this.deprecated = dataset.deprecated && !this.isNewVersion
 
     // Load data catalog
     this.dataCatalog = dataset.data_catalog?.identifier

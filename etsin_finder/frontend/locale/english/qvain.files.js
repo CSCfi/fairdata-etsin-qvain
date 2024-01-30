@@ -70,8 +70,9 @@ const files = {
       save: 'Add files',
       close: 'Close',
     },
-    versionInfo:{
-      published: 'Note! Cumulative dataset allows you to add files to it but you cannot remove existing files. Removing the data is only possible by creating a new version of the dataset.',
+    versionInfo: {
+      published:
+        'Note! Cumulative dataset allows you to add files to it but you cannot remove existing files. Removing the data is only possible by creating a new version of the dataset.',
       draft: `Note! While the dataset is saved as a draft, data can be changed freely.
       Once the dataset has been published, data cannot be changed without creating a new version of the dataset. Files can be added to published cumulative datasets.`,
     },
@@ -90,19 +91,8 @@ const files = {
       close: 'Close',
     },
   },
-  fixDeprecatedModal: {
-    statusText:
-      'This dataset is deprecated. Some of the files in the dataset are no longer available.',
-    header: 'Fix Deprecated Dataset',
-    help: 'This will fix the dataset by removing any included files and directories that are no longer available. A new dataset version will be created. The changes will take place immediately.',
-    changes: 'You need to save your changes to the dataset first.',
-    buttons: {
-      show: 'Fix deprecated dataset',
-      ok: 'Fix dataset',
-      cancel: 'Cancel',
-      close: 'Close',
-    },
-  },
+  deprecated:
+    'This dataset is deprecated. Some of the files in the dataset are no longer available.',
   metadataModal: {
     header: 'Digital Preservation metadata',
     help: 'Saving the changes will update the file metadata regardless of whether the file is in your dataset or not.',

@@ -67,8 +67,9 @@ const files = {
       save: 'Lisää tiedostot',
       close: 'Sulje',
     },
-    versionInfo:{
-      published: 'Huom! Kasvavaan aineistoon voi lisätä tiedostoja vapaasti, mutta tiedostojen poistaminen ei ole sallittua ilman, että aineistosta tehdään uusi versio.',
+    versionInfo: {
+      published:
+        'Huom! Kasvavaan aineistoon voi lisätä tiedostoja vapaasti, mutta tiedostojen poistaminen ei ole sallittua ilman, että aineistosta tehdään uusi versio.',
       draft: `Huom! Niin kauan, kun aineisto on tallennettu vain luonnoksena, tiedostoja voi muuttaa vapaasti.
       Julkaistun aineiston tiedostoja ei voi enää muuttaa ilman, että siitä tehdään uusi versio. Julkaistuun kasvavaan aineistoon voi lisätä tiedostoja.`,
     },
@@ -87,18 +88,7 @@ const files = {
       close: 'Sulje',
     },
   },
-  fixDeprecatedModal: {
-    statusText: 'Aineisto on vanhentunut. Jotkin aineiston tiedostot eivät ole enää saatavilla.',
-    header: 'Korjaa vanhentunut aineisto',
-    help: 'Tämä toiminto korjaa aineiston poistamalla siitä kaikki tiedostot ja hakemistot jotka eivät ole enää saatavilla. Aineistosta tehdään uusi versio.',
-    changes: 'Aineistoon tehdyt muutokset on tallennettava ennen tätä toimintoa.',
-    buttons: {
-      show: 'Korjaa vanhentunut aineisto',
-      ok: 'Korjaa aineisto',
-      cancel: 'Peruuta',
-      close: 'Sulje',
-    },
-  },
+  deprecated: 'Aineisto on vanhentunut. Jotkin aineiston tiedostot eivät ole enää saatavilla.',
   metadataModal: {
     header: 'Muokkaa PAS-metadataa',
     help: 'Datan tallentaminen päivittää tiedoston metadatan riippumatta siitä onko se aineistossa.',

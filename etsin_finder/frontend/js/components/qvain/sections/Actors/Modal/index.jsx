@@ -94,7 +94,7 @@ export const ActorModalBase = () => {
     <Modal
       isOpen
       onRequestClose={requestClose}
-      contentLabel="fixDeprecatedModal"
+      contentLabel="actorsModal"
       customStyles={modalStyle}
       ref={modalRef}
     >

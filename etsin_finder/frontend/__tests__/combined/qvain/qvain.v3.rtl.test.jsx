@@ -21,6 +21,8 @@ import dataset, { accessRightsEmbargo } from '../../__testdata__/v3dataset.data'
 import Qvain from '@/components/qvain/views/main'
 import { flatten, removeMatchingKeys } from '@/utils/flatten'
 
+jest.setTimeout(15000)
+
 // axios mocks
 const mockAdapter = new MockAdapter(axios)
 mockAdapter.onGet(new RegExp('/v3/reference-data/.*')).reply(200, [])

@@ -123,10 +123,6 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
         return None
 
     @property
-    def _METAX_FIX_DEPRECATED(self):
-        return self.metax_url("/rpc/v2/datasets/fix_deprecated")
-
-    @property
     def _METAX_UPDATE_DATASET_FILES(self):
         return self.metax_url("/rest/v2/datasets") + "/{0}/files"
 
@@ -485,10 +481,6 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
     def refresh_directory_content(self, cr_identifier, dir_identifier):
         """No longer necessary, use update_dataset_files instead."""
-        return "API removed", 403
-
-    def fix_deprecated_dataset(self, cr_identifier):
-        """No longer necessary, creating new version should fix a deprecated dataset automatically."""
         return "API removed", 403
 
     def update_dataset_files(self, cr_id, data, params=None):
