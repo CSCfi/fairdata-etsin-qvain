@@ -64,7 +64,6 @@ def add_restful_resources(app):
         User,
         Language,
         Session,
-        Files,
         AppConfig,
         SupportedFlags,
     )
@@ -134,7 +133,6 @@ def add_restful_resources(app):
     # Etsin API endpoints
     add_resource(Dataset, "/api/dataset/<id:cr_id>")
     add_resource(DatasetMetadata, "/api/format")
-    add_resource(Files, "/api/files/<id:cr_id>")
     add_resource(Contact, "/api/email/<id:cr_id>")
     add_resource(User, "/api/user")
     add_resource(Language, "/api/language")

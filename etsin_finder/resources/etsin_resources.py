@@ -218,55 +218,6 @@ class RelatedDatasets(MethodView):
         return response, 200
 
 
-class Files(MethodView):
-    """File/directory related REST endpoints for frontend."""
-
-    @log_request
-    def get(self, cr_id):
-        """Get files and directory objects for frontend.
-
-        Args:
-            cr_id (str): Catalog record identifier.
-
-        Returns:
-            tuple: Payload and status code.
-
-        """
-        args = parser.parse(
-            {
-                "dir_id": fields.Str(required=True, validate=validate.Length(min=1)),
-                "file_fields": fields.Str(),
-                "directory_fields": fields.Str(),
-            },
-            request,
-        )
-        dir_id = args.get("dir_id")
-        file_fields = args.get("file_fields", None)
-        directory_fields = args.get("directory_fields", None)
-
-        if not authorization.user_can_view_dataset(cr_id):
-            abort(404)
-
-        cr = cr_service.get_catalog_record(cr_id, False, False)
-        dir_api_obj = cr_service.get_directory_data_for_catalog_record(
-            cr_id, dir_id, file_fields, directory_fields
-        )
-
-        if cr and dir_api_obj:
-            # Sort the items
-            sort_array_of_obj_by_key(
-                dir_api_obj.get("directories", []), "directory_name"
-            )
-            sort_array_of_obj_by_key(dir_api_obj.get("files", []), "file_name")
-
-            # Strip the items of sensitive data
-            authorization.strip_dir_api_object(
-                dir_api_obj, authentication.is_authenticated(), cr
-            )
-            return dir_api_obj, 200
-        return "", 404
-
-
 class Contact(MethodView):
     """Contact form related REST endpoints for frontend."""
 
