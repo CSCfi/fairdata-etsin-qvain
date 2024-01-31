@@ -18,12 +18,12 @@ import Event from './event'
 const EventList = () => {
   const {
     Etsin: {
-      EtsinDataset: { deletedVersions, provenance, dateDeprecated },
+      EtsinDataset: { deletedVersions, provenance, isDeprecated, dateDeprecated },
     },
     Locale: { dateFormat, getValueTranslation },
   } = useStores()
 
-  if (!(hasProvenances(provenance) || deletedVersions?.length > 0 || dateDeprecated)) {
+  if (!(hasProvenances(provenance) || deletedVersions?.length > 0 || isDeprecated)) {
     return null
   }
 
@@ -60,7 +60,7 @@ const EventList = () => {
               <Event event={event} key={`event-${getValueTranslation(event.title || undefined)}`} />
             ))
           }
-          {dateDeprecated && (
+          {isDeprecated && (
             // Displaying deprecated datasets
             <tr key={dateDeprecated}>
               {/* Dataset deprecation as event */}
