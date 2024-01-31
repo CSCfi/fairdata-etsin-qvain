@@ -1,1 +1,1 @@
-export { withStores, useStores } from '../../../stores/stores'
+export { withStores, useStores } from '@/stores/stores'

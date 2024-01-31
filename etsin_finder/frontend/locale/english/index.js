@@ -10,6 +10,7 @@
 
 import track from '@/stores/view/qvain/track'
 import qvain from './qvain'
+import search from './search'
 
 const english = {
   changepage: 'Navigated to page: %(page)s',
@@ -331,7 +332,7 @@ const english = {
     spatial_coverage: 'Spatial Coverage',
     temporal_coverage: 'Temporal Coverage',
     tags: 'Dataset tags',
-    version: { number: 'Version %(number)s', old: '(Old)', label: 'Dataset version selector'},
+    version: { number: 'Version %(number)s', old: '(Old)', label: 'Dataset version selector' },
     agent: {
       contributor_role: 'Contributor role',
       contributor_type: 'Contributor type',
@@ -438,41 +439,7 @@ const english = {
       snglr: '%(amount)s result',
     },
   },
-  search: {
-    name: 'Search',
-    placeholder: 'Search term',
-    sorting: {
-      sort: 'Sort',
-      best: 'Most relevant',
-      bestTitle: 'Relevance',
-      dateA: 'Oldest first',
-      dateATitle: 'Oldest',
-      dateD: 'Last modified',
-      dateDTitle: 'Newest',
-    },
-    filter: {
-      clearFilter: 'Remove filters',
-      filtersCleared: 'Filters cleared',
-      filters: 'Filters',
-      filter: 'Filter',
-      SRactive: 'active',
-      show: 'More',
-      hide: 'Less',
-    },
-    pagination: {
-      prev: 'Previous page',
-      next: 'Next page',
-      skipped: 'Skipped pages indicator',
-      page: 'Page %(page)s',
-      currentpage: 'Current page %(page)s',
-      pagination: 'Pagination',
-      changepage: 'Page %(value)s',
-    },
-    noResults: {
-      searchterm: 'Your search - <strong>%(search)s</strong> - did not match any documents.',
-      nosearchterm: 'Your search did not match any documents.',
-    },
-  },
+  search,
   slogan: 'Research data finder',
   stc: 'Skip to content',
   stsd: 'Skip to submit dataset',

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
-import { withStores } from '../../stores/stores'
+import { withStores } from '@/stores/stores'
 
 const LoggedInUser = ({ Stores }) => {
   const { user, userLogged } = Stores.Auth

@@ -16,7 +16,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 
 import { InvertedButton } from '../../general/button'
-import { useStores } from '../../../stores/stores'
+import { useStores } from '@/stores/stores'
 
 const Filter = styled.div`
   float: left;

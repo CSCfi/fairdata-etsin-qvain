@@ -14,7 +14,7 @@ import RouterStore from '@/utils/RouterStore'
 
 import Flags from './env.flags'
 
-import { getCookieValue } from '../../utils/cookies'
+import { getCookieValue } from '@/utils/cookies'
 import urls from '@/utils/urls'
 
 async function importValuesAsync() {

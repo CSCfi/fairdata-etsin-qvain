@@ -21,7 +21,7 @@ import { mix } from 'polished'
 
 import FilterItem from './filterItem'
 import { TransparentLink } from '../../general/button'
-import { withStores } from '../../../stores/stores'
+import { withStores } from '@/stores/stores'
 
 export class FilterSection extends Component {
   constructor(props) {

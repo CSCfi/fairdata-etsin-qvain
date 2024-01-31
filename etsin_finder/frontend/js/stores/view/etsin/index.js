@@ -7,6 +7,7 @@ import DatasetProcessorV2, { DatasetProcessorV3 } from './processor/etsin.datase
 import createFilesStore from './etsin.files'
 import RelationsProcessor from './processor/etsin.relations'
 import FilesProcessor from './processor/etsin.files'
+import EtsinSearch from './etsin.search.js'
 
 const errorTranslations = {
   dataset: {
@@ -17,11 +18,12 @@ const errorTranslations = {
 
 class Etsin {
   constructor({ Env, Access, Accessibility, Locale }) {
-    this.env = Env
+    this.Env = Env
     this.Access = Access
     this.accessibility = Accessibility
     this.Locale = Locale
-    this.useDatasetV3 = this.env.Flags.flagEnabled('ETSIN.METAX_V3.FRONTEND')
+    this.useDatasetV3 = this.Env.Flags.flagEnabled('ETSIN.METAX_V3.FRONTEND')
+    this.Search = new EtsinSearch(this.Env)
 
     if (this.useDatasetV3) {
       this.EtsinDatasetClass = EtsinDatasetV3
@@ -32,9 +34,10 @@ class Etsin {
     }
 
     this.EtsinDataset = new this.EtsinDatasetClass({ Access, Locale })
-    this.datasetProcessor = new this.DatasetProcessorClass(this.env)
-    this.relationsProcessor = new RelationsProcessor(this.env)
-    this.filesProcessor = new FilesProcessor(this.env)
+    this.datasetProcessor = new this.DatasetProcessorClass(this.Env)
+    this.relationsProcessor = new RelationsProcessor(this.Env)
+    this.filesProcessor = new FilesProcessor(this.Env)
+
     makeObservable(this)
   }
 
@@ -76,7 +79,8 @@ class Etsin {
   @action.bound reset() {
     this.abortAllRequests()
     this.EtsinDataset = new this.EtsinDatasetClass({ Access: this.Access, Locale: this.Locale })
-    this.Files = createFilesStore(this.env)
+    this.Files = createFilesStore(this.Env)
+    this.Search = new EtsinSearch(this.Env)
 
     this.requests = {
       dataset: [],

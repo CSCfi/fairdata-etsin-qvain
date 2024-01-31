@@ -1,9 +1,9 @@
-import ComponentHarness from '@/../__tests__/ComponentHarness'
 import { cleanup, screen } from '@testing-library/react'
+import ReactModal from 'react-modal'
+import contextRenderer from '@/../__tests__/utils/contextRenderer.rtl'
 import Info from '@/components/dataset/data/idaResources/info.jsx'
 import { buildStores } from '@/stores'
 import { useStores } from '@/stores/stores'
-import ReactModal from 'react-modal'
 
 afterEach(cleanup)
 
@@ -22,7 +22,7 @@ describe('Info', () => {
   }
 
   describe('checksum given', () => {
-    beforeEach(() => {
+    it('renders text in InfoItem', () => {
       const props = {
         ...minimalProps,
         checksum: {
@@ -30,11 +30,7 @@ describe('Info', () => {
           algorithm: 'SHA',
         },
       }
-
-      ComponentHarness(Info, props)
-    })
-
-    it('renders text in InfoItem', () => {
+      contextRenderer({ Component: Info, props })
       const component = screen.getByText('Checksum (SHA)')
       expect(component).toBeTruthy()
     })

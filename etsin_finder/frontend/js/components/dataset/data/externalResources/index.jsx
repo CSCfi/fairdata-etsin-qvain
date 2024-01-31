@@ -16,7 +16,7 @@ import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
 import buildColumns from '../../../../utils/buildColumns'
-import { useStores } from '../../../../stores/stores'
+import { useStores } from '@/stores/stores'
 import { Header, HeaderTitle, HeaderStats } from '../common/dataHeader'
 import ResourceItem from './resourceItem'
 

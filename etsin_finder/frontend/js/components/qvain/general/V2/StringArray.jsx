@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { AddNewButton } from '../buttons'
 
 import ValidationError from '../errors/validationError'
-import { useStores } from '../../../../stores/stores'
+import { useStores } from '@/stores/stores'
 
 const createOption = label => ({
   label,

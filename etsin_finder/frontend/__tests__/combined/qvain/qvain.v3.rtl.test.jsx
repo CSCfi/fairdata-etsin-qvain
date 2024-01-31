@@ -16,12 +16,12 @@ import etsinTheme from '@/styles/theme'
 import { buildStores } from '@/stores'
 import EnvClass from '@/stores/domain/env'
 import { StoresProvider } from '@/stores/stores'
-
-import dataset, { accessRightsEmbargo } from '../../__testdata__/v3dataset.data'
 import Qvain from '@/components/qvain/views/main'
 import { flatten, removeMatchingKeys } from '@/utils/flatten'
 
 jest.setTimeout(15000)
+import { access_rights_embargo } from '../../__testdata__/metaxv3/refs/access_rights.data'
+import dataset from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 
 // axios mocks
 const mockAdapter = new MockAdapter(axios)
@@ -367,7 +367,7 @@ describe('Qvain with an opened dataset', () => {
 
   it('shows embargo date and restriction grounds', async () => {
     const section = await renderSection('Data Origin', {
-      access_rights: accessRightsEmbargo,
+      access_rights: access_rights_embargo,
     })
 
     expect(within(section).getByLabelText('Embargo expiration date').value).toEqual('12/24/2023')
@@ -399,12 +399,12 @@ describe('Qvain with an opened dataset', () => {
     const expectedExtra = []
 
     await renderQvain({
-      access_rights: accessRightsEmbargo,
+      access_rights: access_rights_embargo,
     })
     const submitButton = screen.getByRole('button', { name: 'Save as draft' })
     await userEvent.click(submitButton) // should submit data to metax
     const submitRights = JSON.parse(mockAdapter.history.patch[0].data).access_rights
-    const flatRights = removeMatchingKeys(flatten(accessRightsEmbargo), expectedMissing)
+    const flatRights = removeMatchingKeys(flatten(access_rights_embargo), expectedMissing)
     const flatSubmitResources = removeMatchingKeys(flatten(submitRights), expectedExtra)
     expect(flatSubmitResources).toEqual(flatRights)
   })

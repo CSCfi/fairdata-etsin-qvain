@@ -12,7 +12,7 @@
 
 import React from 'react'
 import Translate from 'react-translate-component'
-import { useStores } from '../../stores/stores'
+import { useStores } from '@/stores/stores'
 
 const CurrentQuery = () => {
   const { ElasticQuery } = useStores()

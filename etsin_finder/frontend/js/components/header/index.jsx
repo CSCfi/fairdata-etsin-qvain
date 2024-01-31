@@ -28,7 +28,7 @@ import MobileNavi from '../general/navigation/mobileNavi'
 import Header, { NaviContainer, Right } from '../general/header'
 import { MobileOnly, DesktopOnly } from '../general/header/mediaHelpers'
 import { Home, Search } from '../../routes'
-import { withStores } from '../../stores/stores'
+import { withStores } from '@/stores/stores'
 
 const routes = [
   {

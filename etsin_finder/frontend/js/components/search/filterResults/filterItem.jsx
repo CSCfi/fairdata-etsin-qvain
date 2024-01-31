@@ -13,7 +13,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { withStores } from '../../../stores/stores'
+import { withStores } from '@/stores/stores'
 
 class FilterItem extends Component {
   state = {

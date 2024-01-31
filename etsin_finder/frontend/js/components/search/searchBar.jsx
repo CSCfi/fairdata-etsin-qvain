@@ -19,7 +19,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { observer } from 'mobx-react'
 
 import ErrorBoundary from '../general/errorBoundary'
-import { withStores } from '../../stores/stores'
+import { withStores } from '@/stores/stores'
 import Input from '../dataset/common/formItems'
 
 class SearchBar extends Component {

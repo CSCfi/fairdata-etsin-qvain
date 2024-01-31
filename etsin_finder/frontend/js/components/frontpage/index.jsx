@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import SearchBar from '../search/searchBar'
 import HeroBanner from '../general/hero'
 import KeyValues from './keyValues'
-import { useStores, withStores } from '../../stores/stores'
+import { useStores, withStores } from '@/stores/stores'
 
 const FrontPage = () => {
   const {

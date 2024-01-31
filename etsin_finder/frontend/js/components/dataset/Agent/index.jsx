@@ -19,7 +19,7 @@ import { observer } from 'mobx-react'
 import { TransparentLink } from '../../general/button'
 import PopUp from '../../general/popup'
 import PopUpContent from './PopUpContent'
-import { useStores } from '../../../stores/stores'
+import { useStores } from '@/stores/stores'
 import { hasExtraInfo, flatParentOrgs } from './utils'
 
 const Agent = ({ agent, first, inline, popupAlign }) => {

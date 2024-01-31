@@ -16,7 +16,7 @@ export const Home = loadable(() => import('../components/frontpage' /* webpackPr
 
 export const Dataset = loadable(() => import('../components/etsin/views/Dataset' /* webpackPrefetch: true */))
 
-export const Search = loadable(() => import('../components/search' /* webpackPrefetch: true */))
+export const Search = loadable(() => import('../components/etsin/views/Search' /* webpackPrefetch: true */))
 
 export const Qvain = loadable(() =>
   import('../components/qvain/views/main' /* webpackPrefetch: true */)

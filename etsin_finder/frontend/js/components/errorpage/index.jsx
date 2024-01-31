@@ -16,7 +16,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
 import HeroBanner from '../general/hero'
-import { withStores } from '../../stores/stores'
+import { withStores } from '@/stores/stores'
 
 class ErrorPage extends React.Component {
   componentDidMount() {

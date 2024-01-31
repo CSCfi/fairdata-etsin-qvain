@@ -23,7 +23,7 @@ import DropdownMenu from './dropdownMenu'
 import LangToggle from './langToggle'
 import LoginButton from './loginButton'
 import { Link } from '../button'
-import { useStores } from '../../../stores/stores'
+import { useStores } from '@/stores/stores'
 
 const MobileNavi = ({ helpUrl, naviRoutes, children, loginThroughService }) => {
   const { Accessibility } = useStores()

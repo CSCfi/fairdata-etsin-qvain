@@ -7,9 +7,9 @@ import Translate from 'react-translate-component'
 import { Popup } from 'react-leaflet'
 import { observer } from 'mobx-react'
 
-import { TypeLocation } from '../../../utils/propTypes'
+import { TypeLocation } from '@/utils/propTypes'
 import MyMap from './map'
-import { withStores } from '../../../stores/stores'
+import { withStores } from '@/stores/stores'
 
 const Table = styled.table`
   overflow-x: scroll;
@@ -70,7 +70,8 @@ class Maps extends Component {
     } = this.props.Stores
 
     // Datasets submitted via API don't require geographic name for location, in which case the name comes from place_uri
-    const locationName = spatial.geographic_name || getValueTranslation(spatial.place_uri?.pref_label)
+    const locationName =
+      spatial.geographic_name || getValueTranslation(spatial.place_uri?.pref_label)
 
     return (
       <tr key={`location-${locationName}`}>

@@ -19,7 +19,7 @@ import HeroBanner from '../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
 
-import { withStores } from '../../stores/stores'
+import { withStores } from '@/stores/stores'
 
 class Search extends Component {
   constructor() {
