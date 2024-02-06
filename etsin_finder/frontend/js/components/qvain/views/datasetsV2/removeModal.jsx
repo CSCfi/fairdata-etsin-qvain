@@ -19,6 +19,10 @@ const modalDataTypes = {
 export const RemoveModal = () => {
   const {
     QvainDatasets: { removeModal },
+    Env: {
+      metaxV3Url,
+      Flags: { flagEnabled },
+    },
   } = useStores()
 
   const [error, setError] = useState(null)
@@ -63,14 +67,24 @@ export const RemoveModal = () => {
 
       // Delete unpublished changes first
       if (dataset.next_draft) {
-        const draftUrl = urls.qvain.dataset(dataset.next_draft.identifier)
+        let draftUrl
+        if (flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
+          draftUrl = metaxV3Url('dataset', dataset.next_draft.identifier)
+        } else {
+          draftUrl = urls.qvain.dataset(dataset.next_draft.identifier)
+        }
         await axios.delete(draftUrl)
         removed = true
       }
 
       // Delete the actual dataset
       if (!onlyChanges) {
-        const url = urls.qvain.dataset(identifier)
+        let url
+        if (flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
+          url = metaxV3Url('dataset', identifier)
+        } else {
+          url = urls.qvain.dataset(identifier)
+        }
         await axios.delete(url)
         removed = true
       }

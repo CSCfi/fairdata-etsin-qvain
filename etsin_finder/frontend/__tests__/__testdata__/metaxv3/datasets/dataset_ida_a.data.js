@@ -72,6 +72,7 @@ const dataset_open_a = {
   ],
   remote_resources: [remote_resource_a],
   created: '2023-06-28T10:16:22+03:00',
+  cumulative_state: 1,
   cumulation_started: '2023-06-28T10:16:22+03:00',
   first: null,
   id: '4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0',

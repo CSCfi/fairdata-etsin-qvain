@@ -8,7 +8,6 @@ const handleSubmitToBackend = Qvain => {
 
   const theme = Qvain.SubjectHeadings.toBackend()
 
-
   // in v2 { creator, publisher, rights_holder, curator, contributor }
   // in v3 { actors }
   const actors = Qvain.Actors.toBackend()
@@ -74,6 +73,15 @@ const handleSubmitToBackend = Qvain => {
 
   if (REMOTE_RESOURCES_DATA_CATALOGS.includes(Qvain.dataCatalog)) {
     obj.remote_resources = Qvain.ExternalResources.toBackend()
+  }
+
+  if (Qvain.Files.useV3) {
+    obj.cumulative_state = Qvain.original ? Qvain.newCumulativeState : Qvain.cumulativeState
+    // Qvain treats incoming cumulative state 2 (closed) as 0 (noncumulative)
+    // but it's a separate state in Metax
+    if (obj.cumulative_state === 0 && Qvain.original?.cumulative_state === 2) {
+      obj.cumulative_state = 2
+    }
   }
 
   if (Qvain.Files.useV3 && Qvain.Files.root?.directChildCount > 0) {

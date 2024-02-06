@@ -227,6 +227,7 @@ class Adapter {
       use_doi_for_published: dataset.pid_type === 'DOI',
       draft_of: this.relatedDraftV3ToV2(dataset.draft_of),
       next_draft: this.relatedDraftV3ToV2(dataset.next_draft),
+      cumulative_state: dataset.cumulative_state,
     }
 
     // include v3 fileset object as it is
@@ -348,6 +349,7 @@ class Adapter {
       remote_resources: this.remoteResourceV2ToV3(dataset.remote_resources),
       actors: dataset.actors, // conversion done in actors store
       pid_type: dataset.use_doi ? 'DOI' : 'URN',
+      cumulative_state: dataset.cumulative_state,
     }
 
     // include v3 fileset object as it is

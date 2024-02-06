@@ -309,6 +309,40 @@ describe('Qvain with an opened dataset', () => {
     expect(flatSubmitResources).toEqual(flatResources)
   })
 
+  describe('updating cumulative state', () => {
+    it('updates cumulative state for draft', async () => {
+      await renderQvain({ cumulative_state: 0 })
+      const cumulativeSelection = screen.getByText('Cumulative dataset').closest('div')
+      const cumulativeButton = within(cumulativeSelection).getByLabelText('Yes.', { exact: false })
+      await userEvent.click(cumulativeButton)
+      const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+      await userEvent.click(submitButton)
+      const submittedState = JSON.parse(mockAdapter.history.patch[0].data).cumulative_state
+      expect(submittedState).toBe(1)
+    })
+
+    it('closes published cumulative dataset', async () => {
+      await renderQvain({ cumulative_state: 1, state: 'published' })
+      const cumulativeSelection = screen.getByText('Cumulative dataset').closest('div')
+      const nonCumulativeButton = within(cumulativeSelection).getByRole('button', {
+        name: 'Turn non-cumulative',
+      })
+      await userEvent.click(nonCumulativeButton)
+      const submitButton = screen.getByRole('button', { name: 'Save and Publish' })
+      await userEvent.click(submitButton)
+      const submittedState = JSON.parse(mockAdapter.history.patch[0].data).cumulative_state
+      expect(submittedState).toBe(2)
+    })
+
+    it('keeps closed cumulative dataset closed', async () => {
+      await renderQvain({ cumulative_state: 2, state: 'published' })
+      const submitButton = screen.getByRole('button', { name: 'Save and Publish' })
+      await userEvent.click(submitButton)
+      const submittedState = JSON.parse(mockAdapter.history.patch[0].data).cumulative_state
+      expect(submittedState).toBe(2)
+    })
+  })
+
   describe('when saving draft', () => {
     const saveDraft = async (overrides = {}) => {
       await renderQvain(overrides)
