@@ -561,9 +561,13 @@ class EtsinDatasetV2 {
     if (!catalog) return null
 
     catalog.id = catalog.identifier
-    for (const page of catalog.publisher?.homepage) {
-      page.url = page.identifier
+
+    if (catalog.publisher?.homepage) {
+      for (const page of catalog.publisher.homepage) {
+        page.url = page.identifier
+      }
     }
+
     return catalog
   }
 
