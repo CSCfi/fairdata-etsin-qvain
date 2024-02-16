@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Translate from 'react-translate-component'
 
-import { useStores } from '@/stores/stores'
+import { useStores } from '../../../stores/stores'
 
 export const Info = ({ icon, children, title }) => (
   <StyledInfo>

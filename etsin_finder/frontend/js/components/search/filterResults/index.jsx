@@ -16,7 +16,7 @@ import Translate from 'react-translate-component'
 
 import { observer } from 'mobx-react'
 import FilterSection from './filterSection'
-import { useStores } from '@/stores/stores'
+import { useStores } from '../../../utils/stores'
 
 const FilterContainer = styled.ul`
   padding: 1em;

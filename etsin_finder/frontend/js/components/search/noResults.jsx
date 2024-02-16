@@ -13,7 +13,7 @@
 import React from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import { useStores } from '@/stores/stores'
+import { useStores } from '../../stores/stores'
 
 export default function NoResults() {
   const { ElasticQuery } = useStores()

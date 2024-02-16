@@ -15,7 +15,7 @@ import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
 import { InvertedButton } from '../../general/button'
-import { useStores } from '@/stores/stores'
+import { useStores } from '../../../stores/stores'
 
 const ClearFilters = () => {
   const { ElasticQuery, Matomo, Accessibility } = useStores()

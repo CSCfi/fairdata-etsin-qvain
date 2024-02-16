@@ -17,7 +17,7 @@ import { withTheme } from 'styled-components'
 import { observer } from 'mobx-react'
 
 import FormatSelect from './formatselect'
-import { withStores } from '@/stores/stores'
+import { withStores } from '../../stores/stores'
 import urls from '../../utils/urls'
 
 export class FormatChanger extends Component {

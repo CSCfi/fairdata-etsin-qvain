@@ -28,7 +28,7 @@ import FilterToggle from './filterResults/filterToggle'
 import NoResults from './noResults'
 import ClearFilters from './filterResults/clearFilters'
 
-import { useStores } from '@/stores/stores'
+import { useStores } from '../../stores/stores'
 
 const Results = () => {
   const { ElasticQuery } = useStores()

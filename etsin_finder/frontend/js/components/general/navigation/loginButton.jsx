@@ -22,7 +22,7 @@ import Loader from '../loader'
 import NoticeBar from '../noticeBar'
 import LoggedInUser from '../loggedInUser'
 import { Dropdown, DropdownItem } from '../dropdown'
-import { withStores } from '@/stores/stores'
+import { withStores } from '../../../stores/stores'
 
 class Login extends Component {
   static propTypes = {

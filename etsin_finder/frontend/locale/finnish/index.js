@@ -9,7 +9,6 @@
  */
 
 import qvain from './qvain'
-import search from './search'
 
 const finnish = {
   changepage: 'Siirryit sivulle: %(page)s',
@@ -331,7 +330,7 @@ const finnish = {
     spatial_coverage: 'Maantieteellinen kattavuus',
     temporal_coverage: 'Ajallinen kattavuus',
     tags: 'Aineiston tägit',
-    version: { number: 'Versio %(number)s', old: '(Vanha)', label: 'Aineiston version valinta' },
+    version: { number: 'Versio %(number)s', old: '(Vanha)', label: 'Aineiston version valinta'},
     agent: {
       contributor_role: 'Rooli',
       contributor_type: 'Tyyppi',
@@ -437,7 +436,41 @@ const finnish = {
       snglr: '%(amount)s hakutulos',
     },
   },
-  search,
+  search: {
+    name: 'Haku',
+    placeholder: 'Anna hakusana',
+    sorting: {
+      sort: 'Järjestä',
+      best: 'Osuvin ensin',
+      bestTitle: 'Osuvin',
+      dateA: 'Vanhin ensin',
+      dateATitle: 'Vanhin',
+      dateD: 'Viimeksi muokattu',
+      dateDTitle: 'Uusin',
+    },
+    filter: {
+      clearFilter: 'Poista rajaukset',
+      filtersCleared: 'Rajaukset poistettu',
+      filters: 'Rajaukset',
+      filter: 'Rajaa',
+      SRactive: 'päällä',
+      show: 'Lisää',
+      hide: 'Vähemmän',
+    },
+    pagination: {
+      prev: 'Edellinen sivu',
+      next: 'Seuraava sivu',
+      skipped: 'Ylihypätyt sivut',
+      page: 'sivu',
+      currentpage: 'nykyinen sivu',
+      pagination: 'Paginaatio',
+      changepage: 'Sivu %(value)s',
+    },
+    noResults: {
+      searchterm: 'Haullesi - <strong>%(search)s</strong> - ei löytynyt yhtään osumaa.',
+      nosearchterm: 'Haullesi ei löytynyt yhtään osumaa.',
+    },
+  },
   slogan: 'Tutkimustenhaku palvelu',
   stc: 'Siirry sivun pääsisältöön',
   stsd: 'Siirry "Julkaise Aineisto"-nappiin',

@@ -17,7 +17,7 @@ import styled from 'styled-components'
 import Translate from 'react-translate-component'
 import translate from 'counterpart'
 
-import { useStores } from '@/stores/stores'
+import { useStores } from '../../../stores/stores'
 import getPages from './getPages'
 
 const Pagination = ({ totalResults, perPage, currentPage: initialCurrentPage }) => {

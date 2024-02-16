@@ -16,7 +16,7 @@ import { observer } from 'mobx-react'
 
 import ExternalResources from './externalResources'
 import IdaResources from './idaResources'
-import { withStores } from '@/stores/stores'
+import { withStores } from '../../../stores/stores'
 
 class Data extends Component {
   componentDidMount() {

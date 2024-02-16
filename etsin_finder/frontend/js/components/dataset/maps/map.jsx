@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import mapStyle from './mapStyle'
 import mapIcon from '../../../../static/images/map_icon.svg'
 
-import { withStores } from '@/stores/stores'
+import { withStores } from '../../../stores/stores'
 
 const MarkerIcon = leaflet.icon({
   iconUrl: mapIcon,

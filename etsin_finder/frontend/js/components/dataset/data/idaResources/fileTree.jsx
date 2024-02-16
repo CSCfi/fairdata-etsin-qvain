@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 
 import FileTreeItem from './fileTreeItem'
 import { useRenderTree } from '../../../general/files/tree'
-import { withStores } from '@/stores/stores'
+import { withStores } from '../../../../stores/stores'
 
 export function FileTree(props) {
   const { Files, Packages } = props.Stores.DatasetQuery

@@ -16,7 +16,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import ContentBox from '../general/contentBox'
-import { withStores } from '@/stores/stores'
+import { withStores } from '../../stores/stores'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
 import FilterValue, { ValueList } from './FilterValue'
 

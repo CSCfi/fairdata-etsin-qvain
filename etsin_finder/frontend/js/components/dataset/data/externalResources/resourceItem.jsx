@@ -6,7 +6,7 @@ import { faFile, faExternalLinkAlt, faDownload } from '@fortawesome/free-solid-s
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { observer } from 'mobx-react'
 
-import { useStores } from '@/stores/stores'
+import { useStores } from '../../../../stores/stores'
 import IconButton from '../common/iconButton'
 
 const ResourceItem = ({ resource, hideAccess, noButtons }) => {

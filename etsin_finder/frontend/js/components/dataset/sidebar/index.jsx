@@ -13,7 +13,7 @@ import ErrorBoundary from '../../general/errorBoundary'
 import Agent from '../Agent'
 import Project from './special/project'
 import DatasetIsCumulativeNotificationBar from '../../general/datasetIsCumulativeNotificationBar'
-import { withStores } from '@/stores/stores'
+import { withStores } from '../../../stores/stores'
 import CitationButton from '../citation/citationButton'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 

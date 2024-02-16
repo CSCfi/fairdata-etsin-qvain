@@ -12,7 +12,7 @@ import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import { useRouteMatch } from 'react-router'
 
-import { useStores } from '@/stores/stores'
+import { useStores } from '../../../stores/stores'
 import EventList from './eventList'
 import Relations from './relations'
 import DeletedVersions from './deletedVersions'

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import { useStores } from '@/stores/stores'
+import { useStores } from '../../stores/stores'
 
 const FlaggedComponent = ({ flag, children, whenDisabled }) => {
   const {

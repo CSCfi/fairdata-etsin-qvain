@@ -19,7 +19,7 @@ import { faSort, faSortAmountUp, faSortAmountDown } from '@fortawesome/free-soli
 import styled from 'styled-components'
 import { InvertedButton } from '../../general/button'
 
-import { withStores } from '@/stores/stores'
+import { withStores } from '../../../stores/stores'
 
 // available options, they are also checked in ElasticQuery store
 const options = ['best', 'dateD', 'dateA']
