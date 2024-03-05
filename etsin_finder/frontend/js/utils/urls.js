@@ -49,7 +49,7 @@ export default {
     directories: metaxV3 => `${metaxV3}/v3/directories`,
     organizations: metaxV3 => `${metaxV3}/v3/organizations?pagination=false`,
     referenceData: (metaxV3, referenceData) => `${metaxV3}/v3/reference-data/${referenceData}`,
-    user: metaxV3 => `${metaxV3}/auth/user`,
+    user: metaxV3 => `${metaxV3}/v3/auth/user`,
     '': metaxV3 => `${metaxV3}`,
   },
 }
