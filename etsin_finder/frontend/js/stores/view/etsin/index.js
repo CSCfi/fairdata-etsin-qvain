@@ -36,7 +36,7 @@ class Etsin {
     this.EtsinDataset = new this.EtsinDatasetClass({ Access, Locale })
     this.datasetProcessor = new this.DatasetProcessorClass(this.Env)
     this.relationsProcessor = new RelationsProcessor(this.Env)
-    this.filesProcessor = new FilesProcessor(this.Env)
+    this.filesProcessor = new FilesProcessor(this.Env, this.useDatasetV3)
 
     makeObservable(this)
   }

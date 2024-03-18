@@ -4,10 +4,10 @@ import createFilesStore from '../etsin.files'
 import EtsinProcessor from '.'
 
 class FilesProcessor extends EtsinProcessor {
-  constructor(Env) {
+  constructor(Env, useV3) {
     super(Env)
     makeObservable(this)
-    this.Packages = new Packages(Env)
+    this.Packages = new Packages(Env, useV3)
     this.Files = createFilesStore(Env)
     this.filesClient = this.Files.client
     this.packagesClient = this.Packages.client

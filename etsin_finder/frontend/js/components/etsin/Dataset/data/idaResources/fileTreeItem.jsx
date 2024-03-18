@@ -23,8 +23,16 @@ import IconButton from '../common/iconButton'
 import FlaggedComponent from '@/components/general/flaggedComponent'
 import { MoreButton, SplitButtonContainer } from './splitButton'
 import TooltipHover from '@/components/general/tooltipHover'
+import { useStores } from '@/stores/stores'
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
+  const {
+    Env: { metaxV3Url },
+    Etsin: {
+      EtsinDataset: { useV3 },
+    },
+  } = useStores()
+
   const { Files, directoryView, extraProps } = treeProps
   const { isDownloadAllowed, Packages } = extraProps
   const { setInInfo, datasetIdentifier } = Files
@@ -63,7 +71,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const haveMetadata = hasMetadata(item)
   const { type } = item
 
-  const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
+  const action = getDownloadAction(useV3, metaxV3Url, datasetIdentifier, item, Packages, Files)
   const {
     func: downloadFunc,
     moreFunc,

@@ -8,10 +8,11 @@ import AbortClient from '@/utils/AbortClient'
 class Packages {
   // Download API package handling
 
-  constructor(Env) {
+  constructor(Env, useV3) {
     this.Env = Env
     this.Notifications = new Notifications(this)
     this.client = new AbortClient()
+    this.useV3 = useV3
     makeObservable(this)
   }
 
@@ -139,7 +140,10 @@ class Packages {
       scope.forEach(path => {
         this.setRequestingPackageCreation(path, true)
       })
-      const resp = await this.client.post(urls.dl.packages(), params)
+      const url = this.useV3
+        ? this.Env.metaxV3Url('download', 'packages', params.cr_id)
+        : urls.dl.packages()
+      const resp = await this.client.post(url, params)
       const { partial, ...full } = resp.data
 
       this.Notifications.subscribe(params)
@@ -200,7 +204,9 @@ class Packages {
 
       let response
       try {
-        const url = `${urls.dl.packages()}?cr_id=${datasetIdentifier}`
+        const url = this.useV3
+          ? `${this.Env.metaxV3Url('download', 'packages', datasetIdentifier)}`
+          : `${urls.dl.packages()}?cr_id=${datasetIdentifier}`
         response = await this.client.get(url)
         this.clearError()
       } catch (err) {
