@@ -172,13 +172,25 @@ const ContactForm = withFormik({
   },
   handleSubmit: (values, { props, setSubmitting, setStatus, setFieldError }) => {
     setStatus('')
+    const url = props.useV3
+      ? props.metaxV3Url('datasetContact', props.datasetID)
+      : urls.email(props.datasetID)
+    const payload = props.useV3
+      ? {
+          subject: values.subject,
+          reply_to: values.email,
+          body: values.message,
+          role: values.recipient.value,
+          service: 'etsin',
+        }
+      : {
+          user_subject: values.subject,
+          user_email: values.email,
+          user_body: values.message,
+          agent_type: values.recipient.value,
+        }
     axios
-      .post(urls.email(props.datasetID), {
-        user_subject: values.subject,
-        user_email: values.email,
-        user_body: values.message,
-        agent_type: values.recipient.value,
-      })
+      .post(url, payload)
       .then(() => {
         setStatus('success')
         props.close(undefined, true)

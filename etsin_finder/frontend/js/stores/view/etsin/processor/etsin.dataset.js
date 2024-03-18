@@ -1,4 +1,4 @@
-import { makeObservable, override } from 'mobx'
+import { action, makeObservable, override } from 'mobx'
 import urls from '@/utils/urls'
 import EtsinProcessor from '.'
 
@@ -45,6 +45,21 @@ export class DatasetProcessorV3 extends EtsinProcessor {
       .get(url, {
         tag,
         params: { include_removed: true, expand_catalog: true, include_allowed_actions: true },
+      })
+      .then(res => {
+        resolved(res.data)
+      })
+      .catch(rej => rejected(rej))
+    return { id, promise, abort: () => this.client.abort(tag) }
+  }
+
+  @action.bound
+  fetchEmails({ id, resolved, rejected }) {
+    const url = this.Env.metaxV3Url('datasetContact', id)
+    const tag = `dataset-${id}-emails`
+    const promise = this.client
+      .get(url, {
+        tag,
       })
       .then(res => {
         resolved(res.data)

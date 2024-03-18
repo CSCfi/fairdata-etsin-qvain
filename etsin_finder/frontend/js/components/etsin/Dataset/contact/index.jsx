@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import translate from 'counterpart'
@@ -12,20 +12,16 @@ import { useStores } from '@/stores/stores'
 
 const Contact = () => {
   const {
+    Env: { metaxV3Url },
     Etsin: {
-      EtsinDataset: { identifier, emailInfo, isRems },
+      EtsinDataset: { useV3, identifier, emailInfo, isRems },
     },
   } = useStores()
 
   const [modalOpen, setModal] = useState(false)
   const [splashOpen, setSplash] = useState(false)
-  const [recipients, setRecipients] = useState(null)
 
-  useEffect(() => {
-    setRecipients(buildRecipients(emailInfo))
-  }, [emailInfo])
-
-  function buildRecipients(emails) {
+  const recipients = () => {
     const recipientLabels = {
       CONTRIBUTOR: 'dataset.contributor.snglr',
       CREATOR: 'dataset.creator.snglr',
@@ -34,10 +30,13 @@ const Contact = () => {
       RIGHTS_HOLDER: 'dataset.rights_holder',
     }
     const recipientList = []
-    for (const o in emails) {
-      if (emails[o]) {
-        if (o !== 'CONTRIBUTOR') {
-          recipientList.push({ label: translate(recipientLabels[o]), value: o })
+    for (const o in emailInfo) {
+      if (emailInfo[o]) {
+        if (o.toUpperCase() !== 'CONTRIBUTOR') {
+          recipientList.push({
+            label: <Translate content={recipientLabels[o.toUpperCase()]} />,
+            value: o,
+          })
         }
       }
     }
@@ -77,8 +76,10 @@ const Contact = () => {
         <ContactForm
           close={closeModal}
           datasetID={identifier}
-          recipientsList={recipients}
+          recipientsList={recipients()}
           translations={translate('dataset.contact')}
+          useV3={useV3}
+          metaxV3Url={metaxV3Url}
         />
       </Modal>
       <Splash visible={splashOpen}>

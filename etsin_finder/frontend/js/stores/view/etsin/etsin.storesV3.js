@@ -18,6 +18,8 @@ class EtsinDatasetV3 {
 
   @observable files = null
 
+  @observable emailInfo = null
+
   @observable showCitationModal = false
 
   @observable inInfo = null
@@ -161,11 +163,6 @@ class EtsinDatasetV3 {
     preservationObject.useCopy = preservationObject.dataset_origin_version
     preservationObject.preservedCopy = preservationObject.dataset_version
     return preservationObject
-  }
-
-  @computed get emailInfo() {
-    // waiting for V3 implementation
-    return null
   }
 
   @computed get metadataFormats() {
@@ -375,6 +372,9 @@ class EtsinDatasetV3 {
     switch (field) {
       case 'versions':
         createVersion(data)
+        break
+      case 'emails':
+        this.emailInfo = data
         break
       default:
         this[field] = data

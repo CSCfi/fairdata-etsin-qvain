@@ -83,7 +83,7 @@ const Maps = props => {
         if (spatial.wkt?.length > 0 || spatial.reference?.pref_label) {
           return (
             <MyMap
-              key={`${spatial.wkt}-${spatial.reference.url}-${spatial.geographic_name}`}
+              key={`${spatial.wkt}-${spatial.reference?.url}-${spatial.geographic_name}`}
               geometry={spatial.wkt}
               location={spatial.reference?.pref_label}
             >

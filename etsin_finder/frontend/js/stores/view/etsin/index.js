@@ -50,6 +50,7 @@ class Etsin {
 
   @observable errors = {
     dataset: [],
+    emails: [],
     relations: [],
     versions: [],
     custom: [],
@@ -91,6 +92,7 @@ class Etsin {
 
     this.errors = {
       dataset: [],
+      emails: [],
       relations: [],
       versions: [],
       custom: [],
@@ -187,6 +189,15 @@ class Etsin {
         rejected: this.constructRejectedCb('dataset'),
       }),
     ]
+    if (this.useDatasetV3) {
+      this.requests.dataset.push(
+        this.datasetProcessor.fetchEmails({
+          id,
+          resolved: this.constructResolvedCb('emails'),
+          rejected: this.constructRejectedCb('emails'),
+        })
+      )
+    }
 
     const promises = [...this.requests.dataset.map(r => r.promise)]
     return Promise.all(promises).finally(() => {
