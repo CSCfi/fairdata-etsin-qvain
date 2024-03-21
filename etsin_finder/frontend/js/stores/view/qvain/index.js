@@ -229,7 +229,7 @@ class Qvain extends Resources {
 
   // load fields that won't be duplicated by template copy
   @action loadStatusAndFileFields = async dataset => {
-    this.deprecated = dataset.deprecated && !this.isNewVersion
+    this.deprecated = dataset.deprecated
 
     // Load data catalog
     this.dataCatalog = dataset.data_catalog?.identifier
@@ -238,6 +238,12 @@ class Qvain extends Resources {
 
     // Load preservation state
     this.preservationState = dataset.preservation_state
+
+    // New version should leave some fields with default values
+    if (this.isNewVersion) {
+      this.deprecated = false
+      this.preservationState = 0
+    }
 
     // Load cumulative state
     this.cumulativeState =
