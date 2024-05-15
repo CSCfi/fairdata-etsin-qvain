@@ -166,7 +166,6 @@ AccessRights.defaultProps = {
 
 AccessRights.propTypes = {
   button: PropTypes.bool,
-  Stores: PropTypes.object.isRequired,
 }
 
 export default observer(AccessRights)

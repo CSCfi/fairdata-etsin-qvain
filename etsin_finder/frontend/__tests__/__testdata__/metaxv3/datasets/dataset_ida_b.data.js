@@ -15,7 +15,7 @@ const dataset_open_b = {
     },
     ,
   ],
-  data_catalog: data_catalog_ida,
+  data_catalog: data_catalog_ida.id,
   description: {
     fi: 'Tämä aineisto on vajaa. Osa aineiston käännöksistä puuttuu',
   },
@@ -44,6 +44,11 @@ const dataset_open_b = {
   previous: null,
   removal_date: null,
   replaces: null,
+}
+
+export const dataset_open_b_catalog_expanded = {
+  ...dataset_open_b,
+  data_catalog: data_catalog_ida,
 }
 
 export default dataset_open_b

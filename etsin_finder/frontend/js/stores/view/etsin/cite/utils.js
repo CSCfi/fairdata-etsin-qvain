@@ -147,7 +147,7 @@ export const capitalizeFirst = string => {
 }
 
 export const getYear = dataset => {
-  const issued = dataset.datasetMetadata.issued
+  const issued = dataset.datasetMetadata.releaseDate
   if (!issued) {
     return undefined
   }
@@ -156,7 +156,7 @@ export const getYear = dataset => {
 }
 
 export const getMonth = dataset => {
-  const issued = dataset.datasetMetadata.issued
+  const issued = dataset.datasetMetadata.releaseDate
   if (!issued) {
     return undefined
   }
