@@ -64,7 +64,7 @@ const Sidebar = () => {
     }
 
     if (draftOf) {
-      return <Identifier idn={draftOf.preferred_identifier} />
+      return <Identifier idn={draftOf.persistent_identifier} />
     }
 
     return <Identifier idn={persistentIdentifier} />

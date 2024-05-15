@@ -45,19 +45,15 @@ class EtsinDatasetV3 {
   }
 
   @computed get draftOf() {
-    // waiting for V3 implementation
-    console.warn('no draft implementation yet in metax V3')
-    return null
+    return this.dataset?.draft_of
   }
 
   @computed get isDraft() {
-    // waiting for V3 implementation
-    console.warn('no draft implementation yet in metax V3')
-    return false
+    return this.dataset?.state === 'draft'
   }
 
   @computed get isPublished() {
-    return !this.isDraft
+    return this.dataset?.state === 'published'
   }
 
   @computed get isIda() {
@@ -229,7 +225,12 @@ class EtsinDatasetV3 {
   }
 
   @computed get datasetVersions() {
-    return this.dataset.dataset_versions?.toReversed()
+    // remove drafts (and datasets with unpublished changes, when previewing the changes-draft) for now
+    return this.dataset.dataset_versions?.filter(
+      version =>
+        (version.state === 'published' && version.next_draft !== this.identifier) ||
+        version.id === this.identifier
+    )
   }
 
   @computed get hasVersion() {

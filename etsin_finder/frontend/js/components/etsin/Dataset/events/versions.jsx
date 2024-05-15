@@ -28,33 +28,31 @@ const Versions = () => {
     return null
   }
 
-  const currentIndex = datasetVersions.findIndex(version => version.id === identifier)
+  const currentVersion = datasetVersions.find(version => version.id === identifier) || 0
 
-  const findType = i => {
+  const findType = (single, i) => {
     let type
-    if (i > currentIndex) {
-      type = 'older'
-    } else if (i === 0) {
+    if (i === 0 && single.version > currentVersion.version) {
       type = 'latest'
-    } else {
+    } else if (single.version > currentVersion.version) {
       type = 'newer'
+    } else {
+      type = 'older'
     }
-
     return type
   }
 
   const versions = datasetVersions
+    .filter(v => !v.removed)
+    .filter(v => v.id !== identifier)
     .map((single, i) => ({
       label: single.version,
       identifier: single.id,
       preferredIdentifier: single.persistent_identifier,
       url: idnToLink(single.persistent_identifier),
       title: Locale.getValueTranslation(single.title),
-      type: findType(i),
-      removed: single.removed,
+      type: findType(single, i),
     }))
-    .filter(v => !v.removed)
-    .filter(v => v.identifier !== identifier)
 
   return (
     <Margin>

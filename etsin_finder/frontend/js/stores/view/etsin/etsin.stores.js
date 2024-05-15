@@ -526,7 +526,7 @@ class EtsinDatasetV2 {
         persistent_identifier: version.preferred_identifier,
         created: version.date_created,
         removed: removed || null,
-        is_deprecated: deprecated,
+        deprecated,
         version: set.length - i,
       }
     })
