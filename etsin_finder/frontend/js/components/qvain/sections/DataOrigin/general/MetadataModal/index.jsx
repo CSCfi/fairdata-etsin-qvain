@@ -96,9 +96,14 @@ export class MetadataModal extends Component {
   }
 
   patchFileCharacteristics = (identifier, data) => {
+    const { original } = this.props.Stores.Qvain
+    const crId = original?.identifier
     const url = urls.qvain.fileCharacteristics(identifier)
     return this.client
       .put(url, data, {
+        params: {
+          cr_identifier: crId, // is empty for new dataset
+        },
         headers: {
           'Content-Type': 'application/json',
         },
@@ -346,13 +351,8 @@ export class MetadataModal extends Component {
   }
 
   render() {
-    const {
-      metadataModalFile,
-      readonly: ro,
-      Files: { userHasRightsToEditProject },
-    } = this.props.Stores.Qvain
+    const { metadataModalFile, readonly } = this.props.Stores.Qvain
     const options = getOptions()
-    const readonly = ro || !userHasRightsToEditProject
 
     return (
       <Modal

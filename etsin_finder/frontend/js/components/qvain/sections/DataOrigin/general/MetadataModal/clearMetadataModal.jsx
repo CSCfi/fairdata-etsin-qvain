@@ -18,12 +18,14 @@ const ClearMetadataModal = () => {
       clearMetadataModalFile,
       setClearMetadataModalFile,
       Files: { applyClearPASMeta },
+      original,
     },
   } = useStores()
   const [loading, setLoading] = useState(false)
 
   const clearFileCharacteristics = async () => {
     const { identifier } = clearMetadataModalFile
+    const crId = original?.identifier
     const url = urls.qvain.fileCharacteristics(identifier)
 
     // revert to default file characteristics
@@ -33,6 +35,9 @@ const ClearMetadataModal = () => {
     setLoading(true)
     try {
       const response = await axios.put(url, data, {
+        params: {
+          cr_identifier: crId, // is empty for new dataset
+        },
         headers: {
           'Content-Type': 'application/json',
         },

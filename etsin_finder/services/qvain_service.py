@@ -76,6 +76,10 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
         return self.metax_url("/rest/v2/datasets") + "/{0}"
 
     @property
+    def _METAX_GET_DATASET_FILE(self):
+        return self.metax_url("/rest/v2/datasets") + "/{0}/files/{1}"
+
+    @property
     def _METAX_GET_DATASETS_FOR_USER(self):
         return (
             self.metax_url("/rest/v2/datasets")
@@ -218,6 +222,23 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
 
         """
         req_url = format_url(self._METAX_GET_FILE, file_identifier)
+        resp, _, success = make_request(requests.get, req_url, **self._get_args())
+        if not success:
+            log.warning("Failed to get file {}".format(file_identifier))
+            return None
+        return resp
+
+    def get_dataset_file(self, cr_id, file_identifier):
+        """Get a specific file in a dataset with file's id
+
+        Args:
+            file_identifier (str): File identifier.
+
+        Returns:
+            Metax response
+
+        """
+        req_url = format_url(self._METAX_GET_DATASET_FILE, cr_id, file_identifier)
         resp, _, success = make_request(requests.get, req_url, **self._get_args())
         if not success:
             log.warning("Failed to get file {}".format(file_identifier))

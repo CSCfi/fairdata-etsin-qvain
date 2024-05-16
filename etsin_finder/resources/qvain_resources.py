@@ -52,6 +52,15 @@ from etsin_finder.utils.log_utils import log_request
 class FileCharacteristics(MethodView):
     """REST endpoint for updating file_characteristics of a file."""
 
+    def _parse_args(self):
+        return parser.parse(
+            {
+                "cr_identifier": fields.Str(),
+            },
+            request,
+            location="query",
+        )
+
     def _update_characteristics(self, file_id, replace=False):
         """Update file_characteristics of a file.
 
@@ -72,7 +81,19 @@ class FileCharacteristics(MethodView):
         project_identifier = file_obj.get("project_identifier")
         user_ida_projects = authentication.get_user_ida_projects() or []
 
-        if project_identifier not in user_ida_projects:
+        allow_access = project_identifier in user_ida_projects
+
+        # Allow updating file characteristics in dataset even if not project member
+        args = self._parse_args()
+        cr_id = args.get("cr_identifier")
+        if cr_id:
+            error = check_dataset_edit_permission(cr_id)
+            if error is not None:
+                return error
+            if allow_access or service.get_dataset_file(cr_id, file_id) is not None:
+                allow_access = True
+
+        if not allow_access:
             log.warning(
                 "User not authenticated or does not have access to project {0} for file {1}".format(
                     project_identifier, file_id

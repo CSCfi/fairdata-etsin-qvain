@@ -12,7 +12,7 @@ import { useStores } from '@/stores/stores'
 const EditDropdown = ({ item, parentArgs }) => {
   const {
     Qvain: {
-      Files: { clearMetadata, toggleInEdit, userHasRightsToEditProject },
+      Files: { clearMetadata, toggleInEdit },
       readonly,
       setMetadataModalFile,
       setClearMetadataModalFile,
@@ -27,8 +27,8 @@ const EditDropdown = ({ item, parentArgs }) => {
   const name = item.name
 
   let canEdit =
-    (item.added || item.existing || hasAddedChildren || parentAdded) && userHasRightsToEditProject
-  if (isRemoved) {
+    (item.added || item.existing || hasAddedChildren || parentAdded)
+  if (isRemoved || readonly) {
     canEdit = false
   }
 
@@ -40,7 +40,7 @@ const EditDropdown = ({ item, parentArgs }) => {
     let icon = faPen
     let ariaLabel = 'qvain.files.selected.buttons.edit'
 
-    if (readonly || !userHasRightsToEditProject) {
+    if (readonly) {
       disabledEditColor = 'gray'
       icon = faEye
       ariaLabel = 'qvain.files.selected.buttons.show'
@@ -92,7 +92,7 @@ const EditDropdown = ({ item, parentArgs }) => {
     }
 
     let pasOption
-    if (readonly || !canEdit || !userHasRightsToEditProject) pasOption = 'show'
+    if (readonly || !canEdit) pasOption = 'show'
     else if (itemHasPASMetadata) pasOption = 'edit'
     else pasOption = 'add'
 
@@ -105,7 +105,7 @@ const EditDropdown = ({ item, parentArgs }) => {
             onClick={showPasModal}
             className='edit-pas-metadata'
           />
-          {!readonly && itemHasPASMetadata && userHasRightsToEditProject && (
+          {!readonly && itemHasPASMetadata && (
             <Translate
               component={DropdownItem}
               content="qvain.files.metadataModal.buttons.delete"
@@ -147,7 +147,7 @@ const EditDropdown = ({ item, parentArgs }) => {
   return (
     <BaseDropdown>
       <MetadataButton type="add" />
-      <RemoveMetadataButton />
+      {itemHasMetadata && <RemoveMetadataButton />}
       {PasButtons()}
     </BaseDropdown>
   )

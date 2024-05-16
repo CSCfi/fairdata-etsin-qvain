@@ -41,7 +41,6 @@ class FileForm extends Component {
 
   componentDidMount = () => {
     this.props.Stores.Qvain.ReferenceData.getLocalizedOptions('file_type').then(translations => {
-
       this.setState((state, props) => ({
         fileTypesEn: translations.en,
         fileTypesFi: translations.fi,
@@ -159,13 +158,8 @@ class FileForm extends Component {
       return null
     }
 
-    const {
-      readonly: ro,
-      Files: { userHasRightsToEditProject },
-    } = this.props.Stores.Qvain
+    const { readonly } = this.props.Stores.Qvain
     const { fileError, titleError, descriptionError, useCategoryError } = this.state
-
-    const readonly = ro || !userHasRightsToEditProject
 
     return (
       <FileContainer className={this.props.className}>
