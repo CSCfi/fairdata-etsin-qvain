@@ -147,7 +147,7 @@ describe('Qvain filepicker', () => {
       file2.find('button').first().simulate('click')
       file2
         .find(Translate)
-        .filterWhere(i => i.prop('content') === 'qvain.files.metadataModal.buttons.edit')
+        .filterWhere(i => i.prop('content') === 'qvain.files.metadataModal.buttons.add')
         .find('button')
         .simulate('click')
 

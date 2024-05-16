@@ -28,10 +28,7 @@ const ClearMetadataModal = () => {
     const crId = original?.identifier
     const url = urls.qvain.fileCharacteristics(identifier)
 
-    // revert to default file characteristics
-    const data = {
-      encoding: 'UTF-8',
-    }
+    const data = {} // clear characteristics
     setLoading(true)
     try {
       const response = await axios.put(url, data, {

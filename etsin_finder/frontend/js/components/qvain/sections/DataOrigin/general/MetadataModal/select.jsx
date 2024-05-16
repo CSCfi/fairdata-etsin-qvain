@@ -10,6 +10,7 @@ export const MetadataSelect = props => {
   return (
     <Label htmlFor={props.inputId} style={labelStyle}>
       {props.children || translate(`qvain.files.metadataModal.fields.${props.field}`)}
+      {props.required && ' *'}
       <Select
         styles={!props.selectStyles && selectStyles}
         menuPlacement="auto"
@@ -17,6 +18,7 @@ export const MetadataSelect = props => {
         menuShouldScrollIntoView={false}
         name={props.inputId}
         isDisabled={noOptions}
+        isClearable
         placeholder={
           noOptions
             ? translate('qvain.files.metadataModal.placeholders.noOptions')
@@ -32,11 +34,13 @@ MetadataSelect.propTypes = {
   ...Select.propTypes,
   selectStyles: PropTypes.object,
   field: PropTypes.string,
+  required: PropTypes.bool,
 }
 
 MetadataSelect.defaultProps = {
   selectStyles: null,
   field: null,
+  required: false,
 }
 
 const selectStyles = {

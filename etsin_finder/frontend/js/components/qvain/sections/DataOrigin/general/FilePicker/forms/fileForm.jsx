@@ -235,6 +235,7 @@ class FileForm extends Component {
             <Translate
               component={CustomSelect}
               value={this.state.fileType}
+              isClearable
               isDisabled={readonly}
               onChange={this.handleChangeFileType}
               options={

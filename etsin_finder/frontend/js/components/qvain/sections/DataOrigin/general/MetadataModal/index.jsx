@@ -14,7 +14,7 @@ import { DangerButton, TableButton } from '@/components/qvain/general/buttons'
 import Response from '../response'
 import { getPASMeta } from '@/stores/view/common.files.items'
 
-import { getOptions, getDefaultOptions, makeOption, findOption } from './options'
+import { getOptions, makeOption, findOption } from './options'
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
 import urls from '@/utils/urls'
 import { withStores } from '@/stores/stores'
@@ -89,7 +89,7 @@ export class MetadataModal extends Component {
 
   setFileFormat = formatOption => {
     this.setState({
-      fileFormat: formatOption.value,
+      fileFormat: formatOption?.value,
       formatVersion: '',
       fileChanged: true,
     })
@@ -117,35 +117,35 @@ export class MetadataModal extends Component {
 
   setFormatVersion = versionOption => {
     this.setState({
-      formatVersion: versionOption.value,
+      formatVersion: versionOption?.value,
       fileChanged: true,
     })
   }
 
   setEncoding = encodingOption => {
     this.setState({
-      encoding: encodingOption.value,
+      encoding: encodingOption?.value,
       fileChanged: true,
     })
   }
 
   setCsvDelimiter = csvDelimiterOption => {
     this.setState({
-      csvDelimiter: csvDelimiterOption.value,
+      csvDelimiter: csvDelimiterOption?.value,
       fileChanged: true,
     })
   }
 
   setCsvRecordSeparator = csvRecordSeparatorOption => {
     this.setState({
-      csvRecordSeparator: csvRecordSeparatorOption.value,
+      csvRecordSeparator: csvRecordSeparatorOption?.value,
       fileChanged: true,
     })
   }
 
   setCsvHasHeader = csvHasHeaderOption => {
     this.setState({
-      csvHasHeader: csvHasHeaderOption.value,
+      csvHasHeader: csvHasHeaderOption?.value,
       fileChanged: true,
     })
   }
@@ -191,9 +191,33 @@ export class MetadataModal extends Component {
     this.props.Stores.Qvain.setMetadataModalFile(null)
   }
 
+  getCharacteristics = () => {
+    const characteristics = {
+      file_format: this.state.fileFormat,
+      format_version: this.state.formatVersion,
+      encoding: this.state.encoding,
+      csv_has_header: this.state.csvHasHeader,
+      csv_delimiter: this.state.csvDelimiter,
+      csv_record_separator: this.state.csvRecordSeparator,
+      csv_quoting_char: this.state.csvQuotingChar,
+    }
+
+    if (!this.isCsv()) {
+      characteristics.csv_has_header = undefined
+      characteristics.csv_delimiter = undefined
+      characteristics.csv_record_separator = undefined
+      characteristics.csv_quoting_char = undefined
+    }
+
+    const nonEmpty = Object.fromEntries(
+      Object.entries(characteristics).filter(([, v]) => v != null && v !== '')
+    )
+    return nonEmpty
+  }
+
   validateMetadata = () => {
     const { fileMetadataSchema } = this.props.Stores.Qvain.Files
-    fileMetadataSchema.validate(this.state, { strict: true })
+    fileMetadataSchema.validate(this.getCharacteristics(), { strict: true })
 
     // Additional validation for formatVersion
     const versions = this.state.formatVersionsMap[this.state.fileFormat] || []
@@ -228,24 +252,10 @@ export class MetadataModal extends Component {
         loading: true,
       })
 
-      const characteristics = {
-        file_format: this.state.fileFormat,
-        format_version: this.state.formatVersion,
-        encoding: this.state.encoding,
-        csv_has_header: this.state.csvHasHeader,
-        csv_delimiter: this.state.csvDelimiter,
-        csv_record_separator: this.state.csvRecordSeparator,
-        csv_quoting_char: this.state.csvQuotingChar,
-      }
-
-      if (!this.isCsv()) {
-        characteristics.csv_has_header = undefined
-        characteristics.csv_delimiter = undefined
-        characteristics.csv_record_separator = undefined
-        characteristics.csv_quoting_char = undefined
-      }
-
-      const patchPromise = this.patchFileCharacteristics(this.state.fileIdentifier, characteristics)
+      const patchPromise = this.patchFileCharacteristics(
+        this.state.fileIdentifier,
+        this.getCharacteristics()
+      )
       const response = await patchPromise
 
       // Update file hierarchy with response data, close modal
@@ -329,24 +339,15 @@ export class MetadataModal extends Component {
       confirmClose: false,
       criticalError: false,
       fileIdentifier: file.identifier,
-      fileFormat: pasObj.fileFormat,
-      formatVersion: pasObj.formatVersion,
-      encoding: pasObj.encoding,
-      csvDelimiter: pasObj.csvDelimiter,
-      csvRecordSeparator: pasObj.csvRecordSeparator,
-      csvQuotingChar: pasObj.csvQuotingChar,
-      csvHasHeader: pasObj.csvHasHeader,
+      fileFormat: pasObj.fileFormat ?? "",
+      formatVersion: pasObj.formatVersion ?? "",
+      encoding: pasObj.encoding ?? "",
+      csvDelimiter: pasObj.csvDelimiter ?? "",
+      csvRecordSeparator: pasObj.csvRecordSeparator ?? "",
+      csvQuotingChar: pasObj.csvQuotingChar ?? "",
+      csvHasHeader: pasObj.csvHasHeader ?? "",
     }
 
-    // Replace null/undefined metadata with defaults
-    const defaults = getDefaultOptions()
-    for (const key in defaults) {
-      if (Object.prototype.hasOwnProperty.call(defaults, key)) {
-        if (newState[key] == null) {
-          newState[key] = defaults[key]
-        }
-      }
-    }
     this.setState(newState)
   }
 
@@ -379,6 +380,7 @@ export class MetadataModal extends Component {
         <MetadataSelect
           inputId="pas_format_version"
           options={this.getformatVersionOptions()}
+          required={this.getformatVersionOptions().length > 0}
           value={makeOption(this.state.formatVersion)}
           onChange={this.setFormatVersion}
           isDisabled={readonly}

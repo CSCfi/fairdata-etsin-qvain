@@ -1,13 +1,13 @@
 import * as yup from 'yup'
 
 export const fileMetadataSchema = yup.object().shape({
-  fileFormat: yup.string().required(),
+  fileFormat: yup.string().optional(),
   formatVersion: yup.string(),
-  encoding: yup.string().required(),
-  csvHasHeader: yup.boolean().required(),
-  csvDelimiter: yup.string().required(),
-  csvRecordSeparator: yup.string().required(),
-  csvQuotingChar: yup.string().required(),
+  encoding: yup.string().optional(),
+  csvHasHeader: yup.boolean().optional(),
+  csvDelimiter: yup.string().optional(),
+  csvRecordSeparator: yup.string().optional(),
+  csvQuotingChar: yup.string().optional(),
 })
 
 // FILE AND DIRECTORY (IDA RESOURCES) VALIDATION

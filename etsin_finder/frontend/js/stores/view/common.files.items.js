@@ -133,8 +133,9 @@ export const hasPASMetadata = file => {
   }
   if (
     pasMeta.description ||
+    pasMeta.fileFormat ||
     pasMeta.formatVersion ||
-    pasMeta.encoding !== 'UTF-8' ||
+    pasMeta.encoding ||
     pasMeta.csvDelimiter ||
     pasMeta.csvRecordSeparator ||
     pasMeta.csvQuotingChar ||

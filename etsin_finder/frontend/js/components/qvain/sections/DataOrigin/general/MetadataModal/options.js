@@ -23,26 +23,12 @@ export const getOptions = () => ({
   ],
   hasHeader: [
     { value: false, label: translate('qvain.files.metadataModal.options.header.false') },
-    { value: true, label: translate('qvain.files.metadataModal.options.header.true') }
-  ]
-})
-
-export const getDefaultOptions = () => ({
-  fileFormat: 'text/csv',
-  formatVersion: '',
-  encoding: 'UTF-8',
-  csvDelimiter: ',',
-  csvRecordSeparator: 'LF',
-  csvQuotingChar: ',',
-  csvHasHeader: true,
+    { value: true, label: translate('qvain.files.metadataModal.options.header.true') },
+  ],
 })
 
 // Turn a plain value into an option object for react-select
-export const makeOption = (value) => (
-  value ? { value, label: value } : null
-)
+export const makeOption = value => (value ? { value, label: value } : null)
 
 // Find option object by value
-export const findOption = (value, options) => (
-  options.find(v => v.value === value)
-)
+export const findOption = (value, options) => options.find(v => v.value === value)
