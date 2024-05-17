@@ -94,6 +94,7 @@ const BasicDataCatalog = observer(() => {
           attributes={{ title: 'qvain.sections.dataOrigin.buttons.ida.title' }}
           selected={dataCatalog === DATA_CATALOG_IDENTIFIER.IDA}
           disabled={isDataCatalogDecided && dataCatalog !== DATA_CATALOG_IDENTIFIER.IDA}
+          cy="data-source-ida"
         >
           <Translate content="qvain.sections.dataOrigin.buttons.ida.description" />
         </Translate>
@@ -105,6 +106,7 @@ const BasicDataCatalog = observer(() => {
           attributes={{ title: 'qvain.sections.dataOrigin.buttons.att.title' }}
           selected={dataCatalog === DATA_CATALOG_IDENTIFIER.ATT}
           disabled={isDataCatalogDecided && dataCatalog !== DATA_CATALOG_IDENTIFIER.ATT}
+          cy="data-source-att"
         >
           <Translate content="qvain.sections.dataOrigin.buttons.att.description" />
         </Translate>

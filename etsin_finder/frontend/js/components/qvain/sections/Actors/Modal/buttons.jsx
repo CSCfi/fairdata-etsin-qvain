@@ -30,6 +30,7 @@ const Buttons = ({ handleRequestClose, handleSaveActor, readonly }) => {
         type="button"
         onClick={handleSaveActor}
         content={`qvain.actors.add.${action}.label`}
+        data-cy="save-actor"
       />
     </ModalButtonGroup>
   )

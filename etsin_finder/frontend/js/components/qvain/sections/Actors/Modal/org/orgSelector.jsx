@@ -115,7 +115,6 @@ export const OrgSelectorBase = ({
 
   const options = getOptionsWithLang(datasetOptions, referenceOptions, lang)
 
-
   const isLast = level === organizations.length - 1
   const deleteButtonStyle = isLast ? null : { display: 'none' }
 
@@ -176,7 +175,7 @@ export const OrgSelectorBase = ({
   return (
     <>
       <FieldGroup>
-        <OrganizationLevel>
+        <OrganizationLevel data-cy={`organization-level-${level}`}>
           <Translate
             component={SelectOrg}
             name="orgField"

@@ -121,6 +121,7 @@ export const ToggleOpenButton = ({ item, directoryView, ...props }) => {
       onClick={() => directoryView.toggleOpen(item)}
       attributes={{ 'aria-label': `qvain.files.selected.buttons.${action}` }}
       with={{ name: item.name }}
+      data-cy={`${action}-${item.name}`}
       {...props}
     />
   )

@@ -47,6 +47,7 @@ export const Datasets = () => {
               history.push(getQvainUrl('/dataset'))
             }}
             content="qvain.datasets.createButton"
+            data-cy="create-dataset"
           />
         </DatasetsHeader>
         <Tabs />

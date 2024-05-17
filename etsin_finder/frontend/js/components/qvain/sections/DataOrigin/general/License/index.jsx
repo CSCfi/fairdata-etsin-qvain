@@ -124,7 +124,7 @@ export class License extends Component {
     }
 
     return (
-      <FieldGroup>
+      <FieldGroup data-cy="license-select">
         <Title htmlFor="licenseSelect">
           <Translate content="qvain.rightsAndLicenses.license.title" />
         </Title>

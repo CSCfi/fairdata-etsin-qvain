@@ -140,7 +140,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   }
 
   return (
-    <ItemRow isOpen={isOpen}>
+    <ItemRow isOpen={isOpen} data-cy={`data-${name}`}>
       <ItemSpacer level={level} />
       <Group>{content}</Group>
       {sizeTag}

@@ -37,7 +37,7 @@ const FieldOfScienceField = () => {
   }
 
   return (
-    <FieldGroup>
+    <FieldGroup data-cy="field-of-science-select">
       <FieldWrapper>
         <Title htmlFor="fieldOfScience-select">
           <Translate content="qvain.description.fieldOfScience.title" />

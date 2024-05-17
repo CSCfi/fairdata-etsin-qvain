@@ -87,7 +87,7 @@ export class AccessType extends Component {
     }
 
     return (
-      <FieldGroup>
+      <FieldGroup data-cy="access-type-select">
         <Title htmlFor="accessTypeSelect">
           <Translate content="qvain.rightsAndLicenses.accessType.title" />
         </Title>

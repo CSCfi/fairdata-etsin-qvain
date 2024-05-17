@@ -87,7 +87,11 @@ const Dataset = ({ dataset, group, isExpanded, expandGroup, isLatest, versionNum
 
   const actions = getDatasetActionsV2(Stores, dataset, group)
   return (
-    <StyledDataset isLatest={isLatest} key={dataset.id}>
+    <StyledDataset
+      isLatest={isLatest}
+      key={dataset.id}
+      data-cy={`dataset-${getTitle(getValueTranslation, dataset)}`}
+    >
       <PadCell />
       <Cell className="dataset-title" onClick={expandGroup}>
         <Title>

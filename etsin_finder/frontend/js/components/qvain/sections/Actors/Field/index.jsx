@@ -22,7 +22,12 @@ const ActorsField = () => {
     <SectionContentWrapper>
       <AddedActors />
       <ButtonContainer>
-        <AddNewButton type="button" onClick={createActor} disabled={readonly}>
+        <AddNewButton
+          type="button"
+          onClick={createActor}
+          disabled={readonly}
+          data-cy="add-new-actor"
+        >
           <Translate content="qvain.actors.addButton" />
         </AddNewButton>
       </ButtonContainer>

@@ -60,7 +60,7 @@ export const AddFilesModal = ({ isOpen, onRequestClose }) => {
       </TreeWrapper>
       <Translate component={HelpField} content={getDatasetEditingInfoTranslation()} />
       <Buttons>
-        <SaveButton onClick={saveAddedItems} disabled={!haveNewFiles}>
+        <SaveButton onClick={saveAddedItems} disabled={!haveNewFiles} data-cy="add-files">
           <Translate content={'qvain.files.addItemsModal.buttons.save'} />
         </SaveButton>
         <CancelButton onClick={onRequestClose}>

@@ -14,7 +14,7 @@ const LanguageField = () => {
   const { storage, set, Model } = Stores.Qvain.DatasetLanguages
 
   return (
-    <FieldGroup>
+    <FieldGroup data-cy="language-select">
       <FieldWrapper>
         <Title htmlFor="dataset-language-select">
           <Translate content="qvain.description.datasetLanguage.title" />

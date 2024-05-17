@@ -21,7 +21,7 @@ const RestrictionGrounds = () => {
   } = useStores()
 
   return (
-    <FieldGroup>
+    <FieldGroup data-cy="restriction-grounds-select">
       <Translate
         component={Title}
         htmlFor="restrictionGrounds-select"

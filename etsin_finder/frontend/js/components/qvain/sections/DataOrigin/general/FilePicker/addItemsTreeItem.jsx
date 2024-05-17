@@ -37,8 +37,11 @@ export const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => 
           checked={checkMark}
           disabled={disabled}
           onChange={toggle}
-          attributes={{ 'aria-label': `qvain.files.selected.buttons.${checkAction}` }}
+          attributes={{
+            'aria-label': `qvain.files.selected.buttons.${checkAction}`,
+          }}
           with={{ name: item.name }}
+          data-cy={`checkbox-${item.name}`}
         />
         <Icon icon={isOpen ? faFolderOpen : faFolder} />
         <ItemTitle onDoubleClick={() => toggleDirectoryOpen(item)}>
@@ -52,7 +55,13 @@ export const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => 
   const getFileContent = () => (
     <>
       <NoIcon />
-      <Checkbox aria-label="select" checked={checkMark} disabled={disabled} onChange={toggle} />
+      <Checkbox
+        aria-label="select"
+        checked={checkMark}
+        disabled={disabled}
+        onChange={toggle}
+        data-cy={`checkbox-${item.name}`}
+      />
       <Icon icon={faFile} />
       <ItemTitle>{item.name}</ItemTitle>
     </>

@@ -14,7 +14,7 @@ const SubjectHeadingsField = () => {
     },
   } = useStores()
   return (
-    <FieldGroup>
+    <FieldGroup data-cy="subject-heading-select">
       <FieldWrapper>
         <Title htmlFor="subjectHeading-select">
           <Translate content="qvain.description.subjectHeadings.title" />

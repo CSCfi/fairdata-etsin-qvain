@@ -12,8 +12,15 @@ export const CatalogButton = ({
   image,
   className,
   disabled,
+  cy,
 }) => (
-  <BoxButton onClick={onClick} className={className} selected={selected} disabled={disabled}>
+  <BoxButton
+    onClick={onClick}
+    className={className}
+    selected={selected}
+    disabled={disabled}
+    cy={cy}
+  >
     <BoxContent>
       <TitleArea>
         <Image src={image} disabled={disabled} />
@@ -40,6 +47,7 @@ CatalogButton.propTypes = {
   selected: PropTypes.bool,
   disabled: PropTypes.bool,
   className: PropTypes.string,
+  cy: PropTypes.string,
 }
 
 CatalogButton.defaultProps = {
@@ -47,6 +55,7 @@ CatalogButton.defaultProps = {
   className: '',
   selected: false,
   disabled: false,
+  cy: '',
 }
 
 const getOpacy = p => opacify(-0.8, p.disabled ? p.theme.color.darkgray : p.theme.color.primary)
@@ -104,15 +113,24 @@ const DisabledButton = styled(Button)`
   cursor: auto;
 `
 
-export function BoxButton({ children, selected, disabled, onClick }) {
+export function BoxButton({ children, selected, disabled, onClick, cy }) {
   if (disabled)
     return (
-      <DisabledButton disabled onClick={onClick}>
+      <DisabledButton disabled onClick={onClick} data-cy={cy}>
         {children}
       </DisabledButton>
     )
-  if (selected) return <SelectedButton onClick={onClick}>{children}</SelectedButton>
-  return <ActiveButton onClick={onClick}>{children}</ActiveButton>
+  if (selected)
+    return (
+      <SelectedButton onClick={onClick} data-cy={cy}>
+        {children}
+      </SelectedButton>
+    )
+  return (
+    <ActiveButton onClick={onClick} data-cy={cy}>
+      {children}
+    </ActiveButton>
+  )
 }
 
 BoxButton.propTypes = {
@@ -120,11 +138,13 @@ BoxButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   selected: PropTypes.bool,
   disabled: PropTypes.bool,
+  cy: PropTypes.string,
 }
 
 BoxButton.defaultProps = {
   selected: false,
   disabled: false,
+  cy: '',
 }
 
 const BoxTitle = styled.div`
