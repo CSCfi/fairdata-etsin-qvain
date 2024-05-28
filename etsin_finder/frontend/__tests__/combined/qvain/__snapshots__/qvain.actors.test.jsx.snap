@@ -3,7 +3,7 @@
 exports[`Qvain.Actors should render correctly 1`] = `
 <Section
   components={
-    Object {
+    {
       "tooltipContent": [Function],
     }
   }
@@ -15,68 +15,68 @@ exports[`Qvain.Actors should render correctly 1`] = `
 `;
 
 exports[`Qvain.Actors store converts dataset for backend 1`] = `
-Object {
-  "contributor": Array [
-    Object {
+{
+  "contributor": [
+    {
       "@type": "Person",
       "email": undefined,
       "identifier": undefined,
-      "member_of": Object {
+      "member_of": {
         "@type": "Organization",
         "email": undefined,
         "identifier": undefined,
-        "name": Object {
+        "name": {
           "en": "Some University",
         },
       },
       "name": "Teppo Testihenkilö",
     },
   ],
-  "creator": Array [
-    Object {
+  "creator": [
+    {
       "@type": "Organization",
       "email": undefined,
       "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A802",
-      "is_part_of": Object {
+      "is_part_of": {
         "@type": "Organization",
         "email": undefined,
         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
-        "name": Object {
+        "name": {
           "en": "Aalto University",
           "fi": "Aalto yliopisto",
           "sv": "Aalto universitetet",
           "und": "Aalto yliopisto",
         },
       },
-      "name": Object {
+      "name": {
         "en": "Department of Media",
         "fi": "Department of Media",
         "und": "Department of Media",
       },
     },
-    Object {
+    {
       "@type": "Person",
       "email": undefined,
       "identifier": undefined,
-      "member_of": Object {
+      "member_of": {
         "@type": "Organization",
         "email": undefined,
         "identifier": undefined,
-        "name": Object {
+        "name": {
           "en": "Some University",
         },
       },
       "name": "Teppo Testihenkilö",
     },
-    Object {
+    {
       "@type": "Person",
       "email": "asdasd@test.com",
       "identifier": undefined,
-      "member_of": Object {
+      "member_of": {
         "@type": "Organization",
         "email": undefined,
         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
-        "name": Object {
+        "name": {
           "en": "Aalto University",
           "fi": "Aalto yliopisto",
           "sv": "Aalto universitetet",
@@ -85,63 +85,63 @@ Object {
       },
       "name": "Asdasd J. Qwerty",
     },
-    Object {
+    {
       "@type": "Organization",
       "email": undefined,
       "identifier": "http://example.com/org",
-      "name": Object {
+      "name": {
         "en": "Some Organization",
       },
     },
-    Object {
+    {
       "@type": "Organization",
       "email": "manual@notreference.com",
       "identifier": undefined,
-      "is_part_of": Object {
+      "is_part_of": {
         "@type": "Organization",
         "email": undefined,
         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/NOT-REALLY-REFERENCE-ORG",
-        "name": Object {
+        "name": {
           "en": "Not Really a Reference Org",
         },
       },
-      "name": Object {
+      "name": {
         "en": "Manual Org",
       },
     },
   ],
-  "curator": Array [
-    Object {
+  "curator": [
+    {
       "@type": "Organization",
       "email": undefined,
       "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076-A802",
-      "is_part_of": Object {
+      "is_part_of": {
         "@type": "Organization",
         "email": undefined,
         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
-        "name": Object {
+        "name": {
           "en": "Aalto University",
           "fi": "Aalto yliopisto",
           "sv": "Aalto universitetet",
           "und": "Aalto yliopisto",
         },
       },
-      "name": Object {
+      "name": {
         "en": "Department of Media",
         "fi": "Department of Media",
         "und": "Department of Media",
       },
     },
   ],
-  "publisher": Object {
+  "publisher": {
     "@type": "Person",
     "email": "asdasd@test.com",
     "identifier": undefined,
-    "member_of": Object {
+    "member_of": {
       "@type": "Organization",
       "email": undefined,
       "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
-      "name": Object {
+      "name": {
         "en": "Aalto University",
         "fi": "Aalto yliopisto",
         "sv": "Aalto universitetet",
@@ -150,30 +150,30 @@ Object {
     },
     "name": "Asdasd J. Qwerty",
   },
-  "rights_holder": Array [
-    Object {
+  "rights_holder": [
+    {
       "@type": "Person",
       "email": undefined,
       "identifier": undefined,
-      "member_of": Object {
+      "member_of": {
         "@type": "Organization",
         "email": undefined,
         "identifier": undefined,
-        "name": Object {
+        "name": {
           "en": "Some University",
         },
       },
       "name": "Teppo Testihenkilö",
     },
-    Object {
+    {
       "@type": "Person",
       "email": "asdasd@test.com",
       "identifier": undefined,
-      "member_of": Object {
+      "member_of": {
         "@type": "Organization",
         "email": undefined,
         "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/10076",
-        "name": Object {
+        "name": {
           "en": "Aalto University",
           "fi": "Aalto yliopisto",
           "sv": "Aalto universitetet",

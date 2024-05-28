@@ -1,24 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Qvain.Files handleSubmit submits data correctly 1`] = `
-Object {
-  "access_rights": Object {
-    "access_type": Object {
+{
+  "access_rights": {
+    "access_type": {
       "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
     "available": undefined,
-    "license": Array [
-      Object {
+    "license": [
+      {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
       },
     ],
   },
-  "creator": Array [
-    Object {
+  "creator": [
+    {
       "@type": "Organization",
       "email": undefined,
       "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-      "name": Object {
+      "name": {
         "en": "Org",
         "fi": "Org",
         "und": "Org",
@@ -27,40 +27,40 @@ Object {
   ],
   "cumulative_state": 0,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
-  "description": Object {
+  "description": {
     "en": "",
     "fi": "Description",
     "sv": "",
   },
-  "field_of_science": Array [],
-  "infrastructure": Array [],
-  "is_output_of": Array [],
+  "field_of_science": [],
+  "infrastructure": [],
+  "is_output_of": [],
   "issued": undefined,
-  "keyword": Array [
+  "keyword": [
     "keyword",
   ],
-  "language": Array [],
+  "language": [],
   "modified": "2022-09-22T12:34:00.000Z",
-  "original": Object {
+  "original": {
     "cumulative_state": 0,
-    "data_catalog": Object {
+    "data_catalog": {
       "id": 9,
       "identifier": "urn:nbn:fi:att:data-catalog-ida",
     },
-    "dataset_version_set": Array [
-      Object {
+    "dataset_version_set": [
+      {
         "date_created": "2020-03-03T11:58:16+02:00",
         "identifier": "6d2cb5f5-4867-47f7-9874-09357f2901a3",
         "preferred_identifier": "urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d",
         "removed": false,
       },
-      Object {
+      {
         "date_created": "2020-03-03T11:53:22+02:00",
         "identifier": "387c0807-f181-4f0b-b4f1-59004bce7fd6",
         "preferred_identifier": "urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f",
         "removed": false,
       },
-      Object {
+      {
         "date_created": "2020-03-03T10:52:00+02:00",
         "identifier": "c05a9c97-2b69-4d88-ab30-791c7b365162",
         "preferred_identifier": "urn:nbn:fi:att:f557c60d-9fad-4d38-8a50-86ec3b10d8ad",
@@ -76,53 +76,53 @@ Object {
     "metadata_provider_org": "ylipoisto.fi",
     "metadata_provider_user": "TESTUSER",
     "preservation_state": 0,
-    "previous_dataset_version": Object {
+    "previous_dataset_version": {
       "id": 495,
       "identifier": "387c0807-f181-4f0b-b4f1-59004bce7fd6",
       "preferred_identifier": "urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f",
     },
     "removed": false,
-    "research_dataset": Object {
-      "access_rights": Object {
-        "access_type": Object {
+    "research_dataset": {
+      "access_rights": {
+        "access_type": {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
           "in_scheme": "http://uri.suomi.fi/codelist/fairdata/access_type",
-          "pref_label": Object {
+          "pref_label": {
             "en": "Open",
             "fi": "Avoin",
             "und": "Avoin",
           },
         },
-        "license": Array [
-          Object {
+        "license": [
+          {
             "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
             "license": "https://creativecommons.org/licenses/by/4.0/",
-            "title": Object {
+            "title": {
               "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
             },
           },
         ],
       },
-      "creator": Array [
-        Object {
+      "creator": [
+        {
           "@type": "Organization",
           "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-          "name": Object {
+          "name": {
             "en": "Org",
             "fi": "Org",
             "und": "Org",
           },
         },
       ],
-      "description": Object {
+      "description": {
         "fi": "Description",
       },
-      "keyword": Array [
+      "keyword": [
         "keyword",
       ],
       "metadata_version_identifier": "615de971-99b1-4801-a45d-d7f03ec06f18",
       "preferred_identifier": "urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d",
-      "title": Object {
+      "title": {
         "fi": "Title",
       },
       "total_files_byte_size": 9216,
@@ -130,13 +130,13 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "other_identifier": Array [],
-  "provenance": Array [],
-  "relation": Array [],
-  "spatial": Array [],
-  "temporal": Array [],
-  "theme": Array [],
-  "title": Object {
+  "other_identifier": [],
+  "provenance": [],
+  "relation": [],
+  "spatial": [],
+  "temporal": [],
+  "theme": [],
+  "title": {
     "en": "",
     "fi": "Title",
     "sv": "",
@@ -146,24 +146,24 @@ Object {
 `;
 
 exports[`Qvain.Files handleSubmit submits data correctly after adding directory 1`] = `
-Object {
-  "access_rights": Object {
-    "access_type": Object {
+{
+  "access_rights": {
+    "access_type": {
       "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
     "available": undefined,
-    "license": Array [
-      Object {
+    "license": [
+      {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
       },
     ],
   },
-  "creator": Array [
-    Object {
+  "creator": [
+    {
       "@type": "Organization",
       "email": undefined,
       "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-      "name": Object {
+      "name": {
         "en": "Org",
         "fi": "Org",
         "und": "Org",
@@ -172,40 +172,40 @@ Object {
   ],
   "cumulative_state": 0,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
-  "description": Object {
+  "description": {
     "en": "",
     "fi": "Description",
     "sv": "",
   },
-  "field_of_science": Array [],
-  "infrastructure": Array [],
-  "is_output_of": Array [],
+  "field_of_science": [],
+  "infrastructure": [],
+  "is_output_of": [],
   "issued": undefined,
-  "keyword": Array [
+  "keyword": [
     "keyword",
   ],
-  "language": Array [],
+  "language": [],
   "modified": "2022-09-22T12:34:00.000Z",
-  "original": Object {
+  "original": {
     "cumulative_state": 0,
-    "data_catalog": Object {
+    "data_catalog": {
       "id": 9,
       "identifier": "urn:nbn:fi:att:data-catalog-ida",
     },
-    "dataset_version_set": Array [
-      Object {
+    "dataset_version_set": [
+      {
         "date_created": "2020-03-03T11:58:16+02:00",
         "identifier": "6d2cb5f5-4867-47f7-9874-09357f2901a3",
         "preferred_identifier": "urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d",
         "removed": false,
       },
-      Object {
+      {
         "date_created": "2020-03-03T11:53:22+02:00",
         "identifier": "387c0807-f181-4f0b-b4f1-59004bce7fd6",
         "preferred_identifier": "urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f",
         "removed": false,
       },
-      Object {
+      {
         "date_created": "2020-03-03T10:52:00+02:00",
         "identifier": "c05a9c97-2b69-4d88-ab30-791c7b365162",
         "preferred_identifier": "urn:nbn:fi:att:f557c60d-9fad-4d38-8a50-86ec3b10d8ad",
@@ -221,53 +221,53 @@ Object {
     "metadata_provider_org": "ylipoisto.fi",
     "metadata_provider_user": "TESTUSER",
     "preservation_state": 0,
-    "previous_dataset_version": Object {
+    "previous_dataset_version": {
       "id": 495,
       "identifier": "387c0807-f181-4f0b-b4f1-59004bce7fd6",
       "preferred_identifier": "urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f",
     },
     "removed": false,
-    "research_dataset": Object {
-      "access_rights": Object {
-        "access_type": Object {
+    "research_dataset": {
+      "access_rights": {
+        "access_type": {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
           "in_scheme": "http://uri.suomi.fi/codelist/fairdata/access_type",
-          "pref_label": Object {
+          "pref_label": {
             "en": "Open",
             "fi": "Avoin",
             "und": "Avoin",
           },
         },
-        "license": Array [
-          Object {
+        "license": [
+          {
             "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
             "license": "https://creativecommons.org/licenses/by/4.0/",
-            "title": Object {
+            "title": {
               "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
             },
           },
         ],
       },
-      "creator": Array [
-        Object {
+      "creator": [
+        {
           "@type": "Organization",
           "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-          "name": Object {
+          "name": {
             "en": "Org",
             "fi": "Org",
             "und": "Org",
           },
         },
       ],
-      "description": Object {
+      "description": {
         "fi": "Description",
       },
-      "keyword": Array [
+      "keyword": [
         "keyword",
       ],
       "metadata_version_identifier": "615de971-99b1-4801-a45d-d7f03ec06f18",
       "preferred_identifier": "urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d",
-      "title": Object {
+      "title": {
         "fi": "Title",
       },
       "total_files_byte_size": 9216,
@@ -275,13 +275,13 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "other_identifier": Array [],
-  "provenance": Array [],
-  "relation": Array [],
-  "spatial": Array [],
-  "temporal": Array [],
-  "theme": Array [],
-  "title": Object {
+  "other_identifier": [],
+  "provenance": [],
+  "relation": [],
+  "spatial": [],
+  "temporal": [],
+  "theme": [],
+  "title": {
     "en": "",
     "fi": "Title",
     "sv": "",
@@ -291,24 +291,24 @@ Object {
 `;
 
 exports[`Qvain.Files handleSubmit submits data correctly after adding file 1`] = `
-Object {
-  "access_rights": Object {
-    "access_type": Object {
+{
+  "access_rights": {
+    "access_type": {
       "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
     "available": undefined,
-    "license": Array [
-      Object {
+    "license": [
+      {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
       },
     ],
   },
-  "creator": Array [
-    Object {
+  "creator": [
+    {
       "@type": "Organization",
       "email": undefined,
       "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-      "name": Object {
+      "name": {
         "en": "Org",
         "fi": "Org",
         "und": "Org",
@@ -317,40 +317,40 @@ Object {
   ],
   "cumulative_state": 0,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
-  "description": Object {
+  "description": {
     "en": "",
     "fi": "Description",
     "sv": "",
   },
-  "field_of_science": Array [],
-  "infrastructure": Array [],
-  "is_output_of": Array [],
+  "field_of_science": [],
+  "infrastructure": [],
+  "is_output_of": [],
   "issued": undefined,
-  "keyword": Array [
+  "keyword": [
     "keyword",
   ],
-  "language": Array [],
+  "language": [],
   "modified": "2022-09-22T12:34:00.000Z",
-  "original": Object {
+  "original": {
     "cumulative_state": 0,
-    "data_catalog": Object {
+    "data_catalog": {
       "id": 9,
       "identifier": "urn:nbn:fi:att:data-catalog-ida",
     },
-    "dataset_version_set": Array [
-      Object {
+    "dataset_version_set": [
+      {
         "date_created": "2020-03-03T11:58:16+02:00",
         "identifier": "6d2cb5f5-4867-47f7-9874-09357f2901a3",
         "preferred_identifier": "urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d",
         "removed": false,
       },
-      Object {
+      {
         "date_created": "2020-03-03T11:53:22+02:00",
         "identifier": "387c0807-f181-4f0b-b4f1-59004bce7fd6",
         "preferred_identifier": "urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f",
         "removed": false,
       },
-      Object {
+      {
         "date_created": "2020-03-03T10:52:00+02:00",
         "identifier": "c05a9c97-2b69-4d88-ab30-791c7b365162",
         "preferred_identifier": "urn:nbn:fi:att:f557c60d-9fad-4d38-8a50-86ec3b10d8ad",
@@ -366,53 +366,53 @@ Object {
     "metadata_provider_org": "ylipoisto.fi",
     "metadata_provider_user": "TESTUSER",
     "preservation_state": 0,
-    "previous_dataset_version": Object {
+    "previous_dataset_version": {
       "id": 495,
       "identifier": "387c0807-f181-4f0b-b4f1-59004bce7fd6",
       "preferred_identifier": "urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f",
     },
     "removed": false,
-    "research_dataset": Object {
-      "access_rights": Object {
-        "access_type": Object {
+    "research_dataset": {
+      "access_rights": {
+        "access_type": {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
           "in_scheme": "http://uri.suomi.fi/codelist/fairdata/access_type",
-          "pref_label": Object {
+          "pref_label": {
             "en": "Open",
             "fi": "Avoin",
             "und": "Avoin",
           },
         },
-        "license": Array [
-          Object {
+        "license": [
+          {
             "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
             "license": "https://creativecommons.org/licenses/by/4.0/",
-            "title": Object {
+            "title": {
               "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
             },
           },
         ],
       },
-      "creator": Array [
-        Object {
+      "creator": [
+        {
           "@type": "Organization",
           "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-          "name": Object {
+          "name": {
             "en": "Org",
             "fi": "Org",
             "und": "Org",
           },
         },
       ],
-      "description": Object {
+      "description": {
         "fi": "Description",
       },
-      "keyword": Array [
+      "keyword": [
         "keyword",
       ],
       "metadata_version_identifier": "615de971-99b1-4801-a45d-d7f03ec06f18",
       "preferred_identifier": "urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d",
-      "title": Object {
+      "title": {
         "fi": "Title",
       },
       "total_files_byte_size": 9216,
@@ -420,13 +420,13 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "other_identifier": Array [],
-  "provenance": Array [],
-  "relation": Array [],
-  "spatial": Array [],
-  "temporal": Array [],
-  "theme": Array [],
-  "title": Object {
+  "other_identifier": [],
+  "provenance": [],
+  "relation": [],
+  "spatial": [],
+  "temporal": [],
+  "theme": [],
+  "title": {
     "en": "",
     "fi": "Title",
     "sv": "",
@@ -436,24 +436,24 @@ Object {
 `;
 
 exports[`Qvain.Files handleSubmit submits data correctly after removing directory 1`] = `
-Object {
-  "access_rights": Object {
-    "access_type": Object {
+{
+  "access_rights": {
+    "access_type": {
       "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
     "available": undefined,
-    "license": Array [
-      Object {
+    "license": [
+      {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
       },
     ],
   },
-  "creator": Array [
-    Object {
+  "creator": [
+    {
       "@type": "Organization",
       "email": undefined,
       "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-      "name": Object {
+      "name": {
         "en": "Org",
         "fi": "Org",
         "und": "Org",
@@ -462,40 +462,40 @@ Object {
   ],
   "cumulative_state": 0,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
-  "description": Object {
+  "description": {
     "en": "",
     "fi": "Description",
     "sv": "",
   },
-  "field_of_science": Array [],
-  "infrastructure": Array [],
-  "is_output_of": Array [],
+  "field_of_science": [],
+  "infrastructure": [],
+  "is_output_of": [],
   "issued": undefined,
-  "keyword": Array [
+  "keyword": [
     "keyword",
   ],
-  "language": Array [],
+  "language": [],
   "modified": "2022-09-22T12:34:00.000Z",
-  "original": Object {
+  "original": {
     "cumulative_state": 0,
-    "data_catalog": Object {
+    "data_catalog": {
       "id": 9,
       "identifier": "urn:nbn:fi:att:data-catalog-ida",
     },
-    "dataset_version_set": Array [
-      Object {
+    "dataset_version_set": [
+      {
         "date_created": "2020-03-03T11:58:16+02:00",
         "identifier": "6d2cb5f5-4867-47f7-9874-09357f2901a3",
         "preferred_identifier": "urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d",
         "removed": false,
       },
-      Object {
+      {
         "date_created": "2020-03-03T11:53:22+02:00",
         "identifier": "387c0807-f181-4f0b-b4f1-59004bce7fd6",
         "preferred_identifier": "urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f",
         "removed": false,
       },
-      Object {
+      {
         "date_created": "2020-03-03T10:52:00+02:00",
         "identifier": "c05a9c97-2b69-4d88-ab30-791c7b365162",
         "preferred_identifier": "urn:nbn:fi:att:f557c60d-9fad-4d38-8a50-86ec3b10d8ad",
@@ -511,53 +511,53 @@ Object {
     "metadata_provider_org": "ylipoisto.fi",
     "metadata_provider_user": "TESTUSER",
     "preservation_state": 0,
-    "previous_dataset_version": Object {
+    "previous_dataset_version": {
       "id": 495,
       "identifier": "387c0807-f181-4f0b-b4f1-59004bce7fd6",
       "preferred_identifier": "urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f",
     },
     "removed": false,
-    "research_dataset": Object {
-      "access_rights": Object {
-        "access_type": Object {
+    "research_dataset": {
+      "access_rights": {
+        "access_type": {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
           "in_scheme": "http://uri.suomi.fi/codelist/fairdata/access_type",
-          "pref_label": Object {
+          "pref_label": {
             "en": "Open",
             "fi": "Avoin",
             "und": "Avoin",
           },
         },
-        "license": Array [
-          Object {
+        "license": [
+          {
             "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
             "license": "https://creativecommons.org/licenses/by/4.0/",
-            "title": Object {
+            "title": {
               "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
             },
           },
         ],
       },
-      "creator": Array [
-        Object {
+      "creator": [
+        {
           "@type": "Organization",
           "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-          "name": Object {
+          "name": {
             "en": "Org",
             "fi": "Org",
             "und": "Org",
           },
         },
       ],
-      "description": Object {
+      "description": {
         "fi": "Description",
       },
-      "keyword": Array [
+      "keyword": [
         "keyword",
       ],
       "metadata_version_identifier": "615de971-99b1-4801-a45d-d7f03ec06f18",
       "preferred_identifier": "urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d",
-      "title": Object {
+      "title": {
         "fi": "Title",
       },
       "total_files_byte_size": 9216,
@@ -565,13 +565,13 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "other_identifier": Array [],
-  "provenance": Array [],
-  "relation": Array [],
-  "spatial": Array [],
-  "temporal": Array [],
-  "theme": Array [],
-  "title": Object {
+  "other_identifier": [],
+  "provenance": [],
+  "relation": [],
+  "spatial": [],
+  "temporal": [],
+  "theme": [],
+  "title": {
     "en": "",
     "fi": "Title",
     "sv": "",
@@ -581,24 +581,24 @@ Object {
 `;
 
 exports[`Qvain.Files handleSubmit submits data correctly after removing file 1`] = `
-Object {
-  "access_rights": Object {
-    "access_type": Object {
+{
+  "access_rights": {
+    "access_type": {
       "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
     "available": undefined,
-    "license": Array [
-      Object {
+    "license": [
+      {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
       },
     ],
   },
-  "creator": Array [
-    Object {
+  "creator": [
+    {
       "@type": "Organization",
       "email": undefined,
       "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-      "name": Object {
+      "name": {
         "en": "Org",
         "fi": "Org",
         "und": "Org",
@@ -607,40 +607,40 @@ Object {
   ],
   "cumulative_state": 0,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
-  "description": Object {
+  "description": {
     "en": "",
     "fi": "Description",
     "sv": "",
   },
-  "field_of_science": Array [],
-  "infrastructure": Array [],
-  "is_output_of": Array [],
+  "field_of_science": [],
+  "infrastructure": [],
+  "is_output_of": [],
   "issued": undefined,
-  "keyword": Array [
+  "keyword": [
     "keyword",
   ],
-  "language": Array [],
+  "language": [],
   "modified": "2022-09-22T12:34:00.000Z",
-  "original": Object {
+  "original": {
     "cumulative_state": 0,
-    "data_catalog": Object {
+    "data_catalog": {
       "id": 9,
       "identifier": "urn:nbn:fi:att:data-catalog-ida",
     },
-    "dataset_version_set": Array [
-      Object {
+    "dataset_version_set": [
+      {
         "date_created": "2020-03-03T11:58:16+02:00",
         "identifier": "6d2cb5f5-4867-47f7-9874-09357f2901a3",
         "preferred_identifier": "urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d",
         "removed": false,
       },
-      Object {
+      {
         "date_created": "2020-03-03T11:53:22+02:00",
         "identifier": "387c0807-f181-4f0b-b4f1-59004bce7fd6",
         "preferred_identifier": "urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f",
         "removed": false,
       },
-      Object {
+      {
         "date_created": "2020-03-03T10:52:00+02:00",
         "identifier": "c05a9c97-2b69-4d88-ab30-791c7b365162",
         "preferred_identifier": "urn:nbn:fi:att:f557c60d-9fad-4d38-8a50-86ec3b10d8ad",
@@ -656,53 +656,53 @@ Object {
     "metadata_provider_org": "ylipoisto.fi",
     "metadata_provider_user": "TESTUSER",
     "preservation_state": 0,
-    "previous_dataset_version": Object {
+    "previous_dataset_version": {
       "id": 495,
       "identifier": "387c0807-f181-4f0b-b4f1-59004bce7fd6",
       "preferred_identifier": "urn:nbn:fi:att:94837825-21a5-41d9-9e49-48fadc85743f",
     },
     "removed": false,
-    "research_dataset": Object {
-      "access_rights": Object {
-        "access_type": Object {
+    "research_dataset": {
+      "access_rights": {
+        "access_type": {
           "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
           "in_scheme": "http://uri.suomi.fi/codelist/fairdata/access_type",
-          "pref_label": Object {
+          "pref_label": {
             "en": "Open",
             "fi": "Avoin",
             "und": "Avoin",
           },
         },
-        "license": Array [
-          Object {
+        "license": [
+          {
             "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
             "license": "https://creativecommons.org/licenses/by/4.0/",
-            "title": Object {
+            "title": {
               "en": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
             },
           },
         ],
       },
-      "creator": Array [
-        Object {
+      "creator": [
+        {
           "@type": "Organization",
           "identifier": "http://uri.suomi.fi/codelist/fairdata/organization/code/123456789",
-          "name": Object {
+          "name": {
             "en": "Org",
             "fi": "Org",
             "und": "Org",
           },
         },
       ],
-      "description": Object {
+      "description": {
         "fi": "Description",
       },
-      "keyword": Array [
+      "keyword": [
         "keyword",
       ],
       "metadata_version_identifier": "615de971-99b1-4801-a45d-d7f03ec06f18",
       "preferred_identifier": "urn:nbn:fi:att:01ea6b60-b3b9-4ad1-9660-f5fdd68e656d",
-      "title": Object {
+      "title": {
         "fi": "Title",
       },
       "total_files_byte_size": 9216,
@@ -710,13 +710,13 @@ Object {
     "service_created": "qvain",
     "service_modified": "qvain",
   },
-  "other_identifier": Array [],
-  "provenance": Array [],
-  "relation": Array [],
-  "spatial": Array [],
-  "temporal": Array [],
-  "theme": Array [],
-  "title": Object {
+  "other_identifier": [],
+  "provenance": [],
+  "relation": [],
+  "spatial": [],
+  "temporal": [],
+  "theme": [],
+  "title": {
     "en": "",
     "fi": "Title",
     "sv": "",

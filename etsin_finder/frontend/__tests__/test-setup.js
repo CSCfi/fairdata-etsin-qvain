@@ -10,12 +10,6 @@ chai.should() // register .should to Object.prototype
 import * as jestMock from 'jest-mock'
 jestMock.isMockFunction = jest.isMockFunction
 
-// uuid library needs crypto.getRandomValues which is not available in jest by default
-import { randomFillSync } from 'crypto'
-global.crypto = {
-  getRandomValues: buffer => randomFillSync(buffer),
-}
-
 import '../js/utils/extendYup'
 import '../js/utils/extendPromise'
 

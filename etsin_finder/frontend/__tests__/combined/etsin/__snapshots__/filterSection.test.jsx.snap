@@ -17,11 +17,11 @@ exports[`FilterSection should render <FilterSection /> 1`] = `
       fixedWidth={false}
       flip={false}
       icon={
-        Object {
-          "icon": Array [
+        {
+          "icon": [
             448,
             512,
-            Array [
+            [
               8964,
             ],
             "f107",
@@ -59,7 +59,7 @@ exports[`FilterSection should render <FilterSection /> 1`] = `
     >
       <ForwardRef
         item={
-          Object {
+          {
             "doc_count": 1,
             "key": "Fairdata IDA datasets",
           }

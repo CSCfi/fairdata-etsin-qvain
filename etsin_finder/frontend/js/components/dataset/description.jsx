@@ -17,6 +17,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import { Link } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 import AccessRights from './accessRights'
 import FairdataPasDatasetIcon from './fairdataPasDatasetIcon'
@@ -302,7 +303,7 @@ const DatasetDescription = styled.div`
   }
 `
 
-const CustomMarkdown = styled(ReactMarkdown)`
+const CustomMarkdown = styled(ReactMarkdown).attrs({ remarkPlugins: [remarkGfm] })`
   > * {
     &:first-child {
       margin-top: 0 !important;
