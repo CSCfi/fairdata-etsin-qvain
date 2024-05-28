@@ -1,6 +1,6 @@
 const nav = {
   home: 'Home',
-  createDataset: 'Create Dataset',
+  createDataset: 'Describe a Dataset',
   editDataset: 'Edit Dataset',
 }
 

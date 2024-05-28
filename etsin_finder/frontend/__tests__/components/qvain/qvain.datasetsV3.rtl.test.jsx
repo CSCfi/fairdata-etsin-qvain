@@ -114,7 +114,7 @@ describe('DatasetsV3', () => {
     await renderDatasets()
     testLocation.pathname.should.eql('/')
 
-    const createNewBtn = screen.getByRole('button', { name: 'Create a new dataset' })
+    const createNewBtn = screen.getByRole('button', { name: 'Describe a dataset' })
     await userEvent.click(createNewBtn)
     testLocation.pathname.should.eql('/dataset')
   })

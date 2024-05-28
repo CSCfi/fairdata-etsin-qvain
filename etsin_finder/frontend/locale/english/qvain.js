@@ -63,7 +63,7 @@ const qvainEnglish = {
   notCSCUserLink: ' CSC Customer Portal',
   notCSCUser2: ' You can register with or without Haka account.',
   notLoggedIn: 'Please login with your CSC account to use Qvain.',
-  titleCreate: 'Create a new dataset',
+  titleCreate: 'Describe a dataset',
   titleEdit: 'Edit dataset',
   titleLoading: 'Loading dataset',
   titleLoadingFailed: 'Loading dataset failed',

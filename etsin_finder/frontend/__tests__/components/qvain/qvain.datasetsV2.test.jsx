@@ -78,9 +78,7 @@ const render = async () => {
   )
 
   // wait until datasets have been fetched
-  await when(
-    () => stores.QvainDatasets.datasetGroups.length > 0 || stores.QvainDatasets.error
-  )
+  await when(() => stores.QvainDatasets.datasetGroups.length > 0 || stores.QvainDatasets.error)
   wrapper.update()
 }
 
@@ -127,7 +125,7 @@ describe('DatasetsV2', () => {
     it('should redirect to /dataset', async () => {
       await render()
       testLocation.pathname.should.eql('/')
-      const createNewBtn = wrapper.find('button[children="Create a new dataset"]')
+      const createNewBtn = wrapper.find('button[children="Describe a dataset"]')
       createNewBtn.simulate('click')
       testLocation.pathname.should.eql('/dataset')
     })

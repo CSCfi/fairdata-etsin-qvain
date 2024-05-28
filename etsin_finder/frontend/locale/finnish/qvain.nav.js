@@ -1,7 +1,7 @@
 const nav = {
   home: 'Koti',
-  createDataset: 'Luo aineisto',
-  editDataset: 'Muokkaa aineistoa',
+  createDataset: 'Luo aineistokuvailu',
+  editDataset: 'Muokkaa aineistokuvailua',
 }
 
 export default nav

@@ -15,7 +15,7 @@ const datasets = {
     dateCreated: 'Date',
   },
   help: 'Choose a dataset to edit or create a new dataset',
-  createButton: 'Create a new dataset',
+  createButton: 'Describe a dataset',
   state: {
     draft: 'Draft',
     published: 'Published',

@@ -15,7 +15,7 @@ const datasets = {
     dateCreated: 'Luotu',
   },
   help: 'Muokkaa olemassa olevaa aineistoa tai luo uusi',
-  createButton: 'Luo uusi aineisto',
+  createButton: 'Luo uusi aineistokuvailu',
   state: {
     draft: 'Luonnos',
     published: 'Julkaistu',

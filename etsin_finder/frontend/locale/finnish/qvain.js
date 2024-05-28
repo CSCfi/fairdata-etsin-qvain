@@ -65,8 +65,8 @@ const qvainFinnish = {
   notCSCUserLink: ' CSC asiakasportaalissa',
   notCSCUser2: ' Voit rekisteröityä Hakatunuksella tai ilman.',
   notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain -palvelua.',
-  titleCreate: 'Lisää uusi aineisto',
-  titleEdit: 'Muokkaa aineistoa',
+  titleCreate: 'Uusi aineistokuvailu',
+  titleEdit: 'Muokkaa aineistokuvailua',
   titleLoading: 'Ladataan aineistoa',
   titleLoadingFailed: 'Aineiston Lataus Epäonnistui',
   lock: {
