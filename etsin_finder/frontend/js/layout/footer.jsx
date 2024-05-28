@@ -14,6 +14,8 @@ import React from 'react'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
+import imgEOSC from '../../static/images/Supporting_EOSC.jpg'
+
 const Footer = () => {
   const accessibilityPath = 'fairdata'
 
@@ -21,11 +23,14 @@ const Footer = () => {
     <FooterDiv>
       <div className="container">
         <div className="row no-gutters">
-          <div className="col col-lg-4 col-md-12 col-sm-12 col-12">
+          <PaddedFlexBox>
+            <a href="https://www.fairdata.fi/en/fairdata-services/">
+              <Banner src={imgEOSC} alt="Supporting EOSC" />
+            </a>
             <Translate component="span" content="footer.fairdata.title" unsafe />
             <Translate component="p" content="footer.fairdata.text" unsafe />
-          </div>
-          <div className="col padding-right col-lg-2 col-md-3 col-sm-6 offset-lg-1">
+          </PaddedFlexBox>
+          <div className="col padding-right col-lg-2 col-md-3 col-sm-6">
             <Translate component="span" content="footer.information.title" unsafe />
             <p>
               <Translate
@@ -64,11 +69,11 @@ const Footer = () => {
               <a href="mailto:servicedesk@csc.fi">servicedesk@csc.fi</a>
             </p>
           </div>
-          <div className="col col-lg-1 col-md-3 col-sm-6 col-6">
+          <div className="col col-lg-2 col-md-3 col-sm-6 col-6">
             <Translate component="span" content="footer.follow.title" unsafe />
             <p>
-              <a href="https://twitter.com/Fairdata_fi" rel="noreferrer" target="_blank">
-                Twitter
+              <a href="https://x.com/Fairdata_fi" rel="noreferrer" target="_blank">
+                X @Fairdata_fi
               </a>
             </p>
             <p>
@@ -90,9 +95,32 @@ const Footer = () => {
 const FooterDiv = styled.footer.attrs({
   className: 'fd-footer',
 })`
-  padding-left: 0rem !important;
-  padding-right: 0rem !important;
-  padding-bottom: 1rem !important;
+  padding: 1rem 0 !important;
+
+  @media screen and (max-width: 992px) {
+    span {
+      margin-top: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+`
+
+const Banner = styled.img`
+  width: 175px;
+  float: right;
+  margin-top: 0.2rem;
+`
+
+const PaddedFlexBox = styled.div.attrs({
+  className: 'col col-lg-4 col-md-12 col-sm-12 col-12',
+})`
+  @media screen and (min-width: 992px) {
+    padding-right: 1.5rem !important;
+  }
+
+  @media screen and (max-width: 992px) {
+    margin-bottom: 0.75rem;
+  }
 `
 
 export default Footer
