@@ -34,7 +34,7 @@ function IdaResources() {
   const action = getDownloadAction(useV3, metaxV3Url, identifier, null, Packages, files)
   const { moreFunc, moreAriaLabel } = action
   const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel, root } = files
-  const fileCount = root?.existingDirectChildCount || 0
+  const fileCount = root?.existingFileCount || 0
   const totalSize = root?.existingByteSize || 0
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
-const CustomMarkdown = styled(ReactMarkdown).attrs({ remarkPlugins: remarkGfm })`
+const CustomMarkdown = styled(ReactMarkdown).attrs({ remarkPlugins: [remarkGfm] })`
   > * {
     &:first-child {
       margin-top: 0 !important;
