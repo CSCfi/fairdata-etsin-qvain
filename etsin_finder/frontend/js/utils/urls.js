@@ -59,5 +59,10 @@ export default {
     referenceData: (metaxV3, referenceData) => `${metaxV3}/v3/reference-data/${referenceData}`,
     user: metaxV3 => `${metaxV3}/v3/auth/user`,
     '': metaxV3 => `${metaxV3}`,
+    datasetPermissions: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/permissions`,
+    datasetPermissionsEditors: (metaxV3, dataset) =>
+      `${metaxV3}/v3/datasets/${dataset}/permissions/editors`,
+    datasetPermissionsEditor: (metaxV3, dataset, username) =>
+      `${metaxV3}/v3/datasets/${dataset}/permissions/editors/${username}`,
   },
 }

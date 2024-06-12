@@ -3,7 +3,7 @@ import { when } from 'mobx'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 
-import { screen, render, waitFor } from '@testing-library/react'
+import { within, screen, render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
@@ -23,24 +23,33 @@ const mockAdapter = new MockAdapter(axios)
 
 let stores, helper, testLocation
 
+// Combine arrays of same length, e.g. [1, 2, 3], ['a', 'b', 'c'] -> [[1, 'a'], ...]
+const zip = (a, b) => a.map((k, i) => [k, b[i]])
+
 beforeEach(() => {
   mockAdapter.reset()
-  mockAdapter.onGet().reply(200, datasets)
+  mockAdapter.onGet('https://metaxv3:443/v3/datasets').reply(200, datasets)
 })
+
+const getStores = () => {
+  const Env = new EnvClass()
+  Env.setMetaxV3Host('metaxv3', 443)
+  Env.Flags.setFlag('QVAIN.METAX_V3.FRONTEND', true)
+  Env.app = 'qvain'
+  const _stores = buildStores({ Env })
+  _stores.Locale.setLang('en')
+  _stores.Auth.setUser({
+    name: 'teppo',
+  })
+  return _stores
+}
 
 const renderDatasets = async ({ showCount = null } = {}) => {
   if (helper) {
     document.body.removeChild(helper)
     helper = null
   }
-  const Env = new EnvClass()
-  Env.Flags.setFlag('QVAIN.METAX_V3.FRONTEND', true)
-  Env.app = 'qvain'
-  stores = buildStores({ Env })
-  stores.Locale.setLang('en')
-  stores.Auth.setUser({
-    name: 'teppo',
-  })
+  stores = getStores()
   if (showCount) {
     stores.QvainDatasets.setShowCount(showCount)
   }
@@ -83,6 +92,7 @@ describe('DatasetsV3', () => {
     })
 
     it('should reload datasets on error when button is clicked', async () => {
+      mockAdapter.reset()
       mockAdapter.onGet().reply(500, 'this is not supposed to happen')
       await renderDatasets()
       mockAdapter.onGet().reply(200, datasets)
@@ -117,5 +127,49 @@ describe('DatasetsV3', () => {
     const createNewBtn = screen.getByRole('button', { name: 'Describe a dataset' })
     await userEvent.click(createNewBtn)
     testLocation.pathname.should.eql('/dataset')
+  })
+
+  it('should show dataset permissions in modal', async () => {
+    mockAdapter.onGet('https://metaxv3:443/v3/datasets/7/permissions').reply(200, {
+      creators: [
+        {
+          username: 'teppo',
+          first_name: 'Teppo',
+          last_name: 'Testaaja',
+          email: 'teppo@example.com',
+        },
+      ],
+      editors: [
+        {
+          username: 'toinen',
+          first_name: 'Toinen',
+          last_name: 'Tyyppi',
+          email: 'toinen@example.com',
+        },
+      ],
+    })
+
+    await renderDatasets({ showCount: { initial: 1, current: 1, increment: 1 } })
+
+    // Open editors modal,
+    // the auto-hiding table buttons are aria-bidden so not available by role
+    const editorsBtn = screen.getByText('Editors', { selector: 'button' })
+    await userEvent.click(editorsBtn)
+    const dialog = screen.getByRole('dialog')
+    within(dialog).getByRole('heading', { name: 'Share metadata editing rights' })
+
+    // Open members tab
+    const membersBtn = within(dialog).getByRole('tab', { name: /Members/ })
+    await userEvent.click(membersBtn)
+
+    // Check members are listed correctly
+    const getTexts = elems => Array.from(elems).map(elem => elem.textContent)
+    const members = getTexts(document.querySelectorAll('.member-name'))
+    const roles = getTexts(document.querySelectorAll('.member-role'))
+    const membersRoles = zip(Array.from(members), Array.from(roles))
+    expect(membersRoles).toEqual([
+      ['Teppo Testaaja (teppo, teppo@example.com)', 'Creator'],
+      ['Toinen Tyyppi (toinen, toinen@example.com)', 'Editor'],
+    ])
   })
 })

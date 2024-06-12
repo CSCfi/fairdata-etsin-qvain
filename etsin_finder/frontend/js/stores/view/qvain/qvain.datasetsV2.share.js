@@ -219,14 +219,15 @@ class Share {
     return this.promiseManager.count(`remove-user-${user.uid}`) > 0
   }
 
+  getRemoveUserUrl(user) {
+    return urls.qvain.datasetEditorPermissionsUser(this.datasetIdentifier, user.uid)
+  }
+
   @action.bound
   async removeUserPermission(user) {
     const remove = async () => {
       try {
-        await this.client.delete(
-          urls.qvain.datasetEditorPermissionsUser(this.datasetIdentifier, user.uid),
-          { timeout, tag: 'delete' }
-        )
+        await this.client.delete(this.getRemoveUserUrl(user), { timeout, tag: 'delete' })
 
         const perms = [...this.userPermissions]
         const index = perms.findIndex(p => p.uid === user.uid)
