@@ -576,6 +576,8 @@ const CustomMarkdown = styled(ReactMarkdown).attrs({ remarkPlugins: [remarkGfm] 
   }
 
   table {
+    display: block;
+    overflow-x: auto;
     padding: 0;
     tr {
       border-top: 1px solid ${p => p.theme.color.medgray};
