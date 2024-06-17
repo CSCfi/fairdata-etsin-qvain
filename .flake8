@@ -34,4 +34,4 @@ ignore =
     W503
 
 # often contains "unused" imports
-exclude = etsin_finder/frontend
+exclude = etsin_finder/frontend,tests

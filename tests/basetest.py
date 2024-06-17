@@ -24,13 +24,13 @@ from .utils import get_test_catalog_record
 def make_sso_user_cookie(user):
     """Create a sso user cookie for tests."""
     encrypted_session = jwt.encode({"authenticated_user": user}, "fake key")
-    return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session)
+    return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session, path=None)
 
 
 def make_sso_cookie(cookie):
     """Create a sso user cookie for tests."""
     encrypted_session = jwt.encode(cookie, "fake key")
-    return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session)
+    return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session, path=None)
 
 
 class FakeLoader(jinja2.BaseLoader):
