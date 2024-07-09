@@ -105,6 +105,7 @@ def data_to_metax(data, metadata_provider_org, metadata_provider_user):
             "spatial": data.get("spatial"),
             "temporal": data.get("temporal"),
             "modified": data.get("modified"),
+            "bibliographic_citation": data.get("bibliographic_citation")
         },
     }
     return clean_empty_keyvalues_from_dict(dataset_data)
@@ -253,6 +254,7 @@ def edited_data_to_metax(data, original):
             "provenance": data.get("provenance"),
             "temporal": data.get("temporal"),
             "modified": data.get("modified"),
+            "bibliographic_citation": data.get("bibliographic_citation")
         }
     )
     edited_data = {

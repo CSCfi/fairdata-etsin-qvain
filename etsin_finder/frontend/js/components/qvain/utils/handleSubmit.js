@@ -38,6 +38,8 @@ const handleSubmitToBackend = Qvain => {
 
   const keyword = Qvain.Keywords.toBackend()
 
+  const bibliographic_citation = Qvain.BibliographicCitation.toBackend()
+
   const modified = new Date().toISOString()
 
   const obj = {
@@ -65,6 +67,7 @@ const handleSubmitToBackend = Qvain => {
     language,
     issued,
     modified,
+    bibliographic_citation,
   }
 
   if (accessType?.identifier !== ACCESS_TYPE_URL.OPEN) {

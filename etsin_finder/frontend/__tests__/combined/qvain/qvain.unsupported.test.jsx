@@ -77,7 +77,6 @@ test('it should list unsupported fields in dataset', () => {
     ['access_rights.access_url.title.en', 'A name given to the document'],
     ['access_rights.description', ''],
     ['access_rights.description.en', 'Free account of the rights'],
-    ['bibliographic_citation', 'this is how this dataset should be cited'],
     ['contributor.0.contributor_role', ''],
     ['contributor.0.contributor_role.0', ''],
     [

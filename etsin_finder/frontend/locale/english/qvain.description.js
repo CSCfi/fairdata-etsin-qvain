@@ -92,6 +92,10 @@ const description = {
     placeholder: 'Type to search for available options',
     help: 'Choose subject headings from the KOKO Ontology. It also has English and Swedish translations of the terms.',
   },
+  bibliographicCitation: {
+    title: 'Bibliographic Citation',
+    infoText: 'The preferred citation of the dataset.',
+  },
   error: {
     title: 'A title is required in at least one language.',
     description: 'A description is required in at least one language.',

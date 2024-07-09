@@ -228,6 +228,7 @@ class Adapter {
       draft_of: this.relatedDraftV3ToV2(dataset.draft_of),
       next_draft: this.relatedDraftV3ToV2(dataset.next_draft),
       cumulative_state: dataset.cumulative_state,
+      bibliographic_citation: dataset.bibliographic_citation,
       metadata_provider_user: dataset.metadata_owner?.user,
     }
 
@@ -351,6 +352,7 @@ class Adapter {
       actors: dataset.actors, // conversion done in actors store
       pid_type: dataset.use_doi ? 'DOI' : 'URN',
       cumulative_state: dataset.cumulative_state,
+      bibliographic_citation: dataset.bibliographic_citation,
     }
 
     // include v3 fileset object as it is

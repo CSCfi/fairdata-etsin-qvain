@@ -22,6 +22,7 @@ import SubjectHeadings from './qvain.subjectHeadings'
 import Description from './qvain.description'
 import ExternalResources from './qvain.externalResources'
 import ActorsV3 from './qvain.actors.v3'
+import BibliographicCitation from './qvain.bibliographicCitation'
 
 class Resources {
   constructor(Env) {
@@ -48,6 +49,7 @@ class Resources {
     this.EmbargoExpDate = new EmbargoExpDate(this)
     this.RestrictionGrounds = new RestrictionGrounds(this)
     this.ExternalResources = new ExternalResources(this)
+    this.BibliographicCitation = new BibliographicCitation(this)
     this.resources = [
       this.Title,
       this.Description,
@@ -70,6 +72,7 @@ class Resources {
       this.EmbargoExpDate,
       this.RestrictionGrounds,
       this.ExternalResources,
+      this.BibliographicCitation,
     ]
   }
 

@@ -81,6 +81,7 @@ class DraftDatasetValidationSchema(Schema):
     use_doi = fields.Boolean()
     is_output_of = fields.List(fields.Nested(ProjectValidationSchema))
     modified = fields.DateTime(format="iso")
+    bibliographic_citation = fields.Str()
 
 
 class PublishDatasetValidationSchema(DatasetValidationSchemaV1):

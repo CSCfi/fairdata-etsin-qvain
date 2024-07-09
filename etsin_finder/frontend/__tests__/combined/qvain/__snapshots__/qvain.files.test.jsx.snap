@@ -13,6 +13,7 @@ exports[`Qvain.Files handleSubmit submits data correctly 1`] = `
       },
     ],
   },
+  "bibliographic_citation": undefined,
   "creator": [
     {
       "@type": "Organization",
@@ -158,6 +159,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after adding directory 
       },
     ],
   },
+  "bibliographic_citation": undefined,
   "creator": [
     {
       "@type": "Organization",
@@ -303,6 +305,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after adding file 1`] =
       },
     ],
   },
+  "bibliographic_citation": undefined,
   "creator": [
     {
       "@type": "Organization",
@@ -448,6 +451,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after removing director
       },
     ],
   },
+  "bibliographic_citation": undefined,
   "creator": [
     {
       "@type": "Organization",
@@ -593,6 +597,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after removing file 1`]
       },
     ],
   },
+  "bibliographic_citation": undefined,
   "creator": [
     {
       "@type": "Organization",

@@ -7,6 +7,7 @@ import FieldOfScience from './FieldOfScience'
 import Language from './Language'
 import OtherIdentifier from './OtherIdentifier'
 import SubjectHeadings from './SubjectHeadings'
+import BibliographicCitation from './BibliographicCitation'
 
 const Description = () => (
   <Section sectionName="Description">
@@ -17,6 +18,7 @@ const Description = () => (
     <FieldOfScience />
     <Language />
     <OtherIdentifier />
+    <BibliographicCitation />
   </Section>
 )
 

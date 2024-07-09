@@ -89,6 +89,10 @@ const description = {
     placeholder: 'Hae vaihtoehtoja',
     help: 'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
   },
+  bibliographicCitation: {
+    title: 'Lähdeviite',
+    infoText: 'Suositeltu lähdeviittauksen muoto.',
+  },
   error: {
     title: 'Otsikko on pakollinen ainakin yhdellä kielellä.',
     description: 'Kuvaus on pakollinen ainakin yhdellä kielellä.',
