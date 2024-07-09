@@ -76,6 +76,15 @@ const CitationModal = () => {
     >
       <Translate component="h1" content="dataset.citation.title" />
       <Grid>
+        {dataset.bibliographic_citation && (
+          <Translate
+            component={Citation}
+            attributes={{
+              title: 'dataset.citation.recommended',
+            }}
+            text={dataset.bibliographic_citation}
+          />
+        )}
         <Citation title="APA" text={apa} />
         <Citation title="Chicago" text={chicago} />
         <Citation title="MLA" text={mla} />

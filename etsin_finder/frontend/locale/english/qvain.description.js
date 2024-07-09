@@ -94,7 +94,7 @@ const description = {
   },
   bibliographicCitation: {
     title: 'Bibliographic Citation',
-    infoText: 'The preferred citation of the dataset.',
+    infoText: 'Recommended way to cite this dataset.',
   },
   error: {
     title: 'A title is required in at least one language.',

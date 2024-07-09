@@ -40,6 +40,7 @@ const english = {
       sidebar: 'Citation / Reference',
       title: 'Cite dataset',
       titleShort: 'Cite',
+      recommended: 'Recommended',
       buttonTitle: 'Copy Citation/References',
       copyButton: 'Copy',
       copyButtonTooltip: 'Copy to clipboard',

@@ -90,8 +90,8 @@ const description = {
     help: 'Valitse asiasanat KOKO-ontologiasta. Kaikille asiasanoille löytyy käännökset englanniksi ja ruotsiksi.',
   },
   bibliographicCitation: {
-    title: 'Lähdeviite',
-    infoText: 'Suositeltu lähdeviittauksen muoto.',
+    title: 'Viittauksen muoto',
+    infoText: 'Suositeltu muoto, jolla tähän aineistoon tulisi viitata.',
   },
   error: {
     title: 'Otsikko on pakollinen ainakin yhdellä kielellä.',

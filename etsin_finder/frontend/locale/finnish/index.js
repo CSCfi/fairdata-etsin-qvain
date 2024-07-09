@@ -40,6 +40,7 @@ const finnish = {
       buttonTitle: 'Kopioi Sitaatti/Lähdeviite',
       title: 'Viittaa aineistoon',
       titleShort: 'Viittaa',
+      recommended: 'Suositeltu',
       copyButton: 'Kopioi',
       copyButtonTooltip: 'Kopioi leikepöydälle',
       copyButtonTooltipSuccess: 'Viittaus kopioitu leikepöydälle',
