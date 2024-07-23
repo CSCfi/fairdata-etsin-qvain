@@ -1,9 +1,0 @@
-{
-  "short_name": "Etsin finder",
-  "name": "Etsin research finder",
-  "start_url": ".",
-  "background_color": "#fff",
-  "theme_color": "rgb(77, 179, 231)",
-  "display": "standalone",
-  "orientation": "portrait"
-}
