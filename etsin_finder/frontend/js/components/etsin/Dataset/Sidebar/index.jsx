@@ -187,13 +187,13 @@ const Sidebar = () => {
       </SidebarArea>
 
       <SidebarArea id="actors-area">
-        <DatasetInfoItem id="dataset-project" itemTitle="dataset.project.project">
+        <DatasetInfoItem id="dataset-project" itemTitle="dataset.project.project_area">
           <List>
             {datasetMetadata.projects &&
               datasetMetadata.projects.map(item => {
-                const projectName = getValueTranslation(item.name)
+                const projectName = getValueTranslation(item.title)
                 return (
-                  <ListItem key={`li-${projectName}`} lang={getPreferredLang(item.name)}>
+                  <ListItem key={`li-${projectName}`} lang={getPreferredLang(item.title)}>
                     <Project project={item} />
                   </ListItem>
                 )
@@ -277,7 +277,11 @@ const List = styled.ul`
   list-style: none;
 `
 
-const ListItem = styled.li``
+const ListItem = styled.li`
+  :not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+`
 
 const SidebarContainer = styled.div`
   word-wrap: break-word;

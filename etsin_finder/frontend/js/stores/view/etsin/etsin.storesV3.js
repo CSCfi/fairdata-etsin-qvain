@@ -101,7 +101,7 @@ class EtsinDatasetV3 {
       language: this.dataset?.language,
       spatial: this.shapeSpatial(this.dataset?.spatial),
       temporal: this.dataset?.temporal,
-      projects: undefined, // waiting for V3 implementation
+      projects: this.dataset?.projects,
       infrastructure: this.dataset?.infrastructure,
     }
   }

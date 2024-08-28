@@ -3,120 +3,110 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from 'react-translate-component'
 
-import Agent from '../../../Agent'
 import { useStores } from '@/stores/stores'
+
+import Agent from '../../../Agent'
+import DatasetInfoItem from '../../../DatasetInfoItem'
 
 const ProjectForm = ({ project, lang }) => {
   const {
-    Locale: { getPreferredLang, getValueTranslation },
+    Locale: { getValueTranslation },
   } = useStores()
-  const hasFunderInfo = Boolean(
-    project.has_funder_identifier || project.funder_type || project.has_funding_agency
-  )
+
+  const funding = project.funding?.reduce((orderedFunding, single) => {
+    if (Object.entries(single).length === 0) return orderedFunding
+    if (single.funding_identifier in orderedFunding) {
+      orderedFunding[single.funding_identifier].push(single.funder)
+    } else {
+      orderedFunding[single.funding_identifier] = [single.funder]
+    }
+    return orderedFunding
+  }, {})
 
   return (
     <Form>
       <InputContainer>
-        <List>
-          <Key>
-            <Translate content="dataset.project.name" />
-          </Key>
-          <Value>{getValueTranslation(project.name)}</Value>
-          {project.identifier && (
-            <div>
-              <Key>
-                <Translate content="dataset.project.identifier" />
-              </Key>
-              <Value>{project.identifier}</Value>
-            </div>
+        <DatasetInfoItem id="project-title" itemTitle="dataset.project.name">
+          {getValueTranslation(project.title)}
+        </DatasetInfoItem>
+
+        <DatasetInfoItem id="project-id" itemTitle="dataset.project.identifier">
+          {project.project_identifier}
+        </DatasetInfoItem>
+
+        <DatasetInfoItem id="project-orgs" itemTitle="dataset.project.sourceOrg">
+          {project.participating_organizations && (
+            <>
+              <OrgList>
+                {project.participating_organizations.map(org => (
+                  <Agent
+                    key={getValueTranslation(org.pref_label)}
+                    lang={lang}
+                    first
+                    agent={{ organization: org }}
+                    popupAlign="left-fit-content"
+                  />
+                ))}
+              </OrgList>
+            </>
           )}
-        </List>
-        {project.homepage?.identifier && (
-          <div>
-            <Topic>
-              <Translate content="dataset.project.homepage" />
-            </Topic>
-            <List>
-              <Key>
-                <Translate content="dataset.project.homepageUrl" />
-              </Key>
-              <Value>
-                <a
-                  href={project.homepage.identifier}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  lang={lang}
-                  title={getValueTranslation(project.homepage.title) || project.homepage.identifier}
-                >
-                  {project.homepage.title ? (
-                    <span lang={getPreferredLang(project.homepage.title)}>
-                      {getValueTranslation(project.homepage.title)}
-                    </span>
-                  ) : (
-                    project.homepage.identifier
-                  )}
-                </a>
-              </Value>
-              {project.homepage.description && (
-                <div>
-                  <Key>
-                    <Translate content="dataset.project.homepageDescr" />
-                  </Key>
-                  <Value>{getValueTranslation(project.homepage.description)}</Value>
-                </div>
-              )}
-            </List>
-          </div>
-        )}
-        {project.source_organization && (
-          <div>
-            <Topic>
-              <Translate content="dataset.project.sourceOrg" />
-            </Topic>
-            <OrgList>
-              {project.source_organization.map(org => (
-                <dd key={getValueTranslation(org.organization.pref_label)}>
-                  <Agent lang={lang} first agent={org} popupAlign="left-fit-content" />
-                </dd>
-              ))}
-            </OrgList>
-          </div>
-        )}
-        {hasFunderInfo && (
-          <div>
+        </DatasetInfoItem>
+
+        {Object.entries(funding || {}).length > 0 && (
+          <>
             <Topic>
               <Translate content="dataset.project.funding" />
             </Topic>
-            <List>
-              {project.has_funder_identifier && (
-                <div>
-                  <Key>
-                    <Translate content="dataset.project.has_funder_identifier" />
-                  </Key>
-                  <Value>{project.has_funder_identifier}</Value>
-                </div>
-              )}
-              {project.funder_type?.pref_label && (
-                <div>
-                  <Key>
-                    <Translate content="dataset.project.funder_type" />
-                  </Key>
-                  <Value>{getValueTranslation(project.funder_type.pref_label)}</Value>
-                </div>
-              )}
-              {project.has_funding_agency &&
-                project.has_funding_agency.map(agency => (
-                  <div key={getValueTranslation(agency.pref_label)}>
-                    <Key>
-                      <Translate content="dataset.project.funder" />
-                    </Key>
-                    <Value>
-                      <Agent lang={lang} first agent={agency} popupAlign="left-fit-content" />
-                    </Value>
-                  </div>
-                ))}
-            </List>
-          </div>
+            {Object.entries(funding).map(([id, orgs]) => (
+              <Funding key={`${id}`}>
+                <DatasetInfoItem
+                  key={`funding-${id}`}
+                  id={`funding-${id}`}
+                  itemTitle="dataset.project.has_funder_identifier"
+                >
+                  {id !== 'undefined' && id}
+                </DatasetInfoItem>
+
+                <DatasetInfoItem
+                  id={`funding-funders-${id}`}
+                  key={`funding-funders-${id}`}
+                  itemTitle={
+                    orgs?.length > 1 ? 'dataset.project.funder_plural' : 'dataset.project.funder'
+                  }
+                >
+                  {orgs?.map(org => {
+                    if (!org) return null
+                    return (
+                      <div
+                        key={`${id}-${getValueTranslation(
+                          org.funder_type?.pref_label
+                        )}-${getValueTranslation(org.organization?.pref_label)}`}
+                      >
+                        {org.funder_type && (
+                          <div>
+                            {<Translate content="dataset.project.funder_type" />}
+                            {`: ${getValueTranslation(org.funder_type?.pref_label)}`}
+                          </div>
+                        )}
+
+                        {org.organization && (
+                          <>
+                            <Agent
+                              key={getValueTranslation(org.organization.pref_label)}
+                              lang={lang}
+                              first
+                              agent={{ organization: org.organization }}
+                              popupAlign="left-fit-content"
+                            />
+                          </>
+                        )}
+                      </div>
+                    )
+                  })}
+                </DatasetInfoItem>
+              </Funding>
+            ))}
+          </>
         )}
       </InputContainer>
     </Form>
@@ -141,8 +131,8 @@ const InputContainer = styled.div`
   padding-bottom: 10px;
 `
 
-const Topic = styled.h3`
-  padding-top: 10px;
+const Topic = styled.h2`
+  padding-top: 2rem;
 `
 
 const Form = styled.form`
@@ -152,22 +142,16 @@ const Form = styled.form`
   min-width: 260px;
 `
 
-const List = styled.dl`
-  padding: 0.5em;
-`
-
-const Key = styled.dt`
-  font-weight: bold;
-  text-decoration: underline;
-`
-
-const Value = styled.dd`
-  margin: 0;
-  padding: 0 0 0.5em 0;
-`
-
 const OrgList = styled.div`
   margin: 0;
-  padding-left: 0.5em;
+  padding-left: 0;
 `
+
+const Funding = styled.div`
+  :not(:last-child) {
+    padding-bottom: 1rem;
+    border-bottom: 2px solid ${props => props.theme.color.lightgray};
+  }
+`
+
 export default ProjectForm

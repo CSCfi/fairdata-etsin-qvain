@@ -505,15 +505,47 @@ class EtsinDatasetV2 {
   }
 
   @action shapeProjects(projects) {
-    return projects?.map(project => {
-      const shapedProject = { ...project }
-      shapedProject.source_organization = shapedProject.source_organization?.map(org =>
-        this.shapeActor(org)
+    if (!projects) return []
+    return projects.map(project => {
+      const title = project.name
+      const projectIdentifier = project.identifier
+      const funderType = project.funder_type
+      if (funderType) {
+        funderType.url = funderType.identifier
+      }
+
+      const participatingOrganizations = project.source_organization?.map(
+        org => this.shapeActor(org).organization
       )
-      shapedProject.has_funding_agency = shapedProject.has_funding_agency?.map(org =>
-        this.shapeActor(org)
-      )
-      return shapedProject
+
+      let funding = project.has_funding_agency?.map(org => {
+        const v3org = this.shapeActor(org)?.organization
+        return {
+          funder: {
+            organization: v3org,
+            funder_type: funderType,
+          },
+          funding_identifier: project.has_funder_identifier,
+        }
+      })
+
+      if (!funding && (funderType || project.has_funder_identifier)) {
+        funding = [
+          {
+            funder: {
+              funder_type: funderType,
+            },
+            funding_identifier: project.has_funder_identifier,
+          },
+        ]
+      }
+
+      return {
+        title,
+        project_identifier: projectIdentifier,
+        participating_organizations: participatingOrganizations,
+        funding,
+      }
     })
   }
 

@@ -16,12 +16,12 @@ const Project = ({ project }) => {
 
   const [modalOpen, setModalOpen] = useState(false)
 
-  const lang = getPreferredLang(project.name)
+  const lang = getPreferredLang(project.title)
 
   return (
     <>
       <InlineTransparentLink noMargin noPadding onClick={() => setModalOpen(true)} lang={lang}>
-        {getValueTranslation(project.name)}
+        {getValueTranslation(project.title)}
       </InlineTransparentLink>
 
       <Modal
@@ -33,7 +33,7 @@ const Project = ({ project }) => {
         contentLabel="Project"
       >
         <h2>
-          <Translate content="dataset.project.project" />
+          <Translate content="dataset.project.project_title" />
         </h2>
 
         <ProjectForm
