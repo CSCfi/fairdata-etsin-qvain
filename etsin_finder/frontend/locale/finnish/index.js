@@ -21,6 +21,14 @@ const finnish = {
     access_draft: 'Hakemus luonnos vaiheessa',
     access_request_sent: 'Käyttölupaa haettu',
     access_granted: 'Käyttölupa myönnetty',
+    access_rights_title: {
+      none: '',
+      open: 'Avoin',
+      login: 'Vaatii kirjautumisen Fairdata-palvelussa',
+      embargo: 'Embargo',
+      permit: 'Vaatii luvan hakemista Fairdata-palvelussa',
+      restricted: 'Saatavuutta rajoitettu',
+    },
     access_rights_description: {
       none: '',
       open: 'Kuka tahansa voi ladata datan.',
@@ -29,7 +37,9 @@ const finnish = {
       permit:
         'Datan voi ladata ainoastaan hakemalla erillisen luvan lataamista varten. Luvan hakeminen vaatii kirjautumisen.',
       restricted: 'Data ei ladattavissa.',
+      custom: 'Kuvaus: ',
     },
+    restriction_grounds: 'Rajoituksen peruste: ',
     access_permission: 'Hae käyttölupaa',
     access_locked: 'Rajattu käyttöoikeus',
     access_open: 'Avoin',

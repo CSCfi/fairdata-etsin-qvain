@@ -61,6 +61,7 @@ const Tags = styled.span`
   font-size: 1rem;
   font-weight: normal;
   vertical-align: middle;
+  align-items: center;
   padding-bottom: 5px;
   > * {
     margin-left: 0;

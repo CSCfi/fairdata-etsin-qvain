@@ -19,6 +19,7 @@ const DatasetInfoItem = props => {
           <DT lang={Locale.currentLang} className="heading4">
             <Translate content={props.itemTitle} />
             {props.tooltip ? <EtsinTooltip tooltip={props.tooltip} /> : null}
+            {props.extra}
           </DT>
         )}
         <DD>{props.children}</DD>
@@ -31,12 +32,14 @@ DatasetInfoItem.propTypes = {
   itemTitle: PropTypes.string,
   children: PropTypes.node,
   tooltip: PropTypes.object,
+  extra: PropTypes.node,
 }
 
 DatasetInfoItem.defaultProps = {
   itemTitle: undefined,
   children: undefined,
   tooltip: null,
+  extra: null,
 }
 
 const DT = styled.dt`

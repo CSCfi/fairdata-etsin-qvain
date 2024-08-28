@@ -22,6 +22,14 @@ const english = {
     access_draft: 'Application in draft state',
     access_request_sent: 'Access request sent',
     access_granted: 'Access granted',
+    access_rights_title: {
+      none: '',
+      open: 'Open',
+      login: 'Requires login in Fairdata service',
+      embargo: 'Embargo',
+      permit: 'Requires applying permission in Fairdata service',
+      restricted: 'Restricted use',
+    },
     access_rights_description: {
       none: '',
       open: 'Anyone can access the data.',
@@ -30,7 +38,9 @@ const english = {
       permit:
         'Data can be accessed only by applying for permission. You need to be logged in to be able to fill-in the application.',
       restricted: 'Data cannot be accessed.',
+      custom: 'Description: ',
     },
+    restriction_grounds: 'Restriction grounds: ',
     access_permission: 'Ask for access',
     access_locked: 'Restricted Access',
     access_open: 'Open Access',

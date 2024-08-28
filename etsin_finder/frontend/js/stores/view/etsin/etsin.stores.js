@@ -51,12 +51,7 @@ class EtsinDatasetV2 {
   }
 
   @computed get accessRights() {
-    const accessRights = { ...this.dataset.access_rights }
-    const license = this.dataset.access_rights?.license?.map(l => this.shapeLicense(l))
-    const type = this.shapeAccessType(this.dataset.access_rights?.access_type)
-    accessRights.license = license
-    accessRights.access_type = type
-    return accessRights || null
+    return this.shapeAccessRights(this.dataset?.access_rights)
   }
 
   @computed get draftOf() {
@@ -453,6 +448,23 @@ class EtsinDatasetV2 {
       id: null,
       in_scheme: null,
     }
+  }
+
+  @action shapeAccessRights(accessRights) {
+    if (!accessRights) return null
+    const license = accessRights.license?.map(l => this.shapeLicense(l))
+    const type = this.shapeAccessType(accessRights.access_type)
+    let restrictionGrounds
+    if (accessRights.restriction_grounds) {
+      restrictionGrounds = accessRights.restriction_grounds.map(grounds => {
+        grounds.url = grounds.identifier
+        return grounds
+      })
+    }
+    accessRights.license = license
+    accessRights.access_type = type
+    accessRights.restriction_grounds = restrictionGrounds
+    return accessRights
   }
 
   @action shapeSpatial(spatial) {

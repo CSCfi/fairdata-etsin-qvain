@@ -44,7 +44,7 @@ const Sidebar = () => {
   const catalogTitle = dataCatalog?.title[catalogPublisherLang]
 
   function getAccessRights() {
-    const isOpen = accessRights?.access_type.identifier === ACCESS_TYPE_URL.OPEN
+    const isOpen = accessRights?.access_type?.url === ACCESS_TYPE_URL.OPEN
     if (!isOpen && accessRights?.restriction_grounds?.length > 0) {
       return accessRights.restriction_grounds.map(rg => (
         <ListItem key={`rg-${rg.url}`} lang={getPreferredLang(rg.pref_label)}>
