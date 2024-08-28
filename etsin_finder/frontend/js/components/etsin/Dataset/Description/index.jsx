@@ -24,10 +24,7 @@ const Description = ({ id }) => {
         identifier,
         isRemoved,
         isHarvested,
-        hasFiles,
-        hasRemoteResources,
-        files,
-        remoteResources,
+        fileTypes,
         creators,
         contributors,
       },
@@ -40,24 +37,7 @@ const Description = ({ id }) => {
     recordEvent(`DETAILS / ${identifier}`)
   }, [identifier, Accessibility, recordEvent])
 
-  const formatDatasetInfoArray = array => array?.join(', ') || null
-
-  const getFileTypes = () => {
-    let dataFileTypes
-    if (hasFiles) {
-      dataFileTypes = files.root.files.map(file =>
-        file.fileType ? getValueTranslation(file.fileType.pref_label) : null
-      )
-    }
-
-    if (hasRemoteResources) {
-      dataFileTypes = remoteResources.map(resource =>
-        resource.file_type ? getValueTranslation(resource.file_type.pref_label) : null
-      )
-    }
-    const fileTypeList = [...new Set(dataFileTypes)].filter(type => type).sort()
-    return formatDatasetInfoArray(fileTypeList)
-  }
+  const formatDatasetInfoArray = array => (array?.length > 0 ? array.join(', ') : null)
 
   const getSpatialCoverage = () =>
     datasetMetadata.spatial && (
@@ -136,7 +116,9 @@ const Description = ({ id }) => {
             )}
           </DatasetInfoItem>
 
-          <DatasetInfoItem itemTitle={'dataset.file_types'}>{getFileTypes()}</DatasetInfoItem>
+          <DatasetInfoItem itemTitle={'dataset.file_types'}>
+            {formatDatasetInfoArray(fileTypes)}
+          </DatasetInfoItem>
 
           <DatasetInfoItem itemTitle={'dataset.field_of_science'}>
             {getFieldsOfScience()}

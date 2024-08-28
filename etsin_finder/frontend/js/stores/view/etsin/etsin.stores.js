@@ -199,6 +199,32 @@ class EtsinDatasetV2 {
     return Boolean(this.files?.root?.directChildCount)
   }
 
+  @computed get fileTypes() {
+    let data
+
+    if (this.hasFiles) {
+      data = this.files?.root?.files
+    }
+    if (this.hasRemoteResources) {
+      data = this.dataset?.remote_resources
+    }
+
+    if (!data) return null
+
+    const typeSet = data?.reduce((types, single) => {
+      if (single.fileType || single.file_type) {
+        types.add(
+          this.Locale.getValueTranslation(
+            single?.fileType?.pref_label || single?.file_type?.pref_label
+          )
+        )
+      }
+      return types
+    }, new Set())
+    const filetypes = [...typeSet].filter(type => type).sort()
+    return filetypes
+  }
+
   @computed get hasRemoteResources() {
     return Boolean(this.dataset?.remote_resources?.length)
   }
