@@ -162,6 +162,7 @@ const formatPackageResponse = packages => {
 export const applyMockAdapter = mockAdapter => {
   // Use mockAdapter to mock axios responses for the Download API.
 
+  mockAdapter.onGet('/api/download/status').reply(200, '') // status ok
   mockAdapter.onGet(RegExp('^/api/download/requests')).reply(({ url, data }) => {
     const params = getParams(url, data)
     if (errors[params.cr_id]) {

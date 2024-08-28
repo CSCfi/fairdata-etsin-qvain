@@ -29,13 +29,13 @@ const ErrorMessage = ({ error, clear }) => {
   const statusCodeToErrorMessage = status => {
     switch (status) {
       case 500: {
-        return 'idaUnavailable'
+        return 'unknownError'
       }
       case 503: {
-        return 'serviceUnavailable'
+        return 'idaUnavailable'
       }
       default: {
-        return 'unknownError'
+        return 'serviceUnavailable'
       }
     }
   }

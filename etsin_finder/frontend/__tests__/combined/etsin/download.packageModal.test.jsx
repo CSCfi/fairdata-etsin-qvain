@@ -38,8 +38,6 @@ jest.mock('../../../js/stores/stores', () => {
   }
 })
 
-const { PENDING, STARTED, SUCCESS } = DOWNLOAD_API_REQUEST_STATUS
-
 const mockAdapter = new MockAdapter(axios)
 applyMockAdapter(mockAdapter)
 
@@ -76,7 +74,10 @@ describe('PackageModal', () => {
 
   const getStores = () => {
     const stores = buildStores()
-    stores.Env.Flags.setFlag('DOWNLOAD_API_V2', true)
+    stores.Env.Flags.setFlag('DOWNLOAD_API_V2.EMAIL.FRONTEND', true)
+    stores.Env.Flags.setFlag('DOWNLOAD_API_V2.EMAIL.BACKEND', true)
+    stores.Env.Flags.setFlag('DOWNLOAD_API_V2.OPTIONS', true)
+    stores.Env.Flags.setFlag('DOWNLOAD_API_V2.STATUS_CHECK', true)
     const packages = new Packages(stores.Env)
     return { ...stores, Packages: packages }
   }
@@ -84,7 +85,6 @@ describe('PackageModal', () => {
   beforeEach(() => {
     applyMockAdapter(mockAdapter)
     fakeDownload.reset()
-    mockAdapter.resetHistory()
   })
 
   afterEach(() => {
@@ -92,6 +92,7 @@ describe('PackageModal', () => {
       console.error.mockReset()
     }
     cleanup()
+    mockAdapter.reset()
   })
 
   describe('Create package', () => {

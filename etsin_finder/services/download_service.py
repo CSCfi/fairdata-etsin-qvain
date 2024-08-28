@@ -55,6 +55,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
             self.REQUESTS_URL = f"{self.API_BASE_URL}/requests"
             self.AUTHORIZE_URL = f"{self.API_BASE_URL}/authorize"
             self.SUBSCRIBE_URL = f"{self.API_BASE_URL}/subscribe"
+            self.STATUS_URL = f"{self.API_BASE_URL}/status"
             self.DOWNLOAD_URL = f"{self.API_PUBLIC_BASE_URL}/download"
             self.NOTIFICATION_CALLBACK_URL = (
                 f"https://{self_domain}/api/download/notifications"
@@ -174,6 +175,21 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
         )
         if not success:
             log.warning(f"Failed to get requests for dataset {dataset}")
+
+        return resp, status
+
+    def status(self):
+        """Return status of download service."""
+        args = self._get_args()
+        resp, status, success = make_request(
+            requests.get,
+            self.STATUS_URL,
+            **args,
+        )
+        if isinstance(resp, dict) and (resp_status := resp.get("status")):
+            resp = resp_status
+        if not success:
+            log.warning(f"Downloads not available: {status} {resp}")
 
         return resp, status
 

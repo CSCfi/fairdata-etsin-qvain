@@ -28,6 +28,7 @@ export default {
     packages: () => '/api/download/requests',
     authorize: () => '/api/download/authorize',
     subscriptions: () => '/api/download/subscriptions',
+    status: () => '/api/download/status',
   },
   rpc: {
     changeCumulativeState: () => '/api/rpc/datasets/change_cumulative_state',

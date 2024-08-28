@@ -36,6 +36,8 @@ class Packages {
 
   @observable manualDownloadUrlGetter = null
 
+  @observable statusPromise = null
+
   @computed get sizeLimit() {
     return this.Env.packageSizeLimit
   }
@@ -61,6 +63,7 @@ class Packages {
   @action clearPackages() {
     this.packages = {}
     this.error = null
+    this.statusPromise = null
   }
 
   @action reset() {
@@ -190,6 +193,17 @@ class Packages {
     this.error = null
   }
 
+  @action.bound checkStatus() {
+    // Check if downloads should be available
+    if (!this.Env.Flags.flagEnabled('DOWNLOAD_API_V2.STATUS_CHECK')) {
+      this.statusPromise = Promise.resolve() // always ok
+    }
+    if (!this.statusPromise) {
+      this.statusPromise = this.client.get(urls.dl.status()) // raises error for non-200 status
+    }
+    return this.statusPromise
+  }
+
   async fetch(datasetIdentifier) {
     try {
       // Fetch list of available downloadable packages
@@ -202,19 +216,25 @@ class Packages {
         this.datasetIdentifier = datasetIdentifier
       })
 
-      let response
-      try {
-        const url = this.useV3
-          ? `${this.Env.metaxV3Url('download', 'packages', datasetIdentifier)}`
-          : `${urls.dl.packages()}?cr_id=${datasetIdentifier}`
-        response = await this.client.get(url)
-        this.clearError()
-      } catch (err) {
-        this.clearPackages()
-        console.error(err)
-        this.setError(err)
-        return
+      const url = this.useV3
+        ? `${this.Env.metaxV3Url('download', 'packages', datasetIdentifier)}`
+        : `${urls.dl.packages()}?cr_id=${datasetIdentifier}`
+
+      const statusPromise = this.checkStatus()
+      const packagesPromise = this.client.get(url)
+
+      // Resolve promises, prioritize errors from statusPromise
+      const promises = await Promise.allSettled([statusPromise, packagesPromise])
+      for (const promise of promises) {
+        if (promise.status !== 'fulfilled') {
+          const err = promise.reason
+          this.clearPackages()
+          console.error(err)
+          this.setError(err)
+          return
+        }
       }
+      const response = promises[1].value
 
       const { partial, ...full } = response.data
       runInAction(() => {

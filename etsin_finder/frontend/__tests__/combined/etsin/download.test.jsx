@@ -113,19 +113,19 @@ describe('Packages', () => {
     // pending items trigger polling
     await packages.fetch(1)
     expect(packages.get('/files/jee').status).toBe(PENDING)
-    expect(mockAdapter.history.get.length).toBe(1)
+    expect(mockAdapter.history.get.length).toBe(2) // status + packages request
 
     // first poll, generation started
     await wait(1000)
     expect(packages.get('/files/jee').status).toBe(STARTED)
-    expect(mockAdapter.history.get.length).toBe(2)
+    expect(mockAdapter.history.get.length).toBe(3)
 
     // second poll should be 2*initialPollInterval after first has finished
-    expect(mockAdapter.history.get.length).toBe(2)
+    expect(mockAdapter.history.get.length).toBe(3)
     await wait(2000 - 1)
     expect(packages.pollTimeout).not.toBe(null)
     await wait(1)
-    expect(mockAdapter.history.get.length).toBe(3)
+    expect(mockAdapter.history.get.length).toBe(4)
     expect(packages.get('/files/jee').status).toBe(SUCCESS)
     expect(packages.pollTimeout).toBe(null)
   })
@@ -473,7 +473,7 @@ describe('ErrorMessage', () => {
       },
     }
     const wrapper = shallow(<ErrorMessage error={error} clear={() => {}} />)
-    translationShouldExist(wrapper, 'dataset.dl.errors.unknownError')
+    translationShouldExist(wrapper, 'dataset.dl.errors.idaUnavailable')
   })
 
   it('shows embargo message', () => {

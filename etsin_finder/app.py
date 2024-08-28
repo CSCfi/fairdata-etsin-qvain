@@ -32,11 +32,13 @@ def add_download_resources(app):
         Authorize,
         Subscriptions,
         Notifications,
+        Status,
     )
 
     add_resource = get_add_resource(app)
     add_resource(Requests, "/api/download/requests", endpoint="dl_requests")
     add_resource(Authorize, "/api/download/authorize", endpoint="dl_download")
+    add_resource(Status, "/api/download/status", endpoint="dl_status")
 
     if flag_enabled("DOWNLOAD_API_V2.EMAIL.BACKEND", app):
         add_resource(

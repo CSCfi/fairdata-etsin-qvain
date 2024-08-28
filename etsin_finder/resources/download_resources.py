@@ -324,3 +324,22 @@ class Notifications(MethodView):
         send_email(language, cr_id, scope, email)
 
         return "", 200
+
+
+class Status(MethodView):
+    """Class for checking download service status."""
+
+    @log_request
+    def get(self):
+        """Request status of download service
+
+        Returns:
+            Status text. Status code is 200 if downloads are available.
+
+        """
+        download_service = DownloadAPIService(current_app)
+
+        _, status = download_service.status()
+        if status != 200:
+            return "Downloads are not currently available.", 503
+        return "Downloads are available.", 200

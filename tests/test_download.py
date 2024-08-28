@@ -273,7 +273,8 @@ class TestDownloadResourcesAuthorize(RequestMocks):
     ):
         """Authorize file"""
         r = unauthd_client.post(
-            "/api/download/authorize", json={"cr_id": "1", "file": "/folder/filename.gif"}
+            "/api/download/authorize",
+            json={"cr_id": "1", "file": "/folder/filename.gif"},
         )
         assert r.status_code == 200
         assert r.json == fakeFileDownloadUrl
@@ -309,7 +310,8 @@ class TestDownloadResourcesAuthorize(RequestMocks):
     def test_authorize_forbidden(self, unauthd_client, login_catalog_record):
         """Require login"""
         r = unauthd_client.post(
-            "/api/download/authorize", json={"cr_id": "1", "file": "/folder/filename.gif"}
+            "/api/download/authorize",
+            json={"cr_id": "1", "file": "/folder/filename.gif"},
         )
         assert r.status_code == 403
 
@@ -318,7 +320,8 @@ class TestDownloadResourcesAuthorize(RequestMocks):
     ):
         """User logged in, can access dataset"""
         r = authd_client.post(
-            "/api/download/authorize", json={"cr_id": "1", "file": "/folder/filename.gif"}
+            "/api/download/authorize",
+            json={"cr_id": "1", "file": "/folder/filename.gif"},
         )
         assert r.status_code == 200
 
@@ -331,6 +334,28 @@ class TestDownloadResourcesAuthorize(RequestMocks):
             "/api/download/authorize", json={"cr_id": "1", "package": "x.zip"}
         )
         assert r.status_code == 503
+
+
+class TestDownloadResourcesStatus(RequestMocks):
+    """Test Download API /status endpoint"""
+
+    def test_status_ok(self, unauthd_client, requests_mock):
+        """Test ok status"""
+        mock = requests_mock.get(
+            "https://mock-download:1/status", json="", status_code=200
+        )
+        r = unauthd_client.get("/api/download/status")
+        assert r.status_code == 200
+        assert mock.call_count == 1
+
+    def test_status_fail(self, unauthd_client, requests_mock):
+        """Teste fail status"""
+        mock = requests_mock.get(
+            "https://mock-download:1/status", json="", status_code=500
+        )
+        r = unauthd_client.get("/api/download/status")
+        assert r.status_code == 503
+        assert mock.call_count == 1
 
 
 class TestDownloadResourcesSubscriptions(BaseTest):

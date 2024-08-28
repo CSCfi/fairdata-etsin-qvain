@@ -1,25 +1,35 @@
 import axios from 'axios'
 import Packages from '../../../js/stores/view/packages'
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../../js/utils/constants'
-import urls from '../../../js/utils/urls'
+import MockAdapter from 'axios-mock-adapter'
+const mockAdapter = new MockAdapter(axios)
 
 jest.useFakeTimers()
 
-jest.mock('axios')
+let checkStatus = false
 
 describe('Packages', () => {
   let packages
   const mockEnv = {
-    Flags: { flagEnabled: () => true },
+    Flags: {
+      flagEnabled: path => {
+        if (path == 'DOWNLOAD_API_V2.STATUS_CHECK') {
+          return checkStatus
+        }
+        return false
+      },
+    },
     packageSizeLimit: 1024,
   }
 
   beforeEach(() => {
+    checkStatus = false
     packages = new Packages(mockEnv)
   })
 
   afterEach(() => {
     jest.resetAllMocks()
+    mockAdapter.reset()
   })
 
   test('initialPollInterval should be 1e3', () => {
@@ -235,15 +245,14 @@ describe('Packages', () => {
   // testing updatePartials and updatePackage is done separately
   describe('when calling createPackage', () => {
     const params = { test: 'test' }
-    const response = { data: {} }
 
     beforeEach(async () => {
-      axios.post.mockReturnValueOnce(response)
+      mockAdapter.onPost('/api/download/requests').reply(200, {})
       await packages.createPackage(params)
     })
 
     test('should call axios.post with correct url and params', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), params, {"signal": expect.any(AbortSignal)})
+      expect(mockAdapter.history.post[0].data).toBe(JSON.stringify(params))
     })
   })
 
@@ -252,13 +261,13 @@ describe('Packages', () => {
     const datasetIdentifier = 'identifier'
     const expectedParams = { cr_id: datasetIdentifier }
     beforeEach(() => {
-      axios.post.mockReturnValueOnce({ data: {} })
+      mockAdapter.onPost('/api/download/requests').reply(200, {})
       packages.datasetIdentifier = datasetIdentifier
       packages.createPackageFromPath(path)
     })
 
     test('should eventially call axios.post with expectedParams', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), expectedParams, {"signal": expect.any(AbortSignal)})
+      expect(mockAdapter.history.post[0].data).toBe(JSON.stringify(expectedParams))
     })
   })
 
@@ -267,13 +276,13 @@ describe('Packages', () => {
     const datasetIdentifier = 'identifier'
     const expectedParams = { cr_id: datasetIdentifier, scope: [path] }
     beforeEach(() => {
-      axios.post.mockReturnValueOnce({ data: {} })
+      mockAdapter.onPost('/api/download/requests').reply(200, {})
       packages.datasetIdentifier = datasetIdentifier
       packages.createPackageFromPath(path)
     })
 
     test('should eventially call axios.post with expectedParams', () => {
-      expect(axios.post).toHaveBeenCalledWith(urls.dl.packages(), expectedParams, {"signal": expect.any(AbortSignal)})
+      expect(mockAdapter.history.post[0].data).toBe(JSON.stringify(expectedParams))
     })
   })
 
@@ -310,16 +319,14 @@ describe('Packages', () => {
       },
     ]
     const expectedPackage = { '/': { full: 'full' }, test: partial[0] }
-    const response = {
-      data: { full: 'full', partial },
-    }
+    const response = { full: 'full', partial }
     beforeEach(async () => {
-      axios.get.mockReturnValueOnce(response)
+      mockAdapter.onGet('/api/download/requests?cr_id=identifier').reply(200, response)
       await packages.fetch(datasetIdentifier)
     })
 
     test('should call axios.get', () => {
-      expect(axios.get).toHaveBeenCalledWith('/api/download/requests?cr_id=identifier', {"signal": expect.any(AbortSignal)})
+      expect(mockAdapter.history.get[0].url).toBe('/api/download/requests?cr_id=identifier')
     })
 
     test('should set datasetIdentifier', () => {
@@ -332,6 +339,44 @@ describe('Packages', () => {
 
     test('should schedule poll, (proven by setTimeout check)', () => {
       expect(setTimeout).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('when calling fetch with status check enabled', () => {
+    const datasetIdentifier = 'identifier'
+    const partial = [
+      {
+        scope: ['test'],
+        status: 'status',
+        foo: 'bar',
+        status: DOWNLOAD_API_REQUEST_STATUS.PENDING,
+      },
+    ]
+    const expectedPackage = { '/': { full: 'full' }, test: partial[0] }
+    const response = { full: 'full', partial }
+
+    beforeEach(async () => {
+      checkStatus = true
+    })
+
+    test('should assign packages when status is ok', async () => {
+      mockAdapter.onGet('/api/download/status').reply(200, '')
+      mockAdapter.onGet('/api/download/requests?cr_id=identifier').reply(200, response)
+      await packages.fetch(datasetIdentifier)
+      expect(mockAdapter.history.get[0].url).toBe('/api/download/status')
+      expect(mockAdapter.history.get[1].url).toBe('/api/download/requests?cr_id=identifier')
+      packages.packages.should.eql(expectedPackage)
+    })
+
+    test('should log error and clear packages when status is not ok', async () => {
+      jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+      mockAdapter.onGet('/api/download/status').reply(503, '')
+      mockAdapter.onGet('/api/download/requests?cr_id=identifier').reply(200, response)
+      await packages.fetch(datasetIdentifier)
+      expect(mockAdapter.history.get[0].url).toBe('/api/download/status')
+      expect(mockAdapter.history.get[1].url).toBe('/api/download/requests?cr_id=identifier')
+      expect(console.error.mock.calls.length).toBe(1)
+      packages.packages.should.eql({})
     })
   })
 
