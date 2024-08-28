@@ -138,8 +138,8 @@ describe('Events page', () => {
     tableToObjects(sections['Relations']).should.eql([
       {
         Identifier: 'Identifier:1234-aaaaa-tunniste',
-        Title: 'Resource in English',
-        Type: 'Cites',
+        'Title and Description': 'Resource in EnglishShow Description',
+        Type: 'Cites (Collection)',
       },
     ])
   })

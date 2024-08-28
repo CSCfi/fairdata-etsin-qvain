@@ -275,7 +275,8 @@ const finnish = {
       relations: {
         title: 'Relaatiot',
         type: 'Tyyppi',
-        name: 'Otsikko',
+        name: 'Otsikko ja kuvaus',
+        description: 'Näytä kuvaus',
         idn: 'Tunniste',
       },
       versions: {

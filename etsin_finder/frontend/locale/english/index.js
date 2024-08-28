@@ -276,7 +276,8 @@ const english = {
       relations: {
         title: 'Relations',
         type: 'Type',
-        name: 'Title',
+        name: 'Title and Description',
+        description: 'Show Description',
         idn: 'Identifier',
       },
       versions: {
