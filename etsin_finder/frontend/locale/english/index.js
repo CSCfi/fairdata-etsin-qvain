@@ -242,13 +242,17 @@ const english = {
       },
       events: {
         title: 'Events',
-        event: 'Event',
+        event: 'Event type',
         who: 'Who',
         when: 'When',
+        where: 'Where',
         event_title: 'Title',
-        description: 'Description',
-        deletionEvent: 'Dataset deletion',
+        description: 'Title and Description',
+        outcome_description: 'Show outcome description',
+        deletionTitle: 'Dataset deletion',
+        deletionEvent: 'Deleted',
         deletionOfDatasetVersion: 'Deleted dataset version: ',
+        deletionIdentifier: 'Identifier of deleted dataset: ',
       },
       preservationEvent: {
         useCopy: {

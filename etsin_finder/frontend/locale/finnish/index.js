@@ -241,13 +241,17 @@ const finnish = {
       },
       events: {
         title: 'Tapahtumat',
-        event: 'Tapahtuma',
+        event: 'Tapahtuman tyyppi',
         who: 'Kuka',
         when: 'Milloin',
+        where: 'Missä',
         event_title: 'Otsikko',
-        description: 'Kuvaus',
-        deletionEvent: 'Aineiston poistaminen',
+        description: 'Otsikko ja kuvaus',
+        outcome_description: 'Näytä lopputuloksen kuvaus',
+        deletionTitle: 'Aineiston poistaminen',
+        deletionEvent: 'Poistettu',
         deletionOfDatasetVersion: 'Poistettu aineistoversio: ',
+        deletionIdentifier: 'Poistetun aineiston tunniste: ',
       },
       preservationEvent: {
         useCopy: {

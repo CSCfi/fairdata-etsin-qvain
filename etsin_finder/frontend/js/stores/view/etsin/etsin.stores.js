@@ -2,6 +2,7 @@
   This class stores the dataset for Etsin React components
 */
 import { makeObservable, observable, action, computed } from 'mobx'
+import { v4 as uuidv4 } from 'uuid'
 import { DATA_CATALOG_IDENTIFIER, ACCESS_TYPE_URL } from '@/utils/constants'
 import Cite from './cite'
 
@@ -158,8 +159,8 @@ class EtsinDatasetV2 {
   }
 
   @computed get preservation() {
-    const useCopy = this.catalogRecord.preservation_dataset_origin_version
-    const preservedCopy = this.catalogRecord.preservation_dataset_version
+    const useCopy = this.catalogRecord?.preservation_dataset_origin_version
+    const preservedCopy = this.catalogRecord?.preservation_dataset_version
     if (useCopy) {
       useCopy.id = useCopy.identifier
       useCopy.persistent_identifier = useCopy.preferred_identifier
@@ -169,9 +170,9 @@ class EtsinDatasetV2 {
       preservedCopy.persistent_identifier = preservedCopy.preferred_identifier
     }
     return {
-      id: this.catalogRecord.preservation_identifier,
-      state: this.catalogRecord.preservation_state,
-      modified: this.catalogRecord.preservation_state_modified,
+      id: this.catalogRecord?.preservation_identifier,
+      state: this.catalogRecord?.preservation_state,
+      modified: this.catalogRecord?.preservation_state_modified,
       useCopy,
       preservedCopy,
       // v3 also includes contract, description, and reason_description
@@ -457,18 +458,24 @@ class EtsinDatasetV2 {
   @action shapeSpatial(spatial) {
     if (!spatial) return null
 
-    return spatial.map(location => ({
-      full_address: location.full_address,
-      geographic_name: location.geographic_name,
-      altitude_in_meters: location.alt,
-      wkt: location.as_wkt,
-      reference: {
-        id: null,
-        url: location.place_uri?.identifier,
-        in_scheme: location.place_uri?.in_scheme,
-        pref_label: location.place_uri?.pref_label,
-      },
-    }))
+    return spatial.map(location => {
+      const reference = location.place_uri
+        ? {
+            id: null,
+            url: location.place_uri?.identifier,
+            in_scheme: location.place_uri?.in_scheme,
+            pref_label: location.place_uri?.pref_label,
+          }
+        : null
+
+      return {
+        full_address: location.full_address,
+        geographic_name: location.geographic_name,
+        altitude_in_meters: location.alt,
+        wkt: location.as_wkt,
+        reference,
+      }
+    })
   }
 
   @action shapeProvenance(provenance) {
@@ -488,6 +495,11 @@ class EtsinDatasetV2 {
       shapedEvent.is_associated_with = event.was_associated_with?.map(actor =>
         this.shapeActor(actor)
       )
+      if (shapedEvent.spatial) {
+        shapedEvent.spatial = this.shapeSpatial(new Array(event.spatial))[0]
+      }
+
+      shapedEvent.id = uuidv4()
       return shapedEvent
     })
   }

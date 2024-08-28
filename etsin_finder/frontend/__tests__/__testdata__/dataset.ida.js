@@ -312,6 +312,46 @@ const dataset = {
           },
         ],
       },
+
+      {
+        title: {
+          en: 'Provenance name2',
+          fi: 'Provenanssin nimi2',
+          und: 'Provenanssin nimi2',
+        },
+        spatial: {
+          geographic_name: 'Provenanssipaikka2',
+        },
+        temporal: {
+          end_date: '2021-02-23T00:00:00.000Z',
+        },
+        description: {
+          en: 'Provenance description2',
+          fi: 'Provenanssin kuvaus2',
+          und: 'Provenanssin kuvaus2',
+        },
+        lifecycle_event: {
+          in_scheme: 'http://uri.suomi.fi/codelist/fairdata/lifecycle_event',
+          identifier: 'http://uri.suomi.fi/codelist/fairdata/lifecycle_event/code/checked',
+          pref_label: {
+            en: 'Checked',
+            fi: 'Tarkistettu',
+            und: 'Tarkistettu',
+          },
+        },
+        was_associated_with: [
+          {
+            name: {
+              en: 'Aalto University',
+              fi: 'Aalto yliopisto',
+              sv: 'Aalto universitetet',
+              und: 'Aalto yliopisto',
+            },
+            '@type': 'Organization',
+            identifier: 'http://uri.suomi.fi/codelist/fairdata/organization/code/10076',
+          },
+        ],
+      },
     ],
     relation: [
       {
@@ -654,6 +694,13 @@ const pasProvenanceEvent = {
 
 export const pasPreservationCopy = {
   ...dataset,
+  data_catalog: {
+    ...dataCatalog,
+    catalog_json: {
+      ...dataCatalog['catalog_json'],
+      identifier: 'urn:nbn:fi:att:data-catalog-pas',
+    },
+  },
   research_dataset: {
     ...dataset.research_dataset,
     provenance: [pasProvenanceEvent],

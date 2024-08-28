@@ -14,7 +14,7 @@ import {
   pasPreservationCopy,
   pasUseCopy,
 } from '../../__testdata__/dataset.ida'
-import Events from '@/components/dataset/events'
+import Events from '@/components/etsin/Dataset/events'
 
 deprecatedDataset.preservation_dataset_origin_version = {
   preferred_identifier: 'urn:nbn:fi:origin-of-preserved-dataset',
@@ -30,6 +30,20 @@ const { dateFormat } = stores.Locale
 
 configure({ safeDescriptors: true })
 stores.Accessibility.handleNavigation = jest.fn()
+
+const versionsToStores = () => {
+  const versions = deprecatedDataset.dataset_version_set
+  for (const version in versions) {
+    const catalog_record = {
+      ...versions[version],
+      research_dataset: {},
+    }
+    const versionID = versions[version].identifier
+    catalog_record['research_dataset']['title'] = versionTitles[versionID]
+    catalog_record['research_dataset']['issued'] = '2024-07-05'
+    stores.Etsin.EtsinDataset.set('versions', { catalog_record: catalog_record })
+  }
+}
 
 const tableToObjects = tableWrapper => {
   // convert table rows into objects, use table headers as keys
@@ -52,6 +66,8 @@ describe('Events page', () => {
 
   const render = async (dataset = deprecatedDataset) => {
     jest.resetAllMocks()
+    stores.Etsin.EtsinDataset.set('dataset', { catalog_record: dataset })
+    versionsToStores()
 
     wrapper = mount(
       <StoresProvider store={stores}>
@@ -78,25 +94,33 @@ describe('Events page', () => {
     await render()
     tableToObjects(sections['Events']).should.eql([
       {
-        Event: 'Checked',
+        'Event type': 'Checked (Unknown)',
         Who: 'Aalto University',
-        When: `${dateFormat('2021-02-03T00:00Z')} – ${dateFormat('2021-02-23T00:00Z')}`,
-        Title: 'Provenance name',
-        Description: 'Provenance description',
+        When: `${dateFormat('2021-02-03')} – ${dateFormat('2021-02-23')}`,
+        'Title and Description': 'Provenance nameProvenance description',
+        Where: 'Bytom (Provenanssipaikka)',
       },
       {
-        Event: 'Deprecated',
+        'Event type': 'Checked',
+        Who: 'Aalto University',
+        When: `– ${dateFormat('2021-02-23')}`,
+        'Title and Description': 'Provenance name2Provenance description2',
+        Where: 'Provenanssipaikka2',
+      },
+      {
+        'Event type': 'Deprecated',
         Who: '-',
         When: dateFormat('2021-12-22T14:29:15+02:00'),
-        Title: 'Data removed',
-        Description: 'Original data removed from Fairdata IDA',
+        'Title and Description': 'Data removedOriginal data removed from Fairdata IDA',
+        Where: '-',
       },
       {
-        Event: 'Dataset deletion',
+        'Event type': 'Deleted',
         Who: '-',
         When: dateFormat('2021-12-20T14:28:54+02:00'),
-        Title: 'Deleted dataset version: 1',
-        Description: '/dataset/1af9f528-e7a7-43e4-9051-b5d07e889cde',
+        'Title and Description':
+          'Dataset deletionDeleted dataset version: 1Identifier of deleted dataset: 1af9f528-e7a7-43e4-9051-b5d07e889cde',
+        Where: '-',
       },
     ])
   })
@@ -134,7 +158,7 @@ describe('Events page', () => {
       {
         Version: '1',
         'Delete date': '2021-12-20',
-        'Link to dataset': '/dataset/1af9f528-e7a7-43e4-9051-b5d07e889cde',
+        'Link to dataset': '1af9f528-e7a7-43e4-9051-b5d07e889cde',
       },
     ])
   })
@@ -168,12 +192,12 @@ describe('Events page', () => {
       await render(pasUseCopy)
       tableToObjects(sections['Events']).should.eql([
         {
-          Description:
-            'Copy created: October 13, 2022. Click here to open the Digital Preservation Service version',
-          Event: 'Copy created into Digital Preservation',
-          Title: '',
-          When: '',
-          Who: '',
+          'Title and Description':
+            'Copy created into Digital PreservationClick here to open the Digital Preservation Service version',
+          'Event type': '-',
+          When: 'December 22, 2021',
+          Who: '-',
+          Where: '-',
         },
       ])
     })
@@ -182,11 +206,11 @@ describe('Events page', () => {
       await render(pasPreservationCopy)
       tableToObjects(sections['Events']).should.eql([
         {
-          Description: 'Created: October 13, 2022. Click here to open the use copy',
-          Event: 'Created in Digital Preservation',
-          Title: '',
-          When: '',
-          Who: '',
+          'Title and Description': 'Created in Digital PreservationClick here to open the use copy',
+          'Event type': '-',
+          When: 'October 13, 2022',
+          Who: '-',
+          Where: '-',
         },
       ])
     })
