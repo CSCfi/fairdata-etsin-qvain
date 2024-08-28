@@ -183,7 +183,7 @@ const fetchExistingChildDataForDirectory = async ({
   const counts = {
     existingDirectChildCount: data.directories.length + data.files.length,
     existingByteSize: data.byte_size || data.parent_directory?.byte_size, // v2 || v3
-    existingFileCount: data.file_count || data.parent_directory?.file_count, // v2 || v3
+    existingFileCount: data.file_count || data.directory?.file_count, // v2 || v3
   }
 
   // when onlyPublic is enabled, use existing counts as the total counts as

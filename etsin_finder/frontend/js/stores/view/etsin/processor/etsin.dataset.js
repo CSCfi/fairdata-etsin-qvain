@@ -44,7 +44,12 @@ export class DatasetProcessorV3 extends EtsinProcessor {
     const promise = this.client
       .get(url, {
         tag,
-        params: { include_removed: true, expand_catalog: true, include_allowed_actions: true },
+        params: {
+          include_removed: true,
+          expand_catalog: true,
+          include_allowed_actions: true,
+          include_metrics: true,
+        },
       })
       .then(res => {
         resolved(res.data)

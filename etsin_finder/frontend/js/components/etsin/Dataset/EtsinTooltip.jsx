@@ -36,7 +36,7 @@ const EtsinTooltip = ({ tooltip, inverted, withMargin }) => {
         align="Left"
       />
       <Tooltip isOpen={tooltipOpen}>
-        <Translate component="span" content={tooltip.infoText} />
+        <Translate component="span" content={tooltip.infoText} unsafe />
       </Tooltip>
     </Wrapper>
   )
@@ -59,6 +59,7 @@ EtsinTooltip.defaultProps = {
 const Wrapper = styled.span`
   > * {
     > * {
+      height: 1rem;
       cursor: pointer;
       margin: ${p => (p.withMargin ? '0 0 0 0.2em' : '0')};
       color: ${p => (p.inverted ? p.theme.color.primary : 'black')};
@@ -85,5 +86,8 @@ const Tooltip = styled.div`
     color: ${p => p.theme.color.darker};
     font-size: 0.9em;
     font-weight: normal;
+  }
+  > span:hover {
+    color: ${p => p.theme.color.darker};
   }
 `

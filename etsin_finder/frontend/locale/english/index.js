@@ -308,6 +308,15 @@ const english = {
     infrastructure: 'Infrastructure',
     issued: 'Release date: %(date)s',
     metadata: 'Dataset metadata',
+    metrics: {
+      title: 'Metrics',
+      toolTip: `Views and downloads are recorded as they occur.<br>
+        Etsin updates the amounts for an individual dataset once per day.<br>
+        <a target="_blank" href="https://www.fairdata.fi/en/dataset-views-and-downloads/">More info</a>`,
+      tooltipLabel: 'Metrics information.',
+      totalViews: 'Views (total)',
+      totalDownloads: 'Downloads (total)',
+    },
     modified: 'Dataset modification date: %(date)s',
     keywords: 'Keywords',
     subjectHeading: 'Subject heading',

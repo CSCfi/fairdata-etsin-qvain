@@ -10,6 +10,7 @@ import checkNested from '@/utils/checkNested'
 import Agent from '../Agent'
 import CitationButton from '../citation/citationButton'
 import DatasetInfoItem from '../DatasetInfoItem'
+import DatasetMetrics from './metrics'
 import Identifier from './identifier'
 import License from './special/license'
 import Logo from './special/logo'
@@ -21,6 +22,8 @@ const Sidebar = () => {
   const {
     Etsin: {
       EtsinDataset: {
+        useV3,
+        dataset,
         dataCatalog,
         datasetMetadata,
         draftOf,
@@ -99,6 +102,11 @@ const Sidebar = () => {
         }
       : null
 
+  const metricsTooltip = {
+    infoText: 'dataset.metrics.toolTip',
+    infoAriaLabel: 'dataset.metrics.tooltipLabel',
+  }
+
   return (
     <SidebarContainer id="sidebar">
       {!isDraft && <VersionChanger />}
@@ -140,6 +148,18 @@ const Sidebar = () => {
           <CitationButton />
         </DatasetInfoItem>
       </SidebarArea>
+
+      {useV3 && dataset.metrics && (
+        <SidebarArea id="metrics-area">
+          <DatasetInfoItem
+            id="dataset-metrics"
+            itemTitle="dataset.metrics.title"
+            tooltip={metricsTooltip}
+          >
+            <DatasetMetrics />
+          </DatasetInfoItem>
+        </SidebarArea>
+      )}
 
       <SidebarArea id="subject-heading-area">
         <DatasetInfoItem id="dataset-theme" itemTitle="dataset.subjectHeading">

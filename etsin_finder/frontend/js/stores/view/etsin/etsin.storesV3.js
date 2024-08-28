@@ -178,7 +178,7 @@ class EtsinDatasetV3 {
   }
 
   @computed get hasFiles() {
-    return Boolean(this.files?.root?.existingDirectChildCount)
+    return Boolean(this.files?.root?.existingFileCount)
   }
 
   @computed get hasRemoteResources() {

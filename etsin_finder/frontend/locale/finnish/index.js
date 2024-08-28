@@ -307,6 +307,15 @@ const finnish = {
     infrastructure: 'Infrastruktuuri',
     issued: 'Julkaisupäivämäärä: %(date)s',
     metadata: 'Aineiston metatiedot',
+    metrics: {
+      title: 'Tilastot',
+      toolTip: `Katsomiskerrat ja lataukset tallennetaan niiden tapahtuessa.<br>
+        Etsimeen tieto päivittyy kunkin aineiston osalta kerran päivässä.<br>
+        <a target="_blank" href="https://www.fairdata.fi/aineistojen-katselu-ja-latausmaarat/">Lisätietoa</a>`,
+      tooltipLabel: 'Lisätietoa tilastoinnista.',
+      totalViews: 'Katsottu (yhteensä)',
+      totalDownloads: 'Ladattu (yhteensä)',
+    },
     modified: 'Aineiston muokkauspäivämäärä: %(date)s',
     harvested: 'Haravoitu',
     cumulative: 'Kumulatiivinen',
