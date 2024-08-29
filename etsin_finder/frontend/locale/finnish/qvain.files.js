@@ -31,7 +31,7 @@ const files = {
   cumulativeState: {
     label: 'Kasvava aineisto',
     radio: {
-      no: 'Ei. (Uusien tiedostojen tai kansioiden lisääminen julkaistuun aineistoon vaatii, että aineistosta tehdään uusi versio.)',
+      no: 'Ei. (Uusien tiedostojen tai kansioiden lisääminen dataa sisältävään julkaistuun aineistoon vaatii, että aineistosta tehdään uusi versio.)',
       yes: 'Kyllä. (Tiedostoja tai kansioita tullaan lisäämään aineistoon. Lisäys onnistuu ilman uuden version luomista.)',
       note: 'Huom! Julkaistua ei-kasvavaa aineistoa ei voi muuttaa kasvavaksi ilman, että siitä tehdään uusi versio. Kasvavan aineiston muuttaminen ei-kasvavaksi on sen sijaan sallittua.',
     },
@@ -43,9 +43,10 @@ const files = {
       note: 'Huom! Jos muutat kasvavan aineiston ei-kasvavaksi, et voi enää muuttaa sitä takaisin kasvavaksi luomatta uutta versiota.',
     },
     disabled: {
-      state: 'Aineisto on julkaistu tavallisena, ei-kasvavana aineistona.',
+      state: 'Aineistokuvailu on julkaistu tavallisena, ei-kasvavana.',
       explanation:
-        'Aineistoon ei voi lisätä tiedostoja tai hakemistoja luomatta siitä uutta versiota.',
+        'Koska kuvailussa ei vielä ole mukana dataa, voit lisätä tiedostoja tai hakemistoja KERRAN.' +
+        ' Tämän jälkeen et voi lisätä tiedostoja tai hakemistoja luomatta aineistosta uutta versiota.',
       note: 'Jos haluat muuttaa aineiston kasvavaksi, siitä on ensin luotava uusi versio.',
     },
     stateChanged: {

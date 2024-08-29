@@ -34,8 +34,8 @@ const files = {
   cumulativeState: {
     label: 'Cumulative dataset',
     radio: {
-      no: 'No. (Adding files or folders to a published dataset requires you to create a new version of the dataset.)',
-      yes: 'Yes. (New files or folders will be added without a version change.)',
+      no: 'No. (Adding files or folders to a published dataset with data requires you to create a new version of the dataset.)',
+      yes: 'Yes.  (New files or folders will be added without a version change.)',
       note: 'Note! Once the dataset has been published, it cannot be turned cumulative without creating a new version of the dataset.',
     },
     enabled: {
@@ -46,9 +46,10 @@ const files = {
       note: 'Note! Once changed, you need to create a new version of the dataset to turn it back to cumulative.',
     },
     disabled: {
-      state: 'This dataset has been marked non-cumulative.',
+      state: 'This dataset has been published as non-cumulative.',
       explanation:
-        'Adding files or folders to a published dataset requires you to create a new version of the dataset.',
+        "As the dataset description doesn't have any data yet, you can add files or folders ONCE." +
+        ' After that adding data requires you to create a new version of the dataset.',
       note: 'Changing the dataset cumulative requires creating a new version of the dataset.',
     },
     stateChanged: {
