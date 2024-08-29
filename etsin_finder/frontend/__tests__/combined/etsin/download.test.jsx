@@ -423,6 +423,36 @@ describe('getAllowDownload', () => {
     ).toBe(false)
   })
 
+  it('returns false if error', () => {
+    expect(
+      getAllowDownload(
+        {
+          isDraft: false,
+          isPas: false,
+          Packages: {
+            error: 'error',
+          },
+        },
+        { allowDataIdaDownloadButton: true }
+      )
+    ).toBe(false)
+  })
+
+  it('returns false if loading', () => {
+    expect(
+      getAllowDownload(
+        {
+          isDraft: false,
+          isPas: false,
+          Packages: {
+            loadingDataset: true,
+          },
+        },
+        { allowDataIdaDownloadButton: true }
+      )
+    ).toBe(false)
+  })
+
   it('returns false for DPS dataset', () => {
     expect(
       getAllowDownload(

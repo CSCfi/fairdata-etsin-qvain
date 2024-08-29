@@ -63,6 +63,7 @@ class Etsin {
     relations: false,
     versions: false,
     files: false,
+    packages: false,
   }
 
   @computed get allErrors() {
@@ -75,6 +76,14 @@ class Etsin {
 
   @computed get datasetErrorTranslations() {
     return this.errors.dataset.map(error => error)
+  }
+
+  @computed get isDownloadPossible() {
+    return (
+      !this.isLoading.packages &&
+      this.EtsinDataset.isDownloadAllowed &&
+      !this.filesProcessor.Packages.error
+    )
   }
 
   @action.bound reset() {
@@ -103,6 +112,7 @@ class Etsin {
       relations: false,
       versions: false,
       files: false,
+      packages: false,
     }
   }
 

@@ -25,9 +25,10 @@ function IdaResources() {
     Locale: { lang, dateFormat },
     Access: { restrictions },
     Etsin: {
-      EtsinDataset: { useV3, identifier, files, isDownloadAllowed, downloadAllInfotext },
+      EtsinDataset: { useV3, identifier, files, downloadAllInfotext },
       filesProcessor: { Packages },
       fetchPackages,
+      isDownloadPossible,
     },
   } = useStores()
 
@@ -77,7 +78,7 @@ function IdaResources() {
     attributes: {
       tooltip: action.tooltip,
     },
-    disabled: action.disabled || !isDownloadAllowed,
+    disabled: action.disabled || !isDownloadPossible,
     onClick: action.func,
   }
 
@@ -105,7 +106,7 @@ function IdaResources() {
                 <Translate
                   component={MoreButton}
                   color={buttonProps.color}
-                  disabled={!isDownloadAllowed}
+                  disabled={!isDownloadPossible}
                   onClick={moreFunc}
                   attributes={{ 'aria-label': moreAriaLabel }}
                 />
@@ -123,7 +124,7 @@ function IdaResources() {
 
       <ErrorMessage error={Packages.error} clear={Packages.clearError} />
 
-      <Tree allowDownload={isDownloadAllowed} />
+      <Tree allowDownload={isDownloadPossible} />
       {inInfo && <Info {...infoProps} />}
       <PackageModal Packages={Packages} />
       <ManualDownloadModal Packages={Packages} />

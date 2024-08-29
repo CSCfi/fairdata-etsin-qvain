@@ -107,6 +107,15 @@ export const getAllowDownload = (DatasetQuery, restrictions) => {
   if (DatasetQuery.isDraft) {
     return false
   }
+
+  if (DatasetQuery.Packages?.error) {
+    return false
+  }
+
+  if (DatasetQuery.Packages?.loadingDataset) {
+    return false
+  }
+
   return restrictions.allowDataIdaDownloadButton
 }
 

@@ -30,11 +30,12 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
     Env: { metaxV3Url },
     Etsin: {
       EtsinDataset: { useV3 },
+      isDownloadPossible,
     },
   } = useStores()
 
   const { Files, directoryView, extraProps } = treeProps
-  const { isDownloadAllowed, Packages } = extraProps
+  const { Packages } = extraProps
   const { setInInfo, datasetIdentifier } = Files
   let content = null
   const name = item.name
@@ -108,7 +109,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
       color={downloadButtonColor}
       icon={downloadIcon}
       spin={downloadIconSpin}
-      disabled={downloadDisabled || !isDownloadAllowed}
+      disabled={downloadDisabled || !isDownloadPossible}
       onClick={downloadFunc}
       with={{ name }}
     />
@@ -122,7 +123,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
           <Translate
             component={MoreButton}
             color={downloadButtonColor}
-            disabled={downloadDisabled || !isDownloadAllowed}
+            disabled={downloadDisabled || !isDownloadPossible}
             onClick={moreFunc}
             attributes={{ 'aria-label': moreAriaLabel }}
           />
