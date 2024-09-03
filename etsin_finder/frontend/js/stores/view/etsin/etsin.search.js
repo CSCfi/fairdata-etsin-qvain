@@ -74,15 +74,17 @@ class EtsinSearch {
     })
 
     const url = `${this.Env.metaxV3Url('datasets')}?${query.toString()}`
+    const aggregatesUrl = `${this.Env.metaxV3Url('aggregates')}?${query.toString()}`
 
     await this.client.abort()
     this.setIsLoading(true)
 
     try {
-      const res = await this.client.get(url)
+      const results = await Promise.all([this.client.get(aggregatesUrl), this.client.get(url)])
+
       runInAction(() => {
-        this.setAggregations(res.data.aggregations)
-        this.setRes(res.data)
+        this.setAggregations(results[0].data)
+        this.setRes(results[1].data)
         if (this.count > 0 && this.offset >= this.count) {
           query.set('page', this.pageCount)
           this.submit(query)

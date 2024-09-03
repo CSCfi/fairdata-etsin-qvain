@@ -47,6 +47,7 @@ export default {
     datasetCreateDraft: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/create-draft`,
     datasetNewVersion: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/new-version`,
     datasets: metaxV3 => `${metaxV3}/v3/datasets`,
+    aggregates: metaxV3 => `${metaxV3}/v3/datasets/aggregates`,
     datasetData: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/data`,
     datasetFormat: (metaxV3, dataset, format) =>
       `${metaxV3}/v3/datasets/${dataset}/metadata-download?format=${format}`,

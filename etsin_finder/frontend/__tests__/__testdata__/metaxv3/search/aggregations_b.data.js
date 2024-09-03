@@ -1,9 +1,5 @@
 // This is a coherent search result response for db that has 21 dataset (dataset_ida_a.data and last dataset_ida_b.data).
-import { v4 as uuid } from 'uuid'
-import dataset_a from '../datasets/dataset_ida_a.data'
-import dataset_b from '../datasets/dataset_ida_b.data'
-
-export const aggregations = {
+const aggregations = {
   data_catalog: {
     query_parameter: 'data_catalog__title',
     hits: [
@@ -88,8 +84,4 @@ export const aggregations = {
   },
 }
 
-export default {
-  results: [dataset_b],
-  aggregations,
-  count: 21,
-}
+export default aggregations

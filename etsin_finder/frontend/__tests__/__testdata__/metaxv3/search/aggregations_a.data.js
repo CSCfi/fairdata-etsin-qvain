@@ -1,7 +1,5 @@
 // This is a coherent search result response for db that has exactly one dataset (datasetA.data).
-import dataset from '../datasets/dataset_ida_a.data'
-
-export const aggregations = {
+const aggregations = {
   data_catalog: {
     query_parameter: 'data_catalog__title',
     hits: [
@@ -136,4 +134,4 @@ export const aggregations = {
   },
 }
 
-export default { results: [dataset], aggregations, count: 1 }
+export default aggregations

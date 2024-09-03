@@ -17,20 +17,36 @@ import Search from '@/components/etsin/Search'
 import { buildStores } from '@/stores'
 import EnvClass from '@/stores/domain/env'
 
-import search_a from '../../__testdata__/metaxv3/search/search_a.data'
-import search_b from '../../__testdata__/metaxv3/search/search_b.data'
+import aggregations_a from '../../__testdata__/metaxv3/search/aggregations_a.data'
+import aggregations_b from '../../__testdata__/metaxv3/search/aggregations_b.data'
 import dataset_ida_a from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 import dataset_ida_b from '../../__testdata__/metaxv3/datasets/dataset_ida_b.data'
 
 const mockAdapter = new MockAdapter(axios)
-mockAdapter.onGet('https://metaxv3:443/v3/datasets?limit=20&offset=0').reply(200, search_a)
+mockAdapter
+  .onGet('https://metaxv3:443/v3/datasets?limit=20&offset=0')
+  .reply(200, { results: [dataset_ida_a], count: 1 })
+mockAdapter
+  .onGet('https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0')
+  .reply(200, aggregations_a)
 mockAdapter
   .onGet('https://metaxv3:443/v3/datasets?keyword=web-development&limit=20&offset=0')
-  .reply(200, search_a)
-mockAdapter.onGet('https://metaxv3:443/v3/datasets?limit=20&offset=20').reply(200, search_b)
+  .reply(200, { results: [dataset_ida_a], count: 1 })
+mockAdapter
+  .onGet('https://metaxv3:443/v3/datasets/aggregates?keyword=web-development&limit=20&offset=0')
+  .reply(200, aggregations_a)
 mockAdapter
   .onGet('https://metaxv3:443/v3/datasets?search=test&limit=20&offset=0')
-  .reply(200, { ...search_a, count: 0, results: [] })
+  .reply(200, { ...dataset_ida_a, count: 0, results: [] })
+mockAdapter
+  .onGet('https://metaxv3:443/v3/datasets/aggregates?search=test&limit=20&offset=0')
+  .reply(200, aggregations_a)
+mockAdapter
+  .onGet('https://metaxv3:443/v3/datasets?limit=20&offset=20')
+  .reply(200, { results: [dataset_ida_b], count: 21 })
+mockAdapter
+  .onGet('https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=20')
+  .reply(200, aggregations_b)
 
 mockAdapter.resetHistory()
 
@@ -101,8 +117,8 @@ describe('Etsin search page', () => {
           renderEtsin()
           await userEvent.click(screen.getByTestId('search-filter-keyword'))
           await userEvent.click(screen.getByText('web-development (1)'))
-          expect(mockAdapter.history.get).toHaveLength(2)
-          expect(mockAdapter.history.get[1].url).toContain('keyword=web-development')
+          expect(mockAdapter.history.get).toHaveLength(4)
+          expect(mockAdapter.history.get[2].url).toContain('keyword=web-development')
         })
       })
 
@@ -111,8 +127,8 @@ describe('Etsin search page', () => {
           renderEtsin()
           const searchBar = await screen.findByLabelText('Search bar')
           await userEvent.type(searchBar, 'test{enter}')
-          expect(mockAdapter.history.get).toHaveLength(2)
-          expect(mockAdapter.history.get[1].url).toContain('search=test')
+          expect(mockAdapter.history.get).toHaveLength(4)
+          expect(mockAdapter.history.get[2].url).toContain('search=test')
         })
       })
     })
