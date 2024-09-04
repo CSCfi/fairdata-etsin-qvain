@@ -96,23 +96,40 @@ export class MetadataModal extends Component {
   }
 
   patchFileCharacteristics = (identifier, data) => {
-    const { original } = this.props.Stores.Qvain
+    const {
+      original,
+      Files: { useV3 },
+    } = this.props.Stores.Qvain
+    const { metaxV3Url } = this.props.Stores.Env
     const crId = original?.identifier
-    const url = urls.qvain.fileCharacteristics(identifier)
-    return this.client
-      .put(url, data, {
+
+    let request
+    if (useV3) {
+      const url = metaxV3Url('fileCharacteristics', identifier)
+      request = this.client
+        .put(url, this.dataToV3(data), {
+          params: { dataset: crId },
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then(resp => ({
+          data: {
+            characteristics: resp.data,
+          },
+        }))
+    } else {
+      const url = urls.qvain.fileCharacteristics(identifier)
+      request = this.client.put(url, data, {
         params: {
           cr_identifier: crId, // is empty for new dataset
         },
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       })
-      .catch(error => {
-        if (!isAbort(error)) {
-          throw error
-        }
-      })
+    }
+    return request.catch(error => {
+      if (!isAbort(error)) {
+        throw error
+      }
+    })
   }
 
   setFormatVersion = versionOption => {
@@ -278,6 +295,20 @@ export class MetadataModal extends Component {
     }
   }
 
+  dataToV3(data) {
+    const { file_format: fileFormat, format_version: formatVersion, ...v3Data } = data
+
+    const formatUrl = this.state.fileFormatVersions.find(
+      v => v.fileFormat === fileFormat && v.formatVersion === (formatVersion || '')
+    )?.value
+    if (formatUrl) {
+      v3Data.file_format_version = {
+        url: formatUrl,
+      }
+    }
+    return v3Data
+  }
+
   isCsv() {
     return this.state.fileFormat === 'text/csv'
   }
@@ -311,6 +342,7 @@ export class MetadataModal extends Component {
       this.setState({
         formatOptions: formatOptions.map(v => ({ value: v, label: v })),
         formatVersionsMap,
+        fileFormatVersions,
       })
 
       this.setFormatFetchStatus('done')
@@ -339,13 +371,13 @@ export class MetadataModal extends Component {
       confirmClose: false,
       criticalError: false,
       fileIdentifier: file.identifier,
-      fileFormat: pasObj.fileFormat ?? "",
-      formatVersion: pasObj.formatVersion ?? "",
-      encoding: pasObj.encoding ?? "",
-      csvDelimiter: pasObj.csvDelimiter ?? "",
-      csvRecordSeparator: pasObj.csvRecordSeparator ?? "",
-      csvQuotingChar: pasObj.csvQuotingChar ?? "",
-      csvHasHeader: pasObj.csvHasHeader ?? "",
+      fileFormat: pasObj.fileFormat ?? '',
+      formatVersion: pasObj.formatVersion ?? '',
+      encoding: pasObj.encoding ?? '',
+      csvDelimiter: pasObj.csvDelimiter ?? '',
+      csvRecordSeparator: pasObj.csvRecordSeparator ?? '',
+      csvQuotingChar: pasObj.csvQuotingChar ?? '',
+      csvHasHeader: pasObj.csvHasHeader ?? '',
     }
 
     this.setState(newState)

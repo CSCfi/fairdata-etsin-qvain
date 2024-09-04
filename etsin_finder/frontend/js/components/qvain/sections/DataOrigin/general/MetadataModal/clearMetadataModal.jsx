@@ -17,29 +17,36 @@ const ClearMetadataModal = () => {
       readonly,
       clearMetadataModalFile,
       setClearMetadataModalFile,
-      Files: { applyClearPASMeta },
+      Files: { applyClearPASMeta, useV3 },
       original,
     },
+    Env: { metaxV3Url },
   } = useStores()
   const [loading, setLoading] = useState(false)
 
   const clearFileCharacteristics = async () => {
     const { identifier } = clearMetadataModalFile
     const crId = original?.identifier
-    const url = urls.qvain.fileCharacteristics(identifier)
 
     const data = {} // clear characteristics
     setLoading(true)
     try {
-      const response = await axios.put(url, data, {
-        params: {
-          cr_identifier: crId, // is empty for new dataset
-        },
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      applyClearPASMeta(getPASMeta(response.data))
+      if (useV3) {
+        const url = metaxV3Url('fileCharacteristics', identifier)
+        await axios.delete(url, { params: { dataset: crId } })
+        applyClearPASMeta({})
+      } else {
+        const url = urls.qvain.fileCharacteristics(identifier)
+        const response = await axios.put(url, data, {
+          params: {
+            cr_identifier: crId, // is empty for new dataset
+          },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        applyClearPASMeta(getPASMeta(response.data))
+      }
       close()
     } finally {
       setLoading(false)

@@ -53,6 +53,7 @@ export default {
       `${metaxV3}/v3/datasets/${dataset}/metadata-download?format=${format}`,
     datasetContact: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/contact`,
     directories: metaxV3 => `${metaxV3}/v3/directories`,
+    fileCharacteristics: (metaxV3, file) => `${metaxV3}/v3/files/${file}/characteristics`,
     download: (metaxV3, endpoint, dataset) =>
       dataset
         ? `${metaxV3}/v3/download/${endpoint}?dataset=${dataset}`

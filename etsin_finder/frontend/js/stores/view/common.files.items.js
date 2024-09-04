@@ -58,13 +58,18 @@ export const Directory = (metaxDir, args) => ({
 
 // PAS metadata is updated separately using an RPC call.
 export const getPASMeta = metaxFile => {
-  const characteristics = metaxFile.file_characteristics || {}
+  const characteristics = metaxFile.file_characteristics || metaxFile.characteristics || {}
   const pasMeta = {}
-  if (characteristics.file_format !== undefined) {
+  if (characteristics.file_format !== undefined) { // v2
     pasMeta.fileFormat = characteristics.file_format
   }
-  if (characteristics.format_version !== undefined) {
+  if (characteristics.format_version !== undefined) { // v2
     pasMeta.formatVersion = characteristics.format_version
+  }
+  const fileFormatVersion = characteristics.file_format_version // v3
+  if (fileFormatVersion) {
+    pasMeta.fileFormat = fileFormatVersion.file_format
+    pasMeta.formatVersion = fileFormatVersion.format_version
   }
   if (characteristics.encoding !== undefined) {
     pasMeta.encoding = characteristics.encoding
