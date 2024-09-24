@@ -8,6 +8,7 @@ const v2ToV3Mapping = {
   keyword: 'themes',
   field_of_science: 'fields-of-science',
   use_category: 'use-categories',
+  restriction_grounds: 'restriction-grounds',
 }
 
 const commonFields = new Set(['value', 'label', 'id', 'parents'])
