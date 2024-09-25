@@ -77,7 +77,10 @@ class Auth {
       return
     }
     this.interceptor = axios.interceptors.request.use(config => {
-      if (this.user.loggedIn && config.url.startsWith(this.Env.metaxV3Url(''))) {
+      // Use location.href as base to avoid errors for relative URLs here
+      const requestUrl = new URL(config.url, global.location.href)
+      const metaxUrl = new URL(this.Env.metaxV3Url(''))
+      if (this.user.loggedIn && requestUrl.origin === metaxUrl.origin) {
         config.withCredentials = true // enables sending SSO cookies to Metax v3
         // Only write methods need a CSRF token
         if (['post', 'patch', 'put', 'delete'].includes(config.method)) {
