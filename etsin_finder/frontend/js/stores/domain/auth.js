@@ -78,17 +78,32 @@ class Auth {
     }
     this.interceptor = axios.interceptors.request.use(config => {
       // Use location.href as base to avoid errors for relative URLs here
-      const requestUrl = new URL(config.url, global.location.href)
-      const metaxUrl = new URL(this.Env.metaxV3Url(''))
-      if (this.user.loggedIn && requestUrl.origin === metaxUrl.origin) {
-        config.withCredentials = true // enables sending SSO cookies to Metax v3
-        // Only write methods need a CSRF token
-        if (['post', 'patch', 'put', 'delete'].includes(config.method)) {
-          config.headers['X-CSRFToken'] = this.user.csrfToken
+      if (this.metaxV3Enabled) {
+        const requestUrl = new URL(config.url, global.location.href)
+        let metaxUrl
+        try {
+          metaxUrl = new URL(this.Env.metaxV3Url(''))
+        } catch (error) {
+          console.error(`Failed to construct Metax V3 URL, host=${this.Env.metaxV3Host}`)
+          throw error
+        }
+        if (this.user.loggedIn && requestUrl.origin === metaxUrl.origin) {
+          config.withCredentials = true // enables sending SSO cookies to Metax v3
+          // Only write methods need a CSRF token
+          if (['post', 'patch', 'put', 'delete'].includes(config.method)) {
+            config.headers['X-CSRFToken'] = this.user.csrfToken
+          }
         }
       }
       return config
     })
+  }
+
+  @computed get metaxV3Enabled() {
+    return (
+      (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND') && this.Env.isQvain) ||
+      (this.Env.Flags.flagEnabled('ETSIN.METAX_V3.FRONTEND') && this.Env.isEtsin)
+    )
   }
 
   @action.bound
@@ -96,10 +111,8 @@ class Auth {
     let csrfToken
     if (this.user.loggedIn) {
       // load v3 auth info
-      const v3Enabled =
-        (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND') && this.Env.isQvain) ||
-        (this.Env.Flags.flagEnabled('ETSIN.METAX_V3.FRONTEND') && this.Env.isEtsin)
-      if (v3Enabled) {
+
+      if (this.metaxV3Enabled) {
         const csrfRes = await axios.get(this.Env.metaxV3Url('user'), {
           withCredentials: true,
         })
