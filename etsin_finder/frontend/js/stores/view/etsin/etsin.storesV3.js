@@ -77,12 +77,11 @@ class EtsinDatasetV3 {
   }
 
   @computed get isDeprecated() {
-    return Boolean(this.dataset?.is_deprecated)
+    return Boolean(this.dataset?.deprecated)
   }
 
   @computed get dateDeprecated() {
-    console.warn('no deprecation date implementation yet in metax V3')
-    return null
+    return this.dataset?.deprecated
   }
 
   @computed get isRems() {
