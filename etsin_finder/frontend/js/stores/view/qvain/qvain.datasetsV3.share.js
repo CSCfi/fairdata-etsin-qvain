@@ -58,18 +58,19 @@ class ShareV3 extends ShareV2 {
             tag: 'fetch-permissions',
           }
         )
-        const mapUsers = (users, role) =>
+        const mapUsers = (users, role, is_member=false) =>
           users.map(user => ({
             uid: user.username,
             name: `${user.first_name} ${user.last_name}`,
             email: user.email,
             role,
-            isProjectMember: false, // not implemented yet
+            isProjectMember: is_member
           }))
 
         const creators = mapUsers(resp.data.creators || [], 'creator')
         const editors = mapUsers(resp.data.editors || [], 'editor')
-        const users = [...creators, ...editors]
+        const members = mapUsers(resp.data.csc_project_members || [], undefined, true)
+        const users = [...creators, ...editors, ...members]
         users.sort(nameCompare)
         users.sort(roleCompare) // creator first
         this.setUserPermissions(users)
