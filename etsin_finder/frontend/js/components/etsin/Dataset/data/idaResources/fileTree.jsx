@@ -10,7 +10,7 @@ import { useStores } from '@/stores/stores'
 export const FileTree = ({ location }) => {
   const {
     Etsin: {
-      EtsinDataset: { files: Files, isDownloadAllowed },
+      EtsinDataset: { files: Files, isDownloadPossible },
       filesProcessor: { Packages },
     },
   } = useStores()
@@ -35,7 +35,7 @@ export const FileTree = ({ location }) => {
       moreItemsLevel: 2,
     },
     {
-      isDownloadAllowed,
+      isDownloadPossible,
       Packages,
     }
   )
