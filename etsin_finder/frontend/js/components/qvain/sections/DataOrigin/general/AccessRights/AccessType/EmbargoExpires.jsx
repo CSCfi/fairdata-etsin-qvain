@@ -7,7 +7,7 @@ import {
   handleDatePickerChange,
   getDateFormatLocale,
 } from '@/components/qvain/general/V2/Datepicker'
-import { Title, InfoText, FieldGroup } from '@/components/qvain/general/V2'
+import { InfoText, FieldGroup, TitleSmall } from '@/components/qvain/general/V2'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 import { useStores } from '@/stores/stores'
 
@@ -28,7 +28,7 @@ const EmbargoExpires = () => {
   return (
     <FieldGroup>
       <Translate
-        component={Title}
+        component={TitleSmall}
         content="qvain.rightsAndLicenses.embargoDate.label"
         htmlFor="embargo-date"
       />

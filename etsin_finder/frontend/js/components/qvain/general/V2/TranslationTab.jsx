@@ -7,7 +7,7 @@ import { observer } from 'mobx-react'
 import { useStores } from '@/stores/stores'
 import { FieldGroup } from './index'
 
-const TranslationTab = ({ language, setLanguage, children, useTitleLanguages }) => {
+const TranslationTab = ({ language, setLanguage, children, useTitleLanguages, id }) => {
   const {
     Locale: { datasetTitleLanguageTabOrder, languageTabOrder },
   } = useStores()
@@ -22,7 +22,7 @@ const TranslationTab = ({ language, setLanguage, children, useTitleLanguages }) 
             <Fragment key={lang}>
               {index !== 0 && <EmptyBlock width="1%" />}
               <LangButton
-                id={`tab-${lang}`}
+                id={`${id}-tab-${lang}`}
                 type="button"
                 active={language === lang}
                 onClick={() => setLanguage(lang)}
@@ -46,6 +46,7 @@ TranslationTab.propTypes = {
   setLanguage: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   useTitleLanguages: PropTypes.bool,
+  id: PropTypes.string.isRequired,
 }
 
 TranslationTab.defaultProps = {

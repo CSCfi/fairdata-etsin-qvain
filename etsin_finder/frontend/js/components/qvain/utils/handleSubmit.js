@@ -42,6 +42,8 @@ const handleSubmitToBackend = Qvain => {
 
   const modified = new Date().toISOString()
 
+  const accessRightsDescription = Qvain.AccessRightsDescription.toBackend()
+
   const obj = {
     title,
     description,
@@ -52,6 +54,7 @@ const handleSubmitToBackend = Qvain => {
     infrastructure: Qvain.Infrastructures.toBackend(),
     access_rights: {
       license,
+      description: accessRightsDescription,
       access_type: accessType,
       available: embargoDate,
     },

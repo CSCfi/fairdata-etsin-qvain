@@ -53,7 +53,11 @@ const Form = ({ Field }) => {
           metaxIdentifier="event_outcome"
           model={Outcome}
         />
-        <TranslationTab language={descLanguage} setLanguage={setDescLanguage}>
+        <TranslationTab
+          language={descLanguage}
+          setLanguage={setDescLanguage}
+          id="outcome-description"
+        >
           <TabInput Field={Field} datum="outcomeDescription" language={descLanguage} />
         </TranslationTab>
       </FieldGroup>

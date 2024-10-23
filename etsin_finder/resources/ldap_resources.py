@@ -1,4 +1,5 @@
 """Rest api for Qvain LDAP searches."""
+
 from etsin_finder.services.ldap_service import LDAPIdmService
 from etsin_finder.utils.qvain_utils import (
     check_authentication,

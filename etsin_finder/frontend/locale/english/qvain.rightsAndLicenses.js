@@ -1,6 +1,7 @@
 const rightsAndLicenses = {
   title: 'Rights And Licenses',
   infoTitle: 'Rights And Licenses info',
+  accessRights: 'Access rights',
   accessType: {
     title: 'Access Type',
     infoText: `<p>This field specifies how the data in your dataset can be accessed.
@@ -16,8 +17,7 @@ const rightsAndLicenses = {
   embargoDate: {
     label: 'Embargo expiration date',
     placeholder: 'Date',
-    help:
-      'By default the embargo date is not set and thus embargo will never end resulting in the files not being available for download',
+    help: 'By default the embargo date is not set and thus embargo will never end resulting in the files not being available for download',
   },
   restrictionGrounds: {
     title: 'Restriction Grounds',
@@ -37,6 +37,9 @@ const rightsAndLicenses = {
       help: 'Specify URL address for license',
     },
     addButton: 'Add license',
+  },
+  description: {
+    title: 'Access rights description',
   },
 }
 

@@ -116,6 +116,7 @@ class Adapter {
       restriction_grounds: this.refdataV3ToV2(value.restriction_grounds),
       license: this.licenseV3toV2(value.license),
       available: value.available,
+      description: value.description,
     }
   }
 
@@ -276,6 +277,7 @@ class Adapter {
       restriction_grounds: this.refdataV2ToV3(value.restriction_grounds),
       license: this.licenseV2toV3(value.license),
       available: value.available,
+      description: value.description,
     }
   }
 

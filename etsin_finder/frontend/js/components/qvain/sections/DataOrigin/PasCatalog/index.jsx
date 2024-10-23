@@ -1,8 +1,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import License from '../general/License'
+import License from '../general/AccessRights/License'
 import FilePicker from '../general/FilePicker'
-import AccessType from '../general/AccessType'
+import AccessType from '../general/AccessRights/AccessType'
 
 const PasCatalog = () => (
   <>

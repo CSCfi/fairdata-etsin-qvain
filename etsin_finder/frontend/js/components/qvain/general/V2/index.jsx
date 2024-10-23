@@ -23,6 +23,14 @@ export const Title = styled.label`
   color: #222;
   margin-top: 0.5rem;
 `
+export const TitleSmall = styled.label`
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem;
+  color: #222;
+  margin-top: 0.5rem;
+`
 
 export const InfoText = styled.span`
   display: relative;

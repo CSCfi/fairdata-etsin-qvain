@@ -8,7 +8,10 @@ import CreatableSelect from 'react-select/creatable'
 import etsinTheme from '@/styles/theme'
 import { buildStores } from '@/stores'
 import { useStores, withStores } from '@/stores/stores'
-import { License, ErrorLabel } from '@/components/qvain/sections/DataOrigin/general/License'
+import {
+  License,
+  ErrorLabel,
+} from '@/components/qvain/sections/DataOrigin/general/AccessRights/License'
 import { LICENSE_URL } from '@/utils/constants'
 import { ValidationError } from '@/components/qvain/general/errors/validationError'
 

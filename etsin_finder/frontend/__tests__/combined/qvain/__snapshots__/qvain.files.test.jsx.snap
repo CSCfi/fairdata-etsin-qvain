@@ -7,6 +7,7 @@ exports[`Qvain.Files handleSubmit submits data correctly 1`] = `
       "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
     "available": undefined,
+    "description": {},
     "license": [
       {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
@@ -29,9 +30,7 @@ exports[`Qvain.Files handleSubmit submits data correctly 1`] = `
   "cumulative_state": 0,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": {
-    "en": "",
     "fi": "Description",
-    "sv": "",
   },
   "field_of_science": [],
   "infrastructure": [],
@@ -138,9 +137,7 @@ exports[`Qvain.Files handleSubmit submits data correctly 1`] = `
   "temporal": [],
   "theme": [],
   "title": {
-    "en": "",
     "fi": "Title",
-    "sv": "",
   },
   "use_doi": false,
 }
@@ -153,6 +150,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after adding directory 
       "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
     "available": undefined,
+    "description": {},
     "license": [
       {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
@@ -175,9 +173,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after adding directory 
   "cumulative_state": 0,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": {
-    "en": "",
     "fi": "Description",
-    "sv": "",
   },
   "field_of_science": [],
   "infrastructure": [],
@@ -284,9 +280,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after adding directory 
   "temporal": [],
   "theme": [],
   "title": {
-    "en": "",
     "fi": "Title",
-    "sv": "",
   },
   "use_doi": false,
 }
@@ -299,6 +293,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after adding file 1`] =
       "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
     "available": undefined,
+    "description": {},
     "license": [
       {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
@@ -321,9 +316,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after adding file 1`] =
   "cumulative_state": 0,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": {
-    "en": "",
     "fi": "Description",
-    "sv": "",
   },
   "field_of_science": [],
   "infrastructure": [],
@@ -430,9 +423,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after adding file 1`] =
   "temporal": [],
   "theme": [],
   "title": {
-    "en": "",
     "fi": "Title",
-    "sv": "",
   },
   "use_doi": false,
 }
@@ -445,6 +436,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after removing director
       "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
     "available": undefined,
+    "description": {},
     "license": [
       {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
@@ -467,9 +459,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after removing director
   "cumulative_state": 0,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": {
-    "en": "",
     "fi": "Description",
-    "sv": "",
   },
   "field_of_science": [],
   "infrastructure": [],
@@ -576,9 +566,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after removing director
   "temporal": [],
   "theme": [],
   "title": {
-    "en": "",
     "fi": "Title",
-    "sv": "",
   },
   "use_doi": false,
 }
@@ -591,6 +579,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after removing file 1`]
       "identifier": "http://uri.suomi.fi/codelist/fairdata/access_type/code/open",
     },
     "available": undefined,
+    "description": {},
     "license": [
       {
         "identifier": "http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0",
@@ -613,9 +602,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after removing file 1`]
   "cumulative_state": 0,
   "data_catalog": "urn:nbn:fi:att:data-catalog-ida",
   "description": {
-    "en": "",
     "fi": "Description",
-    "sv": "",
   },
   "field_of_science": [],
   "infrastructure": [],
@@ -722,9 +709,7 @@ exports[`Qvain.Files handleSubmit submits data correctly after removing file 1`]
   "temporal": [],
   "theme": [],
   "title": {
-    "en": "",
     "fi": "Title",
-    "sv": "",
   },
   "use_doi": false,
 }

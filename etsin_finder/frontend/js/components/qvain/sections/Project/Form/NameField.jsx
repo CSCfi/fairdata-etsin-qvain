@@ -12,7 +12,7 @@ const NameField = () => {
 
   return (
     <>
-      <TranslationTab language={language} setLanguage={setLanguage}>
+      <TranslationTab language={language} setLanguage={setLanguage} id="project">
         <TabInput Field={Field} datum="name" language={language} isRequired />
       </TranslationTab>
     </>

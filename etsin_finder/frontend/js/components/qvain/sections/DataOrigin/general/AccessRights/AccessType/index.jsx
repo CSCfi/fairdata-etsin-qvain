@@ -5,7 +5,7 @@ import Select from 'react-select'
 import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
-import { Title, FieldGroup, Divider } from '@/components/qvain/general/V2'
+import { TitleSmall, FieldGroup, Divider } from '@/components/qvain/general/V2'
 
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
 import ValidationError from '@/components/qvain/general/errors/validationError'
@@ -20,7 +20,7 @@ import { HelpField } from '@/components/qvain/general/modal/form'
 import { withStores } from '@/stores/stores'
 import RestrictionGrounds from './RestrictionGrounds'
 import EmbargoExpires from './EmbargoExpires'
-import { handleAccessTypeReferenceDataResponse } from '../../IdaCatalog/componentHelpers'
+import { handleAccessTypeReferenceDataResponse } from '../../../IdaCatalog/componentHelpers'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
 
 export class AccessType extends Component {
@@ -88,9 +88,9 @@ export class AccessType extends Component {
 
     return (
       <FieldGroup data-cy="access-type-select">
-        <Title htmlFor="accessTypeSelect">
+        <TitleSmall htmlFor="accessTypeSelect">
           <Translate content="qvain.rightsAndLicenses.accessType.title" />
-        </Title>
+        </TitleSmall>
         <Translate
           component={Select}
           inputId="accessTypeSelect"

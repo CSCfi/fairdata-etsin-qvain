@@ -1,78 +1,81 @@
 import { computed } from 'mobx'
 
-import Actors from './qvain.actors'
-import Spatials from './qvain.spatials'
-import Provenances from './qvain.provenances'
-import RelatedResources from './qvain.relatedResources'
-import Temporals from './qvain.temporals'
-import Infrastructures from './qvain.infrastructure'
-import OtherIdentifiers from './qvain.otherIdentifier'
-import FieldOfSciences from './qvain.fieldOfScience'
-import DatasetLanguages from './qvain.datasetLanguage'
-import Keywords from './qvain.keyword'
-import IssuedDate from './qvain.issuedDate'
+import AccessRightsDescription from './qvain.accessRightsDescription'
 import AccessType from './qvain.accessType'
-import Projects from './qvain.project'
-import ProjectV2 from './qvain.projectV2'
-import Licenses from './qvain.license'
-import EmbargoExpDate from './qvain.embargoExpDate'
-import RestrictionGrounds from './qvain.restrictionGrounds'
-import Title from './qvain.title'
-import SubjectHeadings from './qvain.subjectHeadings'
-import Description from './qvain.description'
-import ExternalResources from './qvain.externalResources'
+import Actors from './qvain.actors'
 import ActorsV3 from './qvain.actors.v3'
 import BibliographicCitation from './qvain.bibliographicCitation'
+import DatasetLanguages from './qvain.datasetLanguage'
+import Description from './qvain.description'
+import EmbargoExpDate from './qvain.embargoExpDate'
+import ExternalResources from './qvain.externalResources'
+import FieldOfSciences from './qvain.fieldOfScience'
+import Infrastructures from './qvain.infrastructure'
+import IssuedDate from './qvain.issuedDate'
+import Keywords from './qvain.keyword'
+import Licenses from './qvain.license'
+import OtherIdentifiers from './qvain.otherIdentifier'
+import Projects from './qvain.project'
+import ProjectV2 from './qvain.projectV2'
+import Provenances from './qvain.provenances'
+import RelatedResources from './qvain.relatedResources'
+import RestrictionGrounds from './qvain.restrictionGrounds'
+import Spatials from './qvain.spatials'
+import SubjectHeadings from './qvain.subjectHeadings'
+import Temporals from './qvain.temporals'
+import Title from './qvain.title'
 
 class Resources {
   constructor(Env) {
     this.Env = Env
-    this.Title = new Title(this)
-    this.Description = new Description(this)
-    this.SubjectHeadings = new SubjectHeadings(this)
+    this.AccessRightsDescription = new AccessRightsDescription(this)
+    this.AccessType = new AccessType(this)
     this.ActorsV2 = new Actors(this)
     this.ActorsV3 = new ActorsV3(this)
-    this.Spatials = new Spatials(this)
-    this.Temporals = new Temporals(this)
-    this.Provenances = new Provenances(this)
-    this.RelatedResources = new RelatedResources(this)
-    this.Infrastructures = new Infrastructures(this)
-    this.OtherIdentifiers = new OtherIdentifiers(this)
-    this.FieldOfSciences = new FieldOfSciences(this)
+    this.BibliographicCitation = new BibliographicCitation(this)
     this.DatasetLanguages = new DatasetLanguages(this)
-    this.Keywords = new Keywords(this)
+    this.Description = new Description(this)
+    this.EmbargoExpDate = new EmbargoExpDate(this)
+    this.ExternalResources = new ExternalResources(this)
+    this.FieldOfSciences = new FieldOfSciences(this)
+    this.Infrastructures = new Infrastructures(this)
     this.IssuedDate = new IssuedDate(this)
-    this.AccessType = new AccessType(this)
+    this.Keywords = new Keywords(this)
+    this.Licenses = new Licenses(this)
+    this.OtherIdentifiers = new OtherIdentifiers(this)
     this.Projects = new Projects(this)
     this.ProjectV2 = new ProjectV2(this)
-    this.Licenses = new Licenses(this)
-    this.EmbargoExpDate = new EmbargoExpDate(this)
+    this.Provenances = new Provenances(this)
+    this.RelatedResources = new RelatedResources(this)
     this.RestrictionGrounds = new RestrictionGrounds(this)
-    this.ExternalResources = new ExternalResources(this)
-    this.BibliographicCitation = new BibliographicCitation(this)
+    this.Spatials = new Spatials(this)
+    this.SubjectHeadings = new SubjectHeadings(this)
+    this.Temporals = new Temporals(this)
+    this.Title = new Title(this)
     this.resources = [
-      this.Title,
-      this.Description,
-      this.SubjectHeadings,
-      this.Actors,
-      this.Spatials,
-      this.Temporals,
-      this.Provenances,
-      this.RelatedResources,
-      this.Infrastructures,
-      this.OtherIdentifiers,
-      this.FieldOfSciences,
-      this.DatasetLanguages,
-      this.Keywords,
-      this.IssuedDate,
+      this.AccessRightsDescription,
       this.AccessType,
+      this.Actors,
+      this.BibliographicCitation,
+      this.Description,
+      this.DatasetLanguages,
+      this.EmbargoExpDate,
+      this.ExternalResources,
+      this.FieldOfSciences,
+      this.Infrastructures,
+      this.IssuedDate,
+      this.Keywords,
+      this.Licenses,
+      this.OtherIdentifiers,
       this.Projects,
       this.ProjectV2,
-      this.Licenses,
-      this.EmbargoExpDate,
+      this.Provenances,
+      this.RelatedResources,
       this.RestrictionGrounds,
-      this.ExternalResources,
-      this.BibliographicCitation,
+      this.Spatials,
+      this.SubjectHeadings,
+      this.Temporals,
+      this.Title,
     ]
   }
 

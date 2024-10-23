@@ -1,10 +1,9 @@
 import { makeObservable, action, computed } from 'mobx'
 import * as yup from 'yup'
-import '@/utils/extendYup'
 
 import MultiLanguageField from './qvain.multiLanguageField'
 
-const descriptionSchemaBase = yup.object().shape({
+export const accessRightsDescriptionSchema = yup.object().shape({
   fi: yup
     .string()
     .typeError('qvain.validationMessages.description.string')
@@ -19,25 +18,21 @@ const descriptionSchemaBase = yup.object().shape({
     .max(50000, 'qvain.validationMessages.description.max'),
 })
 
-export const descriptionSchema = descriptionSchemaBase
-  .requireTranslation('qvain.validationMessages.description.required')
-  .required('qvain.validationMessages.description.required')
-
 // Validation for draft datasets: description is optional
-export const descriptionDraftSchema = descriptionSchemaBase.nullable()
+export const accessRightsDescriptionDraftSchema = accessRightsDescriptionSchema.nullable()
 
-class Description extends MultiLanguageField {
+class AccessRightsDescription extends MultiLanguageField {
   constructor(Parent) {
-    super(Parent, descriptionSchema)
+    super(Parent, accessRightsDescriptionSchema)
     makeObservable(this)
   }
 
   @action
   fromBackend = dataset => {
     this.value = {
-      en: dataset.description?.en || '',
-      fi: dataset.description?.fi || '',
-      sv: dataset.description?.sv || '',
+      en: dataset.access_rights?.description?.en || '',
+      fi: dataset.access_rights?.description?.fi || '',
+      sv: dataset.access_rights?.description?.sv || '',
     }
   }
 
@@ -49,7 +44,7 @@ class Description extends MultiLanguageField {
     }
   }
 
-  schema = descriptionSchema
+  schema = accessRightsDescriptionSchema
 }
 
-export default Description
+export default AccessRightsDescription

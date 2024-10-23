@@ -41,7 +41,7 @@ const Form = ({ Field, hideRelationType }) => {
           isRequired
         />
       )}
-      <TranslationTab language={language} setLanguage={setLanguage}>
+      <TranslationTab language={language} setLanguage={setLanguage} id="tt-test">
         <TabInput
           Field={Field}
           datum="name"

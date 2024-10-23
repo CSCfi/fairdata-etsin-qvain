@@ -1,6 +1,7 @@
 const rightsAndLicenses = {
   title: 'Oikeudet ja lisenssit',
   infoTitle: 'Oikeudet ja lisenssit info',
+  accessRights: 'Käyttöoikeudet',
   accessType: {
     title: 'Pääsyoikeus',
     infoText: `<p>Tällä tiedolla määrittelet, miten julkaistun aineiston tiedostot saa käyttöönsä.
@@ -17,14 +18,12 @@ const rightsAndLicenses = {
   embargoDate: {
     label: 'Embargo loppumispäivämäärä',
     placeholder: 'Päivämäärä',
-    help:
-      'Jos päivämäärää ei aseteta, embargo ei lopu ja näin ollen tiedostot eivät koskaan tule ladattavaksi.',
+    help: 'Jos päivämäärää ei aseteta, embargo ei lopu ja näin ollen tiedostot eivät koskaan tule ladattavaksi.',
   },
   restrictionGrounds: {
     title: 'Rajoituksen peruste',
     placeholder: 'Valitse vaihtoehto',
-    text:
-      'Jos pääsyoikeus on jokin muu kuin "Avoin", valitse peruste tiedostojen lataamisen rajoittamiselle.',
+    text: 'Jos pääsyoikeus on jokin muu kuin "Avoin", valitse peruste tiedostojen lataamisen rajoittamiselle.',
   },
   license: {
     title: 'Lisenssi',
@@ -37,6 +36,9 @@ const rightsAndLicenses = {
       help: 'Anna osoite lisenssille.',
     },
     addButton: 'Lisää lisenssi',
+  },
+  description: {
+    title: 'Käyttöoikeuksien kuvaus',
   },
 }
 

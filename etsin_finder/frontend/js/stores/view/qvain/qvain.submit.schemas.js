@@ -9,6 +9,10 @@ import { otherIdentifiersArraySchema } from './qvain.otherIdentifier'
 import { licenseArrayMetaxSchema } from './qvain.license'
 import { accessTypeMetaxSchema } from './qvain.accessType'
 import { restrictionGroundsMetaxSchema } from './qvain.restrictionGrounds'
+import {
+  accessRightsDescriptionDraftSchema,
+  accessRightsDescriptionSchema,
+} from './qvain.accessRightsDescription'
 import { metaxActorsSchema, metaxActorSchema, getRequiredMetaxActorSchema } from './qvain.actors'
 import {
   cumulativeStateSchema,
@@ -30,6 +34,7 @@ const accessRightsDraftSchema = yup
       then: restrictionGroundsMetaxSchema,
     }),
     available: embargoExpDateSchema,
+    description: accessRightsDescriptionDraftSchema,
   })
   .noUnknown()
 
@@ -43,6 +48,7 @@ const accessRightsSchema = yup
       then: restrictionGroundsMetaxSchema,
     }),
     available: embargoExpDateSchema,
+    description: accessRightsDescriptionSchema,
   })
   .noUnknown()
   .required('qvain.validationMessages.accessType.required')

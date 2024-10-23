@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
 import CreatableSelect from 'react-select/creatable'
 
-import { FieldGroup, Title, InfoText } from '@/components/qvain/general/V2'
+import { FieldGroup, TitleSmall, InfoText } from '@/components/qvain/general/V2'
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
 import {
   onChangeMulti,
@@ -67,10 +67,6 @@ export class License extends Component {
     this.client.abort()
   }
 
-  removeLicense = license => {
-    this.props.Stores.Qvain.Licenses.remove(license)
-  }
-
   validateLicenses = () => {
     const { storage, schema } = this.props.Stores.Qvain.Licenses
     const licenseErrors = {}
@@ -125,9 +121,9 @@ export class License extends Component {
 
     return (
       <FieldGroup data-cy="license-select">
-        <Title htmlFor="licenseSelect">
+        <TitleSmall htmlFor="licenseSelect">
           <Translate content="qvain.rightsAndLicenses.license.title" />
-        </Title>
+        </TitleSmall>
         <Translate
           component={CreatableSelect}
           inputId="licenseSelect"

@@ -5,7 +5,7 @@ import MockAdapter from 'axios-mock-adapter'
 import { configure } from 'mobx'
 import Select from 'react-select'
 
-import AccessType from '@/components/qvain/sections/DataOrigin/general/AccessType'
+import AccessType from '@/components/qvain/sections/DataOrigin/general/AccessRights/AccessType'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { buildStores } from '@/stores'
 import { onChange } from '@/components/qvain/utils/select'

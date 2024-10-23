@@ -1,4 +1,5 @@
 """Validation schemas for form data coming in from Qvain"""
+
 from marshmallow import (
     Schema,
     ValidationError,
@@ -143,6 +144,9 @@ class AccessRightsValidationSchema(Schema):
     """Access rights validation schema"""
 
     license = fields.List(fields.Nested(LicenseValidationSchema))
+    description = fields.Dict(
+        required=False, validate=lambda x: x.get("en") or x.get("fi")
+    )
     available = fields.Str()  # Embargo date
     restriction_grounds = fields.List(fields.Nested(ReferenceObjectValidationSchema))
     access_type = fields.Nested(ReferenceObjectValidationSchema, required=True)

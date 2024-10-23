@@ -1,7 +1,7 @@
 import translate from 'counterpart'
 import { expect } from 'chai'
 import Harness from '../componentTestHarness'
-import EmbargoExpires from '@/components/qvain/sections/DataOrigin/general/AccessType/EmbargoExpires'
+import EmbargoExpires from '@/components/qvain/sections/DataOrigin/general/AccessRights/AccessType/EmbargoExpires'
 import '../../../locale/translations'
 import DatePicker, { getDateFormatLocale } from '@/components/qvain/general/V2/Datepicker'
 import { useStores } from '@/stores/stores'

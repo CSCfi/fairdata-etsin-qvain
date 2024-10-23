@@ -32,7 +32,11 @@ const PublicationDetails = ({ Field }) => {
         translationsRoot={`${Field.translationsRoot}.publications`}
         isRequired
       />
-      <TranslationTab language={language} setLanguage={setLanguage}>
+      <TranslationTab
+        language={language}
+        setLanguage={setLanguage}
+        id="related-resource-title-and-description"
+      >
         <TabInput Field={Field} datum="name" language={language} translationsRoot={t} isRequired />
         <TabInput Field={Field} datum="description" language={language} translationsRoot={t} />
       </TranslationTab>

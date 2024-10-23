@@ -18,7 +18,12 @@ const DescriptionField = () => {
   const [activeLang, setActiveLang] = useState(getMatchingLang([titleValue, descriptionValue]))
 
   return (
-    <TranslationTab language={activeLang} setLanguage={setActiveLang} useTitleLanguages>
+    <TranslationTab
+      language={activeLang}
+      setLanguage={setActiveLang}
+      useTitleLanguages
+      id="title-and-description"
+    >
       <DescriptionFieldInput propName="title" fieldName="Title" activeLang={activeLang} />
       <DescriptionFieldTextField activeLang={activeLang} />
     </TranslationTab>

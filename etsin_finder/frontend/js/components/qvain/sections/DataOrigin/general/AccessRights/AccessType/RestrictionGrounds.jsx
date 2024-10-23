@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
-import { Title, InfoText, FieldGroup } from '@/components/qvain/general/V2'
+import { InfoText, FieldGroup, TitleSmall } from '@/components/qvain/general/V2'
 import Select from '@/components/qvain/general/V2/Select'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 import { useStores } from '@/stores/stores'
@@ -23,7 +23,7 @@ const RestrictionGrounds = () => {
   return (
     <FieldGroup data-cy="restriction-grounds-select">
       <Translate
-        component={Title}
+        component={TitleSmall}
         htmlFor="restrictionGrounds-select"
         content="qvain.rightsAndLicenses.restrictionGrounds.title"
       />

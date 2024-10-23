@@ -17,6 +17,7 @@ describe('TranslationsTab', () => {
       language: 'en',
       setLanguage: jest.fn(),
       children: <div></div>,
+      id: 'id',
     }
 
     beforeEach(() => {
@@ -31,7 +32,7 @@ describe('TranslationsTab', () => {
 
     describe('primary tab', () => {
       beforeEach(() => {
-        tab = wrapper.find('#tab-en')
+        tab = wrapper.find('#id-tab-en')
       })
 
       test('should exist', () => {
@@ -61,7 +62,7 @@ describe('TranslationsTab', () => {
 
     describe('secondary tab', () => {
       beforeEach(() => {
-        tab = wrapper.find('#tab-fi')
+        tab = wrapper.find('#id-tab-fi')
       })
 
       test('should exist', () => {

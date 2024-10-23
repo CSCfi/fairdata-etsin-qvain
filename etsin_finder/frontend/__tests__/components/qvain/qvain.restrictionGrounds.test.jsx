@@ -2,8 +2,8 @@ import Harness from '../componentTestHarness'
 import { expect } from 'chai'
 
 import { useStores } from '@/stores/stores'
-import RestrictionGrounds from '@/components/qvain/sections/DataOrigin/general/AccessType/RestrictionGrounds'
-import { Title } from '@/components/qvain/general/V2'
+import RestrictionGrounds from '@/components/qvain/sections/DataOrigin/general/AccessRights/AccessType/RestrictionGrounds'
+import { TitleSmall } from '@/components/qvain/general/V2'
 
 const mockStores = {
   Qvain: {
@@ -39,7 +39,7 @@ describe('given mockStores', () => {
 
     test('should render children with expected properties', () => {
       const children = [
-        { label: 'Label', findArgs: { component: Title } },
+        { label: 'Label', findArgs: { component: TitleSmall } },
         { label: 'Select', findArgs: { name: 'restrictionGrounds' } },
         {
           label: 'InfoText',

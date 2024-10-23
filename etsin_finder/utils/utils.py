@@ -201,9 +201,11 @@ def sort_array_of_obj_by_key(obj_array, obj_key, obj_nested_key=False):
     try:
         if obj_array and obj_key:
             obj_array.sort(
-                key=lambda x: x.get(obj_key, {}).get(obj_nested_key)
-                if obj_nested_key
-                else x.get(obj_key)
+                key=lambda x: (
+                    x.get(obj_key, {}).get(obj_nested_key)
+                    if obj_nested_key
+                    else x.get(obj_key)
+                )
             )
     except Exception:
         pass

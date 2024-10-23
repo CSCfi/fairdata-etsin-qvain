@@ -251,11 +251,7 @@ class Qvain extends Resources {
     this.newCumulativeState = this.cumulativeState
 
     // Load DOI
-    if (
-      (researchDataset.preferred_identifier &&
-        researchDataset.preferred_identifier.startsWith('doi')) ||
-      dataset.use_doi_for_published
-    ) {
+    if (researchDataset?.preferred_identifier?.startsWith('doi') || dataset.use_doi_for_published) {
       this.useDoi = true
     } else {
       this.useDoi = false
