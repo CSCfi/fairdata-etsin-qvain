@@ -48,7 +48,7 @@ const config = env => ({
       favicon: 'static/images/favicon.png',
     }),
     new ProvidePlugin({
-      process: 'process/browser',
+      process: 'process/browser.js',
     }),
     new DefinePlugin({
       BUILD: JSON.stringify(env.BUILD || process.env.NODE_ENV || 'production'),
