@@ -14,7 +14,6 @@ import { remote_resource_a } from '../refs/remote_resources.data'
 import { data_catalog_ida } from '../refs/data_catalogs.data'
 
 const dataset_open_a = {
-  state: 'draft',
   access_rights: access_rights_open_a,
   actors: [
     {
@@ -46,6 +45,10 @@ const dataset_open_a = {
     fi: 'Tällä aineistolla testataan kaikkia Etsimen aineistosivulta löytyviä kenttiä. Aineisto, Data, Tunnisteet ja Tapahtumat, sekä Kartat -välilehdet kuuluvat myös tähän testiin. Uusi versio tehtiin, jotta version valinta -painiketta voidaan testata.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
   },
   field_of_science: [field_of_science_cis],
+  first: null,
+  id: '4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0',
+  is_deprecated: false,
+  is_removed: false,
   issued: '2023-06-28',
   keyword: [
     'test',
@@ -56,20 +59,37 @@ const dataset_open_a = {
     'web-kehitys',
   ],
   language: [language_fi, language_en],
+  last: null,
   metadata_owner: { id: 3, user: { username: 'fd_user5' }, organization: 'csc.fi' },
+  modified: '2023-08-11T14:46:00.140339+03:00',
+  other_identifiers: [other_identifier_a],
   persistent_identifier: 'doi:10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5',
-  theme: [theme_a, theme_b],
-  title: { en: 'All Fields Test Dataset', fi: 'Kaikkien kenttien testiaineisto testi' },
+  previous: null,
+  projects: [
+    {
+      title: {
+        fi: 'Projekti',
+        en: 'Project',
+      },
+      project_identifier: 'abcd_1234',
+      participating_organizations: [organization_kone],
+    },
+  ],
   provenance: [provenance_a],
   relation: [relation_a],
+  remote_resources: [remote_resource_a],
+  removal_date: null,
+  replaces: null,
   spatial: [spatial_b, spatial_c],
-  other_identifiers: [other_identifier_a],
+  state: 'draft',
   temporal: [
     {
       start_date: '2023-09-20',
       end_date: '2023-11-25',
     },
   ],
+  theme: [theme_a, theme_b],
+  title: { en: 'All Fields Test Dataset', fi: 'Kaikkien kenttien testiaineisto testi' },
   remote_resources: [remote_resource_a],
   created: '2023-06-28T10:16:22+03:00',
   cumulative_state: 1,

@@ -7,8 +7,11 @@ import Provenances, { Provenance, ProvenanceModel } from '@/stores/view/qvain/qv
 jest.mock('uuid')
 jest.mock('mobx')
 
+const originalCer = console.error
+
 describe('Provenances', () => {
   let provenances
+  console.error = jest.fn()
 
   const Stores = buildStores()
   Stores.Qvain = {
@@ -16,7 +19,7 @@ describe('Provenances', () => {
     createLooseProvenancePromise: jest.fn(),
   }
   const Qvain = Stores.Qvain
-
+  console.error = originalCer
   beforeEach(() => {
     provenances = Stores.Qvain.Provenances
   })

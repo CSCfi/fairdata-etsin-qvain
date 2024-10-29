@@ -60,15 +60,13 @@ const MandatorySection = ({ children, title }) => (
 )
 
 const OptionalSection = ({ children, title, isExpanded, toggleExpanded }) => (
-  <>
-    <Card bottomContent={!isExpanded}>
-      <SectionTitle>
-        <ExpandCollapse type="button" isExpanded={isExpanded} onClick={toggleExpanded} />
-        <Translate content={title} onClick={toggleExpanded} />
-      </SectionTitle>
-      {isExpanded && <Content>{children}</Content>}
-    </Card>
-  </>
+  <Card bottomContent={!isExpanded}>
+    <SectionTitle>
+      <ExpandCollapse type="button" isExpanded={isExpanded} onClick={toggleExpanded} />
+      <Translate content={title} onClick={toggleExpanded} />
+    </SectionTitle>
+    {isExpanded && <Content>{children}</Content>}
+  </Card>
 )
 
 Section.propTypes = {

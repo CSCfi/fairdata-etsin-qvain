@@ -23,6 +23,7 @@ import AccessClass from './view/access'
 import SearchFiltersClass from './view/searchfilters'
 import MatomoClass from './tracking'
 import CrossRefClass from './view/qvain/qvain.crossRef'
+import OrgReferencesClass from './view/qvain/qvain.orgReferences.v3'
 
 export const buildStores = (options = {}) => {
   const Env = options.Env || new EnvClass()
@@ -38,7 +39,8 @@ export const buildStores = (options = {}) => {
   } else {
     QvainDatasets = new QvainDatasetsClass(Env, Locale)
   }
-  const Qvain = new QvainClass(Env, Auth)
+  const OrgReferences = new OrgReferencesClass(Env)
+  const Qvain = new QvainClass(Env, Auth, OrgReferences)
   const DatasetQuery = new DatasetQueryClass(Env, Access)
   const Etsin = new EtsinClass({ Env, Access, Accessibility, Locale })
   const Map = new MapClass(Locale)

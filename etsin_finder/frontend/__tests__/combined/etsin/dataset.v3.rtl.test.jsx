@@ -103,6 +103,7 @@ describe('Etsin dataset page', () => {
       Cite: 'Copy Citation/References',
       'Subject heading': 'software developmentweb pages',
       License: 'Other (Open)Creative Commons Attribution 4.0 International (CC BY 4.0)',
+      'Projects and Funding': 'Project',
       Access: 'Open',
       Publisher: 'Test org, Test dept',
       Curator: 'Kone Foundation',

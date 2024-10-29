@@ -112,8 +112,15 @@ test('it should list unsupported fields in dataset', () => {
       'curator.0.contributor_type.1.identifier',
       'http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Sponsor',
     ],
+    ['is_output_of.0.has_funding_agency.0.contributor_type', ''],
+    ['is_output_of.0.has_funding_agency.0.contributor_type.0', ''],
+    [
+      'is_output_of.0.has_funding_agency.0.contributor_type.0.identifier',
+      'http://uri.suomi.fi/codelist/fairdata/contributor_type/code/Editor',
+    ],
     ['is_output_of.0.has_funding_agency.0.telephone', ''],
     ['is_output_of.0.has_funding_agency.0.telephone.0', '+358501232233'],
+    ['is_output_of.0.name.en', 'Name of project'],
     ['is_output_of.0.source_organization.0.contributor_type', ''],
     ['is_output_of.0.source_organization.0.contributor_type.0', ''],
     [

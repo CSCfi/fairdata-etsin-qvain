@@ -8,6 +8,7 @@ import historyV2 from './qvain.historyV2'
 import home from './qvain.home'
 import nav from './qvain.nav'
 import projectV2 from './qvain.projectv2'
+import project from './qvain.project.v3'
 import publications from './qvain.publications'
 import rightsAndLicenses from './qvain.rightsAndLicenses'
 import validationMessages from './qvain.validationMessages'
@@ -131,6 +132,7 @@ const qvainEnglish = {
   home,
   nav,
   projectV2,
+  project,
   publications,
   rightsAndLicenses,
   validationMessages,

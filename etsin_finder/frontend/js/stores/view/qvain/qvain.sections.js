@@ -8,6 +8,7 @@ import TimePeriod from './sections/TimePeriod'
 import Infrastructure from './sections/Infrastructure'
 import History from './sections/History'
 import Project from './sections/Project'
+import Projects from './sections/Projects.v3'
 
 class Sections {
   constructor({ parent }) {
@@ -21,11 +22,12 @@ class Sections {
       TimePeriod: new TimePeriod(),
       Infrastructure: new Infrastructure(),
       History: new History(),
-      Project: new Project({ parent }),
+      Project: new Project({ parent }), // v2
+      Projects: new Projects({ parent }), // v3
     }
 
     for (const key in this.all) {
-      if ({}.hasOwnProperty.call(this.all, key)) {
+      if (Object.hasOwn(this.all, key)) {
         this[key] = this.all[key]
       }
     }

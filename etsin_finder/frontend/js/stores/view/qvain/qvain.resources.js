@@ -15,8 +15,8 @@ import IssuedDate from './qvain.issuedDate'
 import Keywords from './qvain.keyword'
 import Licenses from './qvain.license'
 import OtherIdentifiers from './qvain.otherIdentifier'
-import Projects from './qvain.project'
 import ProjectV2 from './qvain.projectV2'
+import { Projects } from './sections/qvain.projects.v3'
 import Provenances from './qvain.provenances'
 import RelatedResources from './qvain.relatedResources'
 import RestrictionGrounds from './qvain.restrictionGrounds'
@@ -26,8 +26,9 @@ import Temporals from './qvain.temporals'
 import Title from './qvain.title'
 
 class Resources {
-  constructor(Env) {
+  constructor(Env, OrgReferences) {
     this.Env = Env
+    this.OrgReferences = OrgReferences
     this.AccessRightsDescription = new AccessRightsDescription(this)
     this.AccessType = new AccessType(this)
     this.ActorsV2 = new Actors(this)

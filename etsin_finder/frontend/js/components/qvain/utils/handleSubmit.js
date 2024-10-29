@@ -28,7 +28,9 @@ const handleSubmitToBackend = Qvain => {
 
   const accessType = Qvain.AccessType.toBackend()
 
-  const projects = Qvain.ProjectV2.toBackend()
+  const projectsV2 = Qvain.ProjectV2.toBackend()
+
+  const projects = Qvain.Projects.adapter.toMetaxV3()
 
   const license = Qvain.Licenses.toBackend()
 
@@ -61,7 +63,7 @@ const handleSubmitToBackend = Qvain => {
     data_catalog: Qvain.dataCatalog,
     cumulative_state: Qvain.cumulativeState,
     use_doi: Qvain.useDoi,
-    is_output_of: projects,
+    is_output_of: projectsV2,
     spatial,
     temporal,
     relation,
@@ -93,6 +95,10 @@ const handleSubmitToBackend = Qvain => {
   if (Qvain.Files.useV3 && Qvain.Files.root?.directChildCount > 0) {
     // file additions, removals and metadata changes
     obj.data = Qvain.Files.actionsToMetax()
+  }
+
+  if (Qvain.Files.useV3) {
+    obj.projects = projects
   }
 
   if (Qvain.original) {

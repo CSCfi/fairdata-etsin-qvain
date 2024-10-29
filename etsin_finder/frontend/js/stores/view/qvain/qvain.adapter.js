@@ -222,6 +222,7 @@ class Adapter {
         remote_resources: this.remoteResourceV3ToV2(dataset.remote_resources),
         actors: this.actorV3ToV2(dataset.actors), // needs v3 actors store
         provenance: this.provenanceV3ToV2(dataset.provenance),
+        projects: dataset.projects, // shortcut to use projects as is
       },
       date_created: dataset.created,
       state: dataset.state,
@@ -352,6 +353,7 @@ class Adapter {
       temporal: this.temporalV2ToV3(dataset.temporal),
       remote_resources: this.remoteResourceV2ToV3(dataset.remote_resources),
       actors: dataset.actors, // conversion done in actors store
+      projects: dataset.projects,
       pid_type: dataset.use_doi ? 'DOI' : 'URN',
       cumulative_state: dataset.cumulative_state,
       bibliographic_citation: dataset.bibliographic_citation,

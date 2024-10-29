@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import { observer } from 'mobx-react'
 
 export const isAlreadyTranslated = children => {
   if (Array.isArray(children)) {
@@ -47,14 +48,15 @@ export const ValidationErrorList = styled.ul`
 `
 
 export const ValidationErrors = ({ errors }) => {
-  if (!errors || errors.length === 0) {
+  if (errors?.length === 0) {
     return null
   }
+
   return (
     <ValidationErrorList>
-      {errors.map(err => (
-        <Translate key={err} content={err} component={ValidationErrorItem} />
-      ))}
+      {errors.map(
+        err => err && <Translate key={err} content={err} component={ValidationErrorItem} />
+      )}
     </ValidationErrorList>
   )
 }
@@ -67,4 +69,4 @@ ValidationErrors.defaultProps = {
   errors: [],
 }
 
-export default ValidationError
+export default observer(ValidationError)

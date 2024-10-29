@@ -4,6 +4,7 @@ import { override, runInAction } from 'mobx'
 import Actors, { Organization, createActor } from './qvain.actors'
 import { ENTITY_TYPE } from '@/utils/constants'
 import symmetricDifference from '@/components/qvain/utils/symmetricDifference'
+import removeEmpty from '@/utils/removeEmpty'
 
 export const actorsSchemaV3 = yup.array().of(
   yup.object().shape({
@@ -34,23 +35,23 @@ class ActorsV3 extends Actors {
     const roles = actor.roles?.filter(v => v !== 'provenance')
     const obj = { id: actor.uiid, roles, person: null }
     if (actor.type === ENTITY_TYPE.PERSON && actor.person) {
-      obj.person = {
+      obj.person = removeEmpty({
         id: actor.person.uiid,
         name: actor.person.name,
         external_identifier: actor.person.identifier,
         email: actor.person.email || null,
-      }
+      })
     }
 
     for (const org of actor.organizations) {
-      const v3Org = {
+      const v3Org = removeEmpty({
         id: org.uiid,
         pref_label: org.name,
         external_identifier: org.identifier || null,
         url: org.url || null,
         email: org.email || null,
         homepage: org.homepage || null,
-      }
+      })
       obj.organization = {
         ...v3Org,
         parent: obj.organization,

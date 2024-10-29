@@ -9,29 +9,40 @@ import RelatedResources, {
 import { buildStores } from '@/stores'
 
 jest.mock('mobx')
+const origCer = console.error
 
 describe('RelatedResources', () => {
-  const Stores = buildStores()
-  const relatedResources = Stores.Qvain.RelatedResources
+  let Stores
+  let relatedResources
+
+  beforeAll(() => {
+    console.error = jest.fn()
+    Stores = buildStores()
+    relatedResources = Stores.Qvain.RelatedResources
+    console.error = origCer
+  })
 
   describe('given storage', () => {
-    const item = {
-      uiid: 1,
-      name: 'name',
-      description: 'description',
-      identifier: 'identifier',
-      entityType: { url: 'entityType' },
-      relationType: { url: 'relationType' },
-    }
+    let storage
+    beforeAll(() => {
+      const item = {
+        uiid: 1,
+        name: 'name',
+        description: 'description',
+        identifier: 'identifier',
+        entityType: { url: 'entityType' },
+        relationType: { url: 'relationType' },
+      }
 
-    const item2 = {
-      uiid: 2,
-      name: 'name2',
-      description: 'description2',
-      relationType: { url: 'relationType2' },
-    }
+      const item2 = {
+        uiid: 2,
+        name: 'name2',
+        description: 'description2',
+        relationType: { url: 'relationType2' },
+      }
 
-    const storage = [item, item2]
+      storage = [item, item2]
+    })
 
     beforeEach(() => {
       relatedResources.storage = storage

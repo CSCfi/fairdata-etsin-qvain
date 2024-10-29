@@ -23,8 +23,7 @@ import Actors from '@/components/qvain/sections/Actors'
 import DataOrigin from '@/components/qvain/sections/DataOrigin/'
 import Geographics from '@/components/qvain/sections/Geographics'
 import History from '@/components/qvain/sections/History'
-import Project from '@/components/qvain/sections/Project'
-import Files from '@/components/qvain/sections/DataOrigin/general/FilePicker'
+import ProjectV3 from '@/components/qvain/sections/ProjectV3'
 import { PageTitle } from '@/components/qvain/general/card'
 
 import { useStores } from '@/stores/stores'
@@ -163,7 +162,8 @@ describe('given haveDataset true', () => {
         { label: 'Actors', findArgs: Actors },
         { label: 'Geographics', findArgs: Geographics },
         { label: 'History', findArgs: History },
-        { label: 'Project', findArgs: Project },
+        //        { label: 'Project', findArgs: Project },
+        { label: 'ProjectV3', findArgs: ProjectV3 },
         { label: 'Consent', findType: 'prop', findArgs: ['content', 'qvain.consent'] },
         { label: 'BottomSubmitButtons', findArgs: SubmitButtons },
         { label: 'SkipToSubmitDataset', findArgs: SkipToSubmitDataset },

@@ -31,7 +31,6 @@ window.requestAnimationFrame = callback => setTimeout(callback, 0)
 describe('Qvain DatePicker', () => {
   const keys = []
   const onKeyDown = event => {
-    // console.log('here', event.key)
     keys.push(event.key)
   }
 

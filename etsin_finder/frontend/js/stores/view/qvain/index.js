@@ -18,11 +18,13 @@ import track, { touch } from './track'
 import queryParamEnabled from '@/utils/queryParamEnabled'
 import Adapter from './qvain.adapter'
 import remapActorIdentifiers from '@/utils/remapActorIdentifiers'
+import Modals from './structural/qvain.modal.v3'
 
 class Qvain extends Resources {
-  constructor(Env, Auth) {
-    super(Env)
+  constructor(Env, Auth, OrgReferences) {
+    super(Env, OrgReferences)
     makeObservable(this)
+    this.OrgReferences = OrgReferences
     this.Env = Env
     this.Auth = Auth
     this.ReferenceData = new ReferenceData(this)
@@ -33,6 +35,7 @@ class Qvain extends Resources {
     this.Adapter = new Adapter(this)
     this.resetQvainStore()
     this.Lock = new Lock(this, Auth)
+    this.Modals = new Modals()
   }
 
   @computed get Submit() {
@@ -73,7 +76,13 @@ class Qvain extends Resources {
     this.clearMetadataModalFile = undefined
 
     this.ExternalResources.reset()
-    this.resources.forEach(r => r.reset())
+    this.resources.forEach(r => {
+      if (r.constructor.name === 'Projects') {
+        r.controller.reset()
+      } else {
+        r.reset()
+      }
+    })
 
     this.useDoi = false
 
@@ -223,7 +232,14 @@ class Qvain extends Resources {
       researchDataset.preferred_identifier,
       researchDataset.total_files_byte_size
     )
-    this.resources.forEach(r => r.fromBackend(researchDataset, this, tracker))
+    this.resources.forEach(r => {
+      if (r.constructor.name === 'Projects') {
+        r.adapter.fromMetaxV3(researchDataset.projects)
+      } else {
+        r.fromBackend(researchDataset, this, tracker)
+      }
+    })
+
     this.unsupported = tracker.getUnused({ deep: true })
   }
 
@@ -386,8 +402,8 @@ class Qvain extends Resources {
 
   @computed
   get readonly() {
-    if (this.Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK') && this.Lock.enabled) {
-      if (this.original && !this.Lock.haveLock) {
+    if (this.Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK') && this.Lock?.enabled) {
+      if (this.original && !this.Lock?.haveLock) {
         return true
       }
     }
