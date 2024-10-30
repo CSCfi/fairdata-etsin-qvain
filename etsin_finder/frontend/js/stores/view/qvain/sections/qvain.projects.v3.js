@@ -39,7 +39,11 @@ class ParticipatingOrganizations extends ListModel {
     super()
     makeObservable(this)
 
-    this.adapter = new ListAdapter({ instance: this, Model: ParticipatingOrganization })
+    this.adapter = new ListAdapter({
+      instance: this,
+      Model: ParticipatingOrganization,
+      V3FieldName: 'participating_organizations',
+    })
     this.controller = new ListController({
       instance: this,
       Model: ParticipatingOrganization,
@@ -117,7 +121,7 @@ export class Projects extends ListModel {
   constructor(Qvain) {
     super()
 
-    this.adapter = new ListAdapter({ instance: this, Model: Project })
+    this.adapter = new ListAdapter({ instance: this, Model: Project, V3FieldName: 'projects' })
     this.controller = new ListModalController({
       instance: this,
       Qvain,

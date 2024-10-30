@@ -77,7 +77,7 @@ class Qvain extends Resources {
 
     this.ExternalResources.reset()
     this.resources.forEach(r => {
-      if (r.constructor.name === 'Projects') {
+      if (r.controller?.reset) {
         r.controller.reset()
       } else {
         r.reset()
@@ -233,8 +233,8 @@ class Qvain extends Resources {
       researchDataset.total_files_byte_size
     )
     this.resources.forEach(r => {
-      if (r.constructor.name === 'Projects') {
-        r.adapter.fromMetaxV3(researchDataset.projects)
+      if (r.adapter?.fromMetaxV3) {
+        r.adapter.fromMetaxV3(researchDataset[r.adapter.V3FieldName])
       } else {
         r.fromBackend(researchDataset, this, tracker)
       }

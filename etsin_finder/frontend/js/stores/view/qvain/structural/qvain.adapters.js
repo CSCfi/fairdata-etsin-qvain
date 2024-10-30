@@ -30,6 +30,8 @@ export class ListAdapter extends CommonAdapter {
   constructor(args) {
     super(args)
     makeObservable(this)
+    this.mandatoryArgs = [...this.mandatoryArgs, 'V3FieldName']
+    this.attachMandatoryArgs(args)
   }
 
   @action.bound fromMetaxV3(data) {
