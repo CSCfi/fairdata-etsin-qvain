@@ -226,7 +226,7 @@ class Adapter {
       },
       date_created: dataset.created,
       state: dataset.state,
-      use_doi_for_published: dataset.pid_type === 'DOI',
+      use_doi_for_published: dataset.generate_pid_on_publish === 'DOI',
       draft_of: this.relatedDraftV3ToV2(dataset.draft_of),
       next_draft: this.relatedDraftV3ToV2(dataset.next_draft),
       cumulative_state: dataset.cumulative_state,
@@ -354,7 +354,7 @@ class Adapter {
       remote_resources: this.remoteResourceV2ToV3(dataset.remote_resources),
       actors: dataset.actors, // conversion done in actors store
       projects: dataset.projects,
-      pid_type: dataset.use_doi ? 'DOI' : 'URN',
+      generate_pid_on_publish: dataset.use_doi ? 'DOI' : 'URN',
       cumulative_state: dataset.cumulative_state,
       bibliographic_citation: dataset.bibliographic_citation,
     }

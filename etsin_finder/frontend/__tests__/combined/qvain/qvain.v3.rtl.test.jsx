@@ -249,7 +249,7 @@ describe('Qvain with an opened dataset', () => {
 
     // fields missing from original that may be added to submit data
     const expectedExtra = [
-      'pid_type', // determined from use_doi_for_published
+      'generate_pid_on_publish',
       'title.sv',
       'description.sv',
       /\.und$/,
