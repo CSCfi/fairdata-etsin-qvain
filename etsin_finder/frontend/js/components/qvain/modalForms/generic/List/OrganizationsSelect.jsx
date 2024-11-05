@@ -8,9 +8,9 @@ import { useStores } from '@/stores/stores'
 import Button from '@/components/general/button'
 import { OrgSelectComponent as Select } from '@/components/qvain/general/V3/CommonOrgComponents'
 import { InfoText } from '@/components/qvain/general/V2'
-import { ValidationErrors } from '../../general/errors'
+import { ValidationErrors } from '@/components/qvain/general/errors'
 
-const OrgSelect = ({ fieldName, organizations, saveCallback }) => {
+const OrganizationsSelect = ({ fieldName, organizations, saveCallback }) => {
   const {
     Qvain: { readonly },
   } = useStores()
@@ -95,13 +95,13 @@ const OrgSelect = ({ fieldName, organizations, saveCallback }) => {
   )
 }
 
-OrgSelect.propTypes = {
+OrganizationsSelect.propTypes = {
   fieldName: PropTypes.string.isRequired,
   organizations: PropTypes.object.isRequired,
   saveCallback: PropTypes.func,
 }
 
-OrgSelect.defaultProps = {
+OrganizationsSelect.defaultProps = {
   saveCallback: () => {},
 }
 
@@ -114,4 +114,4 @@ const Divider = styled.div`
   padding: 8px 0px;
 `
 
-export default observer(OrgSelect)
+export default observer(OrganizationsSelect)

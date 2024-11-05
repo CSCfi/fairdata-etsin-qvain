@@ -15,11 +15,14 @@ class ModalController extends CommonController {
 
   @override set(args) {
     this.controller.set(args)
-    this.hasChanged = true
   }
 
   @action.bound reset() {
     this.controller.reset()
+  }
+
+  @action.bound setHasChanged(value = true) {
+    this.hasChanged = value
   }
 }
 

@@ -34,7 +34,8 @@ export class CommonController {
           }
         )
       } catch (e) {
-        this.instance.validationError[fieldName] = e.message
+        if (e instanceof ValidationError) this.instance.validationError[fieldName] = e.message
+        else throw e
       }
     else if (this.instance.schema)
       Object.entries(this.instance.schema)?.forEach(([key, value]) => {
@@ -64,7 +65,7 @@ export class ListController extends CommonController {
     this.attachMandatoryArgs(args)
 
     if (!('inEdit' in this.instance)) {
-      console.error(this.instance.prototype.name, 'instance is missing inEdit property')
+      console.error(this.instance.constructor.name, 'Class is missing inEdit property')
     }
   }
 
@@ -82,6 +83,10 @@ export class ListController extends CommonController {
     }
 
     this.create()
+  }
+
+  @action.bound edit(itemId) {
+    this.instance.inEdit = this.instance.storage.find(i => i.itemId === itemId).clone()
   }
 
   @action.bound create() {

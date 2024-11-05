@@ -12,18 +12,11 @@ const project = {
       editSave: 'Apply changes',
       cancel: 'Cancel',
     },
-    funding: {
-      addButton: 'Add Funding',
+    section: {
       title: {
-        add: 'Add funding',
-        edit: 'Edit funding',
+        funding: 'Funding',
+        project: 'Project details',
       },
-    },
-  },
-  section: {
-    title: {
-      funding: 'Funding',
-      project: 'Project details',
     },
   },
   fields: {
@@ -76,7 +69,7 @@ const project = {
               infoText: 'Project funding type',
             },
             organization: {
-              title: 'Funder organization',
+              label: 'Funder organization',
               infoText: 'Organization that funds the project',
               organization: {
                 infoText: 'Organization',

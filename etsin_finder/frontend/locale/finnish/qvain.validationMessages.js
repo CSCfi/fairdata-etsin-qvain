@@ -153,6 +153,11 @@ const validationMessages = {
         identifier: 'Organisaation rooli on pakollinen tieto.',
       },
     },
+    funding: {
+      max:
+        'Qvain tukee tällä hetkellä ainoastaan yhden rahoituksen lisäämistä projektia kohden.' +
+        ' Usean rahoituksen tuki tullaan lisäämään lähitulevaisuudessa.',
+    },
   },
   temporalAndSpatial: {
     spatial: {

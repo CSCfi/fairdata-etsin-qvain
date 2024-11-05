@@ -16,7 +16,7 @@ import {
 } from '@/components/qvain/general/V2'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 
-const TabInput = ({ language, fieldName, item, isRequired }) => {
+const TabInput = ({ language, fieldName, item, changeCallback, isRequired }) => {
   const {
     Qvain: { readonly },
   } = useStores()
@@ -30,6 +30,7 @@ const TabInput = ({ language, fieldName, item, isRequired }) => {
 
   const handleChange = event => {
     set({ fieldName, value: { ...value, [language]: event.target.value } })
+    changeCallback()
   }
 
   const translations = language
@@ -73,12 +74,14 @@ const TabInput = ({ language, fieldName, item, isRequired }) => {
 TabInput.propTypes = {
   item: PropTypes.object.isRequired,
   fieldName: PropTypes.string.isRequired,
-  isRequired: PropTypes.bool,
   language: PropTypes.string.isRequired,
+  changeCallback: PropTypes.func,
+  isRequired: PropTypes.bool,
 }
 
 TabInput.defaultProps = {
   isRequired: false,
+  changeCallback: () => {},
 }
 
 const TabError = styled(ValidationError)`

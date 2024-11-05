@@ -45,12 +45,17 @@ const testProjectPayload = {
   title: { fi: 'projekti' },
   project_identifier: 'abcd-1234',
   participating_organizations: [org, otherOrg],
-}
-
-const expectedTestProjectPayload = {
-  title: { fi: 'projekti' },
-  project_identifier: 'abcd-1234',
-  participating_organizations: [expectedResultOrg, expectedResultOtherOrg],
+  funding: [
+    {
+      funding_identifier: 'https://abcd-1234',
+      funder: {
+        organization: fullOrg,
+        funder_type: {
+          url: 'http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes-shok',
+        },
+      },
+    },
+  ],
 }
 
 describe('projects', () => {
@@ -79,6 +84,8 @@ describe('projects', () => {
     expect(inEdit.isNew).toBe(true)
     inEdit.controller.set({ fieldName: 'title', value: title })
     inEdit.controller.set({ fieldName: 'project_identifier', value: project_identifier })
+
+    inEdit.controller.setHasChanged()
     expect(inEdit.controller.hasChanged).toBe(true)
 
     // save
@@ -99,7 +106,6 @@ describe('projects', () => {
 
     expect(inEdit.controller.hasChanged).toBe(false)
     inEdit.controller.set({ fieldName: 'project_identifier', value: new_project_identifier })
-    expect(inEdit.controller.hasChanged).toBe(true)
     expect(inEdit.project_identifier).toEqual(new_project_identifier)
 
     // save

@@ -151,6 +151,9 @@ const validationMessages = {
         identifier: 'The role is required.',
       },
     },
+    funding: {
+      max: 'Qvain supports only one funding per project. Multiple fund support will be added later on.',
+    },
   },
   temporalAndSpatial: {
     spatial: {

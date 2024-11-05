@@ -14,7 +14,7 @@ import {
 import ValidationError from '@/components/qvain/general/errors/validationError'
 import { useStores } from '@/stores/stores'
 
-const ModalInput = ({ fieldName, item, type, isRequired }) => {
+const ModalInput = ({ fieldName, item, type, isRequired, changeCallback }) => {
   const {
     Qvain: { readonly },
   } = useStores()
@@ -31,7 +31,10 @@ const ModalInput = ({ fieldName, item, type, isRequired }) => {
     infoText: `${translationPath}.fields.${fieldName}.infoText`,
   }
 
-  const handleChange = event => set({ fieldName, value: event.target.value })
+  const handleChange = event => {
+    set({ fieldName, value: event.target.value })
+    changeCallback()
+  }
 
   return (
     <FieldGroup>
@@ -60,11 +63,13 @@ ModalInput.propTypes = {
   fieldName: PropTypes.string.isRequired,
   type: PropTypes.string,
   isRequired: PropTypes.bool,
+  changeCallback: PropTypes.func,
 }
 
 ModalInput.defaultProps = {
   isRequired: false,
   type: 'text',
+  changeCallback: () => {},
 }
 
 export const ModalError = styled(ValidationError)`

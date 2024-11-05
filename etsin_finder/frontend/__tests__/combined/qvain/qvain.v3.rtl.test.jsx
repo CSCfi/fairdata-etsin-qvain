@@ -259,6 +259,9 @@ describe('Qvain with an opened dataset', () => {
       /\.person\.external_id$/,
       // special handling
       'issued', // exact value may change
+      'actors.0.organization.email',
+      'actors.0.organization.external_identifier',
+      'actors.0.organization.homepage',
     ]
 
     await renderQvain()

@@ -8,10 +8,10 @@ import {
   ButtonLabel,
   DeleteButton,
   ListItemButtonContainer,
-} from '../../general/V2/buttons'
+} from '@/components/qvain/general/V2/buttons'
 import { useStores } from '@/stores/stores'
 
-const ModalList = ({ model, disableNoItemsText }) => {
+const ModalList = ({ model, disableNoItemsText, changeCallback }) => {
   const {
     Locale: { getValueTranslation },
     Qvain: { readonly },
@@ -36,7 +36,10 @@ const ModalList = ({ model, disableNoItemsText }) => {
           <Translate
             component={DeleteButton}
             type="button"
-            onClick={() => remove(item.itemId)}
+            onClick={() => {
+              remove(item.itemId)
+              changeCallback()
+            }}
             attribute={{ 'aria-label': 'qvain.general.buttons.remove' }}
           />
         )}
@@ -48,10 +51,12 @@ const ModalList = ({ model, disableNoItemsText }) => {
 ModalList.propTypes = {
   model: PropTypes.object.isRequired,
   disableNoItemsText: PropTypes.bool,
+  changeCallback: PropTypes.func,
 }
 
 ModalList.defaultProps = {
   disableNoItemsText: false,
+  changeCallback: () => {},
 }
 
 export const FieldListContainer = styled(ButtonGroup)`

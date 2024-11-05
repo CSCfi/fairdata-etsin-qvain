@@ -30,6 +30,114 @@ const participatingOrganizationsSchema = array()
   .min(1, 'qvain.validationMessages.projects.organization.min')
   .required('qvain.validationMessages.projects.organization.min')
 
+// max validation is just for the transitional phase. Later on there is no limit how many funds project can have.
+const fundingSchema = array().max(1, 'qvain.validationMessages.projects.funding.max').nullable()
+
+const accessTypeSchema = object().shape({
+  url: string().required('qvain.validationMessages.projects.funding.funder.access_type.required'),
+})
+
+const funderSchema = object().shape({
+  access_type: mixed().when('organization', {
+    is: val => Object.values(val.pref_label).filter(v => v).length,
+    then: accessTypeSchema.nullable(),
+    otherwise: accessTypeSchema.required(),
+  }),
+  organization: object(),
+})
+
+export class FunderOrganization extends Organization {
+  constructor() {
+    super({ fieldName: 'organization' })
+  }
+
+  translationPath = 'qvain.project.fields.funding.fields.funder.fields.organization'
+}
+
+export class FunderAdapter extends CommonAdapter {
+  constructor(args) {
+    super(args)
+    makeObservable(this)
+  }
+
+  @action.bound toMetaxV3() {
+    return {
+      funder_type: this.instance.funder_type,
+      organization: this.instance.organization.adapter.toMetaxV3(),
+    }
+  }
+
+  @action.bound fromMetaxV3(data) {
+    this.instance.funder_type = data?.funder_type
+    this.instance.organization = new FunderOrganization()
+    this.instance.organization.adapter.fromMetaxV3(data?.organization)
+  }
+}
+
+export class Funder extends CommonModel {
+  constructor() {
+    super()
+    makeObservable(this)
+
+    this.adapter = new FunderAdapter({ instance: this, Model: Funder })
+    this.controller = new CommonController({ instance: this, Model: Funder })
+  }
+
+  translationPath = 'qvain.project.fields.funding.fields.funder'
+
+  @observable funder_type = null
+
+  @observable organization = new FunderOrganization()
+}
+
+export class FundAdapter extends CommonAdapter {
+  constructor(args) {
+    super(args)
+    makeObservable(this)
+  }
+
+  @action.bound toMetaxV3() {
+    // Qvain supports only one funding per project for now
+    return [
+      {
+        funding_identifier: this.instance.funding_identifier,
+        funder: this.instance.funder.adapter.toMetaxV3(),
+      },
+    ]
+  }
+
+  @action.bound fromMetaxV3(data) {
+    this.instance.funding_identifier = data[0]?.funding_identifier || ''
+    this.instance.funder = new Funder()
+    this.instance.funder.adapter.fromMetaxV3(data[0]?.funder)
+  }
+}
+
+export class Fund extends CommonModel {
+  constructor() {
+    super()
+    makeObservable(this)
+    this.controller = new CommonController({ instance: this })
+    this.adapter = new FundAdapter({ instance: this, Model: this })
+    this.validationError = {
+      funding_identifier: '',
+      funder: '',
+    }
+    this.schema = {
+      funding_identifier: projectIdentifierSchema,
+      funder: funderSchema,
+    }
+  }
+
+  translationPath = 'qvain.project.fields.funding'
+
+  @observable funding_identifier = ''
+
+  @observable funder = new Funder()
+
+  @observable validationError
+}
+
 export class ParticipatingOrganization extends Organization {
   translationPath = 'qvain.project.fields.participating_organizations'
 }
@@ -71,6 +179,8 @@ class ProjectAdapter extends CommonAdapter {
     this.instance.project_identifier = data.project_identifier
     this.instance.participating_organizations = new ParticipatingOrganizations()
     this.instance.participating_organizations.adapter.fromMetaxV3(data.participating_organizations)
+    this.instance.funding = new Fund()
+    this.instance.funding.adapter.fromMetaxV3(data.funding)
   }
 
   @action.bound toMetaxV3() {
@@ -78,6 +188,7 @@ class ProjectAdapter extends CommonAdapter {
       title: this.instance.title,
       project_identifier: this.instance.project_identifier,
       participating_organizations: this.instance.participating_organizations.adapter.toMetaxV3(),
+      funding: this.instance.funding.adapter.toMetaxV3(),
     }
   }
 }
@@ -96,11 +207,13 @@ export class Project extends CommonModel {
       title: titleSchema,
       project_identifier: projectIdentifierSchema,
       participating_organizations: participatingOrganizationsSchema,
+      funding: fundingSchema,
     }
     this.validationError = {
       title: '',
       project_identifier: '',
       participating_organizations: '',
+      funding: '',
     }
   }
 
@@ -111,6 +224,8 @@ export class Project extends CommonModel {
   @observable project_identifier = ''
 
   @observable participating_organizations = new ParticipatingOrganizations()
+
+  @observable funding = new Fund()
 
   getLabel() {
     return this.title

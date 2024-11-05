@@ -56,6 +56,10 @@ export class OrganizationAdapter extends CommonAdapter {
   @action.bound fromMetaxV3(data) {
     const fields = ['organization', 'department', 'subdepartment']
 
+    if (!data) {
+      return
+    }
+
     let depth = 0
     if (data.parent) depth += 1
     if (data.parent?.parent) depth += 1

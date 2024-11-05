@@ -23,210 +23,212 @@ import Spinner from '@/components/etsin/general/spinner'
  * Internally used select component with form for adding organization manually.
  * This is a stateless component.
  */
-export const OrgSelectComponent = observer(({ selectId, org, settings, section }) => {
-  const {
-    Locale: { getValueTranslation },
-    Qvain: { OrgReferences, readonly },
-  } = useStores()
+export const OrgSelectComponent = observer(
+  ({ selectId, org, settings, section, changeCallback }) => {
+    const {
+      Locale: { getValueTranslation },
+      Qvain: { OrgReferences, readonly },
+    } = useStores()
 
-  const parentSection = {
-    organization: null,
-    department: 'organization',
-    subdepartment: 'department',
-  }[section]
+    const parentSection = {
+      organization: null,
+      department: 'organization',
+      subdepartment: 'department',
+    }[section]
 
-  // Eslint suggests using useMemo but with it parent won't update after parent change
-  // eslint-disable-next-line
-  const parent = parentSection ? org[parentSection] : { id: '' }
+    // Eslint suggests using useMemo but with it parent won't update after parent change
+    // eslint-disable-next-line
+    const parent = parentSection ? org[parentSection] : { id: '' }
 
-  useEffect(() => {
-    const fetchOrgs = async () => {
-      if (parent === null) return
-      if (
-        !OrgReferences.loading.organizations[parent.id] &&
-        !OrgReferences.data.organizations[parent.id]
-      ) {
-        OrgReferences.fetchOrganizations(parent)
+    useEffect(() => {
+      const fetchOrgs = async () => {
+        if (parent === null) return
+        if (
+          !OrgReferences.loading.organizations[parent.id] &&
+          !OrgReferences.data.organizations[parent.id]
+        ) {
+          OrgReferences.fetchOrganizations(parent)
+        }
       }
-    }
-    fetchOrgs()
-  }, [OrgReferences, parent])
+      fetchOrgs()
+    }, [OrgReferences, parent])
 
-  /**
-   * Open form if add manually is selected.
-   *
-   * @param {Object} option Selected option
-   */
-  const onSelectChange = option => {
-    if (option.value === 'create') {
-      org.controller.setSection({
-        section,
-        value: {
-          url: '',
-          pref_label: { und: '' },
-          email: '',
-          external_identifier: '',
-          isReference: false,
-        },
-      })
-    } else org.controller.setSection({ section, value: { ...option, isReference: true } })
-  }
-
-  const onReset = () =>
-    org.controller.setSection({ section, value: { pref_label: { und: '' }, isReference: true } })
-
-  /**
-   * Craft payload for onChange, based on organization form.
-   */
-  const onFormChange = event => {
-    const newValue = event.target.value
-    const newName = event.target.name
-
-    switch (newName) {
-      case 'name': {
-        org.controller.set({
+    /**
+     * Open form if add manually is selected.
+     *
+     * @param {Object} option Selected option
+     */
+    const onSelectChange = option => {
+      if (option.value === 'create') {
+        org.controller.setSection({
           section,
-          fieldName: 'pref_label',
-          value: { fi: newValue, en: newValue, und: newValue },
+          value: {
+            url: '',
+            pref_label: { und: '' },
+            email: '',
+            external_identifier: '',
+            isReference: false,
+          },
         })
-        break
-      }
-      case 'email': {
-        org.controller.set({ section, fieldName: 'email', value: newValue })
-        break
-      }
-      case 'external_identifier': {
-        org.controller.set({ section, fieldName: 'external_identifier', value: newValue })
-        break
-      }
-      default:
-        break
-    }
-  }
-
-  /**
-   * Add option for adding organization manually
-   * if props has creatable set to true.
-   */
-  const getOptions = () => {
-    const options = []
-    const optionCreate = {
-      label: t('qvain.organizationSelect.label.addNew'),
-      options: [
-        { value: 'create', pref_label: { und: t('qvain.organizationSelect.label.addNew') } },
-      ],
+      } else org.controller.setSection({ section, value: { ...option, isReference: true } })
+      changeCallback()
     }
 
-    if (settings.creatable) options.push(optionCreate)
+    const onReset = () =>
+      org.controller.setSection({ section, value: { pref_label: { und: '' }, isReference: true } })
 
-    if (OrgReferences.data.organizations[parent.id]?.length) {
-      options.push({
-        label: t('qvain.actors.add.organization.options.presets'),
-        options: OrgReferences.data.organizations[parent.id]
-          .slice()
-          .sort((a, b) => getValueTranslation(a.pref_label) > getValueTranslation(b.pref_label)),
-      })
+    /**
+     * Craft payload for onChange, based on organization form.
+     */
+    const onFormChange = event => {
+      const newValue = event.target.value
+      const newName = event.target.name
+
+      switch (newName) {
+        case 'name': {
+          org.controller.set({
+            section,
+            fieldName: 'pref_label',
+            value: { fi: newValue, en: newValue, und: newValue },
+          })
+          break
+        }
+        case 'email': {
+          org.controller.set({ section, fieldName: 'email', value: newValue })
+          break
+        }
+        case 'external_identifier': {
+          org.controller.set({ section, fieldName: 'external_identifier', value: newValue })
+          break
+        }
+        default:
+          break
+      }
     }
 
-    return options
-  }
+    /**
+     * Add option for adding organization manually
+     * if props has creatable set to true.
+     */
+    const getOptions = () => {
+      const options = []
+      const optionCreate = {
+        label: t('qvain.organizationSelect.label.addNew'),
+        options: [
+          { value: 'create', pref_label: { und: t('qvain.organizationSelect.label.addNew') } },
+        ],
+      }
 
-  /**
-   * Select option will have an additional form is open property
-   * if organization for should be visible.
-   */
+      if (settings.creatable) options.push(optionCreate)
 
-  if (OrgReferences.loading.organizations[parent.id]) return <Spinner />
+      if (OrgReferences.data.organizations[parent.id]?.length) {
+        options.push({
+          label: t('qvain.actors.add.organization.options.presets'),
+          options: OrgReferences.data.organizations[parent.id]
+            .slice()
+            .sort((a, b) => getValueTranslation(a.pref_label) > getValueTranslation(b.pref_label)),
+        })
+      }
 
-  const renderForm = () => {
-    if (org[section].isReference) return null
+      return options
+    }
+
+    /**
+     * Select option will have an additional form is open property
+     * if organization for should be visible.
+     */
+
+    if (OrgReferences.loading.organizations[parent.id]) return <Spinner />
+
+    const renderForm = () => {
+      if (org[section].isReference) return null
+      return (
+        <AddOptionContainer>
+          <Translate component={FieldLabel} content="qvain.organizationSelect.label.addNew" />
+          <Divider />
+          <FieldGroup>
+            <Translate component={Title} content="qvain.organizationSelect.label.name" />
+            <Translate
+              component={Input}
+              value={org[section].pref_label.und}
+              onChange={onFormChange}
+              onBlur={() => org.controller.validate(section)}
+              name="name"
+              id={`${selectId}-name`}
+              placeholder=""
+            />
+            <RequiredText />
+            <Translate component={InfoText} content={'qvain.organizationSelect.infoText.name'} />
+          </FieldGroup>
+          <FieldGroup>
+            <Translate component={Title} content="qvain.organizationSelect.label.email" />
+            <Translate
+              component={Input}
+              value={org[section].email}
+              onChange={onFormChange}
+              onBlur={() => org.controller.validate(section)}
+              name="email"
+              id={`${selectId}-email`}
+              placeholder=""
+            />
+            <Translate component={InfoText} content={'qvain.organizationSelect.infoText.email'} />
+          </FieldGroup>
+          <FieldGroup>
+            <Translate component={Title} content="qvain.organizationSelect.label.identifier" />
+            <Translate
+              component={Input}
+              value={org[section].external_identifier}
+              onChange={onFormChange}
+              onBlur={() => org.controller.validate(section)}
+              name="external_identifier"
+              id={`${selectId}-external_identifier`}
+              placeholder=""
+            />
+            <Translate
+              component={InfoText}
+              content={'qvain.organizationSelect.infoText.identifier'}
+            />
+          </FieldGroup>
+        </AddOptionContainer>
+      )
+    }
     return (
-      <AddOptionContainer>
-        <Translate component={FieldLabel} content="qvain.organizationSelect.label.addNew" />
-        <Divider />
-        <FieldGroup>
-          <Translate component={Title} content="qvain.organizationSelect.label.name" />
+      <>
+        <OrgItemContainer>
           <Translate
-            component={Input}
-            value={org[section].pref_label.und}
-            onChange={onFormChange}
-            onBlur={() => org.controller.validate(section)}
-            name="name"
-            id={`${selectId}-name`}
+            component={StyledSelect}
+            name={`${selectId}-${section}`}
+            inputId={`${selectId}-${section}`}
+            isDisabled={readonly}
+            onChange={onSelectChange}
+            getOptionLabel={option => getValueTranslation(option?.pref_label) || ''}
+            getOptionValue={option => option?.url || option?.pref_label || ''}
+            value={org[section]}
+            className="basic-single"
+            classNamePrefix="select"
+            options={getOptions()}
             placeholder=""
+            menuShouldScrollIntoView={false}
+            menuPlacement="auto"
+            menuPosition="fixed"
+            attributes={{
+              'aria-label': `${org.translationPath}.${section}.aria`,
+            }}
+            ariaAutocomplete="list"
           />
-          <RequiredText />
-          <Translate component={InfoText} content={'qvain.organizationSelect.infoText.name'} />
-        </FieldGroup>
-        <FieldGroup>
-          <Translate component={Title} content="qvain.organizationSelect.label.email" />
-          <Translate
-            component={Input}
-            value={org[section].email}
-            onChange={onFormChange}
-            onBlur={() => org.controller.validate(section)}
-            name="email"
-            id={`${selectId}-email`}
-            placeholder=""
-          />
-          <Translate component={InfoText} content={'qvain.organizationSelect.infoText.email'} />
-        </FieldGroup>
-        <FieldGroup>
-          <Translate component={Title} content="qvain.organizationSelect.label.identifier" />
-          <Translate
-            component={Input}
-            value={org[section].external_identifier}
-            onChange={onFormChange}
-            onBlur={() => org.controller.validate(section)}
-            name="external_identifier"
-            id={`${selectId}-external_identifier`}
-            placeholder=""
-          />
-          <Translate
-            component={InfoText}
-            content={'qvain.organizationSelect.infoText.identifier'}
-          />
-        </FieldGroup>
-      </AddOptionContainer>
+          {settings.allowReset && !readonly ? (
+            <DeleteButton
+              type="button"
+              onClick={onReset}
+              style={{ margin: '0 0 0 .25rem', height: 38 }}
+            />
+          ) : null}
+        </OrgItemContainer>
+        {renderForm()}
+      </>
     )
   }
-
-  return (
-    <>
-      <OrgItemContainer>
-        <Translate
-          component={StyledSelect}
-          name={`${selectId}-${section}`}
-          inputId={`${selectId}-${section}`}
-          isDisabled={readonly}
-          onChange={onSelectChange}
-          getOptionLabel={option => getValueTranslation(option?.pref_label) || ''}
-          getOptionValue={option => option?.url || option?.pref_label || ''}
-          value={org[section]}
-          className="basic-single"
-          classNamePrefix="select"
-          options={getOptions()}
-          placeholder=""
-          menuShouldScrollIntoView={false}
-          menuPlacement="auto"
-          menuPosition="fixed"
-          attributes={{
-            'aria-label': `${org.translationPath}.${section}.aria`,
-          }}
-          ariaAutocomplete="list"
-        />
-        {settings.allowReset && !readonly ? (
-          <DeleteButton
-            type="button"
-            onClick={onReset}
-            style={{ margin: '0 0 0 .25rem', height: 38 }}
-          />
-        ) : null}
-      </OrgItemContainer>
-      {renderForm()}
-    </>
-  )
-})
+)
 
 const StyledSelect = styled(ReactSelect)`
   flex-grow: 1;
@@ -240,6 +242,7 @@ OrgSelectComponent.propTypes = {
     allowReset: PropTypes.bool,
   }),
   section: PropTypes.string.isRequired,
+  changeCallback: PropTypes.func,
 }
 
 OrgSelectComponent.defaultProps = {
@@ -248,6 +251,7 @@ OrgSelectComponent.defaultProps = {
     creatable: true,
     allowReset: false,
   },
+  changeCallback: () => {},
 }
 
 export const SelectContainer = styled.div`

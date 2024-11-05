@@ -3,13 +3,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
-import ModalList from '@/components/qvain/modalForms/generic/ModalList.v3'
 import { Title, FieldGroup } from '@/components/qvain/general/V2'
 import { ValidationError } from '@/components/qvain/general/errors'
 import { BoxedContainer } from '@/components/qvain/general/V3/CommonOrgComponents'
-import OrganizationSelect from './OrganizationSelect'
+import OrganizationsSelect from './OrganizationsSelect'
+import ModalList from './ModalList.v3'
 
-const OrganizationField = ({ fieldName, item }) => {
+const OrganizationsField = ({ fieldName, item, changeCallback }) => {
   const {
     [fieldName]: organizations,
     validationError,
@@ -23,11 +23,14 @@ const OrganizationField = ({ fieldName, item }) => {
         <FieldGroup>
           <Translate component={Title} content={`${translationPath}.title`} />
           <Translate component="p" content={`${translationPath}.infoText`} />
-          <ModalList model={organizations} />
-          <OrganizationSelect
+          <ModalList model={organizations} changeCallback={changeCallback} />
+          <OrganizationsSelect
             fieldName={fieldName}
             organizations={organizations}
-            saveCallback={() => validate(fieldName)}
+            saveCallback={() => {
+              validate(fieldName)
+              changeCallback()
+            }}
           />
           {validationError[fieldName] && (
             <ValidationError>{validationError[fieldName]}</ValidationError>
@@ -38,9 +41,13 @@ const OrganizationField = ({ fieldName, item }) => {
   )
 }
 
-OrganizationField.propTypes = {
+OrganizationsField.propTypes = {
   item: PropTypes.object.isRequired,
   fieldName: PropTypes.string.isRequired,
+  changeCallback: PropTypes.func,
 }
 
-export default observer(OrganizationField)
+OrganizationsField.defaultProps = {
+  changeCallback: () => {},
+}
+export default observer(OrganizationsField)

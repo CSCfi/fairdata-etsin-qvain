@@ -8,43 +8,56 @@ import Select from '../../general/V2/Select'
 import { Title, FieldGroup, InfoText, Required, RequiredText } from '../../general/V2/index'
 
 const ModalReferenceInput = ({
-  field,
+  item,
+  fieldName,
   options: { isSearch, isRequired, isMulti, isClearable },
+  changeCallback,
 }) => {
-  const setValue = value => field.set({ value })
+  const {
+    controller: { set },
+    [fieldName]: value,
+    translationPath,
+  } = item
+
+  const setValue = v => {
+    set({ value: v, fieldName })
+    changeCallback()
+  }
   const translations = {
-    label: `${field.translationPath}.label`,
-    infoText: `${field.translationPath}.infoText`,
+    label: `${translationPath}.fields.${fieldName}.label`,
+    infoText: `${translationPath}.fields.${fieldName}.infoText`,
   }
 
   const getSearchSelect = () => (
     <SearchSelect
-      id={`${field.referenceName}-input`}
-      name={field.referenceName}
-      getter={field.value}
+      id={`${fieldName}-input`}
+      name={fieldName}
+      getter={value}
       setter={setValue}
-      model={field.model}
-      metaxIdentifier={field.referenceName}
+      model={(label, v) => ({ pref_label: label, url: v })}
+      metaxIdentifier={fieldName}
       placeholder=""
       inModal
       isClearable
       aria-autocomplete="list"
+      changeCallback={changeCallback}
     />
   )
 
   const getStaticSelect = () => (
     <Select
-      id={`${field.referenceName}-input`}
-      name={field.referenceName}
-      getter={field.value}
+      id={`${fieldName}-input`}
+      name={fieldName}
+      getter={value}
       setter={setValue}
-      model={field.model}
-      metaxIdentifier={field.referenceName}
+      model={(label, v) => ({ pref_label: label, url: v })}
+      metaxIdentifier={fieldName}
       placeholder=""
       inModal
       isClearable={isClearable}
       isMulti={isMulti}
       aria-autocomplete="list"
+      changeCallback={changeCallback}
     />
   )
 
@@ -52,7 +65,7 @@ const ModalReferenceInput = ({
 
   return (
     <FieldGroup>
-      <Title htmlFor={`${field.referenceName}-input`}>
+      <Title htmlFor={`${fieldName}-input`}>
         <Translate content={translations.label} />
         {isRequired && <Required />}
       </Title>
@@ -64,13 +77,15 @@ const ModalReferenceInput = ({
 }
 
 ModalReferenceInput.propTypes = {
-  field: PropTypes.object.isRequired,
+  item: PropTypes.object.isRequired,
+  fieldName: PropTypes.string.isRequired,
   options: PropTypes.shape({
     isSearch: PropTypes.bool,
     isMulti: PropTypes.bool,
     isRequired: PropTypes.bool,
     isClearable: PropTypes.bool,
   }),
+  changeCallback: PropTypes.func,
 }
 
 ModalReferenceInput.defaultProps = {
@@ -80,6 +95,7 @@ ModalReferenceInput.defaultProps = {
     isMulti: false,
     isClearable: true,
   },
+  changeCallback: () => {},
 }
 
 export default observer(ModalReferenceInput)

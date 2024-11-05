@@ -12,18 +12,11 @@ const project = {
       editSave: 'Vahvista muutokset',
       cancel: 'Peruuta',
     },
-    funding: {
-      addButton: 'Lisää rahoitus',
+    section: {
       title: {
-        add: 'Lisää rahoitus',
-        edit: 'Muokkaa rahoitusta',
+        project: 'Projektin tiedot',
+        funding: 'Rahoitus',
       },
-    },
-  },
-  section: {
-    title: {
-      project: 'Projektin tiedot',
-      funding: 'Rahoitus',
     },
   },
   fields: {
@@ -76,7 +69,7 @@ const project = {
               infoText: 'Projektin rahoitustyyppi',
             },
             organization: {
-              title: 'Rahoittajaorganisaatio',
+              label: 'Rahoittajaorganisaatio',
               infoText: 'Organisaatio joka rahoittaa projektia',
               organization: {
                 infoText: 'Organisaatio',

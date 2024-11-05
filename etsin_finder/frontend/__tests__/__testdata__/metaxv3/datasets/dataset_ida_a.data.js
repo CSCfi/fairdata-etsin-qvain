@@ -73,6 +73,17 @@ const dataset_open_a = {
       },
       project_identifier: 'abcd_1234',
       participating_organizations: [organization_kone],
+      funding: [
+        {
+          funding_identifier: 'https://abcd-1234',
+          funder: {
+            organization: organization_kone,
+            funder_type: {
+              url: 'http://uri.suomi.fi/codelist/fairdata/funder_type/code/tekes-shok',
+            },
+          },
+        },
+      ],
     },
   ],
   provenance: [provenance_a],

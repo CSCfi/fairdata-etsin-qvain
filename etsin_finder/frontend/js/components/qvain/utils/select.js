@@ -105,6 +105,16 @@ export const sortOptions = async (model, lang, options, sortFunc = null) => {
   }
 }
 
+// Sort options array in-place according to lang
+export const sortOptionsV3 = async (lang, options, sortFunc = null) => {
+  if (sortFunc) {
+    options.sort(sortFunc)
+  } else {
+    const collator = getCollator(lang)
+    options.sort((a, b) => collator.compare(a.pref_label[lang], b.pref_label[lang]))
+  }
+}
+
 // Sort state.options automatically on language change, disposes in componentWillUnmount
 export const autoSortOptions = (componentInstance, Locale, model, sortFunc = null) => {
   disposeOnUnmount(
