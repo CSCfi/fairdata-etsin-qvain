@@ -72,30 +72,3 @@ export const InlineUl = styled.ul`
   margin: 0;
   padding: 0;
 `
-
-export const hasProvenances = provenances => {
-  if (provenances) {
-    for (const provenance of provenances) {
-      if (provenance.preservation_event || provenance.lifecycle_event) {
-        return true
-      }
-      if (provenance.was_associated_with) {
-        return true
-      }
-      if (provenance.temporal) {
-        if (
-          provenance.temporal.end_date &&
-          provenance.temporal.end_date !== '' &&
-          provenance.temporal.start_date &&
-          provenance.temporal.start_date !== ''
-        ) {
-          return true
-        }
-      }
-      if (provenance.description) {
-        return true
-      }
-    }
-  }
-  return false
-}

@@ -13,18 +13,18 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
 import { useStores } from '@/stores/stores'
-import { hasProvenances, Table, IDLink, Margin } from './common'
+import { Table, IDLink, Margin } from './common'
 import Event from './event'
 
 const EventList = () => {
   const {
     Etsin: {
-      EtsinDataset: { deletedVersions, provenance, isDeprecated, dateDeprecated },
+      EtsinDataset: { deletedVersions, hasProvenances, provenance, isDeprecated, dateDeprecated },
     },
     Locale: { dateFormat },
   } = useStores()
 
-  if (!(hasProvenances(provenance) || deletedVersions?.length > 0 || isDeprecated)) {
+  if (!(hasProvenances || deletedVersions?.length > 0 || isDeprecated)) {
     return null
   }
 

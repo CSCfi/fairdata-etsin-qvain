@@ -3,7 +3,7 @@
 */
 import { makeObservable, observable, action, computed } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
-import { DATA_CATALOG_IDENTIFIER, ACCESS_TYPE_URL } from '@/utils/constants'
+import { DATA_CATALOG_IDENTIFIER, ACCESS_TYPE_URL, PRESERVATION_EVENT_CREATED } from '@/utils/constants'
 import Cite from './cite'
 
 class EtsinDatasetV2 {
@@ -249,10 +249,19 @@ class EtsinDatasetV2 {
     return false
   }
 
+  @computed get hasProvenances() {
+    return this.provenance?.some(event => 
+      event.title || 
+      event.description || 
+      event.lifecycle_event || 
+      event.preservation_event?.url === PRESERVATION_EVENT_CREATED
+    )
+  }
+
   @computed get hasEvents() {
     return Boolean(
       this.hasVersion ||
-        this.provenance?.length ||
+        this.hasProvenances ||
         this.isDeprecated ||
         this.otherIdentifiers?.length ||
         this.datasetRelations?.length ||
