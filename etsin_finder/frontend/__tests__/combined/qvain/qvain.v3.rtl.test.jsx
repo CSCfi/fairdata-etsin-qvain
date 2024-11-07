@@ -227,7 +227,6 @@ describe('Qvain with an opened dataset', () => {
       'is_deprecated',
       'is_removed',
       'removal_date',
-      'persistent_identifier',
       'cumulation_started',
       'state',
       /^metadata_owner\..+/,

@@ -194,6 +194,11 @@ class Adapter {
   }
 
   relatedDraftV3ToV2(draft) {
+    if (typeof draft === 'string') {
+      return {
+        identifier: draft,
+      }
+    }
     return {
       ...draft,
       identifier: draft.id,
@@ -223,6 +228,7 @@ class Adapter {
         actors: this.actorV3ToV2(dataset.actors), // needs v3 actors store
         provenance: this.provenanceV3ToV2(dataset.provenance),
         projects: dataset.projects, // shortcut to use projects as is
+        preferred_identifier: dataset.persistent_identifier,
       },
       date_created: dataset.created,
       state: dataset.state,
@@ -233,6 +239,11 @@ class Adapter {
       bibliographic_citation: dataset.bibliographic_citation,
       metadata_provider_user: dataset.metadata_owner?.user,
     }
+
+    d.dataset_version_set = dataset.dataset_versions?.map(this.convertV3ToV2) || []
+    d.dataset_version_set.forEach(v => {
+      v.data_catalog = d.data_catalog // Add missing catalog data to versions
+    })
 
     // include v3 fileset object as it is
     if (dataset.fileset) {
@@ -337,6 +348,7 @@ class Adapter {
     // Convert Qvain front->backend V2 format to Metax V3 format
     const d = {
       id: dataset.original?.id,
+      persistent_identifier: dataset.original?.research_dataset?.preferred_identifier,
       data_catalog: dataset.data_catalog,
       title: this.removeMissingTranslations(dataset.title),
       description: this.removeMissingTranslations(dataset.description),
@@ -354,9 +366,13 @@ class Adapter {
       remote_resources: this.remoteResourceV2ToV3(dataset.remote_resources),
       actors: dataset.actors, // conversion done in actors store
       projects: dataset.projects,
-      generate_pid_on_publish: dataset.use_doi ? 'DOI' : 'URN',
       cumulative_state: dataset.cumulative_state,
       bibliographic_citation: dataset.bibliographic_citation,
+    }
+
+    // Set generate_pid_on_publish only when there is no existing pid
+    if (!d.persistent_identifier) {
+      d.generate_pid_on_publish = dataset.use_doi ? 'DOI' : 'URN'
     }
 
     // include v3 fileset object as it is

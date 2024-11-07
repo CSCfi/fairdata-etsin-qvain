@@ -11,17 +11,24 @@ const remapActorIdentifiers = dataset => {
     }
   }
 
-  for (const actor of dataset.actors) {
+  const remapOrg = org => {
+    let _org = org
+    while (_org) {
+      remap(_org)
+      _org = _org.parent
+    }
+  }
+
+  const remapActor = actor => {
     remap(actor)
     if (actor.person) {
       remap(actor.person)
     }
-    let org = actor.organization
-    while (org) {
-      remap(org)
-      org = org.parent
-    }
+    remapOrg(actor.organization)
   }
+
+  dataset.actors?.forEach(a => remapActor(a))
+  dataset.provenance?.forEach(p => p.is_associated_with?.forEach(a => remapActor(a)))
 }
 
 export default remapActorIdentifiers

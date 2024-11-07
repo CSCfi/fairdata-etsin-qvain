@@ -53,10 +53,9 @@ class SubmitV3 extends Submit {
       if (!(await this.promptProvenances())) return
 
       const dataset = this.prepareDataset()
-
       try {
         await schema.validate(dataset, { strict: true })
-        await this.checkDoiCompability(dataset)
+        await this.checkDoiCompatibility(dataset)
       } catch (error) {
         this.setError(error)
         if (error instanceof ValidationError) {

@@ -179,7 +179,7 @@ class Submit {
 
       try {
         await schema.validate(dataset, { strict: true })
-        await this.checkDoiCompability(dataset)
+        await this.checkDoiCompatibility(dataset)
       } catch (error) {
         this.setError(error)
         if (error instanceof ValidationError) {
@@ -385,11 +385,16 @@ class Submit {
     }
   }
 
-  checkDoiCompability = payload =>
+  checkDoiCompatibility = payload =>
     new Promise((res, rej) => {
-      if (!payload.use_doi) res()
-      if (payload.use_doi && payload.data_catalog === DATA_CATALOG_IDENTIFIER.ATT) {
-        rej(new ValidationError('DOI can be used only with IDA datasets.'))
+      const pid = payload.original?.research_dataset?.preferred_identifier
+      const isNewDraft = !payload.original?.draft_of
+      const hasPid = pid && !pid.startsWith('draft:')
+      if (isNewDraft && !hasPid) {
+        if (!payload.use_doi) res()
+        if (payload.use_doi && payload.data_catalog === DATA_CATALOG_IDENTIFIER.ATT) {
+          rej(new ValidationError('DOI can be used only with IDA datasets.'))
+        }
       }
       res()
     })
