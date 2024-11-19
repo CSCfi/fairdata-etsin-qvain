@@ -17,9 +17,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSort, faSortAmountUp, faSortAmountDown } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { useQuery } from '@/components/etsin/general/useQuery'
 
 import { InvertedButton } from '../../general/button'
-import { useQuery } from '../utils'
 import { useStores } from '@/stores/stores'
 
 const RELEVANCE = 'best'

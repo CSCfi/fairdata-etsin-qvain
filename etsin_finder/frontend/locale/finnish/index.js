@@ -422,6 +422,7 @@ const finnish = {
     },
   },
   home: {
+    titleV3: 'Etsi aineistoa (yhteensä %(count)s)',
     title: 'Etsi aineistoa',
     title1: 'Mikä Etsin on?',
     title2: 'Miten saan aineistot käyttööni?',

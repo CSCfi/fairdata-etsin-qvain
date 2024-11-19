@@ -1,29 +1,18 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import React, { useEffect } from 'react'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { observer } from 'mobx-react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import Translate from 'react-translate-component'
 
-import { useQuery } from '@/components/etsin/general/useQuery'
-import ErrorBoundary from '@/components/general/errorBoundary'
-import { useStores } from '@/stores/stores'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import useQuery from '@/components/etsin/general/useQuery'
 import { Input } from '@/components/etsin/general/Input'
 
-function SearchBar() {
+import { useStores, withStores } from '@/stores/stores'
+import ErrorBoundary from '@/components/general/errorBoundary'
+
+const SearchBar = () => {
   const {
     Matomo,
     Etsin: {
@@ -69,11 +58,9 @@ function SearchBar() {
             <Translate
               component={Input}
               id="searchBarInput"
-              attributes={{
-                'aria-label': 'search.searchBar',
-              }}
+              attributes={{ placeholder: 'search.placeholder' }}
               value={term}
-              onChange={e => setTerm(e.currentTarget.value)}
+              onChange={e => setTerm(e.target.value)}
             />
           </SearchInner>
         </SearchContainer>
@@ -128,4 +115,4 @@ const SearchInner = styled.div`
     }
   }
 `
-export default observer(SearchBar)
+export default withStores(observer(SearchBar))

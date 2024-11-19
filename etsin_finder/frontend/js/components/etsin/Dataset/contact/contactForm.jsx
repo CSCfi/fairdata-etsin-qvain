@@ -18,7 +18,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import Select from '@/components/etsin/general/select'
 
-import Input, { InputArea } from '../common/formItems'
+import { Input, InputArea } from '@/components/etsin/general/Input'
 import { InvertedButton } from '@/components/etsin/general/button'
 import ErrorBoundary from '@/components/general/errorBoundary'
 import urls from '@/utils/urls'

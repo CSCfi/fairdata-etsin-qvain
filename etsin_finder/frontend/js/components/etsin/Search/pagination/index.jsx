@@ -18,9 +18,9 @@ import translate from 'counterpart'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 import { useStores } from '@/stores/stores'
+import { useQuery } from '@/components/etsin/general/useQuery'
 
 import getPages from './getPages'
-import { useQuery } from '../utils'
 
 const Pagination = () => {
   const {

@@ -16,8 +16,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 
 import { useStores } from '@/stores/stores'
-
-import { useQuery } from './utils'
+import { useQuery } from '@/components/etsin/general/useQuery'
 
 function NoResults() {
   const {

@@ -26,6 +26,8 @@ class EtsinSearch {
 
   @observable aggregations = {}
 
+  @observable overallCount = null
+
   @computed get count() {
     return this.res?.count || 0
   }
@@ -50,6 +52,14 @@ class EtsinSearch {
 
   @computed get offset() {
     return this.currentPage * this.itemsPerPage - this.itemsPerPage
+  }
+
+  @action.bound async fetchOverallCount() {
+    const url = `${this.Env.metaxV3Url('datasets')}?limit=1`
+    const res = await this.client.get(url)
+    runInAction(() => {
+      this.overallCount = res.data.count
+    })
   }
 
   @action.bound

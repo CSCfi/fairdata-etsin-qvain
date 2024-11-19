@@ -1,15 +1,3 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import React, { Component } from 'react'
 import counterpart from 'counterpart'
 import PropTypes from 'prop-types'
@@ -20,7 +8,7 @@ import { observer } from 'mobx-react'
 
 import ErrorBoundary from '../general/errorBoundary'
 import { withStores } from '@/stores/stores'
-import Input from '../dataset/common/formItems'
+import { Input } from '../dataset/common/formItems'
 
 class SearchBar extends Component {
   // Handle possible empty initial query

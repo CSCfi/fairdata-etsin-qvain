@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
 
-import { Input } from '../../../common/formItems'
+import { Input } from '@/components/etsin/general/Input'
 import FlaggedComponent from '@/components/general/flaggedComponent'
 
 const NotificationEmail = ({ Packages }) => (

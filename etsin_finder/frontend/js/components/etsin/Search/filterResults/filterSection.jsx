@@ -1,15 +1,3 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import Translate from 'react-translate-component'
@@ -23,7 +11,7 @@ import { TransparentLink } from '@/components/general/button'
 import { useStores } from '@/stores/stores'
 
 import FilterItem from './filterItem'
-import { useQuery } from '../utils'
+import { useQuery } from '@/components/etsin/general/useQuery'
 
 const FilterSection = ({ filterName }) => {
   const {

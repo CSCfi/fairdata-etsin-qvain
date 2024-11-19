@@ -16,11 +16,11 @@ import Translate from 'react-translate-component'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 import { useStores } from '@/stores/stores'
+import { useQuery } from '@/components/etsin/general/useQuery'
 
 import HeroBanner from '../../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
-import { useQuery } from './utils'
 import Spinner from '../general/spinner'
 
 const Search = () => {

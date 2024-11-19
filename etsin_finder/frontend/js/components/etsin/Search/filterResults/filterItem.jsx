@@ -1,22 +1,10 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 import { useStores } from '@/stores/stores'
-import { useQuery } from '../utils'
+import { useQuery } from '@/components/etsin/general/useQuery'
 
 const FilterItem = ({ filter, item, tabIndex }) => {
   const {
