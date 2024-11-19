@@ -24,28 +24,34 @@ import dataset_ida_b from '../../__testdata__/metaxv3/datasets/dataset_ida_b.dat
 
 const mockAdapter = new MockAdapter(axios)
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets?limit=20&offset=0')
+  .onGet('https://metaxv3:443/v3/datasets?limit=20&offset=0&publishing_channels=etsin')
   .reply(200, { results: [dataset_ida_a], count: 1 })
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0')
+  .onGet('https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&publishing_channels=etsin')
   .reply(200, aggregations_a)
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets?keyword=web-development&limit=20&offset=0')
+  .onGet(
+    'https://metaxv3:443/v3/datasets?keyword=web-development&limit=20&offset=0&publishing_channels=etsin'
+  )
   .reply(200, { results: [dataset_ida_a], count: 1 })
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets/aggregates?keyword=web-development&limit=20&offset=0')
+  .onGet(
+    'https://metaxv3:443/v3/datasets/aggregates?keyword=web-development&limit=20&offset=0&publishing_channels=etsin'
+  )
   .reply(200, aggregations_a)
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets?search=test&limit=20&offset=0')
+  .onGet('https://metaxv3:443/v3/datasets?search=test&limit=20&offset=0&publishing_channels=etsin')
   .reply(200, { ...dataset_ida_a, count: 0, results: [] })
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets/aggregates?search=test&limit=20&offset=0')
+  .onGet(
+    'https://metaxv3:443/v3/datasets/aggregates?search=test&limit=20&offset=0&publishing_channels=etsin'
+  )
   .reply(200, aggregations_a)
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets?limit=20&offset=20')
+  .onGet('https://metaxv3:443/v3/datasets?limit=20&offset=20&publishing_channels=etsin')
   .reply(200, { results: [dataset_ida_b], count: 21 })
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=20')
+  .onGet('https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=20&publishing_channels=etsin')
   .reply(200, aggregations_b)
 
 mockAdapter.resetHistory()
