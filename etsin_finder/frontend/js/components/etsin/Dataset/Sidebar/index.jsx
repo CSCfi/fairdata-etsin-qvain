@@ -139,7 +139,7 @@ const Sidebar = () => {
           tooltip={identifierTooltip()}
         >
           {identifierInfo()}
-          {isCumulative && <Translate content="dataset.dl.cumulativeDatasetLabel" />}
+          {isCumulative && <div><Translate content="dataset.dl.cumulativeDatasetLabel" /></div>}
         </DatasetInfoItem>
       </SidebarArea>
 
@@ -170,12 +170,11 @@ const Sidebar = () => {
       <SidebarArea id="rights-area">
         <DatasetInfoItem id="dataset-license" itemTitle="dataset.license">
           <List>
-            {accessRights?.license &&
-              accessRights.license.map(l => (
-                <ListItem key={l.url}>
-                  <License license={l} />
-                </ListItem>
-              ))}
+            {accessRights?.license?.map(l => (
+              <ListItem key={l.url}>
+                <License license={l} />
+              </ListItem>
+            ))}
           </List>
         </DatasetInfoItem>
 
@@ -189,15 +188,14 @@ const Sidebar = () => {
       <SidebarArea id="actors-area">
         <DatasetInfoItem id="dataset-project" itemTitle="dataset.project.project_area">
           <List>
-            {datasetMetadata.projects &&
-              datasetMetadata.projects.map(item => {
-                const projectName = getValueTranslation(item.title)
-                return (
-                  <ListItem key={`li-${projectName}`} lang={getPreferredLang(item.title)}>
-                    <Project project={item} />
-                  </ListItem>
-                )
-              })}
+            {datasetMetadata.projects?.map(item => {
+              const projectName = getValueTranslation(item.title)
+              return (
+                <ListItem key={`li-${projectName}`} lang={getPreferredLang(item.title)}>
+                  <Project project={item} />
+                </ListItem>
+              )
+            })}
           </List>
         </DatasetInfoItem>
 
@@ -220,20 +218,19 @@ const Sidebar = () => {
 
         <DatasetInfoItem id="dataset-curator" itemTitle="dataset.curator">
           <List>
-            {actors.curators &&
-              actors.curators.map(curator => {
-                const curatorName =
-                  curator.person?.name || getValueTranslation(curator.organization?.pref_label)
-                return (
-                  <Agent
-                    key={`li-${curatorName}`}
-                    lang={getPreferredLang(curator.organization?.pref_label)}
-                    first
-                    agent={curator}
-                    popupAlign="sidebar"
-                  />
-                )
-              })}
+            {actors.curators?.map(curator => {
+              const curatorName =
+                curator.person?.name || getValueTranslation(curator.organization?.pref_label)
+              return (
+                <Agent
+                  key={`li-${curatorName}`}
+                  lang={getPreferredLang(curator.organization?.pref_label)}
+                  first
+                  agent={curator}
+                  popupAlign="sidebar"
+                />
+              )
+            })}
           </List>
         </DatasetInfoItem>
 
