@@ -34,21 +34,28 @@ const PopupContent = ({ agent }) => {
     orgs = orgs.slice(0, -1)
   }
 
+  const url = organization?.url
   return (
     <PopUpContainer>
       {name && <Name lang={getPreferredLang(name)}>{getValueTranslation(name)}</Name>}
-      {organization.url?.startsWith('http') && (
-        // TODO: fix screenreader reading the link url when the popup is focused. It does not read the content.
-        <IdentifierLink
-          href={organization.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={translate('dataset.identifier')}
-        >
-          <IdentifierText>{organization.url}</IdentifierText>
-        </IdentifierLink>
+      {url && (
+        <>
+          {url.startsWith('http') ? (
+            // TODO: fix screenreader reading the link url when the popup is focused.
+            // It does not read the content.
+            <IdentifierLink
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={translate('dataset.identifier')}
+            >
+              <IdentifierText>{url}</IdentifierText>
+            </IdentifierLink>
+          ) : (
+            <IdentifierText>{url}</IdentifierText>
+          )}
+        </>
       )}
-      {!organization.url?.startsWith('http') && <IdentifierText>{organization.url}</IdentifierText>}
       {hasExtraInfo(agent) && (
         <dl>
           {orgs?.length > 0 && (
