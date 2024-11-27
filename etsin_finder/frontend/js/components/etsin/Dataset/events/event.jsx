@@ -112,7 +112,11 @@ const Event = ({ event }) => {
   const getTemporal = () => {
     if (showPreservationEvent) {
       return (
-        <>{preservation.modified ? dateFormat(preservation.modified, { format: 'date' }) : '-'}</>
+        <>
+          {preservation.state_modified
+            ? dateFormat(preservation.state_modified, { format: 'date' })
+            : '-'}
+        </>
       )
     }
     return (
@@ -151,7 +155,7 @@ const Event = ({ event }) => {
             }
             return ''
           })}
-        {!event.is_associated_with && '-'}
+        {(!event.is_associated_with || event.is_associated_with.length === 0) && '-'}
       </td>
       <td>{getTemporal()}</td>
       <td>{getSpatial(event.spatial)}</td>

@@ -40,7 +40,7 @@ const Sidebar = () => {
 
   const catalogPublisher = dataCatalog?.publisher
   const catalogPublisherLang = getPreferredLang(catalogPublisher?.name)
-  const catalogPublisherHomepage = catalogPublisher?.homepage?.[0].url || ''
+  const catalogPublisherHomepage = catalogPublisher?.homepage?.[0]?.url || ''
   const catalogTitle = dataCatalog?.title[catalogPublisherLang]
 
   function getAccessRights() {
@@ -139,7 +139,11 @@ const Sidebar = () => {
           tooltip={identifierTooltip()}
         >
           {identifierInfo()}
-          {isCumulative && <div><Translate content="dataset.dl.cumulativeDatasetLabel" /></div>}
+          {isCumulative && (
+            <div>
+              <Translate content="dataset.dl.cumulativeDatasetLabel" />
+            </div>
+          )}
         </DatasetInfoItem>
       </SidebarArea>
 

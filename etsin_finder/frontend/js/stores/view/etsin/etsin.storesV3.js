@@ -1,5 +1,9 @@
 import { makeObservable, observable, action, computed } from 'mobx'
-import { DATA_CATALOG_IDENTIFIER, ACCESS_TYPE_URL, PRESERVATION_EVENT_CREATED } from '@/utils/constants'
+import {
+  DATA_CATALOG_IDENTIFIER,
+  ACCESS_TYPE_URL,
+  PRESERVATION_EVENT_CREATED,
+} from '@/utils/constants'
 import Cite from './cite'
 
 class EtsinDatasetV3 {
@@ -155,7 +159,13 @@ class EtsinDatasetV3 {
         state: -1,
       }
 
-    preservationObject.useCopy = preservationObject.dataset_origin_version
+    if (
+      preservationObject.dataset_origin_version &&
+      !preservationObject.dataset_origin_version.removed
+    ) {
+      preservationObject.useCopy = preservationObject.dataset_origin_version
+    }
+
     preservationObject.preservedCopy = preservationObject.dataset_version
     return preservationObject
   }
@@ -223,11 +233,12 @@ class EtsinDatasetV3 {
   }
 
   @computed get hasProvenances() {
-    return this.provenance?.some(event => 
-      event.title || 
-      event.description || 
-      event.lifecycle_event || 
-      event.preservation_event?.url === PRESERVATION_EVENT_CREATED
+    return this.provenance?.some(
+      event =>
+        event.title ||
+        event.description ||
+        event.lifecycle_event ||
+        event.preservation_event?.url === PRESERVATION_EVENT_CREATED
     )
   }
 
