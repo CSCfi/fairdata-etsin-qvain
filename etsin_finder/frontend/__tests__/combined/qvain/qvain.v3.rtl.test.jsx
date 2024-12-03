@@ -230,6 +230,7 @@ describe('Qvain with an opened dataset', () => {
       'cumulation_started',
       'state',
       /^metadata_owner\..+/,
+      'persistent_identifier',
       // id not supported outside actors
       /^(?!actors\.).*.id$/,
       // redundant reference data

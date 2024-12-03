@@ -348,7 +348,6 @@ class Adapter {
     // Convert Qvain front->backend V2 format to Metax V3 format
     const d = {
       id: dataset.original?.id,
-      persistent_identifier: dataset.original?.research_dataset?.preferred_identifier,
       data_catalog: dataset.data_catalog,
       title: this.removeMissingTranslations(dataset.title),
       description: this.removeMissingTranslations(dataset.description),
@@ -371,7 +370,7 @@ class Adapter {
     }
 
     // Set generate_pid_on_publish only when there is no existing pid
-    if (!d.persistent_identifier) {
+    if (!dataset.original?.research_dataset?.preferred_identifier) {
       d.generate_pid_on_publish = dataset.use_doi ? 'DOI' : 'URN'
     }
 
