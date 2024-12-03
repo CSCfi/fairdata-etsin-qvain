@@ -58,6 +58,10 @@ class Submit {
     this.response = null
   }
 
+  getResponseIdentifier() {
+    return this.response?.identifier
+  }
+
   @computed get submitType() {
     const { original } = this.Qvain
     if (!original) {
@@ -125,8 +129,9 @@ class Submit {
         console.error('Unknown submit status')
         throw new Error('Unknown submit status')
     }
-    if (this.response?.identifier && cb) {
-      cb(this.response.identifier)
+    const identifier = this.getResponseIdentifier()
+    if (cb && identifier) {
+      cb(identifier)
     }
   }
 
@@ -262,7 +267,7 @@ class Submit {
     const draft = draftResponse.data
 
     const data = await this.updateDataset({ ...dataset, original: draft })
-    return { ...data, is_draft: true }
+    return data
   }
 
   publishWithoutUpdating = async dataset => {

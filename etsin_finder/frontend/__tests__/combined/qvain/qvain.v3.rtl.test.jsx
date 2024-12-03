@@ -386,7 +386,7 @@ describe('Qvain with an opened dataset', () => {
       expect(mockAdapter.history.post[0].url).toBe(
         `https://metaxv3:443/v3/datasets/${dataset.id}/publish`
       )
-      expect(routerLocation.pathname).toBe(`/dataset/${dataset.id}`)
+      expect(routerLocation.pathname).toBe(`/`)
     })
 
     it('given linked draft, should update and publish dataset', async () => {
@@ -397,15 +397,14 @@ describe('Qvain with an opened dataset', () => {
       expect(mockAdapter.history.post[0].url).toBe(
         `https://metaxv3:443/v3/datasets/linked-draft-id/publish`
       )
-      // qvain should be redirected to original dataset
-      expect(routerLocation.pathname).toBe(`/dataset/${dataset.id}`)
+      expect(routerLocation.pathname).toBe(`/`)
     })
 
     it('given published, should update dataset directly', async () => {
       await publish({ state: 'published' })
       expect(mockAdapter.history.post.length).toBe(0)
       expect(mockAdapter.history.patch[0].url).toBe(`https://metaxv3:443/v3/datasets/${dataset.id}`)
-      expect(routerLocation.pathname).toBe(`/dataset/${dataset.id}`)
+      expect(routerLocation.pathname).toBe(`/`)
     })
   })
 

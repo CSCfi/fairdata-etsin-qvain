@@ -68,7 +68,7 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
           <ResponseLabel success>
             <Translate
               content={
-                response.is_draft
+                isDraft
                   ? 'qvain.submitStatus.draftSuccess'
                   : 'qvain.submitStatus.editMetadataSuccess'
               }

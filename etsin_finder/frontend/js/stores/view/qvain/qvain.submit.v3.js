@@ -15,6 +15,10 @@ class SubmitV3 extends Submit {
 
   qvainFormSchema = qvainFormSchemaV3
 
+  getResponseIdentifier() {
+    return this.response?.id
+  }
+
   @override async exec(submitFunction, schema = qvainFormSchemaV3) {
     const {
       OtherIdentifiers: { cleanupBeforeBackend },
@@ -135,7 +139,7 @@ class SubmitV3 extends Submit {
 
     remapActorIdentifiers(dataset)
     const data = await this.updateDataset({ ...dataset, id: res.data.id })
-    return { ...data, is_draft: true }
+    return data
   }
 
   publishNewDataset = {
