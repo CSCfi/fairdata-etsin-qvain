@@ -2,11 +2,11 @@ import axios from 'axios'
 
 import urls from '@/utils/urls'
 
-const authorize = async (params, Packages, useV3, metaxV3Url) => {
+const authorize = async (params, Packages) => {
   Packages.clearError()
   // Authorize download for single file or package and return url
+  const authUrl = Packages.useV3 ? urls.metaxV3.download.authorize() : urls.dl.authorize()
   try {
-    const authUrl = useV3 ? metaxV3Url('download', 'authorize') : urls.dl.authorize()
     const resp = await axios.post(authUrl, params)
     const { url } = resp.data
     return { url, params }
@@ -17,11 +17,11 @@ const authorize = async (params, Packages, useV3, metaxV3Url) => {
   }
 }
 
-const download = async (params, Packages, useV3, metaxV3Url) => {
+const download = async (params, Packages) => {
   Packages.clearError()
   // Authorize download for single file or package and download it
   try {
-    const { url } = await authorize(params, Packages, useV3, metaxV3Url)
+    const { url } = await authorize(params, Packages)
     if (!url) {
       return
     }
@@ -41,34 +41,22 @@ const download = async (params, Packages, useV3, metaxV3Url) => {
   }
 }
 
-export const downloadFile = async (useV3, metaxV3Url, datasetIdentifier, path, Packages) => {
+export const downloadFile = async (datasetIdentifier, path, Packages) => {
   const params = { cr_id: datasetIdentifier, file: path }
-  return download(params, Packages, useV3, metaxV3Url)
+  return download(params, Packages)
 }
 
-export const downloadPackage = async (
-  useV3,
-  metaxV3Url,
-  datasetIdentifier,
-  packageName,
-  Packages
-) => {
+export const downloadPackage = async (datasetIdentifier, packageName, Packages) => {
   const params = { cr_id: datasetIdentifier, package: packageName }
-  return download(params, Packages, useV3, metaxV3Url)
+  return download(params, Packages)
 }
 
-export const authorizeFile = async (useV3, metaxV3Url, datasetIdentifier, path, Packages) => {
+export const authorizeFile = async (datasetIdentifier, path, Packages) => {
   const params = { cr_id: datasetIdentifier, file: path }
-  return authorize(params, Packages, useV3, metaxV3Url)
+  return authorize(params, Packages)
 }
 
-export const authorizePackage = async (
-  useV3,
-  metaxV3Url,
-  datasetIdentifier,
-  packageName,
-  Packages
-) => {
+export const authorizePackage = async (datasetIdentifier, packageName, Packages) => {
   const params = { cr_id: datasetIdentifier, package: packageName }
-  return authorize(params, Packages, useV3, metaxV3Url)
+  return authorize(params, Packages)
 }

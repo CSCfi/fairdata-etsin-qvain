@@ -17,15 +17,15 @@ const actionDefaults = {
   tooltip: null,
 }
 
-const actionDownload = (useV3, metaxV3Url, datasetIdentifier, item, path, pack, Packages) => {
+const actionDownload = (datasetIdentifier, item, path, pack, Packages) => {
   let func, authorizeFunc
   if (item && item.type === 'file') {
-    func = () => downloadFile(useV3, metaxV3Url, datasetIdentifier, path, Packages)
-    authorizeFunc = () => authorizeFile(useV3, metaxV3Url, datasetIdentifier, path, Packages)
+    func = () => downloadFile(datasetIdentifier, path, Packages)
+    authorizeFunc = () => authorizeFile(datasetIdentifier, path, Packages)
   } else {
-    func = () => downloadPackage(useV3, metaxV3Url, datasetIdentifier, pack.package, Packages)
+    func = () => downloadPackage(datasetIdentifier, pack.package, Packages)
     authorizeFunc = () =>
-      authorizePackage(useV3, metaxV3Url, datasetIdentifier, pack.package, Packages)
+      authorizePackage(datasetIdentifier, pack.package, Packages)
   }
   return {
     ...actionDefaults,
@@ -66,7 +66,7 @@ const actionCreatePackage = (Packages, path) => ({
   type: 'create',
 })
 
-const getDownloadAction = (useV3, metaxV3Url, datasetIdentifier, item, Packages, Files) => {
+const getDownloadAction = (datasetIdentifier, item, Packages, Files) => {
   const isFile = item?.type === 'file'
   let path = '/'
   if (item) {
@@ -76,7 +76,7 @@ const getDownloadAction = (useV3, metaxV3Url, datasetIdentifier, item, Packages,
 
   let action
   if (isFile || (pack && pack.status === DOWNLOAD_API_REQUEST_STATUS.SUCCESS)) {
-    action = actionDownload(useV3, metaxV3Url, datasetIdentifier, item, path, pack, Packages)
+    action = actionDownload(datasetIdentifier, item, path, pack, Packages)
   } else {
     if (
       pack &&

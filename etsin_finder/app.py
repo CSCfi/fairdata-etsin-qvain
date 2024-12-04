@@ -27,26 +27,41 @@ def get_add_resource(app):
 
 def add_download_resources(app):
     """Set download API endpoints"""
-    from etsin_finder.resources.download_resources import (
-        Requests,
-        Authorize,
-        Subscriptions,
-        Notifications,
-        Status,
+    from etsin_finder.resources.download_resources_common import Status
+    from etsin_finder.resources.download_resources_v2 import (
+        PackageRequestsV2,
+        AuthorizeV2,
+        SubscriptionsV2,
+        NotificationsV2
     )
 
     add_resource = get_add_resource(app)
-    add_resource(Requests, "/api/download/requests", endpoint="dl_requests")
-    add_resource(Authorize, "/api/download/authorize", endpoint="dl_download")
+    add_resource(PackageRequestsV2, "/api/download/requests", endpoint="dl_requests")
+    add_resource(AuthorizeV2, "/api/download/authorize", endpoint="dl_download")
     add_resource(Status, "/api/download/status", endpoint="dl_status")
 
     if flag_enabled("DOWNLOAD_API_V2.EMAIL.BACKEND", app):
         add_resource(
-            Subscriptions, "/api/download/subscriptions", endpoint="dl_subscriptions"
+            SubscriptionsV2, "/api/download/subscriptions", endpoint="dl_subscriptions"
         )
         add_resource(
-            Notifications, "/api/download/notifications", endpoint="dl_notifications"
+            NotificationsV2, "/api/download/notifications", endpoint="dl_notifications"
         )
+
+    if flag_enabled("ETSIN.METAX_V3.BACKEND", app):
+        from etsin_finder.resources.download_resources_v3 import (
+            PackageRequestsV3,
+            AuthorizeV3,
+            SubscriptionsV3,
+            NotificationsV3
+        )
+        add_resource(PackageRequestsV3, "/api/v3/download/requests")
+        add_resource(AuthorizeV3, "/api/v3/download/authorize")
+        add_resource(Status, "/api/v3/download/status")
+
+        if flag_enabled("DOWNLOAD_API_V2.EMAIL.BACKEND", app):
+            add_resource(SubscriptionsV3, "/api/v3/download/subscriptions",)
+            add_resource(NotificationsV3, "/api/v3/download/notifications",)
 
 
 def add_restful_resources(app):

@@ -27,9 +27,7 @@ import { useStores } from '@/stores/stores'
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const {
-    Env: { metaxV3Url },
     Etsin: {
-      EtsinDataset: { useV3 },
       isDownloadPossible,
     },
   } = useStores()
@@ -72,7 +70,7 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const haveMetadata = hasMetadata(item)
   const { type } = item
 
-  const action = getDownloadAction(useV3, metaxV3Url, datasetIdentifier, item, Packages, Files)
+  const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
   const {
     func: downloadFunc,
     moreFunc,

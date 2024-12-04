@@ -21,7 +21,6 @@ import Tree from './fileTree'
 
 function IdaResources() {
   const {
-    Env: { metaxV3Url },
     Locale: { lang, dateFormat },
     Access: { restrictions },
     Etsin: {
@@ -32,7 +31,7 @@ function IdaResources() {
     },
   } = useStores()
 
-  const action = getDownloadAction(useV3, metaxV3Url, identifier, null, Packages, files)
+  const action = getDownloadAction(identifier, null, Packages, files)
   const { moreFunc, moreAriaLabel } = action
   const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel, root } = files
   const fileCount = root?.existingFileCount || 0
@@ -122,7 +121,7 @@ function IdaResources() {
         </Translate>
       </Header>
 
-      <ErrorMessage error={Packages.error} clear={Packages.clearError} />
+      <ErrorMessage />
 
       <Tree allowDownload={isDownloadPossible} />
       {inInfo && <Info {...infoProps} />}

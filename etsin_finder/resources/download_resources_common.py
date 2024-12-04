@@ -1,45 +1,31 @@
-# This file is part of the Etsin service
-#
-# Copyright 2017-2018 Ministry of Education and Culture, Finland
-#
-# :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-# :license: MIT
-
-"""Download API endpoints."""
-
-from flask_mail import Message
-
-from flask import current_app, request, make_response
+"""Common download functionalities. Metax access defined by child classes."""
+from flask import current_app, request
 from flask.views import MethodView
+from flask_mail import Message
 from webargs import fields, validate
 
-from etsin_finder.utils.parser import parser
-from etsin_finder.utils.abort import abort
-from etsin_finder.log import log
-from etsin_finder.auth import authentication
-from etsin_finder.auth import authorization
-from etsin_finder.utils.localization import get_language, translate, default_language
-from etsin_finder.services import cr_service, common_service
 from etsin_finder.services.download_service import DownloadAPIService
+from etsin_finder.utils.log_utils import log_request
+from etsin_finder.utils.abort import abort
+from etsin_finder.utils.parser import parser
+from etsin_finder.log import log
+from etsin_finder.utils.localization import get_language, default_language, translate
 from etsin_finder.utils.constants import PACKAGE_SIZE_LIMIT
 
-from etsin_finder.utils.log_utils import log_request
+def check_download_permission(self, cr_id):
+    """Placeholder for debugging"""
+    abort(500, description="Download permission check not implemented.")
 
 
-def send_email(language, cr_id, scope, email):
-    """Send notification email."""
+def get_pid_for_email_common(self, cr_id):
+    """Placeholder for debugging"""
+    abort(500, description="Dataset pid check not implemented.")
+
+
+def send_email(language, cr_id, scope, email, pref_id):
+    """Send package notification email."""
     if not scope:
         scope = ["/"]
-    try:
-        cr = cr_service.get_catalog_record(cr_id, False, False)
-        if not cr:
-            log.warning(f"Notifications: Catalog record {cr_id} not found.")
-            abort(404, message="Catalog record not found")
-        pref_id = cr_service.get_catalog_record_preferred_identifier(cr)
-    except Exception as e:
-        log.error(e)
-        abort(500, message=repr(e))
-
     with current_app.mail.record_messages() as outbox:
         try:
             log.info(f"Sending notification mail for dataset {cr_id}")
@@ -84,25 +70,14 @@ def package_already_created(error):
     return status_conflict and status_success
 
 
-def check_download_permission(cr_id):
-    """Abort if user is not allowed to download files from dataset."""
-    if not authorization.user_can_view_dataset(cr_id):
-        abort(404)
+class PackageRequests(MethodView):
+    """Parent view for generating requests for getting and creating packages. Child classes direct queries to correct Metax."""
 
-    cr = cr_service.get_catalog_record(cr_id, False, False)
-    if not cr:
-        abort(400, description="Unable to get catalog record")
+    check_permission = check_download_permission
 
-    allowed, reason = authorization.user_is_allowed_to_download_from_ida(
-        cr, authentication.is_authenticated()
-    )
-    if not allowed:
-        abort(403, message="Not authorized", reason=reason)
-    return True
-
-
-class Requests(MethodView):
-    """Class for generating and retrieving download package requests."""
+    def get_package_byte_size(self, cr_id, path):
+        """Placeholder method, overridden by child class."""
+        abort(500, description="Package size check not implemented.")
 
     @log_request
     def get(self):
@@ -120,7 +95,7 @@ class Requests(MethodView):
             request,
         )
         cr_id = args.get("cr_id")
-        check_download_permission(cr_id)
+        self.check_permission(cr_id)
         download_service = DownloadAPIService(current_app)
         return download_service.get_requests(cr_id)
 
@@ -144,35 +119,11 @@ class Requests(MethodView):
             request,
         )
         cr_id = args.get("cr_id")
-        check_download_permission(cr_id)
-
-        projects, status = common_service.get_dataset_projects(cr_id)
-
-        if status != 200:
-            abort(
-                status,
-                message="Error occured when Etsin tried to fetch project details from Metax.",
-            )
-        if projects is None or len(projects) == 0:
-            abort(
-                404,
-                message=f"Etsin could not find project for dataset using catalog record identifier {cr_id}",
-            )
-
-        project = projects[0]
         path = args.get("scope")
 
-        directory_details, status = common_service.get_directory_for_project_using_path(
-            cr_id, project, (path or ["/"])[0]
-        )
+        self.check_permission(cr_id)
 
-        if status != 200:
-            abort(
-                status,
-                message="Error occured when Etsin tried to fetch package details from Metax.",
-            )
-
-        byte_size = directory_details.get("results", {}).get("byte_size", None)
+        byte_size = self.get_package_byte_size(cr_id, path)
 
         if byte_size > PACKAGE_SIZE_LIMIT:
             abort(400, message="Package is too large.")
@@ -182,7 +133,9 @@ class Requests(MethodView):
 
 
 class Authorize(MethodView):
-    """Class for requesting download authorizations."""
+    """Parent view for generating a download url. Child classes direct queries to correct Metax."""
+
+    check_permission = check_download_permission
 
     @log_request
     def post(self):
@@ -218,7 +171,7 @@ class Authorize(MethodView):
             abort(400, message="Specify either 'file' or 'package', not both")
 
         cr_id = args.get("cr_id")
-        check_download_permission(cr_id)
+        self.check_permission(cr_id)
 
         download_service = DownloadAPIService(current_app)
         resp, status = download_service.authorize(cr_id, file=file, package=package)
@@ -233,7 +186,10 @@ class Authorize(MethodView):
 
 
 class Subscriptions(MethodView):
-    """Class for subscribing to package creation emails."""
+    """Parent view for subscribing to package ready -notifications. Child classes direct queries to correct Metax."""
+
+    check_permission = check_download_permission
+    get_pid_for_email = get_pid_for_email_common
 
     @log_request
     def post(self):
@@ -257,7 +213,7 @@ class Subscriptions(MethodView):
             request,
         )
         cr_id = args.get("cr_id")
-        check_download_permission(cr_id)
+        self.check_permission(cr_id)
 
         scope = args.get("scope")
         email = args.get("email")
@@ -284,13 +240,16 @@ class Subscriptions(MethodView):
 
         # Error due to package being already created, send mail immediately
         if package_already_created(resp):
-            send_email(language, cr_id, scope, email)
+            pid = self.get_pid_for_email(cr_id)
+            send_email(language, cr_id, scope, email, pid)
             return "", 200
         return resp, status
 
 
 class Notifications(MethodView):
-    """Email notification sending."""
+    """Parent view for sending a package notification. Child classes direct queries to correct Metax."""
+
+    get_pid_for_email = get_pid_for_email_common
 
     @log_request
     def post(self):
@@ -321,7 +280,8 @@ class Notifications(MethodView):
         scope = payload.get("scope") or ["/"]
         email = payload["email"]
         language = payload.get("language", default_language)
-        send_email(language, cr_id, scope, email)
+        pid = self.get_pid_for_email(cr_id)
+        send_email(language, cr_id, scope, email, pid)
 
         return "", 200
 

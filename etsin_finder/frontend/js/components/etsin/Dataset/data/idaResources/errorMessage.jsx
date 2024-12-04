@@ -2,24 +2,36 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import PropTypes from 'prop-types'
 import Translate from 'react-translate-component'
+import { useStores } from '@/stores/stores'
+import { ACCESS_TYPE_URL } from '@/utils/constants'
 
 const ACCESS_DENIED_MESSAGES = {
   EMBARGO: 'dataset.access_rights_description.embargo',
-  NEED_LOGIN: 'dataset.access_rights_description.login',
-  NEED_REMS_PERMISSION: 'dataset.access_rights_description.permit',
+  LOGIN: 'dataset.access_rights_description.login',
+  PERMIT: 'dataset.access_rights_description.permit',
   RESTRICTED: 'dataset.access_rights_description.restricted',
 }
 
-const ErrorMessage = ({ error, clear }) => {
+const ErrorMessage = () => {
+  const {
+    Etsin: {
+      filesProcessor: { Packages },
+      EtsinDataset: { accessRights, isDownloadAllowed },
+    },
+  } = useStores()
+
   const [showDetails, setShowDetails] = useState(false)
+
+  const { error, clearError } = Packages
+
+  const accessType = accessRights?.access_type?.url
 
   useEffect(() => {
     setShowDetails(false)
   }, [error])
 
-  if (!error) {
+  if (!error && isDownloadAllowed) {
     return null
   }
 
@@ -40,19 +52,21 @@ const ErrorMessage = ({ error, clear }) => {
     }
   }
 
-  let summaryTranslation = `dataset.dl.errors.${statusCodeToErrorMessage(error.response?.status)}`
+  let summaryTranslation = `dataset.dl.errors.${statusCodeToErrorMessage(error?.response?.status)}`
 
-  const reason = error?.response?.data?.reason
-  if (reason in ACCESS_DENIED_MESSAGES) {
-    summaryTranslation = ACCESS_DENIED_MESSAGES[reason]
-    allowDetails = false
-    errorColor = 'primary'
+  if (!isDownloadAllowed) {
+    const reason = Object.keys(ACCESS_TYPE_URL).find(key => ACCESS_TYPE_URL[key] === accessType)
+    if (reason in ACCESS_DENIED_MESSAGES) {
+      summaryTranslation = ACCESS_DENIED_MESSAGES[reason]
+      allowDetails = false
+      errorColor = 'primary'
+    }
   }
 
   const detailAction = `error.details.${showDetails ? 'hideDetails' : 'showDetails'}`
 
-  const message = `${error.name}: ${error.message}`
-  const response = error.request?.responseText
+  const message = `${error?.name}: ${error?.message}`
+  const response = error?.request?.responseText
   return (
     <ErrorDiv errorColor={errorColor}>
       <Message style={{ flexGrow: 1 }}>
@@ -69,20 +83,11 @@ const ErrorMessage = ({ error, clear }) => {
           </>
         )}
       </Message>
-      <CloseButton onClick={clear}>
+      <CloseButton onClick={clearError}>
         <FontAwesomeIcon icon={faTimes} />
       </CloseButton>
     </ErrorDiv>
   )
-}
-
-ErrorMessage.propTypes = {
-  error: PropTypes.object,
-  clear: PropTypes.func.isRequired,
-}
-
-ErrorMessage.defaultProps = {
-  error: null,
 }
 
 const MessagePart = styled.div`
@@ -127,6 +132,7 @@ const ErrorDiv = styled.div.attrs({
   display: flex;
   padding: 0;
   margin-bottom: 1rem;
+  border-radius: 0.25em;
   ${p => p.errorColor && `background: ${p.theme.color[p.errorColor]};`}
 `
 

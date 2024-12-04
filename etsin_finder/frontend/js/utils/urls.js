@@ -54,10 +54,6 @@ export default {
     datasetContact: (metaxV3, dataset) => `${metaxV3}/v3/datasets/${dataset}/contact`,
     directories: metaxV3 => `${metaxV3}/v3/directories`,
     fileCharacteristics: (metaxV3, file) => `${metaxV3}/v3/files/${file}/characteristics`,
-    download: (metaxV3, endpoint, dataset) =>
-      dataset
-        ? `${metaxV3}/v3/download/${endpoint}?dataset=${dataset}`
-        : `${metaxV3}/v3/download/${endpoint}`,
     organizations: metaxV3 => `${metaxV3}/v3/organizations?pagination=false`,
     referenceData: (metaxV3, referenceData) => `${metaxV3}/v3/reference-data/${referenceData}`,
     user: metaxV3 => `${metaxV3}/v3/auth/user`,
@@ -67,5 +63,11 @@ export default {
       `${metaxV3}/v3/datasets/${dataset}/permissions/editors`,
     datasetPermissionsEditor: (metaxV3, dataset, username) =>
       `${metaxV3}/v3/datasets/${dataset}/permissions/editors/${username}`,
+    download: {
+      packages: () => '/api/v3/download/requests',
+      authorize: () => '/api/v3/download/authorize',
+      subscriptions: () => '/api/v3/download/subscriptions',
+      status: () => '/api/v3/download/status',
+    },
   },
 }

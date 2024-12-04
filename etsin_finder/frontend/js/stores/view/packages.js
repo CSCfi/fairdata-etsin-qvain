@@ -143,9 +143,7 @@ class Packages {
       scope.forEach(path => {
         this.setRequestingPackageCreation(path, true)
       })
-      const url = this.useV3
-        ? this.Env.metaxV3Url('download', 'packages', params.cr_id)
-        : urls.dl.packages()
+      const url = this.useV3 ? urls.metaxV3.download.packages() : urls.dl.packages()
       const resp = await this.client.post(url, params)
       const { partial, ...full } = resp.data
 
@@ -199,7 +197,8 @@ class Packages {
       this.statusPromise = Promise.resolve() // always ok
     }
     if (!this.statusPromise) {
-      this.statusPromise = this.client.get(urls.dl.status()) // raises error for non-200 status
+      const statusUrl = this.useV3 ? urls.metaxV3.download.status() : urls.dl.status()
+      this.statusPromise = this.client.get(statusUrl) // raises error for non-200 status
     }
     return this.statusPromise
   }
@@ -217,7 +216,7 @@ class Packages {
       })
 
       const url = this.useV3
-        ? `${this.Env.metaxV3Url('download', 'packages', datasetIdentifier)}`
+        ? `${urls.metaxV3.download.packages()}?cr_id=${datasetIdentifier}`
         : `${urls.dl.packages()}?cr_id=${datasetIdentifier}`
 
       const statusPromise = this.checkStatus()

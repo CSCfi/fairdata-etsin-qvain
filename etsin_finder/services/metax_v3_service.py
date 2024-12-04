@@ -92,3 +92,21 @@ class MetaxV3APIService(FlaskService):
             )
             return None
         return resp
+
+    def get_directory(self, identifier, path):
+        """Get dataset directory from Metax."""
+        url = self.metax_url("/v3/datasets/{identifier}/directories", identifier=identifier)
+        resp, status, success = make_request(
+            self.session.get,
+            url,
+            params={"path": path},
+            headers={"Accept": "application/json"},
+            verify=self.verify_ssl,
+            timeout=30,
+        )
+        if not success:
+            log.warning(
+                "Failed to get directory {0} of catalog record {1} from Metax API".format(path, identifier)
+            )
+            return None, status
+        return resp, status
