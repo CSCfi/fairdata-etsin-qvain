@@ -73,7 +73,7 @@ class EtsinDatasetV3 {
   }
 
   @computed get isHarvested() {
-    return this.dataCatalog?.harvested
+    return this.dataCatalog?.is_external
   }
 
   @computed get isRemoved() {

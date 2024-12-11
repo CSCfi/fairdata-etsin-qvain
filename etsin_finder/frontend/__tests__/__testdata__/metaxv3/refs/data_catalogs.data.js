@@ -38,7 +38,7 @@ export const data_catalog_ida = {
     fi: 'IDA-palvelussa säilytettävät aineistot',
   },
   dataset_versioning_enabled: true,
-  harvested: false,
+  is_external: false,
   dataset_groups_create: ['ida', 'fairdata_users'],
   dataset_groups_admin: ['ida'],
   allow_remote_resources: false,
