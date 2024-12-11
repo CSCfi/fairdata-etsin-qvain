@@ -13,6 +13,7 @@ from flask import request, current_app
 from flask.views import MethodView
 from flask_mail import Message
 from webargs import fields
+import socket
 
 from etsin_finder.utils.abort import abort
 from etsin_finder.utils.parser import parser
@@ -679,7 +680,12 @@ class QvainDatasetEditorPermissions(MethodView):
                     subject=subject,
                     body=body,
                 )
-                current_app.mail.send(msg)
+                default_timeout = socket.getdefaulttimeout()
+                try:
+                    socket.setdefaulttimeout(10)
+                    current_app.mail.send(msg)
+                finally:
+                    socket.setdefaulttimeout(default_timeout)
             if len(outbox) != len(recipients):
                 raise Exception
 
