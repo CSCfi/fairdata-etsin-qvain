@@ -12,6 +12,7 @@ import re
 import json
 import marshmallow
 
+from etsin_finder.utils.flags import flag_enabled
 from etsin_finder.utils.request_utils import make_request
 from etsin_finder.utils.crypto_utils import (
     generate_fernet_key,
@@ -23,7 +24,6 @@ from etsin_finder.log import log
 from etsin_finder.utils.utils import FlaskService
 from .base_service import BaseService, ConfigValidationMixin
 from etsin_finder.schemas.services import DownloadServiceConfigurationSchema
-
 
 class DownloadAPIService(FlaskService, ConfigValidationMixin):
     """Download API Service"""
@@ -57,9 +57,12 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
             self.SUBSCRIBE_URL = f"{self.API_BASE_URL}/subscribe"
             self.STATUS_URL = f"{self.API_BASE_URL}/status"
             self.DOWNLOAD_URL = f"{self.API_PUBLIC_BASE_URL}/download"
-            self.NOTIFICATION_CALLBACK_URL = (
-                f"https://{self_domain}/api/download/notifications"
-            )
+
+            if flag_enabled("ETSIN.METAX_V3.BACKEND", app):
+                self.NOTIFICATION_CALLBACK_URL = (f"https://{self_domain}/api/v3/download/notifications")
+            else:
+                self.NOTIFICATION_CALLBACK_URL = (f"https://{self_domain}/api/download/notifications")
+
             self.NOTIFICATION_SECRET = generate_fernet_key(app.config["SECRET_KEY"])
 
             self.verify_ssl = verify_ssl
