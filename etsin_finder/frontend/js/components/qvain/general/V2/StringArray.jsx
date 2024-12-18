@@ -66,8 +66,9 @@ const StringArray = ({ id, fieldName, addWithComma, required, hideButton }) => {
   }
 
   const handleInputChange = (str, meta) => {
-    // prevent blur from clearing the input
-    if (meta.action !== 'input-blur' && meta.action !== 'menu-close') {
+    if (meta.action === 'input-blur' || meta.action === 'menu-close') {
+      validateAndAdd() // Save value when leaving input
+    } else {
       setItemStr(str)
     }
   }
