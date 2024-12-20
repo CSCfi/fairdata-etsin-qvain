@@ -64,14 +64,14 @@ poetry add <dependency>
 poetry update
 poetry export --without-hashes -o requirements.txt
 
-# Add new development dependencies using -D option
-poetry add -D tox
+# Add new development dependencies using --group dev option
+poetry add --group dev tox
 
 # After poetry commands, update requirements.txt
 poetry export --without-hashes -o requirements.txt
 
-# After poetry commands, update dev dependencies with dev dependencies with 
-poetry export --without-hashes --dev -o requirements.txt
+# After poetry commands, update test_requirements.txt with
+poetry export --without-hashes --with dev -o test_requirements.txt
 ```
 
 

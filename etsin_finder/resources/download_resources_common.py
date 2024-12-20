@@ -62,7 +62,7 @@ def send_email(language, cr_id, scope, email, pref_id):
 
 def package_already_created(error):
     """Check if error is due to package being already created."""
-    if type(error) != dict:
+    if not isinstance(error, dict):
         return False
 
     status_conflict = error.get("name") == "Conflict"

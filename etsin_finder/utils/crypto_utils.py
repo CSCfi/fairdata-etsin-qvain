@@ -27,7 +27,7 @@ def generate_fernet_key(source_key):
         salt=salt,
         info=None,
     )
-    if type(source_key) == str:
+    if isinstance(source_key, str):
         source_bytes = source_key.encode("utf-8")
     else:
         source_bytes = source_key

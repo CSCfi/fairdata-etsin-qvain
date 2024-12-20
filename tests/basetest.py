@@ -60,7 +60,7 @@ class BaseTest:
         """Keep track of sent emails"""
         messages = []
 
-        def sent(message, app):
+        def sent(app, message):
             messages.append(message)
 
         email_dispatched.connect(sent, weak=True)
