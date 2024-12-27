@@ -179,7 +179,8 @@ class EtsinDatasetV3 {
     }
     if (
       this.persistentIdentifier?.startsWith('urn:nbn:fi:att:') ||
-      this.persistentIdentifier?.startsWith('urn:nbn:fi:csc')
+      this.persistentIdentifier?.startsWith('urn:nbn:fi:csc') ||
+      this.persistentIdentifier?.startsWith('urn:nbn:fi:fd-')
     ) {
       return [{ value: 'metax' }, { value: 'fairdata_datacite' }]
     }
