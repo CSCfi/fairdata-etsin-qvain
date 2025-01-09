@@ -231,6 +231,7 @@ class Adapter {
         preferred_identifier: dataset.persistent_identifier,
       },
       date_created: dataset.created,
+      date_removed: dataset.removed,
       state: dataset.state,
       use_doi_for_published: dataset.generate_pid_on_publish === 'DOI',
       draft_of: this.relatedDraftV3ToV2(dataset.draft_of),

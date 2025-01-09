@@ -110,10 +110,7 @@ class QvainDatasets {
   }
 
   @action.bound removeDatasetChanges(dataset) {
-    const datasetIndex = this.datasets.findIndex(d => d.identifier === dataset.identifier)
-    if (datasetIndex >= 0) {
-      delete dataset.next_draft
-    }
+    delete dataset.next_draft
   }
 
   @action.bound removeDataset(dataset) {

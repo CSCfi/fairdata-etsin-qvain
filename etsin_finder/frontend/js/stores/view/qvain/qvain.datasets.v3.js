@@ -37,7 +37,9 @@ class QvainDatasetsV3 extends QvainDatasets {
       const latestDatasets = response.data.map(d => adapter.convertV3ToV2(d))
 
       // Attach drafts to original datasets
-      const allDatasets = latestDatasets.map(d => d.dataset_version_set).flat()
+      const allDatasets = latestDatasets
+        .map(d => (d.dataset_version_set.length > 0 ? d.dataset_version_set : [d]))
+        .flat()
       const datasets = allDatasets.filter(dataset => !dataset.draft_of)
       const datasetDrafts = allDatasets.filter(dataset => dataset.draft_of)
       this.attachDrafts(datasets, datasetDrafts)
@@ -53,17 +55,18 @@ class QvainDatasetsV3 extends QvainDatasets {
   }
 
   @override get datasetGroups() {
-    // Return only datasets that aren't a draft of an existing one
-    return this.datasets.map(d => {
-      const datasets = d.dataset_version_set.filter(v => !v.draft_of)
-      if (datasets.length > 0) {
-        return datasets
-      }
-      // If the resulting dataset_versions is empty, return just the dataset. This is unlikely
-      // to happen with real data because all V3 datasets have a dataset_versions and
-      // datasets with draft_of should be in the same dataset_versions as the original one.
-      return [d]
-    })
+    // Group datasets by version sets
+    const datasetVersions = this.datasets.map(d =>
+      d.dataset_version_set.length > 0 ? d.dataset_version_set : [d]
+    )
+    // Remove versions that are removed or drafts of an existing dataset
+    return datasetVersions
+      .map(versions => versions.filter(v => !v.draft_of && !v.date_removed))
+      .filter(versions => versions.length > 0)
+  }
+
+  @override removeDataset(dataset) {
+    dataset.date_removed = new Date() // datasets that have date_removed are ignored in the list
   }
 }
 
