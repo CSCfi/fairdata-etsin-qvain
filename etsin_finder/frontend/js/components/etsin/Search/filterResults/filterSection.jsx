@@ -26,13 +26,13 @@ const FilterSection = ({ filterName }) => {
 
   // sort activated items first
   const itemsSort = (a, b) => {
-    if (parseInt(a.count, 10) < parseInt(b.count, 10)) {
-      return -1
+    const hasA = query.has(filter, getValueTranslation(a.value)) ? 1 : 0
+    const hasB = query.has(filter, getValueTranslation(b.value)) ? 1 : 0
+    if (hasB - hasA === 0) {
+      // both activated or neither activated, sort descending
+      return parseInt(b.count, 10) - parseInt(a.count, 10)
     }
-    if (query.has(filter, getValueTranslation(b.value))) {
-      return 1
-    }
-    return -1
+    return hasB - hasA // sort activated first
   }
 
   const titleName = `search.aggregations.${filterName}.title`
