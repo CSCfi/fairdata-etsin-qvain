@@ -69,7 +69,7 @@ const App = () => {
     const Stores = buildStores({ Env })
     setStores(Stores)
     const { Accessibility, Auth, Locale } = Stores
-    Auth.enableRequestInterceptor()
+    Auth.enableRequestInterceptors()
     Auth.checkLogin()
     Accessibility.initialLoad()
     if (

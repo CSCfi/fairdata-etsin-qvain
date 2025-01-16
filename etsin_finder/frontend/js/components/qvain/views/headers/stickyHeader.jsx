@@ -62,7 +62,13 @@ const StickyHeader = ({ datasetError }) => {
 
   // Sticky header content
   if (datasetError) {
-    return null
+    return (
+      <StickySubHeaderWrapper>
+        <StickySubHeader>
+          <CustomSubHeader>{createLinkBack('left')}</CustomSubHeader>
+        </StickySubHeader>
+      </StickySubHeaderWrapper>
+    )
   }
 
   if (isLoading) {
