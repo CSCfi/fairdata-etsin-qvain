@@ -41,6 +41,12 @@ const qvainFinnish = {
     editable: 'Voit muuttaa kuvauksia muttet lisätä tai poistaa tiedostoja.',
     readonly: 'Voit katsoa kuvauksia muttet tehdä muutoksia.',
   },
+  pasInfoV3: {
+    processRunning:
+      'Aineistoa prosessoidaan säilytyspalvelussa. Voit katsoa kuvauksia muttet tehdä muutoksia.',
+    packageCreated:
+      'HUOM! Kuvailutietoihin tehtyjä muutoksia ei viedä säilytyksessä olevaan PAS-pakettiin, vaan ne näkyvät ainoastaan Etsimessä.',
+  },
   pasState: {
     0: 'Odottaa tarkastusta',
     10: 'Rikastaa',

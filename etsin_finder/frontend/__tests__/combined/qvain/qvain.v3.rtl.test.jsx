@@ -546,4 +546,29 @@ describe('Qvain with an opened dataset', () => {
     const flatSubmitResources = removeMatchingKeys(flatten(submitRights), expectedExtra)
     expect(flatSubmitResources).toEqual(flatRights)
   })
+
+  describe('when dataset is in preservation', () => {
+    it('renders dataset in read-only mode when PAS process is running', async () => {
+      await renderQvain({ preservation: { pas_process_running: true } })
+      expect(
+        screen.getByText(
+          'The dataset is being processed by the Digital Preservation Service.' +
+            ' You can view metadata but cannot make any changes.'
+        )
+      ).toBeInTheDocument()
+      const input = document.getElementById("titleInput")
+      expect(input.hasAttribute("disabled")).toBe(true)
+    })
+
+    it('shows notification when PAS package has been created', async () => {
+      await renderQvain({ preservation: { pas_package_created: true } })
+      expect(
+        screen.getByText(
+          'NOTE! Changes made to the metadata do NOT affect the version in Digital Preservation but are only visible in Etsin.'
+        )
+      ).toBeInTheDocument()
+      const input = document.getElementById("titleInput")
+      expect(input.hasAttribute("disabled")).toBe(false)
+    })
+  })
 })

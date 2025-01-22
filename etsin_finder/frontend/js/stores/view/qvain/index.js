@@ -325,7 +325,12 @@ class Qvain extends Resources {
 
   @computed
   get isPas() {
-    return this.dataCatalog === DATA_CATALOG_IDENTIFIER.PAS || this.preservationState > 0
+    return !!(
+      this.dataCatalog === DATA_CATALOG_IDENTIFIER.PAS ||
+      this.preservationState > 0 ||
+      this.original?.preservation_pas_process_running ||
+      this.original?.preservation_pas_package_created
+    )
   }
 
   @computed
@@ -406,6 +411,10 @@ class Qvain extends Resources {
       if (this.original && !this.Lock?.haveLock) {
         return true
       }
+    }
+
+    if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
+      return !!this.original?.preservation_pas_process_running
     }
     return (
       this.preservationState >= 80 &&

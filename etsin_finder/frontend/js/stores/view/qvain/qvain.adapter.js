@@ -239,6 +239,10 @@ class Adapter {
       next_draft: this.relatedDraftV3ToV2(dataset.next_draft),
       cumulative_state: dataset.cumulative_state,
       metadata_provider_user: dataset.metadata_owner?.user,
+      preservation_state: dataset.preservation?.state,
+      // v3 specific preservation fields
+      preservation_pas_process_running: dataset.preservation?.pas_process_running,
+      preservation_pas_package_created: dataset.preservation?.pas_package_created,
     }
 
     d.dataset_version_set = dataset.dataset_versions?.map(this.convertV3ToV2) || []
