@@ -229,6 +229,7 @@ class Adapter {
         provenance: this.provenanceV3ToV2(dataset.provenance),
         projects: dataset.projects, // shortcut to use projects as is
         preferred_identifier: dataset.persistent_identifier,
+        bibliographic_citation: dataset.bibliographic_citation,
       },
       date_created: dataset.created,
       date_removed: dataset.removed,
@@ -237,7 +238,6 @@ class Adapter {
       draft_of: this.relatedDraftV3ToV2(dataset.draft_of),
       next_draft: this.relatedDraftV3ToV2(dataset.next_draft),
       cumulative_state: dataset.cumulative_state,
-      bibliographic_citation: dataset.bibliographic_citation,
       metadata_provider_user: dataset.metadata_owner?.user,
     }
 

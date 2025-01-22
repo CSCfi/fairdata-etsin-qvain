@@ -39,6 +39,7 @@ const dataset_open_a = {
       person: null,
     },
   ],
+  bibliographic_citation: "cite me this way",
   data_catalog: data_catalog_ida.id,
   description: {
     en: 'This dataset is used for testing all fields in the Etsin dataset page. Description, Data, Identifiers and Events, and Maps -tabs are included in this test as well. Another version was made to test the version picker as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
