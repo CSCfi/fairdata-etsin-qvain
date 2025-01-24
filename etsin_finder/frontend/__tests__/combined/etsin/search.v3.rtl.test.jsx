@@ -22,36 +22,36 @@ import aggregations_b from '../../__testdata__/metaxv3/search/aggregations_b.dat
 import dataset_ida_a from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 import dataset_ida_b from '../../__testdata__/metaxv3/datasets/dataset_ida_b.data'
 
+const common_query = 'publishing_channels=etsin&latest_versions=true'
+
 const mockAdapter = new MockAdapter(axios)
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets?limit=20&offset=0&publishing_channels=etsin')
+  .onGet(`https://metaxv3:443/v3/datasets?limit=20&offset=0&${common_query}`)
   .reply(200, { results: [dataset_ida_a], count: 1 })
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&publishing_channels=etsin')
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&${common_query}`)
   .reply(200, aggregations_a)
 mockAdapter
   .onGet(
-    'https://metaxv3:443/v3/datasets?keyword=web-development&limit=20&offset=0&publishing_channels=etsin'
+    `https://metaxv3:443/v3/datasets?keyword=web-development&limit=20&offset=0&${common_query}`
   )
   .reply(200, { results: [dataset_ida_a], count: 1 })
 mockAdapter
   .onGet(
-    'https://metaxv3:443/v3/datasets/aggregates?keyword=web-development&limit=20&offset=0&publishing_channels=etsin'
+    `https://metaxv3:443/v3/datasets/aggregates?keyword=web-development&limit=20&offset=0&${common_query}`
   )
   .reply(200, aggregations_a)
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets?search=test&limit=20&offset=0&publishing_channels=etsin')
+  .onGet(`https://metaxv3:443/v3/datasets?search=test&limit=20&offset=0&${common_query}`)
   .reply(200, { ...dataset_ida_a, count: 0, results: [] })
 mockAdapter
-  .onGet(
-    'https://metaxv3:443/v3/datasets/aggregates?search=test&limit=20&offset=0&publishing_channels=etsin'
-  )
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?search=test&limit=20&offset=0&${common_query}`)
   .reply(200, aggregations_a)
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets?limit=20&offset=20&publishing_channels=etsin')
+  .onGet(`https://metaxv3:443/v3/datasets?limit=20&offset=20&${common_query}`)
   .reply(200, { results: [dataset_ida_b], count: 21 })
 mockAdapter
-  .onGet('https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=20&publishing_channels=etsin')
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=20&${common_query}`)
   .reply(200, aggregations_b)
 
 mockAdapter.resetHistory()
