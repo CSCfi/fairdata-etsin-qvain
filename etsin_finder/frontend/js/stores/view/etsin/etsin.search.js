@@ -78,6 +78,7 @@ class EtsinSearch {
     query.set('offset', this.offset)
     query.set('publishing_channels', 'etsin')
     query.set('latest_versions', true)
+    query.set('state', 'published')
 
     query.forEach((value, key) => {
       if (value.includes(',') && !value.startsWith('"')) {

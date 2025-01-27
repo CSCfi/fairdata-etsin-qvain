@@ -22,7 +22,7 @@ import aggregations_b from '../../__testdata__/metaxv3/search/aggregations_b.dat
 import dataset_ida_a from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 import dataset_ida_b from '../../__testdata__/metaxv3/datasets/dataset_ida_b.data'
 
-const common_query = 'publishing_channels=etsin&latest_versions=true'
+const common_query = 'publishing_channels=etsin&latest_versions=true&state=published'
 
 const mockAdapter = new MockAdapter(axios)
 mockAdapter
