@@ -214,7 +214,7 @@ export const RESOURCE_ENTITY_TYPE = {
 
 export const RELATION_TYPE = {
   RELATED_DATASET: {
-    label: { fi: 'Liittyvä aineisto', en: 'Related dataset', und: 'Liittyvä aineisto' },
+    label: { fi: 'Liittyy', en: 'Relation', und: 'Liittyy' },
     url: 'http://purl.org/dc/terms/relation',
   },
 }
