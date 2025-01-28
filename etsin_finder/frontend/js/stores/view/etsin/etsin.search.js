@@ -8,7 +8,9 @@ class EtsinSearch {
     this.client = new AbortClient()
   }
 
-  @observable term = ''
+  @observable term = '' // current value of search input
+
+  @observable usedTerm = '' // value that was used for current search
 
   @observable res = null
 
@@ -64,6 +66,7 @@ class EtsinSearch {
 
   @action.bound
   async submit(query) {
+    this.setUsedTerm(query.get("search"))
     if (query.has('page')) {
       const newPage = parseInt(query.get('page'), 10)
 
@@ -129,6 +132,10 @@ class EtsinSearch {
 
   @action.bound setTerm(term) {
     this.term = term
+  }
+
+  @action.bound setUsedTerm(term) {
+    this.usedTerm = term
   }
 
   @action.bound setPage(pageNum) {
