@@ -21,6 +21,7 @@ const CumulativeDataset = () => {
       isNewVersion,
       hasBeenPublished,
       original,
+      Files,
     },
   } = useStores()
 
@@ -80,11 +81,15 @@ const CumulativeDataset = () => {
     const stateKey = newCumulativeState === CUMULATIVE_STATE.YES ? 'enabled' : 'disabled'
     const stateChanged = cumulativeState !== newCumulativeState
     const stateOrChangeKey = stateChanged ? 'stateChanged' : stateKey
+    const hasFiles = Files.root?.directChildCount > 0
+
     return (
       <>
         <Paragraph>
           <Translate component="strong" content={`qvain.files.cumulativeState.${stateKey}.state`} />{' '}
-          <Translate content={`qvain.files.cumulativeState.${stateKey}.explanation`} />
+          {(stateKey === 'enabled' || !hasFiles) && (
+            <Translate content={`qvain.files.cumulativeState.${stateKey}.explanation`} />
+          )}
           {canChangeCumulativeState && (
             <CumulativeStateButton type="button" onClick={handleToggleNewCumulativeState}>
               <Translate content={`qvain.files.cumulativeState.${stateOrChangeKey}.button`} />
@@ -101,7 +106,8 @@ const CumulativeDataset = () => {
     )
   }
 
-  const content = (hasBeenPublished && !isNewVersion) ? getPublishedContent() : getUnpublishedContent()
+  const content =
+    hasBeenPublished && !isNewVersion ? getPublishedContent() : getUnpublishedContent()
 
   return (
     <FieldGroup>

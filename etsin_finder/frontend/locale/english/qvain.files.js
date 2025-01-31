@@ -48,7 +48,7 @@ const files = {
     disabled: {
       state: 'This dataset has been published as non-cumulative.',
       explanation:
-        "As the dataset description doesn't have any data yet, you can add files or folders ONCE." +
+        "As the dataset doesn't have any data yet, you can add files or folders ONCE." +
         ' After that adding data requires you to create a new version of the dataset.',
       note: 'Changing the dataset cumulative requires creating a new version of the dataset.',
     },
