@@ -392,15 +392,20 @@ class Actors {
     this.referenceOrganizationErrors = {}
   }
 
+
   isActorEqual = (org1, org2) => isEqual(org1, org2, ['uiid', 'roles', 'isReference'])
 
   isOrganizationEqual = (org1, org2) => isEqual(org1, org2, ['uiid', 'isReference'])
 
+  getOrganizationIdentifier(org) {
+    return org.identifier
+  }
+
   getReferenceOrganizations = parent => {
-    if (parent && !maybeReference(parent.identifier)) {
+    if (parent && !maybeReference(this.getOrganizationIdentifier(parent))) {
       return []
     }
-    const parentId = parent ? parent.identifier : ''
+    const parentId = parent ? this.getOrganizationIdentifier(parent) : ''
     return this.referenceOrganizations[parentId]
   }
 
@@ -483,10 +488,10 @@ class Actors {
   @action.bound async fetchReferenceOrganizations(parent) {
     // Fetch child reference organizations of parent organization,
     // or all top-level organizations if no parent is defined.
-    if (parent && !maybeReference(parent.identifier)) {
+    if (parent && !maybeReference(this.getOrganizationIdentifier(parent))) {
       return []
     }
-    const parentId = parent ? parent.identifier : ''
+    const parentId = parent ? this.getOrganizationIdentifier(parent) : ''
     if (this.referenceOrganizations[parentId]) {
       return this.referenceOrganizations[parentId]
     }
@@ -600,7 +605,7 @@ class Actors {
         if (org.isReference !== null) {
           return
         }
-        if (!maybeReference(org.identifier)) {
+        if (!maybeReference(this.getOrganizationIdentifier(org))) {
           org.isReference = false
           return
         }
@@ -609,7 +614,7 @@ class Actors {
           refs = this.referenceOrganizations['']
         } else {
           const parent = actor.organizations[index - 1]
-          const parentId = parent.identifier
+          const parentId = this.getOrganizationIdentifier(parent)
           if (!parentId || parent.isReference === false) {
             org.isReference = false
             return

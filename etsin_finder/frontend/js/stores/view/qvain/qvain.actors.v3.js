@@ -27,6 +27,10 @@ class ActorsV3 extends Actors {
     // this.mergeActorsOrganizationsWithReferences()
   }
 
+  getOrganizationIdentifier(org) {
+    return org.url
+  }
+
   isActorEqual = (actor1, actor2) => actor1.uiid === actor2.uiid
 
   isOrganizationEqual = (org1, org2) => org1.uiid === org2.uiid
@@ -83,7 +87,7 @@ class ActorsV3 extends Actors {
     if (parent && !parent.isReference) {
       return []
     }
-    const parentId = parent ? parent.identifier : ''
+    const parentId = parent ? this.getOrganizationIdentifier(parent) : ''
     if (this.referenceOrganizations[parentId]) {
       return this.referenceOrganizations[parentId]
     }
