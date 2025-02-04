@@ -248,6 +248,7 @@ class Adapter {
     d.dataset_version_set = dataset.dataset_versions?.map(this.convertV3ToV2) || []
     d.dataset_version_set.forEach(v => {
       v.data_catalog = d.data_catalog // Add missing catalog data to versions
+      v.metadata_provider_user = d.metadata_provider_user
     })
 
     // include v3 fileset object as it is
