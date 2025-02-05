@@ -57,7 +57,7 @@ class EtsinSearch {
   }
 
   @action.bound async fetchOverallCount() {
-    const url = `${this.Env.metaxV3Url('datasets')}?limit=1`
+    const url = `${this.Env.metaxV3Url('datasets')}?limit=1&latest_versions=true&state=published`
     const res = await this.client.get(url)
     runInAction(() => {
       this.overallCount = res.data.count
@@ -66,7 +66,7 @@ class EtsinSearch {
 
   @action.bound
   async submit(query) {
-    this.setUsedTerm(query.get("search"))
+    this.setUsedTerm(query.get('search'))
     if (query.has('page')) {
       const newPage = parseInt(query.get('page'), 10)
 
