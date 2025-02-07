@@ -24,7 +24,7 @@ import LoggedInRoute from './loggedInRoute'
 const Content = ({ contentRef }) => {
   const {
     Auth,
-    Env: { isQvain, separateQvain, getQvainUrl },
+    Env: { isQvain, separateQvain, getQvainUrl, Flags },
     Matomo: { changeService },
     Accessibility,
   } = useStores()
@@ -47,6 +47,14 @@ const Content = ({ contentRef }) => {
     return `/qvain${path}`
   }
 
+  const maintenance = (isQvain && Flags.flagEnabled('QVAIN.MAINTENANCE'))
+  if (maintenance) {
+    const query = new URLSearchParams(window.location.search)
+    if (query.get('disable_redirect') !== 'true') {
+      window.location.replace('https://www.fairdata.fi/maintenance/')
+    }
+  }
+
   return (
     <main className="content">
       <span ref={contentRef} tabIndex="-1" />
@@ -57,6 +65,11 @@ const Content = ({ contentRef }) => {
           <Route exact path="/datasets/:query?" key="search" component={Search} />,
           <Route path="/dataset/:identifier" key="dataset" component={Dataset} />,
         ]}
+        {maintenance && (
+          <Route path={qvainPath('')}>
+            <QvainLandingPage />
+          </Route>
+        )}
         <LoggedInRoute path={qvainPath('/dataset/:identifier')}>
           <Qvain />
         </LoggedInRoute>

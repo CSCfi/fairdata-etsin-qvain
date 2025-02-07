@@ -36,60 +36,59 @@ class Flags {
   constructor(Env) {
     makeObservable(this)
     this.Env = Env
-    if (BUILD !== 'production') {
-      // Global flag helpers for front-end development. The functions do not modify
-      // flags directly but instead the values are kept in the overrides object.
-      // The values are stored in localStorage.
-      //   setFlag: set a flag value
-      //   getFlags: get all flag values in effect (flags + overrides)
-      //   flagEnabled: is a flag enabled
-      //   resetFlags: reset flags to original values (clears overrides)
-      //   cleanupFlags: reset flags that aren't supported
-      extendObservable(this, {
-        overrides: {},
-      })
 
-      // Apply existing overrides starting from shortest paths
-      window.applyOverrides = () => {
-        const overridesList = Object.entries(
-          JSON.parse(localStorage.getItem('flagOverrides')) || {}
-        )
-        overridesList.sort(([pathA], [pathB]) => pathA.split('.').length - pathB.split('.').length)
-        overridesList.forEach(([path, value]) => this.setOverride(path, value))
-      }
-      window.applyOverrides()
+    // Global flag helpers for front-end development. The functions do not modify
+    // flags directly but instead the values are kept in the overrides object.
+    // The values are stored in localStorage.
+    //   setFlag: set a flag value
+    //   getFlags: get all flag values in effect (flags + overrides)
+    //   flagEnabled: is a flag enabled
+    //   resetFlags: reset flags to original values (clears overrides)
+    //   cleanupFlags: reset flags that aren't supported
+    extendObservable(this, {
+      overrides: {},
+    })
 
-      window.flagEnabled = this.flagEnabled
-
-      window.getFlags = () => JSON.parse(JSON.stringify(this.activeFlags))
-
-      window.setFlag = action((flagPath, value) => {
-        if (this.supportedFlags && !this.validateFlagPath(flagPath)) {
-          console.warn(`unsupported flag: ${flagPath}`)
-        }
-
-        if (typeof flagPath !== 'string') {
-          console.error('expected string flag path')
-          return
-        }
-        this.setOverride(flagPath, value)
-        localStorage.setItem('flagOverrides', JSON.stringify(this.overrides))
-      })
-
-      window.cleanupFlags = action(() => {
-        for (const path of Object.keys(this.overrides)) {
-          if (this.supportedFlags && !this.validateFlagPath(path)) {
-            delete this.overrides[path]
-          }
-        }
-        localStorage.setItem('flagOverrides', JSON.stringify(this.overrides))
-      })
-
-      window.resetFlags = action(() => {
-        this.overrides = {}
-        localStorage.removeItem('flagOverrides')
-      })
+    // Apply existing overrides starting from shortest paths
+    window.applyOverrides = () => {
+      const overridesList = Object.entries(
+        JSON.parse(localStorage.getItem('flagOverrides')) || {}
+      )
+      overridesList.sort(([pathA], [pathB]) => pathA.split('.').length - pathB.split('.').length)
+      overridesList.forEach(([path, value]) => this.setOverride(path, value))
     }
+    window.applyOverrides()
+
+    window.flagEnabled = this.flagEnabled
+
+    window.getFlags = () => JSON.parse(JSON.stringify(this.activeFlags))
+
+    window.setFlag = action((flagPath, value) => {
+      if (this.supportedFlags && !this.validateFlagPath(flagPath)) {
+        console.warn(`unsupported flag: ${flagPath}`)
+      }
+
+      if (typeof flagPath !== 'string') {
+        console.error('expected string flag path')
+        return
+      }
+      this.setOverride(flagPath, value)
+      localStorage.setItem('flagOverrides', JSON.stringify(this.overrides))
+    })
+
+    window.cleanupFlags = action(() => {
+      for (const path of Object.keys(this.overrides)) {
+        if (this.supportedFlags && !this.validateFlagPath(path)) {
+          delete this.overrides[path]
+        }
+      }
+      localStorage.setItem('flagOverrides', JSON.stringify(this.overrides))
+    })
+
+    window.resetFlags = action(() => {
+      this.overrides = {}
+      localStorage.removeItem('flagOverrides')
+    })
   }
 
   @observable flags = {}
