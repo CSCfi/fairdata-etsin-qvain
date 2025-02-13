@@ -60,6 +60,8 @@ const ErrorMessage = () => {
       summaryTranslation = ACCESS_DENIED_MESSAGES[reason]
       allowDetails = false
       errorColor = 'primary'
+    } else {
+      return null // Unknown reason, e.g. catalog does not allow downloads
     }
   }
 
