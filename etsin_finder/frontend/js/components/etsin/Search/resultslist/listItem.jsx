@@ -70,9 +70,9 @@ const SearchListItem = ({ item }) => {
                 <div className="basic-info">
                   <p>
                     {item.field_of_science.map(field => (
-                      <span key={field.url} lang={lang}>
+                      <div key={field.url} lang={lang}>
                         {getValueTranslation(field.pref_label)}
-                      </span>
+                      </div>
                     ))}
                   </p>
                 </div>
