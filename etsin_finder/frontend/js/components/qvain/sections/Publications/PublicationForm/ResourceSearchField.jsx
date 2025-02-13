@@ -1,6 +1,6 @@
 import React from 'react'
 import Select from 'react-select/async'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import { Title, FieldGroup, FieldWrapper, InfoText } from '@/components/qvain/general/V2'

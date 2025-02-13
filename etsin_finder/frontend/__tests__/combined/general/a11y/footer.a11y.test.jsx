@@ -2,14 +2,20 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { axe } from 'jest-axe'
 
-import '../../../../locale/translations'
+import { buildStores } from '@/stores'
+import { StoresProvider } from '@/stores/stores'
 import Footer from '../../../../js/layout/footer'
 
 describe('Footer', () => {
   let wrapper
 
   beforeAll(async () => {
-    wrapper = mount(<Footer />)
+    const stores = buildStores()
+    wrapper = mount(
+      <StoresProvider store={stores}>
+        <Footer />
+      </StoresProvider>
+    )
   })
 
   afterAll(() => {

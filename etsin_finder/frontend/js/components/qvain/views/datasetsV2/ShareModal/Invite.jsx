@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { components } from 'react-select'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '../../../utils/stores'
 import Button from '../../../../general/button'

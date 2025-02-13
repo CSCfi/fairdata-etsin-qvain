@@ -2,7 +2,6 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 import axios from 'axios'
 
-import '../../../locale/translations'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
 import etsinTheme from '../../../js/styles/theme'
@@ -13,7 +12,6 @@ import EnvClass from '../../../js/stores/domain/env'
 import QvainClass from '../../../js/stores/view/qvain'
 import LocaleClass from '../../../js/stores/view/locale'
 import AccessibilityClass from '../../../js/stores/view/accessibility'
-import ElasticQueryClass from '../../../js/stores/view/elasticquery'
 
 import CumulativeDataset, {
   CumulativeStateButton,
@@ -34,9 +32,7 @@ jest.mock('../../../js/stores/stores', () => {
 
 const Env = new EnvClass()
 const Qvain = new QvainClass(Env)
-const Accessibility = new AccessibilityClass(Env)
-const ElasticQuery = new ElasticQueryClass(Env)
-const Locale = new LocaleClass(Accessibility, ElasticQuery)
+const Locale = new LocaleClass(Env)
 
 const stores = {
   Env,

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { FormContainer, ModalLabel, FieldGroup } from '@/components/qvain/general/V2'
 import FunderTypeSelect from './FunderTypeSelect'
 import FunderOrganizationSelect from './FunderOrganizationSelect'

@@ -1,7 +1,6 @@
 import Harness from '../componentTestHarness'
 import { expect } from 'chai'
 import ReactSelect from 'react-select'
-import translate from 'counterpart'
 import { setImmediate } from 'timers'
 
 import { Lifecycle, Outcome } from '@/stores/view/qvain/qvain.provenances'
@@ -19,6 +18,7 @@ import ModalFieldList from '@/components/qvain/general/V2/ModalFieldList'
 import ModalFieldListAdd from '@/components/qvain/general/V2/ModalFieldListAdd'
 import Provenance from '@/components/qvain/sections/History'
 import ProvenanceFieldContent from '@/components/qvain/sections/History/ProvenanceFieldContent'
+import LocaleClass from '@/stores/view/locale'
 
 jest.mock('@/stores/view/qvain/qvain.submit.schemas', () => {
   return {
@@ -30,8 +30,6 @@ jest.mock('@/stores/view/qvain/qvain.submit.schemas', () => {
     },
   }
 })
-
-jest.mock('counterpart')
 
 const flushPromises = () => new Promise(setImmediate)
 
@@ -61,9 +59,7 @@ describe('Provenance', () => {
         associationsTranslationsRoot: 'qvain.history.provenance.modal.actorsInput',
       },
     },
-    Locale: {
-      lang: 'en',
-    },
+    Locale: new LocaleClass()
   }
 
   const harness = new Harness(Provenance)
@@ -158,6 +154,7 @@ describe('given required props and mockStores', () => {
       },
       readonly: false,
     },
+    Locale: new LocaleClass()
   }
 
   const props = {
@@ -276,9 +273,7 @@ describe('given required props and mockStores', () => {
   })
 
   describe('ActorsInput', () => {
-    const createButtonTranslation = 'createButton translation'
     beforeEach(() => {
-      translate.mockReturnValue(createButtonTranslation)
       harness.shallow()
       harness.diveInto(ActorsInput)
     })

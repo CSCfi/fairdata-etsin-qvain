@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
+import Translate from '@/utils/Translate'
 
 export const IconStyles = styled(FontAwesomeIcon)`
   color: ${props => props.theme.color.primary};

@@ -12,8 +12,8 @@
 
 import React, { useEffect, useRef } from 'react'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import { useQuery } from '@/components/etsin/general/useQuery'

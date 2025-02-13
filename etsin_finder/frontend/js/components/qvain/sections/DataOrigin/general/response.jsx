@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
 import { withRouter } from 'react-router-dom'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 
 import Loader from '@/components/general/loader'
 import { TableButton } from '@/components/qvain/general/buttons'

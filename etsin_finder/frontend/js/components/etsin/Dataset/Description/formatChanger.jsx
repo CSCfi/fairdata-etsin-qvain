@@ -1,8 +1,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import Select from 'react-select'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 

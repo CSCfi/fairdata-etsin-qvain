@@ -13,7 +13,7 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { isAlreadyTranslated } from '../errors/validationError'
 
 const TooltipHoverOnSave = ({ isOpen, children, errors, description }) => {

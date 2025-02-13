@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import axios from 'axios'
+import Translate from '@/utils/Translate'
 
 import Modal from '@/components/general/modal'
 import { DangerButton, TableButton } from '@/components/qvain/general/buttons'

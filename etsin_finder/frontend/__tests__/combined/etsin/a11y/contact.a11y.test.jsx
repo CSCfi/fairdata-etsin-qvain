@@ -7,13 +7,11 @@ import ReactModal from 'react-modal'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import etsinTheme from '@/styles/theme'
-import '../../../../locale/translations'
 import dataset from '../../../__testdata__/metaxv3/datasets/dataset_att_a'
 import Contact from '@/components/etsin/Dataset/contact'
 import Modal from '@/components/general/modal'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-failTestsWhenTranslationIsMissing()
 
 const emailInfo = {
   CONTRIBUTOR: true,
@@ -23,11 +21,14 @@ const emailInfo = {
   RIGHTS_HOLDER: true,
 }
 
+const registerMissingTranslationHandler = failTestsWhenTranslationIsMissing()
+
 describe('Etsin contact modal', () => {
   let wrapper, helper
 
   beforeAll(async () => {
     const stores = buildStores()
+    registerMissingTranslationHandler(stores.Locale)
     stores.Etsin.EtsinDataset.set('dataset', dataset)
     stores.Etsin.EtsinDataset.set('emails', emailInfo)
 

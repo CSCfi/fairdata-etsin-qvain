@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import {
@@ -14,7 +13,10 @@ import {
 import parseActorLabel from '@/components/qvain/utils/actor'
 
 const ActorsList = ({ actors, items, language }) => {
-  const { readonly } = useStores().Qvain
+  const {
+    Qvain: { readonly },
+    Locale: { translate },
+  } = useStores()
 
   const handleRemoveActor = actor => {
     actors.removeActorRef(actor.value)

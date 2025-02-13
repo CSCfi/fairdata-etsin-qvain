@@ -1,8 +1,7 @@
 import React from 'react'
 
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
+import Translate from '@/utils/Translate'
 
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
 import Select from '@/components/qvain/general/V2/SearchSelect'
@@ -11,6 +10,9 @@ import { FieldGroup, FieldWrapper, Title, InfoText } from '@/components/qvain/ge
 
 const LanguageField = () => {
   const Stores = useStores()
+  const {
+    Locale: { translate },
+  } = Stores
   const { storage, set, Model } = Stores.Qvain.DatasetLanguages
 
   return (

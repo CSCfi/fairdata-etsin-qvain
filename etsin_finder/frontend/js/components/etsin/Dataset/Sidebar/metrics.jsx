@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 
 import ErrorBoundary from '@/components/general/errorBoundary'

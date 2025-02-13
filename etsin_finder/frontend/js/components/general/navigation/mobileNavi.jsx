@@ -13,11 +13,10 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCog } from '@fortawesome/free-solid-svg-icons'
+import Translate from '@/utils/Translate'
 
 import DropdownMenu from './dropdownMenu'
 import LangToggle from './langToggle'
@@ -26,7 +25,10 @@ import { Link } from '../button'
 import { useStores } from '@/stores/stores'
 
 const MobileNavi = ({ helpUrl, naviRoutes, children, loginThroughService }) => {
-  const { Accessibility } = useStores()
+  const {
+    Accessibility,
+    Locale: { translate },
+  } = useStores()
   return (
     <MobileItems>
       <DropdownMenu

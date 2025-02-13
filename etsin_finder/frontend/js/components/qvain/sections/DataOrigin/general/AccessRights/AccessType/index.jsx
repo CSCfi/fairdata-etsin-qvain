@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import Select from 'react-select'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 
 import { TitleSmall, FieldGroup, Divider } from '@/components/qvain/general/V2'
 

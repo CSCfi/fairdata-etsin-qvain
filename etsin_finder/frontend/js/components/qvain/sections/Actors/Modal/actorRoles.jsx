@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { ROLE } from '../../../../../utils/constants'
 import { ModalLabel, FieldGroup } from '@/components/qvain/general/V2'
 import RoleCheckbox from './roleCheckbox'

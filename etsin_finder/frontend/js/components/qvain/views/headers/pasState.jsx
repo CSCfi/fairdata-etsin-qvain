@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { useStores } from '../../utils/stores'
 
 // If we have a PAS dataset, show information on current state.

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import Select from 'react-select'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { useStores } from '@/utils/stores'
 import versionChangerStyles from './versionChangerStyles'
 

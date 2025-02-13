@@ -1,6 +1,6 @@
 import React from 'react'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 import { useStores } from '@/stores/stores'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 import { ButtonContainer, AddNewButton } from '@/components/qvain/general/buttons'

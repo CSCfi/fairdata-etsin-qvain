@@ -8,7 +8,6 @@ import { axe } from 'jest-axe'
 import MockAdapter from 'axios-mock-adapter'
 
 import { buildStores } from '../../../../js/stores'
-import '../../../../locale/translations'
 import etsinTheme from '../../../../js/styles/theme'
 import { ENTITY_TYPE } from '../../../../js/utils/constants'
 import ActorModal from '../../../../js/components/qvain/sections/Actors/Modal'
@@ -19,7 +18,6 @@ import organizationMockGet, {
 import { useStores, StoresProvider } from '../../../../js/stores/stores'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-failTestsWhenTranslationIsMissing()
 
 jest.setTimeout(10000)
 
@@ -40,6 +38,7 @@ jest.mock('../../../../js/stores/stores', () => {
 })
 
 const stores = buildStores()
+failTestsWhenTranslationIsMissing(stores.Locale)
 
 beforeEach(() => {
   stores.Qvain.resetQvainStore()

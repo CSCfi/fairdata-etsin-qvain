@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
 import { tint } from 'polished'
 import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { Spinner } from '../loader'
 

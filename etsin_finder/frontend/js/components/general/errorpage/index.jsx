@@ -11,9 +11,9 @@
 }
 
 import React, { useEffect } from 'react'
-import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import Translate from '@/utils/Translate'
 
 import HeroBanner from '@/components/general/hero'
 import { useStores } from '@/stores/stores'

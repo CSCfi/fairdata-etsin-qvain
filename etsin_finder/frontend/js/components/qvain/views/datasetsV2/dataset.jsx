@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled, { css } from 'styled-components'
-import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faChevronRight,
@@ -10,6 +9,7 @@ import {
   faEllipsisH,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import formatAge from './formatAge'
@@ -82,9 +82,10 @@ const Dataset = ({ dataset, group, isExpanded, expandGroup, isLatest, versionNum
   const Stores = useStores()
   const {
     QvainDatasets: { loadTime },
-    Locale: { getValueTranslation },
+    Locale,
     Auth,
   } = Stores
+  const { getValueTranslation } = Locale
 
   const actions = getDatasetActionsV2(Stores, dataset, group)
   return (
@@ -105,7 +106,7 @@ const Dataset = ({ dataset, group, isExpanded, expandGroup, isLatest, versionNum
         <DatasetStateTag state={getDatasetState(dataset)} />
       </Cell>
       <Cell className="dataset-owner">{datasetOwner(dataset, Auth.userName)}</Cell>
-      <Cell className="dataset-created">{formatAge(loadTime, dataset.date_created)}</Cell>
+      <Cell className="dataset-created">{formatAge(Locale, loadTime, dataset.date_created)}</Cell>
       {actions.filter(action => action.icon).map(action => getActionButton(action))}
       <Cell className="dataset-more">
         <Dropdown

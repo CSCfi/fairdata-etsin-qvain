@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { FieldGroup, FormContainer, InfoTextLarge, ModalLabel } from '@/components/qvain/general/V2'
 import { Location } from '@/stores/view/qvain/qvain.spatials'

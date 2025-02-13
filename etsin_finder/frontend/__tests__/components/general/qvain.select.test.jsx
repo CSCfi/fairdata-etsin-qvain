@@ -11,7 +11,7 @@ import {
   getOptionValue,
   getGroupLabel,
   onChange,
-  optionsToModels
+  optionsToModels,
 } from '../../../js/components/qvain/utils/select'
 
 const mockOptions = [{ value: 'value', label: 'label' }]
@@ -20,7 +20,10 @@ const getOptions = jest.fn(() => Promise.resolve(mockOptions))
 
 const mockStores = {
   Qvain: { readonly: 'readonly', ReferenceData: { getOptions } },
-  Locale: { lang: 'fi' },
+  Locale: {
+    lang: 'fi',
+    translate: v => v,
+  },
 }
 
 jest.mock('../../../js/stores/stores', () => ({

@@ -12,7 +12,6 @@
 
 import React from 'react'
 import { observer } from 'mobx-react'
-import translate from 'counterpart'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
@@ -24,7 +23,7 @@ export const accessRightsBool = ar => ar?.access_type?.url === ACCESS_TYPE_URL.O
 
 function AccessRights(props) {
   const {
-    Locale: { getValueTranslation, getPreferredLang, dateFormat },
+    Locale: { getValueTranslation, getPreferredLang, dateFormat, translate },
   } = useStores()
 
   const title = props.accessRights?.access_type?.pref_label || {

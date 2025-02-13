@@ -13,8 +13,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
+import Translate from '@/utils/Translate'
 
 import buildColumns from '@/utils/buildColumns'
 import { useStores } from '@/stores/stores'

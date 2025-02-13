@@ -1,7 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
+import Translate from '@/utils/Translate'
 import {
   DatePicker,
   handleDatePickerChange,
@@ -22,7 +21,7 @@ const EmbargoExpires = () => {
         validate,
       },
     },
-    Locale: { lang },
+    Locale: { lang, translate },
   } = useStores()
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react'
 import Harness from '../componentTestHarness'
 import { expect } from 'chai'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { Dataset } from '@/components/qvain/views/DatasetEditorV2'
 import Header from '@/components/qvain/views/headers/header'
@@ -194,6 +194,7 @@ describe('given datasetLoading true', () => {
     Qvain: {
       original: {},
     },
+    Locale: { translate: v => v },
   }
 
   const props = {
@@ -235,6 +236,7 @@ describe('given datasetLoading false and original', () => {
     Qvain: {
       original: {},
     },
+    translate: v => v,
   }
 
   const props = {
@@ -274,6 +276,7 @@ describe('given datasetLoading false and original', () => {
 describe('given datasetLoading false and no original', () => {
   const mockStores = {
     Qvain: {},
+    Locale: { translate: v => v },
   }
 
   const props = {
@@ -313,6 +316,7 @@ describe('given datasetLoading false and no original', () => {
 describe('given datasetError true', () => {
   const mockStores = {
     Qvain: {},
+    Locale: { translate: v => v },
   }
 
   const props = {

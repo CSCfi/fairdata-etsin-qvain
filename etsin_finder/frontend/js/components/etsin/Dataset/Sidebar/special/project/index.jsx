@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import Modal from '@/components/general/modal'
 import { TransparentLink } from '@/components/etsin/general/button'

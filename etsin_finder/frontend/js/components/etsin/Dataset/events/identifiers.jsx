@@ -9,8 +9,8 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 
 import idnToLink from '@/utils/idnToLink'
 

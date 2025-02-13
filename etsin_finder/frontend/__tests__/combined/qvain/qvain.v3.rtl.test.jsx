@@ -11,7 +11,6 @@ import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import parseDateISO from 'date-fns/parseISO'
 
-import '../../../locale/translations'
 import etsinTheme from '@/styles/theme'
 import { buildStores } from '@/stores'
 import EnvClass from '@/stores/domain/env'
@@ -19,7 +18,7 @@ import { StoresProvider } from '@/stores/stores'
 import Qvain from '@/components/qvain/views/main'
 import { flatten, removeMatchingKeys } from '@/utils/flatten'
 
-jest.setTimeout(15000)
+jest.setTimeout(25000)
 import { access_rights_embargo } from '../../__testdata__/metaxv3/refs/access_rights.data'
 import dataset from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 

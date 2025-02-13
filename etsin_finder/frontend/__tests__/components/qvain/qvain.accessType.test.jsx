@@ -11,7 +11,6 @@ import { buildStores } from '@/stores'
 import { onChange } from '@/components/qvain/utils/select'
 
 import accessTypeResponse from '../../__testdata__/accessTypes.data'
-import '../../../locale/translations'
 import { StoresProvider } from '../../../js/stores/stores'
 
 configure({

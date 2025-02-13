@@ -1,5 +1,5 @@
 import React from 'react'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { InfoTextLarge } from '@/components/qvain/general/V2'
 import { SectionContentWrapper } from '@/components/qvain/general/V2/Section'

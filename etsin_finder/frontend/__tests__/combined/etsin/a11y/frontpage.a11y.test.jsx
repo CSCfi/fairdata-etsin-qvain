@@ -8,14 +8,13 @@ import MockAdapter from 'axios-mock-adapter'
 import { MemoryRouter } from 'react-router-dom'
 
 import etsinTheme from '../../../../js/styles/theme'
-import '../../../../locale/translations'
 import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import FrontPage from '../../../../js/components/etsin/FrontPage'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-failTestsWhenTranslationIsMissing()
 const stores = buildStores()
+failTestsWhenTranslationIsMissing(stores.Locale)
 
 const mockAdapter = new MockAdapter(axios)
 mockAdapter.onGet().reply(200, { count: 1 })

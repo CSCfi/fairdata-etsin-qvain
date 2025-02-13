@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 const State = styled.div`
   display: inline-block;

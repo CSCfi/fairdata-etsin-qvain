@@ -12,11 +12,11 @@
 
 import React, { useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSort, faSortAmountUp, faSortAmountDown } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import Translate from '@/utils/Translate'
 import { useQuery } from '@/components/etsin/general/useQuery'
 
 import { InvertedButton } from '../../general/button'

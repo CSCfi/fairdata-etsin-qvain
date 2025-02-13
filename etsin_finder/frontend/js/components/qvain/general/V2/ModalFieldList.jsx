@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 import {
   ButtonGroup,
   ButtonLabel,

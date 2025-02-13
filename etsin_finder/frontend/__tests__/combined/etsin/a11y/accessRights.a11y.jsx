@@ -5,7 +5,6 @@ import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 
 import etsinTheme from '@/styles/theme'
-import '../../../../locale/translations'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import dataset from '../../../__testdata__/metaxv3/datasets/dataset_att_a'
@@ -13,10 +12,10 @@ import AccessRights from '@/components/etsin/Dataset/accessRights'
 import Modal from '@/components/general/modal'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-failTestsWhenTranslationIsMissing()
 
 jest.mock('@/stores/view/accessibility')
 const stores = buildStores()
+failTestsWhenTranslationIsMissing(stores.Locale)
 stores.Etsin.EtsinDataset.set('dataset', dataset)
 
 describe('Etsin access rights modal', () => {

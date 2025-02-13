@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 import { useStores } from '@/stores/stores'
 
 import { FieldGroup, ModalLabel } from '@/components/qvain/general/V2'

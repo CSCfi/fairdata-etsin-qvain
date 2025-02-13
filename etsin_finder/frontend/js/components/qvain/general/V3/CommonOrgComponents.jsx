@@ -1,23 +1,22 @@
-import React, { useEffect } from 'react'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import Translate from 'react-translate-component'
-import t from 'counterpart'
+import React, { useEffect } from 'react'
 import ReactSelect from 'react-select'
+import styled from 'styled-components'
 
+import Spinner from '@/components/etsin/general/spinner'
 import { Input } from '@/components/qvain/general/modal/form'
-import { DeleteButton } from '@/components/qvain/general/V2/buttons'
-import { useStores } from '@/stores/stores'
 import {
-  InfoText,
-  FieldLabel,
-  FieldGroup,
   Divider,
+  FieldGroup,
+  FieldLabel,
+  InfoText,
   RequiredText,
   Title,
 } from '@/components/qvain/general/V2'
-import Spinner from '@/components/etsin/general/spinner'
+import { DeleteButton } from '@/components/qvain/general/V2/buttons'
+import { useStores } from '@/stores/stores'
+import Translate from '@/utils/Translate'
 
 /**
  * Internally used select component with form for adding organization manually.
@@ -26,7 +25,7 @@ import Spinner from '@/components/etsin/general/spinner'
 export const OrgSelectComponent = observer(
   ({ selectId, org, settings, section, changeCallback }) => {
     const {
-      Locale: { getValueTranslation },
+      Locale: { getValueTranslation, translate },
       Qvain: { OrgReferences, readonly },
     } = useStores()
 
@@ -113,9 +112,12 @@ export const OrgSelectComponent = observer(
     const getOptions = () => {
       const options = []
       const optionCreate = {
-        label: t('qvain.organizationSelect.label.addNew'),
+        label: translate('qvain.organizationSelect.label.addNew'),
         options: [
-          { value: 'create', pref_label: { und: t('qvain.organizationSelect.label.addNew') } },
+          {
+            value: 'create',
+            pref_label: { und: translate('qvain.organizationSelect.label.addNew') },
+          },
         ],
       }
 
@@ -123,7 +125,7 @@ export const OrgSelectComponent = observer(
 
       if (OrgReferences.data.organizations[parent.id]?.length) {
         options.push({
-          label: t('qvain.actors.add.organization.options.presets'),
+          label: translate('qvain.actors.add.organization.options.presets'),
           options: OrgReferences.data.organizations[parent.id]
             .slice()
             .sort((a, b) => getValueTranslation(a.pref_label) > getValueTranslation(b.pref_label)),

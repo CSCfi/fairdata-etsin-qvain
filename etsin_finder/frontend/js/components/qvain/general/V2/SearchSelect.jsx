@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ReactSelect from 'react-select/async'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import { toJS } from 'mobx'
+import Translate from '@/utils/Translate'
 import {
   onChange,
   onChangeMulti,

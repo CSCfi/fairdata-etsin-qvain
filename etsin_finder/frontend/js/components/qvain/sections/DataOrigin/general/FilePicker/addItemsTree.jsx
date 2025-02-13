@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 
 import { useRenderTree } from '../../../../../general/files/tree'
 import AddItemsTreeItem from './addItemsTreeItem'

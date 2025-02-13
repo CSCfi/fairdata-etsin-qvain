@@ -10,7 +10,6 @@ import PackageSuccess from './packageSuccess'
 
 const modalContent = Packages => {
   const status = Packages.get(Packages.packageModalPath)?.status
-  console.log('status:', status)
   if (status === DOWNLOAD_API_REQUEST_STATUS.SUCCESS) {
     return <PackageSuccess Packages={Packages} />
   }

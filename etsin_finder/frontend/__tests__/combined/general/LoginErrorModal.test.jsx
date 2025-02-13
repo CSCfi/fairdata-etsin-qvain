@@ -5,7 +5,6 @@ import ReactModal from 'react-modal'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 
-import '@/../locale/translations'
 import etsinTheme from '@/styles/theme'
 import { StoresProvider } from '@/stores/stores'
 import LoginErrorModal from '@/layout/LoginErrorModal'

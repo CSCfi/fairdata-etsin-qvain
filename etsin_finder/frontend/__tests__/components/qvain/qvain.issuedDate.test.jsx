@@ -1,11 +1,11 @@
 import Harness from '../componentTestHarness'
 import { expect } from 'chai'
-import '../../../locale/translations'
 
 import IssuedDate from '@/components/qvain/sections/Description/IssuedDate'
 import { useStores } from '../../../js/stores/stores'
 import DatePicker from '../../../js/components/qvain/general/V2/Datepicker'
 import ValidationError from '../../../js/components/qvain/general/errors/validationError'
+import Locale from '@/stores/view/locale'
 
 jest.mock('../../../js/stores/stores')
 
@@ -23,9 +23,7 @@ describe('given mockStores (not published with doi)', () => {
       hasBeenPublishedWithDoi: false,
       readonly: false,
     },
-    Locale: {
-      lang: 'en',
-    },
+    Locale: new Locale(),
   }
 
   const harness = new Harness(IssuedDate)
@@ -106,9 +104,7 @@ describe('given mockStores (published with doi and has validation error)', () =>
       hasBeenPublishedWithDoi: true,
       readonly: false,
     },
-    Locale: {
-      lang: 'en',
-    },
+    Locale: new Locale(),
   }
 
   const harness = new Harness(IssuedDate)

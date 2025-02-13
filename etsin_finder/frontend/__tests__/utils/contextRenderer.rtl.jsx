@@ -6,7 +6,6 @@ import { MemoryRouter } from 'react-router-dom'
 import { Route } from 'react-router-dom/cjs/react-router-dom.min'
 
 import theme from '@/styles/theme'
-import '@/../locale/translations'
 import { StoresProvider } from '@/stores/stores'
 
 export const contextRenderer = ({ Component, props = {}, stores = null, urls = null }) => {

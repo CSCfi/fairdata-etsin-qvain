@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { SaveButton, CancelButton } from '../../../../../general/buttons'
 import { Label, CustomSelect, Input, Textarea } from '../../../../../general/modal/form'
 

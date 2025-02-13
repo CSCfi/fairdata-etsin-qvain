@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
 
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { Label } from '@/components/qvain/general/modal/form'
 import { Organization } from '@/stores/view/qvain/qvain.actors'
 import OrgSelector from './orgSelector'

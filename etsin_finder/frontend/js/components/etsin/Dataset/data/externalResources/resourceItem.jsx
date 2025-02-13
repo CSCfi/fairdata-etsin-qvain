@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import {
   faFile,
   faExternalLinkAlt,
@@ -10,6 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import IconButton from '../common/iconButton'

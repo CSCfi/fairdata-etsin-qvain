@@ -19,6 +19,7 @@ describe('given mockStores', () => {
         Model: jest.fn(),
       },
     },
+    Locale: { translate: v => v },
   }
 
   const harness = new Harness(FieldOfScienceField)

@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import HeightTransition from '@/components/general/animations/heightTransition'
 import SortResults from './sortResults'

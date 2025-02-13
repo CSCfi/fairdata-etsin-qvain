@@ -5,7 +5,6 @@ import { BrowserRouter } from 'react-router-dom'
 import { axe } from 'jest-axe'
 
 import etsinTheme from '../../../../js/styles/theme'
-import '../../../../locale/translations'
 import {buildStores} from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import QvainHeader from '../../../../js/components/qvain/general/header'
@@ -13,7 +12,7 @@ import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 const stores = buildStores()
 
-failTestsWhenTranslationIsMissing()
+failTestsWhenTranslationIsMissing(stores.Locale)
 
 describe('Qvain header', () => {
   let wrapper

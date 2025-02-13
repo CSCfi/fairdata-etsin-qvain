@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import { FieldGroup } from './index'

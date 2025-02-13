@@ -12,8 +12,8 @@
 
 import PropTypes from 'prop-types'
 import React from 'react'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 
 import { Link } from '../button'
 import LangToggle from './langToggle'

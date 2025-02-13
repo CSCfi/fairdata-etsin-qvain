@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import Translate from 'react-translate-component'
 import moment from 'moment'
+import Translate from '@/utils/Translate'
 
 import Label from '@/components/qvain/general/card/label'
 

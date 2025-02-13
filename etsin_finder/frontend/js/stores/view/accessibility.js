@@ -9,14 +9,17 @@
  */
 
 import React from 'react'
-import { observable, action, makeObservable } from 'mobx'
-import translate from 'counterpart'
+import { observable, action, makeObservable, autorun } from 'mobx'
 
 class Accessibility {
-  constructor(Env) {
+  constructor(Env, Locale) {
     this.Env = Env
+    this.Locale = Locale
     makeObservable(this)
     this.announce = this.announce.bind(this)
+
+    // Run handleNavigation when currentLang changes
+    autorun(() => this.Locale.currentLang && this.handleNavigation())
   }
 
   @observable assertiveAnnouncement = ''
@@ -82,14 +85,14 @@ class Accessibility {
   @action.bound
   handleNavigation(location, resetFocus = true) {
     if (this.Env.isQvain) {
-      this.setQvainPageTitle(translate('general.qvainPageTitle'))
+      this.setQvainPageTitle(this.Locale.translate('general.qvainPageTitle'))
       return
     }
 
     let loc = location
     loc = this.getLocation()
 
-    const pageName = translate(`general.etsinPageTitles.${loc}`)
+    const pageName = this.Locale.translate(`general.etsinPageTitles.${loc}`)
     this.announce(pageName)
     this.setEtsinPageTitle(pageName)
     if (resetFocus) {
@@ -109,6 +112,10 @@ class Accessibility {
     ]
 
     let location
+    if (!this.Env.history.location?.pathname) {
+      return 'home' // Fix when location is not set in tests
+    }
+
     const pathname = this.Env.history.location.pathname
     for (const [matchLocation, matcher] of etsinLocationMatchers) {
       if (matcher.test(pathname)) {

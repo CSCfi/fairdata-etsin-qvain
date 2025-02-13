@@ -1,12 +1,15 @@
 import React from 'react'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
+import Translate from '@/utils/Translate'
 
 import Button from '@/components/etsin/general/button'
 import etsinTheme from '@/styles/theme'
 import Loader from '@/components/general/loader'
+import { useStores } from '@/stores/stores'
 
 const REMSButton = props => {
+  const {
+    Locale: { translate },
+  } = useStores()
   let button
   switch (props.applicationState) {
     case 'apply':
@@ -25,12 +28,7 @@ const REMSButton = props => {
       break
     case 'draft':
       button = (
-        <Button
-          id="rems-button-draft"
-          onClick={props.onClick}
-          color="yellow"
-          noMargin
-        >
+        <Button id="rems-button-draft" onClick={props.onClick} color="yellow" noMargin>
           {props.loading ? (
             <>
               <Translate content="dataset.access_draft" />
@@ -44,12 +42,7 @@ const REMSButton = props => {
       break
     case 'submitted':
       button = (
-        <Button
-          id="rems-button-submitted"
-          onClick={props.onClick}
-          color="yellow"
-          noMargin
-        >
+        <Button id="rems-button-submitted" onClick={props.onClick} color="yellow" noMargin>
           {props.loading ? (
             <>
               <Translate content="dataset.access_request_sent" />

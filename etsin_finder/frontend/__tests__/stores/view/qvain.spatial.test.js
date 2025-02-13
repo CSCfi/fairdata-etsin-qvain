@@ -2,17 +2,18 @@ import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import { expect } from 'chai'
 
-import '../../../locale/translations'
 import Spatials, {
   Spatial,
   Location,
   SpatialModel,
 } from '../../../js/stores/view/qvain/qvain.spatials'
+import Locale from '../../../js/stores/view/locale'
 
 jest.mock('../../../js/stores/view/qvain/qvain.field', () => {
   class mockField {
-    constructor(...args) {
-      this.constructorFunction(...args)
+    constructor(Parent, ...args) {
+      this.constructorFunction(Parent, ...args)
+      this.Parent = Parent
     }
     storage = []
     fromBackendBase = jest.fn()
@@ -27,7 +28,7 @@ jest.mock('mobx')
 
 describe('Spatials store', () => {
   let spatials
-  const parent = {}
+  const parent = { Locale: new Locale() }
   const existingSpatials = ['here lies spatials']
 
   beforeEach(() => {
@@ -248,5 +249,6 @@ test('should return "Geographical area" for nameless spatial', () => {
   const spatialObj = {
     as_wkt: ['POINT(1 2)'],
   }
-  expect(new Spatials().getItemLabel(spatialObj)).to.equal("Geographical area")
+  const spatials = new Spatials({ Locale: new Locale() })
+  expect(spatials.getItemLabel(spatialObj)).to.equal('Geographical area')
 })

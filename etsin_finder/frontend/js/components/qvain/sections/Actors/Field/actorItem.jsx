@@ -1,8 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import translate from 'counterpart'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import { getActorName, ActorIcon } from '../common'
@@ -16,7 +15,7 @@ import { FieldListContainer, FieldListLabel } from '@/components/qvain/general/V
 const ActorItem = ({ actor }) => {
   const Stores = useStores()
   const { editActor, removeActor } = Stores.Qvain.Actors
-  const { lang } = Stores.Locale
+  const { lang, translate } = Stores.Locale
   const { readonly } = Stores.Qvain
 
   const handleEditActor = () => {
@@ -34,7 +33,7 @@ const ActorItem = ({ actor }) => {
 
   return (
     <FieldListContainer>
-      <FieldListLabel className='actor-label'>
+      <FieldListLabel className="actor-label">
         <ActorIcon actor={actor} style={{ marginRight: '8px' }} />
         {getActorName(actor, lang)}
         {actor.roles.map(translateRole)}

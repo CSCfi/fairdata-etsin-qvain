@@ -109,7 +109,7 @@ const finnish = {
         'Validoimaton Datacite: Aineisto näytetään Datacite -formaatissa, mutta ilman pakollisten kenttien validointia. Aineisto ei sellaisenaan välttämättä täytä Dataciten vaatimuksia.',
       datacite: 'Datacite tietomallissa (XML)',
       fairdata_datacite: 'Ei validoituna Datacite tietomallissa (XML)',
-      metax: 'Metax tietomallissa (JSON)',
+      json: 'Metax tietomallissa (JSON)',
     },
     draftInfo: {
       draft: 'Tämä aineisto on luonnos ja näkyy ainoastaan aineiston luojalle.',

@@ -13,7 +13,6 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import translate from 'counterpart'
 import styled from 'styled-components'
 import { faGlobe, faUniversity, faUser } from '@fortawesome/free-solid-svg-icons'
 import { observer } from 'mobx-react'
@@ -24,7 +23,7 @@ import { useStores } from '@/stores/stores'
 
 const PopupContent = ({ agent }) => {
   const {
-    Locale: { getPreferredLang, getValueTranslation },
+    Locale: { getPreferredLang, getValueTranslation, translate },
   } = useStores()
   const { organization, person, contributor_role, contributor_type, homepage } = agent
   const name = person?.name || organization.pref_label

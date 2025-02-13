@@ -25,6 +25,7 @@ describe('given mockStores', () => {
     },
     Locale: {
       lang: 'en',
+      translate: v => v,
     },
   }
 

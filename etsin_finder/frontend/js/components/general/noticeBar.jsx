@@ -13,11 +13,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import { darken } from 'polished'
+import Translate from '@/utils/Translate'
 import checkColor from '../../styles/styledUtils'
 import { TransparentButton } from './button'
 

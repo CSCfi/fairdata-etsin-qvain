@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import { InvertedButton } from '@/components/etsin/general/button'
@@ -14,6 +13,7 @@ const ClearFilters = () => {
     Etsin: {
       Search: { isLoading },
     },
+    Locale: { translate },
   } = useStores()
   const history = useHistory()
 

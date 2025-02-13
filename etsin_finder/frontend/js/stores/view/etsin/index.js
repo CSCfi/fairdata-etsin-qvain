@@ -1,5 +1,4 @@
 import { action, observable, computed, makeObservable } from 'mobx'
-import translate from 'counterpart'
 import { isAbort } from '@/utils/AbortClient'
 import EtsinDatasetV3 from './etsin.storesV3'
 import { DatasetProcessorV3 } from './processor/etsin.dataset'
@@ -226,7 +225,7 @@ class Etsin {
   }
 
   @action.bound setLoadingOn() {
-    this.accessibility.announcePolite(translate('dataset.loading'))
+    this.accessibility.announcePolite(this.Locale.translate('dataset.loading'))
     this.isLoading.dataset = true
     this.isLoading.files = true
   }

@@ -1,6 +1,6 @@
 import React from 'react'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import { Title, FieldGroup } from '@/components/qvain/general/V2'
@@ -26,6 +26,7 @@ const LocationInput = () => {
         translationsRoot={root}
         readonly={readonly}
         disableNoItemsText
+        nameGetter={Field.getItemLabel}
       />
       <FieldListAdd
         Field={Field}

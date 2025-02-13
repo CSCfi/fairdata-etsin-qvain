@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import translate from 'counterpart'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { InvertedButton } from '@/components/etsin/general/button'
 import Splash from '@/components/etsin/general/splash'
@@ -16,6 +15,7 @@ const Contact = () => {
     Etsin: {
       EtsinDataset: { identifier, emailInfo, isRems },
     },
+    Locale: { translate },
   } = useStores()
 
   const [modalOpen, setModal] = useState(false)

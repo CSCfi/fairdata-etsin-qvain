@@ -1,6 +1,6 @@
 import React from 'react'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 
 export const ModalHeader = styled.h2`
   display: flex;

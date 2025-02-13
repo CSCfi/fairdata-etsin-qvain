@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import translate from 'counterpart'
 import { autorun } from 'mobx'
 import { observer } from 'mobx-react'
 
 import { withRouter } from 'react-router-dom'
 import { Prompt } from 'react-router'
-import Translate from 'react-translate-component'
 
+import Translate from '@/utils/Translate'
 import queryParam from '@/utils/queryParam'
 import { QvainContainer } from '../../general/card'
 import ErrorBoundary from '../../../general/errorBoundary'
@@ -125,6 +124,7 @@ export class Qvain extends Component {
     if (isAbort(e)) {
       return
     }
+    const { translate } = this.props.Stores.Locale
     const status = e.response.status
 
     let errorTitle, errorDetails

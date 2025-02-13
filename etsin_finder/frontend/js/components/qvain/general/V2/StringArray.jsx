@@ -1,10 +1,10 @@
 import React, { useRef } from 'react'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import CreatableSelect from 'react-select/creatable'
 import { components } from 'react-select'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 import { AddNewButton } from '../buttons'
 
 import ValidationError from '../errors/validationError'

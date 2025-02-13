@@ -10,16 +10,16 @@
    */
 }
 
-import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import React, { useState } from 'react'
+import styled from 'styled-components'
 
-import Button from '../general/button'
 import Modal from '@/components/general/modal'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { useStores } from '@/utils/stores'
+import Translate from '@/utils/Translate'
+import Button from '../general/button'
 import DatasetInfoItem from './DatasetInfoItem'
 
 function AccessRights(props) {

@@ -11,11 +11,11 @@
 }
 
 import React, { Component } from 'react'
-import Translate from 'react-translate-component'
 import { NavLink, withRouter } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 import { withStores } from '@/stores/stores'
 
 class Tabs extends Component {

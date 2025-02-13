@@ -1,5 +1,4 @@
 import Harness from '../componentTestHarness'
-import { expect } from 'chai'
 
 import LandingPage from '../../../js/components/qvain/views/landingPage'
 import { useStores } from '../../../js/stores/stores'
@@ -27,6 +26,7 @@ describe('given mockStores', () => {
     },
     Locale: {
       lang: 'en',
+      translate: v => v,
     },
   }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { ModalHeader, ModalDivider } from '@/components/qvain/general/V2'
 import { ConfirmClose } from '../modal/confirmClose'
 import ModalButtons from './ModalButtons'

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
-
 import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons'
+import Translate from '@/utils/Translate'
+
 import FlaggedComponent from '@/components/general/flaggedComponent'
 import TooltipHover from '@/components/general/tooltipHover'
 import sizeParse from '@/utils/sizeParse'

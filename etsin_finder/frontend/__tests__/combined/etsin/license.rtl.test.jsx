@@ -1,12 +1,10 @@
 import React from 'react'
 import { ThemeProvider } from 'styled-components'
-import translate from 'counterpart'
 
 import { screen, render, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
-import '../../../locale/translations'
 import etsinTheme from '@/styles/theme'
 import License from '@/components/etsin/Dataset/Sidebar/special/license'
 import { LICENSE_URL } from '@/utils/constants'
@@ -35,9 +33,12 @@ const customLicense = {
   custom_url: 'https://example.com/license',
 }
 
+let translate
+
 describe('License', () => {
   const renderLicense = async licenseData => {
     const stores = buildStores()
+    translate = stores.Locale.translate
     render(
       <ThemeProvider theme={etsinTheme}>
         <StoresProvider store={stores}>

@@ -4,17 +4,26 @@ import { runInAction } from 'mobx'
 
 import { AskForAccess } from '@/components/etsin/Dataset/Description/askForAccess'
 import AccessClass from '@/stores/view/access'
+import LocaleClass from '@/stores/view/locale'
 import AuthClass from '@/stores/domain/auth'
 import REMSButton from '@/components/etsin/Dataset/Description/REMSButton'
 import Loader from '@/components/general/loader'
+import { useStores } from '../../../js/stores/stores'
 
 const Access = new AccessClass()
 const Auth = new AuthClass()
+const Locale = new LocaleClass()
+jest.mock('../../../js/stores/stores')
 
-const getStores = () => ({
-  Access,
-  Auth,
-})
+const getStores = () => {
+  const stores = {
+    Access,
+    Auth,
+    Locale,
+  }
+  useStores.mockReturnValue(stores)
+  return stores
+}
 
 const access = {
   access_type: {
@@ -90,5 +99,4 @@ describe('REMSButton', () => {
     )
     expect(wrapper.find(Loader).length).toBe(1)
   })
-  it('', () => {})
 })

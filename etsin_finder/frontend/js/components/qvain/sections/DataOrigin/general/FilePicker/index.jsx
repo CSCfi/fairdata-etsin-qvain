@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 
 import { Title, FieldGroup } from '@/components/qvain/general/V2'
 import { Checkbox, Label } from '@/components/qvain/general/modal/form'

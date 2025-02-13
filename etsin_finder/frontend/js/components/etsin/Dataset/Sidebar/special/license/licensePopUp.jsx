@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Translate from 'react-translate-component'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 
 import PopUp from '@/components/general/popup'
 import { LinkButton } from '@/components/general/button'

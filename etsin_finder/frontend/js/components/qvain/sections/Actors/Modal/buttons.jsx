@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import { ModalButtonGroup } from '@/components/qvain/general/V2'

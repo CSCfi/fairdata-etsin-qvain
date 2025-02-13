@@ -1,6 +1,4 @@
-import translate from 'counterpart'
-
-export const getOptions = () => ({
+export const getOptions = ({ translate }) => ({
   separator: [
     { value: 'LF', label: 'LF' },
     { value: 'CRLF', label: 'CRLF' },

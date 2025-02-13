@@ -7,7 +7,6 @@ import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 
 import { buildStores } from '../../../../js/stores/'
-import '../../../../locale/translations'
 import etsinTheme from '../../../../js/styles/theme'
 import dataset from '../../../__testdata__/dataset.att'
 import { getReferenceData } from '../../../__testdata__/referenceData.data'
@@ -16,8 +15,6 @@ import RelatedResource from '../../../../js/components/qvain/sections/Publicatio
 import { EditButton } from '../../../../js/components/qvain/general/V2/buttons'
 import Modal from '../../../../js/components/general/modal'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
-
-failTestsWhenTranslationIsMissing()
 
 // Make sure MobX store values are not mutated outside actions.
 configure({
@@ -36,6 +33,7 @@ jest.mock('../../../../js/stores/stores', () => {
 })
 
 const stores = buildStores()
+failTestsWhenTranslationIsMissing(stores.Locale)
 
 beforeEach(() => {
   axios.get.mockReset()

@@ -27,7 +27,6 @@ import {
   DATA_CATALOG_IDENTIFIER,
   ACCESS_TYPE_URL,
 } from '../../../js/utils/constants'
-import '../../../locale/translations'
 import urls from '../../../js/utils/urls'
 import { configure } from 'mobx'
 

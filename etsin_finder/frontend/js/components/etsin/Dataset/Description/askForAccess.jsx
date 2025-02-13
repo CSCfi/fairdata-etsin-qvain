@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
 import { observer } from 'mobx-react'
 import axios from 'axios'
+import Translate from '@/utils/Translate'
 
 import Button from '@/components/etsin/general/button'
 import REMSButton from './REMSButton'
@@ -40,6 +39,9 @@ export class AskForAccess extends Component {
   }
 
   render() {
+    const {
+      Locale: { translate },
+    } = this.props.Stores
     if (!this.props.Stores.Access.restrictions.showREMSbutton) {
       return null
     }

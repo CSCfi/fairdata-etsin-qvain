@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
 import Select from 'react-select'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 import { useStores } from '../../../../utils/stores'
 import { ignoreAbort } from '@/utils/AbortClient'
 

@@ -5,7 +5,6 @@ import { MemoryRouter, Route } from 'react-router-dom'
 import { configure } from 'mobx'
 
 import etsinTheme from '@/styles/theme'
-import '@/../locale/translations'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import { versionTitles } from '../../__testdata__/dataset.ida'

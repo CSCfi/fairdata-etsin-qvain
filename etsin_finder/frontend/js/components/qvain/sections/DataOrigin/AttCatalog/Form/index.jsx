@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
 import { action } from 'mobx'
-import Translate from 'react-translate-component'
 import Select from 'react-select'
+import Translate from '@/utils/Translate'
 import {
   FieldWrapper,
   FieldInput,

@@ -13,7 +13,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { InvertedButton } from '@/components/general/button'
 import { useStores } from '@/stores/stores'

@@ -3,7 +3,6 @@ import { mount } from 'enzyme'
 import { Provider } from 'mobx-react'
 import { ThemeProvider } from 'styled-components'
 
-import '../../../locale/translations'
 import etsinTheme from '../../../js/styles/theme'
 import DatePicker, {
   StyledCustomDatePicker,

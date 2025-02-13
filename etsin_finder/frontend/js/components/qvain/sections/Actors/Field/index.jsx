@@ -1,6 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { SectionContentWrapper } from '@/components/qvain/general/V2/Section'
 import { Actor } from '@/stores/view/qvain/qvain.actors'

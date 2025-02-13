@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import { Outcome, Lifecycle } from '@/stores/view/qvain/qvain.provenances'

@@ -5,17 +5,22 @@ import { render, screen, cleanup } from '@testing-library/react'
 import Identifiers from '@/components/etsin/Dataset/events/identifiers'
 import { ThemeProvider } from 'styled-components'
 import etsinTheme from '@/styles/theme'
+import { StoresProvider } from '../../../js/stores/stores'
+import { buildStores } from '../../../js/stores'
 
 describe('Identifiers', () => {
   afterEach(cleanup)
 
   const renderIdentifierWithProps = (props, debug = false) => {
+    const stores = buildStores()
     const rendered = render(
-      <Provider>
-        <ThemeProvider theme={etsinTheme}>
-          <Identifiers {...props} />
-        </ThemeProvider>
-      </Provider>
+      <StoresProvider store={stores}>
+        <Provider>
+          <ThemeProvider theme={etsinTheme}>
+            <Identifiers {...props} />
+          </ThemeProvider>
+        </Provider>
+      </StoresProvider>
     )
     if (debug) screen.debug()
     return rendered

@@ -11,8 +11,8 @@
 }
 
 import React, { useState } from 'react'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 
 import Modal from '../components/general/modal'
 import { useStores } from '../stores/stores'

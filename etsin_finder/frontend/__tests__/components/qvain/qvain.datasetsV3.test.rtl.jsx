@@ -11,7 +11,6 @@ import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
 import ReactModal from 'react-modal'
 
-import '@/../locale/translations'
 import etsinTheme from '@/styles/theme'
 import datasets from '../../__testdata__/qvain.datasets.v3'
 import { StoresProvider } from '@/stores/stores'

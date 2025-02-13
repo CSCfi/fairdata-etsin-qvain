@@ -1,7 +1,7 @@
 import Harness from '../../components/componentTestHarness'
 import React, { useState } from 'react'
 import { shallow } from 'enzyme'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { components } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 

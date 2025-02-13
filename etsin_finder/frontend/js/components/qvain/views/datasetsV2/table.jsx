@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
-
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
+
 import { useStores } from '../../utils/stores'
 import DatasetGroup from './datasetGroup'
 import Loader from '../../../general/loader'

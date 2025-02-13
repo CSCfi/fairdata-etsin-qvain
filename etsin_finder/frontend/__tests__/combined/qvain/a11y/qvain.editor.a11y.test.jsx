@@ -7,7 +7,6 @@ import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 
 import etsinTheme from '../../../../js/styles/theme'
-import '../../../../locale/translations'
 import QvainContent from '../../../../js/components/qvain/views/main/index'
 import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
@@ -16,7 +15,7 @@ import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 const stores = buildStores()
 
-failTestsWhenTranslationIsMissing()
+failTestsWhenTranslationIsMissing(stores.Locale)
 
 global.fdweRecordEvent = () => {}
 

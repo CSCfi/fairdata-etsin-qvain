@@ -12,9 +12,9 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Translate from '@/utils/Translate'
 
 import InfoItem from './infoItem'
 import Modal from '@/components/general/modal'

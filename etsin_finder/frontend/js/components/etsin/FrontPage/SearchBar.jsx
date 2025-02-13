@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
-import Translate from 'react-translate-component'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import Translate from '@/utils/Translate'
 import useQuery from '@/components/etsin/general/useQuery'
 import { Input } from '@/components/etsin/general/Input'
 

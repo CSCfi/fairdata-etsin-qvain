@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 

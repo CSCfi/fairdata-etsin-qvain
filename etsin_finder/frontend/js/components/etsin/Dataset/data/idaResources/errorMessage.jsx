@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { useStores } from '@/stores/stores'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 

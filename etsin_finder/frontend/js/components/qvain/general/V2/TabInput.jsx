@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 import { FieldWrapper, FieldGroup, FieldInput, FieldLabel, InfoText, RequiredText } from './index'
 import ValidationError from '../errors/validationError'
 

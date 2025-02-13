@@ -5,7 +5,6 @@ import axios from 'axios'
 import { configure } from 'mobx'
 import { setImmediate } from 'timers'
 
-import '../../../locale/translations'
 import { buildStores } from '@/stores'
 import { getReferenceData } from '../../__testdata__/referenceData.data'
 import { StoresProvider } from '@/stores/stores'

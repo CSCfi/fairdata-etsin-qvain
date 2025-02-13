@@ -11,12 +11,12 @@
 }
 
 import React, { useEffect } from 'react'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { observer } from 'mobx-react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import Translate from '@/utils/Translate'
 
 import { useQuery } from '@/components/etsin/general/useQuery'
 import ErrorBoundary from '@/components/general/errorBoundary'

@@ -13,9 +13,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import translate from 'counterpart'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { opacify } from 'polished'
@@ -24,6 +22,7 @@ import { withStores, useStores } from '@/stores/stores'
 import ErrorPage from '@/components/general/errorpage'
 import ErrorBoundary from '@/components/general/errorBoundary'
 import Loader from '@/components/general/loader'
+import Translate from '@/utils/Translate'
 
 import CitationModal from './citation/citationModal'
 import Sidebar from './Sidebar'
@@ -129,6 +128,7 @@ function DatasetLoadSpinner() {
 function DatasetView() {
   const {
     Accessibility,
+    Locale,
     Etsin: {
       EtsinDataset: { isDraft, draftInfotext },
     },
@@ -145,7 +145,9 @@ function DatasetView() {
               exact
               to="/datasets"
               onClick={() => {
-                Accessibility.announce(translate('changepage', { page: translate('nav.datasets') }))
+                Accessibility.announce(
+                  Locale.translate('changepage', { page: Locale.translate('nav.datasets') })
+                )
               }}
             >
               <span aria-hidden>{'< '}</span>

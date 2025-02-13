@@ -1,6 +1,8 @@
-import '../../../locale/translations'
 import moment from 'moment'
 import formatAge from '../../../js/components/qvain/views/datasetsV2/formatAge'
+import LocaleClass from '@/stores/view/locale'
+
+const Locale = new LocaleClass()
 
 const now = moment('2021-06-09')
 test.each([
@@ -22,5 +24,5 @@ test.each([
   [-1, 'year', 'A few moments ago'],
 ])('given %d %s difference, should return "%s"', (elapsed, unit, expected) => {
   const then = now.clone().subtract(elapsed, unit)
-  formatAge(now, then).should.eql(expected)
+  formatAge(Locale, now, then).should.eql(expected)
 })

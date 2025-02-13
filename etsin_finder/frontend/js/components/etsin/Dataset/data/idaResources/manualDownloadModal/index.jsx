@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import Modal from '@/components/general/modal'
 import Content from './content'

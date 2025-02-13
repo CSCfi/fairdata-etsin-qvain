@@ -13,8 +13,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
+import Translate from '@/utils/Translate'
 
 import Modal from '@/components/general/modal'
 import { useStores } from '@/utils/stores'

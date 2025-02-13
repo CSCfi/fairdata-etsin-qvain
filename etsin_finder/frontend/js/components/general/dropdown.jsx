@@ -15,8 +15,8 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Translate from 'react-translate-component'
 import { tint } from 'polished'
+import Translate from '@/utils/Translate'
 
 import Button from './button'
 

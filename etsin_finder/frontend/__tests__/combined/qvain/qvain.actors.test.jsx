@@ -8,7 +8,6 @@ import { components as selectComponents } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import MockAdapter from 'axios-mock-adapter'
 
-import '../../../locale/translations'
 import etsinTheme from '@/styles/theme'
 import { ENTITY_TYPE, ROLE } from '@/utils/constants'
 import { ActorsBase } from '@/components/qvain/sections/Actors'
@@ -22,7 +21,6 @@ import OrgForm from '@/components/qvain/sections/Actors/Modal/org/orgForm'
 import { DeleteButton } from '@/components/qvain/general/V2/buttons'
 import EnvClass from '@/stores/domain/env'
 import QvainClass from '@/stores/view/qvain'
-import ElasticQueryClass from '@/stores/view/elasticquery'
 import {
   Actor,
   Organization,
@@ -58,9 +56,7 @@ jest.mock('@/stores/stores', () => {
 
 const Env = new EnvClass()
 const Qvain = new QvainClass(Env)
-const Accessibility = new AccessibilityClass(Env)
-const ElasticQuery = new ElasticQueryClass(Env)
-const Locale = new LocaleClass(Accessibility, ElasticQuery)
+const Locale = new LocaleClass(Env)
 
 const stores = {
   Env,

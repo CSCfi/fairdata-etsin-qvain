@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { opacify, desaturate } from 'polished'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Translate from 'react-translate-component'
 import {
   faPen,
   faTimes,
@@ -14,6 +13,7 @@ import {
   faSortAmountDown,
   faSortAmountDownAlt,
 } from '@fortawesome/free-solid-svg-icons'
+import Translate from '@/utils/Translate'
 
 const FileIconStyles = styled(FontAwesomeIcon)`
   width: 5%;

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleDoubleUp, faAngleDoubleDown, faAngleDown } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDoubleUp, faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { mix } from 'polished'
+import Translate from '@/utils/Translate'
 
 import { TransparentLink } from '@/components/general/button'
 import { useStores } from '@/stores/stores'
@@ -74,9 +74,7 @@ const FilterSection = ({ filterName, onlyCurrentLanguage }) => {
         onClick={toggleSection}
         aria-expanded={isOpen}
         content={`search.aggregations.${filterName}.title`}
-      >
-        <FontAwesomeIcon icon={faAngleDown} size="2x" />
-      </Translate>
+      />
       <FilterItems className={isOpen ? 'open' : ''} aria-hidden={!isOpen}>
         <Translate component="ul" attributes={{ 'aria-label': titleName }}>
           {shownItems.map(item => (

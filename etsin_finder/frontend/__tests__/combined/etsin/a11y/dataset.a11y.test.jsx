@@ -9,7 +9,6 @@ import MockAdapter from 'axios-mock-adapter'
 import { setImmediate } from 'timers'
 
 import etsinTheme from '@/styles/theme'
-import '../../../../locale/translations'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import dataset, { contact } from '../../../__testdata__/metaxv3/datasets/dataset_att_a'
@@ -21,7 +20,6 @@ import ExternalResources from '@/components/etsin/Dataset/data/externalResources
 import axios from 'axios'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-failTestsWhenTranslationIsMissing()
 
 jest.setTimeout(25000) // the default 5000ms timeout is not always enough here
 
@@ -46,6 +44,7 @@ const identifier = dataset.id
 const path = `/dataset/${identifier}`
 
 const stores = buildStores()
+failTestsWhenTranslationIsMissing(stores.Locale)
 stores.Accessibility.handleNavigation = jest.fn()
 
 const flushPromises = () => new Promise(setImmediate)

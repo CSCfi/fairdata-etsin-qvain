@@ -13,7 +13,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import translate from 'counterpart'
 import {
   faLock,
   faLockOpen,
@@ -23,7 +22,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import checkNested from '../../../../utils/checkNested'
 import Button from '../../../general/button'
@@ -46,6 +45,9 @@ export const accessRightsBool = accessRights => {
 class AccessRights extends Component {
   constructor(props) {
     super(props)
+    const {
+      Locale: { translate },
+    } = this.props.Stores
     let title = { en: 'Restricted Access', fi: 'Rajoitettu käyttöoikeus' }
     let description = ''
     let identifier = ''

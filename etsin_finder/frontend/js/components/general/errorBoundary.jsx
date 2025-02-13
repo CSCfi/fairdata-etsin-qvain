@@ -11,9 +11,9 @@
 }
 
 import React, { Component } from 'react'
-import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 
 export default class ErrorBoundary extends Component {
   constructor(props) {

@@ -7,7 +7,6 @@ import axios from 'axios'
 import { setImmediate } from 'timers'
 
 import etsinTheme from '@/styles/theme'
-import '../../../locale/translations'
 import { buildStores } from '@/stores'
 import dataset from '../../__testdata__/dataset.att'
 import ManualDownloadModal from '@/components/etsin/Dataset/data/idaResources/manualDownloadModal'

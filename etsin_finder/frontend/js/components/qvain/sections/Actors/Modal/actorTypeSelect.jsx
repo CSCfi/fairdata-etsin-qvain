@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { ENTITY_TYPE } from '@/utils/constants'
 import { ModalLabel, FieldGroup } from '@/components/qvain/general/V2'
 import ActorRadio from './actorRadio'

@@ -12,7 +12,6 @@ import { File, Directory, Project } from '@/stores/view/common.files.items'
 
 import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { metaxResponses } from '../../__testdata__/qvainPas.data'
-import '../../../locale/translations'
 
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'

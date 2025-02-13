@@ -12,8 +12,8 @@
 
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
+import Translate from '@/utils/Translate'
 
 export default class SkipToContent extends Component {
   render() {

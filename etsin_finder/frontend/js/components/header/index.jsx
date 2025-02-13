@@ -12,10 +12,9 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import translate from 'counterpart'
+import Translate from '@/utils/Translate'
 
 import { FAIRDATA_WEBSITE_URL } from '../../utils/constants'
 import MaybeExternalLink from '../general/navigation/maybeExternalLink'
@@ -51,7 +50,11 @@ const QvainLink = styled(MaybeExternalLink)`
 
 const EtsinHeader = props => {
   const { lang, currentLang } = props.Stores.Locale
-  const { Env, Matomo } = props.Stores
+  const {
+    Env,
+    Matomo,
+    Locale: { translate },
+  } = props.Stores
   const helpUrl = lang === 'fi' ? FAIRDATA_WEBSITE_URL.ETSIN.FI : FAIRDATA_WEBSITE_URL.ETSIN.EN
 
   const mobileSettingsExtra = (

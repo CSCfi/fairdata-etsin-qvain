@@ -15,8 +15,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClipboard, faCheck } from '@fortawesome/free-solid-svg-icons'
-import translate from 'counterpart'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { Button } from '../general/button'
 import TooltipHover from '@/components/general/tooltipHover'
@@ -45,12 +44,11 @@ const CopyToClipboard = ({
       timeoutIndex.current = null
     }
   }
-
   const onClick = () => {
     navigator.clipboard.writeText(content)
     setCopiedStatus(true)
     setTooltipText(tooltipSuccess)
-    announce(translate(tooltipSuccess, { locale: lang }))
+    announce(Stores.Locale.translate(tooltipSuccess, { locale: lang }))
     clearCopyTimeout()
     const index = setTimeout(() => {
       setCopiedStatus(false)

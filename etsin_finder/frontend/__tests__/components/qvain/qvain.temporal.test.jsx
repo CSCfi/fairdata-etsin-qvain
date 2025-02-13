@@ -8,7 +8,7 @@ import DurationPicker from '../../../js/components/qvain/general/V2/Durationpick
 import { AddNewButton } from '../../../js/components/qvain/general/buttons'
 import ValidationError from '../../../js/components/qvain/general/errors/validationError'
 import Label from '../../../js/components/qvain/general/card/label'
-import '../../../locale/translations'
+import LocaleClass from '../../../js/stores/view/locale'
 
 jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas')
 
@@ -23,13 +23,11 @@ const mockStores = {
       validateAndSave: jest.fn(),
     },
   },
-  Locale: {
-    lang: 'lang',
-  },
+  Locale: new LocaleClass(),
 }
 
 describe('given required props', () => {
-  const lang = 'lang'
+  const lang = 'en'
 
   const harness = new Harness(TemporalFieldContent, {}, 'TemporalFieldContent')
 

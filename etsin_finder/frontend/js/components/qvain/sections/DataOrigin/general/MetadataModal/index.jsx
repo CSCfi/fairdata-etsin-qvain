@@ -1,23 +1,22 @@
-import React, { Component } from 'react'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
-import PropTypes from 'prop-types'
+import { action, autorun, makeObservable, observable } from 'mobx'
 import { observer } from 'mobx-react'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import styled from 'styled-components'
-import { makeObservable, observable, action, autorun } from 'mobx'
 
 import Modal from '@/components/general/modal'
-import { ConfirmClose } from '@/components/qvain/general/modal/confirmClose'
-import { getResponseError } from '@/components/qvain/utils/responseError'
-import { Label, HelpField, Input } from '@/components/qvain/general/modal/form'
 import { DangerButton, TableButton } from '@/components/qvain/general/buttons'
-import Response from '../response'
+import { ConfirmClose } from '@/components/qvain/general/modal/confirmClose'
+import { HelpField, Input, Label } from '@/components/qvain/general/modal/form'
+import { getResponseError } from '@/components/qvain/utils/responseError'
 import { getPASMeta } from '@/stores/view/common.files.items'
+import Translate from '@/utils/Translate'
+import Response from '../response'
 
-import { getOptions, makeOption, findOption } from './options'
-import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
 import { withStores } from '@/stores/stores'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
+import { findOption, getOptions, makeOption } from './options'
+import { labelStyle, MetadataSelect, selectStylesNarrow } from './select'
 
 export class MetadataModal extends Component {
   @observable
@@ -218,6 +217,7 @@ export class MetadataModal extends Component {
   }
 
   validateMetadata = () => {
+    const { translate } = this.props.Stores.Locale
     const { fileMetadataSchema } = this.props.Stores.Qvain.Files
     fileMetadataSchema.validate(this.getCharacteristics(), { strict: true })
 
@@ -299,6 +299,7 @@ export class MetadataModal extends Component {
   }
 
   async fetchformatVersions() {
+    const { translate } = this.props.Stores.Locale
     this.setFormatFetchStatus('loading')
     try {
       // Create a list of available versions for each supported file format.
@@ -369,8 +370,10 @@ export class MetadataModal extends Component {
   }
 
   render() {
+    const { Locale } = this.props.Stores
+    const { translate } = Locale
     const { metadataModalFile, readonly } = this.props.Stores.Qvain
-    const options = getOptions()
+    const options = getOptions(Locale)
 
     return (
       <Modal

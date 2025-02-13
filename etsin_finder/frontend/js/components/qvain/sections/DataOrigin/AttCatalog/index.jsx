@@ -1,6 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import Form from './Form'
 import { useStores } from '@/stores/stores'

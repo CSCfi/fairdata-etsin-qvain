@@ -11,8 +11,9 @@
 }
 
 import React, { Component } from 'react'
-import Translation from 'react-translate-component'
 import PropTypes from 'prop-types'
+
+import Translate from '@/utils/Translate'
 import Idle from './idle'
 import NoticeBar from '../noticeBar'
 import Auth from '../../../stores/domain/auth'
@@ -92,7 +93,7 @@ export default class KeepAlive extends Component {
             color="white"
             bg="yellow"
           >
-            <Translation content="general.state.inactiveLogout" />
+            <Translate content="general.state.inactiveLogout" />
           </NoticeBar>
         )}
       </>

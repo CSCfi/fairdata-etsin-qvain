@@ -1,4 +1,5 @@
 import EnvClass from '../../../js/stores/domain/env'
+import LocaleClass from '../../../js/stores/view/locale'
 import AccessibilityClass from '../../../js/stores/view/accessibility'
 
 describe('Accessibility Store', () => {
@@ -6,7 +7,8 @@ describe('Accessibility Store', () => {
 
   beforeEach(() => {
     const Env = new EnvClass()
-    Accessibility = new AccessibilityClass(Env)
+    const Locale = new LocaleClass()
+    Accessibility = new AccessibilityClass(Env, Locale)
   })
 
   describe('when calling toggleTabbing', () => {

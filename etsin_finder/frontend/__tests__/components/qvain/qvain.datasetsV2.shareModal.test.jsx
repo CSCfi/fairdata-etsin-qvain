@@ -8,7 +8,6 @@ import { BrowserRouter } from 'react-router-dom'
 import ReactModal from 'react-modal'
 import { components } from 'react-select'
 
-import '@/../locale/translations'
 import etsinTheme from '@/styles/theme'
 import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'

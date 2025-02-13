@@ -8,8 +8,8 @@
  * @license   MIT
  */
 import React from 'react'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 
 import idnToLink from '@/utils/idnToLink'
 import { useStores } from '@/stores/stores'

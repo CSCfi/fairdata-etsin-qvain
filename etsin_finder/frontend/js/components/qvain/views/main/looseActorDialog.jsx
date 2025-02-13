@@ -1,14 +1,14 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
+
+import Translate from '@/utils/Translate'
 import ConfirmDialog from './confirmDialog'
 import { useStores } from '../../utils/stores'
 
 const LooseActorsDialog = () => {
   const {
     Qvain: { orphanActors, promptLooseActors },
-    Locale: { lang },
+    Locale: { lang, translate },
   } = useStores()
 
   const getRoleTranslation = role => translate(`qvain.actors.add.checkbox.${role}`)

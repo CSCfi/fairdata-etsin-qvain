@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { DangerCancelButton, DangerButton, ConfirmButtonContainer } from '../buttons'
 import { ResponseOverlay } from './modalOverlay'

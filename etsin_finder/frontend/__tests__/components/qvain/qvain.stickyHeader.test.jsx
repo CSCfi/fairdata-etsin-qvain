@@ -3,7 +3,7 @@ import Harness from '../componentTestHarness'
 import { expect } from 'chai'
 import axios from 'axios'
 import { configure } from 'mobx'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import StickyHeader, { DatasetState } from '@/components/qvain/views/headers/stickyHeader'
 import SubmitResponse from '@/components/qvain/views/headers/submitResponse'

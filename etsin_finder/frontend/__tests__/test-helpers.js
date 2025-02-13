@@ -1,6 +1,5 @@
 // Helper extensions for enzyme and jest
 
-import counterpart from 'counterpart'
 import { ReactWrapper, ShallowWrapper } from 'enzyme'
 import { roleElements, elementRoles } from 'aria-query'
 
@@ -103,18 +102,17 @@ export const registerHelpers = () => {
   global.jestExpect.extend({ toBeAccessible })
 }
 
-export const failTestsWhenTranslationIsMissing = () => {
-  const missingTranslations = []
-  beforeEach(() => {
-    missingTranslations.length = 0
-  })
+export const failTestsWhenTranslationIsMissing = Locale => {
+  // Call at top level to add missing translations check to all tests.
+  // Returns handler that should be used on a Locale store instance
+  // to actually detect missing translations. When using the same Locale
+  // instance for the entire test suite, you can also provide it
+  // as an argument for this function.
 
+  const missingTranslations = []
   afterEach(() => {
     expect().noMissingTranslations()
-  })
-
-  counterpart.onTranslationNotFound(function (locale, key, fallback, scope) {
-    missingTranslations.push(key)
+    missingTranslations.length = 0
   })
 
   global.jestExpect.extend({
@@ -131,4 +129,16 @@ export const failTestsWhenTranslationIsMissing = () => {
       }
     },
   })
+
+  // Return handler that modifies Locale store instance
+  const registerMissingHandler = Locale => {
+    Locale.setMissingTranslationHandler(function (key) {
+      missingTranslations.push(key)
+    })
+  }
+  if (Locale) {
+    registerMissingHandler(Locale)
+  }
+
+  return registerMissingHandler
 }

@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '../../../utils/stores'
 import { Tab, TabRow } from '../common'

@@ -10,7 +10,6 @@ import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
 import etsinTheme from '@/styles/theme'
 import { StoresProvider } from '@/stores/stores'
-import '../../../locale/translations'
 
 import Search from '@/components/etsin/Search'
 

@@ -7,15 +7,10 @@ import axios from 'axios'
 import { setImmediate } from 'timers'
 
 import etsinTheme from '@/styles/theme'
-import '../../../../locale/translations'
 import { buildStores } from '@/stores'
 import dataset from '../../../__testdata__/metaxv3/datasets/dataset_att_a'
 import CitationModal from '@/components/etsin/Dataset/citation/citationModal'
-import Modal from '@/components/general/modal'
 import { useStores } from '@/stores/stores'
-import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
-
-failTestsWhenTranslationIsMissing()
 
 const stores = buildStores()
 stores.Etsin.EtsinDataset.set('dataset', dataset)

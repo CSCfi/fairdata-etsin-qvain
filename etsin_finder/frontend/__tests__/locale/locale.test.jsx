@@ -1,17 +1,12 @@
 import EnvClass from '../../js/stores/domain/env'
-import AccessibilityClass from '../../js/stores/view/accessibility'
-import ElasticQueryClass from '../../js/stores/view/elasticquery'
 import LocaleClass from '../../js/stores/view/locale'
-import counterpart from 'counterpart'
 import moment from 'moment'
 import axios from 'axios'
 
 jest.mock('axios')
 
 const Env = new EnvClass()
-const Accessibility = new AccessibilityClass(Env)
-const ElasticQuery = new ElasticQueryClass(Env)
-const Locale = new LocaleClass(Accessibility, ElasticQuery)
+const Locale = new LocaleClass(Env)
 
 Env.history.location = { pathname: '/' }
 
@@ -23,14 +18,6 @@ describe('Locale store', () => {
 
       Locale.setLang('fi')
       expect(Locale.lang).toBe('fi')
-    })
-
-    it('sets counterpart locale', () => {
-      Locale.setLang('en')
-      expect(counterpart.getLocale()).toBe('en')
-
-      Locale.setLang('fi')
-      expect(counterpart.getLocale()).toBe('fi')
     })
 
     it('sets moment locale', () => {

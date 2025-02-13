@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Translate from '@/utils/Translate'
 
 import Loader from '../../../../general/loader'
 import { useStores } from '../../../utils/stores'

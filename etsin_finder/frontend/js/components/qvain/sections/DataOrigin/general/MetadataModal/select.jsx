@@ -1,11 +1,14 @@
 import React from 'react'
-import translate from 'counterpart'
 import PropTypes from 'prop-types'
 
 import Select from 'react-select'
 import { Label } from '@/components/qvain/general/modal/form'
+import { useStores } from '@/stores/stores'
 
 export const MetadataSelect = props => {
+  const {
+    Locale: { translate },
+  } = useStores()
   const noOptions = !props.options || props.options.length === 0
   return (
     <Label htmlFor={props.inputId} style={labelStyle}>

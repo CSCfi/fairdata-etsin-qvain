@@ -2,12 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import ReactSelect, { components as selectComponents } from 'react-select'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
-import translate from 'counterpart'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
+import Translate from '@/utils/Translate'
 import { Title, FieldGroup, InfoText } from '@/components/qvain/general/V2'
 import { useStores } from '@/stores/stores'
 import { Actor } from '@/stores/view/qvain/qvain.actors'
@@ -19,8 +18,9 @@ import ActorsList from './ActorsList'
 const ActorsInput = () => {
   const {
     Qvain: { Actors, Provenances, readonly },
-    Locale: { lang: language },
+    Locale: { lang: language, translate },
   } = useStores()
+
   const associations = Provenances.inEdit.associations || {}
   const selectedOptions = associations.actorOptions || []
   const selectedOptionIds = selectedOptions.map(option => option.value)

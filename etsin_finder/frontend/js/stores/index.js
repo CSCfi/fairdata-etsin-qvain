@@ -11,7 +11,6 @@
 import LocaleClass from './view/locale'
 import EnvClass from './domain/env'
 import AuthClass from './domain/auth'
-import ElasticQueryClass from './view/elasticquery'
 import DatasetQueryClass from './view/datasetquery'
 import AccessibilityClass from './view/accessibility'
 import MapClass from './view/map'
@@ -28,9 +27,8 @@ import OrgReferencesClass from './view/qvain/qvain.orgReferences.v3'
 export const buildStores = (options = {}) => {
   const Env = options.Env || new EnvClass()
   const Auth = new AuthClass(Env)
-  const Accessibility = new AccessibilityClass(Env)
-  const ElasticQuery = new ElasticQueryClass(Env)
-  const Locale = new LocaleClass(Accessibility, ElasticQuery)
+  const Locale = new LocaleClass(Env)
+  const Accessibility = new AccessibilityClass(Env, Locale)
   const SearchFilters = new SearchFiltersClass()
   const Access = new AccessClass(Auth)
   let QvainDatasets
@@ -40,7 +38,7 @@ export const buildStores = (options = {}) => {
     QvainDatasets = new QvainDatasetsClass(Env, Auth, Locale)
   }
   const OrgReferences = new OrgReferencesClass(Env)
-  const Qvain = new QvainClass(Env, Auth, OrgReferences)
+  const Qvain = new QvainClass(Env, Auth, Locale, OrgReferences)
   const DatasetQuery = new DatasetQueryClass(Env, Access)
   const Etsin = new EtsinClass({ Env, Access, Accessibility, Locale })
   const Map = new MapClass(Locale)
@@ -53,7 +51,6 @@ export const buildStores = (options = {}) => {
     Etsin,
     Accessibility,
     Locale,
-    ElasticQuery,
     DatasetQuery,
     Auth,
     Access,

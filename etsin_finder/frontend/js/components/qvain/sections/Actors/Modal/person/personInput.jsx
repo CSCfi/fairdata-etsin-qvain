@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
 
+import Translate from '@/utils/Translate'
 import { Label } from '@/components/qvain/general/modal/form'
 import { ActorInput, ActorError } from '../../common'
 import { useStores } from '@/stores/stores'

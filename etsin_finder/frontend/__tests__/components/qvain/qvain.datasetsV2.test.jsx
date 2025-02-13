@@ -10,7 +10,6 @@ import { MemoryRouter, Route } from 'react-router-dom'
 import ReactModal from 'react-modal'
 import { components } from 'react-select'
 
-import '@/../locale/translations'
 import etsinTheme from '@/styles/theme'
 import datasets from '../../__testdata__/qvain.datasets'
 import { StoresProvider } from '@/stores/stores'

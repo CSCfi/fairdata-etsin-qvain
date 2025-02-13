@@ -22,7 +22,6 @@ import en from 'date-fns/locale/en-GB'
 import EnvClass from '@/stores/domain/env'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
-import '../locale/translations'
 import Layout from './layout'
 import browserHistory from './browserHistory'
 

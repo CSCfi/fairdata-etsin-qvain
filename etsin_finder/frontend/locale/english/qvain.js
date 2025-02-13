@@ -27,7 +27,7 @@ const qvainEnglish = {
   consent: `By using Qvain the user agrees to obtain prior consent from all persons whose personal
   information the user will add to the descriptive data and inform them how they can get
   their personal data removed. By using Qvain the user agrees to the
-  <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/">Terms of Usage</a>.`,
+  <a href="https://www.fairdata.fi/hyodyntaminen/kayttopolitiikat-ja-ehdot/" target="_blank">Terms of Usage</a>.`,
   submitStatus: {
     success: 'Dataset published!',
     draftSuccess: 'Draft saved!',

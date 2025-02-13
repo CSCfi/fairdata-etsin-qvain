@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { Title, Divider } from '@/components/qvain/general/V2'
 

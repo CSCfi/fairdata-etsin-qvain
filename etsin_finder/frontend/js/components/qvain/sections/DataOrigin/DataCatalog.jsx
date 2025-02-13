@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { useStores } from '@/stores/stores'
 import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { FieldGroup } from '@/components/qvain/general/V2'

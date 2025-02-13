@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { expect as expectChai } from 'chai'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import DurationPicker from '@/components/qvain/general/V2/Durationpicker'
 import { useStores } from '@/stores/stores'
@@ -33,6 +33,7 @@ describe('DurationPicker', () => {
     },
     Locale: {
       lang: 'en',
+      translate: v => v,
     },
   }
 

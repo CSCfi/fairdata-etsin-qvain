@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import ValidationError, {
   ValidationErrorText,

@@ -1,7 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
+import Translate from '@/utils/Translate'
 
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
 import ValidationError from '@/components/qvain/general/errors/validationError'
@@ -28,7 +27,7 @@ const IssuedDateField = () => {
       IssuedDate: { value: issuedDate, set: setIssuedDate, validationError, validate },
       hasBeenPublishedWithDoi,
     },
-    Locale: { lang },
+    Locale: { lang, translate },
   } = useStores()
 
   return (

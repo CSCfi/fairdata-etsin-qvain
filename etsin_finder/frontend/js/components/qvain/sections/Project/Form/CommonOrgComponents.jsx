@@ -2,9 +2,8 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
-import t from 'counterpart'
 import ReactSelect from 'react-select'
+import Translate from '@/utils/Translate'
 
 import { Input } from '@/components/qvain/general/modal/form'
 import { DeleteButton } from '@/components/qvain/general/V2/buttons'
@@ -35,9 +34,8 @@ export const OrgSelectComponent = observer(
     allowReset,
     ariaLabel,
   }) => {
-    const {
-      Locale: { getPreferredLang, getValueTranslation },
-    } = useStores()
+    const { Locale } = useStores()
+    const { getPreferredLang, getValueTranslation } = Locale
     /**
      * Open form if add manually is selected.
      *
@@ -89,14 +87,15 @@ export const OrgSelectComponent = observer(
      * if props has creatable set to true.
      */
     const getOptions = () => {
+      const { translate } = Locale
       if (!creatable) return options
       return [
         {
-          label: t('qvain.organizationSelect.label.addNew'),
-          options: [{ value: 'create', label: t('qvain.organizationSelect.label.addNew') }],
+          label: translate('qvain.organizationSelect.label.addNew'),
+          options: [{ value: 'create', label: translate('qvain.organizationSelect.label.addNew') }],
         },
         {
-          label: t('qvain.actors.add.organization.options.presets'),
+          label: translate('qvain.actors.add.organization.options.presets'),
           options,
         },
       ]

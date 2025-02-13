@@ -13,7 +13,6 @@ import { BrowserRouter } from 'react-router-dom'
 import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
 import etsinTheme from '@/styles/theme'
-import '@/../locale/translations.js'
 
 import Editor from '@/components/qvain/views/DatasetEditorV2'
 import FilePicker from '@/components/qvain/sections/DataOrigin/general/FilePicker'

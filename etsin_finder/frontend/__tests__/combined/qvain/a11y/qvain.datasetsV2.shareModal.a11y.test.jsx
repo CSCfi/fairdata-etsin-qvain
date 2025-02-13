@@ -8,7 +8,6 @@ import { axe } from 'jest-axe'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
 
-import '@/../locale/translations'
 import etsinTheme from '@/styles/theme'
 import datasets from '../../../__testdata__/qvain.datasets'
 import { StoresProvider } from '@/stores/stores'
@@ -16,14 +15,15 @@ import { buildStores } from '@/stores'
 import ShareModal from '@/components/qvain/views/datasetsV2/ShareModal'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-failTestsWhenTranslationIsMissing()
 
 let stores
 
 jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
+const registerMissingHandler = failTestsWhenTranslationIsMissing(stores)
 
 beforeEach(() => {
   stores = buildStores()
+  registerMissingHandler(stores.Locale)
   stores.Auth.setUser({
     name: 'teppo',
   })

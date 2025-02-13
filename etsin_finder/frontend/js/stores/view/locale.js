@@ -9,11 +9,20 @@
  */
 
 import axios from 'axios'
+import { get } from 'lodash'
 import { observable, action, computed, makeObservable } from 'mobx'
-import counterpart from 'counterpart'
 import moment from 'moment'
+import finnish from '@/../locale/finnish'
+import english from '@/../locale/english'
+import interpolate from '@/utils/interpolate'
 
 import urls from '../../utils/urls'
+
+const locales = {
+  en: english,
+  fi: finnish,
+}
+const fallbackLocale = 'en'
 
 const languages = ['en', 'fi']
 
@@ -79,14 +88,17 @@ const getDefaultDateFormat = date => {
   return 'datetime'
 }
 
+// eslint-disable-next-line no-unused-vars
+const defaultMissingTranslationHandler = (key, { locale: lang, ...context }) =>
+  `missing translation: ${lang}.${key}`
+
 class Locale {
-  constructor(Accessibility, ElasticQuery) {
-    this.Accessibility = Accessibility
-    this.Env = Accessibility.Env
-    this.ElasticQuery = ElasticQuery
+  constructor(Env) {
+    this.Env = Env
     makeObservable(this)
     this.dateFormat = this.dateFormat.bind(this)
     this.dateSeparator = this.dateSeparator.bind(this)
+    this.translate = this.translate.bind(this)
 
     if (BUILD !== 'production') {
       window.setLang = lang => this.setLang(lang, { save: true })
@@ -96,9 +108,19 @@ class Locale {
           { save: true }
         )
     }
+    this.setMissingTranslationHandler()
   }
 
-  @observable currentLang = counterpart.getLocale()
+  setMissingTranslationHandler(handler) {
+    // Set function that handles missing translations
+    if (handler) {
+      this.handleMissingTranslation = handler
+    } else {
+      this.handleMissingTranslation = defaultMissingTranslationHandler
+    }
+  }
+
+  @observable currentLang = 'en' // FIXME: read from session? or something?
 
   // get current computed (state changes are tracked) language. Convenience function.
   @computed get lang() {
@@ -131,8 +153,7 @@ class Locale {
     if (!languages.includes(lang)) {
       return
     }
-    counterpart.setLocale(lang)
-    this.currentLang = counterpart.getLocale()
+    this.currentLang = lang
     moment.locale(lang)
     document.documentElement.lang = this.currentLang
     if (save) {
@@ -143,26 +164,8 @@ class Locale {
   @action
   toggleLang = (options = {}) => {
     const { save } = options
-    const current = counterpart.getLocale()
+    const current = this.currentLang
     this.setLang(current === 'fi' ? 'en' : 'fi', { save })
-
-    this.Accessibility.handleNavigation()
-
-    // TODO: this should probably not be here
-    // other things to do when language changes
-    // removes all filters and queries new results after filters are removed
-    // changes url only on /datasets/ page
-    const isSearch = this.Env?.history?.location?.pathname?.startsWith('/datasets/')
-    if (isSearch) {
-      // update url true
-      const filtersChanged = this.ElasticQuery.clearFilters(true)
-      if (filtersChanged) {
-        this.ElasticQuery.queryES()
-      }
-    } else {
-      // update url false
-      this.ElasticQuery.clearFilters(false)
-    }
   }
 
   @action
@@ -281,6 +284,36 @@ class Locale {
       })}`
     }
     return null
+  }
+
+  translate(key, { locale: lang, ...context } = {}) {
+    // Return translation value in current language.
+    //
+    // Translation key should be a dot-separated path 'key.subkey' or an array ['key', 'subkey'].
+    //
+    // Optionally provided context will be used in string interpolation
+    // to replace e.g. %(value)s in the translated string with context.value.
+    let translation = get(locales[lang || this.currentLang], key)
+    if (translation == null) {
+      translation = get(locales[fallbackLocale], key)
+    }
+    if (translation && context) {
+      translation = interpolate(translation, context)
+
+      // Pluralization. When context has a "count" value,
+      // try to return translation.one or translation.other depending on count.
+      // As a fallback, return the translated object itself.
+      if (typeof translation === 'object' && context.count != null) {
+        if (context.count === 1) {
+          return translation.one || translation
+        }
+        return translation.other || translation
+      }
+    }
+    if (translation == null) {
+      return this.handleMissingTranslation(key, { locale: lang || this.currentLang, ...context })
+    }
+    return translation
   }
 }
 

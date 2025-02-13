@@ -12,8 +12,8 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 
 import { LinkButton } from '@/components/etsin/general/button'
 

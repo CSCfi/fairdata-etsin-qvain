@@ -1,8 +1,6 @@
-import translate from 'counterpart'
 import { expect } from 'chai'
 import Harness from '../componentTestHarness'
 import EmbargoExpires from '@/components/qvain/sections/DataOrigin/general/AccessRights/AccessType/EmbargoExpires'
-import '../../../locale/translations'
 import DatePicker, { getDateFormatLocale } from '@/components/qvain/general/V2/Datepicker'
 import { useStores } from '@/stores/stores'
 import ValidationError from '@/components/qvain/general/errors/validationError'
@@ -23,6 +21,7 @@ describe('given useStores', () => {
     },
     Locale: {
       lang: 'en',
+      translate: v => v,
     },
   }
 
@@ -53,7 +52,7 @@ describe('given useStores', () => {
           strictParsing: true,
           selected: new Date(1),
           locale: 'en',
-          placeholderText: translate('qvain.rightsAndLicenses.embargoDate.placeholder'),
+          placeholderText: 'qvain.rightsAndLicenses.embargoDate.placeholder',
           dateFormat: getDateFormatLocale('en'),
           disabled: false,
         },

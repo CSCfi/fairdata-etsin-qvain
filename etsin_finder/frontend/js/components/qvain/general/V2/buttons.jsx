@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { opacify, desaturate } from 'polished'
+import Translate from '@/utils/Translate'
 
 export const EditButton = props => (
   <Translate

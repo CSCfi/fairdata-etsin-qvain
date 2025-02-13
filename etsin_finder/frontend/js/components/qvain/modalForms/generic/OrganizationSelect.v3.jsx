@@ -1,8 +1,8 @@
 import React from 'react'
-import Translate from 'react-translate-component'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 
 import { OrgSelectComponent as Select } from '@/components/qvain/general/V3/CommonOrgComponents'
 import { InfoText } from '@/components/qvain/general/V2'

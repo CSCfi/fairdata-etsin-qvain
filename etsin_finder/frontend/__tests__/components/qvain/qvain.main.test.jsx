@@ -68,6 +68,7 @@ describe('given required props', () => {
       Flags: { flagEnabled: () => false },
       history: { location: {} },
     },
+    Locale: { translate: v => v },
   }
 
   const props = {
@@ -109,7 +110,7 @@ describe('given required props', () => {
         { label: 'Header', findArgs: Header },
         { label: 'StickyHeader', findArgs: StickyHeader },
         { label: 'DatasetErrorBoundary', findArgs: ErrorBoundary },
-        { label: 'Dataset', findArgs: DatasetEditorV2},
+        { label: 'Dataset', findArgs: DatasetEditorV2 },
         { label: 'LooseActorDialog', findArgs: LooseActorDialog },
         { label: 'LooseProvenanceDialog', findArgs: LooseProvenanceDialog },
         { label: 'UnsavedChangesPrompt', findType: 'prop', findArgs: ['component', Prompt] },

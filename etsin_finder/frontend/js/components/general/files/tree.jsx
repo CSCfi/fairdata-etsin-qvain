@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import { LinkButton } from '../button'
 import { ItemRow, Items, ItemSpacer, isDirectory } from './items'

@@ -15,7 +15,7 @@ import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import Button from '../button'
 import Loader from '../loader'

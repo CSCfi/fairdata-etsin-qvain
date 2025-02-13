@@ -13,14 +13,17 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
+import Translate from '@/utils/Translate'
 
+import { useStores } from '@/stores/stores'
 import TooltipClick from './tooltipClick'
 import { HelpIcon } from './form'
 import CumulativeDatasetInfo from './cumulativeDatasetInfoText'
 
 const DatasetIsCumulativeNotificationBar = props => {
+  const {
+    Locale: { translate },
+  } = useStores()
   const [tooltipOpen, setTooltipOpen] = useState(false)
 
   return (
@@ -36,9 +39,7 @@ const DatasetIsCumulativeNotificationBar = props => {
           onClick={() => setTooltipOpen(!tooltipOpen)}
         />
       </TooltipClick>
-      <Translate
-        content="dataset.dl.cumulativeDatasetLabel"
-      />
+      <Translate content="dataset.dl.cumulativeDatasetLabel" />
     </DatasetIsCumulativeContainer>
   )
 }

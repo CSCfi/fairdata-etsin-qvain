@@ -8,7 +8,6 @@ import theme from '@/styles/theme'
 import { useStores } from '@/stores/stores'
 import { buildStores } from '@/stores'
 
-import '../../../locale/translations'
 import maximalDataset from '../../__testdata__/qvain.maximalDataset'
 
 const mockAdapter = new MockAdapter(axios)

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
+import Translate from '@/utils/Translate'
 
 import SearchBar from '@/components/etsin/FrontPage/SearchBar'
 import { useStores } from '@/stores/stores'

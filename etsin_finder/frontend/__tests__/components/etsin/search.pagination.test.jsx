@@ -4,7 +4,6 @@ import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 
 import { buildStores } from '@/stores'
-import '../../../locale/translations'
 import etsinTheme from '@/styles/theme'
 import Pagination from '@/components/etsin/Search/pagination'
 import { StoresProvider } from '@/stores/stores'

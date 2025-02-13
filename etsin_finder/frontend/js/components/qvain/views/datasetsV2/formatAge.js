@@ -1,7 +1,7 @@
-import translate from 'counterpart'
 import moment from 'moment'
 
-const formatAge = (currentTime, eventTime) => {
+const formatAge = (Locale, currentTime, eventTime) => {
+  const { translate } = Locale
   const timestampCurrentTime = moment(currentTime)
   const timestampEvent = moment(eventTime)
 

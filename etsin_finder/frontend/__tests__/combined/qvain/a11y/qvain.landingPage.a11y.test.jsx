@@ -6,14 +6,13 @@ import { axe } from 'jest-axe'
 import {configure} from 'mobx'
 
 import etsinTheme from '../../../../js/styles/theme'
-import '../../../../locale/translations'
 import {buildStores} from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import LandingPage from '../../../../js/components/qvain/views/landingPage/index.jsx'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-failTestsWhenTranslationIsMissing()
 
+const registerMissingTranslationHandler = failTestsWhenTranslationIsMissing()
 
 describe('Qvain landing page', () => {
   let wrapper
@@ -22,9 +21,10 @@ describe('Qvain landing page', () => {
   beforeAll(async () => {
     configure({ safeDescriptors: false })
     stores = buildStores()
+    registerMissingTranslationHandler(stores.Locale)
     configure({ safeDescriptors: true })
     stores.Accessibility.handleNavigation = jest.fn()
-    
+
     wrapper = mount(
       <StoresProvider store={stores}>
         <BrowserRouter>

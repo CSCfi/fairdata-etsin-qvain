@@ -13,9 +13,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import { useQuery } from '@/components/etsin/general/useQuery'
@@ -28,6 +27,7 @@ const Pagination = () => {
     Etsin: {
       Search: { currentPage, pageCount },
     },
+    Locale: { translate },
   } = useStores()
   const pages = getPages({
     pageCount,

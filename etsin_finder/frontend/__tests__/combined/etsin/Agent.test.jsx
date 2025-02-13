@@ -2,7 +2,6 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 
-import '@/../locale/translations'
 import etsinTheme from '@/styles/theme'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'

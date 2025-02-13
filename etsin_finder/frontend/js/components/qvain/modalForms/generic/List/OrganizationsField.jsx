@@ -2,7 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 import { Title, FieldGroup } from '@/components/qvain/general/V2'
 import { ValidationError } from '@/components/qvain/general/errors'
 import { BoxedContainer } from '@/components/qvain/general/V3/CommonOrgComponents'

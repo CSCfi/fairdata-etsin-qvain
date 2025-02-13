@@ -8,6 +8,7 @@ jest.useFakeTimers('modern').setSystemTime(fakeNow)
 
 describe('when calling handleSubmit with mockStores', () => {
   const getMockStores = ({ dataCatalog, accessType = ACCESS_TYPE_URL.OPEN }) => ({
+    Locale: { translate: v => v },
     Qvain: {
       Files: {
         useV3: false,

@@ -12,10 +12,10 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
 import PropTypes from 'prop-types'
+import Translate from '@/utils/Translate'
 
+import { useStores } from '@/stores/stores'
 import ErrorBoundary from '../../../general/errorBoundary'
 
 const ErrorContainer = styled.div.attrs({
@@ -34,6 +34,9 @@ const getTitle = field => (
 )
 
 export const FieldErrorBoundary = ({ children, field }) => {
+  const {
+    Locale: { translate },
+  } = useStores()
   const title = getTitle(translate(field))
 
   return (

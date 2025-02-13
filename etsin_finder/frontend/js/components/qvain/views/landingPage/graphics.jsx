@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Translate from 'react-translate-component'
+import Translate from '@/utils/Translate'
 
 import QvainImage from '../../../../../static/images/qvain_frontpage/qvain.svg'
 import EtsinImage from '../../../../../static/images/qvain_frontpage/etsin.svg'

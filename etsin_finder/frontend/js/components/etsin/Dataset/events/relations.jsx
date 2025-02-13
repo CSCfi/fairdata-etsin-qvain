@@ -8,9 +8,9 @@
  * @license   MIT
  */
 import React, { useState } from 'react'
-import Translate from 'react-translate-component'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
+import Translate from '@/utils/Translate'
 
 import etsinTheme from '@/styles/theme'
 import { useStores } from '@/stores/stores'

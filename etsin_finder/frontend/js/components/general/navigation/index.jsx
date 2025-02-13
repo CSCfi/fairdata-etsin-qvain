@@ -12,16 +12,16 @@
 
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
+import Translate from '@/utils/Translate'
 import { useStores } from '../../../utils/stores'
 
 const Navi = ({ routes }) => {
   const {
     Accessibility: { announce },
+    Locale: { translate },
   } = useStores()
 
   return routes.map(route => (

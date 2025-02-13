@@ -1,6 +1,5 @@
 import Harness from '../componentTestHarness'
 import { expect } from 'chai'
-import translate from 'counterpart'
 
 import TitleAndDescription from '@/components/qvain/sections/Description/TitleAndDescription'
 import DescriptionFieldInput from '@/components/qvain/sections/Description/TitleAndDescription/DescriptionFieldInput'
@@ -8,7 +7,6 @@ import DescriptionFieldTextField from '@/components/qvain/sections/Description/T
 import { useStores } from '@/stores/stores'
 import TranslationTab from '@/components/qvain/general/V2/TranslationTab'
 import { Title, FieldInput } from '@/components/qvain/general/V2'
-import '@/../locale/translations'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 
 describe('given Stores with required data', () => {

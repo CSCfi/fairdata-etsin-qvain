@@ -1,19 +1,18 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { observer } from 'mobx-react'
-import styled from 'styled-components'
-import Translate from 'react-translate-component'
-import translate from 'counterpart'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { createFilter, components as selectComponents } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPen } from '@fortawesome/free-solid-svg-icons'
+import styled from 'styled-components'
 
-import { useStores } from '../../../../utils/stores'
-import { DeleteButton } from '../../../../general/V2/buttons'
-import ValidationError from '../../../../general/errors/validationError'
-import { getOrganizationName } from '../../common'
+import { DeleteButton } from '@/components/qvain/general/V2/buttons'
+import ValidationError from '@/components/qvain/general/errors/validationError'
 import { FieldGroup, InfoText } from '@/components/qvain/general/V2'
+import Translate from '@/utils/Translate'
+import { useStores } from '@/utils/stores'
+import { getOrganizationName } from '../../common'
 
 // From the reference data parse the values with the current lang
 // or und.
@@ -36,18 +35,18 @@ const getDatasetOrgOptionsWithLang = (orgArrays, lang) =>
     }
   })
 
-const getOptionsWithLang = (datasetOptions, referenceOptions, lang) => [
+const getOptionsWithLang = (Locale, datasetOptions, referenceOptions, lang) => [
   {
-    label: translate('qvain.actors.add.organization.options.create', { locale: lang }),
+    label: Locale.translate('qvain.actors.add.organization.options.create', { locale: lang }),
     value: 'create',
     type: 'create',
   },
   {
-    label: translate('qvain.actors.add.organization.options.dataset', { locale: lang }),
+    label: Locale.translate('qvain.actors.add.organization.options.dataset', { locale: lang }),
     options: datasetOptions,
   },
   {
-    label: translate('qvain.actors.add.organization.options.presets', { locale: lang }),
+    label: Locale.translate('qvain.actors.add.organization.options.presets', { locale: lang }),
     options: referenceOptions,
   },
 ]
@@ -113,7 +112,7 @@ export const OrgSelectorBase = ({
     datasetOptions = getDatasetOrgOptionsWithLang(datasetOrganizations, lang)
   }
 
-  const options = getOptionsWithLang(datasetOptions, referenceOptions, lang)
+  const options = getOptionsWithLang(Stores.Locale, datasetOptions, referenceOptions, lang)
 
   const isLast = level === organizations.length - 1
   const deleteButtonStyle = isLast ? null : { display: 'none' }
@@ -140,7 +139,7 @@ export const OrgSelectorBase = ({
 
     if (!isReference && selectedOption && selectedOption.label === '') {
       components.SingleValue = ValuePlaceholder
-      selectedOption.label = translate('qvain.actors.add.organization.label')
+      selectedOption.label = Stores.Locale.translate('qvain.actors.add.organization.label')
     }
 
     components.Option = CustomOption

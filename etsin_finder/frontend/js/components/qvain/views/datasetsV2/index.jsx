@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { observer } from 'mobx-react'
-import Translate from 'react-translate-component'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
+import Translate from '@/utils/Translate'
 
 import { useStores } from '../../utils/stores'
 import { QvainContainer, PageTitle } from '../../general/card'
