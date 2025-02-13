@@ -221,7 +221,12 @@ class EtsinDatasetV3 {
   }
 
   @computed get hasData() {
-    if ((!this.hasFiles && !this.hasRemoteResources) || this.isRemoved || this.isDeprecated) {
+    if (
+      (!this.hasFiles && !this.hasRemoteResources) ||
+      this.isRemoved ||
+      this.isDeprecated ||
+      this.isPas
+    ) {
       return false
     }
     if (this.hasFiles) {
