@@ -14,7 +14,6 @@ import { Checkbox } from '../../../general/modal/form'
 
 export const ShareModal = () => {
   const {
-    Auth: { userName },
     QvainDatasets: {
       share: {
         userPermissionToRemove,
@@ -22,6 +21,7 @@ export const ShareModal = () => {
         confirmRemoveUserPermission,
         isRemovingUserPermission,
         permissionChangeError,
+        loseAccessIfRemoved,
       },
     },
   } = useStores()
@@ -31,9 +31,6 @@ export const ShareModal = () => {
   useEffect(() => {
     setChecked(false) // reset when user changes
   }, [userPermissionToRemove])
-
-  const loseAccessIfRemoved =
-    userPermissionToRemove?.uid === userName && !userPermissionToRemove?.isProjectMember
 
   const confirmIsDisabled = loseAccessIfRemoved && !checked
 

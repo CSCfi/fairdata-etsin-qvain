@@ -12,12 +12,14 @@ import ShareV3 from './qvain.datasetsV3.share'
 import Sort from './qvain.datasetsV2.sort'
 
 class QvainDatasets {
-  constructor(Env, Locale) {
+  constructor(Env, Auth, Locale) {
     makeObservable(this)
     this.Env = Env
+    this.Auth = Auth
+    this.Locale = Locale
     this.tabs = new Tabs({ all: 'qvain.datasets.tabs.all' }, 'all')
-    this.shareV2 = new Share()
-    this.shareV3 = new ShareV3(Env)
+    this.shareV2 = new Share(Env, Auth, this)
+    this.shareV3 = new ShareV3(Env, Auth, this)
     this.sort = new Sort(Locale)
     this.promiseManager = new PromiseManager()
     this.removeModal = new Modal()

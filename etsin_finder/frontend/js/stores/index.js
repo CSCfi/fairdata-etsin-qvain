@@ -35,9 +35,9 @@ export const buildStores = (options = {}) => {
   const Access = new AccessClass(Auth)
   let QvainDatasets
   if (Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
-    QvainDatasets = new QvainDatasetsV3Class(Env, Locale)
+    QvainDatasets = new QvainDatasetsV3Class(Env, Auth, Locale)
   } else {
-    QvainDatasets = new QvainDatasetsClass(Env, Locale)
+    QvainDatasets = new QvainDatasetsClass(Env, Auth, Locale)
   }
   const OrgReferences = new OrgReferencesClass(Env)
   const Qvain = new QvainClass(Env, Auth, OrgReferences)

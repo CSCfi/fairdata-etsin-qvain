@@ -494,7 +494,7 @@ describe('ShareModal', () => {
       wrapper.find('.project-member-users .member-user').should.have.lengthOf(memberCount)
     })
 
-    it('should allow require extra confirmation non-member editor remove themself from permissions list', async () => {
+    it('should require extra confirmation non-member editor remove themself from permissions list', async () => {
       stores.Auth.setUser({
         name: 'not_in_ldap',
       })
@@ -513,10 +513,12 @@ describe('ShareModal', () => {
         () => !wrapper.find('button span[children="Remove"]').closest('button').prop('disabled')
       )
 
+      wrapper.find('h3[children="Share metadata editing rights"]').should.have.lengthOf(1)
       wrapper.find('button span[children="Remove"]').simulate('click')
       await wait(() => wrapper.find('button span[children="Remove"]').length === 0)
-      wrapper.find('.permission-users .member-user').should.have.lengthOf(permissionCount - 1)
-      wrapper.find('.project-member-users .member-user').should.have.lengthOf(memberCount)
+
+      // Modal should be closed after removing permissions from self
+      wrapper.find('h3[children="Share metadata editing rights"]').should.have.lengthOf(0)
     })
 
     it('should cancel removing user from permissions list', async () => {

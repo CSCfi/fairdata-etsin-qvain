@@ -13,11 +13,6 @@ const roleCompare = (a, b) => roleValue(a) - roleValue(b)
 const timeout = 20000
 
 class ShareV3 extends ShareV2 {
-  constructor(Env) {
-    super()
-    this.Env = Env
-  }
-
   @override
   async sendInvite() {
     const results = []

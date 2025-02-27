@@ -16,7 +16,10 @@ const roleCompare = (a, b) => roleValue(a) - roleValue(b)
 const timeout = 20000
 
 class Share {
-  constructor() {
+  constructor(Env, Auth, QvainDatasets) {
+    this.Env = Env
+    this.Auth = Auth
+    this.QvainDatasets = QvainDatasets
     this.promiseManager = new PromiseManager()
     this.modal = new Modal()
     this.tabs = new Tabs(
@@ -225,6 +228,7 @@ class Share {
 
   @action.bound
   async removeUserPermission(user) {
+    const loseAccess = this.loseAccessIfRemoved
     const remove = async () => {
       try {
         await this.client.delete(this.getRemoveUserUrl(user), { timeout, tag: 'delete' })
@@ -245,6 +249,12 @@ class Share {
         }
         this.setPermissionChangeError(undefined)
 
+        if (loseAccess) {
+          // User no longer has access to dataset, remove from list
+          this.QvainDatasets.removeDataset(this.modal.data.dataset)
+          this.modal.close()
+        }
+
         return true
       } catch (err) {
         this.setPermissionChangeError(err)
@@ -263,6 +273,16 @@ class Share {
   @action.bound
   requestRemoveUserPermission(user) {
     this.userPermissionToRemove = user
+  }
+
+  @computed
+  get loseAccessIfRemoved() {
+    // Return true if logged in user will lose access to dataset when permission is removed
+    const perm = this.userPermissionToRemove
+    if (!perm) {
+      return false
+    }
+    return perm.uid === this.Auth.userName && !perm.isProjectMember
   }
 
   @action.bound
