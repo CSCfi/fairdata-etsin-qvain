@@ -16,21 +16,23 @@ const FrontPageV3 = () => {
 
   useEffect(() => {
     fetchOverallCount()
-  }, [fetchOverallCount, overallCount])
+  }, [fetchOverallCount])
 
   return (
     <div className="search-page">
       <HeroBanner className="hero-primary">
-        {overallCount && (
-          <div className="container">
-            <section className="text-center">
-              <h1>
-                <Translate with={{ count: overallCount }} content="home.titleV3" />
-              </h1>
-              <SearchBar />
-            </section>
-          </div>
-        )}
+        <div className="container">
+          <section className="text-center">
+            <h1>
+              <Translate content="home.titleV3" />
+              &nbsp;
+              {overallCount !== null && (
+                <Translate with={{ count: overallCount }} content="home.count" />
+              )}
+            </h1>
+            <SearchBar />
+          </section>
+        </div>
       </HeroBanner>
       <div className="container">
         <div className="regular-row">

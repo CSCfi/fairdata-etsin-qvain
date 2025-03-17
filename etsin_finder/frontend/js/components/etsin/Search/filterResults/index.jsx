@@ -47,12 +47,12 @@ const FilterResults = () => {
       </span>
       <FilterSection filterName="data_catalog" />
       <FilterSection filterName="access_type" />
-      <FilterSection filterName="organization" />
-      <FilterSection filterName="creator" />
+      <FilterSection filterName="organization" onlyCurrentLanguage />
+      <FilterSection filterName="creator" onlyCurrentLanguage />
       <FilterSection filterName="field_of_science" />
       <FilterSection filterName="keyword" />
       <FilterSection filterName="infrastructure" />
-      <FilterSection filterName="project" />
+      <FilterSection filterName="project" onlyCurrentLanguage />
       <FilterSection filterName="file_type" />
     </FilterContainer>
   )

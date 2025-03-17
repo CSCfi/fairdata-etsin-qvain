@@ -13,7 +13,7 @@ import { useStores } from '@/stores/stores'
 import FilterItem from './filterItem'
 import { useQuery } from '@/components/etsin/general/useQuery'
 
-const FilterSection = ({ filterName }) => {
+const FilterSection = ({ filterName, onlyCurrentLanguage }) => {
   const {
     Etsin: {
       // isLoading will trigger update even though it is not strictly used here
@@ -38,7 +38,10 @@ const FilterSection = ({ filterName }) => {
   const titleName = `search.aggregations.${filterName}.title`
   const filter = getAggregationQueryName(filterName)
   const items = getAggregation(filterName).slice().sort(itemsSort) || []
-  let shownItems = items.filter(i => i.value[lang] || i.value.und)
+  let shownItems = items
+  if (onlyCurrentLanguage) {
+    shownItems = shownItems.filter(i => i.value[lang] || i.value.und)
+  }
   const displayShowMoreButton = shownItems?.length > 10
 
   const [isOpen, setOpen] = useState(query.has(filter))
@@ -103,6 +106,12 @@ const FilterSection = ({ filterName }) => {
 
 FilterSection.propTypes = {
   filterName: PropTypes.string.isRequired,
+  onlyCurrentLanguage: PropTypes.bool,
+}
+
+FilterSection.defaultProps = {
+  // Enable to ignore items that don't have a translation in current language or "und" language
+  onlyCurrentLanguage: false,
 }
 
 export default observer(FilterSection)

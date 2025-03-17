@@ -42,8 +42,8 @@ const SearchListItem = ({ item }) => {
         <Link
           to={`/dataset/${item.id}`}
           aria-label={`
-              ${title}: 
-              ${datasetAvailability()}: 
+              ${title}:
+              ${datasetAvailability()}:
               ${shortenDescription()}`}
           lang={lang}
         >
@@ -67,15 +67,13 @@ const SearchListItem = ({ item }) => {
             </ErrorBoundary>
             <ErrorBoundary>
               {Array.isArray(item.field_of_science) && (
-                <div className="basic-info">
-                  <p>
-                    {item.field_of_science.map(field => (
-                      <div key={field.url} lang={lang}>
-                        {getValueTranslation(field.pref_label)}
-                      </div>
-                    ))}
-                  </p>
-                </div>
+                <BasicInfo className="basic-info">
+                  {item.field_of_science.map(field => (
+                    <div key={field.url} lang={lang}>
+                      {getValueTranslation(field.pref_label)}
+                    </div>
+                  ))}
+                </BasicInfo>
               )}
             </ErrorBoundary>
             <ErrorBoundary>
@@ -99,6 +97,10 @@ SearchListItem.propTypes = {
     data_catalog: PropTypes.string,
   }).isRequired,
 }
+
+const BasicInfo = styled.div`
+  margin-bottom: 1rem;
+`
 
 const ItemHeader = styled.div`
   margin-bottom: 0em;

@@ -425,7 +425,8 @@ const english = {
     },
   },
   home: {
-    titleV3: 'Search datasets (%(count)s total)',
+    titleV3: 'Search datasets',
+    count: '(%(count)s total)',
     title: 'Search datasets',
     title1: 'What is Etsin?',
     title2: 'How can I get access to the datasets?',
