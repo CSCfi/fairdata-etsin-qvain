@@ -87,8 +87,8 @@ class QvainDatasets {
   }
 
   @action
-  setPublishedDataset = identifier => {
-    this.publishedDataset = identifier
+  setPublishedDataset = publishedDataset => {
+    this.publishedDataset = publishedDataset
   }
 
   @action.bound setSearchTerm(term) {

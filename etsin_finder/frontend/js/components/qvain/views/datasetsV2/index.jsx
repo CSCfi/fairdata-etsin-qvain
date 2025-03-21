@@ -33,7 +33,13 @@ export const Datasets = () => {
       <Translate component={PageTitle} content="qvain.datasets.title" />
       {publishedDataset && (
         <PublishSuccess onClose={() => setPublishedDataset(null)}>
-          <Translate content="qvain.submitStatus.success" />
+          <Translate
+            content={
+              publishedDataset.isNew
+                ? 'qvain.submitStatus.success'
+                : 'qvain.submitStatus.editMetadataSuccess'
+            }
+          />
         </PublishSuccess>
       )}
 

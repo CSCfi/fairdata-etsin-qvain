@@ -112,9 +112,11 @@ class Submit {
   }
 
   @action submitPublish = async cb => {
+    let isNew = false
     switch (this.submitType) {
       case DATASET_STATE.NEW:
         await this.exec(this.publishNewDataset)
+        isNew = true
         break
       case DATASET_STATE.DRAFT:
         await this.exec(this.publishDraft)
@@ -131,7 +133,7 @@ class Submit {
     }
     const identifier = this.getResponseIdentifier()
     if (cb && identifier) {
-      cb(identifier)
+      cb({ identifier, isNew })
     }
   }
 

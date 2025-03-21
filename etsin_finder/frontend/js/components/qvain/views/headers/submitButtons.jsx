@@ -47,9 +47,9 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
     }
   }, [original, QvainDatasets, getQvainUrl, history, prevalidate])
 
-  const goToDatasetsCallBack = identifier => {
+  const goToDatasetsCallBack = ({ identifier, isNew }) => {
     // go to datasets view and highlight published dataset
-    QvainDatasets.setPublishedDataset(identifier)
+    QvainDatasets.setPublishedDataset({ identifier, isNew })
     history.push(getQvainUrl('/'))
   }
 

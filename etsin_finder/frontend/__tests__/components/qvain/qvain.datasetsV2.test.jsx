@@ -171,11 +171,28 @@ describe('DatasetsV2', () => {
   describe('PublishSuccess', () => {
     it('should hide when close button is clicked', async () => {
       await render()
-      stores.QvainDatasets.setPublishedDataset('someDatasetIdentifier')
+      stores.QvainDatasets.setPublishedDataset({
+        identifier: 'someDatasetIdentifier',
+        isNew: true,
+      })
       wrapper.update()
       wrapper.find('span[children="Dataset published!"]').length.should.eql(1)
       wrapper.find('span[children="hide notice"]').simulate('click')
       wrapper.find('span[children="Dataset published!"]').length.should.eql(0)
+    })
+  })
+
+  describe('EditMetadataSuccess', () => {
+    it('should show when dataset is updated', async () => {
+      await render()
+      stores.QvainDatasets.setPublishedDataset({
+        identifier: 'someDatasetIdentifier',
+        isNew: false,
+      })
+      wrapper.update()
+      wrapper.find('span[children="Dataset successfully updated!"]').length.should.eql(1)
+      wrapper.find('span[children="hide notice"]').simulate('click')
+      wrapper.find('span[children="Dataset successfully updated!"]').length.should.eql(0)
     })
   })
 
