@@ -76,7 +76,7 @@ const cacheDirectories = ({ Files, dir, data, defaults, fetchType, onlyPublic = 
           }
         },
         [FetchType.ANY]: () => {
-          cache[key].byteSize = newDir.byte_size
+          cache[key].byteSize = newDir.byte_size ?? newDir.size // v2 ?? v3
           cache[key].fileCount = newDir.file_count
           cache[key].index = { ...cache[key].index, [sort.paginationKey]: index }
           if (itemsByKey[key]) {
@@ -182,8 +182,8 @@ const fetchExistingChildDataForDirectory = async ({
   // determine file counts for parent directory
   const counts = {
     existingDirectChildCount: data.directories.length + data.files.length,
-    existingByteSize: data.byte_size || data.parent_directory?.byte_size, // v2 || v3
-    existingFileCount: data.file_count || data.directory?.file_count, // v2 || v3
+    existingByteSize: data.byte_size ?? data.directory?.size, // v2 ?? v3
+    existingFileCount: data.file_count ?? data.directory?.file_count, // v2 ?? v3
   }
 
   // when onlyPublic is enabled, use existing counts as the total counts as
@@ -219,7 +219,7 @@ const fetchAnyChildDataForDirectory = async ({ Files, dir, defaults = {}, sort }
       }
 
       cache[key].fileCount = newDir.file_count
-      cache[key].byteSize = newDir.byte_size
+      cache[key].byteSize = newDir.byte_size ?? newDir.size // v2 ?? v3
       cache[key].index = { ...cache[key].index, [sort.paginationKey]: index }
 
       if (itemsByKey[key]) {
@@ -252,7 +252,7 @@ const fetchAnyChildDataForDirectory = async ({ Files, dir, defaults = {}, sort }
 
   return {
     directChildCount: data.directories.length + data.files.length,
-    byteSize: data.byte_size,
+    byteSize: data.byte_size ?? data.size,
     fileCount: data.file_count,
   }
 }
@@ -399,10 +399,10 @@ const fetchItems = async ({ Files, dir, offset, limit, type, sort, filter = '' }
     let existingFileCount, existingByteSize
     if (type === FetchType.EXISTING || type === FetchType.PUBLIC) {
       existingFileCount = newDir.file_count
-      existingByteSize = newDir.byte_size
+      existingByteSize = newDir.byte_size ?? newDir.size // v2 ?? v3
     } else if (type === FetchType.NOT_EXISTING) {
       existingFileCount = cache[key].fileCount - newDir.file_count
-      existingByteSize = cache[key].byteSize - newDir.byte_size
+      existingByteSize = cache[key].byteSize - (newDir.byte_size ?? newDir.size)
     } else {
       existingFileCount = 0
       existingByteSize = 0
@@ -430,7 +430,7 @@ const fetchItems = async ({ Files, dir, offset, limit, type, sort, filter = '' }
       File(newFile, {
         parent: dir,
         existing: type === FetchType.EXISTING,
-        byteSize: newFile.byte_size,
+        byteSize: newFile.byte_size ?? newFile.size, // v2 ?? v3
         ...cache[identifierKey],
         ...cache[key],
       })
