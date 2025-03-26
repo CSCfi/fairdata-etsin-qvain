@@ -35,7 +35,7 @@ class Sections {
 
   @action.bound expandPopulatedSections(dataset) {
     Object.values(this.all).forEach(section => {
-      section.setExpanded(section.metaxFieldName && dataset[section.metaxFieldName])
+      section.expandIfPopulated(dataset)
     })
   }
 

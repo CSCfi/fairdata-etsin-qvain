@@ -1,4 +1,4 @@
-import { makeObservable } from 'mobx'
+import { makeObservable, override } from 'mobx'
 import Section from './section'
 
 class Projects extends Section {
@@ -11,6 +11,12 @@ class Projects extends Section {
 
   // used for checking if dataset has items
   metaxFieldName = 'projects'
+
+  @override expandIfPopulated(dataset) {
+    if (dataset.projects?.length > 0) {
+      this.setExpanded(true)
+    }
+  }
 }
 
 export default Projects

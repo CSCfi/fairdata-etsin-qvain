@@ -31,6 +31,10 @@ class Section {
   @action.bound getField(fieldName) {
     return this.fields[fieldName]
   }
+
+  @action.bound expandIfPopulated() {
+    return false
+  }
 }
 
 export default Section

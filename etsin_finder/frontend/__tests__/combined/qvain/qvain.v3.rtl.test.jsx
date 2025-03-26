@@ -213,6 +213,17 @@ describe('Qvain with an opened dataset', () => {
     }
   })
 
+  it.each([
+    ['History and events (provenance)'],
+    ['Time period'],
+    ['Related publications and other material'],
+    ['Geographical area'],
+    ['Project and funding'],
+  ])('expands optional sections', async sectionName => {
+    const section = await renderSection(sectionName)
+    expect(within(section).getByRole('button', { name: 'Show less' })).toBeInTheDocument()
+  })
+
   it('when submit is clicked, submits all supported fields from dataset', async () => {
     // fields not expected to be present in the submitted data
     const expectedMissing = [
@@ -556,8 +567,8 @@ describe('Qvain with an opened dataset', () => {
             ' You can view metadata but cannot make any changes.'
         )
       ).toBeInTheDocument()
-      const input = document.getElementById("titleInput")
-      expect(input.hasAttribute("disabled")).toBe(true)
+      const input = document.getElementById('titleInput')
+      expect(input.hasAttribute('disabled')).toBe(true)
     })
 
     it('shows notification when PAS package has been created', async () => {
@@ -567,8 +578,8 @@ describe('Qvain with an opened dataset', () => {
           'NOTE! Changes made to the metadata do NOT affect the version in Digital Preservation but are only visible in Etsin.'
         )
       ).toBeInTheDocument()
-      const input = document.getElementById("titleInput")
-      expect(input.hasAttribute("disabled")).toBe(false)
+      const input = document.getElementById('titleInput')
+      expect(input.hasAttribute('disabled')).toBe(false)
     })
   })
 })

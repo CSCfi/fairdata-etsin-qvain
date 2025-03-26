@@ -186,24 +186,4 @@ describe('EditorV2', () => {
       })
     })
   })
-
-  describe('given existing dataset', () => {
-    beforeAll(async () => {
-      props.haveDataset = false
-      await stores.Qvain.editDataset(datasetIda)
-      props.haveDataset = true
-    })
-
-    test('should expand optional fields', () => {
-      const optionalSections = ['Publications', 'Geographics', 'TimePeriod', 'History', 'Project']
-
-      optionalSections.forEach(section => {
-        const sectionWrapper = wrapper.find(`#section-${section}`, { exact: false })
-        const contentWrapper = sectionWrapper.find('Section__Content', { exact: false })
-
-        expect(sectionWrapper.prop('isExpanded')).toBe(true)
-        expect(contentWrapper.html()).toBeTruthy()
-      })
-    })
-  })
 })
