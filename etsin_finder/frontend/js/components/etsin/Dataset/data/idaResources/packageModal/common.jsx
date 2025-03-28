@@ -6,21 +6,21 @@ import Translate from 'react-translate-component'
 
 import Button, { InvertedButton } from '@/components/etsin/general/button'
 
-const createPackage = async Packages => {
+const createPackage = Packages => {
   Packages.Notifications.validateEmail()
   if (Packages.Notifications.emailError) {
     return
   }
-  await Packages.createPackageFromPath(Packages.packageModalPath)
+  Packages.createPackageFromPath(Packages.packageModalPath)
   Packages.closePackageModal()
 }
 
-const submitEmail = async Packages => {
+const submitEmail = Packages => {
   Packages.Notifications.validateEmail(true)
   if (Packages.Notifications.emailError) {
     return
   }
-  await Packages.Notifications.subscribeToPath(Packages.packageModalPath)
+  Packages.Notifications.subscribeToPath(Packages.packageModalPath)
   Packages.closePackageModal()
 }
 
