@@ -24,7 +24,7 @@ function IdaResources() {
     Locale: { lang, dateFormat },
     Access: { restrictions },
     Etsin: {
-      EtsinDataset: { useV3, identifier, files, downloadAllInfotext },
+      EtsinDataset: { identifier, files, downloadAllInfotext },
       filesProcessor: { Packages },
       fetchPackages,
       isDownloadPossible,
@@ -49,15 +49,13 @@ function IdaResources() {
 
   let shapedChecksum
   if (inInfo?.checksum) {
-    shapedChecksum = useV3
-      ? inInfo.checksum
-      : `${inInfo.checksum.algorithm}:${inInfo.checksum.value}`
+    shapedChecksum = inInfo.checksum
   }
 
   const infoProps = inInfo && {
     open: true,
     name: inInfo.name,
-    id: useV3 && inInfo.type === 'directory' ? null : inInfo.identifier,
+    id: inInfo.type === 'directory' ? null : inInfo.identifier,
     checksum: shapedChecksum,
     title: inInfo.title,
     size: sizeParse(inInfo.existingByteSize || inInfo.byteSize),

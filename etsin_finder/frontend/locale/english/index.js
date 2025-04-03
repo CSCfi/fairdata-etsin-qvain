@@ -364,7 +364,7 @@ const english = {
       contributor_role: 'Contributor role',
       contributor_type: 'Contributor type',
       member_of: 'Member of',
-      is_part_of: 'Is part of',
+      parent: 'Is part of',
       homepage: 'Homepage',
     },
     language: 'Language',

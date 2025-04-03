@@ -162,8 +162,8 @@ const formatPackageResponse = packages => {
 export const applyMockAdapter = mockAdapter => {
   // Use mockAdapter to mock axios responses for the Download API.
 
-  mockAdapter.onGet('/api/download/status').reply(200, '') // status ok
-  mockAdapter.onGet(RegExp('^/api/download/requests')).reply(({ url, data }) => {
+  mockAdapter.onGet('/api/v3/download/status').reply(200, '') // status ok
+  mockAdapter.onGet(RegExp('^/api/v3/download/requests')).reply(({ url, data }) => {
     const params = getParams(url, data)
     if (errors[params.cr_id]) {
       return errors[params.cr_id]
@@ -173,7 +173,7 @@ export const applyMockAdapter = mockAdapter => {
     return formatPackageResponse(packages)
   })
 
-  mockAdapter.onPost(RegExp('^/api/download/requests')).reply(({ url, data }) => {
+  mockAdapter.onPost(RegExp('^/api/v3/download/requests')).reply(({ url, data }) => {
     const params = getParams(url, data)
     if (errors[params.cr_id]) {
       return errors[params.cr_id]
@@ -188,7 +188,7 @@ export const applyMockAdapter = mockAdapter => {
     return formatPackageResponse(createdPackages)
   })
 
-  mockAdapter.onPost(RegExp('^/api/download/authorize')).reply(({ url, data }) => {
+  mockAdapter.onPost(RegExp('^/api/v3/download/authorize')).reply(({ url, data }) => {
     const params = getParams(url, data)
     const { cr_id, file, package: pack } = params
     if (errors[cr_id]) {

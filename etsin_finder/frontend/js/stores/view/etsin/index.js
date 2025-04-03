@@ -1,11 +1,9 @@
-import { action, observable, computed, makeObservable, runInAction } from 'mobx'
+import { action, observable, computed, makeObservable } from 'mobx'
 import translate from 'counterpart'
 import { isAbort } from '@/utils/AbortClient'
-import EtsinDatasetV2 from './etsin.stores'
 import EtsinDatasetV3 from './etsin.storesV3'
-import DatasetProcessorV2, { DatasetProcessorV3 } from './processor/etsin.dataset'
+import { DatasetProcessorV3 } from './processor/etsin.dataset'
 import createFilesStore from './etsin.files'
-import RelationsProcessor from './processor/etsin.relations'
 import FilesProcessor from './processor/etsin.files'
 import EtsinSearch from './etsin.search.js'
 
@@ -22,37 +20,26 @@ class Etsin {
     this.Access = Access
     this.accessibility = Accessibility
     this.Locale = Locale
-    this.useDatasetV3 = this.Env.Flags.flagEnabled('ETSIN.METAX_V3.FRONTEND')
     this.Search = new EtsinSearch(this.Env)
 
-    if (this.useDatasetV3) {
-      this.EtsinDatasetClass = EtsinDatasetV3
-      this.DatasetProcessorClass = DatasetProcessorV3
-    } else {
-      this.EtsinDatasetClass = EtsinDatasetV2
-      this.DatasetProcessorClass = DatasetProcessorV2
-    }
+    this.EtsinDatasetClass = EtsinDatasetV3
+    this.DatasetProcessorClass = DatasetProcessorV3
 
     this.EtsinDataset = new this.EtsinDatasetClass({ Access, Locale })
     this.datasetProcessor = new this.DatasetProcessorClass(this.Env)
-    this.relationsProcessor = new RelationsProcessor(this.Env)
-    this.filesProcessor = new FilesProcessor(this.Env, this.useDatasetV3)
+    this.filesProcessor = new FilesProcessor(this.Env)
 
     makeObservable(this)
   }
 
   @observable requests = {
     dataset: [],
-    relations: [],
-    versions: [],
     custom: [],
   }
 
   @observable errors = {
     dataset: [],
     emails: [],
-    relations: [],
-    versions: [],
     custom: [],
     Access: this.Access,
     Locale: this.Locale,
@@ -60,8 +47,6 @@ class Etsin {
 
   @observable isLoading = {
     dataset: false,
-    relations: false,
-    versions: false,
     files: false,
     packages: false,
   }
@@ -94,23 +79,17 @@ class Etsin {
 
     this.requests = {
       dataset: [],
-      relations: [],
-      versions: [],
       custom: [],
     }
 
     this.errors = {
       dataset: [],
       emails: [],
-      relations: [],
-      versions: [],
       custom: [],
     }
 
     this.isLoading = {
       dataset: false,
-      relations: false,
-      versions: false,
       files: false,
       packages: false,
     }
@@ -175,16 +154,7 @@ class Etsin {
 
     if (!this.EtsinDataset.identifier) return []
 
-    let promises
-    if (!this.useDatasetV3) {
-      promises = [this.fetchVersions(), this.fetchRelations(id), this.fetchFiles()]
-    } else {
-      runInAction(() => {
-        this.isLoading.versions = false
-        this.isLoading.relations = false
-      })
-      promises = [this.fetchFiles()]
-    }
+    const promises = [this.fetchFiles()]
 
     return Promise.all(promises).finally(() => {
       this.requests = {}
@@ -199,15 +169,14 @@ class Etsin {
         rejected: this.constructRejectedCb('dataset'),
       }),
     ]
-    if (this.useDatasetV3) {
-      this.requests.dataset.push(
-        this.datasetProcessor.fetchEmails({
-          id,
-          resolved: this.constructResolvedCb('emails'),
-          rejected: this.constructRejectedCb('emails'),
-        })
-      )
-    }
+
+    this.requests.dataset.push(
+      this.datasetProcessor.fetchEmails({
+        id,
+        resolved: this.constructResolvedCb('emails'),
+        rejected: this.constructRejectedCb('emails'),
+      })
+    )
 
     const promises = [...this.requests.dataset.map(r => r.promise)]
     return Promise.all(promises).finally(() => {
@@ -248,60 +217,9 @@ class Etsin {
     })
   }
 
-  @action
-  fetchVersions = async () => {
-    if (!this.EtsinDataset.v2VersionSet) {
-      this.setLoadingOff('versions')
-      return []
-    }
-
-    runInAction(() => {
-      this.requests.versions = Object.values(this.EtsinDataset.v2VersionSet).map(version => {
-        if (version.identifier === this.EtsinDataset.identifier) return null
-        return this.datasetProcessor.fetch({
-          id: version.identifier,
-          resolved: this.constructResolvedCb('versions'),
-          rejected: this.constructRejectedCb('versions'),
-        })
-      })
-    })
-
-    const promises = this.requests.versions.filter(r => r).map(r => r.promise)
-    return Promise.all(promises).finally(() => {
-      runInAction(() => {
-        this.EtsinDataset.versions.push(this.EtsinDataset)
-      })
-      this.setLoadingOff('versions')
-    })
-  }
-
-  @action
-  fetchRelations = async id => {
-    if (this.EtsinDataset.isRemoved || this.EtsinDataset.isDeprecated) {
-      runInAction(() => {
-        this.requests.relations = [
-          this.relationsProcessor.fetch({
-            id,
-            resolved: this.constructResolvedCb('relations'),
-            rejected: this.constructRejectedCb('relations'),
-          }),
-        ]
-      })
-
-      const promises = [...this.requests.relations.map(r => r.promise)]
-      return Promise.all(promises).finally(() => this.setLoadingOff('relations'))
-    }
-
-    this.setLoadingOff('relations')
-    return []
-  }
-
   @action updateAccess = data => {
-    const accessRights = this.useDatasetV3
-      ? data.access_rights
-      : data.catalog_record.research_dataset.access_rights
     this.Access.updateAccess(
-      accessRights,
+      data.access_rights,
       data.has_permit || false,
       data.application_state || undefined
     )
@@ -310,8 +228,6 @@ class Etsin {
   @action.bound setLoadingOn() {
     this.accessibility.announcePolite(translate('dataset.loading'))
     this.isLoading.dataset = true
-    this.isLoading.relations = true
-    this.isLoading.versions = true
     this.isLoading.files = true
   }
 

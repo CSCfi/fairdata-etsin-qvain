@@ -8,12 +8,10 @@ import etsinTheme from '@/styles/theme'
 import '@/../locale/translations'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
-import {
-  deprecatedDataset,
-  versionTitles,
-  pasPreservationCopy,
-  pasUseCopy,
-} from '../../__testdata__/dataset.ida'
+import { versionTitles } from '../../__testdata__/dataset.ida'
+import deprecatedDataset from '../../__testdata__/metaxv3/datasets/dataset_ida_c_deprecated'
+import pasUseCopy from '../../__testdata__/metaxv3/datasets/dataset_ida_c_pasUseCopy'
+import pasPreservationCopy from '../../__testdata__/metaxv3/datasets/dataset_ida_c_preservationCopy'
 import Events from '@/components/etsin/Dataset/events'
 
 deprecatedDataset.preservation_dataset_origin_version = {
@@ -32,16 +30,9 @@ configure({ safeDescriptors: true })
 stores.Accessibility.handleNavigation = jest.fn()
 
 const versionsToStores = () => {
-  const versions = deprecatedDataset.dataset_version_set
+  const versions = deprecatedDataset.dataset_versions
   for (const version in versions) {
-    const catalog_record = {
-      ...versions[version],
-      research_dataset: {},
-    }
-    const versionID = versions[version].identifier
-    catalog_record['research_dataset']['title'] = versionTitles[versionID]
-    catalog_record['research_dataset']['issued'] = '2024-07-05'
-    stores.Etsin.EtsinDataset.set('versions', { catalog_record: catalog_record })
+    stores.Etsin.EtsinDataset.set('versions', versions[version])
   }
 }
 
@@ -66,7 +57,7 @@ describe('Events page', () => {
 
   const render = async (dataset = deprecatedDataset) => {
     jest.resetAllMocks()
-    stores.Etsin.EtsinDataset.set('dataset', { catalog_record: dataset })
+    stores.Etsin.EtsinDataset.set('dataset', dataset)
     versionsToStores()
 
     wrapper = mount(
@@ -167,21 +158,27 @@ describe('Events page', () => {
     await render()
     tableToObjects(sections['Versions']).should.eql([
       {
-        Identifier: 'http://urn.fi/urn:nbn:fi:att:12345677-4867-47f7-9874-112233445566',
+        Identifier: 'http://urn.fi/urn:nbn:fi:att:12345688-4867-47f7-9874-112233445566',
         Number: '5',
-        Title: 'English Title 3',
-        Type: 'Latest',
+        Title: 'English Title 4',
+        Type: 'Older',
       },
       {
-        Identifier: 'http://urn.fi/urn:nbn:fi:att:12345688-4867-47f7-9874-112233445566',
+        Identifier: 'http://urn.fi/urn:nbn:fi:att:12345677-4867-47f7-9874-112233445566',
         Number: '4',
-        Title: 'English Title 4',
-        Type: 'Newer',
+        Title: 'English Title 3',
+        Type: 'Older',
       },
       {
         Identifier: 'http://urn.fi/urn:nbn:fi:att:12345678-4867-47f7-9874-112233445566',
-        Number: '2',
+        Number: '3',
         Title: 'English Title 2',
+        Type: 'Older',
+      },
+      {
+        Identifier: 'http://urn.fi/urn:nbn:fi:att:162e04c5-857b-477c-a452-cd063ee3c44d',
+        Number: '2',
+        Title: 'English Title',
         Type: 'Older',
       },
     ])

@@ -1,11 +1,10 @@
 import axios from 'axios'
-
 import urls from '@/utils/urls'
 
 const authorize = async (params, Packages) => {
   Packages.clearError()
   // Authorize download for single file or package and return url
-  const authUrl = Packages.useV3 ? urls.metaxV3.download.authorize() : urls.dl.authorize()
+  const authUrl = urls.metaxV3.download.authorize()
   try {
     const resp = await axios.post(authUrl, params)
     const { url } = resp.data

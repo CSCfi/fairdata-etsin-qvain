@@ -48,10 +48,10 @@ const Search = () => {
   }, [query, handleNavigation, submit, prevLang, lang, history])
 
   return (
-    <>
+    <div>
       <SearchBarHeader />
       {isLoading ? <Spinner /> : <SearchPage />}
-    </>
+    </div>
   )
 }
 

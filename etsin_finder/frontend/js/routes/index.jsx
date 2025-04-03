@@ -12,11 +12,17 @@
 
 import loadable from '@loadable/component'
 
-export const Home = loadable(() => import('../components/frontpage' /* webpackPrefetch: true */))
+export const Home = loadable(() =>
+  import('../components/etsin/views/FrontPage' /* webpackPrefetch: true */)
+)
 
-export const Dataset = loadable(() => import('../components/etsin/views/Dataset' /* webpackPrefetch: true */))
+export const Dataset = loadable(() =>
+  import('../components/etsin/views/Dataset' /* webpackPrefetch: true */)
+)
 
-export const Search = loadable(() => import('../components/etsin/views/Search' /* webpackPrefetch: true */))
+export const Search = loadable(() =>
+  import('../components/etsin/views/Search' /* webpackPrefetch: true */)
+)
 
 export const Qvain = loadable(() =>
   import('../components/qvain/views/main' /* webpackPrefetch: true */)

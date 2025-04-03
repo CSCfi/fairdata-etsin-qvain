@@ -83,27 +83,19 @@ const handleSubmitToBackend = Qvain => {
     obj.remote_resources = Qvain.ExternalResources.toBackend()
   }
 
-  if (Qvain.Files.useV3) {
-    obj.cumulative_state = Qvain.original ? Qvain.newCumulativeState : Qvain.cumulativeState
-    // Qvain treats incoming cumulative state 2 (closed) as 0 (noncumulative)
-    // but it's a separate state in Metax
-    if (
-      obj.cumulative_state === 0 &&
-      Qvain.original?.cumulative_state === 2 &&
-      !Qvain.isNewVersion
-    ) {
-      obj.cumulative_state = 2
-    }
+  obj.cumulative_state = Qvain.original ? Qvain.newCumulativeState : Qvain.cumulativeState
+  // Qvain treats incoming cumulative state 2 (closed) as 0 (noncumulative)
+  // but it's a separate state in Metax
+  if (obj.cumulative_state === 0 && Qvain.original?.cumulative_state === 2 && !Qvain.isNewVersion) {
+    obj.cumulative_state = 2
   }
 
-  if (Qvain.Files.useV3 && Qvain.Files.root?.directChildCount > 0) {
+  if (Qvain.Files.root?.directChildCount > 0) {
     // file additions, removals and metadata changes
     obj.data = Qvain.Files.actionsToMetax()
   }
 
-  if (Qvain.Files.useV3) {
-    obj.projects = projects
-  }
+  obj.projects = projects
 
   if (Qvain.original) {
     obj.original = Qvain.original

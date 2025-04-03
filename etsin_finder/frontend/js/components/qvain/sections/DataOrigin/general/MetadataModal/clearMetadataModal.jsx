@@ -6,10 +6,7 @@ import axios from 'axios'
 
 import Modal from '@/components/general/modal'
 import { DangerButton, TableButton } from '@/components/qvain/general/buttons'
-import { getPASMeta } from '@/stores/view/common.files.items'
 import { useStores } from '@/stores/stores'
-
-import urls from '@/utils/urls'
 
 const ClearMetadataModal = () => {
   const {
@@ -17,7 +14,7 @@ const ClearMetadataModal = () => {
       readonly,
       clearMetadataModalFile,
       setClearMetadataModalFile,
-      Files: { applyClearPASMeta, useV3 },
+      Files: { applyClearPASMeta },
       original,
     },
     Env: { metaxV3Url },
@@ -28,25 +25,11 @@ const ClearMetadataModal = () => {
     const { identifier } = clearMetadataModalFile
     const crId = original?.identifier
 
-    const data = {} // clear characteristics
     setLoading(true)
     try {
-      if (useV3) {
-        const url = metaxV3Url('fileCharacteristics', identifier)
-        await axios.delete(url, { params: { dataset: crId } })
-        applyClearPASMeta({})
-      } else {
-        const url = urls.qvain.fileCharacteristics(identifier)
-        const response = await axios.put(url, data, {
-          params: {
-            cr_identifier: crId, // is empty for new dataset
-          },
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        applyClearPASMeta(getPASMeta(response.data))
-      }
+      const url = metaxV3Url('fileCharacteristics', identifier)
+      await axios.delete(url, { params: { dataset: crId } })
+      applyClearPASMeta({})
       close()
     } finally {
       setLoading(false)

@@ -69,19 +69,6 @@ class Auth {
     this.user = user
   }
 
-  isMetaxV3Request(requestConfig) {
-    // Return true if Axios request config object is a Metax V3 request
-    const requestUrl = new URL(requestConfig.url, global.location.href)
-    let metaxUrl
-    try {
-      metaxUrl = new URL(this.Env.metaxV3Url(''))
-    } catch (error) {
-      console.error(`Failed to construct Metax V3 URL, host=${this.Env.metaxV3Host}`)
-      throw error
-    }
-    return requestUrl.origin === metaxUrl.origin
-  }
-
   @action.bound
   enableRequestInterceptors() {
     // Enable interceptors for handling Metax V3 authentication
@@ -95,13 +82,16 @@ class Auth {
     // CSRF token for requests to Metax V3
     this.interceptors.request = axios.interceptors.request.use(config => {
       // Use location.href as base to avoid errors for relative URLs here
-      if (this.metaxV3Enabled && this.user.loggedIn && this.isMetaxV3Request(config)) {
+
+      if (this.user.loggedIn) {
         config.withCredentials = true // enables sending SSO cookies to Metax v3
         // Only write methods need a CSRF token
+
         if (['post', 'patch', 'put', 'delete'].includes(config.method)) {
           config.headers['X-CSRFToken'] = this.user.csrfToken
         }
       }
+
       return config
     })
 
@@ -111,8 +101,10 @@ class Auth {
       response => response,
       async error => {
         const requestConfig = error.config
-        if (this.metaxV3Enabled && this.user.loggedIn && this.isMetaxV3Request(requestConfig)) {
+
+        if (this.user.loggedIn) {
           const response = error.response
+
           if (response?.status === 403 && response.data?.detail?.startsWith?.('CSRF Failed')) {
             // CSRF error, try updating the token and retry the original request.
             if (await this.updateCsrf()) {
@@ -120,15 +112,9 @@ class Auth {
             }
           }
         }
+
         return Promise.reject(error)
       }
-    )
-  }
-
-  @computed get metaxV3Enabled() {
-    return (
-      (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND') && this.Env.isQvain) ||
-      (this.Env.Flags.flagEnabled('ETSIN.METAX_V3.FRONTEND') && this.Env.isEtsin)
     )
   }
 
@@ -138,14 +124,12 @@ class Auth {
     let csrfToken
     if (this.user.loggedIn) {
       // load v3 auth info
+      const res = await axios.get(this.Env.metaxV3Url('user'), {
+        withCredentials: true,
+      })
 
-      if (this.metaxV3Enabled) {
-        const res = await axios.get(this.Env.metaxV3Url('user'), {
-          withCredentials: true,
-        })
-        if (res.data.username === this.user.name) {
-          csrfToken = res.data.metax_csrf_token
-        }
+      if (res.data.username === this.user.name) {
+        csrfToken = res.data.metax_csrf_token
       }
     }
 
@@ -183,19 +167,20 @@ class Auth {
 
       runInAction(() => {
         // User verified through HAKA or other external verification, but no valid CSC account -> no permission
-        if (res.data.is_authenticated && !res.data.is_authenticated_CSC_user) {
+        const markAsLoggedOut = () => {
           this.userLogged = false
           this.cscUserLogged = false
+        }
 
+        if (res.data.is_authenticated && !res.data.is_authenticated_CSC_user) {
+          markAsLoggedOut()
           // User verified through CSC account, but no set home organization -> no permission
         } else if (
           res.data.is_authenticated &&
           res.data.is_authenticated_CSC_user &&
           !res.data.home_organization_id
         ) {
-          this.userLogged = false
-          this.cscUserLogged = false
-
+          markAsLoggedOut()
           // User verified through CSC account and has set home organization -> login successful
         } else if (
           res.data.is_authenticated &&
@@ -207,8 +192,7 @@ class Auth {
 
           // Error handling, if above conditions are not met, user should not be logged in
         } else {
-          this.userLogged = false
-          this.cscUserLogged = false
+          markAsLoggedOut()
         }
       })
     } catch (err) {

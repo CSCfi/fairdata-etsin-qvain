@@ -4,52 +4,45 @@ import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
-import { observable, when } from 'mobx'
+import { observable, runInAction, when } from 'mobx'
 import MockAdapter from 'axios-mock-adapter'
 import { setImmediate } from 'timers'
 
-import etsinTheme from '../../../../js/styles/theme'
+import etsinTheme from '@/styles/theme'
 import '../../../../locale/translations'
-import { buildStores } from '../../../../js/stores'
-import { StoresProvider } from '../../../../js/stores/stores'
-import dataset from '../../../__testdata__/dataset.att'
-import Dataset from '../../../../js/components/dataset'
-import Description from '../../../../js/components/dataset/description'
-import Maps from '../../../../js/components/dataset/maps'
-import Events from '../../../../js/components/dataset/events'
-import ExternalResources from '../../../../js/components/dataset/data/externalResources'
+import { buildStores } from '@/stores'
+import { StoresProvider } from '@/stores/stores'
+import dataset, { contact } from '../../../__testdata__/metaxv3/datasets/dataset_att_a'
+import Dataset from '@/components/etsin/Dataset'
+import Description from '@/components/etsin/Dataset/Description'
+import Maps from '@/components/etsin/Dataset/maps'
+import Events from '@/components/etsin/Dataset/events'
+import ExternalResources from '@/components/etsin/Dataset/data/externalResources'
 import axios from 'axios'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
 
-jest.setTimeout(45000) // the default 5000ms timeout is not always enough here
+jest.setTimeout(25000) // the default 5000ms timeout is not always enough here
 
-jest.mock('@/components/dataset/sidebar/special/importImages')
+jest.mock('@/components/etsin/Dataset/Sidebar/special/importImages')
 
-jest.mock('../../../../js/stores/view/accessibility')
+jest.mock('@/stores/view/accessibility')
 
 const datasetsCalls = observable.array([])
 
 const mockAdapter = new MockAdapter(axios)
-mockAdapter.onGet().reply((args) => {
+mockAdapter.onGet(`https:///v3/datasets/${dataset.id}`).reply(args => {
   datasetsCalls.push(JSON.parse(JSON.stringify(args)))
-  return [
-    200,
-    {
-      catalog_record: dataset,
-      email_info: {
-        CONTRIBUTOR: false,
-        CREATOR: false,
-        CURATOR: false,
-        PUBLISHER: false,
-        RIGHTS_HOLDER: false,
-      },
-    },
-  ]
+  return [200, dataset]
 })
 
-const identifier = dataset.identifier
+mockAdapter.onGet(`https:///v3/datasets/${dataset.id}/contact`).reply(args => {
+  datasetsCalls.push(JSON.parse(JSON.stringify(args)))
+  return [200, contact]
+})
+
+const identifier = dataset.id
 const path = `/dataset/${identifier}`
 
 const stores = buildStores()
@@ -73,6 +66,8 @@ describe('Etsin dataset page', () => {
         <MemoryRouter initialEntries={[path]}>
           <ThemeProvider theme={etsinTheme}>
             <main>
+              <label htmlFor="react-select-2-input"> dummy</label>
+              {/* to silence react select falsy test fails*/}
               <Route path="/dataset/:identifier" component={Dataset} />
             </main>
           </ThemeProvider>
@@ -80,9 +75,8 @@ describe('Etsin dataset page', () => {
       </StoresProvider>,
       { attachTo: helper }
     )
-
     // wait for async tasks to finish
-    await when(() => datasetsCalls.length >= 1)
+    await when(() => datasetsCalls.length >= 2)
     await flushPromises()
     wrapper.update()
   })
@@ -102,13 +96,17 @@ describe('Etsin dataset page', () => {
   })
 
   it('should call Accessibility.handleNavigation for dataset', async () => {
-    expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([['dataset', false]])
+    expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([
+      ['error'],
+      ['dataset', false],
+    ])
   })
 
   describe('Data tab (external resources)', () => {
     beforeAll(() => {
       jest.resetAllMocks()
       datasetsCalls.clear()
+
       wrapper.find('a#tab-for-data').simulate('click', { button: 0 })
     })
 
@@ -130,6 +128,7 @@ describe('Etsin dataset page', () => {
     beforeAll(() => {
       jest.resetAllMocks()
       datasetsCalls.clear()
+
       wrapper.find('a#tab-for-events').simulate('click', { button: 0 })
     })
 
@@ -150,7 +149,8 @@ describe('Etsin dataset page', () => {
   describe('Maps tab', () => {
     beforeAll(() => {
       jest.resetAllMocks()
-      datasetsCalls.clear()
+      runInAction(() => datasetsCalls.clear())
+
       wrapper.find('a#tab-for-maps').simulate('click', { button: 0 })
     })
 

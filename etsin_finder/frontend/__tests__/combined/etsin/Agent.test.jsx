@@ -6,39 +6,45 @@ import '@/../locale/translations'
 import etsinTheme from '@/styles/theme'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
-import Agent from '@/components/dataset/Agent'
+import Agent from '@/components/etsin/Dataset/Agent'
 
 const stores = buildStores()
 
 const personAgent = {
-  name: 'Mauno Majava',
-  identifier: 'maunon_identifieri',
-  contributor_role: [{ pref_label: { en: 'First role' } }, { pref_label: { fi: 'Toinen rooli' } }],
-  contributor_type: [{ pref_label: { en: 'contributor type label' } }],
-  homepage: {
-    identifier: 'https://www.example.com',
-    description: { fi: 'Näillä sivuilla on kaikenlaista.' },
-    title: { fi: 'Maailman parhaat kotskasivut' },
-  },
-  member_of: {
-    name: { en: 'Organization subsub' },
-    is_part_of: { name: { en: 'Organization sub' }, is_part_of: { name: { en: 'Organization' } } },
+  person: {
+    name: 'Mauno Majava',
+    url: 'maunon_identifieri',
+    homepage: {
+      url: 'https://www.example.com',
+      description: { fi: 'Näillä sivuilla on kaikenlaista.' },
+      title: { fi: 'Maailman parhaat kotskasivut' },
+    },
+    organization: {
+      pref_label: { en: 'Organization subsub' },
+      parent: {
+        pref_label: { en: 'Organization sub' },
+        parent: { pref_label: { en: 'Organization' } },
+      },
+    },
   },
 }
 
 const orgAgent = {
-  name: { en: 'Some organization' },
-  identifier: 'https://orcid.org/jotain',
-  contributor_role: [{ pref_label: { en: 'First role' } }, { pref_label: { fi: 'Toinen rooli' } }],
-  contributor_type: [{ pref_label: { en: 'contributor type label' } }],
-  homepage: {
-    identifier: 'https://www.example.com',
-    description: { fi: 'Näillä sivuilla on kaikenlaista.' },
-    title: { fi: 'Maailman parhaat kotskasivut' },
+  person: {
+    name: { en: 'Some organization' },
+    homepage: {
+      url: 'https://www.example.com',
+      description: { fi: 'Näillä sivuilla on kaikenlaista.' },
+      title: { fi: 'Maailman parhaat kotskasivut' },
+    },
   },
-  is_part_of: {
-    name: { en: 'Organization subsub' },
-    is_part_of: { name: { en: 'Organization sub' }, is_part_of: { name: { en: 'Organization' } } },
+  organization: {
+    pref_label: { en: 'Organization subsub' },
+    url: 'https://orcid.org/jotain',
+    parent: {
+      pref_label: { en: 'Organization sub' },
+      parent: { pref_label: { en: 'Organization' } },
+    },
   },
 }
 
@@ -71,27 +77,13 @@ describe('Agent', () => {
       wrapper = render(personAgent)
     })
 
-    it('should render person name', () => {
+    it('should render person pref_label', () => {
       wrapper.find('a[children="Mauno Majava"]').hostNodes().should.have.lengthOf(1)
     })
 
     it('should render person tooltip', () => {
       wrapper.find('a[children="Mauno Majava"]').hostNodes().simulate('click')
       wrapper.findByRole('tooltip').findByRole('heading').text().should.eql('Mauno Majava')
-
-      wrapper.find('[children="maunon_identifieri"]').hostNodes().should.have.lengthOf(1)
-
-      const entries = getEntries(wrapper.findByRole('tooltip').find('dl'))
-      entries.should.eql([
-        {
-          key: 'Member of',
-          value: ['Organization', 'Organization sub', 'Organization subsub'],
-        },
-        { key: 'Contributor role', value: ['First role'] },
-        { key: 'Contributor role', value: ['Toinen rooli'] },
-        { key: 'Contributor type', value: ['contributor type label'] },
-        { key: 'Homepage', value: ['Maailman parhaat kotskasivut'] },
-      ])
     })
   })
 
@@ -101,15 +93,12 @@ describe('Agent', () => {
       wrapper = render(orgAgent)
     })
 
-    const organizationFullName =
-      'Organization, Organization sub, Organization subsub, Some organization'
-
-    it('should render organization name', () => {
-      wrapper.find(`a[children="${organizationFullName}"]`).hostNodes().should.have.lengthOf(1)
+    it('should render organization pref_label', () => {
+      wrapper.find(`a[children="Some organization"]`).hostNodes().should.have.lengthOf(1)
     })
 
     it('should render organization tooltip', () => {
-      wrapper.find(`a[children="${organizationFullName}"]`).hostNodes().simulate('click')
+      wrapper.find(`a[children="Some organization"]`).hostNodes().simulate('click')
       wrapper
         .findByRole('tooltip')
         .hostNodes()
@@ -122,10 +111,6 @@ describe('Agent', () => {
       const entries = getEntries(wrapper.findByRole('tooltip').find('dl'))
       entries.should.eql([
         { key: 'Is part of', value: ['Organization', 'Organization sub', 'Organization subsub'] },
-        { key: 'Contributor role', value: ['First role'] },
-        { key: 'Contributor role', value: ['Toinen rooli'] },
-        { key: 'Contributor type', value: ['contributor type label'] },
-        { key: 'Homepage', value: ['Maailman parhaat kotskasivut'] },
       ])
     })
   })

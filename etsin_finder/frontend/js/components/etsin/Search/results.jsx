@@ -14,7 +14,6 @@ import ResultsAmount from './resultsAmount'
 import FilterResults from './filterResults'
 import FilterToggle from './filterResults/filterToggle'
 import NoResults from './noResults'
-import ClearFilters from './filterResults/clearFilters'
 import CurrentQuery from './currentQuery'
 
 import { useStores } from '@/stores/stores'
@@ -108,7 +107,6 @@ function Filters({ filterOpen }) {
       attributes={{ 'aria-label': 'search.filter.filters' }}
     >
       <HeightTransition in={filterOpen} duration={300} onlyMobile>
-        <ClearFilters />
         <FilterResults open={filterOpen} />
       </HeightTransition>
     </Translate>

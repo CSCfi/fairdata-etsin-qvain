@@ -16,7 +16,6 @@ import { getPASMeta } from '@/stores/view/common.files.items'
 
 import { getOptions, makeOption, findOption } from './options'
 import { MetadataSelect, selectStylesNarrow, labelStyle } from './select'
-import urls from '@/utils/urls'
 import { withStores } from '@/stores/stores'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
 
@@ -96,35 +95,21 @@ export class MetadataModal extends Component {
   }
 
   patchFileCharacteristics = (identifier, data) => {
-    const {
-      original,
-      Files: { useV3 },
-    } = this.props.Stores.Qvain
+    const { original } = this.props.Stores.Qvain
     const { metaxV3Url } = this.props.Stores.Env
     const crId = original?.identifier
 
-    let request
-    if (useV3) {
-      const url = metaxV3Url('fileCharacteristics', identifier)
-      request = this.client
-        .put(url, this.dataToV3(data), {
-          params: { dataset: crId },
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then(resp => ({
-          data: {
-            characteristics: resp.data,
-          },
-        }))
-    } else {
-      const url = urls.qvain.fileCharacteristics(identifier)
-      request = this.client.put(url, data, {
-        params: {
-          cr_identifier: crId, // is empty for new dataset
-        },
+    const url = metaxV3Url('fileCharacteristics', identifier)
+    const request = this.client
+      .put(url, this.dataToV3(data), {
+        params: { dataset: crId },
         headers: { 'Content-Type': 'application/json' },
       })
-    }
+      .then(resp => ({
+        data: {
+          characteristics: resp.data,
+        },
+      }))
     return request.catch(error => {
       if (!isAbort(error)) {
         throw error

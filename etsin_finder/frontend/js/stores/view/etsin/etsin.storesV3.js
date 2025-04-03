@@ -14,8 +14,6 @@ class EtsinDatasetV3 {
     makeObservable(this)
   }
 
-  useV3 = true
-
   @observable dataset = null
 
   @observable packages = null
@@ -175,16 +173,16 @@ class EtsinDatasetV3 {
       this.preservation.identifier?.includes('doi') ||
       this.persistentIdentifier?.includes('doi')
     ) {
-      return [{ value: 'metax' }, { value: 'datacite' }]
+      return [{ value: 'json' }, { value: 'datacite' }]
     }
     if (
       this.persistentIdentifier?.startsWith('urn:nbn:fi:att:') ||
       this.persistentIdentifier?.startsWith('urn:nbn:fi:csc') ||
       this.persistentIdentifier?.startsWith('urn:nbn:fi:fd-')
     ) {
-      return [{ value: 'metax' }, { value: 'fairdata_datacite' }]
+      return [{ value: 'json' }, { value: 'fairdata_datacite' }]
     }
-    return [{ value: 'metax' }]
+    return [{ value: 'json' }]
   }
 
   @computed get hasFiles() {
@@ -407,22 +405,11 @@ class EtsinDatasetV3 {
   }
 
   @action.bound set(field, data) {
-    const createVersion = _data => {
-      const ds = new EtsinDatasetV3({ Access: this.Access, Locale: this.Locale })
-      ds.set('dataset', _data)
-      this.versions.push(ds)
+    if (field === 'emails') {
+      this.emailInfo = data
+      return
     }
-
-    switch (field) {
-      case 'versions':
-        createVersion(data)
-        break
-      case 'emails':
-        this.emailInfo = data
-        break
-      default:
-        this[field] = data
-    }
+    this[field] = data
   }
 
   @action shapeSpatial(spatial) {

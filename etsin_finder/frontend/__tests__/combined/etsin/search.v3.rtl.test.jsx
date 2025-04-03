@@ -64,7 +64,6 @@ const getStores = () => {
     },
   }
   Env.setMetaxV3Host('metaxv3', 443)
-  Env.Flags.setFlag('ETSIN.METAX_V3.FRONTEND', true)
   const stores = buildStores({ Env })
 
   return stores

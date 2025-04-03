@@ -1,17 +1,10 @@
 import React from 'react'
 
-import FlaggedComponent from '@/components/general/flaggedComponent'
-import OldDataset from '@/components/dataset'
-import NewDataset from '@/components/etsin/Dataset'
+import Dataset from '@/components/etsin/Dataset'
 
+// this Component is for potential versioning the view
 function DatasetView(props) {
-  return (
-    <div>
-      <FlaggedComponent flag="ETSIN.UI.V2" whenDisabled={<OldDataset {...props} />}>
-        <NewDataset {...props} />
-      </FlaggedComponent>
-    </div>
-  )
+  return <Dataset {...props} />
 }
 
 export default DatasetView

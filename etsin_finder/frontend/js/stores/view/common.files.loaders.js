@@ -31,22 +31,13 @@ const getChildDataUrl = (Files, dir, sort) => {
   // Return URL object for getting basic data on direct children for directory.
   let url = new URL(urls.common.directoryFiles(dir.identifier), document.location.origin)
 
-  if (Files.useV3) {
-    url = new URL(Files.Env.metaxV3Url('directories'))
-    url.searchParams.set('storage_service', 'ida')
-    url.searchParams.set('csc_project', Files.selectedProject)
-    url.searchParams.set('path', dir.identifier || dir.path)
-    url.searchParams.set('directory_fields', ['pathname', 'file_count', 'size'].join(','))
-    url.searchParams.set('directory_ordering', sort.directoryOrderingV3)
-    url.searchParams.set('file_ordering', sort.fileOrderingV3)
-  } else {
-    url.searchParams.set(
-      'directory_fields',
-      ['id', 'file_count', 'byte_size', 'service_created'].join(',')
-    )
-    url.searchParams.set('directory_ordering', sort.directoryOrdering)
-    url.searchParams.set('file_ordering', sort.fileOrdering)
-  }
+  url = new URL(Files.Env.metaxV3Url('directories'))
+  url.searchParams.set('storage_service', 'ida')
+  url.searchParams.set('csc_project', Files.selectedProject)
+  url.searchParams.set('path', dir.identifier || dir.path)
+  url.searchParams.set('directory_fields', ['pathname', 'file_count', 'size'].join(','))
+  url.searchParams.set('directory_ordering', sort.directoryOrderingV3)
+  url.searchParams.set('file_ordering', sort.fileOrderingV3)
   url.searchParams.set('pagination', 'false')
   url.searchParams.set('file_fields', 'id')
   url.searchParams.set('include_parent', true)
@@ -116,12 +107,8 @@ const fetchExistingChildDataForDirectory = async ({
   }
 
   const url = getChildDataUrl(Files, dir, sort)
+  url.searchParams.set('dataset', datasetIdentifier) // v3
 
-  if (Files.useV3) {
-    url.searchParams.set('dataset', datasetIdentifier) // v3
-  } else {
-    url.searchParams.set('cr_identifier', datasetIdentifier) // v2
-  }
   const resp = ignoreNotFound(
     Files.client.get(url.href, { tag: 'fetch-existing-child-data' }),
     emptyDirectoryResponse
@@ -332,46 +319,30 @@ const fetchChildData = action(({ Files, dir, type, sort }) => {
 const fetchItems = async ({ Files, dir, offset, limit, type, sort, filter = '' }) => {
   const { datasetIdentifier } = Files
 
-  let url = new URL(urls.common.directoryFiles(dir.identifier), document.location.origin)
-  if (Files.useV3) {
-    url = new URL(Files.Env.metaxV3Url('directories'))
-    url.searchParams.set('path', dir.identifier || dir.path)
-    url.searchParams.set('storage_service', 'ida')
-    url.searchParams.set('csc_project', Files.selectedProject)
-  }
+  const url = new URL(Files.Env.metaxV3Url('directories'))
+  url.searchParams.set('path', dir.identifier || dir.path)
+  url.searchParams.set('storage_service', 'ida')
+  url.searchParams.set('csc_project', Files.selectedProject)
 
   url.searchParams.set('pagination', true)
   url.searchParams.set('offset', offset)
   url.searchParams.set('limit', limit)
   url.searchParams.set('include_parent', true)
-  if (Files.useV3) {
-    url.searchParams.set('directory_ordering', sort.directoryOrderingV3)
-    url.searchParams.set('file_ordering', sort.fileOrderingV3)
-  } else {
-    url.searchParams.set('directory_ordering', sort.directoryOrdering)
-    url.searchParams.set('file_ordering', sort.fileOrdering)
-  }
+  url.searchParams.set('directory_ordering', sort.directoryOrderingV3)
+  url.searchParams.set('file_ordering', sort.fileOrderingV3)
+
   const filterText = filter
   if (filter) {
     url.searchParams.set('name', filterText)
   }
 
-  if (Files.useV3) {
-    if (datasetIdentifier) {
-      url.searchParams.set('dataset', datasetIdentifier)
-      if (type === FetchType.ANY) {
-        url.searchParams.set('include_all', true)
-      }
-      if (type === FetchType.NOT_EXISTING) {
-        url.searchParams.set('exclude_dataset', true)
-      }
-    }
-  } else if (datasetIdentifier) {
-    if (type === FetchType.EXISTING || type === FetchType.PUBLIC) {
-      url.searchParams.set('cr_identifier', datasetIdentifier) // v2
+  if (datasetIdentifier) {
+    url.searchParams.set('dataset', datasetIdentifier)
+    if (type === FetchType.ANY) {
+      url.searchParams.set('include_all', true)
     }
     if (type === FetchType.NOT_EXISTING) {
-      url.searchParams.set('not_cr_identifier', datasetIdentifier) // v2
+      url.searchParams.set('exclude_dataset', true)
     }
   }
 

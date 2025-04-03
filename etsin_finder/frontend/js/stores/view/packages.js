@@ -8,11 +8,10 @@ import AbortClient from '@/utils/AbortClient'
 class Packages {
   // Download API package handling
 
-  constructor(Env, useV3) {
+  constructor(Env) {
     this.Env = Env
     this.Notifications = new Notifications(this)
     this.client = new AbortClient()
-    this.useV3 = useV3
     makeObservable(this)
   }
 
@@ -143,7 +142,7 @@ class Packages {
       scope.forEach(path => {
         this.setRequestingPackageCreation(path, true)
       })
-      const url = this.useV3 ? urls.metaxV3.download.packages() : urls.dl.packages()
+      const url = urls.metaxV3.download.packages()
       const resp = await this.client.post(url, params)
       const { partial, ...full } = resp.data
 
@@ -197,7 +196,7 @@ class Packages {
       this.statusPromise = Promise.resolve() // always ok
     }
     if (!this.statusPromise) {
-      const statusUrl = this.useV3 ? urls.metaxV3.download.status() : urls.dl.status()
+      const statusUrl = urls.metaxV3.download.status()
       this.statusPromise = this.client.get(statusUrl) // raises error for non-200 status
     }
     return this.statusPromise
@@ -215,9 +214,7 @@ class Packages {
         this.datasetIdentifier = datasetIdentifier
       })
 
-      const url = this.useV3
-        ? `${urls.metaxV3.download.packages()}?cr_id=${datasetIdentifier}`
-        : `${urls.dl.packages()}?cr_id=${datasetIdentifier}`
+      const url = `${urls.metaxV3.download.packages()}?cr_id=${datasetIdentifier}`
 
       const statusPromise = this.checkStatus()
       const packagesPromise = this.client.get(url)

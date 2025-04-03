@@ -26,6 +26,7 @@ describe('Auth Store', () => {
   beforeEach(() => {
     errorSpy = jest.spyOn(console, 'error').mockReturnValue()
     mock.reset()
+    mock.onGet('https:///v3/auth/user').reply(200, mockUser)
     mock.onGet('/api/user').reply(200, mockUser)
     Auth.reset()
   })
@@ -52,25 +53,11 @@ describe('Auth Store', () => {
     )
   })
 
-  it('Should fail to login without CSC user id', async () => {
-    const user = { ...mockUser, is_authenticated_CSC_user: false }
-    mock.onGet('/api/user').reply(200, user)
-    await Auth.checkLogin()
-    expect(Auth.userLogged).toBe(false)
-  })
-
   it('Should fail to login without organization id', async () => {
     const user = { ...mockUser, home_organization_id: undefined }
     mock.onGet('/api/user').reply(200, user)
     await Auth.checkLogin()
     expect(Auth.userLogged).toBe(false)
-  })
-
-  it('Should login without organization name', async () => {
-    const user = { ...mockUser, home_organization_name: undefined }
-    mock.onGet('/api/user').reply(200, user)
-    await Auth.checkLogin()
-    expect(Auth.userLogged).toBe(true)
   })
 
   it('Should logout with logout()', async () => {

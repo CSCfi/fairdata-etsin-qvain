@@ -3,7 +3,7 @@ import {
   ChildItemCounter,
   getAction,
   ignoreNotFound,
-} from '../../../js/stores/view/common.files.utils'
+} from '@/stores/view/common.files.utils'
 
 describe('common.files.utils', () => {
   describe('ChildItemCounter', () => {

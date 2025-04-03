@@ -1,4 +1,4 @@
-import getPages from '@/components/search/pagination/getPages'
+import getPages from '@/components/etsin/Search/pagination/getPages'
 
 // prettier-ignore
 describe('getPages', () => {

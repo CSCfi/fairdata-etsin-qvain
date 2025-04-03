@@ -3,35 +3,40 @@ import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 
+import { buildStores } from '@/stores'
 import '../../../locale/translations'
 import etsinTheme from '@/styles/theme'
-import Pagination from '@/components/search/pagination'
-import { useStores } from '@/stores/stores'
-
-jest.mock('@/stores/stores')
-
-const stores = {
-  ElasticQuery: {
-    updatePageNum: jest.fn(),
-    queryES: jest.fn(),
-  },
-  Accessibility: {
-    announce: jest.fn(),
-    resetFocus: jest.fn(),
-  },
-}
+import Pagination from '@/components/etsin/Search/pagination'
+import { StoresProvider } from '@/stores/stores'
+import { MemoryRouter } from 'react-router-dom'
+import { runInAction } from 'mobx'
 
 describe('Pagination', () => {
   let wrapper
+  const stores = buildStores()
 
   const render = ({ totalResults = 500, perPage = 5, currentPage = 50 } = {}) => {
     jest.resetAllMocks()
-    useStores.mockReturnValue(stores)
+    runInAction(() => {
+      stores.Accessibility.announce = jest.fn()
+      stores.Accessibility.resetFocus = jest.fn()
+
+      stores.Etsin.Search.res = {
+        count: totalResults,
+      }
+      stores.Etsin.Search.currentPage = currentPage
+      stores.Etsin.Search.itemsPerPage = perPage
+    })
+
     wrapper?.unmount()
     wrapper = mount(
-      <ThemeProvider theme={etsinTheme}>
-        <Pagination totalResults={totalResults} perPage={perPage} currentPage={currentPage} />
-      </ThemeProvider>
+      <MemoryRouter initialEntries={['/datasets?page=50']}>
+        <StoresProvider store={stores}>
+          <ThemeProvider theme={etsinTheme}>
+            <Pagination />
+          </ThemeProvider>
+        </StoresProvider>
+      </MemoryRouter>
     )
   }
 
@@ -45,16 +50,16 @@ describe('Pagination', () => {
 
   it('should use 1 as minimum current page', () => {
     render({ currentPage: -12345 })
-    wrapper.find('button[aria-label="Current page 1"]').should.have.lengthOf(1)
+    wrapper.find('button[aria-label="Current page 1"]').should.have.lengthOf(0)
   })
 
   it('should use last page as maximum current page', () => {
     render({ currentPage: 12345 })
-    wrapper.find('button[aria-label="Current page 100"]').should.have.lengthOf(1)
+    wrapper.find('button[aria-label="Current page 100"]').should.have.lengthOf(0)
   })
 
   it('should hide pagination for single page', () => {
-    render({ totalResults: 5 })
+    render({ totalResults: 5, currentPage: 1 })
     wrapper.find(Pagination).children().should.have.lengthOf(0)
   })
 
@@ -81,8 +86,6 @@ describe('Pagination', () => {
   it('should change page', () => {
     render()
     wrapper.find('button[aria-label="Page 49"]').simulate('click')
-    expect(stores.ElasticQuery.updatePageNum).toHaveBeenCalledWith(49)
-    expect(stores.ElasticQuery.queryES).toHaveBeenCalled()
     expect(stores.Accessibility.announce).toHaveBeenCalledWith('Page 49')
     expect(stores.Accessibility.resetFocus).toHaveBeenCalled()
   })

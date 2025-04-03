@@ -1,15 +1,3 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -18,7 +6,13 @@ import translate from 'counterpart'
 
 import TooltipClick from './tooltipClick'
 import { HelpIcon } from '@/components/general/form'
-import CumulativeDatasetInfo from './cumulativeDatasetInfoText'
+
+const CumulativeDatasetInfoText = () => (
+  <>
+    <Translate component="h3" content="dataset.dl.cumulativeDatasetTooltip.header" />
+    <Translate component="p" content="dataset.dl.cumulativeDatasetTooltip.info" />
+  </>
+)
 
 const DatasetIsCumulativeNotificationBar = props => {
   const [tooltipOpen, setTooltipOpen] = useState(false)
@@ -29,16 +23,14 @@ const DatasetIsCumulativeNotificationBar = props => {
         isOpen={tooltipOpen}
         close={() => setTooltipOpen(!tooltipOpen)}
         align={props.directionToDisplayTooltip}
-        text={<CumulativeDatasetInfo />}
+        text={<CumulativeDatasetInfoText />}
       >
         <HelpIcon
           aria-label={translate('qvain.rightsAndLicenses.infoTitle')}
           onClick={() => setTooltipOpen(!tooltipOpen)}
         />
       </TooltipClick>
-      <Translate
-        content="dataset.dl.cumulativeDatasetLabel"
-      />
+      <Translate content="dataset.dl.cumulativeDatasetLabel" />
     </DatasetIsCumulativeContainer>
   )
 }

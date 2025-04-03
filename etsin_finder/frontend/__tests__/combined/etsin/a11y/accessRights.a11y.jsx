@@ -4,19 +4,20 @@ import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 
-import etsinTheme from '../../../../js/styles/theme'
+import etsinTheme from '@/styles/theme'
 import '../../../../locale/translations'
-import { buildStores } from '../../../../js/stores'
-import { StoresProvider } from '../../../../js/stores/stores'
-import dataset from '../../../__testdata__/dataset.att'
-import AccessRights from '../../../../js/components/dataset/accessRights'
-import Modal from '../../../../js/components/general/modal'
+import { buildStores } from '@/stores'
+import { StoresProvider } from '@/stores/stores'
+import dataset from '../../../__testdata__/metaxv3/datasets/dataset_att_a'
+import AccessRights from '@/components/etsin/Dataset/accessRights'
+import Modal from '@/components/general/modal'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
 
-jest.mock('../../../../js/stores/view/accessibility')
+jest.mock('@/stores/view/accessibility')
 const stores = buildStores()
+stores.Etsin.EtsinDataset.set('dataset', dataset)
 
 describe('Etsin access rights modal', () => {
   let wrapper, helper
@@ -30,7 +31,7 @@ describe('Etsin access rights modal', () => {
       <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
           <main>
-            <AccessRights button access_rights={dataset.research_dataset.access_rights} />
+            <AccessRights button />
           </main>
         </ThemeProvider>
       </StoresProvider>,

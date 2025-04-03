@@ -145,16 +145,17 @@ const Event = ({ event }) => {
       <td>{getTitleandDescription()}</td>
       <td>{getEventType()}</td>
       <td>
-        {event.is_associated_with &&
-          event.is_associated_with.map((associate, i) => {
+        <ul>
+          {event.is_associated_with?.map((associate, i) => {
             const name = associate.person?.name || associate.organization.pref_label
             if (name) {
               return (
                 <Agent lang={getPreferredLang(name)} key={name} first={i === 0} agent={associate} />
               )
             }
-            return ''
+            return <>{''}</>
           })}
+        </ul>
         {(!event.is_associated_with || event.is_associated_with.length === 0) && '-'}
       </td>
       <td>{getTemporal()}</td>
@@ -167,7 +168,7 @@ Event.propTypes = {
   event: PropTypes.object.isRequired,
 }
 
-const EventTitle = styled.h5`
+const EventTitle = styled.h3`
   font-weight: bold;
 `
 

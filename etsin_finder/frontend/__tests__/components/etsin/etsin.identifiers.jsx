@@ -2,7 +2,9 @@ import React from 'react'
 import '@testing-library/jest-dom'
 import { Provider } from 'mobx-react'
 import { render, screen, cleanup } from '@testing-library/react'
-import Identifiers from '@/components/dataset/events/identifiers'
+import Identifiers from '@/components/etsin/Dataset/events/identifiers'
+import { ThemeProvider } from 'styled-components'
+import etsinTheme from '@/styles/theme'
 
 describe('Identifiers', () => {
   afterEach(cleanup)
@@ -10,7 +12,9 @@ describe('Identifiers', () => {
   const renderIdentifierWithProps = (props, debug = false) => {
     const rendered = render(
       <Provider>
-        <Identifiers {...props} />
+        <ThemeProvider theme={etsinTheme}>
+          <Identifiers {...props} />
+        </ThemeProvider>
       </Provider>
     )
     if (debug) screen.debug()

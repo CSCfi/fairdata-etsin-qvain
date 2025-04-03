@@ -1,7 +1,7 @@
 import { cleanup, screen } from '@testing-library/react'
 import ReactModal from 'react-modal'
 import contextRenderer from '@/../__tests__/utils/contextRenderer.rtl'
-import Info from '@/components/dataset/data/idaResources/info.jsx'
+import Info from '@/components/etsin/Dataset/data/info.jsx'
 import { buildStores } from '@/stores'
 import { useStores } from '@/stores/stores'
 
@@ -25,10 +25,7 @@ describe('Info', () => {
     it('renders text in InfoItem', () => {
       const props = {
         ...minimalProps,
-        checksum: {
-          value: '1234',
-          algorithm: 'SHA',
-        },
+        checksum: 'SHA:1234',
       }
       contextRenderer({ Component: Info, props })
       const component = screen.getByText('Checksum (SHA)')

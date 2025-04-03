@@ -2,11 +2,11 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { runInAction } from 'mobx'
 
-import { AskForAccess } from '../../../js/components/dataset/askForAccess'
-import AccessClass from '../../../js/stores/view/access'
-import AuthClass from '../../../js/stores/domain/auth'
-import REMSButton from '../../../js/components/dataset/REMSButton'
-import Loader from '../../../js/components/general/loader'
+import { AskForAccess } from '@/components/etsin/Dataset/Description/askForAccess'
+import AccessClass from '@/stores/view/access'
+import AuthClass from '@/stores/domain/auth'
+import REMSButton from '@/components/etsin/Dataset/Description/REMSButton'
+import Loader from '@/components/general/loader'
 
 const Access = new AccessClass()
 const Auth = new AuthClass()

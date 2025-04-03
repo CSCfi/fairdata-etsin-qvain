@@ -6,24 +6,24 @@ import ReactModal from 'react-modal'
 import axios from 'axios'
 import { setImmediate } from 'timers'
 
-import etsinTheme from '../../../js/styles/theme'
+import etsinTheme from '@/styles/theme'
 import '../../../locale/translations'
-import { buildStores } from '../../../js/stores'
+import { buildStores } from '@/stores'
 import dataset from '../../__testdata__/dataset.att'
-import ManualDownloadModal from '../../../js/components/dataset/data/idaResources/manualDownloadModal'
-import { ErrorDiv } from '../../../js/components/dataset/data/idaResources/manualDownloadModal/content'
-import Modal from '../../../js/components/general/modal'
-import { useStores } from '../../../js/stores/stores'
+import ManualDownloadModal from '@/components/etsin/Dataset/data/idaResources/manualDownloadModal'
+import { ErrorDiv } from '@/components/etsin/Dataset/data/idaResources/manualDownloadModal/content'
+import Modal from '@/components/general/modal'
+import { useStores } from '@/stores/stores'
 import CopyField, {
   LoaderWrapper,
-} from '../../../js/components/dataset/data/idaResources/manualDownloadModal/copyField'
+} from '@/components/etsin/Dataset/data/idaResources/manualDownloadModal/copyField'
 
 const stores = buildStores()
 
-jest.mock('../../../js/stores/stores', () => {
+jest.mock('@/stores/stores', () => {
   const useStores = jest.fn()
   return {
-    ...jest.requireActual('../../../js/stores/stores'),
+    ...jest.requireActual('@/stores/stores'),
     useStores,
   }
 })

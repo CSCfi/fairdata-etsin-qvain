@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { useStores } from '@/stores/stores'
-import accessRights from '@/components/dataset/accessRights'
+import accessRights from './accessRights.base'
 
 export const accessRightsBool = ar => ar?.access_type?.url === ACCESS_TYPE_URL.OPEN
 

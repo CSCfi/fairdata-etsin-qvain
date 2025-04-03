@@ -22,7 +22,6 @@ const Sidebar = () => {
   const {
     Etsin: {
       EtsinDataset: {
-        useV3,
         dataset,
         dataCatalog,
         datasetMetadata,
@@ -76,17 +75,18 @@ const Sidebar = () => {
   function subjectHeading() {
     if (datasetMetadata.subjectHeading) {
       return (
-        <List>
+        <List id="subject-heading">
           {datasetMetadata.subjectHeading.map(theme => (
-            <SubjectHeaderLink
-              key={Object.values(theme.pref_label)[0]}
-              href={theme.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={theme.url}
-            >
-              {getValueTranslation(theme.pref_label)}
-            </SubjectHeaderLink>
+            <li key={Object.values(theme.pref_label)[0]}>
+              <SubjectHeaderLink
+                href={theme.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={theme.url}
+              >
+                {getValueTranslation(theme.pref_label)}
+              </SubjectHeaderLink>
+            </li>
           ))}
         </List>
       )
@@ -153,7 +153,7 @@ const Sidebar = () => {
         </DatasetInfoItem>
       </SidebarArea>
 
-      {useV3 && dataset.metrics && (
+      {dataset.metrics && (
         <SidebarArea id="metrics-area">
           <DatasetInfoItem
             id="dataset-metrics"
@@ -173,55 +173,56 @@ const Sidebar = () => {
 
       <SidebarArea id="rights-area">
         <DatasetInfoItem id="dataset-license" itemTitle="dataset.license">
-          <List>
-            {accessRights?.license?.map(l => (
-              <ListItem key={l.url}>
-                <License license={l} />
-              </ListItem>
-            ))}
-          </List>
-        </DatasetInfoItem>
-
-        {accessRights && (
-          <DatasetInfoItem id="dataset-access-rights" itemTitle="dataset.access_rights">
-            <List>{getAccessRights()}</List>
-          </DatasetInfoItem>
-        )}
-      </SidebarArea>
-
-      <SidebarArea id="actors-area">
-        <DatasetInfoItem id="dataset-project" itemTitle="dataset.project.project_area">
-          <List>
-            {datasetMetadata.projects?.map(item => {
-              const projectName = getValueTranslation(item.title)
-              return (
-                <ListItem key={`li-${projectName}`} lang={getPreferredLang(item.title)}>
-                  <Project project={item} />
+          {accessRights.license?.length && (
+            <List id="rights">
+              {accessRights?.license?.map(l => (
+                <ListItem key={l.url}>
+                  <License license={l} />
                 </ListItem>
-              )
-            })}
-          </List>
-        </DatasetInfoItem>
-
-        <DatasetInfoItem id="dataset-publisher" itemTitle="dataset.publisher">
-          {actors.publisher && (
-            <List>
-              <Agent
-                lang={getPreferredLang(actors.publisher.organization?.pref_label)}
-                key={
-                  actors.publisher.person?.name ||
-                  getValueTranslation(actors.publisher.organization?.pref_label)
-                }
-                first
-                agent={actors.publisher}
-                popupAlign="sidebar"
-              />
+              ))}
             </List>
           )}
         </DatasetInfoItem>
 
+        <DatasetInfoItem id="dataset-access-rights" itemTitle="dataset.access_rights">
+          <List id="access-rights">{getAccessRights()}</List>
+        </DatasetInfoItem>
+      </SidebarArea>
+
+      <SidebarArea id="actors-area">
+        <DatasetInfoItem id="dataset-project" itemTitle="dataset.project.project_area">
+          {datasetMetadata.projects?.length && (
+            <List id="projects">
+              {datasetMetadata.projects?.map(item => {
+                const projectName = getValueTranslation(item.title)
+                return (
+                  <ListItem key={`li-${projectName}`} lang={getPreferredLang(item.title)}>
+                    <Project project={item} />
+                  </ListItem>
+                )
+              })}
+            </List>
+          )}
+        </DatasetInfoItem>
+
+        <DatasetInfoItem id="dataset-publisher" itemTitle="dataset.publisher">
+          <List id="agency">
+            <Agent
+              lang={getPreferredLang(actors.publisher.organization?.pref_label)}
+              key={
+                actors.publisher.person?.name ||
+                getValueTranslation(actors.publisher.organization?.pref_label)
+              }
+              first
+              agent={actors.publisher}
+              popup
+              Align="sidebar"
+            />
+          </List>
+        </DatasetInfoItem>
+
         <DatasetInfoItem id="dataset-curator" itemTitle="dataset.curator">
-          <List>
+          <List id="curators">
             {actors.curators?.map(curator => {
               const curatorName =
                 curator.person?.name || getValueTranslation(curator.organization?.pref_label)
@@ -239,8 +240,8 @@ const Sidebar = () => {
         </DatasetInfoItem>
 
         <DatasetInfoItem id="dataset-rights-holder" itemTitle="dataset.rights_holder">
-          {actors.rightsHolders && (
-            <List>
+          {actors.rightsHolders.length && (
+            <List id="rights-holder">
               {actors.rightsHolders.map(rh => {
                 const rightsHolderName =
                   rh.person?.name || getValueTranslation(rh.organization?.pref_label)
@@ -261,7 +262,7 @@ const Sidebar = () => {
 
       <SidebarArea id="infrastructure-area">
         <DatasetInfoItem id="dataset-infrastructure" itemTitle="dataset.infrastructure">
-          <List>
+          <List id="infrastructures">
             {datasetMetadata.infrastructure?.map(entity => (
               <ListItem key={entity.id} lang={getPreferredLang(entity.pref_label)}>
                 {getValueTranslation(entity.pref_label)}

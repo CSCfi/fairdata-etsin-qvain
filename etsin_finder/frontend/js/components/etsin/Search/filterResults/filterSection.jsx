@@ -44,22 +44,22 @@ const FilterSection = ({ filterName, onlyCurrentLanguage }) => {
   }
   const displayShowMoreButton = shownItems?.length > 10
 
-  const [isOpen, setOpen] = useState(query.has(filter))
+  const [isOpen, setIsOpen] = useState(query.has(filter))
   const [showMoreItems, setShowMoreItems] = useState(false)
 
   useEffect(() => {
     if (!isLoading) {
       const f = getAggregationQueryName(filterName)
       if (query.has(f)) {
-        setOpen(true)
+        setIsOpen(true)
       } else {
-        setOpen(false)
+        setIsOpen(false)
       }
     }
-  }, [setOpen, query, filterName, isLoading, getAggregationQueryName])
+  }, [setIsOpen, query, filterName, isLoading, getAggregationQueryName])
 
   const toggleSection = () => {
-    setOpen(!isOpen)
+    setIsOpen(!isOpen)
   }
 
   if (displayShowMoreButton) {

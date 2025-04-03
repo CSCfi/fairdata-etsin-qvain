@@ -71,7 +71,7 @@ class MyMap extends Component {
     const { Map: MapStore } = this.props.Stores
     MapStore.makeGeometry(this.props.geometry, this.props.location).then(geometry => {
       // TODO: use all geometries to calculate bounds
-      const bounds = geometry[0].bounds
+      const bounds = geometry?.[0].bounds
       const layers = this.makeLayers(geometry)
       this.setState({
         geometry,

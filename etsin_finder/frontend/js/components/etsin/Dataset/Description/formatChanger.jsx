@@ -5,7 +5,6 @@ import Translate from 'react-translate-component'
 import styled from 'styled-components'
 
 import { useStores } from '@/stores/stores'
-import urls from '@/utils/urls'
 
 import EtsinTooltip from '../EtsinTooltip'
 import formatChangerStyles from './formatChangerStyles'
@@ -14,7 +13,7 @@ const FormatChanger = () => {
   const {
     Env: { metaxV3Url },
     Etsin: {
-      EtsinDataset: { useV3, identifier, metadataFormats },
+      EtsinDataset: { identifier, metadataFormats },
     },
   } = useStores()
 
@@ -34,10 +33,7 @@ const FormatChanger = () => {
 
   const chooseFormat = format => {
     if (metadataFormats.some(field => field.value === format.value)) {
-      const V3Format = format.value === 'metax' ? 'json' : format.value
-      const url = useV3
-        ? metaxV3Url('datasetFormat', identifier, V3Format)
-        : urls.format(identifier, format.value)
+      const url = metaxV3Url('datasetFormat', identifier, format.value)
       window.open(url, '_blank').focus()
     } else {
       console.log(`Invalid value selected for dataset format: ${format.value}`)

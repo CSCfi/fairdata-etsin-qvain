@@ -70,9 +70,7 @@ class Notifications {
       email: this.email,
     }
     try {
-      const url = this.Packages.useV3
-        ? urls.metaxV3.download.subscriptions()
-        : urls.dl.subscriptions()
+      const url = urls.metaxV3.download.subscriptions()
       await axios.post(url, subParams)
     } catch (err) {
       console.error(err)

@@ -48,7 +48,7 @@ const VersionChanger = props => {
   return (
     hasExistingVersion && (
       <>
-        <Translate content="dataset.version.label" className="sr-only" />
+        <Translate component="label" content="dataset.version.label" className="sr-only" />
         <Select
           id="versionChanger"
           styles={versionChangerStyles(selected)}

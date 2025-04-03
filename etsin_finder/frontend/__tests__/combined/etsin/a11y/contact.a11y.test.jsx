@@ -4,11 +4,13 @@ import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 
-import etsinTheme from '../../../../js/styles/theme'
+import { buildStores } from '@/stores'
+import { StoresProvider } from '@/stores/stores'
+import etsinTheme from '@/styles/theme'
 import '../../../../locale/translations'
-import dataset from '../../../__testdata__/dataset.att'
-import Contact from '../../../../js/components/dataset/contact'
-import Modal from '../../../../js/components/general/modal'
+import dataset from '../../../__testdata__/metaxv3/datasets/dataset_att_a'
+import Contact from '@/components/etsin/Dataset/contact'
+import Modal from '@/components/general/modal'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
@@ -25,15 +27,21 @@ describe('Etsin contact modal', () => {
   let wrapper, helper
 
   beforeAll(async () => {
+    const stores = buildStores()
+    stores.Etsin.EtsinDataset.set('dataset', dataset)
+    stores.Etsin.EtsinDataset.set('emails', emailInfo)
+
     helper = document.createElement('div')
     document.body.appendChild(helper)
     ReactModal.setAppElement(helper)
     wrapper = mount(
-      <ThemeProvider theme={etsinTheme}>
-        <main>
-          <Contact datasetID={dataset.identifier} emails={emailInfo} isRems={true} />
-        </main>
-      </ThemeProvider>,
+      <StoresProvider store={stores}>
+        <ThemeProvider theme={etsinTheme}>
+          <main>
+            <Contact datasetID={dataset.identifier} emails={emailInfo} isRems={true} />
+          </main>
+        </ThemeProvider>
+      </StoresProvider>,
       { attachTo: helper }
     )
     wrapper.find('button').simulate('click')

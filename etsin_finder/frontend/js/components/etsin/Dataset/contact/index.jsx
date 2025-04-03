@@ -14,7 +14,7 @@ const Contact = () => {
   const {
     Env: { metaxV3Url },
     Etsin: {
-      EtsinDataset: { useV3, identifier, emailInfo, isRems },
+      EtsinDataset: { identifier, emailInfo, isRems },
     },
   } = useStores()
 
@@ -78,7 +78,6 @@ const Contact = () => {
           datasetID={identifier}
           recipientsList={recipients()}
           translations={translate('dataset.contact')}
-          useV3={useV3}
           metaxV3Url={metaxV3Url}
         />
       </Modal>

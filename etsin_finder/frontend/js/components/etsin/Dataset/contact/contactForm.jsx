@@ -21,7 +21,6 @@ import Select from '@/components/etsin/general/select'
 import { Input, InputArea } from '@/components/etsin/general/Input'
 import { InvertedButton } from '@/components/etsin/general/button'
 import ErrorBoundary from '@/components/general/errorBoundary'
-import urls from '@/utils/urls'
 
 const InnerForm = props => {
   const {
@@ -172,23 +171,15 @@ const ContactForm = withFormik({
   },
   handleSubmit: (values, { props, setSubmitting, setStatus, setFieldError }) => {
     setStatus('')
-    const url = props.useV3
-      ? props.metaxV3Url('datasetContact', props.datasetID)
-      : urls.email(props.datasetID)
-    const payload = props.useV3
-      ? {
-          subject: values.subject,
-          reply_to: values.email,
-          body: values.message,
-          role: values.recipient.value,
-          service: 'etsin',
-        }
-      : {
-          user_subject: values.subject,
-          user_email: values.email,
-          user_body: values.message,
-          agent_type: values.recipient.value,
-        }
+    const url = props.metaxV3Url('datasetContact', props.datasetID)
+    const payload = {
+      subject: values.subject,
+      reply_to: values.email,
+      body: values.message,
+      role: values.recipient.value,
+      service: 'etsin',
+    }
+
     axios
       .post(url, payload)
       .then(() => {

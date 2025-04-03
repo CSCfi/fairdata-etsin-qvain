@@ -6,7 +6,7 @@ export const spatial_ref_unioninkatu = {
     sv: 'Unionsgatan (Helsingfors)',
   },
   in_scheme: 'http://www.yso.fi/onto/yso/places',
-  as_wkt: '',
+  as_wkt: 'POINT(24.14585 67.60502)',
 }
 
 export const spatial_ref_tapiola = {

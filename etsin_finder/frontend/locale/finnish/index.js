@@ -363,7 +363,7 @@ const finnish = {
       contributor_role: 'Rooli',
       contributor_type: 'Tyyppi',
       member_of: 'Jäsen',
-      is_part_of: 'Jäsen',
+      parent: 'Jäsen',
       homepage: 'Kotisivu',
     },
     language: 'Kieli',

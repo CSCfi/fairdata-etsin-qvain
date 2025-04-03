@@ -247,7 +247,7 @@ describe('Packages', () => {
     const params = { test: 'test' }
 
     beforeEach(async () => {
-      mockAdapter.onPost('/api/download/requests').reply(200, {})
+      mockAdapter.onPost('/api/v3/download/requests').reply(200, {})
       await packages.createPackage(params)
     })
 
@@ -261,7 +261,7 @@ describe('Packages', () => {
     const datasetIdentifier = 'identifier'
     const expectedParams = { cr_id: datasetIdentifier }
     beforeEach(() => {
-      mockAdapter.onPost('/api/download/requests').reply(200, {})
+      mockAdapter.onPost('/api/v3/download/requests').reply(200, {})
       packages.datasetIdentifier = datasetIdentifier
       packages.createPackageFromPath(path)
     })
@@ -276,7 +276,7 @@ describe('Packages', () => {
     const datasetIdentifier = 'identifier'
     const expectedParams = { cr_id: datasetIdentifier, scope: [path] }
     beforeEach(() => {
-      mockAdapter.onPost('/api/download/requests').reply(200, {})
+      mockAdapter.onPost('/api/v3/download/requests').reply(200, {})
       packages.datasetIdentifier = datasetIdentifier
       packages.createPackageFromPath(path)
     })
@@ -321,12 +321,12 @@ describe('Packages', () => {
     const expectedPackage = { '/': { full: 'full' }, test: partial[0] }
     const response = { full: 'full', partial }
     beforeEach(async () => {
-      mockAdapter.onGet('/api/download/requests?cr_id=identifier').reply(200, response)
+      mockAdapter.onGet('/api/v3/download/requests?cr_id=identifier').reply(200, response)
       await packages.fetch(datasetIdentifier)
     })
 
     test('should call axios.get', () => {
-      expect(mockAdapter.history.get[0].url).toBe('/api/download/requests?cr_id=identifier')
+      expect(mockAdapter.history.get[0].url).toBe('/api/v3/download/requests?cr_id=identifier')
     })
 
     test('should set datasetIdentifier', () => {
@@ -360,21 +360,21 @@ describe('Packages', () => {
     })
 
     test('should assign packages when status is ok', async () => {
-      mockAdapter.onGet('/api/download/status').reply(200, '')
-      mockAdapter.onGet('/api/download/requests?cr_id=identifier').reply(200, response)
+      mockAdapter.onGet('/api/v3/download/status').reply(200, '')
+      mockAdapter.onGet('/api/v3/download/requests?cr_id=identifier').reply(200, response)
       await packages.fetch(datasetIdentifier)
-      expect(mockAdapter.history.get[0].url).toBe('/api/download/status')
-      expect(mockAdapter.history.get[1].url).toBe('/api/download/requests?cr_id=identifier')
+      expect(mockAdapter.history.get[0].url).toBe('/api/v3/download/status')
+      expect(mockAdapter.history.get[1].url).toBe('/api/v3/download/requests?cr_id=identifier')
       packages.packages.should.eql(expectedPackage)
     })
 
     test('should log error and clear packages when status is not ok', async () => {
       jest.spyOn(console, 'error').mockImplementationOnce(() => {})
-      mockAdapter.onGet('/api/download/status').reply(503, '')
-      mockAdapter.onGet('/api/download/requests?cr_id=identifier').reply(200, response)
+      mockAdapter.onGet('/api/v3/download/status').reply(503, '')
+      mockAdapter.onGet('/api/v3/download/requests?cr_id=identifier').reply(200, response)
       await packages.fetch(datasetIdentifier)
-      expect(mockAdapter.history.get[0].url).toBe('/api/download/status')
-      expect(mockAdapter.history.get[1].url).toBe('/api/download/requests?cr_id=identifier')
+      expect(mockAdapter.history.get[0].url).toBe('/api/v3/download/status')
+      expect(mockAdapter.history.get[1].url).toBe('/api/v3/download/requests?cr_id=identifier')
       expect(console.error.mock.calls.length).toBe(1)
       packages.packages.should.eql({})
     })

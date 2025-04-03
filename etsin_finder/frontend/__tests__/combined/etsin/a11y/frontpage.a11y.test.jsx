@@ -11,7 +11,7 @@ import etsinTheme from '../../../../js/styles/theme'
 import '../../../../locale/translations'
 import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
-import FrontPage from '../../../../js/components/frontpage'
+import FrontPage from '../../../../js/components/etsin/FrontPage'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 failTestsWhenTranslationIsMissing()
