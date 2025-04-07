@@ -1,6 +1,7 @@
 import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
+import translate from 'counterpart'
 import '../../../utils/extendYup'
 
 import { touch } from './track'
@@ -63,7 +64,8 @@ class Spatials extends Field {
     place_uri: spatial.location ? { identifier: spatial.location.url } : { identifier: undefined },
   })
 
-  getItemLabel = spatial => spatial.name || spatial.location.name
+  getItemLabel = spatial =>
+    spatial.name || spatial.location?.name || translate('qvain.geographics.title.section')
 
   toBackend = () => this.storage.map(this.spatialToBackend)
 

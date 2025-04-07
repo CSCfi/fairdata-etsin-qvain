@@ -2,6 +2,7 @@ import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import { expect } from 'chai'
 
+import '../../../locale/translations'
 import Spatials, {
   Spatial,
   Location,
@@ -241,4 +242,11 @@ describe('when calling SpatialModel without geometry and location', () => {
 
     returnValue.should.deep.eql(expectedObject)
   })
+})
+
+test('should return "Geographical area" for nameless spatial', () => {
+  const spatialObj = {
+    as_wkt: ['POINT(1 2)'],
+  }
+  expect(new Spatials().getItemLabel(spatialObj)).to.equal("Geographical area")
 })
