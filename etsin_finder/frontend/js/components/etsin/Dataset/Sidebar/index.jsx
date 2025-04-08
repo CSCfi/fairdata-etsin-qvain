@@ -205,21 +205,23 @@ const Sidebar = () => {
           )}
         </DatasetInfoItem>
 
-        <DatasetInfoItem id="dataset-publisher" itemTitle="dataset.publisher">
-          <List id="agency">
-            <Agent
-              lang={getPreferredLang(actors.publisher.organization?.pref_label)}
-              key={
-                actors.publisher.person?.name ||
-                getValueTranslation(actors.publisher.organization?.pref_label)
-              }
-              first
-              agent={actors.publisher}
-              popup
-              Align="sidebar"
-            />
-          </List>
-        </DatasetInfoItem>
+        {actors.publisher && (
+          <DatasetInfoItem id="dataset-publisher" itemTitle="dataset.publisher">
+            <List id="agency">
+              <Agent
+                lang={getPreferredLang(actors.publisher.organization?.pref_label)}
+                key={
+                  actors.publisher.person?.name ||
+                  getValueTranslation(actors.publisher.organization?.pref_label)
+                }
+                first
+                agent={actors.publisher}
+                popup
+                Align="sidebar"
+              />
+            </List>
+          </DatasetInfoItem>
+        )}
 
         <DatasetInfoItem id="dataset-curator" itemTitle="dataset.curator">
           <List id="curators">
