@@ -22,11 +22,11 @@ const Translate = ({ children, content, attributes, component, with: _with, unsa
   const C = component
   if (unsafe && translation != null) {
     return (
-      <C dangerouslySetInnerHTML={{ __html: translation }} {...translatedAttributes} {...props} />
+      <C dangerouslySetInnerHTML={{ __html: translation }} {...props} {...translatedAttributes} />
     )
   }
   return (
-    <C {...translatedAttributes} {...props}>
+    <C {...props} {...translatedAttributes}>
       {translation || children}
     </C>
   )
