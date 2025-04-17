@@ -220,7 +220,7 @@ class Etsin {
     this.Access.updateAccess(
       data.access_rights,
       data.has_permit || false,
-      data.application_state || undefined
+      data.allowed_actions?.rems_status || undefined
     )
   }
 

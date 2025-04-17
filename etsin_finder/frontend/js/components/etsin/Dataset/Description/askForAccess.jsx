@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import axios from 'axios'
-import Translate from '@/utils/Translate'
 
-import Button from '@/components/etsin/general/button'
 import REMSButton from './REMSButton'
-import { REMS_URL } from '@/utils/constants'
 import { withStores } from '@/utils/stores'
-import urls from '@/utils/urls'
+import AccessModal from './AccessModal'
 
 export class AskForAccess extends Component {
   state = {
@@ -19,46 +15,30 @@ export class AskForAccess extends Component {
   onClick = () => {
     const {
       Etsin: {
-        EtsinDataset: { identifier },
+        EtsinDataset: { setShowAccessModal },
       },
     } = this.props.Stores
-    this.setState({ loading: true })
-    axios
-      .get(urls.rems(identifier))
-      .then(res => {
-        console.log(res)
-        window.open(`${REMS_URL}/application/${res.data}`, '_blank')
-      })
-      .catch(err => {
-        console.log(err)
-        this.setState({ applicationState: 'disabled' })
-      })
-      .finally(() => {
-        this.setState({ loading: false })
-      })
+    setShowAccessModal(true)
   }
 
   render() {
-    const {
-      Locale: { translate },
-    } = this.props.Stores
+    const { Env } = this.props.Stores
+    if (!Env.Flags.flagEnabled('ETSIN.REMS')) {
+      return null
+    }
     if (!this.props.Stores.Access.restrictions.showREMSbutton) {
       return null
     }
-    const button = this.props.Stores.Auth.userLogged ? (
-      <REMSButton
-        loading={this.state.loading}
-        applicationState={this.state.applicationState}
-        onClick={this.onClick}
-      />
-    ) : (
-      <div aria-hidden="true" title={translate('dataset.access_login')}>
-        <Button id="disabled-rems-button" disabled noMargin>
-          <Translate content="dataset.access_permission" />
-        </Button>
-      </div>
+    return (
+      <>
+        <REMSButton
+          loading={this.state.loading}
+          applicationState={this.state.applicationState}
+          onClick={this.onClick}
+        />
+        <AccessModal />
+      </>
     )
-    return button
   }
 }
 

@@ -8,7 +8,6 @@
  * @license   MIT
  */
 
-import track from '@/stores/view/qvain/track'
 import qvain from './qvain'
 import search from './search'
 
@@ -16,6 +15,18 @@ const english = {
   changepage: 'Navigated to page: %(page)s',
   dataset: {
     additionalInformation: 'Additional information',
+    access_modal: {
+      title: 'Apply for Data Access',
+      terms: 'Terms for Data Access',
+      license: 'License',
+      accept: 'I agree to',
+      acceptTerms: 'the terms for data access and',
+      acceptLicense: {
+        one: 'the license.',
+        other: 'the licenses.',
+      },
+      submit: 'Submit',
+    },
     access_login: 'Login to apply for access',
     access_unavailable: 'Unavailable',
     access_denied: 'Application denied',

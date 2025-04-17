@@ -39,7 +39,7 @@ const dataset_open_a = {
       person: null,
     },
   ],
-  bibliographic_citation: "cite me this way",
+  bibliographic_citation: 'cite me this way',
   data_catalog: data_catalog_ida.id,
   description: {
     en: 'This dataset is used for testing all fields in the Etsin dataset page. Description, Data, Identifiers and Events, and Maps -tabs are included in this test as well. Another version was made to test the version picker as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
@@ -120,6 +120,52 @@ const dataset_open_a = {
 export const dataset_open_a_catalog_expanded = {
   ...dataset_open_a,
   data_catalog: data_catalog_ida,
+}
+
+export const dataset_rems = {
+  ...dataset_open_a,
+  data_catalog: {
+    ...data_catalog_ida,
+    rems_enabled: true,
+  },
+  allowed_actions: {
+    download: false,
+    rems_status: 'no_application',
+    update: false,
+  },
+  access_rights: {
+    license: [
+      {
+        custom_url: 'http://example.com/license.pdf',
+        url: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+        in_scheme: 'http://uri.suomi.fi/codelist/fairdata/license',
+        pref_label: {
+          en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)',
+          fi: 'Creative Commons Nimeä 4.0 Kansainvälinen (CC BY 4.0)',
+        },
+      },
+    ],
+    access_type: {
+      url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
+      in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
+      pref_label: {
+        en: 'Requires applying permission in Fairdata service',
+        fi: 'Vaatii luvan hakemista Fairdata-palvelussa',
+      },
+    },
+    restriction_grounds: [
+      {
+        url: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/contractual',
+        in_scheme: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds',
+        pref_label: {
+          en: 'Restricted access due to contractual reasons, eg. commercial or industrial use',
+          fi: 'Saatavuutta rajoitettu sopimuksen perusteella, esim. luottamuksellisen kaupallisen tai teollisen toiminnan perusteella',
+          sv: 'Begränsad åtkomst på grund av kontrakt',
+        },
+      },
+    ],
+    rems_approval_type: 'automatic',
+  },
 }
 
 export default dataset_open_a

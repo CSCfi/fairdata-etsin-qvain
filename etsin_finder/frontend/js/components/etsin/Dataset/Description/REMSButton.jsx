@@ -1,129 +1,104 @@
+import PropTypes from 'prop-types'
 import React from 'react'
-import Translate from '@/utils/Translate'
+import { observer } from 'mobx-react'
 
 import Button from '@/components/etsin/general/button'
-import etsinTheme from '@/styles/theme'
 import Loader from '@/components/general/loader'
 import { useStores } from '@/stores/stores'
+import etsinTheme from '@/styles/theme'
+import Translate from '@/utils/Translate'
 
 const REMSButton = props => {
   const {
     Locale: { translate },
+    Auth: { userLogged },
   } = useStores()
-  let button
-  switch (props.applicationState) {
+
+  let wrapperTitle
+  let buttonContent = 'dataset.access_permission'
+  let buttonId = 'rems-button'
+  let buttonColor = etsinTheme.color.primary
+  let disabled = false
+
+  let state = props.applicationState
+  if (!userLogged) {
+    disabled = true
+    wrapperTitle = 'dataset.access_login'
+    state = 'not_rems_user'
+  }
+
+  switch (state) {
     case 'apply':
-      button = (
-        <Button id="rems-button-apply" onClick={props.onClick} noMargin>
-          {props.loading ? (
-            <>
-              <Translate content="dataset.access_permission" />
-              <Loader color="white" active size="1.2em" />
-            </>
-          ) : (
-            <Translate content="dataset.access_permission" />
-          )}
-        </Button>
-      )
+      buttonId = 'rems-button-apply'
       break
     case 'draft':
-      button = (
-        <Button id="rems-button-draft" onClick={props.onClick} color="yellow" noMargin>
-          {props.loading ? (
-            <>
-              <Translate content="dataset.access_draft" />
-              <Loader color="white" active size="1.2em" />
-            </>
-          ) : (
-            <Translate content="dataset.access_draft" />
-          )}
-        </Button>
-      )
+      buttonId = 'rems-button-draft'
+      buttonContent = 'dataset.access_draft'
+      buttonColor = 'yellow'
       break
     case 'submitted':
-      button = (
-        <Button id="rems-button-submitted" onClick={props.onClick} color="yellow" noMargin>
-          {props.loading ? (
-            <>
-              <Translate content="dataset.access_request_sent" />
-              <Loader color="white" active size="1.2em" />
-            </>
-          ) : (
-            <Translate content="dataset.access_request_sent" />
-          )}
-        </Button>
-      )
+      buttonId = 'rems-button-submitted'
+      buttonContent = 'dataset.access_request_sent'
+      buttonColor = 'yellow'
       break
     case 'approved':
-      button = (
-        <Button
-          id="rems-button-approved"
-          onClick={props.onClick}
-          color={etsinTheme.color.success}
-          noMargin
-        >
-          {props.loading ? (
-            <>
-              <Translate content="dataset.access_granted" />
-              <Loader color="white" active size="1.2em" />
-            </>
-          ) : (
-            <Translate content="dataset.access_granted" />
-          )}
-        </Button>
-      )
+      buttonId = 'rems-button-approved'
+      buttonContent = 'dataset.access_granted'
+      buttonColor = etsinTheme.color.success
       break
     case 'rejected':
-      button = (
-        <Button
-          id="rems-button-rejected"
-          onClick={props.onClick}
-          color={etsinTheme.color.error}
-          noMargin
-        >
-          {props.loading ? (
-            <>
-              <Translate content="dataset.access_denied" />
-              <Loader color="white" active size="1.2em" />
-            </>
-          ) : (
-            <Translate content="dataset.access_denied" />
-          )}
-        </Button>
-      )
+      buttonId = 'rems-button-rejected'
+      buttonContent = 'dataset.access_denied'
+      buttonColor = etsinTheme.color.error
       break
     case 'disabled':
-      button = (
-        <div aria-hidden="true" title={translate('dataset.access_unavailable')}>
-          <Button id="rems-button-error" disabled noMargin>
-            {props.loading ? (
-              <>
-                <Translate content="dataset.access_permission" />
-                <Loader color="white" active size="1.2em" />
-              </>
-            ) : (
-              <Translate content="dataset.access_permission" />
-            )}
-          </Button>
-        </div>
-      )
+      disabled = true
+      buttonId = 'rems-button-error'
+      wrapperTitle = 'dataset.access_unavailable'
       break
     default:
-      button = (
-        <Button onClick={props.onClick} color={etsinTheme.color.primary} noMargin>
-          {props.loading ? (
-            <>
-              <Translate content="dataset.access_permission" />
-              <Loader color="white" active size="1.2em" />
-            </>
-          ) : (
-            <Translate content="dataset.access_permission" />
-          )}
-        </Button>
-      )
       break
+  }
+
+  const button = (
+    <Button
+      id={buttonId}
+      data-testid="rems-button"
+      onClick={props.onClick}
+      disabled={disabled}
+      color={buttonColor}
+      noMargin
+    >
+      {props.loading ? (
+        <>
+          <Translate content={buttonContent} />
+          <Loader color="white" active size="1.2em" />
+        </>
+      ) : (
+        <Translate content={buttonContent} />
+      )}
+    </Button>
+  )
+  if (wrapperTitle) {
+    return (
+      <div aria-hidden="true" title={translate(wrapperTitle)}>
+        {button}
+      </div>
+    )
   }
   return button
 }
 
-export default REMSButton
+REMSButton.propTypes = {
+  applicationState: PropTypes.string,
+  onClick: PropTypes.func,
+  loading: PropTypes.bool,
+}
+
+REMSButton.defaultProps = {
+  loading: false,
+  onClick: undefined,
+  applicationState: undefined,
+}
+
+export default observer(REMSButton)

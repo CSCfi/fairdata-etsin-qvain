@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 
 import { useStores } from '@/stores/stores'
 
@@ -50,4 +51,4 @@ Translate.defaultProps = {
   children: undefined,
 }
 
-export default Translate
+export default observer(Translate)

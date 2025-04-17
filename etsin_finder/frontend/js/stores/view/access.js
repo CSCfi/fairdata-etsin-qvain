@@ -43,7 +43,7 @@ class Access {
   }
 
   updateAccess(access, hasPermit, state) {
-    switch (access?.access_type?.identifier) {
+    switch (access?.access_type?.url) {
       case accessTypes.open:
         this.open()
         break
@@ -51,10 +51,10 @@ class Access {
         this.embargoAccess(access.available)
         break
       case accessTypes.restricted:
-        this.restrictedAccess()
+        this.restrictedAccess(access.rems_approval_type)
         break
       case accessTypes.permit:
-        this.permitAccess(hasPermit, state)
+        this.permitAccess(access.rems_approval_type, hasPermit, state)
         break
       case accessTypes.login:
         this.loginAccess()
@@ -102,19 +102,19 @@ class Access {
   }
 
   @action
-  restrictedAccess() {
+  restrictedAccess(remsApprovalType) {
     this.restrictions = {
       open: false,
       allowDataRemote: true,
       allowDataIda: true,
       allowDataIdaDownloadButton: false,
-      showREMSbutton: false,
+      showREMSbutton: !!remsApprovalType,
       applicationState: null,
     }
   }
 
   @action
-  permitAccess(hasPermit, state) {
+  permitAccess(remsApprovalType, hasPermit, state) {
     if (hasPermit) {
       this.restrictions = {
         open: false,
@@ -130,7 +130,7 @@ class Access {
         allowDataRemote: true,
         allowDataIda: true,
         allowDataIdaDownloadButton: false,
-        showREMSbutton: true,
+        showREMSbutton: !!remsApprovalType,
         applicationState: state,
       }
     }

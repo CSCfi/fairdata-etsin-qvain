@@ -10,7 +10,7 @@ const accessRights = {
         und: 'Apache Software License 2.0',
       },
       license: 'https://url.of.license.which.applies.here.org',
-      identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/Apache-2.0',
+      url: 'http://uri.suomi.fi/codelist/fairdata/license/code/Apache-2.0',
       description: {
         en: 'Free account of the rights',
       },
@@ -22,7 +22,7 @@ const accessRights = {
         und: 'Creative Commons Nimeä-EiKaupallinen 2.0 Yleinen (CC BY-NC 2.0)',
       },
       license: 'https://creativecommons.org/licenses/by-nc/2.0/',
-      identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-NC-2.0',
+      url: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-NC-2.0',
       description: {
         en: 'Free account of the rights',
       },
@@ -33,25 +33,13 @@ const accessRights = {
         fi: 'Muu',
         und: 'Muu',
       },
-      identifier: 'http://uri.suomi.fi/codelist/fairdata/license/code/other',
+      url: 'http://uri.suomi.fi/codelist/fairdata/license/code/other',
     },
   ],
   available: '2014-01-15',
-  access_url: {
-    title: {
-      en: 'A name given to the document',
-    },
-    identifier: 'https://access.url.com/landing',
-    description: {
-      en: 'Description of the link. For example to be used as hover text.',
-    },
-  },
   access_type: {
     in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
-    definition: {
-      en: 'A statement or formal explanation of the meaning of a concept.',
-    },
-    identifier: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
+    url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/open',
     pref_label: {
       en: 'Open',
       fi: 'Avoin',
@@ -64,7 +52,7 @@ const accessRights = {
   restriction_grounds: [
     {
       in_scheme: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds',
-      identifier: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/other',
+      url: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/other',
       pref_label: {
         en: 'Restricted access due to other reasons',
         fi: 'Saatavuutta rajoitettu muulla perusteella',
@@ -82,7 +70,7 @@ describe('Access Store', () => {
   describe('Update for open access', () => {
     it('Should start update process', done => {
       const open = accessRights
-      open.access_type.identifier = ACCESS_TYPE_URL.OPEN
+      open.access_type.url = ACCESS_TYPE_URL.OPEN
       Access.updateAccess(open)
       done()
     })
@@ -92,7 +80,7 @@ describe('Access Store', () => {
     it('Should show IDA files', () => {
       expect(Access.restrictions.allowDataIda).toEqual(true)
     })
-    it('Should allow Ida file download', () => {
+    it('Should allow IDA file download', () => {
       expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
     })
     it('Should not show ask for access', () => {
@@ -106,7 +94,7 @@ describe('Access Store', () => {
         const d = new Date()
         d.setFullYear(d.getFullYear() - 1)
         embargoed.available = d.toISOString()
-        embargoed.access_type.identifier = ACCESS_TYPE_URL.EMBARGO
+        embargoed.access_type.url = ACCESS_TYPE_URL.EMBARGO
         Access.updateAccess(embargoed)
         done()
       })
@@ -116,7 +104,7 @@ describe('Access Store', () => {
       it('Should show IDA files', () => {
         expect(Access.restrictions.allowDataIda).toEqual(true)
       })
-      it('Should allow Ida file download', () => {
+      it('Should allow IDA file download', () => {
         expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
       })
       it('Should not show ask for access', () => {
@@ -129,7 +117,7 @@ describe('Access Store', () => {
         const d = new Date()
         d.setFullYear(d.getFullYear() + 1)
         embargoed.available = d.toISOString()
-        embargoed.access_type.identifier = ACCESS_TYPE_URL.EMBARGO
+        embargoed.access_type.url = ACCESS_TYPE_URL.EMBARGO
         Access.updateAccess(embargoed)
         done()
       })
@@ -139,7 +127,7 @@ describe('Access Store', () => {
       it('Should show IDA files', () => {
         expect(Access.restrictions.allowDataIda).toEqual(true)
       })
-      it('Should not allow Ida file download', () => {
+      it('Should not allow IDA file download', () => {
         expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
       })
       it('Should not show ask for access', () => {
@@ -150,7 +138,7 @@ describe('Access Store', () => {
   describe('Update for restricted access', () => {
     it('Should start update process', done => {
       const restricted = accessRights
-      restricted.access_type.identifier = ACCESS_TYPE_URL.RESTRICTED
+      restricted.access_type.url = ACCESS_TYPE_URL.RESTRICTED
       Access.updateAccess(restricted)
       done()
     })
@@ -160,7 +148,7 @@ describe('Access Store', () => {
     it('Should show IDA files', () => {
       expect(Access.restrictions.allowDataIda).toEqual(true)
     })
-    it('Should not allow Ida file download', () => {
+    it('Should not allow IDA file download', () => {
       expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
     })
     it('Should not show ask for access', () => {
@@ -170,7 +158,8 @@ describe('Access Store', () => {
   describe('Update for permit access', () => {
     it('Should start update process', done => {
       const restricted_fairdata = accessRights
-      restricted_fairdata.access_type.identifier = ACCESS_TYPE_URL.PERMIT
+      restricted_fairdata.access_type.url = ACCESS_TYPE_URL.PERMIT
+      restricted_fairdata.rems_approval_type = 'automatic'
       Access.updateAccess(restricted_fairdata)
       done()
     })
@@ -180,7 +169,7 @@ describe('Access Store', () => {
     it('Should show IDA files', () => {
       expect(Access.restrictions.allowDataIda).toEqual(true)
     })
-    it('Should not allow Ida file download', () => {
+    it('Should not allow IDA file download', () => {
       expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
     })
     it('Should show ask for access', () => {
@@ -192,7 +181,7 @@ describe('Access Store', () => {
       it('Should start update process', done => {
         Auth.userLogged = false
         const restricted_registration = accessRights
-        restricted_registration.access_type.identifier = ACCESS_TYPE_URL.LOGIN
+        restricted_registration.access_type.url = ACCESS_TYPE_URL.LOGIN
         Access.updateAccess(restricted_registration)
         done()
       })
@@ -202,7 +191,7 @@ describe('Access Store', () => {
       it('Should show IDA files', () => {
         expect(Access.restrictions.allowDataIda).toEqual(true)
       })
-      it('Should not allow Ida file download', () => {
+      it('Should not allow IDA file download', () => {
         expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(false)
       })
       it('Should not show ask for access', () => {
@@ -213,7 +202,7 @@ describe('Access Store', () => {
       it('Should start update process', done => {
         Auth.userLogged = true
         const restricted_registration = accessRights
-        restricted_registration.access_type.identifier = ACCESS_TYPE_URL.LOGIN
+        restricted_registration.access_type.url = ACCESS_TYPE_URL.LOGIN
         Access.updateAccess(restricted_registration)
         done()
       })
@@ -223,7 +212,7 @@ describe('Access Store', () => {
       it('Should show IDA files', () => {
         expect(Access.restrictions.allowDataIda).toEqual(true)
       })
-      it('Should not allow Ida file download', () => {
+      it('Should allow IDA file download', () => {
         expect(Access.restrictions.allowDataIdaDownloadButton).toEqual(true)
       })
       it('Should not show ask for access', () => {

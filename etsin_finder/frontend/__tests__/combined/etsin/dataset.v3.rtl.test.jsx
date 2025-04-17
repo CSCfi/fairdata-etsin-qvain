@@ -17,7 +17,10 @@ import Dataset from '@/components/etsin/Dataset'
 import { buildStores } from '@/stores'
 import EnvClass from '@/stores/domain/env'
 
-import { dataset_open_a_catalog_expanded } from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
+import {
+  dataset_open_a_catalog_expanded,
+  dataset_rems,
+} from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 
 // Avoid reactmodal warnings
 ReactModal.setAppElement(document.createElement('div'))
@@ -33,18 +36,37 @@ const getStores = () => {
   }
   Env.setMetaxV3Host('metaxv3', 443)
   Env.Flags.setFlag('ETSIN.UI.V2', true)
+  Env.Flags.setFlag('ETSIN.REMS', true)
   const stores = buildStores({ Env })
 
   return stores
 }
 
-const renderEtsin = async (dataset = dataset_open_a_catalog_expanded) => {
+const renderEtsin = async (dataset = dataset_open_a_catalog_expanded, userLogged = false) => {
   mockAdapter.reset()
   mockAdapter
     .onGet(`https://metaxv3:443/v3/datasets/${dataset.id}`)
     .reply(200, { ...dataset, state: 'published' })
   mockAdapter.onGet(`https://metaxv3:443/v3/datasets/${dataset.id}/contact`).reply(200, {})
+  mockAdapter
+    .onPost(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-applications`)
+    .reply(200, { success: true })
   const stores = getStores()
+  if (userLogged) {
+    // REMS requires user login
+    stores.Auth.userLogged = true
+    stores.Auth.cscUserLogged = true
+    stores.Auth.setUser({
+      name: 'fd_user3',
+      firstName: 'fd',
+      lastName: 'user',
+      loggedIn: true,
+      homeOrganizationId: undefined,
+      idaProjects: [],
+      isUsingRems: undefined, // not used by V3, use flag instead
+      csrfToken: undefined,
+    })
+  }
   render(
     <ThemeProvider theme={etsinTheme}>
       <MemoryRouter initialEntries={[`/dataset/${dataset.id}`]}>
@@ -117,5 +139,16 @@ describe('Etsin dataset page', () => {
       'Kone Foundation, & Henkilö, K. (2023). All Fields Test Dataset. ' +
         'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
     )
+  })
+
+  test('renders REMS application', async () => {
+    await renderEtsin(dataset_rems, true)
+    await userEvent.click(screen.getByTestId('rems-button'))
+    const dialog = screen.getByRole('dialog')
+    within(dialog).getByRole('heading', { name: 'Apply for Data Access' })
+
+    // Submit button should be clickable after accepting terms
+    await userEvent.click(within(dialog).getByTestId('accept-access-terms'))
+    await userEvent.click(within(dialog).getByTestId('submit-access-application'))
   })
 })

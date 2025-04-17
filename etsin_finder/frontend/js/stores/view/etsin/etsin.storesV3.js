@@ -24,6 +24,8 @@ class EtsinDatasetV3 {
 
   @observable showCitationModal = false
 
+  @observable showAccessModal = false
+
   @observable inInfo = null
 
   @computed get dataCatalog() {
@@ -87,7 +89,7 @@ class EtsinDatasetV3 {
   }
 
   @computed get isRems() {
-    return this.accessRights.access_type.url === ACCESS_TYPE_URL.PERMIT
+    return this.accessRights.access_type.url === ACCESS_TYPE_URL.PERMIT || this.accessRights.access_type.url === ACCESS_TYPE_URL.RESTRICTED
   }
 
   @computed get datasetMetadata() {
@@ -398,6 +400,10 @@ class EtsinDatasetV3 {
 
   @action setShowCitationModal = value => {
     this.showCitationModal = value
+  }
+
+  @action setShowAccessModal = value => {
+    this.showAccessModal = value
   }
 
   @action setInInfo = resource => {

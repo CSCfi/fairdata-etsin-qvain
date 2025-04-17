@@ -5,11 +5,14 @@ import { runInAction } from 'mobx'
 import { AskForAccess } from '@/components/etsin/Dataset/Description/askForAccess'
 import AccessClass from '@/stores/view/access'
 import LocaleClass from '@/stores/view/locale'
+import EnvClass from '@/stores/domain/env'
 import AuthClass from '@/stores/domain/auth'
 import REMSButton from '@/components/etsin/Dataset/Description/REMSButton'
 import Loader from '@/components/general/loader'
 import { useStores } from '../../../js/stores/stores'
 
+const Env = new EnvClass()
+Env.Flags.setFlag('ETSIN.REMS', true)
 const Access = new AccessClass()
 const Auth = new AuthClass()
 const Locale = new LocaleClass()
@@ -20,15 +23,18 @@ const getStores = () => {
     Access,
     Auth,
     Locale,
+    Env,
   }
+  stores.Auth.userLogged = true
   useStores.mockReturnValue(stores)
   return stores
 }
 
 const access = {
   access_type: {
-    identifier: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
+    url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
   },
+  rems_approval_type: 'automatic',
 }
 
 describe('AskForAccess', () => {
@@ -38,21 +44,9 @@ describe('AskForAccess', () => {
     expect(wrapper.type()).toEqual(null)
   })
 
-  it('should render AskForAccess as disabled button', () => {
-    // User is not logged in so button is rendered but disabled
+  it('should render REMSButton', () => {
     const stores = getStores()
     stores.Access.updateAccess(access, false, 'apply')
-    const wrapper = shallow(<AskForAccess Stores={stores} cr_id="test" />)
-    expect(wrapper.find('#disabled-rems-button').prop('disabled')).toEqual(true)
-  })
-
-  it('should render AskForAccess with REMSButton', () => {
-    // User is logged in so it renders the REMSButton
-    const stores = getStores()
-    stores.Access.updateAccess(access, false, 'apply')
-    runInAction(() => {
-      stores.Auth.userLogged = true
-    })
     const wrapper = shallow(<AskForAccess Stores={stores} cr_id="test" />)
     expect(wrapper.find(REMSButton).length).toBe(1)
   })

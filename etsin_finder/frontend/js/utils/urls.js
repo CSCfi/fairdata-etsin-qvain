@@ -63,6 +63,8 @@ export default {
       `${metaxV3}/v3/datasets/${dataset}/permissions/editors`,
     datasetPermissionsEditor: (metaxV3, dataset, username) =>
       `${metaxV3}/v3/datasets/${dataset}/permissions/editors/${username}`,
+    datasetREMSApplications: (metaxV3, dataset) =>
+      `${metaxV3}/v3/datasets/${dataset}/rems-applications`,
     download: {
       packages: () => '/api/v3/download/requests',
       authorize: () => '/api/v3/download/authorize',

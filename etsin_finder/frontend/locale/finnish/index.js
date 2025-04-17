@@ -15,6 +15,18 @@ const finnish = {
   changepage: 'Siirryit sivulle: %(page)s',
   dataset: {
     additionalInformation: 'Lisätietoja',
+    access_modal: {
+      title: 'Hae käyttölupaa',
+      terms: 'Aineiston käyttöehdot',
+      license: 'Lisenssi',
+      accept: 'Hyväksyn aineiston',
+      acceptTerms: 'käyttöehdot ja',
+      acceptLicense: {
+        one: 'lisenssin.',
+        other: 'lisenssit.',
+      },
+      submit: 'Lähetä hakemus',
+    },
     access_login: 'Käyttöluvan hakeminen vaatii sisään kirjautumisen',
     access_unavailable: 'Ei käytettävissä',
     access_denied: 'Hakemus evätty',
