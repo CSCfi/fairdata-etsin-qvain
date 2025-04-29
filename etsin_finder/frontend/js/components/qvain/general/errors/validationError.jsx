@@ -15,10 +15,14 @@ export const isAlreadyTranslated = children => {
 }
 
 export const ValidationError = ({ children }) => {
-  if (!children) return null
-
+  if (!children || children?.length === 0) return null
   if (isAlreadyTranslated(children)) {
     return <ValidationErrorText>{children}</ValidationErrorText>
+  }
+  if (Array.isArray(children)) {
+    // If children is a list of validation errors, use only first item.
+    // Ideally the 'ValidationErrors' component should be used instead for lists.
+    return <Translate key={children[0]} content={children[0]} component={ValidationErrorText} />
   }
   return <Translate key={children} content={children} component={ValidationErrorText} />
 }

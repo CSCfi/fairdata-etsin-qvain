@@ -12,9 +12,9 @@ describe('ValidationError', () => {
     wrapper.find(Translate).prop('content').should.eq('qvain.field.error')
   })
 
-  it('should translate error array', () => {
-    const wrapper = shallow(<ValidationError>{['qvain', 'field.error']}</ValidationError>)
-    wrapper.find(Translate).prop('content').should.eql(['qvain', 'field.error'])
+  it('should translate first error of array', () => {
+    const wrapper = shallow(<ValidationError>{['qvain.error1', 'qvain.error2']}</ValidationError>)
+    wrapper.find(Translate).prop('content').should.eql('qvain.error1')
   })
 
   it('should not re-translate error message', () => {
@@ -29,6 +29,6 @@ describe('ValidationError', () => {
 
   it('should handle empty array', () => {
     const wrapper = shallow(<ValidationError>{[]}</ValidationError>)
-    wrapper.find(Translate).prop('content').should.eql([])
+    expect(wrapper.isEmptyRender()).toEqual(true)
   })
 })
