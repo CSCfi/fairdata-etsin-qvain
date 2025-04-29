@@ -5,6 +5,7 @@ import AccessType from './qvain.accessType'
 import Actors from './qvain.actors'
 import ActorsV3 from './qvain.actors.v3'
 import BibliographicCitation from './qvain.bibliographicCitation'
+import DataAccess from './qvain.dataAccess'
 import DatasetLanguages from './qvain.datasetLanguage'
 import Description from './qvain.description'
 import EmbargoExpDate from './qvain.embargoExpDate'
@@ -34,6 +35,7 @@ class Resources {
     this.ActorsV2 = new Actors(this)
     this.ActorsV3 = new ActorsV3(this)
     this.BibliographicCitation = new BibliographicCitation(this)
+    this.DataAccess = new DataAccess(this)
     this.DatasetLanguages = new DatasetLanguages(this)
     this.Description = new Description(this)
     this.EmbargoExpDate = new EmbargoExpDate(this)
@@ -59,6 +61,7 @@ class Resources {
       this.Actors,
       this.BibliographicCitation,
       this.Description,
+      this.DataAccess,
       this.DatasetLanguages,
       this.EmbargoExpDate,
       this.ExternalResources,

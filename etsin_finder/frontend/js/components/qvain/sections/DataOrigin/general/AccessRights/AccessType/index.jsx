@@ -22,6 +22,7 @@ import RestrictionGrounds from './RestrictionGrounds'
 import EmbargoExpires from './EmbargoExpires'
 import { handleAccessTypeReferenceDataResponse } from '../../../IdaCatalog/componentHelpers'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
+import DataAccess from './DataAccess'
 
 export class AccessType extends Component {
   client = new AbortClient()
@@ -72,6 +73,7 @@ export class AccessType extends Component {
   render() {
     const { lang } = this.props.Stores.Locale
     const { value, Model, validationError, readonly, validate } = this.props.Stores.Qvain.AccessType
+    const { shouldShowDataAccess } = this.props.Stores.Qvain.DataAccess
     const { options } = this.state
 
     let permitInfo = null
@@ -115,6 +117,7 @@ export class AccessType extends Component {
             <Divider />
             {value?.url === ACCESS_TYPE_URL.EMBARGO && <EmbargoExpires />}
             {value.url !== ACCESS_TYPE_URL.OPEN ? <RestrictionGrounds /> : null}
+            {shouldShowDataAccess(value) && <DataAccess />}
           </>
         )}
       </FieldGroup>

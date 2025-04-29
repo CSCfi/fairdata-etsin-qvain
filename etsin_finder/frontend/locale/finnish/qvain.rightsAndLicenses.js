@@ -40,6 +40,18 @@ const rightsAndLicenses = {
   description: {
     title: 'Käyttöoikeuksien kuvaus',
   },
+  dataAccess: {
+    title: 'Aineiston luvitus',
+    applicationInstructions: 'Ohjeet luvan pyytämiseen',
+    reviewerInstructions: 'Ohjeet luvan antamiseen luvittajille (ei näy käyttäjille)',
+    terms: 'Myöntämisehdot (millä perustein luvitetaan)',
+    remsApprovalType: {
+      title: 'Luvan tyyppi',
+      disabled: 'Ei käytössä',
+      automatic: 'Automaattinen',
+      manual: 'Manuaalinen',
+    },
+  },
 }
 
 export default rightsAndLicenses

@@ -23,20 +23,27 @@ import {
 import { filesSchema, directoriesSchema } from './qvain.files.schemas'
 import { embargoExpDateSchema } from './qvain.embargoExpDate'
 import { actorsSchemaV3 } from './qvain.actors.v3'
+import { dataAccessMultilanguageSchema } from './qvain.dataAccess'
 
-const accessRightsDraftSchema = yup
-  .object()
-  .shape({
-    license: licenseArrayMetaxSchema,
-    access_type: accessTypeMetaxSchema,
-    restriction_grounds: yup.mixed().when('access_type.identifier', {
-      is: url => url !== ACCESS_TYPE_URL.OPEN,
-      then: restrictionGroundsMetaxSchema,
-    }),
-    available: embargoExpDateSchema,
-    description: accessRightsDescriptionDraftSchema,
-  })
-  .noUnknown()
+const dataAccessSchemaPartial = {
+  rems_approval_type: yup.string().nullable(),
+  data_access_application_instructions: dataAccessMultilanguageSchema,
+  data_access_terms: dataAccessMultilanguageSchema,
+  data_access_reviewer_instructions: dataAccessMultilanguageSchema,
+}
+
+const accessRightsDraftSchema = yup.object().shape({
+  license: licenseArrayMetaxSchema,
+  access_type: accessTypeMetaxSchema,
+  restriction_grounds: yup.mixed().when('access_type.identifier', {
+    is: url => url !== ACCESS_TYPE_URL.OPEN,
+    then: restrictionGroundsMetaxSchema,
+  }),
+  available: embargoExpDateSchema,
+  description: accessRightsDescriptionDraftSchema,
+  ...dataAccessSchemaPartial
+})
+
 
 const accessRightsSchema = yup
   .object()
@@ -49,6 +56,7 @@ const accessRightsSchema = yup
     }),
     available: embargoExpDateSchema,
     description: accessRightsDescriptionSchema,
+    ...dataAccessSchemaPartial
   })
   .noUnknown()
   .required('qvain.validationMessages.accessType.required')

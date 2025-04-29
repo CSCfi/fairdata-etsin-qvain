@@ -24,6 +24,15 @@ export const Title = styled.label`
   margin-top: 0.5rem;
 `
 
+export const TitleSmall = styled.label`
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem;
+  color: #222;
+  margin-top: 0.5rem;
+`
+
 export const InfoText = styled.span`
   display: relative;
   margin-top: ${({ weight = 0.5 }) => weight * -0.55}rem;
@@ -133,4 +142,7 @@ export const TextArea = styled.textarea`
   color: #000;
   display: block;
   resize: vertical;
+`
+export const NarrowTextArea = styled(TextArea)`
+  min-height: 6rem;
 `

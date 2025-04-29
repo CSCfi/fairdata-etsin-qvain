@@ -12,7 +12,7 @@ import {
   Required,
   RequiredTextTitleOrDescription,
 } from '@/components/qvain/general/V2'
-import ValidationError from '@/components/qvain/general/errors/validationError'
+import { ValidationErrors } from '@/components/qvain/general/errors/validationError'
 import { useStores } from '@/stores/stores'
 
 const DescriptionFieldTextField = ({ activeLang }) => {
@@ -59,7 +59,7 @@ const DescriptionFieldTextField = ({ activeLang }) => {
         component={InfoText}
         content={`qvain.description.description.description.infoText.${activeLang}`}
       />
-      {validationError && <ValidationError>{validationError}</ValidationError>}
+      {validationError && <ValidationErrors errors={validationError} />}
     </FieldGroup>
   )
 }

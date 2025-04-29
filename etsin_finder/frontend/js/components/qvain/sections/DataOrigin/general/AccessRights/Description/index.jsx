@@ -63,7 +63,7 @@ const AccessRightsDescription = () => {
             <span>
               <Translate
                 component={InfoText}
-                id="accerss-rights-description-char-counter"
+                id="access-rights-description-char-counter"
                 content="qvain.description.charactersRemaining"
                 with={{ charactersRemaining: charactersRemaining[language] }}
               />

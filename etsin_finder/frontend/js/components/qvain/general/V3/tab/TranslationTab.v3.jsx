@@ -1,43 +1,41 @@
-import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import Translate from '@/utils/Translate'
+import PropTypes from 'prop-types'
+import React, { Fragment } from 'react'
+import styled from 'styled-components'
 
-import { useStores } from '@/stores/stores'
 import { FieldGroup } from '@/components/qvain/general/V2'
+import { useStores } from '@/stores/stores'
 
 const TranslationTab = ({ language, setLanguage, children, useTitleLanguages }) => {
   const {
-    Locale: { datasetTitleLanguageTabOrder, languageTabOrder },
+    Locale: { datasetTitleLanguageTabOrder, languageTabOrder, translate },
   } = useStores()
 
   const languages = useTitleLanguages ? datasetTitleLanguageTabOrder : languageTabOrder
 
   return (
-    <FieldGroup>
-      <GapNegator>
-        <LangButtonContainer>
-          {languages.map((lang, index) => (
-            <Fragment key={lang}>
-              {index !== 0 && <EmptyBlock width="1%" />}
-              <LangButton
-                id={`tab-${lang}`}
-                type="button"
-                active={language === lang}
-                onClick={() => setLanguage(lang)}
-                language={lang}
-              >
-                <Translate content={`qvain.general.lang.${lang}`} />
-              </LangButton>
-            </Fragment>
-          ))}
+    <TabGroup>
+      <LangButtonContainer role="tablist">
+        {languages.map((lang, index) => (
+          <Fragment key={lang}>
+            {index !== 0 && <EmptyBlock width="1%" />}
+            <LangButton
+              id={`tab-${lang}`}
+              role="tab"
+              type="button"
+              active={language === lang}
+              onClick={() => setLanguage(lang)}
+              language={lang}
+            >
+              {translate(`qvain.general.lang.${lang}`)}
+            </LangButton>
+          </Fragment>
+        ))}
 
-          <EmptyBlock width="25%" />
-        </LangButtonContainer>
-        <ContentCard>{children}</ContentCard>
-      </GapNegator>
-    </FieldGroup>
+        <EmptyBlock width="25%" />
+      </LangButtonContainer>
+      <ContentCard>{children}</ContentCard>
+    </TabGroup>
   )
 }
 
@@ -68,7 +66,7 @@ const LangButtonContainer = styled.div`
   flex-direction: row;
 `
 
-const GapNegator = styled.div`
+const TabGroup = styled(FieldGroup)`
   margin-top: 0.5rem;
   gap: 0;
 `

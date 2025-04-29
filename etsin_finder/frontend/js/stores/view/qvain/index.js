@@ -407,6 +407,14 @@ class Qvain extends Resources {
   }
 
   @computed
+  get isREMSAllowed() {
+    if (!this.Env?.Flags.flagEnabled('QVAIN.REMS')) {
+      return false
+    }
+    return this.dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
+  }
+
+  @computed
   get readonly() {
     if (this.Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK') && this.Lock?.enabled) {
       if (this.original && !this.Lock?.haveLock) {

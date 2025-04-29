@@ -1,4 +1,4 @@
-import { makeObservable, action, computed } from 'mobx'
+import { makeObservable, action } from 'mobx'
 import * as yup from 'yup'
 import '@/utils/extendYup'
 
@@ -28,7 +28,7 @@ export const descriptionDraftSchema = descriptionSchemaBase.nullable()
 
 class Description extends MultiLanguageField {
   constructor(Parent) {
-    super(Parent, descriptionSchema)
+    super(Parent, descriptionSchema, { characterLimit: 50000 })
     makeObservable(this)
   }
 
@@ -38,14 +38,6 @@ class Description extends MultiLanguageField {
       en: dataset.description?.en || '',
       fi: dataset.description?.fi || '',
       sv: dataset.description?.sv || '',
-    }
-  }
-
-  @computed get charactersRemaining() {
-    return {
-      fi: 50000 - (this.value?.fi?.length || 0),
-      en: 50000 - (this.value?.en?.length || 0),
-      sv: 50000 - (this.value?.sv?.length || 0),
     }
   }
 

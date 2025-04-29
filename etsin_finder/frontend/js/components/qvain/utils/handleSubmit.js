@@ -59,6 +59,12 @@ const handleSubmitToBackend = Qvain => {
       description: accessRightsDescription,
       access_type: accessType,
       available: embargoDate,
+      // DataAccess supported in V3 only, contains:
+      // - rems_approval_type
+      // - data_access_application_instructions
+      // - data_access_terms
+      // - data_access_reviewer_instructions
+      ...Qvain.DataAccess.toBackend(),
     },
     data_catalog: Qvain.dataCatalog,
     cumulative_state: Qvain.cumulativeState,

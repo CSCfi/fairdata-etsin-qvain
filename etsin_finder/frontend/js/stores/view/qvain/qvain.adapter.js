@@ -117,6 +117,11 @@ class Adapter {
       license: this.licenseV3toV2(value.license),
       available: value.available,
       description: value.description,
+      // Values not in V2
+      rems_approval_type: value.rems_approval_type,
+      data_access_application_instructions: value.data_access_application_instructions,
+      data_access_terms: value.data_access_terms,
+      data_access_reviewer_instructions: value.data_access_reviewer_instructions,
     }
   }
 
@@ -296,6 +301,10 @@ class Adapter {
       license: this.licenseV2toV3(value.license),
       available: value.available,
       description: value.description,
+      rems_approval_type: value.rems_approval_type,
+      data_access_application_instructions: value.data_access_application_instructions,
+      data_access_terms: value.data_access_terms,
+      data_access_reviewer_instructions: value.data_access_reviewer_instructions,
     }
   }
 

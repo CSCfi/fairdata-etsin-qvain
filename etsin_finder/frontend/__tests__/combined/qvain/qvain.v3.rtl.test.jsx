@@ -19,7 +19,11 @@ import Qvain from '@/components/qvain/views/main'
 import { flatten, removeMatchingKeys } from '@/utils/flatten'
 
 jest.setTimeout(25000)
-import { access_rights_embargo } from '../../__testdata__/metaxv3/refs/access_rights.data'
+import {
+  access_rights_embargo,
+  access_type_permit,
+  restriction_grounds_research,
+} from '../../__testdata__/metaxv3/refs/access_rights.data'
 import dataset from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 
 // axios mocks
@@ -75,6 +79,7 @@ const renderQvain = async (overrides = {}, { initialPath } = {}) => {
   document.cookie = 'etsin_app=qvain' // sets etsin_app
   const Env = new EnvClass()
   Env.Flags.setFlag('QVAIN.METAX_V3.FRONTEND', true)
+  Env.Flags.setFlag('QVAIN.REMS', true)
   Env.setMetaxV3Host('metaxv3', 443)
   const stores = buildStores({ Env })
 
@@ -580,5 +585,57 @@ describe('Qvain with an opened dataset', () => {
       const input = document.getElementById('titleInput')
       expect(input.hasAttribute('disabled')).toBe(false)
     })
+  })
+
+  it('shows data access fields for "permit" access type', async () => {
+    await renderQvain({
+      access_rights: {
+        ...dataset.access_rights,
+        access_type: access_type_permit,
+        restriction_grounds: [restriction_grounds_research],
+      },
+    })
+    const collapseButton = screen.getByTestId('toggle-data-access')
+    await userEvent.click(collapseButton) // should open data access fields
+
+    // Test text input for data access fields
+    const fields = screen.getByTestId('data-access-fields')
+    const applicationInput = within(fields).getByLabelText('how to apply for permission', {
+      exact: false,
+    })
+    await userEvent.type(applicationInput, 'how to apply')
+    const reviewerInput = within(fields).getByLabelText('instructions for approvers', {
+      exact: false,
+    })
+    await userEvent.type(reviewerInput, 'instructions')
+    const termsInput = within(fields).getByLabelText('terms for data access', { exact: false })
+    await userEvent.type(termsInput, 'terms')
+
+    // Test changing language tab
+    const finnishTab = within(fields).getByRole('tab', {
+      name: 'Finnish',
+    })
+    await userEvent.click(finnishTab)
+    const applicationInputFi = within(fields).getByLabelText('how to apply for permission', {
+      exact: false,
+    })
+    await userEvent.type(applicationInputFi, 'näin haet')
+
+    // Select approval type
+    const approvalGroup = screen.getByRole('group', { name: /approval type/i })
+    await userEvent.click(within(approvalGroup).getByLabelText('Automatic'))
+
+    // Check values get submitted
+    const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    await userEvent.click(submitButton) // should submit data to metax
+    const submitRights = JSON.parse(mockAdapter.history.patch[0].data).access_rights
+    expect(submitRights).toEqual(
+      expect.objectContaining({
+        rems_approval_type: 'automatic',
+        data_access_application_instructions: { en: 'how to apply', fi: 'näin haet' },
+        data_access_terms: { en: 'terms' },
+        data_access_reviewer_instructions: { en: 'instructions' },
+      })
+    )
   })
 })

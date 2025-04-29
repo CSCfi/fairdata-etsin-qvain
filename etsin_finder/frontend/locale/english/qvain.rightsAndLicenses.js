@@ -41,6 +41,18 @@ const rightsAndLicenses = {
   description: {
     title: 'Access rights description',
   },
+  dataAccess: {
+    title: 'Data access',
+    applicationInstructions: 'Instructions on how to apply for permission',
+    reviewerInstructions: 'Instructions for approvers (not shown to users)',
+    terms: 'Access policy (terms for data access)',
+    remsApprovalType: {
+      title: 'Approval type',
+      disabled: 'Disabled',
+      automatic: 'Automatic',
+      manual: 'Manual',
+    },
+  },
 }
 
 export default rightsAndLicenses

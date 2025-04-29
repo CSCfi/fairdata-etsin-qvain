@@ -21,6 +21,7 @@ export const ExpandCollapse = props => (
   <Translate
     component={NoStyleButton}
     type="button"
+    aria-expanded={props.isExpanded}
     {...props}
     attributes={{
       'aria-label': props.isExpanded ? 'general.showLess' : 'general.showMore',

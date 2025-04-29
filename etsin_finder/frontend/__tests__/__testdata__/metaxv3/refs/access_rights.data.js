@@ -32,6 +32,12 @@ export const access_type_embargo = {
   pref_label: { en: 'Embargo', fi: 'Embargo' },
 }
 
+export const access_type_permit = {
+  url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
+  in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
+  pref_label: { en: 'Requires permission', fi: 'Vaatii luvan' },
+}
+
 export const access_rights_open_a = {
   id: '55f2ff9b-68f2-4895-88b9-ca7f9ff750fc',
   description: null,
