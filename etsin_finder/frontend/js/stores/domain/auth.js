@@ -69,6 +69,19 @@ class Auth {
     this.user = user
   }
 
+  isMetaxV3Request(requestConfig) {
+    // Return true if Axios request config object is a Metax V3 request
+    const requestUrl = new URL(requestConfig.url, global.location.href)
+    let metaxUrl
+    try {
+      metaxUrl = new URL(this.Env.metaxV3Url(''))
+    } catch (error) {
+      console.error(`Failed to construct Metax V3 URL, host=${this.Env.metaxV3Host}`)
+      throw error
+    }
+    return requestUrl.origin === metaxUrl.origin
+  }
+
   @action.bound
   enableRequestInterceptors() {
     // Enable interceptors for handling Metax V3 authentication
@@ -82,16 +95,13 @@ class Auth {
     // CSRF token for requests to Metax V3
     this.interceptors.request = axios.interceptors.request.use(config => {
       // Use location.href as base to avoid errors for relative URLs here
-
-      if (this.user.loggedIn) {
+      if (this.user.loggedIn && this.isMetaxV3Request(config)) {
         config.withCredentials = true // enables sending SSO cookies to Metax v3
         // Only write methods need a CSRF token
-
         if (['post', 'patch', 'put', 'delete'].includes(config.method)) {
           config.headers['X-CSRFToken'] = this.user.csrfToken
         }
       }
-
       return config
     })
 
@@ -101,10 +111,8 @@ class Auth {
       response => response,
       async error => {
         const requestConfig = error.config
-
-        if (this.user.loggedIn) {
+        if (this.user.loggedIn && this.isMetaxV3Request(requestConfig)) {
           const response = error.response
-
           if (response?.status === 403 && response.data?.detail?.startsWith?.('CSRF Failed')) {
             // CSRF error, try updating the token and retry the original request.
             if (await this.updateCsrf()) {
