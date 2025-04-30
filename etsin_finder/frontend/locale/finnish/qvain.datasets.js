@@ -151,7 +151,7 @@ const datasets = {
       remove: 'Poista',
       labels: {
         permissions: 'Jäsenet',
-        projectMembers: 'Projektin %(project)s jäsenet',
+        projectMembers: 'Projektin jäsenet',
       },
       updateError: 'Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä uudelleen.',
       projectHelp:

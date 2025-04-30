@@ -151,7 +151,7 @@ const datasets = {
       remove: 'Remove',
       labels: {
         permissions: 'Members',
-        projectMembers: 'Project %(project)s members',
+        projectMembers: 'Project members',
       },
       updateError: 'There was an error updating user permissions. Please try again.',
       projectHelp:

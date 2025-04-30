@@ -53,13 +53,13 @@ class ShareV3 extends ShareV2 {
             tag: 'fetch-permissions',
           }
         )
-        const mapUsers = (users, role, is_member=false) =>
+        const mapUsers = (users, role, is_member = false) =>
           users.map(user => ({
             uid: user.username,
             name: `${user.first_name} ${user.last_name}`,
-            email: user.email,
+            email: user.email === '<hidden>' ? undefined : user.email,
             role,
-            isProjectMember: is_member
+            isProjectMember: is_member,
           }))
 
         const creators = mapUsers(resp.data.creators || [], 'creator')
