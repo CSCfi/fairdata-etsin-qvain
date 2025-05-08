@@ -53,23 +53,33 @@ class ShareV3 extends ShareV2 {
             tag: 'fetch-permissions',
           }
         )
-        const mapUsers = (users, role, is_member = false) =>
-          users.map(user => ({
-            uid: user.username,
-            name: `${user.first_name} ${user.last_name}`,
-            email: user.email === '<hidden>' ? undefined : user.email,
-            role,
-            isProjectMember: is_member,
-          }))
+        // Convert and merge user data from permission lists. A user may be in multiple lists.
+        const users = []
+        const processUsers = (usersData, role, isMember = false) => {
+          for (const userData of usersData) {
+            let user = users.find(v => v.uid === userData.username)
+            if (!user) {
+              user = {
+                uid: userData.username,
+                name: `${userData.first_name} ${userData.last_name}`,
+                email: userData.email === '<hidden>' ? undefined : userData.email,
+                role,
+                isProjectMember: isMember,
+              }
+              users.push(user)
+            } else {
+              user.isProjectMember = user.isProjectMember || isMember
+            }
+          }
+        }
 
-        const creators = mapUsers(resp.data.creators || [], 'creator')
-        const editors = mapUsers(resp.data.editors || [], 'editor')
-        const members = mapUsers(resp.data.csc_project_members || [], undefined, true)
-        const users = [...creators, ...editors, ...members]
+        processUsers(resp.data.creators || [], 'creator')
+        processUsers(resp.data.editors || [], 'editor')
+        processUsers(resp.data.csc_project_members || [], undefined, true)
         users.sort(nameCompare)
         users.sort(roleCompare) // creator first
         this.setUserPermissions(users)
-        this.setProject(resp.data.project)
+        this.setProject(resp.data.csc_project)
         this.removeAddedUsersFromSelected()
       } catch (err) {
         if (isAbort(err)) {
