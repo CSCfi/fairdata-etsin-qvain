@@ -60,7 +60,7 @@ const ModalReferenceInput = ({
 
   return (
     <FieldGroup>
-      <Title htmlFor={`${datum}-input`}>
+      <Title htmlFor={`${datum}-select`}>
         <Translate content={translations.label} />
         {isRequired && <Required />}
       </Title>

@@ -1,17 +1,16 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import etsinTheme from '@/styles/theme'
 import dataset from '../../../__testdata__/metaxv3/datasets/dataset_att_a'
 import Contact from '@/components/etsin/Dataset/contact'
-import Modal from '@/components/general/modal'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
-
 
 const emailInfo = {
   CONTRIBUTOR: true,
@@ -24,9 +23,9 @@ const emailInfo = {
 const registerMissingTranslationHandler = failTestsWhenTranslationIsMissing()
 
 describe('Etsin contact modal', () => {
-  let wrapper, helper
+  let helper
 
-  beforeAll(async () => {
+  const renderModal = async () => {
     const stores = buildStores()
     registerMissingTranslationHandler(stores.Locale)
     stores.Etsin.EtsinDataset.set('dataset', dataset)
@@ -35,30 +34,26 @@ describe('Etsin contact modal', () => {
     helper = document.createElement('div')
     document.body.appendChild(helper)
     ReactModal.setAppElement(helper)
-    wrapper = mount(
+    render(
       <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
           <main>
-            <Contact datasetID={dataset.identifier} emails={emailInfo} isRems={true} />
+            <Contact datasetID={dataset.identifier} emails={emailInfo} isRems />
           </main>
         </ThemeProvider>
       </StoresProvider>,
       { attachTo: helper }
     )
-    wrapper.find('button').simulate('click')
-  })
+    await userEvent.click(screen.getByRole('button'))
+  }
 
-  afterAll(() => {
-    wrapper?.unmount?.()
+  afterEach(() => {
     document.body.removeChild(helper)
   })
 
-  it('should be open', async () => {
-    expect(wrapper.find(Modal).prop('isOpen')).toBe(true)
-  })
-
   it('should be accessible', async () => {
-    const results = await axe(wrapper.getDOMNode())
+    await renderModal()
+    const results = await axe(screen.getByRole('dialog'))
     expect(results).toBeAccessible()
   })
 })

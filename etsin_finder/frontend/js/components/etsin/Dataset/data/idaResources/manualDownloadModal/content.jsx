@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
@@ -10,21 +10,21 @@ import CopyField from './copyField'
 const Content = ({ Packages }) => {
   const [downloadUrl, setDownloadUrl] = useState('')
   const [downloadUrlError, setDownloadUrlError] = useState()
+  const isCanceled = useRef(false)
 
   const { manualDownloadUrlGetter } = Packages
 
   useEffect(() => {
-    let isCanceled = false
     const getDownloadUrl = async () => {
       const { url, error } = await manualDownloadUrlGetter()
-      if (!isCanceled) {
+      if (!isCanceled.current) {
         setDownloadUrl(url)
         setDownloadUrlError(error)
       }
     }
     getDownloadUrl()
     return () => {
-      isCanceled = true
+      isCanceled.current = true
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

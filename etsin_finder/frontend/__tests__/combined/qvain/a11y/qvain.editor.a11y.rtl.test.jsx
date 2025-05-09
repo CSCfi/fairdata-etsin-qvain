@@ -1,10 +1,10 @@
 import React from 'react'
 import axios from 'axios'
-import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
+import { render, screen } from '@testing-library/react'
 
 import etsinTheme from '../../../../js/styles/theme'
 import QvainContent from '../../../../js/components/qvain/views/main/index'
@@ -21,7 +21,7 @@ global.fdweRecordEvent = () => {}
 
 jest.mock('axios')
 
-jest.setTimeout(25000) // the default 5000ms timeout is not always enough here
+jest.setTimeout(40000) // the default 5000ms timeout is not always enough here
 
 axios.get.mockReturnValue(
   Promise.resolve({
@@ -34,16 +34,16 @@ axios.get.mockReturnValue(
 )
 
 describe('Qvain editor', () => {
-  let wrapper, helper
+  let helper
 
-  beforeEach(async () => {
+  const renderEditor = async () => {
     await stores.Qvain.editDataset(dataset)
 
     helper = document.createElement('div')
     document.body.appendChild(helper)
     ReactModal.setAppElement(helper)
 
-    wrapper = mount(
+    render(
       <StoresProvider store={stores}>
         <BrowserRouter>
           <ThemeProvider theme={etsinTheme}>
@@ -55,15 +55,15 @@ describe('Qvain editor', () => {
       </StoresProvider>,
       { attachTo: helper }
     )
-  })
+  }
 
   afterEach(() => {
-    wrapper?.unmount?.()
     document.body.removeChild(helper)
   })
 
   it('is accessible', async () => {
-    const results = await axe(wrapper.getDOMNode())
+    await renderEditor()
+    const results = await axe(screen.getByRole('main'))
     expect(results).toBeAccessible()
   })
 })

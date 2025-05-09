@@ -40,7 +40,7 @@ const Events = ({ id }) => {
   }, [])
 
   return (
-    <Margin className="tabContent" id={id}>
+    <Margin className="tabContent" id={id} data-testid={id}>
       <EventList />
       <Identifiers
         title="dataset.events_idn.other_idn"

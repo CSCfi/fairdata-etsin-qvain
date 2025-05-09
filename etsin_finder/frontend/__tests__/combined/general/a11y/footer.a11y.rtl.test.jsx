@@ -1,30 +1,21 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import { axe } from 'jest-axe'
+import { render } from '@testing-library/react'
 
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import Footer from '../../../../js/layout/footer'
 
 describe('Footer', () => {
-  let wrapper
-
-  beforeAll(async () => {
+  it('should be accessible', async () => {
     const stores = buildStores()
-    wrapper = mount(
+    const { container } = render(
       <StoresProvider store={stores}>
         <Footer />
       </StoresProvider>
     )
-  })
 
-  afterAll(() => {
-    jest.resetAllMocks()
-    wrapper?.unmount?.()
-  })
-
-  it('should be accessible', async () => {
-    const results = await axe(wrapper.getDOMNode())
+    const results = await axe(container)
     expect(results).toBeAccessible()
   })
 })

@@ -55,7 +55,7 @@ const Maps = props => {
   }
 
   return (
-    <div id={props.id} className="tabContent">
+    <div id={props.id} className="tabContent" data-testid={props.id}>
       {/* Map details in a table list (this is not the actual map) */}
       <Table>
         {/* Table header */}

@@ -91,7 +91,7 @@ const Description = ({ id }) => {
   }
 
   return (
-    <div className="dsContent tabContent" id={id}>
+    <div className="dsContent tabContent" id={id} data-testid={id}>
       <section>
         <MainInfo id="main-info">
           <TextInfo>

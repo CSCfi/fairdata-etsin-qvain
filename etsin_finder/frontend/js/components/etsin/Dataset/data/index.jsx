@@ -16,13 +16,14 @@ const Data = ({ id }) => {
     },
   } = useStores()
 
+
   useEffect(() => {
     Accessibility.handleNavigation('data', false)
     recordEvent(`DATA / ${identifier}`)
   }, [Accessibility, recordEvent, identifier])
 
   return (
-    <div className="tabContent" id={id}>
+    <div className="tabContent" id={id} data-testid={id}>
       {!hasRemoteResources && <IdaResources />}
       {hasRemoteResources && <ExternalResources />}
     </div>

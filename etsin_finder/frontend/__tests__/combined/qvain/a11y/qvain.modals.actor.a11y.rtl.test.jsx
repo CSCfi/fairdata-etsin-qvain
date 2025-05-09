@@ -1,11 +1,11 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import { configure } from 'mobx'
 import axios from 'axios'
 import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 import MockAdapter from 'axios-mock-adapter'
+import { render, screen } from '@testing-library/react'
 
 import { buildStores } from '../../../../js/stores'
 import etsinTheme from '../../../../js/styles/theme'
@@ -18,7 +18,6 @@ import organizationMockGet, {
 import { useStores, StoresProvider } from '../../../../js/stores/stores'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-
 jest.setTimeout(10000)
 
 const mockAdapter = new MockAdapter(axios)
@@ -29,11 +28,11 @@ configure({
 })
 
 jest.mock('../../../../js/stores/stores', () => {
-  const useStores = jest.fn()
+  const useStoresMock = jest.fn()
 
   return {
     ...jest.requireActual('../../../../js/stores/stores'),
-    useStores,
+    useStores: useStoresMock,
   }
 })
 
@@ -47,12 +46,10 @@ beforeEach(() => {
 })
 
 describe('Qvain.Actors modal', () => {
-  let helper, wrapper
+  let helper
 
-  beforeEach(async () => {
-    mockAdapter.onGet().reply(({ url }) => {
-      return [200, organizationMockGet(url)]
-    })
+  const renderModal = async () => {
+    mockAdapter.onGet().reply(({ url }) => [200, organizationMockGet(url)])
     await stores.Qvain.editDataset(actorsDataset)
     stores.Qvain.Actors.editActor(Actor())
 
@@ -62,7 +59,7 @@ describe('Qvain.Actors modal', () => {
     document.body.appendChild(helper)
     ReactModal.setAppElement(helper)
 
-    wrapper = mount(
+    render(
       <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
           <ActorModal />
@@ -70,25 +67,25 @@ describe('Qvain.Actors modal', () => {
       </StoresProvider>,
       { attachTo: helper }
     )
-  })
+  }
 
   afterEach(() => {
     document.body.removeChild(helper)
-    wrapper.unmount()
-    wrapper.detach()
   })
 
   it('person modal is accessible', async () => {
+    await renderModal()
     const { editActor, actors } = stores.Qvain.Actors
     editActor(actors.find(actor => actor.type === ENTITY_TYPE.PERSON))
-    const results = await axe(helper)
+    const results = await axe(screen.getByRole('dialog'))
     expect(results).toBeAccessible({ ignore: ['aria-hidden-focus'] })
   })
 
   it('organization modal is accessible', async () => {
+    await renderModal()
     const { editActor, actors } = stores.Qvain.Actors
     editActor(actors.find(actor => actor.type === ENTITY_TYPE.ORGANIZATION))
-    const results = await axe(helper)
+    const results = await axe(screen.getByRole('dialog'))
     expect(results).toBeAccessible({ ignore: ['aria-hidden-focus'] })
   })
 })

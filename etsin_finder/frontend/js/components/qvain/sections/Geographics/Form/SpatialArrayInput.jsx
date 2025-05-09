@@ -6,13 +6,17 @@ import { runInAction } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import Translate from '@/utils/Translate'
+
 import { Input } from '@/components/qvain/general/modal/form'
 import { FieldGroup, InfoTextLarge, Title } from '@/components/qvain/general/V2'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 import Button from '@/components/general/button'
+import { useStores } from '@/stores/stores'
 
 const ModalArrayInput = ({ datum, handleBlur, type, Field, error, isRequired }) => {
+  const {
+    Locale: { translate },
+  } = useStores()
   const { changeAttribute, readonly } = Field
 
   const translations = {
@@ -37,23 +41,22 @@ const ModalArrayInput = ({ datum, handleBlur, type, Field, error, isRequired }) 
   const renderInputs = () =>
     Field.inEdit[datum].map((item, id) => (
       <SpatialItemWrapper key={`${item.key}-${datum}-item`}>
-        <Translate
-          component={ArrayInputElem}
+        <ArrayInputElem
           type={type}
           autoFocus
           disabled={readonly}
           value={item.value || ''}
           onChange={event => onChange(event, id)}
           onBlur={() => handleBlur()}
+          aria-label={translate('qvain.geographics.geometry.label')}
         />
-        <Translate
-          component={RemoveButton}
+        <RemoveButton
           onClick={() => onRemoveClick(id)}
-          attributes={{ 'aria-label': 'qvain.general.buttons.remove' }}
           disabled={Field.readonly}
+          aria-label={translate('qvain.general.buttons.remove')}
         >
           <FontAwesomeIcon icon={faTimes} />
-        </Translate>
+        </RemoveButton>
       </SpatialItemWrapper>
     ))
 
@@ -61,9 +64,9 @@ const ModalArrayInput = ({ datum, handleBlur, type, Field, error, isRequired }) 
     <FieldGroup>
       <ModalArrayInputWrapper>
         <Title>
-          <Translate content={translations.label} /> {isRequired ? '*' : ''}
+          {translate(translations.label)} {isRequired ? '*' : ''}
         </Title>
-        <Translate component={InfoTextLarge} content={translations.infoText} weight={0.5} />
+        <InfoTextLarge weight={0.5}>{translate(translations.infoText)}</InfoTextLarge>
         {renderInputs()}
         <AddButton
           onClick={() => {
@@ -73,7 +76,7 @@ const ModalArrayInput = ({ datum, handleBlur, type, Field, error, isRequired }) 
           }}
           disabled={Field.readonly}
         >
-          <Translate content={'qvain.geographics.modal.buttons.addGeometry'} />
+          {translate('qvain.geographics.modal.buttons.addGeometry')}
         </AddButton>
         {error && <ArrayInputError>{error}</ArrayInputError>}
       </ModalArrayInputWrapper>

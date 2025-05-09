@@ -1,19 +1,18 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import { configure } from 'mobx'
 import axios from 'axios'
 import ReactModal from 'react-modal'
 import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
+import { buildStores } from '../../../../js/stores'
 import etsinTheme from '../../../../js/styles/theme'
 import dataset from '../../../__testdata__/dataset.att'
 import { getReferenceData } from '../../../__testdata__/referenceData.data'
 import { useStores, StoresProvider } from '../../../../js/stores/stores'
-import Spatial from '../../../../js/components/qvain/sections/Geographics/SpatialFieldContent'
-import Modal from '../../../../js/components/general/modal'
-import { EditButton } from '../../../../js/components/qvain/general/V2/buttons'
-import { buildStores } from '../../../../js/stores'
+import RelatedResource from '../../../../js/components/qvain/sections/Publications'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 // Make sure MobX store values are not mutated outside actions.
@@ -24,11 +23,11 @@ configure({
 jest.mock('axios')
 
 jest.mock('../../../../js/stores/stores', () => {
-  const useStores = jest.fn()
+  const useStoresMock = jest.fn()
 
   return {
     ...jest.requireActual('../../../../js/stores/stores'),
-    useStores,
+    useStores: useStoresMock,
   }
 })
 
@@ -49,10 +48,10 @@ beforeEach(() => {
   useStores.mockReturnValue(stores)
 })
 
-describe('Spatial coverage modal', () => {
-  let helper, wrapper
+describe('Related resources modal', () => {
+  let helper
 
-  beforeEach(async () => {
+  const renderModal = async () => {
     await stores.Qvain.editDataset(dataset)
 
     useStores.mockReturnValue(stores)
@@ -61,31 +60,25 @@ describe('Spatial coverage modal', () => {
     document.body.appendChild(helper)
     ReactModal.setAppElement(helper)
 
-    wrapper = mount(
+    render(
       <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
-          <Spatial Store={stores} />
+          <RelatedResource />
         </ThemeProvider>
       </StoresProvider>,
       { attachTo: helper }
     )
 
-    wrapper.find(EditButton).first().simulate('click')
-    wrapper.update()
-  })
+    await userEvent.click(screen.getByRole('button', { name: 'Edit' }))
+  }
 
   afterEach(() => {
     document.body.removeChild(helper)
-    wrapper.unmount()
-    wrapper.detach()
-  })
-
-  it('is open', async () => {
-    expect(wrapper.find(Modal).prop('isOpen')).toBe(true)
   })
 
   it('is accessible', async () => {
-    const results = await axe(helper)
+    await renderModal()
+    const results = await axe(screen.getByRole('dialog'))
     expect(results).toBeAccessible({ ignore: ['aria-hidden-focus'] })
   })
 })

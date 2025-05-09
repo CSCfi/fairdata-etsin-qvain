@@ -1,8 +1,11 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import FlaggedComponent from '../../../js/components/general/flaggedComponent'
-import { useStores } from '../../../js/stores/stores'
+import '@testing-library/jest-dom'
+import { screen, render } from '@testing-library/react'
+
+import FlaggedComponent from '../../../js/components/general/flaggedComponent.jsx'
+import { useStores } from '../../../js/stores/stores.jsx'
 import FlagsClass from '../../../js/stores/domain/env.flags.js'
+
 const Flags = new FlagsClass()
 Flags.setFlags({
   ENABLED_FEATURE: true,
@@ -32,39 +35,40 @@ jest.mock('../../../js/stores/stores', () => ({
 useStores.mockReturnValue({ Env: { Flags } })
 
 describe('FlaggedComponent', () => {
-  let wrapper
   const { flagEnabled } = Flags
   const TestComponent = () => <div>test component</div>
-  const WhenDisabledComponent = () => <div>test component 2</div>
+  const WhenDisabledComponent = () => <div>disabled component</div>
 
   describe('when flag is true', () => {
     test('should render TestComponent', () => {
-      wrapper = shallow(
+      const { container } = render(
         <FlaggedComponent flag="ENABLED_FEATURE" whenDisabled={<WhenDisabledComponent />}>
           <TestComponent />
         </FlaggedComponent>
       )
-      expect(wrapper.find(TestComponent).exists()).toBe(true)
+      expect(screen.getByText('test component')).toBeInTheDocument()
+      expect(container.children.length).toBe(1)
     })
   })
 
   describe('when flag is false', () => {
     test('should render WhenDisabledComponent', () => {
-      wrapper = shallow(
+      const { container } = render(
         <FlaggedComponent flag="DISABLED_FEATURE" whenDisabled={<WhenDisabledComponent />}>
           <TestComponent />
         </FlaggedComponent>
       )
-      expect(wrapper.find(WhenDisabledComponent).exists()).toBe(true)
+      expect(screen.getByText('disabled component')).toBeInTheDocument()
+      expect(container.children.length).toBe(1)
     })
 
     test('should render nothing', () => {
-      wrapper = shallow(
+      const { container } = render(
         <FlaggedComponent flag="DISABLED_FEATURE">
           <TestComponent />
         </FlaggedComponent>
       )
-      expect(wrapper.isEmptyRender()).toBe(true)
+      expect(container.children.length).toBe(0)
     })
   })
 
@@ -102,7 +106,7 @@ describe('FlaggedComponent', () => {
     })
 
     test('should warn when state is requested', () => {
-      wrapper = shallow(
+      render(
         <FlaggedComponent
           flag="THIS_FEATURE_DOES_NOT_EXIST"
           whenDisabled={<WhenDisabledComponent />}

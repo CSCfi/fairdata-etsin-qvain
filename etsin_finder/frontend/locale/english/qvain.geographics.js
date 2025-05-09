@@ -1,4 +1,4 @@
-const geographical = {
+const geographics = {
   infoText: {
     section: 'Geographical area covered by the dataset, i.e. locations of observations.',
     geometry:
@@ -47,4 +47,4 @@ const geographical = {
   },
 }
 
-export default geographical
+export default geographics

@@ -1,8 +1,8 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import ReactModal from 'react-modal'
+import { render, screen } from '@testing-library/react'
 
 import { axe } from 'jest-axe'
 import { ThemeProvider } from 'styled-components'
@@ -14,7 +14,6 @@ import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
 import ShareModal from '@/components/qvain/views/datasetsV2/ShareModal'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
-
 
 let stores
 
@@ -37,13 +36,13 @@ const mockAdapter = new MockAdapter(axios)
 mockAdapter.onGet().reply(200, datasets)
 
 describe('ShareModal', () => {
-  let wrapper, helper
-  beforeEach(() => {
+  let helper
+  const renderModal = () => {
     helper = document.createElement('div')
     document.body.appendChild(helper)
     ReactModal.setAppElement(helper)
 
-    wrapper = mount(
+    render(
       <StoresProvider store={stores}>
         <BrowserRouter>
           <ThemeProvider theme={etsinTheme}>
@@ -53,17 +52,12 @@ describe('ShareModal', () => {
       </StoresProvider>,
       { attachTo: helper }
     )
-  })
-
-  afterEach(() => {
-    document.body.removeChild(helper)
-    wrapper?.unmount?.()
-  })
+  }
 
   test('invite tab should be accessible', async () => {
     stores.QvainDatasets.share.tabs.setActive('invite')
-    wrapper.update()
-    const results = await axe(helper)
+    renderModal()
+    const results = await axe(screen.getByRole('dialog'))
     expect(results).toBeAccessible({ ignore: ['aria-hidden-focus'] })
   })
 
@@ -91,8 +85,8 @@ describe('ShareModal', () => {
         isProjectMember: true,
       },
     ])
-    wrapper.update()
-    const results = await axe(helper)
+    renderModal()
+    const results = await axe(screen.getByRole('dialog'))
     expect(results).toBeAccessible({ ignore: ['aria-hidden-focus'] })
   })
 })

@@ -28,7 +28,7 @@ export default class Select extends Component {
         value={value}
       >
         <ReactSelect
-          id={name}
+          inputId={name}
           clearable={clearable}
           name={name}
           options={options}

@@ -158,7 +158,7 @@ const Inner = styled.div`
   }
 `
 
-const ModalInner = styled.div`
+const ModalInner = styled.dl`
   max-width: 100%;
   svg {
     margin-right: 1.5em;

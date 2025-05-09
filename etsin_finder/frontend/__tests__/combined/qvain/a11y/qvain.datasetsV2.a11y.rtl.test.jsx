@@ -1,8 +1,8 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import { when } from 'mobx'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
+import { render } from '@testing-library/react'
 
 import { axe } from 'jest-axe'
 import { ThemeProvider } from 'styled-components'
@@ -33,9 +33,8 @@ beforeEach(() => {
 mockAdapter.onGet().reply(200, datasets)
 
 describe('DatasetsV2', () => {
-  let wrapper
-  beforeEach(() => {
-    wrapper = mount(
+  it('is accessible', async () => {
+    const { container } = render(
       <StoresProvider store={stores}>
         <BrowserRouter>
           <ThemeProvider theme={etsinTheme}>
@@ -44,18 +43,11 @@ describe('DatasetsV2', () => {
         </BrowserRouter>
       </StoresProvider>
     )
-  })
 
-  afterEach(() => {
-    wrapper?.unmount?.()
-  })
-
-  it('is accessible', async () => {
     // wait until datasets have been fetched
     await when(() => stores.QvainDatasets.datasetGroups.length > 0)
-    wrapper.update()
 
-    const results = await axe(wrapper.getDOMNode(), { rules: { region: { enabled: false } } })
+    const results = await axe(container, { rules: { region: { enabled: false } } })
     expect(results).toBeAccessible()
   })
 })

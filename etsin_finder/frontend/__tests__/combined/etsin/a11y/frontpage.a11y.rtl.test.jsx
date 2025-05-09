@@ -1,11 +1,11 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { MemoryRouter } from 'react-router-dom'
+import { render, screen } from '@testing-library/react'
 
 import etsinTheme from '../../../../js/styles/theme'
 import { buildStores } from '../../../../js/stores'
@@ -32,14 +32,14 @@ const mockLocation = {
 }
 
 describe('Etsin frontpage', () => {
-  let wrapper, helper
+  let helper
 
-  beforeAll(async () => {
+  const renderPage = async () => {
     helper = document.createElement('div')
     document.body.appendChild(helper)
     ReactModal.setAppElement(helper)
 
-    wrapper = mount(
+    render(
       <StoresProvider store={stores}>
         <MemoryRouter>
           <ThemeProvider theme={etsinTheme}>
@@ -51,15 +51,15 @@ describe('Etsin frontpage', () => {
       </StoresProvider>,
       { attachTo: helper }
     )
-  })
+  }
 
-  afterAll(() => {
-    wrapper?.unmount?.()
+  afterEach(() => {
     document.body.removeChild(helper)
   })
 
   it('should be accessible', async () => {
-    const results = await axe(wrapper.getDOMNode())
+    renderPage()
+    const results = await axe(screen.getByRole("main"))
     expect(results).toBeAccessible()
   })
 })

@@ -83,7 +83,7 @@ const ActorsInput = () => {
 
   return (
     <FieldGroup>
-      <Translate component={Title} content={`${translationsRoot}.label`} htmlFor="actors-input" />
+      <Translate component={Title} content={`${translationsRoot}.label`} htmlFor="actors-select" />
       <ActorsList
         language={language}
         actors={Provenances.inEdit.associations}
