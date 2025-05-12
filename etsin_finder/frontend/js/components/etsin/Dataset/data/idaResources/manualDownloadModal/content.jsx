@@ -32,7 +32,7 @@ const Content = ({ Packages }) => {
   if (downloadUrlError) {
     return (
       <Wrapper>
-        <ErrorDiv>
+        <ErrorDiv data-testid="manual-download-error">
           <Translate component="p" content="dataset.dl.manualDownload.error" />
         </ErrorDiv>
       </Wrapper>

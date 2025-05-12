@@ -1,8 +1,9 @@
+/* eslint-disable dot-notation */
 import React from 'react'
-import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { configure } from 'mobx'
+import { render } from '@testing-library/react'
 
 import etsinTheme from '@/styles/theme'
 import { buildStores } from '@/stores'
@@ -30,21 +31,24 @@ stores.Accessibility.handleNavigation = jest.fn()
 
 const versionsToStores = () => {
   const versions = deprecatedDataset.dataset_versions
-  for (const version in versions) {
+  for (const version of versions) {
     stores.Etsin.EtsinDataset.set('versions', versions[version])
   }
 }
 
-const tableToObjects = tableWrapper => {
+const tableToObjects = tableElement => {
   // convert table rows into objects, use table headers as keys
-  const table = tableWrapper.find('table').first()
-  const labels = table.find('th').map(th => th.text().trim())
-  const rowWrappers = table.find('tbody tr')
+  const labels = Array.from(tableElement.querySelectorAll('th')).map(th => th.textContent.trim())
+  const rowElements = Array.from(tableElement.querySelectorAll('tbody tr'))
   const rows = []
-  rowWrappers.map(rowWrapper => {
+  rowElements.forEach(rowElement => {
     const row = {}
-    rowWrapper.find('td').map((tdWrapper, index) => {
-      row[labels[index]] = tdWrapper.text().trim()
+    Array.from(rowElement.cells).forEach((td, index) => {
+      const content = Array.from(td.childNodes)
+        .map(v => v.textContent.trim())
+        .filter(v => v)
+        .join('|')
+      row[labels[index]] = content
     })
     rows.push(row)
   })
@@ -52,14 +56,14 @@ const tableToObjects = tableWrapper => {
 }
 
 describe('Events page', () => {
-  let wrapper, sections
+  let sections
 
-  const render = async (dataset = deprecatedDataset) => {
+  const renderPage = async (dataset = deprecatedDataset) => {
     jest.resetAllMocks()
     stores.Etsin.EtsinDataset.set('dataset', dataset)
     versionsToStores()
 
-    wrapper = mount(
+    render(
       <StoresProvider store={stores}>
         <MemoryRouter initialEntries={[path]}>
           <ThemeProvider theme={etsinTheme}>
@@ -71,37 +75,39 @@ describe('Events page', () => {
       </StoresProvider>
     )
 
+    const sectionElements = Array.from(document.querySelectorAll('section#tab-events section'))
+
     // get wrappers for sections by title
-    sections = wrapper.find('section#tab-events section').reduce((map, section) => {
-      const title = section.children().filter('h2').text()
-      const content = section.children().filter(':not(h2)')
+    sections = sectionElements.reduce((map, section) => {
+      const title = section.querySelector('h2').textContent
+      const content = section.querySelector(':scope > :not(h2)')
       map[title] = content
       return map
     }, {})
   }
 
   it('should render provenances, deprecations and version deletions in events table', async () => {
-    await render()
+    await renderPage()
     tableToObjects(sections['Events']).should.eql([
       {
-        'Event type': 'Checked (Unknown)',
+        'Event type': 'Checked|(Unknown)',
         Who: 'Aalto University',
         When: `${dateFormat('2021-02-03')} – ${dateFormat('2021-02-23')}`,
-        'Title and Description': 'Provenance nameProvenance description',
+        'Title and Description': 'Provenance name|Provenance description',
         Where: 'Bytom (Provenanssipaikka)',
       },
       {
         'Event type': 'Checked',
         Who: 'Aalto University',
         When: `– ${dateFormat('2021-02-23')}`,
-        'Title and Description': 'Provenance name2Provenance description2',
+        'Title and Description': 'Provenance name2|Provenance description2',
         Where: 'Provenanssipaikka2',
       },
       {
         'Event type': 'Deprecated',
         Who: '-',
         When: dateFormat('2021-12-22T14:29:15+02:00'),
-        'Title and Description': 'Data removedOriginal data removed from Fairdata IDA',
+        'Title and Description': 'Data removed|Original data removed from Fairdata IDA',
         Where: '-',
       },
       {
@@ -109,41 +115,39 @@ describe('Events page', () => {
         Who: '-',
         When: dateFormat('2021-12-20T14:28:54+02:00'),
         'Title and Description':
-          'Dataset deletionDeleted dataset version: 1Identifier of deleted dataset: 1af9f528-e7a7-43e4-9051-b5d07e889cde',
+          'Dataset deletion|Deleted dataset version: 1Identifier of deleted dataset: 1af9f528-e7a7-43e4-9051-b5d07e889cde',
         Where: '-',
       },
     ])
   })
 
   it('should render other identifiers', async () => {
-    await render()
-    sections['Other identifiers']
-      .find('li')
-      .map(li => li.text())
+    await renderPage()
+    Array.from(sections['Other identifiers'].querySelectorAll('li'))
+      .map(li => li.textContent)
       .should.eql(['https://doi.org/identifier', 'https://doi.org/another_identifier'])
   })
 
   it('should render relations', async () => {
-    await render()
-    tableToObjects(sections['Relations']).should.eql([
+    await renderPage()
+    tableToObjects(sections.Relations).should.eql([
       {
-        Identifier: 'Identifier:1234-aaaaa-tunniste',
-        'Title and Description': 'Resource in EnglishShow Description',
-        Type: 'Cites (Collection)',
+        Identifier: 'Identifier:|1234-aaaaa-tunniste',
+        'Title and Description': 'Resource in English|Show Description',
+        Type: 'Cites|(Collection)',
       },
     ])
   })
 
   it('should render origin dataset identifier', async () => {
-    await render()
-    sections['Origin dataset identifier']
-      .find('li')
-      .map(li => li.text())
+    await renderPage()
+    Array.from(sections['Origin dataset identifier'].querySelectorAll('li'))
+      .map(li => li.textContent)
       .should.eql(['urn:nbn:fi:origin-of-preserved-dataset'])
   })
 
   it('should render deleted versions', async () => {
-    await render()
+    await renderPage()
     tableToObjects(sections['Deleted versions']).should.eql([
       {
         Version: '1',
@@ -154,7 +158,7 @@ describe('Events page', () => {
   })
 
   it('should render other existing versions', async () => {
-    await render()
+    await renderPage()
     tableToObjects(sections['Versions']).should.eql([
       {
         Identifier: 'http://urn.fi/urn:nbn:fi:att:12345688-4867-47f7-9874-112233445566',
@@ -185,11 +189,11 @@ describe('Events page', () => {
 
   describe('digital preservation datasets', () => {
     it('should render copy creation event for original version', async () => {
-      await render(pasUseCopy)
+      await renderPage(pasUseCopy)
       tableToObjects(sections['Events']).should.eql([
         {
           'Title and Description':
-            'Copy created into Digital PreservationClick here to open the Digital Preservation Service version',
+            'Copy created into Digital Preservation|Click here to open the Digital Preservation Service version',
           'Event type': '-',
           When: 'December 22, 2021',
           Who: '-',
@@ -199,10 +203,11 @@ describe('Events page', () => {
     })
 
     it('should render creation event for preservation version', async () => {
-      await render(pasPreservationCopy)
+      await renderPage(pasPreservationCopy)
       tableToObjects(sections['Events']).should.eql([
         {
-          'Title and Description': 'Created in Digital PreservationClick here to open the use copy',
+          'Title and Description':
+            'Created in Digital Preservation|Click here to open the use copy',
           'Event type': '-',
           When: 'October 13, 2022',
           Who: '-',

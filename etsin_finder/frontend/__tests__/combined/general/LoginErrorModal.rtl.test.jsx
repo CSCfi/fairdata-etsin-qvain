@@ -1,9 +1,11 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import { ThemeProvider } from 'styled-components'
 import ReactModal from 'react-modal'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
+import '@testing-library/jest-dom'
+import { screen, render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 import etsinTheme from '@/styles/theme'
 import { StoresProvider } from '@/stores/stores'
@@ -46,20 +48,20 @@ beforeEach(() => {
 })
 
 describe('Etsin frontpage', () => {
-  let wrapper, helper
+  let helper
 
-  const render = async () => {
+  const renderModal = async () => {
     helper = document.createElement('div')
     document.body.appendChild(helper)
     ReactModal.setAppElement(helper)
     const stores = buildStores()
     await stores.Auth.checkLogin()
 
-    wrapper = mount(
+    render(
       <StoresProvider store={stores}>
         <ThemeProvider theme={etsinTheme}>
           <main>
-            <LoginErrorModal location={mockLocation} />
+            <LoginErrorModal data-testid="modal" location={mockLocation} />
           </main>
         </ThemeProvider>
       </StoresProvider>,
@@ -70,46 +72,41 @@ describe('Etsin frontpage', () => {
 
   it('should not show modal for successful login', async () => {
     mockAdapter.onGet().reply(200, authenticated)
-    await render()
-    wrapper.find(LoginErrorModal).children().should.have.lengthOf(0)
+    await renderModal()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
   it('should not show modal for unauthenticated user', async () => {
     mockAdapter.onGet().reply(200, unauthenticated)
-    await render()
-    wrapper.find(LoginErrorModal).children().should.have.lengthOf(0)
+    await renderModal()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
   it('should show modal for login with missing username', async () => {
     mockAdapter.onGet().reply(200, noUserName)
-    await render()
-    wrapper
-      .find('[aria-modal]')
-      .text()
-      .should.contain('Please make sure that you have a valid CSC account.')
+    await renderModal()
+    const modal = screen.getByRole('dialog')
+    expect(modal).toHaveTextContent('Please make sure that you have a valid CSC account.')
   })
 
   it('should show modal for login with missing home organization', async () => {
     mockAdapter.onGet().reply(200, noOrganizationId)
-    await render()
-    wrapper
-      .find('[aria-modal]')
-      .text()
-      .should.contain('your account does not seem to have a home organization')
+    await renderModal()
+    const modal = screen.getByRole('dialog')
+    expect(modal).toHaveTextContent('your account does not seem to have a home organization')
   })
 
   it('should delete session when modal is closed', async () => {
     mockAdapter.onDelete().reply(200, '')
     mockAdapter.onGet().reply(200, noOrganizationId)
-    await render()
-    wrapper.find('[aria-modal]').should.have.lengthOf(1)
-    wrapper.find('button[aria-label="Close"]').simulate('click')
-    wrapper.find('[aria-modal]').should.have.lengthOf(0)
+    await renderModal()
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     expect(mockAdapter.history.delete).toHaveLength(1)
   })
 
-  afterAll(() => {
-    wrapper?.unmount?.()
+  afterEach(() => {
     document.body.removeChild(helper)
   })
 })
