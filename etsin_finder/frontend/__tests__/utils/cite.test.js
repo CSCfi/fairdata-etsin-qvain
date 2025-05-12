@@ -1,133 +1,135 @@
 import { buildStores } from '../../js/stores'
-import Cite from '../../js/components/dataset/citation/cite'
-import CitationBuilder from '../../js/components/dataset/citation/cite/citationBuilder'
+import Cite from '@/stores/view/etsin/cite'
+import CitationBuilder from '@/stores/view/etsin/cite/citationBuilder'
 import {
   getNameInitials,
   getLastnameFirst,
   getNameParts,
   getVersion,
   getIdentifier,
-} from '../../js/components/dataset/citation/cite/utils'
+} from '@/stores/view/etsin/cite/utils'
 
 const stores = buildStores()
-const cite = new Cite(stores.Locale.getValueTranslation)
-
-const emptyDataset = {
-  research_dataset: {},
-}
+const cite = new Cite({ Stores: stores.Etsin.EtsinDataset, Locale: stores.Locale })
 
 const personDataset = {
-  research_dataset: {
-    creator: [{ name: 'Etunimi von Sukunimi' }, { name: 'Toinen Henkilö' }],
-    publisher: { name: { en: 'Publisher' } },
-    issued: '2021-02-23',
-    title: { fi: 'Julkaisun nimi', en: 'Publication title' },
-    preferred_identifier: 'urn:nbn:fi:att:feedc0de',
-  },
-  identifier: 'metax_identifier_for_this_dataset',
+  actors: [
+    { roles: ['creator'], person: { name: 'Etunimi von Sukunimi' } },
+    { roles: ['creator'], person: { name: 'Toinen Henkilö' } },
+    { roles: ['publisher'], organization: { pref_label: { en: 'Publisher' } } },
+  ],
+  issued: '2021-02-23',
+  title: { fi: 'Julkaisun nimi', en: 'Publication title' },
+  persistent_identifier: 'urn:nbn:fi:att:feedc0de',
+  id: 'metax_identifier_for_this_dataset',
 }
 
 const draftDataset = {
   ...personDataset,
   state: 'draft',
-  identifier: undefined
+  id: undefined,
 }
 
 const organizationDataset = {
-  research_dataset: {
-    creator: [
-      {
-        name: { en: 'Some suborganization', fi: 'Joku aliorganisaatio' },
-        '@type': 'Organization',
-        is_part_of: {
-          name: { en: 'Top organization', fi: 'Pääorganisaatio' },
-          '@type': 'Organization',
+  actors: [
+    {
+      roles: ['creator'],
+      organization: {
+        pref_label: { en: 'Some suborganization', fi: 'Joku aliorganisaatio' },
+        parent: {
+          pref_label: { en: 'Top organization', fi: 'Pääorganisaatio' },
         },
       },
-    ],
-    publisher: { name: { en: 'Publisher', fi: 'Julkaisija' } },
-    issued: '2021-02-23',
-    title: { fi: 'Julkaisun nimi', en: 'Publication title' },
-    preferred_identifier: 'urn:nbn:fi:att:feedc0de',
-  },
-  identifier: 'metax_identifier_for_this_dataset',
+    },
+    {
+      roles: ['publisher'],
+      organization: { pref_label: { en: 'Publisher', fi: 'Julkaisija' } },
+    },
+  ],
+  issued: '2021-02-23',
+  title: { fi: 'Julkaisun nimi', en: 'Publication title' },
+  persistent_identifier: 'urn:nbn:fi:att:feedc0de',
+  id: 'metax_identifier_for_this_dataset',
 }
 
 const publisherSuborganizationDataset = {
-  research_dataset: {
-    creator: [{ name: { en: 'Creator', fi: 'Creator' } }],
-    publisher: {
-      name: { en: 'Suborganization', fi: 'Joku aliorganisaatio' },
-      '@type': 'Organization',
-      is_part_of: {
-        name: { en: 'Top organization', fi: 'Pääorganisaatio' },
-        '@type': 'Organization',
+  actors: [
+    { roles: ['creator'], person: { name: 'Creator' } },
+    {
+      roles: ['publisher'],
+      organization: {
+        pref_label: { en: 'Suborganization', fi: 'Joku aliorganisaatio' },
+        parent: {
+          pref_label: { en: 'Top organization', fi: 'Pääorganisaatio' },
+        },
       },
     },
-    issued: '2021-02-23',
-    title: { fi: 'Julkaisun nimi', en: 'Publication title' },
-    preferred_identifier: 'urn:nbn:fi:att:feedc0de',
-  },
-  identifier: 'metax_identifier_for_this_dataset',
+  ],
+  issued: '2021-02-23',
+  title: { fi: 'Julkaisun nimi', en: 'Publication title' },
+  persistent_identifier: 'urn:nbn:fi:att:feedc0de',
+  id: 'metax_identifier_for_this_dataset',
 }
 
 const doiDataset = {
-  research_dataset: {
-    ...organizationDataset.research_dataset,
-    preferred_identifier: 'doi:10.234567/c4fef00f-1234-5678-9abcde-133753c19b7b',
-  },
+  ...organizationDataset,
+  persistent_identifier: 'doi:10.234567/c4fef00f-1234-5678-9abcde-133753c19b7b',
 }
 
 const capitalizedUrnDataset = {
-  research_dataset: {
-    ...organizationDataset.research_dataset,
-    preferred_identifier: 'URN:NBN:fi:att:d00d',
-  },
+  ...organizationDataset,
+  persistent_identifier: 'URN:NBN:fi:att:d00d',
 }
 
 const manyCreatorsDataset = {
-  research_dataset: {
-    ...personDataset.research_dataset,
-    creator: [
-      { name: 'Tyyppi Eka' },
-      { name: 'Tyyppi Toka' },
-      { name: 'Tyyppi Kolmas' },
-      { name: 'Tyyppi Neljäs' },
-      { name: 'Tyyppi Viides' },
-      { name: 'Tyyppi Kuudes' },
-      { name: 'Tyyppi Seitsemäs' },
-      { name: 'Tyyppi Kahdeksas' },
-      { name: 'Tyyppi Yhdeksäs' },
-      { name: 'Tyyppi Kymmenes' },
-      { name: 'Tyyppi Yhdestoista' },
-      { name: 'Tyyppi Kahdestoista' },
-      { name: 'Tyyppi Kolmastoista' },
-      { name: 'Tyyppi Neljästoista' },
-      { name: 'Tyyppi Viidestoista' },
-      { name: 'Tyyppi Kuudestoista' },
-      { name: 'Tyyppi Seitsemästoista' },
-      { name: 'Tyyppi Kahdeksastoista' },
-      { name: 'Tyyppi Yhdeksästoista' },
-      { name: 'Tyyppi Kahdeskymmenes' },
-      { name: 'Tyyppi Kahdeskymmenesensimmäinen' },
-      { name: 'Tyyppi Kahdeskymmenestoinen' },
-    ],
-  },
+  ...personDataset,
+  actors: [
+    ...[
+      'Tyyppi Eka',
+      'Tyyppi Toka',
+      'Tyyppi Kolmas',
+      'Tyyppi Neljäs',
+      'Tyyppi Viides',
+      'Tyyppi Kuudes',
+      'Tyyppi Seitsemäs',
+      'Tyyppi Kahdeksas',
+      'Tyyppi Yhdeksäs',
+      'Tyyppi Kymmenes',
+      'Tyyppi Yhdestoista',
+      'Tyyppi Kahdestoista',
+      'Tyyppi Kolmastoista',
+      'Tyyppi Neljästoista',
+      'Tyyppi Viidestoista',
+      'Tyyppi Kuudestoista',
+      'Tyyppi Seitsemästoista',
+      'Tyyppi Kahdeksastoista',
+      'Tyyppi Yhdeksästoista',
+      'Tyyppi Kahdeskymmenes',
+      'Tyyppi Kahdeskymmenesensimmäinen',
+      'Tyyppi Kahdeskymmenestoinen',
+    ].map(name => ({
+      roles: ['creator'],
+      person: {
+        name,
+      },
+    })),
+    { roles: ['publisher'], organization: { pref_label: { en: 'Publisher' } } },
+  ],
 }
 
 const firstVersionDataset = {
   ...organizationDataset,
-  dataset_version_set: [
-    { identifier: 'metax_identifier_for_second' },
-    { identifier: organizationDataset.identifier },
+  dataset_versions: [
+    { id: 'metax_identifier_for_second', state: 'published' },
+    { id: organizationDataset.id, state: 'published' },
   ],
 }
 
 const secondVersionDataset = {
   ...organizationDataset,
-  dataset_version_set: [
-    { identifier: organizationDataset.identifier },
-    { identifier: 'metax_identifier_for_first' },
+  dataset_versions: [
+    { id: organizationDataset.id, state: 'published' },
+    { id: 'metax_identifier_for_first', state: 'published' },
   ],
 }
 
@@ -137,11 +139,10 @@ beforeEach(() => {
 
 describe('Citation styles', () => {
   describe('APA', () => {
-    const c = cite.apa
-
-    it('should handle empty dataset', () => {
-      c(emptyDataset).should.eq('')
-    })
+    const c = dataset => {
+      stores.Etsin.EtsinDataset.set('dataset', dataset)
+      return cite.apa
+    }
 
     it('should render citation for dataset by a person', () => {
       c(personDataset).should.eq(
@@ -203,11 +204,10 @@ describe('Citation styles', () => {
   })
 
   describe('Chicago', () => {
-    const c = cite.chicago
-
-    it('should handle empty dataset', () => {
-      c(emptyDataset).should.eq('')
-    })
+    const c = dataset => {
+      stores.Etsin.EtsinDataset.set('dataset', dataset)
+      return cite.chicago
+    }
 
     it('should render citation for dataset by a person', () => {
       c(personDataset).should.eq(
@@ -266,11 +266,10 @@ describe('Citation styles', () => {
   })
 
   describe('MLA', () => {
-    const c = cite.mla
-
-    it('should handle empty dataset', () => {
-      c(emptyDataset).should.eq('')
-    })
+    const c = dataset => {
+      stores.Etsin.EtsinDataset.set('dataset', dataset)
+      return cite.mla
+    }
 
     it('should render citation for dataset by a person', () => {
       c(personDataset).should.eq(
@@ -328,11 +327,10 @@ describe('Citation styles', () => {
     })
   })
   describe('BibTex', () => {
-    const c = cite.bibtex
-
-    it('should handle empty dataset', () => {
-      c(emptyDataset).should.eq('')
-    })
+    const c = dataset => {
+      stores.Etsin.EtsinDataset.set('dataset', dataset)
+      return cite.bibtex
+    }
 
     it('should render citation for dataset by a person', () => {
       c(personDataset).should.eq(
@@ -378,9 +376,10 @@ describe('Citation styles', () => {
     })
 
     it('should render citation for draft dataset', () => {
-      c(draftDataset).should.eq('@misc{draft,\nauthor = {von Sukunimi, Etunimi and Henkilö, Toinen},\ntitle = {Publication title},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\nnote = {Publisher}\n}')
+      c(draftDataset).should.eq(
+        '@misc{draft,\nauthor = {von Sukunimi, Etunimi and Henkilö, Toinen},\ntitle = {Publication title},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\nnote = {Publisher}\n}'
+      )
     })
-
   })
 })
 
@@ -473,52 +472,59 @@ describe('Utils', () => {
     const getTranslation = v => v.en
     it('returns correct version', () => {
       const dataset = {
-        identifier: 1,
-        dataset_version_set: [{ identifier: 1 }, { identifier: 3 }, { identifier: 5 }],
+        id: 1,
+        dataset_versions: [1, 3, 5].map(id => ({ id, state: 'published' })),
       }
-      expect(getVersion(dataset, getTranslation)).toEqual('Version 3')
+      stores.Etsin.EtsinDataset.set('dataset', dataset)
+      expect(getVersion(stores.Etsin.EtsinDataset, getTranslation)).toEqual('Version 3')
     })
 
     it('returns undefined if dataset has no version set', () => {
-      const dataset = { identifier: 1 }
-      expect(getVersion(dataset, getTranslation)).toEqual(undefined)
+      const dataset = { id: 1 }
+      stores.Etsin.EtsinDataset.set('dataset', dataset)
+      expect(getVersion(stores.Etsin.EtsinDataset, getTranslation)).toEqual(undefined)
     })
 
     it('returns undefined if dataset is not in version set', () => {
-      const dataset = { identifier: 1, dataset_version_set: [] }
-      expect(getVersion(dataset, getTranslation)).toEqual(undefined)
+      const dataset = { id: 1, dataset_versions: [] }
+      stores.Etsin.EtsinDataset.set('dataset', dataset)
+      expect(getVersion(stores.Etsin.EtsinDataset, getTranslation)).toEqual(undefined)
     })
   })
 
   describe('getIdentifier', () => {
-    it('returns preferred identifier', () => {
+    it('returns preferred id', () => {
       const dataset = {
-        research_dataset: { preferred_identifier: 'xyz' },
+        persistent_identifier: 'xyz',
       }
-      expect(getIdentifier(dataset)).toEqual('xyz')
+      stores.Etsin.EtsinDataset.set('dataset', dataset)
+      expect(getIdentifier(stores.Etsin.EtsinDataset)).toEqual('xyz')
     })
 
-    it('returns unefined for draft', () => {
+    it('returns undefined for draft', () => {
       const dataset = {
-        research_dataset: { preferred_identifier: 'xyz' },
+        persistent_identifier: 'xyz',
         state: 'draft',
       }
-      expect(getIdentifier(dataset)).toEqual(undefined)
+      stores.Etsin.EtsinDataset.set('dataset', dataset)
+      expect(getIdentifier(stores.Etsin.EtsinDataset)).toEqual(undefined)
     })
 
-    it('returns preferred identifier of published original', () => {
+    it('returns preferred id of published original', () => {
       const dataset = {
-        research_dataset: { preferred_identifier: 'draft-id' },
-        draft_of: { preferred_identifier: 'published-id' },
+        persistent_identifier: 'draft-id',
+        draft_of: { persistent_identifier: 'published-id' },
       }
-      expect(getIdentifier(dataset)).toEqual('published-id')
+      stores.Etsin.EtsinDataset.set('dataset', dataset)
+      expect(getIdentifier(stores.Etsin.EtsinDataset)).toEqual('published-id')
     })
 
     it('returns doi url', () => {
       const dataset = {
-        research_dataset: { preferred_identifier: 'doi:xyz' },
+        persistent_identifier: 'doi:xyz',
       }
-      expect(getIdentifier(dataset)).toEqual('https://doi.org/xyz')
+      stores.Etsin.EtsinDataset.set('dataset', dataset)
+      expect(getIdentifier(stores.Etsin.EtsinDataset)).toEqual('https://doi.org/xyz')
     })
   })
 })

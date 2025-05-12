@@ -1,6 +1,7 @@
+import React from 'react'
 import { cleanup, screen } from '@testing-library/react'
 import ReactModal from 'react-modal'
-import contextRenderer from '@/../__tests__/utils/contextRenderer.rtl'
+import { contextRenderer } from '@/../__tests__/test-helpers'
 import Info from '@/components/etsin/Dataset/data/info.jsx'
 import { buildStores } from '@/stores'
 import { useStores } from '@/stores/stores'
@@ -27,7 +28,7 @@ describe('Info', () => {
         ...minimalProps,
         checksum: 'SHA:1234',
       }
-      contextRenderer({ Component: Info, props })
+      contextRenderer(<Info {...props} />)
       const component = screen.getByText('Checksum (SHA)')
       expect(component).toBeTruthy()
     })

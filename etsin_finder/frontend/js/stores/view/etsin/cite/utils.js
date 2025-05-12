@@ -175,7 +175,7 @@ export const getVersion = (dataset, getTranslation) => {
     return undefined
   }
   const identifier = dataset.identifier
-  const versionIndex = dataset.datasetVersions.findIndex(v => v.identifier === identifier)
+  const versionIndex = dataset.datasetVersions.findIndex(v => v.id === identifier)
 
   if (versionIndex < 0) {
     return undefined
@@ -186,7 +186,7 @@ export const getVersion = (dataset, getTranslation) => {
 }
 
 export const getIdentifier = (dataset, short = false, draftIdentifier = undefined) => {
-  let identifier = dataset.draft_of?.preferred_identifier || dataset.persistentIdentifier
+  let identifier = dataset.draftOf?.persistent_identifier || dataset.persistentIdentifier
   if (!identifier) {
     return undefined
   }
@@ -194,13 +194,13 @@ export const getIdentifier = (dataset, short = false, draftIdentifier = undefine
   if (url && !short) {
     return url
   }
+  if (dataset.isDraft) {
+    return draftIdentifier
+  }
   if (short && identifier.startsWith('doi:')) {
     identifier = identifier.slice(4)
   }
   identifier = identifier.toLowerCase()
-  if (dataset.state === 'draft') {
-    return draftIdentifier
-  }
   return identifier
 }
 

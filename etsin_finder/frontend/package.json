@@ -133,11 +133,10 @@
     },
     "testPathIgnorePatterns": [
       "./__tests__/test-setup.js",
-      "./__tests__/test-helpers.js",
+      "./__tests__/test-helpers",
       "./__tests__/timezonedJSDOMEnvironment.js",
       "./__tests__/timezonedNodeEnvironment.js",
       "./__tests__/__testdata__",
-      "./__tests__/utils",
       "./__tests__/components/componentTestHarness.jsx"
     ],
     "testEnvironmentOptions": {

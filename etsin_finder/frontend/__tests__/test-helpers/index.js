@@ -4,6 +4,7 @@ import { ReactWrapper, ShallowWrapper } from 'enzyme'
 import { roleElements, elementRoles } from 'aria-query'
 
 import { toHaveNoViolations } from 'jest-axe'
+export { contextRenderer } from './contextRenderer'
 
 const checkSingleHostNode = (wrapper, funcname) => {
   const nodes = wrapper.hostNodes()

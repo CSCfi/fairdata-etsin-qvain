@@ -89,7 +89,10 @@ class EtsinDatasetV3 {
   }
 
   @computed get isRems() {
-    return this.accessRights.access_type.url === ACCESS_TYPE_URL.PERMIT || this.accessRights.access_type.url === ACCESS_TYPE_URL.RESTRICTED
+    return (
+      this.accessRights.access_type.url === ACCESS_TYPE_URL.PERMIT ||
+      this.accessRights.access_type.url === ACCESS_TYPE_URL.RESTRICTED
+    )
   }
 
   @computed get datasetMetadata() {

@@ -8,29 +8,22 @@ import { Route } from 'react-router-dom/cjs/react-router-dom.min'
 import theme from '@/styles/theme'
 import { StoresProvider } from '@/stores/stores'
 
-export const contextRenderer = ({ Component, props = {}, stores = null, urls = null }) => {
-  let Rendable = () => (
-    <ThemeProvider theme={theme}>
-      <Component {...props} />
-    </ThemeProvider>
-  )
+export const contextRenderer = (component, { stores = null, urls = null } = {}) => {
+  let components = <ThemeProvider theme={theme}>{component}</ThemeProvider>
+
   if (stores) {
-    Rendable = () => (
-      <StoresProvider store={stores}>
-        <Rendable />
-      </StoresProvider>
-    )
+    components = <StoresProvider store={stores}>{components}</StoresProvider>
   }
 
   if (urls) {
-    Rendable = () => (
+    components = (
       <MemoryRouter initialEntries={urls}>
-        <Route path={urls[0]} Rendable={Rendable} />
+        <Route path={urls[0]}>{components}</Route>
       </MemoryRouter>
     )
   }
 
-  return render(<Rendable />)
+  return render(components)
 }
 
 export default contextRenderer

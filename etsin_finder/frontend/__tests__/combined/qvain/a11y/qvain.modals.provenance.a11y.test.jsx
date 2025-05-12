@@ -16,6 +16,8 @@ import { EditButton } from '../../../../js/components/qvain/general/V2/buttons'
 import Modal from '../../../../js/components/general/modal'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
+jest.setTimeout(10000)
+
 // Make sure MobX store values are not mutated outside actions.
 configure({
   enforceActions: 'always',

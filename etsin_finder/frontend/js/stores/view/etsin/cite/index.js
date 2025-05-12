@@ -9,7 +9,7 @@ class Cite {
   constructor({ Stores, Locale }) {
     makeObservable(this)
     this.getTranslation = Locale.getValueTranslation
-    this.Stores = Stores
+    this.Stores = Stores // Should be a EtsinDatasetV3 instance
   }
 
   @computed get apa() {
