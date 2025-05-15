@@ -21,9 +21,6 @@ const DurationPicker = ({ Field, datum, id }) => {
     endInfoText: `${translationsRoot}.${datum}.endInfoText`,
   }
 
-  const handleDateChangeRaw = (e, propName) =>
-    e && handleDatePickerChange(e.target.value, date => changeAttribute(propName, date))
-
   const handleDateChange = (date, propName) =>
     date && handleDatePickerChange(date.toISOString(), d => changeAttribute(propName, d))
 
@@ -43,7 +40,6 @@ const DurationPicker = ({ Field, datum, id }) => {
             endDate={endDate && new Date(endDate)}
             strictParsing
             selected={startDate ? new Date(startDate) : ''}
-            onChangeRaw={e => handleDateChangeRaw(e, 'startDate')}
             onChange={date => handleDateChange(date, 'startDate')}
             locale={lang}
             attributes={{
@@ -64,7 +60,6 @@ const DurationPicker = ({ Field, datum, id }) => {
             endDate={endDate && new Date(endDate)}
             strictParsing
             selected={endDate ? new Date(endDate) : ''}
-            onChangeRaw={e => handleDateChangeRaw(e, 'endDate')}
             onChange={date => handleDateChange(date, 'endDate')}
             locale={lang}
             attributes={{

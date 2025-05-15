@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import withCustomProps from '@/utils/withCustomProps'
 
 export function Card({ children, bottomContent, className }) {
   return (
@@ -10,7 +11,7 @@ export function Card({ children, bottomContent, className }) {
   )
 }
 
-export const Container = styled.div`
+export const Container = withCustomProps(styled.div)`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;

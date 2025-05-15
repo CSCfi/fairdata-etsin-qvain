@@ -20,6 +20,7 @@ import Translate from '@/utils/Translate'
 import { Button } from '../general/button'
 import TooltipHover from '@/components/general/tooltipHover'
 import { useStores } from '@/utils/stores'
+import withCustomProps from '@/utils/withCustomProps'
 
 const CopyToClipboard = ({
   content,
@@ -78,7 +79,7 @@ const CopyToClipboard = ({
   )
 }
 
-const IconContent = styled.div`
+const IconContent = withCustomProps(styled.div)`
   ${p =>
     !p.horizontal &&
     `

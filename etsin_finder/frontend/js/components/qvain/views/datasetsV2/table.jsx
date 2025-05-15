@@ -7,6 +7,7 @@ import { useStores } from '../../utils/stores'
 import DatasetGroup from './datasetGroup'
 import Loader from '../../../general/loader'
 import { InvertedButton } from '../../../general/button'
+import withCustomProps from '@/utils/withCustomProps'
 
 const Table = () => {
   const {
@@ -118,7 +119,7 @@ const PadHeadCell = styled.th.attrs({ 'aria-hidden': true })`
   padding: 1rem;
 `
 
-const HeadCell = styled.th`
+const HeadCell = withCustomProps(styled.th)`
   vertical-align: middle;
   padding: 0.5rem 0.5rem;
   @media (min-width: ${props => props.theme.breakpoints.sm}) {

@@ -21,6 +21,7 @@ import Select from '@/components/etsin/general/select'
 import { Input, InputArea } from '@/components/etsin/general/Input'
 import { InvertedButton } from '@/components/etsin/general/button'
 import ErrorBoundary from '@/components/general/errorBoundary'
+import withCustomProps from '@/utils/withCustomProps'
 
 const InnerForm = props => {
   const {
@@ -127,9 +128,6 @@ const InnerForm = props => {
     </Form>
   )
 }
-InnerForm.defaultProps = {
-  status: undefined,
-}
 
 InnerForm.propTypes = {
   values: PropTypes.object.isRequired,
@@ -209,7 +207,7 @@ ContactForm.propTypes = {
 
 /* Styles */
 
-const InputContainer = styled.div`
+const InputContainer = withCustomProps(styled.div)`
   display: inline-flex;
   flex-direction: column;
   width: 100%;

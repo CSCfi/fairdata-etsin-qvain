@@ -1,6 +1,3 @@
-import { autorun } from 'mobx'
-import { disposeOnUnmount } from 'mobx-react'
-
 // If label is missing from selected option, use one from the options if available.
 // Allows having default options without requiring hardcoded labels.
 export const getCurrentOption = (model, options, getter) => {
@@ -113,26 +110,4 @@ export const sortOptionsV3 = async (lang, options, sortFunc = null) => {
     const collator = getCollator(lang)
     options.sort((a, b) => collator.compare(a.pref_label[lang], b.pref_label[lang]))
   }
-}
-
-// Sort state.options automatically on language change, disposes in componentWillUnmount
-export const autoSortOptions = (componentInstance, Locale, model, sortFunc = null) => {
-  disposeOnUnmount(
-    componentInstance,
-    autorun(() => {
-      const { lang } = Locale
-      componentInstance.setState(state => {
-        const opts = [...state.options]
-        const hasGroups = opts[0]?.options
-        if (hasGroups) {
-          sortGroups(model, lang, opts, sortFunc)
-        } else {
-          sortOptions(model, lang, opts, sortFunc)
-        }
-        return {
-          options: opts,
-        }
-      })
-    })
-  )
 }

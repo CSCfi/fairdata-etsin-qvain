@@ -21,8 +21,9 @@ import { useStores } from '@/utils/stores'
 import Translate from '@/utils/Translate'
 import Button from '../general/button'
 import DatasetInfoItem from './DatasetInfoItem'
+import withCustomProps from '@/utils/withCustomProps'
 
-function AccessRights(props) {
+function AccessRights({ button = false, ...props }) {
   const {
     Etsin: {
       EtsinDataset: { accessRights },
@@ -62,7 +63,14 @@ function AccessRights(props) {
 
   return (
     <>
-      <CustomButton onClick={openModal} color="#e0e0e0" padding="0.2em 0.9em" noMargin {...props}>
+      <CustomButton
+        onClick={openModal}
+        color="#e0e0e0"
+        padding="0.2em 0.9em"
+        noMargin
+        button={button}
+        {...props}
+      >
         <Inner lang={lang} title={title}>
           {hasOpenAccess ? openAccess() : restricted()}
         </Inner>
@@ -125,10 +133,6 @@ function AccessRights(props) {
   )
 }
 
-AccessRights.defaultProps = {
-  button: false,
-}
-
 AccessRights.propTypes = {
   button: PropTypes.bool,
 }
@@ -136,7 +140,7 @@ AccessRights.propTypes = {
 export default observer(AccessRights)
 export const undecorated = AccessRights
 
-const CustomButton = styled(Button)`
+const CustomButton = withCustomProps(styled(Button))`
   margin: 0rem 0.5rem;
   border-radius: 1em;
   color: ${p => p.theme.color.dark};

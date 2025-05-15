@@ -7,6 +7,7 @@ import Modal from '../../../general/modal'
 import Button from '../../../general/button'
 import ModalContent from './ModalContent'
 import { modalStyle } from './index'
+import withCustomProps from '@/utils/withCustomProps'
 
 const ModalFieldListAdd = ({
   Field,
@@ -99,7 +100,7 @@ ModalFieldListAdd.defaultProps = {
   onClick: null,
 }
 
-const ButtonContainer = styled.div`
+const ButtonContainer = withCustomProps(styled.div)`
   text-align: ${props => props.position};
   margin-top: 0.5rem;
   margin-bottom: 0;

@@ -8,7 +8,6 @@ import { FieldGroup, InfoText, TitleSmall } from '@/components/qvain/general/V2'
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
 import { ValidationError } from '@/components/qvain/general/errors/validationError'
 import {
-  autoSortOptions,
   getCurrentOption,
   getOptionLabel,
   onChangeMulti,
@@ -38,10 +37,7 @@ export class License extends Component {
       .then(opts => {
         const options = opts.map(ref => Model(ref.label, ref.value))
         sortOptions(Model, lang, options)
-        this.setState({
-          options,
-        })
-        autoSortOptions(this, this.props.Stores.Locale, Model)
+        this.setState({ options })
       })
       .catch(error => {
         if (isAbort(error)) {

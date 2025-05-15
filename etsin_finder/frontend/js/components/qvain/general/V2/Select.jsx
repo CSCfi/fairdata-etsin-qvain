@@ -12,7 +12,6 @@ import {
   getOptionValue,
   sortGroups,
   sortOptions,
-  autoSortOptions,
   getCurrentOption,
 } from '@/components/qvain/utils/select'
 import { withStores } from '@/stores/stores'
@@ -83,7 +82,6 @@ class Select extends Component {
         options: mappedOptions,
       })
     }
-    autoSortOptions(this, this.props.Stores.Locale, model, sortFunc)
   }
 
   rejectRefData = error => {

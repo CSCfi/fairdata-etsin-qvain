@@ -1,5 +1,5 @@
 import { ACCESS_TYPE_URL } from '@/utils/constants'
-import { sortOptions, autoSortOptions } from '@/components/qvain/utils/select'
+import { sortOptions } from '@/components/qvain/utils/select'
 
 export const handleAccessTypeReferenceDataResponse = (options, Stores, component) => {
   const {
@@ -19,8 +19,6 @@ export const handleAccessTypeReferenceDataResponse = (options, Stores, component
   component.setState({
     options: mappedOptions,
   })
-
-  autoSortOptions(component, Locale, Model)
 }
 
 export default handleAccessTypeReferenceDataResponse

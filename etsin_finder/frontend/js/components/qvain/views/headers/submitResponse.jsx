@@ -14,6 +14,7 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
   const {
     Qvain: { original },
     Env: { getEtsinUrl },
+    Locale: { translate },
   } = useStores()
 
   const getPreferredIdentifier = () => {
@@ -40,8 +41,8 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
     return (
       <ResponseContainerSuccess>
         <ResponseContainerContent>
-          <ResponseLabel success>
-            <Translate content={`qvain.submitStatus.${isDraft ? 'draftSuccess' : 'success'}`} />
+          <ResponseLabel>
+            {translate(`qvain.submitStatus.${isDraft ? 'draftSuccess' : 'success'}`)}
           </ResponseLabel>
           <LinkToEtsin
             href={getEtsinUrl(`/dataset/${identifier}${goToEtsinQuery}`)}
@@ -65,14 +66,10 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
     return (
       <ResponseContainerSuccess>
         <ResponseContainerContent>
-          <ResponseLabel success>
-            <Translate
-              content={
-                isDraft
-                  ? 'qvain.submitStatus.draftSuccess'
-                  : 'qvain.submitStatus.editMetadataSuccess'
-              }
-            />
+          <ResponseLabel>
+            {translate(
+              isDraft ? 'qvain.submitStatus.draftSuccess' : 'qvain.submitStatus.editMetadataSuccess'
+            )}
           </ResponseLabel>
           <LinkToEtsin
             href={getEtsinUrl(`/dataset/${identifier}${goToEtsinQuery}`)}
@@ -96,9 +93,7 @@ const SubmitResponse = ({ response, clearSubmitResponse }) => {
     return (
       <ResponseContainerError>
         <ResponseContainerContent>
-          <ResponseLabel>
-            <Translate content="qvain.submitStatus.fail" />
-          </ResponseLabel>
+          <ResponseLabel>{translate('qvain.submitStatus.fail')}</ResponseLabel>
           <p>{response.toString().replace(/,/g, '\n')}</p>
         </ResponseContainerContent>
         <ResponseContainerCloseButtonContainer>

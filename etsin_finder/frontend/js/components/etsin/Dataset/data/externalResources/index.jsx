@@ -21,6 +21,7 @@ import { useStores } from '@/stores/stores'
 import { Header, HeaderTitle, HeaderStats } from '../common/dataHeader'
 import Info from '../info'
 import ResourceItem from './resourceItem'
+import withCustomProps from '@/utils/withCustomProps'
 
 const ExternalResources = () => {
   const {
@@ -90,7 +91,7 @@ const gridColumns = ({ showAccess, hasDownload, mobile }) => {
   return buildColumns(columns)
 }
 
-export const Grid = styled.ul`
+export const Grid = withCustomProps(styled.ul)`
   display: grid;
   grid-template-columns: ${p => gridColumns({ ...p, mobile: false })};
   @media (max-width: ${props => props.theme.breakpoints.sm}) {

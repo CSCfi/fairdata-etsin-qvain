@@ -1,4 +1,4 @@
-import { cleanup, render, screen, within } from '@testing-library/react'
+import { waitFor, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
@@ -30,20 +30,6 @@ beforeEach(() => {
   mockAdapter.reset()
   mockAdapter.onGet().reply(200, datasets)
 })
-
-const wait = async cond => {
-  let counter = 0
-  while (!cond()) {
-    counter += 1
-    if (counter > 100) {
-      throw new Error('Wait timed out')
-    }
-    jest.advanceTimersByTime(1000)
-    // eslint-disable-next-line no-await-in-loop
-    await Promise.resolve()
-  }
-}
-
 const helper = document.createElement('div')
 ReactModal.setAppElement(helper)
 
@@ -117,8 +103,7 @@ describe('DatasetsV2', () => {
       // should reload datasets when button is clicked'
       mockAdapter.onGet().reply(200, datasets)
       await user.click(screen.getByRole('button', { name: 'Reload' }))
-      await wait(() => document.querySelectorAll('tbody').length > 0)
-      expect(document.querySelectorAll('tbody')).toHaveLength(7)
+      await waitFor(() => expect(document.querySelectorAll('tbody')).toHaveLength(7))
     })
   })
 
@@ -159,11 +144,13 @@ describe('DatasetsV2', () => {
     it('should show more datasets', async () => {
       await renderDatasets()
       stores.QvainDatasets.setShowCount({ initial: 4, current: 4, increment: 2 })
-      document.querySelectorAll('tbody').length.should.eql(4)
+      await waitFor(() => document.querySelectorAll('tbody').length.should.eql(4))
+
       await user.click(screen.getByRole('button', { name: 'Show more >' }))
-      document.querySelectorAll('tbody').length.should.eql(6)
+      await waitFor(() => document.querySelectorAll('tbody').length.should.eql(6))
+
       await user.click(screen.getByRole('button', { name: 'Show more >' }))
-      document.querySelectorAll('tbody').length.should.eql(7)
+      await waitFor(() => document.querySelectorAll('tbody').length.should.eql(7))
     })
   })
 
@@ -174,7 +161,7 @@ describe('DatasetsV2', () => {
         identifier: 'someDatasetIdentifier',
         isNew: true,
       })
-      expect(screen.getByText('Dataset published!')).toBeInTheDocument()
+      expect(await screen.findByText('Dataset published!')).toBeInTheDocument()
       await user.click(screen.getByRole('button', { name: 'hide notice' }))
       expect(screen.queryByText('Dataset published!')).not.toBeInTheDocument()
     })
@@ -187,7 +174,7 @@ describe('DatasetsV2', () => {
         identifier: 'someDatasetIdentifier',
         isNew: false,
       })
-      expect(screen.getByText('Dataset successfully updated!')).toBeInTheDocument()
+      expect(await screen.findByText('Dataset successfully updated!')).toBeInTheDocument()
       await user.click(screen.getByRole('button', { name: 'hide notice' }))
       expect(screen.queryByText('Dataset successfully updated!')).not.toBeInTheDocument()
     })
@@ -342,22 +329,6 @@ describe('DatasetsV2', () => {
         ['Draft 5 by me'],
         ['Draft dataset'],
         ['IDA dataset version 2'],
-      ])
-    })
-
-    it('should sort datasets by active language', async () => {
-      await renderDatasets()
-      await sortBy('Title')
-      stores.Locale.setLang('fi')
-      stores.QvainDatasets.sort.type.should.eql('title')
-      getColumns('.dataset-title').should.eql([
-        ['Changes here'],
-        ['Draft 2 suomeksi'],
-        ['Draft 3 by me and project'],
-        ['Draft 4 by project'],
-        ['Draft 5 by me'],
-        ['Draft dataset'],
-        ['Tämä on suomenkielinen nimi'],
       ])
     })
 

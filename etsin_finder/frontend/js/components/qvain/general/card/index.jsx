@@ -6,7 +6,7 @@ export const Container = styled.div`
   padding-left: 45px;
   padding-right: 45px;
   padding-top: 25px;
-  padding-bottom: ${props => (props.bottomContent ? '31px' : '56px')};
+  padding-bottom: ${props => (props.$bottomContent ? '31px' : '56px')};
   margin-top: 20px;
   border: 1px solid #cccccc;
   min-height: 150px;
@@ -15,7 +15,7 @@ export const Container = styled.div`
 `
 
 const Card = ({ children, bottomContent, className }) => (
-  <Container bottomContent={bottomContent} className={className}>
+  <Container $bottomContent={bottomContent} className={className}>
     {children}
   </Container>
 )

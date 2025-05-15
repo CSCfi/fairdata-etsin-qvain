@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
@@ -56,7 +56,7 @@ beforeEach(() => {
 })
 
 describe('Qvain.Actors', () => {
-  it('should list all added actors', () => {
+  it('should list all added actors', async () => {
     contextRenderer(<AddedActors />, { stores })
     expect(screen.getByText('No actors have been added.')).toBeInTheDocument()
     stores.Qvain.Actors.saveActor(
@@ -129,13 +129,15 @@ describe('Qvain.Actors', () => {
       })
     )
 
-    const labels = Array.from(document.querySelectorAll('.actor-label')).map(e => e.textContent)
-    expect(labels).toEqual([
-      'University of Helsinki / Publisher',
-      'Teppo Testaaja / Creator',
-      'Tuppo Testaaja / Rights holder',
-      'Toppo Testaaja / Contributor',
-    ])
+    await waitFor(() => {
+      const labels = Array.from(document.querySelectorAll('.actor-label')).map(e => e.textContent)
+      expect(labels).toEqual([
+        'University of Helsinki / Publisher',
+        'Teppo Testaaja / Creator',
+        'Tuppo Testaaja / Rights holder',
+        'Toppo Testaaja / Contributor',
+      ])
+    })
   })
 })
 
@@ -186,10 +188,10 @@ describe('Qvain.Actors modal', () => {
     const { actorInEdit } = stores.Qvain.Actors
     expect(actorInEdit.organizations.length).toBe(2)
 
-    await userEvent.click(screen.getByRole('button', { name: 'Remove' }))
+    await userEvent.click(await screen.findByRole('button', { name: 'Remove' }))
     expect(actorInEdit.organizations.length).toBe(1)
 
-    await userEvent.click(screen.getByRole('button', { name: 'Remove' }))
+    await userEvent.click(await screen.findByRole('button', { name: 'Remove' }))
     expect(actorInEdit.organizations.length).toBe(0)
   })
 
@@ -270,7 +272,7 @@ describe('Qvain.Actors modal', () => {
     setActorOrganizations(actorInEdit, [aalto])
     expect(actorInEdit.organizations).toEqual([aalto])
 
-    const subOrg = screen.getByTestId('org-level-1')
+    const subOrg = await screen.findByTestId('org-level-1')
     await userEvent.click(within(subOrg).getByRole('combobox')) // open menu
     await userEvent.click(within(subOrg).getAllByRole('option', { name: 'Department of Media' })[0])
     expect(actorInEdit.organizations).toEqual([aalto, department])
@@ -312,7 +314,7 @@ describe('Qvain.Actors modal', () => {
       }),
     ])
 
-    await userEvent.click(screen.getByLabelText('Edit organization details'))
+    await userEvent.click(await screen.findByLabelText('Edit organization details'))
 
     const nameInput = screen.getByLabelText('Organization name', { exact: false })
     await userEvent.clear(nameInput)
@@ -345,7 +347,7 @@ describe('Qvain.Actors modal', () => {
       }),
     ])
 
-    await userEvent.click(screen.getByLabelText('Edit organization details'))
+    await userEvent.click(await screen.findByLabelText('Edit organization details'))
     const nameInput = screen.getByLabelText('Organization name', { exact: false })
     await userEvent.clear(nameInput)
     await userEvent.type(nameInput, 'New Name')
@@ -358,18 +360,19 @@ describe('Qvain.Actors modal', () => {
     editActor(actors.find(actor => actor.type === ENTITY_TYPE.PERSON))
     stores.Qvain.setPreservationState(80)
 
-    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))
-
     // Expect disabled inputs:
     // - person/organization radio buttons
     // - 5 role checkboxes
     // - name, email, identifier
-    expect(inputs.length).toBe(11)
-    inputs.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
+    await waitFor(() => {
+      const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))
+      expect(inputs.length).toBe(11)
+      inputs.forEach(c => expect(c).toBeDisabled())
+    })
 
     // Organization selection should be disabled
     const selects = Array.from(document.querySelectorAll('combobox'))
-    selects.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
+    selects.forEach(c => expect(c).toBeDisabled())
 
     // 1 manual org details button, 2 modal close buttons
     const enabledButtons = Array.from(document.querySelectorAll('button:not([disabled])'))
@@ -382,18 +385,19 @@ describe('Qvain.Actors modal', () => {
     editActor(actors.find(actor => actor.type === ENTITY_TYPE.ORGANIZATION))
     stores.Qvain.setPreservationState(80)
 
-    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))
-
     // Expect disabled inputs:
     // - person/organization radio buttons
     // - 5 role checkboxes
     // - name, email, identifier
-    expect(inputs.length).toBe(8)
-    inputs.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
+    await waitFor(() => {
+      const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))
+      expect(inputs.length).toBe(8)
+      inputs.forEach(c => expect(c).toBeDisabled())
+    })
 
     // Organization selection should be disabled
     const selects = Array.from(document.querySelectorAll('combobox'))
-    selects.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
+    selects.forEach(c => expect(c).toBeDisabled())
 
     // 2 modal close buttons
     const enabledButtons = Array.from(document.querySelectorAll('button:not([disabled])'))

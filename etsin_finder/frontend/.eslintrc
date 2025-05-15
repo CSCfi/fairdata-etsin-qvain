@@ -1,14 +1,21 @@
 {
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "parser": "@babel/eslint-parser",
   "parserOptions": {
     "babelOptions": {
       "configFile": "./.babelrc"
     }
   },
-  "plugins": ["react", "import", "react-hooks", "@babel"],
+  "plugins": ["react", "import", "react-hooks", "@babel", "jsx-a11y"],
   "env": {
     "browser": true,
-    "jest": true
+    "node": true,
+    "jest": true,
+    "es6": true
   },
   "rules": {
     "arrow-parens": 0,
@@ -48,6 +55,7 @@
     "react/jsx-props-no-spreading": "off",
     "react/static-property-placement": "off",
     "react/state-in-constructor": "off",
+    "react/require-default-props": "off", // defaultProps deprecated
     "semi": 0,
     "template-curly-spacing": 0,
     "jsx-a11y/anchor-is-valid": [
@@ -64,10 +72,16 @@
         "components": ["Label"]
       }
     ],
+    "jsx-a11y/no-autofocus": "off",
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
     "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
   },
-  "extends": ["airbnb", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "prettier",
+    "plugin:jsx-a11y/recommended",
+    "plugin:react/recommended"
+  ],
   "globals": { "BUILD": "readonly" },
   "overrides": [
     {

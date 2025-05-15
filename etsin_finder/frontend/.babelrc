@@ -1,9 +1,7 @@
 {
   "env": {
     "development": {
-      "plugins": [
-        ["babel-plugin-styled-components", { "minify": false }]
-      ]
+      "plugins": [["babel-plugin-styled-components", { "minify": false }]]
     },
     "test": {
       "plugins": [
@@ -14,7 +12,10 @@
         ["@babel/plugin-transform-runtime"]
       ],
       "presets": [
-        ["@babel/preset-env", { "useBuiltIns": "entry", "corejs": 2, "targets": "> 0.25%, not dead" }],
+        [
+          "@babel/preset-env",
+          { "useBuiltIns": "entry", "corejs": 2, "targets": "> 0.25%, not dead" }
+        ],
         "@babel/preset-react"
       ]
     }

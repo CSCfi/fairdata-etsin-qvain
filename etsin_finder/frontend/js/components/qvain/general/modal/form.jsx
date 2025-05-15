@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Select from 'react-select'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import withCustomProps from '@/utils/withCustomProps'
 
 export const FormField = styled.div`
   display: inline-flex;
@@ -50,7 +51,7 @@ export const NestedLabel = styled.label`
   }
 `
 
-export const CheckboxStyles = styled.input`
+export const CheckboxStyles = withCustomProps(styled.input)`
   width: 18px;
   height: 18px;
   margin: 4px;
@@ -83,7 +84,7 @@ export const HelpIconStyles = styled(FontAwesomeIcon)`
   }
 `
 
-export const NoStyleButton = styled.button`
+export const NoStyleButton = withCustomProps(styled.button)`
   border: none;
   background-color: unset;
 `

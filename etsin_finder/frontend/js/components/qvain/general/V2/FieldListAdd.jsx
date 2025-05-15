@@ -8,6 +8,7 @@ import Button from '@/components/general/button'
 import ModalContent from '@/components/qvain/general/V2/ModalContent'
 import { useStores } from '@/stores/stores'
 import { modalStyle } from './index'
+import withCustomProps from '@/utils/withCustomProps'
 
 const FieldListAdd = ({ fieldName, form, styling: { contentLabel, position, hideButton } }) => {
   const [confirm, setConfirm] = useState(false)
@@ -87,7 +88,7 @@ FieldListAdd.defaultProps = {
   },
 }
 
-const ButtonContainer = styled.div`
+const ButtonContainer = withCustomProps(styled.div)`
   text-align: ${props => props.position};
   margin-top: 0.5rem;
   margin-bottom: 0;

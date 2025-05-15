@@ -5,6 +5,7 @@ import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import Button from '@/components/general/button'
+import withCustomProps from '@/utils/withCustomProps'
 
 const ListAdd = ({ model, alignment }) => {
   const {
@@ -34,7 +35,7 @@ ListAdd.defaultProps = {
   alignment: 'left',
 }
 
-const ButtonContainer = styled.div`
+const ButtonContainer = withCustomProps(styled.div)`
   text-align: ${props => props.alignment};
   margin-top: 0.5rem;
   margin-bottom: 0;

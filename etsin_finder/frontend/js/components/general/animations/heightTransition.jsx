@@ -14,6 +14,7 @@ import React, { Component } from 'react'
 import Transition from 'react-transition-group/Transition'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import withCustomProps from '@/utils/withCustomProps'
 
 export default class HeightTransition extends Component {
   constructor(props) {
@@ -126,7 +127,7 @@ export default class HeightTransition extends Component {
   }
 }
 
-const TransitionDiv = styled.div.attrs(props => ({
+const TransitionDiv = withCustomProps(styled.div).attrs(props => ({
   height: props.height ? props.height : props.initialHeight,
   visibility: props.visibility ? props.visibility : 'inherit',
 }))`

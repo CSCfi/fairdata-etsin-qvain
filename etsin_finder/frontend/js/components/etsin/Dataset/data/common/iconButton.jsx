@@ -13,8 +13,6 @@ const IconButton = ({
   children,
   invert,
   fontSize,
-  Wrapper,
-  flexGrow,
   ...props
 }) => {
   let as = null

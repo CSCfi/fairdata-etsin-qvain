@@ -3,6 +3,7 @@ import ReactSelect from 'react-select'
 import styled from 'styled-components'
 import { lighten } from 'polished'
 import PropTypes from 'prop-types'
+import withCustomProps from '@/utils/withCustomProps'
 
 // react-select library: https://github.com/JedWatson/react-select
 
@@ -43,7 +44,7 @@ export default class Select extends Component {
   }
 }
 /* prettier-ignore */
-const SelectContainer = styled.div.attrs(props => ({
+const SelectContainer = withCustomProps(styled.div).attrs(props => ({
   current: props.options[0] === props.value ? props.colorCurrent : undefined,
   bordercolor: props.bordercolor ? props.bordercolor : props.theme.color.gray,
   background: props.background ? props.background : 'white',

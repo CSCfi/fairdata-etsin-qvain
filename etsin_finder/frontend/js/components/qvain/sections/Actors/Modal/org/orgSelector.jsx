@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -130,9 +131,7 @@ export const OrgSelectorBase = ({
 
   const getComponents = () => {
     const components = {
-      Placeholder: ValuePlaceholder,
       SingleValue: Value,
-      ValueContainer,
     }
 
     if (hideDropdown) {
@@ -141,7 +140,6 @@ export const OrgSelectorBase = ({
     }
 
     if (!isReference && selectedOption && selectedOption.label === '') {
-      components.SingleValue = ValuePlaceholder
       selectedOption.label = translate('qvain.actors.add.organization.label')
     }
 
@@ -286,15 +284,6 @@ const Value = styled(ValueWrapper)`
   overflow: hidden;
   white-space: nowrap;
   box-sizing: border-box;
-`
-
-const ValuePlaceholder = styled(selectComponents.Placeholder)`
-  color: hsl(0, 0%, 50%);
-  position: absolute;
-`
-
-const ValueContainer = styled(selectComponents.ValueContainer)`
-  align-self: stretch;
 `
 
 const SelectOrg = styled(CreatableSelect)`

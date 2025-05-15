@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
 import Dataset from './dataset'
+import withCustomProps from '@/utils/withCustomProps'
 
 const DatasetGroup = ({ group }) => {
   const [expanded, setExpanded] = useState(false)
@@ -44,7 +45,7 @@ DatasetGroup.propTypes = {
   group: PropTypes.array.isRequired,
 }
 
-const Group = styled.tbody`
+const Group = withCustomProps(styled.tbody)`
   ${p => p.expanded && `background: ${p.theme.color.primaryLight};`}
 `
 

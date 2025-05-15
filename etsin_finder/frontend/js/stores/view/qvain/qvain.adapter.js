@@ -1,5 +1,4 @@
-import parseDateISO from 'date-fns/parseISO'
-import format from 'date-fns/format'
+import { format, parseISO as parseDateISO } from 'date-fns'
 import { ENTITY_TYPE } from '@/utils/constants'
 
 class Adapter {

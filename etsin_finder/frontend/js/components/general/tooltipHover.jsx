@@ -13,6 +13,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import withCustomProps from '@/utils/withCustomProps'
 
 const TooltipHover = props => {
   const { position, children, showOnClick, ...restProps } = props
@@ -113,7 +114,7 @@ function getTipPosition(position) {
   }
 }
 
-const Tip = styled.span.attrs(props => ({
+const Tip = withCustomProps(styled.span).attrs(props => ({
   bg: props.theme.color.darkgray,
   fg: props.theme.color.white,
 }))`

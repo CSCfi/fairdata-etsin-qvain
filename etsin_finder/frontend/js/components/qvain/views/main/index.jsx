@@ -59,8 +59,9 @@ export class Qvain extends Component {
     this.handleIdentifierChanged()
 
     // Prevent reload when there are unsaved changes
+    const { Qvain } = this.props.Stores
     this.disposeConfirmReload = autorun(() => {
-      const { changed } = this.props.Stores.Qvain
+      const { changed } = Qvain
       if (changed) {
         window.addEventListener('beforeunload', confirmReload)
       } else {

@@ -5,7 +5,6 @@ import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 import { observable, when } from 'mobx'
 import MockAdapter from 'axios-mock-adapter'
-import { setImmediate } from 'timers'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import axios from 'axios'
@@ -43,8 +42,6 @@ const stores = buildStores()
 failTestsWhenTranslationIsMissing(stores.Locale)
 stores.Accessibility.handleNavigation = jest.fn()
 
-const flushPromises = () => new Promise(setImmediate)
-
 describe('Etsin dataset page', () => {
   let helper
 
@@ -72,7 +69,7 @@ describe('Etsin dataset page', () => {
     )
     // wait for async tasks to finish
     await when(() => datasetsCalls.length >= 2)
-    await flushPromises()
+    await screen.findByRole('article')
   }
 
   afterEach(() => {
@@ -84,6 +81,7 @@ describe('Etsin dataset page', () => {
     const tab = screen.getByTestId('tab-description')
     const results = await axe(tab)
     expect(results).toBeAccessible()
+
     expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([
       ['error'],
       ['dataset', false],
@@ -100,10 +98,7 @@ describe('Etsin dataset page', () => {
       const results = await axe(tab)
       expect(results).toBeAccessible()
 
-      expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([
-        ['dataset', false],
-        ['data', false],
-      ])
+      expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([['data', false]])
     })
   })
 
@@ -117,10 +112,7 @@ describe('Etsin dataset page', () => {
       const results = await axe(tab)
       expect(results).toBeAccessible()
 
-      expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([
-        ['dataset', false],
-        ['events', false],
-      ])
+      expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([['events', false]])
     })
   })
 
@@ -134,10 +126,7 @@ describe('Etsin dataset page', () => {
       const results = await axe(tab)
       expect(results).toBeAccessible()
 
-      expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([
-        ['dataset', false],
-        ['maps', false],
-      ])
+      expect(stores.Accessibility.handleNavigation.mock.calls).toEqual([['maps', false]])
     })
   })
 })

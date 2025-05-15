@@ -20,6 +20,7 @@ import { darken } from 'polished'
 import Translate from '@/utils/Translate'
 import checkColor from '../../styles/styledUtils'
 import { TransparentButton } from './button'
+import withCustomProps from '@/utils/withCustomProps'
 
 export default class NoticeBar extends React.Component {
   static propTypes = {
@@ -89,7 +90,7 @@ export default class NoticeBar extends React.Component {
   }
 }
 
-const Bar = styled.div`
+const Bar = withCustomProps(styled.div)`
   width: 100%;
   z-index: ${p => p.z};
   background-color: ${props => checkColor(props.bg)};

@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 {
   /**
    * This file is part of the Etsin service
@@ -47,7 +48,7 @@ const Content = ({ contentRef }) => {
     return `/qvain${path}`
   }
 
-  const maintenance = (isQvain && Flags.flagEnabled('QVAIN.MAINTENANCE'))
+  const maintenance = isQvain && Flags.flagEnabled('QVAIN.MAINTENANCE')
   if (maintenance) {
     const query = new URLSearchParams(window.location.search)
     if (query.get('disable_redirect') !== 'true') {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Map, TileLayer, GeoJSON, Marker, Rectangle } from 'react-leaflet'
+import { MapContainer, TileLayer, GeoJSON, Marker, Rectangle } from 'react-leaflet'
 import styled, { withTheme } from 'styled-components'
 import leaflet from 'leaflet'
 import PropTypes from 'prop-types'
@@ -155,7 +155,7 @@ class MyMap extends Component {
   }
 }
 
-const CustomMap = styled(Map)`
+const CustomMap = styled(MapContainer)`
   height: 400px;
   width: 100%;
 `

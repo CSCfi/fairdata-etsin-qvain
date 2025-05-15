@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
+import withCustomProps from '@/utils/withCustomProps'
 
 export const ModalHeader = styled.h2`
   display: flex;
@@ -33,12 +34,12 @@ export const TitleSmall = styled.label`
   margin-top: 0.5rem;
 `
 
-export const InfoText = styled.span`
+export const InfoText = withCustomProps(styled.span)`
   display: relative;
   margin-top: ${({ weight = 0.5 }) => weight * -0.55}rem;
   font-size: 0.875rem;
 `
-export const InfoTextLarge = styled.p`
+export const InfoTextLarge = withCustomProps(styled.p)`
   margin-top: ${({ weight = 3 }) => weight * -0.55}rem;
   font-size: 1rem;
   padding-bottom: 1rem;

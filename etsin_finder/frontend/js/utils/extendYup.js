@@ -1,5 +1,4 @@
-import parseDateISO from 'date-fns/parseISO'
-import parseDate from 'date-fns/parse'
+import { parseISO as parseDateISO, parse as parseDate } from 'date-fns'
 import * as yup from 'yup'
 
 function validateDate({ allowTime } = {}) {

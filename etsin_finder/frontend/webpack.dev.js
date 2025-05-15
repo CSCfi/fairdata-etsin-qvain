@@ -76,11 +76,7 @@ const config = env => ({
       patterns: ['js/**/*.(js|jsx|css)'],
       detectUnusedExport: false, // disable as too noisy
     }),
-    new ReactRefreshWebpackPlugin({
-      overlay: {
-        sockPort: 443,
-      },
-    }),
+    new ReactRefreshWebpackPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       // TODO: add manifest to new html

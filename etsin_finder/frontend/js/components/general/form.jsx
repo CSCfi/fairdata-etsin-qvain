@@ -20,6 +20,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import withCustomProps from '@/utils/withCustomProps'
 
 export const HelpIconStyles = styled(FontAwesomeIcon)`
   :hover {
@@ -27,7 +28,7 @@ export const HelpIconStyles = styled(FontAwesomeIcon)`
   }
 `
 
-export const NoStyleButton = styled.button`
+export const NoStyleButton = withCustomProps(styled.button)`
   border: none;
   background-color: unset;
   padding-left: 0;

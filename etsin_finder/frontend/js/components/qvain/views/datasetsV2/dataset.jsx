@@ -16,6 +16,7 @@ import formatAge from './formatAge'
 import { getDatasetActionsV2 } from './datasetActions'
 import { Dropdown, DropdownItem } from '@/components/general/dropdown'
 import { DatasetStateTag } from './tags'
+import withCustomProps from '@/utils/withCustomProps'
 
 const getActionMenuItem = action => {
   const { text, handler, danger, moreIfNarrow } = action
@@ -199,7 +200,7 @@ const onlyIconStyling = css`
   gap: 0.25rem;
 `
 
-const StyledIconButton = styled.button.attrs({ type: 'button' })`
+const StyledIconButton = withCustomProps(styled.button).attrs({ type: 'button' })`
   color: ${p => p.theme.color[p.color]};
   border: none;
   background: transparent;
@@ -222,13 +223,13 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   margin-right: 0.25rem;
 `
 
-const StyledDataset = styled.tr`
+const StyledDataset = withCustomProps(styled.tr)`
   height: 4rem;
   font-size: 16px;
   ${p => p.isLatest && `td:not(${PadCell}) { border-top: 1px solid #cecece; }`}
 `
 
-const Cell = styled.td`
+const Cell = withCustomProps(styled.td)`
   vertical-align: middle;
   padding: 0.25rem 0.5rem;
   text-align: center;

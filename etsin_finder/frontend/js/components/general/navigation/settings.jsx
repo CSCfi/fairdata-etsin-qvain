@@ -19,15 +19,13 @@ import { Link } from '../button'
 import LangToggle from './langToggle'
 
 const Settings = props => (
-  <>
-    <Positioner>
-      <Link width="max-content" href={props.helpUrl} rel="noopener noreferrer" target="_blank">
-        <Translate content="nav.help" />
-      </Link>
-      {props.children}
-      <LangToggle />
-    </Positioner>
-  </>
+  <Positioner>
+    <Link width="max-content" href={props.helpUrl} rel="noopener noreferrer" target="_blank">
+      <Translate content="nav.help" />
+    </Link>
+    {props.children}
+    <LangToggle />
+  </Positioner>
 )
 
 export default Settings

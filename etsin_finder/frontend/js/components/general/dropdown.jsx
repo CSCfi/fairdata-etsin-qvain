@@ -19,6 +19,7 @@ import { tint } from 'polished'
 import Translate from '@/utils/Translate'
 
 import Button from './button'
+import withCustomProps from '@/utils/withCustomProps'
 
 export class Dropdown extends Component {
   constructor(props) {
@@ -252,7 +253,7 @@ DropdownItem.defaultProps = {
   onlyNarrow: false,
 }
 
-const DropdownItemLi = styled.li`
+const DropdownItemLi = withCustomProps(styled.li)`
   ${p =>
     p.onlyNarrow &&
     `
@@ -263,7 +264,7 @@ const DropdownItemLi = styled.li`
     `}
 `
 
-export const DropdownItemButton = styled.button.attrs({ type: 'button' })`
+export const DropdownItemButton = withCustomProps(styled.button).attrs({ type: 'button' })`
   width: 100%;
   border: none;
   ${p => (p.border === 'top' || p.border === 'both') && `border-top: 1px solid rgba(0, 0, 0, 0.4);`}

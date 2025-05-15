@@ -2,9 +2,7 @@
 
 // Convert nested values to dotted paths, e.g. {a:{b:'value'}} to {a.b:'value'}
 
-import parseDateISO from 'date-fns/parseISO'
-import formatDate from 'date-fns/format'
-import isValid from 'date-fns/isValid'
+import { isValid, formatDate, parseISO } from 'date-fns'
 
 export const flatten = (root, { normalizeDates = false } = {}) => {
   const flat = {}
@@ -16,9 +14,9 @@ export const flatten = (root, { normalizeDates = false } = {}) => {
       if (value && typeof value === 'object') {
         recurse(value, newPath)
       } else {
-        if (normalizeDates) {
+        if (normalizeDates && value) {
           // Round dates to milliseconds to avoid small rounding errors from breaking comparisons
-          const date = parseDateISO(value)
+          const date = parseISO(value.toString())
           if (isValid(date)) {
             value = formatDate(date, "yyyy-MM-dd'T'HH:mm:ssSSSXXX")
           }

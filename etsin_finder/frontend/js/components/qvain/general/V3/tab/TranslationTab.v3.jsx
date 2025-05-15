@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import { FieldGroup } from '@/components/qvain/general/V2'
 import { useStores } from '@/stores/stores'
+import withCustomProps from '@/utils/withCustomProps'
 
 const TranslationTab = ({ language, setLanguage, children, useTitleLanguages }) => {
   const {
@@ -71,7 +72,7 @@ const TabGroup = styled(FieldGroup)`
   gap: 0;
 `
 
-const LangButton = styled.button`
+const LangButton = withCustomProps(styled.button)`
   flex-grow: 1;
   width: 25%;
   padding: 5px 20px;

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Loader from '@/components/general/loader'
+import withCustomProps from '@/utils/withCustomProps'
 
 export default function Spinner() {
   return (
@@ -10,7 +11,7 @@ export default function Spinner() {
   )
 }
 
-const LoadingSplash = styled.div`
+const LoadingSplash = withCustomProps(styled.div)`
   flex: 1;
   display: flex;
   justify-content: center;

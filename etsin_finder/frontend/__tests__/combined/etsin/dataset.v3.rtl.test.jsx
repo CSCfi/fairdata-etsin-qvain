@@ -2,9 +2,8 @@ import React from 'react'
 import ReactModal from 'react-modal'
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
-import { render, screen, within, waitFor } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import '@testing-library/jest-dom'
 
 // context
 import { ThemeProvider } from 'styled-components'
@@ -76,7 +75,8 @@ const renderEtsin = async (dataset = dataset_open_a_catalog_expanded, userLogged
       </MemoryRouter>
     </ThemeProvider>
   )
-  await waitFor(() => expect(document.querySelectorAll('loader-active').length).toBe(0))
+
+  await screen.findByRole('article')
 }
 
 const cleanupText = node => {
@@ -97,7 +97,7 @@ const getDLValues = () => {
   for (const dt of dts) {
     const dd = dt.nextElementSibling
     expect(dd.tagName).toBe('DD') // DT should be followed by DD
-    values[cleanupText(dt)] = dd.textContent
+    values[cleanupText(dt.firstChild)] = dd.textContent
   }
   return values
 }

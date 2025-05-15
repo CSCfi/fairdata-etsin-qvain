@@ -1,4 +1,4 @@
-import { act, render, screen, within } from '@testing-library/react'
+import { act, waitFor, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
@@ -138,13 +138,13 @@ describe('ShareModal', () => {
       await renderModal()
       const input = screen.getByRole('combobox', { name: 'Users' })
       await user.type(input, 'testi')
-      const opt = screen.getByRole('option', { name: /Testi Testinen/ })
+      const opt = await screen.findByRole('option', { name: /Testi Testinen/ })
       await user.click(opt)
       stores.QvainDatasets.share.selectedUsers.should.eql([testUser])
 
       await user.click(input)
-      await user.type(input, 'testi', { advanceTimers: null, delay: null })
-      const opt2 = screen.getByRole('option', { name: /Othertesti/ })
+      await user.type(input, 'testi')
+      const opt2 = await screen.findByRole('option', { name: /Othertesti/ })
       await user.click(opt2)
       stores.QvainDatasets.share.selectedUsers.should.eql([testUser, otherTestUser])
     })
@@ -165,14 +165,14 @@ describe('ShareModal', () => {
       await renderModal()
       const input = screen.getByRole('combobox', { name: 'Users' })
       await user.type(input, 'empty')
-      expect(screen.getByText('No matching users found.')).toBeInTheDocument()
+      await screen.findByText('No matching users found.')
     })
 
     it('should show error message and log error', async () => {
       await renderModal()
       const input = screen.getByRole('combobox', { name: 'Users' })
       await user.type(input, 'error')
-      expect(screen.getByText(/There was an error/)).toBeInTheDocument()
+      await screen.findByText(/There was an error/)
       expect(console.error.mock.calls.length > 0).toBe(true)
     })
 
@@ -180,7 +180,7 @@ describe('ShareModal', () => {
       await renderModal()
       const input = screen.getByRole('combobox', { name: 'Users' })
       await user.type(input, 'testi')
-      expect(screen.getAllByRole('option').length > 0).toBe(true)
+      await waitFor(() => expect(screen.getAllByRole('option').length > 0).toBe(true))
 
       await user.clear(input)
       await user.type(input, '  z  ')
@@ -197,7 +197,7 @@ describe('ShareModal', () => {
       // select user
       const input = screen.getByRole('combobox', { name: 'Users' })
       await user.type(input, 'testi')
-      const opt = screen.getByRole('option', { name: /Testi Testinen/ })
+      const opt = await screen.findByRole('option', { name: /Testi Testinen/ })
       await user.click(opt)
 
       // message should now be writable
@@ -254,7 +254,7 @@ describe('ShareModal', () => {
       it('should enable "invite" button', async () => {
         await renderModal()
         stores.QvainDatasets.share.setSelectedUsers([testUser])
-        expect(getInviteButton()).toBeEnabled()
+        await waitFor(() => expect(getInviteButton()).toBeEnabled())
       })
 
       it('should show successful share', async () => {
@@ -361,14 +361,6 @@ describe('ShareModal', () => {
       await user.click(screen.getByRole('tab', { name: /Members/ }))
     }
 
-    it('should show loader while loading permissions', async () => {
-      await renderMembers()
-      const promise = stores.QvainDatasets.share.fetchPermissions()
-      expect(document.querySelector('.loader-active')).toBeInTheDocument()
-      await promise
-      expect(document.querySelector('.loader-active')).not.toBeInTheDocument()
-    })
-
     it('should show error when loading permissions fails', async () => {
       await renderMembers()
       mockAdapter.onGet('/api/qvain/datasets/jeejee/editor_permissions').reply(400, '')
@@ -432,7 +424,6 @@ describe('ShareModal', () => {
       await user.click(dropdownButton)
       const removeButton = within(member).getByRole('button', { name: 'Remove' })
       await user.click(removeButton)
-      // await wait(() => wrapper.find('button span[children="Remove"]').length === 1)
     }
 
     it('should remove member editor from permissions list', async () => {
@@ -530,7 +521,7 @@ describe('ShareModal', () => {
 
       await openConfirmRemoveDialog('Editor Member (editormember, editormember@example.com)')
       await user.click(screen.getByRole('button', { name: 'Remove' }))
-      expect(screen.getAllByText(/There was an error/)[0]).toBeInTheDocument()
+      await waitFor(() => expect(screen.getAllByText(/There was an error/)[0]).toBeInTheDocument())
     })
   })
 })

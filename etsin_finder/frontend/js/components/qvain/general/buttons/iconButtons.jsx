@@ -14,6 +14,7 @@ import {
   faSortAmountDownAlt,
 } from '@fortawesome/free-solid-svg-icons'
 import Translate from '@/utils/Translate'
+import withCustomProps from '@/utils/withCustomProps'
 
 const FileIconStyles = styled(FontAwesomeIcon)`
   width: 5%;
@@ -116,7 +117,7 @@ SortDirectionButton.propTypes = {
   descending: PropTypes.bool.isRequired,
 }
 
-const SortButtonStyles = styled.button`
+const SortButtonStyles = withCustomProps(styled.button)`
   background-color: #fff;
   width: 40px;
   height: 38px;

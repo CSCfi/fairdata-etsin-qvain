@@ -31,11 +31,18 @@ class Submit {
 
   @observable response = null
 
-  @action reset = () => {
+  @observable prevalidationDone = false
+
+  @action.bound reset() {
+    this.prevalidationDone = false
     this.draftValidationError = []
     this.publishValidationError = []
     this.error = undefined
     this.response = null
+  }
+
+  @action.bound setPrevalidationDone(val) {
+    this.prevalidationDone = val
   }
 
   @action setLoading = state => {
@@ -82,18 +89,20 @@ class Submit {
   }
 
   @computed get isDraftButtonDisabled() {
+    if (!this.prevalidationDone) return true
     if (!this.draftValidationError) return false
     if (this.draftValidationError.length === 0) return false
     return true
   }
 
   @computed get isPublishButtonDisabled() {
+    if (!this.prevalidationDone) return true
     if (!this.publishValidationError) return false
     if (this.publishValidationError.length === 0) return false
     return true
   }
 
-  @action submitDraft = async () => {
+  submitDraft = async () => {
     switch (this.submitType) {
       case DATASET_STATE.NEW:
         await this.exec(this.createNewDraft, qvainFormDraftSchema)
@@ -111,7 +120,7 @@ class Submit {
     }
   }
 
-  @action submitPublish = async cb => {
+  submitPublish = async cb => {
     let isNew = false
     switch (this.submitType) {
       case DATASET_STATE.NEW:
@@ -133,6 +142,9 @@ class Submit {
     }
     const identifier = this.getResponseIdentifier()
     if (cb && identifier) {
+      // Wait a bit so setChanged(false) has time to propagated to the Prompt component.
+      // Fixes bug where redirect after publication prompts about unsaved changes.
+      await Promise.delay(0)
       cb({ identifier, isNew })
     }
   }
@@ -416,20 +428,25 @@ class Submit {
   }
 
   @action prevalidate = debounce(async () => {
+    this.setPrevalidationDone(false)
     this.setPublishValidationError([])
     this.setDraftValidationError([])
     const dataset = this.prepareDataset()
 
     try {
-      await this.qvainFormSchema.validate(dataset, { abortEarly: false, strict: true })
-    } catch (error) {
-      this.setPublishValidationError(error)
-    }
+      try {
+        await this.qvainFormSchema.validate(dataset, { abortEarly: false, strict: true })
+      } catch (error) {
+        this.setPublishValidationError(error)
+      }
 
-    try {
-      await this.qvainFormDraftSchema.validate(dataset, { abortEarly: false, strict: true })
-    } catch (error) {
-      this.setDraftValidationError(error)
+      try {
+        await this.qvainFormDraftSchema.validate(dataset, { abortEarly: false, strict: true })
+      } catch (error) {
+        this.setDraftValidationError(error)
+      }
+    } finally {
+      this.setPrevalidationDone(true)
     }
   }, 200)
 }

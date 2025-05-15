@@ -41,7 +41,7 @@ const List = ({ model, disableEdit, disableNoItemsText }) => {
       component={DeleteButton}
       type="button"
       onClick={() => remove(item.itemId)}
-      attribute={{ 'aria-label': 'qvain.general.buttons.remove' }}
+      attributes={{ 'aria-label': 'qvain.general.buttons.remove' }}
     />
   )
 

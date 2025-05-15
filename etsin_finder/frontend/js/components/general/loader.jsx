@@ -13,6 +13,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import withCustomProps from '@/utils/withCustomProps'
 
 const Loader = ({ color, size, margin, spinnerSize, active, left }) => {
   const spinner = <Spinner color={color} size={size} />
@@ -37,7 +38,7 @@ const Loader = ({ color, size, margin, spinnerSize, active, left }) => {
 
 export default Loader
 
-const Holder = styled.div`
+const Holder = withCustomProps(styled.div)`
   display: none;
   justify-content: center;
   align-items: center;
@@ -54,7 +55,7 @@ const Holder = styled.div`
 `
 
 /* prettier-ignore */
-export const Spinner = styled.div`
+export const Spinner = withCustomProps(styled.div)`
   height: ${p => p.size};
   width: ${p => p.size};
   animation: spinner 0.8s infinite linear;

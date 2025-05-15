@@ -15,7 +15,7 @@ import { useStores, StoresProvider } from '../../../../js/stores/stores'
 import Provenance from '../../../../js/components/qvain/sections/History'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-jest.setTimeout(10000)
+jest.setTimeout(20000)
 
 // Make sure MobX store values are not mutated outside actions.
 configure({

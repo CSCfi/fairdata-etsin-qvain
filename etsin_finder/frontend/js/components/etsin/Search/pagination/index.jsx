@@ -20,6 +20,7 @@ import { useStores } from '@/stores/stores'
 import { useQuery } from '@/components/etsin/general/useQuery'
 
 import getPages from './getPages'
+import withCustomProps from '@/utils/withCustomProps'
 
 const Pagination = () => {
   const {
@@ -87,15 +88,13 @@ const Pagination = () => {
 
     return (
       <li key={getItemKey(item, index)}>
-        <Translate
-          component={PaginationButton}
+        <PaginationButton
           className={className}
           onClick={onClick}
-          attributes={{ 'aria-label': getItemLabel(item, currentStr) }}
-          with={{ page }}
+          aria-label={translate(getItemLabel(item, currentStr), { page })}
         >
           {item}
-        </Translate>
+        </PaginationButton>
       </li>
     )
   }
@@ -117,7 +116,7 @@ const Pagination = () => {
   )
 }
 
-const PaginationItem = styled.span.attrs(() => ({
+const PaginationButton = withCustomProps(styled.button).attrs(() => ({
   size: '40px',
 }))`
   cursor: pointer;
@@ -146,8 +145,6 @@ const PaginationItem = styled.span.attrs(() => ({
     line-height: ${props => props.size};
   }
 `
-
-const PaginationButton = PaginationItem.withComponent('button')
 
 const PaginationContainer = styled.nav`
   margin-top: 1em;

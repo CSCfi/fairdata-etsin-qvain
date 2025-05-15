@@ -49,10 +49,6 @@ const IssuedDateField = () => {
           id="issuedDateInput"
           strictParsing
           selected={issuedDate ? new Date(issuedDate) : new Date()}
-          onChangeRaw={e => {
-            if (e) handleDatePickerChange(e.target.value, setIssuedDate)
-            validate()
-          }}
           onChange={date => {
             if (date) handleDatePickerChange(date.toISOString(), setIssuedDate)
             validate()

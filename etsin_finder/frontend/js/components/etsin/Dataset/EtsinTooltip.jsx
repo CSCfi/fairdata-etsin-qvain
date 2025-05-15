@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
 import { HelpIcon } from '@/components/qvain/general/modal/form'
+import withCustomProps from '@/utils/withCustomProps'
 
 const EtsinTooltip = ({ tooltip, inverted, withMargin }) => {
   const [tooltipOpen, setTooltipOpen] = useState(false)
@@ -56,7 +57,7 @@ EtsinTooltip.defaultProps = {
 }
 
 // reaching for the tooltip help icon here
-const Wrapper = styled.span`
+const Wrapper = withCustomProps(styled.span)`
   > * {
     > * {
       height: 1rem;
@@ -70,7 +71,7 @@ const Wrapper = styled.span`
   }
 `
 
-const Tooltip = styled.div`
+const Tooltip = withCustomProps(styled.div)`
   z-index: 10;
   position: absolute;
   bottom: 2.1em;

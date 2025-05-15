@@ -40,7 +40,7 @@ const ModalList = ({ model, disableNoItemsText, changeCallback }) => {
               remove(item.itemId)
               changeCallback()
             }}
-            attribute={{ 'aria-label': 'qvain.general.buttons.remove' }}
+            attributes={{ 'aria-label': 'qvain.general.buttons.remove' }}
           />
         )}
       </ListItemButtonContainer>

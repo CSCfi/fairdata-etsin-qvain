@@ -41,8 +41,13 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
     const identifier = original?.identifier
     if (identifier && identifier !== QvainDatasets.publishedDataset) {
       const path = `/dataset/${identifier}`
-      if (history.location.pathname !== path) {
+      const redirect = async () => {
+        // Wait a bit so setChanged(false) has time to propagated to the Prompt component.
+        await Promise.delay(0)
         history.replace(getQvainUrl(path))
+      }
+      if (history.location.pathname !== path) {
+        redirect()
       }
     }
   }, [original, QvainDatasets, getQvainUrl, history, prevalidate])

@@ -6,10 +6,10 @@ import ReactModal from 'react-modal'
 
 import { MemoryRouter, Route, useLocation } from 'react-router-dom'
 
-import { screen, render, within, waitForElementToBeRemoved } from '@testing-library/react'
+import { waitFor, screen, render, within, waitForElementToBeRemoved } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
-import parseDateISO from 'date-fns/parseISO'
+import { parseISO } from 'date-fns'
 
 import etsinTheme from '@/styles/theme'
 import { buildStores } from '@/stores'
@@ -285,8 +285,8 @@ describe('Qvain with an opened dataset', () => {
     const submitData = JSON.parse(mockAdapter.history.patch[0].data)
 
     // issued date might not have same timezone but should represent same date
-    const datasetIssued = parseDateISO(dataset.issued).getTime()
-    const submitIssued = parseDateISO(submitData.issued).getTime()
+    const datasetIssued = parseISO(dataset.issued).getTime()
+    const submitIssued = parseISO(submitData.issued).getTime()
     expect(datasetIssued).toEqual(submitIssued)
 
     const flatDataset = removeMatchingKeys(
@@ -370,13 +370,15 @@ describe('Qvain with an opened dataset', () => {
 
     it('given draft, should update dataset directly', async () => {
       await saveDraft({ state: 'draft' })
+      await waitFor(() => expect(routerLocation.pathname).toBe(`/dataset/${dataset.id}`))
       expect(mockAdapter.history.patch[0].url).toBe(`https://metaxv3:443/v3/datasets/${dataset.id}`)
       expect(mockAdapter.history.post.length).toBe(0)
-      expect(routerLocation.pathname).toBe(`/dataset/${dataset.id}`)
     })
 
     it('given published, should create linked draft', async () => {
       await saveDraft({ state: 'published' })
+      // qvain should be redirected to linked draft
+      await waitFor(() => expect(routerLocation.pathname).toBe(`/dataset/linked-draft-id`))
       expect(mockAdapter.history.post.length).toBe(1)
       expect(mockAdapter.history.post[0].url).toBe(
         `https://metaxv3:443/v3/datasets/${dataset.id}/create-draft`
@@ -384,8 +386,6 @@ describe('Qvain with an opened dataset', () => {
       expect(mockAdapter.history.patch[0].url).toBe(
         `https://metaxv3:443/v3/datasets/linked-draft-id`
       )
-      // qvain should be redirected to linked draft
-      expect(routerLocation.pathname).toBe(`/dataset/linked-draft-id`)
     })
   })
 
@@ -398,29 +398,29 @@ describe('Qvain with an opened dataset', () => {
 
     it('given new draft, should update and publish dataset', async () => {
       await publish({ state: 'draft' })
+      await waitFor(() => expect(routerLocation.pathname).toBe(`/`))
       expect(mockAdapter.history.patch[0].url).toBe(`https://metaxv3:443/v3/datasets/${dataset.id}`)
       expect(mockAdapter.history.post[0].url).toBe(
         `https://metaxv3:443/v3/datasets/${dataset.id}/publish`
       )
-      expect(routerLocation.pathname).toBe(`/`)
     })
 
     it('given linked draft, should update and publish dataset', async () => {
       await publish({ state: 'draft' }, { initialPath: '/dataset/linked-draft-id' })
+      await waitFor(() => expect(routerLocation.pathname).toBe(`/`))
       expect(mockAdapter.history.patch[0].url).toBe(
         `https://metaxv3:443/v3/datasets/linked-draft-id`
       )
       expect(mockAdapter.history.post[0].url).toBe(
         `https://metaxv3:443/v3/datasets/linked-draft-id/publish`
       )
-      expect(routerLocation.pathname).toBe(`/`)
     })
 
     it('given published, should update dataset directly', async () => {
       await publish({ state: 'published' })
+      await waitFor(() => expect(routerLocation.pathname).toBe(`/`))
       expect(mockAdapter.history.post.length).toBe(0)
       expect(mockAdapter.history.patch[0].url).toBe(`https://metaxv3:443/v3/datasets/${dataset.id}`)
-      expect(routerLocation.pathname).toBe(`/`)
     })
   })
 

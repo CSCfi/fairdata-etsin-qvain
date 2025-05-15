@@ -97,8 +97,8 @@ class Login extends Component {
     if (!Auth[this.props.isLoggedInKey]) {
       return (
         <>
-          <Cont width={this.props.width} margin={this.props.margin}>
-            <LoaderCont active={this.state.loading}>
+          <Cont $width={this.props.width} $margin={this.props.margin}>
+            <LoaderCont $active={this.state.loading}>
               <Loader active color="white" size="1.1em" spinnerSize="3px" />
             </LoaderCont>
             <LoginButton
@@ -109,7 +109,7 @@ class Login extends Component {
               }
               borderColor={this.props.borderColor}
             >
-              <LoginText visible={!this.state.loading} fontSize={this.props.fontSize}>
+              <LoginText $visible={!this.state.loading} $fontSize={this.props.fontSize}>
                 <Translate content="nav.login" />
               </LoginText>
             </LoginButton>
@@ -140,8 +140,8 @@ class Login extends Component {
   }
 }
 const Cont = styled.div`
-  width: ${p => (p.width ? p.width : '')};
-  margin: ${p => (p.margin ? p.margin : '')};
+  width: ${p => (p.$width || '')};
+  margin: ${p => (p.$margin || '')};
   position: relative;
 `
 
@@ -163,11 +163,11 @@ const LoaderCont = styled.div`
   height: 100%;
   display: flex;
   position: absolute;
-  visibility: ${p => (p.active ? 'initial' : 'hidden')};
+  visibility: ${p => (p.$active ? 'initial' : 'hidden')};
 `
 const LoginText = styled.span`
-  visibility: ${p => (p.visible ? 'initial' : 'hidden')};
-  font-size: ${p => p.fontSize};
+  visibility: ${p => (p.$visible ? 'initial' : 'hidden')};
+  font-size: ${p => p.$fontSize};
 `
 
 export default withRouter(withStores(observer(Login)))

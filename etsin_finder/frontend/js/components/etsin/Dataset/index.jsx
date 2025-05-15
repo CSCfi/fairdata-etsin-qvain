@@ -30,6 +30,7 @@ import Content from './content'
 import StateInfo from './StateInfo'
 import PreservationInfo from './PreservationInfo'
 import TitleContainer from './TitleContainer'
+import withCustomProps from '@/utils/withCustomProps'
 
 const BackButton = styled(NavLink)`
   color: ${props => props.theme.color.primary};
@@ -182,7 +183,7 @@ const MarginAfter = styled.div`
   margin: 0.8em 0 1em 0;
 `
 
-const LoadingSplash = styled.div`
+const LoadingSplash = withCustomProps(styled.div)`
   flex: 1;
   display: flex;
   justify-content: center;
@@ -190,7 +191,7 @@ const LoadingSplash = styled.div`
   margin: ${({ margin = 0 }) => margin};
 `
 
-const DraftInfo = styled.div`
+const DraftInfo = withCustomProps(styled.div)`
   background-color: ${p => p.theme.color.primaryLight};
   text-align: center;
   color: ${p => p.theme.color.primaryDark};

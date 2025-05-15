@@ -6,6 +6,7 @@ import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import { FieldGroup } from './index'
+import withCustomProps from '@/utils/withCustomProps'
 
 const TranslationTab = ({ language, setLanguage, children, useTitleLanguages, id }) => {
   const {
@@ -74,7 +75,7 @@ const GapNegator = styled.div`
   gap: 0;
 `
 
-const LangButton = styled.button`
+const LangButton = withCustomProps(styled.button)`
   flex-grow: 1;
   width: 25%;
   padding: 5px 20px;

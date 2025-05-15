@@ -35,7 +35,7 @@ describe('Qvain.PasState', () => {
     return contextRenderer(<PasState />, { stores })
   }
 
-  it('shows pas state', () => {
+  it('shows pas state', async () => {
     const stores = getStores()
     stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     stores.Qvain.setPreservationState(80)
@@ -44,6 +44,7 @@ describe('Qvain.PasState', () => {
 
     stores.Qvain.setPreservationState(0)
     stores.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.PAS)
+    await Promise.resolve()
 
     expect(screen.getByTestId('pas-state').textContent).not.toContain('80:')
     expect(screen.getByTestId('pas-state').textContent).toContain('0:')

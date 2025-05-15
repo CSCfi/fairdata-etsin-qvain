@@ -7,6 +7,7 @@ import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons
 import Translate from '@/utils/Translate'
 
 import { Spinner } from '../loader'
+import withCustomProps from '@/utils/withCustomProps'
 
 export const isDirectory = item => item.type === 'directory'
 export const isFile = item => item.type === 'file'
@@ -27,7 +28,8 @@ export const SmallLoader = styled(LoaderWrapper)`
   opacity: 0.8;
 `
 
-const IconWrapper = ({ icon, color, disabledColor, disabledOpacity, ...props }) => (
+// eslint-disable-next-line no-unused-vars
+const IconWrapper = ({ icon, disabledColor, disabledOpacity, ...props }) => (
   <div {...props}>
     <FontAwesomeIcon icon={icon} />
   </div>
@@ -47,7 +49,8 @@ IconWrapper.defaultProps = {
   disabledOpacity: 1,
 }
 
-const ClickableIconButton = ({ icon, disabledColor, disabledOpacity, spin, pulse, ...props }) => (
+// eslint-disable-next-line no-unused-vars
+const ClickableIconButton = ({ icon, spin, pulse, disabledColor, disabledOpacity, ...props }) => (
   <button type="button" {...props}>
     <FontAwesomeIcon icon={icon} spin={spin} pulse={pulse} />
   </button>
@@ -183,7 +186,7 @@ export const FileCount = styled.span`
   white-space: nowrap;
 `
 
-export const ItemRow = styled.li`
+export const ItemRow = withCustomProps(styled.li)`
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -197,7 +200,7 @@ export const ItemRow = styled.li`
   ${props => (props.disabled ? 'color: #888' : '')}
 `
 
-export const ItemSpacer = styled.div`
+export const ItemSpacer = withCustomProps(styled.div)`
   width: ${props => props.level * 1.3}em;
   margin: 0;
   padding: 0;
@@ -218,7 +221,7 @@ export const Items = styled.ul`
   overflow: visible;
 `
 
-export const Tag = styled.div`
+export const Tag = withCustomProps(styled.div)`
   font-size: 75%;
   font-weight: bold;
   background: ${p => (p.color && tint(0.8, p.theme.color[p.color])) || '#cdf'};
@@ -232,7 +235,7 @@ export const Tag = styled.div`
   white-space: nowrap;
 `
 
-export const PlainTag = styled.div`
+export const PlainTag = withCustomProps(styled.div)`
   font-size: 90%;
   border-radius: 4px;
   text-align: left;

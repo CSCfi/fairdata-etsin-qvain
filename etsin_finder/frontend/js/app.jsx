@@ -16,8 +16,7 @@ import { Router } from 'react-router-dom'
 import { observer } from 'mobx-react'
 
 import { registerLocale } from 'react-datepicker'
-import fi from 'date-fns/locale/fi'
-import en from 'date-fns/locale/en-GB'
+import { fi, enGB as en } from 'date-fns/locale'
 
 import EnvClass from '@/stores/domain/env'
 import { buildStores } from '@/stores'

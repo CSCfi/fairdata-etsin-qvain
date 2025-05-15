@@ -9,6 +9,7 @@ import OrgSelector from './orgSelector'
 import OrgForm from './orgForm'
 import { getOrganizationName } from '../../common'
 import { useStores } from '@/stores/stores'
+import withCustomProps from '@/utils/withCustomProps'
 
 const sortOpts = { numeric: true, sensitivity: 'base' }
 const sortFunc = (a, b) => a.localeCompare(b, undefined, sortOpts)
@@ -162,7 +163,7 @@ export const OrgInfoBase = () => {
 
 const countContPadding = props => `${props.index * 20}px`
 
-const OrgContainer = styled.div`
+const OrgContainer = withCustomProps(styled.div)`
   padding-left: ${countContPadding};
 `
 

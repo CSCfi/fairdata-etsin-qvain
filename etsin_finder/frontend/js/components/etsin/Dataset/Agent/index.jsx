@@ -22,6 +22,7 @@ import PopUp from '@/components/etsin/general/popup'
 import PopUpContent from './PopUpContent'
 import { useStores } from '@/stores/stores'
 import { hasExtraInfo, flatParentOrgs } from './utils'
+import withCustomProps from '@/utils/withCustomProps'
 
 const Agent = ({ agent, first, inline, popupAlign }) => {
   const {
@@ -101,7 +102,7 @@ const TextWithoutPopup = styled.span`
   display: inline;
 `
 
-const AgentListItem = styled.li`
+const AgentListItem = withCustomProps(styled.li)`
   list-style: none;
   ${p => p.inline && 'display: inline;'}
 `

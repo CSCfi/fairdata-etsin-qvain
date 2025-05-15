@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -16,6 +17,6 @@ MaybeExternalLink.propTypes = {
   to: PropTypes.string.isRequired,
 }
 
-const CustomNavLink = Link.withComponent(NavLink)
+const CustomNavLink = styled(Link).attrs({ as: NavLink })``
 
 export default MaybeExternalLink

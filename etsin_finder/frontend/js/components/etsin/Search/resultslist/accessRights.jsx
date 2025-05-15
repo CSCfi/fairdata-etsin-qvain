@@ -18,6 +18,7 @@ import PropTypes from 'prop-types'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { useStores } from '@/stores/stores'
 import accessRights from './accessRights.base'
+import withCustomProps from '@/utils/withCustomProps'
 
 export const accessRightsBool = ar => ar?.access_type?.url === ACCESS_TYPE_URL.OPEN
 
@@ -68,7 +69,7 @@ function AccessRights(props) {
 export default observer(AccessRights)
 export const undecorated = AccessRights
 
-const Access = styled.div`
+const Access = withCustomProps(styled.div)`
   padding: 0.2em 0.9em;
   background-color: ${p => p.theme.color.lightgray};
   border-radius: 1em;

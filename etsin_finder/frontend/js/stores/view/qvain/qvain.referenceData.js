@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { observable, makeObservable } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 
 import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
@@ -83,6 +83,10 @@ class ReferenceData {
     )
   }
 
+  @action.bound setCacheValue(key, value) {
+    this.cache[key] = value
+  }
+
   async getOptions(referenceData, { client = axios, searchText } = {}) {
     let url
     if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
@@ -100,7 +104,7 @@ class ReferenceData {
       }
       options = this.cleanupExtraFields(referenceData, options)
       if (!searchText) {
-        this.cache[url] = options
+        this.setCacheValue(url, options)
       }
     }
 

@@ -55,8 +55,9 @@ export class MetadataModal extends Component {
   async componentDidMount() {
     this.initialize()
     await this.fetchformatVersions()
+    const { Qvain } = this.props.Stores
     this.autorunDisposer = autorun(async () => {
-      const file = this.props.Stores.Qvain.metadataModalFile || {}
+      const file = Qvain.metadataModalFile || {}
       if (file.identifier !== this.state.fileIdentifier) {
         this.initialize()
         if (this.formatFetchStatus === 'error') {

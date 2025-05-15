@@ -50,7 +50,7 @@ const ActorItem = ({ actor }) => {
             component={DeleteButton}
             type="button"
             onClick={handleRemoveActor}
-            attribute={{ 'aria-label': 'qvain.general.buttons.remove' }}
+            attributes={{ 'aria-label': 'qvain.general.buttons.remove' }}
           />
         )}
       </ListItemButtonContainer>

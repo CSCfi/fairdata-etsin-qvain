@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 import Translate from '@/utils/Translate'
+import withCustomProps from '@/utils/withCustomProps'
 
 export const IconStyles = styled(FontAwesomeIcon)`
   color: ${props => props.theme.color.primary};
@@ -12,7 +13,7 @@ export const IconStyles = styled(FontAwesomeIcon)`
   }
 `
 
-export const NoStyleButton = styled.button`
+export const NoStyleButton = withCustomProps(styled.button)`
   border: none;
   background-color: unset;
 `

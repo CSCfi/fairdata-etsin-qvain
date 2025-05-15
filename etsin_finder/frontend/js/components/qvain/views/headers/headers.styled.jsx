@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { InvertedButton } from '../../../general/button'
 import { StickySubHeader } from '../../general/card'
+import withCustomProps from '@/utils/withCustomProps'
 
 export const SubmitButton = styled(InvertedButton)`
   background: #fff;
@@ -25,7 +26,7 @@ export const CustomSubHeader = styled(StickySubHeader)`
   justify-content: space-between;
 `
 
-export const LinkBackContainer = styled.div`
+export const LinkBackContainer = withCustomProps(styled.div)`
   text-align: ${props => props.position};
   white-space: nowrap;
 `

@@ -15,9 +15,10 @@ import PropTypes from 'prop-types'
 
 import { opacify, darken } from 'polished'
 import checkColor from '../../styles/styledUtils'
+import withCustomProps from '@/utils/withCustomProps'
 
 // prettier-ignore
-export const Button = styled.button.attrs(props => ({
+export const Button = withCustomProps(styled.button).attrs(props => ({
   padding: props.padding ? props.padding : '0.3em 0.6em 0.4em',
   margin: props.margin ? props.margin : '0.25em 0.25em',
   type: props.type || 'button',
@@ -119,7 +120,7 @@ export const LinkButtonDarkGray = styled(TransparentButton)`
 `
 
 // prettier-ignore
-export const Link = styled.a.attrs(props => ({
+export const Link = withCustomProps(styled.a).attrs(props => ({
   padding: props.padding ? props.padding : '0.3em 0.6em 0.4em',
   margin: props.margin ? props.margin : '0.25em 0.25em',
 }))`

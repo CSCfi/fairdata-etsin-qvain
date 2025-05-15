@@ -2,8 +2,8 @@ import React from 'react'
 import '@testing-library/jest-dom'
 import { render } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components'
-import { MemoryRouter } from 'react-router-dom'
-import { Route } from 'react-router-dom/cjs/react-router-dom.min'
+
+import { MemoryRouter, Route } from 'react-router-dom'
 
 import theme from '@/styles/theme'
 import { StoresProvider } from '@/stores/stores'
