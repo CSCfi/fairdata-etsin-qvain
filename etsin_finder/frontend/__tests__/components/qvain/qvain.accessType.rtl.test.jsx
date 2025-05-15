@@ -1,9 +1,10 @@
+/* eslint-disable testing-library/no-render-in-setup */
 import React from 'react'
-import { mount } from 'enzyme'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { configure } from 'mobx'
-import Select from 'react-select'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 import AccessType from '@/components/qvain/sections/DataOrigin/general/AccessRights/AccessType'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
@@ -30,11 +31,10 @@ jest.mock('@/components/qvain/utils/select', () => {
 
 describe('Qvain Access Type', () => {
   let Stores, Auth, Qvain
-  let component
 
-  const getOptions = () => {
-    component.update()
-    return component.find('Select').first().prop('options')
+  const getOptions = async () => {
+    await userEvent.click(screen.getByLabelText('Access Type'))
+    return screen.getAllByRole('option').map(o => o.textContent)
   }
 
   beforeEach(() => {
@@ -49,7 +49,7 @@ describe('Qvain Access Type', () => {
 
   const setAuthUserAndRender = (userSettings = {}) => {
     Auth.setUser({ ...Auth.user, ...userSettings })
-    component = mount(
+    render(
       <StoresProvider store={Stores}>
         <AccessType />
       </StoresProvider>
@@ -63,94 +63,76 @@ describe('Qvain Access Type', () => {
     })
 
     it('restricts which access types are shown', async () => {
-      const options = getOptions()
+      const options = await getOptions()
       expect(options.length).toBe(4)
-      expect(options.filter(opt => opt.url === ACCESS_TYPE_URL.PERMIT).length).toBe(0)
+      expect(options.filter(opt => opt.includes('permission')).length).toBe(0)
     })
 
     it('should not render RestrictionGrounds', () => {
-      const restrictionGrounds = component.find('RestrictionGrounds')
-      expect(restrictionGrounds.exists()).toBe(false)
+      expect(screen.queryByLabelText('Restriction Grounds')).not.toBeInTheDocument()
     })
   })
 
   describe('given AccessType is Permit but isUsingRems is false', () => {
     beforeEach(async () => {
       Qvain.AccessType.set({ url: ACCESS_TYPE_URL.PERMIT })
-      await setAuthUserAndRender({ isUsingRems: false })
+      setAuthUserAndRender({ isUsingRems: false })
     })
 
     it('always allows the current access type', async () => {
-      const options = getOptions()
+      const options = await getOptions()
       expect(options.length).toBe(5)
-      expect(options.filter(opt => opt.url === ACCESS_TYPE_URL.PERMIT).length).toBe(1)
+      expect(options.filter(opt => opt.includes('permission')).length).toBe(1)
+      expect(screen.getByLabelText('Restriction Grounds')).toBeInTheDocument()
     })
 
     it('renders permitInfo', () => {
-      const permitInfo = component.find({
-        content: 'qvain.rightsAndLicenses.accessType.permitInfo',
-      })
-      expect(permitInfo.exists()).toBe(true)
+      expect(screen.getByTestId('permit-help')).toBeInTheDocument()
     })
   })
 
   describe('given AccessType is Permit and isUsingRems is true', () => {
     beforeEach(async () => {
       Qvain.AccessType.set({ url: ACCESS_TYPE_URL.PERMIT })
-      await setAuthUserAndRender({ isUsingRems: true })
+      setAuthUserAndRender({ isUsingRems: true })
     })
 
     it('shows all access type options', async () => {
-      const options = getOptions()
+      const options = await getOptions()
       expect(options.length).toBe(5)
-      expect(options.filter(opt => opt.url === ACCESS_TYPE_URL.PERMIT).length).toBe(1)
+      expect(options.filter(opt => opt.includes('permission')).length).toBe(1)
     })
   })
 
   describe('given AccesType is EMBARGO', () => {
     beforeEach(async () => {
       Qvain.AccessType.set({ url: ACCESS_TYPE_URL.EMBARGO })
-      await setAuthUserAndRender()
+      setAuthUserAndRender()
     })
 
     it('renders EmbargoExpires', () => {
-      const embargoExp = component.find('EmbargoExpires')
-      expect(embargoExp.exists()).toBe(true)
+      expect(screen.getByLabelText('Embargo expiration date')).toBeInTheDocument()
     })
   })
 
   describe('Select', () => {
-    let select
-
     beforeEach(async () => {
       Qvain.AccessType.setValidationError = jest.fn()
       Qvain.AccessType.validate = jest.fn()
-      await setAuthUserAndRender()
-      select = component.find(Select).find('input#accessTypeSelect')
+      setAuthUserAndRender()
     })
 
-    describe('when triggering onChange', () => {
-      beforeEach(() => {
-        component.find('Select').instance().selectOption({ label: '...', value: 50 })
-      })
-
-      it('should call onChange', () => {
-        expect(onChange).toHaveBeenCalled()
-      })
-
-      it('should call setValidationError with null', () => {
-        expect(Qvain.AccessType.setValidationError).toHaveBeenCalledWith(null)
-      })
+    it('should call onChange', async () => {
+      await userEvent.click(screen.getByLabelText('Access Type'))
+      await userEvent.click(screen.getAllByRole('option')[0])
+      expect(onChange).toHaveBeenCalled()
+      expect(Qvain.AccessType.setValidationError).toHaveBeenCalledWith(null)
     })
 
-    describe('when triggering onBlur', () => {
-      beforeEach(() => {
-        select.simulate('blur')
-      })
-
-      it('should call validate', () => {
-        expect(Qvain.AccessType.validate).toHaveBeenCalled()
-      })
+    it('should validate on blur', async () => {
+      await userEvent.click(screen.getByLabelText('Access Type'))
+      await userEvent.click(document.body)
+      expect(Qvain.AccessType.validate).toHaveBeenCalled()
     })
   })
 })

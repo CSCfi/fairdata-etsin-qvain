@@ -127,28 +127,37 @@ class Share {
     this.searchError = err
   }
 
+  searchDelay = 300
+
+  setSearchDelay(delay) {
+    this.searchDelay = delay
+  }
+
   @action.bound
   async searchUsers(str) {
     this.client.abort('search')
+    this.setSearchError(undefined)
     if (!str) {
       this.setSearchResults([])
       return []
     }
     const search = async () => {
       try {
-        this.setSearchError(undefined)
-        await Promise.delay(300)
+        if (this.searchDelay) {
+          await this.client.delay(this.searchDelay, { tag: 'search' }) // debounce
+        }
         const resp = await this.client.get(urls.ldap.searchUser(str), { timeout, tag: 'search' })
 
         const options = resp.data
         this.setSearchResults(options)
+        this.setSearchError(undefined)
         return options
       } catch (e) {
         if (!isAbort(e)) {
           console.error(e)
           this.setSearchError(e)
         }
-        return []
+        return this.searchResults
       }
     }
     return this.promiseManager.add(search(), 'search')

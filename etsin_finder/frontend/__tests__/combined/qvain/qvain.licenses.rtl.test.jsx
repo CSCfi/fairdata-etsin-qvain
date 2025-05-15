@@ -1,17 +1,12 @@
+import { screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { shallow } from 'enzyme'
-import { components } from 'react-select'
-import CreatableSelect from 'react-select/creatable'
 
-import etsinTheme from '@/styles/theme'
+import { contextRenderer } from '@/../__tests__/test-helpers'
+import License from '@/components/qvain/sections/DataOrigin/general/AccessRights/License'
 import { buildStores } from '@/stores'
 import { useStores } from '@/stores/stores'
-import {
-  License,
-  ErrorLabel,
-} from '@/components/qvain/sections/DataOrigin/general/AccessRights/License'
 import { LICENSE_URL } from '@/utils/constants'
-import { ValidationError } from '@/components/qvain/general/errors/validationError'
 
 jest.mock('@/stores/stores', () => {
   const mockUseStores = jest.fn()
@@ -36,18 +31,9 @@ jest.mock('axios', () => ({
 describe('Qvain.License', () => {
   let stores
 
-  const getRenderedLicenseUrls = shallowLicenseComponent => {
-    const selectedOptions = shallowLicenseComponent
-      .findWhere(c => c.prop('component') === CreatableSelect)
-      .dive()
-      .dive()
-      .dive()
-      .dive()
-      .find(components.MultiValue)
-
-    return selectedOptions.map(
-      opt => opt.prop('data').identifier || opt.prop('data').otherLicenseUrl
-    )
+  const getRenderedLicenseUrls = () => {
+    const inputs = Array.from(document.querySelectorAll('input[type="hidden"]'))
+    return inputs.map(v => v.value)
   }
 
   beforeEach(() => {
@@ -61,8 +47,8 @@ describe('Qvain.License', () => {
   })
 
   it('should render default license', () => {
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    expect(getRenderedLicenseUrls(component)).toEqual([LICENSE_URL.CCBY4])
+    contextRenderer(<License />, { stores })
+    expect(getRenderedLicenseUrls()).toEqual([LICENSE_URL.CCBY4])
   })
 
   it('should render one added license, Other (URL)', () => {
@@ -70,8 +56,8 @@ describe('Qvain.License', () => {
     setLicenseArray([
       LicenseConstructor({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'https://test.url'),
     ])
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    expect(getRenderedLicenseUrls(component)).toEqual(['https://test.url'])
+    contextRenderer(<License />, { stores })
+    expect(getRenderedLicenseUrls()).toEqual(['https://test.url'])
   })
 
   it('should render one added license, CCBY4', () => {
@@ -83,8 +69,8 @@ describe('Qvain.License', () => {
         LICENSE_URL.CCBY4
       ),
     ])
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    expect(getRenderedLicenseUrls(component)).toEqual([LICENSE_URL.CCBY4])
+    contextRenderer(<License />, { stores })
+    expect(getRenderedLicenseUrls()).toEqual([LICENSE_URL.CCBY4])
   })
 
   it('should render three added licenses, Other (URL) x 2 + CCBY4', () => {
@@ -97,15 +83,15 @@ describe('Qvain.License', () => {
         LICENSE_URL.CCBY4
       ),
     ])
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    expect(getRenderedLicenseUrls(component)).toEqual([
+    contextRenderer(<License />, { stores })
+    expect(getRenderedLicenseUrls()).toEqual([
       'https://test.url',
       'https://test2.url',
       LICENSE_URL.CCBY4,
     ])
   })
 
-  it('should render four licenses where two have errors', () => {
+  it('should render four licenses where two have errors', async () => {
     const { Licenses } = stores.Qvain
     Licenses.set([
       Licenses.Model(
@@ -116,26 +102,37 @@ describe('Qvain.License', () => {
       Licenses.CustomLicenseModel({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'http://ok.url'),
       Licenses.CustomLicenseModel({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httppp:/fail.url'),
     ])
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    component.instance().validateLicenses()
-    expect(getRenderedLicenseUrls(component)).toEqual([
+    contextRenderer(<License />, { stores })
+
+    // Trigger blur event to validate licenses
+    await userEvent.click(screen.getByRole('combobox'))
+    await userEvent.click(document.body)
+
+    expect(getRenderedLicenseUrls()).toEqual([
       LICENSE_URL.CCBY4,
-      'httpöötest.url',
-      'http://ok.url',
-      'httppp:/fail.url',
+      'custom:httpöötest.url',
+      'custom:http://ok.url',
+      'custom:httppp:/fail.url',
     ])
-    const errorLabels = component.find(ErrorLabel).map(item => item.text())
-    expect(errorLabels).toEqual(['httpöötest.url:', 'httppp:/fail.url:'])
+    const errors = screen.getByTestId('license-errors')
+    const labels = Array.from(errors.querySelectorAll('span')).map(e => e.textContent)
+    expect(labels).toEqual(['httpöötest.url:', 'httppp:/fail.url:'])
   })
 
-  it('should render invalid url error', () => {
+  it('should render invalid url error', async () => {
     const { Licenses } = stores.Qvain
     Licenses.set([
       Licenses.CustomLicenseModel({ en: 'Other (URL)', fi: 'Muu (URL)' }, 'httpöötest.url'),
     ])
-    const component = shallow(<License Stores={stores} theme={etsinTheme} />)
-    component.instance().validateLicenses()
-    const errors = component.find(ValidationError).map(item => item.children().text())
-    expect(errors).toEqual(['qvain.validationMessages.license.otherUrl.url'])
+    contextRenderer(<License />, { stores })
+
+    // Trigger blur event to validate licenses
+    await userEvent.click(screen.getByRole('combobox'))
+    await userEvent.click(document.body)
+
+    const errors = screen.getByTestId('license-errors')
+    expect(errors.textContent).toContain(
+      stores.Locale.translate('qvain.validationMessages.license.otherUrl.url')
+    )
   })
 })

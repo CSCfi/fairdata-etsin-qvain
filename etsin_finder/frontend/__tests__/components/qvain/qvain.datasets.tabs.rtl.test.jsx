@@ -1,5 +1,6 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { screen, render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
 
@@ -22,9 +23,8 @@ beforeEach(() => {
 })
 
 describe('Datasets Tabs', () => {
-  let wrapper
-  beforeEach(() => {
-    wrapper = mount(
+  const renderTabs = () => {
+    render(
       <StoresProvider store={stores}>
         <BrowserRouter>
           <ThemeProvider theme={etsinTheme}>
@@ -33,26 +33,20 @@ describe('Datasets Tabs', () => {
         </BrowserRouter>
       </StoresProvider>
     )
-  })
-
-  afterEach(() => {
-    wrapper?.unmount?.()
-  })
-
-  const findTabWithText = text => {
-    return wrapper.find('button').filterWhere(btn => {
-      return btn.prop('children') === text
-    })
   }
 
+  const findTabWithText = text => screen.getByRole('tab', { name: text })
+
   it('should initially show default tab', async () => {
-    findTabWithText("test.tabs.all").prop('aria-selected').should.be.true
-    findTabWithText("test.tabs.another").prop('aria-selected').should.not.be.true
+    renderTabs()
+    expect(findTabWithText('test.tabs.all').getAttribute('aria-selected')).toBe('true')
+    expect(findTabWithText('test.tabs.another').getAttribute('aria-selected')).toBe('false')
   })
 
   it('should change tab', async () => {
-    findTabWithText("test.tabs.another").simulate('click')
-    findTabWithText("test.tabs.another").prop('aria-selected').should.be.true
-    findTabWithText("test.tabs.all").prop('aria-selected').should.not.be.true
+    renderTabs()
+    await userEvent.click(findTabWithText('test.tabs.another'))
+    expect(findTabWithText('test.tabs.another').getAttribute('aria-selected')).toBe('true')
+    expect(findTabWithText('test.tabs.all').getAttribute('aria-selected')).toBe('false')
   })
 })

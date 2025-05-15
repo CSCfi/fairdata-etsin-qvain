@@ -71,7 +71,7 @@ export class AccessType extends Component {
   }
 
   render() {
-    const { lang } = this.props.Stores.Locale
+    const { lang, translate } = this.props.Stores.Locale
     const { value, Model, validationError, readonly, validate } = this.props.Stores.Qvain.AccessType
     const { shouldShowDataAccess } = this.props.Stores.Qvain.DataAccess
     const { options } = this.state
@@ -79,7 +79,7 @@ export class AccessType extends Component {
     let permitInfo = null
     if (value && value.url === ACCESS_TYPE_URL.PERMIT) {
       permitInfo = (
-        <PermitHelp>
+        <PermitHelp data-testid="permit-help">
           <Translate
             component={HelpField}
             content="qvain.rightsAndLicenses.accessType.permitInfo"
@@ -91,10 +91,9 @@ export class AccessType extends Component {
     return (
       <FieldGroup data-cy="access-type-select">
         <TitleSmall htmlFor="accessTypeSelect">
-          <Translate content="qvain.rightsAndLicenses.accessType.title" />
+          {translate('qvain.rightsAndLicenses.accessType.title')}
         </TitleSmall>
-        <Translate
-          component={Select}
+        <Select
           inputId="accessTypeSelect"
           name="accessType"
           options={options}
@@ -105,9 +104,7 @@ export class AccessType extends Component {
           getOptionLabel={getOptionLabel(Model, lang)}
           getOptionValue={getOptionValue(Model)}
           onBlur={validate}
-          attributes={{
-            placeholder: 'qvain.rightsAndLicenses.accessType.placeholder',
-          }}
+          placeholder={translate('qvain.rightsAndLicenses.accessType.placeholder')}
           aria-autocomplete="list"
         />
         {permitInfo}

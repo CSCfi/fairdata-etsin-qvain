@@ -47,6 +47,10 @@ const SearchSelect = props => {
     },
     ariaAutocomplete: 'list',
     placeholder: '',
+    classNames: {
+      control: () => 'control',
+      multiValueLabel: () => 'selected-value',
+    },
   }
 
   return inModal ? (

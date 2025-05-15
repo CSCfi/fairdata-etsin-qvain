@@ -139,6 +139,10 @@ class Select extends Component {
       getOptionLabel: option => modifyOptionLabel(optionLabelFunc(option), option),
       getOptionValue: getOptionValue(model),
       ariaAutocomplete: 'list',
+      classNames: {
+        control: () => 'control',
+        multiValueLabel: () => 'selected-value',
+      },
     }
 
     if (inModal) {

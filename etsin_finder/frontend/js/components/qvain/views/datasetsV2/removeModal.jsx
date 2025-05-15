@@ -23,6 +23,7 @@ export const RemoveModal = () => {
       metaxV3Url,
       Flags: { flagEnabled },
     },
+    Locale: { translate },
   } = useStores()
 
   const [error, setError] = useState(null)
@@ -111,10 +112,10 @@ export const RemoveModal = () => {
       <Translate component="p" content={`qvain.datasets.remove.confirm.${removeKey}.text`} />
       {error && <ErrorMessage>{error}</ErrorMessage>}
       <TableButton id="cancel-remove-dataset" disabled={loading} onClick={clearAndClose}>
-        <Translate content="qvain.datasets.remove.confirm.cancel" />
+        {translate('qvain.datasets.remove.confirm.cancel')}
       </TableButton>
       <DangerButton id="confirm-remove-dataset" disabled={loading} onClick={() => handleRemove()}>
-        <Translate content={`qvain.datasets.remove.confirm.${removeKey}.ok`} />
+        {translate(`qvain.datasets.remove.confirm.${removeKey}.ok`)}
       </DangerButton>
     </Modal>
   )

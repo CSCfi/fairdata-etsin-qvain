@@ -63,7 +63,7 @@
     "react-modal": "^3.16.1",
     "react-refresh": "^0.14.0",
     "react-router-dom": "^5.3.4",
-    "react-select": "^4.3.1",
+    "react-select": "^5.10.1",
     "react-transition-group": "^2.9.0",
     "react-with-direction": "^1.4.0",
     "remark-gfm": "^3.0.1",
@@ -117,9 +117,6 @@
     "webpack-plugin-serve": "^1.6.0"
   },
   "jest": {
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ],
     "testEnvironment": "./__tests__/timezonedJSDOMEnvironment.js",
     "setupFilesAfterEnv": [
       "./__tests__/test-setup.js"
@@ -136,8 +133,7 @@
       "./__tests__/test-helpers",
       "./__tests__/timezonedJSDOMEnvironment.js",
       "./__tests__/timezonedNodeEnvironment.js",
-      "./__tests__/__testdata__",
-      "./__tests__/components/componentTestHarness.jsx"
+      "./__tests__/__testdata__"
     ],
     "testEnvironmentOptions": {
       "url": "http://localhost"

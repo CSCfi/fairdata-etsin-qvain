@@ -77,6 +77,24 @@ class AbortClient {
     this.controllers.replace(this.controllers.filter(({ done }) => !done))
   }
 
+  async delay(milliseconds, { tag } = {}) {
+    // Abortable delay.
+    //
+    // When aborted, rejects with an axios.Cancel instance
+    // which can be identified with isAbort(error).
+    if (milliseconds == null) {
+      return
+    }
+    const controller = this.createController(tag)
+    const { signal } = controller.abortController
+    await Promise.delay(milliseconds)
+    this.clearController(controller)
+
+    if (signal.aborted) {
+      throw new axios.Cancel('Delay aborted')
+    }
+  }
+
   request({ method, url, data, tag, ...axiosConfig }) {
     const controller = this.createController(tag)
     const { signal } = controller.abortController

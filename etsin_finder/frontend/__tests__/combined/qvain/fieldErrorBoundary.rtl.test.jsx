@@ -1,5 +1,6 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { screen, render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 // fills withFieldErrorBoundaryTranslationList as a side effect
 import '@/components/qvain/views/main'
@@ -11,47 +12,48 @@ import {
   withFieldErrorBoundaryTranslationList,
 } from '@/components/qvain/general/errors/fieldErrorBoundary'
 
+jest.spyOn(console, 'error').mockImplementation(() => {})
+
 describe('FieldErrorBoundary', () => {
+  const errorDetails = 'tymä virhe'
   const DumbComponent = () => {
-    return 'hello world'
+    throw new Error(errorDetails)
   }
 
-  let wrapper
   let stores
-  const errorDetails = 'tymä virhe'
 
-  beforeEach(() => {
+  const renderError = () => {
     stores = buildStores()
     stores.Locale.setMissingTranslationHandler(key => key)
-    wrapper = mount(
+    render(
       <StoresProvider store={stores}>
         <FieldErrorBoundary field="test.dumbField">
           <DumbComponent />
         </FieldErrorBoundary>
       </StoresProvider>
     )
-    wrapper.find(DumbComponent).simulateError(errorDetails)
-  })
+  }
 
   it('should show field title', () => {
-    wrapper.text().should.contain('test.dumbField')
+    renderError()
+    expect(
+      screen.getByRole('heading', { name: 'There was an error rendering test.dumbField' })
+    ).toBeInTheDocument()
+    expect(screen.queryByText(errorDetails)).not.toBeInTheDocument() // details hidden by default
   })
 
-  it('should not show details by default', () => {
-    wrapper.text().should.not.contain(errorDetails)
-  })
-
-  it('should show details when "show details" is clicked', () => {
-    const detailsButton = wrapper.find('button')
-    detailsButton.simulate('click')
-    wrapper.text().should.contain('test.dumbField')
+  it('should show details when "show details" is clicked', async () => {
+    renderError()
+    const detailsButton = screen.getByRole('button', { name: 'Show details' })
+    await userEvent.click(detailsButton)
+    expect(screen.getByText(`Error: ${errorDetails}`, { exact: false })).toBeInTheDocument()
   })
 })
 
 describe('withFieldErrorBoundary', () => {
   it('should use correct translations', () => {
     const stores = buildStores()
-    let errors = []
+    const errors = []
     stores.Locale.setMissingTranslationHandler(key => {
       errors.push(key)
       return `translation ${key} does not exist`
@@ -59,6 +61,6 @@ describe('withFieldErrorBoundary', () => {
     withFieldErrorBoundaryTranslationList.forEach(key => {
       stores.Locale.translate(key).should.be.a('string')
     })
-    errors.should.be.empty
+    expect(errors).toEqual([])
   })
 })

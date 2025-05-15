@@ -109,6 +109,10 @@ const StringArray = ({ id, fieldName, addWithComma, required, hideButton }) => {
         value={options}
         required={required}
         placeholder=""
+        classNames={{
+          control: () => 'control',
+          multiValueLabel: () => 'selected-value',
+        }}
       />
       <ErrorAndButtonContainer>
         {!hideButton && (

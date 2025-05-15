@@ -46,6 +46,7 @@ Control.propTypes = {
 
 const Invite = () => {
   const {
+    Locale: { translate },
     QvainDatasets: {
       share: {
         searchUsers,
@@ -90,9 +91,8 @@ const Invite = () => {
         content="qvain.datasets.share.invite.users.label"
       />
       <SearchRow>
-        <Translate
+        <Select
           inputId="search-users-input"
-          component={Select}
           styles={{
             container: provided => ({ ...provided, flexGrow: 1 }),
             multiValueLabel: provided => ({ ...provided, whiteSpace: 'normal' }),
@@ -108,7 +108,7 @@ const Invite = () => {
           menuPlacement="auto"
           menuPosition="fixed"
           menuShouldScrollIntoView={false}
-          attributes={{ placeholder: 'qvain.datasets.share.invite.users.placeholder' }}
+          placeholder={translate('qvain.datasets.share.invite.users.placeholder')}
         />
         <Translate component={Role} content="qvain.datasets.share.invite.roles.editor" />
       </SearchRow>
@@ -118,13 +118,13 @@ const Invite = () => {
         content="qvain.datasets.share.invite.message.label"
       />
 
-      <Translate
+      <Message
         id="invite-message-input"
         component={Message}
         value={inviteMessage}
         onChange={e => setInviteMessage(e.target.value)}
         disabled={selectedUsers.length === 0}
-        attributes={{ placeholder: 'qvain.datasets.share.invite.message.placeholder' }}
+        placeholder={translate('qvain.datasets.share.invite.message.placeholder')}
       />
       <InviteButton disabled={selectedUsers.length === 0 || isInviting} onClick={sendInvite}>
         <Translate content="qvain.datasets.share.invite.button" />

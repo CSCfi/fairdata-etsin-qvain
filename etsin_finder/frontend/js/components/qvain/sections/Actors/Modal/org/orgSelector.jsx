@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { observer } from 'mobx-react'
@@ -13,6 +14,8 @@ import { FieldGroup, InfoText } from '@/components/qvain/general/V2'
 import Translate from '@/utils/Translate'
 import { useStores } from '@/utils/stores'
 import { getOrganizationName } from '../../common'
+
+import { Input } from '@/components/qvain/general/modal/form'
 
 // From the reference data parse the values with the current lang
 // or und.
@@ -84,7 +87,7 @@ export const OrgSelectorBase = ({
 }) => {
   const Stores = useStores()
   const { readonly } = Stores.Qvain
-  const { lang } = Stores.Locale
+  const { lang, translate } = Stores.Locale
 
   const isNew = level >= organizations.length
   const isReference = organization?.isReference
@@ -139,18 +142,20 @@ export const OrgSelectorBase = ({
 
     if (!isReference && selectedOption && selectedOption.label === '') {
       components.SingleValue = ValuePlaceholder
-      selectedOption.label = Stores.Locale.translate('qvain.actors.add.organization.label')
+      selectedOption.label = translate('qvain.actors.add.organization.label')
     }
 
     components.Option = CustomOption
 
     if (isEditable) {
       components.Control = props => (
-        <selectComponents.Control
-          {...props}
-          style={{ cursor: 'pointer', alignItems: 'stretch' }}
-          innerProps={{ onMouseDown: toggleEdit, style: { cursor: 'pointer' } }}
-        />
+        <EditToggle
+          onClick={toggleEdit}
+          tabIndex="0"
+          aria-label={translate('qvain.actors.add.organization.details')}
+        >
+          {props.children}
+        </EditToggle>
       )
       components.IndicatorsContainer = () => <EditIcon />
     }
@@ -283,7 +288,7 @@ const Value = styled(ValueWrapper)`
   box-sizing: border-box;
 `
 
-const ValuePlaceholder = styled(Value)`
+const ValuePlaceholder = styled(selectComponents.Placeholder)`
   color: hsl(0, 0%, 50%);
   position: absolute;
 `
@@ -295,6 +300,17 @@ const ValueContainer = styled(selectComponents.ValueContainer)`
 const SelectOrg = styled(CreatableSelect)`
   flex-grow: 1;
   margin-bottom: 0.5rem;
+`
+
+const EditToggle = styled(Input).attrs({ as: 'button' })`
+  margin: 0;
+  text-align: left;
+  background: none;
+  padding: 0;
+  height: 38px;
+  display: flex;
+  padding: 2px 4px;
+  align-items: center;
 `
 
 OrgSelectorBase.propTypes = propTypes

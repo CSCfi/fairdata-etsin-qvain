@@ -127,7 +127,11 @@ export const OrgInfoBase = () => {
         {' *'}
       </Label>
       {padded.map((organization, index) => (
-        <OrgContainer index={index} key={`${organization?.uiid}` || `new-${index}`}>
+        <OrgContainer
+          index={index}
+          key={`${organization?.uiid}` || `new-${index}`}
+          data-testid={`org-level-${index}`}
+        >
           <OrgSelector
             organization={organization}
             organizations={actor.organizations}

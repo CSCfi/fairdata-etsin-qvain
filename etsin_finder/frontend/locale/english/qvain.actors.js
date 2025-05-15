@@ -78,6 +78,7 @@ const actors = {
         dataset: 'Organizations in dataset',
         presets: 'Preset organizations',
       },
+      details: 'Edit organization details',
     },
     save: {
       label: 'Add actor',

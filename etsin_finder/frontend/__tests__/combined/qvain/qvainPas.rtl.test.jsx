@@ -1,25 +1,21 @@
-import React from 'react'
-import { mount } from 'enzyme'
-import { ThemeProvider } from 'styled-components'
+import { screen } from '@testing-library/react'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
+import React from 'react'
 
-import etsinTheme from '@/styles/theme'
-import PasState from '@/components/qvain/views/headers/pasState'
-import FileForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/fileForm'
 import DirectoryForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/directoryForm'
-import { File, Directory, Project } from '@/stores/view/common.files.items'
+import FileForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/fileForm'
+import PasState from '@/components/qvain/views/headers/pasState'
+import { Directory, File, Project } from '@/stores/view/common.files.items'
 
+import { contextRenderer } from '@/../__tests__/test-helpers'
 import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { metaxResponses } from '../../__testdata__/qvainPas.data'
 
 import { buildStores } from '@/stores'
-import { StoresProvider } from '@/stores/stores'
-
-const stores = buildStores()
 
 const getStores = () => {
-  stores.Qvain.resetQvainStore()
+  const stores = buildStores()
   return stores
 }
 
@@ -33,46 +29,29 @@ mockAdapter.onGet().reply(async ({ url }) => {
   return [200, metaxResponses[path]]
 })
 
-// Unmount mounted components after each test to avoid tests affecting each other.
-let wrapper
-afterEach(() => {
-  if (wrapper && wrapper.unmount && wrapper.length === 1) {
-    wrapper.unmount()
-    wrapper = null
-  }
-})
-
-
 describe('Qvain.PasState', () => {
-  const render = stores => {
+  const renderState = stores => {
     stores.Qvain.Keywords.set(['key', 'word'])
-    return mount(
-      <StoresProvider store={stores}>
-        <ThemeProvider theme={etsinTheme}>
-          <PasState />
-        </ThemeProvider>
-      </StoresProvider>
-    )
+    return contextRenderer(<PasState />, { stores })
   }
 
   it('shows pas state', () => {
     const stores = getStores()
     stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
     stores.Qvain.setPreservationState(80)
-    wrapper = render(stores)
-    expect(wrapper.find(PasState).text().includes('80:')).toBe(true)
-    wrapper.unmount()
+    renderState(stores)
+    expect(screen.getByTestId('pas-state').textContent).toContain('80:')
 
-    stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.PAS
     stores.Qvain.setPreservationState(0)
-    wrapper = render(stores)
-    expect(wrapper.find(PasState).text().includes('80:')).toBe(false)
-    expect(wrapper.find(PasState).text().includes('0:')).toBe(true)
+    stores.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.PAS)
+
+    expect(screen.getByTestId('pas-state').textContent).not.toContain('80:')
+    expect(screen.getByTestId('pas-state').textContent).toContain('0:')
   })
 })
 
 describe('Qvain.Files', () => {
-  const render = (stores, editDirectory) => {
+  const renderFiles = (stores, editDirectory) => {
     const testfile = File({
       description: 'File',
       title: 'testfile',
@@ -124,71 +103,65 @@ describe('Qvain.Files', () => {
       stores.Qvain.Files.setInEdit(testfile)
       Form = FileForm
     }
-    return mount(
-      <StoresProvider store={stores}>
-        <ThemeProvider theme={etsinTheme}>
-          <Form requestClose={() => {}} setChanged={() => {}} />
-        </ThemeProvider>
-      </StoresProvider>
-    )
+    return contextRenderer(<Form requestClose={() => {}} setChanged={() => {}} />, { stores })
   }
 
   it('prevents editing of file fields', async () => {
     const stores = getStores()
     stores.Qvain.setPreservationState(80)
-    wrapper = render(stores)
+    renderFiles(stores)
 
-    const inputs = wrapper.find('input').not('[type="hidden"]')
-    const textareas = wrapper.find('textarea').not('[type="hidden"]')
-
+    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]'))
     expect(inputs.length).toBe(3)
-    inputs.forEach(c => expect(c.props().disabled).toBe(true))
+    inputs.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
 
+    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"]'))
     expect(textareas.length).toBe(1)
-    textareas.forEach(c => expect(c.props().disabled).toBe(true))
+    textareas.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
   })
 
   it('allows editing of file fields', async () => {
     const stores = getStores()
     stores.Auth.user.idaProjects = ['project_y']
     stores.Qvain.setPreservationState(0)
-    wrapper = render(stores)
-    const inputs = wrapper.find('input').not('[type="hidden"]')
-    expect(inputs.length).toBe(3)
-    inputs.forEach(c => expect(c.props().disabled).toBe(false))
+    renderFiles(stores)
 
-    const textareas = wrapper.find('textarea').not('[type="hidden"]')
+    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]'))
+    expect(inputs.length).toBe(3)
+    inputs.forEach(c => expect(c.hasAttribute('disabled')).toBe(false))
+
+    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"]'))
     expect(textareas.length).toBe(1)
-    textareas.forEach(c => expect(c.props().disabled).toBe(false))
+    textareas.forEach(c => expect(c.hasAttribute('disabled')).toBe(false))
   })
 
   it('prevents editing of directory fields', async () => {
     const stores = getStores()
     stores.Auth.user.idaProjects = ['project_y']
     stores.Qvain.setPreservationState(80)
-    wrapper = render(stores, true)
+    renderFiles(stores, true)
 
-    const inputs = wrapper.find('input').not('[type="hidden"]')
+    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]'))
     expect(inputs.length).toBe(3)
-    inputs.forEach(c => expect(c.props().disabled).toBe(true))
+    inputs.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
 
-    const textareas = wrapper.find('textarea').not('[type="hidden"]')
+    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"]'))
     expect(textareas.length).toBe(1)
-    textareas.forEach(c => expect(c.props().disabled).toBe(true))
+    textareas.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
   })
 
   it('allows editing of directory fields', async () => {
     const stores = getStores()
     stores.Auth.user.idaProjects = ['project_y']
     stores.Qvain.setPreservationState(100)
-    wrapper = render(stores, true)
+    renderFiles(stores, true)
 
-    const inputs = wrapper.find('input').not('[type="hidden"]')
+    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]'))
     expect(inputs.length).toBe(3)
-    inputs.forEach(c => expect(c.props().disabled).toBe(false))
+    inputs.forEach(c => expect(c.hasAttribute('disabled')).toBe(false))
 
-    const textareas = wrapper.find('textarea').not('[type="hidden"]')
+    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"]'))
     expect(textareas.length).toBe(1)
-    textareas.forEach(c => expect(c.props().disabled).toBe(false))
+    textareas.forEach(c => expect(c.hasAttribute('disabled')).toBe(false))
   })
 })

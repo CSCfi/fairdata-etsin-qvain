@@ -1,6 +1,6 @@
-import { configure } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import '@testing-library/react/dont-cleanup-after-each' // disable automatic cleanup
 import '@testing-library/jest-dom'
+import { cleanup } from '@testing-library/react'
 
 import { registerHelpers } from './test-helpers'
 import chai from 'chai'
@@ -16,8 +16,12 @@ import '../js/utils/extendPromise'
 
 chai.use(chaiJestMocks)
 
-configure({
-  adapter: new Adapter(),
+// Allow disabling RTL autocleanup per test file
+global.autoCleanup = true
+afterEach(() => {
+  if (global.autoCleanup) {
+    cleanup()
+  }
 })
 
 global.jestExpect = global.expect

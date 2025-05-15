@@ -211,7 +211,7 @@ describe('Qvain with an opened dataset', () => {
     const section = await renderSection('Description')
     const multivalue = within(section)
       .getByLabelText(label, { exact: false })
-      .closest('[class*=ValueContainer]')
+      .closest('[class*=control]')
     for (const value of values) {
       expect(within(multivalue).getByText(value, { exact })).toBeInTheDocument()
     }

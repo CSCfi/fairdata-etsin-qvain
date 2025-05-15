@@ -1,34 +1,26 @@
-import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import axios from 'axios'
+import React from 'react'
 
-import { ThemeProvider } from 'styled-components'
-import { BrowserRouter } from 'react-router-dom'
-import etsinTheme from '../../../js/styles/theme'
 import MockAdapter from 'axios-mock-adapter'
 
-import { CUMULATIVE_STATE } from '../../../js/utils/constants'
+import { contextRenderer } from '@/../__tests__/test-helpers'
 import EnvClass from '../../../js/stores/domain/env'
-import QvainClass from '../../../js/stores/view/qvain'
 import LocaleClass from '../../../js/stores/view/locale'
-import AccessibilityClass from '../../../js/stores/view/accessibility'
+import QvainClass from '../../../js/stores/view/qvain'
+import { CUMULATIVE_STATE } from '../../../js/utils/constants'
 
-import CumulativeDataset, {
-  CumulativeStateButton,
-} from '../../../js/components/qvain/sections/DataOrigin/IdaCatalog/CumulativeDataset'
-import { useStores, StoresProvider } from '../../../js/stores/stores'
+import CumulativeDataset from '../../../js/components/qvain/sections/DataOrigin/IdaCatalog/CumulativeDataset'
+import { useStores } from '../../../js/stores/stores'
 
 const mockAdapter = new MockAdapter(axios)
 mockAdapter.onGet().reply(200, {})
 
-jest.mock('../../../js/stores/stores', () => {
-  const useStores = jest.fn()
-
-  return {
-    ...jest.requireActual('../../../js/stores/stores'),
-    useStores,
-  }
-})
+jest.mock('../../../js/stores/stores', () => ({
+  ...jest.requireActual('../../../js/stores/stores'),
+  useStores: jest.fn(),
+}))
 
 const Env = new EnvClass()
 const Qvain = new QvainClass(Env)
@@ -80,25 +72,25 @@ describe('Qvain CumulativeDataset', () => {
   })
 
   it('shows radio buttons for new dataset', () => {
-    const component = shallow(<CumulativeDataset />, <StoresProvider store={stores} />)
-    expect(component.find('#cumulativeStateNo').prop('checked')).toBe(true)
-    expect(component.find('#cumulativeStateYes').prop('checked')).toBe(false)
+    contextRenderer(<CumulativeDataset />, { stores })
+    expect(document.querySelector('#cumulativeStateNo').hasAttribute('checked')).toBe(true)
+    expect(document.querySelector('#cumulativeStateYes').hasAttribute('checked')).toBe(false)
   })
 
   it('shows radio buttons with state set to false for draft', async () => {
     const { editDataset } = Qvain
     await editDataset(dataset)
-    const component = shallow(<CumulativeDataset />, <StoresProvider store={stores} />)
-    expect(component.find('#cumulativeStateNo').prop('checked')).toBe(true)
-    expect(component.find('#cumulativeStateYes').prop('checked')).toBe(false)
+    contextRenderer(<CumulativeDataset />, { stores })
+    expect(document.querySelector('#cumulativeStateNo').hasAttribute('checked')).toBe(true)
+    expect(document.querySelector('#cumulativeStateYes').hasAttribute('checked')).toBe(false)
   })
 
   it('shows radio buttons with state set to true for draft', async () => {
     const { editDataset } = Qvain
     await editDataset({ ...dataset, cumulative_state: CUMULATIVE_STATE.YES })
-    const component = shallow(<CumulativeDataset />, <StoresProvider store={stores} />)
-    expect(component.find('#cumulativeStateNo').prop('checked')).toBe(false)
-    expect(component.find('#cumulativeStateYes').prop('checked')).toBe(true)
+    contextRenderer(<CumulativeDataset />, { stores })
+    expect(document.querySelector('#cumulativeStateNo').hasAttribute('checked')).toBe(false)
+    expect(document.querySelector('#cumulativeStateYes').hasAttribute('checked')).toBe(true)
   })
 
   it('does not show cumulation enabling button for published dataset', async () => {
@@ -108,16 +100,15 @@ describe('Qvain CumulativeDataset', () => {
       cumulative_state: CUMULATIVE_STATE.NO,
       draft_of: { identifier: 1 },
     })
-    const component = shallow(<CumulativeDataset />, <StoresProvider store={stores} />)
-    expect(component.find(CumulativeStateButton).length).toBe(0)
+    contextRenderer(<CumulativeDataset />, { stores })
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
 
     await editDataset({
       ...dataset,
       cumulative_state: CUMULATIVE_STATE.CLOSED,
       draft_of: { identifier: 1 },
     })
-    component.update()
-    expect(component.find(CumulativeStateButton).length).toBe(0)
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 
   it('closes cumulation for published dataset', async () => {
@@ -127,26 +118,16 @@ describe('Qvain CumulativeDataset', () => {
       cumulative_state: CUMULATIVE_STATE.YES,
       draft_of: { identifier: 1 },
     })
-    let component = mount(
-      <StoresProvider store={stores}>
-        <BrowserRouter>
-          <ThemeProvider theme={etsinTheme}>
-            <CumulativeDataset />
-          </ThemeProvider>
-        </BrowserRouter>
-      </StoresProvider>
-    )
-    expect(component.find(CumulativeStateButton).length).toBe(1)
+    contextRenderer(<CumulativeDataset />, { stores })
 
     // set cumulation to be closed
-    component.find(CumulativeStateButton).simulate('click')
-    component.update()
+    const button = screen.getByRole('button', { name: 'Turn non-cumulative' })
+    await userEvent.click(button)
     expect(Qvain.cumulativeState).toBe(CUMULATIVE_STATE.YES)
     expect(Qvain.newCumulativeState).toBe(CUMULATIVE_STATE.CLOSED)
 
     // cancel close
-    component.find(CumulativeStateButton).simulate('click')
-    component.update()
+    await userEvent.click(button)
     expect(Qvain.cumulativeState).toBe(CUMULATIVE_STATE.YES)
     expect(Qvain.newCumulativeState).toBe(CUMULATIVE_STATE.YES)
   })

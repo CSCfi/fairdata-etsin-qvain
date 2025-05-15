@@ -1,23 +1,22 @@
-import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import styled, { withTheme } from 'styled-components'
 import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import CreatableSelect from 'react-select/creatable'
-import Translate from '@/utils/Translate'
+import styled, { withTheme } from 'styled-components'
 
-import { FieldGroup, TitleSmall, InfoText } from '@/components/qvain/general/V2'
+import { FieldGroup, InfoText, TitleSmall } from '@/components/qvain/general/V2'
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
+import { ValidationError } from '@/components/qvain/general/errors/validationError'
 import {
-  onChangeMulti,
-  getOptionLabel,
-  getOptionValue,
-  sortOptions,
   autoSortOptions,
   getCurrentOption,
+  getOptionLabel,
+  onChangeMulti,
+  sortOptions,
 } from '@/components/qvain/utils/select'
-import { ValidationError } from '@/components/qvain/general/errors/validationError'
 import { withStores } from '@/stores/stores'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
+import Translate from '@/utils/Translate'
 
 export class License extends Component {
   client = new AbortClient()
@@ -92,7 +91,7 @@ export class License extends Component {
       { fi: `Muu (URL): ${url}`, en: `Other (URL): ${url}` },
       url
     )
-    return { ...custom, identifier: url }
+    return custom
   }
 
   render() {
@@ -103,7 +102,7 @@ export class License extends Component {
     // allow wrap for long license labels
     const styles = {
       multiValue: (style, state) => {
-        if (this.state.licenseErrors[state.data.identifier]) {
+        if (this.state.licenseErrors[state.data.identifier || state.data.otherLicenseUrl]) {
           return {
             ...style,
             background: this.props.theme.color.error,
@@ -119,6 +118,8 @@ export class License extends Component {
       }),
     }
 
+    const getLicenseOptionValue = option => option.identifier || `custom:${option.otherLicenseUrl}`
+
     return (
       <FieldGroup data-cy="license-select">
         <TitleSmall htmlFor="licenseSelect">
@@ -130,12 +131,13 @@ export class License extends Component {
           name="license"
           isDisabled={readonly}
           getOptionLabel={getOptionLabel(Model, lang)}
-          getOptionValue={getOptionValue(Model)}
+          getOptionValue={getLicenseOptionValue}
           value={getCurrentOption(Model, options, storage)}
           options={options}
           isMulti
           isClearable={false}
           onChange={this.onChange}
+          onBlur={this.validateLicenses}
           createOptionPosition="first"
           getNewOptionData={this.createLicense}
           attributes={{
@@ -146,7 +148,7 @@ export class License extends Component {
         />
         <Translate component={InfoText} content="qvain.rightsAndLicenses.license.infoText" />
         {licenseErrors && (
-          <Errors>
+          <Errors data-testid="license-errors">
             {Object.entries(licenseErrors).map(([url, err]) => (
               <ErrorRow key={url}>
                 <ErrorLabel>{url}:</ErrorLabel>

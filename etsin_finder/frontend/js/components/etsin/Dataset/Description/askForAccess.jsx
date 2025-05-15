@@ -1,49 +1,35 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
+import React from 'react'
 
-import REMSButton from './REMSButton'
-import { withStores } from '@/utils/stores'
+import { useStores } from '@/stores/stores'
 import AccessModal from './AccessModal'
+import REMSButton from './REMSButton'
 
-export class AskForAccess extends Component {
-  state = {
-    applicationState: this.props.Stores.Access.restrictions.applicationState,
-    loading: false,
-  }
+const AskForAccess = () => {
+  const {
+    Env: { Flags, applicationState },
+    Access,
+    Etsin: {
+      EtsinDataset: { setShowAccessModal },
+    },
+  } = useStores()
 
-  onClick = () => {
-    const {
-      Etsin: {
-        EtsinDataset: { setShowAccessModal },
-      },
-    } = this.props.Stores
+  const onClick = () => {
     setShowAccessModal(true)
   }
 
-  render() {
-    const { Env } = this.props.Stores
-    if (!Env.Flags.flagEnabled('ETSIN.REMS')) {
-      return null
-    }
-    if (!this.props.Stores.Access.restrictions.showREMSbutton) {
-      return null
-    }
-    return (
-      <>
-        <REMSButton
-          loading={this.state.loading}
-          applicationState={this.state.applicationState}
-          onClick={this.onClick}
-        />
-        <AccessModal />
-      </>
-    )
+  if (!Flags.flagEnabled('ETSIN.REMS')) {
+    return null
   }
+  if (!Access.restrictions.showREMSbutton) {
+    return null
+  }
+  return (
+    <>
+      <REMSButton applicationState={applicationState} onClick={onClick} />
+      <AccessModal />
+    </>
+  )
 }
 
-AskForAccess.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default withStores(observer(AskForAccess))
+export default observer(AskForAccess)

@@ -79,6 +79,7 @@ Jo tallennettuja tietoja pääset muuttamaan klikkaamalla tallennetun toimijan k
         dataset: 'Aineiston organisaatiot',
         presets: 'Organisaatiot',
       },
+      details: 'Muokkaa organisaation tietoja',
     },
     save: {
       label: 'Lisää toimija',

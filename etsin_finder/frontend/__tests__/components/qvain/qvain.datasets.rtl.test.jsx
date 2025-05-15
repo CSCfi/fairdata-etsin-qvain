@@ -1,27 +1,30 @@
-import React from 'react'
-import { mount } from 'enzyme'
-import { when } from 'mobx'
+import { cleanup, render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { when } from 'mobx'
+import React from 'react'
 
-import { ThemeProvider } from 'styled-components'
-import { MemoryRouter, Route } from 'react-router-dom'
 import ReactModal from 'react-modal'
-import { components } from 'react-select'
+import { MemoryRouter, Route } from 'react-router-dom'
+import { ThemeProvider } from 'styled-components'
 
+import DatasetsV2 from '@/components/qvain/views/datasetsV2'
+import { buildStores } from '@/stores'
+import { StoresProvider } from '@/stores/stores'
 import etsinTheme from '@/styles/theme'
 import datasets from '../../__testdata__/qvain.datasets'
-import { StoresProvider } from '@/stores/stores'
-import { buildStores } from '@/stores'
-import DatasetsV2 from '@/components/qvain/views/datasetsV2'
 
 jest.useFakeTimers('modern')
 jest.setSystemTime(new Date('2021-05-07T10:00:00Z'))
 
+global.autoCleanup = false // Allow tests to share render results
+
+const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime })
+
 const mockAdapter = new MockAdapter(axios)
 
-let stores, wrapper, helper, testLocation
+let stores, testLocation
 
 beforeEach(() => {
   mockAdapter.reset()
@@ -36,17 +39,17 @@ const wait = async cond => {
       throw new Error('Wait timed out')
     }
     jest.advanceTimersByTime(1000)
+    // eslint-disable-next-line no-await-in-loop
     await Promise.resolve()
-    wrapper.update()
   }
 }
 
-const render = async () => {
-  wrapper?.unmount?.()
-  if (helper) {
-    document.body.removeChild(helper)
-    helper = null
-  }
+const helper = document.createElement('div')
+ReactModal.setAppElement(helper)
+
+const renderDatasets = async () => {
+  cleanup()
+
   stores = buildStores()
   stores.Locale.setLang('en')
   stores.Env.app = 'qvain'
@@ -55,10 +58,7 @@ const render = async () => {
   })
   stores.Env.Flags.setFlag('UI.NEW_DATASETS_VIEW', true)
 
-  helper = document.createElement('div')
-  document.body.appendChild(helper)
-  ReactModal.setAppElement(helper)
-  wrapper = mount(
+  render(
     <StoresProvider store={stores}>
       <MemoryRouter>
         <Route
@@ -72,27 +72,30 @@ const render = async () => {
           <DatasetsV2 />
         </ThemeProvider>
       </MemoryRouter>
-    </StoresProvider>,
-    { attachTo: helper }
+    </StoresProvider>
   )
 
   // wait until datasets have been fetched
   await when(() => stores.QvainDatasets.datasetGroups.length > 0 || stores.QvainDatasets.error)
-  wrapper.update()
 }
 
-const findDatasetWithTitle = title =>
-  wrapper
-    .find('td.dataset-title')
-    .filterWhere(e => e.text().includes(title))
-    .closest('tr')
-
-const findDatasetWithTitleExact = title => {
-  const dataset = wrapper.find(`td.dataset-title span[children="${title}"]`)
-  if (dataset.length === 0) {
-    return dataset
+const findDatasetWithTitle = title => {
+  const titles = Array.from(document.querySelectorAll('td.dataset-title'))
+  for (const dataset of titles) {
+    if (dataset.textContent.includes(title)) {
+      return dataset.closest('tr')
+    }
   }
-  return dataset.closest('tr')
+  return null
+}
+const findDatasetWithTitleExact = title => {
+  const titles = Array.from(document.querySelectorAll('td.dataset-title'))
+  for (const dataset of titles) {
+    if (title === dataset.textContent) {
+      return dataset.closest('tr')
+    }
+  }
+  return null
 }
 
 describe('DatasetsV2', () => {
@@ -101,7 +104,6 @@ describe('DatasetsV2', () => {
     beforeEach(async () => {
       spy = jest.spyOn(console, 'error').mockImplementation(() => {})
       mockAdapter.onGet().reply(500, 'this is not supposed to happen')
-      await render()
     })
 
     afterEach(() => {
@@ -109,157 +111,143 @@ describe('DatasetsV2', () => {
     })
 
     it('should show error', async () => {
-      wrapper.text().should.include('this is not supposed to happen')
-    })
+      await renderDatasets()
+      expect(document.body.textContent).toContain('this is not supposed to happen')
 
-    it('should reload datasets when button is clicked', async () => {
+      // should reload datasets when button is clicked'
       mockAdapter.onGet().reply(200, datasets)
-      wrapper.find('button[children="Reload"]').simulate('click')
-      await wait(() => wrapper.find('tbody').length > 0)
-      wrapper.find('tbody').length.should.eql(7)
+      await user.click(screen.getByRole('button', { name: 'Reload' }))
+      await wait(() => document.querySelectorAll('tbody').length > 0)
+      expect(document.querySelectorAll('tbody')).toHaveLength(7)
     })
   })
 
   describe('create new dataset', () => {
     it('should redirect to /dataset', async () => {
-      await render()
+      await renderDatasets()
       testLocation.pathname.should.eql('/')
-      const createNewBtn = wrapper.find('button[children="Describe a dataset"]')
-      createNewBtn.simulate('click')
+      const createNewBtn = screen.getByRole('button', { name: 'Describe a dataset' })
+      await user.click(createNewBtn)
       testLocation.pathname.should.eql('/dataset')
     })
   })
 
   describe('given multiple dataset versions', () => {
     it('should toggle visibility of previous versions', async () => {
-      await render()
-      findDatasetWithTitleExact('IDA dataset').should.have.lengthOf(0)
+      await renderDatasets()
+      expect(findDatasetWithTitleExact('IDA dataset')).toBe(null)
       let dataset = findDatasetWithTitle('IDA dataset version 2')
-      const showPrev = dataset.find('svg[aria-label="Show previous versions"]')
+      const showPrev = dataset.querySelector('svg[aria-label="Show previous versions"]')
 
       // show previous versions
-      showPrev.simulate('click')
-      wrapper.find('td[children="Previous versions"]').should.have.lengthOf(1)
-      const previousDataset = findDatasetWithTitleExact('IDA dataset')
-      previousDataset.should.have.lengthOf(1)
-      previousDataset.find('span[children="Version 1"]').should.have.lengthOf(1)
+      await user.click(showPrev)
+
+      expect(screen.getByRole('cell', { name: 'Previous versions' })).toBeInTheDocument()
+      const previousDataset = findDatasetWithTitleExact('Version 1IDA dataset')
+      expect(previousDataset).toBeInTheDocument()
 
       // hide previous versions
       dataset = findDatasetWithTitle('IDA dataset version 2')
-      const hidePrev = dataset.find('svg[aria-label="Hide previous versions"]')
-      hidePrev.simulate('click')
-      wrapper.find('td[children="Previous versions"]').should.have.lengthOf(0)
-      findDatasetWithTitleExact('IDA dataset').should.have.lengthOf(0)
+      const hidePrev = dataset.querySelector('svg[aria-label="Hide previous versions"]')
+      await user.click(hidePrev)
+
+      expect(screen.queryByRole('cell', { name: 'Previous versions' })).not.toBeInTheDocument()
     })
   })
 
   describe('show more', () => {
     it('should show more datasets', async () => {
-      await render()
-      const getMoreBtn = () => wrapper.find('span[children*="Show more"]').closest('button')
+      await renderDatasets()
       stores.QvainDatasets.setShowCount({ initial: 4, current: 4, increment: 2 })
-      wrapper.update()
-      wrapper.find('tbody').length.should.eql(4)
-      getMoreBtn().simulate('click')
-      wrapper.find('tbody').length.should.eql(6)
-      getMoreBtn().simulate('click')
-      wrapper.find('tbody').length.should.eql(7)
+      document.querySelectorAll('tbody').length.should.eql(4)
+      await user.click(screen.getByRole('button', { name: 'Show more >' }))
+      document.querySelectorAll('tbody').length.should.eql(6)
+      await user.click(screen.getByRole('button', { name: 'Show more >' }))
+      document.querySelectorAll('tbody').length.should.eql(7)
     })
   })
 
   describe('PublishSuccess', () => {
     it('should hide when close button is clicked', async () => {
-      await render()
+      await renderDatasets()
       stores.QvainDatasets.setPublishedDataset({
         identifier: 'someDatasetIdentifier',
         isNew: true,
       })
-      wrapper.update()
-      wrapper.find('span[children="Dataset published!"]').length.should.eql(1)
-      wrapper.find('span[children="hide notice"]').simulate('click')
-      wrapper.find('span[children="Dataset published!"]').length.should.eql(0)
+      expect(screen.getByText('Dataset published!')).toBeInTheDocument()
+      await user.click(screen.getByRole('button', { name: 'hide notice' }))
+      expect(screen.queryByText('Dataset published!')).not.toBeInTheDocument()
     })
   })
 
   describe('EditMetadataSuccess', () => {
     it('should show when dataset is updated', async () => {
-      await render()
+      await renderDatasets()
       stores.QvainDatasets.setPublishedDataset({
         identifier: 'someDatasetIdentifier',
         isNew: false,
       })
-      wrapper.update()
-      wrapper.find('span[children="Dataset successfully updated!"]').length.should.eql(1)
-      wrapper.find('span[children="hide notice"]').simulate('click')
-      wrapper.find('span[children="Dataset successfully updated!"]').length.should.eql(0)
+      expect(screen.getByText('Dataset successfully updated!')).toBeInTheDocument()
+      await user.click(screen.getByRole('button', { name: 'hide notice' }))
+      expect(screen.queryByText('Dataset successfully updated!')).not.toBeInTheDocument()
     })
   })
 
   describe('publication status', () => {
-    beforeAll(async () => {
-      await render()
-    })
+    it('should publication status', async () => {
+      await renderDatasets()
 
-    it('should show Draft', async () => {
-      const dataset = findDatasetWithTitle('Draft 5 by me')
-      dataset.find('td.dataset-state').text().should.include('Draft')
-    })
+      // draft
+      let dataset = findDatasetWithTitle('Draft 5 by me')
+      dataset.querySelector('td.dataset-state').textContent.should.include('Draft')
 
-    it('should show Published', async () => {
-      const dataset = findDatasetWithTitle('IDA dataset')
-      dataset.find('td.dataset-state').text().should.include('Published')
-    })
+      // published
+      dataset = findDatasetWithTitle('IDA dataset')
+      dataset.querySelector('td.dataset-state').textContent.should.include('Published')
 
-    it('should show Unpublished changes', async () => {
-      const dataset = findDatasetWithTitle('Changes here')
-      dataset.find('td.dataset-state').text().should.include('Unpublished changes')
+      // unpublished changes
+      dataset = findDatasetWithTitle('Changes here')
+      dataset.querySelector('td.dataset-state').textContent.should.include('Unpublished changes')
     })
   })
 
   describe('dataset owner', () => {
-    beforeAll(async () => {
-      await render()
-    })
+    it('should show dataset owner', async () => {
+      await renderDatasets()
 
-    it('should show Me as owner of dataset', async () => {
-      const dataset = findDatasetWithTitle('Draft 5 by me')
-      dataset.find('td.dataset-owner span').prop('children').should.eql('Me')
-    })
+      // Me (created)
+      let dataset = findDatasetWithTitle('Draft 5 by me')
+      dataset.querySelector('td.dataset-owner').textContent.should.eql('Me')
 
-    it('should show Me as owner of dataset that also has a project', async () => {
-      const dataset = findDatasetWithTitle('Draft 3 by me and project')
-      dataset.find('td.dataset-owner span').prop('children').should.eql('Me')
-    })
+      // Me (created + project)
+      dataset = findDatasetWithTitle('Draft 3 by me and project')
+      dataset.querySelector('td.dataset-owner').textContent.should.eql('Me')
 
-    it('should show Project as owner of project dataset', async () => {
-      const dataset = findDatasetWithTitle('Draft 4 by project')
-      dataset
-        .find('td.dataset-owner')
-        .find(FontAwesomeIcon)
-        .prop('aria-label')
-        .should.eql('Project')
+      // Project
+      dataset = findDatasetWithTitle('Draft 4 by project')
+      expect(dataset.querySelector('td.dataset-owner svg').getAttribute('aria-label')).toBe(
+        'Project'
+      )
     })
   })
 
   describe('date created', () => {
-    beforeAll(async () => {
-      await render()
-    })
+    it('should show creation date"', async () => {
+      await renderDatasets()
+      let dataset = findDatasetWithTitle('Changes here')
+      dataset.querySelector('td.dataset-created').textContent.should.eql('6 days ago')
 
-    it('should show "6 days ago"', async () => {
-      const dataset = findDatasetWithTitle('Changes here')
-      dataset.find('td.dataset-created').text().should.eql('6 days ago')
-    })
-
-    it('should show "3 months ago"', async () => {
-      const dataset = findDatasetWithTitle('Draft 5 by me')
-      dataset.find('td.dataset-created').text().should.eql('3 months ago')
+      dataset = findDatasetWithTitle('Draft 5 by me')
+      dataset.querySelector('td.dataset-created').textContent.should.eql('3 months ago')
     })
   })
 
   describe('actions', () => {
     beforeAll(async () => {
-      await render()
+      mockAdapter.reset()
+      mockAdapter.onGet().reply(200, datasets)
+      // eslint-disable-next-line testing-library/no-render-in-setup
+      await renderDatasets()
     })
 
     // dataset rows
@@ -300,43 +288,39 @@ describe('DatasetsV2', () => {
       '$row.msg should$items.no have "$label" $items.msg',
       async ({ row, label, items: { button, menu } }) => {
         const dataset = findDatasetWithTitle(row.title)
-        dataset.exists().should.be.true
-        dataset.find(`button[aria-label="${label}"]`).should.have.lengthOf(button ? 1 : 0)
-        dataset.find(`[role="menu"] span[children="${label}"]`).should.have.lengthOf(menu ? 1 : 0)
+        expect(dataset).toBeInTheDocument()
+        expect(!!dataset.querySelector(`button[aria-label="${label}"]`)).toBe(!!button)
+        expect(dataset.querySelector('[role="menu"]').textContent.includes(label)).toBe(!!menu)
       }
     )
   })
 
   describe('Add editors button', () => {
     it('should open modal', async () => {
-      await render()
+      await renderDatasets()
       const dataset = findDatasetWithTitle('IDA dataset')
-      const shareButton = dataset.find(`button[aria-label="Add editors"]`)
-      wrapper.find('[aria-label="shareDatasetModal"]').should.have.lengthOf(0)
-      shareButton.simulate('click')
-      wrapper.find('[aria-label="shareDatasetModal"]').should.have.lengthOf(1)
+      expect(document.querySelectorAll('[aria-label="shareDatasetModal"]')).toHaveLength(0)
+      const shareButton = within(dataset).getByLabelText('Add editors')
+      await user.click(shareButton)
+      expect(document.querySelectorAll('[aria-label="shareDatasetModal"]')).toHaveLength(1)
     })
   })
 
   describe('sorting', () => {
-    beforeEach(async () => {
-      await render()
-    })
+    beforeEach(async () => {})
 
     const sortBy = async type => {
-      const input = wrapper.find('input#sort-datasets-input')
-      input.simulate('mouseDown', { button: 'left' })
-      await wait(() => wrapper.find(components.Option).length > 0)
-      wrapper.find(components.Menu).find(`span[children="${type}"]`).simulate('click')
+      const input = document.querySelector('input#sort-datasets-input')
+      await user.click(input)
+      await user.click(screen.getByRole('option', { name: type }))
     }
 
     const getColumns = (...classes) => {
       let values
-      for (let c of classes) {
-        const row = wrapper
-          .find(c)
-          .hostNodes()
-          .map(t => t.text() || t.find('[aria-label]').hostNodes().prop('aria-label'))
+      for (const c of classes) {
+        const row = Array.from(document.querySelectorAll(c)).map(
+          v => v.textContent || v.querySelector('[aria-label]').getAttribute('aria-label')
+        )
         if (!values) {
           values = row.map(v => [v])
         } else {
@@ -347,6 +331,7 @@ describe('DatasetsV2', () => {
     }
 
     it('should sort datasets by title', async () => {
+      await renderDatasets()
       await sortBy('Title')
       stores.QvainDatasets.sort.type.should.eql('title')
       getColumns('.dataset-title').should.eql([
@@ -361,6 +346,7 @@ describe('DatasetsV2', () => {
     })
 
     it('should sort datasets by active language', async () => {
+      await renderDatasets()
       await sortBy('Title')
       stores.Locale.setLang('fi')
       stores.QvainDatasets.sort.type.should.eql('title')
@@ -376,8 +362,9 @@ describe('DatasetsV2', () => {
     })
 
     it('should reverse sort order', async () => {
+      await renderDatasets()
       await sortBy('Title')
-      wrapper.find(`button.sort-direction`).simulate('click')
+      await user.click(screen.getByRole('button', { name: 'Ascending' }))
 
       stores.QvainDatasets.sort.type.should.eql('title')
       getColumns('.dataset-title').should.eql([
@@ -392,6 +379,7 @@ describe('DatasetsV2', () => {
     })
 
     it('should sort datasets by creation date', async () => {
+      await renderDatasets()
       await sortBy('Date')
       stores.QvainDatasets.sort.type.should.eql('dateCreated')
       getColumns('.dataset-title', '.dataset-created').should.eql([
@@ -406,6 +394,7 @@ describe('DatasetsV2', () => {
     })
 
     it('should sort datasets by owner', async () => {
+      await renderDatasets()
       await sortBy('Owner')
       stores.QvainDatasets.sort.type.should.eql('owner')
       getColumns('.dataset-title', '.dataset-owner').should.eql([
@@ -420,6 +409,7 @@ describe('DatasetsV2', () => {
     })
 
     it('should sort datasets by status', async () => {
+      await renderDatasets()
       await sortBy('Status')
       stores.QvainDatasets.sort.type.should.eql('status')
       getColumns('.dataset-title', '.dataset-state').should.eql([
@@ -435,26 +425,19 @@ describe('DatasetsV2', () => {
   })
 
   describe('filtering', () => {
-    beforeEach(async () => {
-      await render()
-    })
-
     const filterBy = async str => {
-      const input = wrapper.find('input#search-datasets-input')
-      input.instance().value = str
-      input.simulate('change')
-      wrapper.update()
+      const input = document.querySelector('input#search-datasets-input')
+      await user.clear(input)
+      await user.type(input, str)
     }
 
-    const getTitles = (...classes) => {
-      const titles = wrapper
-        .find('.dataset-title')
-        .hostNodes()
-        .map(t => t.text())
+    const getTitles = () => {
+      const titles = Array.from(document.querySelectorAll('.dataset-title')).map(v => v.textContent)
       return titles
     }
 
     it('should filter datasets by title', async () => {
+      await renderDatasets()
       await filterBy('Draft')
       getTitles().should.eql([
         'Draft 3 by me and project',
@@ -466,37 +449,42 @@ describe('DatasetsV2', () => {
     })
 
     it('should not clear filter when resetting datasets list', async () => {
+      await renderDatasets()
       await filterBy('search string')
       stores.QvainDatasets.reset()
-      stores.QvainDatasets.reset()
-      const input = wrapper.find('input#search-datasets-input')
-      input.instance().value.should.eql('search string')
+      const input = document.querySelector('input#search-datasets-input')
+      input.value.should.eql('search string')
     })
 
     it('should not clear filter when input loses focus', async () => {
+      await renderDatasets()
       await filterBy('search string')
-      const input = wrapper.find('input#search-datasets-input')
-      input.simulate('blur')
-      input.instance().value.should.eql('search string')
+      const input = document.querySelector('input#search-datasets-input')
+      await user.click(input)
+      await user.click(document.body)
+      input.value.should.eql('search string')
     })
 
     it('should filter datasets by other translations', async () => {
+      await renderDatasets()
       await filterBy('suom')
       getTitles().should.eql(['Draft 2', 'IDA dataset version 2'])
     })
 
     it('should show message when no matches are found', async () => {
+      await renderDatasets()
       await filterBy('no such dataset')
       getTitles().should.eql([])
-      wrapper.find('span[children="No matching datasets found."]').should.have.lengthOf(1)
+      expect(screen.getByText('No matching datasets found.')).toBeInTheDocument()
     })
 
     it('should not show "Show more" when no more matches are available', async () => {
+      await renderDatasets()
       await filterBy('Draft')
       stores.QvainDatasets.setShowCount({ initial: 5, current: 5, increment: 2 })
-      wrapper.update()
-      wrapper.find('tbody').length.should.eql(5)
-      wrapper.find('span[children*="Show more"]').should.have.lengthOf(0)
+
+      document.querySelectorAll('tbody').length.should.eql(5)
+      expect(screen.queryByText('Show more', { exact: false })).not.toBeInTheDocument()
     })
   })
 })

@@ -1,19 +1,16 @@
-import React from 'react'
-import { mount } from 'enzyme'
-import { ThemeProvider } from 'styled-components'
+import { screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import axios from 'axios'
 import { configure } from 'mobx'
+import React from 'react'
 import { setImmediate } from 'timers'
 
-import { buildStores } from '@/stores'
-import { getReferenceData } from '../../__testdata__/referenceData.data'
-import { StoresProvider } from '@/stores/stores'
-import etsinTheme from '@/styles/theme'
-import FileForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/fileForm'
+import { contextRenderer } from '@/../__tests__/test-helpers'
 import DirectoryForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/directoryForm'
-import { File, Directory, Project } from '@/stores/view/common.files.items'
-import { SaveButton } from '@/components/qvain/general/buttons'
-import { ValidationErrors } from '@/components/qvain/general/errors/validationError'
+import FileForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/fileForm'
+import { buildStores } from '@/stores'
+import { Directory, File, Project } from '@/stores/view/common.files.items'
+import { getReferenceData } from '../../__testdata__/referenceData.data'
 
 const getStores = () => {
   configure({ safeDescriptors: false })
@@ -40,15 +37,9 @@ describe('Qvain.Files', () => {
     stores.Auth.user.idaProjects = []
   })
 
-  let wrapper, stores
-  afterEach(() => {
-    if (wrapper && wrapper.unmount && wrapper.length === 1) {
-      wrapper.unmount()
-      wrapper = null
-    }
-  })
+  let stores
 
-  const render = async editDirectory => {
+  const renderForm = async editDirectory => {
     const testfile = File({
       description: 'File',
       title: 'testfile',
@@ -105,34 +96,19 @@ describe('Qvain.Files', () => {
 
     jest.spyOn(stores.Qvain.Files, 'applyInEdit')
 
-    wrapper = mount(
-      <StoresProvider store={stores}>
-        <ThemeProvider theme={etsinTheme}>
-          <Form requestClose={() => {}} setChanged={() => {}} />
-        </ThemeProvider>
-      </StoresProvider>
-    )
+    contextRenderer(<Form requestClose={() => {}} setChanged={() => {}} />, { stores })
     await flushPromises()
-    return wrapper
   }
 
   const selectOption = async (inputId, optionLabel) => {
-    wrapper
-      .find(`[inputId="${inputId}"]`)
-      .find('DropdownIndicator')
-      .simulate('mouseDown', { button: 0 })
-    wrapper
-      .find('Option')
-      .filterWhere(opt => opt.text() === optionLabel)
-      .simulate('click')
-
+    await userEvent.click(document.getElementById(inputId))
+    await userEvent.click(screen.getByRole('option', { name: optionLabel }))
     await flushPromises()
   }
 
   const expectSave = async result => {
-    wrapper.find(SaveButton).simulate('click')
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }))
     await flushPromises()
-    wrapper.update()
     const { calls } = stores.Qvain.Files.applyInEdit.mock
     if (result === undefined) {
       expect(calls).toEqual([])
@@ -143,21 +119,16 @@ describe('Qvain.Files', () => {
 
   const expectError = async errorKey => {
     await expectSave(undefined)
-    const errorContent = wrapper.find(ValidationErrors).prop('errors')[0]
-    expect(errorContent).toBe(errorKey)
+    expect(screen.getAllByText(stores.Locale.translate(errorKey))[0]).toBeInTheDocument()
   }
 
   describe('FileForm', () => {
-    const selectUseCategory = label => {
-      return selectOption('file-form-use-category', label)
-    }
+    const selectUseCategory = label => selectOption('file-form-use-category', label)
 
-    const selectFileType = async label => {
-      return selectOption('file-form-file-type', label)
-    }
+    const selectFileType = async label => selectOption('file-form-file-type', label)
 
     it('should allow selecting use category', async () => {
-      await render()
+      await renderForm()
       await selectUseCategory('Documentation')
       await expectSave({
         title: 'testfile',
@@ -168,12 +139,12 @@ describe('Qvain.Files', () => {
     })
 
     it('should fail to save without use category', async () => {
-      await render()
+      await renderForm()
       await expectError('qvain.validationMessages.files.file.useCategory.required')
     })
 
     it('should allow selecting file type', async () => {
-      await render()
+      await renderForm()
       await selectUseCategory('Documentation')
       await selectFileType('Audiovisual')
       await expectSave({
@@ -185,9 +156,11 @@ describe('Qvain.Files', () => {
     })
 
     it('should allow changing title', async () => {
-      await render()
+      await renderForm()
       await selectUseCategory('Documentation')
-      wrapper.find('input#file-form-title').simulate('change', { target: { value: 'New Title' } })
+      const input = screen.getByLabelText('Title', { exact: false })
+      await userEvent.clear(input)
+      await userEvent.type(input, 'New Title')
       await expectSave({
         title: 'New Title',
         description: 'File',
@@ -197,18 +170,19 @@ describe('Qvain.Files', () => {
     })
 
     it('should fail to save without title', async () => {
-      await render()
+      await renderForm()
       await selectUseCategory('Documentation')
-      wrapper.find('input#file-form-title').simulate('change', { target: { value: '' } })
+      const input = screen.getByLabelText('Title', { exact: false })
+      await userEvent.clear(input)
       await expectError('qvain.validationMessages.files.file.title.required')
     })
 
     it('should allow changing description', async () => {
-      await render()
+      await renderForm()
       await selectUseCategory('Documentation')
-      wrapper
-        .find('textarea#file-form-description')
-        .simulate('change', { target: { value: 'This is a great description' } })
+      const input = screen.getByLabelText('Description')
+      await userEvent.clear(input)
+      await userEvent.type(input, 'This is a great description')
       await expectSave({
         title: 'testfile',
         description: 'This is a great description',
@@ -219,12 +193,10 @@ describe('Qvain.Files', () => {
   })
 
   describe('DirectoryForm', () => {
-    const selectUseCategory = label => {
-      return selectOption('directory-form-use-category', label)
-    }
+    const selectUseCategory = label => selectOption('directory-form-use-category', label)
 
     it('should allow selecting use category', async () => {
-      await render(true)
+      await renderForm(true)
       await selectUseCategory('Documentation')
       await expectSave({
         title: 'testdir',
@@ -233,16 +205,16 @@ describe('Qvain.Files', () => {
     })
 
     it('should fail to save when use category is not set', async () => {
-      await render(true)
+      await renderForm(true)
       await expectError('qvain.validationMessages.files.directory.useCategory.required')
     })
 
     it('should allow changing title', async () => {
-      await render(true)
+      await renderForm(true)
       await selectUseCategory('Documentation')
-      wrapper
-        .find('input#directory-form-title')
-        .simulate('change', { target: { value: 'New Title' } })
+      const input = screen.getByLabelText('Title', { exact: false })
+      await userEvent.clear(input)
+      await userEvent.type(input, 'New Title')
       await expectSave({
         title: 'New Title',
         useCategory: 'http://uri.suomi.fi/codelist/fairdata/use_category/code/documentation',
@@ -250,18 +222,19 @@ describe('Qvain.Files', () => {
     })
 
     it('should fail to save without title', async () => {
-      await render(true)
+      await renderForm(true)
       await selectUseCategory('Documentation')
-      wrapper.find('input#directory-form-title').simulate('change', { target: { value: '' } })
+      const input = screen.getByLabelText('Title', { exact: false })
+      await userEvent.clear(input)
       await expectError('qvain.validationMessages.files.directory.title.required')
     })
 
     it('should allow changing description', async () => {
-      await render(true)
+      await renderForm(true)
       await selectUseCategory('Documentation')
-      wrapper
-        .find('textarea#directory-form-description')
-        .simulate('change', { target: { value: 'This is a great description' } })
+      const input = screen.getByLabelText('Description')
+      await userEvent.clear(input)
+      await userEvent.type(input, 'This is a great description')
       await expectSave({
         title: 'testdir',
         description: 'This is a great description',
