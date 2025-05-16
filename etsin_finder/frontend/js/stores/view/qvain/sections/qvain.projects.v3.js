@@ -9,6 +9,7 @@ import {
 } from '../structural/qvain.controllers'
 import { ListModel, CommonModel } from '../structural/qvain.models'
 import { Organization } from '../complex/qvain.organizations.v3'
+import removeEmpty from '@/utils/removeEmpty'
 
 const titleSchema = object()
   .shape({
@@ -98,12 +99,12 @@ export class FundAdapter extends CommonAdapter {
 
   @action.bound toMetaxV3() {
     // Qvain supports only one funding per project for now
-    return [
+    return removeEmpty([
       {
         funding_identifier: this.instance.funding_identifier,
         funder: this.instance.funder.adapter.toMetaxV3(),
       },
-    ]
+    ])
   }
 
   @action.bound fromMetaxV3(data) {
