@@ -6,6 +6,14 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import { useStores } from '@/stores/stores'
 import { useQuery } from '@/components/etsin/general/useQuery'
 
+const quoteValue = value => {
+  // Wrap value with quotation marks if needed
+  if (value.includes(',') && !value.startsWith('"')) {
+    return `"${value}"`
+  }
+  return value
+}
+
 const FilterItem = ({ filter, item, tabIndex }) => {
   const {
     Locale: { getValueTranslation },
@@ -14,11 +22,13 @@ const FilterItem = ({ filter, item, tabIndex }) => {
   const query = useQuery()
   const history = useHistory()
   const values = query.getAll(filter)
-  const isActive = values.find(v => v === getValueTranslation(item.value))
+
+  const itemValue = quoteValue(getValueTranslation(item.value))
+  const isActive = values.find(v => v === itemValue)
 
   function setFilter() {
-    if (isActive) query.delete(filter, getValueTranslation(item.value))
-    else query.append(filter, getValueTranslation(item.value))
+    if (isActive) query.delete(filter, itemValue)
+    else query.append(filter, itemValue)
 
     history.push(`/datasets?${query.toString()}`)
   }

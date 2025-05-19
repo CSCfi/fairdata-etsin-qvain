@@ -83,12 +83,6 @@ class EtsinSearch {
     query.set('latest_versions', true)
     query.set('state', 'published')
 
-    query.forEach((value, key) => {
-      if (value.includes(',') && !value.startsWith('"')) {
-        query.set(key, `"${value}"`)
-      }
-    })
-
     const url = `${this.Env.metaxV3Url('datasets')}?${query.toString()}`
     const aggregatesUrl = `${this.Env.metaxV3Url('aggregates')}?${query.toString()}`
 
