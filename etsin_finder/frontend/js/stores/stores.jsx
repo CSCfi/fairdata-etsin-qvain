@@ -16,6 +16,10 @@ StoresProvider.defaultProps = {
   children: null,
 }
 
+/**
+ * Return stores from StoresProvider context.
+ * @returns {ReturnType<import("./index.js").buildStores>}
+ */
 export const useStores = () => React.useContext(StoresContext)
 
 export const withStores = Component =>
