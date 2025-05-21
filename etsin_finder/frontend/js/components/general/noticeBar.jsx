@@ -10,7 +10,7 @@
    */
 }
 
-import React from 'react'
+import { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -22,7 +22,7 @@ import checkColor from '../../styles/styledUtils'
 import { TransparentButton } from './button'
 import withCustomProps from '@/utils/withCustomProps'
 
-export default class NoticeBar extends React.Component {
+export default class NoticeBar extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     bg: PropTypes.string,
@@ -31,7 +31,7 @@ export default class NoticeBar extends React.Component {
     z: PropTypes.string,
     duration: PropTypes.number,
     className: PropTypes.string,
-    onClose: PropTypes.func
+    onClose: PropTypes.func,
   }
 
   static defaultProps = {
@@ -41,7 +41,7 @@ export default class NoticeBar extends React.Component {
     z: '0',
     duration: 0,
     className: '',
-    onClose: null
+    onClose: null,
   }
 
   state = {

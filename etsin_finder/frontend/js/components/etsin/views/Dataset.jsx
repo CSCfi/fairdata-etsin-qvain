@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Dataset from '@/components/etsin/Dataset'
 
 // this Component is for potential versioning the view

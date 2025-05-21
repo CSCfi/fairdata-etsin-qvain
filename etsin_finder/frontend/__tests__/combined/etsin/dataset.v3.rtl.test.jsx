@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactModal from 'react-modal'
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'

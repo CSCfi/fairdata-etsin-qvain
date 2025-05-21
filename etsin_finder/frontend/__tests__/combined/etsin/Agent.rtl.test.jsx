@@ -1,4 +1,3 @@
-import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'

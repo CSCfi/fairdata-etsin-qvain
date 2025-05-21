@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from '@/utils/Translate'
 import { FormContainer, ModalLabel, FieldGroup } from '@/components/qvain/general/V2'

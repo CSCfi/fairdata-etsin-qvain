@@ -1,4 +1,3 @@
-import React from 'react'
 import Select from 'react-select/async'
 import Translate from '@/utils/Translate'
 

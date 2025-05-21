@@ -7,8 +7,7 @@ function importAll(r) {
   return images
 }
 
-const importImages = () => importAll(
-  require.context('@/../static/images/catalog_logos', false, /\.(png|jpe?g|svg)$/)
-)
+const importImages = () =>
+  importAll(require.context('@/../static/images/catalog_logos', false, /\.(png|jpe?g|svg)$/))
 
 export default importImages

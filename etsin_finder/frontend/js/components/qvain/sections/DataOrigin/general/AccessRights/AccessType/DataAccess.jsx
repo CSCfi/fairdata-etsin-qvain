@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { FieldGroup, InfoText, TitleSmall } from '@/components/qvain/general/V2'
 import { ExpandCollapse } from '@/components/qvain/general/V2/ExpandCollapse'

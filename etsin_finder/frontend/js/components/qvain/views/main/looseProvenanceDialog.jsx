@@ -1,4 +1,3 @@
-import React from 'react'
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
 import ConfirmDialog from './confirmDialog'

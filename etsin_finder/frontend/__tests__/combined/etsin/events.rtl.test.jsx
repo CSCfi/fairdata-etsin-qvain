@@ -1,5 +1,4 @@
 /* eslint-disable dot-notation */
-import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { configure } from 'mobx'

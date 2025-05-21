@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import PersonInput from './personInput'
 import { useStores } from '@/stores/stores'

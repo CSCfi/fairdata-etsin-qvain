@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createRef, Component } from 'react'
 import PropTypes from 'prop-types'
 import { autorun } from 'mobx'
 import { observer } from 'mobx-react'
@@ -34,7 +34,7 @@ export class Qvain extends Component {
 
   setFocusOnSubmitButton = this.setFocusOnSubmitButton.bind(this)
 
-  submitButtonsRef = React.createRef()
+  submitButtonsRef = createRef()
 
   static propTypes = {
     Stores: PropTypes.object.isRequired,

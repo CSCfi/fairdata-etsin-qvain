@@ -24,8 +24,7 @@ const actionDownload = (datasetIdentifier, item, path, pack, Packages) => {
     authorizeFunc = () => authorizeFile(datasetIdentifier, path, Packages)
   } else {
     func = () => downloadPackage(datasetIdentifier, pack.package, Packages)
-    authorizeFunc = () =>
-      authorizePackage(datasetIdentifier, pack.package, Packages)
+    authorizeFunc = () => authorizePackage(datasetIdentifier, pack.package, Packages)
   }
   return {
     ...actionDefaults,

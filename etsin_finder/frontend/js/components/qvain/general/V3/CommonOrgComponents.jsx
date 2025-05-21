@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import ReactSelect from 'react-select'
 import styled from 'styled-components'
 

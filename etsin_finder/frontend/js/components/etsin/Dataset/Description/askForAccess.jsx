@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react'
-import React from 'react'
 
 import { useStores } from '@/stores/stores'
 import AccessModal from './AccessModal'

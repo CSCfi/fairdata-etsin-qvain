@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from '@/utils/Translate'
 import { ModalHeader, ModalDivider } from '@/components/qvain/general/V2'
@@ -18,7 +17,7 @@ const ModalContent = ({
 
   const translations = {
     title:
-      editMode ?? fieldEdit
+      (editMode ?? fieldEdit)
         ? `${translationsRoot}.modal.title.edit`
         : `${translationsRoot}.modal.title.add`,
   }

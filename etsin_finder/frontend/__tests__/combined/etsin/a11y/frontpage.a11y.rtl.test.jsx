@@ -1,4 +1,3 @@
-import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
@@ -59,7 +58,7 @@ describe('Etsin frontpage', () => {
 
   it('should be accessible', async () => {
     renderPage()
-    const results = await axe(screen.getByRole("main"))
+    const results = await axe(screen.getByRole('main'))
     expect(results).toBeAccessible()
   })
 })

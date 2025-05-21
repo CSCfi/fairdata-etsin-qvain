@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Search from '@/components/etsin/Search'
 
 // this Component is for potential versioning the view

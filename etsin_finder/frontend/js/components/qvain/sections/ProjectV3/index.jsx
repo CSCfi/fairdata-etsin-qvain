@@ -1,4 +1,3 @@
-import React from 'react'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'

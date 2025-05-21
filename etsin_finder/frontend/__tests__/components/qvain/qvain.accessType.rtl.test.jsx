@@ -1,5 +1,4 @@
 /* eslint-disable testing-library/no-render-in-setup */
-import React from 'react'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { configure } from 'mobx'

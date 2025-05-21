@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { when } from 'mobx'
-import React from 'react'
 
 import ReactModal from 'react-modal'
 import { MemoryRouter, Route } from 'react-router-dom'

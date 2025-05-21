@@ -10,7 +10,6 @@
    */
 }
 
-import React from 'react'
 import { useStores } from '@/stores/stores'
 import TextToAnnounce from './textToAnnounce'
 

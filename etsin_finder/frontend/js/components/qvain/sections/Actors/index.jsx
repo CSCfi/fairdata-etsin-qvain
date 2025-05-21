@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Section from '@/components/qvain/general/V2/Section'
 import ActorsInfoTooltip from './ActorsInfoTooltip'
 import ActorModal from './Modal'

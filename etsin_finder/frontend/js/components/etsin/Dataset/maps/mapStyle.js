@@ -279,7 +279,11 @@ const mapStyle = css`
 
   /* general typography */
   .leaflet-container {
-    font: 12px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font:
+      12px/1.5 'Helvetica Neue',
+      Arial,
+      Helvetica,
+      sans-serif;
   }
 
   /* general toolbar styles */
@@ -342,7 +346,10 @@ const mapStyle = css`
 
   .leaflet-control-zoom-in,
   .leaflet-control-zoom-out {
-    font: bold 18px 'Lucida Console', Monaco, monospace;
+    font:
+      bold 18px 'Lucida Console',
+      Monaco,
+      monospace;
     text-indent: 1px;
   }
 
@@ -523,7 +530,10 @@ const mapStyle = css`
     text-align: center;
     width: 18px;
     height: 14px;
-    font: 16px/14px Tahoma, Verdana, sans-serif;
+    font:
+      16px/14px Tahoma,
+      Verdana,
+      sans-serif;
     color: #c3c3c3;
     text-decoration: none;
     font-weight: bold;

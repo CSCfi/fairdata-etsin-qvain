@@ -10,7 +10,7 @@
    */
 }
 
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'

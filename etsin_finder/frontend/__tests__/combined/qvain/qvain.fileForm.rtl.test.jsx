@@ -2,7 +2,6 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import axios from 'axios'
 import { configure } from 'mobx'
-import React from 'react'
 import { setImmediate } from 'timers'
 
 import { contextRenderer } from '@/../__tests__/test-helpers'

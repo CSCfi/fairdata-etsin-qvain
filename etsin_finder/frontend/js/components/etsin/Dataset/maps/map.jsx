@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Fragment, Component } from 'react'
 import { MapContainer, TileLayer, GeoJSON, Marker, Rectangle } from 'react-leaflet'
 import styled, { withTheme } from 'styled-components'
 import leaflet from 'leaflet'
@@ -123,13 +123,13 @@ class MyMap extends Component {
           )
         case 'MultiPoint':
           return (
-            <React.Fragment key={`marker-${geo.type}-${geo.coordinates}`}>
+            <Fragment key={`marker-${geo.type}-${geo.coordinates}`}>
               {geo.coordinates.map(single => (
                 <Marker key={`marker-${geo.type}-${single}`} position={single} icon={MarkerIcon}>
                   {this.props.children}
                 </Marker>
               ))}
-            </React.Fragment>
+            </Fragment>
           )
         default:
           console.error("CAN'T DRAW GEOMETRY FOR TYPE: ", geo)

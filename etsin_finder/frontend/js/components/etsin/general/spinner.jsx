@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import Loader from '@/components/general/loader'
 import withCustomProps from '@/utils/withCustomProps'

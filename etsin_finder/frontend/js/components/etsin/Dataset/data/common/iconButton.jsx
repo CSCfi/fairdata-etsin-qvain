@@ -1,20 +1,11 @@
-import React from 'react'
+import { Fragment } from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PropTypes from 'prop-types'
 
 import Button, { InvertedButton, Link, InvertedLink } from '@/components/etsin/general/button'
 
-const IconButton = ({
-  icon,
-  spin,
-  link,
-  href,
-  children,
-  invert,
-  fontSize,
-  ...props
-}) => {
+const IconButton = ({ icon, spin, link, href, children, invert, fontSize, ...props }) => {
   let as = null
   let target
   if (link) {
@@ -51,7 +42,7 @@ IconButton.defaultProps = {
   link: false,
   href: undefined,
   fontSize: null,
-  Wrapper: React.Fragment,
+  Wrapper: Fragment,
   flexGrow: 0,
 }
 

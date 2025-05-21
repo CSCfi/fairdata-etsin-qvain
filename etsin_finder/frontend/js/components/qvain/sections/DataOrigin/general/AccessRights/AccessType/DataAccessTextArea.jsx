@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import React from 'react'
 
 import { FieldWrapper, NarrowTextArea, TitleSmall } from '@/components/qvain/general/V3'
 import { ValidationErrors } from '@/components/qvain/general/errors'

@@ -17,6 +17,8 @@ describe('buildColumns', () => {
       ['name', '2fr'],
       ['category', '1fr'],
       ['another', '3fr'],
-    ]).should.equal('[name-start] 2fr [name-end category-start] 1fr [category-end another-start] 3fr [another-end]')
+    ]).should.equal(
+      '[name-start] 2fr [name-end category-start] 1fr [category-end another-start] 3fr [another-end]'
+    )
   })
 })

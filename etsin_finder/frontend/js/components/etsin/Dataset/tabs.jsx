@@ -10,7 +10,7 @@
    */
 }
 
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { NavLink, withRouter } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'

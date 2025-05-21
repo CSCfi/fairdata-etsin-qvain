@@ -1,4 +1,3 @@
-import React from 'react'
 import { configure } from 'mobx'
 import axios from 'axios'
 import ReactModal from 'react-modal'

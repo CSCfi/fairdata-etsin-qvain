@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import React from 'react'
 import { useStores } from '@/stores/stores'
 
 const REMSApprovalTypeChoice = ({ value, label }) => {

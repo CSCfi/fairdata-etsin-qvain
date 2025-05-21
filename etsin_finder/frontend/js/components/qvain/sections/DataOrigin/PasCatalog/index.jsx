@@ -1,4 +1,3 @@
-import React from 'react'
 import { observer } from 'mobx-react'
 import License from '../general/AccessRights/License'
 import FilePicker from '../general/FilePicker'

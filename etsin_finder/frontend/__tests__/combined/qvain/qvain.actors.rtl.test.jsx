@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { configure } from 'mobx'
-import React from 'react'
 import ReactModal from 'react-modal'
 
 import { contextRenderer } from '@/../__tests__/test-helpers'

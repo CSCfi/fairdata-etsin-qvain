@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
 import { action } from 'mobx'
 import Select from 'react-select'
@@ -77,11 +77,7 @@ export const ExternalFileFormBase = () => {
           options={useCategoryOptions}
           clearable
           isDisabled={readonly}
-          value={getCurrentOption(
-            UseCategory,
-            useCategoryOptions,
-            externalResource.useCategory
-          )}
+          value={getCurrentOption(UseCategory, useCategoryOptions, externalResource.useCategory)}
           onChange={val => onChange(setUseCategory)(val)}
           getOptionLabel={getOptionLabel(UseCategory, lang)}
           getOptionValue={getOptionValue(UseCategory)}

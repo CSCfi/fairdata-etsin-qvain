@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import React, { Fragment } from 'react'
+import { Fragment } from 'react'
 import styled from 'styled-components'
 
 import { FieldGroup } from '@/components/qvain/general/V2'

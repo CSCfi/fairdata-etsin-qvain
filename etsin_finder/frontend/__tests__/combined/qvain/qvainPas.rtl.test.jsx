@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import React from 'react'
 
 import DirectoryForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/directoryForm'
 import FileForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/fileForm'

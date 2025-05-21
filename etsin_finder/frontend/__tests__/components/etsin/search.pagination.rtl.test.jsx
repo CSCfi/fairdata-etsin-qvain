@@ -1,4 +1,3 @@
-import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 import { render, screen } from '@testing-library/react'

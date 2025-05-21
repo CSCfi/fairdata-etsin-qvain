@@ -10,13 +10,6 @@
    */
 }
 
-/**
- * This file contains functionality copied from qvain/general/form.jsx
- *
- * This is, until further notice, done to keep Etsin and Qvain separate, as two modules in the same app.
- */
-
-import React from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'

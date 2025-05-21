@@ -10,7 +10,7 @@
    */
 }
 
-import React, { Component } from 'react'
+import { Component } from 'react'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import { observer } from 'mobx-react'
@@ -140,8 +140,8 @@ class Login extends Component {
   }
 }
 const Cont = styled.div`
-  width: ${p => (p.$width || '')};
-  margin: ${p => (p.$margin || '')};
+  width: ${p => p.$width || ''};
+  margin: ${p => p.$margin || ''};
   position: relative;
 `
 

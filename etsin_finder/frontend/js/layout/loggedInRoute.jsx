@@ -10,7 +10,7 @@
    */
 }
 
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Route, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'

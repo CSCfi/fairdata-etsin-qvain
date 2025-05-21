@@ -10,7 +10,6 @@
    */
 }
 
-import React from 'react'
 import Translate from '@/utils/Translate'
 
 const CumulativeDatasetInfoText = () => (

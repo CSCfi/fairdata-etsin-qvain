@@ -10,7 +10,7 @@
    */
 }
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
 

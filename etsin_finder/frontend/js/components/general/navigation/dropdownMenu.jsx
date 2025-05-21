@@ -10,7 +10,7 @@
    */
 }
 
-import React, { Component } from 'react'
+import { createRef, Component } from 'react'
 import styled from 'styled-components'
 import { darken } from 'polished'
 import PropTypes from 'prop-types'
@@ -23,8 +23,8 @@ export default class DropdownMenu extends Component {
     this.state = {
       open: false,
     }
-    this.content = React.createRef()
-    this.button = React.createRef()
+    this.content = createRef()
+    this.button = createRef()
   }
 
   onBlur = e => {

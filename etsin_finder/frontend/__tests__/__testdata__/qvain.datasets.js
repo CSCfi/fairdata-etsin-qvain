@@ -279,7 +279,7 @@ const datasets = [
     research_dataset: {
       title: {
         en: 'Draft 2',
-        fi: 'Draft 2 suomeksi'
+        fi: 'Draft 2 suomeksi',
       },
       issued: '2021-02-05',
       access_rights: {

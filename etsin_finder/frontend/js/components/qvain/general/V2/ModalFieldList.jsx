@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
@@ -32,7 +31,9 @@ const ModalFieldList = ({
 
   return storage.map(item => (
     <FieldListContainer key={item.uiid}>
-      <FieldListLabel className="item-label">{getValueTranslation(nameGetter(item), lang)}</FieldListLabel>
+      <FieldListLabel className="item-label">
+        {getValueTranslation(nameGetter(item), lang)}
+      </FieldListLabel>
       <ListItemButtonContainer>
         <Translate
           component={EditButton}

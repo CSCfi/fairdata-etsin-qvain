@@ -51,9 +51,7 @@ class Flags {
 
     // Apply existing overrides starting from shortest paths
     window.applyOverrides = () => {
-      const overridesList = Object.entries(
-        JSON.parse(localStorage.getItem('flagOverrides')) || {}
-      )
+      const overridesList = Object.entries(JSON.parse(localStorage.getItem('flagOverrides')) || {})
       overridesList.sort(([pathA], [pathB]) => pathA.split('.').length - pathB.split('.').length)
       overridesList.forEach(([path, value]) => this.setOverride(path, value))
     }

@@ -40,7 +40,8 @@ export const externalResourceFileTypeSchema = yup
   .object()
   .shape({
     url: yup.string(),
-  }).nullable()
+  })
+  .nullable()
 
 export const externalResourceAccessUrlSchema = yup
   .string()

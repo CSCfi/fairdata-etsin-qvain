@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
@@ -27,9 +26,7 @@ import { useStores } from '@/stores/stores'
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const {
-    Etsin: {
-      isDownloadPossible,
-    },
+    Etsin: { isDownloadPossible },
   } = useStores()
 
   const { Files, directoryView, extraProps } = treeProps

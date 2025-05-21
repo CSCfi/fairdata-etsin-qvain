@@ -10,7 +10,7 @@
    */
 }
 
-import React, { Component } from 'react'
+import { createRef, Component } from 'react'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
@@ -29,7 +29,7 @@ class Layout extends Component {
   constructor(props) {
     super(props)
     this.focusContent = this.focusContent.bind(this)
-    this.content = React.createRef()
+    this.content = createRef()
   }
 
   focusContent() {

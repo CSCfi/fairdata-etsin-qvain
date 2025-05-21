@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React from 'react'
 import { Link } from '../button'
 
 // return either a NavLink (moving within app) or Link (moving between sites) based on link target.

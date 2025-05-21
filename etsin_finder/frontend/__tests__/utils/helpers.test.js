@@ -1,4 +1,3 @@
-import React from 'react'
 import { hasChildren } from '../../js/utils/helpers'
 
 const Hello = () => <div>Hello!</div>

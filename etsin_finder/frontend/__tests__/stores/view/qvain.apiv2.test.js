@@ -180,7 +180,6 @@ describe('Submit.exec()', () => {
     expect(Submit.isLoading).toBe(false)
   })
 
-
   test('exec should perform actions in correct order', async () => {
     const callOrder = []
     const logCallOrder = (name, returnValue) => {

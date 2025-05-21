@@ -10,7 +10,7 @@
    */
 }
 
-import React, { Component } from 'react'
+import { Component } from 'react'
 import styled from 'styled-components'
 import ReactModal from 'react-modal'
 import PropTypes from 'prop-types'

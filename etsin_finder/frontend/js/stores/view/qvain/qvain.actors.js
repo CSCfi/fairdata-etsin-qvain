@@ -392,7 +392,6 @@ class Actors {
     this.referenceOrganizationErrors = {}
   }
 
-
   isActorEqual = (org1, org2) => isEqual(org1, org2, ['uiid', 'roles', 'isReference'])
 
   isOrganizationEqual = (org1, org2) => isEqual(org1, org2, ['uiid', 'isReference'])

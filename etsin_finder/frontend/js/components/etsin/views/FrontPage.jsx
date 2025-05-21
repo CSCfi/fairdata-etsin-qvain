@@ -1,4 +1,3 @@
-import React from 'react'
 import FrontPage from '../FrontPage'
 
 // this Component is for potential versioning the view

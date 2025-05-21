@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import styled, { withTheme } from 'styled-components'
 

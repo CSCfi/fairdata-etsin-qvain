@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { observer } from 'mobx-react'
 import axios from 'axios'
 import styled from 'styled-components'

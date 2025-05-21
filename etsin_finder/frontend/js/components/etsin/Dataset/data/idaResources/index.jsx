@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons'

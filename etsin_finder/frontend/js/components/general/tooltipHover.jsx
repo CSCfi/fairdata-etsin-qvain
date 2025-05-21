@@ -10,7 +10,7 @@
    */
 }
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import withCustomProps from '@/utils/withCustomProps'

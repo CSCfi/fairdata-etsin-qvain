@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -24,10 +23,8 @@ const getTranslationItem = (item, lang) => ({
 })
 
 const getTranslationPath = item => {
-  if (item.startDate && !item.endDate)
-    return 'qvain.timePeriod.listItem.startDateOnly'
-  if (!item.startDate && item.endDate)
-    return 'qvain.timePeriod.listItem.endDateOnly'
+  if (item.startDate && !item.endDate) return 'qvain.timePeriod.listItem.startDateOnly'
+  if (!item.startDate && item.endDate) return 'qvain.timePeriod.listItem.endDateOnly'
 
   return 'qvain.timePeriod.listItem.bothDates'
 }

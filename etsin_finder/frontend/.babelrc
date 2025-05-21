@@ -16,7 +16,12 @@
           "@babel/preset-env",
           { "useBuiltIns": "entry", "corejs": 2, "targets": "> 0.25%, not dead" }
         ],
-        "@babel/preset-react"
+        [
+          "@babel/preset-react",
+          {
+            "runtime": "automatic"
+          }
+        ]
       ]
     }
   },
@@ -36,6 +41,11 @@
         "targets": "> 0.25%, not dead"
       }
     ],
-    "@babel/preset-react"
+    [
+      "@babel/preset-react",
+      {
+        "runtime": "automatic"
+      }
+    ]
   ]
 }

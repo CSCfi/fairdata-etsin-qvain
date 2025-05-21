@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react'
-import React from 'react'
 import styled from 'styled-components'
 
 import { FieldGroup, TitleSmall } from '@/components/qvain/general/V2'

@@ -7,7 +7,7 @@
  * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
  * @license   MIT
  */
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import { useRouteMatch } from 'react-router'

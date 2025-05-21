@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import React from 'react'
+import { createRef } from 'react'
 import { observable, action, makeObservable, autorun } from 'mobx'
 
 class Accessibility {
@@ -28,7 +28,7 @@ class Accessibility {
 
   @observable userIsTabbing = false
 
-  focusableElement = React.createRef()
+  focusableElement = createRef()
 
   @action
   toggleTabbing(value) {

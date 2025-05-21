@@ -126,13 +126,10 @@ export const metaxResponses = {
             input_file_format: '',
             output_format_version: '',
             label: {
-              fi:
-                'Saatavuutta rajoitettu tietoja antaneen henkilön etuun tai suojaan perustuen tai esim. luovutussopimuksen perusteella',
-              en:
-                'Restricted access based on the interest or protection of the person who provided the information or, for example, on the basis of extradite',
+              fi: 'Saatavuutta rajoitettu tietoja antaneen henkilön etuun tai suojaan perustuen tai esim. luovutussopimuksen perusteella',
+              en: 'Restricted access based on the interest or protection of the person who provided the information or, for example, on the basis of extradite',
               sv: 'Begränsad åtkomst på grund av skydd av person',
-              und:
-                'Saatavuutta rajoitettu tietoja antaneen henkilön etuun tai suojaan perustuen tai esim. luovutussopimuksen perusteella',
+              und: 'Saatavuutta rajoitettu tietoja antaneen henkilön etuun tai suojaan perustuen tai esim. luovutussopimuksen perusteella',
             },
             parent_ids: [],
             child_ids: [],

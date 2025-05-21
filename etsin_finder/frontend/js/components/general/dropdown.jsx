@@ -10,7 +10,7 @@
    */
 }
 
-import React, { Component } from 'react'
+import { createRef, Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
@@ -27,8 +27,8 @@ export class Dropdown extends Component {
     this.state = {
       open: false,
     }
-    this.content = React.createRef()
-    this.container = React.createRef()
+    this.content = createRef()
+    this.container = createRef()
     this.listenersAdded = false
   }
 
@@ -77,7 +77,8 @@ export class Dropdown extends Component {
       left = containerRect.left
     } else if (this.props.align === 'left') {
       left = containerRect.right - listWidth
-    } else { // center
+    } else {
+      // center
       left = (containerRect.left + containerRect.right) / 2 - listWidth / 2
     }
     left = Math.max(margin, Math.min(pageWidth - listWidth - margin, left))

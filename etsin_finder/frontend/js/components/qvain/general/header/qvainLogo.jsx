@@ -10,8 +10,6 @@
    */
 }
 
-import React from 'react'
-
 import Logo from '../../../general/header/logo'
 import QvainLogoImage from '../../../../../static/images/Qvain_300px.png'
 

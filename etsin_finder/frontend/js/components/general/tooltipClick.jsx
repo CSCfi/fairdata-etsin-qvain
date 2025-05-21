@@ -10,13 +10,7 @@
    */
 }
 
-/**
- * This file contains functionality copied from qvain/general/tooltip.jsx
- *
- * This is, until further notice, done to keep Etsin and Qvain separate, as two modules in the same app.
- */
-
-import React, { useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -44,9 +38,7 @@ const TooltipClick = ({ isOpen, close, align, text, children }) => {
     case 'Right':
       tooltip = (
         <>
-          <span ref={wrapperTooltipButtonRef}>
-            {children}
-          </span>
+          <span ref={wrapperTooltipButtonRef}>{children}</span>
           <Wrapper ref={wrapperTooltipCardRef}>
             <TooltipRight>
               <TooltipArrowRight />
@@ -59,9 +51,7 @@ const TooltipClick = ({ isOpen, close, align, text, children }) => {
     case 'Left':
       tooltip = (
         <>
-          <span ref={wrapperTooltipButtonRef}>
-            {children}
-          </span>
+          <span ref={wrapperTooltipButtonRef}>{children}</span>
           <Wrapper ref={wrapperTooltipCardRef}>
             <TooltipLeft>
               <TooltipText>{text}</TooltipText>
@@ -74,9 +64,7 @@ const TooltipClick = ({ isOpen, close, align, text, children }) => {
     case 'Down':
       tooltip = (
         <>
-          <span ref={wrapperTooltipButtonRef}>
-            {children}
-          </span>
+          <span ref={wrapperTooltipButtonRef}>{children}</span>
           <Wrapper ref={wrapperTooltipCardRef}>
             <TooltipDown>
               <TooltipArrowDown />
@@ -89,9 +77,7 @@ const TooltipClick = ({ isOpen, close, align, text, children }) => {
     case 'Up':
       tooltip = (
         <>
-          <span ref={wrapperTooltipButtonRef}>
-            {children}
-          </span>
+          <span ref={wrapperTooltipButtonRef}>{children}</span>
           <Wrapper ref={wrapperTooltipCardRef}>
             <TooltipUp>
               <TooltipText>{text}</TooltipText>
@@ -104,9 +90,7 @@ const TooltipClick = ({ isOpen, close, align, text, children }) => {
     default:
       tooltip = (
         <>
-          <span ref={wrapperTooltipButtonRef}>
-            {children}
-          </span>
+          <span ref={wrapperTooltipButtonRef}>{children}</span>
           <Wrapper ref={wrapperTooltipCardRef}>
             <TooltipDown>
               <TooltipText>{text}</TooltipText>

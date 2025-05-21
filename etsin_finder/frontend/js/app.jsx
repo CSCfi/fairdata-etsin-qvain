@@ -10,7 +10,7 @@
    */
 }
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Router } from 'react-router-dom'
 import { observer } from 'mobx-react'

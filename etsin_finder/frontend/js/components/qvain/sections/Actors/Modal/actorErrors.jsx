@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import Translate from '@/utils/Translate'
 import ValidationError, { ValidationErrors } from '../../../general/errors/validationError'

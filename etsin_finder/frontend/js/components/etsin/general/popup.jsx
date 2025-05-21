@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { createRef, Component } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
@@ -25,7 +25,7 @@ export default class PopUp extends Component {
 
     this.onBlur = this.onBlur.bind(this)
     this.onFocus = this.onFocus.bind(this)
-    this.popRef = React.createRef()
+    this.popRef = createRef()
     this.timeoutID = undefined
   }
 

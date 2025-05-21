@@ -90,9 +90,7 @@ export const ExternalResourceModel = data => ({
   useCategory: data.use_category
     ? UseCategory(data.use_category.pref_label, data.use_category.identifier)
     : null,
-  fileType: data.file_type
-    ? FileType(data.file_type.pref_label, data.file_type.identifier)
-    : null,
+  fileType: data.file_type ? FileType(data.file_type.pref_label, data.file_type.identifier) : null,
 })
 
 export const ExternalResource = ({

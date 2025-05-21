@@ -11,7 +11,7 @@
  * @license   MIT
  */
 
-import React from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
@@ -38,7 +38,7 @@ const BackButton = styled(NavLink)`
   margin: 0 0 0.5em 0;
 `
 
-class Dataset extends React.Component {
+class Dataset extends Component {
   constructor(props) {
     super(props)
 

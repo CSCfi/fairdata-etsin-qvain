@@ -1,4 +1,3 @@
-import React from 'react'
 import { observer } from 'mobx-react'
 import { useStores } from '@/stores/stores'
 import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import debounce from 'lodash.debounce'
 import { observer } from 'mobx-react'

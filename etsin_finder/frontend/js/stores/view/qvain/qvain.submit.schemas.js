@@ -41,9 +41,8 @@ const accessRightsDraftSchema = yup.object().shape({
   }),
   available: embargoExpDateSchema,
   description: accessRightsDescriptionDraftSchema,
-  ...dataAccessSchemaPartial
+  ...dataAccessSchemaPartial,
 })
-
 
 const accessRightsSchema = yup
   .object()
@@ -56,7 +55,7 @@ const accessRightsSchema = yup
     }),
     available: embargoExpDateSchema,
     description: accessRightsDescriptionSchema,
-    ...dataAccessSchemaPartial
+    ...dataAccessSchemaPartial,
   })
   .noUnknown()
   .required('qvain.validationMessages.accessType.required')

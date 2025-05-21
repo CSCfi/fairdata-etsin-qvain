@@ -60,10 +60,12 @@ export const Directory = (metaxDir, args) => ({
 export const getPASMeta = metaxFile => {
   const characteristics = metaxFile.file_characteristics || metaxFile.characteristics || {}
   const pasMeta = {}
-  if (characteristics.file_format !== undefined) { // v2
+  if (characteristics.file_format !== undefined) {
+    // v2
     pasMeta.fileFormat = characteristics.file_format
   }
-  if (characteristics.format_version !== undefined) { // v2
+  if (characteristics.format_version !== undefined) {
+    // v2
     pasMeta.formatVersion = characteristics.format_version
   }
   const fileFormatVersion = characteristics.file_format_version // v3

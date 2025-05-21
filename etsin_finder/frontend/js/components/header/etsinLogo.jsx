@@ -10,8 +10,6 @@
    */
 }
 
-import React from 'react'
-
 import Logo from '../general/header/logo'
 import EtsinLogoImage from '../../../static/images/Etsin_300px.png'
 

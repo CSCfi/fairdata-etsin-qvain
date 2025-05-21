@@ -11,7 +11,7 @@
    */
 }
 
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'

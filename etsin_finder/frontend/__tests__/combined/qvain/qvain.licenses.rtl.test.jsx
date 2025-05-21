@@ -1,6 +1,5 @@
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import React from 'react'
 
 import { contextRenderer } from '@/../__tests__/test-helpers'
 import License from '@/components/qvain/sections/DataOrigin/general/AccessRights/License'

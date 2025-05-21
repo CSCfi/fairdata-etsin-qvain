@@ -10,7 +10,6 @@
    */
 }
 
-import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'

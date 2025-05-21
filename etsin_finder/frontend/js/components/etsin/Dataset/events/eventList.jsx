@@ -7,7 +7,6 @@
  * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
  * @license   MIT
  */
-import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'

@@ -10,7 +10,7 @@
    */
 }
 
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { observer } from 'mobx-react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import Translate from '@/utils/Translate'

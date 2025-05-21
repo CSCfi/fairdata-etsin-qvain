@@ -250,7 +250,7 @@ describe('Env', () => {
   describe('when metaxV3 host is defined', () => {
     const testHost = 'metaxHost'
     const testPort = 443
-    const expectedUrl = "https://metaxHost:443/v3/datasets/dataset_id"
+    const expectedUrl = 'https://metaxHost:443/v3/datasets/dataset_id'
 
     beforeEach(() => {
       Env.setMetaxV3Host(testHost, testPort)

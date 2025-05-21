@@ -1,4 +1,3 @@
-import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import ReactModal from 'react-modal'
 import axios from 'axios'

@@ -1,13 +1,13 @@
 /* eslint-disable camelcase */
 export const hasExtraInfo = agent =>
-  agent.person || 
-  agent.contributor_role || 
-  agent.contributor_type || 
-  agent.organization.parent || 
-  agent.organization.homepage || 
+  agent.person ||
+  agent.contributor_role ||
+  agent.contributor_type ||
+  agent.organization.parent ||
+  agent.organization.homepage ||
   agent.organization.url
 
-export const flatParentOrgs = (agent) => {
+export const flatParentOrgs = agent => {
   let org = agent.organization
   const orgs = []
   while (org) {

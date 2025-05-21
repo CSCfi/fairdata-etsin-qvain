@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
 import Section from '@/components/qvain/general/V2/Section'
 import RelatedResourceContent from './RelatedResourceContent'

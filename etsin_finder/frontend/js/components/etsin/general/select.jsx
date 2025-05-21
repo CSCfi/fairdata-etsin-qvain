@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import ReactSelect from 'react-select'
 import styled from 'styled-components'
 import { lighten } from 'polished'

@@ -112,7 +112,6 @@
     "webpack-plugin-serve": "^1.6.0"
   },
   "prettier": {
-    "function-paren-newline": false,
     "arrowParens": "avoid",
     "printWidth": 100,
     "semi": false,

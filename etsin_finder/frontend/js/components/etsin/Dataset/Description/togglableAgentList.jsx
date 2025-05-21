@@ -10,7 +10,7 @@
    */
 }
 
-import React, { Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
@@ -69,12 +69,8 @@ class TogglableAgentList extends Component {
               return (
                 <Agent
                   inline
-                  lang={getPreferredLang(
-                    agent.person?.name || agent.organization.pref_label
-                  )}
-                  key={getValueTranslation(
-                    agent.person?.name || agent.organization.pref_label
-                  )}
+                  lang={getPreferredLang(agent.person?.name || agent.organization.pref_label)}
+                  key={getValueTranslation(agent.person?.name || agent.organization.pref_label)}
                   first={i === 0}
                   agent={agent}
                 />
@@ -90,12 +86,8 @@ class TogglableAgentList extends Component {
                 return (
                   <Agent
                     inline
-                    lang={getPreferredLang(
-                      agent.person?.name || agent.organization.pref_label
-                    )}
-                    key={getValueTranslation(
-                      agent.person?.name || agent.organization.pref_label
-                    )}
+                    lang={getPreferredLang(agent.person?.name || agent.organization.pref_label)}
+                    key={getValueTranslation(agent.person?.name || agent.organization.pref_label)}
                     agent={agent}
                   />
                 )

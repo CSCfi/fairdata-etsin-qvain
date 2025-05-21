@@ -1,4 +1,3 @@
-import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'

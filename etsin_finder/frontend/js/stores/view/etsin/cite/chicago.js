@@ -1,6 +1,14 @@
 import CitationBuilder from './citationBuilder'
-import { getYear, getTitle, getVersion, getIdentifier, getPublisher, addQuotes, getAuthorsFull, capitalizeFirst } from './utils'
-
+import {
+  getYear,
+  getTitle,
+  getVersion,
+  getIdentifier,
+  getPublisher,
+  addQuotes,
+  getAuthorsFull,
+  capitalizeFirst,
+} from './utils'
 
 const getCitation = (dataset, getTranslation) => {
   const citation = new CitationBuilder({
@@ -12,7 +20,7 @@ const getCitation = (dataset, getTranslation) => {
       capitalizeFirst(getVersion(dataset, getTranslation)),
       getPublisher(dataset, getTranslation),
       getIdentifier(dataset),
-    ]
+    ],
   })
   return citation.get()
 }

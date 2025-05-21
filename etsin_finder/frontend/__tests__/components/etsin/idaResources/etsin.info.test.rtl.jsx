@@ -1,4 +1,3 @@
-import React from 'react'
 import { cleanup, screen } from '@testing-library/react'
 import ReactModal from 'react-modal'
 import { contextRenderer } from '@/../__tests__/test-helpers'

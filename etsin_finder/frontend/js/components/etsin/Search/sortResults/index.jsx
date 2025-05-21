@@ -10,7 +10,7 @@
    */
 }
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSort, faSortAmountUp, faSortAmountDown } from '@fortawesome/free-solid-svg-icons'
@@ -131,14 +131,18 @@ const SelectOptions = styled.div`
   max-height: 0px;
   width: max-content;
   overflow: hidden;
-  transition: max-height 0.5s ease, border 0.3s ease 0.4s;
+  transition:
+    max-height 0.5s ease,
+    border 0.3s ease 0.4s;
   margin-top: 0.5em;
   & > div {
     display: flex;
     flex-direction: column;
   }
   &.open {
-    transition: max-height 0.5s ease, border 0.3s ease;
+    transition:
+      max-height 0.5s ease,
+      border 0.3s ease;
     max-height: 150px;
     border: 2px solid ${props => props.theme.color.primary};
   }

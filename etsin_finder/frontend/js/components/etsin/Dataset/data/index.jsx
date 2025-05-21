@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
@@ -15,7 +15,6 @@ const Data = ({ id }) => {
       EtsinDataset: { identifier, hasRemoteResources },
     },
   } = useStores()
-
 
   useEffect(() => {
     Accessibility.handleNavigation('data', false)

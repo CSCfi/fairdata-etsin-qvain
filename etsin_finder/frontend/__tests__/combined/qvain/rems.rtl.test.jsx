@@ -1,5 +1,4 @@
 import { screen } from '@testing-library/react'
-import React from 'react'
 
 import { contextRenderer } from '@/../__tests__/test-helpers'
 import AskForAccess from '@/components/etsin/Dataset/Description/askForAccess'

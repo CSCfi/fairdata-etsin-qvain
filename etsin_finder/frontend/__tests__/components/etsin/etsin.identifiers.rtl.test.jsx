@@ -1,5 +1,4 @@
 /* eslint-disable testing-library/no-debugging-utils */
-import React from 'react'
 import '@testing-library/jest-dom'
 import { Provider } from 'mobx-react'
 import { render, screen, cleanup } from '@testing-library/react'
@@ -50,7 +49,9 @@ describe('Identifiers', () => {
 
     expect(screen.getByTestId(`other-identifier-link-${url}`)).toHaveTextContent(url)
     expect(screen.getByTestId(`other-identifier-link-${doi}`)).toHaveTextContent(doi)
-    expect(screen.getByTestId(`other-identifier-link-${reportronic}`)).toHaveTextContent(reportronic)
+    expect(screen.getByTestId(`other-identifier-link-${reportronic}`)).toHaveTextContent(
+      reportronic
+    )
     expect(screen.getByTestId(`other-identifier-link-${urn}`)).toHaveTextContent(urn)
   })
 })

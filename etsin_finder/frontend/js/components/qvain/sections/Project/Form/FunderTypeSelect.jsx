@@ -1,4 +1,3 @@
-import React from 'react'
 import { observer } from 'mobx-react'
 import ModalReferenceInput from '@/components/qvain/general/V2/ModalReferenceInput'
 

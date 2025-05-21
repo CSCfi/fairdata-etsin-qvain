@@ -4,7 +4,7 @@
  * This is, until further notice, done to keep Etsin and Qvain separate, as two modules in the same app.
  */
 
-import React, { useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 

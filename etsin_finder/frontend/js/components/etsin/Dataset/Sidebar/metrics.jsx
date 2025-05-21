@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 import { ACCESS_TYPE_URL } from '@/utils/constants'

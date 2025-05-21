@@ -11,7 +11,7 @@
    */
 }
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
@@ -55,7 +55,9 @@ const Agent = ({ agent, first, inline, popupAlign }) => {
     <AgentListItem inline={inline}>
       {first ? '' : ' & '}
       {!shouldHavePopup ? (
-        <TextWithoutPopup lang={getPreferredLang(name)}>{getValueTranslation(name)}</TextWithoutPopup>
+        <TextWithoutPopup lang={getPreferredLang(name)}>
+          {getValueTranslation(name)}
+        </TextWithoutPopup>
       ) : (
         <PopUp
           isOpen={popUpOpen}

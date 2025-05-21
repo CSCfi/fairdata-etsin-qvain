@@ -1,4 +1,4 @@
-import React from 'react'
+import { createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
@@ -8,7 +8,7 @@ import { useStores } from '@/stores/stores'
 import Card from './card'
 import { ExpandCollapse } from './ExpandCollapse'
 
-const SectionContext = React.createContext()
+const SectionContext = createContext()
 
 const Section = ({ sectionName, children }) => (
   <SectionContext.Provider value={sectionName}>
@@ -108,7 +108,7 @@ export const SectionContentWrapper = styled.div`
 
 export default observer(Section)
 
-export const useSectionName = () => React.useContext(SectionContext)
+export const useSectionName = () => useContext(SectionContext)
 
 export const useField = fieldName => {
   const sectionName = useSectionName()

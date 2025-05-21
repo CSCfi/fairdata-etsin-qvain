@@ -1,4 +1,3 @@
-import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { BrowserRouter } from 'react-router-dom'
 import { axe } from 'jest-axe'
@@ -14,8 +13,7 @@ const stores = buildStores()
 failTestsWhenTranslationIsMissing(stores.Locale)
 
 describe('Etsin header', () => {
-
-  const renderHeader =  async () => {
+  const renderHeader = async () => {
     render(
       <StoresProvider store={stores}>
         <BrowserRouter>
@@ -31,7 +29,7 @@ describe('Etsin header', () => {
 
   it('should be accessible', async () => {
     await renderHeader()
-    const results = await axe(screen.getByRole("banner"))
+    const results = await axe(screen.getByRole('banner'))
     expect(results).toBeAccessible()
   })
 })

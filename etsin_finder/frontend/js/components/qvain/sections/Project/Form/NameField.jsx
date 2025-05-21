@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { observer } from 'mobx-react'
 import { useStores } from '@/stores/stores'
 import TranslationTab from '@/components/qvain/general/V2/TranslationTab'

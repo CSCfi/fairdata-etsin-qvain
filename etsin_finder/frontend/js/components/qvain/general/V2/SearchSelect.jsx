@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import ReactSelect from 'react-select/async'
 import { observer } from 'mobx-react'

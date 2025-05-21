@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { faPen, faEye } from '@fortawesome/free-solid-svg-icons'
 import { observer } from 'mobx-react'
@@ -26,8 +25,7 @@ const EditDropdown = ({ item, parentArgs }) => {
     (item.removed || (parentRemoved && !item.added)) && !hasAddedChildren && item.existing
   const name = item.name
 
-  let canEdit =
-    (item.added || item.existing || hasAddedChildren || parentAdded)
+  let canEdit = item.added || item.existing || hasAddedChildren || parentAdded
   if (isRemoved || readonly) {
     canEdit = false
   }
@@ -69,7 +67,7 @@ const EditDropdown = ({ item, parentArgs }) => {
       component={DropdownItem}
       content={`qvain.files.selected.${type}UserMetadata`}
       onClick={() => toggleInEdit(item)}
-      className='edit-user-metadata'
+      className="edit-user-metadata"
     />
   )
 
@@ -103,14 +101,14 @@ const EditDropdown = ({ item, parentArgs }) => {
             component={DropdownItem}
             content={`qvain.files.metadataModal.buttons.${pasOption}`}
             onClick={showPasModal}
-            className='edit-pas-metadata'
+            className="edit-pas-metadata"
           />
           {!readonly && itemHasPASMetadata && (
             <Translate
               component={DropdownItem}
               content="qvain.files.metadataModal.buttons.delete"
               onClick={showClearPasModal}
-              className='remove-pas-metadata'
+              className="remove-pas-metadata"
               danger
             />
           )}

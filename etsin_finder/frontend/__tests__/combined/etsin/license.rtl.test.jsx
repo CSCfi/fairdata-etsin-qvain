@@ -1,4 +1,3 @@
-import React from 'react'
 import { ThemeProvider } from 'styled-components'
 
 import { screen, render, within } from '@testing-library/react'

@@ -12,7 +12,7 @@
 
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import Modal from '@/components/general/modal'

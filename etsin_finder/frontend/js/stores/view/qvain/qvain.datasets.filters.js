@@ -32,7 +32,9 @@ export const groupDatasetsByVersionSet = datasets => {
   const groups = []
   const groupByIdentifier = {}
   datasets.forEach(dataset => {
-    const versionSet = dataset.dataset_version_set || [{ identifier: dataset.identifier || dataset.id }]
+    const versionSet = dataset.dataset_version_set || [
+      { identifier: dataset.identifier || dataset.id },
+    ]
     let group = groupByIdentifier[dataset.identifier]
     if (!group) {
       group = []
