@@ -1,6 +1,5 @@
 import { access_rights_open_a } from '../refs/access_rights.data'
 import { organization_kone } from '../refs/organizations.data'
-import { field_of_science_cis } from '../refs/fields_of_science.data'
 import { language_fi } from '../refs/languages.data'
 import { data_catalog_ida } from '../refs/data_catalogs.data'
 
@@ -13,7 +12,6 @@ const dataset_open_b = {
       organization: organization_kone,
       person: null,
     },
-    ,
   ],
   data_catalog: data_catalog_ida.id,
   description: {

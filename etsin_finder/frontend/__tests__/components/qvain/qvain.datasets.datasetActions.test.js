@@ -1,3 +1,4 @@
+/* global jestExpect */
 import { configure } from 'mobx'
 
 import { buildStores } from '../../../js/stores'

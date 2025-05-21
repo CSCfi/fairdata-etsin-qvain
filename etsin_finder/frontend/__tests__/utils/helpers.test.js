@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-key */
+/* eslint-disable react/prop-types */
 import { hasChildren } from '../../js/utils/helpers'
 
 const Hello = () => <div>Hello!</div>

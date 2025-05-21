@@ -1,5 +1,3 @@
-const createDataset = {}
-
 const datasets = [
   { id: 1, title: { en: 'Older dataset' }, created: '2021-12-01T02:00:00Z', state: 'published' },
   { id: 2, title: { en: 'Dataset 1' }, created: '2023-12-01T01:00:00Z', state: 'published' },

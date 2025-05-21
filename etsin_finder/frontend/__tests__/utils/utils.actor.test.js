@@ -1,5 +1,3 @@
-import { expect } from 'chai'
-
 import actorFunc from '../../js/components/qvain/utils/actor'
 
 describe('Utils: actor', () => {

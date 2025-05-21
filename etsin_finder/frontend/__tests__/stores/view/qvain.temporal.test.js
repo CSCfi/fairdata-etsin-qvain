@@ -148,16 +148,20 @@ describe('Temporals with Parent as arg', () => {
         expect(temporals.save).to.have.beenCalledTimes(1)
       })
 
-      test('should return an array of objects where startDate and endDate are transformed to ISO-date and mapped to start_date and end_date (only one object in this case)', () => {
-        const expectedReturn = [
-          {
-            start_date: new Date(inEditObj.startDate).toISOString(),
-            end_date: new Date(inEditObj.endDate).toISOString(),
-          },
-        ]
+      test(
+        'should return an array of objects where startDate and endDate are transformed ' +
+          'to ISO-date and mapped to start_date and end_date (only one object in this case)',
+        () => {
+          const expectedReturn = [
+            {
+              start_date: new Date(inEditObj.startDate).toISOString(),
+              end_date: new Date(inEditObj.endDate).toISOString(),
+            },
+          ]
 
-        returnValue.should.eql(expectedReturn)
-      })
+          returnValue.should.eql(expectedReturn)
+        }
+      )
     })
   })
 

@@ -74,7 +74,9 @@ describe('Auth Store', () => {
     expect(Auth.userLogged).toBe(true)
     try {
       await Auth.logout()
-    } catch {}
+    } catch {
+      // pass
+    }
     expect(errorSpy.mock.calls.length).toBe(1)
     expect(Auth.userLogged).toBe(true)
   })
@@ -85,7 +87,9 @@ describe('Auth Store', () => {
     expect(Auth.userLogged).toBe(true)
     try {
       await Auth.renewSession()
-    } catch {}
+    } catch {
+      // pass
+    }
     expect(Auth.userLogged).toBe(false)
   })
 
@@ -95,7 +99,9 @@ describe('Auth Store', () => {
     expect(Auth.userLogged).toBe(true)
     try {
       await Auth.renewSession()
-    } catch {}
+    } catch {
+      // pass
+    }
     expect(Auth.user).toEqual({
       name: undefined,
       loggedIn: false,

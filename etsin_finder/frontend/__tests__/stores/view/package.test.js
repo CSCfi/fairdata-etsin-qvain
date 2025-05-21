@@ -313,7 +313,6 @@ describe('Packages', () => {
     const partial = [
       {
         scope: ['test'],
-        status: 'status',
         foo: 'bar',
         status: DOWNLOAD_API_REQUEST_STATUS.PENDING,
       },
@@ -347,7 +346,6 @@ describe('Packages', () => {
     const partial = [
       {
         scope: ['test'],
-        status: 'status',
         foo: 'bar',
         status: DOWNLOAD_API_REQUEST_STATUS.PENDING,
       },

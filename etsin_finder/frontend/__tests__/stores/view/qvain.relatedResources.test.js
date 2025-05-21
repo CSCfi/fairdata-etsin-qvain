@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
-import RelatedResources, {
+import {
   RelatedResource,
   RelatedResourceModel,
 } from '@/stores/view/qvain/qvain.relatedResources'
@@ -101,7 +101,6 @@ describe('RelatedResources', () => {
     })
 
     describe('when calling fromBackend', () => {
-      let returnValue
 
       const dataset = {
         relation: ['relation'],
@@ -113,7 +112,7 @@ describe('RelatedResources', () => {
 
       beforeEach(() => {
         relatedResources.fromBackendBase = jest.fn()
-        returnValue = relatedResources.fromBackend(dataset, Qvain)
+        relatedResources.fromBackend(dataset, Qvain)
       })
 
       test('should call fromBackendBase with dataset.relation and Qvain', () => {

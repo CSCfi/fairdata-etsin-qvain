@@ -1165,7 +1165,9 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
           code: 'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
           type: 'file_format_version',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
+          uri:
+            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/' +
+            'application_vnd.openxmlformats-officedocument.wordprocessingml.document_14.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -1190,7 +1192,9 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
           code: 'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
           type: 'file_format_version',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
+          uri:
+            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/' +
+            'application_vnd.openxmlformats-officedocument.wordprocessingml.document_15.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -1325,7 +1329,9 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
           code: 'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
           type: 'file_format_version',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
+          uri:
+            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/' +
+            'application_vnd.openxmlformats-officedocument.presentationml.presentation_15.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.presentationml.presentation',
@@ -2186,7 +2192,9 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
           code: 'file_format_version_application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
           type: 'file_format_version',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
+          uri:
+            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/' +
+            'application_vnd.openxmlformats-officedocument.wordprocessingml.document_12.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -2255,7 +2263,9 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
           code: 'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
           type: 'file_format_version',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
+          uri:
+            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/' +
+            'application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_12.0',
           wkt: '',
           input_file_format: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           output_format_version: '12.0',
@@ -2279,7 +2289,9 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
           code: 'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
           type: 'file_format_version',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
+          uri:
+            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/' +
+            'application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_14.0',
           wkt: '',
           input_file_format: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           output_format_version: '14.0',
@@ -2303,7 +2315,9 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
           code: 'file_format_version_application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
           type: 'file_format_version',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
+          uri:
+            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/' +
+            'application_vnd.openxmlformats-officedocument.spreadsheetml.sheet_15.0',
           wkt: '',
           input_file_format: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           output_format_version: '15.0',
@@ -2349,7 +2363,9 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
           code: 'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
           type: 'file_format_version',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
+          uri:
+            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/' +
+            'application_vnd.openxmlformats-officedocument.presentationml.presentation_12.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.presentationml.presentation',
@@ -2374,7 +2390,9 @@ const fileFormatVersion = {
           id: 'file_format_version_file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
           code: 'file_format_version_application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
           type: 'file_format_version',
-          uri: 'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
+          uri:
+            'http://uri.suomi.fi/codelist/fairdata/file_format_version/code/' +
+            'application_vnd.openxmlformats-officedocument.presentationml.presentation_14.0',
           wkt: '',
           input_file_format:
             'application/vnd.openxmlformats-officedocument.presentationml.presentation',
@@ -7215,7 +7233,9 @@ const restrictionGrounds = {
           output_format_version: '',
           label: {
             fi: 'Saatavuutta rajoitettu tietoja antaneen henkilön etuun tai suojaan perustuen tai esim. luovutussopimuksen perusteella',
-            en: 'Restricted access based on the interest or protection of the person who provided the information or, for example, on the basis of extradite',
+            en:
+              'Restricted access based on the interest or protection of the person who provided the information or,' +
+              'for example, on the basis of extradite',
             sv: 'Begränsad åtkomst på grund av skydd av person',
             und: 'Saatavuutta rajoitettu tietoja antaneen henkilön etuun tai suojaan perustuen tai esim. luovutussopimuksen perusteella',
           },
@@ -8643,7 +8663,7 @@ export const getReferenceData = url => {
   const { pathname } = new URL(url, 'https://localhost')
 
   if (!urls[pathname]) {
-    console.error(`getReferenceData: url ${url} not found`)
+    console.error(`getReferenceData: url ${url} not found`)
   }
   return urls[pathname]
 }

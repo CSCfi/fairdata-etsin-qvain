@@ -54,9 +54,8 @@ describe('Spatials store', () => {
     })
 
     describe('when calling clone', () => {
-      let returnValue
       beforeEach(() => {
-        returnValue = spatials.clone()
+        spatials.clone()
       })
 
       test('should call fromBackendBase', () => {
@@ -65,8 +64,6 @@ describe('Spatials store', () => {
     })
 
     describe('when calling fromBackend', () => {
-      let returnValue
-
       const dataset = {
         spatial: [{ some: 'data' }],
       }
@@ -74,7 +71,7 @@ describe('Spatials store', () => {
       const Qvain = { name: 'qvain' }
 
       beforeEach(() => {
-        returnValue = spatials.fromBackend(dataset, Qvain)
+        spatials.fromBackend(dataset, Qvain)
       })
 
       test('should call super.fromBackendBase with args', () => {

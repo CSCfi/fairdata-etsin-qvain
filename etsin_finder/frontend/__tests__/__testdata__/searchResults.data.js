@@ -493,7 +493,9 @@ const results = {
           data_catalog: { fi: 'SYKE Metatietopalvelu', en: 'SYKE Metadata portal' },
           data_catalog_identifier: 'urn:nbn:fi:att:data-catalog-harvest-syke',
           description: {
-            fi: 'Aineisto sisältää Suomen Vierassatamat Oy:n ylläpitämät tiedot venesatamista ja niiden palveluista. Aineisto kattaa Suomen rannikkoalueet ja sisämaan laajat järvet.',
+            fi:
+              'Aineisto sisältää Suomen Vierassatamat Oy:n ylläpitämät tiedot venesatamista ' +
+              'ja niiden palveluista. Aineisto kattaa Suomen rannikkoalueet ja sisämaan laajat järvet.',
           },
           access_rights: {
             license: [
@@ -511,7 +513,9 @@ const results = {
               },
             },
             description: {
-              fi: 'Vain viranomaistehtäviin. Aineiston luovuttaminen kolmannelle osapuolelle kielletty ilman tiedontuottajan lupaa. © Suomen Vierassatamat Oy',
+              fi:
+                'Vain viranomaistehtäviin. Aineiston luovuttaminen kolmannelle osapuolelle kielletty ' +
+                'ilman tiedontuottajan lupaa. © Suomen Vierassatamat Oy',
             },
           },
           title: { fi: 'Venesatamat' },

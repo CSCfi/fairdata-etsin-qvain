@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import { ActorsRef, isEqual, actorToMetax } from '../../../js/stores/view/qvain/qvain.actors'
 
 describe('ActorsRef', () => {

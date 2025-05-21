@@ -36,7 +36,7 @@ export const failTestsWhenTranslationIsMissing = Locale => {
   })
 
   global.jestExpect.extend({
-    noMissingTranslations(args) {
+    noMissingTranslations() {
       if (missingTranslations.length === 0) {
         return {
           pass: true,

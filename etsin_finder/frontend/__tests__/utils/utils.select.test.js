@@ -320,7 +320,6 @@ describe('when calling getOptionValue with model. Calling following function wit
 })
 
 describe('when calling sortGroups with sortFunc', () => {
-  let returnValue
   const lang = 'fi'
   const sortFunc = (a, b) => b === 'b' //b should be first
 
@@ -331,7 +330,7 @@ describe('when calling sortGroups with sortFunc', () => {
   ]
 
   beforeEach(async () => {
-    returnValue = await sortGroups(model, lang, groups, sortFunc)
+    await sortGroups(model, lang, groups, sortFunc)
   })
 
   test('should call options.sort with sortFunc', () => {
@@ -340,7 +339,6 @@ describe('when calling sortGroups with sortFunc', () => {
 })
 
 describe('when calling sortGroups without sortFunc', () => {
-  let returnValue
   const lang = 'fi'
 
   const groups = [
@@ -355,7 +353,7 @@ describe('when calling sortGroups without sortFunc', () => {
   ]
 
   beforeEach(async () => {
-    returnValue = await sortGroups(model, lang, groups)
+    await sortGroups(model, lang, groups)
   })
 
   test('should call options.sort with sortFunc', () => {

@@ -1953,7 +1953,7 @@ const filter = (data, name) => {
   const newData = {
     ...data,
     directories: data.directories.filter(d => d.directory_name.includes(name)),
-    files: data.files.filter(f => d.file_name.includes(name)),
+    files: data.files.filter(f => f.file_name.includes(name)),
   }
   return newData
 }
@@ -1969,7 +1969,6 @@ export const get = rawURL => {
   const name = searchParams.get('name') || ''
   const crIdentifier = searchParams.get('cr_identifier')
   const notCRIdentifier = searchParams.get('not_cr_identifier')
-  const dirID = searchParams.get('dir_id')
 
   if (path.startsWith('/es/')) {
     return Promise.resolve({ data: getReferenceData(path) })

@@ -5,6 +5,10 @@ import {
   ignoreNotFound,
 } from '@/stores/view/common.files.utils'
 
+function fail(message) {
+  throw new Error(message)
+}
+
 describe('common.files.utils', () => {
   describe('ChildItemCounter', () => {
     let childItemCounter

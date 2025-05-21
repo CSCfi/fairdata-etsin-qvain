@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/await-async-utils */
 import { observable, runInAction, when } from 'mobx'
 
 import { Directory, File } from '../../../js/stores/view/common.files.items'

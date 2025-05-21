@@ -6,10 +6,6 @@ const org = {
   pref_label: { fi: 'testi org', en: 'test org' },
 }
 
-const expectedResultOrg = {
-  url: 'http://test.org/1234',
-}
-
 const otherOrg = {
   url: 'http://other-test.org/1234',
   pref_label: { fi: 'toinen org', en: 'other org' },
@@ -35,10 +31,6 @@ const fullOrg = {
       },
     },
   },
-}
-
-const expectedResultOtherOrg = {
-  url: 'http://other-test.org/1234',
 }
 
 const testProjectPayload = {

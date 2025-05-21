@@ -9,6 +9,7 @@ chai.should() // register .should to Object.prototype
 
 // isMockFunction is no longer in 'jest-mock' in jest 27 but chai-jest-mocks requires it
 import * as jestMock from 'jest-mock'
+// eslint-disable-next-line no-import-assign
 jestMock.isMockFunction = jest.isMockFunction
 
 import '../js/utils/extendYup'

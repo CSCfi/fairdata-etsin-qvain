@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { action, makeObservable } from 'mobx'
+import { makeObservable } from 'mobx'
 
 import Keywords from '../../../js/stores/view/qvain/qvain.keyword'
 

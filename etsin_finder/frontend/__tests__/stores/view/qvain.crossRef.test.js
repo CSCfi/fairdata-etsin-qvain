@@ -48,13 +48,12 @@ describe('CrossRef', () => {
     })
 
     describe('when calling search', () => {
-      let returnValue
       const mockRequest = { token: 'token' }
 
       beforeEach(async () => {
         axios.get.mockImplementationOnce(() => Promise.resolve())
         axios.CancelToken.source.mockReturnValueOnce(mockRequest)
-        returnValue = await crossRef.search()
+        await crossRef.search()
       })
 
       test('should call axios.get with search term and cancelToken', () => {

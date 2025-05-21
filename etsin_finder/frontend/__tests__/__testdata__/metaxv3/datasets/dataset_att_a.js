@@ -1,4 +1,4 @@
-import { spatial_a, spatial_c } from '../refs/spatials.data'
+import { spatial_a } from '../refs/spatials.data'
 
 export default {
   id: '2356c755-c2cb-4cdc-9db1-380b7d025fd8',

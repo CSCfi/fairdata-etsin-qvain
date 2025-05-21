@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
 import { buildStores } from '@/stores'
-import Provenances, { Provenance, ProvenanceModel } from '@/stores/view/qvain/qvain.provenances'
+import { Provenance, ProvenanceModel } from '@/stores/view/qvain/qvain.provenances'
 
 jest.mock('uuid')
 jest.mock('mobx')
@@ -240,18 +240,6 @@ describe('Provenances', () => {
       const actor = {
         uiid: 2,
       }
-
-      const storage = [
-        {
-          associations: {
-            actorsRef: {
-              1: {
-                toBe: 'removed',
-              },
-            },
-          },
-        },
-      ]
 
       beforeEach(async () => {
         returnValue = await provenances.checkActorFromRefs(actor)

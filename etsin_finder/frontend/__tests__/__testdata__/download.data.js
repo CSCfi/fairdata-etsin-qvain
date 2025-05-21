@@ -131,7 +131,7 @@ const formatPackageResponse = packages => {
   //
   // This converts the mock package object from
   // {
-  //   '/' : { scope: ['/'], package: 'x.zip' },
+  //   '/' : { scope: ['/'], package: 'x.zip' },
   //   '/path': { scope: ['/path'], package: 'y.zip' }
   // }
   // to
@@ -208,9 +208,6 @@ export const applyMockAdapter = mockAdapter => {
     let path = '/'
     if (params.scope) {
       path = params.scope[0]
-    }
-    const createdPackages = {
-      [path]: fakeDownload.createPackage(params.cr_id, path),
     }
     fakeDownload.addSubscription(params.cr_id, path, params.email)
     return [200, '']
