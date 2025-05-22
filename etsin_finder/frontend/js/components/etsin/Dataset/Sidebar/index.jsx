@@ -63,8 +63,7 @@ const Sidebar = () => {
 
   function identifierInfo() {
     if (isDraft && !draftOf) {
-      // This ({" "}) is a work around for translate component bug:
-      return <Translate content="dataset.draftIdentifierInfo" >{" "}</Translate>
+      return <Translate content="dataset.draftIdentifierInfo" />
     }
 
     if (draftOf) {
@@ -147,12 +146,11 @@ const Sidebar = () => {
             </div>
           )}
         </DatasetInfoItem>
-        <DatasetInfoItem
-          id="dataset-identifier"
-          itemTitle="dataset.events_idn.other_idn"
-        >
-          <OtherIdentifiers otherIdentifiers={otherIdentifiers?.map(v => v.notation)} />
-        </DatasetInfoItem>
+        {otherIdentifiers?.length > 0 && (
+          <DatasetInfoItem id="dataset-identifier" itemTitle="dataset.events_idn.other_idn">
+            <OtherIdentifiers otherIdentifiers={otherIdentifiers.map(v => v.notation)} />
+          </DatasetInfoItem>
+        )}
       </SidebarArea>
 
       <SidebarArea id="cite-area">

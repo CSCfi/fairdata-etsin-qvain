@@ -47,7 +47,7 @@ Translate.defaultProps = {
   content: undefined,
   attributes: {},
   with: undefined,
-  children: undefined,
+  // Omitted children: undefined to fix `hasChildren` helper returning false for Translate component
 }
 
 export default observer(Translate)

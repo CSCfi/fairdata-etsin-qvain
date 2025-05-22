@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable react/prop-types */
-import { hasChildren } from '../../js/utils/helpers'
+import { hasChildren } from '@/utils/helpers'
+import Translate from '@/utils/Translate'
 
 const Hello = () => <div>Hello!</div>
 
@@ -56,6 +57,9 @@ describe('Helper functions', () => {
       })
       it('returns true for component without children', () => {
         expect(hasChildren(<Hello />)).toEqual(true)
+      })
+      it('returns true for Translate component', () => {
+        expect(hasChildren(<Translate />)).toEqual(true)
       })
       it('returns true for array that has a nested object', () => {
         expect(
