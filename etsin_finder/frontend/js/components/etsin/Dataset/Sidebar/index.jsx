@@ -17,6 +17,7 @@ import Logo from './special/logo'
 import Project from './special/project'
 import SidebarArea from './SidebarArea'
 import VersionChanger from './versionChanger'
+import OtherIdentifiers from '../events/otherIdentifiers'
 
 const Sidebar = () => {
   const {
@@ -30,6 +31,7 @@ const Sidebar = () => {
         isCumulative,
         accessRights,
         persistentIdentifier,
+        otherIdentifiers,
         actors,
       },
     },
@@ -62,7 +64,8 @@ const Sidebar = () => {
 
   function identifierInfo() {
     if (isDraft && !draftOf) {
-      return <Translate content="dataset.draftIdentifierInfo" />
+      // This ({" "}) is a work around for translate component bug:
+      return <Translate content="dataset.draftIdentifierInfo" >{" "}</Translate>
     }
 
     if (draftOf) {
@@ -97,9 +100,9 @@ const Sidebar = () => {
   const identifierTooltip = () =>
     isCumulative
       ? {
-          infoText: 'dataset.dl.cumulativeDatasetTooltip.info',
-          infoAriaLabel: 'dataset.dl.cumulativeDatasetTooltip.header',
-        }
+        infoText: 'dataset.dl.cumulativeDatasetTooltip.info',
+        infoAriaLabel: 'dataset.dl.cumulativeDatasetTooltip.header',
+      }
       : null
 
   const metricsTooltip = {
@@ -144,6 +147,12 @@ const Sidebar = () => {
               <Translate content="dataset.dl.cumulativeDatasetLabel" />
             </div>
           )}
+        </DatasetInfoItem>
+        <DatasetInfoItem
+          id="dataset-identifier"
+          itemTitle="dataset.events_idn.other_idn"
+        >
+          <OtherIdentifiers otherIdentifiers={otherIdentifiers?.map(v => v.notation)} />
         </DatasetInfoItem>
       </SidebarArea>
 

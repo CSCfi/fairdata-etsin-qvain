@@ -67,6 +67,10 @@ export const Margin = styled.section`
   margin: 1.5em 0em;
 `
 
+export const SectionSideBar = styled.section`
+  margin: 0em;
+`
+
 export const InlineUl = styled.ul`
   display: inline;
   margin: 0;

@@ -1,0 +1,72 @@
+version: '3.8'
+services:
+    etsin-qvain-webpack:
+      image: etsin-qvain-webpack
+      hostname: 'etsin-qvain-webpack'
+      ports:
+        - 8080:8080
+      command: npm run dev
+      volumes:
+        - ./etsin_finder/:/etsin_finder/
+      depends_on:
+        - backend
+      environment:
+        - CHOKIDAR_USEPOLLING=true
+        - base_url=0.0.0.0:8080
+    etsin-qvain-flask:
+      extra_hosts:
+        - "metaxv3.fd-dev.csc.fi:172.17.0.1"
+      image: etsin-qvain-flask
+      hostname: 'etsin-qvain-flask'
+      configs:
+        - source: etsin-qvain-app-config
+          target: /home/etsin-user/app_config
+      volumes:
+        - ./etsin_finder/:/etsin_finder/
+        - ./tests/:/tests/
+      environment:
+        - base_url=0.0.0.0:5000
+        - FLASK_ENV=development
+        - PYTHONPATH=/
+        - FLASK_DEBUG=1
+    etsin-qvain-memcached:
+      image: memcached:latest
+      hostname: 'etsin-qvain-memcached'
+      ports:
+        - "11211:11211"
+      command: ["memcached"]
+    fairdata-nginx:
+      image: nginx:latest
+      configs:
+        - source: fairdata-nginx-config
+          target: /etc/nginx/nginx.conf
+        - source: fairdata-ssl-certificate
+          target: /etc/pki/tls/certs/ssl.crt.pem
+        - source: fairdata-ssl-certificate-key
+          target: /etc/pki/tls/private/ssl.key.pem
+        - source: etsin-qvain-nginx-config
+          target: /etc/nginx/sites-enabled/etsin-qvain
+        - source: metax-v3-nginx-config
+          target: /etc/nginx/sites-enabled/metaxV3
+
+      ports:
+        - 443:443
+      volumes:
+        - ./etsin_finder/:/etsin_finder/
+
+configs:
+  etsin-qvain-app-config:
+    external: True
+  etsin-qvain-nginx-config:
+    external: True
+  fairdata-nginx-config:
+    external: True
+  fairdata-ssl-certificate:
+    external: True
+  fairdata-ssl-certificate-key:
+    external: True
+  metax-v3-nginx-config:
+    external: True
+
+
+

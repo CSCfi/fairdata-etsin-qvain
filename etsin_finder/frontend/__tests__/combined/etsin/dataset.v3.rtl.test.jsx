@@ -41,7 +41,7 @@ const getStores = () => {
   return stores
 }
 
-const renderEtsin = async (dataset = dataset_open_a_catalog_expanded, userLogged = false) => {
+const renderEtsin = async (dataset = dataset_open_a_catalog_expanded, userLogged = false, tab) => {
   mockAdapter.reset()
   mockAdapter
     .onGet(`https://metaxv3:443/v3/datasets/${dataset.id}`)
@@ -66,9 +66,16 @@ const renderEtsin = async (dataset = dataset_open_a_catalog_expanded, userLogged
       csrfToken: undefined,
     })
   }
+
+  const initialEntries = [`/dataset/${dataset.id}`]
+
+  if (tab) {
+    initialEntries[0] += `/${tab}`
+  }
+
   render(
     <ThemeProvider theme={etsinTheme}>
-      <MemoryRouter initialEntries={[`/dataset/${dataset.id}`]}>
+      <MemoryRouter initialEntries={initialEntries}>
         <StoresProvider store={stores}>
           <Route path="/dataset/:identifier" component={Dataset} />
         </StoresProvider>
@@ -104,7 +111,9 @@ const getDLValues = () => {
 
 describe('Etsin dataset page', () => {
   test('renders dataset', async () => {
-    await renderEtsin()
+    const newDataset = dataset_open_a_catalog_expanded
+    newDataset.other_identifiers.push({ notation: "not-a-link" })
+    await renderEtsin(newDataset)
     screen.getByRole('heading', { name: /All Fields Test Dataset/ })
     screen.getByRole('button', { name: 'Open' })
     const values = getDLValues()
@@ -127,6 +136,7 @@ describe('Etsin dataset page', () => {
       Access: 'Open',
       Publisher: 'Test org, Test dept',
       Curator: 'Kone Foundation',
+      "Other identifiers": "https://www.example.com"
     })
   })
 
@@ -137,7 +147,7 @@ describe('Etsin dataset page', () => {
     const header = within(dialog).getByRole('heading', { name: 'APA' })
     expect(header.nextElementSibling.textContent).toEqual(
       'Kone Foundation, & Henkilö, K. (2023). All Fields Test Dataset. ' +
-        'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
+      'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
     )
   })
 

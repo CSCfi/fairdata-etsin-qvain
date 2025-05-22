@@ -16,7 +16,7 @@ import idnToLink from '@/utils/idnToLink'
 
 import { OtherID, Margin } from './common'
 
-const Events = ({ identifiers, title }) => {
+const Identifiers = ({ identifiers, title }) => {
   if (!(identifiers?.length > 0)) {
     return null
   }
@@ -47,13 +47,13 @@ const Events = ({ identifiers, title }) => {
   )
 }
 
-Events.defaultProps = {
+Identifiers.defaultProps = {
   identifiers: [],
 }
 
-Events.propTypes = {
+Identifiers.propTypes = {
   title: PropTypes.string.isRequired,
   identifiers: PropTypes.arrayOf(PropTypes.string),
 }
 
-export default observer(Events)
+export default observer(Identifiers)
