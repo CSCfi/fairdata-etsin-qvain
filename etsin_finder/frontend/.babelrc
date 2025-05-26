@@ -6,15 +6,19 @@
     "test": {
       "plugins": [
         ["babel-plugin-styled-components", { "minify": false }],
-        ["@babel/plugin-proposal-decorators", { "legacy": true }],
-        ["@babel/plugin-proposal-class-properties", { "loose": false }],
-        "@babel/plugin-syntax-dynamic-import",
+        ["@babel/plugin-proposal-decorators", { "version": "legacy" }],
         ["@babel/plugin-transform-runtime"]
       ],
       "presets": [
         [
           "@babel/preset-env",
-          { "useBuiltIns": "entry", "corejs": 2, "targets": "> 0.25%, not dead" }
+          {
+            "useBuiltIns": "entry",
+            "corejs": 2,
+            "targets": "> 0.25%, not dead",
+            // needed by legacy decorators
+            "include": ["@babel/plugin-transform-class-properties"]
+          }
         ],
         [
           "@babel/preset-react",
@@ -27,18 +31,17 @@
   },
   "plugins": [
     ["babel-plugin-styled-components", { "displayName": false, "minify": false }],
-    ["@babel/plugin-proposal-decorators", { "legacy": true }],
-    ["@babel/plugin-proposal-class-properties", { "loose": false }],
-    "@loadable/babel-plugin",
-    "@babel/plugin-syntax-dynamic-import",
-    "@babel/plugin-proposal-object-rest-spread"
+    ["@babel/plugin-proposal-decorators", { "version": "legacy" }],
+    "@loadable/babel-plugin"
   ],
   "presets": [
     [
       "@babel/preset-env",
       {
         "modules": false,
-        "targets": "> 0.25%, not dead"
+        "targets": "> 0.25%, not dead",
+        // needed by legacy decorators
+        "include": ["@babel/plugin-transform-class-properties"]
       }
     ],
     [
