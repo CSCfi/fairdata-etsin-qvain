@@ -16,7 +16,7 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import withCustomProps from '@/utils/withCustomProps'
 
 export const HelpIconStyles = styled(FontAwesomeIcon)`
-  :hover {
+  &:hover {
     color: ${props => props.theme.color.primary};
   }
 `

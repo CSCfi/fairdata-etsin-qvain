@@ -273,9 +273,9 @@ export const DropdownItemButton = withCustomProps(styled.button).attrs({ type: '
     (p.border === 'bottom' || p.border === 'both') && `border-top: 1px solid rgba(0, 0, 0, 0.4);`}
   background: none;
   color: ${p => (p.disabled ? p.theme.color.gray : p.theme.color.dark)};
-  :not(:disabled) {
-    :hover,
-    :focus {
+  &:not(:disabled) {
+    &:hover,
+    &:focus {
       background: ${p => p.theme.color.lightgray};
     }
   }
@@ -286,8 +286,8 @@ export const DropdownItemButton = withCustomProps(styled.button).attrs({ type: '
     p.danger &&
     `
     color: ${p.disabled ? tint(0.65, '#cc0000') : '#cc0000'};
-    :not(:disabled) {
-      :hover, :focus {
+    &:not(:disabled) {
+      &:hover, &:focus {
         background: #ffb2b2;
       }
     }

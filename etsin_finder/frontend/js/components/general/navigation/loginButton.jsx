@@ -152,7 +152,7 @@ const LoginButton = styled(Button)`
     props.borderColor &&
     `
   border-color: ${props.theme.color[props.borderColor]};
-  :hover {
+  &:hover {
     border-color: ${props.theme.color[props.borderColor]};
   }
   `}

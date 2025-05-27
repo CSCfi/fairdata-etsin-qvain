@@ -92,7 +92,7 @@ const ActiveButton = styled(Button)`
   color: inherit;
   border-color: ${p => getOpacy(p)};
 
-  :hover {
+  &:hover {
     box-shadow: 0 3px 6px ${p => getOpacy(p)};
     border-color: ${p => p.theme.color.primary};
     color: ${p => p.theme.color.primaryDark};

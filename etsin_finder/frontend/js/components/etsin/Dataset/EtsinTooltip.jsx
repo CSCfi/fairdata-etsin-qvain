@@ -64,7 +64,7 @@ const Wrapper = withCustomProps(styled.span)`
       cursor: pointer;
       margin: ${p => (p.withMargin ? '0 0 0 0.2em' : '0')};
       color: ${p => (p.inverted ? p.theme.color.primary : 'black')};
-      :hover {
+      &:hover {
         color: ${p => (p.inverted ? 'black' : p.theme.color.primary)};
       }
     }

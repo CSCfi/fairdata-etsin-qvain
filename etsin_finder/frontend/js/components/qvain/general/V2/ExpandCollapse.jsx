@@ -7,7 +7,7 @@ import withCustomProps from '@/utils/withCustomProps'
 
 export const IconStyles = styled(FontAwesomeIcon)`
   color: ${props => props.theme.color.primary};
-  :hover {
+  &:hover {
     color: #004d79;
   }
 `

@@ -78,7 +78,7 @@ export const HelpField = styled.span`
 `
 
 export const HelpIconStyles = styled(FontAwesomeIcon)`
-  :hover {
+  &:hover {
     color: ${props => props.theme.color.primary};
   }
 `
