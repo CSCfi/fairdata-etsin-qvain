@@ -16,7 +16,6 @@ import PropTypes from 'prop-types'
 
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import { useStores } from '@/stores/stores'
-import accessRights from './accessRights.base'
 import withCustomProps from '@/utils/withCustomProps'
 
 export const accessRightsBool = ar => ar?.access_type?.url === ACCESS_TYPE_URL.OPEN
@@ -54,12 +53,12 @@ function AccessRights(props) {
     </>
   )
 
-  if (!accessRights) return null
+  if (!props.accessRights) return null
   // display only main info on results list
   return (
     <Access {...props}>
       <Inner title={getValueTranslation(description)} lang={getPreferredLang(description)}>
-        {accessRightsBool(accessRights) ? openAccess() : restricted()}
+        {accessRightsBool(props.accessRights) ? openAccess() : restricted()}
       </Inner>
     </Access>
   )

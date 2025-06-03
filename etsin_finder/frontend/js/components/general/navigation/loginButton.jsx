@@ -10,135 +10,108 @@
    */
 }
 
-import { Component } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import Translate from '@/utils/Translate'
 
 import Button from '../button'
 import Loader from '../loader'
 import NoticeBar from '../noticeBar'
 import LoggedInUser from '../loggedInUser'
 import { Dropdown, DropdownItem } from '../dropdown'
-import { withStores } from '@/stores/stores'
+import { useStores } from '@/stores/stores'
 
-class Login extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    margin: PropTypes.string,
-    width: PropTypes.string,
-    isLoggedInKey: PropTypes.string,
-    fontSize: PropTypes.string,
-    borderColor: PropTypes.string,
-    loginThroughService: PropTypes.string,
+const Login = ({
+  location,
+  margin = '0 0 0 0.4em',
+  width,
+  isLoggedInKey = 'userLogged',
+  fontSize = 'inherit',
+  borderColor = '',
+  loginThroughService = '',
+}) => {
+  const [showNotice, setShowNotice] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const {
+    Auth,
+    Locale: { translate },
+  } = useStores()
+
+  const pageShowHandler = () => {
+    setLoading(false)
   }
 
-  static defaultProps = {
-    margin: '0 0 0 0.4em',
-    width: undefined,
-    fontSize: 'inherit',
-    isLoggedInKey: 'userLogged',
-    borderColor: '',
-    loginThroughService: '',
-  }
+  useEffect(() => {
+    window.addEventListener('pageshow', pageShowHandler)
+    return () => window.removeEventListener('pageshow', pageShowHandler)
+  }, [])
 
-  state = {
-    loading: false,
-    showNotice: false,
-    loggedInThroughService: '',
-  }
-
-  componentDidMount() {
-    this.setState({
-      loggedInThroughService: this.props.loginThroughService,
-    })
-
-    window.addEventListener('pageshow', this.pageShowHandler)
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('pageshow', this.pageShowHandler)
-  }
-
-  pageShowHandler = () => {
-    this.setState({ loading: false })
-  }
-
-  redirectToLogin = (location, loginThroughService) => {
+  const redirectToLogin = (location, loginThroughService) => {
     const query = location.search
-    this.setState(
-      {
-        loading: true,
-      },
-      () => {
-        window.location = `/login/${loginThroughService}?relay=${
-          location.pathname
-        }${encodeURIComponent(query)}`
-      }
-    )
+    setLoading(true)
+    window.location = `/login/${loginThroughService}?relay=${location.pathname}${encodeURIComponent(
+      query
+    )}`
   }
 
-  logout = () => {
-    this.setState(
-      {
-        showNotice: true,
-      },
-      () => {
-        window.location = `/logout/${this.state.loggedInThroughService}`
-      }
-    )
+  const logout = () => {
+    setShowNotice(true)
+    window.location = `/logout/${loginThroughService}`
   }
 
-  render() {
-    const { Auth } = this.props.Stores
-    if (!Auth[this.props.isLoggedInKey]) {
-      return (
-        <>
-          <Cont $width={this.props.width} $margin={this.props.margin}>
-            <LoaderCont $active={this.state.loading}>
-              <Loader active color="white" size="1.1em" spinnerSize="3px" />
-            </LoaderCont>
-            <LoginButton
-              width={this.props.width}
-              margin="0"
-              onClick={() =>
-                this.redirectToLogin(this.props.location, this.props.loginThroughService)
-              }
-              borderColor={this.props.borderColor}
-            >
-              <LoginText $visible={!this.state.loading} $fontSize={this.props.fontSize}>
-                <Translate content="nav.login" />
-              </LoginText>
-            </LoginButton>
-          </Cont>
-          {this.state.showNotice && (
-            <NoticeBar
-              border
-              z="100"
-              position="fixed"
-              border_color="primary"
-              color="white"
-              bg="primary"
-              duration={4000}
-            >
-              <Translate content="nav.logoutNotice" />
-            </NoticeBar>
-          )}
-        </>
-      )
-    }
+  if (!Auth[isLoggedInKey]) {
     return (
-      <Dropdown buttonComponent={LoginButton} buttonContent={<LoggedInUser />}>
-        <DropdownItem onClick={this.logout}>
-          <Translate content="nav.logout" />
-        </DropdownItem>
-      </Dropdown>
+      <>
+        <Cont $width={width} $margin={margin}>
+          <LoaderCont $active={loading}>
+            <Loader active color="white" size="1.1em" spinnerSize="3px" />
+          </LoaderCont>
+          <LoginButton
+            width={width}
+            margin="0"
+            onClick={() => redirectToLogin(location, loginThroughService)}
+            borderColor={borderColor}
+          >
+            <LoginText $visible={!loading} $fontSize={fontSize}>
+              {translate('nav.login')}
+            </LoginText>
+          </LoginButton>
+        </Cont>
+        {showNotice && (
+          <NoticeBar
+            border
+            z="100"
+            position="fixed"
+            border_color="primary"
+            color="white"
+            bg="primary"
+            duration={4000}
+          >
+            {translate('nav.logoutNotice')}
+          </NoticeBar>
+        )}
+      </>
     )
   }
+  return (
+    <Dropdown buttonComponent={LoginButton} buttonContent={<LoggedInUser />}>
+      <DropdownItem onClick={logout}>{translate('nav.logout')}</DropdownItem>
+    </Dropdown>
+  )
 }
+
+Login.propTypes = {
+  location: PropTypes.object.isRequired,
+  margin: PropTypes.string,
+  width: PropTypes.string,
+  isLoggedInKey: PropTypes.string,
+  fontSize: PropTypes.string,
+  borderColor: PropTypes.string,
+  loginThroughService: PropTypes.string,
+}
+
 const Cont = styled.div`
   width: ${p => p.$width || ''};
   margin: ${p => p.$margin || ''};
@@ -170,4 +143,4 @@ const LoginText = styled.span`
   font-size: ${p => p.$fontSize};
 `
 
-export default withRouter(withStores(observer(Login)))
+export default withRouter(observer(Login))

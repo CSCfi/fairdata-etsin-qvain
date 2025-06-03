@@ -1,13 +1,13 @@
-import { Fragment, Component } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { MapContainer, TileLayer, GeoJSON, Marker, Rectangle } from 'react-leaflet'
-import styled, { withTheme } from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import leaflet from 'leaflet'
 import PropTypes from 'prop-types'
 
 import mapStyle from './mapStyle'
 import mapIcon from '@/../static/images/map_icon.svg'
 
-import { withStores } from '@/stores/stores'
+import { useStores } from '@/stores/stores'
 
 const MarkerIcon = leaflet.icon({
   iconUrl: mapIcon,
@@ -26,62 +26,14 @@ const MarkerIcon = leaflet.icon({
 //   layers: React Elements           onMount
 // }
 
-class MyMap extends Component {
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    geometry: PropTypes.arrayOf(PropTypes.string),
-    location: PropTypes.objectOf(PropTypes.string),
-    children: PropTypes.element,
-    theme: PropTypes.object.isRequired,
-  }
+const MyMap = ({ geometry: inputGeometry, location, children = null }) => {
+  const Stores = useStores()
+  const [geometry, setGeometry] = useState()
+  const [bounds, setBounds] = useState()
+  const [layers, setLayers] = useState()
+  const theme = useTheme()
 
-  static defaultProps = {
-    geometry: undefined,
-    location: undefined,
-    children: null,
-  }
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      geometry: undefined,
-      bounds: undefined,
-      layers: undefined,
-    }
-  }
-
-  componentDidMount = () => {
-    this.initMap()
-  }
-
-  getMapOptions = () => {
-    // TODO: Zoom and bounds are calculated by first WKT string and not influenced by others
-    if (this.state.geometry[0].type === 'Point') {
-      return {
-        zoom: 10,
-        center: this.state.bounds[0],
-      }
-    }
-    return {
-      bounds: this.state.bounds,
-    }
-  }
-
-  initMap = () => {
-    const { Map: MapStore } = this.props.Stores
-    MapStore.makeGeometry(this.props.geometry, this.props.location).then(geometry => {
-      // TODO: use all geometries to calculate bounds
-      const bounds = geometry?.[0].bounds
-      const layers = this.makeLayers(geometry)
-      this.setState({
-        geometry,
-        bounds,
-        layers,
-      })
-    })
-  }
-
-  makeLayers = geometry =>
+  const makeLayers = geometry =>
     geometry.map(geo => {
       switch (geo.type) {
         case 'LineString':
@@ -93,10 +45,10 @@ class MyMap extends Component {
             <GeoJSON
               key={`geojson-${geo.type}-${geo.coordinates}`}
               data={geo}
-              color={this.props.theme.color.primary}
+              color={theme.color.primary}
               weight="3"
             >
-              {this.props.children}
+              {children}
             </GeoJSON>
           )
         case 'Rectangle':
@@ -104,9 +56,9 @@ class MyMap extends Component {
             <Rectangle
               key={`rectangle-${geo.type}-${geo.coordinates}`}
               bounds={geo.coordinates}
-              color={this.props.theme.color.primary}
+              color={theme.color.primary}
             >
-              {this.props.children}
+              {children}
             </Rectangle>
           )
         case 'Point':
@@ -118,7 +70,7 @@ class MyMap extends Component {
               position={geo.bounds[0]}
               icon={MarkerIcon}
             >
-              {this.props.children}
+              {children}
             </Marker>
           )
         case 'MultiPoint':
@@ -126,7 +78,7 @@ class MyMap extends Component {
             <Fragment key={`marker-${geo.type}-${geo.coordinates}`}>
               {geo.coordinates.map(single => (
                 <Marker key={`marker-${geo.type}-${single}`} position={single} icon={MarkerIcon}>
-                  {this.props.children}
+                  {children}
                 </Marker>
               ))}
             </Fragment>
@@ -137,22 +89,56 @@ class MyMap extends Component {
       }
     })
 
-  render() {
-    if (this.state.geometry === undefined) {
-      return null
-    }
-    return (
-      <MapStyleContainer>
-        <CustomMap {...this.getMapOptions()}>
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          />
-          {this.state.layers}
-        </CustomMap>
-      </MapStyleContainer>
-    )
+  const initMap = () => {
+    const { Map: MapStore } = Stores
+    MapStore.makeGeometry(inputGeometry, location).then(geometry => {
+      // TODO: use all geometries to calculate bounds
+      const bounds = geometry?.[0].bounds
+      const layers = makeLayers(geometry)
+      setGeometry(geometry)
+      setBounds(bounds)
+      setLayers(layers)
+    })
   }
+
+  useEffect(() => {
+    initMap()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  if (geometry === undefined) {
+    return null
+  }
+
+  const getMapOptions = () => {
+    // TODO: Zoom and bounds are calculated by first WKT string and not influenced by others
+    if (geometry?.[0].type === 'Point') {
+      return {
+        zoom: 10,
+        center: bounds?.[0],
+      }
+    }
+    return {
+      bounds: bounds,
+    }
+  }
+  return (
+    <MapStyleContainer>
+      <CustomMap {...getMapOptions()}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        />
+        {layers}
+      </CustomMap>
+    </MapStyleContainer>
+  )
+}
+
+MyMap.propTypes = {
+  geometry: PropTypes.arrayOf(PropTypes.string),
+  location: PropTypes.objectOf(PropTypes.string),
+  children: PropTypes.element,
 }
 
 const CustomMap = styled(MapContainer)`
@@ -165,4 +151,4 @@ const MapStyleContainer = styled.div`
   ${mapStyle};
 `
 
-export default withStores(withTheme(MyMap))
+export default MyMap
