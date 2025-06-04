@@ -357,6 +357,21 @@ const GlobalStyle = createGlobalStyle`
   .notification-banner {
     visibility: visible;
   }
+
+  /* Summary element */
+
+  details:first-of-type summary::marker,
+  :is(::-webkit-details-marker) {
+    content: "+ ";
+    font-family: monospace;
+    font-weight: bold;
+    color: ${etsinTheme.color.primary};
+  }
+
+  details[open]:first-of-type summary::marker {
+    content: "− ";
+  }
+
 `
 
 export default GlobalStyle

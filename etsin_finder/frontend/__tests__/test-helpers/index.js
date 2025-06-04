@@ -2,6 +2,7 @@
 
 import { toHaveNoViolations } from 'jest-axe'
 export { contextRenderer } from './contextRenderer'
+export * from './textNodes'
 
 const toBeAccessible = (results, options = { ignore: [] }) => {
   // Stricter accessibility check than the jest-axe default.

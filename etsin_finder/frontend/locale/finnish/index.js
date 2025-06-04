@@ -18,7 +18,10 @@ const finnish = {
     access_modal: {
       title: 'Hae käyttölupaa',
       terms: 'Aineiston käyttöehdot',
-      license: 'Lisenssi',
+      license: {
+        one: 'Lisenssi',
+        other: 'Lisenssit',
+      },
       accept: 'Hyväksyn aineiston',
       acceptTerms: 'käyttöehdot ja',
       acceptLicense: {

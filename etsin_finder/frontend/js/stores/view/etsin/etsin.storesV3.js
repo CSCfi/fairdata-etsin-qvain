@@ -5,12 +5,14 @@ import {
   PRESERVATION_EVENT_CREATED,
 } from '@/utils/constants'
 import Cite from './cite'
+import EtsinDatasetRems from './etsin.rems'
 
 class EtsinDatasetV3 {
-  constructor({ Access, Locale }) {
+  constructor({ Access, Env, Locale }) {
     this.Access = Access
     this.Locale = Locale
     this.citations = new Cite({ Stores: this, Locale })
+    this.rems = new EtsinDatasetRems({ EtsinDataset: this, Env })
     makeObservable(this)
   }
 
@@ -23,8 +25,6 @@ class EtsinDatasetV3 {
   @observable emailInfo = null
 
   @observable showCitationModal = false
-
-  @observable showAccessModal = false
 
   @observable inInfo = null
 
@@ -403,10 +403,6 @@ class EtsinDatasetV3 {
 
   @action setShowCitationModal = value => {
     this.showCitationModal = value
-  }
-
-  @action setShowAccessModal = value => {
-    this.showAccessModal = value
   }
 
   @action setInInfo = resource => {

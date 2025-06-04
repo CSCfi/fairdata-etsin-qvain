@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "baseUrl": "../",
+    "jsx": "react",
+    "paths": {
+      "@/*": ["./js/*"],
+      "@helpers": ["./__tests__/test-helpers"],
+      "@helpers/*": ["./__tests__/test-helpers/*"],
+      "@testdata/*": ["./__tests__/__testdata__/*"]
+    }
+  },
+  "exclude": ["node_modules", "stories", "static", "build"]
+}

@@ -18,7 +18,10 @@ const english = {
     access_modal: {
       title: 'Apply for Data Access',
       terms: 'Terms for Data Access',
-      license: 'License',
+      license: {
+        one: 'License',
+        other: 'Licenses',
+      },
       accept: 'I agree to',
       acceptTerms: 'the terms for data access and',
       acceptLicense: {

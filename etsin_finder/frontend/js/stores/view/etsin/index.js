@@ -24,7 +24,7 @@ class Etsin {
     this.EtsinDatasetClass = EtsinDatasetV3
     this.DatasetProcessorClass = DatasetProcessorV3
 
-    this.EtsinDataset = new this.EtsinDatasetClass({ Access, Locale })
+    this.EtsinDataset = new this.EtsinDatasetClass({ Access, Locale, Env })
     this.datasetProcessor = new this.DatasetProcessorClass(this.Env)
     this.filesProcessor = new FilesProcessor(this.Env)
 
@@ -72,7 +72,11 @@ class Etsin {
 
   @action.bound reset() {
     this.abortAllRequests()
-    this.EtsinDataset = new this.EtsinDatasetClass({ Access: this.Access, Locale: this.Locale })
+    this.EtsinDataset = new this.EtsinDatasetClass({
+      Access: this.Access,
+      Locale: this.Locale,
+      Env: this.Env,
+    })
     this.Files = createFilesStore(this.Env)
     this.Search = new EtsinSearch(this.Env)
 

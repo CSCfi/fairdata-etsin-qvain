@@ -10,6 +10,9 @@ __pycache__
 .coverage
 .env
 
+# Backup files from git merge
+*.orig
+
 # VSCode settings
 *.vscode
 

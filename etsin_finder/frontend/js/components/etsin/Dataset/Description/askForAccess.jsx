@@ -6,26 +6,28 @@ import REMSButton from './REMSButton'
 
 const AskForAccess = () => {
   const {
-    Env: { Flags, applicationState },
-    Access,
+    Env: { Flags },
+    Access: { restrictions },
     Etsin: {
-      EtsinDataset: { setShowAccessModal },
+      EtsinDataset: {
+        rems: { setShowModal },
+      },
     },
   } = useStores()
 
   const onClick = () => {
-    setShowAccessModal(true)
+    setShowModal(true)
   }
 
   if (!Flags.flagEnabled('ETSIN.REMS')) {
     return null
   }
-  if (!Access.restrictions.showREMSbutton) {
+  if (!restrictions.showREMSbutton) {
     return null
   }
   return (
     <>
-      <REMSButton applicationState={applicationState} onClick={onClick} />
+      <REMSButton applicationState={restrictions.applicationState} onClick={onClick} />
       <AccessModal />
     </>
   )
