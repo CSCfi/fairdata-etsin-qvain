@@ -1,1 +1,1 @@
-export { withStores, useStores } from '@/stores/stores'
+export { useStores } from '@/stores/stores'

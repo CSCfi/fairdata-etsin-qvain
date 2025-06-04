@@ -1,4 +1,4 @@
-import { createContext, useContext, forwardRef } from 'react'
+import { createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 
 export const StoresContext = createContext()
@@ -21,7 +21,3 @@ StoresProvider.defaultProps = {
  * @returns {ReturnType<import("./index.js").buildStores>}
  */
 export const useStores = () => useContext(StoresContext)
-
-export const withStores = Component =>
-  // eslint-disable-next-line react/display-name
-  forwardRef((props, ref) => <Component ref={ref} {...props} Stores={useStores()} />)

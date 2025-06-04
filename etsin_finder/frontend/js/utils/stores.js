@@ -1,1 +1,1 @@
-export { useStores, withStores } from '../stores/stores'
+export { useStores } from '../stores/stores'
