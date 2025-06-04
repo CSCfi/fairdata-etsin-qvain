@@ -1,16 +1,4 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
 
-import { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
@@ -18,96 +6,82 @@ import Translate from '@/utils/Translate'
 import { LinkButton } from '@/components/etsin/general/button'
 
 import Agent from '../Agent'
-import { withStores } from '@/stores/stores'
+import { useStores } from '@/stores/stores'
+import { useState } from 'react'
 
-class TogglableAgentList extends Component {
-  constructor(props) {
-    super(props)
+const TogglableAgentList = props => {
+  const {
+    Locale: { getPreferredLang, getValueTranslation },
+  } = useStores()
+  const [open, setOpen] = useState(false)
 
-    const agents = props.agents
-    const agentType = props.agentType
-    if (agents) {
-      this.state = {
-        agentType,
-        firstThree: agents.slice(0, 3),
-        rest: agents.slice(3),
-        open: false,
-      }
-    } else {
-      this.state = {
-        open: false,
-      }
-    }
-
-    this.toggleOpen = this.toggleOpen.bind(this)
+  const agents = props.agents
+  const agentType = props.agentType
+  let firstThree, rest
+  if (agents) {
+    firstThree = agents.slice(0, 3)
+    rest = agents.slice(3)
   }
 
-  toggleOpen() {
-    this.setState(state => ({
-      open: !state.open,
-    }))
+  const toggleOpen = () => {
+    setOpen(!open)
   }
 
-  render() {
-    const {
-      Locale: { getPreferredLang, getValueTranslation },
-    } = this.props.Stores
+  if (!agents?.length) return null
 
-    if (!this.props.agents?.length) return null
-    return (
-      <AgentsCont>
-        {this.props.agents.length > 1 ? (
-          <Translate content={`dataset.${this.state.agentType}.plrl`} />
-        ) : (
-          <Translate content={`dataset.${this.state.agentType}.snglr`} />
-        )}
-        {': '}
-        <InlineUl>
-          {/* Show first three */}
-          {this.state.firstThree.map((agent, i) => {
+  return (
+    <AgentsCont>
+      {agents.length > 1 ? (
+        <Translate content={`dataset.${agentType}.plrl`} />
+      ) : (
+        <Translate content={`dataset.${agentType}.snglr`} />
+      )}
+      {': '}
+      <InlineUl>
+        {/* Show first three */}
+        {firstThree.map((agent, i) => {
+          if (agent.person?.name || agent.organization.pref_label) {
+            return (
+              <Agent
+                inline
+                lang={getPreferredLang(agent.person?.name || agent.organization.pref_label)}
+                key={getValueTranslation(agent.person?.name || agent.organization.pref_label)}
+                first={i === 0}
+                agent={agent}
+              />
+            )
+          }
+          return ''
+        })}
+        {/* Show the rest */}
+        {agents.length > 3 &&
+          open &&
+          rest.map(agent => {
             if (agent.person?.name || agent.organization.pref_label) {
               return (
                 <Agent
                   inline
                   lang={getPreferredLang(agent.person?.name || agent.organization.pref_label)}
                   key={getValueTranslation(agent.person?.name || agent.organization.pref_label)}
-                  first={i === 0}
                   agent={agent}
                 />
               )
             }
             return ''
           })}
-          {/* Show the rest */}
-          {this.props.agents.length > 3 &&
-            this.state.open &&
-            this.state.rest.map(agent => {
-              if (agent.person?.name || agent.organization.pref_label) {
-                return (
-                  <Agent
-                    inline
-                    lang={getPreferredLang(agent.person?.name || agent.organization.pref_label)}
-                    key={getValueTranslation(agent.person?.name || agent.organization.pref_label)}
-                    agent={agent}
-                  />
-                )
-              }
-              return ''
-            })}
-          {/* Show Button to open rest */}{' '}
-          {this.props.agents.length > 3 && (
-            <AgentListLinkButton onClick={this.toggleOpen}>
-              {this.state.open ? (
-                <Translate content="general.showLess" />
-              ) : (
-                <Translate content="general.showMore" />
-              )}
-            </AgentListLinkButton>
-          )}
-        </InlineUl>
-      </AgentsCont>
-    )
-  }
+        {/* Show Button to open rest */}{' '}
+        {agents.length > 3 && (
+          <AgentListLinkButton onClick={toggleOpen}>
+            {open ? (
+              <Translate content="general.showLess" />
+            ) : (
+              <Translate content="general.showMore" />
+            )}
+          </AgentListLinkButton>
+        )}
+      </InlineUl>
+    </AgentsCont>
+  )
 }
 
 TogglableAgentList.defaultProps = {
@@ -118,7 +92,6 @@ TogglableAgentList.defaultProps = {
 TogglableAgentList.propTypes = {
   agents: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   agentType: PropTypes.string,
-  Stores: PropTypes.object.isRequired,
 }
 
 const AgentsCont = styled.div`
@@ -136,4 +109,4 @@ const AgentListLinkButton = styled(LinkButton)`
   text-decoration: underline;
 `
 
-export default withStores(TogglableAgentList)
+export default TogglableAgentList

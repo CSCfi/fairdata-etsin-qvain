@@ -1,18 +1,6 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
 
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import PropTypes from 'prop-types'
 import Translate from '@/utils/Translate'
 
 import { FAIRDATA_WEBSITE_URL } from '../../utils/constants'
@@ -26,7 +14,7 @@ import MobileNavi from '../general/navigation/mobileNavi'
 import Header, { NaviContainer, Right } from '../general/header'
 import { MobileOnly, DesktopOnly } from '../general/header/mediaHelpers'
 import { Home, Search } from '../../routes'
-import { withStores } from '@/stores/stores'
+import { useStores } from '@/stores/stores'
 
 const routes = [
   {
@@ -47,13 +35,12 @@ const QvainLink = styled(MaybeExternalLink)`
   white-space: nowrap;
 `
 
-const EtsinHeader = props => {
-  const { lang, currentLang } = props.Stores.Locale
+const EtsinHeader = () => {
   const {
     Env,
     Matomo,
-    Locale: { translate },
-  } = props.Stores
+    Locale: { translate, lang, currentLang },
+  } = useStores()
   const helpUrl = lang === 'fi' ? FAIRDATA_WEBSITE_URL.ETSIN.FI : FAIRDATA_WEBSITE_URL.ETSIN.EN
 
   const mobileSettingsExtra = (
@@ -100,8 +87,4 @@ const EtsinHeader = props => {
   )
 }
 
-EtsinHeader.propTypes = {
-  Stores: PropTypes.object.isRequired,
-}
-
-export default withStores(observer(EtsinHeader))
+export default observer(EtsinHeader)

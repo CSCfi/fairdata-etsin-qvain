@@ -16,7 +16,6 @@ import PropTypes from 'prop-types'
 import Translate from '@/utils/Translate'
 
 import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
-import { withStores } from '@/stores/stores'
 
 const FairdataPasDatasetIcon = props => {
   if (
@@ -30,7 +29,7 @@ const FairdataPasDatasetIcon = props => {
   return <Translate component={FairdataPasIconContainerInPas} content="dataset.fairdataPas" />
 }
 
-export default withStores(observer(FairdataPasDatasetIcon))
+export default observer(FairdataPasDatasetIcon)
 export const undecorated = FairdataPasDatasetIcon
 
 const FairdataPasIconContainer = styled.div`

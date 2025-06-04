@@ -1,6 +1,7 @@
 import { createRef, Component } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
+import withCustomProps from '@/utils/withCustomProps'
 
 export default class PopUp extends Component {
   static propTypes = {
@@ -186,7 +187,7 @@ const alignment = align => {
   return value
 }
 
-const Pop = styled.div`
+const Pop = withCustomProps(styled.div)`
   z-index: 1;
   position: absolute;
   top: initial;

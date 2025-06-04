@@ -15,6 +15,10 @@ jestMock.isMockFunction = jest.isMockFunction
 import '../js/utils/extendYup'
 import '../js/utils/extendPromise'
 
+jest.mock('../js/components/etsin/Dataset/Sidebar/special/importImages', () => {
+  return () => ({}) // mock image import as require.context is not available in tests
+})
+
 chai.use(chaiJestMocks)
 
 // Allow disabling RTL autocleanup per test file

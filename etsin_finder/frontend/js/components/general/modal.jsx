@@ -10,7 +10,7 @@
    */
 }
 
-import { Component } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import ReactModal from 'react-modal'
 import PropTypes from 'prop-types'
@@ -21,7 +21,7 @@ import Translate from '@/utils/Translate'
 import ErrorBoundary from './errorBoundary'
 import { TransparentButton } from './button'
 
-const customStyles = {
+const defaultStyles = {
   overlay: {
     position: 'fixed',
     top: 0,
@@ -52,71 +52,68 @@ const customStyles = {
 
 if (BUILD !== 'test') ReactModal.setAppElement('#root')
 
-export default class Modal extends Component {
-  static propTypes = {
-    customStyles: PropTypes.object,
-    isOpen: PropTypes.bool.isRequired,
-    onAfterOpen: PropTypes.func,
-    onRequestClose: PropTypes.func,
-    contentLabel: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired,
-    labelledBy: PropTypes.string,
-  }
+const Modal = ({
+  isOpen,
+  contentLabel,
+  children,
+  labelledBy,
+  onAfterOpen = () => {},
+  onRequestClose = () => {},
+  customStyles = {},
+}) => {
+  const [clearError, setClearError] = useState()
 
-  static defaultProps = {
-    customStyles: {},
-    onAfterOpen: () => {},
-    onRequestClose: () => {},
-    labelledBy: undefined,
-  }
-
-  state = {
-    clearError: null,
-  }
-
-  getStyles() {
-    if (this.state.clearError) {
-      return customStyles
+  const getStyles = () => {
+    if (clearError) {
+      return defaultStyles
     }
 
-    const overlayStyle = { ...customStyles.overlay, ...this.props.customStyles.overlay }
-    const contentStyle = { ...customStyles.content, ...this.props.customStyles.content }
+    const overlayStyle = { ...defaultStyles.overlay, ...customStyles.overlay }
+    const contentStyle = { ...defaultStyles.content, ...customStyles.content }
     return { overlay: overlayStyle, content: contentStyle }
   }
 
-  errorCallback = (_error, _info, clearError) => {
-    this.setState({ clearError })
+  const errorCallback = (_error, _info, clearError) => {
+    setClearError(clearError)
   }
 
-  requestClose = () => {
-    if (this.state.clearError) {
-      this.state.clearError()
+  const requestClose = () => {
+    if (clearError) {
+      clearError()
     }
-    this.props.onRequestClose()
+    onRequestClose()
   }
 
-  render() {
-    return (
-      <ReactModal
-        isOpen={this.props.isOpen}
-        onAfterOpen={this.props.onAfterOpen}
-        onRequestClose={this.requestClose}
-        style={this.getStyles()}
-        contentLabel={this.props.contentLabel}
-        aria={{ labelledby: this.props.labelledBy }}
+  return (
+    <ReactModal
+      isOpen={isOpen}
+      onAfterOpen={onAfterOpen}
+      onRequestClose={requestClose}
+      style={getStyles()}
+      contentLabel={contentLabel}
+      aria={{ labelledby: labelledBy }}
+    >
+      <Translate
+        component={CloseButton}
+        onClick={onRequestClose}
+        noMargin
+        attributes={{ 'aria-label': 'qvain.common.close' }}
       >
-        <Translate
-          component={CloseButton}
-          onClick={this.props.onRequestClose}
-          noMargin
-          attributes={{ 'aria-label': 'qvain.common.close' }}
-        >
-          <FontAwesomeIcon aria-hidden icon={faTimes} />
-        </Translate>
-        <ErrorBoundary callback={this.errorCallback}>{this.props.children}</ErrorBoundary>
-      </ReactModal>
-    )
-  }
+        <FontAwesomeIcon aria-hidden icon={faTimes} />
+      </Translate>
+      <ErrorBoundary callback={errorCallback}>{children}</ErrorBoundary>
+    </ReactModal>
+  )
+}
+
+Modal.propTypes = {
+  customStyles: PropTypes.object,
+  isOpen: PropTypes.bool.isRequired,
+  onAfterOpen: PropTypes.func,
+  onRequestClose: PropTypes.func,
+  contentLabel: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  labelledBy: PropTypes.string,
 }
 
 const CloseButton = styled(TransparentButton)`
@@ -124,3 +121,5 @@ const CloseButton = styled(TransparentButton)`
   top: 1em;
   right: 1em;
 `
+
+export default Modal

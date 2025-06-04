@@ -9,7 +9,7 @@ import Translate from '@/utils/Translate'
 import useQuery from '@/components/etsin/general/useQuery'
 import { Input } from '@/components/etsin/general/Input'
 
-import { useStores, withStores } from '@/stores/stores'
+import { useStores } from '@/stores/stores'
 import ErrorBoundary from '@/components/general/errorBoundary'
 
 const SearchBar = () => {
@@ -115,4 +115,4 @@ const SearchInner = styled.div`
     }
   }
 `
-export default withStores(observer(SearchBar))
+export default observer(SearchBar)

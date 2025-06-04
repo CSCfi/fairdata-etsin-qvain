@@ -10,101 +10,95 @@
    */
 }
 
-import { Component } from 'react'
 import { NavLink, withRouter } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
-import { withStores } from '@/stores/stores'
+import { useStores } from '@/stores/stores'
 
-class Tabs extends Component {
-  render() {
-    const {
-      Etsin: {
-        EtsinDataset: { identifier },
-      },
-    } = this.props.Stores
+const Tabs = (props) => {
+  const {
+    Etsin: {
+      EtsinDataset: { identifier },
+    },
+  } = useStores()
 
-    let query = ''
-    const params = new URLSearchParams(this.props.location.search)
-    if (params.get('preview') === '1') {
-      query = '?preview=1'
-    }
+  let query = ''
+  const params = new URLSearchParams(props.location.search)
+  if (params.get('preview') === '1') {
+    query = '?preview=1'
+  }
 
-    return (
-      <EtsinTabs className="nav nav-tabs" role="tablist">
+  return (
+    <EtsinTabs className="nav nav-tabs" role="tablist">
+      <li className="nav-item" role="presentation">
+        <NavLink
+          exact
+          replace
+          to={`/dataset/${identifier}${query}`}
+          id="tab-for-description"
+          aria-controls="tab-description"
+          role="tab"
+          className="nav-link"
+          aria-selected={props.location.pathname === `/dataset/${identifier}${query}`}
+        >
+          <Translate content="nav.dataset" fallback="Dataset" />
+        </NavLink>
+      </li>
+      {props.showData && (
         <li className="nav-item" role="presentation">
           <NavLink
             exact
             replace
-            to={`/dataset/${identifier}${query}`}
-            id="tab-for-description"
-            aria-controls="tab-description"
+            to={`/dataset/${identifier}/data${query}`}
+            id="tab-for-data"
+            aria-controls="tab-data"
             role="tab"
             className="nav-link"
-            aria-selected={this.props.location.pathname === `/dataset/${identifier}${query}`}
+            aria-selected={props.location.pathname === `/dataset/${identifier}/data${query}`}
           >
-            <Translate content="nav.dataset" fallback="Dataset" />
+            <Translate content="nav.data" fallback="Data" />
           </NavLink>
         </li>
-        {this.props.showData && (
-          <li className="nav-item" role="presentation">
-            <NavLink
-              exact
-              replace
-              to={`/dataset/${identifier}/data${query}`}
-              id="tab-for-data"
-              aria-controls="tab-data"
-              role="tab"
-              className="nav-link"
-              aria-selected={this.props.location.pathname === `/dataset/${identifier}/data${query}`}
-            >
-              <Translate content="nav.data" fallback="Data" />
-            </NavLink>
-          </li>
-        )}
-        {this.props.showEvents && (
-          <li className="nav-item" role="presentation">
-            <NavLink
-              exact
-              replace
-              to={`/dataset/${identifier}/events${query}`}
-              id="tab-for-events"
-              aria-controls="tab-events"
-              role="tab"
-              className="nav-link"
-              aria-selected={
-                this.props.location.pathname === `/dataset/${identifier}/events${query}`
-              }
-            >
-              <Translate content="nav.events" fallback="Identifiers and events" />
-            </NavLink>
-          </li>
-        )}
-        {this.props.showMaps && (
-          <li className="nav-item" role="presentation">
-            <NavLink
-              exact
-              replace
-              to={`/dataset/${identifier}/maps${query}`}
-              id="tab-for-maps"
-              aria-controls="tab-maps"
-              role="tab"
-              className="nav-link"
-              aria-selected={this.props.location.pathname === `/dataset/${identifier}/maps${query}`}
-            >
-              <Translate content="nav.maps" fallback="Maps" />
-            </NavLink>
-          </li>
-        )}
-      </EtsinTabs>
-    )
-  }
+      )}
+      {props.showEvents && (
+        <li className="nav-item" role="presentation">
+          <NavLink
+            exact
+            replace
+            to={`/dataset/${identifier}/events${query}`}
+            id="tab-for-events"
+            aria-controls="tab-events"
+            role="tab"
+            className="nav-link"
+            aria-selected={props.location.pathname === `/dataset/${identifier}/events${query}`}
+          >
+            <Translate content="nav.events" fallback="Identifiers and events" />
+          </NavLink>
+        </li>
+      )}
+      {props.showMaps && (
+        <li className="nav-item" role="presentation">
+          <NavLink
+            exact
+            replace
+            to={`/dataset/${identifier}/maps${query}`}
+            id="tab-for-maps"
+            aria-controls="tab-maps"
+            role="tab"
+            className="nav-link"
+            aria-selected={props.location.pathname === `/dataset/${identifier}/maps${query}`}
+          >
+            <Translate content="nav.maps" fallback="Maps" />
+          </NavLink>
+        </li>
+      )}
+    </EtsinTabs>
+  )
 }
 
 Tabs.propTypes = {
-  Stores: PropTypes.object.isRequired,
   showData: PropTypes.bool.isRequired,
   showEvents: PropTypes.bool.isRequired,
   showMaps: PropTypes.bool.isRequired,
@@ -160,4 +154,4 @@ const EtsinTabs = styled.ul`
   }
 `
 
-export default withRouter(withStores(observer(Tabs)))
+export default withRouter(observer(Tabs))

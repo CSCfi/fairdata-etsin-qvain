@@ -10,20 +10,15 @@
    */
 }
 
-import { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from '@/utils/Translate'
 
-export default class SkipToContent extends Component {
-  render() {
-    return (
-      <SkipToContentButton onClick={this.props.callback}>
-        <Translate content="stc" />
-      </SkipToContentButton>
-    )
-  }
-}
+const SkipToContent = ({ callback }) => (
+  <SkipToContentButton onClick={callback}>
+    <Translate content="stc" />
+  </SkipToContentButton>
+)
 
 const SkipToContentButton = styled.button.attrs({
   type: 'button',
@@ -48,3 +43,5 @@ const SkipToContentButton = styled.button.attrs({
 SkipToContent.propTypes = {
   callback: PropTypes.func.isRequired,
 }
+
+export default SkipToContent

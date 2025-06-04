@@ -1,41 +1,34 @@
-import { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import importImages from './importImages'
 import Image from '@/components/etsin/general/image'
 
-export default class Logo extends Component {
-  static propTypes = {
-    alt: PropTypes.string.isRequired,
-    file: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-  }
+const images = importImages()
 
-  constructor(props) {
-    super(props)
+const Logo = ({ alt, file, url }) => {
+  return (
+    <Cont>
+      {url ? (
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          <Image alt={alt} file={images[file]} />
+        </a>
+      ) : (
+        <Image alt={alt} file={images[file]} />
+      )}
+    </Cont>
+  )
+}
 
-    this.state = {
-      images: importImages(),
-    }
-  }
-
-  render() {
-    return (
-      <Cont>
-        {this.props.url ? (
-          <a href={this.props.url} target="_blank" rel="noopener noreferrer">
-            <Image alt={this.props.alt} file={this.state.images[this.props.file]} />
-          </a>
-        ) : (
-          <Image alt={this.props.alt} file={this.state.images[this.props.file]} />
-        )}
-      </Cont>
-    )
-  }
+Logo.propTypes = {
+  alt: PropTypes.string.isRequired,
+  file: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
 }
 
 const Cont = styled.div`
   text-align: center;
   padding-top: 1.5rem;
 `
+
+export default Logo
