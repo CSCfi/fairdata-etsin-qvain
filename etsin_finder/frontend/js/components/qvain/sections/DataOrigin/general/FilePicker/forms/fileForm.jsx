@@ -1,301 +1,215 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
+import PropTypes from 'prop-types'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import Translate from '@/utils/Translate'
 
-import { SaveButton, CancelButton } from '../../../../../general/buttons'
-import { Label, Input, Textarea, CustomSelect } from '../../../../../general/modal/form'
-import { Container } from '../../../../../general/card'
-import { ValidationErrors } from '../../../../../general/errors/validationError'
-import { withStores } from '../../../../../utils/stores'
+import { CancelButton, SaveButton } from '@/components/qvain/general/buttons'
+import { ValidationErrors } from '@/components/qvain/general/errors/validationError'
+import { CustomSelect, Input, Label } from '@/components/qvain/general/modal/form'
+import { TextArea } from '@/components/qvain/general/V3'
+import { useStores } from '@/utils/stores'
+import useReferenceData from '@/utils/useReferenceData'
+import { Buttons, FileContainer } from './styles'
 
-class FileForm extends Component {
-  inEdit = this.props.Stores.Qvain.Files.inEdit
+const FileForm = ({ setChanged, requestClose }) => {
+  const Stores = useStores()
+  const {
+    Locale: { translate, getValueTranslation },
+    Qvain: {
+      readonly,
+      Files: { inEdit, fileDescriptionSchema, fileUseCategorySchema, fileTitleSchema },
+    },
+  } = Stores
+  const { options: fileTypeOptions, isLoading: isLoadingFileType } = useReferenceData('file_type')
+  const { options: useCategoryOptions, isLoading: isLoadingUseCategory } =
+    useReferenceData('use_category')
 
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    className: PropTypes.string,
-    setChanged: PropTypes.func.isRequired,
-    requestClose: PropTypes.func.isRequired,
-  }
+  const [title, setTitle] = useState()
+  const [description, setDescription] = useState()
+  const [fileType, setFileType] = useState()
+  const [useCategory, setUseCategory] = useState()
 
-  static defaultProps = {
-    className: '',
-  }
+  const [fileError, setFileError] = useState()
+  const [descriptionError, setDescriptionError] = useState()
+  const [titleError, setTitleError] = useState()
+  const [useCategoryError, setUseCategoryError] = useState()
 
-  state = {
-    fileTypesEn: [],
-    fileTypesFi: [],
-    useCategoriesEn: [],
-    useCategoriesFi: [],
-    title: this.inEdit.title || this.inEdit.name,
-    description: this.inEdit.description,
-    useCategory: undefined,
-    fileType: undefined,
-    fileError: undefined,
-    titleError: undefined,
-    descriptionError: undefined,
-    useCategoryError: undefined,
-  }
+  useEffect(() => {
+    const file = inEdit || {}
+    setTitle(file.title || file.name)
+    setDescription(file.description)
+    setFileType(file.fileType)
+    setUseCategory(file.useCategory)
 
-  componentDidMount = () => {
-    this.props.Stores.Qvain.ReferenceData.getLocalizedOptions('file_type').then(translations => {
-      this.setState((state, props) => ({
-        fileTypesEn: translations.en,
-        fileTypesFi: translations.fi,
-        fileType: translations[props.Stores.Locale.lang].find(
-          opt => opt.value === this.props.Stores.Qvain.Files.inEdit.fileType
-        ),
-      }))
-    })
-    this.props.Stores.Qvain.ReferenceData.getLocalizedOptions('use_category').then(translations => {
-      this.setState({
-        useCategoriesEn: translations.en,
-        useCategoriesFi: translations.fi,
-        useCategory: getUseCategory(translations.fi, translations.en, this.props.Stores),
-      })
-    })
-  }
+    setTitleError(undefined)
+    setDescriptionError(undefined)
+    setUseCategoryError(undefined)
+    setFileError(undefined)
+  }, [inEdit])
 
-  handleCancel = event => {
+  const handleCancel = event => {
     event.preventDefault()
-    this.props.requestClose()
+    requestClose()
   }
 
-  updateValues = values => {
-    this.setState(values)
-    this.props.setChanged(true)
+  const updateTitle = value => {
+    setTitle(value)
+    setChanged(true)
   }
 
-  handleChangeUse = selectedOption => {
-    this.setState({
-      useCategory: selectedOption,
-      useCategoryError: undefined,
-    })
-    this.props.setChanged(true)
+  const updateDescription = value => {
+    setDescription(value)
+    setChanged(true)
   }
 
-  handleChangeFileType = selectedOption => {
-    this.setState({
-      fileType: selectedOption,
-    })
-    this.props.setChanged(true)
+  const handleChangeUse = selectedOption => {
+    setUseCategory(selectedOption.value)
+    setUseCategoryError(undefined)
+    setChanged(true)
   }
 
-  handleSave = event => {
+  const handleChangeFileType = selectedOption => {
+    setFileType(selectedOption.value)
+    setChanged(true)
+  }
+
+  const handleSave = async event => {
     event.preventDefault()
-    const { title, description, useCategory, fileType } = this.state
     const validationObj = {
       title,
       description,
       useCategory,
       fileType,
     }
-    const { fileSchema } = this.props.Stores.Qvain.Files
+    const { fileSchema, applyInEdit } = Stores.Qvain.Files
 
-    fileSchema
-      .validate(validationObj, { strict: true })
-      .then(() => {
-        this.setState({
-          fileError: undefined,
-          useCategoryError: undefined,
-        })
-        this.props.Stores.Qvain.Files.applyInEdit({
-          title,
-          description,
-          useCategory: useCategory.value,
-          fileType: (fileType && fileType.value) || undefined,
-        })
+    try {
+      await fileSchema.validate(validationObj, { strict: true })
+      setFileError(undefined)
+      setUseCategoryError(undefined)
+      applyInEdit({
+        title,
+        description,
+        useCategory: useCategory,
+        fileType: fileType,
       })
-      .catch(err => {
-        this.setState({
-          fileError: err.errors,
-        })
-      })
-  }
-
-  getFormatVersions = fileFormat => {
-    if (fileFormat !== undefined) {
-      return this.state.formatVersions.get(fileFormat.value)
+    } catch (err) {
+      setFileError(err.errors)
     }
-    return []
   }
 
-  handleOnBlur = (validator, value, errorSet) => {
+  const handleOnBlur = (validator, value, errorSet) => {
     validator
       .validate(value, { strict: true })
       .then(() => errorSet(undefined))
       .catch(err => errorSet(err.errors))
   }
 
-  handleTitleBlur = () => {
-    const { fileTitleSchema } = this.props.Stores.Qvain.Files
-    this.handleOnBlur(fileTitleSchema, this.state.title, value =>
-      this.setState({ titleError: value })
-    )
+  const handleTitleBlur = () => {
+    handleOnBlur(fileTitleSchema, title, setTitleError)
   }
 
-  handleDescriptionBlur = () => {
-    const { fileDescriptionSchema } = this.props.Stores.Qvain.Files
-    this.handleOnBlur(fileDescriptionSchema, this.state.description, value =>
-      this.setState({ descriptionError: value })
-    )
+  const handleDescriptionBlur = () => {
+    handleOnBlur(fileDescriptionSchema, description, setDescriptionError)
   }
 
-  handleUseCategoryBlur = () => {
-    const { fileUseCategorySchema } = this.props.Stores.Qvain.Files
-    this.handleOnBlur(
-      fileUseCategorySchema,
-      this.state.useCategory ? this.state.useCategory : undefined,
-      value => this.setState({ useCategoryError: value })
-    )
+  const handleUseCategoryBlur = () => {
+    handleOnBlur(fileUseCategorySchema, useCategory, setUseCategoryError)
   }
 
-  render() {
-    const { inEdit } = this.props.Stores.Qvain.Files
-    if (!inEdit) {
-      return null
-    }
+  if (!inEdit) {
+    return null
+  }
 
-    const { readonly } = this.props.Stores.Qvain
-    const { fileError, titleError, descriptionError, useCategoryError } = this.state
+  const getOptionLabel = option => getValueTranslation(option.label)
 
-    return (
-      <FileContainer className={this.props.className}>
-        <Translate
-          component={Label}
-          disabled={readonly}
-          style={{ textTransform: 'uppercase' }}
-          content="qvain.files.selected.form.identifier.label"
-        />
-        <p style={{ marginLeft: '10px' }}>{inEdit.identifier}</p>
-        <Label htmlFor="file-form-title">
-          <Translate content="qvain.files.selected.form.title.label" /> *
-        </Label>
-        <Translate
-          component={Input}
-          value={this.state.title}
-          disabled={readonly}
-          onChange={event =>
-            this.updateValues({
-              title: event.target.value,
-            })
-          }
-          onBlur={this.handleTitleBlur}
-          attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
-          id="file-form-title"
-        />
-        {titleError !== undefined && <ValidationErrors errors={titleError} />}
-        <Label htmlFor="file-form-description">
-          <Translate content="qvain.files.selected.form.description.label" />
-        </Label>
-        <Translate
-          component={Textarea}
-          value={this.state.description}
-          disabled={readonly}
-          onChange={event =>
-            this.updateValues({
-              description: event.target.value,
-            })
-          }
-          onBlur={this.handleDescriptionBlur}
-          attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
-          id="file-form-description"
-        />
-        {descriptionError !== undefined && <ValidationErrors errors={descriptionError} />}
-        <Row>
-          <div>
-            <Label htmlFor="file-form-use-category">
-              <Translate content="qvain.files.selected.form.use.label" /> *
-            </Label>
-            <Translate
-              component={CustomSelect}
-              value={this.state.useCategory}
-              isDisabled={readonly}
-              options={
-                this.props.Stores.Locale.lang === 'en'
-                  ? this.state.useCategoriesEn
-                  : this.state.useCategoriesFi
-              }
-              onChange={this.handleChangeUse}
-              onBlur={this.handleUseCategoryBlur}
-              menuPlacement="auto"
-              menuPosition="fixed"
-              menuShouldScrollIntoView={false}
-              attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
-              inputId="file-form-use-category"
-            />
-            {useCategoryError !== undefined && <ValidationErrors errors={useCategoryError} />}
-          </div>
-          <div>
-            <Label htmlFor="file-form-file-type">
-              <Translate content="qvain.files.selected.form.fileType.label" />
-            </Label>
-            <Translate
-              component={CustomSelect}
-              value={this.state.fileType}
-              isClearable
-              isDisabled={readonly}
-              onChange={this.handleChangeFileType}
-              options={
-                this.props.Stores.Locale.lang === 'en'
-                  ? this.state.fileTypesEn
-                  : this.state.fileTypesFi
-              }
-              menuPlacement="auto"
-              menuPosition="fixed"
-              menuShouldScrollIntoView={false}
-              attributes={{ placeholder: 'qvain.files.selected.form.fileType.placeholder' }}
-              inputId="file-form-file-type"
-            />
-          </div>
-        </Row>
-        {fileError !== undefined && <ValidationErrors errors={fileError} />}
-        <Buttons>
-          <Translate
-            component={CancelButton}
-            onClick={this.handleCancel}
-            content="qvain.common.cancel"
+  return (
+    <FileContainer>
+      <Label disabled={readonly} style={{ textTransform: 'uppercase' }}>
+        {translate('qvain.files.selected.form.identifier.label')}
+      </Label>
+      <p style={{ marginLeft: '10px' }}>{inEdit.identifier}</p>
+      <Label htmlFor="file-form-title">
+        {translate('qvain.files.selected.form.title.label')} *
+      </Label>
+      <Input
+        value={title || ''}
+        disabled={readonly}
+        onChange={event => updateTitle(event.target.value)}
+        onBlur={handleTitleBlur}
+        placeholder={translate('qvain.files.selected.form.title.placeholder')}
+        id="file-form-title"
+      />
+      {titleError !== undefined && <ValidationErrors errors={titleError} />}
+      <Label htmlFor="file-form-description">
+        {translate('qvain.files.selected.form.description.label')}
+      </Label>
+      <TextArea
+        value={description || ''}
+        disabled={readonly}
+        onChange={event => updateDescription(event.target.value)}
+        onBlur={handleDescriptionBlur}
+        placeholder={translate('qvain.files.selected.form.description.placeholder')}
+        id="file-form-description"
+      />
+      {descriptionError !== undefined && <ValidationErrors errors={descriptionError} />}
+      <Row>
+        <div>
+          <Label htmlFor="file-form-use-category">
+            {translate('qvain.files.selected.form.use.label')} *
+          </Label>
+          <CustomSelect
+            component={CustomSelect}
+            value={useCategoryOptions.find(opt => opt.value == useCategory) || ''}
+            isDisabled={readonly}
+            options={useCategoryOptions}
+            isLoading={isLoadingUseCategory}
+            onChange={handleChangeUse}
+            onBlur={handleUseCategoryBlur}
+            getOptionLabel={getOptionLabel}
+            menuPlacement="auto"
+            menuPosition="fixed"
+            menuShouldScrollIntoView={false}
+            placeholder={translate('qvain.files.selected.form.use.placeholder')}
+            inputId="file-form-use-category"
           />
-          <Translate
-            component={SaveButton}
-            disabled={readonly}
-            onClick={this.handleSave}
-            content="qvain.common.save"
+          {useCategoryError !== undefined && <ValidationErrors errors={useCategoryError} />}
+        </div>
+        <div>
+          <Label htmlFor="file-form-file-type">
+            {translate('qvain.files.selected.form.fileType.label')}
+          </Label>
+          <CustomSelect
+            value={fileTypeOptions.find(opt => opt.value == fileType) || ''}
+            isClearable
+            isDisabled={readonly}
+            onChange={handleChangeFileType}
+            options={fileTypeOptions}
+            isLoading={isLoadingFileType}
+            getOptionLabel={getOptionLabel}
+            menuPlacement="auto"
+            menuPosition="fixed"
+            menuShouldScrollIntoView={false}
+            placeholder={translate('qvain.files.selected.form.fileType.placeholder')}
+            inputId="file-form-file-type"
           />
-        </Buttons>
-      </FileContainer>
-    )
-  }
+        </div>
+      </Row>
+      {fileError !== undefined && <ValidationErrors errors={fileError} />}
+      <Buttons>
+        <CancelButton onClick={handleCancel}>{translate('qvain.common.cancel')}</CancelButton>
+        <SaveButton disabled={readonly} onClick={handleSave}>
+          {translate('qvain.common.save')}
+        </SaveButton>
+      </Buttons>
+    </FileContainer>
+  )
 }
 
-const getUseCategory = (fi, en, stores) => {
-  let uc
-  if (stores.Locale.lang === 'en') {
-    uc = en.find(opt => opt.value === stores.Qvain.Files.inEdit.useCategory)
-  } else {
-    uc = fi.find(opt => opt.value === stores.Qvain.Files.inEdit.useCategory)
-  }
-  return uc
+FileForm.propTypes = {
+  setChanged: PropTypes.func.isRequired,
+  requestClose: PropTypes.func.isRequired,
 }
-
-const FileContainer = styled(Container)`
-  border: none;
-  padding: 0;
-  margin: 0;
-  box-shadow: none;
-`
-
-const Buttons = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  * {
-    margin: 0.25rem;
-    flex-grow: 1;
-  }
-  margin: -0.25rem;
-`
 
 const Row = styled.div`
   display: grid;
@@ -303,4 +217,4 @@ const Row = styled.div`
   column-gap: 0.5rem;
 `
 
-export default withStores(observer(FileForm))
+export default observer(FileForm)

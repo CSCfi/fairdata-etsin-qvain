@@ -57,9 +57,14 @@ export const ValidationErrors = ({ errors }) => {
 
   return (
     <ValidationErrorList>
-      {errors.map(
-        err => err && <Translate key={err} content={err} component={ValidationErrorItem} />
-      )}
+      {errors
+        .filter(err => err)
+        .map(err => {
+          if (isAlreadyTranslated(err)) {
+            return err
+          }
+          return <Translate key={err} content={err} component={ValidationErrorItem} />
+        })}
     </ValidationErrorList>
   )
 }

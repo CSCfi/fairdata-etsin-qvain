@@ -1,272 +1,218 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
-import { observer } from 'mobx-react'
-import styled from 'styled-components'
 import Translate from '@/utils/Translate'
-import { SaveButton, CancelButton } from '../../../../../general/buttons'
-import { Label, CustomSelect, Input, Textarea } from '../../../../../general/modal/form'
+import { observer } from 'mobx-react'
+import PropTypes from 'prop-types'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
 
-import { Checkbox } from '@/components/qvain/general/modal/form'
 import Loader from '@/components/general/loader'
+import { CancelButton, SaveButton } from '@/components/qvain/general/buttons'
+import { ValidationErrors } from '@/components/qvain/general/errors/validationError'
+import { Checkbox, CustomSelect, Input, Label } from '@/components/qvain/general/modal/form'
+import { TextArea } from '@/components/qvain/general/V3'
+import { useStores } from '@/stores/stores'
+import useReferenceData from '@/utils/useReferenceData'
+import { Buttons, DirectoryContainer } from './styles'
 
-import { Container } from '../../../../../general/card'
-import { ValidationErrors } from '../../../../../general/errors/validationError'
-import { withStores } from '../../../../../utils/stores'
+const DirectoryForm = ({ setChanged, requestClose }) => {
+  const Stores = useStores()
+  const {
+    Locale: { translate, getValueTranslation },
+    Qvain: {
+      readonly,
+      Files: {
+        inEdit,
+        directoryDescriptionSchema,
+        directoryUseCategorySchema,
+        directoryTitleSchema,
+      },
+    },
+  } = Stores
+  const { options: useCategoryOptions, isLoading: isLoadingUseCategory } =
+    useReferenceData('use_category')
 
-export class DirectoryFormBase extends Component {
-  inEdit = this.props.Stores.Qvain.Files.inEdit
+  const [title, setTitle] = useState()
+  const [description, setDescription] = useState()
+  const [useCategory, setUseCategory] = useState()
 
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    className: PropTypes.string,
-    setChanged: PropTypes.func.isRequired,
-    requestClose: PropTypes.func.isRequired,
-  }
+  const [directoryError, setDirectoryError] = useState()
+  const [descriptionError, setDescriptionError] = useState()
+  const [titleError, setTitleError] = useState()
+  const [useCategoryError, setUseCategoryError] = useState()
 
-  static defaultProps = {
-    className: '',
-  }
+  const [shouldApplyUseCategoryToChildren, setShouldApplyUseCategoryToChildren] = useState(false)
+  const [applyingUseCategory, setApplyingUseCategory] = useState(false)
 
-  state = {
-    title: this.inEdit.title || this.inEdit.name,
-    description: this.inEdit.description,
-    useCategoriesEn: [],
-    useCategoriesFi: [],
-    useCategory: undefined,
-    directoryError: undefined,
-    titleError: undefined,
-    descriptionError: undefined,
-    useCategoryError: undefined,
-    shouldApplyUseCategoryToChildren: false,
-    applyingUseCategory: false,
-  }
+  useEffect(() => {
+    const file = inEdit || {}
+    setTitle(file.title || file.name)
+    setDescription(file.description)
+    setUseCategory(file.useCategory)
+    setShouldApplyUseCategoryToChildren(false)
 
-  componentDidMount = () => {
-    const { inEdit } = this.props.Stores.Qvain.Files
-    this.props.Stores.Qvain.ReferenceData.getLocalizedOptions('use_category').then(translations => {
-      this.setState((state, props) => ({
-        useCategoriesEn: translations.en,
-        useCategoriesFi: translations.fi,
-        useCategory:
-          props.Stores.Locale.lang === 'en'
-            ? getUseCategory(inEdit, translations.en)
-            : getUseCategory(inEdit, translations.fi),
-      }))
-    })
-  }
+    setTitleError(undefined)
+    setDescriptionError(undefined)
+    setUseCategoryError(undefined)
+    setDirectoryError(undefined)
+  }, [inEdit])
 
-  handleCancel = event => {
+  const handleCancel = event => {
     event.preventDefault()
-    this.props.requestClose()
+    requestClose()
   }
 
-  updateValues = values => {
-    this.setState(values)
-    this.props.setChanged(true)
+  const updateTitle = value => {
+    setTitle(value)
+    setChanged(true)
   }
 
-  handleChangeUse = selectedOption => {
-    this.setState({
-      useCategory: selectedOption,
-      useCategoryError: undefined,
-    })
-    this.props.setChanged(true)
+  const updateDescription = value => {
+    setDescription(value)
+    setChanged(true)
   }
 
-  handleSave = event => {
+  const handleChangeUse = selectedOption => {
+    setUseCategory(selectedOption.value)
+    setUseCategoryError(undefined)
+    setChanged(true)
+  }
+
+  const handleSave = async event => {
     event.preventDefault()
-    const { title, description, useCategory } = this.state
     const validationObj = {
       title,
       description,
       useCategory,
     }
-    const { directorySchema } = this.props.Stores.Qvain.Files
+    const { directorySchema, applyInEdit } = Stores.Qvain.Files
 
-    directorySchema
-      .validate(validationObj, { strict: true })
-      .then(async () => {
-        this.setState(state => ({
-          directoryError: undefined,
-          useCategoryError: undefined,
-          applyingUseCategory: state.shouldApplyUseCategoryToChildren,
-        }))
-        await this.props.Stores.Qvain.Files.applyInEdit(
-          {
-            title,
-            description,
-            useCategory: useCategory.value,
-          },
-          { applyToChildren: this.state.shouldApplyUseCategoryToChildren }
-        )
-        this.props.setChanged(false)
-      })
-      .catch(err => {
-        this.setState({
-          directoryError: err.errors,
-          applyingUseCategory: false,
-        })
-      })
+    try {
+      await directorySchema.validate(validationObj, { strict: true })
+      setDirectoryError(undefined)
+      setUseCategoryError(undefined)
+      setApplyingUseCategory(shouldApplyUseCategoryToChildren)
+      await applyInEdit(
+        {
+          title,
+          description,
+          useCategory: useCategory,
+        },
+        { applyToChildren: shouldApplyUseCategoryToChildren }
+      )
+      setChanged(false)
+    } catch (err) {
+      setDirectoryError(err.errors)
+    } finally {
+      setApplyingUseCategory(false)
+    }
   }
 
-  handleOnBlur = (validator, value, errorSet) => {
+  const handleOnBlur = (validator, value, errorSet) => {
     validator
       .validate(value, { strict: true })
       .then(() => errorSet(undefined))
       .catch(err => errorSet(err.errors))
   }
 
-  handleTitleBlur = () => {
-    const { directoryTitleSchema } = this.props.Stores.Qvain.Files
-    this.handleOnBlur(directoryTitleSchema, this.state.title, value =>
-      this.setState({ titleError: value })
-    )
+  const handleTitleBlur = () => {
+    handleOnBlur(directoryTitleSchema, title, setTitleError)
   }
 
-  handleDescriptionBlur = () => {
-    const { directoryDescriptionSchema } = this.props.Stores.Qvain.Files
-    this.handleOnBlur(directoryDescriptionSchema, this.state.description, value =>
-      this.setState({ descriptionError: value })
-    )
+  const handleDescriptionBlur = () => {
+    handleOnBlur(directoryDescriptionSchema, description, setDescriptionError)
   }
 
-  handleOnUseCategoryBlur = () => {
-    const { directoryUseCategorySchema } = this.props.Stores.Qvain.Files
-    const { useCategory } = this.state
-    directoryUseCategorySchema
-      .validate(useCategory, { strict: true })
-      .then(() => {
-        this.setState({
-          useCategoryError: undefined,
-          directoryError: undefined,
-        })
-      })
-      .catch(err => {
-        this.setState({
-          useCategoryError: err.errors,
-        })
-      })
+  const handleUseCategoryBlur = () => {
+    handleOnBlur(directoryUseCategorySchema, useCategory, setUseCategoryError)
   }
 
-  toggleShouldApplyUseCategoryToChildren = () => {
-    this.setState(state => ({
-      shouldApplyUseCategoryToChildren: !state.shouldApplyUseCategoryToChildren,
-    }))
+  if (!inEdit) {
+    return null
   }
 
-  render() {
-    const { readonly } = this.props.Stores.Qvain
-    const { titleError, descriptionError, directoryError, useCategoryError } = this.state
+  const getOptionLabel = option => getValueTranslation(option.label)
 
-    return (
-      <DirectoryContainer className={this.props.className}>
-        <Label htmlFor="directory-form-title">
-          <Translate content="qvain.files.selected.form.title.label" /> *
-        </Label>
-        <Translate
-          component={Input}
-          value={this.state.title}
+  const toggleShouldApplyUseCategoryToChildren = () => {
+    setShouldApplyUseCategoryToChildren(!shouldApplyUseCategoryToChildren)
+  }
+
+  return (
+    <DirectoryContainer>
+      <Label htmlFor="directory-form-title">
+        <Translate content="qvain.files.selected.form.title.label" /> *
+      </Label>
+      <Input
+        value={title || ''}
+        disabled={readonly}
+        onChange={event => updateTitle(event.target.value)}
+        onBlur={handleTitleBlur}
+        placeholder={translate('qvain.files.selected.form.title.placeholder')}
+        id="directory-form-title"
+      />
+      {titleError !== undefined && <ValidationErrors errors={titleError} />}
+      <Label htmlFor="directory-form-description">
+        <Translate content="qvain.files.selected.form.description.label" />
+      </Label>
+      <TextArea
+        value={description || ''}
+        disabled={readonly}
+        onChange={event => updateDescription(event.target.value)}
+        onBlur={handleDescriptionBlur}
+        placeholder={translate('qvain.files.selected.form.description.placeholder')}
+        id="directory-form-description"
+      />
+      {descriptionError !== undefined && <ValidationErrors errors={descriptionError} />}
+      <Label htmlFor="directory-form-use-category">
+        {translate('qvain.files.selected.form.use.label')} *
+      </Label>
+      <CustomSelect
+        component={CustomSelect}
+        value={useCategoryOptions.find(opt => opt.value == useCategory) || ''}
+        isDisabled={readonly}
+        options={useCategoryOptions}
+        isLoading={isLoadingUseCategory}
+        onChange={handleChangeUse}
+        onBlur={handleUseCategoryBlur}
+        getOptionLabel={getOptionLabel}
+        menuPlacement="auto"
+        menuPosition="fixed"
+        menuShouldScrollIntoView={false}
+        placeholder={translate('qvain.files.selected.form.use.placeholder')}
+        inputId="directory-form-use-category"
+      />
+
+      <CheckboxRow>
+        <Checkbox
+          id="applyToChildrenCheckbox"
+          onChange={toggleShouldApplyUseCategoryToChildren}
+          checked={shouldApplyUseCategoryToChildren}
           disabled={readonly}
-          onChange={event =>
-            this.updateValues({
-              title: event.target.value,
-            })
-          }
-          onBlur={this.handleTitleBlur}
-          attributes={{ placeholder: 'qvain.files.selected.form.title.placeholder' }}
-          id="directory-form-title"
         />
-        {titleError !== undefined && <ValidationErrors errors={titleError} />}
-        <Label htmlFor="directory-form-description">
-          <Translate content="qvain.files.selected.form.description.label" />
-        </Label>
         <Translate
-          component={Textarea}
-          value={this.state.description}
-          disabled={readonly}
-          onChange={event =>
-            this.updateValues({
-              description: event.target.value,
-            })
-          }
-          onBlur={this.handleDescriptionBlur}
-          attributes={{ placeholder: 'qvain.files.selected.form.description.placeholder' }}
-          id="directory-form-description"
+          content="qvain.files.selected.form.applyUseCategoryToChildren"
+          component={CheckboxLabel}
+          htmlFor="applyToChildrenCheckbox"
         />
-        {descriptionError !== undefined && <ValidationErrors errors={descriptionError} />}
-        <Label htmlFor="directory-form-use-category">
-          <Translate content="qvain.files.selected.form.use.label" /> *
-        </Label>
-        <Translate
-          component={CustomSelect}
-          value={this.state.useCategory}
-          isDisabled={readonly}
-          options={
-            this.props.Stores.Locale.lang === 'en'
-              ? this.state.useCategoriesEn
-              : this.state.useCategoriesFi
-          }
-          onChange={this.handleChangeUse}
-          onBlur={this.handleOnUseCategoryBlur}
-          menuPlacement="auto"
-          menuPosition="fixed"
-          menuShouldScrollIntoView={false}
-          attributes={{ placeholder: 'qvain.files.selected.form.use.placeholder' }}
-          inputId="directory-form-use-category"
-        />
+        {applyingUseCategory && <Loader active size="1.1em" spinnerSize="3px" />}
+      </CheckboxRow>
 
-        <CheckboxRow>
-          <Checkbox
-            id="applyToChildrenCheckbox"
-            onChange={this.toggleShouldApplyUseCategoryToChildren}
-            disabled={readonly}
-            checked={this.state.shouldApplyUseCategoryToChildren}
-          />
-          <Translate
-            content="qvain.files.selected.form.applyUseCategoryToChildren"
-            component={CheckboxLabel}
-            htmlFor="applyToChildrenCheckbox"
-          />
-          {this.state.applyingUseCategory && <Loader active size="1.1em" spinnerSize="3px" />}
-        </CheckboxRow>
-
-        {useCategoryError !== undefined && <ValidationErrors errors={useCategoryError} />}
-        {directoryError !== undefined && <ValidationErrors errors={directoryError} />}
-        <Buttons>
-          <Translate
-            component={CancelButton}
-            onClick={this.handleCancel}
-            content="qvain.common.cancel"
-            disabled={this.state.applyingUseCategory}
-          />
-          <Translate
-            component={SaveButton}
-            disabled={readonly || this.state.applyingUseCategory}
-            onClick={this.handleSave}
-            content="qvain.common.save"
-          />
-        </Buttons>
-      </DirectoryContainer>
-    )
-  }
+      {useCategoryError !== undefined && <ValidationErrors errors={useCategoryError} />}
+      {directoryError !== undefined && <ValidationErrors errors={directoryError} />}
+      <Buttons>
+        <CancelButton onClick={handleCancel} disabled={applyingUseCategory}>
+          {translate('qvain.common.cancel')}
+        </CancelButton>
+        <SaveButton disabled={readonly || applyingUseCategory} onClick={handleSave}>
+          {translate('qvain.common.save')}
+        </SaveButton>
+      </Buttons>
+    </DirectoryContainer>
+  )
 }
 
-const DirectoryContainer = styled(Container)`
-  border: none;
-  padding: 0;
-  margin: 0;
-  box-shadow: none;
-`
-
-const Buttons = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  * {
-    margin: 0.25rem;
-    flex-grow: 1;
-  }
-  margin: -0.25rem;
-`
+DirectoryForm.propTypes = {
+  setChanged: PropTypes.func.isRequired,
+  requestClose: PropTypes.func.isRequired,
+}
 
 const CheckboxRow = styled.div`
   display: flex;
@@ -281,7 +227,4 @@ const CheckboxLabel = styled.label`
   display: inline-block;
 `
 
-const getUseCategory = (directory, translations) =>
-  translations.find(opt => opt.value === directory.useCategory)
-
-export default withStores(observer(DirectoryFormBase))
+export default observer(DirectoryForm)

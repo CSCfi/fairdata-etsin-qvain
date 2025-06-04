@@ -13,7 +13,7 @@ export const fileMetadataSchema = yup.object().shape({
 // FILE AND DIRECTORY (IDA RESOURCES) VALIDATION
 
 export const fileUseCategorySchema = yup
-  .object()
+  .string()
   .required('qvain.validationMessages.files.file.useCategory.required')
 
 export const fileTitleSchema = yup
@@ -26,7 +26,7 @@ export const fileSchema = yup.object().shape({
   title: fileTitleSchema,
   description: fileDescriptionSchema,
   useCategory: fileUseCategorySchema,
-  fileType: yup.object().nullable(),
+  fileType: yup.string().nullable(),
 })
 
 export const filesSchema = yup.array().of(fileSchema)
@@ -38,14 +38,13 @@ export const directoryTitleSchema = yup
 export const directoryDescriptionSchema = yup.string()
 
 export const directoryUseCategorySchema = yup
-  .object()
+  .string()
   .required('qvain.validationMessages.files.directory.useCategory.required')
 
 export const directorySchema = yup.object().shape({
   title: directoryTitleSchema,
   description: directoryDescriptionSchema,
   useCategory: directoryUseCategorySchema,
-  fileType: yup.object().nullable(),
 })
 
 export const directoriesSchema = yup.array().of(directorySchema)
