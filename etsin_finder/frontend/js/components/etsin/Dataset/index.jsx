@@ -1,6 +1,3 @@
-/* eslint-disable react/jsx-indent */
-/* eslint-disable space-before-function-paren */
-
 /**
  * This file is part of the Etsin service
  *
@@ -11,14 +8,14 @@
  * @license   MIT
  */
 
-import { Component } from 'react'
+import { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { opacify } from 'polished'
 
-import { withStores, useStores } from '@/stores/stores'
+import { useStores } from '@/stores/stores'
 import ErrorPage from '@/components/general/errorpage'
 import ErrorBoundary from '@/components/general/errorBoundary'
 import Loader from '@/components/general/loader'
@@ -38,38 +35,31 @@ const BackButton = styled(NavLink)`
   margin: 0 0 0.5em 0;
 `
 
-class Dataset extends Component {
-  constructor(props) {
-    super(props)
+const Dataset = ({ match }) => {
+  const oldIdentifier = useRef()
 
-    this.query = this.query.bind(this)
-  }
+  const {
+    Accessibility: { resetFocus },
+    Etsin: {
+      isLoading,
+      fetchData,
+      setCustomError,
+      allErrors,
+      EtsinDataset: { dataset },
+    },
+  } = useStores()
 
-  componentDidMount() {
-    this.props.Stores.Accessibility.resetFocus()
-    this.query()
-  }
-
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(newProps) {
-    if (this.props.match.params.identifier !== newProps.match.params.identifier) {
-      this.query(newProps.match.params.identifier)
+  useEffect(() => {
+    const identifier = match.params.identifier
+    if (identifier != oldIdentifier.current) {
+      resetFocus()
+      query(identifier)
     }
-  }
+    oldIdentifier.current = identifier
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [match])
 
-  componentDidUpdate() {
-    window.onbeforeunload = this.props.Stores.Etsin.reset
-  }
-
-  query(customId) {
-    const {
-      Etsin: { fetchData, setCustomError },
-    } = this.props.Stores
-    let identifier = this.props.match.params.identifier
-    if (customId !== undefined) {
-      identifier = customId
-    }
-
+  const query = identifier => {
     // in production integer based identifiers are not permitted.
     if (BUILD === 'production' && /^\d+$/.test(identifier)) {
       console.log('Using integer as identifier not permitted')
@@ -80,25 +70,14 @@ class Dataset extends Component {
     fetchData(identifier)
   }
 
-  render() {
-    const {
-      Etsin: {
-        isLoading,
-        allErrors,
-        EtsinDataset: { dataset },
-      },
-    } = this.props.Stores
-
-    if (allErrors.length) {
-      return <DatasetError />
-    }
-
-    if (!dataset || isLoading.files || isLoading.versions || isLoading.dataset) {
-      return <DatasetLoadSpinner />
-    }
-
-    return <DatasetView />
+  if (allErrors.length) {
+    return <DatasetError />
   }
+
+  if (!dataset || isLoading.files || isLoading.versions || isLoading.dataset) {
+    return <DatasetLoadSpinner />
+  }
+  return <DatasetView />
 }
 
 function DatasetError() {
@@ -202,8 +181,7 @@ const DraftInfo = withCustomProps(styled.div)`
 `
 
 Dataset.propTypes = {
-  Stores: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 }
 
-export default withStores(observer(Dataset))
+export default observer(Dataset)

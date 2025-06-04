@@ -17,6 +17,7 @@ class Accessibility {
     this.Locale = Locale
     makeObservable(this)
     this.announce = this.announce.bind(this)
+    this.resetFocus = this.resetFocus.bind(this)
 
     // Run handleNavigation when currentLang changes
     autorun(() => this.Locale.currentLang && this.handleNavigation())
