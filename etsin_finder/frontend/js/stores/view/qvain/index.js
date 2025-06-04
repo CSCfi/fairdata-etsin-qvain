@@ -19,6 +19,8 @@ import queryParamEnabled from '@/utils/queryParamEnabled'
 import Adapter from './qvain.adapter'
 import remapActorIdentifiers from '@/utils/remapActorIdentifiers'
 import Modals from './structural/qvain.modal.v3'
+import AbortClient, { ignoreAbort, isAbort } from '@/utils/AbortClient'
+import urls from '@/utils/urls'
 
 class Qvain extends Resources {
   constructor(Env, Auth, Locale, OrgReferences) {
@@ -62,6 +64,7 @@ class Qvain extends Resources {
 
   @action
   resetQvainStore = () => {
+    this.client.abort()
     this.original = undefined
     this.unsupported = null
 
@@ -125,6 +128,94 @@ class Qvain extends Resources {
   @observable promptLooseProvenances = undefined
 
   @observable provenancesWithNonExistingActors = []
+
+  client = new AbortClient()
+
+  @observable datasetLoading = false
+
+  @observable datasetError = null
+
+  @action.bound setDatasetLoading(value) {
+    this.datasetLoading = value
+  }
+
+  @action.bound setDatasetError(value) {
+    this.datasetError = value
+  }
+
+  @action.bound
+  async fetchDataset(identifier, { isTemplate = false } = {}) {
+    this.client.abort()
+    const { metaxV3Url } = this.Env
+    this.datasetLoading = true
+    this.datasetError = null
+
+    try {
+      let result
+      let nextDraft
+      if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
+        const url = metaxV3Url('dataset', identifier)
+        result = await this.client.get(url)
+        nextDraft = result.data.next_draft?.id
+      } else {
+        const url = urls.qvain.dataset(identifier)
+        result = await this.client.get(url)
+        nextDraft = result.data.next_draft?.identifier
+      }
+      this.resetQvainStore()
+
+      // Open draft instead if it exists
+      if (nextDraft && !isTemplate) {
+        return this.fetchDataset(nextDraft)
+      }
+
+      if (isTemplate) {
+        this.resetWithTemplate(result.data)
+      } else {
+        ignoreAbort(() => this.editDataset(result.data))
+      }
+      this.setDatasetError(null)
+    } catch (e) {
+      this.handleFetchDatasetError(e)
+    } finally {
+      this.setDatasetLoading(false)
+    }
+  }
+
+  handleFetchDatasetError(e) {
+    if (isAbort(e)) {
+      return
+    }
+    const status = e.response.status
+
+    let errorTitle, errorDetails
+    if (status === 401 || status === 403) {
+      errorTitle = 'qvain.error.permission'
+    } else if (status === 404) {
+      errorTitle = 'qvain.error.missing'
+    } else {
+      errorTitle = 'qvain.error.default'
+    }
+
+    if (typeof e.response.data === 'object') {
+      const values = Object.values(e.response.data)
+      if (values.length === 1) {
+        errorDetails = values[0]
+      } else {
+        errorDetails = JSON.stringify(e.response.data, null, 2)
+      }
+    } else {
+      errorDetails = e.response.data
+    }
+    if (!errorDetails) {
+      errorDetails = e.message
+    }
+
+    this.setDatasetError({
+      title: errorTitle,
+      details: errorDetails,
+    })
+  }
 
   @action
   setDataCatalog = selectedDataCatalog => {

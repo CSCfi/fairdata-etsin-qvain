@@ -1,25 +1,6 @@
 import styled from 'styled-components'
 import { Container } from '../../general/card'
 
-export const SkipToSubmitDataset = styled.button.attrs({
-  type: 'button',
-})`
-  background: ${p => p.theme.color.primary};
-  color: #fafafa;
-  max-height: 0;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  border: none;
-  letter-spacing: 2px;
-  transition: 0.2s ease;
-  &:focus {
-    text-decoration: underline;
-    padding: 0.5em;
-    max-height: 3em;
-  }
-`
-
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -62,4 +43,8 @@ export const Left = styled.div`
 
 export const Separator = styled.div`
   margin-top: 1.5rem;
+`
+
+export const SubmitButtonsWrapper = styled(Right)`
+  margin-bottom: 2rem;
 `

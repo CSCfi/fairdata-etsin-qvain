@@ -17,6 +17,8 @@ import { StoresProvider } from '@/stores/stores'
 import Qvain from '@/components/qvain/views/main'
 import { flatten, removeMatchingKeys } from '@/utils/flatten'
 
+// Replace debounce milliseconds with 0
+jest.mock('lodash.debounce', () => f => jest.requireActual('lodash.debounce')(f, 0))
 jest.setTimeout(25000)
 import {
   access_rights_embargo,
@@ -25,11 +27,13 @@ import {
 } from '../../__testdata__/metaxv3/refs/access_rights.data'
 import dataset from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 
-// axios mocks
 const mockAdapter = new MockAdapter(axios)
-mockAdapter.onGet(new RegExp('/v3/reference-data/.*')).reply(200, [])
-mockAdapter.onGet(new RegExp('/v3/organizations')).reply(200, [])
+
+// axios mocks
 beforeEach(() => {
+  mockAdapter.reset()
+  mockAdapter.onGet(new RegExp('/v3/reference-data/.*')).reply(200, [])
+  mockAdapter.onGet(new RegExp('/v3/organizations')).reply(200, [])
   mockAdapter.resetHistory()
 })
 

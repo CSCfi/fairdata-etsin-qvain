@@ -6,6 +6,7 @@ import moment from 'moment'
 import Translate from '@/utils/Translate'
 
 import Label from '@/components/qvain/general/card/label'
+import withCustomProps from '@/utils/withCustomProps'
 
 const dateToString = (date, lang) => {
   if (date) {
@@ -63,7 +64,7 @@ TemporalList.defaultProps = {
   readonly: false,
 }
 
-const RemoveButtonStyles = styled.button.attrs({
+const RemoveButtonStyles = withCustomProps(styled.button).attrs({
   type: 'button',
 })`
   background: none;

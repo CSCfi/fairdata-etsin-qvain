@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import PropTypes, { instanceOf } from 'prop-types'
 import { observer } from 'mobx-react'
 import { useHistory } from 'react-router-dom'
-import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import TooltipHoverOnSave from '@/components/qvain/general/header/tooltipHoverOnSave'
@@ -28,6 +27,7 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
     Env: { getQvainUrl },
     QvainDatasets,
     Matomo,
+    Locale: { translate },
   } = useStores()
 
   const history = useHistory()
@@ -97,7 +97,7 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
             disabled={disabled || isDraftButtonDisabled}
             onClick={handleDraftClick}
           >
-            <Translate content="qvain.saveDraft" />
+            {translate('qvain.saveDraft')}
           </SaveButton>
         </WrapperDivForHovering>
       </TooltipHoverOnSave>
@@ -120,7 +120,7 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
             disabled={disabled || isPublishButtonDisabled}
             onClick={handlePublishClick}
           >
-            <Translate content="qvain.submit" />
+            {translate('qvain.submit')}
           </PublishButton>
         </WrapperDivForHovering>
       </TooltipHoverOnSave>

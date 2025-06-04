@@ -2,12 +2,11 @@ import PropTypes from 'prop-types'
 import Translate from '@/utils/Translate'
 
 import {
-  SkipToSubmitDataset,
   Form,
   SubmitContainer,
   DisableImplicitSubmit,
-  Right,
   Separator,
+  SubmitButtonsWrapper,
 } from './editor.styled'
 import { ErrorContainer, ErrorLabel, ErrorContent, ErrorButtons } from '../../general/errors'
 import { Button } from '../../../general/button'
@@ -26,15 +25,13 @@ import Project from '../../sections/Project'
 import ProjectV3 from '../../sections/ProjectV3'
 import FlaggedComponent from '@/components/general/flaggedComponent'
 import ModalManager from '../../general/V3/modal/ModalManager.v3'
+import { useStores } from '@/stores/stores'
+import { observer } from 'mobx-react'
 
-export const Dataset = ({
-  datasetError,
-  haveDataset,
-  datasetErrorTitle,
-  datasetErrorDetails,
-  handleRetry,
-  setFocusOnSubmitButton,
-}) => {
+export const Dataset = ({ datasetError, datasetErrorTitle, datasetErrorDetails, handleRetry }) => {
+  const {
+    Qvain: { datasetLoading },
+  } = useStores()
   if (datasetError) {
     return (
       <div className="container">
@@ -49,7 +46,7 @@ export const Dataset = ({
     )
   }
 
-  if (!haveDataset) {
+  if (datasetLoading) {
     return null
   }
 
@@ -74,12 +71,9 @@ export const Dataset = ({
       <SubmitContainer>
         <Translate component="p" content="qvain.consent" unsafe />
       </SubmitContainer>
-      <Right>
+      <SubmitButtonsWrapper>
         <SubmitButtons idSuffix="-bottom" />
-      </Right>
-      <SkipToSubmitDataset onClick={setFocusOnSubmitButton}>
-        <Translate content="stsd" />
-      </SkipToSubmitDataset>
+      </SubmitButtonsWrapper>
       <ModalManager />
     </Form>
   )
@@ -87,9 +81,7 @@ export const Dataset = ({
 
 Dataset.propTypes = {
   datasetError: PropTypes.bool.isRequired,
-  haveDataset: PropTypes.bool.isRequired,
   handleRetry: PropTypes.func.isRequired,
-  setFocusOnSubmitButton: PropTypes.func.isRequired,
   datasetErrorTitle: PropTypes.node,
   datasetErrorDetails: PropTypes.node,
 }
@@ -99,4 +91,4 @@ Dataset.defaultProps = {
   datasetErrorDetails: null,
 }
 
-export default Dataset
+export default observer(Dataset)
