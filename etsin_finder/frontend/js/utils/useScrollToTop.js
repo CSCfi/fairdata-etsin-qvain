@@ -1,15 +1,17 @@
 import { useRef, useEffect } from 'react'
 
-const useScrollToTop = () => {
+const useScrollToTop = (enabled = true) => {
   // Scroll ref element to top on mount, useful for modal content
   const ref = useRef()
   useEffect(() => {
-    window.setTimeout(() => {
-      if (ref.current?.scrollTo) {
-        ref.current.scrollTo({ top: 0, behavior: 'instant' })
-      }
-    })
-  }, [])
+    if (enabled) {
+      window.setTimeout(() => {
+        if (ref.current?.scrollTo) {
+          ref.current.scrollTo({ top: 0, behavior: 'instant' })
+        }
+      })
+    }
+  }, [enabled])
 
   return ref
 }

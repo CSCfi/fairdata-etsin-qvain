@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import ReactSelect from 'react-select'
 import styled from 'styled-components'
 import { lighten } from 'polished'
@@ -7,41 +6,43 @@ import withCustomProps from '@/utils/withCustomProps'
 
 // react-select library: https://github.com/JedWatson/react-select
 
-export default class Select extends Component {
-  handleChange = value => {
+const Select = ({
+  className = '',
+  error = false,
+  clearable = true,
+  name,
+  options,
+  value,
+  onChange,
+  onBlur,
+  ...rest
+}) => {
+
+  const handleChange = value => {
     // this is going to call setFieldValue and manually update values.topics
-    this.props.onChange(this.props.name, value)
+    onChange(name, value)
   }
 
-  handleBlur = () => {
+  const handleBlur = () => {
     // this is going to call setFieldTouched and manually update touched.topcis
-    this.props.onBlur(this.props.name, true)
+    onBlur(name, true)
   }
 
-  render() {
-    const { className, error, name, options, value, clearable, ...rest } = this.props
-    return (
-      <SelectContainer
-        className={className}
-        error={error}
-        {...rest}
+  return (
+    <SelectContainer className={className} error={error} {...rest} options={options} value={value}>
+      <ReactSelect
+        inputId={name}
+        clearable={clearable}
+        name={name}
         options={options}
+        onChange={handleChange}
+        onBlur={handleBlur}
         value={value}
-      >
-        <ReactSelect
-          inputId={name}
-          clearable={clearable}
-          name={name}
-          options={options}
-          onChange={this.handleChange}
-          onBlur={this.handleBlur}
-          value={value}
-          noResultsText={false}
-          searchable={false}
-        />
-      </SelectContainer>
-    )
-  }
+        noResultsText={false}
+        searchable={false}
+      />
+    </SelectContainer>
+  )
 }
 /* prettier-ignore */
 const SelectContainer = withCustomProps(styled.div).attrs(props => ({
@@ -526,12 +527,6 @@ const SelectContainer = withCustomProps(styled.div).attrs(props => ({
   }
 `
 
-Select.defaultProps = {
-  className: '',
-  error: false,
-  clearable: true,
-}
-
 Select.propTypes = {
   name: PropTypes.string.isRequired,
   onBlur: PropTypes.func.isRequired,
@@ -542,3 +537,5 @@ Select.propTypes = {
   options: PropTypes.array.isRequired,
   value: PropTypes.object.isRequired,
 }
+
+export default Select

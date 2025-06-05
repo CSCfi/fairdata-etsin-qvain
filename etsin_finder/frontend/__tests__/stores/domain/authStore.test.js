@@ -80,34 +80,4 @@ describe('Auth Store', () => {
     expect(errorSpy.mock.calls.length).toBe(1)
     expect(Auth.userLogged).toBe(true)
   })
-
-  it('Login renewal error should clear login', async () => {
-    mock.onGet('/api/session').reply(401)
-    await Auth.checkLogin()
-    expect(Auth.userLogged).toBe(true)
-    try {
-      await Auth.renewSession()
-    } catch {
-      // pass
-    }
-    expect(Auth.userLogged).toBe(false)
-  })
-
-  it('Login renewal error should clear user', async () => {
-    mock.onGet('/api/session').reply(401)
-    await Auth.checkLogin()
-    expect(Auth.userLogged).toBe(true)
-    try {
-      await Auth.renewSession()
-    } catch {
-      // pass
-    }
-    expect(Auth.user).toEqual({
-      name: undefined,
-      loggedIn: false,
-      homeOrganizationId: undefined,
-      idaProjects: [],
-      isUsingRems: undefined,
-    })
-  })
 })

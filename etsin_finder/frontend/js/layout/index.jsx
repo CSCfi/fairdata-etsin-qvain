@@ -1,9 +1,7 @@
-
 import { useRef } from 'react'
 import { observer } from 'mobx-react'
 
 import ErrorBoundary from '../components/general/errorBoundary'
-import KeepAlive from '../components/general/keepAlive'
 import AnnounceAndReset from '../components/general/announceAndReset'
 import SkipToContent from '../components/general/skipToContent'
 import Header from '../components/header'
@@ -25,7 +23,6 @@ const Layout = () => {
 
   return (
     <ErrorBoundary>
-      <KeepAlive loginThroughService={isQvain ? 'qvain' : 'etsin'} />
       <AnnounceAndReset />
       <header>
         <SkipToContent callback={focusContent} />

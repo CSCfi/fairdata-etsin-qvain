@@ -34,7 +34,7 @@ export const ActorModalBase = () => {
   } = useStores()
   const [actorError, setActorError] = useState(null)
   const [confirmClose, setConfirmClose] = useState(false)
-  const modalRef = useScrollToTop()
+  const contentRef = useScrollToTop(!!actorInEdit)
 
   if (!actorInEdit) {
     return null
@@ -96,14 +96,13 @@ export const ActorModalBase = () => {
       onRequestClose={requestClose}
       contentLabel="actorsModal"
       customStyles={modalStyle}
-      ref={modalRef}
     >
       <ModalHeader>
         <ActorIcon actor={actorInEdit} style={{ marginRight: '1rem' }} />
         <Translate content={`qvain.actors.add.action.${action}`} />
       </ModalHeader>
       <ModalDivider />
-      <Content>
+      <Content ref={contentRef}>
         <ActorTypeSelect />
         <ActorRoles />
         <ActorInfo />

@@ -1,98 +1,63 @@
-import { createRef, Component } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import withCustomProps from '@/utils/withCustomProps'
 
-export default class PopUp extends Component {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-    popUp: PropTypes.node.isRequired,
-    isOpen: PropTypes.bool.isRequired,
-    onRequestClose: PropTypes.func.isRequired,
-    align: PropTypes.oneOf(['left', 'left-fit-content', 'right', 'center', 'sidebar']),
-    role: PropTypes.string,
-  }
+const PopUp = ({ children, popUp, isOpen, onRequestClose, align = 'left', role }) => {
+  const [isFocused, setIsFocused] = useState(false)
+  const popRef = useRef()
+  const timeoutId = useRef()
 
-  static defaultProps = {
-    align: 'left',
-    role: undefined,
-  }
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      isFocused: false,
-    }
-
-    this.onBlur = this.onBlur.bind(this)
-    this.onFocus = this.onFocus.bind(this)
-    this.popRef = createRef()
-    this.timeoutID = undefined
-  }
-
-  componentDidUpdate() {
+  useEffect(() => {
     // This fixes issues with opening and closing
     // when there are multiple popups
-    if (this.props.isOpen === true) {
+    if (isOpen) {
       setTimeout(() => {
-        if (this.popRef.current) {
-          this.popRef.current.focus()
+        if (popRef.current) {
+          popRef.current.focus()
         }
       }, 50)
     }
-  }
+  }, [isOpen])
 
-  onBlur() {
-    this.timeoutID = setTimeout(() => {
-      if (this.state.isFocused) {
-        this.setState(
-          {
-            isFocused: false,
-          },
-          () => {
-            this.props.onRequestClose()
-          }
-        )
+  const onBlur = () => {
+    timeoutId.current = setTimeout(() => {
+      if (isFocused) {
+        setIsFocused(false)
+        onRequestClose()
       }
     }, 0)
   }
 
-  onFocus() {
-    clearTimeout(this.timeoutID)
-    if (!this.state.isFocused) {
-      this.setState({
-        isFocused: true,
-      })
-    }
+  const onFocus = () => {
+    clearTimeout(timeoutId.current)
+    setIsFocused(true)
   }
 
-  render() {
-    return (
-      <Relative
-        onMouseDown={
-          e => e.preventDefault() // prevent popup from closing and reopening again when its button is clicked
-        }
-      >
-        {this.props.isOpen && (
-          <PopContainer>
-            <Pop
-              ref={this.popRef}
-              tabIndex="-1"
-              autoFocus
-              onBlur={this.onBlur}
-              onFocus={this.onFocus}
-              align={this.props.align}
-              role={this.props.role}
-            >
-              {this.props.popUp}
-            </Pop>
-            <DownTriangle />
-          </PopContainer>
-        )}
-        {this.props.children}
-      </Relative>
-    )
-  }
+  return (
+    <Relative
+      // prevent popup from closing and reopening again when its button is clicked
+      onMouseDown={e => e.preventDefault()}
+    >
+      {isOpen && (
+        <PopContainer>
+          <Pop
+            ref={popRef}
+            tabIndex="-1"
+            autoFocus
+            onBlur={onBlur}
+            onFocus={onFocus}
+            align={align}
+            role={role}
+          >
+            {popUp}
+          </Pop>
+          <DownTriangle />
+        </PopContainer>
+      )}
+      {children}
+    </Relative>
+  )
 }
 
 const DownTriangle = () => (
@@ -229,3 +194,14 @@ const Svg = styled.svg`
 // desktop alignment
 // - stay over arrow
 // - option to align right, left or center
+
+PopUp.propTypes = {
+  children: PropTypes.node.isRequired,
+  popUp: PropTypes.node.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onRequestClose: PropTypes.func.isRequired,
+  align: PropTypes.oneOf(['left', 'left-fit-content', 'right', 'center', 'sidebar']),
+  role: PropTypes.string,
+}
+
+export default PopUp

@@ -10,7 +10,7 @@
    */
 }
 
-import { Component } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -22,72 +22,56 @@ import checkColor from '../../styles/styledUtils'
 import { TransparentButton } from './button'
 import withCustomProps from '@/utils/withCustomProps'
 
-export default class NoticeBar extends Component {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-    bg: PropTypes.string,
-    color: PropTypes.string,
-    position: PropTypes.string,
-    z: PropTypes.string,
-    duration: PropTypes.number,
-    className: PropTypes.string,
-    onClose: PropTypes.func,
-  }
+const NoticeBar = ({
+  children,
+  bg = 'primary',
+  color = 'white',
+  position = 'relative',
+  z = '0',
+  duration = 0,
+  className = '',
+  onClose = null,
+}) => {
+  const [open, setOpen] = useState(true)
+  const timeout = useRef()
 
-  static defaultProps = {
-    color: 'white',
-    bg: 'primary',
-    position: 'relative',
-    z: '0',
-    duration: 0,
-    className: '',
-    onClose: null,
-  }
+  const handleClose = useCallback(() => {
+    setOpen(false)
+    onClose?.()
+  }, [onClose])
 
-  state = {
-    open: true,
-  }
-
-  componentDidMount() {
-    if (this.props.duration) {
-      setTimeout(() => {
-        this.close()
-      }, this.props.duration)
+  useEffect(() => {
+    if (duration && open) {
+      timeout.current = setTimeout(handleClose, duration)
     }
-  }
+    return () => clearTimeout(timeout.current)
+  }, [duration, open, handleClose])
 
-  close = () => {
-    this.setState({
-      open: false,
-    })
-    if (this.props.onClose) {
-      this.props.onClose()
-    }
+  if (!open) {
+    return null
   }
+  return (
+    <Bar z={z} position={position} bg={bg} color={color} open={open} className={className}>
+      <NoticeText>{children}</NoticeText>
+      {!duration && (
+        <CloseButton onClick={handleClose} role="button" aria-pressed={!open}>
+          <Translate content="general.notice.SRhide" className="sr-only" />
+          <FontAwesomeIcon icon={faTimes} aria-hidden />
+        </CloseButton>
+      )}
+    </Bar>
+  )
+}
 
-  render() {
-    if (!this.state.open) {
-      return null
-    }
-    return (
-      <Bar
-        z={this.props.z}
-        position={this.props.position}
-        bg={this.props.bg}
-        color={this.props.color}
-        open={this.state.open}
-        className={this.props.className}
-      >
-        <NoticeText>{this.props.children}</NoticeText>
-        {!this.props.duration && (
-          <CloseButton onClick={this.close} role="button" aria-pressed={!this.state.open}>
-            <Translate content="general.notice.SRhide" className="sr-only" />
-            <FontAwesomeIcon icon={faTimes} aria-hidden />
-          </CloseButton>
-        )}
-      </Bar>
-    )
-  }
+NoticeBar.propTypes = {
+  children: PropTypes.node.isRequired,
+  bg: PropTypes.string,
+  color: PropTypes.string,
+  position: PropTypes.string,
+  z: PropTypes.string,
+  duration: PropTypes.number,
+  className: PropTypes.string,
+  onClose: PropTypes.func,
 }
 
 const Bar = withCustomProps(styled.div)`
@@ -127,3 +111,5 @@ const CloseButton = styled(TransparentButton)`
     text-decoration: none;
   }
 `
+
+export default NoticeBar

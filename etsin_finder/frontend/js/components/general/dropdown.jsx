@@ -1,16 +1,4 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
-import { createRef, Component } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
@@ -21,31 +9,26 @@ import Translate from '@/utils/Translate'
 import Button from './button'
 import withCustomProps from '@/utils/withCustomProps'
 
-export class Dropdown extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      open: false,
-    }
-    this.content = createRef()
-    this.container = createRef()
-    this.listenersAdded = false
-  }
+export const Dropdown = ({
+  children,
+  icon = faCaretDown,
+  buttonContent = null,
+  with: _with = undefined,
+  buttonComponent = CustomButton,
+  buttonProps = {},
+  align = 'center',
+}) => {
+  const [open, setOpen] = useState()
+  const content = useRef()
+  const container = useRef()
+  const listenersAdded = useRef(false)
 
-  componentDidUpdate() {
-    if (this.state.open) {
-      this.addListeners()
-    } else {
-      this.removeListeners()
-    }
-  }
-
-  updatePosition = () => {
-    if (!this.content.current || !this.container.current) {
+  const updatePosition = useCallback(() => {
+    if (!content.current || !container.current) {
       return
     }
-    const list = this.content.current
-    const containerRect = this.container.current.getBoundingClientRect()
+    const list = content.current
+    const containerRect = container.current.getBoundingClientRect()
 
     let listHeight = list.offsetHeight
     const listWidth = list.offsetWidth
@@ -73,9 +56,9 @@ export class Dropdown extends Component {
     const margin = 5 // margin from edge of window
     const pageWidth = document.documentElement.clientWidth
     let left
-    if (this.props.align === 'right') {
+    if (align === 'right') {
       left = containerRect.left
-    } else if (this.props.align === 'left') {
+    } else if (align === 'left') {
       left = containerRect.right - listWidth
     } else {
       // center
@@ -83,97 +66,90 @@ export class Dropdown extends Component {
     }
     left = Math.max(margin, Math.min(pageWidth - listWidth - margin, left))
     list.style.left = `${left}px`
-  }
+  }, [align])
 
-  onBlur = e => {
+  const addListeners = useCallback(() => {
+    if (listenersAdded.current) {
+      return
+    }
+    window.addEventListener('scroll', updatePosition)
+    window.addEventListener('resize', updatePosition)
+    listenersAdded.current = true
+  }, [updatePosition])
+
+  const removeListeners = useCallback(() => {
+    if (!listenersAdded.current) {
+      return
+    }
+    window.removeEventListener('scroll', updatePosition)
+    window.removeEventListener('resize', updatePosition)
+    listenersAdded.current = false
+  }, [updatePosition])
+
+  useEffect(() => {
+    if (open) {
+      addListeners()
+      content.current.focus()
+      updatePosition()
+    } else {
+      removeListeners()
+    }
+  }, [addListeners, open, removeListeners, updatePosition])
+
+  const onBlur = e => {
     const currentTarget = e.currentTarget
     setTimeout(() => {
       if (!currentTarget.contains(document.activeElement)) {
-        this.close()
+        handleClose()
       }
     }, 0)
   }
 
-  open = () => {
-    this.setState(
-      {
-        open: true,
-      },
-      () => {
-        this.content.current.focus()
-        this.updatePosition()
-      }
-    )
+  const handleOpen = () => {
+    setOpen(true)
   }
 
-  close = () => {
-    this.setState({
-      open: false,
-    })
+  const handleClose = () => {
+    setOpen(false)
   }
 
-  onClick = e => {
+  const onClick = e => {
     e.stopPropagation()
-    if (this.state.open) {
-      this.close()
+    if (open) {
+      handleClose()
     } else {
-      this.open()
+      handleOpen()
     }
   }
 
-  addListeners() {
-    if (this.listenersAdded) {
-      return
-    }
-    window.addEventListener('scroll', this.updatePosition)
-    window.addEventListener('resize', this.updatePosition)
-    this.listenersAdded = true
-  }
-
-  removeListeners() {
-    if (!this.listenersAdded) {
-      return
-    }
-    window.removeEventListener('scroll', this.updatePosition)
-    window.removeEventListener('resize', this.updatePosition)
-    this.listenersAdded = false
-  }
-
-  render() {
-    const ButtonComponent = this.props.buttonComponent
+  {
+    const ButtonComponent = buttonComponent
     return (
-      <DropdownContainer ref={this.container} onBlur={this.onBlur} aria-haspopup="true">
+      <DropdownContainer ref={container} onBlur={onBlur} aria-haspopup="true">
         <ButtonWrapper>
           <Translate
             role="button"
             component={ButtonComponent}
-            open={this.state.open}
-            aria-pressed={this.state.open}
-            with={this.props.with}
-            onClick={this.onClick}
+            open={open}
+            aria-pressed={open}
+            with={_with}
+            onClick={onClick}
             attributes={{
-              'aria-label':
-                typeof this.props.buttonContent === 'string' ? this.props.buttonContent : undefined,
+              'aria-label': typeof buttonContent === 'string' ? buttonContent : undefined,
             }}
-            {...this.props.buttonProps}
+            {...buttonProps}
           >
-            {this.props.buttonContent &&
-              (typeof this.props.buttonContent === 'string' ? (
-                <Translate content={this.props.buttonContent} with={this.props.with} />
+            {buttonContent &&
+              (typeof buttonContent === 'string' ? (
+                <Translate content={buttonContent} with={_with} />
               ) : (
-                this.props.buttonContent
+                buttonContent
               ))}
-            {this.props.icon && <Icon icon={this.props.icon} />}
+            {icon && <Icon icon={icon} />}
           </Translate>
         </ButtonWrapper>
-        <Content
-          role="menu"
-          ref={this.content}
-          open={this.state.open}
-          onClick={this.close}
-          tabIndex="-1"
-        >
-          {this.props.children}
+        <Content role="menu" ref={content} open={open} onClick={handleClose} tabIndex="-1">
+          {children}
         </Content>
       </DropdownContainer>
     )
@@ -293,3 +269,5 @@ export const DropdownItemButton = withCustomProps(styled.button).attrs({ type: '
     }
   `};
 `
+
+export default Dropdown

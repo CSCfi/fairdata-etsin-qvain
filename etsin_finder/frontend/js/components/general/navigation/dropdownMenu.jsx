@@ -1,101 +1,61 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
-import { createRef, Component } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { darken } from 'polished'
 import PropTypes from 'prop-types'
 
 import Button, { TransparentButton } from '../button'
 
-export default class DropdownMenu extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      open: false,
-    }
-    this.content = createRef()
-    this.button = createRef()
-  }
+const DropdownMenu = ({ children, buttonContent, transparent = false }) => {
+  const [open, setOpen] = useState(false)
+  const content = useRef()
+  const button = useRef()
 
-  onBlur = e => {
+  useEffect(() => {
+    if (open) {
+      content.current.focus()
+    }
+  }, [open])
+
+  const onBlur = e => {
     const currentTarget = e.currentTarget
     setTimeout(() => {
       if (
         !currentTarget.contains(document.activeElement) &&
-        this.button.current !== document.activeElement
+        button.current !== document.activeElement
       ) {
-        this.close()
+        handleClose()
       }
     }, 0)
   }
 
-  open = () => {
-    this.setState(
-      {
-        open: true,
-      },
-      () => {
-        this.content.current.focus()
-      }
-    )
+  const handleOpen = () => {
+    setOpen(true)
   }
 
-  close = () => {
-    this.setState({
-      open: false,
-    })
+  const handleClose = () => {
+    setOpen(false)
   }
 
-  render() {
-    return (
-      <MenuContainer>
-        <ButtonContainer>
-          {this.props.transparent ? (
-            <CustomTransparentButton
-              role="button"
-              color="primary"
-              open={this.state.open}
-              ref={this.button}
-              aria-pressed={this.state.open}
-              onClick={() => (this.state.open ? this.close() : this.open())}
-            >
-              {this.props.buttonContent}
-            </CustomTransparentButton>
-          ) : (
-            <CustomButton
-              role="button"
-              color="primary"
-              open={this.state.open}
-              ref={this.button}
-              aria-pressed={this.state.open}
-              onClick={() => (this.state.open ? this.close() : this.open())}
-            >
-              {this.props.buttonContent}
-            </CustomButton>
-          )}
-        </ButtonContainer>
-        <Content
-          open={this.state.open}
-          onClick={this.close}
-          ref={this.content}
-          tabIndex="-1"
-          onBlur={this.onBlur}
+  const ButtonComponent = transparent ? CustomTransparentButton : CustomButton
+
+  return (
+    <MenuContainer>
+      <ButtonContainer>
+        <ButtonComponent
+          color="primary"
+          open={open}
+          ref={button}
+          aria-pressed={open}
+          onClick={() => (open ? handleClose() : handleOpen())}
         >
-          <Container>{this.props.children}</Container>
-        </Content>
-      </MenuContainer>
-    )
-  }
+          {buttonContent}
+        </ButtonComponent>
+      </ButtonContainer>
+      <Content open={open} onClick={handleClose} ref={content} tabIndex="-1" onBlur={onBlur}>
+        <Container>{children}</Container>
+      </Content>
+    </MenuContainer>
+  )
 }
 
 const MenuContainer = styled.div`
@@ -163,12 +123,10 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-DropdownMenu.defaultProps = {
-  transparent: false,
-}
-
 DropdownMenu.propTypes = {
   children: PropTypes.node.isRequired,
   buttonContent: PropTypes.node.isRequired,
   transparent: PropTypes.bool,
 }
+
+export default DropdownMenu

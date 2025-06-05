@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
-import PopUp from '@/components/general/popup'
+import PopUp from '@/components/etsin/general/popup'
 import { TransparentLink } from '@/components/general/button'
 
 import etsinTheme from '@/styles/theme'

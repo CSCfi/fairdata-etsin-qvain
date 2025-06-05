@@ -1,20 +1,16 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
+/*
+ * Error boundary component that renders an error instead of crashing
+ * the entire app when a child component fails.
+ *
+ * Implemented as a class component because there is currently no way to write
+ * an error boundary as a function component.
+ * See https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary
+ */
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props)

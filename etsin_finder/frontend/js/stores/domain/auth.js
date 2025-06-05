@@ -235,18 +235,6 @@ class Auth {
         })
     })
   }
-
-  /* keepAlive component calls renewsession if user is active */
-  @action.bound
-  async renewSession() {
-    try {
-      await axios.get('/api/session')
-    } catch (err) {
-      if (err?.response?.status === 401) {
-        this.reset()
-      }
-    }
-  }
 }
 
 export default Auth

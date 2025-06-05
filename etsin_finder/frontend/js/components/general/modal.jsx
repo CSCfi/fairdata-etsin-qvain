@@ -1,25 +1,13 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { useState } from 'react'
 import styled from 'styled-components'
 import ReactModal from 'react-modal'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import Translate from '@/utils/Translate'
 
 import ErrorBoundary from './errorBoundary'
 import { TransparentButton } from './button'
+import { useStores } from '@/stores/stores'
 
 const defaultStyles = {
   overlay: {
@@ -62,6 +50,9 @@ const Modal = ({
   customStyles = {},
 }) => {
   const [clearError, setClearError] = useState()
+  const {
+    Locale: { translate },
+  } = useStores()
 
   const getStyles = () => {
     if (clearError) {
@@ -93,14 +84,14 @@ const Modal = ({
       contentLabel={contentLabel}
       aria={{ labelledby: labelledBy }}
     >
-      <Translate
+      <CloseButton
         component={CloseButton}
         onClick={onRequestClose}
         noMargin
-        attributes={{ 'aria-label': 'qvain.common.close' }}
+        aria-label={translate('qvain.common.close')}
       >
         <FontAwesomeIcon aria-hidden icon={faTimes} />
-      </Translate>
+      </CloseButton>
       <ErrorBoundary callback={errorCallback}>{children}</ErrorBoundary>
     </ReactModal>
   )
