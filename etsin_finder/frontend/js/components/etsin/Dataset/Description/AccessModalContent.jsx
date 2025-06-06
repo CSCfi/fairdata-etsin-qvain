@@ -23,6 +23,7 @@ const AccessModalContent = () => {
           isLoadingApplication,
           isSubmitting,
           licenses,
+          applicationDataError,
         },
       },
     },
@@ -38,11 +39,14 @@ const AccessModalContent = () => {
   if (!dataset) {
     return null
   }
-  if (isLoadingApplication) {
+  if (isLoadingApplication || applicationDataError) {
     return (
       <>
         <Translate component="h1" content="dataset.access_modal.title" />
-        <Loader active />
+        {isLoadingApplication && <Loader active />}
+        {applicationDataError && (
+          <ErrorDiv>{translate("dataset.access_modal.loadingFailed")}</ErrorDiv>
+        )}
         <Buttons>
           <Translate
             component={SaveButton}
@@ -153,6 +157,14 @@ const Buttons = styled.div`
 
 const Wrapper = styled.div`
   overflow-y: auto;
+`
+const ErrorDiv = styled.div`
+  display: flex;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.25em;
+  color: white;
+  background: ${p => p.theme.color.error};
 `
 
 export default observer(AccessModalContent)

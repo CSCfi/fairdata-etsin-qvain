@@ -44,8 +44,7 @@ const getStores = () => {
 
 const renderEtsin = async (
   dataset = dataset_open_a_catalog_expanded,
-  userLogged = false,
-  tab = undefined
+  { userLogged = false, tab = undefined } = {}
 ) => {
   mockAdapter.reset()
   mockAdapter
@@ -165,7 +164,7 @@ describe('Etsin dataset page', () => {
   })
 
   test('renders REMS application', async () => {
-    await renderEtsin(dataset_rems, true)
+    await renderEtsin(dataset_rems, { userLogged: true })
     await userEvent.click(screen.getByTestId('rems-button'))
     const dialog = screen.getByRole('dialog')
     within(dialog).getByRole('heading', { name: 'Apply for Data Access' })
@@ -197,6 +196,21 @@ describe('Etsin dataset page', () => {
     expect(request.url).toBe(
       'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0/rems-applications'
     )
-    expect(request.data).toBe('{"accept_licenses":[[4,1,5]]}')
+    expect(request.data).toBe('{"accept_licenses":[4,1,5]}')
+  })
+
+  test('renders REMS error message', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {}) // hide console.error from output
+    await renderEtsin(dataset_rems, { userLogged: true })
+
+    mockAdapter
+      .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-application-data`)
+      .reply(500, remsApplicationData)
+
+    await userEvent.click(screen.getByTestId('rems-button'))
+    const dialog = screen.getByRole('dialog')
+    within(dialog).getByRole('heading', { name: 'Apply for Data Access' })
+    within(dialog).getByText('There was an error loading access data')
+    expect(within(dialog).getByRole('button', { name: 'Submit' })).toBeDisabled()
   })
 })

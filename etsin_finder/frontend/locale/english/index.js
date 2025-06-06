@@ -29,6 +29,7 @@ const english = {
         other: 'the licenses.',
       },
       submit: 'Submit',
+      loadingFailed: 'There was an error loading access data',
     },
     access_login: 'Login to apply for access',
     access_unavailable: 'Unavailable',

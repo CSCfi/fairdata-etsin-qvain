@@ -15,6 +15,8 @@ class EtsinDatasetRems {
 
   @observable applicationData
 
+  @observable applicationDataError
+
   @action.bound setShowModal(value) {
     this.showModal = value
   }
@@ -23,17 +25,22 @@ class EtsinDatasetRems {
     this.applicationData = value
   }
 
+  @action.bound setApplicationDataError(value) {
+    this.applicationDataError = value
+  }
+
   @action.bound async fetchApplicationData() {
     if (this.isLoadingApplication) {
       return
     }
+    this.setApplicationData(undefined)
     const url = this.Env.metaxV3Url('datasetREMSApplicationData', this.EtsinDataset.identifier)
-    try{
+    try {
       const { data } = await this.promiseManager.add(this.client.get(url), 'application-data')
       this.setApplicationData(data)
     } catch (e) {
       console.error(e)
-      throw e
+      this.setApplicationDataError(e)
     }
   }
 
@@ -52,7 +59,7 @@ class EtsinDatasetRems {
   @action.bound async createApplication() {
     const url = this.Env.metaxV3Url('datasetREMSApplications', this.EtsinDataset.identifier)
     await this.promiseManager.add(
-      this.client.post(url, { accept_licenses: [this.licenses.map(l => l.id)] }),
+      this.client.post(url, { accept_licenses: this.licenses.map(l => l.id) }),
       'create-application'
     )
     this.setShowModal(false)

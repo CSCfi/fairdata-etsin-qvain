@@ -29,6 +29,7 @@ const finnish = {
         other: 'lisenssit.',
       },
       submit: 'Lähetä hakemus',
+      loadingFailed: 'Tietojen latauksessa tapahtui virhe',
     },
     access_login: 'Käyttöluvan hakeminen vaatii sisään kirjautumisen',
     access_unavailable: 'Ei käytettävissä',
