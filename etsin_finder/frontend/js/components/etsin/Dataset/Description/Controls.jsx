@@ -5,7 +5,7 @@ import ErrorBoundary from '@/components/general/errorBoundary'
 import { useStores } from '@/utils/stores'
 
 import Contact from '../contact'
-import AskForAccess from './askForAccess'
+import AskForAccess from '../AskForAccess'
 
 const Controls = () => {
   const {

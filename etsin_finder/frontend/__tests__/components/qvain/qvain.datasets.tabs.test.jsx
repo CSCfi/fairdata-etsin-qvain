@@ -7,7 +7,7 @@ import etsinTheme from '@/styles/theme'
 
 import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
-import TabsStore from '../../../js/stores/view/qvain/tabs'
+import TabsStore from '@/stores/view/tabs'
 import Tabs from '@/components/qvain/views/datasetsV2/tabs'
 
 let stores

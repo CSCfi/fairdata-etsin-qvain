@@ -253,7 +253,7 @@ class Locale {
     return undefined
   }
 
-  dateFormat = (date, { shortMonth = false, format } = {}) => {
+  dateFormat(date, { shortMonth = false, format } = {}) {
     const formats = getDateFormats(shortMonth)
     if (!date) {
       return ''

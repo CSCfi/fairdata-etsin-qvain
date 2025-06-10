@@ -2,39 +2,39 @@ import propTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { useStores } from '@/stores/stores'
-import CustomMarkdown from './customMarkdown'
+import CustomMarkdown from '../Description/customMarkdown'
 
 const REMSLicense = ({ license, isDataAccessTerms = false }) => {
   const {
-    Locale: { getPreferredLang },
+    Locale: { getValueTranslationWithLang },
   } = useStores()
-
-  const lang = getPreferredLang(license.localizations)
-  const localization = license.localizations[lang]
-  const title = localization.title
-  const textcontent = localization.textcontent
-  if (license.licensetype === 'text') {
+  const type = license['license/type']
+  const [title, titleLang] = getValueTranslationWithLang(license['license/title'])
+  if (type === 'text') {
+    const [text, lang] = getValueTranslationWithLang(license['license/text'])
     const cls = isDataAccessTerms ? 'heading2' : 'heading3'
     return (
       <details open>
-        <summary className={cls}>{title}</summary>
-        <LicenseMarkdown>{textcontent}</LicenseMarkdown>
+        <summary className={cls} lang={titleLang}>
+          {title}
+        </summary>
+        <LicenseMarkdown lang={lang}>{text}</LicenseMarkdown>
       </details>
     )
   }
 
-  if (license.licensetype === 'link') {
-    const url = localization.textcontent
+  if (type === 'link') {
+    const [url, lang] = getValueTranslationWithLang(license['license/link'])
     return (
       <>
-        <h3>{title}</h3>
+        <h3 lang={titleLang}>{title}</h3>
         <a href={url} target="_blank" rel="noopener noreferrer" lang={lang}>
           {url}
         </a>
       </>
     )
   }
-  throw new Error('Unsupported license type')
+  throw new Error(`Unsupported license type: ${type}`)
 }
 
 REMSLicense.propTypes = {

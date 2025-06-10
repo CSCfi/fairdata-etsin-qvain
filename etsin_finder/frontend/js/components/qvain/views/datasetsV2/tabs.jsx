@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
-import { useStores } from '../../utils/stores'
-import { Tab, TabRow } from './common'
+import { useStores } from '@/utils/stores'
+import { Tab, TabRow } from '@/components/general/Tab'
 
 export const Tabs = () => {
   const {

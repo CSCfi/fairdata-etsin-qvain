@@ -6,7 +6,7 @@ import urls from '../../../utils/urls'
 import { filterGroups, groupDatasetsByVersionSet } from './qvain.datasets.filters'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
 
-import Tabs from './tabs'
+import Tabs from '../tabs'
 import Share from './qvain.datasetsV2.share'
 import ShareV3 from './qvain.datasetsV3.share'
 import Sort from './qvain.datasetsV2.sort'

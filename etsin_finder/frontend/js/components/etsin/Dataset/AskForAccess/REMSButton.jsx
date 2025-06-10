@@ -22,7 +22,7 @@ const REMSButton = props => {
   let state = props.applicationState
   if (!userLogged) {
     disabled = true
-    wrapperTitle = 'dataset.access_login'
+    wrapperTitle = 'dataset.access_states.require_login'
     state = 'not_rems_user'
   }
 
@@ -32,28 +32,28 @@ const REMSButton = props => {
       break
     case 'draft':
       buttonId = 'rems-button-draft'
-      buttonContent = 'dataset.access_draft'
+      buttonContent = 'dataset.access_states.application_draft'
       buttonColor = 'yellow'
       break
     case 'submitted':
       buttonId = 'rems-button-submitted'
-      buttonContent = 'dataset.access_request_sent'
+      buttonContent = 'dataset.access_states.application_submitted'
       buttonColor = 'yellow'
       break
     case 'approved':
       buttonId = 'rems-button-approved'
-      buttonContent = 'dataset.access_granted'
+      buttonContent = 'dataset.access_states.access_granted'
       buttonColor = etsinTheme.color.success
       break
     case 'rejected':
       buttonId = 'rems-button-rejected'
-      buttonContent = 'dataset.access_denied'
+      buttonContent = 'dataset.access_states.access_denied'
       buttonColor = etsinTheme.color.error
       break
     case 'disabled':
       disabled = true
       buttonId = 'rems-button-error'
-      wrapperTitle = 'dataset.access_unavailable'
+      wrapperTitle = 'dataset.access_states.access_unavailable'
       break
     default:
       break

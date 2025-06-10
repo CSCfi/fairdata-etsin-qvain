@@ -169,7 +169,7 @@ const Pop = withCustomProps(styled.div)`
     ${p => alignment(p.align)};
     position: absolute;
     width: initial;
-    max-width: 40vw;
+    max-width: 60vw;
   }
 `
 

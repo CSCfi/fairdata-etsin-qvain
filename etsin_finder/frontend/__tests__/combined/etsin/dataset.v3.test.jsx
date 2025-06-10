@@ -20,7 +20,11 @@ import {
   dataset_open_a_catalog_expanded,
   dataset_rems,
 } from '@testdata/metaxv3/datasets/dataset_ida_a.data'
-import { remsApplicationData } from '@testdata/rems.data'
+import {
+  approvedApplication,
+  approvedApplicationList,
+  remsApplicationBase,
+} from '@testdata/rems.data'
 
 // Avoid reactmodal warnings
 ReactModal.setAppElement(document.createElement('div'))
@@ -52,11 +56,14 @@ const renderEtsin = async (
     .reply(200, { ...dataset, state: 'published' })
   mockAdapter.onGet(`https://metaxv3:443/v3/datasets/${dataset.id}/contact`).reply(200, {})
   mockAdapter
-    .onPost(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-applications`)
-    .reply(200, { success: true })
+    .onGet(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-application-base`)
+    .reply(200, remsApplicationBase)
   mockAdapter
-    .onGet(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-application-data`)
-    .reply(200, remsApplicationData)
+    .onPost(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-applications`)
+    .reply(200, { success: true, 'application-id': 123 })
+  mockAdapter
+    .onGet(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-applications`)
+    .reply(200, [])
   const stores = getStores()
   if (userLogged) {
     // REMS requires user login
@@ -188,7 +195,16 @@ describe('Etsin dataset page', () => {
         name: 'I agree to the terms for data access and the licenses.',
       })
     )
-    await userEvent.click(within(dialog).getByRole('button', { name: 'Submit' }))
+    const clickSubmitPromise = userEvent.click(within(dialog).getByRole('button', { name: 'Submit' }))
+
+    // Mock responses for created application
+    mockAdapter
+      .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-applications`)
+      .reply(200, approvedApplicationList)
+    mockAdapter
+      .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-applications/123`)
+      .reply(200, approvedApplication)
+    await clickSubmitPromise
 
     // Check that correct application creation request is sent
     expect(mockAdapter.history.post).toHaveLength(1)
@@ -197,6 +213,11 @@ describe('Etsin dataset page', () => {
       'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0/rems-applications'
     )
     expect(request.data).toBe('{"accept_licenses":[4,1,5]}')
+
+    // Created application should be in a new tab and active
+    const tab = within(dialog).getByRole('tab', { name: /Application.*123/ })
+    expect(tab.getAttribute("aria-selected")).toBe("true")
+    expect(within(dialog).getByText("Application created on March 5, 2025")).toBeInTheDocument()
   })
 
   test('renders REMS error message', async () => {
@@ -204,8 +225,8 @@ describe('Etsin dataset page', () => {
     await renderEtsin(dataset_rems, { userLogged: true })
 
     mockAdapter
-      .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-application-data`)
-      .reply(500, remsApplicationData)
+      .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-application-base`)
+      .reply(500, remsApplicationBase)
 
     await userEvent.click(screen.getByTestId('rems-button'))
     const dialog = screen.getByRole('dialog')

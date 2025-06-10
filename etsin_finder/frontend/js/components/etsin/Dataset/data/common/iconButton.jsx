@@ -61,7 +61,7 @@ const StyledIconButton = styled(Button).attrs(p => ({
   padding: 0.125rem 0.5rem 0.125rem 0.25rem;
   margin: 0.25rem 0.5rem;
   width: ${p => p.width || 'auto'};
-  :last-child {
+  &:last-child {
     margin-right: 0;
   }
   font-size: 11pt;

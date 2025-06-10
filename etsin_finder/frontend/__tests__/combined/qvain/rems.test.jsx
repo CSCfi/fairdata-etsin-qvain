@@ -1,8 +1,8 @@
 import { screen } from '@testing-library/react'
 
 import { contextRenderer } from '@/../__tests__/test-helpers'
-import AskForAccess from '@/components/etsin/Dataset/Description/askForAccess'
-import REMSButton from '@/components/etsin/Dataset/Description/REMSButton'
+import AskForAccess from '@/components/etsin/Dataset/AskForAccess'
+import REMSButton from '@/components/etsin/Dataset/AskForAccess/REMSButton'
 import { buildStores } from '@/stores'
 import EnvClass from '@/stores/domain/env'
 

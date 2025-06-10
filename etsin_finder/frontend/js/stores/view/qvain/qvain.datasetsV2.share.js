@@ -5,7 +5,7 @@ import PromiseManager from '../../../utils/promiseManager'
 import urls from '../../../utils/urls'
 
 import Modal from './modal'
-import Tabs from './tabs'
+import Tabs from '../tabs'
 
 const sortOpts = { numeric: true, sensitivity: 'base' }
 const nameCompare = (a, b) => (a.name || '').localeCompare(b.name || '', undefined, sortOpts)
