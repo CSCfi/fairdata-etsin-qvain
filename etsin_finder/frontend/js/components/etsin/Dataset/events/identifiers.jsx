@@ -13,7 +13,8 @@ import Translate from '@/utils/Translate'
 
 import idnToLink from '@/utils/idnToLink'
 
-import { OtherID, Margin } from './common'
+import { Margin } from './common'
+import { OtherID } from '@/components/etsin/general/identifiers'
 
 const Identifiers = ({ identifiers, title }) => {
   if (!(identifiers?.length > 0)) {

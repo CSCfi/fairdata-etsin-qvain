@@ -16,7 +16,8 @@ import Logo from './special/logo'
 import Project from './special/project'
 import SidebarArea from './SidebarArea'
 import VersionChanger from './versionChanger'
-import OtherIdentifiers from '../events/otherIdentifiers'
+import OtherIdentifiers from './otherIdentifiers'
+import { includeURNAndDOI } from '@/utils/includeURNAndDOI'
 
 const Sidebar = () => {
   const {
@@ -42,6 +43,9 @@ const Sidebar = () => {
   const catalogPublisherLang = getPreferredLang(catalogPublisher?.name)
   const catalogPublisherHomepage = catalogPublisher?.homepage?.[0]?.url || ''
   const catalogTitle = dataCatalog?.title[catalogPublisherLang]
+
+  // Initiate an array with only DOI or URN formatted items:
+  const URNandDOIIdentifiers = otherIdentifiers.map(v => v.notation).filter(includeURNAndDOI)
 
   function getAccessRights() {
     const isOpen = accessRights?.access_type?.url === ACCESS_TYPE_URL.OPEN
@@ -146,9 +150,11 @@ const Sidebar = () => {
             </div>
           )}
         </DatasetInfoItem>
-        {otherIdentifiers?.length > 0 && (
-          <DatasetInfoItem id="dataset-identifier" itemTitle="dataset.events_idn.other_idn">
-            <OtherIdentifiers otherIdentifiers={otherIdentifiers.map(v => v.notation)} />
+        {URNandDOIIdentifiers?.length > 0 && (
+          <DatasetInfoItem
+            id="dataset-other-identifier"
+            itemTitle="dataset.events_idn.other_idn">
+            <OtherIdentifiers otherIdentifiers={URNandDOIIdentifiers} />
           </DatasetInfoItem>
         )}
       </SidebarArea>

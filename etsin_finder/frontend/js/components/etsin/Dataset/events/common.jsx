@@ -1,12 +1,3 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2021 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
 import styled from 'styled-components'
 
 export const Table = styled.table`
@@ -56,20 +47,10 @@ export const IDLink = styled.a`
   color: ${p => p.theme.color.linkColorUIV2};
 `
 
-export const OtherID = styled.li`
-  margin: 0;
-  > a {
-    color: ${p => p.theme.color.linkColorUIV2};
-  }
-`
-
 export const Margin = styled.section`
   margin: 1.5em 0em;
 `
 
-export const SectionSideBar = styled.section`
-  margin: 0em;
-`
 
 export const InlineUl = styled.ul`
   display: inline;

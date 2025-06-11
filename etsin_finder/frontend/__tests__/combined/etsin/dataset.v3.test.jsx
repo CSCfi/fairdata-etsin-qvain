@@ -120,7 +120,12 @@ const getDLValues = () => {
 describe('Etsin dataset page', () => {
   test('renders dataset', async () => {
     const newDataset = dataset_open_a_catalog_expanded
-    newDataset.other_identifiers.push({ notation: 'not-a-link' })
+    newDataset.other_identifiers.push(
+      { notation: "urn:nbn:fi:csc-test" },
+      { notation: "doi:10.0000/00-00" },
+      { notation: "not-a-link" }
+    )
+
     await renderEtsin(newDataset)
     screen.getByRole('heading', { name: /All Fields Test Dataset/ })
     screen.getByRole('button', { name: 'Open' })
@@ -144,7 +149,7 @@ describe('Etsin dataset page', () => {
       Access: 'Open',
       Publisher: 'Test org, Test dept',
       Curator: 'Kone Foundation',
-      'Other identifiers': 'https://www.example.com',
+      "Other identifiers": "urn:nbn:fi:csc-testdoi:10.0000/00-00"
     })
   })
 
@@ -155,7 +160,7 @@ describe('Etsin dataset page', () => {
     const header = within(dialog).getByRole('heading', { name: 'APA' })
     expect(header.nextElementSibling.textContent).toEqual(
       'Kone Foundation, & Henkilö, K. (2023). All Fields Test Dataset. ' +
-        'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
+      'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
     )
   })
 
