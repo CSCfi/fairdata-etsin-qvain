@@ -319,52 +319,30 @@ describe('when calling getOptionValue with model. Calling following function wit
   })
 })
 
-describe('when calling sortGroups with sortFunc', () => {
-  const lang = 'fi'
-  const sortFunc = (a, b) => b === 'b' //b should be first
-
-  const groups = [
-    {
-      options: ['b', 'a'],
-    },
-  ]
-
-  beforeEach(async () => {
-    await sortGroups(model, lang, groups, sortFunc)
-  })
-
-  test('should call options.sort with sortFunc', () => {
-    groups[0].options.should.eql(['b', 'a'])
-  })
-})
-
-describe('when calling sortGroups without sortFunc', () => {
+describe('when calling sortGroups', () => {
   const lang = 'fi'
 
   const groups = [
     {
-      label: 'bb',
-      options: [{ label: { fi: 'b' } }, { label: { fi: 'a' } }],
+      label: { fi: 'bb' },
+      options: [{ label: { fi: 'c' } }, { label: { fi: 'b' } }],
     },
     {
-      label: 'aa',
-      options: [{ label: { fi: 'a' } }, { label: { fi: 'b' } }],
+      label: { fi: 'aa' },
+      options: [{ label: { fi: 'a' } }, { label: { fi: 'd' } }],
     },
   ]
 
-  beforeEach(async () => {
-    await sortGroups(model, lang, groups)
-  })
-
-  test('should call options.sort with sortFunc', () => {
+  test('should sort groups and options', async () => {
+    await sortGroups(lang, groups)
     groups.should.eql([
       {
-        label: 'bb',
-        options: [{ label: { fi: 'a' } }, { label: { fi: 'b' } }],
+        label: { fi: 'aa' },
+        options: [{ label: { fi: 'a' } }, { label: { fi: 'd' } }],
       },
       {
-        label: 'aa',
-        options: [{ label: { fi: 'a' } }, { label: { fi: 'b' } }],
+        label: { fi: 'bb' },
+        options: [{ label: { fi: 'b' } }, { label: { fi: 'c' } }],
       },
     ])
   })

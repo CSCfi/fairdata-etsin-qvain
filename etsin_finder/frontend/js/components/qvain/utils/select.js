@@ -76,38 +76,39 @@ export const optionsToModels = (model, options) => {
 const getCollator = lang => new Intl.Collator(lang, { numeric: true, sensitivity: 'base' })
 
 // Sort groups array and their options in-place according to lang
-export const sortGroups = async (model, lang, groups, sortFunc = null) => {
-  const labelKey = Object.keys(model())[0]
+export const sortGroups = async (
+  lang,
+  groups,
+  { optionKey, translateOptionKey, groupKey = 'label', translateGroupKey = true } = {}
+) => {
   groups.forEach(group => {
     if (group.options.length > 0) {
-      sortOptions(model, lang, group.options, sortFunc)
+      sortOptions(lang, group.options, { key: optionKey, translateKey: translateOptionKey })
     }
   })
-  if (sortFunc) {
-    groups.sort(sortFunc)
+
+  const collator = getCollator(lang)
+  if (translateGroupKey) {
+    groups.sort((a, b) => collator.compare(a[groupKey][lang], b[groupKey][lang]))
   } else {
-    const collator = getCollator(lang)
-    groups.sort((a, b) => collator.compare(a[labelKey][lang], b[labelKey][lang]))
+    groups.sort((a, b) => collator.compare(a[groupKey], b[groupKey]))
   }
 }
 
 // Sort options array in-place according to lang
-export const sortOptions = async (model, lang, options, sortFunc = null) => {
-  const labelKey = Object.keys(model())[0]
+export const sortOptions = async (
+  lang,
+  options,
+  { sortFunc = null, key = 'label', translateKey = true } = {}
+) => {
   if (sortFunc) {
     options.sort(sortFunc)
   } else {
     const collator = getCollator(lang)
-    options.sort((a, b) => collator.compare(a[labelKey][lang], b[labelKey][lang]))
-  }
-}
-
-// Sort options array in-place according to lang
-export const sortOptionsV3 = async (lang, options, sortFunc = null) => {
-  if (sortFunc) {
-    options.sort(sortFunc)
-  } else {
-    const collator = getCollator(lang)
-    options.sort((a, b) => collator.compare(a.pref_label[lang], b.pref_label[lang]))
+    if (translateKey) {
+      options.sort((a, b) => collator.compare(a[key][lang], b[key][lang]))
+    } else {
+      options.sort((a, b) => collator.compare(a[key], b[key]))
+    }
   }
 }

@@ -1,10 +1,8 @@
 import { ACCESS_TYPE_URL } from '@/utils/constants'
-import { sortOptions } from '@/components/qvain/utils/select'
 
-export const handleAccessTypeReferenceDataResponse = (options, Stores, component) => {
+export const handleAccessTypeReferenceDataResponse = (options, Stores) => {
   const {
     Auth: { user },
-    Locale,
     Qvain: {
       AccessType: { Model, value: accessType },
     },
@@ -15,10 +13,7 @@ export const handleAccessTypeReferenceDataResponse = (options, Stores, component
     mappedOptions = mappedOptions.filter(ref => ref.url !== ACCESS_TYPE_URL.PERMIT)
   }
 
-  sortOptions(Model, Locale.lang, mappedOptions)
-  component.setState({
-    options: mappedOptions,
-  })
+  return mappedOptions
 }
 
 export default handleAccessTypeReferenceDataResponse

@@ -8,8 +8,8 @@ import {
   onChangeMulti,
   getOptionLabel,
   getOptionValue,
-  sortOptions,
   optionsToModels,
+  sortOptions,
 } from '@/components/qvain/utils/select'
 import { useStores } from '@/stores/stores'
 
@@ -37,11 +37,9 @@ const SearchSelect = props => {
     getOptionLabel: getOptionLabel(model, lang),
     getOptionValue: getOptionValue(model),
     loadOptions: async inputValue => {
-      const opts = optionsToModels(
-        model,
-        await getOptions(metaxIdentifier, { searchText: inputValue })
-      )
-      sortOptions(model, lang, opts)
+      let opts = await getOptions(metaxIdentifier, { searchText: inputValue })
+      sortOptions(lang, opts)
+      opts = optionsToModels(model, opts)
       return opts
     },
     ariaAutocomplete: 'list',

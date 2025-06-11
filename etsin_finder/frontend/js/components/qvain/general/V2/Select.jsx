@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactSelect from 'react-select'
 import { observer } from 'mobx-react'
@@ -11,150 +10,107 @@ import {
   getOptionLabel,
   getOptionValue,
   sortGroups,
-  sortOptions,
   getCurrentOption,
+  sortOptions,
 } from '@/components/qvain/utils/select'
-import { withStores } from '@/stores/stores'
-import AbortClient, { isAbort } from '@/utils/AbortClient'
+import { useStores } from '@/stores/stores'
+import useReferenceData from '@/utils/useReferenceData'
 
-class Select extends Component {
-  client = new AbortClient()
+function Select({
+  metaxIdentifier,
+  getter,
+  modifyOptionLabel = translation => translation,
+  modifyGroupLabel = translation => translation,
+  setter,
+  model,
+  name,
+  getRefGroups,
+  sortFunc,
+  inModal = false,
+  isClearable = true,
+  isMulti = false,
+  placeholder = '',
+  ...props
+}) {
+  const Stores = useStores()
 
-  static propTypes = {
-    Stores: PropTypes.object.isRequired,
-    metaxIdentifier: PropTypes.string.isRequired,
-    getter: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    getRefGroups: PropTypes.func,
-    modifyOptionLabel: PropTypes.func,
-    modifyGroupLabel: PropTypes.func,
-    sortFunc: PropTypes.func,
-    setter: PropTypes.func.isRequired,
-    model: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
-    inModal: PropTypes.bool,
-    isClearable: PropTypes.bool,
-    isMulti: PropTypes.bool,
-    placeholder: PropTypes.string,
-  }
-
-  static defaultProps = {
-    getter: undefined,
-    inModal: false,
-    isClearable: true,
-    isMulti: false,
-    getRefGroups: null,
-    modifyOptionLabel: translation => translation,
-    modifyGroupLabel: translation => translation,
-    sortFunc: null,
-    placeholder: '',
-  }
-
-  state = {
-    options: [],
-  }
-
-  componentDidMount = () => {
-    this.props.Stores.Qvain.ReferenceData.getOptions(this.props.metaxIdentifier, {
-      client: this.client,
-    })
-      .then(this.resolveRefData)
-      .catch(this.rejectRefData)
-  }
-
-  componentWillUnmount() {
-    this.client.abort()
-  }
-
-  resolveRefData = options => {
-    const { model, getRefGroups, Stores, sortFunc } = this.props
+  const handleOptions = options => {
     const { lang } = Stores.Locale
 
     if (getRefGroups) {
       const groups = getRefGroups(options)
-      sortGroups(model, lang, groups)
-      this.setState({
-        options: groups,
+      sortGroups(lang, groups, {
+        optionKey: 'url',
+        translateOptionKey: false,
+        groupKey: 'url',
+        translateGroupKey: false,
       })
+      return groups
     } else {
+      sortOptions(lang, options, { sortFunc })
       const mappedOptions = options.map(ref => model(ref.label, ref.value))
-      sortOptions(model, lang, mappedOptions, sortFunc)
-      this.setState({
-        options: mappedOptions,
-      })
+      return mappedOptions
     }
   }
 
-  rejectRefData = error => {
-    if (isAbort(error)) {
-      return
-    }
-    if (error.response) {
-      // Error response from Metax
-      console.error(error.response.data)
-      console.error(error.response.status)
-      console.error(error.response.headers)
-    } else if (error.request) {
-      // No response from Metax
-      console.error(error.request)
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.error('Error', error.message)
-    }
+  const { options, isLoading } = useReferenceData(metaxIdentifier, { handler: handleOptions })
+
+  const { readonly } = Stores.Qvain
+  const { lang } = Stores.Locale
+
+  const groupLabelFunc = getGroupLabel(model, lang)
+  const optionLabelFunc = getOptionLabel(model, lang)
+
+  const properties = {
+    ...props,
+    placeholder,
+    inputId: `${name}-select`,
+    attributes: { placeholder },
+    isDisabled: readonly,
+    value: getCurrentOption(model, options, getter),
+    classNamePrefix: 'select',
+    options,
+    onChange: isMulti ? onChangeMulti(setter) : onChange(setter),
+    isClearable,
+    isMulti,
+    isLoading,
+    formatGroupLabel: group => modifyGroupLabel(groupLabelFunc(group), group),
+    getOptionLabel: option => modifyOptionLabel(optionLabelFunc(option), option),
+    getOptionValue: getOptionValue(model),
+    ariaAutocomplete: 'list',
+    classNames: {
+      control: () => 'control',
+      multiValueLabel: () => 'selected-value',
+    },
+    ...(inModal && {
+      menuPlacement: 'auto',
+      menuPosition: 'fixed',
+      menuShouldScrollIntoView: false,
+    }),
   }
 
-  render() {
-    const { readonly } = this.props.Stores.Qvain
-    const {
-      getter,
-      setter,
-      model,
-      name,
-      inModal,
-      isClearable,
-      isMulti,
-      modifyGroupLabel,
-      modifyOptionLabel,
-      placeholder,
-    } = this.props
-    const { options } = this.state
-    const { lang } = this.props.Stores.Locale
-
-    const groupLabelFunc = getGroupLabel(model, lang)
-    const optionLabelFunc = getOptionLabel(model, lang)
-
-    const props = {
-      ...this.props,
-      inputId: `${name}-select`,
-      attributes: { placeholder },
-      isDisabled: readonly,
-      value: getCurrentOption(model, options, getter),
-      classNamePrefix: 'select',
-      options,
-      onChange: isMulti ? onChangeMulti(setter) : onChange(setter),
-      isClearable,
-      isMulti,
-      formatGroupLabel: group => modifyGroupLabel(groupLabelFunc(group), group),
-      getOptionLabel: option => modifyOptionLabel(optionLabelFunc(option), option),
-      getOptionValue: getOptionValue(model),
-      ariaAutocomplete: 'list',
-      classNames: {
-        control: () => 'control',
-        multiValueLabel: () => 'selected-value',
-      },
-    }
-
-    if (inModal) {
-      props.menuPlacement = 'auto'
-      props.menuPosition = 'fixed'
-      props.menuShouldScrollIntoView = false
-    }
-
-    if (!(props.attributes && props.attributes.placeholder)) {
-      props.attributes = { ...props.attributes, placeholder }
-    }
-
-    return <Translate component={ReactSelect} {...props} />
+  if (!properties.attributes?.placeholder) {
+    properties.attributes = { ...properties.attributes, placeholder }
   }
+
+  return <Translate component={ReactSelect} {...properties} />
 }
 
-export default withStores(observer(Select))
+Select.propTypes = {
+  metaxIdentifier: PropTypes.string.isRequired,
+  getter: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  modifyOptionLabel: PropTypes.func,
+  modifyGroupLabel: PropTypes.func,
+  setter: PropTypes.func.isRequired,
+  model: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  getRefGroups: PropTypes.func,
+  sortFunc: PropTypes.func,
+  inModal: PropTypes.bool,
+  isClearable: PropTypes.bool,
+  isMulti: PropTypes.bool,
+  placeholder: PropTypes.string,
+}
+
+
+export default observer(Select)

@@ -108,7 +108,7 @@ class ReferenceData {
       }
     }
 
-    return options
+    return [...options]
   }
 
   async getLocalizedOptions(field, { client = axios, searchText } = {}) {
