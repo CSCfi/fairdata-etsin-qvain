@@ -18,7 +18,7 @@ const Layout = () => {
   } = useStores()
 
   const focusContent = () => {
-    this.content.current.focus()
+    content.current.focus()
   }
 
   return (
