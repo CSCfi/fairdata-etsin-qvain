@@ -111,11 +111,11 @@ describe('Qvain.Files', () => {
     stores.Qvain.setPreservationState(80)
     renderFiles(stores)
 
-    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]'))
+    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))
     expect(inputs.length).toBe(3)
     inputs.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
 
-    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"]'))
+    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"])'))
     expect(textareas.length).toBe(1)
     textareas.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
   })
@@ -126,11 +126,11 @@ describe('Qvain.Files', () => {
     stores.Qvain.setPreservationState(0)
     renderFiles(stores)
 
-    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]'))
+    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))
     expect(inputs.length).toBe(3)
     inputs.forEach(c => expect(c.hasAttribute('disabled')).toBe(false))
 
-    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"]'))
+    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"])'))
     expect(textareas.length).toBe(1)
     textareas.forEach(c => expect(c.hasAttribute('disabled')).toBe(false))
   })
@@ -141,11 +141,11 @@ describe('Qvain.Files', () => {
     stores.Qvain.setPreservationState(80)
     renderFiles(stores, true)
 
-    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]'))
+    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))
     expect(inputs.length).toBe(3)
     inputs.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
 
-    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"]'))
+    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"])'))
     expect(textareas.length).toBe(1)
     textareas.forEach(c => expect(c.hasAttribute('disabled')).toBe(true))
   })
@@ -156,11 +156,11 @@ describe('Qvain.Files', () => {
     stores.Qvain.setPreservationState(100)
     renderFiles(stores, true)
 
-    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]'))
+    const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))
     expect(inputs.length).toBe(3)
     inputs.forEach(c => expect(c.hasAttribute('disabled')).toBe(false))
 
-    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"]'))
+    const textareas = Array.from(document.querySelectorAll('textarea:not([type="hidden"])'))
     expect(textareas.length).toBe(1)
     textareas.forEach(c => expect(c.hasAttribute('disabled')).toBe(false))
   })

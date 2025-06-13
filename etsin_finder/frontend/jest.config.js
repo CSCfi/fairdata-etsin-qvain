@@ -25,6 +25,7 @@ module.exports = {
   ],
   testEnvironmentOptions: {
     url: 'http://localhost',
+    globalsCleanup: 'on',
   },
   globals: {
     BUILD: 'test',
