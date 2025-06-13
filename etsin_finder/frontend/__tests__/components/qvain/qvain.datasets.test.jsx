@@ -232,7 +232,7 @@ describe('DatasetsV2', () => {
     beforeAll(async () => {
       mockAdapter.reset()
       mockAdapter.onGet().reply(200, datasets)
-      // eslint-disable-next-line testing-library/no-render-in-setup
+      // eslint-disable-next-line testing-library/no-render-in-lifecycle
       await renderDatasets()
     })
 

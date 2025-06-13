@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+ 
 import { makeObservable, observable, action, computed, override, runInAction } from 'mobx'
 import * as yup from 'yup'
 import { v4 as uuidv4 } from 'uuid'

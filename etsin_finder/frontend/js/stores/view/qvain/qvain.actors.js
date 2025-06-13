@@ -477,7 +477,7 @@ class Actors {
         if (!org.isReference) {
           break
         }
-        // eslint-disable-next-line no-await-in-loop
+         
         await this.fetchReferenceOrganizations(org)
       }
     })

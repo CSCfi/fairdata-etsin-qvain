@@ -1,4 +1,3 @@
-/* eslint-disable testing-library/no-debugging-utils */
 import '@testing-library/jest-dom'
 import { Provider } from 'mobx-react'
 import { render, screen, cleanup } from '@testing-library/react'
@@ -23,6 +22,7 @@ describe('Identifiers', () => {
         </Provider>
       </StoresProvider>
     )
+    // eslint-disable-next-line testing-library/no-debugging-utils
     if (debug) screen.debug()
     return rendered
   }

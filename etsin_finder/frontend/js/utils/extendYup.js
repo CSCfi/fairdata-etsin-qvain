@@ -1,8 +1,8 @@
+/* eslint-disable no-invalid-this */
 import { parseISO as parseDateISO, parse as parseDate } from 'date-fns'
 import * as yup from 'yup'
 
 function validateDate({ allowTime } = {}) {
-  // eslint-disable-next-line func-names
   return this.test('is a date string', undefined, function (value) {
     const { path, createError } = this
     if (!value) {
@@ -26,7 +26,6 @@ function validateDate({ allowTime } = {}) {
 const numberRegex = /^[\d.]+$/
 
 function validateStringNumber() {
-  // eslint-disable-next-line func-names
   return this.test('is a number string', undefined, function (value) {
     const { path, createError } = this
     if (value == null || value === '') {
@@ -44,7 +43,7 @@ function validateHasTranslation(message) {
   if (!message) {
     throw new Error('validateHasTranslation requires an error message')
   }
-  // eslint-disable-next-line func-names
+
   return this.test('has translation', undefined, function (value) {
     // if object exists, require it to have at least one translation property
     if (!value) {

@@ -59,7 +59,7 @@ export const OrgSelectComponent = observer(
     const onFormChange = event => {
       const newValue = event.target.value
       const newName = event.target.name
-      const payload = { ...value } || { label: undefined, name: undefined, value: undefined }
+      const payload = value ? { ...value } : { label: undefined, name: undefined, value: undefined }
       const preferred = getPreferredLang(value.name)
       switch (newName) {
         case 'name': {

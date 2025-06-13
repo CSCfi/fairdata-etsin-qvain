@@ -58,7 +58,7 @@ const CopyToClipboard = ({
     timeoutIndex.current = index
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   useEffect(() => clearCopyTimeout, [])
 
   // return styled link

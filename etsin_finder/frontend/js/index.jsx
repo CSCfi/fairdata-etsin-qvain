@@ -21,7 +21,7 @@ import '../fairdata-ui/fairdata.css'
 
 if (BUILD === 'development') {
   // REACT-AXE: Disabled for now, since it outputs a lot of error messages to the console
-  // eslint-disable-next-line global-require
+   
   // const axe = require('@axe-core/react')
   // window.setTimeout(() => axe(React, ReactDOM, 1500, {}), 1000)
 }

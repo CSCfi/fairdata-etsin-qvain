@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+ 
 export const hasExtraInfo = agent =>
   agent.person ||
   agent.contributor_role ||

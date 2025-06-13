@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+ 
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'

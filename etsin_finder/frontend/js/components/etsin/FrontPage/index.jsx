@@ -19,7 +19,7 @@ const FrontPageV3 = () => {
   useEffect(() => {
     Accessibility.handleNavigation('home')
     recordEvent('HOME')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     fetchOverallCount()
   }, [fetchOverallCount, overallCount, recordEvent, Accessibility])
 

@@ -120,7 +120,7 @@ describe('common.files.utils', () => {
       try {
         const result = await ignoreNotFound(getTestPromise(), defaultResponse)
         result.should.be.string(defaultResponse)
-      } catch (err) {
+      } catch {
         fail('should not throw error')
       }
     })

@@ -1,4 +1,4 @@
-/* eslint-disable testing-library/no-render-in-setup */
+/* eslint-disable testing-library/no-render-in-lifecycle */
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { configure } from 'mobx'

@@ -1,6 +1,6 @@
 import { REMOTE_RESOURCES_DATA_CATALOGS, ACCESS_TYPE_URL } from '../../../utils/constants'
 
-/* eslint-disable camelcase */
+ 
 const handleSubmitToBackend = Qvain => {
   const title = Qvain.Title.toBackend()
 

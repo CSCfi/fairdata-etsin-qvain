@@ -473,7 +473,7 @@ class ItemLoader {
     while (dir.loading) {
       // loop needed to make sure only one is released at a time
       // TODO: use signal from AbortClient in when (needs mobx 6.7.0)
-      // eslint-disable-next-line no-await-in-loop
+       
       await when(() => !dir.loading)
     }
     runInAction(() => {

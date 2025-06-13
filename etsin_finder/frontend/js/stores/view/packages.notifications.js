@@ -41,7 +41,7 @@ class Notifications {
     try {
       emailSchema.validateSync(this.email)
       this.emailError = null
-    } catch (e) {
+    } catch {
       // do nothing
     }
   }

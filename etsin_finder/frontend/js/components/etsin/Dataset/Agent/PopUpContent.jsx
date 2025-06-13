@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+ 
 {
   /**
    * This file is part of the Etsin service

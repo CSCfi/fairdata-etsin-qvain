@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+ 
 import { makeObservable, observable, action } from 'mobx'
 import { object, array, string, mixed } from 'yup'
 import { CommonAdapter, ListAdapter } from '../structural/qvain.adapters'

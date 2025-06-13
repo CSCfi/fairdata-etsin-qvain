@@ -49,7 +49,7 @@ class OrgReferences {
 
     delete this.errors.organizations[parentId]
 
-    // eslint-disable-next-line no-async-promise-executor
+     
     const url = this.getOrganizationSearchUrl(parent)
     let orgs
     try {

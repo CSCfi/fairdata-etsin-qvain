@@ -1,4 +1,3 @@
-/* eslint-disable dot-notation */
 import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { configure } from 'mobx'

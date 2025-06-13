@@ -140,7 +140,7 @@ class FilesBase {
       dir = dir.directories.find(d => d.name === part)
       if (dir && !dir.loaded) {
         if (i < parts.length - 1 || !skipFinalLoad) {
-          // eslint-disable-next-line no-await-in-loop
+           
           await this.loadDirectory(dir)
         }
       }

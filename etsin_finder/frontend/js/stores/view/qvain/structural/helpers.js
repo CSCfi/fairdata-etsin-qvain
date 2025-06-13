@@ -1,3 +1,5 @@
+/* eslint-disable no-invalid-this */
+
 export function attachMandatoryArgs(args) {
   if (!this.mandatoryArgs) {
     console.error(`Mandatory args not found in ${this.constructor.name}`)

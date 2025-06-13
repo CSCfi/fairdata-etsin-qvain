@@ -4,7 +4,7 @@ describe('date string validation', () => {
   const isValid = str => {
     try {
       yup.string().date().validateSync(str, { strict: true })
-    } catch (e) {
+    } catch {
       return false
     }
     return true
@@ -39,7 +39,7 @@ describe('number string validation', () => {
   const isValid = str => {
     try {
       yup.string().number().validateSync(str, { strict: true })
-    } catch (e) {
+    } catch {
       return false
     }
     return true

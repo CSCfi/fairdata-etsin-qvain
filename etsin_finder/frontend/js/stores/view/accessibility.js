@@ -78,7 +78,7 @@ class Accessibility {
       this.toggleTabbing(true)
 
       window.removeEventListener('keydown', this.handleTab)
-      /* eslint-disable-next-line no-use-before-define */
+       
       window.addEventListener('mousedown', this.handleMouseDownOnce)
     }
   }

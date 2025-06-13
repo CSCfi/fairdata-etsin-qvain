@@ -110,7 +110,7 @@ describe('Etsin search page', () => {
       test('it shows keyword aggregation', async () => {
         renderEtsin()
         for (const kw of dataset_ida_a.keyword) {
-          // eslint-disable-next-line no-await-in-loop
+           
           expect(await screen.findByText(`${kw} (1)`)).toBeInTheDocument()
         }
       })

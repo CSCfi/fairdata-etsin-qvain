@@ -349,7 +349,7 @@ describe('create new draft', () => {
 
     try {
       await Submit.submitDraft()
-    } catch (e) {
+    } catch {
       expect().toBe(true)
     } finally {
       expect(Submit.error).toBe(undefined)
