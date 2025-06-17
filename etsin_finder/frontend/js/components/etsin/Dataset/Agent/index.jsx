@@ -87,7 +87,6 @@ Agent.propTypes = {
 }
 
 const TextWithoutPopup = styled.span`
-  color: ${p => p.theme.color.dark};
   display: inline;
 `
 
