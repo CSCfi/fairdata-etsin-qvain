@@ -296,11 +296,12 @@ export default class MetadataModalState {
       // get array of available versions for each file format
       const formatVersionsMap = {}
       fileFormatVersions.forEach(formatVersion => {
-        if (formatVersionsMap[formatVersion.inputFileFormat] === undefined) {
-          formatVersionsMap[formatVersion.fileFormat] = []
+        const fileFormat = formatVersion.fileFormat
+        if (formatVersionsMap[fileFormat] === undefined) {
+          formatVersionsMap[fileFormat] = []
         }
         if (formatVersion.formatVersion !== '') {
-          formatVersionsMap[formatVersion.fileFormat].push(formatVersion.formatVersion)
+          formatVersionsMap[fileFormat].push(formatVersion.formatVersion)
         }
       })
 
