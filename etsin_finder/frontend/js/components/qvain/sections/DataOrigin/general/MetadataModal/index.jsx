@@ -311,7 +311,7 @@ export class MetadataModal extends Component {
       // get array of available versions for each file format
       const formatVersionsMap = {}
       fileFormatVersions.forEach(formatVersion => {
-        if (formatVersionsMap[formatVersion.inputFileFormat] === undefined) {
+        if (formatVersionsMap[formatVersion.fileFormat] === undefined) {
           formatVersionsMap[formatVersion.fileFormat] = []
         }
         if (formatVersion.formatVersion !== '') {
