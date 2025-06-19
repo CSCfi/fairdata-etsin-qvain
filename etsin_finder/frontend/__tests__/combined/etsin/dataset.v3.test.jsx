@@ -118,8 +118,13 @@ const getDLValues = () => {
   for (const dt of dts) {
     const dd = dt.nextElementSibling
     expect(dd.tagName).toBe('DD') // DT should be followed by DD
-    values[cleanupText(dt.firstChild)] = dd.textContent
+    if (dt.textContent === 'Other identifiers') {
+      values[dt.textContent] = dd.textContent
+    } else {
+      values[cleanupText(dt.firstChild)] = dd.textContent
+    }
   }
+
   return values
 }
 
@@ -127,14 +132,18 @@ describe('Etsin dataset page', () => {
   test('renders dataset', async () => {
     const newDataset = dataset_open_a_catalog_expanded
     newDataset.other_identifiers.push(
-      { notation: "urn:nbn:fi:csc-test" },
-      { notation: "doi:10.0000/00-00" },
-      { notation: "not-a-link" }
+      { notation: 'urn:nbn:fi:csc-test' },
+      { notation: 'doi:10.0000/00-00' },
+      { notation: 'not-a-link' }
     )
 
     await renderEtsin(newDataset)
     screen.getByRole('heading', { name: /All Fields Test Dataset/ })
     screen.getByRole('button', { name: 'Open' })
+    /* Click Other identifiers title's plus button so that other identifiers 
+    are rendered:*/
+    await userEvent.click(screen.getByTestId('toggle-show-expandable-dataset-info-item-children'))
+
     const values = getDLValues()
     expect(values).toEqual({
       Description: expect.stringContaining('This dataset is used for testing all fields'),
@@ -155,7 +164,7 @@ describe('Etsin dataset page', () => {
       Access: 'Open',
       Publisher: 'Test org, Test dept',
       Curator: 'Kone Foundation',
-      "Other identifiers": "urn:nbn:fi:csc-testdoi:10.0000/00-00"
+      'Other identifiers': 'urn:nbn:fi:csc-testdoi:10.0000/00-00'
     })
   })
 

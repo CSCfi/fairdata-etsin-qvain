@@ -16,8 +16,9 @@ import Logo from './special/logo'
 import Project from './special/project'
 import SidebarArea from './SidebarArea'
 import VersionChanger from './versionChanger'
-import OtherIdentifiers from './otherIdentifiers'
+import OtherIdentifiers from './OtherIdentifiers'
 import { includeURNAndDOI } from '@/utils/includeURNAndDOI'
+import ExpandableDatasetInfoItem from '../ExpandableDatasetInfoItem'
 
 const Sidebar = () => {
   const {
@@ -151,11 +152,12 @@ const Sidebar = () => {
           )}
         </DatasetInfoItem>
         {URNandDOIIdentifiers?.length > 0 && (
-          <DatasetInfoItem
+          <ExpandableDatasetInfoItem
             id="dataset-other-identifier"
-            itemTitle="dataset.events_idn.other_idn">
+            itemTitle="dataset.events_idn.other_idn"
+          >
             <OtherIdentifiers otherIdentifiers={URNandDOIIdentifiers} />
-          </DatasetInfoItem>
+          </ExpandableDatasetInfoItem>
         )}
       </SidebarArea>
 
