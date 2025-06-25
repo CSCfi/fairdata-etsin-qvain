@@ -27,9 +27,10 @@ const rightsAndLicenses = {
   },
   license: {
     title: 'Lisenssi',
-    infoText: `Lisenssillä määrittelet, miten aineistoa voi käyttää.
-    Oletuksena on valittuna tutkimusaineistoille suositeltu CC BY 4.0.
-    Jos haluat määrittää lisenssin URL-osoitteen itse, kirjoita kenttään lisenssin verkko-osoite https://-muodossa.`,
+    infoText: `Lisenssillä määrittelet, miten aineistoa voi käyttää. 
+    Oletuksena on valittuna tutkimusaineistoille suositeltu CC BY 4.0, mutta voit vaihtaa sitä. 
+    Jos haluat määrittää lisenssin URL-osoitteen itse, kirjoita kenttään lisenssin verkko-osoite https://-muodossa. 
+    <br>HUOM! Kuvailutiedot saavat automaattisesti CC0-lisenssin.`,
     placeholder: 'Valitse vaihtoehto',
     other: {
       label: 'URL',

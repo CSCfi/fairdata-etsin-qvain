@@ -96,7 +96,7 @@ const License = () => {
         styles={styles}
         aria-autocomplete="list"
       />
-      <Translate component={InfoText} content="qvain.rightsAndLicenses.license.infoText" />
+      <Translate component={InfoText} content="qvain.rightsAndLicenses.license.infoText" unsafe={true} />
       {licenseErrors && (
         <Errors data-testid="license-errors">
           {Object.entries(licenseErrors).map(([url, err]) => (
