@@ -168,6 +168,18 @@ const files = {
     title: 'Valitut tiedostot',
     readonlyTitle: 'Valitut tiedostot projektista %(project)s',
     none: 'Tiedostoja tai hakemistoja ei ole vielä valittu.',
+    infoText: {
+      noncumulative: `Et voi muokata tai poistaa tiedostoja, koska aineisto on julkaistu ja se on saanut pysyvän tunnisteen.<br>
+        Tiedostoja pääsee muokkaamaan luomalla uuden version aineistosta. Molemmat versiot näkyvät Etsimessä.`,
+      cumulative: `Et voi poistaa tiedostoja, koska aineisto on julkaistu ja se on saanut pysyvän tunnisteen.<br>
+        Tiedostoja pääsee poistamaan luomalla uuden version aineistosta. Molemmat versiot näkyvät tämän jälkeen Etsimessä.`,
+    },
+    newVersionInfoText: {
+      noncumulative:
+        'Olet luomassa uutta versiota aineistokuvailusta. Voit lisätä ja poistaa tiedostoja kunnes julkaiset uuden version.',
+      cumulative:
+        'Olet luomassa uutta versiota aineistokuvailusta. Voit poistaa tiedostoja kunnes julkaiset uuden version.',
+    },
     newTag: 'Lisätään',
     removeTag: 'Poistetaan',
     hideRemoved: 'Piilota poistettavat',

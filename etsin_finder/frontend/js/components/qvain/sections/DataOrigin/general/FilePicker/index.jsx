@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
-import { Title, FieldGroup } from '@/components/qvain/general/V2'
+import { Title, FieldGroup, InfoText } from '@/components/qvain/general/V2'
 import { Checkbox, Label } from '@/components/qvain/general/modal/form'
 import Loader from '@/components/general/loader'
 import {
@@ -33,7 +33,11 @@ export const FilePickerBase = () => {
         loadingProjectError,
       },
       canSelectFiles,
-    },
+      canRemoveFiles,
+      isNewVersion,
+      isCumulative,
+      newCumulativeState
+    }
   } = useStores()
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -42,6 +46,14 @@ export const FilePickerBase = () => {
     (root.files.some(f => f.existing) ||
       root.directories.some(d => d.existing) ||
       root.addedChildCount > 0)
+
+  /*When a user cannot remove IDA files from a published dataset in Qvain, 
+  after loading the dataset, it must initially have IDA file-related items, 
+  whether it is a cumulative dataset or not: */
+  const hasItemsOriginally =
+    root &&
+    (root.files.some(f => f.existing) ||
+      root.directories.some(d => d.existing))
 
   const isEmptyProject = loadingProjectError?.response?.status === 404
 
@@ -111,6 +123,21 @@ export const FilePickerBase = () => {
     )
   }
 
+  /*When a new version of an existing dataset is created, additional 
+  information is added under the Selected files header. The information 
+  text changes dynamically slightly depending on whether a cumulative or 
+  non-cumulative radio button option is selected. */
+  const newVersionInfoText = (
+    <>
+      {isNewVersion &&
+        <InfoText>
+          <MarginBottom>
+            <Translate content={`qvain.files.selected.newVersionInfoText.${newCumulativeState ? 'cumulative' : 'noncumulative'}`} />
+          </MarginBottom>
+        </InfoText>}
+    </>
+  )
+
   const content = (
     <>
       {canSelectFiles && (
@@ -132,10 +159,29 @@ export const FilePickerBase = () => {
     </>
   )
 
+  /*Show instruction text related to file editing/deletion restrictions 
+  if IDA directories/files have been added to the published dataset when 
+  published and if the dataset is not a new draft created from an existing 
+  dataset.
+  
+  Note: The condition for showing the info text also includes 
+  hasItemsOriginally, because canRemoveFiles returns false when editing a 
+  published cumulative dataset that doesn't originally contain file items. */
+  const filesInfoText = (
+    <>
+      {!canRemoveFiles && hasItemsOriginally &&
+        <InfoText>
+          <Translate content={`qvain.files.selected.infoText.${isCumulative ? 'cumulative' : 'noncumulative'}`} unsafe={true} />
+        </InfoText>}
+    </>
+  )
+
   return (
     <FieldGroup>
       {title}
+      {newVersionInfoText}
       {content}
+      {filesInfoText}
       <AddItemsModal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} />
       {error}
       <FormModal />
@@ -173,6 +219,10 @@ const AddItems = styled.div`
   display: flex;
   align-items: center;
   flex-grow: 1;
+`
+
+const MarginBottom = styled.div`
+  margin-bottom: 0.25rem;
 `
 
 export default observer(FilePickerBase)

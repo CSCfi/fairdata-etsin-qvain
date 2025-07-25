@@ -72,6 +72,8 @@ const qvainEnglish = {
   notLoggedIn: 'Please login with your CSC account to use Qvain.',
   titleCreate: 'Describe a dataset',
   titleEdit: 'Edit dataset',
+  titleNewVersion: 'Create new version',
+  titleModelBasedDataset: 'Describe a dataset from a template',
   titleLoading: 'Loading dataset',
   titleLoadingFailed: 'Loading dataset failed',
   lock: {

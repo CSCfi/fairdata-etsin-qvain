@@ -74,6 +74,8 @@ const qvainFinnish = {
   notLoggedIn: 'Kirjaudu sisään CSC -tililläsi käyttääksesi Qvain -palvelua.',
   titleCreate: 'Uusi aineistokuvailu',
   titleEdit: 'Muokkaa aineistokuvailua',
+  titleNewVersion: 'Luo uusi versio',
+  titleModelBasedDataset: 'Uusi aineistokuvailu mallista',
   titleLoading: 'Ladataan aineistoa',
   titleLoadingFailed: 'Aineiston Lataus Epäonnistui',
   lock: {

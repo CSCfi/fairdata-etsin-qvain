@@ -1,15 +1,3 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { observer } from 'mobx-react'
 
 import QvainLogo from './qvainLogo'
@@ -22,12 +10,39 @@ import Header, { NaviContainer, Right } from '../../../general/header'
 import { MobileOnly, DesktopOnly } from '../../../general/header/mediaHelpers'
 import { Qvain, QvainDatasetsV2 } from '../../../../routes'
 import { useStores } from '../../utils/stores'
+import queryParam from '@/utils/queryParam'
 
 const QvainHeader = () => {
   const {
-    Qvain: { original },
+    Qvain: { original, isNewVersion },
     Locale: { lang },
+    Env: {
+      history: {
+        location
+      }
+    }
   } = useStores()
+
+  const getLabel = () => {
+    const templateIdentifier = queryParam(location, 'template')
+
+    /*If a dataset has a template identifier, it uses an existing dataset 
+    as a model: */
+    if (templateIdentifier) {
+      return 'qvain.titleModelBasedDataset'
+    }
+    /*If a new version of an existing dataset is created, the condition 
+    below is implemented. The condition must come before the condition that 
+    is reflected to the value of original, since the new version also has 
+    original: */
+    if (isNewVersion) {
+      return 'qvain.titleNewVersion'
+    }
+    if (original) {
+      return 'qvain.nav.editDataset'
+    }
+    return 'qvain.nav.createDataset'
+  }
 
   const routes = [
     {
@@ -38,7 +53,7 @@ const QvainHeader = () => {
     },
     {
       loadableComponent: Qvain,
-      label: original ? 'qvain.nav.editDataset' : 'qvain.nav.createDataset',
+      label: getLabel(),
       path: '/dataset',
       exact: false,
     },

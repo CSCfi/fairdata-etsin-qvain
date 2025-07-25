@@ -171,6 +171,18 @@ const files = {
     title: 'Selected files',
     readonlyTitle: 'Selected files from project %(project)s',
     none: 'No files or folders have been selected yet.',
+    infoText: {
+      noncumulative: `You cannot change or delete files as this dataset is already published and has a persistent identifier.<br>
+        You can change the files by creating a new version of this dataset. Etsin will show both versions.`,
+      cumulative: `You cannot delete files as this dataset is already published and has a persistent identifier.<br>
+        You can delete files by creating a new version of this dataset. Etsin will show both versions.`,
+    },
+    newVersionInfoText: {
+      noncumulative:
+        'You are creating a new version of this dataset. You are allowed to add and delete files until you publish this version.',
+      cumulative:
+        'You are creating a new version of this dataset. You are allowed to delete files until you publish this version.',
+    },
     newTag: 'To be added',
     removeTag: 'To be removed',
     hideRemoved: 'Hide removed',

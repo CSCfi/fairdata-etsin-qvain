@@ -29,8 +29,8 @@ const rightsAndLicenses = {
     infoText: `License is an essential part of the dataset description. 
     The license describes how the dataset can be used. 
     As a default, the recommended license for research datasets "CC BY 4.0" is selected, but you can change it if needed. 
-    If you need to specify your own license, type it in the field as a URL in https:// format. 
-    <br>Note! Dataset's metadata is automatically CC0 licenced.`,
+    If you need to specify your own license, type it in the field as a URL in https:// format.<br>
+    Note! Dataset's metadata is automatically CC0 licenced.`,
     placeholder: 'Select option',
     other: {
       label: 'URL address',
