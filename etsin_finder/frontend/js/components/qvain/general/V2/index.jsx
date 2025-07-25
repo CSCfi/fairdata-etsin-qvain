@@ -120,8 +120,16 @@ const RequiredStyle = styled.span`
   padding-left: 0.25rem;
 `
 
+export const SectionTitleAsteriskStyle = styled(RequiredStyle)`
+  color: ${p => p.theme.color.primary};
+`
+
 export function Required() {
   return <RequiredStyle>*</RequiredStyle>
+}
+
+export function SectionTitleAsterisk() {
+  return <SectionTitleAsteriskStyle>*</SectionTitleAsteriskStyle>
 }
 
 export function RequiredText(props) {

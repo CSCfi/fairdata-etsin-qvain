@@ -24,7 +24,7 @@ jest.mock('@/components/qvain/utils/select', () => {
   const actual = jest.requireActual('@/components/qvain/utils/select')
   return {
     ...actual,
-    onChange: jest.fn(() => () => {}),
+    onChange: jest.fn(() => () => { }),
   }
 })
 
@@ -32,7 +32,7 @@ describe('Qvain Access Type', () => {
   let Stores, Auth, Qvain
 
   const getOptions = async () => {
-    await userEvent.click(screen.getByLabelText('Access Type'))
+    await userEvent.click(screen.getByLabelText('Access Type*'))
     return screen.getAllByRole('option').map(o => o.textContent)
   }
 
@@ -122,14 +122,14 @@ describe('Qvain Access Type', () => {
     })
 
     it('should call onChange', async () => {
-      await userEvent.click(screen.getByLabelText('Access Type'))
+      await userEvent.click(screen.getByLabelText('Access Type*'))
       await userEvent.click(screen.getAllByRole('option')[0])
       expect(onChange).toHaveBeenCalled()
       expect(Qvain.AccessType.setValidationError).toHaveBeenCalledWith(null)
     })
 
     it('should validate on blur', async () => {
-      await userEvent.click(screen.getByLabelText('Access Type'))
+      await userEvent.click(screen.getByLabelText('Access Type*'))
       await userEvent.click(document.body)
       expect(Qvain.AccessType.validate).toHaveBeenCalled()
     })

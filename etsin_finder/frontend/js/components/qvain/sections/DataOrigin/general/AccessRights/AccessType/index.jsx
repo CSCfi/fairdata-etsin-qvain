@@ -3,7 +3,7 @@ import Select from 'react-select'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
-import { TitleSmall, FieldGroup, Divider } from '@/components/qvain/general/V2'
+import { TitleSmall, FieldGroup, Divider, Required } from '@/components/qvain/general/V2'
 
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
 import ValidationError from '@/components/qvain/general/errors/validationError'
@@ -51,6 +51,7 @@ const AccessType = () => {
     <FieldGroup data-cy="access-type-select">
       <TitleSmall htmlFor="accessTypeSelect">
         {translate('qvain.rightsAndLicenses.accessType.title')}
+        <Required />
       </TitleSmall>
       <Select
         inputId="accessTypeSelect"

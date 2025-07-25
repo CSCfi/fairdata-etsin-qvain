@@ -3,7 +3,7 @@ import { useState } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import styled, { useTheme } from 'styled-components'
 
-import { FieldGroup, InfoText, TitleSmall } from '@/components/qvain/general/V2'
+import { FieldGroup, InfoText, Required, TitleSmall } from '@/components/qvain/general/V2'
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
 import { ValidationError } from '@/components/qvain/general/errors/validationError'
 import { getCurrentOption, getOptionLabel, onChangeMulti } from '@/components/qvain/utils/select'
@@ -73,6 +73,7 @@ const License = () => {
     <FieldGroup data-cy="license-select">
       <TitleSmall htmlFor="licenseSelect">
         <Translate content="qvain.rightsAndLicenses.license.title" />
+        <Required />
       </TitleSmall>
       <Translate
         component={CreatableSelect}

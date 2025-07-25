@@ -136,7 +136,7 @@ describe('Qvain with an opened dataset', () => {
   })
 
   it('adds actor in modal', async () => {
-    const section = await renderSection('Actors')
+    const section = await renderSection('Actors *')
     const getActorLabels = elem =>
       Array.from(elem.getElementsByClassName('actor-label')).map(v => v.textContent)
     expect(getActorLabels(section)).toEqual([
@@ -489,7 +489,7 @@ describe('Qvain with an opened dataset', () => {
   })
 
   it('shows remote resources in modal', async () => {
-    const section = await renderSection('Data Origin', {
+    const section = await renderSection('Data Origin *', {
       data_catalog: 'urn:nbn:fi:att:data-catalog-att',
     })
 
@@ -522,7 +522,7 @@ describe('Qvain with an opened dataset', () => {
   })
 
   it('shows embargo date and restriction grounds', async () => {
-    const section = await renderSection('Data Origin', {
+    const section = await renderSection('Data Origin *', {
       access_rights: access_rights_embargo,
     })
 
@@ -571,7 +571,7 @@ describe('Qvain with an opened dataset', () => {
       expect(
         screen.getByText(
           'The dataset is being processed by the Digital Preservation Service.' +
-            ' You can view metadata but cannot make any changes.'
+          ' You can view metadata but cannot make any changes.'
         )
       ).toBeInTheDocument()
       const input = document.getElementById('titleInput')

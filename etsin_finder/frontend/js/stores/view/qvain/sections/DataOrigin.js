@@ -8,6 +8,7 @@ class DataOrigin extends Section {
   }
 
   isRequired = true
+  showAsterisk = true
 }
 
 export default DataOrigin

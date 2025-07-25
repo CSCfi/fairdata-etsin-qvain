@@ -14,6 +14,8 @@ class Section {
     })
   }
 
+  showAsterisk = false
+
   @observable translations
 
   @observable translationsRoot

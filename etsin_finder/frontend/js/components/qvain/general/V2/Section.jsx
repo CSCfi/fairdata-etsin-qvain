@@ -7,6 +7,7 @@ import Translate from '@/utils/Translate'
 import { useStores } from '@/stores/stores'
 import Card from './card'
 import { ExpandCollapse } from './ExpandCollapse'
+import { SectionTitleAsterisk } from '.'
 
 const SectionContext = createContext()
 
@@ -28,10 +29,11 @@ const SectionComponent = observer(({ children }) => {
     isRequired,
     isExpanded,
     toggleExpanded,
+    showAsterisk
   } = section
 
   return isRequired ? (
-    <MandatorySection id={`section-${sectionName}`} title={title}>
+    <MandatorySection id={`section-${sectionName}`} title={title} showAsterisk={showAsterisk}>
       {children}
     </MandatorySection>
   ) : (
@@ -50,11 +52,19 @@ SectionComponent.propTypes = {
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]).isRequired,
 }
 
-const MandatorySection = ({ children, title }) => (
+const MandatorySection = ({ children, title, showAsterisk }) => (
   <Card>
-    <SectionTitle>
-      <Translate content={title} />
-    </SectionTitle>
+    {showAsterisk ? (
+      <CustomSectionTitle>
+        <Translate content={title} />
+        <SectionTitleAsterisk />
+      </CustomSectionTitle>
+    ) : (
+      <SectionTitle>
+        <Translate content={title} />
+      </SectionTitle>
+    )}
+
     <Content>{children}</Content>
   </Card>
 )
@@ -77,6 +87,7 @@ Section.propTypes = {
 MandatorySection.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]).isRequired,
+  showAsterisk: PropTypes.bool.isRequired,
 }
 
 OptionalSection.propTypes = {
@@ -90,6 +101,14 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+`
+
+const CustomSectionTitle = styled.h2`
+  text-transform: uppercase;
+  color: ${p => p.theme.color.primary};
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 0;
 `
 
 const SectionTitle = styled.h2`
