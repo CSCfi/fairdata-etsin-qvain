@@ -230,7 +230,7 @@ describe('Etsin dataset page', () => {
   })
 
   test('renders REMS error message', async () => {
-    jest.spyOn(console, 'error').mockImplementation(() => {}) // hide console.error from output
+    jest.spyOn(console, 'error').mockImplementation(() => { }) // hide console.error from output
     await renderEtsin(dataset_rems, { userLogged: true })
 
     mockAdapter
@@ -242,5 +242,80 @@ describe('Etsin dataset page', () => {
     within(dialog).getByRole('heading', { name: 'Apply for Data Access' })
     within(dialog).getByText('There was an error loading access data')
     expect(within(dialog).getByRole('button', { name: 'Submit' })).toBeDisabled()
+  })
+})
+
+const spatial_ref_olari = {
+  url: 'https://finto.fi/yso-paikat/en/page/p204788?clang=fi',
+  pref_label: { en: 'Olari', fi: 'Olari (Espoo)', sv: 'Olars (Esbo)' },
+  in_scheme: 'http://www.yso.fi/onto/yso/places',
+  as_wkt: 'POINT(24.73137 60.17190)',
+}
+
+const spatial_olari = {
+  reference: spatial_ref_olari,
+  full_address: 'Komeetankatu 2, 02210 Espoo',
+  altitude_in_meters: 0,
+  id: 'c04c4768-515e-463d-a3d8-000000000000',
+  custom_wkt: ['POINT(24.7337401 60.1663356)'],
+}
+
+const spatial_autti = {
+  id: 'c04c4768-515e-463d-0000-000000000000',
+  custom_wkt: ['POINT(27.10814 66.32100)'],
+}
+
+const tableToObjects = tableElement => {
+  // convert table rows into objects, use table headers as keys
+  const labels = Array.from(tableElement.querySelectorAll('th')).map(th => th.textContent.trim())
+  const rowElements = Array.from(tableElement.querySelectorAll('tbody tr'))
+  const rows = []
+  rowElements.forEach(rowElement => {
+    const row = {}
+    Array.from(rowElement.cells).forEach((td, index) => {
+      const content = td.textContent
+      row[labels[index]] = content
+    })
+    rows.push(row)
+  })
+  return rows
+}
+
+describe('Etsin map page', () => {
+  test('renders map table', async () => {
+    const dataset = dataset_open_a_catalog_expanded
+    dataset.spatial.push(spatial_olari, spatial_autti)
+
+    await renderEtsin(dataset, { userLogged: false, tab: "maps" })
+
+    const mapTableValues = tableToObjects(screen.getByRole('table'))
+
+    /*If a spatial record doesn't contain any map table data, it should not 
+    be displayed: */
+    expect(mapTableValues).not.toContain(
+      {
+        'Geographical name': '-',
+        'Full address': '-',
+        'Altitude (m)': '-'
+      }
+    )
+
+    expect(mapTableValues).toEqual([
+      {
+        'Geographical name': 'Random Address in Helsinki',
+        'Full address': 'Unioninkatu 6, Helsinki',
+        'Altitude (m)': '-'
+      },
+      {
+        'Geographical name': 'Another Random Address in Espoo',
+        'Full address': 'Itätuulenkuja 3, Espoo',
+        'Altitude (m)': '1337'
+      },
+      {
+        'Geographical name': 'Olari',
+        'Full address': 'Komeetankatu 2, 02210 Espoo',
+        'Altitude (m)': '0'
+      }
+    ])
   })
 })
