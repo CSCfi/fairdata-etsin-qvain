@@ -24,7 +24,13 @@ function IdaResources() {
     Locale: { lang, dateFormat },
     Access: { restrictions },
     Etsin: {
-      EtsinDataset: { identifier, files, downloadAllInfotext },
+      EtsinDataset: {
+        identifier,
+        files,
+        downloadAllInfotext,
+        isFileMetadataAllowed,
+        dataset: { fileset },
+      },
       filesProcessor: { Packages },
       fetchPackages,
       isDownloadPossible,
@@ -33,9 +39,9 @@ function IdaResources() {
 
   const action = getDownloadAction(identifier, null, Packages, files)
   const { moreFunc, moreAriaLabel } = action
-  const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel, root } = files
-  const fileCount = root?.existingFileCount || 0
-  const totalSize = root?.existingByteSize || 0
+  const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel } = files
+  const fileCount = fileset?.total_files_count || 0
+  const totalSize = fileset?.total_files_size || 0
 
   useEffect(() => {
     fetchPackages()
@@ -121,7 +127,7 @@ function IdaResources() {
 
       <ErrorMessage />
 
-      <Tree allowDownload={isDownloadPossible} />
+      {isFileMetadataAllowed && <Tree allowDownload={isDownloadPossible} />}
       {inInfo && <Info {...infoProps} />}
       <PackageModal Packages={Packages} />
       <ManualDownloadModal Packages={Packages} />

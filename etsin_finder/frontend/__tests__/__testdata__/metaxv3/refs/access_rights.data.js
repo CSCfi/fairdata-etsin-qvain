@@ -38,6 +38,12 @@ export const access_type_permit = {
   pref_label: { en: 'Requires permission', fi: 'Vaatii luvan' },
 }
 
+export const access_type_login = {
+  url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
+  in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
+  pref_label: { en: 'Requires login', fi: 'Vaatii kirjautumista' },
+}
+
 export const restriction_grounds_research = {
   id: '6cedbc74-0b3a-41f1-91ae-fd1f4cbcbe1c',
   url: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/research',
@@ -65,4 +71,13 @@ export const access_rights_embargo = {
   restriction_grounds: [restriction_grounds_research],
   available: '2023-12-24',
   show_file_metadata: true,
+}
+
+export const access_rights_login = {
+  id: '55f2ff9b-68f2-4895-88b9-ca7f9ff750fc',
+  description: null,
+  license: [license_a, license_b],
+  access_type: access_type_login,
+  restriction_grounds: [restriction_grounds_research],
+  show_data_metadata: false,
 }

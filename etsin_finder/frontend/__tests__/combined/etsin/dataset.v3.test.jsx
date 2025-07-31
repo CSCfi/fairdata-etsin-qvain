@@ -19,6 +19,7 @@ import { textValues } from '@helpers'
 import {
   dataset_open_a_catalog_expanded,
   dataset_rems,
+  dataset_requires_login,
 } from '@testdata/metaxv3/datasets/dataset_ida_a.data'
 import {
   approvedApplication,
@@ -164,7 +165,7 @@ describe('Etsin dataset page', () => {
       Access: 'Open',
       Publisher: 'Test org, Test dept',
       Curator: 'Kone Foundation',
-      'Other identifiers': 'urn:nbn:fi:csc-testdoi:10.0000/00-00'
+      'Other identifiers': 'urn:nbn:fi:csc-testdoi:10.0000/00-00',
     })
   })
 
@@ -175,7 +176,7 @@ describe('Etsin dataset page', () => {
     const header = within(dialog).getByRole('heading', { name: 'APA' })
     expect(header.nextElementSibling.textContent).toEqual(
       'Kone Foundation, & Henkilö, K. (2023). All Fields Test Dataset. ' +
-      'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
+        'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
     )
   })
 
@@ -204,7 +205,9 @@ describe('Etsin dataset page', () => {
         name: 'I agree to the terms for data access and the licenses.',
       })
     )
-    const clickSubmitPromise = userEvent.click(within(dialog).getByRole('button', { name: 'Submit' }))
+    const clickSubmitPromise = userEvent.click(
+      within(dialog).getByRole('button', { name: 'Submit' })
+    )
 
     // Mock responses for created application
     mockAdapter
@@ -225,12 +228,12 @@ describe('Etsin dataset page', () => {
 
     // Created application should be in a new tab and active
     const tab = within(dialog).getByRole('tab', { name: /Application.*123/ })
-    expect(tab.getAttribute("aria-selected")).toBe("true")
-    expect(within(dialog).getByText("Application created on March 5, 2025")).toBeInTheDocument()
+    expect(tab.getAttribute('aria-selected')).toBe('true')
+    expect(within(dialog).getByText('Application created on March 5, 2025')).toBeInTheDocument()
   })
 
   test('renders REMS error message', async () => {
-    jest.spyOn(console, 'error').mockImplementation(() => { }) // hide console.error from output
+    jest.spyOn(console, 'error').mockImplementation(() => {}) // hide console.error from output
     await renderEtsin(dataset_rems, { userLogged: true })
 
     mockAdapter
@@ -242,6 +245,14 @@ describe('Etsin dataset page', () => {
     within(dialog).getByRole('heading', { name: 'Apply for Data Access' })
     within(dialog).getByText('There was an error loading access data')
     expect(within(dialog).getByRole('button', { name: 'Submit' })).toBeDisabled()
+  })
+
+  test('renders dataset with login access type', async () => {
+    await renderEtsin(dataset_requires_login, { tab: 'Data' })
+    screen.getByRole('heading', { name: /Files/ })
+    expect(screen.getByText('1 file')).toBeInTheDocument()
+    expect(screen.getByText('(1000 Bytes)')).toBeInTheDocument()
+    expect(screen.getByText('Users have to log in to access the data.')).toBeInTheDocument()
   })
 })
 
@@ -286,36 +297,34 @@ describe('Etsin map page', () => {
     const dataset = dataset_open_a_catalog_expanded
     dataset.spatial.push(spatial_olari, spatial_autti)
 
-    await renderEtsin(dataset, { userLogged: false, tab: "maps" })
+    await renderEtsin(dataset, { userLogged: false, tab: 'maps' })
 
     const mapTableValues = tableToObjects(screen.getByRole('table'))
 
     /*If a spatial record doesn't contain any map table data, it should not 
     be displayed: */
-    expect(mapTableValues).not.toContain(
-      {
-        'Geographical name': '-',
-        'Full address': '-',
-        'Altitude (m)': '-'
-      }
-    )
+    expect(mapTableValues).not.toContain({
+      'Geographical name': '-',
+      'Full address': '-',
+      'Altitude (m)': '-',
+    })
 
     expect(mapTableValues).toEqual([
       {
         'Geographical name': 'Random Address in Helsinki',
         'Full address': 'Unioninkatu 6, Helsinki',
-        'Altitude (m)': '-'
+        'Altitude (m)': '-',
       },
       {
         'Geographical name': 'Another Random Address in Espoo',
         'Full address': 'Itätuulenkuja 3, Espoo',
-        'Altitude (m)': '1337'
+        'Altitude (m)': '1337',
       },
       {
         'Geographical name': 'Olari',
         'Full address': 'Komeetankatu 2, 02210 Espoo',
-        'Altitude (m)': '0'
-      }
+        'Altitude (m)': '0',
+      },
     ])
   })
 })

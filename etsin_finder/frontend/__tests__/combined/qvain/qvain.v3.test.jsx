@@ -302,6 +302,7 @@ describe('Qvain with an opened dataset', () => {
       'issued', // exact value may change
       /license\.0.custom_url$/, // license-0 has no custom url
       /license\.1.url$/, // license-1 has custom url so url is hidden
+      /allowed_actions\..+/,
     ]
 
     // fields missing from original that may be added to submit data

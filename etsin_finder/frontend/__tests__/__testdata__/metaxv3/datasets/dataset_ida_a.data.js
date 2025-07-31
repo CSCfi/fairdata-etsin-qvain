@@ -1,4 +1,4 @@
-import { access_rights_open_a } from '../refs/access_rights.data'
+import { access_rights_open_a, access_rights_login } from '../refs/access_rights.data'
 import {
   organization_kone,
   custom_organization_a,
@@ -123,6 +123,12 @@ const dataset_open_a = {
   previous: null,
   removal_date: null,
   replaces: null,
+  allowed_actions: {
+    download: true,
+    rems_status: 'no_application',
+    update: false,
+    file_metadata: true,
+  },
 }
 
 export const dataset_open_a_catalog_expanded = {
@@ -174,6 +180,22 @@ export const dataset_rems = {
     ],
     rems_approval_type: 'automatic',
   },
+}
+
+export const dataset_requires_login = {
+  ...dataset_open_a,
+  allowed_actions: {
+    download: false,
+    rems_status: 'no_application',
+    update: false,
+    file_metadata: false,
+  },
+  remote_resources: null,
+  fileset: {
+    total_files_count: 1,
+    total_files_size: 1000,
+  },
+  access_rights: access_rights_login,
 }
 
 export default dataset_open_a

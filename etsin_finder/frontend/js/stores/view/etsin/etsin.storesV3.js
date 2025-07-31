@@ -191,7 +191,7 @@ class EtsinDatasetV3 {
   }
 
   @computed get hasFiles() {
-    return Boolean(this.files?.root?.existingFileCount)
+    return Boolean(this.dataset?.fileset?.total_files_count)
   }
 
   @computed get fileTypes() {
@@ -268,6 +268,10 @@ class EtsinDatasetV3 {
 
   @computed get isDownloadAllowed() {
     return this.dataset?.allowed_actions.download
+  }
+
+  @computed get isFileMetadataAllowed() {
+    return this.dataset?.allowed_actions.file_metadata
   }
 
   @computed get datasetVersions() {
