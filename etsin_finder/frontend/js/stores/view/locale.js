@@ -1,13 +1,3 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
-
 import axios from 'axios'
 import { get } from 'lodash'
 import { observable, action, computed, makeObservable } from 'mobx'
@@ -17,6 +7,7 @@ import english from '@/../locale/english'
 import interpolate from '@/utils/interpolate'
 
 import urls from '../../utils/urls'
+import queryParam from '@/utils/queryParam'
 
 const locales = {
   en: english,
@@ -170,8 +161,16 @@ class Locale {
 
   @action
   loadLang = () => {
-    // get initial language from document head
-    this.setLang(getInitialLanguage(), false)
+    const langParamValue = queryParam(this.Env.history.location, 'lang')
+    const isUILang = this.languages.includes(langParamValue)
+
+    if (isUILang) {
+      // set and save the language specified by the lang query param:
+      this.setLang(langParamValue, { save: true })
+    } else {
+      // get initial language from document head
+      this.setLang(getInitialLanguage(), false)
+    }
   }
 
   getMatchingLang = values => {

@@ -29,6 +29,50 @@ describe('Locale store', () => {
     })
   })
 
+  describe('loadLang', () => {
+    it('changes the language to English based on a query param when the initial language is English', () => {
+      Locale.setLang('en')
+      Env.history.location.search = '?lang=en'
+      Locale.loadLang()
+      expect(Locale.lang).toBe('en')
+    })
+
+    it('changes the language to English based on a query param when the initial language is Finnish', () => {
+      Locale.setLang('fi')
+      Env.history.location.search = '?lang=en'
+      Locale.loadLang()
+      expect(Locale.lang).toBe('en')
+    })
+
+    it('changes the language to Finnish based on a query param', () => {
+      Locale.setLang('en')
+      Env.history.location.search = '?lang=fi'
+      Locale.loadLang()
+      expect(Locale.lang).toBe('fi')
+    })
+
+    it("uses documentElement's lang property when the query param value is not valid", () => {
+      Locale.setLang('en')
+      Env.history.location.search = '?lang=sv'
+      Locale.loadLang()
+      expect(Locale.lang).toBe('en')
+    })
+
+    it("uses documentElement's lang property when the query param key is not valid", () => {
+      Locale.setLang('en')
+      Env.history.location.search = '?language=fi'
+      Locale.loadLang()
+      expect(Locale.lang).toBe('en')
+    })
+
+    it("uses documentElement's lang property when the query param is not defined", () => {
+      Locale.setLang('en')
+      delete Env.history.location.search
+      Locale.loadLang()
+      expect(Locale.lang).toBe('en')
+    })
+  })
+
   describe('getMatchingLang', () => {
     it('returns current language by default', () => {
       const values = [{}]
