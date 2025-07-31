@@ -1,12 +1,11 @@
 import { observer } from 'mobx-react'
 import { useState } from 'react'
 
-import { FieldGroup, InfoText, TitleSmall } from '@/components/qvain/general/V2'
+import { FieldGroup, TitleSmall } from '@/components/qvain/general/V2'
 import { ExpandCollapse } from '@/components/qvain/general/V2/ExpandCollapse'
 import TranslationTab from '@/components/qvain/general/V3/tab/TranslationTab.v3'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 import { useStores } from '@/stores/stores'
-import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import DataAccessTextArea from './DataAccessTextArea'
 import REMSApprovalType from './REMSApprovalType'
 
@@ -21,7 +20,6 @@ const DataAccess = () => {
         remsApprovalType,
         validationError,
       },
-      dataCatalog,
       isREMSAllowed,
     },
     Env: {
@@ -44,8 +42,6 @@ const DataAccess = () => {
     setIsExpanded(!isExpanded)
   }
 
-  const isRemote = dataCatalog === DATA_CATALOG_IDENTIFIER.ATT
-
   return (
     <FieldGroup data-cy="data-access">
       <div>&nbsp;</div>
@@ -62,11 +58,6 @@ const DataAccess = () => {
       </div>
       {isExpanded && (
         <div id="data-access-fields" data-testid="data-access-fields">
-          {isRemote && (
-            <InfoText>
-              {translate('qvain.rightsAndLicenses.dataAccess.remoteResourcesInfo')}
-            </InfoText>
-          )}
           <TranslationTab language={language} setLanguage={setLanguage}>
             <DataAccessTextArea
               id="data-access-application-instructions"

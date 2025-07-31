@@ -1,9 +1,7 @@
 import { observer } from 'mobx-react'
 import Select from 'react-select'
-import styled from 'styled-components'
-import Translate from '@/utils/Translate'
 
-import { TitleSmall, FieldGroup, Divider, Required } from '@/components/qvain/general/V2'
+import { TitleSmall, FieldGroup, Divider, InfoText, Required } from '@/components/qvain/general/V2'
 
 import { withFieldErrorBoundary } from '@/components/qvain/general/errors/fieldErrorBoundary'
 import ValidationError from '@/components/qvain/general/errors/validationError'
@@ -13,8 +11,7 @@ import {
   getOptionValue,
   getCurrentOption,
 } from '@/components/qvain/utils/select'
-import { ACCESS_TYPE_URL } from '@/utils/constants'
-import { HelpField } from '@/components/qvain/general/modal/form'
+import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { useStores } from '@/stores/stores'
 import RestrictionGrounds from './RestrictionGrounds'
 import EmbargoExpires from './EmbargoExpires'
@@ -32,13 +29,16 @@ const AccessType = () => {
   const { value, Model, validationError, readonly, validate, set, setValidationError } =
     Stores.Qvain.AccessType
   const { shouldShowDataAccess } = Stores.Qvain.DataAccess
+  const { dataCatalog } = Stores.Qvain
+
+  const isRemote = dataCatalog == DATA_CATALOG_IDENTIFIER.ATT
 
   let permitInfo = null
-  if (value && value.url === ACCESS_TYPE_URL.PERMIT) {
+  if (value?.url === ACCESS_TYPE_URL.PERMIT && !isRemote) {
     permitInfo = (
-      <PermitHelp data-testid="permit-help">
-        <Translate component={HelpField} content="qvain.rightsAndLicenses.accessType.permitInfo" />
-      </PermitHelp>
+      <InfoText data-testid="permit-help">
+        {translate('qvain.rightsAndLicenses.accessType.permitInfo')}
+      </InfoText>
     )
   }
 
@@ -46,6 +46,7 @@ const AccessType = () => {
     onChange(set)(selection)
     setValidationError(null)
   }
+
 
   return (
     <FieldGroup data-cy="access-type-select">
@@ -68,6 +69,9 @@ const AccessType = () => {
         placeholder={translate('qvain.rightsAndLicenses.accessType.placeholder')}
         aria-autocomplete="list"
       />
+      {isRemote && (
+        <InfoText>{translate('qvain.rightsAndLicenses.dataAccess.remoteResourcesInfo')}</InfoText>
+      )}
       {permitInfo}
       <ValidationError>{validationError}</ValidationError>
       {value?.url !== ACCESS_TYPE_URL.OPEN && (
@@ -81,10 +85,6 @@ const AccessType = () => {
     </FieldGroup>
   )
 }
-
-const PermitHelp = styled.div`
-  margin-top: 0.5rem;
-`
 
 export default withFieldErrorBoundary(
   observer(AccessType),

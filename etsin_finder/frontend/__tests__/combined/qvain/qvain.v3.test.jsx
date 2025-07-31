@@ -16,6 +16,9 @@ import EnvClass from '@/stores/domain/env'
 import { StoresProvider } from '@/stores/stores'
 import Qvain from '@/components/qvain/views/main'
 import { flatten, removeMatchingKeys } from '@/utils/flatten'
+import { failTestsWhenTranslationIsMissing } from '@helpers'
+
+const registerMissingTranslationHandler = failTestsWhenTranslationIsMissing()
 
 // Replace debounce milliseconds with 0
 jest.mock('lodash.debounce', () => f => jest.requireActual('lodash.debounce')(f, 0))
@@ -85,6 +88,7 @@ const renderQvain = async (overrides = {}, { initialPath } = {}) => {
   Env.Flags.setFlag('QVAIN.REMS', true)
   Env.setMetaxV3Host('metaxv3', 443)
   const stores = buildStores({ Env })
+  registerMissingTranslationHandler(stores.Locale)
 
   render(
     <ThemeProvider theme={etsinTheme}>

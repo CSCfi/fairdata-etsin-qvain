@@ -52,6 +52,10 @@ const rightsAndLicenses = {
       automatic: 'Automaattinen',
       manual: 'Manuaalinen',
     },
+    remoteResourcesInfo: `Huom! Ulkoista datalähdettä käyttävien aineistojen
+    käyttölupien hakeminen ja myöntäminen tapahtuu Fairdata-palveluiden ulkopuolella.
+    Valittu pääsyoikeus näytetään käyttäjille mutta se ei vaikuta ulkoisen
+    datan saatavuuteen Etsimessä.`,
   },
 }
 

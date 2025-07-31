@@ -52,6 +52,10 @@ const rightsAndLicenses = {
       automatic: 'Automatic',
       manual: 'Manual',
     },
+    remoteResourcesInfo: `Note! For Remote Resources the applying and granting the
+    permission is done outside of Fairdata services.
+    The selected Access Type is shown to the users but does not affect
+    access to external data in Etsin.`
   },
 }
 
