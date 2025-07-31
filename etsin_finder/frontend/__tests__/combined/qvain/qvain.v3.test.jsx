@@ -116,6 +116,41 @@ describe('Qvain with an opened dataset', () => {
     expect(idaButton).toHaveClass('selected')
   })
 
+  it('shows option for show/hide file metadata', async () => {
+    await renderQvain({ access_rights: access_rights_embargo })
+    const showFileMetadataCheckbox = screen.getByRole('radio', {
+      name: 'Show data details in Etsin',
+    })
+    expect(showFileMetadataCheckbox).toBeInTheDocument()
+    expect(showFileMetadataCheckbox).toBeChecked()
+
+    const hideFileMetadataCheckbox = screen.getByRole('radio', {
+      name: 'Hide data details in Etsin',
+    })
+    expect(hideFileMetadataCheckbox).toBeInTheDocument()
+    expect(hideFileMetadataCheckbox).not.toBeChecked()
+  })
+
+  it('shows correct option checked for show/hide file metadata', async () => {
+    await renderQvain({
+      access_rights: {
+        ...access_rights_embargo,
+        show_file_metadata: null,
+      },
+    })
+    const showFileMetadataCheckbox = screen.getByRole('radio', {
+      name: 'Show data details in Etsin',
+    })
+    expect(showFileMetadataCheckbox).toBeInTheDocument()
+    expect(showFileMetadataCheckbox).not.toBeChecked()
+
+    const hideFileMetadataCheckbox = screen.getByRole('radio', {
+      name: 'Hide data details in Etsin',
+    })
+    expect(hideFileMetadataCheckbox).toBeInTheDocument()
+    expect(hideFileMetadataCheckbox).toBeChecked()
+  })
+
   it('shows title and description in both languages', async () => {
     const section = await renderSection('Description')
     expect(within(section).getByDisplayValue('All Fields Test Dataset')).toBeInTheDocument()
@@ -575,7 +610,7 @@ describe('Qvain with an opened dataset', () => {
       expect(
         screen.getByText(
           'The dataset is being processed by the Digital Preservation Service.' +
-          ' You can view metadata but cannot make any changes.'
+            ' You can view metadata but cannot make any changes.'
         )
       ).toBeInTheDocument()
       const input = document.getElementById('titleInput')

@@ -14,6 +14,15 @@ const rightsAndLicenses = {
     placeholder: 'Valitse vaihtoehto',
     permitInfo:
       'Aineiston omistaja (alkuperäinen kuvailun tekijä) pystyy oletuksena hyväksymään aineiston datan käyttöön liittyvät käyttölupahakemukset. Käyttölupatoimintoa kehitetään, ja jossain vaiheessa tullaan lisäämään mahdollisuus myös muiden ko. organisaation edustajien päästä, joko omistajan lisäksi tai sijaan, hyväksymään käyttölupahakemuksia. Valitsemalla pääsyoikeudeksi "Vaatii luvan hakemista" / "Requires permission" käyttäjä sitoutuu näihin muutoksiin.',
+    showDataDetailsInfo:
+      'Datan metatiedot (kansiorakenne, tiedostonimet ja muu tiedostometatieto) ovat oletuksena piilotettu, kun pääsyoikeutta aineistoon on rajoitettu. Valitse, haluatko näyttää vai piilottaa datan metatiedot julkaistussa aineistossa. Huom: Pääsy dataan pysyy rajoitettuna.',
+    showDataDetails: {
+      radio: {
+        no: 'Piilota datan tiedot Etsimessä',
+        yes: 'Näytä datan tiedot Etsimessä',
+      },
+    },
+    showDataDetailsTitle: 'Aineiston näkyvyys',
   },
   embargoDate: {
     label: 'Embargo loppumispäivämäärä',

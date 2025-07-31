@@ -5,6 +5,7 @@ import { qvainFormSchemaV3 } from './qvain.submit.schemas'
 import { getResponseError } from '../../../components/qvain/utils/responseError'
 import Submit from './qvain.submit'
 import remapActorIdentifiers from '@/utils/remapActorIdentifiers'
+import { ACCESS_TYPE_URL } from '@/utils/constants'
 
 class SubmitV3 extends Submit {
   constructor(Qvain) {
@@ -73,6 +74,13 @@ class SubmitV3 extends Submit {
         this.setLoading(true)
         dataset.fileset = Files.actionsToMetax()
         let v3Dataset = convertQvainV2ToV3(dataset)
+
+        if (this.Qvain.AccessType.value.url !== ACCESS_TYPE_URL.OPEN) {
+          v3Dataset.access_rights.show_file_metadata = this.Qvain.showFileMetadata
+        } else {
+          v3Dataset.access_rights.show_file_metadata = true
+        }
+
         if (this.Qvain.isNewVersion) {
           v3Dataset = await this.createNewVersion(v3Dataset)
         }

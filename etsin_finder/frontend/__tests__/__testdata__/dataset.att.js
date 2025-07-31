@@ -70,6 +70,7 @@ const dataCatalog = {
         en: 'Contains datasets that are not stored in the Finnish Fairdata services.',
         fi: 'Sisältää esimerkiksi verkkoaineistot, rajapinnat ja muut muualla kuin fairdata-palveluissa säilytettävät aineistot.',
       },
+      show_file_metadata: true,
     },
     dataset_versioning: false,
     research_dataset_schema: 'att',
@@ -471,6 +472,7 @@ const dataset = {
           },
         },
       ],
+      show_file_metadata: true, // for testing
     },
     rights_holder: [
       {

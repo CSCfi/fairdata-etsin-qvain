@@ -78,6 +78,7 @@ class Qvain extends Resources {
 
     this.metadataModalFile = undefined
     this.clearMetadataModalFile = undefined
+    this.showFileMetadata = false
 
     this.ExternalResources.reset()
     this.resources.forEach(r => {
@@ -134,6 +135,8 @@ class Qvain extends Resources {
   @observable datasetLoading = false
 
   @observable datasetError = null
+
+  @observable showFileMetadata = false
 
   @action.bound setDatasetLoading(value) {
     this.datasetLoading = value
@@ -269,6 +272,11 @@ class Qvain extends Resources {
     this.changed = true
   }
 
+  @action
+  setShowFileMetadata = selectedShowFileMetadata => {
+    this.showFileMetadata = selectedShowFileMetadata
+  }
+
   // Create new array by joining two arrays. If some objects have duplicate identifiers, use the object from the first array.
   mergeArraysByIdentifier = (a, b) => {
     const result = [...a]
@@ -375,6 +383,10 @@ class Qvain extends Resources {
     let v2Dataset = dataset
     if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
       v2Dataset = this.Adapter.convertV3ToV2(dataset)
+      this.showFileMetadata =
+        dataset.access_rights.show_file_metadata !== null
+          ? dataset.access_rights.show_file_metadata
+          : false
     }
     this.setChanged(false)
     this.original = { ...v2Dataset }
@@ -389,6 +401,10 @@ class Qvain extends Resources {
     if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
       remapActorIdentifiers(dataset) // can't reuse actor ids in new dataset
       v2Dataset = this.Adapter.convertV3ToV2(dataset)
+      this.showFileMetadata =
+        dataset.access_rights.show_file_metadata !== null
+          ? dataset.access_rights.show_file_metadata
+          : false
     }
     this.loadBasicFields(v2Dataset)
     this.OtherIdentifiers.reset()

@@ -18,6 +18,7 @@ import EmbargoExpires from './EmbargoExpires'
 import { handleAccessTypeReferenceDataResponse } from '../../../IdaCatalog/componentHelpers'
 import DataAccess from './DataAccess'
 import useReferenceData from '@/utils/useReferenceData'
+import ShowDataDetails from './ShowDataDetails'
 
 const AccessType = () => {
   const Stores = useStores()
@@ -25,6 +26,7 @@ const AccessType = () => {
     handler: opts => handleAccessTypeReferenceDataResponse(opts, Stores),
     sort: true,
   })
+
   const { lang, translate } = Stores.Locale
   const { value, Model, validationError, readonly, validate, set, setValidationError } =
     Stores.Qvain.AccessType
@@ -32,6 +34,7 @@ const AccessType = () => {
   const { dataCatalog } = Stores.Qvain
 
   const isRemote = dataCatalog == DATA_CATALOG_IDENTIFIER.ATT
+  const isIDA = Stores.Qvain.dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
 
   let permitInfo = null
   if (value?.url === ACCESS_TYPE_URL.PERMIT && !isRemote) {
@@ -47,9 +50,8 @@ const AccessType = () => {
     setValidationError(null)
   }
 
-
   return (
-    <FieldGroup data-cy="access-type-select">
+    <FieldGroup data-cy="access-type-select" data-testid="accessTypeSelect">
       <TitleSmall htmlFor="accessTypeSelect">
         {translate('qvain.rightsAndLicenses.accessType.title')}
         <Required />
@@ -76,6 +78,7 @@ const AccessType = () => {
       <ValidationError>{validationError}</ValidationError>
       {value?.url !== ACCESS_TYPE_URL.OPEN && (
         <>
+          {isIDA && <ShowDataDetails />}
           <Divider />
           {value?.url === ACCESS_TYPE_URL.EMBARGO && <EmbargoExpires />}
           {value.url !== ACCESS_TYPE_URL.OPEN ? <RestrictionGrounds /> : null}

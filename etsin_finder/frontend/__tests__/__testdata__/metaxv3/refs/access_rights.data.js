@@ -38,13 +38,6 @@ export const access_type_permit = {
   pref_label: { en: 'Requires permission', fi: 'Vaatii luvan' },
 }
 
-export const access_rights_open_a = {
-  id: '55f2ff9b-68f2-4895-88b9-ca7f9ff750fc',
-  description: null,
-  license: [license_a, license_b],
-  access_type: access_type_open,
-}
-
 export const restriction_grounds_research = {
   id: '6cedbc74-0b3a-41f1-91ae-fd1f4cbcbe1c',
   url: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/research',
@@ -56,6 +49,14 @@ export const restriction_grounds_research = {
   },
 }
 
+export const access_rights_open_a = {
+  id: '55f2ff9b-68f2-4895-88b9-ca7f9ff750fc',
+  description: null,
+  license: [license_a, license_b],
+  access_type: access_type_open,
+  show_file_metadata: true,
+}
+
 export const access_rights_embargo = {
   id: '55f2ff9b-68f2-4895-88b9-ca7f9ff750fc',
   description: null,
@@ -63,4 +64,5 @@ export const access_rights_embargo = {
   access_type: access_type_embargo,
   restriction_grounds: [restriction_grounds_research],
   available: '2023-12-24',
+  show_file_metadata: true,
 }

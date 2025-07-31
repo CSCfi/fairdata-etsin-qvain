@@ -58,6 +58,7 @@ export default {
         url: 'http://uri.suomi.fi/codelist/fairdata/restriction_grounds/code/copyright',
       },
     ],
+    show_file_metadata: true,
   },
   actors: [
     {

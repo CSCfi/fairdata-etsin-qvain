@@ -13,6 +13,15 @@ const rightsAndLicenses = {
     placeholder: 'Select option',
     permitInfo:
       'By default the dataset owner (the original describer) can approve the applications. In addition, functionality is under development to allow chosen representatives (only or in addition to the owner) of the dataset\'s organization to make the approvals. By using the access type "Requires permission" the dataset owner agrees to these upcoming changes.',
+    showDataDetailsInfo:
+      'Data details (folder structure, file names, and other file metadata) are hidden by default when access to data is restricted. To show or hide data details in the published dataset, select the appropriate option below. Note: Access to actual data remains restricted.',
+    showDataDetails: {
+      radio: {
+        no: 'Hide data details in Etsin',
+        yes: 'Show data details in Etsin',
+      },
+    },
+    showDataDetailsTitle: 'Data visibility',
   },
   embargoDate: {
     label: 'Embargo expiration date',
