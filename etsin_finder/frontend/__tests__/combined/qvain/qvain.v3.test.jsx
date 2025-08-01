@@ -116,6 +116,42 @@ describe('Qvain with an opened dataset', () => {
     expect(idaButton).toHaveClass('selected')
   })
 
+  it('shows DOI option as checked by default after selecting IDA catalog', async () => {
+    const section = await renderSection(/Data Origin/)
+    const idaButton = within(section).getByText('Choose "IDA"', { exact: false }).closest('button')
+    await userEvent.click(idaButton)
+    expect(within(section).getByLabelText('to have a DOI', { exact: false })).toBeChecked()
+  })
+
+  it('shows DOI option as unchecked due to user action after selecting IDA catalog', async () => {
+    const section = await renderSection(/Data Origin/)
+    const idaButton = within(section).getByText('Choose "IDA"', { exact: false }).closest('button')
+    const doiSelector = within(section).getByLabelText('to have a DOI', { exact: false })
+
+    await userEvent.click(idaButton)
+    await userEvent.click(doiSelector)
+    await userEvent.click(idaButton)
+    await userEvent.click(idaButton)
+
+    expect(doiSelector).not.toBeChecked()
+  })
+
+  it('shows DOI option as checked due to user action after selecting IDA catalog', async () => {
+    const section = await renderSection(/Data Origin/)
+    const idaButton = within(section).getByText('Choose "IDA"', { exact: false }).closest('button')
+    const remoteResourcesButton = within(section).getByText('Choose "Remote Resources', { exact: false }).closest('button')
+    const doiSelector = within(section).getByLabelText('to have a DOI', { exact: false })
+
+    await userEvent.click(idaButton)
+    await userEvent.click(doiSelector)
+    await userEvent.click(doiSelector)
+    await userEvent.click(remoteResourcesButton)
+    await userEvent.click(idaButton)
+
+    expect(doiSelector).toBeChecked()
+  })
+
+
   it('shows option for show/hide file metadata', async () => {
     await renderQvain({ access_rights: access_rights_embargo })
     const showFileMetadataCheckbox = screen.getByRole('radio', {
@@ -175,7 +211,7 @@ describe('Qvain with an opened dataset', () => {
   })
 
   it('adds actor in modal', async () => {
-    const section = await renderSection('Actors *')
+    const section = await renderSection(/Actors/)
     const getActorLabels = elem =>
       Array.from(elem.getElementsByClassName('actor-label')).map(v => v.textContent)
     expect(getActorLabels(section)).toEqual([
@@ -529,7 +565,7 @@ describe('Qvain with an opened dataset', () => {
   })
 
   it('shows remote resources in modal', async () => {
-    const section = await renderSection('Data Origin *', {
+    const section = await renderSection(/Data Origin/, {
       data_catalog: 'urn:nbn:fi:att:data-catalog-att',
     })
 
@@ -562,7 +598,7 @@ describe('Qvain with an opened dataset', () => {
   })
 
   it('shows embargo date and restriction grounds', async () => {
-    const section = await renderSection('Data Origin *', {
+    const section = await renderSection(/Data Origin/, {
       access_rights: access_rights_embargo,
     })
 
@@ -611,7 +647,7 @@ describe('Qvain with an opened dataset', () => {
       expect(
         screen.getByText(
           'The dataset is being processed by the Digital Preservation Service.' +
-            ' You can view metadata but cannot make any changes.'
+          ' You can view metadata but cannot make any changes.'
         )
       ).toBeInTheDocument()
       const input = document.getElementById('titleInput')

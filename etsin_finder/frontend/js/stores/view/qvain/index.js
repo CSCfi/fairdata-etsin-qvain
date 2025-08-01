@@ -90,6 +90,7 @@ class Qvain extends Resources {
     })
 
     this.useDoi = false
+    this.defaultDoi = true
 
     this.changed = false
     this.deprecated = false
@@ -112,6 +113,8 @@ class Qvain extends Resources {
   @observable dataCatalog = undefined
 
   @observable useDoi = false
+
+  @observable defaultDoi = true
 
   @observable cumulativeState = CUMULATIVE_STATE.NO
 
@@ -230,20 +233,11 @@ class Qvain extends Resources {
       this.setUseDoi(false)
     }
 
+    /*When IDA is selected as the catalog, the DOI value is set to the 
+    user-selected value. If the user hasn't changed the value, it'll be true 
+    by default: */
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
-      this.setUseDoi(true)
-    }
-
-    if (!FILES_DATA_CATALOGS.includes(selectedDataCatalog)) {
-      this.Files.reset()
-    }
-
-    if (!REMOTE_RESOURCES_DATA_CATALOGS.includes(selectedDataCatalog)) {
-      this.ExternalResources.reset()
-    }
-
-    if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
-      this.setUseDoi(true)
+      this.setUseDoi(this.defaultDoi)
     }
 
     if (!FILES_DATA_CATALOGS.includes(selectedDataCatalog)) {
@@ -258,6 +252,11 @@ class Qvain extends Resources {
   @action
   setUseDoi = selectedUseDoiStatus => {
     this.useDoi = selectedUseDoiStatus
+  }
+
+  @action
+  setDefaultDoi = isChecked => {
+    this.defaultDoi = isChecked
   }
 
   @action
@@ -369,8 +368,10 @@ class Qvain extends Resources {
     // Load DOI
     if (researchDataset?.preferred_identifier?.startsWith('doi') || dataset.use_doi_for_published) {
       this.useDoi = true
+      this.defaultDoi = true
     } else {
       this.useDoi = false
+      this.defaultDoi = false
     }
 
     // Load files

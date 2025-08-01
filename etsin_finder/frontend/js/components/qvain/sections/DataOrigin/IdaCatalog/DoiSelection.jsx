@@ -9,7 +9,7 @@ import { useStores } from '@/utils/stores'
 
 function DoiSelection() {
   const {
-    Qvain: { dataCatalog, original, useDoi, setUseDoi, readonly, isNewVersion },
+    Qvain: { dataCatalog, original, useDoi, setUseDoi, setDefaultDoi, readonly, isNewVersion },
   } = useStores()
   const isNewDraft = original && original.state === 'draft' && !original.draft_of
   const canSelectDoi =
@@ -17,6 +17,7 @@ function DoiSelection() {
 
   const handleDoiCheckboxChange = event => {
     setUseDoi(event.target.checked)
+    setDefaultDoi(event.target.checked)
   }
 
   if (!canSelectDoi) {
