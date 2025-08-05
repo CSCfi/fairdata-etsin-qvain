@@ -141,7 +141,7 @@ describe('Etsin dataset page', () => {
     await renderEtsin(newDataset)
     screen.getByRole('heading', { name: /All Fields Test Dataset/ })
     screen.getByRole('button', { name: 'Open' })
-    /* Click Other identifiers title's plus button so that other identifiers 
+    /* Click Other identifiers title's plus button so that other identifiers
     are rendered:*/
     await userEvent.click(screen.getByTestId('toggle-show-expandable-dataset-info-item-children'))
 
@@ -230,6 +230,19 @@ describe('Etsin dataset page', () => {
     const tab = within(dialog).getByRole('tab', { name: /Application.*123/ })
     expect(tab.getAttribute('aria-selected')).toBe('true')
     expect(within(dialog).getByText('Application created on March 5, 2025')).toBeInTheDocument()
+
+    mockAdapter.resetHistory()
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Close' }))
+
+    expect(mockAdapter.history.get.length).toEqual(2)
+    const reloadRequest = mockAdapter.history.get[0]
+    expect(reloadRequest.url).toBe(
+      'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0'
+    )
+    const contactRequest = mockAdapter.history.get[1]
+    expect(contactRequest.url).toBe(
+      'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0/contact'
+    )
   })
 
   test('renders REMS error message', async () => {
@@ -301,7 +314,7 @@ describe('Etsin map page', () => {
 
     const mapTableValues = tableToObjects(screen.getByRole('table'))
 
-    /*If a spatial record doesn't contain any map table data, it should not 
+    /*If a spatial record doesn't contain any map table data, it should not
     be displayed: */
     expect(mapTableValues).not.toContain({
       'Geographical name': '-',

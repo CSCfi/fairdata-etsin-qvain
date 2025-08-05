@@ -25,7 +25,7 @@ const AccessModal = () => {
         dataset,
         rems: { setShowModal, showModal, fetchApplicationBase, fetchApplications, tabs },
       },
-      fetchDataset,
+      fetchData,
     },
   } = useStores()
 
@@ -40,12 +40,12 @@ const AccessModal = () => {
   }, [dataset, showModal, fetchApplicationBase, fetchApplications])
 
   useEffect(() => {
-    // When access modal is closed, reload dataset in the background to update permissions
+    // When access modal is closed, reload dataset to update permissions
     if (prevShowModal.current && !showModal && dataset?.id) {
-      fetchDataset(dataset.id)
+      fetchData(dataset.id)
     }
     prevShowModal.current = showModal
-  }, [showModal, fetchDataset, dataset?.id])
+  }, [showModal, fetchData, dataset?.id])
 
   if (!dataset) {
     return null
