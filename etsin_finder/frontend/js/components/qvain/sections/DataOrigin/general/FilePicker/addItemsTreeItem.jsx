@@ -41,6 +41,7 @@ export const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => 
           }}
           with={{ name: item.name }}
           data-cy={`checkbox-${item.name}`}
+          data-testid={`select-${item.path}`}
         />
         <Icon icon={isOpen ? faFolderOpen : faFolder} />
         <ItemTitle onDoubleClick={() => toggleDirectoryOpen(item)}>
@@ -60,6 +61,7 @@ export const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => 
         disabled={disabled}
         onChange={toggle}
         data-cy={`checkbox-${item.name}`}
+        data-testid={`select-${item.path}`}
       />
       <Icon icon={faFile} />
       <ItemTitle>{item.name}</ItemTitle>

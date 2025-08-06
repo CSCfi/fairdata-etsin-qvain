@@ -454,11 +454,11 @@ class Qvain extends Resources {
     }
 
     if (this.hasBeenPublished && !this.isNewVersion) {
-      if (
-        this.Files &&
-        (!this.Files.projectLocked || this.Files.draftOfHasProject === false) &&
-        this.Files.userHasRightsToEditProject
-      ) {
+      const hasNoPublishedFiles =
+        this.Files.hasPublishedFiles === false || // V3
+        !this.Files.projectLocked ||
+        this.Files.draftOfHasProject === false // V2
+      if (hasNoPublishedFiles) {
         return true // for published noncumulative datasets, allow adding files only if none exist yet
       }
       return this.isCumulative

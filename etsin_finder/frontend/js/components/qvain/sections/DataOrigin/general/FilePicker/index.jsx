@@ -143,7 +143,11 @@ export const FilePickerBase = () => {
       {canSelectFiles && (
         <Controls>
           <AddItems>
-            <AddButton onClick={() => setModalOpen(true)} data-cy="start-adding-files" />
+            <AddButton
+              onClick={() => setModalOpen(true)}
+              data-cy="start-adding-files"
+              data-testid="open-add-files"
+            />
             <ProjectInfo>
               {selectedProject || <Translate content="qvain.files.selected.none" />}
             </ProjectInfo>

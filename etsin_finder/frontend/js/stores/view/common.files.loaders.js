@@ -48,7 +48,6 @@ const cacheDirectories = ({ Files, dir, data, defaults, fetchType, onlyPublic = 
   runInAction(() => {
     const cache = Files.cache
     const itemsByKey = getItemsByKey(dir)
-
     data.directories.forEach((newDir, index) => {
       const key = dirKey(newDir)
       cache[key] = {
@@ -109,10 +108,7 @@ const fetchExistingChildDataForDirectory = async ({
   const url = getChildDataUrl(Files, dir, sort)
   url.searchParams.set('dataset', datasetIdentifier) // v3
 
-  const resp = ignoreNotFound(
-    Files.client.get(url.href, { tag: 'fetch-existing-child-data' }),
-    emptyDirectoryResponse
-  )
+  const resp = Files.client.get(url.href, { tag: 'fetch-existing-child-data' })
   const { data } = await resp
 
   const cache = Files.cache
