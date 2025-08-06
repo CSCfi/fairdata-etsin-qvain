@@ -22,7 +22,6 @@ import Tree from './fileTree'
 function IdaResources() {
   const {
     Locale: { lang, dateFormat },
-    Access: { restrictions },
     Etsin: {
       EtsinDataset: {
         identifier,
@@ -30,6 +29,8 @@ function IdaResources() {
         downloadAllInfotext,
         isFileMetadataAllowed,
         dataset: { fileset },
+        embargoDate,
+        isEmbargoExpired
       },
       filesProcessor: { Packages },
       fetchPackages,
@@ -92,6 +93,16 @@ function IdaResources() {
     </Translate>
   )
 
+  /*Return the text related to the embargo expiration. The text content 
+  depends on whether the expiration has already occured: */
+  const getEmbargoText = () => {
+    if (isEmbargoExpired) {
+      return "dataset.embargoDateExpired"
+    }
+
+    return "dataset.embargo_date"
+  }
+
   return (
     <>
       <Header>
@@ -116,12 +127,13 @@ function IdaResources() {
               )}
             </HeaderButtonSplit>
           </FlaggedComponent>
-          {restrictions.embargoDate && (
+          {/* If embargo date has been defined, its future or past expiration 
+          is displayed: */}
+          {embargoDate && (
             <EmbargoDate>
-              <Translate content="dataset.embargo_date" />
-              &nbsp; {dateFormat(restrictions.embargoDate, { shortMonth: true })}
-            </EmbargoDate>
-          )}
+              <Translate content={getEmbargoText()} />
+              &nbsp; {dateFormat(embargoDate, { shortMonth: true })}
+            </EmbargoDate>)}
         </Translate>
       </Header>
 

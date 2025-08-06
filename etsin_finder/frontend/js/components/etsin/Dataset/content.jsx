@@ -14,7 +14,7 @@ import Maps from './maps'
 const Content = props => {
   const {
     Etsin: {
-      EtsinDataset: { identifier, hasData, hasEvents, hasMapData },
+      EtsinDataset: { identifier, hasData, hasEventsAndIdentifiers, hasMapData },
     },
   } = useStores()
 
@@ -29,7 +29,7 @@ const Content = props => {
       <Tabs
         location={props.location}
         showData={hasData}
-        showEvents={hasEvents}
+        showEvents={hasEventsAndIdentifiers}
         showMaps={hasMapData}
       />
 
@@ -60,7 +60,7 @@ const Content = props => {
         )}
 
         {/* Route to Events */}
-        {hasEvents && (
+        {hasEventsAndIdentifiers && (
           <Route
             exact
             path="/dataset/:identifier/events"

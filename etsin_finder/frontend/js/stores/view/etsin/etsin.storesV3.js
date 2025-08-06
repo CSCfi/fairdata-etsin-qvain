@@ -116,6 +116,28 @@ class EtsinDatasetV3 {
     return this.dataset?.provenance
   }
 
+  /*Returns those provenances that are PAS creation events. Currently, other 
+  PAS events are ignored. */
+  @computed get pasProvenances() {
+    if (!this.hasProvenances) {
+      return []
+    }
+
+    return this.provenance?.filter(
+      event => event.preservation_event?.url === PRESERVATION_EVENT_CREATED
+    )
+  }
+
+  /*Returns all user-entered events, i.e. all other provenances except PAS 
+  events:*/
+  @computed get userEnteredProvenances() {
+    if (!this.hasProvenances) {
+      return []
+    }
+
+    return this.provenance.filter(event => !event.preservation_event)
+  }
+
   @computed get creators() {
     return this.dataset?.actors.filter(actor => actor.roles.some(role => role === 'creator'))
   }
@@ -251,14 +273,52 @@ class EtsinDatasetV3 {
     )
   }
 
+  @computed get embargoDate() {
+    if (this.accessRights?.access_type?.url === ACCESS_TYPE_URL.EMBARGO) {
+      return this.accessRights?.available
+    }
+
+    return undefined
+  }
+
+  @computed get isEmbargoExpired() {
+    if (!this.embargoDate) {
+      return undefined
+    }
+
+    if (new Date(this.embargoDate) < new Date()) {
+      return true
+    }
+
+    return false
+  }
+
+  @computed get hasServiceGeneratedEvents() {
+    return Boolean(
+      this.pasProvenances.length > 0 ||
+        this.deletedVersions.length > 0 ||
+        this.isDeprecated ||
+        this.isEmbargoExpired
+    )
+  }
+
+  @computed get hasUserEnteredEvents() {
+    return Boolean(this.userEnteredProvenances.length > 0)
+  }
+
   @computed get hasEvents() {
+    return Boolean(this.hasServiceGeneratedEvents || this.hasUserEnteredEvents)
+  }
+
+  @computed get hasEventsAndIdentifiers() {
     return Boolean(
       this.hasVersion ||
         this.hasProvenances ||
         this.isDeprecated ||
         this.otherIdentifiers?.length ||
         this.datasetRelations?.length ||
-        this.preservation?.useCopy?.persistent_identifier
+        this.preservation?.useCopy?.persistent_identifier ||
+        this.isEmbargoExpired
     )
   }
 

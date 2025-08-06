@@ -169,6 +169,7 @@ Event.propTypes = {
 }
 
 const EventTitle = styled.h3`
+  font-size: 1em;
   font-weight: bold;
 `
 

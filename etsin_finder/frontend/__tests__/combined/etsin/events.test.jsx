@@ -87,6 +87,7 @@ describe('Events page', () => {
   it('should render provenances, deprecations and version deletions in events table', async () => {
     await renderPage()
     tableToObjects(sections['Events']).should.eql([
+      { 'Title and Description': 'User-entered events', },
       {
         'Event type': 'Checked|(Unknown)',
         Who: 'Aalto University',
@@ -101,6 +102,7 @@ describe('Events page', () => {
         'Title and Description': 'Provenance name2|Provenance description2',
         Where: 'Provenanssipaikka2',
       },
+      { 'Title and Description': 'Service-generated events' },
       {
         'Event type': 'Deprecated',
         Who: '-',
@@ -189,6 +191,7 @@ describe('Events page', () => {
     it('should render copy creation event for original version', async () => {
       await renderPage(pasUseCopy)
       tableToObjects(sections['Events']).should.eql([
+        { 'Title and Description': 'Service-generated events' },
         {
           'Title and Description':
             'Copy created into Digital Preservation|Click here to open the Digital Preservation Service version',
@@ -203,6 +206,7 @@ describe('Events page', () => {
     it('should render creation event for preservation version', async () => {
       await renderPage(pasPreservationCopy)
       tableToObjects(sections['Events']).should.eql([
+        { 'Title and Description': 'Service-generated events' },
         {
           'Title and Description':
             'Created in Digital Preservation|Click here to open the use copy',

@@ -1,13 +1,3 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
-
 import qvain from './qvain'
 import search from './search'
 
@@ -270,6 +260,7 @@ const finnish = {
       },
     },
     embargo_date: 'Embargo voimassa',
+    embargoDateExpired: 'Embargo päättynyt',
     events_idn: {
       deleted_versions: {
         title: 'Poistetut Versiot',
@@ -290,6 +281,10 @@ const finnish = {
         deletionEvent: 'Poistettu',
         deletionOfDatasetVersion: 'Poistettu aineistoversio: ',
         deletionIdentifier: 'Poistetun aineiston tunniste: ',
+        subheads: {
+          userEnteredEvents: 'Käyttäjän lisäämät tapahtumat',
+          serviceGeneratedEvents: 'Palvelun luomat tapahtumat',
+        },
       },
       preservationEvent: {
         useCopy: {
@@ -302,6 +297,10 @@ const finnish = {
           descriptionDate: 'Luotu: %(date)s.',
           descriptionLink: 'Käyttökopioon pääset tästä.',
         },
+      },
+      embargo: {
+        title: 'Embargo',
+        event: 'Päättynyt',
       },
       deprecations: {
         event: 'Vanhentunut (deprekoitunut)',
