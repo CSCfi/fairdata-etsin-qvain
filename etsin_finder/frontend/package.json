@@ -11,7 +11,8 @@
   "license": "ISC",
   "scripts": {
     "build": "webpack --mode production --config webpack.prod.js --node-env production",
-    "dev-build": "webpack --config webpack.dev.js --node-env development",
+    "build-test": "webpack --mode production --config webpack.prod.js --node-env test",
+    "build-dev": "webpack --config webpack.dev.js --node-env development",
     "lint": "eslint js __tests__ --ext .jsx,.js",
     "test": "node --max-old-space-size=1024 ./node_modules/.bin/jest",
     "coverage": "jest --collect-coverage --collect-coverage-from=\"js/**\"",
