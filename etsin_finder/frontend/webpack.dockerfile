@@ -1,5 +1,5 @@
 # Load base image (node)
-FROM node:18
+FROM node:22
 
 # Set working directory
 WORKDIR /etsin_finder/frontend/
