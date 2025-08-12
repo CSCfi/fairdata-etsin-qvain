@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { useNavigate } from 'react-router-dom'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
@@ -14,12 +14,12 @@ const ClearFilters = () => {
     },
     Locale: { translate },
   } = useStores()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const clear = () => {
     Matomo.recordEvent('CLEAR_FILTERS')
     Accessibility.announce(translate('search.filter.filtersCleared'))
-    history.push('/datasets')
+    navigate('/datasets')
   }
 
   if (isLoading) return null

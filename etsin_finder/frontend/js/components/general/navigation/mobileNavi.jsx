@@ -38,7 +38,7 @@ const MobileNavi = ({ helpUrl, naviRoutes, children, loginThroughService }) => {
         {naviRoutes.map(route => (
           <NavItem
             key={route.path}
-            exact={route.exact}
+            end={route.end}
             to={route.path}
             onPointerOver={() => {
               if (route.loadableComponent) {
@@ -87,7 +87,7 @@ MobileNavi.propTypes = {
       loadableComponent: PropTypes.elementType,
       label: PropTypes.string.isRequired,
       path: PropTypes.string.isRequired,
-      exact: PropTypes.bool,
+      end: PropTypes.bool,
     })
   ),
   children: PropTypes.node,

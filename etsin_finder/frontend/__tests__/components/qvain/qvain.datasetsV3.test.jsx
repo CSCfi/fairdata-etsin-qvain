@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
 import { ThemeProvider } from 'styled-components'
-import { MemoryRouter, Route } from 'react-router-dom'
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
 import ReactModal from 'react-modal'
 
 import etsinTheme from '@/styles/theme'
@@ -42,6 +42,12 @@ const getStores = () => {
   return _stores
 }
 
+const CaptureLocation = () => {
+  const location = useLocation()
+  testLocation = location
+  return null
+}
+
 const renderDatasets = async ({ showCount = null } = {}) => {
   if (helper) {
     document.body.removeChild(helper)
@@ -58,13 +64,9 @@ const renderDatasets = async ({ showCount = null } = {}) => {
   render(
     <StoresProvider store={stores}>
       <MemoryRouter>
-        <Route
-          path="*"
-          render={({ location }) => {
-            testLocation = location
-            return null
-          }}
-        />
+        <Routes>
+          <Route path="*" Component={CaptureLocation} />
+        </Routes>
         <ThemeProvider theme={etsinTheme}>
           <DatasetsV2 />
         </ThemeProvider>

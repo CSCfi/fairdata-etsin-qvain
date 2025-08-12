@@ -1,18 +1,5 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
 import Translate from '@/utils/Translate'
 
 import HeroBanner from '@/components/general/hero'
@@ -61,9 +48,6 @@ function ErrorPage({ errors, loginRequired }) {
 ErrorPage.propTypes = {
   errors: PropTypes.arrayOf(PropTypes.object),
   loginRequired: PropTypes.bool,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-  }).isRequired,
 }
 
 ErrorPage.defaultProps = {
@@ -71,4 +55,4 @@ ErrorPage.defaultProps = {
   loginRequired: false,
 }
 
-export default withRouter(ErrorPage)
+export default ErrorPage

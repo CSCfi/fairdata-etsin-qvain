@@ -12,7 +12,7 @@
 
 import { useEffect, useRef } from 'react'
 import { observer } from 'mobx-react'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { useNavigate } from 'react-router-dom'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
@@ -34,18 +34,18 @@ const Search = () => {
 
   const query = useQuery()
   const prevLang = useRef(lang)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   useEffect(() => {
     handleNavigation('datasets')
 
     if (lang !== prevLang.current) {
       prevLang.current = lang
-      history.push('/datasets')
+      navigate('/datasets')
     }
 
     submit(query)
-  }, [query, handleNavigation, submit, prevLang, lang, history])
+  }, [query, handleNavigation, submit, prevLang, lang, navigate])
 
   return (
     <div>

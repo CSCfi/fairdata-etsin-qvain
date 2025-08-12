@@ -21,13 +21,13 @@ const routes = [
     loadableComponent: Home,
     label: 'nav.home',
     path: '/',
-    exact: true,
+    end: true,
   },
   {
     loadableComponent: Search,
     label: 'nav.datasets',
     path: '/datasets',
-    exact: false,
+    end: false,
   },
 ]
 

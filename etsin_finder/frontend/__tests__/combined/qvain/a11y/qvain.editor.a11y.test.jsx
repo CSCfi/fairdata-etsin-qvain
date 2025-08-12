@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { ThemeProvider } from 'styled-components'
-import { BrowserRouter } from 'react-router-dom'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 import { render, screen } from '@testing-library/react'
@@ -11,6 +10,7 @@ import { buildStores } from '../../../../js/stores'
 import { StoresProvider } from '../../../../js/stores/stores'
 import dataset from '../../../__testdata__/dataset.att'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+import DataMemoryRouter from '@helpers/DataMemoryRouter'
 
 const stores = buildStores()
 
@@ -44,13 +44,13 @@ describe('Qvain editor', () => {
 
     render(
       <StoresProvider store={stores}>
-        <BrowserRouter>
+        <DataMemoryRouter>
           <ThemeProvider theme={etsinTheme}>
             <main>
               <QvainContent />
             </main>
           </ThemeProvider>
-        </BrowserRouter>
+        </DataMemoryRouter>
       </StoresProvider>,
       { attachTo: helper }
     )

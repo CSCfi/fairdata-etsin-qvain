@@ -4,8 +4,11 @@
 //
 // Usage:
 // * Create an instance of RouterStore
-// * Call the .syncWithHistory(history) to sync with a history object
-// * The push() and replace() methods are shorthand for history.push() and history.replace()
+// * Call the .syncWithRouter(router) to sync with a router object
+// * To navigate and add item to history, call .navigate(to)
+// * To navigate and replace current item in history, call .navigate(to, { replace: true })
+// * To navigate to previous item, call .navigate(-1)
+// * For backwards compatibility, methods push, replace, and goBack are also provided
 import { observable, action, makeObservable } from 'mobx'
 
 export class RouterStore {
@@ -17,16 +20,19 @@ export class RouterStore {
 
   @observable location
 
-  history = null
+  router = null
+
+  unsubscribe = null
 
   @action.bound
-  syncWithHistory(history) {
-    this.history = history
-    this.setLocation(history.location)
-    history.listen(location => {
+  syncWithRouter(router) {
+    this.unsubscribe?.()
+    this.router = router
+    this.setLocation(router.state.location)
+    this.unsubscribe = router.subscribe(({ location }) => {
       this.setLocation(location)
     })
-    return history
+    return this.unsubscribe
   }
 
   @action.bound
@@ -34,12 +40,20 @@ export class RouterStore {
     this.location = location
   }
 
-  push(...args) {
-    return this.history.push(...args)
+  navigate(to, { replace, state, relative, ...options } = {}) {
+    return this.router.navigate(to, { ...options, replace, state, relative })
   }
 
-  replace(...args) {
-    return this.history.replace(...args)
+  push(to, options = {}) {
+    return this.navigate(to, { ...options, replace: false })
+  }
+
+  replace(to, options = {}) {
+    return this.navigate(to, { ...options, replace: true })
+  }
+
+  goBack(options = {}) {
+    return this.navigate(-1, { ...options })
   }
 }
 

@@ -1,5 +1,5 @@
 import { ThemeProvider } from 'styled-components'
-import { MemoryRouter, Route } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { configure } from 'mobx'
 import { render } from '@testing-library/react'
 
@@ -65,9 +65,12 @@ describe('Events page', () => {
       <StoresProvider store={stores}>
         <MemoryRouter initialEntries={[path]}>
           <ThemeProvider theme={etsinTheme}>
-            <Route path="/dataset/:identifier/events">
-              <Events id="tab-events" dataset={dataset} versionTitles={versionTitles} />
-            </Route>
+            <Routes>
+              <Route
+                path="/dataset/:identifier/events"
+                element={<Events id="tab-events" dataset={dataset} versionTitles={versionTitles} />}
+              />
+            </Routes>
           </ThemeProvider>
         </MemoryRouter>
       </StoresProvider>
@@ -87,7 +90,7 @@ describe('Events page', () => {
   it('should render provenances, deprecations and version deletions in events table', async () => {
     await renderPage()
     tableToObjects(sections['Events']).should.eql([
-      { 'Title and Description': 'User-entered events', },
+      { 'Title and Description': 'User-entered events' },
       {
         'Event type': 'Checked|(Unknown)',
         Who: 'Aalto University',

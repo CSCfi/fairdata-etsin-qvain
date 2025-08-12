@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import Translate from '@/utils/Translate'
 import Card from '../../general/card'
 import LoginButton from '../../../general/navigation/loginButton'
@@ -20,7 +20,7 @@ const QvainLogin = ({ redirectPath }) => {
           <LoginButton loginThroughService="qvain" isLoggedInKey="cscUserLogged" />
         </>
       )}
-      {cscUserLogged && <Redirect to={redirectPath} />}
+      {cscUserLogged && <Navigate to={redirectPath} replace />}
     </Card>
   )
 }

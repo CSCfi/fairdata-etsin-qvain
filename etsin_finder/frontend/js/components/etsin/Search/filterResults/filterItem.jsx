@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { useNavigate } from 'react-router-dom'
 
 import { useStores } from '@/stores/stores'
 import { useQuery } from '@/components/etsin/general/useQuery'
@@ -19,7 +19,7 @@ const FilterItem = ({ filter, item, tabIndex }) => {
   } = useStores()
 
   const query = useQuery()
-  const history = useHistory()
+  const navigate = useNavigate()
   const values = query.getAll(filter)
 
   const itemValue = quoteValue(getValueTranslation(item.value))
@@ -29,7 +29,7 @@ const FilterItem = ({ filter, item, tabIndex }) => {
     if (isActive) query.delete(filter, itemValue)
     else query.append(filter, itemValue)
 
-    history.push(`/datasets?${query.toString()}`)
+    navigate(`/datasets?${query.toString()}`)
   }
 
   return (

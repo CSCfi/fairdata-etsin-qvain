@@ -18,6 +18,7 @@ module.exports = {
   },
   testPathIgnorePatterns: [
     './__tests__/test-setup.js',
+    './__tests__/ensureTextEncoder.js',
     './__tests__/test-helpers',
     './__tests__/timezonedJSDOMEnvironment.js',
     './__tests__/timezonedNodeEnvironment.js',

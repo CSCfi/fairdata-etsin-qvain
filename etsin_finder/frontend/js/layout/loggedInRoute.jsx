@@ -1,24 +1,12 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { useEffect } from 'react'
-import { Route, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 
 import QvainLogin from '../components/qvain/views/main/qvainLogin'
 import { useStores } from '../utils/stores'
 
-const LoggedInRoute = ({ notLoggedIn, children, component, render, ...props }) => {
+const LoggedInRoute = ({ notLoggedIn, children, component, render }) => {
   const location = useLocation()
   const { Auth } = useStores()
 
@@ -44,7 +32,7 @@ const LoggedInRoute = ({ notLoggedIn, children, component, render, ...props }) =
     }
   }
 
-  return <Route {...props}>{output}</Route>
+  return output
 }
 
 LoggedInRoute.propTypes = {

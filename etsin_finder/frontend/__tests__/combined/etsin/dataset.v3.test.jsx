@@ -7,7 +7,7 @@ import ReactModal from 'react-modal'
 // context
 import { StoresProvider } from '@/stores/stores'
 import etsinTheme from '@/styles/theme'
-import { MemoryRouter, Route } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 
 import Dataset from '@/components/etsin/Dataset'
@@ -92,7 +92,9 @@ const renderEtsin = async (
     <ThemeProvider theme={etsinTheme}>
       <MemoryRouter initialEntries={initialEntries}>
         <StoresProvider store={stores}>
-          <Route path="/dataset/:identifier" component={Dataset} />
+          <Routes>
+            <Route path="/dataset/:identifier/*" Component={Dataset} />
+          </Routes>
         </StoresProvider>
       </MemoryRouter>
     </ThemeProvider>

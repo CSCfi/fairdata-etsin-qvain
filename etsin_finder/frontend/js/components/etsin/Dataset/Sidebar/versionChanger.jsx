@@ -1,18 +1,19 @@
 import { useState } from 'react'
 import { observer } from 'mobx-react'
 import Select from 'react-select'
-import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Translate from '@/utils/Translate'
 import { useStores } from '@/utils/stores'
 import versionChangerStyles from './versionChangerStyles'
 
-const VersionChanger = props => {
+const VersionChanger = () => {
   const {
     Etsin: {
       EtsinDataset: { identifier, datasetVersions, hasExistingVersion },
     },
   } = useStores()
+
+  const navigate = useNavigate()
 
   const versions = datasetVersions?.map((single, i) => {
     const old = i > 0
@@ -42,7 +43,7 @@ const VersionChanger = props => {
 
   const changeVersion = value => {
     setSelected(value)
-    props.history.push(`/dataset/${value.value}`)
+    navigate(`/dataset/${value.value}`)
   }
 
   return (
@@ -63,8 +64,4 @@ const VersionChanger = props => {
   )
 }
 
-VersionChanger.propTypes = {
-  history: PropTypes.object.isRequired,
-}
-
-export default withRouter(observer(VersionChanger))
+export default observer(VersionChanger)

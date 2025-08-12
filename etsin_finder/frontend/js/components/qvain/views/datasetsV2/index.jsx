@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '../../utils/stores'
@@ -15,7 +15,7 @@ import ShareModal from './ShareModal'
 import Search from './search'
 
 export const Datasets = () => {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const {
     Qvain: { resetQvainStore },
@@ -50,7 +50,7 @@ export const Datasets = () => {
             component={SaveButton}
             onClick={() => {
               resetQvainStore()
-              history.push(getQvainUrl('/dataset'))
+              navigate(getQvainUrl('/dataset'))
             }}
             content="qvain.datasets.createButton"
             data-cy="create-dataset"

@@ -12,7 +12,7 @@
 
 import { useState, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
-import { Router } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { observer } from 'mobx-react'
 
 import { registerLocale } from 'react-datepicker'
@@ -22,7 +22,6 @@ import EnvClass from '@/stores/domain/env'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import Layout from './layout'
-import browserHistory from './browserHistory'
 
 import '../fairdata-ui/footer.css'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -44,9 +43,6 @@ if (BUILD === 'test') {
 } else if (BUILD !== 'production') {
   console.log('Looks like we are in development mode!')
 }
-
-// Syncing history with store
-const history = Env.history.syncWithHistory(browserHistory)
 
 const hideSpinner = () => {
   const spinner = document.getElementById('app-spinner')
@@ -92,17 +88,23 @@ const App = () => {
   return (
     <div className="app">
       <StoresProvider store={stores}>
-        <Router history={history}>
-          <ThemeProvider theme={etsinTheme}>
-            <>
-              <GlobalStyle />
-              <Layout />
-            </>
-          </ThemeProvider>
-        </Router>
+        <ThemeProvider theme={etsinTheme}>
+          <>
+            <GlobalStyle />
+            <Layout />
+          </>
+        </ThemeProvider>
       </StoresProvider>
     </div>
   )
 }
 
-export default observer(App)
+const router = createBrowserRouter([
+  // match everything with "*"
+  { path: '*', element: <App /> },
+])
+Env.history.syncWithRouter(router)
+
+const RoutedApp = () => <RouterProvider router={router} />
+
+export default observer(RoutedApp)

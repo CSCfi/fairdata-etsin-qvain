@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import { Route, Redirect, Switch, withRouter } from 'react-router-dom'
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
 import { useStores } from '@/stores/stores'
 import etsinTheme from '@/styles/theme'
 
@@ -11,15 +10,17 @@ import Events from './events'
 import Tabs from './tabs'
 import Maps from './maps'
 
-const Content = props => {
+const Content = () => {
   const {
     Etsin: {
       EtsinDataset: { identifier, hasData, hasEventsAndIdentifiers, hasMapData },
     },
   } = useStores()
 
+  const location = useLocation()
+
   let query = ''
-  const params = new URLSearchParams(props.location.search)
+  const params = new URLSearchParams(location.search)
   if (params.get('preview') === '1') {
     query = '?preview=1'
   }
@@ -27,69 +28,55 @@ const Content = props => {
   return (
     <MarginAfter>
       <Tabs
-        location={props.location}
+        location={location}
         showData={hasData}
         showEvents={hasEventsAndIdentifiers}
         showMaps={hasMapData}
       />
 
-      <Switch>
+      <Routes>
         {/* Initial route */}
         <Route
-          exact
-          path="/dataset/:identifier"
-          render={() => (
+          path=""
+          element={
             <Description
               id="tab-description"
               aria-labelledby="tab-for-description"
               role="tabpanel"
-              {...props}
             />
-          )}
+          }
         />
 
         {/* Route to downloads */}
         {hasData && (
           <Route
-            exact
-            path="/dataset/:identifier/data"
-            render={() => (
-              <Data id="tab-data" aria-labelledby="tab-for-data" role="tabpanel" {...props} />
-            )}
+            path="/data"
+            element={<Data id="tab-data" aria-labelledby="tab-for-data" role="tabpanel" />}
           />
         )}
 
         {/* Route to Events */}
         {hasEventsAndIdentifiers && (
           <Route
-            exact
-            path="/dataset/:identifier/events"
-            render={() => (
-              <Events id="tab-events" aria-labelledby="tab-for-events" role="tabpanel" {...props} />
-            )}
+            path="/events"
+            element={<Events id="tab-events" aria-labelledby="tab-for-events" role="tabpanel" />}
           />
         )}
 
         {/* Route to Maps */}
         {hasMapData && (
           <Route
-            exact
-            path="/dataset/:identifier/maps"
-            render={() => (
-              <Maps id="tab-maps" aria-labelledby="tab-for-maps" role="tabpanel" {...props} />
-            )}
+            path="/maps"
+            element={<Maps id="tab-maps" aria-labelledby="tab-for-maps" role="tabpanel" />}
           />
         )}
-
-        <Route>
-          <Redirect to={`/dataset/${identifier}${query}`} />
-        </Route>
-      </Switch>
+        <Route path="*" element={<Navigate to={`/dataset/${identifier}${query}`} replace />} />
+      </Routes>
     </MarginAfter>
   )
 }
 
-export default withRouter(observer(Content))
+export default observer(Content)
 
 const MarginAfter = styled.div`
   padding-bottom: 1.5rem;
@@ -103,7 +90,3 @@ const MarginAfter = styled.div`
     margin-bottom: 0.5em;
   }
 `
-
-Content.propTypes = {
-  location: PropTypes.object.isRequired,
-}

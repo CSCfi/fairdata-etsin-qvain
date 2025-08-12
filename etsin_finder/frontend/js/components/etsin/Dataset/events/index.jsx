@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import { useRouteMatch } from 'react-router'
+import { useParams } from 'react-router-dom'
 
 import { useStores } from '@/stores/stores'
 import EventList from './eventList'
@@ -22,11 +22,11 @@ const Events = ({ id }) => {
 
   const originIdentifier = [preservation.useCopy?.persistent_identifier].filter(v => v)
 
-  const match = useRouteMatch()
+  const params = useParams()
 
   useEffect(() => {
     Accessibility.handleNavigation('events', false)
-    Matomo.recordEvent(`EVENTS / ${match.params.identifier}`)
+    Matomo.recordEvent(`EVENTS / ${params.identifier}`)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

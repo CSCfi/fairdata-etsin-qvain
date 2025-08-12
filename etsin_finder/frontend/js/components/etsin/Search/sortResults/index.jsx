@@ -15,7 +15,7 @@ import { observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSort, faSortAmountUp, faSortAmountDown } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { useNavigate } from 'react-router-dom'
 import Translate from '@/utils/Translate'
 import { useQuery } from '@/components/etsin/general/useQuery'
 
@@ -46,7 +46,7 @@ function SortResults() {
   const [isOpen, setOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState(RELEVANCE)
   const query = useQuery()
-  const history = useHistory()
+  const navigate = useNavigate()
   const listToggle = isOpen ? 'open' : ''
 
   useEffect(() => {
@@ -70,7 +70,7 @@ function SortResults() {
       query.delete('ordering')
     }
     setOpen(false)
-    history.push(`/datasets?${query.toString()}`)
+    navigate(`/datasets?${query.toString()}`)
   }
 
   if (isLoading) return null

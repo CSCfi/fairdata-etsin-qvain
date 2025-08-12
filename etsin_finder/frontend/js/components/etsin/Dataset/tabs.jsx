@@ -1,31 +1,21 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
-import { NavLink, withRouter } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 import { useStores } from '@/stores/stores'
 
-const Tabs = (props) => {
+const Tabs = props => {
   const {
     Etsin: {
       EtsinDataset: { identifier },
     },
   } = useStores()
 
+  const location = useLocation()
+
   let query = ''
-  const params = new URLSearchParams(props.location.search)
+  const params = new URLSearchParams(location.search)
   if (params.get('preview') === '1') {
     query = '?preview=1'
   }
@@ -34,14 +24,14 @@ const Tabs = (props) => {
     <EtsinTabs className="nav nav-tabs" role="tablist">
       <li className="nav-item" role="presentation">
         <NavLink
-          exact
+          end
           replace
           to={`/dataset/${identifier}${query}`}
           id="tab-for-description"
           aria-controls="tab-description"
           role="tab"
           className="nav-link"
-          aria-selected={props.location.pathname === `/dataset/${identifier}${query}`}
+          aria-selected={location.pathname === `/dataset/${identifier}${query}`}
         >
           <Translate content="nav.dataset" fallback="Dataset" />
         </NavLink>
@@ -49,14 +39,14 @@ const Tabs = (props) => {
       {props.showData && (
         <li className="nav-item" role="presentation">
           <NavLink
-            exact
+            end
             replace
             to={`/dataset/${identifier}/data${query}`}
             id="tab-for-data"
             aria-controls="tab-data"
             role="tab"
             className="nav-link"
-            aria-selected={props.location.pathname === `/dataset/${identifier}/data${query}`}
+            aria-selected={location.pathname === `/dataset/${identifier}/data${query}`}
           >
             <Translate content="nav.data" fallback="Data" />
           </NavLink>
@@ -65,14 +55,14 @@ const Tabs = (props) => {
       {props.showEvents && (
         <li className="nav-item" role="presentation">
           <NavLink
-            exact
+            end
             replace
             to={`/dataset/${identifier}/events${query}`}
             id="tab-for-events"
             aria-controls="tab-events"
             role="tab"
             className="nav-link"
-            aria-selected={props.location.pathname === `/dataset/${identifier}/events${query}`}
+            aria-selected={location.pathname === `/dataset/${identifier}/events${query}`}
           >
             <Translate content="nav.events" fallback="Identifiers and events" />
           </NavLink>
@@ -81,14 +71,14 @@ const Tabs = (props) => {
       {props.showMaps && (
         <li className="nav-item" role="presentation">
           <NavLink
-            exact
+            end
             replace
             to={`/dataset/${identifier}/maps${query}`}
             id="tab-for-maps"
             aria-controls="tab-maps"
             role="tab"
             className="nav-link"
-            aria-selected={props.location.pathname === `/dataset/${identifier}/maps${query}`}
+            aria-selected={location.pathname === `/dataset/${identifier}/maps${query}`}
           >
             <Translate content="nav.maps" fallback="Maps" />
           </NavLink>
@@ -102,10 +92,6 @@ Tabs.propTypes = {
   showData: PropTypes.bool.isRequired,
   showEvents: PropTypes.bool.isRequired,
   showMaps: PropTypes.bool.isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-    search: PropTypes.string,
-  }).isRequired,
 }
 
 const EtsinTabs = styled.ul`
@@ -154,4 +140,4 @@ const EtsinTabs = styled.ul`
   }
 `
 
-export default withRouter(observer(Tabs))
+export default observer(Tabs)

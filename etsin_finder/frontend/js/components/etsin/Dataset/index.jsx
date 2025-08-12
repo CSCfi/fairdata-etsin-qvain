@@ -1,18 +1,7 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
-
 import { useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, useParams } from 'react-router-dom'
 import { opacify } from 'polished'
 
 import { useStores } from '@/stores/stores'
@@ -35,8 +24,9 @@ const BackButton = styled(NavLink)`
   margin: 0 0 0.5em 0;
 `
 
-const Dataset = ({ match }) => {
+const Dataset = () => {
   const oldIdentifier = useRef()
+  const params = useParams()
 
   const {
     Accessibility: { resetFocus },
@@ -50,14 +40,14 @@ const Dataset = ({ match }) => {
   } = useStores()
 
   useEffect(() => {
-    const identifier = match.params.identifier
+    const identifier = params.identifier
     if (identifier != oldIdentifier.current) {
       resetFocus()
       query(identifier)
     }
     oldIdentifier.current = identifier
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [match])
+  }, [params])
 
   const query = identifier => {
     // in production integer based identifiers are not permitted.
@@ -122,7 +112,6 @@ function DatasetView() {
           <div className="col-12">
             <StateInfo />
             <BackButton
-              exact
               to="/datasets"
               onClick={() => {
                 Accessibility.announce(
@@ -179,9 +168,5 @@ const DraftInfo = withCustomProps(styled.div)`
   margin-top: 0.5rem;
   margin-bottom: 1rem;
 `
-
-Dataset.propTypes = {
-  match: PropTypes.object.isRequired,
-}
 
 export default observer(Dataset)

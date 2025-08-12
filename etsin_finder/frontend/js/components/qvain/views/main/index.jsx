@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 
-import { withRouter } from 'react-router-dom'
-import { Prompt } from 'react-router'
+import { useParams } from 'react-router-dom'
 
 import Translate from '@/utils/Translate'
 import queryParam from '@/utils/queryParam'
@@ -16,8 +14,11 @@ import LooseActorDialog from './looseActorDialog'
 import LooseProvenanceDialog from './looseProvenanceDialog'
 import { useStores } from '@/stores/stores'
 import useConfirmReload from '@/components/etsin/general/useConfirmReload'
+import { usePrompt } from '@/utils/usePrompt'
 
-const Qvain = ({ match }) => {
+const Qvain = () => {
+  const params = useParams()
+
   const Stores = useStores()
   const {
     Qvain,
@@ -26,6 +27,11 @@ const Qvain = ({ match }) => {
     Matomo: { recordEvent },
   } = Stores
   const { datasetLoading, datasetError, changed } = Qvain
+
+  // Block navigation when there are unsaved changes.
+  // When developing, hot module reload can cause some
+  // "A router only supports one blocker at a time" warnings which can be ignored.
+  usePrompt({ shouldBlock: changed, message: translate('qvain.unsavedChanges') })
 
   // Prevent reload when dataset has changes
   useConfirmReload(useCallback(() => changed, [changed]))
@@ -48,7 +54,7 @@ const Qvain = ({ match }) => {
       return
     }
     const { original, fetchDataset } = Qvain
-    const matchIdentifier = match.params.identifier
+    const matchIdentifier = params.identifier
     let identifier = matchIdentifier
     let isTemplate = false
     const templateIdentifier = queryParam(Env.history.location, 'template')
@@ -74,13 +80,13 @@ const Qvain = ({ match }) => {
   useEffect(() => {
     // handleIdentifierChanged is called once when editor is openeed
     // and each time the identifier changes.
-    const identifier = match.params.identifier || ''
+    const identifier = params.identifier || ''
     if (identifier !== oldIdentifier.current) {
       handleIdentifierChanged()
     }
     oldIdentifier.current = identifier
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [match])
+  }, [params])
 
   const getDatasetProps = () => {
     return {
@@ -101,24 +107,10 @@ const Qvain = ({ match }) => {
       </ErrorBoundary>
       <LooseActorDialog />
       <LooseProvenanceDialog />
-      <Translate
-        component={Prompt}
-        when={changed}
-        attributes={{ message: 'qvain.unsavedChanges' }}
-      />
     </QvainContainer>
   )
 }
 
-Qvain.propTypes = {
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
-  }).isRequired,
-  match: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
-}
-
 export const ErrorTitle = () => <Translate component="h2" content="qvain.error.render" />
 
-export default withRouter(observer(Qvain))
+export default observer(Qvain)

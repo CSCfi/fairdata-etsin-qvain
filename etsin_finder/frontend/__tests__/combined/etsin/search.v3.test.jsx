@@ -6,7 +6,7 @@ import '@testing-library/jest-dom'
 
 // context
 import { ThemeProvider } from 'styled-components'
-import { MemoryRouter, Route } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import etsinTheme from '@/styles/theme'
 import { StoresProvider } from '@/stores/stores'
 
@@ -73,7 +73,9 @@ const renderEtsin = (path = '/datasets') => {
     <ThemeProvider theme={etsinTheme}>
       <MemoryRouter initialEntries={[path]}>
         <StoresProvider store={stores}>
-          <Route path="/datasets" component={Search} />
+          <Routes>
+            <Route path="/datasets" Component={Search} />
+          </Routes>
         </StoresProvider>
       </MemoryRouter>
     </ThemeProvider>
@@ -110,7 +112,6 @@ describe('Etsin search page', () => {
       test('it shows keyword aggregation', async () => {
         renderEtsin()
         for (const kw of dataset_ida_a.keyword) {
-           
           expect(await screen.findByText(`${kw} (1)`)).toBeInTheDocument()
         }
       })

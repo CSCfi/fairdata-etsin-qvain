@@ -1,25 +1,12 @@
-/* eslint-disable react/display-name */
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { useEffect } from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { Home, Search, Dataset, Qvain, QvainDatasetsV2 } from '../routes'
 import ErrorPage from '@/components/general/errorpage'
 
-import QvainLandingPage from '../components/qvain/views/landingPage'
-import { useStores } from '../utils/stores'
+import QvainLandingPage from '@/components/qvain/views/landingPage'
+import { useStores } from '@/utils/stores'
 import LoggedInRoute from './loggedInRoute'
 
 const Content = ({ contentRef }) => {
@@ -41,13 +28,6 @@ const Content = ({ contentRef }) => {
 
   if (Auth.initializing) return null
 
-  const qvainPath = path => {
-    if (isQvain) {
-      return path || '/'
-    }
-    return `/qvain${path}`
-  }
-
   const maintenance = isQvain && Flags.flagEnabled('QVAIN.MAINTENANCE')
   if (maintenance) {
     const query = new URLSearchParams(window.location.search)
@@ -59,31 +39,38 @@ const Content = ({ contentRef }) => {
   return (
     <main className="content">
       <span ref={contentRef} tabIndex="-1" />
-      <Switch>
-        {separateQvain && <Route path="/qvain" render={redirectToQvain(isQvain, getQvainUrl)} />}
+      <Routes>
+        {separateQvain && <Route path="/qvain" element={<NavigateToQvain />} />}
+        {separateQvain && <Route path="/qvain/*" element={<NavigateToQvain />} />}
         {!isQvain && [
-          <Route exact path="/" key="home" component={Home} />,
-          <Route exact path="/datasets/:query?" key="search" component={Search} />,
-          <Route path="/dataset/:identifier" key="dataset" component={Dataset} />,
+          <Route path="/" key="home" element={<Home />} />,
+          <Route path="/datasets/:query?" key="search" element={<Search />} />,
+          <Route path="/dataset/:identifier/*" key="dataset" element={<Dataset />} />,
         ]}
         {maintenance && (
-          <Route path={qvainPath('')}>
+          <Route path={getQvainUrl('')}>
             <QvainLandingPage />
           </Route>
         )}
-        <LoggedInRoute path={qvainPath('/dataset/:identifier')}>
-          <Qvain />
-        </LoggedInRoute>
-        <LoggedInRoute exact path={qvainPath('/dataset')}>
-          <Qvain />
-        </LoggedInRoute>
-        <LoggedInRoute exact path={qvainPath('')} notLoggedIn={<QvainLandingPage />}>
-          <QvainDatasetsV2 />
-        </LoggedInRoute>
         <Route
-          render={() => <ErrorPage errors={[{ type: 'error', translation: 'error.notFound' }]} />}
+          path={getQvainUrl('/dataset/:identifier?')}
+          element={
+            <LoggedInRoute>
+              <Qvain />
+            </LoggedInRoute>
+          }
         />
-      </Switch>
+        <Route
+          path={getQvainUrl('')}
+          notLoggedIn={<QvainLandingPage />}
+          element={
+            <LoggedInRoute>
+              <QvainDatasetsV2 />
+            </LoggedInRoute>
+          }
+        />
+        <Route path="*" element={<ErrorPage error={{ type: 'error' }} />} />
+      </Routes>
     </main>
   )
 }
@@ -94,13 +81,20 @@ Content.propTypes = {
 
 export default observer(Content)
 
-const redirectToQvain = (isQvain, getQvainUrl) => props => {
+const NavigateToQvain = () => {
   // redirect /qvain to the new qvain app url
-  // eslint-disable-next-line react/prop-types
-  const path = props.location.pathname.replace(/^\/qvain/, '')
+  const {
+    Env: {
+      isQvain,
+      getQvainUrl,
+      history: { location },
+    },
+  } = useStores()
+
+  const path = location.pathname.replace(/^\/qvain/, '') || '/'
   if (isQvain) {
     // already in qvain, just remove /qvain from path
-    return <Redirect to={path} />
+    return <Navigate to={path} replace />
   }
   // not in qvain, redirect to qvain domain
   const url = getQvainUrl(path)

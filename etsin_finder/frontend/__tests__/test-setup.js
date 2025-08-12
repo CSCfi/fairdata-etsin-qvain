@@ -2,10 +2,14 @@ import '@testing-library/react/dont-cleanup-after-each' // disable automatic cle
 import '@testing-library/jest-dom'
 import { cleanup } from '@testing-library/react'
 
+import './ensureTextEncoder' // needed by react-dom before importing test-helpers
+import { Request } from 'cross-fetch'
 import { registerHelpers } from './test-helpers'
 import chai from 'chai'
 import chaiJestMocks from 'chai-jest-mocks'
 chai.should() // register .should to Object.prototype
+
+global.Request = Request // Needed by react router in tests
 
 // isMockFunction is no longer in 'jest-mock' in jest 27 but chai-jest-mocks requires it
 import * as jestMock from 'jest-mock'

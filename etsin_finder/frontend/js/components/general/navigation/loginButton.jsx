@@ -12,7 +12,6 @@
 
 import { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { withRouter } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
@@ -22,9 +21,9 @@ import NoticeBar from '../noticeBar'
 import LoggedInUser from '../loggedInUser'
 import { Dropdown, DropdownItem } from '../dropdown'
 import { useStores } from '@/stores/stores'
+import { useLocation } from 'react-router-dom'
 
 const Login = ({
-  location,
   margin = '0 0 0 0.4em',
   width,
   isLoggedInKey = 'userLogged',
@@ -38,6 +37,8 @@ const Login = ({
     Auth,
     Locale: { translate },
   } = useStores()
+
+  const location = useLocation()
 
   const pageShowHandler = () => {
     setLoading(false)
@@ -103,7 +104,6 @@ const Login = ({
 }
 
 Login.propTypes = {
-  location: PropTypes.object.isRequired,
   margin: PropTypes.string,
   width: PropTypes.string,
   isLoggedInKey: PropTypes.string,
@@ -143,4 +143,4 @@ const LoginText = styled.span`
   font-size: ${p => p.$fontSize};
 `
 
-export default withRouter(observer(Login))
+export default observer(Login)

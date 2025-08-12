@@ -5,7 +5,7 @@ import MockAdapter from 'axios-mock-adapter'
 import { when } from 'mobx'
 
 import ReactModal from 'react-modal'
-import { MemoryRouter, Route } from 'react-router-dom'
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 
 import DatasetsV2 from '@/components/qvain/views/datasetsV2'
@@ -32,6 +32,12 @@ beforeEach(() => {
 const helper = document.createElement('div')
 ReactModal.setAppElement(helper)
 
+const CaptureLocation = () => {
+  const location = useLocation()
+  testLocation = location
+  return null
+}
+
 const renderDatasets = async () => {
   cleanup()
 
@@ -46,13 +52,9 @@ const renderDatasets = async () => {
   render(
     <StoresProvider store={stores}>
       <MemoryRouter>
-        <Route
-          path="*"
-          render={({ location }) => {
-            testLocation = location
-            return null
-          }}
-        />
+        <Routes>
+          <Route path="*" Component={CaptureLocation} />
+        </Routes>
         <ThemeProvider theme={etsinTheme}>
           <DatasetsV2 />
         </ThemeProvider>

@@ -18,12 +18,12 @@ export const getEnterEditAction = (Stores, dataset) => {
     handler: () => {
       if (dataset.next_draft) {
         Matomo.recordEvent(`EDIT / ${dataset.next_draft.identifier}`)
-        history.push(getQvainUrl(`/dataset/${dataset.next_draft.identifier}`))
+        history.navigate(getQvainUrl(`/dataset/${dataset.next_draft.identifier}`))
         return
       }
 
       Matomo.recordEvent(`EDIT / ${dataset.identifier}`)
-      history.push(getQvainUrl(`/dataset/${dataset.identifier}`))
+      history.navigate(getQvainUrl(`/dataset/${dataset.identifier}`))
     },
   }
 }
@@ -94,7 +94,7 @@ export const getCreateNewVersionAction = (Stores, dataset) => {
     more: true,
     handler: async () => {
       recordEvent(`NEW_VERSION / ${identifier}`)
-      history.push(getQvainUrl(`/dataset/${dataset.identifier}?new_version`))
+      history.navigate(getQvainUrl(`/dataset/${dataset.identifier}?new_version`))
     },
   }
 }
@@ -114,7 +114,7 @@ export const getUseAsTemplateAction = (Stores, dataset) => {
       recordEvent(`TEMPLATE / ${dataset.identifier}`)
 
       const identifier = dataset.next_draft?.identifier || dataset.identifier
-      history.push(getQvainUrl(`/dataset?template=${identifier}`))
+      history.navigate(getQvainUrl(`/dataset?template=${identifier}`))
     },
   }
 }

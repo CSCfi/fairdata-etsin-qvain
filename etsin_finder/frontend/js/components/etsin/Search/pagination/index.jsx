@@ -12,7 +12,7 @@
 
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { useNavigate } from 'react-router-dom'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
@@ -35,13 +35,13 @@ const Pagination = () => {
   })
 
   const query = useQuery()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const changePage = (event, value) => {
     query.set('page', value)
     Accessibility.announce(translate('search.pagination.changepage', { value }))
     Accessibility.resetFocus()
-    history.push(`/datasets?${query.toString()}`)
+    navigate(`/datasets?${query.toString()}`)
   }
 
   const getItemPage = item => {

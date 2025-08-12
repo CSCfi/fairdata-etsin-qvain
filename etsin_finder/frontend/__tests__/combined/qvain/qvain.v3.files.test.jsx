@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
 import ReactModal from 'react-modal'
 
-import { MemoryRouter, Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { screen, render, within, waitForElementToBeRemoved } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -15,6 +15,7 @@ import EnvClass from '@/stores/domain/env'
 import { StoresProvider } from '@/stores/stores'
 import Qvain from '@/components/qvain/views/main'
 import { failTestsWhenTranslationIsMissing } from '@helpers'
+import DataMemoryRouter from '@helpers/DataMemoryRouter'
 
 const registerMissingTranslationHandler = failTestsWhenTranslationIsMissing()
 
@@ -94,11 +95,16 @@ const renderQvain = async ({ initialPath, overrides = {}, draftOverrides = {} } 
 
   render(
     <ThemeProvider theme={etsinTheme}>
-      <MemoryRouter initialEntries={[initialPath || `/dataset/${metaxDataset.id}`]}>
+      <DataMemoryRouter
+        initialEntries={[initialPath || `/dataset/${metaxDataset.id}`]}
+        stores={stores}
+      >
         <StoresProvider store={stores}>
-          <Route path="/dataset/:identifier" component={Qvain} />
+          <Routes>
+            <Route path="/dataset/:identifier" Component={Qvain} />
+          </Routes>
         </StoresProvider>
-      </MemoryRouter>
+      </DataMemoryRouter>
     </ThemeProvider>
   )
   ReactModal.setAppElement(document.createElement('div'))

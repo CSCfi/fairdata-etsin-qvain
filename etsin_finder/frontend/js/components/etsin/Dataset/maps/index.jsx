@@ -9,6 +9,7 @@ import Translate from '@/utils/Translate'
 import { useStores } from '@/utils/stores'
 
 import MyMap from './map'
+import { useParams } from 'react-router-dom'
 
 const Maps = props => {
   const {
@@ -20,21 +21,24 @@ const Maps = props => {
     Locale: { getPreferredLang, getValueTranslation },
   } = useStores()
 
+  const params = useParams()
+
   useEffect(() => {
     Accessibility.handleNavigation('maps', false)
-    Matomo.recordEvent(`MAPS / ${props.match.params.identifier}`)
-  }, [Accessibility, Matomo, props.match.params.identifier])
+    Matomo.recordEvent(`MAPS / ${params.identifier}`)
+  }, [Accessibility, Matomo, params.identifier])
 
-  /*Values of each spatial record are reviewed. If any of the records contain 
-  table data, the hasCellValues variable will be true, rendering the map 
-  table. If no record has table data, the table will not be rendered. (See 
-  the return part): 
+  /*Values of each spatial record are reviewed. If any of the records contain
+  table data, the hasCellValues variable will be true, rendering the map
+  table. If no record has table data, the table will not be rendered. (See
+  the return part):
   */
-  const hasCellValues = datasetMetadata.spatial.some(spat =>
-    spat.geographic_name ||
-    getValueTranslation(spat.reference?.pref_label) ||
-    spat.full_address ||
-    spat.altitude_in_meters?.toString()
+  const hasCellValues = datasetMetadata.spatial.some(
+    spat =>
+      spat.geographic_name ||
+      getValueTranslation(spat.reference?.pref_label) ||
+      spat.full_address ||
+      spat.altitude_in_meters?.toString()
   )
 
   const buildLocationRow = spatial => {
@@ -42,7 +46,7 @@ const Maps = props => {
     const locationName =
       spatial.geographic_name || getValueTranslation(spatial.reference?.pref_label)
 
-    // Build a table row only if the record has table data: 
+    // Build a table row only if the record has table data:
     if (locationName || spatial.full_address || spatial.altitude_in_meters?.toString()) {
       return (
         <tr key={`location-${locationName}`}>
@@ -61,9 +65,13 @@ const Maps = props => {
           <td>
             {
               // Display if alt exists, otherwise display '-'
-              /*The value is converted to a string since in the case where 
+              /*The value is converted to a string since in the case where
               altitude is 0, it would otherwise evaluate to false: */
-              spatial.altitude_in_meters?.toString() ? <span>{spatial.altitude_in_meters}</span> : <span>-</span>
+              spatial.altitude_in_meters?.toString() ? (
+                <span>{spatial.altitude_in_meters}</span>
+              ) : (
+                <span>-</span>
+              )
             }
           </td>
         </tr>
@@ -76,25 +84,27 @@ const Maps = props => {
   return (
     <div id={props.id} className="tabContent" data-testid={props.id}>
       {/* Map details in a table list (this is not the actual map) */}
-      {hasCellValues && <Table>
-        {/* Table header */}
-        <thead>
-          <tr>
-            <th className="rowIcon" scope="col">
-              <Translate content="dataset.map.geographic_name" />
-            </th>
-            <th className="rowIcon" scope="col">
-              <Translate content="dataset.map.full_address" />
-            </th>
-            <th className="rowIcon" scope="col">
-              <Translate content="dataset.map.alt" />
-            </th>
-          </tr>
-        </thead>
+      {hasCellValues && (
+        <Table>
+          {/* Table header */}
+          <thead>
+            <tr>
+              <th className="rowIcon" scope="col">
+                <Translate content="dataset.map.geographic_name" />
+              </th>
+              <th className="rowIcon" scope="col">
+                <Translate content="dataset.map.full_address" />
+              </th>
+              <th className="rowIcon" scope="col">
+                <Translate content="dataset.map.alt" />
+              </th>
+            </tr>
+          </thead>
 
-        {/* Table body */}
-        <tbody>{datasetMetadata.spatial.map(spatial => buildLocationRow(spatial))}</tbody>
-      </Table>}
+          {/* Table body */}
+          <tbody>{datasetMetadata.spatial.map(spatial => buildLocationRow(spatial))}</tbody>
+        </Table>
+      )}
 
       {/* The actual map */}
       {datasetMetadata.spatial.map(spatial => {
@@ -108,9 +118,9 @@ const Maps = props => {
             >
               {/* Map popup, hidden if it contains no information */}
               {spatial.reference?.pref_label ||
-                spatial.geographic_name ||
-                spatial.full_address ||
-                spatial.altitude_in_meters?.toString() ? (
+              spatial.geographic_name ||
+              spatial.full_address ||
+              spatial.altitude_in_meters?.toString() ? (
                 <CustomPopup>
                   {spatial.reference && (
                     <h2 lang={getPreferredLang(spatial.reference.pref_label)}>
@@ -193,11 +203,6 @@ const CustomPopup = styled(Popup)`
 `
 
 Maps.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      identifier: PropTypes.string,
-    }),
-  }).isRequired,
   id: PropTypes.string.isRequired,
 }
 

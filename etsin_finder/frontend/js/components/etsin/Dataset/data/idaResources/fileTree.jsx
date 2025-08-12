@@ -1,13 +1,12 @@
 import { useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import { withRouter } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import FileTreeItem from './fileTreeItem'
 import { useRenderTree } from '@/components/general/files/tree'
 import { useStores } from '@/stores/stores'
 
-export const FileTree = ({ location }) => {
+export const FileTree = () => {
   const {
     Etsin: {
       EtsinDataset: { files: Files, isDownloadPossible },
@@ -17,6 +16,7 @@ export const FileTree = ({ location }) => {
 
   const { View } = Files
 
+  const location = useLocation()
   // Open directories so items specified by query parameters are visible,
   // e.g. ?show=/path/subpath will open /path.
   // Supports multiple paths, e.g. ?show=/path1/item&show=/path2/item.
@@ -43,10 +43,4 @@ export const FileTree = ({ location }) => {
   return renderTree()
 }
 
-FileTree.propTypes = {
-  location: PropTypes.shape({
-    search: PropTypes.string,
-  }).isRequired,
-}
-
-export default withRouter(observer(FileTree))
+export default observer(FileTree)

@@ -1,4 +1,4 @@
-import createMemoryHistory from 'history/createMemoryHistory'
+import { createMemoryRouter } from 'react-router-dom'
 import RouterStore from '@/utils/RouterStore'
 import { autorun } from 'mobx'
 
@@ -11,12 +11,14 @@ afterEach(() => {
 
 const setupStore = () => {
   const routerStore = new RouterStore()
-  const history = createMemoryHistory({ initialEntries: ['/'] })
-  routerStore.syncWithHistory(history)
+  const router = createMemoryRouter([{ path: '*' }], {
+    initialEntries: ['/'],
+  })
+  routerStore.syncWithRouter(router)
   return routerStore
 }
 
-it('should provide observable location', () => {
+it('should provide observable location', async () => {
   const routerStore = setupStore()
 
   // observe location changes
@@ -26,6 +28,20 @@ it('should provide observable location', () => {
   })
 
   expect(pathname).toEqual('/')
+  try {
+    await routerStore.navigate(-1)
+  } catch (e) {
+    console.log(e)
+  }
   routerStore.push('/dataset')
   expect(pathname).toEqual('/dataset')
+
+  routerStore.replace('/dataset/1')
+  expect(pathname).toEqual('/dataset/1')
+
+  routerStore.goBack()
+  expect(pathname).toEqual('/')
+
+  routerStore.navigate(1)
+  expect(pathname).toEqual('/dataset/1')
 })

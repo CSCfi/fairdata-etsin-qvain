@@ -26,7 +26,7 @@ const Navi = ({ routes }) => {
   return routes.map(route => (
     <NavItem
       key={route.path}
-      exact={route.exact}
+      end={route.end}
       to={route.path}
       onPointerOver={() => {
         if (route.loadableComponent) {
@@ -48,7 +48,7 @@ Navi.propTypes = {
       loadableComponent: PropTypes.elementType,
       label: PropTypes.string.isRequired,
       path: PropTypes.string.isRequired,
-      exact: PropTypes.bool,
+      end: PropTypes.bool,
     })
   ).isRequired,
 }

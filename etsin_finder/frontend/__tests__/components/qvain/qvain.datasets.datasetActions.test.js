@@ -23,7 +23,7 @@ beforeEach(() => {
   stores = buildStores()
   configure({ safeDescriptors: true })
   stores.Matomo.recordEvent = jest.fn()
-  stores.Env.history.push = jest.fn()
+  stores.Env.history.navigate = jest.fn()
   stores.Qvain.editDataset = jest.fn()
   stores.Qvain.resetWithTemplate = jest.fn()
   stores.QvainDatasets.removeModal = { open: jest.fn() }
@@ -57,7 +57,7 @@ describe('getEnterEditAction', () => {
     })
 
     it('should navigate to editor url', () => {
-      expect(stores.Env.history.push).to.have.beenCalledWith(`/qvain/dataset/${expectedIdentifier}`)
+      expect(stores.Env.history.navigate).to.have.beenCalledWith(`/qvain/dataset/${expectedIdentifier}`)
     })
 
     if (expectCallEditDataset) {
@@ -114,7 +114,7 @@ describe('getCreateNewVersionAction', () => {
       })
 
       it('should call navigate to editor url', () => {
-        expect(stores.Env.history.push).to.have.beenCalledWith(
+        expect(stores.Env.history.navigate).to.have.beenCalledWith(
           `/qvain/dataset/published-id?new_version`
         )
       })
@@ -134,13 +134,13 @@ describe('getUseAsTemplateAction', () => {
 
     if (dataset.next_draft) {
       it('should use dataset.next_draft as template', () => {
-        expect(stores.Env.history.push).to.have.beenCalledWith(
+        expect(stores.Env.history.navigate).to.have.beenCalledWith(
           `/qvain/dataset?template=${dataset.next_draft.identifier}`
         )
       })
     } else {
       it('should use dataset as template', () => {
-        expect(stores.Env.history.push).to.have.beenCalledWith(
+        expect(stores.Env.history.navigate).to.have.beenCalledWith(
           `/qvain/dataset?template=${dataset.identifier}`
         )
       })

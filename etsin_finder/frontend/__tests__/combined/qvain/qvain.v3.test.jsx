@@ -2,8 +2,7 @@ import { ThemeProvider } from 'styled-components'
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
 import ReactModal from 'react-modal'
-
-import { MemoryRouter, Route, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 
 import { waitFor, screen, render, within, waitForElementToBeRemoved } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -17,6 +16,7 @@ import { StoresProvider } from '@/stores/stores'
 import Qvain from '@/components/qvain/views/main'
 import { flatten, removeMatchingKeys } from '@/utils/flatten'
 import { failTestsWhenTranslationIsMissing } from '@helpers'
+import DataMemoryRouter from '@helpers/DataMemoryRouter'
 
 const registerMissingTranslationHandler = failTestsWhenTranslationIsMissing()
 
@@ -92,12 +92,17 @@ const renderQvain = async (overrides = {}, { initialPath } = {}) => {
 
   render(
     <ThemeProvider theme={etsinTheme}>
-      <MemoryRouter initialEntries={[initialPath || `/dataset/${metaxDataset.id}`]}>
+      <DataMemoryRouter
+        initialEntries={[initialPath || `/dataset/${metaxDataset.id}`]}
+        stores={stores}
+      >
         <StoresProvider store={stores}>
           <Location />
-          <Route path="/dataset/:identifier" component={Qvain} />
+          <Routes>
+            <Route path="/dataset/:identifier" Component={Qvain} />
+          </Routes>
         </StoresProvider>
-      </MemoryRouter>
+      </DataMemoryRouter>
     </ThemeProvider>
   )
   ReactModal.setAppElement(document.createElement('div'))
@@ -139,7 +144,9 @@ describe('Qvain with an opened dataset', () => {
   it('shows DOI option as checked due to user action after selecting IDA catalog', async () => {
     const section = await renderSection(/Data Origin/)
     const idaButton = within(section).getByText('Choose "IDA"', { exact: false }).closest('button')
-    const remoteResourcesButton = within(section).getByText('Choose "Remote Resources', { exact: false }).closest('button')
+    const remoteResourcesButton = within(section)
+      .getByText('Choose "Remote Resources', { exact: false })
+      .closest('button')
     const doiSelector = within(section).getByLabelText('to have a DOI', { exact: false })
 
     await userEvent.click(idaButton)
@@ -150,7 +157,6 @@ describe('Qvain with an opened dataset', () => {
 
     expect(doiSelector).toBeChecked()
   })
-
 
   it('shows option for show/hide file metadata', async () => {
     await renderQvain({ access_rights: access_rights_embargo })
@@ -647,7 +653,7 @@ describe('Qvain with an opened dataset', () => {
       expect(
         screen.getByText(
           'The dataset is being processed by the Digital Preservation Service.' +
-          ' You can view metadata but cannot make any changes.'
+            ' You can view metadata but cannot make any changes.'
         )
       ).toBeInTheDocument()
       const input = document.getElementById('titleInput')

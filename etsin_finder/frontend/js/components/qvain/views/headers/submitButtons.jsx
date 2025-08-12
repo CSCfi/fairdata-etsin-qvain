@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import PropTypes, { instanceOf } from 'prop-types'
 import { observer } from 'mobx-react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import { useStores } from '@/stores/stores'
 import TooltipHoverOnSave from '@/components/qvain/general/header/tooltipHoverOnSave'
@@ -30,7 +30,8 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
     Locale: { translate },
   } = useStores()
 
-  const history = useHistory()
+  const navigate = useNavigate()
+  const location = useLocation()
   const disabled = readonly || allButtonsDisabled
 
   const [draftButtonHover, setDraftButtonHover] = useState(false)
@@ -44,18 +45,18 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
       const redirect = async () => {
         // Wait a bit so setChanged(false) has time to propagated to the Prompt component.
         await Promise.delay(0)
-        history.replace(getQvainUrl(path))
+        navigate(getQvainUrl(path))
       }
-      if (history.location.pathname !== path) {
+      if (location.pathname !== path) {
         redirect()
       }
     }
-  }, [original, QvainDatasets, getQvainUrl, history, prevalidate])
+  }, [original, QvainDatasets, getQvainUrl, navigate, location.pathname, prevalidate])
 
   const goToDatasetsCallBack = ({ identifier, isNew }) => {
     // go to datasets view and highlight published dataset
     QvainDatasets.setPublishedDataset({ identifier, isNew })
-    history.push(getQvainUrl('/'))
+    navigate(getQvainUrl('/'))
   }
 
   const handleDraftClick = () => {

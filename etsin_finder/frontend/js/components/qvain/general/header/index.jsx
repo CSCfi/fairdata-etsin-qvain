@@ -49,13 +49,13 @@ const QvainHeader = () => {
       loadableComponent: QvainDatasetsV2,
       label: 'qvain.nav.home',
       path: '/',
-      exact: true,
+      end: true,
     },
     {
       loadableComponent: Qvain,
       label: getLabel(),
       path: '/dataset',
-      exact: false,
+      end: false,
     },
   ]
 

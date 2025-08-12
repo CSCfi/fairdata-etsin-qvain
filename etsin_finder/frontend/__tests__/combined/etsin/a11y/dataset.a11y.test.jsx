@@ -1,5 +1,5 @@
 import { ThemeProvider } from 'styled-components'
-import { MemoryRouter, Route } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 import { observable, when } from 'mobx'
@@ -59,7 +59,9 @@ describe('Etsin dataset page', () => {
             <main>
               <label htmlFor="react-select-2-input"> dummy</label>
               {/* to silence react select falsy test fails */}
-              <Route path="/dataset/:identifier" component={Dataset} />
+              <Routes>
+                <Route path="/dataset/:identifier/*" Component={Dataset} />
+              </Routes>
             </main>
           </ThemeProvider>
         </MemoryRouter>
