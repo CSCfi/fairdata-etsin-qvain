@@ -52,8 +52,8 @@ vi.mock('../../../js/stores/view/qvain/qvain.submit.schemas', () => {
   }
 })
 
-vi.mock('lodash.debounce', async () => {
-  return { default: f => f }
+vi.mock('lodash-es', async () => {
+  return { ...(await vi.importActual('lodash-es')), debounce: f => f }
 })
 
 const errors = {

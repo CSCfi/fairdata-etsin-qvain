@@ -28,9 +28,8 @@ export default defineConfig(({ command, mode }) => {
         input: '/js/index.jsx', // overwrite default .html entry
       },
       // Avoid minifying code when in development build
-      minify: !isDev,
+      minify: isDev ? false : 'terser',
       terserOptions: {
-        minify: !isDev,
         mangle: !isDev,
       },
     },

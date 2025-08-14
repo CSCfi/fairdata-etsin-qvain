@@ -1,8 +1,7 @@
-
 import { makeObservable, observable, action, computed, override, runInAction } from 'mobx'
 import * as yup from 'yup'
 import { v4 as uuidv4 } from 'uuid'
-import cloneDeep from 'lodash.clonedeep'
+import { cloneDeep } from 'lodash-es'
 import axios from 'axios'
 
 import Field from './qvain.field'

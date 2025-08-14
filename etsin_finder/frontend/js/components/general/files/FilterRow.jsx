@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import debounce from 'lodash.debounce'
+import { debounce } from 'lodash-es'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Select from 'react-select'

@@ -1,7 +1,7 @@
 import { makeObservable, observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { ValidationError } from 'yup'
-import debounce from 'lodash.debounce'
+import { debounce } from 'lodash-es'
 import handleSubmitToBackend from '../../../components/qvain/utils/handleSubmit'
 import { qvainFormSchema, qvainFormDraftSchema } from './qvain.submit.schemas'
 import { DATA_CATALOG_IDENTIFIER, DATASET_STATE, CUMULATIVE_STATE } from '../../../utils/constants'

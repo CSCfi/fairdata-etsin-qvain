@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 import { observable, computed, action, toJS, makeObservable } from 'mobx'
-import cloneDeep from 'lodash.clonedeep'
+import { cloneDeep } from 'lodash-es'
 
 class Field {
   constructor(Parent, Template, Model, fieldName, references = []) {

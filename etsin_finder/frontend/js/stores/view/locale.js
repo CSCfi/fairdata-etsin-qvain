@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { observable, action, computed, makeObservable } from 'mobx'
 import moment from 'moment'
 import finnish from '@/../locale/finnish'

@@ -1,4 +1,4 @@
-import { escape } from 'lodash'
+import { escape } from 'lodash-es'
 
 const matchRegex = /%\((.+?)\)s/g // E.g. %(key)s
 

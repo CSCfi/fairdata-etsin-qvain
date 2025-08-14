@@ -20,9 +20,9 @@ import DataMemoryRouter from '@helpers/DataMemoryRouter'
 const registerMissingTranslationHandler = failTestsWhenTranslationIsMissing()
 
 // Replace debounce milliseconds with 0
-vi.mock('lodash.debounce', async () => {
-  const { default: actualDebounce } = await vi.importActual('lodash.debounce')
-  return { default: f => actualDebounce(f, 0) }
+vi.mock('lodash-es', async () => {
+  const actual = await vi.importActual('lodash-es')
+  return { ...actual, debounce: f => actual.debounce(f, 0) }
 })
 
 vi.setConfig({ testTimeout: 25000 })

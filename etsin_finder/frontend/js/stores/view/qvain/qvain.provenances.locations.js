@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import Spatials from './qvain.spatials'
 
 class Locations extends Spatials {
