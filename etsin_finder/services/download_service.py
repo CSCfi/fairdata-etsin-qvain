@@ -48,6 +48,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
             public_port = dl_api_config.get("PUBLIC_PORT")
             auth_token = dl_api_config.get("AUTH_TOKEN")
             verify_ssl = dl_api_config.get("VERIFY_SSL", True)
+            timeout = dl_api_config.get("TIMEOUT", 30)
             self_domain = app.config.get("SERVER_ETSIN_DOMAIN_NAME")
 
             self.API_BASE_URL = f"https://{host}:{port}"
@@ -67,6 +68,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
 
             self.verify_ssl = verify_ssl
             self.auth_token = auth_token
+            self.timeout = timeout
             self.proxies = None
             if dl_api_config.get("HTTPS_PROXY"):
                 self.proxies = dict(https=dl_api_config.get("HTTPS_PROXY"))
@@ -85,7 +87,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
         args = dict(
             headers=headers,
             verify=self.verify_ssl,
-            timeout=30,
+            timeout=self.timeout,
             proxies=self.proxies,
             error_to_response=self._error_to_response,
         )
