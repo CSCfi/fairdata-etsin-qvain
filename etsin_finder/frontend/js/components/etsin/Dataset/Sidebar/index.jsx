@@ -296,7 +296,7 @@ const List = styled.ul`
 `
 
 const ListItem = styled.li`
-  :not(:last-child) {
+  &:not(:last-child) {
     margin-bottom: 0.5rem;
   }
 `

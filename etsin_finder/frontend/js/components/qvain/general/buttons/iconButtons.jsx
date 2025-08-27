@@ -57,7 +57,7 @@ const EditButtonStyles = styled.button`
     background-color: rgba(0, 187, 255, 0.1);
     border-color: rgb(0, 127, 173);
   }
-  :disabled {
+  &:disabled {
     color: ${props => opacify(-0.6, desaturate(0.5, props.theme.color.primary))};
   }
 `

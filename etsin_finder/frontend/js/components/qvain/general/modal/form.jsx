@@ -55,7 +55,7 @@ export const CheckboxStyles = withCustomProps(styled.input)`
   height: 18px;
   margin: 4px;
   padding: 0;
-  :not(:disabled) {
+  &:not(:disabled) {
     cursor: pointer;
   }
 `

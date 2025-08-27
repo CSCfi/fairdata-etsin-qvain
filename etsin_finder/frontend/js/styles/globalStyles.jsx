@@ -361,7 +361,7 @@ const GlobalStyle = createGlobalStyle`
   /* Summary element */
 
   details:first-of-type summary::marker,
-  :is(::-webkit-details-marker) {
+  &:is(::-webkit-details-marker) {
     content: "+ ";
     font-family: monospace;
     font-weight: bold;

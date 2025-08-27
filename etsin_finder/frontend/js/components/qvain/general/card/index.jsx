@@ -42,7 +42,7 @@ export const PageTitle = styled.h1`
 `
 
 export const Paragraph = styled.p`
-  :last-child {
+  &:last-child {
     margin-bottom: 0;
   }
 `

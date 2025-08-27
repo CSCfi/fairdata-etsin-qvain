@@ -125,8 +125,7 @@ const InputContainer = styled.div`
     width: ${props => (props.width ? props.width : '100%')};
     padding-right: ${props => (props.paddingRight ? props.paddingRight : '')};
     padding-left: ${props => (props.paddingLeft ? props.paddingLeft : '')};
-  },
-  padding-top: 10px;
+  }
   padding-bottom: 10px;
 `
 
@@ -147,7 +146,7 @@ const OrgList = styled.div`
 `
 
 const Funding = styled.div`
-  :not(:last-child) {
+  &:not(:last-child) {
     padding-bottom: 1rem;
     border-bottom: 2px solid ${props => props.theme.color.lightgray};
   }

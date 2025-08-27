@@ -36,7 +36,7 @@ ValidationError.defaultProps = {
 
 export const ValidationErrorText = styled.p`
   color: ${props => props.theme.color.redText};
-  :empty {
+  &:empty {
     display: none;
   }
 `
