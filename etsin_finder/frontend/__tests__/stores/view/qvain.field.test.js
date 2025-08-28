@@ -21,7 +21,7 @@ describe('Field', () => {
   let mockStores
 
   beforeEach(() => {
-    mockStores = { readonly, setChanged: jest.fn() }
+    mockStores = { readonly, setChanged: vi.fn() }
     configure({ safeDescriptors: false })
     field = new Field(mockStores, Template, testModel)
     configure({ safeDescriptors: true })
@@ -294,7 +294,7 @@ describe('Field', () => {
   })
 
   describe('when calling cloneRefs', () => {
-    const item = { testRef: { clone: jest.fn() } }
+    const item = { testRef: { clone: vi.fn() } }
     beforeEach(() => {
       field.references = ['testRef']
       field.cloneRefs(item)
@@ -311,14 +311,14 @@ describe('Field', () => {
     beforeEach(async () => {
       field.create()
       inEdit = { ...field.inEdit }
-      jest.spyOn(field.schema, 'validate')
-      jest.spyOn(field, 'save')
-      jest.spyOn(field, 'clearInEdit')
+      vi.spyOn(field.schema, 'validate')
+      vi.spyOn(field, 'save')
+      vi.spyOn(field, 'clearInEdit')
       await field.validateAndSave()
     })
 
     afterEach(() => {
-      jest.restoreAllMocks()
+      vi.restoreAllMocks()
     })
 
     test('should call schema with Field.inEdit', () => {
@@ -343,14 +343,14 @@ describe('Field', () => {
     }
 
     beforeEach(async () => {
-      jest.spyOn(field.schema, 'validate')
-      jest.spyOn(field, 'setValidationError')
+      vi.spyOn(field.schema, 'validate')
+      vi.spyOn(field, 'setValidationError')
       field.schema.validate.mockReturnValue(Promise.reject(error))
       await field.validateAndSave()
     })
 
     afterEach(() => {
-      jest.restoreAllMocks()
+      vi.restoreAllMocks()
     })
 
     test('should call setValidationError', () => {

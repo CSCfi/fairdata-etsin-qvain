@@ -1,6 +1,6 @@
 import { buildStores } from '../../../js/stores'
 
-jest.mock('../../../js/stores/stores')
+vi.mock('../../../js/stores/stores')
 
 describe('Given modified provenance with added used entity', () => {
   const mockStores = buildStores()

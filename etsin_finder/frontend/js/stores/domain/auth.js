@@ -71,7 +71,7 @@ class Auth {
 
   isMetaxV3Request(requestConfig) {
     // Return true if Axios request config object is a Metax V3 request
-    const requestUrl = new URL(requestConfig.url, global.location.href)
+    const requestUrl = new URL(requestConfig.url, globalThis.location.href)
     let metaxUrl
     try {
       metaxUrl = new URL(this.Env.metaxV3Url(''))

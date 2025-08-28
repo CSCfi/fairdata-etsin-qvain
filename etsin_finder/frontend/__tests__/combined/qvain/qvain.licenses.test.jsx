@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
@@ -6,26 +7,26 @@ import License from '@/components/qvain/sections/DataOrigin/general/AccessRights
 import { buildStores } from '@/stores'
 import { useStores } from '@/stores/stores'
 import { LICENSE_URL } from '@/utils/constants'
+import MockAdapter from 'axios-mock-adapter'
 
-jest.mock('@/stores/stores', () => {
-  const mockUseStores = jest.fn()
+vi.mock('@/stores/stores', async () => {
+  const mockUseStores = vi.fn()
   return {
-    ...jest.requireActual('@/stores/stores'),
+    ...(await vi.importActual('@/stores/stores')),
     useStores: mockUseStores,
   }
 })
 
-jest.mock('react', () => {
-  const original = jest.requireActual('react')
+vi.mock('react', async () => {
+  const original = await vi.importActual('react')
   return {
     ...original,
-    useState: jest.fn(original.useState),
+    useState: vi.fn(original.useState),
   }
 })
 
-jest.mock('axios', () => ({
-  get: jest.fn().mockReturnValue(Promise.resolve({ data: { hits: { hits: [] } } })),
-}))
+const mockAdapter = new MockAdapter(axios)
+mockAdapter.onGet().reply(200, { hits: { hits: [] } })
 
 describe('Qvain.License', () => {
   let stores
@@ -42,7 +43,7 @@ describe('Qvain.License', () => {
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should render default license', () => {

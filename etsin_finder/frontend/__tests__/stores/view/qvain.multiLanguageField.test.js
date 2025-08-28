@@ -12,13 +12,13 @@ describe('MultiLanguageField', () => {
 
   beforeEach(() => {
     mockStores = {
-      setChanged: jest.fn(),
+      setChanged: vi.fn(),
     }
     multiLanguageField = new MultiLanguageField(mockStores)
   })
 
   afterEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   test('value should be set to default', () => {

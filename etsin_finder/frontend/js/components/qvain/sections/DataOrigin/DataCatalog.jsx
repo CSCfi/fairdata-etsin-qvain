@@ -5,9 +5,9 @@ import { useStores } from '@/stores/stores'
 import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { FieldGroup } from '@/components/qvain/general/V2'
 import { HelpField } from '@/components/qvain/general/modal/form'
-import IdaSvg from '@/../static/images/data-ida.svg'
-import AttSvg from '@/../static/images/data-remote.svg'
-import PasSvg from '@/../static/images/data-pas.svg'
+import IdaSvg from '@/assets/images/data-ida.svg'
+import AttSvg from '@/assets/images/data-remote.svg'
+import PasSvg from '@/assets/images/data-pas.svg'
 import CatalogButton from './CatalogButton'
 
 const DataCatalog = observer(() => {

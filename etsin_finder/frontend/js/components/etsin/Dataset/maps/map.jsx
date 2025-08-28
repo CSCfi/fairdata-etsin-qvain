@@ -5,7 +5,7 @@ import leaflet from 'leaflet'
 import PropTypes from 'prop-types'
 
 import mapStyle from './mapStyle'
-import mapIcon from '@/../static/images/map_icon.svg'
+import mapIcon from '@/assets/images/map_icon.svg'
 
 import { useStores } from '@/stores/stores'
 

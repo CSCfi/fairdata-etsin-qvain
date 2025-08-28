@@ -14,10 +14,10 @@ describe('Pagination', () => {
   const stores = buildStores()
 
   const renderPagination = ({ totalResults = 500, perPage = 5, currentPage = 50 } = {}) => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
     runInAction(() => {
-      stores.Accessibility.announce = jest.fn()
-      stores.Accessibility.resetFocus = jest.fn()
+      stores.Accessibility.announce = vi.fn()
+      stores.Accessibility.resetFocus = vi.fn()
 
       stores.Etsin.Search.res = {
         count: totalResults,

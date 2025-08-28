@@ -7,7 +7,6 @@ import { Route, Routes } from 'react-router'
 
 import { screen, render, within, waitForElementToBeRemoved } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import '@testing-library/jest-dom'
 
 import etsinTheme from '@/styles/theme'
 import { buildStores } from '@/stores'
@@ -20,8 +19,11 @@ import DataMemoryRouter from '@helpers/DataMemoryRouter'
 const registerMissingTranslationHandler = failTestsWhenTranslationIsMissing()
 
 // Replace debounce milliseconds with 0
-jest.mock('lodash.debounce', () => f => jest.requireActual('lodash.debounce')(f, 0))
-jest.setTimeout(25000)
+vi.mock('lodash.debounce', async () => {
+  const { default: actualDebounce } = await vi.importActual('lodash.debounce')
+  return { default: f => actualDebounce(f, 0) }
+})
+vi.setConfig({ testTimeout: 25000 })
 import dataset from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 import FilesMock from '@testdata/files.data'
 

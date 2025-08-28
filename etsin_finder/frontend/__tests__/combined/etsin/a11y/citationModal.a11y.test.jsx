@@ -16,16 +16,16 @@ const stores = buildStores()
 stores.Etsin.EtsinDataset.set('dataset', dataset)
 failTestsWhenTranslationIsMissing(stores.Locale)
 
-jest.mock('@/stores/stores', () => {
-  const useStoresMock = jest.fn()
+vi.mock('@/stores/stores', async () => {
+  const useStoresMock = vi.fn()
 
   return {
-    ...jest.requireActual('@/stores/stores'),
+    ...(await vi.importActual('@/stores/stores')),
     useStores: useStoresMock,
   }
 })
 
-axios.get = jest.fn(() =>
+axios.get = vi.fn(() =>
   Promise.resolve({
     data: dataset,
   })

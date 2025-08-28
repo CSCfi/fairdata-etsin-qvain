@@ -11,12 +11,12 @@ describe('SingleValueField', () => {
   const schema = 'schema'
 
   beforeEach(() => {
-    mockStores = { setChanged: jest.fn(), readonly }
+    mockStores = { setChanged: vi.fn(), readonly }
     singleValueField = new SingleValueField(mockStores, schema, defaultValue)
   })
 
   afterEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   test('value should be defaultValue', () => {

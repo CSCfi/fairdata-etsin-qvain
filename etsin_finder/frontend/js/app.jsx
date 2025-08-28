@@ -25,8 +25,6 @@ import Layout from './layout'
 
 import '../fairdata-ui/footer.css'
 import 'react-datepicker/dist/react-datepicker.css'
-import './utils/extendYup'
-import './utils/extendPromise'
 
 import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
@@ -36,11 +34,11 @@ const Env = new EnvClass()
 registerLocale('fi', fi)
 registerLocale('en', en)
 
-if (BUILD === 'test') {
+if (process.env.BUILD === 'test') {
   console.log('We are in test')
-} else if (BUILD === 'development') {
+} else if (process.env.BUILD === 'development') {
   console.log('We are in development')
-} else if (BUILD !== 'production') {
+} else if (process.env.BUILD !== 'production') {
   console.log('Looks like we are in development mode!')
 }
 

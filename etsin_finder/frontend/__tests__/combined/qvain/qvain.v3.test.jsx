@@ -6,7 +6,6 @@ import { Route, Routes, useLocation } from 'react-router'
 
 import { waitFor, screen, render, within, waitForElementToBeRemoved } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import '@testing-library/jest-dom'
 import { parseISO } from 'date-fns'
 
 import etsinTheme from '@/styles/theme'
@@ -21,8 +20,12 @@ import DataMemoryRouter from '@helpers/DataMemoryRouter'
 const registerMissingTranslationHandler = failTestsWhenTranslationIsMissing()
 
 // Replace debounce milliseconds with 0
-jest.mock('lodash.debounce', () => f => jest.requireActual('lodash.debounce')(f, 0))
-jest.setTimeout(25000)
+vi.mock('lodash.debounce', async () => {
+  const { default: actualDebounce } = await vi.importActual('lodash.debounce')
+  return { default: f => actualDebounce(f, 0) }
+})
+
+vi.setConfig({ testTimeout: 25000 })
 import {
   access_rights_embargo,
   access_type_permit,
@@ -708,7 +711,7 @@ describe('Qvain with an opened dataset', () => {
 
     // Select approval type
     const approvalGroup = screen.getByRole('group', { name: /approval type/i })
-    await userEvent.click(within(approvalGroup).getByLabelText(/Automatic/))
+    await userEvent.click(within(approvalGroup).getByText(/Automatic/))
 
     // Check values get submitted
     const submitButton = screen.getByRole('button', { name: 'Save as draft' })

@@ -7,9 +7,8 @@ import {
   getOptionValue,
   sortGroups,
 } from '../../js/components/qvain/utils/select'
-import { expect } from 'chai'
 
-jest.mock('axios')
+vi.mock('axios')
 
 const model = (label, uri) => ({
   label,
@@ -175,7 +174,7 @@ describe('when calling getCurrentOption with getter as Array', () => {
 })
 
 describe('when calling onChange with callback and selection', () => {
-  const callback = jest.fn(s => s)
+  const callback = vi.fn(s => s)
   const selection = 'selection'
 
   beforeEach(() => {
@@ -183,12 +182,12 @@ describe('when calling onChange with callback and selection', () => {
   })
 
   test('should call callback with selection', () => {
-    expect(callback).to.have.beenCalledWith(selection)
+    expect(callback).toHaveBeenCalledWith(selection)
   })
 })
 
 describe('when calling onChange with callback but without selection', () => {
-  const callback = jest.fn(s => s)
+  const callback = vi.fn(s => s)
   const selection = null
 
   beforeEach(() => {
@@ -196,12 +195,12 @@ describe('when calling onChange with callback but without selection', () => {
   })
 
   test('should call callback without args', () => {
-    expect(callback).to.have.beenCalledWith(undefined)
+    expect(callback).toHaveBeenCalledWith(undefined)
   })
 })
 
 describe('when calling onChangeMulti with callback but without selection', () => {
-  const callback = jest.fn(s => s)
+  const callback = vi.fn(s => s)
   const selection = null
 
   beforeEach(() => {
@@ -209,12 +208,12 @@ describe('when calling onChangeMulti with callback but without selection', () =>
   })
 
   test('should call callback with empty Array', () => {
-    expect(callback).to.have.beenCalledWith([])
+    expect(callback).toHaveBeenCalledWith([])
   })
 })
 
 describe('when calling onChangeMulti with callback but with selection', () => {
-  const callback = jest.fn(s => s)
+  const callback = vi.fn(s => s)
   const selection = 'this probably should be Array but no-one checks that'
 
   beforeEach(() => {
@@ -222,7 +221,7 @@ describe('when calling onChangeMulti with callback but with selection', () => {
   })
 
   test('should call callback with empty Array', () => {
-    expect(callback).to.have.beenCalledWith(selection)
+    expect(callback).toHaveBeenCalledWith(selection)
   })
 })
 

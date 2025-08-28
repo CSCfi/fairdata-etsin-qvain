@@ -25,7 +25,7 @@ mockAdapter.onPost().reply(200, {
   },
 })
 
-jest.mock('../../../../js/stores/view/accessibility')
+vi.mock('../../../../js/stores/view/accessibility')
 const mockLocation = {
   pathname: '/',
 }

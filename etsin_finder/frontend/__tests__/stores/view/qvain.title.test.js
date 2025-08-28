@@ -1,24 +1,23 @@
-import Title from '../../../js/stores/view/qvain/qvain.title'
-import { expect } from 'chai'
+import Title from '@/stores/view/qvain/qvain.title'
 import { makeObservable } from 'mobx'
 
-jest.mock('../../../js/stores/view/qvain/qvain.multiLanguageField', () => {
+vi.mock('@/stores/view/qvain/qvain.multiLanguageField', () => {
   class MultiLanguageField {
     constructor(Parent) {
       this.constructorFunc(Parent)
     }
 
-    constructorFunc = jest.fn()
+    constructorFunc = vi.fn()
 
     value = undefined
   }
-  return MultiLanguageField
+  return { default: MultiLanguageField }
 })
 
-jest.mock('mobx', () => {
+vi.mock('mobx', async () => {
   return {
-    ...jest.requireActual('mobx'),
-    makeObservable: jest.fn(),
+    ...(await vi.importActual('mobx')),
+    makeObservable: vi.fn(),
   }
 })
 
@@ -32,11 +31,11 @@ describe('Title', () => {
     })
 
     test('should call MultiLanguageField.constructor with parent', () => {
-      expect(title.constructorFunc).to.have.beenCalledWith(Parent)
+      expect(title.constructorFunc).toHaveBeenCalledWith(Parent)
     })
 
     test('should call makeObservbles', () => {
-      expect(makeObservable).to.have.beenCalledWith(title)
+      expect(makeObservable).toHaveBeenCalledWith(title)
     })
 
     describe('when calling fromBackend with dataset', () => {

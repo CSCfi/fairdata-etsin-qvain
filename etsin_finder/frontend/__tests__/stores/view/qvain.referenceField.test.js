@@ -1,5 +1,4 @@
 import ReferenceField from '../../../js/stores/view/qvain/qvain.referenceField'
-import { expect } from 'chai'
 
 const testStr = 'testStr'
 const testStr2 = 'testStr2'
@@ -15,7 +14,7 @@ describe('ReferenceField', () => {
 
   describe('default setup & reset', () => {
     beforeEach(() => {
-      mockStores = { setChanged: jest.fn(), readonly: readonlyValue }
+      mockStores = { setChanged: vi.fn(), readonly: readonlyValue }
       referenceField = new ReferenceField(mockStores)
       referenceField.reset()
       referenceField.Schema = {
@@ -24,7 +23,7 @@ describe('ReferenceField', () => {
     })
 
     afterEach(() => {
-      jest.resetAllMocks()
+      vi.resetAllMocks()
     })
 
     test('storage should be empty array', () => {
@@ -55,7 +54,7 @@ describe('ReferenceField', () => {
       })
 
       test('should set changed to true', () => {
-        expect(mockStores.setChanged).to.have.beenCalledWith(true)
+        expect(mockStores.setChanged).toHaveBeenCalledWith(true)
       })
     })
 
@@ -70,7 +69,7 @@ describe('ReferenceField', () => {
       })
 
       test('should set changed to true', () => {
-        expect(mockStores.setChanged).to.have.beenCalledWith(true)
+        expect(mockStores.setChanged).toHaveBeenCalledWith(true)
       })
     })
 
@@ -84,7 +83,7 @@ describe('ReferenceField', () => {
       })
 
       test('setChanged should be called with true', () => {
-        expect(mockStores.setChanged).to.have.beenCalledWith(true)
+        expect(mockStores.setChanged).toHaveBeenCalledWith(true)
       })
     })
 
@@ -98,7 +97,7 @@ describe('ReferenceField', () => {
       })
 
       test('setChanged should be called with true', () => {
-        expect(mockStores.setChanged).to.have.beenCalledWith(true)
+        expect(mockStores.setChanged).toHaveBeenCalledWith(true)
       })
     })
 
@@ -148,7 +147,7 @@ describe('ReferenceField', () => {
       })
 
       test('setChanged should be called twice', () => {
-        expect(mockStores.setChanged).to.have.beenCalledTimes(2)
+        expect(mockStores.setChanged).toHaveBeenCalledTimes(2)
       })
     })
 

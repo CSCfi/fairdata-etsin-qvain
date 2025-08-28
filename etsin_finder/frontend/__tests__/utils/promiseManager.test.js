@@ -15,7 +15,7 @@ describe('common.files.utils', () => {
 
     describe('when calling add', () => {
       beforeEach(() => {
-        testPromise = promiseManager.add(new Promise(jest.fn()))
+        testPromise = promiseManager.add(new Promise(vi.fn()))
       })
 
       test('should add promise to promises', () => {

@@ -46,7 +46,7 @@ describe('Map functions', () => {
   describe('makeGeometry', () => {
     describe('from a wkt string', () => {
       describe('wkt point', () => {
-        it('geoJSON with type, coordinates and coordinates in lat,lng', done => {
+        it('geoJSON with type, coordinates and coordinates in lat,lng', () => {
           Map.makeGeometry(data.wkt_point.as_wkt).then(geometry => {
             expect(geometry[0].type).toEqual('Point')
             expect(geometry[0].coordinates).toEqual([30, 10])
@@ -54,12 +54,11 @@ describe('Map functions', () => {
               [10, 30],
               [10, 30],
             ])
-            done()
           })
         })
       })
       describe('wkt linestring', () => {
-        it('geoJSON with type, coordinates and coordinates in lat,lng', done => {
+        it('geoJSON with type, coordinates and coordinates in lat,lng', () => {
           Map.makeGeometry(data.wkt_linestring.as_wkt).then(geometry => {
             expect(geometry[0].type).toEqual('LineString')
             expect(geometry[0].coordinates).toEqual([
@@ -71,12 +70,11 @@ describe('Map functions', () => {
               [10, 10],
               [40, 70],
             ])
-            done()
           })
         })
       })
       describe('wkt polygon', () => {
-        it('geoJSON with type, coordinates and coordinates in lat,lng', done => {
+        it('geoJSON with type, coordinates and coordinates in lat,lng', () => {
           Map.makeGeometry(data.wkt_polygon.as_wkt).then(geometry => {
             expect(geometry[0].type).toEqual('Polygon')
             expect(geometry[0].coordinates).toEqual([
@@ -92,12 +90,11 @@ describe('Map functions', () => {
               [10, 10],
               [40, 40],
             ])
-            done()
           })
         })
       })
       describe('wkt polygon inside polygon', () => {
-        it('geoJSON with type, coordinates and coordinates in lat,lng', done => {
+        it('geoJSON with type, coordinates and coordinates in lat,lng', () => {
           Map.makeGeometry(data.wkt_polygonInPolygon.as_wkt).then(geometry => {
             expect(geometry[0].type).toEqual('Polygon')
             expect(geometry[0].coordinates).toEqual([
@@ -119,12 +116,11 @@ describe('Map functions', () => {
               [10, 10],
               [45, 45],
             ])
-            done()
           })
         })
       })
       describe('wkt multipoint', () => {
-        it('geoJSON with type, coordinates and coordinates in lat,lng', done => {
+        it('geoJSON with type, coordinates and coordinates in lat,lng', () => {
           Map.makeGeometry(data.wkt_multipoint.as_wkt).then(geometry => {
             expect(geometry[0].type).toEqual('MultiPoint')
             expect(geometry[0].coordinates).toEqual([
@@ -137,12 +133,11 @@ describe('Map functions', () => {
               [10, 10],
               [40, 40],
             ])
-            done()
           })
         })
       })
       describe('wkt multipoint2', () => {
-        it('geoJSON with type, coordinates and coordinates in lat,lng', done => {
+        it('geoJSON with type, coordinates and coordinates in lat,lng', () => {
           Map.makeGeometry(data.wkt_multipoint2.as_wkt).then(geometry => {
             expect(geometry[0].type).toEqual('MultiPoint')
             expect(geometry[0].coordinates).toEqual([
@@ -155,12 +150,11 @@ describe('Map functions', () => {
               [10, 10],
               [40, 40],
             ])
-            done()
           })
         })
       })
       describe('wkt multilinestring', () => {
-        it('geoJSON with type, coordinates and coordinates in lat,lng', done => {
+        it('geoJSON with type, coordinates and coordinates in lat,lng', () => {
           Map.makeGeometry(data.wkt_multilinestring.as_wkt).then(geometry => {
             expect(geometry[0].type).toEqual('MultiLineString')
             expect(geometry[0].coordinates).toEqual([
@@ -180,12 +174,11 @@ describe('Map functions', () => {
               [10, 10],
               [40, 40],
             ])
-            done()
           })
         })
       })
       describe('wkt multipolygon', () => {
-        it('geoJSON with type, coordinates and coordinates in lat,lng', done => {
+        it('geoJSON with type, coordinates and coordinates in lat,lng', () => {
           Map.makeGeometry(data.wkt_multipolygon.as_wkt).then(geometry => {
             expect(geometry[0].type).toEqual('MultiPolygon')
             expect(geometry[0].coordinates).toEqual([
@@ -211,12 +204,11 @@ describe('Map functions', () => {
               [5, 5],
               [40, 45],
             ])
-            done()
           })
         })
       })
       describe('wkt multipolygon2', () => {
-        it('geoJSON with type, coordinates and coordinates in lat,lng', done => {
+        it('geoJSON with type, coordinates and coordinates in lat,lng', () => {
           Map.makeGeometry(data.wkt_multipolygon2.as_wkt).then(geometry => {
             expect(geometry[0].type).toEqual('MultiPolygon')
             expect(geometry[0].coordinates).toEqual([
@@ -249,7 +241,6 @@ describe('Map functions', () => {
               [5, 10],
               [100, 45],
             ])
-            done()
           })
         })
       })

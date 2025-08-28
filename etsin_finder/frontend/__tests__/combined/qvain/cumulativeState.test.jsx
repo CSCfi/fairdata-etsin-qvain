@@ -16,9 +16,9 @@ import { useStores } from '../../../js/stores/stores'
 const mockAdapter = new MockAdapter(axios)
 mockAdapter.onGet().reply(200, {})
 
-jest.mock('../../../js/stores/stores', () => ({
-  ...jest.requireActual('../../../js/stores/stores'),
-  useStores: jest.fn(),
+vi.mock('@/stores/stores', async () => ({
+  ...(await vi.importActual('@/stores/stores')),
+  useStores: vi.fn(),
 }))
 
 const Env = new EnvClass()

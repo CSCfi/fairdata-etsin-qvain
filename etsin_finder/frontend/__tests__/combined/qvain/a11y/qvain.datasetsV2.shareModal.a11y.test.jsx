@@ -16,7 +16,7 @@ import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
 let stores
 
-jest.setTimeout(15000) // the default 5000ms timeout is not always enough here
+vi.setConfig({ testTimeout: 15000 }) // the default 5000ms timeout is not always enough here
 const registerMissingHandler = failTestsWhenTranslationIsMissing(stores)
 
 beforeEach(() => {

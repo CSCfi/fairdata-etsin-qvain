@@ -1,30 +1,25 @@
 import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
-import { expect } from 'chai'
 
-import Spatials, {
-  Spatial,
-  Location,
-  SpatialModel,
-} from '../../../js/stores/view/qvain/qvain.spatials'
-import Locale from '../../../js/stores/view/locale'
+import Spatials, { Spatial, Location, SpatialModel } from '@/stores/view/qvain/qvain.spatials'
+import Locale from '@/stores/view/locale'
 
-jest.mock('../../../js/stores/view/qvain/qvain.field', () => {
+vi.mock('@/stores/view/qvain/qvain.field', () => {
   class mockField {
     constructor(Parent, ...args) {
       this.constructorFunction(Parent, ...args)
       this.Parent = Parent
     }
     storage = []
-    fromBackendBase = jest.fn()
-    constructorFunction = jest.fn()
+    fromBackendBase = vi.fn()
+    constructorFunction = vi.fn()
   }
 
-  return mockField
+  return { default: mockField }
 })
 
-jest.mock('uuid')
-jest.mock('mobx')
+vi.mock('uuid')
+vi.mock('mobx')
 
 describe('Spatials store', () => {
   let spatials
@@ -36,21 +31,21 @@ describe('Spatials store', () => {
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   describe('given trivial args', () => {
     const expectedArgs = [parent, Spatial, SpatialModel, 'spatials']
     test('should call super.construction with expectedArgs', () => {
-      expect(spatials.constructorFunction).to.have.beenCalledWith(...expectedArgs)
+      expect(spatials.constructorFunction).toHaveBeenCalledWith(...expectedArgs)
     })
 
     test('should call makeObservable', () => {
-      expect(makeObservable).to.have.beenCalledTimes(1)
+      expect(makeObservable).toHaveBeenCalledTimes(1)
     })
 
     test('should call fromBackendBase with existing spatials', () => {
-      expect(spatials.fromBackendBase).to.have.beenCalledWith(existingSpatials, parent)
+      expect(spatials.fromBackendBase).toHaveBeenCalledWith(existingSpatials, parent)
     })
 
     describe('when calling clone', () => {
@@ -59,7 +54,7 @@ describe('Spatials store', () => {
       })
 
       test('should call fromBackendBase', () => {
-        expect(spatials.fromBackendBase).to.have.beenCalledWith(existingSpatials, parent)
+        expect(spatials.fromBackendBase).toHaveBeenCalledWith(existingSpatials, parent)
       })
     })
 
@@ -75,7 +70,7 @@ describe('Spatials store', () => {
       })
 
       test('should call super.fromBackendBase with args', () => {
-        expect(spatials.fromBackendBase).to.have.beenCalledWith(dataset.spatial, Qvain)
+        expect(spatials.fromBackendBase).toHaveBeenCalledWith(dataset.spatial, Qvain)
       })
     })
 
@@ -127,8 +122,8 @@ describe('Spatials store', () => {
       })
 
       describe('when editing and saving', () => {
-        beforeEach(() => {
-          const ActualField = jest.requireActual('@/stores/view/qvain/qvain.field').default
+        beforeEach(async () => {
+          const ActualField = (await vi.importActual('@/stores/view/qvain/qvain.field')).default
           const ActualSpatials = ActualField.bind(Spatials)
           const spatials = new ActualSpatials(parent, [])
           const f = new ActualField(...expectedArgs)

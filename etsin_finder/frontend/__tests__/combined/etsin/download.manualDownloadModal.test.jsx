@@ -10,24 +10,20 @@ import { buildStores } from '@/stores'
 import dataset from '../../__testdata__/dataset.att'
 import ManualDownloadModal from '@/components/etsin/Dataset/data/idaResources/manualDownloadModal'
 import { useStores } from '@/stores/stores'
+import MockAdapter from 'axios-mock-adapter'
 
 const stores = buildStores()
 
-jest.mock('@/stores/stores', () => {
-  const mockUseStores = jest.fn()
+vi.mock('@/stores/stores', async () => {
+  const mockUseStores = vi.fn()
   return {
-    ...jest.requireActual('@/stores/stores'),
+    ...(await vi.importActual('@/stores/stores')),
     useStores: mockUseStores,
   }
 })
 
-axios.get = jest.fn(() =>
-  Promise.resolve({
-    data: {
-      catalog_record: dataset,
-    },
-  })
-)
+const mockAdapter = new MockAdapter(axios)
+mockAdapter.onGet().reply(200, { catalog_record: dataset })
 
 useStores.mockReturnValue(stores)
 
@@ -35,9 +31,7 @@ const flushPromises = () => new Promise(setImmediate)
 
 stores.DatasetQuery.getData()
 
-navigator.clipboard = {
-  writeText: jest.fn(),
-}
+vi.stubGlobal('navigator', { clipboard: { writeText: vi.fn() } })
 
 describe('Etsin manual download options modal', () => {
   let wrapper, helper

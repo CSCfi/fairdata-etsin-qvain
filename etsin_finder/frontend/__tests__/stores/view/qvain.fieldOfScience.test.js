@@ -1,10 +1,9 @@
-import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
-import FieldOfSciences from '../../../js/stores/view/qvain/qvain.fieldOfScience'
+import FieldOfSciences from '@/stores/view/qvain/qvain.fieldOfScience'
 
-jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
-  const actual = jest.requireActual('../../../js/stores/view/qvain/qvain.referenceField')
+vi.mock('@/stores/view/qvain/qvain.referenceField', async () => {
+  const actual = await vi.importActual('@/stores/view/qvain/qvain.referenceField')
   const { referenceObjectSchema } = actual
 
   class mockReferenceField {
@@ -12,18 +11,18 @@ jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
       this.constructorFunc(...args)
     }
 
-    constructorFunc = jest.fn()
+    constructorFunc = vi.fn()
 
-    reset = jest.fn()
+    reset = vi.fn()
   }
 
   return { __esModule: true, default: mockReferenceField, referenceObjectSchema }
 })
 
-jest.mock('mobx', () => {
+vi.mock('mobx', async () => {
   return {
-    ...jest.requireActual('mobx'),
-    makeObservable: jest.fn(),
+    ...(await vi.importActual('mobx')),
+    makeObservable: vi.fn(),
   }
 })
 
@@ -38,11 +37,11 @@ describe('given any args', () => {
 
     describe('when calling constructor', () => {
       test('should call super.constructor with given args', () => {
-        expect(fieldOfSciences.constructorFunc).to.have.beenCalledWith(...someArgs)
+        expect(fieldOfSciences.constructorFunc).toHaveBeenCalledWith(...someArgs)
       })
 
       test('should call makeObservable', () => {
-        expect(makeObservable).to.have.beenCalledWith(fieldOfSciences)
+        expect(makeObservable).toHaveBeenCalledWith(fieldOfSciences)
       })
 
       describe('when calling fromBackend with dataset', () => {

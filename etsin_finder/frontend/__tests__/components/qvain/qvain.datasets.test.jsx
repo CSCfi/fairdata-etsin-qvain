@@ -12,14 +12,14 @@ import DatasetsV2 from '@/components/qvain/views/datasetsV2'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import etsinTheme from '@/styles/theme'
-import datasets from '../../__testdata__/qvain.datasets'
+import datasets from '@testdata/qvain.datasets'
 
-jest.useFakeTimers('modern')
-jest.setSystemTime(new Date('2021-05-07T10:00:00Z'))
+vi.useFakeTimers()
+vi.setSystemTime(new Date('2021-05-07T10:00:00Z'))
 
-global.autoCleanup = false // Allow tests to share render results
+globalThis.autoCleanup = false // Allow tests to share render results
 
-const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime })
+const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
 
 const mockAdapter = new MockAdapter(axios)
 
@@ -89,7 +89,7 @@ describe('DatasetsV2', () => {
   describe('given error', () => {
     let spy
     beforeEach(async () => {
-      spy = jest.spyOn(console, 'error').mockImplementation(() => {})
+      spy = vi.spyOn(console, 'error').mockImplementation(() => {})
       mockAdapter.onGet().reply(500, 'this is not supposed to happen')
     })
 

@@ -1,25 +1,24 @@
-import { expect } from 'chai'
 import moment from 'moment'
 import { makeObservable } from 'mobx'
 
 import IssuedDate, { issuedDateSchema } from '../../../js/stores/view/qvain/qvain.issuedDate'
 
-jest.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
+vi.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
   class mockSingleValueField {
     constructor(...args) {
       this.constructorFunc(...args)
     }
 
-    constructorFunc = jest.fn()
+    constructorFunc = vi.fn()
   }
 
-  return mockSingleValueField
+  return { default: mockSingleValueField }
 })
 
-jest.mock('mobx', () => {
+vi.mock('mobx', async () => {
   return {
-    ...jest.requireActual('mobx'),
-    makeObservable: jest.fn(),
+    ...(await vi.importActual('mobx')),
+    makeObservable: vi.fn(),
   }
 })
 
@@ -36,7 +35,7 @@ describe('given Parent object', () => {
 
     describe('when constructor is called', () => {
       test('should call super.constructor with Parent and schema', () => {
-        expect(issuedDate.constructorFunc).to.have.beenCalledWith(
+        expect(issuedDate.constructorFunc).toHaveBeenCalledWith(
           Parent,
           issuedDateSchema,
           moment().format('YYYY-MM-DD')
@@ -44,7 +43,7 @@ describe('given Parent object', () => {
       })
 
       test('should call makeObservable', () => {
-        expect(makeObservable).to.have.beenCalledWith(issuedDate)
+        expect(makeObservable).toHaveBeenCalledWith(issuedDate)
       })
     })
 
@@ -72,7 +71,7 @@ describe('given Parent object', () => {
       })
 
       test('should set value to undefined', () => {
-        expect(issuedDate.value).to.be.undefined
+        expect(issuedDate.value).toBeUndefined()
       })
     })
   })

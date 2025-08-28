@@ -68,11 +68,10 @@ const Access = new AccessClass(Auth)
 
 describe('Access Store', () => {
   describe('Update for open access', () => {
-    it('Should start update process', done => {
+    it('Should start update process', () => {
       const open = accessRights
       open.access_type.url = ACCESS_TYPE_URL.OPEN
       Access.updateAccess(open)
-      done()
     })
     it('Should show Remote files', () => {
       expect(Access.restrictions.allowDataRemote).toEqual(true)
@@ -89,14 +88,13 @@ describe('Access Store', () => {
   })
   describe('Update for embargo access', () => {
     describe('Is available', () => {
-      it('Should start update process', done => {
+      it('Should start update process', () => {
         const embargoed = accessRights
         const d = new Date()
         d.setFullYear(d.getFullYear() - 1)
         embargoed.available = d.toISOString()
         embargoed.access_type.url = ACCESS_TYPE_URL.EMBARGO
         Access.updateAccess(embargoed)
-        done()
       })
       it('Should show Remote files', () => {
         expect(Access.restrictions.allowDataRemote).toEqual(true)
@@ -112,14 +110,13 @@ describe('Access Store', () => {
       })
     })
     describe('Unavailable', () => {
-      it('Should start update process', done => {
+      it('Should start update process', () => {
         const embargoed = accessRights
         const d = new Date()
         d.setFullYear(d.getFullYear() + 1)
         embargoed.available = d.toISOString()
         embargoed.access_type.url = ACCESS_TYPE_URL.EMBARGO
         Access.updateAccess(embargoed)
-        done()
       })
       it('Should show Remote files', () => {
         expect(Access.restrictions.allowDataRemote).toEqual(true)
@@ -136,11 +133,10 @@ describe('Access Store', () => {
     })
   })
   describe('Update for restricted access', () => {
-    it('Should start update process', done => {
+    it('Should start update process', () => {
       const restricted = accessRights
       restricted.access_type.url = ACCESS_TYPE_URL.RESTRICTED
       Access.updateAccess(restricted)
-      done()
     })
     it('Should show Remote files', () => {
       expect(Access.restrictions.allowDataRemote).toEqual(true)
@@ -156,12 +152,11 @@ describe('Access Store', () => {
     })
   })
   describe('Update for permit access', () => {
-    it('Should start update process', done => {
+    it('Should start update process', () => {
       const restricted_fairdata = accessRights
       restricted_fairdata.access_type.url = ACCESS_TYPE_URL.PERMIT
       restricted_fairdata.rems_approval_type = 'automatic'
       Access.updateAccess(restricted_fairdata)
-      done()
     })
     it('Should show Remote files', () => {
       expect(Access.restrictions.allowDataRemote).toEqual(true)
@@ -178,12 +173,11 @@ describe('Access Store', () => {
   })
   describe('Update for login access', () => {
     describe('User not logged in', () => {
-      it('Should start update process', done => {
+      it('Should start update process', () => {
         Auth.userLogged = false
         const restricted_registration = accessRights
         restricted_registration.access_type.url = ACCESS_TYPE_URL.LOGIN
         Access.updateAccess(restricted_registration)
-        done()
       })
       it('Should show Remote files', () => {
         expect(Access.restrictions.allowDataRemote).toEqual(true)
@@ -199,12 +193,11 @@ describe('Access Store', () => {
       })
     })
     describe('User logged in', () => {
-      it('Should start update process', done => {
+      it('Should start update process', () => {
         Auth.userLogged = true
         const restricted_registration = accessRights
         restricted_registration.access_type.url = ACCESS_TYPE_URL.LOGIN
         Access.updateAccess(restricted_registration)
-        done()
       })
       it('Should show Remote files', () => {
         expect(Access.restrictions.allowDataRemote).toEqual(true)

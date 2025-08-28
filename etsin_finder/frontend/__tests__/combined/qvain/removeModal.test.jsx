@@ -7,7 +7,7 @@ import { contextRenderer } from '@/../__tests__/test-helpers'
 import { RemoveModal as RemoveModalBase } from '../../../js/components/qvain/views/datasetsV2/removeModal'
 import { buildStores } from '../../../js/stores'
 
-jest.mock('axios')
+vi.mock('axios')
 
 const helper = document.createElement('div')
 document.body.appendChild(helper)
@@ -34,7 +34,7 @@ describe('Qvain.RemoveModal', () => {
           identifier: 1,
         },
         onlyChanges: false,
-        postRemoveCallback: jest.fn(),
+        postRemoveCallback: vi.fn(),
       }
       stores.QvainDatasets.removeModal.open(modalData)
       renderModal()
@@ -57,7 +57,7 @@ describe('Qvain.RemoveModal', () => {
           },
         },
         onlyChanges: true,
-        postRemoveCallback: jest.fn(),
+        postRemoveCallback: vi.fn(),
       }
       stores.QvainDatasets.removeModal.open(modalData)
       renderModal()
@@ -77,7 +77,7 @@ describe('Qvain.RemoveModal', () => {
           identifier: 1,
         },
         onlyChanges: true,
-        postRemoveCallback: jest.fn(),
+        postRemoveCallback: vi.fn(),
       }
       stores.QvainDatasets.removeModal.open(modalData)
       renderModal()
@@ -99,7 +99,7 @@ describe('Qvain.RemoveModal', () => {
           },
         },
         onlyChanges: false,
-        postRemoveCallback: jest.fn(),
+        postRemoveCallback: vi.fn(),
       }
       stores.QvainDatasets.removeModal.open(modalData)
       renderModal()

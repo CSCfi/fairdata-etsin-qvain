@@ -11,7 +11,7 @@ import dataset from '../../../__testdata__/metaxv3/datasets/dataset_att_a'
 import AccessRights from '@/components/etsin/Dataset/accessRights'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-jest.mock('@/stores/view/accessibility')
+vi.mock('@/stores/view/accessibility')
 const stores = buildStores()
 failTestsWhenTranslationIsMissing(stores.Locale)
 stores.Etsin.EtsinDataset.set('dataset', dataset)

@@ -1,9 +1,8 @@
-import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
 import QvainDatasetsStore from '../../../js/stores/view/qvain/qvain.datasets'
 
-jest.mock('mobx')
+vi.mock('mobx')
 
 describe('Datasets Tabs', () => {
   let tabs
@@ -13,7 +12,7 @@ describe('Datasets Tabs', () => {
 
   describe('when calling constructor', () => {
     test('should call makeObservable', () => {
-      expect(makeObservable).to.have.beenCalledWith(tabs)
+      expect(makeObservable).toHaveBeenCalledWith(tabs)
     })
 
     it('should have default values', () => {

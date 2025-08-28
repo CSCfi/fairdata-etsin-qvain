@@ -38,7 +38,11 @@ const defaultStyles = {
   },
 }
 
-if (BUILD !== 'test') ReactModal.setAppElement('#root')
+// Root element is not available in tests
+const root = document.getElementById('root')
+if (root) {
+  ReactModal.setAppElement(root)
+}
 
 const Modal = ({
   isOpen,

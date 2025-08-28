@@ -10,7 +10,7 @@ const Field = {
     endDate: '2.2.2020',
   },
   translationsRoot: 'translationsRoot',
-  changeAttribute: jest.fn(),
+  changeAttribute: vi.fn(),
 }
 
 const datum = 'datum'
@@ -31,7 +31,7 @@ describe('DurationPicker', () => {
   }
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   const renderPicker = () => contextRenderer(<DurationPicker {...props} />, { stores })

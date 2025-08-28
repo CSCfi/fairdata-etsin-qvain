@@ -1,30 +1,29 @@
-import { expect } from 'chai'
 import { makeObservable, override } from 'mobx'
 import RestrictionGrounds, {
   restrictionGroundsIdentifierSchema,
-} from '../../../js/stores/view/qvain/qvain.restrictionGrounds'
+} from '@/stores/view/qvain/qvain.restrictionGrounds'
 
-jest.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
+vi.mock('@/stores/view/qvain/qvain.singleValueField', () => {
   class mockSingleValueField {
     constructor(...args) {
       this.constructorFunc(...args)
     }
 
-    constructorFunc = jest.fn()
+    constructorFunc = vi.fn()
 
-    validateFunc = jest.fn()
+    validateFunc = vi.fn()
 
-    setValidationError = jest.fn()
+    setValidationError = vi.fn()
 
     validate() {
       this.validateFunc()
     }
   }
 
-  return mockSingleValueField
+  return { default: mockSingleValueField }
 })
 
-jest.mock('mobx')
+vi.mock('mobx')
 override.mockImplementation(func => func)
 
 describe('RestrictionGrounds', () => {
@@ -39,14 +38,14 @@ describe('RestrictionGrounds', () => {
     })
 
     test('should call super.constructor', () => {
-      expect(restrictionGrounds.constructorFunc).to.have.beenCalledWith(
+      expect(restrictionGrounds.constructorFunc).toHaveBeenCalledWith(
         Parent,
         restrictionGroundsIdentifierSchema
       )
     })
 
     test('should call makeObservable', () => {
-      expect(makeObservable).to.have.beenCalledWith(restrictionGrounds)
+      expect(makeObservable).toHaveBeenCalledWith(restrictionGrounds)
     })
 
     describe('when calling fromBackend', () => {
@@ -101,7 +100,7 @@ describe('RestrictionGrounds', () => {
 
     describe('when calling validate (with Schema)', () => {
       const Schema = {
-        validate: jest.fn(() => Promise.resolve()),
+        validate: vi.fn(() => Promise.resolve()),
       }
 
       beforeEach(async () => {
@@ -111,11 +110,11 @@ describe('RestrictionGrounds', () => {
       })
 
       test('should call Schema.validate', () => {
-        expect(Schema.validate).to.have.beenCalledWith('identifier', { strict: true })
+        expect(Schema.validate).toHaveBeenCalledWith('identifier', { strict: true })
       })
 
       test('should call setValidationError with null', () => {
-        expect(restrictionGrounds.setValidationError).to.have.beenCalledWith(null)
+        expect(restrictionGrounds.setValidationError).toHaveBeenCalledWith(null)
       })
     })
   })

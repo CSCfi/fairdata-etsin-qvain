@@ -248,7 +248,7 @@ describe('Etsin dataset page', () => {
   })
 
   test('renders REMS error message', async () => {
-    jest.spyOn(console, 'error').mockImplementation(() => {}) // hide console.error from output
+    vi.spyOn(console, 'error').mockImplementation(() => {}) // hide console.error from output
     await renderEtsin(dataset_rems, { userLogged: true })
 
     mockAdapter

@@ -15,11 +15,11 @@ import dataset, { contact } from '../../../__testdata__/metaxv3/datasets/dataset
 import Dataset from '@/components/etsin/Dataset'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-jest.setTimeout(25000) // the default 5000ms timeout is not always enough here
+vi.setConfig({ testTimeout: 25000 }) // the default 5000ms timeout is not always enough here
 
-jest.mock('@/components/etsin/Dataset/Sidebar/special/importImages')
+vi.mock('@/components/etsin/Dataset/Sidebar/special/importImages')
 
-jest.mock('@/stores/view/accessibility')
+vi.mock('@/stores/view/accessibility')
 
 const datasetsCalls = observable.array([])
 
@@ -39,13 +39,13 @@ const path = `/dataset/${identifier}`
 
 const stores = buildStores()
 failTestsWhenTranslationIsMissing(stores.Locale)
-stores.Accessibility.handleNavigation = jest.fn()
+stores.Accessibility.handleNavigation = vi.fn()
 
 describe('Etsin dataset page', () => {
   let helper
 
   const renderPage = async () => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
     datasetsCalls.clear()
 
     helper = document.createElement('div')
@@ -92,7 +92,7 @@ describe('Etsin dataset page', () => {
   describe('Data tab (external resources)', () => {
     it('should be accessible', async () => {
       await renderPage()
-      jest.resetAllMocks()
+      vi.resetAllMocks()
       await userEvent.click(document.querySelector('a#tab-for-data'))
 
       const tab = screen.getByTestId('tab-data')
@@ -106,7 +106,7 @@ describe('Etsin dataset page', () => {
   describe('Events tab', () => {
     it('should be accessible', async () => {
       await renderPage()
-      jest.resetAllMocks()
+      vi.resetAllMocks()
       await userEvent.click(document.querySelector('a#tab-for-events'))
 
       const tab = screen.getByTestId('tab-events')
@@ -120,7 +120,7 @@ describe('Etsin dataset page', () => {
   describe('Maps tab', () => {
     it('should be accessible', async () => {
       await renderPage()
-      jest.resetAllMocks()
+      vi.resetAllMocks()
       await userEvent.click(document.querySelector('a#tab-for-maps'))
 
       const tab = screen.getByTestId('tab-maps')

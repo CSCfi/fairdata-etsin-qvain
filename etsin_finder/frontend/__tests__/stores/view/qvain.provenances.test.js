@@ -1,22 +1,21 @@
-import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
 import { buildStores } from '@/stores'
 import { Provenance, ProvenanceModel } from '@/stores/view/qvain/qvain.provenances'
 
-jest.mock('uuid')
-jest.mock('mobx')
+vi.mock('uuid')
+vi.mock('mobx')
 
 const originalCer = console.error
 
 describe('Provenances', () => {
   let provenances
-  console.error = jest.fn()
+  console.error = vi.fn()
 
   const Stores = buildStores()
   Stores.Qvain = {
     ...Stores.Qvain,
-    createLooseProvenancePromise: jest.fn(),
+    createLooseProvenancePromise: vi.fn(),
   }
   const Qvain = Stores.Qvain
   console.error = originalCer
@@ -26,7 +25,7 @@ describe('Provenances', () => {
 
   describe('when calling constructor', () => {
     test('should call makeObservables', () => {
-      expect(makeObservable).to.have.beenCalledWith(provenances)
+      expect(makeObservable).toHaveBeenCalledWith(provenances)
     })
 
     test('should Parent, Model, Template defined', () => {
@@ -146,9 +145,9 @@ describe('Provenances', () => {
         },
         startDate: 1,
         endDate: 2,
-        locations: { toBackend: jest.fn(() => []) },
+        locations: { toBackend: vi.fn(() => []) },
         outcome: { url: 'outcome_identifier' },
-        usedEntities: { toBackend: jest.fn() },
+        usedEntities: { toBackend: vi.fn() },
         associations: { toBackend: undefined },
         lifecycle: { url: 'lifecycle_identifier' },
       }
@@ -180,8 +179,8 @@ describe('Provenances', () => {
       })
 
       test('should call spatials and usedEntities toBackend functions', () => {
-        expect(obj.locations.toBackend).to.have.beenCalledWith()
-        expect(obj.usedEntities.toBackend).to.have.beenCalledWith()
+        expect(obj.locations.toBackend).toHaveBeenCalledWith()
+        expect(obj.usedEntities.toBackend).toHaveBeenCalledWith()
       })
     })
 
@@ -190,7 +189,7 @@ describe('Provenances', () => {
       const Qvain = 'Qvain'
 
       beforeEach(() => {
-        provenances.fromBackendBase = jest.fn()
+        provenances.fromBackendBase = vi.fn()
         provenances.provenancesWithNonExistingActors = 'some value'
         provenances.fromBackend(dataset, Qvain)
       })
@@ -200,7 +199,7 @@ describe('Provenances', () => {
       })
 
       test('should call super.fromBackendBase', () => {
-        expect(provenances.fromBackendBase).to.have.beenCalledWith(dataset.provenance, Qvain)
+        expect(provenances.fromBackendBase).toHaveBeenCalledWith(dataset.provenance, Qvain)
       })
     })
 
@@ -259,12 +258,12 @@ describe('Provenances', () => {
     const storage = [
       {
         associations: {
-          removeActorRef: jest.fn(),
+          removeActorRef: vi.fn(),
         },
       },
       {
         associations: {
-          removeActorRef: jest.fn(),
+          removeActorRef: vi.fn(),
         },
       },
     ]
@@ -275,8 +274,8 @@ describe('Provenances', () => {
     })
 
     test('should call removeActorRef from both provenances.associations', () => {
-      expect(provenances.storage[0].associations.removeActorRef).to.have.beenCalledWith(1)
-      expect(provenances.storage[1].associations.removeActorRef).to.have.beenCalledWith(1)
+      expect(provenances.storage[0].associations.removeActorRef).toHaveBeenCalledWith(1)
+      expect(provenances.storage[1].associations.removeActorRef).toHaveBeenCalledWith(1)
     })
   })
 })

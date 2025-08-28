@@ -2,15 +2,15 @@
   font-family: Lato;
   src:
     local('Lato Regular'),
-    url(../resources/fonts/lato/Lato-Regular.ttf) format('truetype');
+    url(/fonts/lato/Lato-Regular.ttf) format('truetype');
 }
 @font-face {
   font-family: Lato;
-  src: local('Lato Bold'), url(../resources/fonts/lato/Lato-Bold.ttf);
+  src: local('Lato Bold'), url(/fonts/lato/Lato-Bold.ttf);
   font-weight: 700;
 }
 @font-face {
   font-family: Lato;
-  src: local('Lato Light'), url(../resources/fonts/lato/Lato-Light.ttf);
+  src: local('Lato Light'), url(/fonts/lato/Lato-Light.ttf);
   font-weight: 300;
 }

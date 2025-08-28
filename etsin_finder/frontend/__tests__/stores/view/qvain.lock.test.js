@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { observable, makeObservable, when, action } from 'mobx'
@@ -6,7 +5,7 @@ import { observable, makeObservable, when, action } from 'mobx'
 import LockClass from '../../../js/stores/view/qvain/qvain.lock'
 
 const mockAdapter = new MockAdapter(axios)
-window.fetch = jest.fn()
+window.fetch = vi.fn()
 
 class FakeQvainClass {
   // Helper class that allows changing dataset identifier,
@@ -27,11 +26,18 @@ const Auth = {
   userName: 'test_user',
 }
 
-describe('things', () => {
+vi.useFakeTimers()
+
+describe('locking', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    vi.clearAllTimers()
+  })
+
   const setup = () => {
-    jest.clearAllMocks()
-    jest.clearAllTimers()
-    jest.useFakeTimers('modern')
     mockAdapter.reset()
     mockAdapter.onDelete().reply(200, {})
     const Qvain = new FakeQvainClass()
@@ -78,7 +84,7 @@ describe('things', () => {
 
       for (let i = 2; i < 10; i++) {
         Lock.isPolling.should.be.false
-        jest.advanceTimersByTime(Lock.pollInterval)
+        vi.advanceTimersByTime(Lock.pollInterval)
         Lock.isPolling.should.be.true
         await when(() => !Lock.isPolling)
         mockAdapter.history.put.length.should.eqls(i)
@@ -116,7 +122,7 @@ describe('things', () => {
       mockAdapter.history.put.length.should.eqls(1)
 
       for (let i = 2; i < 10; i++) {
-        jest.advanceTimersByTime(Lock.pollInterval)
+        vi.advanceTimersByTime(Lock.pollInterval)
         await when(() => !Lock.isPolling)
         mockAdapter.history.put.length.should.eqls(i)
       }
@@ -158,7 +164,7 @@ describe('things', () => {
       Lock.setLockData('datasetti', 'test_user')
       Lock.enable()
       Lock.unload()
-      expect(window.fetch).to.have.beenCalledWith('/api/qvain/datasets/datasetti/lock', {
+      expect(window.fetch).toHaveBeenCalledWith('/api/qvain/datasets/datasetti/lock', {
         keepalive: true,
         method: 'DELETE',
       })
@@ -169,7 +175,7 @@ describe('things', () => {
     it('should not do anything', async () => {
       const { Lock } = setup()
       Lock.enable()
-      jest.advanceTimersByTime(Lock.pollInterval * 100)
+      vi.advanceTimersByTime(Lock.pollInterval * 100)
       Lock.pollingEnabled.should.be.false
       mockAdapter.history.put.length.should.eql(0)
       mockAdapter.history.delete.length.should.eql(0)
@@ -179,7 +185,7 @@ describe('things', () => {
       const { Lock } = setup()
       Lock.enable()
       Lock.unload()
-      expect(window.fetch).not.to.have.beenCalled()
+      expect(window.fetch).not.toHaveBeenCalled()
     })
   })
 })

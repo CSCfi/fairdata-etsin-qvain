@@ -32,9 +32,9 @@ configure({
 
 const mockAdapter = new MockAdapter(axios)
 
-jest.mock('@/stores/stores', () => ({
-  ...jest.requireActual('@/stores/stores'),
-  useStores: jest.fn(),
+vi.mock('@/stores/stores', async () => ({
+  ...(await vi.importActual('@/stores/stores')),
+  useStores: vi.fn(),
 }))
 
 const Env = new EnvClass()

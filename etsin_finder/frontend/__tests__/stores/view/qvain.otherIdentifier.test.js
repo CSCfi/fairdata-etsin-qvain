@@ -1,38 +1,37 @@
-import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
-import OtherIdentifiers from '../../../js/stores/view/qvain/qvain.otherIdentifier'
+import OtherIdentifiers from '@/stores/view/qvain/qvain.otherIdentifier'
 
-jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
+vi.mock('@/stores/view/qvain/qvain.referenceField', () => {
   class mockReferenceField {
     constructor(...args) {
       this.constructorFunc(...args)
     }
 
-    constructorFunc = jest.fn()
+    constructorFunc = vi.fn()
 
-    reset = jest.fn()
+    reset = vi.fn()
 
-    addItemStr = jest.fn()
+    addItemStr = vi.fn()
 
-    setValidationError = jest.fn()
+    setValidationError = vi.fn()
 
-    validate = jest.fn()
+    validate = vi.fn()
 
-    validateStr = jest.fn()
+    validateStr = vi.fn()
   }
 
-  return mockReferenceField
+  return { default: mockReferenceField }
 })
 
-jest.mock('mobx', () => {
+vi.mock('mobx', async () => {
   return {
-    ...jest.requireActual('mobx'),
-    makeObservable: jest.fn(),
+    ...(await vi.importActual('mobx')),
+    makeObservable: vi.fn(),
   }
 })
 
-jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas')
+vi.mock('@/stores/view/qvain/qvain.submit.schemas')
 
 describe('OtherIdentifiers', () => {
   let otherIdentifiers
@@ -43,16 +42,16 @@ describe('OtherIdentifiers', () => {
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   describe('when calling costructor with any args', () => {
     test('should call super.constructor with args', () => {
-      expect(otherIdentifiers.constructorFunc).to.have.beenCalledWith(...args)
+      expect(otherIdentifiers.constructorFunc).toHaveBeenCalledWith(...args)
     })
 
     test('should call makeObservable', () => {
-      expect(makeObservable).to.have.beenCalledWith(otherIdentifiers)
+      expect(makeObservable).toHaveBeenCalledWith(otherIdentifiers)
     })
   })
 
@@ -70,7 +69,7 @@ describe('OtherIdentifiers', () => {
     })
 
     test('should call super.reset', () => {
-      expect(otherIdentifiers.reset).to.have.beenCalled()
+      expect(otherIdentifiers.reset).toHaveBeenCalled()
     })
   })
 
@@ -96,7 +95,7 @@ describe('OtherIdentifiers', () => {
         })
 
         test('should call super.addItemStr', () => {
-          expect(otherIdentifiers.addItemStr).to.have.beenCalled()
+          expect(otherIdentifiers.addItemStr).toHaveBeenCalled()
         })
 
         test('should return true', () => {

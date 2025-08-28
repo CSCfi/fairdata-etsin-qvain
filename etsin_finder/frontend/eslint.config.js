@@ -1,14 +1,14 @@
-const { defineConfig } = require('eslint/config')
-const globals = require('globals')
-const eslintJS = require('@eslint/js')
-const prettierConfig = require('eslint-config-prettier/flat')
-const babelParser = require('@babel/eslint-parser')
-const jsxA11yPlugin = require('eslint-plugin-jsx-a11y')
-const reactPlugin = require('eslint-plugin-react')
-const reactHooksPlugin = require('eslint-plugin-react-hooks')
-const testingLibraryPlugin = require('eslint-plugin-testing-library')
-const babelPlugin = require('@babel/eslint-plugin')
-const importPlugin = require('eslint-plugin-import')
+import { defineConfig } from 'eslint/config'
+import globals from 'globals'
+import eslintJS from '@eslint/js'
+import prettierConfig from 'eslint-config-prettier/flat'
+import babelParser from '@babel/eslint-parser'
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
+import reactPlugin from 'eslint-plugin-react'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import testingLibraryPlugin from 'eslint-plugin-testing-library'
+import babelPlugin from '@babel/eslint-plugin'
+import importPlugin from 'eslint-plugin-import'
 
 // Old version of globals (which some babel stuff still depends on) has a bug
 // where `browsers.AudioWorkletGlobalScope ` has an extra space which causes
@@ -18,7 +18,26 @@ const importPlugin = require('eslint-plugin-import')
 const browserGlobals = { ...globals.browser }
 delete browserGlobals['AudioWorkletGlobalScope ']
 
-module.exports = defineConfig([
+// Globals exported by vitest
+const vitestGlobals = {
+  vitest: 'readonly',
+  vi: 'readonly',
+  suite: 'readonly',
+  test: 'readonly',
+  describe: 'readonly',
+  it: 'readonly',
+  chai: 'readonly',
+  expect: 'readonly',
+  assert: 'readonly',
+  beforeAll: 'readonly',
+  afterAll: 'readonly',
+  beforeEach: 'readonly',
+  afterEach: 'readonly',
+  onTestFailed: 'readonly',
+  onTestFinished: 'readonly',
+}
+
+export default defineConfig([
   eslintJS.configs.recommended,
   jsxA11yPlugin.flatConfigs.recommended,
   reactPlugin.configs.flat.recommended,
@@ -40,11 +59,22 @@ module.exports = defineConfig([
     languageOptions: {
       ecmaVersion: 'latest',
       parser: babelParser,
+      parserOptions: {
+        requireConfigFile: false,
+        babelOptions: {
+          plugins: [
+            ['@babel/plugin-proposal-decorators', { version: 'legacy' }],
+            ['@babel/plugin-transform-runtime'],
+            ['@babel/plugin-transform-class-properties'],
+          ],
+          presets: ['@babel/preset-react'],
+        },
+      },
       globals: {
         ...browserGlobals,
         ...globals.node,
         ...globals.es6,
-        ...globals.jest,
+        ...vitestGlobals,
         BUILD: 'readonly',
       },
     },
@@ -124,7 +154,7 @@ module.exports = defineConfig([
       // and matches all assignments that contain `render` e.g. `thing = thingThatWasRendered`
       'testing-library/render-result-naming-convention': 0,
       camelcase: 0,
-      // Our tests allow disabling auto cleanup (global.autoCleanup = false)
+      // Our tests allow disabling auto cleanup (globalThis.autoCleanup = false)
       // so this rule is too strict
       'testing-library/no-manual-cleanup': 0,
     },

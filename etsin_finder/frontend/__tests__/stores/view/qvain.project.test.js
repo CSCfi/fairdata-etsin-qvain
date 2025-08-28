@@ -1,23 +1,22 @@
-import { expect } from 'chai'
 import { v4 as uuidv4 } from 'uuid'
 import { makeObservable } from 'mobx'
 import Projects from '../../../js/stores/view/qvain/qvain.project'
 
-jest.mock('mobx', () => {
-  const actual = jest.requireActual('mobx')
+vi.mock('mobx', async () => {
+  const actual = await vi.importActual('mobx')
   return {
     ...actual,
-    makeObservable: jest.fn(),
+    makeObservable: vi.fn(),
   }
 })
 
-jest.mock('uuid')
+vi.mock('uuid')
 
 describe('Projects', () => {
   let projects
   const Parent = {
     readonly: false,
-    setChanged: jest.fn(),
+    setChanged: vi.fn(),
   }
 
   beforeEach(() => {
@@ -26,7 +25,7 @@ describe('Projects', () => {
 
   describe('when calling constructor with Parent', () => {
     test('should call makeObservable', () => {
-      expect(makeObservable).to.have.beenCalledWith(projects)
+      expect(makeObservable).toHaveBeenCalledWith(projects)
     })
   })
 
@@ -59,7 +58,7 @@ describe('Projects', () => {
     })
 
     test('should call Parent setChanged with true', () => {
-      expect(Parent.setChanged).to.have.beenCalledWith(true)
+      expect(Parent.setChanged).toHaveBeenCalledWith(true)
     })
   })
 
@@ -105,7 +104,7 @@ describe('Projects', () => {
     })
 
     test('should call Parent setChanged with true', () => {
-      expect(Parent.setChanged).to.have.beenCalledWith(true)
+      expect(Parent.setChanged).toHaveBeenCalledWith(true)
     })
   })
 

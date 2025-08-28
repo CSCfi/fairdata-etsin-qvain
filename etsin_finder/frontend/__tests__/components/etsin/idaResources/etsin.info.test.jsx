@@ -7,7 +7,7 @@ import { useStores } from '@/stores/stores'
 
 afterEach(cleanup)
 
-jest.mock('@/stores/stores')
+vi.mock('@/stores/stores')
 useStores.mockReturnValue(buildStores())
 
 // avoid ReactModal warning about missing app element

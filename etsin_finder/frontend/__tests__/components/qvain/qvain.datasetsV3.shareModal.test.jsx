@@ -12,8 +12,8 @@ import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import etsinTheme from '@/styles/theme'
 
-const user = userEvent.setup({ delay: null })
-jest.useFakeTimers('modern')
+vi.useFakeTimers()
+const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime, delay: null })
 
 const testUser = {
   name: 'Testi Testinen',
@@ -58,7 +58,8 @@ const searchResultsTestinen = [testUser]
 let stores, wrapper, helper, mockAdapter
 
 const renderModal = async () => {
-  jest.resetAllMocks()
+  vi.resetAllMocks()
+  vi.spyOn(console, 'error').mockImplementation(() => undefined) // suppress 404 warnings
   wrapper?.unmount?.()
   if (helper) {
     document.body.removeChild(helper)
@@ -94,7 +95,7 @@ const renderModal = async () => {
 
 const mockInviteWithDelay = () => {
   // Delay response from invitation endpoint so loading behavior can be tested.
-  // Call jest.advanceTimersByTime(100) to resolve
+  // Call vi.advanceTimersByTime(100) to resolve
   mockAdapter.onPost('/api/qvain/datasets/jeejee/editor_permissions').reply(async config => {
     const statuses = JSON.parse(config.data).users.map(uid => ({
       ...userInviteResponses[uid],
@@ -105,8 +106,7 @@ const mockInviteWithDelay = () => {
 }
 
 beforeEach(async () => {
-  jest.resetAllMocks()
-  jest.spyOn(console, 'error').mockImplementation(() => {}) // suppress 404 warnings
+  vi.resetAllMocks()
   mockAdapter = new MockAdapter(axios)
   mockAdapter.onGet('/api/ldap/users/testi').reply(200, searchResultsTesti)
   mockAdapter.onGet('/api/ldap/users/testinen').reply(200, searchResultsTestinen)
@@ -154,7 +154,7 @@ describe('ShareModal', () => {
       const input = screen.getByRole('combobox', { name: 'Users' })
       await user.type(input, 'testi')
       await user.type(input, 'nen') // cancels previous input
-      await act(async () => jest.advanceTimersByTime(100))
+      await act(async () => vi.advanceTimersByTime(100))
       expect(screen.getAllByRole('option').map(v => v.textContent)).toEqual([
         'Testi Testinen (testinen, testi.testinen@example.com)',
       ])
@@ -311,7 +311,7 @@ describe('ShareModal', () => {
         await user.click(document.body)
         expect(screen.getByRole('dialog')).toBeInTheDocument()
         expect(screen.queryByRole('button', { name: /discard invitation/ })).not.toBeInTheDocument()
-        jest.advanceTimersByTime(100)
+        vi.advanceTimersByTime(100)
       })
     })
   })

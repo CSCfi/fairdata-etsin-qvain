@@ -1,25 +1,24 @@
-import { expect } from 'chai'
 import EmbargoExpDate, {
   embargoExpDateSchema,
 } from '../../../js/stores/view/qvain/qvain.embargoExpDate'
 import { makeObservable } from 'mobx'
 
-jest.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
+vi.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
   class mockSingleValueField {
     constructor(...args) {
       this.constructorFunc(...args)
     }
 
-    constructorFunc = jest.fn()
+    constructorFunc = vi.fn()
   }
 
-  return mockSingleValueField
+  return {default: mockSingleValueField}
 })
 
-jest.mock('mobx', () => {
+vi.mock('mobx', async () => {
   return {
-    ...jest.requireActual('mobx'),
-    makeObservable: jest.fn(),
+    ...(await vi.importActual('mobx')),
+    makeObservable: vi.fn(),
   }
 })
 
@@ -36,11 +35,11 @@ describe('given Parent object', () => {
 
     describe('when constructor is called', () => {
       test('should call super.constructor with Parent and schema', () => {
-        expect(embargoExpDate.constructorFunc).to.have.beenCalledWith(Parent, embargoExpDateSchema)
+        expect(embargoExpDate.constructorFunc).toHaveBeenCalledWith(Parent, embargoExpDateSchema)
       })
 
       test('should call makeObservable', () => {
-        expect(makeObservable).to.have.beenCalledWith(embargoExpDate)
+        expect(makeObservable).toHaveBeenCalledWith(embargoExpDate)
       })
     })
 
@@ -72,7 +71,7 @@ describe('given Parent object', () => {
       })
 
       test('should set value to undefined', () => {
-        expect(embargoExpDate.value).to.be.undefined
+        expect(embargoExpDate.value).toBeUndefined()
       })
     })
   })

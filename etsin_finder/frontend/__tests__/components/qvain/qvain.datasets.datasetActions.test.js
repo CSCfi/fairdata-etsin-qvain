@@ -1,4 +1,3 @@
-/* global jestExpect */
 import { configure } from 'mobx'
 
 import { buildStores } from '../../../js/stores'
@@ -13,8 +12,7 @@ import {
   groupActions,
 } from '../../../js/components/qvain/views/datasetsV2/datasetActions'
 
-import { expect } from 'chai'
-jest.mock('axios')
+vi.mock('axios')
 
 let stores
 
@@ -22,12 +20,12 @@ beforeEach(() => {
   configure({ safeDescriptors: false })
   stores = buildStores()
   configure({ safeDescriptors: true })
-  stores.Matomo.recordEvent = jest.fn()
-  stores.Env.history.navigate = jest.fn()
-  stores.Qvain.editDataset = jest.fn()
-  stores.Qvain.resetWithTemplate = jest.fn()
-  stores.QvainDatasets.removeModal = { open: jest.fn() }
-  window.open = jest.fn()
+  stores.Matomo.recordEvent = vi.fn()
+  stores.Env.history.navigate = vi.fn()
+  stores.Qvain.editDataset = vi.fn()
+  stores.Qvain.resetWithTemplate = vi.fn()
+  stores.QvainDatasets.removeModal = { open: vi.fn() }
+  window.open = vi.fn()
 })
 
 const idaDataset = {
@@ -57,21 +55,21 @@ describe('getEnterEditAction', () => {
     })
 
     it('should navigate to editor url', () => {
-      expect(stores.Env.history.navigate).to.have.beenCalledWith(`/qvain/dataset/${expectedIdentifier}`)
+      expect(stores.Env.history.navigate).toHaveBeenCalledWith(`/qvain/dataset/${expectedIdentifier}`)
     })
 
     if (expectCallEditDataset) {
       it('should call editDataset', () => {
-        expect(stores.Qvain.editDataset).to.have.beenCalledWith(dataset)
+        expect(stores.Qvain.editDataset).toHaveBeenCalledWith(dataset)
       })
     } else {
       it('should not call editDataset', () => {
-        expect(stores.Qvain.editDataset).to.not.have.beenCalled()
+        expect(stores.Qvain.editDataset).not.toHaveBeenCalled()
       })
     }
 
     it('should call Matomo.recordEvent', () => {
-      expect(stores.Matomo.recordEvent).to.have.beenCalledWith(`EDIT / ${expectedIdentifier}`)
+      expect(stores.Matomo.recordEvent).toHaveBeenCalledWith(`EDIT / ${expectedIdentifier}`)
     })
   })
 })
@@ -87,14 +85,14 @@ describe('getGoToEtsinAction', () => {
     })
 
     it('should open etsin in a new tab', () => {
-      expect(window.open).to.have.beenCalledWith(
+      expect(window.open).toHaveBeenCalledWith(
         `/dataset/${expectedIdentifier}${expectedQuery}`,
         '_blank'
       )
     })
 
     it('should call Matomo.recordEvent', () => {
-      expect(stores.Matomo.recordEvent).to.have.beenCalledWith(`PREVIEW / ${expectedIdentifier}`)
+      expect(stores.Matomo.recordEvent).toHaveBeenCalledWith(`PREVIEW / ${expectedIdentifier}`)
     })
   })
 })
@@ -108,13 +106,13 @@ describe('getCreateNewVersionAction', () => {
       })
 
       it('should call Matomo.recordEvent', () => {
-        expect(stores.Matomo.recordEvent).to.have.beenCalledWith(
+        expect(stores.Matomo.recordEvent).toHaveBeenCalledWith(
           `NEW_VERSION / ${expectedIdentifier}`
         )
       })
 
       it('should call navigate to editor url', () => {
-        expect(stores.Env.history.navigate).to.have.beenCalledWith(
+        expect(stores.Env.history.navigate).toHaveBeenCalledWith(
           `/qvain/dataset/published-id?new_version`
         )
       })
@@ -134,20 +132,20 @@ describe('getUseAsTemplateAction', () => {
 
     if (dataset.next_draft) {
       it('should use dataset.next_draft as template', () => {
-        expect(stores.Env.history.navigate).to.have.beenCalledWith(
+        expect(stores.Env.history.navigate).toHaveBeenCalledWith(
           `/qvain/dataset?template=${dataset.next_draft.identifier}`
         )
       })
     } else {
       it('should use dataset as template', () => {
-        expect(stores.Env.history.navigate).to.have.beenCalledWith(
+        expect(stores.Env.history.navigate).toHaveBeenCalledWith(
           `/qvain/dataset?template=${dataset.identifier}`
         )
       })
     }
 
     it('should call Matomo.recordEvent', () => {
-      expect(stores.Matomo.recordEvent).to.have.beenCalledWith(`TEMPLATE / ${expectedIdentifier}`)
+      expect(stores.Matomo.recordEvent).toHaveBeenCalledWith(`TEMPLATE / ${expectedIdentifier}`)
     })
   })
 })
@@ -165,10 +163,10 @@ describe('getRemoveAction', () => {
       })
 
       it('should open modal', () => {
-        jestExpect(stores.QvainDatasets.removeModal.open).toHaveBeenCalledWith({
+        expect(stores.QvainDatasets.removeModal.open).toHaveBeenCalledWith({
           dataset,
           onlyChanges,
-          postRemoveCallback: jestExpect.any(Function),
+          postRemoveCallback: expect.any(Function),
         })
       })
     })
@@ -181,10 +179,10 @@ describe('getRemoveAction', () => {
         })
 
         it('should open modal', () => {
-          jestExpect(stores.QvainDatasets.removeModal.open).toHaveBeenCalledWith({
+          expect(stores.QvainDatasets.removeModal.open).toHaveBeenCalledWith({
             dataset,
             onlyChanges,
-            postRemoveCallback: jestExpect.any(Function),
+            postRemoveCallback: expect.any(Function),
           })
         })
       })

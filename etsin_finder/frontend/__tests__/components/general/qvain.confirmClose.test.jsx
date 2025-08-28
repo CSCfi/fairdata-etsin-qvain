@@ -12,8 +12,8 @@ import { buildStores } from '@/stores'
 describe('ConfirmDialog', () => {
   const props = {
     show: true,
-    onCancel: jest.fn(),
-    onConfirm: jest.fn(),
+    onCancel: vi.fn(),
+    onConfirm: vi.fn(),
     content: {
       warning: 'warning',
       cancel: 'cancel',
@@ -59,8 +59,8 @@ describe('ConfirmClose', () => {
   test('should render confirmation dialog', () => {
     const props = {
       show: true,
-      onCancel: jest.fn(),
-      onConfirm: jest.fn(),
+      onCancel: vi.fn(),
+      onConfirm: vi.fn(),
     }
 
     contextRenderer(<ConfirmClose {...props} />, { stores: buildStores() })

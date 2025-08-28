@@ -237,7 +237,7 @@ def create_app(testing=None):
     if testing is None:
         testing = bool(os.environ.get("TESTING", False))
 
-    app = Flask(__name__, template_folder="./frontend/build")
+    app = Flask(__name__, template_folder="templates")
     app.config.update(load_app_config(testing))
     initialize_supported_flags(app)
     if not app.testing and not executing_cicd():

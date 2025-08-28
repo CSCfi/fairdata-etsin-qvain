@@ -19,13 +19,13 @@ configure({
   enforceActions: 'always',
 })
 
-jest.mock('axios')
+vi.mock('axios')
 
-jest.mock('../../../../js/stores/stores', () => {
-  const useStoresMock = jest.fn()
+vi.mock('../../../../js/stores/stores', async () => {
+  const useStoresMock = vi.fn()
 
   return {
-    ...jest.requireActual('../../../../js/stores/stores'),
+    ...(await vi.importActual('../../../../js/stores/stores')),
     useStores: useStoresMock,
   }
 })

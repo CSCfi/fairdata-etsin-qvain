@@ -14,20 +14,20 @@ import { useStores, StoresProvider } from '../../../../js/stores/stores'
 import RelatedResource from '../../../../js/components/qvain/sections/Publications'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 
-jest.setTimeout(10000)
+vi.setConfig({ testTimeout: 10000 })
 
 // Make sure MobX store values are not mutated outside actions.
 configure({
   enforceActions: 'always',
 })
 
-jest.mock('axios')
+vi.mock('axios')
 
-jest.mock('../../../../js/stores/stores', () => {
-  const useStoresMock = jest.fn()
+vi.mock('../../../../js/stores/stores', async () => {
+  const useStoresMock = vi.fn()
 
   return {
-    ...jest.requireActual('../../../../js/stores/stores'),
+    ...(await vi.importActual('../../../../js/stores/stores')),
     useStores: useStoresMock,
   }
 })

@@ -1,6 +1,7 @@
-// Helper extensions for jest
+// Helper extensions for tests
 
 import { toHaveNoViolations } from 'jest-axe'
+
 export { contextRenderer } from './contextRenderer'
 export * from './textNodes'
 
@@ -20,7 +21,7 @@ const toBeAccessible = (results, options = { ignore: [] }) => {
 }
 
 export const registerHelpers = () => {
-  global.jestExpect.extend({ toBeAccessible })
+  globalThis.viExpect.extend({ toBeAccessible })
 }
 
 export const failTestsWhenTranslationIsMissing = Locale => {
@@ -36,7 +37,7 @@ export const failTestsWhenTranslationIsMissing = Locale => {
     missingTranslations.length = 0
   })
 
-  global.jestExpect.extend({
+  globalThis.viExpect.extend({
     noMissingTranslations() {
       if (missingTranslations.length === 0) {
         return {

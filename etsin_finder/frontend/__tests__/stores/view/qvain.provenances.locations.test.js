@@ -1,5 +1,4 @@
 import Locations from '@/stores/view/qvain/qvain.provenances.locations'
-import { expect } from 'chai'
 import EnvClass from '@/stores/domain/env'
 
 const Parent = {
@@ -9,17 +8,17 @@ const Parent = {
 
 const existingLocations = ['some locations']
 
-jest.mock('@/stores/view/qvain/qvain.spatials', () => {
+vi.mock('@/stores/view/qvain/qvain.spatials', () => {
   class MockSpatials {
     constructor(...args) {
       this.mockConstructor(...args)
     }
 
-    mockConstructor = jest.fn(Parent => {
+    mockConstructor = vi.fn(Parent => {
       this.Parent = Parent
     })
   }
-  return MockSpatials
+  return { default: MockSpatials }
 })
 
 describe('Locations', () => {
@@ -29,7 +28,7 @@ describe('Locations', () => {
   })
 
   test('should call Spatials costructor when calling Location constructor', () => {
-    expect(locations.mockConstructor).to.have.beenCalledWith(Parent, existingLocations)
+    expect(locations.mockConstructor).toHaveBeenCalledWith(Parent, existingLocations)
   })
 
   test('should have translationsRoot matched with V2', () => {

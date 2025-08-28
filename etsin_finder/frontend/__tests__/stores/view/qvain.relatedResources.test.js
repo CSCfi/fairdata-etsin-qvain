@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
 import {
@@ -8,7 +7,7 @@ import {
 
 import { buildStores } from '@/stores'
 
-jest.mock('mobx')
+vi.mock('mobx')
 const origCer = console.error
 
 describe('RelatedResources', () => {
@@ -16,7 +15,7 @@ describe('RelatedResources', () => {
   let relatedResources
 
   beforeAll(() => {
-    console.error = jest.fn()
+    console.error = vi.fn()
     Stores = buildStores()
     relatedResources = Stores.Qvain.RelatedResources
     console.error = origCer
@@ -62,7 +61,7 @@ describe('RelatedResources', () => {
       })
 
       test('should call makeObservable', () => {
-        expect(makeObservable).to.have.beenCalledWith(relatedResources)
+        expect(makeObservable).toHaveBeenCalledWith(relatedResources)
       })
     })
 
@@ -111,12 +110,12 @@ describe('RelatedResources', () => {
       }
 
       beforeEach(() => {
-        relatedResources.fromBackendBase = jest.fn()
+        relatedResources.fromBackendBase = vi.fn()
         relatedResources.fromBackend(dataset, Qvain)
       })
 
       test('should call fromBackendBase with dataset.relation and Qvain', () => {
-        expect(relatedResources.fromBackendBase).to.have.beenCalledWith(dataset.relation, Qvain)
+        expect(relatedResources.fromBackendBase).toHaveBeenCalledWith(dataset.relation, Qvain)
       })
     })
   })

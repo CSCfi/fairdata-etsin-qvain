@@ -1,35 +1,34 @@
-import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
 import Keywords from '../../../js/stores/view/qvain/qvain.keyword'
 
-jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
+vi.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
   class mockReferenceField {
     constructor(...args) {
       this.constructorFunc(...args)
     }
 
-    constructorFunc = jest.fn()
+    constructorFunc = vi.fn()
 
     reset = () => {}
 
-    set = jest.fn()
+    set = vi.fn()
 
-    removeItemStr = jest.fn()
+    removeItemStr = vi.fn()
 
     itemStr = 'some, keywords'
 
     storage = []
   }
 
-  return mockReferenceField
+  return { default: mockReferenceField }
 })
 
-jest.mock('mobx', () => {
+vi.mock('mobx', async () => {
   return {
-    ...jest.requireActual('mobx'),
+    ...(await vi.importActual('mobx')),
     override: func => func,
-    makeObservable: jest.fn(),
+    makeObservable: vi.fn(),
   }
 })
 
@@ -40,7 +39,7 @@ describe('Keywords with args', () => {
   const defaultItem = { some: 'initial data' }
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   describe('on creation', () => {
@@ -49,11 +48,11 @@ describe('Keywords with args', () => {
     })
 
     afterEach(() => {
-      jest.clearAllMocks()
+      vi.clearAllMocks()
     })
 
     test('should call ReferenceField super with args', () => {
-      expect(keywords.constructorFunc).to.have.beenCalledWith(
+      expect(keywords.constructorFunc).toHaveBeenCalledWith(
         Parent,
         defaultStorageFactory,
         defaultItem
@@ -61,7 +60,7 @@ describe('Keywords with args', () => {
     })
 
     test('should call makeObservable', () => {
-      expect(makeObservable).to.have.beenCalledWith(keywords)
+      expect(makeObservable).toHaveBeenCalledWith(keywords)
     })
   })
 
@@ -75,7 +74,7 @@ describe('Keywords with args', () => {
     })
 
     test('should call super.removeItemStr', () => {
-      expect(keywords.removeItemStr).to.have.beenCalledTimes(1)
+      expect(keywords.removeItemStr).toHaveBeenCalledTimes(1)
     })
 
     test('should populate storage with keywords', () => {
@@ -91,11 +90,11 @@ describe('Keywords with args', () => {
       })
 
       test('should call set', () => {
-        expect(keywords.set).to.have.beenCalledWith(['data', 'some', 'keywords'])
+        expect(keywords.set).toHaveBeenCalledWith(['data', 'some', 'keywords'])
       })
 
       test('should call removeItemStr', () => {
-        expect(keywords.removeItemStr).to.have.beenCalled()
+        expect(keywords.removeItemStr).toHaveBeenCalled()
       })
     })
   })

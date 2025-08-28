@@ -2,7 +2,6 @@ import { ThemeProvider } from 'styled-components'
 import ReactModal from 'react-modal'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import '@testing-library/jest-dom'
 import { screen, render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 

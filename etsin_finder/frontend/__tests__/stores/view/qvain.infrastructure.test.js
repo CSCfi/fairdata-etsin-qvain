@@ -1,26 +1,25 @@
-import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
-import Infrastructures from '../../../js/stores/view/qvain/qvain.infrastructure'
+import Infrastructures from '@/stores/view/qvain/qvain.infrastructure'
 
-jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
+vi.mock('@/stores/view/qvain/qvain.referenceField', () => {
   class mockReferenceField {
     constructor(...args) {
       this.constructorFunc(...args)
     }
 
-    constructorFunc = jest.fn()
+    constructorFunc = vi.fn()
 
-    reset = jest.fn()
+    reset = vi.fn()
   }
 
-  return mockReferenceField
+  return { default: mockReferenceField }
 })
 
-jest.mock('mobx', () => {
+vi.mock('mobx', async () => {
   return {
-    ...jest.requireActual('mobx'),
-    makeObservable: jest.fn(),
+    ...(await vi.importActual('mobx')),
+    makeObservable: vi.fn(),
   }
 })
 
@@ -35,11 +34,11 @@ describe('given any args', () => {
 
     describe('when calling constructor', () => {
       test('should call super.constructor with given args', () => {
-        expect(infrastructures.constructorFunc).to.have.beenCalledWith(...someArgs)
+        expect(infrastructures.constructorFunc).toHaveBeenCalledWith(...someArgs)
       })
 
       test('should call makeObservable', () => {
-        expect(makeObservable).to.have.beenCalledWith(infrastructures)
+        expect(makeObservable).toHaveBeenCalledWith(infrastructures)
       })
 
       describe('when calling fromBackend with dataset', () => {

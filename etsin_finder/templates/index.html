@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{{ app_description }}" />
     <meta name="theme-color" content="#007FAD" />
+    <link rel="icon" type="image/png" href="/build/favicon.png" />
     <title>{{ app_title }}</title>
     <style>
       .loader:empty {
@@ -40,8 +41,32 @@
     {% if matomo_url -%}
     <script defer src="{{ matomo_url }}"></script>
     {% endif %} {% if sso_host -%}
-    <link rel="stylesheet" type="text/css" href="{{ sso_host }}/notification.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ sso_host }}/notification.css"
+    />
     <script defer src="{{ sso_host }}/notification.js"></script>
+    {% endif %} {% if is_development %}
+    <!-- Vite development server scripts -->
+    <script type="module">
+      // Script needed by @vitejs/plugin-react.
+      // See: https://vite.dev/guide/backend-integration.html
+      import RefreshRuntime from "/vite/@react-refresh";
+      RefreshRuntime.injectIntoGlobalHook(window);
+      window.$RefreshReg$ = () => {};
+      window.$RefreshSig$ = () => (type) => type;
+      window.__vite_plugin_react_preamble_installed__ = true;
+    </script>
+    <script type="module" src="/vite/@vite/client"></script>
+    <script type="module" src="/vite/js/index.jsx"></script>
+    {% elif entry_tags %}
+    {% for tag in entry_tags %}
+    {{ tag | safe }}{% endfor %}
+    {% else %}
+    <script type="module">
+      console.error("Error loading app: Entry point not found.");
+    </script>
     {% endif %}
   </head>
 

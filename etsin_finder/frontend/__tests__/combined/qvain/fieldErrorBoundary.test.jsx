@@ -11,7 +11,7 @@ import {
   withFieldErrorBoundaryTranslationList,
 } from '@/components/qvain/general/errors/fieldErrorBoundary'
 
-jest.spyOn(console, 'error').mockImplementation(() => {})
+vi.spyOn(console, 'error').mockImplementation(() => {})
 
 describe('FieldErrorBoundary', () => {
   const errorDetails = 'tymä virhe'

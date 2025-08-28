@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom'
 import { screen, render } from '@testing-library/react'
 
 import FlaggedComponent from '../../../js/components/general/flaggedComponent.jsx'
@@ -27,8 +26,8 @@ Flags.setSupportedFlags([
   'DISABLED_GROUP.SUBFEATURE',
 ])
 
-jest.mock('../../../js/stores/stores', () => ({
-  useStores: jest.fn(),
+vi.mock('../../../js/stores/stores', () => ({
+  useStores: vi.fn(),
 }))
 
 useStores.mockReturnValue({ Env: { Flags } })
@@ -97,7 +96,7 @@ describe('FlaggedComponent', () => {
 
   describe('when flag is unsupported', () => {
     beforeEach(() => {
-      jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
+      vi.spyOn(console, 'warn').mockImplementationOnce(() => {})
     })
 
     afterEach(() => {

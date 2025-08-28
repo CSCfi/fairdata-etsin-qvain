@@ -1,29 +1,30 @@
 import { RouterStore } from '@/utils/RouterStore'
 import axios from 'axios'
 
-import EnvClass from '../../../js/stores/domain/env'
-import { getCookieValue } from '../../../js/utils/cookies'
+import EnvClass from '@/stores/domain/env'
+import { getCookieValue } from '@/utils/cookies'
 
 const defaultCookieValue = 'etsin'
 const qvainCookieValue = 'qvain'
 
-jest.mock('../../../js/stores/domain/env.flags', () => {
-  return function () {
+vi.mock('@/stores/domain/env.flags', () => {
+  function flagmock() {
     return {
-      flagEnabled: jest.fn(),
-      setFlags: jest.fn(),
-      validateFlags: jest.fn(),
+      flagEnabled: vi.fn(),
+      setFlags: vi.fn(),
+      validateFlags: vi.fn(),
     }
   }
+  return { default: flagmock }
 })
 
-jest.mock('../../../js/utils/cookies', () => {
+vi.mock('@/utils/cookies', () => {
   return {
-    getCookieValue: jest.fn(),
+    getCookieValue: vi.fn(),
   }
 })
 
-jest.mock('axios')
+vi.mock('axios')
 
 describe('Env', () => {
   let Env
@@ -33,7 +34,7 @@ describe('Env', () => {
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   test('should set etsinHost to empty string', () => {

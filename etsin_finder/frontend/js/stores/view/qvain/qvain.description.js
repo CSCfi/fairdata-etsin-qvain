@@ -1,6 +1,5 @@
 import { makeObservable, action } from 'mobx'
 import * as yup from 'yup'
-import '@/utils/extendYup'
 
 import MultiLanguageField from './qvain.multiLanguageField'
 

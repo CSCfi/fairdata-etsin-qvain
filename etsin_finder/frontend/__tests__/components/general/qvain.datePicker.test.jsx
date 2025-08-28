@@ -9,8 +9,8 @@ import LocaleStore from '@/stores/view/locale'
 
 // Fake system time so calendar always shows same month.
 // This also requires disabling delay in userEvent.
-jest.useFakeTimers().setSystemTime(new Date('2026-02-11'))
-const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime })
+vi.useFakeTimers().setSystemTime(new Date('2026-02-11'))
+const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
 
 const getStores = () => ({
   Locale: LocaleStore,

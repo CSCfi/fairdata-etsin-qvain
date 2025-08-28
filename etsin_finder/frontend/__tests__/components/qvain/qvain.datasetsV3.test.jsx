@@ -4,7 +4,6 @@ import MockAdapter from 'axios-mock-adapter'
 
 import { within, screen, render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import '@testing-library/jest-dom'
 
 import { ThemeProvider } from 'styled-components'
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router'
@@ -84,7 +83,7 @@ describe('DatasetsV3', () => {
 
     beforeEach(() => {
       // hide errors from console
-      spy = jest.spyOn(console, 'error').mockImplementation(() => {})
+      spy = vi.spyOn(console, 'error').mockImplementation(() => {})
     })
 
     afterEach(() => {

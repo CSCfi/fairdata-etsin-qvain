@@ -91,7 +91,7 @@ class Locale {
     this.dateSeparator = this.dateSeparator.bind(this)
     this.translate = this.translate.bind(this)
 
-    if (BUILD !== 'production') {
+    if (process.env.BUILD !== 'production') {
       window.setLang = lang => this.setLang(lang, { save: true })
       window.toggleLang = () =>
         this.setLang(

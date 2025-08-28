@@ -20,11 +20,11 @@ configure({
 const mockAdapter = new MockAdapter(axios)
 mockAdapter.onGet().reply(200, accessTypeResponse)
 
-jest.mock('@/components/qvain/utils/select', () => {
-  const actual = jest.requireActual('@/components/qvain/utils/select')
+vi.mock('@/components/qvain/utils/select', async () => {
+  const actual = await vi.importActual('@/components/qvain/utils/select')
   return {
     ...actual,
-    onChange: jest.fn(() => () => { }),
+    onChange: vi.fn(() => () => {}),
   }
 })
 
@@ -43,7 +43,7 @@ describe('Qvain Access Type', () => {
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   const setAuthUserAndRender = (userSettings = {}) => {
@@ -116,8 +116,8 @@ describe('Qvain Access Type', () => {
 
   describe('Select', () => {
     beforeEach(async () => {
-      Qvain.AccessType.setValidationError = jest.fn()
-      Qvain.AccessType.validate = jest.fn()
+      Qvain.AccessType.setValidationError = vi.fn()
+      Qvain.AccessType.validate = vi.fn()
       setAuthUserAndRender()
     })
 

@@ -1,8 +1,4 @@
 /*
- * @jest-environment ./__tests__/timezonedNodeEnvironment.js
- */
-
-/*
  **  Files submit cases frontend tests
  **
  **  Files has 144 theoretical test conditions. Almost half of these cases are inactive or not possible at all.
@@ -37,27 +33,27 @@ import {
 } from '../../../js/stores/view/qvain/qvain.submit.schemas'
 
 const { qvainFormSchema: realQvainFormSchema, qvainFormDraftSchema: realQvainFormDraftSchema } =
-  jest.requireActual('../../../js/stores/view/qvain/qvain.submit.schemas')
+  await vi.importActual('../../../js/stores/view/qvain/qvain.submit.schemas')
 
-jest.mock('axios')
+vi.mock('axios')
 
-jest.mock('../../../js/components/qvain/utils/handleSubmit', () => {
-  return jest.fn()
-})
+vi.mock('../../../js/components/qvain/utils/handleSubmit', () => ({
+  default: vi.fn(),
+}))
 
-jest.mock('../../../js/stores/view/qvain/qvain.submit.schemas', () => {
+vi.mock('../../../js/stores/view/qvain/qvain.submit.schemas', () => {
   return {
     qvainFormSchema: {
-      validate: jest.fn(),
+      validate: vi.fn(),
     },
     qvainFormDraftSchema: {
-      validate: jest.fn(),
+      validate: vi.fn(),
     },
   }
 })
 
-jest.mock('lodash.debounce', () => {
-  return func => () => func()
+vi.mock('lodash.debounce', async () => {
+  return { default: f => f }
 })
 
 const errors = {
@@ -112,14 +108,14 @@ const generateDefaultDatasetForDraft = settings => ({
 
 const createMockQvain = settings => ({
   Files: {
-    actionsToMetax: jest.fn(() => ({ files: [], directories: [] })),
-    metadataToMetax: jest.fn(() => ({ files: [], directories: [] })),
+    actionsToMetax: vi.fn(() => ({ files: [], directories: [] })),
+    metadataToMetax: vi.fn(() => ({ files: [], directories: [] })),
   },
-  Actors: { checkProvenanceActors: jest.fn(() => true) },
-  OtherIdentifiers: { cleanupBeforeBackend: jest.fn(() => true) },
-  editDataset: jest.fn(),
-  setChanged: jest.fn(),
-  setOriginal: jest.fn(),
+  Actors: { checkProvenanceActors: vi.fn(() => true) },
+  OtherIdentifiers: { cleanupBeforeBackend: vi.fn(() => true) },
+  editDataset: vi.fn(),
+  setChanged: vi.fn(),
+  setOriginal: vi.fn(),
   canRemoveFiles: true,
   canSelectFiles: true,
   ...settings,
@@ -147,7 +143,7 @@ describe('Submit.exec()', () => {
 
   beforeEach(() => {
     handleSubmitToBackend.mockReturnValue(generateDefaultDatasetForPublish())
-    submitFunction = jest.fn(() => generalPostResponse.data)
+    submitFunction = vi.fn(() => generalPostResponse.data)
     mockQvain = createMockQvain({
       original: {
         identifier: 'some identifier',
@@ -159,7 +155,7 @@ describe('Submit.exec()', () => {
 
   afterEach(() => {
     configure({ safeDescriptors: true })
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   test('exec, should call submit function', async () => {
@@ -193,8 +189,8 @@ describe('Submit.exec()', () => {
       directories: [],
     })
     submitFunction = {
-      draftFunction: jest.fn(logCallOrder('save draft', generalPostResponse.data)),
-      publishFunction: jest.fn(logCallOrder('publish dataset', generalPostResponse.data)),
+      draftFunction: vi.fn(logCallOrder('save draft', generalPostResponse.data)),
+      publishFunction: vi.fn(logCallOrder('publish dataset', generalPostResponse.data)),
     }
     axios.get.mockImplementation(logCallOrder('get updated dataset', generalGetResponse.data))
 
@@ -272,7 +268,7 @@ describe('prevalidate', () => {
   })
 
   afterEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   describe('when validation returns nothing', () => {
@@ -366,7 +362,7 @@ describe('create new draft', () => {
   }
 
   afterEach(async () => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   test('should call axios.post with dataset and draft param', async () => {
@@ -503,12 +499,12 @@ describe('publish new dataset', () => {
   }
 
   afterEach(async () => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   test('should call given callback', async () => {
     const dataset = generateDefaultDatasetForPublish()
-    const mockCallback = jest.fn()
+    const mockCallback = vi.fn()
     await expectNoError(dataset, mockCallback)
     expect(mockCallback).toHaveBeenCalledTimes(1)
   })
@@ -655,7 +651,7 @@ describe('edit existing draft dataset', () => {
   }
 
   afterEach(async () => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   test('should call axios.patch with dataset and existing identifier', async () => {
@@ -776,7 +772,7 @@ describe('publish existing draft dataset', () => {
   }
 
   afterEach(async () => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   test('should call axios.patch and post', async () => {
@@ -912,7 +908,7 @@ describe('save published dataset as draft', () => {
   }
 
   afterEach(async () => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   test('should call axios.post to make new draft, patch to save changes', async () => {
@@ -1050,7 +1046,7 @@ describe('republish dataset', () => {
   }
 
   afterEach(async () => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   test('should call axios.patch with dataset and existing identifier', async () => {
@@ -1197,7 +1193,7 @@ describe('publish unpublished dataset', () => {
   }
 
   afterEach(async () => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   test('should call axios.patch with dataset and existing identifier', async () => {

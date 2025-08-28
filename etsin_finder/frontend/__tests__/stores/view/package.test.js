@@ -1,10 +1,10 @@
 import axios from 'axios'
-import Packages from '../../../js/stores/view/packages'
-import { DOWNLOAD_API_REQUEST_STATUS } from '../../../js/utils/constants'
+import Packages from '@/stores/view/packages'
+import { DOWNLOAD_API_REQUEST_STATUS } from '@/utils/constants'
 import MockAdapter from 'axios-mock-adapter'
 const mockAdapter = new MockAdapter(axios)
 
-jest.useFakeTimers()
+vi.useFakeTimers()
 
 let checkStatus = false
 
@@ -28,7 +28,7 @@ describe('Packages', () => {
   })
 
   afterEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
     mockAdapter.reset()
   })
 
@@ -146,7 +146,7 @@ describe('Packages', () => {
 
   describe('when calling clearPollTimeout', () => {
     const pollTimeout = 'timeout'
-    const clearTimeout = jest.spyOn(global, 'clearTimeout')
+    const clearTimeout = vi.spyOn(global, 'clearTimeout')
 
     beforeEach(() => {
       packages.pollTimeout = pollTimeout
@@ -169,7 +169,7 @@ describe('Packages', () => {
   describe('when calling setPollTimeout', () => {
     const timeoutFunction = () => {}
     const pollInterval = 1
-    const setTimeout = jest.spyOn(global, 'setTimeout')
+    const setTimeout = vi.spyOn(global, 'setTimeout')
     const pollTimeout = 'timeout'
 
     beforeEach(() => {
@@ -367,7 +367,7 @@ describe('Packages', () => {
     })
 
     test('should log error and clear packages when status is not ok', async () => {
-      jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+      vi.spyOn(console, 'error').mockImplementationOnce(() => {})
       mockAdapter.onGet('/api/v3/download/status').reply(503, '')
       mockAdapter.onGet('/api/v3/download/requests?cr_id=identifier').reply(200, response)
       await packages.fetch(datasetIdentifier)

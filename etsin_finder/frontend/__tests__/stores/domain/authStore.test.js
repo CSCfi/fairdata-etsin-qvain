@@ -24,7 +24,7 @@ describe('Auth Store', () => {
   let errorSpy
 
   beforeEach(() => {
-    errorSpy = jest.spyOn(console, 'error').mockReturnValue()
+    errorSpy = vi.spyOn(console, 'error').mockReturnValue()
     mock.reset()
     mock.onGet('https:///v3/auth/user').reply(200, mockUser)
     mock.onGet('/api/user').reply(200, mockUser)

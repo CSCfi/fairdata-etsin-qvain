@@ -3,7 +3,7 @@ import LocaleClass from '../../js/stores/view/locale'
 import moment from 'moment'
 import axios from 'axios'
 
-jest.mock('axios')
+vi.mock('axios')
 
 const Env = new EnvClass()
 const Locale = new LocaleClass(Env)

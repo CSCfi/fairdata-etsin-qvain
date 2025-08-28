@@ -1,4 +1,4 @@
- 
+
 import { makeObservable, observable, action, computed, override, runInAction } from 'mobx'
 import * as yup from 'yup'
 import { v4 as uuidv4 } from 'uuid'
@@ -336,6 +336,9 @@ class ProjectV2 extends Field {
   }
 
   @computed get orgEditMode() {
+    if (!this.inEdit) {
+      return undefined
+    }
     return this.inEdit.organizations.find(i => i.uiid === this.orgInEdit.uiid)
   }
 

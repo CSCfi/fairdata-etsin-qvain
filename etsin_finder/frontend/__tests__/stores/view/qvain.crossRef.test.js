@@ -1,17 +1,16 @@
-import { expect } from 'chai'
 import CrossRef from '@/stores/view/qvain/qvain.crossRef'
 import EnvClass from '@/stores/domain/env'
 import axios from 'axios'
 import urls from '@/utils/urls'
-jest.mock('axios')
-axios.isCancel = jest.fn()
+vi.mock('axios')
+axios.isCancel = vi.fn()
 describe('CrossRef', () => {
-  const cancelMockFunc = jest.fn()
+  const cancelMockFunc = vi.fn()
   let crossRef
 
   beforeEach(() => {
     axios.CancelToken = {
-      source: jest.fn(() => ({ cancel: () => cancelMockFunc })),
+      source: vi.fn(() => ({ cancel: () => cancelMockFunc })),
     }
     const Env = new EnvClass()
     crossRef = new CrossRef(Env)
@@ -19,7 +18,7 @@ describe('CrossRef', () => {
   })
 
   afterEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   describe('when calling search with empty string', () => {
@@ -28,10 +27,10 @@ describe('CrossRef', () => {
       returnValue = await crossRef.search('')
     })
     test('should call cancel on prevRequest', () => {
-      expect(cancelMockFunc).to.have.beenCalledWith()
+      expect(cancelMockFunc).toHaveBeenCalledWith()
     })
     test('should not call axios.get', () => {
-      expect(axios.get).to.not.have.beenCalled()
+      expect(axios.get).not.toHaveBeenCalled()
     })
     test('should clear results', () => {
       returnValue.should.eql(crossRef.defaultOptions)
@@ -57,7 +56,7 @@ describe('CrossRef', () => {
       })
 
       test('should call axios.get with search term and cancelToken', () => {
-        expect(axios.get).to.have.beenCalledWith(urls.crossRef.search('test'), {
+        expect(axios.get).toHaveBeenCalledWith(urls.crossRef.search('test'), {
           cancelToken: mockRequest.token,
         })
       })
@@ -82,7 +81,7 @@ describe('CrossRef', () => {
         })
 
         test('should call axios.isCancel', () => {
-          expect(axios.isCancel).to.have.beenCalledWith('error')
+          expect(axios.isCancel).toHaveBeenCalledWith('error')
         })
       })
     })
@@ -100,7 +99,7 @@ describe('CrossRef', () => {
     })
 
     test('should call prev request cancel function', () => {
-      expect(cancelMockFunc).to.have.beenCalledWith()
+      expect(cancelMockFunc).toHaveBeenCalledWith()
     })
   })
 

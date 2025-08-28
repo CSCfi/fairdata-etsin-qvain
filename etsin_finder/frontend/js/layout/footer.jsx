@@ -13,7 +13,7 @@
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
-import imgEOSC from '../../static/images/Supporting_EOSC.jpg'
+import imgEOSC from '@/assets/images/Supporting_EOSC.jpg'
 
 const Footer = () => {
   const accessibilityPath = 'fairdata'

@@ -1,27 +1,26 @@
-import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 import SubjectHeadings, {
   SubjectHeadingModel,
 } from '../../../js/stores/view/qvain/qvain.subjectHeadings'
 
-jest.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
+vi.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
   class mockReferenceField {
     constructor(...args) {
       this.constructorFunc(...args)
     }
 
-    constructorFunc = jest.fn()
+    constructorFunc = vi.fn()
 
-    reset = jest.fn()
+    reset = vi.fn()
   }
 
-  return mockReferenceField
+  return { default: mockReferenceField }
 })
 
-jest.mock('mobx', () => {
+vi.mock('mobx', async () => {
   return {
-    ...jest.requireActual('mobx'),
-    makeObservable: jest.fn(),
+    ...(await vi.importActual('mobx')),
+    makeObservable: vi.fn(),
   }
 })
 
@@ -35,15 +34,15 @@ describe('SubjectHeadings with args', () => {
     })
 
     afterEach(() => {
-      jest.clearAllMocks()
+      vi.clearAllMocks()
     })
 
     test('should call ReferenceField super with args', () => {
-      expect(subjectHeadings.constructorFunc).to.have.beenCalledWith(...args)
+      expect(subjectHeadings.constructorFunc).toHaveBeenCalledWith(...args)
     })
 
     test('should call makeObservable', () => {
-      expect(makeObservable).to.have.beenCalledWith(subjectHeadings)
+      expect(makeObservable).toHaveBeenCalledWith(subjectHeadings)
     })
   })
 
@@ -62,7 +61,7 @@ describe('SubjectHeadings with args', () => {
     })
 
     test('should call super.reset', () => {
-      expect(subjectHeadings.reset).to.have.beenCalledTimes(1)
+      expect(subjectHeadings.reset).toHaveBeenCalledTimes(1)
     })
 
     test('should populate storage with modeled data', () => {

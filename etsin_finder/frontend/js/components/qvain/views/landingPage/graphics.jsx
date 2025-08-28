@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
-import QvainImage from '../../../../../static/images/qvain_frontpage/qvain.svg'
-import EtsinImage from '../../../../../static/images/qvain_frontpage/etsin.svg'
-import MeshImage from '../../../../../static/images/qvain_frontpage/mesh.png'
-import MeshImage2x from '../../../../../static/images/qvain_frontpage/mesh@2x.png'
-import IdaImage from '../../../../../static/images/qvain_frontpage/ida.png'
-import IdaImage2x from '../../../../../static/images/qvain_frontpage/ida@2x.png'
+import QvainImage from '@/assets/images/qvain_frontpage/qvain.svg'
+import EtsinImage from '@/assets/images/qvain_frontpage/etsin.svg'
+import MeshImage from '@/assets/images/qvain_frontpage/mesh.png'
+import MeshImage2x from '@/assets/images/qvain_frontpage/mesh@2x.png'
+import IdaImage from '@/assets/images/qvain_frontpage/ida.png'
+import IdaImage2x from '@/assets/images/qvain_frontpage/ida@2x.png'
 import { Box, SideBySide } from './box'
 
 const GraphicsContainer = styled.div``

@@ -1,42 +1,41 @@
 import '@testing-library/react/dont-cleanup-after-each' // disable automatic cleanup
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
+
 import { cleanup } from '@testing-library/react'
 
 import './ensureTextEncoder' // needed by react-dom before importing test-helpers
 import { Request } from 'cross-fetch'
 import { registerHelpers } from './test-helpers'
-import chai from 'chai'
-import chaiJestMocks from 'chai-jest-mocks'
+
+// Chai is included in vitest.
 chai.should() // register .should to Object.prototype
 
 global.Request = Request // Needed by react router in tests
 
-// isMockFunction is no longer in 'jest-mock' in jest 27 but chai-jest-mocks requires it
-import * as jestMock from 'jest-mock'
-// eslint-disable-next-line no-import-assign
-jestMock.isMockFunction = jest.isMockFunction
+import '@/utils/extendYup'
+import '@/utils/extendPromise'
 
-import '../js/utils/extendYup'
-import '../js/utils/extendPromise'
+process.env.TZ = 'Europe/Helsinki' // Use fixed timezone for tests
 
-jest.mock('../js/components/etsin/Dataset/Sidebar/special/importImages', () => {
-  return () => ({}) // mock image import as require.context is not available in tests
+// userEvent needs jest.advanceTimersByTime stub needed for fake timers to work
+vi.stubGlobal('jest', {
+  advanceTimersByTime: vi.advanceTimersByTime.bind(vi),
 })
 
-chai.use(chaiJestMocks)
-
 // Allow disabling RTL autocleanup per test file
-global.autoCleanup = true
+globalThis.autoCleanup = true
 afterEach(() => {
-  if (global.autoCleanup) {
+  if (globalThis.autoCleanup) {
     cleanup()
   }
 })
 
-global.jestExpect = global.expect
-global.chaiExpect = chai.expect
-global.setExpect = framework => {
-  global.expect = global[`${framework}Expect`]
+globalThis.viExpect = globalThis.expect
+globalThis.chaiExpect = chai.expect
+globalThis.setExpect = framework => {
+  globalThis.expect = globalThis[`${framework}Expect`]
 }
+
+vi.setConfig({ testTimeout: 10000 })
 
 registerHelpers()

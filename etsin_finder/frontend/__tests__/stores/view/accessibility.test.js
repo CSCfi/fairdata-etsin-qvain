@@ -64,7 +64,7 @@ describe('Accessibility Store', () => {
 
   describe('when calling initialLoad', () => {
     beforeEach(() => {
-      jest.spyOn(window, 'addEventListener')
+      vi.spyOn(window, 'addEventListener')
       Accessibility.initialLoad()
     })
 
@@ -75,9 +75,9 @@ describe('Accessibility Store', () => {
 
   describe('when calling handleTab with event of keyCode 9', () => {
     beforeEach(() => {
-      jest.spyOn(document.body.classList, 'add')
-      jest.spyOn(window, 'removeEventListener')
-      jest.spyOn(window, 'addEventListener')
+      vi.spyOn(document.body.classList, 'add')
+      vi.spyOn(window, 'removeEventListener')
+      vi.spyOn(window, 'addEventListener')
       const event = { keyCode: 9 }
       Accessibility.handleTab(event)
     })

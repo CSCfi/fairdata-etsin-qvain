@@ -1,14 +1,10 @@
-import { expect } from 'chai'
 import { override } from 'mobx'
-import Temporals, {
-  TemporalModel,
-  TemporalTemplate,
-} from '../../../js/stores/view/qvain/qvain.temporals'
+import Temporals, { TemporalModel, TemporalTemplate } from '@/stores/view/qvain/qvain.temporals'
 
-jest.mock('mobx')
+vi.mock('mobx')
 override.mockImplementation(func => func)
 
-jest.mock('../../../js/stores/view/qvain/qvain.field', () => {
+vi.mock('@/stores/view/qvain/qvain.field', () => {
   class Field {
     constructor(...args) {
       this.constructorFunc(...args)
@@ -16,13 +12,13 @@ jest.mock('../../../js/stores/view/qvain/qvain.field', () => {
 
     storage = []
 
-    constructorFunc = jest.fn()
+    constructorFunc = vi.fn()
 
-    resetFunc = jest.fn()
+    resetFunc = vi.fn()
 
-    createFunc = jest.fn()
+    createFunc = vi.fn()
 
-    save = jest.fn()
+    save = vi.fn()
 
     reset() {
       this.resetFunc()
@@ -32,16 +28,16 @@ jest.mock('../../../js/stores/view/qvain/qvain.field', () => {
       this.createFunc()
     }
 
-    fromBackendBase = jest.fn()
+    fromBackendBase = vi.fn()
   }
 
-  return Field
+  return { default: Field }
 })
 
 describe('Temporals with Parent as arg', () => {
   let temporals
   const parent = {
-    setChanged: jest.fn(),
+    setChanged: vi.fn(),
   }
 
   beforeEach(() => {
@@ -49,12 +45,12 @@ describe('Temporals with Parent as arg', () => {
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   describe('when constructor is called', () => {
     test("should call super with Parent, TemporalTemplate, TemporalModel, 'temporals'", () => {
-      expect(temporals.constructorFunc).to.have.beenCalledWith(
+      expect(temporals.constructorFunc).toHaveBeenCalledWith(
         parent,
         TemporalTemplate,
         TemporalModel,
@@ -121,8 +117,8 @@ describe('Temporals with Parent as arg', () => {
     })
 
     test('should call super.reset and super.create', () => {
-      expect(temporals.resetFunc).to.have.beenCalledTimes(1)
-      expect(temporals.createFunc).to.have.beenCalledTimes(1)
+      expect(temporals.resetFunc).toHaveBeenCalledTimes(1)
+      expect(temporals.createFunc).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -145,7 +141,7 @@ describe('Temporals with Parent as arg', () => {
       })
 
       test('should call super.save', () => {
-        expect(temporals.save).to.have.beenCalledTimes(1)
+        expect(temporals.save).toHaveBeenCalledTimes(1)
       })
 
       test(
@@ -199,7 +195,7 @@ describe('Temporals with Parent as arg', () => {
     })
 
     test('should call super.fromBackendBase with dataset.temporal, Qvain', () => {
-      expect(temporals.fromBackendBase).to.have.beenCalledWith(dataset.temporal, Qvain)
+      expect(temporals.fromBackendBase).toHaveBeenCalledWith(dataset.temporal, Qvain)
     })
   })
 })

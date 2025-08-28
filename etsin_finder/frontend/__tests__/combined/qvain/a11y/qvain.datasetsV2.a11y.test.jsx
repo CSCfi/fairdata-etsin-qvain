@@ -17,7 +17,7 @@ import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
 let stores
 const mockAdapter = new MockAdapter(axios)
 
-jest.setTimeout(50000) // the default 5000ms timeout is not always enough here
+vi.setConfig({ testTimeout: 50000 }) // the default 5000ms timeout is not always enough here
 const registerMissingHandler = failTestsWhenTranslationIsMissing()
 
 beforeEach(() => {

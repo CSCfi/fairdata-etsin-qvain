@@ -16,11 +16,11 @@ const stores = buildStores()
 
 failTestsWhenTranslationIsMissing(stores.Locale)
 
-global.fdweRecordEvent = () => {}
+globalThis.fdweRecordEvent = () => {}
 
-jest.mock('axios')
+vi.mock('axios')
 
-jest.setTimeout(40000) // the default 5000ms timeout is not always enough here
+vi.setConfig({ testTimeout: 40000 }) // the default 5000ms timeout is not always enough here
 
 axios.get.mockReturnValue(
   Promise.resolve({

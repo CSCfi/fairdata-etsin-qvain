@@ -51,7 +51,7 @@ const Dataset = () => {
 
   const query = identifier => {
     // in production integer based identifiers are not permitted.
-    if (BUILD === 'production' && /^\d+$/.test(identifier)) {
+    if (process.env.BUILD === 'production' && /^\d+$/.test(identifier)) {
       console.log('Using integer as identifier not permitted')
       setCustomError('error.invalidIdentifier')
       return

@@ -25,7 +25,7 @@ const stores = buildStores()
 const { dateFormat } = stores.Locale
 
 configure({ safeDescriptors: true })
-stores.Accessibility.handleNavigation = jest.fn()
+stores.Accessibility.handleNavigation = vi.fn()
 
 const versionsToStores = () => {
   const versions = deprecatedDataset.dataset_versions
@@ -57,7 +57,7 @@ describe('Events page', () => {
   let sections
 
   const renderPage = async (dataset = deprecatedDataset) => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
     stores.Etsin.EtsinDataset.set('dataset', dataset)
     versionsToStores()
 
@@ -81,7 +81,8 @@ describe('Events page', () => {
     // get wrappers for sections by title
     sections = sectionElements.reduce((map, section) => {
       const title = section.querySelector('h2').textContent
-      const content = section.querySelector(':scope > :not(h2)')
+      // The query is ':scope > :not(h2)' in jsdom, this one works for happy-dom
+      const content = section.querySelector('> :not(h2)')
       map[title] = content
       return map
     }, {})

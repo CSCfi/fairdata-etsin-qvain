@@ -1,9 +1,6 @@
-import { expect } from 'chai'
-import * as mobx from 'mobx'
 import ProjectV2, { projectSchema } from '../../../js/stores/view/qvain/qvain.projectV2'
 
-jest.spyOn(mobx, 'makeObservable')
-jest.mock('uuid')
+vi.mock('uuid')
 
 const getProject = () => {
   const metaxProject = {
@@ -45,7 +42,7 @@ const getProject = () => {
 
   const Parent = {
     readonly: false,
-    setChanged: jest.fn(),
+    setChanged: vi.fn(),
   }
   const projectStore = new ProjectV2(Parent)
   projectStore.fromBackend({ is_output_of: [metaxProject] })
@@ -53,13 +50,6 @@ const getProject = () => {
 }
 
 describe('ProjectV2', () => {
-  describe('when calling constructor with Parent', () => {
-    test('should call makeObservable', () => {
-      const project = getProject()
-      expect(mobx.makeObservable).to.have.beenCalledWith(project)
-    })
-  })
-
   describe('schema', () => {
     const isValid = project => {
       return projectSchema.isValidSync(project.storage[0], { strict: true })

@@ -16,7 +16,7 @@ describe('Qvain landing page', () => {
     stores = buildStores()
     registerMissingTranslationHandler(stores.Locale)
     configure({ safeDescriptors: true })
-    stores.Accessibility.handleNavigation = jest.fn()
+    stores.Accessibility.handleNavigation = vi.fn()
 
     contextRenderer(
       <main>

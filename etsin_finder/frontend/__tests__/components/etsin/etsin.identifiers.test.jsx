@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom'
 import { Provider } from 'mobx-react'
 import { render, screen, cleanup } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components'

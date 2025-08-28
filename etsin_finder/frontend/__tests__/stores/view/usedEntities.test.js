@@ -2,24 +2,23 @@ import UsedEntities, {
   UsedEntityTemplate,
   UsedEntityModel,
 } from '../../../js/stores/view/qvain/qvain.usedEntities'
-import { expect } from 'chai'
 import { makeObservable } from 'mobx'
 
-jest.mock('../../../js/stores/view/qvain/qvain.field', () => {
+vi.mock('../../../js/stores/view/qvain/qvain.field', () => {
   class mockField {
     constructor(...args) {
       this.constructorFunction(...args)
     }
     storage = []
-    fromBackendBase = jest.fn()
-    constructorFunction = jest.fn()
+    fromBackendBase = vi.fn()
+    constructorFunction = vi.fn()
   }
 
-  return mockField
+  return { default: mockField }
 })
 
-jest.mock('uuid')
-jest.mock('mobx')
+vi.mock('uuid')
+vi.mock('mobx')
 
 describe('UsedEntities', () => {
   let usedEntities
@@ -33,7 +32,7 @@ describe('UsedEntities', () => {
 
   describe('when calling constructor', () => {
     test("should call super.constructor with Qvain, UsedEntityTemplate, UsedEntityModel and 'usedEntities'", () => {
-      expect(usedEntities.constructorFunction).to.have.beenCalledWith(
+      expect(usedEntities.constructorFunction).toHaveBeenCalledWith(
         Qvain,
         UsedEntityTemplate,
         UsedEntityModel,
@@ -42,11 +41,11 @@ describe('UsedEntities', () => {
     })
 
     test('should call makeObservable', () => {
-      expect(makeObservable).to.have.beenCalledWith(usedEntities)
+      expect(makeObservable).toHaveBeenCalledWith(usedEntities)
     })
 
     test('should call fromBackendBase with existingEntities', () => {
-      expect(usedEntities.fromBackendBase).to.have.beenCalledWith(existingEntities, Qvain)
+      expect(usedEntities.fromBackendBase).toHaveBeenCalledWith(existingEntities, Qvain)
     })
   })
 
@@ -58,7 +57,7 @@ describe('UsedEntities', () => {
     })
 
     test('should call super.fromBackendBase with args', () => {
-      expect(usedEntities.fromBackendBase).to.have.beenCalledWith(dataset.used_entity, Qvain)
+      expect(usedEntities.fromBackendBase).toHaveBeenCalledWith(dataset.used_entity, Qvain)
     })
   })
 

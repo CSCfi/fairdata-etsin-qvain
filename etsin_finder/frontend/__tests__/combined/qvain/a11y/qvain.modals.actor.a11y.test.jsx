@@ -6,18 +6,16 @@ import { axe } from 'jest-axe'
 import MockAdapter from 'axios-mock-adapter'
 import { render, screen } from '@testing-library/react'
 
-import { buildStores } from '../../../../js/stores'
-import etsinTheme from '../../../../js/styles/theme'
-import { ENTITY_TYPE } from '../../../../js/utils/constants'
-import ActorModal from '../../../../js/components/qvain/sections/Actors/Modal'
-import { Actor } from '../../../../js/stores/view/qvain/qvain.actors'
-import organizationMockGet, {
-  dataset as actorsDataset,
-} from '../../../__testdata__/qvain.actors.data'
-import { useStores, StoresProvider } from '../../../../js/stores/stores'
-import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+import { buildStores } from '@/stores'
+import etsinTheme from '@/styles/theme'
+import { ENTITY_TYPE } from '@/utils/constants'
+import ActorModal from '@/components/qvain/sections/Actors/Modal'
+import { Actor } from '@/stores/view/qvain/qvain.actors'
+import organizationMockGet, { dataset as actorsDataset } from '@testdata/qvain.actors.data'
+import { useStores, StoresProvider } from '@/stores/stores'
+import { failTestsWhenTranslationIsMissing } from '@helpers'
 
-jest.setTimeout(10000)
+vi.setConfig({ testTimeout: 10000 })
 
 const mockAdapter = new MockAdapter(axios)
 
@@ -26,11 +24,11 @@ configure({
   enforceActions: 'always',
 })
 
-jest.mock('../../../../js/stores/stores', () => {
-  const useStoresMock = jest.fn()
+vi.mock('@/stores/stores', async () => {
+  const useStoresMock = vi.fn()
 
   return {
-    ...jest.requireActual('../../../../js/stores/stores'),
+    ...(await vi.importActual('@/stores/stores')),
     useStores: useStoresMock,
   }
 })

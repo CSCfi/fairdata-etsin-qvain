@@ -200,7 +200,7 @@ class Flags {
     if (this.supportedFlags && this.validateFlagPath(flagPath) !== FLAG_SUPPORT.FULL) {
       console.warn(`flagEnabled called with unsupported flag: ${flagPath}`)
     }
-    if (BUILD !== 'test') {
+    if (process.env.BUILD !== 'test') {
       if (this.Env?.appConfigLoaded === false) {
         console.warn(`flagEnabled called before app config has been loaded, flag: ${flagPath}`)
       }

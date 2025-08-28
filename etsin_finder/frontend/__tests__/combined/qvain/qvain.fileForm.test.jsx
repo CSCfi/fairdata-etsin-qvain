@@ -18,7 +18,7 @@ const getStores = () => {
   return stores
 }
 
-jest.mock('axios')
+vi.mock('axios')
 
 axios.get.mockImplementation(url => {
   const { pathname } = new URL(url, 'https://localhost')
@@ -93,7 +93,7 @@ describe('Qvain.Files', () => {
 
     stores.Auth.user.idaProjects = ['project_y']
 
-    jest.spyOn(stores.Qvain.Files, 'applyInEdit')
+    vi.spyOn(stores.Qvain.Files, 'applyInEdit')
 
     contextRenderer(<Form requestClose={() => {}} setChanged={() => {}} />, { stores })
     await flushPromises()
