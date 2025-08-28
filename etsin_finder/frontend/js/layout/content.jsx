@@ -62,9 +62,8 @@ const Content = ({ contentRef }) => {
         />
         <Route
           path={getQvainUrl('')}
-          notLoggedIn={<QvainLandingPage />}
           element={
-            <LoggedInRoute>
+            <LoggedInRoute notLoggedIn={<QvainLandingPage />}>
               <QvainDatasetsV2 />
             </LoggedInRoute>
           }
