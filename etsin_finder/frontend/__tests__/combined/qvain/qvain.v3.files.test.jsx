@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
 import ReactModal from 'react-modal'
 
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router'
 
 import { screen, render, within, waitForElementToBeRemoved } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'

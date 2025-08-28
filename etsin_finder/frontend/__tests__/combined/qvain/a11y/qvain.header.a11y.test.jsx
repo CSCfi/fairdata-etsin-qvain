@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 import { axe } from 'jest-axe'
 import { screen } from '@testing-library/react'
 

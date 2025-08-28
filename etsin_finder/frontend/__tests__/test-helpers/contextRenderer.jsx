@@ -2,7 +2,7 @@ import '@testing-library/jest-dom'
 import { render } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components'
 
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router'
 
 import theme from '@/styles/theme'
 import { StoresProvider } from '@/stores/stores'

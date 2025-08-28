@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
+import { Route, Routes, Navigate, useLocation } from 'react-router'
 import { useStores } from '@/stores/stores'
 import etsinTheme from '@/styles/theme'
 

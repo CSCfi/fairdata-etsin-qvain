@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import PropTypes from 'prop-types'
-import { createMemoryRouter, RouterProvider } from 'react-router-dom'
+import { createMemoryRouter, RouterProvider } from 'react-router'
 
 /* Replacement for MemoryRouter in tests
  * that need a data router. Needed for useBlocker (and usePrompt) to work.

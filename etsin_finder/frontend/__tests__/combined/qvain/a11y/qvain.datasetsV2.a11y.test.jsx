@@ -5,7 +5,7 @@ import { render } from '@testing-library/react'
 
 import { axe } from 'jest-axe'
 import { ThemeProvider } from 'styled-components'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 
 import etsinTheme from '@/styles/theme'
 import datasets from '../../../__testdata__/qvain.datasets'

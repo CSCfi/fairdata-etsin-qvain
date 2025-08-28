@@ -5,7 +5,7 @@ import MockAdapter from 'axios-mock-adapter'
 import { when } from 'mobx'
 
 import ReactModal from 'react-modal'
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router'
 import { ThemeProvider } from 'styled-components'
 
 import DatasetsV2 from '@/components/qvain/views/datasetsV2'

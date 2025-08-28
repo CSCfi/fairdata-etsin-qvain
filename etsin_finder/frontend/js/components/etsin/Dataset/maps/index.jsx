@@ -9,7 +9,7 @@ import Translate from '@/utils/Translate'
 import { useStores } from '@/utils/stores'
 
 import MyMap from './map'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 const Maps = props => {
   const {

@@ -7,7 +7,7 @@ import ReactModal from 'react-modal'
 // context
 import { StoresProvider } from '@/stores/stores'
 import etsinTheme from '@/styles/theme'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router'
 import { ThemeProvider } from 'styled-components'
 
 import Dataset from '@/components/etsin/Dataset'

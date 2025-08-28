@@ -1,5 +1,5 @@
 import { ThemeProvider } from 'styled-components'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 import { axe } from 'jest-axe'
 import { render, screen } from '@testing-library/react'
 

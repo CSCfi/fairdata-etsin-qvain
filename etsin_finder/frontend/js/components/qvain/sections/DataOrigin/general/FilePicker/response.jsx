@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
 

@@ -12,7 +12,7 @@
 
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'

@@ -3,7 +3,7 @@ import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router'
 import { render, screen } from '@testing-library/react'
 
 import etsinTheme from '../../../../js/styles/theme'

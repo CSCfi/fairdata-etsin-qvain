@@ -1,5 +1,5 @@
 import { ThemeProvider } from 'styled-components'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router'
 import { axe } from 'jest-axe'
 import ReactModal from 'react-modal'
 import { observable, when } from 'mobx'

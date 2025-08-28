@@ -2,7 +2,7 @@ import { ThemeProvider } from 'styled-components'
 import { axe } from 'jest-axe'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router'
 import { runInAction } from 'mobx'
 
 import { buildStores } from '@/stores'

@@ -4,7 +4,7 @@ import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { when } from 'mobx'
 import ReactModal from 'react-modal'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 import { ThemeProvider } from 'styled-components'
 
 import ShareModal from '@/components/qvain/views/datasetsV2/ShareModal'

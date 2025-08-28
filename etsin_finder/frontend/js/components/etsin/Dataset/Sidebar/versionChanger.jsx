@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { observer } from 'mobx-react'
 import Select from 'react-select'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import Translate from '@/utils/Translate'
 import { useStores } from '@/utils/stores'
 import versionChangerStyles from './versionChangerStyles'

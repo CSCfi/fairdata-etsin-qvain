@@ -10,7 +10,7 @@
    */
 }
 
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'

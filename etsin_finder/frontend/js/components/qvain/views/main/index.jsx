@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { observer } from 'mobx-react'
 
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import Translate from '@/utils/Translate'
 import queryParam from '@/utils/queryParam'

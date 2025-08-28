@@ -6,7 +6,7 @@ import '@testing-library/jest-dom'
 
 // context
 import { ThemeProvider } from 'styled-components'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router'
 import etsinTheme from '@/styles/theme'
 import { StoresProvider } from '@/stores/stores'
 

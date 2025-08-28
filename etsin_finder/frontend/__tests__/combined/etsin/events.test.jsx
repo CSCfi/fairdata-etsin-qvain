@@ -1,5 +1,5 @@
 import { ThemeProvider } from 'styled-components'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router'
 import { configure } from 'mobx'
 import { render } from '@testing-library/react'
 

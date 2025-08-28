@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import PropTypes, { instanceOf } from 'prop-types'
 import { observer } from 'mobx-react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 
 import { useStores } from '@/stores/stores'
 import TooltipHoverOnSave from '@/components/qvain/general/header/tooltipHoverOnSave'

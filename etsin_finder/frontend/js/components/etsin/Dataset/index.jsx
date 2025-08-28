@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import { NavLink, useLocation, useParams } from 'react-router-dom'
+import { NavLink, useLocation, useParams } from 'react-router'
 import { opacify } from 'polished'
 
 import { useStores } from '@/stores/stores'

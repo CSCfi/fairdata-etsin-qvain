@@ -1,7 +1,7 @@
 import { screen, render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ThemeProvider } from 'styled-components'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 
 import etsinTheme from '@/styles/theme'
 

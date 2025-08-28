@@ -21,7 +21,7 @@ import NoticeBar from '../noticeBar'
 import LoggedInUser from '../loggedInUser'
 import { Dropdown, DropdownItem } from '../dropdown'
 import { useStores } from '@/stores/stores'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
 const Login = ({
   margin = '0 0 0 0.4em',

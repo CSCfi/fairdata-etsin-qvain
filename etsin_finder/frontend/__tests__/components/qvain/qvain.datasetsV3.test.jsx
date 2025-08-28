@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
 import { ThemeProvider } from 'styled-components'
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router'
 import ReactModal from 'react-modal'
 
 import etsinTheme from '@/styles/theme'

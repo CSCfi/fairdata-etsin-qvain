@@ -1,4 +1,4 @@
-import { createMemoryRouter } from 'react-router-dom'
+import { createMemoryRouter } from 'react-router'
 import RouterStore from '@/utils/RouterStore'
 import { autorun } from 'mobx'
 

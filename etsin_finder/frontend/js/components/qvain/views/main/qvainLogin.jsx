@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import { Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router'
 import Translate from '@/utils/Translate'
 import Card from '../../general/card'
 import LoginButton from '../../../general/navigation/loginButton'

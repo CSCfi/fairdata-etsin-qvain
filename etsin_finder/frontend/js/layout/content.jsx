@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Route, Routes, Navigate } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { Home, Search, Dataset, Qvain, QvainDatasetsV2 } from '../routes'

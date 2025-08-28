@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { useStores } from '@/stores/stores'
 import EventList from './eventList'

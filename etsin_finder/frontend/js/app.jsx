@@ -12,7 +12,7 @@
 
 import { useState, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router'
 import { observer } from 'mobx-react'
 
 import { registerLocale } from 'react-datepicker'

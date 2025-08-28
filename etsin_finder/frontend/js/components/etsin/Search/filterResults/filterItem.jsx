@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { useStores } from '@/stores/stores'
 import { useQuery } from '@/components/etsin/general/useQuery'

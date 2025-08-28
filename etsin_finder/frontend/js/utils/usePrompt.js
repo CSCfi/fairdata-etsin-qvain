@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useBlocker } from 'react-router-dom'
+import { useBlocker } from 'react-router'
 
 /* Hook for blocking navigation when there are unsaved changes.
  *
@@ -8,7 +8,7 @@ import { useBlocker } from 'react-router-dom'
  * Navigating using the address bar or reloading the page shows a
  * browser-specific prompt message that cannot be changed.
  *
- * Implementation based on unsafe_usePrompt from react-router-dom
+ * Implementation based on unsafe_usePrompt from react-router
  */
 export function usePrompt({ shouldBlock, message }) {
   const blocker = useBlocker(shouldBlock)

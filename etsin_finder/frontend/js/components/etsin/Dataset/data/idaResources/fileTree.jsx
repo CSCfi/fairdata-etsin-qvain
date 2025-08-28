@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { observer } from 'mobx-react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
 import FileTreeItem from './fileTreeItem'
 import { useRenderTree } from '@/components/general/files/tree'
