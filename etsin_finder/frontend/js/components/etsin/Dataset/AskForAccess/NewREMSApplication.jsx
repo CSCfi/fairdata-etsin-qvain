@@ -52,7 +52,7 @@ const AccessModalContent = () => {
             id="accept-access-terms"
             data-testid="accept-access-terms"
             disabled={isSubmitting}
-            value={acceptLicenses}
+            checked={acceptLicenses}
             onClick={() => setAcceptLicenses(!acceptLicenses)}
           />
           <CheckLabel htmlFor="accept-access-terms">{getAcceptLabel()}</CheckLabel>
