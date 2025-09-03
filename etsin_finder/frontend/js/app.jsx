@@ -29,7 +29,18 @@ import 'react-datepicker/dist/react-datepicker.css'
 import etsinTheme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
 
-const Env = new EnvClass()
+let Env = new EnvClass()
+
+if (import.meta.hot && process.env.NODE_ENV === 'development') {
+  // Keep Env instance across HMR updates to avoid the configuration
+  // fetch that would cause the entire app component to reload.
+  if (import.meta.hot.data.Env) {
+    const prototype = Object.getPrototypeOf(Env)
+    Env = import.meta.hot.data.Env
+    Object.setPrototypeOf(Env, prototype)
+  }
+  import.meta.hot.data.Env = Env // Persist reference to Env across HMR updates
+}
 
 registerLocale('fi', fi)
 registerLocale('en', en)
@@ -57,6 +68,13 @@ const App = () => {
 
   // Load runtime config
   const configure = async () => {
+    if (import.meta.hot && process.env.NODE_ENV === 'development') {
+      if (Env.appConfigLoaded) {
+        // Already configured, no need to configure again
+        setInitialized(true)
+        return
+      }
+    }
     await Env.fetchAppConfig()
     const Stores = buildStores({ Env })
     setStores(Stores)

@@ -18,6 +18,20 @@ export default class ErrorBoundary extends Component {
     this.clearError = this.clearError.bind(this)
   }
 
+  componentDidMount() {
+    if (import.meta.hot && process.env.NODE_ENV === 'development') {
+      // Clear error when Hot Module Reload occurs during development
+      // so React will render the children again after code changes.
+      import.meta.hot.on('vite:afterUpdate', this.clearError)
+    }
+  }
+
+  componentWillUnmount() {
+    if (import.meta.hot && process.env.NODE_ENV === 'development') {
+      import.meta.hot.off('vite:afterUpdate', this.clearError)
+    }
+  }
+
   componentDidCatch(error, info) {
     this.setState({ error, info })
     if (this.props.callback) {

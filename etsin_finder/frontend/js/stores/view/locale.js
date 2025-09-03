@@ -9,15 +9,31 @@ import interpolate from '@/utils/interpolate'
 import urls from '../../utils/urls'
 import queryParam from '@/utils/queryParam'
 
-const locales = {
+const locales = observable({
   en: english,
   fi: finnish,
-}
+})
 const fallbackLocale = 'en'
 
 const languages = ['en', 'fi']
 
 const datasetTitleLanguages = ['en', 'fi', 'sv']
+
+if (import.meta.hot && process.env.NODE_ENV === 'development') {
+  // Accept HMR updates from translations without reloading the Locale module itself.
+  import.meta.hot.accept(
+    '@/../locale/english',
+    action(newModule => {
+      locales.en = newModule.default
+    })
+  )
+  import.meta.hot.accept(
+    '@/../locale/finnish',
+    action(newModule => {
+      locales.fi = newModule.default
+    })
+  )
+}
 
 const getInitialLanguage = () =>
   languages.find(lang => lang === document.documentElement.lang) || languages[0]

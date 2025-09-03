@@ -1,8 +1,11 @@
-import { makeObservable } from 'mobx'
+import { configure } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 
 import Spatials, { Spatial, Location, SpatialModel } from '@/stores/view/qvain/qvain.spatials'
 import Locale from '@/stores/view/locale'
+import Env from '@/stores/domain/env'
+
+configure({ safeDescriptors: false })
 
 vi.mock('@/stores/view/qvain/qvain.field', () => {
   class mockField {
@@ -19,11 +22,10 @@ vi.mock('@/stores/view/qvain/qvain.field', () => {
 })
 
 vi.mock('uuid')
-vi.mock('mobx')
 
 describe('Spatials store', () => {
   let spatials
-  const parent = { Locale: new Locale() }
+  const parent = { Locale: new Locale(new Env()) }
   const existingSpatials = ['here lies spatials']
 
   beforeEach(() => {
@@ -38,10 +40,6 @@ describe('Spatials store', () => {
     const expectedArgs = [parent, Spatial, SpatialModel, 'spatials']
     test('should call super.construction with expectedArgs', () => {
       expect(spatials.constructorFunction).toHaveBeenCalledWith(...expectedArgs)
-    })
-
-    test('should call makeObservable', () => {
-      expect(makeObservable).toHaveBeenCalledTimes(1)
     })
 
     test('should call fromBackendBase with existing spatials', () => {
