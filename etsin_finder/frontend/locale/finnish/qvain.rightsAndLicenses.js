@@ -36,8 +36,8 @@ const rightsAndLicenses = {
   },
   license: {
     title: 'Lisenssi',
-    infoText: `Lisenssillä määrittelet, miten aineistoa voi käyttää. 
-    Oletuksena on valittuna tutkimusaineistoille suositeltu CC BY 4.0, mutta voit vaihtaa sitä. 
+    infoText: `Lisenssillä määrittelet, miten aineistoa voi käyttää.
+    Oletuksena on valittuna tutkimusaineistoille suositeltu CC BY 4.0, mutta voit vaihtaa sitä.
     Jos haluat määrittää lisenssin URL-osoitteen itse, kirjoita kenttään lisenssin verkko-osoite https://-muodossa.<br>
     HUOM! Kuvailutiedot saavat automaattisesti CC0-lisenssin.`,
     placeholder: 'Valitse vaihtoehto',
@@ -57,8 +57,9 @@ const rightsAndLicenses = {
     terms: 'Myöntämisehdot (millä perustein luvitetaan)',
     remsApprovalType: {
       title: 'Luvan tyyppi',
-      disabled: 'Ei käytössä',
-      automatic: 'Automaattinen',
+      disabled: 'Ei käytössä. Käyttäjät eivät voi hakea lupaa aineiston dataan.',
+      automatic: `Automaattinen. Käyttäjät saavat pääsyn aineiston dataan kun ovat hyväksyneet
+      lisenssin ja myöntämisehdot.`,
       manual: 'Manuaalinen',
     },
     remoteResourcesInfo: `Huom! Ulkoista datalähdettä käyttävien aineistojen

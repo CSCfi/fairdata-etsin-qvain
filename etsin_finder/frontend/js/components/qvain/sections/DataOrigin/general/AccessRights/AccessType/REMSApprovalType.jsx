@@ -24,17 +24,18 @@ const REMSApprovalType = () => {
           value="automatic"
           label="qvain.rightsAndLicenses.dataAccess.remsApprovalType.automatic"
         />
-        <REMSApprovalTypeChoice
+        {/* <REMSApprovalTypeChoice
           value="manual"
           label="qvain.rightsAndLicenses.dataAccess.remsApprovalType.manual"
-        />
+        /> */}
       </RadioRow>
     </fieldset>
   )
 }
 
 const RadioRow = styled(FieldGroup)`
-  flex-direction: row;
+  flex-direction: column;
+  gap: 0.25rem;
 `
 
 export default observer(REMSApprovalType)

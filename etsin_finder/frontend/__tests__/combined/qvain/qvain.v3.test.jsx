@@ -708,7 +708,7 @@ describe('Qvain with an opened dataset', () => {
 
     // Select approval type
     const approvalGroup = screen.getByRole('group', { name: /approval type/i })
-    await userEvent.click(within(approvalGroup).getByLabelText('Automatic'))
+    await userEvent.click(within(approvalGroup).getByLabelText(/Automatic/))
 
     // Check values get submitted
     const submitButton = screen.getByRole('button', { name: 'Save as draft' })

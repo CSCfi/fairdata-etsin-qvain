@@ -35,9 +35,9 @@ const rightsAndLicenses = {
   },
   license: {
     title: 'License',
-    infoText: `License is an essential part of the dataset description. 
-    The license describes how the dataset can be used. 
-    As a default, the recommended license for research datasets "CC BY 4.0" is selected, but you can change it if needed. 
+    infoText: `License is an essential part of the dataset description.
+    The license describes how the dataset can be used.
+    As a default, the recommended license for research datasets "CC BY 4.0" is selected, but you can change it if needed.
     If you need to specify your own license, type it in the field as a URL in https:// format.<br>
     Note! Dataset's metadata is automatically CC0 licenced.`,
     placeholder: 'Select option',
@@ -57,9 +57,10 @@ const rightsAndLicenses = {
     terms: 'Access policy (terms for data access)',
     remsApprovalType: {
       title: 'Approval type',
-      disabled: 'Disabled',
-      automatic: 'Automatic',
-      manual: 'Manual',
+      disabled: 'Disabled. Users cannot apply for permission to access the data.',
+      automatic:
+        'Automatic. Users get permission to access the data after accepting the licenses and the access policy.',
+      manual: 'Manual.',
     },
     remoteResourcesInfo: `Note! For Remote Resources the applying and granting the
     permission is done outside of Fairdata services.

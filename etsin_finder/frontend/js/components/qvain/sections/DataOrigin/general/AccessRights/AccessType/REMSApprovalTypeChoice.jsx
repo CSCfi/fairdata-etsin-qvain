@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { useStores } from '@/stores/stores'
+import { RadioInput, Label, FormField } from '@/components/qvain/general/modal/form'
 
 const REMSApprovalTypeChoice = ({ value, label }) => {
   const {
@@ -17,18 +18,20 @@ const REMSApprovalTypeChoice = ({ value, label }) => {
     DataAccess.remsApprovalType.value === value ||
     (value === '' && !DataAccess.remsApprovalType.value)
 
+  const id = `rems-approval-type-${value || 'disabled'}`
+
   return (
-    <label>
-      <input
+    <FormField>
+      <RadioInput
         type="radio"
-        id="rems-approval-type"
-        name="rems-approval-type"
+        id={id}
+        name={id}
         checked={checked}
         value={value}
         onChange={handler}
       />
-      {translate(label)}
-    </label>
+      <Label htmlFor={id}>{translate(label)}</Label>
+    </FormField>
   )
 }
 
