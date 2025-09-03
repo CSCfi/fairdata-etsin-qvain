@@ -34,8 +34,7 @@ const EmbargoExpires = () => {
         id="embargo-date"
         strictParsing
         selected={embargoExpDate ? new Date(embargoExpDate) : null}
-        onChangeRaw={e => e && handleDatePickerChange(e.target.value, setEmbargoExpDate)}
-        onChange={date => date && handleDatePickerChange(date.toISOString(), setEmbargoExpDate)}
+        onChange={date => handleDatePickerChange(date, setEmbargoExpDate)}
         locale={lang}
         placeholderText={translate('qvain.rightsAndLicenses.embargoDate.placeholder')}
         dateFormat={getDateFormatLocale(lang)}

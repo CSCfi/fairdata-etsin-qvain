@@ -21,7 +21,7 @@ const DurationPicker = ({ Field, datum, id }) => {
   }
 
   const handleDateChange = (date, propName) =>
-    date && handleDatePickerChange(date.toISOString(), d => changeAttribute(propName, d))
+    date && handleDatePickerChange(date, d => changeAttribute(propName, d))
 
   return (
     <FieldGroup>

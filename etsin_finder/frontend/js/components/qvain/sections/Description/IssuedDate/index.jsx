@@ -49,7 +49,7 @@ const IssuedDateField = () => {
           strictParsing
           selected={issuedDate ? new Date(issuedDate) : new Date()}
           onChange={date => {
-            if (date) handleDatePickerChange(date.toISOString(), setIssuedDate)
+            handleDatePickerChange(date, setIssuedDate)
             validate()
           }}
           locale={lang}

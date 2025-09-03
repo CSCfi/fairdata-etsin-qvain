@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import ReactDatePicker from 'react-datepicker'
 import moment from 'moment'
-import parseDate from 'moment-parseformat'
+import parseDateFormat from 'moment-parseformat'
 import DateFormats from '@/components/qvain/utils/date'
 
 export const StyledCustomDatePicker = styled(ReactDatePicker)`
@@ -16,7 +16,7 @@ export const StyledCustomDatePicker = styled(ReactDatePicker)`
   width: 8rem;
 `
 
-export const DatePicker = props => {
+export const DatePicker = ({ onChange, ariaLabel, ...props }) => {
   const onKeyDown = e => {
     // Close calendar on escape and prevent event from being propagated so modal doesn't close
     if (e.key === 'Escape' && open) {
@@ -27,9 +27,6 @@ export const DatePicker = props => {
     return true
   }
 
-  // Pass ariaLabel prop to the input element
-  const ariaLabel = props.ariaLabel
-
   return (
     <div>
       <StyledCustomDatePicker
@@ -37,6 +34,20 @@ export const DatePicker = props => {
         enableTabLoop={false}
         onKeyDown={onKeyDown}
         onPopperKeyDown={onKeyDown}
+        onChange={onChange}
+        onChangeRaw={event => {
+          if (!onChange) {
+            return
+          }
+          // Parse manually typed date and pass it to onChange()
+          const dateStr = event.target.value
+          if (dateStr) {
+            const date = parseDate(dateStr)
+            if (date) {
+              onChange(date)
+            }
+          }
+        }}
         {...props}
       />
     </div>
@@ -45,6 +56,7 @@ export const DatePicker = props => {
 
 DatePicker.propTypes = {
   ariaLabel: PropTypes.string,
+  onChange: PropTypes.func
 }
 
 DatePicker.defaultProps = {
@@ -59,19 +71,19 @@ export const getDateFormatLocale = lang => {
   return locale[lang]
 }
 
-export const handleDatePickerChange = (dateStr, setDate) => {
-  if (dateStr) {
-    const date = prepareDate(dateStr)
-    setDate(date)
+export const handleDatePickerChange = (date, setDate) => {
+  if (date) {
+    const dateStr = moment(date).format(DateFormats.ISO8601_DATE_FORMAT)
+    setDate(dateStr)
   } else {
     setDate(null)
   }
 }
 
-const prepareDate = dateStr => {
+const parseDate = dateStr => {
   const date = moment(
     dateStr,
-    parseDate(dateStr, {
+    parseDateFormat(dateStr, {
       preferredOrder: {
         '.': 'DMY',
         '/': 'MDY',
@@ -80,7 +92,7 @@ const prepareDate = dateStr => {
     })
   )
 
-  if (date.isValid()) return date.format(DateFormats.ISO8601_DATE_FORMAT)
+  if (date.isValid()) return date.toDate()
   return undefined
 }
 

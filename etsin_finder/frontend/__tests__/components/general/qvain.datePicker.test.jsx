@@ -3,9 +3,9 @@ import { ThemeProvider } from 'styled-components'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import etsinTheme from '../../../js/styles/theme'
-import DatePicker from '../../../js/components/qvain/general/V2/Datepicker'
-import LocaleStore from '../../../js/stores/view/locale'
+import etsinTheme from '@/styles/theme'
+import DatePicker, { handleDatePickerChange } from '@/components/qvain/general/V2/Datepicker'
+import LocaleStore from '@/stores/view/locale'
 
 // Fake system time so calendar always shows same month.
 // This also requires disabling delay in userEvent.
@@ -23,13 +23,17 @@ describe('Qvain DatePicker', () => {
   const onKeyDown = event => {
     keys.push(event.key)
   }
+  let inputDate
+  const setInputDate = date => {
+    inputDate = date
+  }
 
   const renderPicker = stores =>
     render(
       <Provider Stores={stores}>
         <ThemeProvider theme={etsinTheme}>
           <summary id="events" onKeyDown={onKeyDown}>
-            <DatePicker />
+            <DatePicker onChange={date => handleDatePickerChange(date, setInputDate)} />
           </summary>
         </ThemeProvider>
       </Provider>
@@ -37,6 +41,7 @@ describe('Qvain DatePicker', () => {
 
   afterEach(() => {
     keys.length = 0
+    inputDate = undefined
   })
 
   it('opens when focused', async () => {
@@ -71,5 +76,45 @@ describe('Qvain DatePicker', () => {
     expect(screen.queryByText('February 2026')).not.toBeInTheDocument()
 
     expect(keys).toEqual(['ArrowLeft', 'ArrowUp'])
+  })
+
+  it('supports manual input in d.m.y format', async () => {
+    const stores = getStores()
+    renderPicker(stores)
+
+    const picker = screen.getByRole('textbox')
+    await user.click(picker)
+    await user.keyboard('1.2.2025')
+    expect(inputDate).toEqual('2025-02-01')
+  })
+
+  it('supports manual input in m/d/y format', async () => {
+    const stores = getStores()
+    renderPicker(stores)
+
+    const picker = screen.getByRole('textbox')
+    await user.click(picker)
+    await user.keyboard('2/10/2026')
+    expect(inputDate).toEqual('2026-02-10')
+  })
+
+  it('supports manual input in y-m-d format', async () => {
+    const stores = getStores()
+    renderPicker(stores)
+
+    const picker = screen.getByRole('textbox')
+    await user.click(picker)
+    await user.keyboard('2027-2-28')
+    expect(inputDate).toEqual('2027-02-28')
+  })
+
+  it('supports manual input dates before year 1800', async () => {
+    const stores = getStores()
+    renderPicker(stores)
+
+    const picker = screen.getByRole('textbox')
+    await user.click(picker)
+    await user.keyboard('01/01/1771')
+    expect(inputDate).toEqual('1771-01-01')
   })
 })
