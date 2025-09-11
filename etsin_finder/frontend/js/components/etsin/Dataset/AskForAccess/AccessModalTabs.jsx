@@ -1,5 +1,3 @@
-import { parseISO } from 'date-fns'
-
 import { Tab, TabRow } from '@/components/general/Tab'
 import { useStores } from '@/stores/stores'
 import { observer } from 'mobx-react'
@@ -9,14 +7,11 @@ const getLabel = (translate, id, val) => {
   if (!val) {
     return translate('dataset.access_modal.createApplication')
   }
-  const date = parseISO(val['application/created'])
-  const dateStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}/${
-    val['application/id']
-  }`
+  const externalId = val['application/external-id']
   return (
     <>
       {translate('dataset.access_modal.application')}
-      <pre>{dateStr}</pre>
+      <pre>{externalId}</pre>
     </>
   )
 }

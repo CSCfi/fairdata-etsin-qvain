@@ -229,7 +229,7 @@ describe('Etsin dataset page', () => {
     expect(request.data).toBe('{"accept_licenses":[4,1,5]}')
 
     // Created application should be in a new tab and active
-    const tab = within(dialog).getByRole('tab', { name: /Application.*123/ })
+    const tab = within(dialog).getByRole('tab', { name: 'Application 2025/17' })
     expect(tab.getAttribute('aria-selected')).toBe('true')
     expect(within(dialog).getByText('Application created on March 5, 2025')).toBeInTheDocument()
 
