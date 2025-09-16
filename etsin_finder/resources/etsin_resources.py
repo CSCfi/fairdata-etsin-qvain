@@ -348,13 +348,6 @@ class User(MethodView):
         groups = authentication.get_user_ida_projects() or []
         user_info["user_ida_projects"] = groups
 
-        is_using_rems_response = get_fairdata_rems_api_config()
-        is_using_rems = False
-
-        if is_using_rems_response is not None:
-            is_using_rems = is_using_rems_response.get("ENABLED", False)
-        user_info["is_using_rems"] = is_using_rems
-
         if csc_user is not None:
             user_info["user_csc_name"] = csc_user
         if first_name:

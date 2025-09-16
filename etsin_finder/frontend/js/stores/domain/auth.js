@@ -34,7 +34,6 @@ class Auth {
     loggedIn: false,
     homeOrganizationId: undefined,
     idaProjects: [],
-    isUsingRems: undefined,
     csrfToken: undefined,
   }
 
@@ -51,7 +50,6 @@ class Auth {
       loggedIn: false,
       homeOrganizationId: undefined,
       idaProjects: [],
-      isUsingRems: undefined,
       csrfToken: undefined,
     }
   }
@@ -168,7 +166,6 @@ class Auth {
         loggedIn: res.data.is_authenticated,
         homeOrganizationId: res.data.home_organization_id,
         idaProjects: res.data.user_ida_projects,
-        isUsingRems: res.data.is_using_rems,
       })
 
       await this.updateCsrf()

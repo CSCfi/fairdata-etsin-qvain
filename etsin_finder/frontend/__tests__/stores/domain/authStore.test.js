@@ -15,7 +15,6 @@ const mockUser = {
   home_organization_id: 'example.com/org',
   home_organization_name: 'organisaatio',
   user_ida_projects: ['IDA:project_x', 'IDA:project_y'],
-  is_using_rems: true,
   user_csc_name: 'Testi Käyttäjä',
 }
 
@@ -48,7 +47,6 @@ describe('Auth Store', () => {
         loggedIn: true,
         homeOrganizationId: 'example.com/org',
         idaProjects: ['IDA:project_x', 'IDA:project_y'],
-        isUsingRems: true,
       })
     )
   })
