@@ -1,6 +1,7 @@
 import AccessClass from '../../../js/stores/view/access'
 import AuthClass from '../../../js/stores/domain/auth'
 import { ACCESS_TYPE_URL } from '../../../js/utils/constants'
+import { data_catalog_ida as idaCatalog } from '@testdata/metaxv3/refs/data_catalogs.data'
 
 const accessRights = {
   license: [
@@ -68,7 +69,7 @@ const Access = new AccessClass(Auth)
 
 describe('Access Store', () => {
   describe('Update for open access', () => {
-    it('Should start update process', () => {
+    beforeAll(() => {
       const open = accessRights
       open.access_type.url = ACCESS_TYPE_URL.OPEN
       Access.updateAccess(open)
@@ -88,7 +89,7 @@ describe('Access Store', () => {
   })
   describe('Update for embargo access', () => {
     describe('Is available', () => {
-      it('Should start update process', () => {
+      beforeAll(() => {
         const embargoed = accessRights
         const d = new Date()
         d.setFullYear(d.getFullYear() - 1)
@@ -110,7 +111,7 @@ describe('Access Store', () => {
       })
     })
     describe('Unavailable', () => {
-      it('Should start update process', () => {
+      beforeAll(() => {
         const embargoed = accessRights
         const d = new Date()
         d.setFullYear(d.getFullYear() + 1)
@@ -133,7 +134,7 @@ describe('Access Store', () => {
     })
   })
   describe('Update for restricted access', () => {
-    it('Should start update process', () => {
+    beforeAll(() => {
       const restricted = accessRights
       restricted.access_type.url = ACCESS_TYPE_URL.RESTRICTED
       Access.updateAccess(restricted)
@@ -152,11 +153,11 @@ describe('Access Store', () => {
     })
   })
   describe('Update for permit access', () => {
-    it('Should start update process', () => {
+    beforeAll(() => {
       const restricted_fairdata = accessRights
       restricted_fairdata.access_type.url = ACCESS_TYPE_URL.PERMIT
       restricted_fairdata.rems_approval_type = 'automatic'
-      Access.updateAccess(restricted_fairdata)
+      Access.updateAccess(restricted_fairdata, false, null, idaCatalog)
     })
     it('Should show Remote files', () => {
       expect(Access.restrictions.allowDataRemote).toEqual(true)
@@ -173,7 +174,7 @@ describe('Access Store', () => {
   })
   describe('Update for login access', () => {
     describe('User not logged in', () => {
-      it('Should start update process', () => {
+      beforeAll(() => {
         Auth.userLogged = false
         const restricted_registration = accessRights
         restricted_registration.access_type.url = ACCESS_TYPE_URL.LOGIN
@@ -193,7 +194,7 @@ describe('Access Store', () => {
       })
     })
     describe('User logged in', () => {
-      it('Should start update process', () => {
+      beforeAll(() => {
         Auth.userLogged = true
         const restricted_registration = accessRights
         restricted_registration.access_type.url = ACCESS_TYPE_URL.LOGIN

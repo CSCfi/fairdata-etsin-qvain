@@ -4,6 +4,7 @@ import { contextRenderer } from '@/../__tests__/test-helpers'
 import AskForAccess from '@/components/etsin/Dataset/AskForAccess'
 import REMSButton from '@/components/etsin/Dataset/AskForAccess/REMSButton'
 import { buildStores } from '@/stores'
+import { data_catalog_ida as idaCatalog } from '@testdata/metaxv3/refs/data_catalogs.data'
 import EnvClass from '@/stores/domain/env'
 
 const Env = new EnvClass()
@@ -31,7 +32,7 @@ describe('AskForAccess', () => {
 
   it('should render REMSButton', () => {
     const stores = getStores()
-    stores.Access.updateAccess(access, false, 'apply')
+    stores.Access.updateAccess(access, false, 'apply', idaCatalog)
     contextRenderer(<AskForAccess cr_id="test" />, { stores })
     expect(screen.getByRole('button', { name: 'Ask for access' })).toBeInTheDocument()
   })
