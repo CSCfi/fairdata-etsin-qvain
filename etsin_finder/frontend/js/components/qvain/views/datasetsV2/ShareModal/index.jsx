@@ -34,7 +34,6 @@ const getSelectedTab = ({ share }) => {
 
 const getModalContent = ({ share }) => {
   const { confirmClose, setConfirmClose, inviteResults, modal } = share
-
   if (inviteResults) {
     return (
       <TabContent>

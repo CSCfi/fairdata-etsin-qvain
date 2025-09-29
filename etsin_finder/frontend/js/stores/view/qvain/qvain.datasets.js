@@ -7,7 +7,6 @@ import { filterGroups, groupDatasetsByVersionSet } from './qvain.datasets.filter
 import AbortClient, { isAbort } from '@/utils/AbortClient'
 
 import Tabs from '../tabs'
-import Share from './qvain.datasetsV2.share'
 import ShareV3 from './qvain.datasetsV3.share'
 import Sort from './qvain.datasetsV2.sort'
 
@@ -18,21 +17,13 @@ class QvainDatasets {
     this.Auth = Auth
     this.Locale = Locale
     this.tabs = new Tabs({ all: 'qvain.datasets.tabs.all' }, 'all')
-    this.shareV2 = new Share(Env, Auth, this)
-    this.shareV3 = new ShareV3(Env, Auth, this)
+    this.share = new ShareV3(Env, Auth, this)
     this.sort = new Sort(Locale)
     this.promiseManager = new PromiseManager()
     this.removeModal = new Modal()
     this.shareModal = new Modal()
     this.client = new AbortClient()
     this.reset()
-  }
-
-  @computed get share() {
-    if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
-      return this.shareV3
-    }
-    return this.shareV2
   }
 
   @observable showCount

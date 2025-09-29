@@ -13,6 +13,7 @@ import { StoresProvider } from '@/stores/stores'
 import etsinTheme from '@/styles/theme'
 
 vi.useFakeTimers()
+vi.setConfig({ testTimeout: 5000 })
 const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime, delay: null })
 
 const testUser = {
@@ -33,33 +34,11 @@ const failTestUser = {
   uid: 'fail',
 }
 
-const userInviteResponses = {
-  testinen: {
-    ...testUser,
-    success: true,
-    status: 201,
-  },
-  person: {
-    ...otherTestUser,
-    success: true,
-    status: 201,
-  },
-  fail: {
-    ...failTestUser,
-    success: false,
-    status: 400,
-  },
-}
-
-const searchResultsTesti = [testUser, otherTestUser]
-
-const searchResultsTestinen = [testUser]
-
 let stores, wrapper, helper, mockAdapter
 
 const renderModal = async () => {
   vi.resetAllMocks()
-  vi.spyOn(console, 'error').mockImplementation(() => undefined) // suppress 404 warnings
+  vi.spyOn(console, 'error')
   wrapper?.unmount?.()
   if (helper) {
     document.body.removeChild(helper)
@@ -70,7 +49,9 @@ const renderModal = async () => {
   stores.Auth.setUser({
     name: 'teppo',
   })
+  stores.Env.setMetaxV3Host('metaxv3', 443)
   stores.Env.Flags.setFlag('UI.NEW_DATASETS_VIEW', true)
+  stores.Env.Flags.setFlag('QVAIN.METAX_V3', true)
 
   const dataset = { identifier: 'jeejee' }
   stores.QvainDatasets.share.setSearchDelay(0)
@@ -93,31 +74,51 @@ const renderModal = async () => {
   )
 }
 
+const selectUser = async name => {
+  const input = screen.getByRole('combobox', { name: 'Users' })
+  await user.type(input, name)
+  const option = await screen.findByRole('option')
+  await user.click(option)
+}
+
 const mockInviteWithDelay = () => {
   // Delay response from invitation endpoint so loading behavior can be tested.
   // Call vi.advanceTimersByTime(100) to resolve
-  mockAdapter.onPost('/api/qvain/datasets/jeejee/editor_permissions').reply(async config => {
-    const statuses = JSON.parse(config.data).users.map(uid => ({
-      ...userInviteResponses[uid],
-    }))
+  mockAdapter.onPost('https://metaxv3:443/v3/datasets/jeejee/permissions').reply(async config => {
     await Promise.delay(100)
-    return [200, { users: statuses }]
+    return [200, config.data]
   })
 }
 
 beforeEach(async () => {
   vi.resetAllMocks()
   mockAdapter = new MockAdapter(axios)
-  mockAdapter.onGet('/api/ldap/users/testi').reply(200, searchResultsTesti)
-  mockAdapter.onGet('/api/ldap/users/testinen').reply(200, searchResultsTestinen)
+  mockAdapter.onGet('/api/ldap/users/testi').reply(200, [testUser, otherTestUser])
+  mockAdapter.onGet('/api/ldap/users/testinen').reply(200, [testUser])
+  mockAdapter.onGet('/api/ldap/users/fail').reply(200, [failTestUser])
   mockAdapter.onGet('/api/ldap/users/empty').reply(200, [])
   mockAdapter.onGet('/api/ldap/users/error').reply(500, 'error happened')
-  mockAdapter.onGet('/api/qvain/datasets/jeejee/editor_permissions').reply(200, [])
-  mockAdapter.onPost('/api/qvain/datasets/jeejee/editor_permissions').reply(config => {
-    const statuses = JSON.parse(config.data).users.map(uid => ({
-      ...userInviteResponses[uid],
-    }))
-    return [200, { users: statuses }]
+  mockAdapter.onGet(/\/api\/ldap\/users\/.*/).reply(200, [])
+  mockAdapter.onGet('https://metaxv3:443/v3/datasets/jeejee/permissions').reply(200, {
+    creators: [
+      {
+        username: 'teppo',
+        fairdata_username: 'teppo',
+        first_name: 'teppo',
+        last_name: 'testaaja',
+        email: 'teppo@example.com',
+      },
+    ],
+    editors: [],
+    csc_project: 'some_project',
+  })
+  mockAdapter.onGet('https://metaxv3:443/v3/datasets/jeejee/permissions/editors').reply(200, [])
+  mockAdapter.onPost('https://metaxv3:443/v3/datasets/jeejee/permissions/editors').reply(config => {
+    const data = JSON.parse(config.data)
+    if (data.username == 'fail') {
+      return [400, 'fail dude fails']
+    }
+    return [200, config.data]
   })
 })
 
@@ -169,6 +170,7 @@ describe('ShareModal', () => {
 
     it('should show error message and log error', async () => {
       await renderModal()
+      console.error.mockImplementation(() => undefined) // suppress error
       const input = screen.getByRole('combobox', { name: 'Users' })
       await user.type(input, 'error')
       await screen.findByText(/There was an error/)
@@ -221,7 +223,7 @@ describe('ShareModal', () => {
     describe('given selected users', () => {
       it('should allow canceling confirmation', async () => {
         await renderModal()
-        stores.QvainDatasets.share.setSelectedUsers([testUser])
+        await selectUser('testinen')
 
         // click close button, modal should still be open
         await user.click(screen.getByRole('button', { name: 'Close' }))
@@ -234,7 +236,7 @@ describe('ShareModal', () => {
 
       it('should require confirmation even if invite tab is not open', async () => {
         await renderModal()
-        stores.QvainDatasets.share.setSelectedUsers([testUser])
+        await selectUser('testinen')
 
         // open "Members" tab
         const members = screen.getByRole('tab', { name: /Members/ })
@@ -252,17 +254,17 @@ describe('ShareModal', () => {
 
       it('should enable "invite" button', async () => {
         await renderModal()
-        stores.QvainDatasets.share.setSelectedUsers([testUser])
+        await selectUser('testinen')
         await waitFor(() => expect(getInviteButton()).toBeEnabled())
       })
 
       it('should show successful share', async () => {
         await renderModal()
-        stores.QvainDatasets.share.setSelectedUsers([testUser])
+        await selectUser('testinen')
         await user.type(screen.getByRole('textbox', { name: 'Message' }), 'This is a message')
         await user.click(getInviteButton())
-        screen.getByRole('heading', { name: /Successfully shared/ })
 
+        await screen.findByRole('heading', { name: /Successfully shared/ })
         const successUsers = Array.from(document.querySelectorAll('ul.success-users > li')).map(
           e => e.textContent
         )
@@ -271,23 +273,30 @@ describe('ShareModal', () => {
 
       it('should show failed shares', async () => {
         await renderModal()
-        stores.QvainDatasets.share.setSelectedUsers([testUser, failTestUser])
+        console.error.mockImplementation(() => undefined) // suppress error
+        await selectUser('testinen')
+        await selectUser('fail')
+
         await user.type(screen.getByRole('textbox', { name: 'Message' }), 'This is a message')
         await user.click(getInviteButton())
-        screen.getByRole('heading', { name: /Successfully shared/ })
-        const successUsers = Array.from(document.querySelectorAll('ul.fail-users > li')).map(
+        await screen.findByRole('heading', { name: /Successfully shared/ })
+        const failUsers = Array.from(document.querySelectorAll('ul.fail-users > li')).map(
           e => e.textContent
         )
-        expect(successUsers).toEqual(['Fail Dude (fail, fail@example.com)'])
+        expect(failUsers).toEqual(['Fail Dude (fail, fail@example.com)'])
       })
 
       it('should return to invite tab and remove succesfully added users from selected', async () => {
         await renderModal()
-        mockAdapter.onGet('/api/qvain/datasets/jeejee/editor_permissions').reply(200, {
-          users: [
+        console.error.mockImplementation(() => undefined) // suppress error
+        mockAdapter.onGet('https://metaxv3:443/v3/datasets/jeejee/permissions').reply(200, {
+          creators: [
             {
-              ...testUser,
-              role: 'creator',
+              first_name: 'Testi',
+              last_name: 'Testinen',
+              email: 'testi.testinen@example.com',
+              username: 'testinen',
+              fairdata_username: 'testinen',
             },
           ],
         })
@@ -301,7 +310,7 @@ describe('ShareModal', () => {
       it('should not allow closing modal while sending invitation', async () => {
         mockInviteWithDelay()
         await renderModal()
-        stores.QvainDatasets.share.setSelectedUsers([testUser])
+        await selectUser('testinen')
         await user.type(screen.getByRole('textbox', { name: 'Message' }), 'This is a message')
         await user.click(getInviteButton())
 
@@ -318,42 +327,56 @@ describe('ShareModal', () => {
 
   describe('Members tab', () => {
     const renderMembers = async () => {
-      mockAdapter.onGet('/api/qvain/datasets/jeejee/editor_permissions').reply(200, {
-        users: [
+      mockAdapter.onGet('https://metaxv3:443/v3/datasets/jeejee/permissions').reply(200, {
+        creators: [
           {
-            uid: 'teppo',
-            name: 'teppo testaaja',
+            username: 'teppo',
+            fairdata_username: 'teppo',
+            first_name: 'teppo',
+            last_name: 'testaaja',
             email: 'teppo@example.com',
-            is_project_member: true,
-            role: 'creator',
-          },
-          {
-            uid: 'member',
-            name: 'Member Person',
-            email: 'member@example.com',
-            is_project_member: true,
-          },
-          {
-            uid: 'not_in_ldap',
-            is_project_member: false,
-            role: 'editor',
-          },
-          {
-            uid: 'longname',
-            name: 'Longlong von Longlonglonglongname',
-            email: 'long@example.com',
-            is_project_member: false,
-            role: 'editor',
-          },
-          {
-            uid: 'editormember',
-            name: 'Editor Member',
-            email: 'editormember@example.com',
-            is_project_member: true,
-            role: 'editor',
           },
         ],
-        project: 'some_project',
+        editors: [
+          {
+            username: 'longname',
+            fairdata_username: 'longname',
+            first_name: 'Longlong',
+            last_name: 'von Longlonglonglongname',
+            email: 'long@example.com',
+          },
+          {
+            username: 'editormember',
+            fairdata_username: 'editormember',
+            first_name: 'Editor',
+            last_name: 'Member',
+            email: 'editormember@example.com',
+          },
+        ],
+        csc_project_members: [
+          {
+            username: 'teppo',
+            fairdata_username: 'teppo',
+            first_name: 'teppo',
+            last_name: 'testaaja',
+            email: 'teppo@example.com',
+          },
+          {
+            username: 'member',
+            fairdata_username: 'member',
+            first_name: 'Member',
+            last_name: 'Person',
+            email: 'member@example.com',
+          },
+          {
+            username: 'editormember',
+            fairdata_username: 'editormember',
+            first_name: 'Editor',
+            last_name: 'Member',
+            email: 'editormember@example.com',
+          },
+        ],
+        csc_project: 'some_project',
       })
       await renderModal()
       await stores.QvainDatasets.share.fetchPermissions()
@@ -362,7 +385,8 @@ describe('ShareModal', () => {
 
     it('should show error when loading permissions fails', async () => {
       await renderMembers()
-      mockAdapter.onGet('/api/qvain/datasets/jeejee/editor_permissions').reply(400, '')
+      console.error.mockImplementation(() => undefined) // suppress error
+      mockAdapter.onGet('https://metaxv3:443/v3/datasets/jeejee/permissions').reply(400, '')
       await stores.QvainDatasets.share.fetchPermissions()
       expect(screen.getByText(/Error retrieving data/)).toBeInTheDocument()
       expect(console.error.mock.calls.length).toBe(1)
@@ -372,7 +396,6 @@ describe('ShareModal', () => {
       await renderMembers()
       const expectedPermissions = [
         ['teppo testaaja (teppo, teppo@example.com)', 'Creator'],
-        ['not_in_ldap', 'Editor'],
         ['Editor Member (editormember, editormember@example.com)', 'Editor'],
         ['Longlong von Longlonglonglongname (longname, long@example.com)', 'Editor'],
       ]
@@ -430,26 +453,10 @@ describe('ShareModal', () => {
       const permissionCount = document.querySelectorAll('.permission-users .member-user').length
       const memberCount = document.querySelectorAll('.project-member-users .member-user').length
       mockAdapter
-        .onDelete('/api/qvain/datasets/jeejee/editor_permissions/editormember')
+        .onDelete('https://metaxv3:443/v3/datasets/jeejee/permissions/editors/editormember')
         .reply(200, '')
       await openConfirmRemoveDialog('Editor Member (editormember, editormember@example.com)')
-      await user.click(screen.getByRole('button', { name: 'Remove' }))
-      expect(document.querySelectorAll('.permission-users .member-user')).toHaveLength(
-        permissionCount - 1
-      )
-      expect(document.querySelectorAll('.project-member-users .member-user')).toHaveLength(
-        memberCount
-      )
-    })
 
-    it('should remove non-member editor from permissions list', async () => {
-      await renderMembers()
-      const permissionCount = document.querySelectorAll('.permission-users .member-user').length
-      const memberCount = document.querySelectorAll('.project-member-users .member-user').length
-      mockAdapter
-        .onDelete(RegExp('^/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap$'))
-        .reply(200, '')
-      await openConfirmRemoveDialog('not_in_ldap')
       await user.click(screen.getByRole('button', { name: 'Remove' }))
       expect(document.querySelectorAll('.permission-users .member-user')).toHaveLength(
         permissionCount - 1
@@ -467,7 +474,7 @@ describe('ShareModal', () => {
       const permissionCount = document.querySelectorAll('.permission-users .member-user').length
       const memberCount = document.querySelectorAll('.project-member-users .member-user').length
       mockAdapter
-        .onDelete('/api/qvain/datasets/jeejee/editor_permissions/editormember')
+        .onDelete('https://metaxv3:443/v3/datasets/jeejee/permissions/editors/editormember')
         .reply(200, '')
       await openConfirmRemoveDialog('Editor Member (editormember, editormember@example.com)')
 
@@ -482,15 +489,18 @@ describe('ShareModal', () => {
       )
     })
 
-    it('should require extra confirmation non-member editor remove themself from permissions list', async () => {
+    it('should require extra confirmation for non-member editor remove themself from permissions list', async () => {
       await renderMembers()
       stores.Auth.setUser({
-        name: 'not_in_ldap',
+        name: 'longname',
       })
       mockAdapter
-        .onDelete('/api/qvain/datasets/jeejee/editor_permissions/not_in_ldap')
+        .onDelete('https://metaxv3:443/v3/datasets/jeejee/permissions/editors/longname')
         .reply(200, '')
-      await openConfirmRemoveDialog('not_in_ldap')
+
+      await openConfirmRemoveDialog(
+        'Longlong von Longlonglonglongname (longname, long@example.com)'
+      )
 
       // "remove" should be disabled until checkbox is clicked
       const removeButton = screen.getByRole('button', { name: 'Remove' })
@@ -506,16 +516,16 @@ describe('ShareModal', () => {
 
     it('should cancel removing user from permissions list', async () => {
       await renderMembers()
-      expect(document.querySelectorAll('.member-user')).toHaveLength(7)
+      expect(document.querySelectorAll('.member-user')).toHaveLength(6)
       await openConfirmRemoveDialog('Editor Member (editormember, editormember@example.com)')
       await user.click(screen.getByRole('button', { name: 'Cancel' }))
-      expect(document.querySelectorAll('.member-user')).toHaveLength(7)
+      expect(document.querySelectorAll('.member-user')).toHaveLength(6)
     })
 
     it('should show error when deletion fails', async () => {
       await renderMembers()
       mockAdapter
-        .onDelete('/api/qvain/datasets/jeejee/editor_permissions/editormember')
+        .onDelete('https://metaxv3:443/v3/datasets/jeejee/permissions/editors/editormember')
         .reply(400, '')
 
       await openConfirmRemoveDialog('Editor Member (editormember, editormember@example.com)')

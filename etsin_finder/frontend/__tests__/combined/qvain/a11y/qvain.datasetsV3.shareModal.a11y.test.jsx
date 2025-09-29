@@ -27,6 +27,7 @@ beforeEach(() => {
   })
   stores.Env.Flags.setFlag('UI.NEW_DATASETS_VIEW', true)
   stores.Env.Flags.setFlag('UI.SHARE_PROJECT', true)
+  stores.Env.Flags.setFlag('QVAIN.METAX_V3', true)
   stores.QvainDatasets.share.modal.open({ dataset: { identifier: 'xyz' } })
   stores.QvainDatasets.share.client.abort()
 })
