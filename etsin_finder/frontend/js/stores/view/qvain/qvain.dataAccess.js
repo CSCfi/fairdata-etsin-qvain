@@ -86,6 +86,10 @@ class DataAccess {
     )
   }
 
+  shouldShowREMSApprovalType(accessType) {
+    return accessType.url === ACCESS_TYPE_URL.PERMIT
+  }
+
   setChanged(value) {
     this.Parent.setChanged(value)
   }

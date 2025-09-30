@@ -19,7 +19,9 @@ const DataAccess = () => {
         terms,
         remsApprovalType,
         validationError,
+        shouldShowREMSApprovalType,
       },
+      AccessType: { value: accessType },
       isREMSAllowed,
     },
     Env: {
@@ -78,7 +80,7 @@ const DataAccess = () => {
               field={terms}
             />
           </TranslationTab>
-          {isREMSAllowed && <REMSApprovalType />}
+          {isREMSAllowed && shouldShowREMSApprovalType(accessType) && <REMSApprovalType />}
         </div>
       )}
       {validationError && <ValidationError>{validationError}</ValidationError>}
