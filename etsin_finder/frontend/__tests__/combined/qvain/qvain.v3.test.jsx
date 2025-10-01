@@ -16,8 +16,11 @@ import Qvain from '@/components/qvain/views/main'
 import { flatten, removeMatchingKeys } from '@/utils/flatten'
 import { failTestsWhenTranslationIsMissing } from '@helpers'
 import DataMemoryRouter from '@helpers/DataMemoryRouter'
+import { access_types as accessTypes } from '@testdata/metaxv3/refs/access_rights.data'
 
 const registerMissingTranslationHandler = failTestsWhenTranslationIsMissing()
+
+ReactModal.setAppElement(document.createElement('div'))
 
 // Replace debounce milliseconds with 0
 vi.mock('lodash-es', async () => {
@@ -30,14 +33,21 @@ import {
   access_rights_embargo,
   access_type_permit,
   restriction_grounds_research,
-} from '../../__testdata__/metaxv3/refs/access_rights.data'
-import dataset from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
+} from '@testdata/metaxv3/refs/access_rights.data'
+import { dataset_open_a_catalog_expanded as dataset } from '@testdata/metaxv3/datasets/dataset_ida_a.data'
+import {
+  data_catalog_ida as idaCatalog,
+  data_catalog_att as attCatalog,
+} from '@testdata/metaxv3/refs/data_catalogs.data'
 
 const mockAdapter = new MockAdapter(axios)
 
 // axios mocks
 beforeEach(() => {
   mockAdapter.reset()
+  mockAdapter
+    .onGet('https://metaxv3:443/v3/reference-data/access-types?pagination=false')
+    .reply(200, accessTypes)
   mockAdapter.onGet(new RegExp('/v3/reference-data/.*')).reply(200, [])
   mockAdapter.onGet(new RegExp('/v3/organizations')).reply(200, [])
   mockAdapter.resetHistory()
@@ -85,6 +95,12 @@ const renderQvain = async (overrides = {}, { initialPath } = {}) => {
     .onPost(`https://metaxv3:443/v3/datasets/${linkedDatasetDraft.id}/publish`)
     .reply(200, publishedDataset)
 
+  // When loading an existing dataset, catalog is included in the payload (?expand_catalog=true).
+  // When creating new dataset, catalogs need to be loaded separately.
+  for (const catalog of [idaCatalog, attCatalog]) {
+    mockAdapter.onGet(`https://metaxv3:443/v3/data-catalogs/${catalog.id}`).reply(200, catalog)
+  }
+
   document.cookie = 'etsin_app=qvain' // sets etsin_app
   const Env = new EnvClass()
   Env.Flags.setFlag('QVAIN.METAX_V3.FRONTEND', true)
@@ -102,20 +118,63 @@ const renderQvain = async (overrides = {}, { initialPath } = {}) => {
         <StoresProvider store={stores}>
           <Location />
           <Routes>
+            <Route path="/dataset" Component={Qvain} />
             <Route path="/dataset/:identifier" Component={Qvain} />
           </Routes>
         </StoresProvider>
       </DataMemoryRouter>
     </ThemeProvider>
   )
-  ReactModal.setAppElement(document.createElement('div'))
-  await waitForElementToBeRemoved(() => screen.queryByText('Loading dataset'))
+  if (initialPath !== '/dataset') {
+    await waitForElementToBeRemoved(() => screen.queryByText('Loading dataset'))
+  }
 }
 
 const renderSection = async (name, overrides) => {
   await renderQvain(overrides)
   return getSection(name)
 }
+
+describe('Qvain with new dataset', () => {
+  it('shows "permit" access type for IDA dataset', async () => {
+    await renderQvain({}, { initialPath: '/dataset' })
+    let idaButton = screen.getByText('Choose "IDA"', { exact: false }).closest('button')
+    expect(idaButton).not.toHaveClass('selected')
+    await userEvent.click(idaButton)
+
+    idaButton = screen.getByText('Choose "IDA"', { exact: false }).closest('button')
+    expect(idaButton).toHaveClass('selected')
+
+    await userEvent.click(screen.getByLabelText(/Access Type/))
+    await userEvent.keyboard('{ArrowDown}')
+
+    const accessTypeSelect = screen.getByTestId('accessTypeSelect')
+    expect(within(accessTypeSelect).getByRole('option', { name: 'Open' })).toBeInTheDocument()
+    expect(
+      within(accessTypeSelect).getByRole('option', { name: /Requires .*permission/ })
+    ).toBeInTheDocument()
+  })
+
+  it('hides "permit" access type for ATT dataset', async () => {
+    await renderQvain({}, { initialPath: '/dataset' })
+    let attButton = screen
+      .getByText('Choose "Remote Resources"', { exact: false })
+      .closest('button')
+    expect(attButton).not.toHaveClass('selected')
+    await userEvent.click(attButton)
+
+    attButton = screen.getByText('Choose "Remote Resources"', { exact: false }).closest('button')
+    expect(attButton).toHaveClass('selected')
+
+    await userEvent.click(screen.getByLabelText(/Access Type/))
+    await userEvent.keyboard('{ArrowDown}')
+    const accessTypeSelect = screen.getByTestId('accessTypeSelect')
+    expect(within(accessTypeSelect).getByRole('option', { name: 'Open' })).toBeInTheDocument()
+    expect(
+      within(accessTypeSelect).queryByRole('option', { name: /Requires .*permission/ })
+    ).not.toBeInTheDocument()
+  })
+})
 
 describe('Qvain with an opened dataset', () => {
   it('shows IDA catalog as selected for IDA dataset', async () => {
@@ -378,7 +437,7 @@ describe('Qvain with an opened dataset', () => {
     expect(datasetIssued).toEqual(submitIssued)
 
     const flatDataset = removeMatchingKeys(
-      flatten(dataset, { normalizeDates: true }),
+      flatten({ ...dataset, data_catalog: dataset.data_catalog.id }, { normalizeDates: true }),
       expectedMissing
     )
     const flatSubmit = removeMatchingKeys(

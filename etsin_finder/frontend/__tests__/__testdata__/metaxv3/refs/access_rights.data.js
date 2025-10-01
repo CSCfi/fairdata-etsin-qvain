@@ -35,13 +35,28 @@ export const access_type_embargo = {
 export const access_type_permit = {
   url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
   in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
-  pref_label: { en: 'Requires permission', fi: 'Vaatii luvan' },
+  pref_label: {
+    en: 'Requires applying permission in Fairdata service',
+    fi: 'Vaatii luvan hakemista Fairdata-palvelussa',
+  },
+}
+
+export const access_type_restricted = {
+  url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/restricted',
+  in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
+  pref_label: {
+    en: 'Restricted use',
+    fi: 'Saatavuutta rajoitettu',
+  },
 }
 
 export const access_type_login = {
   url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/login',
   in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
-  pref_label: { en: 'Requires login', fi: 'Vaatii kirjautumista' },
+  pref_label: {
+    en: 'Requires login in Fairdata service',
+    fi: 'Vaatii kirjautumisen Fairdata-palvelussa',
+  },
 }
 
 export const restriction_grounds_research = {
@@ -81,3 +96,11 @@ export const access_rights_login = {
   restriction_grounds: [restriction_grounds_research],
   show_data_metadata: false,
 }
+
+export const access_types = [
+  access_type_open,
+  access_type_login,
+  access_type_embargo,
+  access_type_restricted,
+  access_type_permit,
+]

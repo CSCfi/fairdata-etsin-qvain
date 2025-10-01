@@ -68,13 +68,11 @@ const Qvain = () => {
     } else {
       recordEvent('DATASET')
     }
-    if (!identifier) {
-      return // No dataset to load
-    }
     // Test if we need to load a dataset or do we use the one currently in store
-    if (original?.identifier !== identifier) {
+    if (identifier && original?.identifier !== identifier) {
       await fetchDataset(identifier, { isTemplate })
     }
+    Qvain.setEditorInitialized(true)
   }
 
   useEffect(() => {

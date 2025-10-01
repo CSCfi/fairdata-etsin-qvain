@@ -214,7 +214,10 @@ class Adapter {
     const d = {
       id: dataset.id,
       identifier: dataset.id,
-      data_catalog: dataset.data_catalog && { identifier: dataset.data_catalog },
+      data_catalog: dataset.data_catalog && {
+        // Catalog is an object when fetch with expand_catalog, otherwise an id string
+        identifier: dataset.data_catalog.id || dataset.data_catalog,
+      },
       research_dataset: {
         title: dataset.title,
         description: dataset.description,

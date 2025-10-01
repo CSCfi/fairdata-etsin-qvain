@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
+
 import Translate from '@/utils/Translate'
 import { useStores } from '@/stores/stores'
 import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
@@ -9,6 +11,7 @@ import IdaSvg from '@/assets/images/data-ida.svg'
 import AttSvg from '@/assets/images/data-remote.svg'
 import PasSvg from '@/assets/images/data-pas.svg'
 import CatalogButton from './CatalogButton'
+import DataCatalogError from './DataCatalogError'
 
 const DataCatalog = observer(() => {
   const {
@@ -69,8 +72,21 @@ PasDataCatalog.displayName = 'PasDataCatalog'
 
 const BasicDataCatalog = observer(() => {
   const {
-    Qvain: { setDataCatalog, isDataCatalogDecided, dataCatalog },
+    Qvain: {
+      setDataCatalog,
+      isDataCatalogDecided,
+      dataCatalog,
+      editorInitialized,
+      ensureBasicDataCatalogs,
+      basicDataCatalogsError,
+    },
   } = useStores()
+
+  useEffect(() => {
+    if (editorInitialized && !isDataCatalogDecided) {
+      ensureBasicDataCatalogs()
+    }
+  }, [editorInitialized, isDataCatalogDecided, ensureBasicDataCatalogs])
 
   const idaOnClick = () =>
     !isDataCatalogDecided && dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
@@ -81,6 +97,10 @@ const BasicDataCatalog = observer(() => {
     !isDataCatalogDecided && dataCatalog === DATA_CATALOG_IDENTIFIER.ATT
       ? setDataCatalog(undefined)
       : setDataCatalog(DATA_CATALOG_IDENTIFIER.ATT)
+
+  if (basicDataCatalogsError) {
+    return <DataCatalogError />
+  }
 
   return (
     <FieldGroup>

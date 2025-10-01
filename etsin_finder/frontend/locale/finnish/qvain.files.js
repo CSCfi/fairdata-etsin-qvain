@@ -10,7 +10,6 @@ const files = {
   },
   error: {
     title: 'Virhe ladattaessa tiedostoja',
-    retry: 'Yritä uudelleen',
     noFiles: 'Valitsemassasi projektissa ei ole tiedostoja.',
   },
   dataCatalog: {

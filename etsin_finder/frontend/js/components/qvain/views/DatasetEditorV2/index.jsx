@@ -30,6 +30,7 @@ import { useStores } from '@/stores/stores'
 export const Dataset = ({ datasetError, datasetErrorTitle, datasetErrorDetails, handleRetry }) => {
   const {
     Qvain: { datasetLoading },
+    Locale: { translate },
   } = useStores()
   if (datasetError) {
     return (
@@ -38,7 +39,7 @@ export const Dataset = ({ datasetError, datasetErrorTitle, datasetErrorDetails, 
           <ErrorLabel>{datasetErrorTitle}</ErrorLabel>
           <ErrorContent>{datasetErrorDetails}</ErrorContent>
           <ErrorButtons>
-            <Button onClick={handleRetry}>Retry</Button>
+            <Button onClick={handleRetry}>{translate('qvain.error.retry')}</Button>
           </ErrorButtons>
         </ErrorContainer>
       </div>

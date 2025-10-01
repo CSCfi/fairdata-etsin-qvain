@@ -6,19 +6,20 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import AccessType from '@/components/qvain/sections/DataOrigin/general/AccessRights/AccessType'
-import { ACCESS_TYPE_URL } from '@/utils/constants'
+import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { buildStores } from '@/stores'
 import { onChange } from '@/components/qvain/utils/select'
 
-import accessTypeResponse from '../../__testdata__/accessTypes.data'
-import { StoresProvider } from '../../../js/stores/stores'
+import { access_types as accessTypes } from '@testdata/metaxv3/refs/access_rights.data'
+import { data_catalog_ida as idaCatalog } from '@testdata/metaxv3/refs/data_catalogs.data'
+import { StoresProvider } from '@/stores/stores'
 
 configure({
   safeDescriptors: false,
 })
 
 const mockAdapter = new MockAdapter(axios)
-mockAdapter.onGet().reply(200, accessTypeResponse)
+mockAdapter.onGet().reply(200, accessTypes)
 
 vi.mock('@/components/qvain/utils/select', async () => {
   const actual = await vi.importActual('@/components/qvain/utils/select')
@@ -29,7 +30,7 @@ vi.mock('@/components/qvain/utils/select', async () => {
 })
 
 describe('Qvain Access Type', () => {
-  let Stores, Auth, Qvain
+  let Stores, Qvain
 
   const getOptions = async () => {
     await userEvent.click(screen.getByLabelText(/Access Type/))
@@ -38,16 +39,17 @@ describe('Qvain Access Type', () => {
 
   beforeEach(() => {
     Stores = buildStores()
-    Auth = Stores.Auth
     Qvain = Stores.Qvain
+    Qvain.Env.Flags.setFlag('QVAIN.METAX_V3', true)
+    Qvain.dataCatalogConfigs[idaCatalog.id] = { ...idaCatalog }
+    Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.IDA)
   })
 
   afterEach(() => {
     vi.clearAllMocks()
   })
 
-  const setAuthUserAndRender = (userSettings = {}) => {
-    Auth.setUser({ ...Auth.user, ...userSettings })
+  const renderAccessType = () => {
     render(
       <StoresProvider store={Stores}>
         <AccessType />
@@ -55,10 +57,11 @@ describe('Qvain Access Type', () => {
     )
   }
 
-  describe('given AccessType is OPEN and isUsingRems is false ', () => {
+  describe('given AccessType is OPEN and QVAIN.REMS is false ', () => {
     beforeEach(() => {
+      Stores.Env.Flags.setFlag('QVAIN.REMS', false)
       Qvain.AccessType.set({ url: ACCESS_TYPE_URL.OPEN })
-      setAuthUserAndRender({ isUsingRems: false })
+      renderAccessType()
     })
 
     it('restricts which access types are shown', async () => {
@@ -72,10 +75,40 @@ describe('Qvain Access Type', () => {
     })
   })
 
-  describe('given AccessType is Permit but isUsingRems is false', () => {
+  describe('given AccessType is OPEN and QVAIN.REMS is true ', () => {
+    beforeEach(() => {
+      Stores.Env.Flags.setFlag('QVAIN.REMS', true)
+      Qvain.AccessType.set({ url: ACCESS_TYPE_URL.OPEN })
+      renderAccessType()
+    })
+
+    it('all access types are shown', async () => {
+      const options = await getOptions()
+      expect(options.length).toBe(5)
+      expect(options.filter(opt => opt.includes('permission')).length).toBe(1)
+    })
+  })
+
+  describe('given AccessType is OPEN and catalog has rems_enabled=false ', () => {
+    beforeEach(() => {
+      Stores.Env.Flags.setFlag('QVAIN.REMS', true)
+      Qvain.dataCatalogConfigs[idaCatalog.id].rems_enabled = false
+      Qvain.AccessType.set({ url: ACCESS_TYPE_URL.OPEN })
+      renderAccessType()
+    })
+
+    it('restricts which access types are shown', async () => {
+      const options = await getOptions()
+      expect(options.length).toBe(4)
+      expect(options.filter(opt => opt.includes('permission')).length).toBe(0)
+    })
+  })
+
+  describe('given AccessType is Permit but QVAIN.REMS is false', () => {
     beforeEach(async () => {
+      Stores.Env.Flags.setFlag('QVAIN.REMS', false)
       Qvain.AccessType.set({ url: ACCESS_TYPE_URL.PERMIT })
-      setAuthUserAndRender({ isUsingRems: false })
+      renderAccessType()
     })
 
     it('always allows the current access type', async () => {
@@ -90,23 +123,10 @@ describe('Qvain Access Type', () => {
     })
   })
 
-  describe('given AccessType is Permit and isUsingRems is true', () => {
-    beforeEach(async () => {
-      Qvain.AccessType.set({ url: ACCESS_TYPE_URL.PERMIT })
-      setAuthUserAndRender({ isUsingRems: true })
-    })
-
-    it('shows all access type options', async () => {
-      const options = await getOptions()
-      expect(options.length).toBe(5)
-      expect(options.filter(opt => opt.includes('permission')).length).toBe(1)
-    })
-  })
-
   describe('given AccesType is EMBARGO', () => {
     beforeEach(async () => {
       Qvain.AccessType.set({ url: ACCESS_TYPE_URL.EMBARGO })
-      setAuthUserAndRender()
+      renderAccessType()
     })
 
     it('renders EmbargoExpires', () => {
@@ -118,7 +138,7 @@ describe('Qvain Access Type', () => {
     beforeEach(async () => {
       Qvain.AccessType.setValidationError = vi.fn()
       Qvain.AccessType.validate = vi.fn()
-      setAuthUserAndRender()
+      renderAccessType()
     })
 
     it('should call onChange', async () => {

@@ -10,7 +10,6 @@ const files = {
   },
   error: {
     title: 'Error loading files',
-    retry: 'Retry',
     noFiles: 'The project does not have any files.',
   },
   dataCatalog: {

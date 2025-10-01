@@ -15,26 +15,32 @@ import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { useStores } from '@/stores/stores'
 import RestrictionGrounds from './RestrictionGrounds'
 import EmbargoExpires from './EmbargoExpires'
-import { handleAccessTypeReferenceDataResponse } from '../../../IdaCatalog/componentHelpers'
 import DataAccess from './DataAccess'
 import useReferenceData from '@/utils/useReferenceData'
 import ShowDataDetails from './ShowDataDetails'
 
 const AccessType = () => {
   const Stores = useStores()
-  const { options, isLoading } = useReferenceData('access_type', {
-    handler: opts => handleAccessTypeReferenceDataResponse(opts, Stores),
+  const { options: allOptions, isLoading } = useReferenceData('access_type', {
+    handler: opts => opts.map(ref => Model(ref.label, ref.value)),
     sort: true,
   })
 
   const { lang, translate } = Stores.Locale
-  const { value, Model, validationError, readonly, validate, set, setValidationError } =
-    Stores.Qvain.AccessType
   const { shouldShowDataAccess } = Stores.Qvain.DataAccess
-  const { dataCatalog } = Stores.Qvain
+  const { dataCatalog, AccessType, original, isREMSAllowed } = Stores.Qvain
+  const { value, Model, validationError, readonly, validate, set, setValidationError } = AccessType
 
-  const isRemote = dataCatalog == DATA_CATALOG_IDENTIFIER.ATT
-  const isIDA = Stores.Qvain.dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
+  let options = allOptions
+  const permitExists =
+    value?.url == ACCESS_TYPE_URL.PERMIT ||
+    original?.research_dataset?.access_type?.url == ACCESS_TYPE_URL.PERMIT
+  if (!(isREMSAllowed || permitExists)) {
+    options = options.filter(ref => ref.url !== ACCESS_TYPE_URL.PERMIT)
+  }
+
+  const isRemote = dataCatalog === DATA_CATALOG_IDENTIFIER.ATT
+  const isIDA = dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
 
   let permitInfo = null
   if (value?.url === ACCESS_TYPE_URL.PERMIT && !isRemote) {

@@ -1,4 +1,4 @@
-import { observable, action, computed, makeObservable, toJS } from 'mobx'
+import { observable, action, computed, makeObservable, toJS, runInAction } from 'mobx'
 import { cumulativeStateSchema, useDoiSchema, dataCatalogSchema } from './qvain.dataCatalog.schemas'
 import {
   CUMULATIVE_STATE,
@@ -62,15 +62,23 @@ class Qvain extends Resources {
 
   @observable unsupported = null
 
+  @observable dataCatalogConfigs = {} // maps catalog ids to catalog objects
+
+  @observable basicDataCatalogsError = undefined
+
+  @observable editorInitialized = false
+
   @action
   resetQvainStore = () => {
     this.client.abort()
     this.original = undefined
     this.unsupported = null
+    this.editorInitialized = false
+    this.basicDataCatalogsError = undefined
 
     // Reset Files/Directories related data
     this.Files.reset()
-    this.dataCatalog = undefined
+    this.dataCatalog = undefined // catalog id
     this.preservationState = 0
     this.cumulativeState = CUMULATIVE_STATE.NO
     this.newCumulativeState = this.cumulativeState
@@ -97,6 +105,10 @@ class Qvain extends Resources {
 
     this.Submit.reset()
     this.Sections.collapseAll()
+  }
+
+  @action.bound setEditorInitialized(val) {
+    this.editorInitialized = val
   }
 
   @action
@@ -161,8 +173,14 @@ class Qvain extends Resources {
       let nextDraft
       if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
         const url = metaxV3Url('dataset', identifier)
-        result = await this.client.get(url)
+        result = await this.client.get(url, { params: { expand_catalog: true } })
         nextDraft = result.data.next_draft?.id
+
+        // Store catalog object for later use
+        const catalog = result.data.data_catalog
+        if (catalog) {
+          this.dataCatalogConfigs[catalog.id] = catalog
+        }
       } else {
         const url = urls.qvain.dataset(identifier)
         result = await this.client.get(url)
@@ -233,8 +251,8 @@ class Qvain extends Resources {
       this.setUseDoi(false)
     }
 
-    /*When IDA is selected as the catalog, the DOI value is set to the 
-    user-selected value. If the user hasn't changed the value, it'll be true 
+    /*When IDA is selected as the catalog, the DOI value is set to the
+    user-selected value. If the user hasn't changed the value, it'll be true
     by default: */
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
       this.setUseDoi(this.defaultDoi)
@@ -246,6 +264,40 @@ class Qvain extends Resources {
 
     if (!REMOTE_RESOURCES_DATA_CATALOGS.includes(selectedDataCatalog)) {
       this.ExternalResources.reset()
+    }
+  }
+
+  @computed get dataCatalogConfig() {
+    return this.dataCatalogConfigs[this.dataCatalog] || {}
+  }
+
+  @action.bound async ensureBasicDataCatalogs() {
+    try {
+
+      // Ensures IDA and ATT catalogs have been loaded to dataCatalogConfigs
+      if (!this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
+      return
+    }
+    const promises = []
+    const catalogIds = [DATA_CATALOG_IDENTIFIER.IDA, DATA_CATALOG_IDENTIFIER.ATT]
+    for (const catalogId of catalogIds) {
+      if (!this.dataCatalogConfigs[catalogId]) {
+        promises.push(this.client.get(this.Env.metaxV3Url('dataCatalog', catalogId)))
+      }
+    }
+
+    const catalogs = await Promise.all(promises)
+    runInAction(() => {
+      for (const catalog of catalogs) {
+        const data = catalog.data
+        this.dataCatalogConfigs[data.id] = data
+      }
+    })
+    } catch (error) {
+      console.error(`Error loading data catalogs:`, error)
+      runInAction(() => {
+        this.basicDataCatalogsError = error
+      })
     }
   }
 
@@ -519,7 +571,7 @@ class Qvain extends Resources {
     if (!this.Env?.Flags.flagEnabled('QVAIN.REMS')) {
       return false
     }
-    return this.dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
+    return !!this.dataCatalogConfig?.rems_enabled
   }
 
   @computed

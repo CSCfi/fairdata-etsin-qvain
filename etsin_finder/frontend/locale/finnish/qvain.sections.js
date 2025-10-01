@@ -22,6 +22,10 @@ const sections = {
       },
     },
     infoText: 'Huom! Et voi muuttaa Datalähdettä enää tallennuksen (luonnos/julkaisu) jälkeen.',
+    error: {
+      title: 'Katalogien lataus epäonnistui',
+      description: 'Katalogien lataamisessa tapahtui virhe. Ole hyvä ja yritä uudelleen.',
+    },
   },
   description: {
     title: 'Kuvaus',

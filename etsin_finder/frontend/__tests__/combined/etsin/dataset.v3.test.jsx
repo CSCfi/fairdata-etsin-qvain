@@ -77,7 +77,6 @@ const renderEtsin = async (
       loggedIn: true,
       homeOrganizationId: undefined,
       idaProjects: [],
-      isUsingRems: undefined, // not used by V3, use flag instead
       csrfToken: undefined,
     })
   }

@@ -91,6 +91,7 @@ const qvainFinnish = {
     default: 'Virhe ladattaessa aineistoa',
     render: 'Aineiston renderöinnissä tapahtui virhe',
     component: 'Kentän %(field)s renderöinnissä tapahtui virhe',
+    retry: 'Yritä uudelleen',
   },
   backLink: ' Takaisin aineistoihin',
   common: {

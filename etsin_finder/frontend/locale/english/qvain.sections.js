@@ -21,7 +21,12 @@ const sections = {
         },
       },
     },
-    infoText: 'Note! Once the dataset has been saved (drafted/published), you cannot change the Data Origin any more.',
+    infoText:
+      'Note! Once the dataset has been saved (drafted/published), you cannot change the Data Origin any more.',
+    error: {
+      title: 'Loading data catalogs failed',
+      description: 'There was an error loading data catalogs. Please try again.',
+    },
   },
   description: {
     title: 'Description',

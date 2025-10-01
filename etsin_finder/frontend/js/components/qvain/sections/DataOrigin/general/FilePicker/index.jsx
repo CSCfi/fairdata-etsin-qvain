@@ -36,8 +36,9 @@ export const FilePickerBase = () => {
       canRemoveFiles,
       isNewVersion,
       isCumulative,
-      newCumulativeState
-    }
+      newCumulativeState,
+    },
+    Locale: { translate },
   } = useStores()
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -47,13 +48,11 @@ export const FilePickerBase = () => {
       root.directories.some(d => d.existing) ||
       root.addedChildCount > 0)
 
-  /*When a user cannot remove IDA files from a published dataset in Qvain, 
-  after loading the dataset, it must initially have IDA file-related items, 
+  /*When a user cannot remove IDA files from a published dataset in Qvain,
+  after loading the dataset, it must initially have IDA file-related items,
   whether it is a cumulative dataset or not: */
   const hasItemsOriginally =
-    root &&
-    (root.files.some(f => f.existing) ||
-      root.directories.some(d => d.existing))
+    root && (root.files.some(f => f.existing) || root.directories.some(d => d.existing))
 
   const isEmptyProject = loadingProjectError?.response?.status === 404
 
@@ -78,9 +77,7 @@ export const FilePickerBase = () => {
           </ErrorLabel>
           <ErrorContent>{String(loadingProjectError)}</ErrorContent>
           <ErrorButtons>
-            <Button onClick={retry}>
-              <Translate content="qvain.files.error.retry" />
-            </Button>
+            <Button onClick={retry}>{translate('qvain.error.retry')}</Button>
           </ErrorButtons>
         </ErrorContainer>
       </div>
@@ -123,18 +120,23 @@ export const FilePickerBase = () => {
     )
   }
 
-  /*When a new version of an existing dataset is created, additional 
-  information is added under the Selected files header. The information 
-  text changes dynamically slightly depending on whether a cumulative or 
+  /*When a new version of an existing dataset is created, additional
+  information is added under the Selected files header. The information
+  text changes dynamically slightly depending on whether a cumulative or
   non-cumulative radio button option is selected. */
   const newVersionInfoText = (
     <>
-      {isNewVersion &&
+      {isNewVersion && (
         <InfoText>
           <MarginBottom>
-            <Translate content={`qvain.files.selected.newVersionInfoText.${newCumulativeState ? 'cumulative' : 'noncumulative'}`} />
+            <Translate
+              content={`qvain.files.selected.newVersionInfoText.${
+                newCumulativeState ? 'cumulative' : 'noncumulative'
+              }`}
+            />
           </MarginBottom>
-        </InfoText>}
+        </InfoText>
+      )}
     </>
   )
 
@@ -163,20 +165,26 @@ export const FilePickerBase = () => {
     </>
   )
 
-  /*Show instruction text related to file editing/deletion restrictions 
-  if IDA directories/files have been added to the published dataset when 
-  published and if the dataset is not a new draft created from an existing 
+  /*Show instruction text related to file editing/deletion restrictions
+  if IDA directories/files have been added to the published dataset when
+  published and if the dataset is not a new draft created from an existing
   dataset.
-  
-  Note: The condition for showing the info text also includes 
-  hasItemsOriginally, because canRemoveFiles returns false when editing a 
+
+  Note: The condition for showing the info text also includes
+  hasItemsOriginally, because canRemoveFiles returns false when editing a
   published cumulative dataset that doesn't originally contain file items. */
   const filesInfoText = (
     <>
-      {!canRemoveFiles && hasItemsOriginally &&
+      {!canRemoveFiles && hasItemsOriginally && (
         <InfoText>
-          <Translate content={`qvain.files.selected.infoText.${isCumulative ? 'cumulative' : 'noncumulative'}`} unsafe={true} />
-        </InfoText>}
+          <Translate
+            content={`qvain.files.selected.infoText.${
+              isCumulative ? 'cumulative' : 'noncumulative'
+            }`}
+            unsafe={true}
+          />
+        </InfoText>
+      )}
     </>
   )
 

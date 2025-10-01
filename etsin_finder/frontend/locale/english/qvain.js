@@ -89,6 +89,7 @@ const qvainEnglish = {
     default: 'Error loading dataset',
     render: 'There was an error displaying the dataset',
     component: 'There was an error rendering %(field)s',
+    retry: 'Retry',
   },
   backLink: ' Back to datasets',
   common: {
