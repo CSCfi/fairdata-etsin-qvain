@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.8
+FROM python:3.12
 
 # set work directory
 WORKDIR /etsin_finder
@@ -22,6 +22,6 @@ COPY . ./
 # Make port available
 EXPOSE 5000
 
-ENV PYTHONPATH "/"
+ENV PYTHONPATH="/"
 
 CMD ["python", "etsin_finder/finder.py"]

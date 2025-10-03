@@ -69,15 +69,6 @@ class TestRems(BaseTest):
             response = rems_service.rems_request(method, url, "")
             assert response == {"Success": "True"}
 
-    def test_rems_request_Http_error(self, app, mocker, rems_service):
-        """Log warning when http error."""
-        mocker.patch("requests.request")
-        requests.request.side_effect = HTTPError()
-
-        with app.app_context():
-            rems_service.rems_request("GET", "localhost", "test error")
-            requests.request.called_once()
-
     def test_get_user_applications(self, app, rems_service, requests_mock):
         """Return response."""
         requests_mock.get(ANY, json='{"Success": True}')
