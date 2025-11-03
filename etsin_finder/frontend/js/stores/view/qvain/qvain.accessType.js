@@ -1,4 +1,4 @@
-import { action, makeObservable } from 'mobx'
+import { action, makeObservable, override } from 'mobx'
 import * as yup from 'yup'
 
 import SingleValueField from './qvain.singleValueField'
@@ -43,6 +43,17 @@ class AccessType extends SingleValueField {
     const at = dataset.access_rights?.access_type ? dataset.access_rights?.access_type : undefined
     touch(dataset.access_rights?.access_type)
     this.value = at ? this.Model({ ...at.pref_label }, at.identifier) : this.defaultValue
+  }
+
+  @override
+  set(newValue) {
+    super.set(newValue)
+
+    if (!this.Parent.DataAccess.shouldShowDataAccess(newValue)) {
+      this.Parent.DataAccess.reset()
+    } else if (!this.Parent.DataAccess.shouldShowREMSApprovalType(newValue)) {
+      this.Parent.DataAccess.remsApprovalType.reset()
+    }
   }
 
   toBackend = () => this.value?.url && { identifier: this.value.url }

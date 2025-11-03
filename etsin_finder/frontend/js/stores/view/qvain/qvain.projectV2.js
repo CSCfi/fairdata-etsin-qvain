@@ -342,19 +342,19 @@ class ProjectV2 extends Field {
   }
 
   @computed get isOrgDepartmentVisible() {
-    return !!this.orgInEdit.organization
+    return !!this.orgInEdit?.organization
   }
 
   @computed get isOrgSubdepartmentVisible() {
-    return !!this.orgInEdit.department
+    return !!this.orgInEdit?.department
   }
 
   @computed get isFunderOrgDepartmentVisible() {
-    return !!this.inEdit.funderOrganization?.organization
+    return !!this.inEdit?.funderOrganization?.organization
   }
 
   @computed get isFunderOrgSubdepartmentVisible() {
-    return !!this.inEdit.funderOrganization?.department
+    return !!this.inEdit?.funderOrganization?.department
   }
 
   FunderTypeModel = FunderTypeModel

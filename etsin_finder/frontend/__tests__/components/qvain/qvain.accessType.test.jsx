@@ -2,17 +2,18 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { configure } from 'mobx'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import AccessType from '@/components/qvain/sections/DataOrigin/general/AccessRights/AccessType'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { buildStores } from '@/stores'
-import { onChange } from '@/components/qvain/utils/select'
 
 import { access_types as accessTypes } from '@testdata/metaxv3/refs/access_rights.data'
 import { data_catalog_ida as idaCatalog } from '@testdata/metaxv3/refs/data_catalogs.data'
 import { StoresProvider } from '@/stores/stores'
+import { ThemeProvider } from 'styled-components'
+import etsinTheme from '@/styles/theme'
 
 configure({
   safeDescriptors: false,
@@ -20,14 +21,6 @@ configure({
 
 const mockAdapter = new MockAdapter(axios)
 mockAdapter.onGet().reply(200, accessTypes)
-
-vi.mock('@/components/qvain/utils/select', async () => {
-  const actual = await vi.importActual('@/components/qvain/utils/select')
-  return {
-    ...actual,
-    onChange: vi.fn(() => () => {}),
-  }
-})
 
 describe('Qvain Access Type', () => {
   let Stores, Qvain
@@ -51,9 +44,11 @@ describe('Qvain Access Type', () => {
 
   const renderAccessType = () => {
     render(
-      <StoresProvider store={Stores}>
-        <AccessType />
-      </StoresProvider>
+      <ThemeProvider theme={etsinTheme}>
+        <StoresProvider store={Stores}>
+          <AccessType />
+        </StoresProvider>
+      </ThemeProvider>
     )
   }
 
@@ -141,17 +136,32 @@ describe('Qvain Access Type', () => {
       renderAccessType()
     })
 
-    it('should call onChange', async () => {
-      await userEvent.click(screen.getByLabelText(/Access Type/))
-      await userEvent.click(screen.getAllByRole('option')[0])
-      expect(onChange).toHaveBeenCalled()
-      expect(Qvain.AccessType.setValidationError).toHaveBeenCalledWith(null)
-    })
-
     it('should validate on blur', async () => {
       await userEvent.click(screen.getByLabelText(/Access Type/))
       await userEvent.click(document.body)
       expect(Qvain.AccessType.validate).toHaveBeenCalled()
+    })
+  })
+
+  describe('given AccessType is Permit and Data Access values are set', () => {
+    beforeEach(async () => {
+      Stores.Env.Flags.setFlag('QVAIN.REMS', true)
+      Qvain.AccessType.set({ url: ACCESS_TYPE_URL.PERMIT })
+      Qvain.DataAccess.remsApprovalType.set('automatic')
+      Qvain.DataAccess.applicationInstructions.set('hello application', 'en')
+      Qvain.DataAccess.reviewerInstructions.set('hello reviewer', 'en')
+      Qvain.DataAccess.terms.set('hello user', 'en')
+      renderAccessType()
+    })
+
+    it('should clear Data Access values when access type is changed', async () => {
+      await userEvent.click(screen.getByLabelText(/Access Type/))
+      const accessTypeSelect = screen.getByTestId('accessTypeSelect')
+      await userEvent.click(within(accessTypeSelect).getByRole('option', { name: 'Open' }))
+      expect(Qvain.DataAccess.remsApprovalType.value).toBe(undefined)
+      expect(Qvain.DataAccess.applicationInstructions.value).toEqual({ en: '', fi: '' })
+      expect(Qvain.DataAccess.reviewerInstructions.value).toEqual({ en: '', fi: '' })
+      expect(Qvain.DataAccess.terms.value).toEqual({ en: '', fi: '' })
     })
   })
 })
