@@ -66,6 +66,7 @@ const REMSButton = props => {
       onClick={props.onClick}
       disabled={disabled}
       color={buttonColor}
+      minWidth="10.5em"
       noMargin
     >
       {props.loading ? (

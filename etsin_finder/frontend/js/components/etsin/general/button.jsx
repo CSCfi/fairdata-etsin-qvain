@@ -25,6 +25,7 @@ export const Button = withCustomProps(styled.button).attrs(props => ({
 }))`
   cursor: pointer;
   width: ${props => (props.width ? props.width : '')};
+  min-width: ${props => (props.minWidth ? props.minWidth : '')};
   padding: ${props => (props.noPadding ? 0 : props.padding)};
   margin: ${props => (props.noMargin ? 0 : props.margin)};
   border: ${props => (props.thin ? '1px' : '2px')} solid ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};

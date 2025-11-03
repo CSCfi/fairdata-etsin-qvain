@@ -5,7 +5,7 @@ export const Header = styled.div`
   display: grid;
   align-items: center;
   margin-bottom: 0.5rem;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(30%, 1fr) auto;
   column-gap: 0.5rem;
 `
 

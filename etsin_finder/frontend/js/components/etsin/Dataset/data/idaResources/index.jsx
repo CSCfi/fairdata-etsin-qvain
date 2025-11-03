@@ -8,6 +8,7 @@ import FlaggedComponent from '@/components/general/flaggedComponent'
 import TooltipHover from '@/components/general/tooltipHover'
 import sizeParse from '@/utils/sizeParse'
 import { useStores } from '@/stores/stores'
+import AskForAccess from '@/components/etsin/Dataset/AskForAccess'
 
 import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
 import Info from '../info'
@@ -30,7 +31,7 @@ function IdaResources() {
         isFileMetadataAllowed,
         dataset: { fileset },
         embargoDate,
-        isEmbargoExpired
+        isEmbargoExpired,
       },
       filesProcessor: { Packages },
       fetchPackages,
@@ -93,14 +94,14 @@ function IdaResources() {
     </Translate>
   )
 
-  /*Return the text related to the embargo expiration. The text content 
+  /*Return the text related to the embargo expiration. The text content
   depends on whether the expiration has already occured: */
   const getEmbargoText = () => {
     if (isEmbargoExpired) {
-      return "dataset.embargoDateExpired"
+      return 'dataset.embargoDateExpired'
     }
 
-    return "dataset.embargo_date"
+    return 'dataset.embargo_date'
   }
 
   return (
@@ -112,29 +113,33 @@ function IdaResources() {
           {totalSize ? ` (${sizeParse(totalSize)})` : null}
         </HeaderStats>
 
-        <Translate component={TooltipHover} attributes={{ title: action.tooltip }} showOnClick>
-          <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
-            <HeaderButtonSplit split={moreFunc}>
-              {downloadButton}
-              {moreFunc && (
-                <Translate
-                  component={MoreButton}
-                  color={buttonProps.color}
-                  disabled={!isDownloadPossible}
-                  onClick={moreFunc}
-                  attributes={{ 'aria-label': moreAriaLabel }}
-                />
-              )}
-            </HeaderButtonSplit>
-          </FlaggedComponent>
-          {/* If embargo date has been defined, its future or past expiration 
+        <HeaderButtons>
+          <AskForAccess />
+          <Translate component={TooltipHover} attributes={{ title: action.tooltip }} showOnClick>
+            <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
+              <HeaderButtonSplit split={moreFunc}>
+                {downloadButton}
+                {moreFunc && (
+                  <Translate
+                    component={MoreButton}
+                    color={buttonProps.color}
+                    disabled={!isDownloadPossible}
+                    onClick={moreFunc}
+                    attributes={{ 'aria-label': moreAriaLabel }}
+                  />
+                )}
+              </HeaderButtonSplit>
+            </FlaggedComponent>
+            {/* If embargo date has been defined, its future or past expiration
           is displayed: */}
-          {embargoDate && (
-            <EmbargoDate>
-              <Translate content={getEmbargoText()} />
-              &nbsp; {dateFormat(embargoDate, { shortMonth: true })}
-            </EmbargoDate>)}
-        </Translate>
+            {embargoDate && (
+              <EmbargoDate>
+                <Translate content={getEmbargoText()} />
+                &nbsp; {dateFormat(embargoDate, { shortMonth: true })}
+              </EmbargoDate>
+            )}
+          </Translate>
+        </HeaderButtons>
       </Header>
 
       <ErrorMessage />
@@ -152,6 +157,18 @@ const HeaderButtonSplit = styled(SplitButtonContainer)`
   & > button:last-child {
     margin: 0;
   }
+`
+
+const HeaderButtons = styled.div`
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  // Use both grid rows, align on top
+  grid-row-start: 1;
+  grid-row-end: 3;
+  align-self: flex-start;
 `
 
 const EmbargoDate = styled.span`
