@@ -1,15 +1,3 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
@@ -41,6 +29,11 @@ function AccessRights({ button = false, ...props }) {
   const restrictionGrounds = accessRights?.restriction_grounds
 
   const hasOpenAccess = url === ACCESS_TYPE_URL.OPEN
+
+  const applicationInstructions = getValueTranslation(
+    accessRights.data_access_application_instructions
+  )
+  const terms = getValueTranslation(accessRights.data_access_terms)
 
   const restricted = () => (
     <RestrictedButton>
@@ -84,46 +77,46 @@ function AccessRights({ button = false, ...props }) {
               embargoDate ? <Date>{dateFormat(embargoDate, { shortMonth: true })} </Date> : null
             }
           >
-            {typeDescription && (
-              // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-              <div tabIndex="0">
-                {<Translate component={AccessParagraph} content={typeDescription} />}
-              </div>
-            )}
+            {typeDescription && <Translate component={AccessParagraph} content={typeDescription} />}
 
             {restrictionGrounds?.length > 0 && (
               <>
                 <Translate component="strong" content="dataset.restriction_grounds" />
                 {restrictionGrounds.map(restriction => (
-                  // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                  <div tabIndex="0" key={restriction.url}>
-                    <AccessParagraph
-                      lang={getPreferredLang(restriction.pref_label)}
-                      key={restriction.url}
-                    >
-                      {getValueTranslation(restriction.pref_label)}
-                    </AccessParagraph>
-                  </div>
+                  <AccessParagraph
+                    lang={getPreferredLang(restriction.pref_label)}
+                    key={restriction.url}
+                  >
+                    {getValueTranslation(restriction.pref_label)}
+                  </AccessParagraph>
                 ))}
               </>
             )}
 
             {accessRights.description && (
               <>
-                {
-                  <Translate
-                    component="strong"
-                    content="dataset.access_rights_description.custom"
-                  />
-                }
-                {
-                  // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                  <div tabIndex="0">
-                    <AccessParagraph lang={getPreferredLang(accessRights.description)}>
-                      {getValueTranslation(accessRights.description)}
-                    </AccessParagraph>
-                  </div>
-                }
+                <Translate component="strong" content="dataset.access_rights_description.custom" />
+                <AccessParagraph lang={getPreferredLang(accessRights.description)}>
+                  {getValueTranslation(accessRights.description)}
+                </AccessParagraph>
+              </>
+            )}
+
+            {applicationInstructions && (
+              <>
+                <Translate component="strong" content="dataset.application_instructions" />
+                <AccessParagraph lang={getPreferredLang(applicationInstructions)}>
+                  {getValueTranslation(applicationInstructions)}
+                </AccessParagraph>
+              </>
+            )}
+
+            {terms && (
+              <>
+                <Translate component="strong" content="dataset.data_access_terms" />
+                <AccessParagraph lang={getPreferredLang(terms)}>
+                  {getValueTranslation(terms)}
+                </AccessParagraph>
               </>
             )}
           </DatasetInfoItem>

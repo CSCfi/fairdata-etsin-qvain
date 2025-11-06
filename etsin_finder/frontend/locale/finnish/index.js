@@ -57,6 +57,8 @@ const finnish = {
       restricted: 'Data ei ladattavissa.',
       custom: 'Kuvaus: ',
     },
+    application_instructions: 'Ohjeet luvan pyytämiseen',
+    data_access_terms: 'Aineiston käyttöehdot',
     restriction_grounds: 'Rajoituksen peruste: ',
     access_permission: 'Hae käyttölupaa',
     access_locked: 'Rajattu käyttöoikeus',

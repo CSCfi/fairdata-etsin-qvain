@@ -57,6 +57,8 @@ const english = {
       restricted: 'Data cannot be accessed.',
       custom: 'Description: ',
     },
+    application_instructions: 'Instructions on how to apply for permission',
+    data_access_terms: 'Access policy (terms for data access)',
     restriction_grounds: 'Restriction grounds: ',
     access_permission: 'Ask for access',
     access_locked: 'Restricted Access',
