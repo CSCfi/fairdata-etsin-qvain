@@ -155,7 +155,7 @@ describe('Qvain with new dataset', () => {
     ).toBeInTheDocument()
   })
 
-  it('hides "permit" access type for ATT dataset', async () => {
+  it('shows "permit" access type for ATT dataset', async () => {
     await renderQvain({}, { initialPath: '/dataset' })
     let attButton = screen
       .getByText('Choose "Remote Resources"', { exact: false })
@@ -171,8 +171,8 @@ describe('Qvain with new dataset', () => {
     const accessTypeSelect = screen.getByTestId('accessTypeSelect')
     expect(within(accessTypeSelect).getByRole('option', { name: 'Open' })).toBeInTheDocument()
     expect(
-      within(accessTypeSelect).queryByRole('option', { name: /Requires .*permission/ })
-    ).not.toBeInTheDocument()
+      within(accessTypeSelect).getByRole('option', { name: /Requires .*permission/ })
+    ).toBeInTheDocument()
   })
 })
 

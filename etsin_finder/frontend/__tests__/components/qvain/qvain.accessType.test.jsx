@@ -84,21 +84,6 @@ describe('Qvain Access Type', () => {
     })
   })
 
-  describe('given AccessType is OPEN and catalog has rems_enabled=false ', () => {
-    beforeEach(() => {
-      Stores.Env.Flags.setFlag('QVAIN.REMS', true)
-      Qvain.dataCatalogConfigs[idaCatalog.id].rems_enabled = false
-      Qvain.AccessType.set({ url: ACCESS_TYPE_URL.OPEN })
-      renderAccessType()
-    })
-
-    it('restricts which access types are shown', async () => {
-      const options = await getOptions()
-      expect(options.length).toBe(4)
-      expect(options.filter(opt => opt.includes('permission')).length).toBe(0)
-    })
-  })
-
   describe('given AccessType is Permit but QVAIN.REMS is false', () => {
     beforeEach(async () => {
       Stores.Env.Flags.setFlag('QVAIN.REMS', false)

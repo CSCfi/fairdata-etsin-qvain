@@ -273,26 +273,25 @@ class Qvain extends Resources {
 
   @action.bound async ensureBasicDataCatalogs() {
     try {
-
       // Ensures IDA and ATT catalogs have been loaded to dataCatalogConfigs
       if (!this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
-      return
-    }
-    const promises = []
-    const catalogIds = [DATA_CATALOG_IDENTIFIER.IDA, DATA_CATALOG_IDENTIFIER.ATT]
-    for (const catalogId of catalogIds) {
-      if (!this.dataCatalogConfigs[catalogId]) {
-        promises.push(this.client.get(this.Env.metaxV3Url('dataCatalog', catalogId)))
+        return
       }
-    }
+      const promises = []
+      const catalogIds = [DATA_CATALOG_IDENTIFIER.IDA, DATA_CATALOG_IDENTIFIER.ATT]
+      for (const catalogId of catalogIds) {
+        if (!this.dataCatalogConfigs[catalogId]) {
+          promises.push(this.client.get(this.Env.metaxV3Url('dataCatalog', catalogId)))
+        }
+      }
 
-    const catalogs = await Promise.all(promises)
-    runInAction(() => {
-      for (const catalog of catalogs) {
-        const data = catalog.data
-        this.dataCatalogConfigs[data.id] = data
-      }
-    })
+      const catalogs = await Promise.all(promises)
+      runInAction(() => {
+        for (const catalog of catalogs) {
+          const data = catalog.data
+          this.dataCatalogConfigs[data.id] = data
+        }
+      })
     } catch (error) {
       console.error(`Error loading data catalogs:`, error)
       runInAction(() => {

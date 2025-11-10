@@ -28,14 +28,15 @@ const AccessType = () => {
 
   const { lang, translate } = Stores.Locale
   const { shouldShowDataAccess } = Stores.Qvain.DataAccess
-  const { dataCatalog, AccessType, original, isREMSAllowed } = Stores.Qvain
+  const { dataCatalog, AccessType, original } = Stores.Qvain
   const { value, Model, validationError, readonly, validate, set, setValidationError } = AccessType
 
   let options = allOptions
+  const remsEnabled = Stores.Env.Flags.flagEnabled('QVAIN.REMS')
   const permitExists =
     value?.url == ACCESS_TYPE_URL.PERMIT ||
     original?.research_dataset?.access_type?.url == ACCESS_TYPE_URL.PERMIT
-  if (!(isREMSAllowed || permitExists)) {
+  if (!(remsEnabled || permitExists)) {
     options = options.filter(ref => ref.url !== ACCESS_TYPE_URL.PERMIT)
   }
 
