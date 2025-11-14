@@ -49,7 +49,7 @@ const getStores = () => {
 
 const renderEtsin = async (
   dataset = dataset_open_a_catalog_expanded,
-  { userLogged = false, tab = undefined } = {}
+  { userLogged = false, tab = undefined, beforeRender = () => {} } = {}
 ) => {
   mockAdapter.reset()
   mockAdapter
@@ -86,6 +86,8 @@ const renderEtsin = async (
   if (tab) {
     initialEntries[0] += `/${tab}`
   }
+
+  beforeRender()
 
   render(
     <ThemeProvider theme={etsinTheme}>
@@ -244,6 +246,51 @@ describe('Etsin dataset page', () => {
     expect(contactRequest.url).toBe(
       'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0/contact'
     )
+  })
+
+  test('renders closed REMS application', async () => {
+    // Mock responses for closed application
+    const closedApplication = {
+      ...approvedApplication,
+      'application/state': 'application.state/closed',
+      'application/events': [
+        ...approvedApplication['application/events'],
+        {
+          'event/id': 966,
+          'event/type': 'application.event/closed',
+          'event/time': '2025-11-14T10:55:46.827Z',
+          'event/actor': 'metax',
+          'application/id': 281,
+          'event/actor-attributes': {
+            userid: 'metax',
+            name: 'Metax',
+          },
+          'application/comment': 'Dataset license has changed.',
+          'event/visibility': 'visibility/public',
+        },
+      ],
+    }
+
+    const beforeRender = () => {
+      mockAdapter
+        .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-applications`)
+        .reply(200, [closedApplication])
+      mockAdapter
+        .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-applications/123`)
+        .reply(200, closedApplication)
+    }
+
+    await renderEtsin(dataset_rems, { userLogged: true, beforeRender })
+    await userEvent.click(screen.getByTestId('rems-button'))
+    const dialog = screen.getByRole('dialog')
+
+    // Open closed application
+    const tab = within(dialog).getByRole('tab', { name: 'Application 2025/17' })
+    await userEvent.click(tab)
+    expect(tab.getAttribute('aria-selected')).toBe('true')
+    expect(
+      within(dialog).getByText('cancelled due to changes in license', { exact: false })
+    ).toBeInTheDocument()
   })
 
   test('renders REMS error message', async () => {

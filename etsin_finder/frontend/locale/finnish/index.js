@@ -28,6 +28,13 @@ const finnish = {
         modified: 'Muokattu',
       },
       applicationCreated: 'Hakemus luotu %(created)s',
+      submittedClosedDueToLicenseChange:
+        'Hakemus peruutettiin aineiston lisenssin tai ehtojen muutoksen johdosta.',
+      approvedClosedDueToLicenseChange:
+        'Aiemmin myönnetty pääsyoikeus dataan peruutettiin aineiston ' +
+        'lisenssin tai ehtojen muutoksen johdosta.',
+      closedDueToAccessTypeChange:
+        'Hakemus peruutettiin aineiston käyttöoikeuksien muutoksen johdosta.',
     },
     access_states: {
       require_login: 'Käyttöluvan hakeminen vaatii sisään kirjautumisen',

@@ -119,6 +119,29 @@ class EtsinDatasetRems {
     }
   }
 
+  getClosedComment(application) {
+    const events = application['application/events'] || []
+    for (const event of events) {
+      if (event['event/type'] === 'application.event/closed') {
+        return event['application/comment'] || ''
+      }
+    }
+
+    return ''
+  }
+
+  applicationWasApproved(application) {
+    // Return true if application was approved at some point (might no longer be approved).
+    const events = application['application/events'] || []
+    for (const event of events) {
+      if (event['event/type'] === 'application.event/approved') {
+        return true
+      }
+    }
+
+    return false
+  }
+
   @computed get isLoadingApplicationBase() {
     return this.promiseManager.count('application-base') > 0
   }

@@ -13,7 +13,7 @@ const REMSApplication = ({ application }) => {
     Locale: { dateFormat, translate },
     Etsin: {
       EtsinDataset: {
-        rems: { fetchApplicationDetails },
+        rems: { fetchApplicationDetails, getClosedComment, applicationWasApproved },
       },
     },
   } = useStores()
@@ -35,6 +35,17 @@ const REMSApplication = ({ application }) => {
     )
   }
 
+  let closedComment = getClosedComment(application)
+  if (closedComment === 'Dataset license has changed.') {
+    if (applicationWasApproved(application)) {
+      closedComment = translate('dataset.access_modal.approvedClosedDueToLicenseChange')
+    } else {
+      closedComment = translate('dataset.access_modal.submittedClosedDueToLicenseChange')
+    }
+  } else if (closedComment === 'Dataset is no longer in REMS.') {
+    closedComment = translate('dataset.access_modal.closedDueToAccessTypeChange')
+  }
+
   const created = dateFormat(application['application/created'], { format: 'date' })
   return (
     <>
@@ -42,10 +53,22 @@ const REMSApplication = ({ application }) => {
         <h1>{translate('dataset.access_modal.applicationCreated', { created })}</h1>
         <ApplicationState application={application} />
       </TitleRow>
+      {closedComment && <ClosedComment>{closedComment}</ClosedComment>}
       {content}
     </>
   )
 }
+
+const ClosedComment = styled.div`
+  background-color: ${props => props.theme.color.gray};
+  text-align: center;
+  width: 100%;
+  color: white;
+  z-index: 2;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  position: relative;
+  padding: 0.25em 1em;
+`
 
 REMSApplication.propTypes = {
   application: PropTypes.object.isRequired,

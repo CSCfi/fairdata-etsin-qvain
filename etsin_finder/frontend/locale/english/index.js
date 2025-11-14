@@ -28,6 +28,13 @@ const english = {
         modified: 'Last modified',
       },
       applicationCreated: 'Application created on %(created)s',
+      submittedClosedDueToLicenseChange:
+        'The application was cancelled due to changes in license / terms for data access.',
+      approvedClosedDueToLicenseChange:
+        'The previously granted access to data was cancelled due to changes ' +
+        'in license / terms for data access.',
+      closedDueToAccessTypeChange:
+        'The application was cancelled due to changes in dataset access rights.',
     },
     access_states: {
       require_login: 'Login to apply for access',
