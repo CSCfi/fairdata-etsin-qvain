@@ -14,17 +14,12 @@ class QvainFilesV3 extends QvainFilesMixin(FilesBaseV3) {
 
   @action async checkHasPublishedFiles(dataset) {
     // Determine if dataset or its draft_of has been published with files.
-    const draftOf = dataset.draft_of?.id
+    const draftOf = dataset.draft_of
     let publishedDataset
     if (dataset.state === 'published') {
       publishedDataset = dataset
     } else if (draftOf) {
-      await this.client.abort('check-has-published-files') // abort previous request if any
-      const { data } = await this.client.get(this.Env.metaxV3Url('dataset', draftOf), {
-        params: { fields: 'id,title,fileset,deprecated' },
-        tag: 'check-has-published-files',
-      })
-      publishedDataset = data
+      publishedDataset = draftOf
     }
 
     let hasPublishedFiles = false

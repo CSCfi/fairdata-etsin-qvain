@@ -4,10 +4,14 @@ import PropTypes, { instanceOf } from 'prop-types'
 import { observer } from 'mobx-react'
 import { useNavigate, useLocation } from 'react-router'
 
+import Modal from '@/components/general/modal'
+
 import { useStores } from '@/stores/stores'
 import TooltipHoverOnSave from '@/components/qvain/general/header/tooltipHoverOnSave'
 
 import { SaveButton, PublishButton } from './submitButton.styled'
+import { DangerButton, TableButton } from '../../general/buttons'
+import Translate from '@/utils/Translate'
 
 export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtonsDisabled }) => {
   const {
@@ -23,6 +27,9 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
       },
       original,
       readonly,
+      hasApprovedREMSApplications,
+      publishWillChangeREMSLicenses,
+      remsApplicationCounts,
     },
     Env: { getQvainUrl },
     QvainDatasets,
@@ -36,6 +43,9 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
 
   const [draftButtonHover, setDraftButtonHover] = useState(false)
   const [publishButtonHover, setPublishButtonHover] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+
+  const needConfirm = hasApprovedREMSApplications && publishWillChangeREMSLicenses
 
   useEffect(() => {
     prevalidate()
@@ -70,7 +80,13 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
   }
 
   const handlePublishClick = () => {
-    submitPublish(goToDatasetsCallBack)
+    if (needConfirm) {
+      // Change in REMS licenses or terms will invalidate
+      // existing applications when the dataset is published
+      setShowConfirm(true)
+    } else {
+      submitPublish(goToDatasetsCallBack)
+    }
 
     if (original?.identifier) {
       Matomo.recordEvent(`PUBLISH / ${original.identifier}`)
@@ -78,6 +94,8 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
       Matomo.recordEvent('PUBLISH')
     }
   }
+
+  const approvedCount = remsApplicationCounts?.approved || 0
 
   return (
     <div ref={submitButtonsRef}>
@@ -125,9 +143,37 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
           </PublishButton>
         </WrapperDivForHovering>
       </TooltipHoverOnSave>
+
+      <Modal
+        contentLabel="confirm-publish"
+        isOpen={showConfirm}
+        onRequestClose={() => setShowConfirm(false)}
+      >
+        <Translate
+          component="p"
+          content="qvain.submitConfirm.remsLicenseChange"
+          with={{ count: approvedCount }}
+          unsafe
+        />
+
+        <Buttons>
+          <TableButton onClick={() => setShowConfirm(false)}>
+            {translate('qvain.common.cancel')}
+          </TableButton>
+          <DangerButton onClick={() => submitPublish(goToDatasetsCallBack)}>
+            {translate('qvain.submit')}
+          </DangerButton>
+        </Buttons>
+      </Modal>
     </div>
   )
 }
+
+const Buttons = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 SubmitButtons.propTypes = {
   submitButtonsRef: PropTypes.shape({ current: instanceOf(Element) }),

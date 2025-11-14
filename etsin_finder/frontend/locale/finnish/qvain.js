@@ -36,6 +36,11 @@ const qvainFinnish = {
     editFilesSuccess: 'Uusi aineistoversio luotu!',
     editMetadataSuccess: 'Aineiston päivitys onnistui!',
   },
+  submitConfirm: {
+    remsLicenseChange: `HUOM! Muutos <em>lisenssiin</em> tai <em>dataluvituksen myöntämisehtoihin</em>
+    mitätöi jo myönnetyt datan pääsyoikeudet (%(count)s kpl). Oletko varma, että haluat muuttaa niitä?`,
+
+  },
   pasInfo: {
     stateInfo: 'Tämä on PAS-aineisto. Aineiston tila on "%(state)s: %(description)s".',
     editable: 'Voit muuttaa kuvauksia muttet lisätä tai poistaa tiedostoja.',

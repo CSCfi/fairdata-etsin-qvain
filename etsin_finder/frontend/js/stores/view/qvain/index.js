@@ -1,6 +1,8 @@
+import { isEqual } from 'lodash-es'
 import { observable, action, computed, makeObservable, toJS, runInAction } from 'mobx'
 import { cumulativeStateSchema, useDoiSchema, dataCatalogSchema } from './qvain.dataCatalog.schemas'
 import {
+  ACCESS_TYPE_URL,
   CUMULATIVE_STATE,
   DATA_CATALOG_IDENTIFIER,
   REMOTE_RESOURCES_DATA_CATALOGS,
@@ -21,6 +23,7 @@ import remapActorIdentifiers from '@/utils/remapActorIdentifiers'
 import Modals from './structural/qvain.modal.v3'
 import AbortClient, { ignoreAbort, isAbort } from '@/utils/AbortClient'
 import urls from '@/utils/urls'
+import removeEmpty from '@/utils/removeEmpty'
 
 class Qvain extends Resources {
   constructor(Env, Auth, Locale, OrgReferences) {
@@ -56,6 +59,8 @@ class Qvain extends Resources {
 
   @observable original = undefined // used if editing, otherwise undefined
 
+  @observable draftOfDataset = undefined // published revision of draft dataset
+
   @observable changed = false // has dataset been changed
 
   @observable deprecated = false
@@ -72,6 +77,7 @@ class Qvain extends Resources {
   resetQvainStore = () => {
     this.client.abort()
     this.original = undefined
+    this.draftOfDataset = undefined
     this.unsupported = null
     this.editorInitialized = false
     this.basicDataCatalogsError = undefined
@@ -105,6 +111,8 @@ class Qvain extends Resources {
 
     this.Submit.reset()
     this.Sections.collapseAll()
+
+    this.remsApplicationCounts = undefined
   }
 
   @action.bound setEditorInitialized(val) {
@@ -145,6 +153,8 @@ class Qvain extends Resources {
 
   @observable provenancesWithNonExistingActors = []
 
+  @observable remsApplicationCounts = undefined
+
   client = new AbortClient()
 
   @observable datasetLoading = false
@@ -162,19 +172,31 @@ class Qvain extends Resources {
   }
 
   @action.bound
-  async fetchDataset(identifier, { isTemplate = false } = {}) {
+  async fetchDataset(identifier, { isTemplate = false, draftOf = null } = {}) {
     this.client.abort()
     const { metaxV3Url } = this.Env
     this.datasetLoading = true
     this.datasetError = null
+    let _draftOf = draftOf
 
     try {
       let result
-      let nextDraft
+      let nextDraftIdentifier, draftOfIdentifier
       if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
         const url = metaxV3Url('dataset', identifier)
         result = await this.client.get(url, { params: { expand_catalog: true } })
-        nextDraft = result.data.next_draft?.id
+        nextDraftIdentifier = result.data.next_draft?.id
+        draftOfIdentifier = result.data.draft_of?.id
+
+        // We need some fields that are not included in draft_of field so
+        // we fetch the full draft_of dataset if available.
+        if (draftOfIdentifier && !_draftOf) {
+          const draftOfUrl = metaxV3Url('dataset', draftOfIdentifier)
+          const draftOfResult = await this.client.get(draftOfUrl, {
+            params: { fields: 'id,title,fileset,deprecated,access_rights' },
+          })
+          _draftOf = draftOfResult.data
+        }
 
         // Store catalog object for later use
         const catalog = result.data.data_catalog
@@ -184,19 +206,19 @@ class Qvain extends Resources {
       } else {
         const url = urls.qvain.dataset(identifier)
         result = await this.client.get(url)
-        nextDraft = result.data.next_draft?.identifier
+        nextDraftIdentifier = result.data.next_draft?.identifier
       }
       this.resetQvainStore()
 
-      // Open draft instead if it exists
-      if (nextDraft && !isTemplate) {
-        return this.fetchDataset(nextDraft)
+      // Open draft instead if it exists, pass the published revision as draftOf
+      if (nextDraftIdentifier && !isTemplate) {
+        return this.fetchDataset(nextDraftIdentifier, { draftOf: result.data })
       }
 
       if (isTemplate) {
         this.resetWithTemplate(result.data)
       } else {
-        ignoreAbort(() => this.editDataset(result.data))
+        ignoreAbort(() => this.editDataset(result.data, { draftOf: _draftOf }))
       }
       this.setDatasetError(null)
     } catch (e) {
@@ -426,10 +448,73 @@ class Qvain extends Resources {
     }
 
     // Load files
-    await this.Files.openDataset(dataset)
+    await Promise.all([this.Files.openDataset(dataset), this.fetchREMSApplicationCounts()])
   }
 
-  @action editDataset = async dataset => {
+  @computed get publishedDataset() {
+    if (this.original?.state === 'published') {
+      return this.original
+    } else if (this.original?.draft_of?.research_dataset) {
+      return this.original.draft_of
+    }
+    return undefined
+  }
+
+  @action.bound async fetchREMSApplicationCounts() {
+    // Fetch REMS application counts when dataset has been published with "permit" access type
+    const publishedDataset = this.publishedDataset
+    if (
+      !(
+        this.isREMSAllowed &&
+        publishedDataset?.research_dataset?.access_rights?.access_type?.identifier ==
+          ACCESS_TYPE_URL.PERMIT
+      )
+    ) {
+      return
+    }
+    const url = this.Env.metaxV3Url('datasetREMSApplicationCounts', publishedDataset.id)
+    const res = await this.client.get(url)
+    runInAction(() => {
+      this.remsApplicationCounts = res.data
+    })
+  }
+
+  @computed get publishWillChangeREMSLicenses() {
+    const publishedDataset = this.publishedDataset
+    if (!publishedDataset) {
+      return false
+    }
+
+    // Check if new access type is not "permit"
+    if (this.AccessType.value?.url != ACCESS_TYPE_URL.PERMIT) {
+      return true
+    }
+
+    // Check if terms have changed
+    const normalize = val => (val ? removeEmpty(toJS(val)) : null)
+    const rights = normalize(publishedDataset.research_dataset.access_rights)
+    if (!isEqual(normalize(this.DataAccess.terms.value), rights.data_access_terms)) {
+      return true
+    }
+
+    // Check if licenses have changed
+    // Currently checks only urls, not additional fields not supported by Qvain
+    const oldLicenses = rights.license?.map(l => l.license || l.identifier) || []
+    oldLicenses.sort()
+    const newLicenses = this.Licenses.storage.map(l => l.otherLicenseUrl || l.identifier)
+    newLicenses.sort()
+    if (!isEqual(newLicenses, oldLicenses)) {
+      return true
+    }
+
+    return false
+  }
+
+  @computed get hasApprovedREMSApplications() {
+    return this.remsApplicationCounts?.approved > 0
+  }
+
+  @action editDataset = async (dataset, { draftOf = undefined } = {}) => {
     this.resetQvainStore()
     this.Submit.reset()
     let v2Dataset = dataset
@@ -439,6 +524,11 @@ class Qvain extends Resources {
         dataset.access_rights.show_file_metadata !== null
           ? dataset.access_rights.show_file_metadata
           : false
+
+      // Assign draftOf dataset to dataset.draft_of
+      if (draftOf) {
+        v2Dataset.draft_of = this.Adapter.convertV3ToV2(draftOf)
+      }
     }
     this.setChanged(false)
     this.original = { ...v2Dataset }

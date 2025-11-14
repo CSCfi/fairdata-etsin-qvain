@@ -70,6 +70,8 @@ export default {
       `${metaxV3}/v3/datasets/${dataset}/rems-applications`,
     datasetREMSApplicationBase: (metaxV3, dataset) =>
       `${metaxV3}/v3/datasets/${dataset}/rems-application-base`,
+    datasetREMSApplicationCounts: (metaxV3, dataset) =>
+      `${metaxV3}/v3/datasets/${dataset}/rems-application-counts`,
     download: {
       packages: () => '/api/v3/download/requests',
       authorize: () => '/api/v3/download/authorize',

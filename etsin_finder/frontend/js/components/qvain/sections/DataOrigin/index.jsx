@@ -16,7 +16,6 @@ const DataOrigin = () => {
   return (
     <Section sectionName="DataOrigin">
       <DataCatalog />
-
       {dataCatalog === DATA_CATALOG_IDENTIFIER.IDA && <IdaCatalog />}
       {dataCatalog === DATA_CATALOG_IDENTIFIER.ATT && <AttCatalog />}
       {isPas && <PasCatalog />}

@@ -35,6 +35,11 @@ const qvainEnglish = {
     editFilesSuccess: 'New dataset version has been created!',
     editMetadataSuccess: 'Dataset successfully updated!',
   },
+  submitConfirm: {
+    remsLicenseChange:
+      'Note! Changing either <em>License</em> or <em>Terms for Data Access</em> will invalidate ' +
+      'the already granted data access rights (%(count)s pcs). Are you sure you want to change them?',
+  },
   pasInfo: {
     stateInfo: 'This is a DPS dataset. The state of the dataset is "%(state)s: %(description)s".',
     editable: 'You can edit metadata but cannot add or remove any files.',

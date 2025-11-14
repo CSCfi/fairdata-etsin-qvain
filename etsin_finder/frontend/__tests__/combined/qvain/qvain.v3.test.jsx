@@ -785,4 +785,97 @@ describe('Qvain with an opened dataset', () => {
       })
     )
   })
+
+  it('publish needs confirmation when terms change closes approved applications', async () => {
+    mockAdapter // mock application counts for draft_of dataset
+      .onGet(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-application-counts`)
+      .reply(200, { approved: 12, submitted: 1 }) // has approved applications
+
+    await renderQvain(
+      {
+        access_rights: {
+          ...dataset.access_rights,
+          access_type: access_type_permit,
+          restriction_grounds: [restriction_grounds_research],
+          rems_approval_type: 'automatic',
+          data_access_application_instructions: { en: 'how to apply', fi: 'näin haet' },
+          data_access_terms: { en: 'terms' },
+          data_access_reviewer_instructions: { en: 'instructions' },
+        },
+      },
+      { initialPath: '/dataset/linked-draft-id' }
+    )
+
+    // Test text input for data access fields
+    const fields = screen.getByTestId('data-access-fields')
+    const termsInput = within(fields).getByLabelText('terms for data access', { exact: false })
+    await userEvent.type(termsInput, ', more terms')
+
+    const submitButton = screen.getByRole('button', { name: 'Save and Publish' })
+    await userEvent.click(submitButton)
+
+    // Dataset changes are not published yet, show confirmation dialog instead
+    expect(mockAdapter.history.patch).toHaveLength(0)
+    const modal = screen.getByRole('dialog')
+    within(modal).getByText('invalidate the already granted data access rights (12 pcs)', {
+      exact: false,
+    })
+
+    // Close dialog and cancel change in terms
+    const cancel = within(modal).getByRole('button', { name: 'Cancel' })
+    await userEvent.click(cancel)
+    await userEvent.clear(termsInput)
+    await userEvent.type(termsInput, 'terms')
+
+    // Check values get submitted
+    await userEvent.click(submitButton) // should submit data to metax
+    const submitRights = JSON.parse(mockAdapter.history.patch[0].data).access_rights
+    expect(submitRights).toEqual(
+      expect.objectContaining({
+        rems_approval_type: 'automatic',
+        data_access_application_instructions: { en: 'how to apply', fi: 'näin haet' },
+        data_access_terms: { en: 'terms' },
+        data_access_reviewer_instructions: { en: 'instructions' },
+      })
+    )
+  })
+
+  it('does not need confirmation for publishing terms change with no approved applications', async () => {
+    mockAdapter // mock application counts for draft_of dataset
+      .onGet(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-application-counts`)
+      .reply(200, { approved: 0, submitted: 1 }) // no approved applications
+
+    await renderQvain(
+      {
+        access_rights: {
+          ...dataset.access_rights,
+          access_type: access_type_permit,
+          restriction_grounds: [restriction_grounds_research],
+          rems_approval_type: 'automatic',
+          data_access_application_instructions: { en: 'how to apply', fi: 'näin haet' },
+          data_access_terms: { en: 'terms' },
+          data_access_reviewer_instructions: { en: 'instructions' },
+        },
+      },
+      { initialPath: '/dataset/linked-draft-id' }
+    )
+
+    // Test text input for data access fields
+    const fields = screen.getByTestId('data-access-fields')
+    const termsInput = within(fields).getByLabelText('terms for data access', { exact: false })
+    await userEvent.type(termsInput, ', more terms')
+
+    // Check values get submitted
+    const submitButton = screen.getByRole('button', { name: 'Save and Publish' })
+    await userEvent.click(submitButton) // should submit data to metax
+    const submitRights = JSON.parse(mockAdapter.history.patch[0].data).access_rights
+    expect(submitRights).toEqual(
+      expect.objectContaining({
+        rems_approval_type: 'automatic',
+        data_access_application_instructions: { en: 'how to apply', fi: 'näin haet' },
+        data_access_terms: { en: 'terms, more terms' },
+        data_access_reviewer_instructions: { en: 'instructions' },
+      })
+    )
+  })
 })
