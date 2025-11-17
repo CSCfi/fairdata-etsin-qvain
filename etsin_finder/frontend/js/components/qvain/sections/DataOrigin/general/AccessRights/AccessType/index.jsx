@@ -17,7 +17,6 @@ import RestrictionGrounds from './RestrictionGrounds'
 import EmbargoExpires from './EmbargoExpires'
 import DataAccess from './DataAccess'
 import useReferenceData from '@/utils/useReferenceData'
-import ShowDataDetails from './ShowDataDetails'
 
 const AccessType = () => {
   const Stores = useStores()
@@ -41,7 +40,6 @@ const AccessType = () => {
   }
 
   const isRemote = dataCatalog === DATA_CATALOG_IDENTIFIER.ATT
-  const isIDA = dataCatalog === DATA_CATALOG_IDENTIFIER.IDA
 
   let permitInfo = null
   if (value?.url === ACCESS_TYPE_URL.PERMIT && !isRemote) {
@@ -85,7 +83,6 @@ const AccessType = () => {
       <ValidationError>{validationError}</ValidationError>
       {value?.url !== ACCESS_TYPE_URL.OPEN && (
         <>
-          {isIDA && <ShowDataDetails />}
           <Divider />
           {value?.url === ACCESS_TYPE_URL.EMBARGO && <EmbargoExpires />}
           {value.url !== ACCESS_TYPE_URL.OPEN ? <RestrictionGrounds /> : null}

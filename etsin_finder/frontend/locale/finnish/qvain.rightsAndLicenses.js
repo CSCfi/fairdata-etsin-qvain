@@ -13,7 +13,7 @@ const rightsAndLicenses = {
     Jos valitset vaihtoehdon "Embargo", määrittele myös embargon päättymisajankohta.</p>`,
     placeholder: 'Valitse vaihtoehto',
     permitInfo:
-      'Aineiston omistaja (alkuperäinen kuvailun tekijä) pystyy oletuksena hyväksymään aineiston datan käyttöön liittyvät käyttölupahakemukset. Käyttölupatoimintoa kehitetään, ja jossain vaiheessa tullaan lisäämään mahdollisuus myös muiden ko. organisaation edustajien päästä, joko omistajan lisäksi tai sijaan, hyväksymään käyttölupahakemuksia. Valitsemalla pääsyoikeudeksi "Vaatii luvan hakemista" / "Requires permission" käyttäjä sitoutuu näihin muutoksiin.',
+      'Organisaation nimeämä taho käsittelee aineiston datan käyttöön liittyvät käyttölupahakemukset. Voit valita myös automaattisen hyväksynnän.',
     showDataDetailsInfo:
       'Datan metatiedot (kansiorakenne, tiedostonimet ja muu tiedostometatieto) ovat oletuksena piilotettu, kun pääsyoikeutta aineistoon on rajoitettu. Valitse, haluatko näyttää vai piilottaa datan metatiedot julkaistussa aineistossa. Huom: Pääsy dataan pysyy rajoitettuna.',
     showDataDetails: {
@@ -51,7 +51,7 @@ const rightsAndLicenses = {
     title: 'Käyttöoikeuksien kuvaus',
   },
   dataAccess: {
-    title: 'Aineiston luvitus',
+    title: 'Aineiston luvituksen ohjeet ja ehdot',
     applicationInstructions: 'Ohjeet luvan pyytämiseen',
     reviewerInstructions: 'Ohjeet luvan antamiseen luvittajille (ei näy käyttäjille)',
     terms: 'Myöntämisehdot (millä perustein luvitetaan)',
@@ -62,10 +62,11 @@ const rightsAndLicenses = {
       lisenssin ja myöntämisehdot.`,
       manual: 'Manuaalinen',
     },
-    remoteResourcesInfo: `Huom! Ulkoista datalähdettä käyttävien aineistojen
-    käyttölupien hakeminen ja myöntäminen tapahtuu Fairdata-palveluiden ulkopuolella.
-    Valittu pääsyoikeus näytetään käyttäjille mutta se ei vaikuta ulkoisen
-    datan saatavuuteen Etsimessä.`,
+    remoteResourcesInfo:
+      'Aineiston käyttöoikeuksien hyväksyntäprosessi ' +
+      'hoidetaan Fairdata-palveluiden ulkopuolella. ' +
+      'Täällä määritetty pääsyoikeustyyppi ja mahdolliset ohjeet ' +
+      'näytetään Etsimessä vain tiedoksi.',
   },
 }
 

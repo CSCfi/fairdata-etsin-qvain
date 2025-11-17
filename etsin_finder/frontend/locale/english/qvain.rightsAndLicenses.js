@@ -12,7 +12,8 @@ const rightsAndLicenses = {
     please also specify the embargo expiration date (an "Embargo expiration date" field will appear).</p>`,
     placeholder: 'Select option',
     permitInfo:
-      'By default the dataset owner (the original describer) can approve the applications. In addition, functionality is under development to allow chosen representatives (only or in addition to the owner) of the dataset\'s organization to make the approvals. By using the access type "Requires permission" the dataset owner agrees to these upcoming changes.',
+      'Designated party in the organization handles the applications related to ' +
+      'the data access. You can also select automatic approval.',
     showDataDetailsInfo:
       'Data details (folder structure, file names, and other file metadata) are hidden by default when access to data is restricted. To show or hide data details in the published dataset, select the appropriate option below. Note: Access to actual data remains restricted.',
     showDataDetails: {
@@ -51,7 +52,7 @@ const rightsAndLicenses = {
     title: 'Access rights description',
   },
   dataAccess: {
-    title: 'Data access',
+    title: 'Data Access instructions and terms',
     applicationInstructions: 'Instructions on how to apply for permission',
     reviewerInstructions: 'Instructions for approvers (not shown to users)',
     terms: 'Access policy (terms for data access)',
@@ -62,10 +63,11 @@ const rightsAndLicenses = {
         'Automatic. Users get permission to access the data after accepting the licenses and the access policy.',
       manual: 'Manual.',
     },
-    remoteResourcesInfo: `Note! For Remote Resources the applying and granting the
-    permission is done outside of Fairdata services.
-    The selected Access Type is shown to the users but does not affect
-    access to external data in Etsin.`,
+    remoteResourcesInfo:
+      'The process for obtaining data access approvals ' +
+      'is managed outside of Fairdata Services. ' +
+      'The Access Type and any instructions provided here are displayed ' +
+      'in Etsin for informational purposes only.',
   },
 }
 
