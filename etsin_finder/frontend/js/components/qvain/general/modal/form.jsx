@@ -34,10 +34,11 @@ export const CustomSelect = styled(Select)`
   margin-bottom: 1.25rem;
 `
 
-export const Label = styled.label`
+export const Label = withCustomProps(styled.label)`
   margin-right: auto;
   padding-left: 4px;
   display: block;
+  color: ${props => (props.disabled ? 'grey' : 'inherit')};
 `
 
 export const NestedLabel = styled.label`

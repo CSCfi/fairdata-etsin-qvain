@@ -32,8 +32,8 @@ const DataAccess = () => {
 
   // Expand if some field has value
   const hasValue = () =>
-    [applicationInstructions, reviewerInstructions, terms].some(v => v.value.fi || v.value.en) ||
-    remsApprovalType.value
+    Boolean([applicationInstructions, reviewerInstructions, terms].some(v => v.value.fi || v.value.en) ||
+      remsApprovalType.value)
   const [isExpanded, setIsExpanded] = useState(hasValue)
 
   if (!flagEnabled('QVAIN.REMS')) {

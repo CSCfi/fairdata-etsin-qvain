@@ -143,7 +143,7 @@ describe('Qvain Access Type', () => {
       await userEvent.click(screen.getByLabelText(/Access Type/))
       const accessTypeSelect = screen.getByTestId('accessTypeSelect')
       await userEvent.click(within(accessTypeSelect).getByRole('option', { name: 'Open' }))
-      expect(Qvain.DataAccess.remsApprovalType.value).toBe(undefined)
+      expect(Qvain.DataAccess.remsApprovalType.value).toBe("automatic") // default value
       expect(Qvain.DataAccess.applicationInstructions.value).toEqual({ en: '', fi: '' })
       expect(Qvain.DataAccess.reviewerInstructions.value).toEqual({ en: '', fi: '' })
       expect(Qvain.DataAccess.terms.value).toEqual({ en: '', fi: '' })

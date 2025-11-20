@@ -4,6 +4,7 @@ import SingleValueField from './qvain.singleValueField'
 import MultiLanguageField from './qvain.multiLanguageField'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import removeEmpty from '@/utils/removeEmpty'
+import { runInAction } from 'mobx'
 
 export const dataAccessMultilanguageSchema = yup.object().shape({
   fi: yup
@@ -33,6 +34,8 @@ class DataAccess {
 
   reset() {
     this.remsApprovalType.reset()
+    // Set value directly instead of using remsApprovalType.set() to avoid triggering Qvain.changed
+    runInAction(() => (this.remsApprovalType.value = 'automatic'))
     this.applicationInstructions.reset()
     this.terms.reset()
     this.reviewerInstructions.reset()
@@ -74,7 +77,9 @@ class DataAccess {
 
   toBackend = () =>
     removeEmpty({
-      rems_approval_type: this.remsApprovalType.value,
+      rems_approval_type: this.shouldShowREMSApprovalType(this.Parent.AccessType.value)
+        ? this.remsApprovalType.value
+        : null,
       data_access_application_instructions: this.applicationInstructions.value,
       data_access_terms: this.terms.value,
       data_access_reviewer_instructions: this.reviewerInstructions.value,

@@ -57,10 +57,12 @@ const rightsAndLicenses = {
     terms: 'Myöntämisehdot (millä perustein luvitetaan)',
     remsApprovalType: {
       title: 'Luvan tyyppi',
-      disabled: 'Ei käytössä. Käyttäjät eivät voi hakea lupaa aineiston dataan.',
-      automatic: `Automaattinen. Käyttäjät saavat pääsyn aineiston dataan kun ovat hyväksyneet
-      lisenssin ja myöntämisehdot.`,
-      manual: 'Manuaalinen',
+      manual:
+        'Data Access Committee (DAC). Käyttäjä voi tehdä hakemuksen ' +
+        'saadakseen pääsyn aineiston dataan, (EI VIELÄ KÄYTÖSSÄ).',
+      automatic:
+        'Automaattinen. Käyttäjät saavat automaattisesti pääsyn aineiston ' +
+        'dataan kun ovat hyväksyneet lisenssin ja myöntämisehdot.',
     },
     remoteResourcesInfo:
       'Aineiston käyttöoikeuksien hyväksyntäprosessi ' +

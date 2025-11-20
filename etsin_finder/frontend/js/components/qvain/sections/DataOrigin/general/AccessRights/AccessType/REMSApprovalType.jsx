@@ -16,18 +16,19 @@ const REMSApprovalType = () => {
         {translate('qvain.rightsAndLicenses.dataAccess.remsApprovalType.title')}
       </TitleSmall>
       <RadioRow data-cy="rems-approval-type">
-        <REMSApprovalTypeChoice
+        {/* <REMSApprovalTypeChoice
           value=""
           label="qvain.rightsAndLicenses.dataAccess.remsApprovalType.disabled"
+        /> */}
+        <REMSApprovalTypeChoice
+          value="manual"
+          disabled
+          label="qvain.rightsAndLicenses.dataAccess.remsApprovalType.manual"
         />
         <REMSApprovalTypeChoice
           value="automatic"
           label="qvain.rightsAndLicenses.dataAccess.remsApprovalType.automatic"
         />
-        {/* <REMSApprovalTypeChoice
-          value="manual"
-          label="qvain.rightsAndLicenses.dataAccess.remsApprovalType.manual"
-        /> */}
       </RadioRow>
     </fieldset>
   )
