@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
@@ -144,5 +144,60 @@ describe('Etsin search page', () => {
       expect(await screen.findByText(dataset_ida_b.title.en)).toBeInTheDocument()
       expect(await screen.findByLabelText('Current page 2')).toBeInTheDocument()
     })
+  })
+})
+
+describe('When the start year is after the end year in the Time Period Facet', () => {
+  test('it should show a validation error', async () => {
+    renderEtsin()
+    await userEvent.click(screen.getByText('Time Period').closest('button'))
+    const temporalFacet = screen.getByTestId('temporal')
+    const fromInput = within(temporalFacet).getByLabelText('From')
+    const toInput = within(temporalFacet).getByLabelText('To')
+    const searchButton = within(temporalFacet).getByText('Search').closest('button')
+
+    expect(fromInput).toBeInTheDocument()
+    expect(toInput).toBeInTheDocument()
+    expect(searchButton).toBeInTheDocument()
+
+    fireEvent.change(fromInput, { target: { value: '2024' } })
+    fireEvent.change(toInput, { target: { value: '2022' } })
+    await userEvent.click(searchButton)
+
+    expect(within(temporalFacet).getByText(/start year cannot be later than end year/)).toBeInTheDocument()
+  })
+})
+
+describe('When the start year is invalid in the Time Period facet', () => {
+  test('it should display the indented validation error', async () => {
+    renderEtsin()
+    await userEvent.click(screen.getByText('Time Period').closest('button'))
+    const temporalFacet = screen.getByTestId('temporal')
+    const fromInput = within(temporalFacet).getByLabelText('From')
+    const toInput = within(temporalFacet).getByLabelText('To')
+    const searchButton = within(temporalFacet).getByText('Search').closest('button')
+
+    fireEvent.change(fromInput, { target: { value: '11' } })
+    fireEvent.change(toInput, { target: { value: '2022' } })
+    await userEvent.click(searchButton)
+
+    expect(within(temporalFacet).getByText(/The given start period is invalid/)).toBeInTheDocument()
+  })
+})
+
+describe('When the end year is invalid in the Time Period facet', () => {
+  test('it should display the indented validation error', async () => {
+    renderEtsin()
+    await userEvent.click(screen.getByText('Time Period').closest('button'))
+    const temporalFacet = screen.getByTestId('temporal')
+    const fromInput = within(temporalFacet).getByLabelText('From')
+    const toInput = within(temporalFacet).getByLabelText('To')
+    const searchButton = within(temporalFacet).getByText('Search').closest('button')
+
+    fireEvent.change(fromInput, { target: { value: '2000' } })
+    fireEvent.change(toInput, { target: { value: 'aa' } })
+    await userEvent.click(searchButton)
+
+    expect(within(temporalFacet).getByText(/The given end period is invalid/)).toBeInTheDocument()
   })
 })

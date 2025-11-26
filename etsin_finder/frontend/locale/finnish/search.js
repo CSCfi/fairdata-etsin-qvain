@@ -61,5 +61,17 @@ export default {
     data_catalog: {
       title: 'Datakatalogi',
     },
+    temporal: {
+      title: 'Ajanjakso',
+      button: 'Hae',
+      placeholder: 'vuosi',
+      start: 'Alkaen',
+      end: 'Päättyen',
+      validationErrors: {
+        startGtEnd: 'Ajanjakson alkamisvuosi ei voi olla myöhemmin kuin päättymisvuosi',
+        invalidStart: 'Annettu alkuajankohta on virheellinen (anna vuosiluku muodossa VVVV)',
+        invalidEnd: 'Annettu päättymisajankohta on virheellinen (anna vuosiluku muodossa VVVV)',
+      },
+    },
   },
 }

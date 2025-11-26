@@ -6,6 +6,7 @@ import ClearFilters from './clearFilters'
 
 import FilterSection from './filterSection'
 import { useStores } from '@/stores/stores'
+import TemporalSection from './TemporalSection'
 
 const FilterContainer = styled.ul`
   padding: 1em;
@@ -39,6 +40,7 @@ const FilterResults = () => {
       <FilterSection filterName="field_of_science" />
       <FilterSection filterName="keyword" />
       <FilterSection filterName="infrastructure" />
+      <TemporalSection />
       <FilterSection filterName="project" onlyCurrentLanguage />
       <FilterSection filterName="file_type" />
     </FilterContainer>

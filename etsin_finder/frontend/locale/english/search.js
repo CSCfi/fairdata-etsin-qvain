@@ -61,5 +61,17 @@ export default {
     data_catalog: {
       title: 'Data Catalog',
     },
+    temporal: {
+      title: 'Time Period',
+      button: 'Search',
+      placeholder: 'year',
+      start: 'From',
+      end: 'To',
+      validationErrors: {
+        startGtEnd: "Time period's start year cannot be later than end year",
+        invalidStart: 'The given start period is invalid (expecting the year in the format YYYY)',
+        invalidEnd: 'The given end period is invalid (expecting the year in the format YYYY)',
+      },
+    },
   },
 }

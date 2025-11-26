@@ -30,6 +30,14 @@ class EtsinSearch {
 
   @observable overallCount = null
 
+  @observable temporalStart = ''
+
+  @observable temporalEnd = ''
+
+  @observable temporalOpen = false
+
+  @observable temporalValidationError = null
+
   @computed get count() {
     return this.res?.count || 0
   }
@@ -139,6 +147,29 @@ class EtsinSearch {
 
   @action setIsLoading(value) {
     this.isLoading = value
+  }
+
+  @action setTemporalStart = value => {
+    this.temporalStart = value
+  }
+
+  @action setTemporalEnd = value => {
+    this.temporalEnd = value
+  }
+
+  @action setTemporalOpen = value => {
+    this.temporalOpen = value
+  }
+
+  @action setTemporalValidationError = value => {
+    this.temporalValidationError = value
+  }
+
+  @action resetTemporal = () => {
+    this.temporalStart = ''
+    this.temporalEnd = ''
+    this.temporalOpen = false
+    this.temporalValidationError = null
   }
 }
 

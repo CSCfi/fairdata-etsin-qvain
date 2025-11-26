@@ -4,13 +4,14 @@ import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
 import { InvertedButton } from '@/components/etsin/general/button'
+import { observer } from 'mobx-react'
 
 const ClearFilters = () => {
   const {
     Matomo,
     Accessibility,
     Etsin: {
-      Search: { isLoading },
+      Search: { isLoading, resetTemporal },
     },
     Locale: { translate },
   } = useStores()
@@ -19,6 +20,7 @@ const ClearFilters = () => {
   const clear = () => {
     Matomo.recordEvent('CLEAR_FILTERS')
     Accessibility.announce(translate('search.filter.filtersCleared'))
+    resetTemporal()
     navigate('/datasets')
   }
 
@@ -43,4 +45,4 @@ const CustomButton = styled(InvertedButton)`
   margin-bottom: 0.5em;
 `
 
-export default ClearFilters
+export default observer(ClearFilters)
