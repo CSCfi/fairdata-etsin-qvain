@@ -163,8 +163,8 @@ export const dataset_rems = {
       url: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
       in_scheme: 'http://uri.suomi.fi/codelist/fairdata/access_type',
       pref_label: {
-        en: 'Requires applying permission in Fairdata service',
-        fi: 'Vaatii luvan hakemista Fairdata-palvelussa',
+        en: 'Requires applying for permission',
+        fi: 'Vaatii luvan hakemista',
       },
     },
     restriction_grounds: [

@@ -51,7 +51,7 @@ const english = {
       open: 'Open',
       login: 'Requires login in Fairdata service',
       embargo: 'Embargo',
-      permit: 'Requires applying permission in Fairdata service',
+      permit: 'Requires applying for permission',
       restricted: 'Restricted use',
     },
     access_rights_description: {

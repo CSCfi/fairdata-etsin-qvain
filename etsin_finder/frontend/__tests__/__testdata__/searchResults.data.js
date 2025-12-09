@@ -440,9 +440,9 @@ const results = {
             access_type: {
               identifier: 'http://uri.suomi.fi/codelist/fairdata/access_type/code/permit',
               pref_label: {
-                fi: 'Vaatii luvan hakemista Fairdata-palvelussa',
-                en: 'Requires applying permission in Fairdata service',
-                und: 'Vaatii luvan hakemista Fairdata-palvelussa',
+                fi: 'Vaatii luvan hakemista',
+                en: 'Requires applying for permission',
+                und: 'Vaatii luvan hakemista',
               },
             },
           },
@@ -663,7 +663,7 @@ const results = {
       buckets: [
         { key: 'Open', doc_count: 18395 },
         { key: 'Embargo', doc_count: 3 },
-        { key: 'Requires applying permission in Fairdata service', doc_count: 3 },
+        { key: 'Requires applying for permission', doc_count: 3 },
         { key: 'Restricted use', doc_count: 1 },
       ],
     },
@@ -835,7 +835,7 @@ const results = {
       buckets: [
         { key: 'Avoin', doc_count: 18395 },
         { key: 'Embargo', doc_count: 3 },
-        { key: 'Vaatii luvan hakemista Fairdata-palvelussa', doc_count: 3 },
+        { key: 'Vaatii luvan hakemista', doc_count: 3 },
         { key: 'Saatavuutta rajoitettu', doc_count: 1 },
       ],
     },

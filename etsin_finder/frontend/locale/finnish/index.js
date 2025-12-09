@@ -51,7 +51,7 @@ const finnish = {
       open: 'Avoin',
       login: 'Vaatii kirjautumisen Fairdata-palvelussa',
       embargo: 'Embargo',
-      permit: 'Vaatii luvan hakemista Fairdata-palvelussa',
+      permit: 'Vaatii luvan hakemista',
       restricted: 'Saatavuutta rajoitettu',
     },
     access_rights_description: {

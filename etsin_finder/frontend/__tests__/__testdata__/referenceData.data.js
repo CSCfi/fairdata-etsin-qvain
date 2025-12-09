@@ -4720,9 +4720,9 @@ const accessType = {
           input_file_format: '',
           output_format_version: '',
           label: {
-            fi: 'Vaatii luvan hakemista Fairdata-palvelussa',
-            en: 'Requires applying permission in Fairdata service',
-            und: 'Vaatii luvan hakemista Fairdata-palvelussa',
+            fi: 'Vaatii luvan hakemista',
+            en: 'Requires applying for permission',
+            und: 'Vaatii luvan hakemista',
           },
           parent_ids: [],
           child_ids: [],
