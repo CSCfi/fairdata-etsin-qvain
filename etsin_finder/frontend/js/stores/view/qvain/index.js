@@ -463,11 +463,12 @@ class Qvain extends Resources {
   @action.bound async fetchREMSApplicationCounts() {
     // Fetch REMS application counts when dataset has been published with "permit" access type
     const publishedDataset = this.publishedDataset
+    const accessRights = publishedDataset?.research_dataset?.access_rights
     if (
       !(
         this.isREMSAllowed &&
-        publishedDataset?.research_dataset?.access_rights?.access_type?.identifier ==
-          ACCESS_TYPE_URL.PERMIT
+        accessRights?.access_type?.identifier == ACCESS_TYPE_URL.PERMIT &&
+        accessRights?.rems_approval_type != null
       )
     ) {
       return
