@@ -15,6 +15,7 @@ import validationMessages from './qvain.validationMessages'
 import sections from './qvain.sections'
 import infrastructure from './qvain.infrastructure'
 import timePeriod from './qvain.timePeriod'
+import adminOrg from './qvain.adminOrg'
 
 const qvainFinnish = {
   saveDraft: 'Tallenna luonnoksena',
@@ -154,6 +155,7 @@ const qvainFinnish = {
   validationMessages,
   infrastructure,
   timePeriod,
+  adminOrg,
 }
 
 export default qvainFinnish

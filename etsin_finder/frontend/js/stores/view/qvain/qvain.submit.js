@@ -436,12 +436,51 @@ class Submit {
     try {
       try {
         await this.qvainFormSchema.validate(dataset, { abortEarly: false, strict: true })
+        if (!this.Qvain.AdminOrg.confirmationSelected) {
+          throw new ValidationError(
+            this.Qvain.Locale.translate('qvain.validationMessages.adminOrg.confirmationRequired')
+          )
+        }
+        if (
+          this.Qvain.AdminOrg.selectedAdminOrg?.value === 'not-selected' &&
+          this.Qvain.isFairdataCatalog
+        ) {
+          throw new ValidationError(
+            this.Qvain.Locale.translate('qvain.validationMessages.adminOrg.adminOrgRequired')
+          )
+        }
       } catch (error) {
         this.setPublishValidationError(error)
       }
 
       try {
         await this.qvainFormDraftSchema.validate(dataset, { abortEarly: false, strict: true })
+
+        const publishedDataset = this.Qvain.publishedDataset
+        if (
+          publishedDataset &&
+          publishedDataset.metadata_owner_admin_org !== this.Qvain.AdminOrg.selectedAdminOrg?.value
+        ) {
+          throw new ValidationError(
+            this.Qvain.Locale.translate(
+              'qvain.validationMessages.adminOrg.cannotSaveDraftWithDifferentAdminOrg'
+            )
+          )
+        }
+
+        if (!this.Qvain.AdminOrg.confirmationSelected) {
+          throw new ValidationError(
+            this.Qvain.Locale.translate('qvain.validationMessages.adminOrg.confirmationRequired')
+          )
+        }
+        if (
+          this.Qvain.AdminOrg.selectedAdminOrg?.value === 'not-selected' &&
+          this.Qvain.isFairdataCatalog
+        ) {
+          throw new ValidationError(
+            this.Qvain.Locale.translate('qvain.validationMessages.adminOrg.adminOrgRequired')
+          )
+        }
       } catch (error) {
         this.setDraftValidationError(error)
       }

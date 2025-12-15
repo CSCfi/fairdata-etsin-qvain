@@ -41,6 +41,7 @@ const StickyHeader = ({ datasetError }) => {
       original,
       Submit: { error, response, isLoading, clearError, clearResponse },
     },
+    QvainDatasets,
     Env: { getQvainUrl },
   } = useStores()
 
@@ -53,7 +54,7 @@ const StickyHeader = ({ datasetError }) => {
 
   const createLinkBack = position => (
     <LinkBackContainer position={position}>
-      <LinkBack to={getQvainUrl('/')}>
+      <LinkBack to={getQvainUrl('/')} onClick={() => QvainDatasets.reset()}>
         <FontAwesomeIcon size="lg" icon={faChevronLeft} title="Back" />
         <Translate component={LinkText} display="block" content="qvain.backLink" />
       </LinkBack>

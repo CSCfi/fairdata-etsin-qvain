@@ -103,7 +103,8 @@ const datasets = {
   errorOccurred: 'Virhe tapahtui',
   tableHeader: 'Luodut aineistot',
   tabs: {
-    all: 'Kaikki aineistot',
+    own: 'Omat ja jaetut aineistot',
+    admin: 'Qvain admin aineistot',
   },
   share: {
     title: 'Jaa metadatan muokkausoikeuksia',

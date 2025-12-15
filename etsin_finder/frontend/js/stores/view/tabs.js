@@ -8,11 +8,20 @@ class Tabs {
   }
 
   @observable options = {}
+  // options is an object with the following structure:
+  // {
+  //   'tab-id': translation key,
+  // }
 
+  // active is the id of the current tab, e.g. 'own' or 'admin'
   @observable active
 
   @action.bound setOptions(options) {
     this.options = options
+  }
+
+  @action.bound addOption(id, value) {
+    this.options[id] = value
   }
 
   @action.bound setActive(val) {

@@ -12,10 +12,14 @@ import { SortDirectionButton } from '../../general/buttons/iconButtons'
 
 const getOptionLabel = option => <Translate content={`qvain.datasets.sort.${option.value}`} />
 
-const Invite = () => {
+const Invite = ({ datasets }) => {
   const {
-    QvainDatasets: { searchTerm, setSearchTerm, sort },
+    QvainDatasets: { sort },
   } = useStores()
+
+  if (!datasets) return null
+
+  const { searchTerm, setSearchTerm } = datasets
 
   return (
     <Container>
@@ -61,6 +65,13 @@ const Invite = () => {
       />
     </Container>
   )
+}
+
+Invite.propTypes = {
+  datasets: PropTypes.shape({
+    searchTerm: PropTypes.string,
+    setSearchTerm: PropTypes.func,
+  }),
 }
 
 // Use customized CreatableSelect as input that allows html (e.g. svg icon) in placeholder

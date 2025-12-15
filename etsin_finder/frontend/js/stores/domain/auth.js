@@ -137,6 +137,11 @@ class Auth {
       if (res.data.username === this.user.name) {
         csrfToken = res.data.metax_csrf_token
       }
+
+      this.setUser({
+        ...this.user,
+        ...res.data,
+      })
     }
 
     // Update user and return true if token found
@@ -166,6 +171,7 @@ class Auth {
         loggedIn: res.data.is_authenticated,
         homeOrganizationId: res.data.home_organization_id,
         idaProjects: res.data.user_ida_projects,
+        isUsingRems: res.data.is_using_rems,
       })
 
       await this.updateCsrf()

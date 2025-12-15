@@ -48,11 +48,11 @@ const renderModal = async () => {
   stores = buildStores()
   stores.Auth.setUser({
     name: 'teppo',
+    admin_organizations: [],
+    available_admin_organizations: [{ id: 'test.csc.fi', pref_label: { en: 'Test Organization' } }],
+    default_admin_organization: { id: 'test.csc.fi' },
   })
   stores.Env.setMetaxV3Host('metaxv3', 443)
-  stores.Env.Flags.setFlag('UI.NEW_DATASETS_VIEW', true)
-  stores.Env.Flags.setFlag('QVAIN.METAX_V3', true)
-
   const dataset = { identifier: 'jeejee' }
   stores.QvainDatasets.share.setSearchDelay(0)
   stores.QvainDatasets.share.modal.open({ dataset })
@@ -93,6 +93,19 @@ const mockInviteWithDelay = () => {
 beforeEach(async () => {
   vi.resetAllMocks()
   mockAdapter = new MockAdapter(axios)
+  mockAdapter.onGet('https://metaxv3:443/v3/datasets/jeejee/permissions').reply(200, {
+    creators: [
+      {
+        username: 'testinen',
+        first_name: 'Testinen',
+        last_name: 'Testinen',
+        email: 'testinen@example.com',
+      },
+    ],
+    editors: [],
+    csc_project_members: [],
+  })
+
   mockAdapter.onGet('/api/ldap/users/testi').reply(200, [testUser, otherTestUser])
   mockAdapter.onGet('/api/ldap/users/testinen').reply(200, [testUser])
   mockAdapter.onGet('/api/ldap/users/fail').reply(200, [failTestUser])

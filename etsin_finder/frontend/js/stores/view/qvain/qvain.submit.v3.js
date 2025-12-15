@@ -61,6 +61,11 @@ class SubmitV3 extends Submit {
       try {
         await schema.validate(dataset, { strict: true })
         await this.checkDoiCompatibility(dataset)
+        if (!this.Qvain.AdminOrg.confirmationSelected) {
+          throw new ValidationError(
+            this.Qvain.Locale.translate('qvain.validationMessages.adminOrg.confirmationRequired')
+          )
+        }
       } catch (error) {
         this.setError(error)
         if (error instanceof ValidationError) {
@@ -81,16 +86,31 @@ class SubmitV3 extends Submit {
           v3Dataset.access_rights.show_file_metadata = true
         }
 
+        const original = this.Qvain.original
+        v3Dataset.metadata_owner = {
+          user: original?.metadata_provider_user || this.Qvain.Auth.userName,
+          organization: original?.metadata_owner_org || this.Qvain.Auth.user.organization,
+          admin_organization:
+            this.Qvain.AdminOrg?.selectedAdminOrg?.value === 'not-selected'
+              ? null
+              : this.Qvain.AdminOrg?.selectedAdminOrg?.value,
+        }
+
         if (this.Qvain.isNewVersion) {
           v3Dataset = await this.createNewVersion(v3Dataset)
         }
+
         if (draftFunction) {
           v3Dataset = await draftFunction(v3Dataset)
         }
+
         if (publishFunction) {
           v3Dataset = await publishFunction(v3Dataset)
+          await editDataset(v3Dataset)
+        } else {
+          await this.Qvain.fetchDataset(v3Dataset.id, { loading: false })
         }
-        await editDataset(v3Dataset)
+
         this.setResponse({ ...v3Dataset, is_new: isNew })
         this.clearError()
       } catch (error) {

@@ -1,4 +1,7 @@
 const sections = {
+  adminOrg: {
+    title: 'Kuvailutietojen ylläpito-oikeudet organisaatiolle',
+  },
   dataOrigin: {
     title: 'Datalähde',
     buttons: {

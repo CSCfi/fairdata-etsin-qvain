@@ -21,11 +21,11 @@ import Geographics from '../../sections/Geographics'
 import TimePeriod from '../../sections/TimePeriod'
 import Infrastructure from '../../sections/Infrastructure'
 import History from '../../sections/History'
-import Project from '../../sections/Project'
 import ProjectV3 from '../../sections/ProjectV3'
 import FlaggedComponent from '@/components/general/flaggedComponent'
 import ModalManager from '../../general/V3/modal/ModalManager.v3'
 import { useStores } from '@/stores/stores'
+import AdminOrgSelector from '../../sections/AdminOrg'
 
 export const Dataset = ({ datasetError, datasetErrorTitle, datasetErrorDetails, handleRetry }) => {
   const {
@@ -56,6 +56,8 @@ export const Dataset = ({ datasetError, datasetErrorTitle, datasetErrorDetails, 
       <FlaggedComponent flag="UI.SHOW_UNSUPPORTED">
         <Unsupported />
       </FlaggedComponent>
+      <Separator />
+      <AdminOrgSelector />
       <DataOrigin />
       <Description />
       <Actors />
@@ -65,9 +67,7 @@ export const Dataset = ({ datasetError, datasetErrorTitle, datasetErrorDetails, 
       <TimePeriod />
       <Infrastructure />
       <History />
-      <FlaggedComponent flag="QVAIN.METAX_V3.FRONTEND" whenDisabled={<Project />}>
-        <ProjectV3 />
-      </FlaggedComponent>
+      <ProjectV3 />
       <SubmitContainer>
         <Translate component="p" content="qvain.consent" unsafe />
       </SubmitContainer>

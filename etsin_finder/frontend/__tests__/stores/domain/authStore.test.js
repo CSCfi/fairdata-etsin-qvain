@@ -16,6 +16,7 @@ const mockUser = {
   home_organization_name: 'organisaatio',
   user_ida_projects: ['IDA:project_x', 'IDA:project_y'],
   user_csc_name: 'Testi Käyttäjä',
+  admin_organizations: [],
 }
 
 describe('Auth Store', () => {

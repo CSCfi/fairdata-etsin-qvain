@@ -1,4 +1,7 @@
 const sections = {
+  adminOrg: {
+    title: 'Organizational maintenance rights to metadata',
+  },
   dataOrigin: {
     title: 'Data Origin',
     buttons: {

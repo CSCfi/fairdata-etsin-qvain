@@ -64,10 +64,14 @@ const getDatasetState = dataset => {
   return 'draft'
 }
 
-const datasetOwner = (dataset, username) => {
+const datasetOwner = (dataset, username, adminOrgs) => {
   const sources = dataset.sources || [] // sources only used in V2
   if (sources.includes('creator') || dataset.metadata_provider_user === username) {
     return <Translate content="qvain.datasets.owner.me" />
+  }
+
+  if (adminOrgs?.some(org => org.id === dataset.metadata_owner_admin_org)) {
+    return <span>{dataset.metadata_provider_user}</span>
   }
   // shared with user
   return (
@@ -106,7 +110,9 @@ const Dataset = ({ dataset, group, isExpanded, expandGroup, isLatest, versionNum
       <Cell className="dataset-state">
         <DatasetStateTag state={getDatasetState(dataset)} />
       </Cell>
-      <Cell className="dataset-owner">{datasetOwner(dataset, Auth.userName)}</Cell>
+      <Cell className="dataset-owner">
+        {datasetOwner(dataset, Auth.userName, Auth.user.admin_organizations)}
+      </Cell>
       <Cell className="dataset-created">{formatAge(Locale, loadTime, dataset.date_created)}</Cell>
       {actions.filter(action => action.icon).map(action => getActionButton(action))}
       <Cell className="dataset-more">

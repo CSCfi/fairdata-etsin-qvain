@@ -1,4 +1,11 @@
 const validationMessages = {
+  adminOrg: {
+    confirmationRequired: 'Vahvista, että organisaatio on valittu oikein.',
+    adminOrgRequired:
+      'Organisaatio on pakollinen tieto kun tiedoston lähde on Fairdata -palvelussa.',
+    cannotSaveDraftWithDifferentAdminOrg:
+      'Luonnosta ei voida tallentaa, jos kuvailutietojen ylläpitäjä on eri kuin aiemmin julkaistussa aineistossa.',
+  },
   types: {
     string: {
       date: 'Arvon on oltava päivämäärämerkkijono.',

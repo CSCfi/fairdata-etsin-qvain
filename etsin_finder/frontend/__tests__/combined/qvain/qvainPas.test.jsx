@@ -108,7 +108,7 @@ describe('Qvain.Files', () => {
 
   it('prevents editing of file fields', async () => {
     const stores = getStores()
-    stores.Qvain.setPreservationState(80)
+    stores.Qvain.setOriginal({ preservation_pas_process_running: true })
     renderFiles(stores)
 
     const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))
@@ -138,7 +138,7 @@ describe('Qvain.Files', () => {
   it('prevents editing of directory fields', async () => {
     const stores = getStores()
     stores.Auth.user.idaProjects = ['project_y']
-    stores.Qvain.setPreservationState(80)
+    stores.Qvain.setOriginal({ preservation_pas_process_running: true })
     renderFiles(stores, true)
 
     const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))

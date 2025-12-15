@@ -1,6 +1,7 @@
 import { when } from 'mobx'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
+import { zip } from 'lodash-es'
 
 import { within, screen, render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -20,12 +21,18 @@ const mockAdapter = new MockAdapter(axios)
 
 let stores, helper, testLocation
 
-// Combine arrays of same length, e.g. [1, 2, 3], ['a', 'b', 'c'] -> [[1, 'a'], ...]
-const zip = (a, b) => a.map((k, i) => [k, b[i]])
-
 beforeEach(() => {
   mockAdapter.reset()
   mockAdapter.onGet('https://metaxv3:443/v3/datasets').reply(200, datasets)
+  mockAdapter.onGet('https://metaxv3:443/v3/user').reply(200, {
+    username: 'teppo',
+    first_name: 'Teppo',
+    last_name: 'Testaaja',
+    email: 'teppo@example.com',
+    admin_organizations: ['test.csc.fi'],
+    available_admin_organizations: [{ id: 'test.csc.fi', pref_label: { en: 'Test Organization' } }],
+    default_admin_organization: { id: 'test.csc.fi' },
+  })
 })
 
 const getStores = () => {
@@ -37,6 +44,12 @@ const getStores = () => {
   _stores.Locale.setLang('en')
   _stores.Auth.setUser({
     name: 'teppo',
+    first_name: 'Teppo',
+    last_name: 'Testaaja',
+    email: 'teppo@example.com',
+    admin_organizations: [],
+    available_admin_organizations: [{ id: 'test.csc.fi', pref_label: { en: 'Test Organization' } }],
+    default_admin_organization: { id: 'test.csc.fi' },
   })
   return _stores
 }
@@ -72,9 +85,11 @@ const renderDatasets = async ({ showCount = null } = {}) => {
       </MemoryRouter>
     </StoresProvider>
   )
-
   // wait until datasets have been fetched
-  await when(() => stores.QvainDatasets.datasetGroups.length > 0 || stores.QvainDatasets.error)
+  await when(
+    () =>
+      stores.QvainDatasets.ownDatasets.datasets.length > 0 || stores.QvainDatasets.ownDatasets.error
+  )
 }
 
 describe('DatasetsV3', () => {
@@ -149,7 +164,6 @@ describe('DatasetsV3', () => {
     })
 
     await renderDatasets({ showCount: { initial: 1, current: 1, increment: 1 } })
-
     // Open editors modal,
     // the auto-hiding table buttons are aria-bidden so not available by role
     const editorsBtn = screen.getByText('Editors', { selector: 'button' })

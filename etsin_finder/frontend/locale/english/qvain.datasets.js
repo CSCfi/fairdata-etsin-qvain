@@ -103,7 +103,8 @@ const datasets = {
   errorOccurred: 'An error occurred',
   tableHeader: 'Created datasets',
   tabs: {
-    all: 'All datasets',
+    own: 'Owned and shared datasets',
+    admin: 'Qvain admin datasets',
   },
   share: {
     title: 'Share metadata editing rights',

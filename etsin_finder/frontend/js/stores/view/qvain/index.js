@@ -9,6 +9,7 @@ import {
   FILES_DATA_CATALOGS,
 } from '../../../utils/constants'
 import Sections from './qvain.sections'
+import QvainAdminOrg from './qvain.adminOrg'
 
 import ReferenceData from './qvain.referenceData'
 import Resources from './qvain.resources'
@@ -38,10 +39,11 @@ class Qvain extends Resources {
     this.SubmitV3 = new SubmitV3(this, this.Env)
     this.Sections = new Sections({ parent: this })
     this.Files = createQvainFilesStore(this, Auth)
-    this.Adapter = new Adapter(this)
+    this.Adapter = new Adapter(this.Auth)
     this.resetQvainStore()
     this.Lock = new Lock(this, Auth)
     this.Modals = new Modals()
+    this.AdminOrg = new QvainAdminOrg(this.Env, this.Auth, this.Locale, this)
   }
 
   @computed get Submit() {
@@ -73,6 +75,12 @@ class Qvain extends Resources {
 
   @observable editorInitialized = false
 
+  @observable hasUnpublishedChanges = false
+
+  @action.bound setHasUnpublishedChanges(value) {
+    this.hasUnpublishedChanges = value
+  }
+
   @action
   resetQvainStore = () => {
     this.client.abort()
@@ -81,7 +89,7 @@ class Qvain extends Resources {
     this.unsupported = null
     this.editorInitialized = false
     this.basicDataCatalogsError = undefined
-
+    this.hasUnpublishedChanges = false
     // Reset Files/Directories related data
     this.Files.reset()
     this.dataCatalog = undefined // catalog id
@@ -113,6 +121,10 @@ class Qvain extends Resources {
     this.Sections.collapseAll()
 
     this.remsApplicationCounts = undefined
+
+    if (this.AdminOrg) {
+      this.AdminOrg.reset()
+    }
   }
 
   @action.bound setEditorInitialized(val) {
@@ -172,10 +184,10 @@ class Qvain extends Resources {
   }
 
   @action.bound
-  async fetchDataset(identifier, { isTemplate = false, draftOf = null } = {}) {
+  async fetchDataset(identifier, { isTemplate = false, draftOf = null, loading = true } = {}) {
     this.client.abort()
     const { metaxV3Url } = this.Env
-    this.datasetLoading = true
+    this.datasetLoading = loading
     this.datasetError = null
     let _draftOf = draftOf
 
@@ -193,7 +205,7 @@ class Qvain extends Resources {
         if (draftOfIdentifier && !_draftOf) {
           const draftOfUrl = metaxV3Url('dataset', draftOfIdentifier)
           const draftOfResult = await this.client.get(draftOfUrl, {
-            params: { fields: 'id,title,fileset,deprecated,access_rights' },
+            params: { fields: 'id,title,fileset,deprecated,access_rights,metadata_owner' },
           })
           _draftOf = draftOfResult.data
         }
@@ -369,6 +381,10 @@ class Qvain extends Resources {
     return this.selectedProject
   }
 
+  @computed get isNewDataset() {
+    return this.original === undefined
+  }
+
   @action setInEdit = selectedItem => {
     this.inEdit = selectedItem
   }
@@ -529,10 +545,12 @@ class Qvain extends Resources {
       // Assign draftOf dataset to dataset.draft_of
       if (draftOf) {
         v2Dataset.draft_of = this.Adapter.convertV3ToV2(draftOf)
+        this.draftOfDataset = v2Dataset.draft_of
       }
     }
     this.setChanged(false)
     this.original = { ...v2Dataset }
+    this.AdminOrg.selectDefaultAdminOrg()
     this.loadBasicFields(v2Dataset)
     await this.loadStatusAndFileFields(v2Dataset)
     this.Sections.expandPopulatedSections(v2Dataset.research_dataset)
@@ -549,6 +567,7 @@ class Qvain extends Resources {
           ? dataset.access_rights.show_file_metadata
           : false
     }
+    this.AdminOrg.selectDefaultAdminOrg()
     this.loadBasicFields(v2Dataset)
     this.OtherIdentifiers.reset()
     this.ExternalResources.reset()
@@ -664,6 +683,13 @@ class Qvain extends Resources {
     return !!this.dataCatalogConfig?.rems_enabled
   }
 
+  @computed get isFairdataCatalog() {
+    return (
+      this.dataCatalog === DATA_CATALOG_IDENTIFIER.IDA ||
+      this.dataCatalog === DATA_CATALOG_IDENTIFIER.PAS
+    )
+  }
+
   @computed
   get readonly() {
     if (this.Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK') && this.Lock?.enabled) {
@@ -672,14 +698,7 @@ class Qvain extends Resources {
       }
     }
 
-    if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
-      return !!this.original?.preservation_pas_process_running
-    }
-    return (
-      this.preservationState >= 80 &&
-      this.preservationState !== 100 &&
-      this.preservationState !== 130
-    )
+    return !!this.original?.preservation_pas_process_running
   }
 
   // these two are self-removing-resolve-functions

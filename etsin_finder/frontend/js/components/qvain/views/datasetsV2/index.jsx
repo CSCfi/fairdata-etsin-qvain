@@ -19,7 +19,7 @@ export const Datasets = () => {
 
   const {
     Qvain: { resetQvainStore },
-    QvainDatasets: { publishedDataset, setPublishedDataset },
+    QvainDatasets: { publishedDataset, setPublishedDataset, currentDatasets },
     Env: { getQvainUrl },
     Matomo: { recordEvent },
   } = useStores()
@@ -58,8 +58,8 @@ export const Datasets = () => {
         </DatasetsHeader>
         <Tabs />
         <DatasetsContent>
-          <Search />
-          <Table />
+          <Search datasets={currentDatasets} />
+          <Table datasets={currentDatasets} />
         </DatasetsContent>
         <RemoveModal />
         <ShareModal />

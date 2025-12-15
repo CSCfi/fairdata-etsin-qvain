@@ -9,11 +9,13 @@ import Infrastructure from './sections/Infrastructure'
 import History from './sections/History'
 import Project from './sections/Project'
 import Projects from './sections/Projects.v3'
+import AdminOrg from './sections/AdminOrg'
 
 class Sections {
   constructor({ parent }) {
     makeObservable(this)
     this.all = {
+      AdminOrg: new AdminOrg(),
       DataOrigin: new DataOrigin(),
       Description: new Description(),
       Actors: new Actors(),

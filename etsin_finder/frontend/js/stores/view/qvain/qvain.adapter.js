@@ -2,8 +2,8 @@ import { format, parseISO as parseDateISO } from 'date-fns'
 import { ENTITY_TYPE } from '@/utils/constants'
 
 class Adapter {
-  constructor(Qvain) {
-    this.Qvain = Qvain
+  constructor(Auth) {
+    this.Auth = Auth
     this.convertV3ToV2 = this.convertV3ToV2.bind(this)
     this.convertQvainV2ToV3 = this.convertQvainV2ToV3.bind(this)
     this.makeBoundAdapterFunc = this.makeBoundAdapterFunc.bind(this)
@@ -212,6 +212,7 @@ class Adapter {
   convertV3ToV2(dataset) {
     // Convert Metax V3 object to V2-style input object.
     const d = {
+      sources: this.Auth.userName === dataset.metadata_owner?.user ? ['creator'] : ['project'],
       id: dataset.id,
       identifier: dataset.id,
       data_catalog: dataset.data_catalog && {
@@ -246,6 +247,8 @@ class Adapter {
       next_draft: this.relatedDraftV3ToV2(dataset.next_draft),
       cumulative_state: dataset.cumulative_state,
       metadata_provider_user: dataset.metadata_owner?.user,
+      metadata_owner_org: dataset.metadata_owner?.organization,
+      metadata_owner_admin_org: dataset.metadata_owner?.admin_organization,
       preservation_state: dataset.preservation?.state,
       // v3 specific preservation fields
       preservation_pas_process_running: dataset.preservation?.pas_process_running,
@@ -256,6 +259,8 @@ class Adapter {
     d.dataset_version_set.forEach(v => {
       v.data_catalog = d.data_catalog // Add missing catalog data to versions
       v.metadata_provider_user = d.metadata_provider_user
+      v.metadata_owner_admin_org = d.metadata_owner_admin_org
+      v.sources = d.sources
     })
 
     // include v3 fileset object as it is

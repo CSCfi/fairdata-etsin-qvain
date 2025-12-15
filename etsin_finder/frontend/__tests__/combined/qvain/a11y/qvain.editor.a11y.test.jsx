@@ -14,6 +14,13 @@ import DataMemoryRouter from '@helpers/DataMemoryRouter'
 
 const stores = buildStores()
 
+stores.Auth.setUser({
+  name: 'teppo',
+  admin_organizations: [],
+  available_admin_organizations: [{ id: 'org-1', pref_label: { en: 'Organization 1' } }],
+  default_admin_organization: { id: 'org-1' },
+})
+
 failTestsWhenTranslationIsMissing(stores.Locale)
 
 globalThis.fdweRecordEvent = () => {}

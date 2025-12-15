@@ -16,8 +16,8 @@ beforeEach(() => {
   stores = buildStores()
   stores.Locale.setMissingTranslationHandler(key => key)
   stores.QvainDatasets.tabs = new TabsStore(
-    { all: 'test.tabs.all', another: 'test.tabs.another' },
-    'all'
+    { own: 'test.tabs.all', admin: 'test.tabs.another' },
+    'own'
   )
 })
 

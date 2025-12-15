@@ -95,6 +95,7 @@ const generateDefaultDatasetForPublish = settings => ({
   cumulative_state: CUMULATIVE_STATE.NO,
   use_doi: false,
   data_catalog: DATA_CATALOG_IDENTIFIER.IDA,
+  metadata_owner_admin_org: 'org-1',
   ...settings,
 })
 
@@ -107,6 +108,10 @@ const generateDefaultDatasetForDraft = settings => ({
 })
 
 const createMockQvain = settings => ({
+  AdminOrg: {
+    confirmationSelected: false,
+    setConfirmationSelected: vi.fn(),
+  },
   Files: {
     actionsToMetax: vi.fn(() => ({ files: [], directories: [] })),
     metadataToMetax: vi.fn(() => ({ files: [], directories: [] })),
@@ -263,6 +268,7 @@ describe('prevalidate', () => {
   let Submit, mockQvain
   beforeEach(() => {
     mockQvain = createMockQvain()
+    mockQvain.AdminOrg.confirmationSelected = true
     Submit = new SubmitClass(mockQvain)
     handleSubmitToBackend.mockReturnValue(generateDefaultDatasetForPublish)
   })

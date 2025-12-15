@@ -12,6 +12,7 @@ import { CUMULATIVE_STATE } from '../../../js/utils/constants'
 
 import CumulativeDataset from '../../../js/components/qvain/sections/DataOrigin/IdaCatalog/CumulativeDataset'
 import { useStores } from '../../../js/stores/stores'
+import AuthClass from '@/stores/domain/auth'
 
 const mockAdapter = new MockAdapter(axios)
 mockAdapter.onGet().reply(200, {})
@@ -22,14 +23,23 @@ vi.mock('@/stores/stores', async () => ({
 }))
 
 const Env = new EnvClass()
-const Qvain = new QvainClass(Env)
+const Auth = new AuthClass(Env)
 const Locale = new LocaleClass(Env)
+const Qvain = new QvainClass(Env, Auth, Locale)
 
 const stores = {
   Env,
   Qvain,
   Locale,
+  Auth,
 }
+
+stores.Auth.setUser({
+  name: 'teppo',
+  admin_organizations: ['org-1'],
+  available_admin_organizations: [{ id: 'org-1', pref_label: { en: 'Organization 1' } }],
+  default_admin_organization: { id: 'org-1' },
+})
 
 const dataset = {
   identifier: 100,

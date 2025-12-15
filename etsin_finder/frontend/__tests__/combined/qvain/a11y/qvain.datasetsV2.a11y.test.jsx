@@ -44,7 +44,7 @@ describe('DatasetsV2', () => {
     )
 
     // wait until datasets have been fetched
-    await when(() => stores.QvainDatasets.datasetGroups.length > 0)
+    await when(() => stores.QvainDatasets.ownDatasets.datasets.length > 0)
 
     const results = await axe(container, { rules: { region: { enabled: false } } })
     expect(results).toBeAccessible()

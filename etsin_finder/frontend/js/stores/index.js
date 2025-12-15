@@ -17,7 +17,6 @@ import MapClass from './view/map'
 import QvainClass from './view/qvain'
 import EtsinClass from './view/etsin'
 import QvainDatasetsClass from './view/qvain/qvain.datasets'
-import QvainDatasetsV3Class from './view/qvain/qvain.datasets.v3'
 import AccessClass from './view/access'
 import SearchFiltersClass from './view/searchfilters'
 import MatomoClass from './tracking'
@@ -31,12 +30,7 @@ export const buildStores = (options = {}) => {
   const Accessibility = new AccessibilityClass(Env, Locale)
   const SearchFilters = new SearchFiltersClass()
   const Access = new AccessClass(Auth)
-  let QvainDatasets
-  if (Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
-    QvainDatasets = new QvainDatasetsV3Class(Env, Auth, Locale)
-  } else {
-    QvainDatasets = new QvainDatasetsClass(Env, Auth, Locale)
-  }
+  const QvainDatasets = new QvainDatasetsClass(Env, Auth, Locale)
   const OrgReferences = new OrgReferencesClass(Env)
   const Qvain = new QvainClass(Env, Auth, Locale, OrgReferences)
   const DatasetQuery = new DatasetQueryClass(Env, Access)
@@ -44,7 +38,6 @@ export const buildStores = (options = {}) => {
   const Map = new MapClass(Locale)
   const Matomo = new MatomoClass(Env)
   const CrossRef = new CrossRefClass(Env)
-
   return {
     Env,
     Qvain,

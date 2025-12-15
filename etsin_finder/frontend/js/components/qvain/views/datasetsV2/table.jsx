@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
@@ -9,30 +10,25 @@ import Loader from '../../../general/loader'
 import { InvertedButton } from '../../../general/button'
 import withCustomProps from '@/utils/withCustomProps'
 
-const Table = () => {
+const Table = ({ datasets }) => {
   const {
     QvainDatasets: {
       error,
-      loadDatasets,
+      loadDataset,
       isLoadingDatasets,
-      reset,
+      isDatasetsFetched,
       searchTerm,
-      filteredGroups,
-      showMore,
-      moreAvailable,
+      tabs: { active },
     },
   } = useStores()
 
   useEffect(() => {
-    loadDatasets()
-    return () => {
-      reset()
+    if (!isDatasetsFetched) {
+      loadDataset(active)
     }
+  }, [loadDataset, active, isDatasetsFetched])
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const noDatasets = !isLoadingDatasets && !error && filteredGroups.length === 0
+  const noDatasets = !isLoadingDatasets && !error && datasets?.filteredGroups?.length === 0
 
   if (isLoadingDatasets) {
     return (
@@ -60,7 +56,7 @@ const Table = () => {
         <Translate
           content="qvain.datasets.reload"
           component={InvertedButton}
-          onClick={() => loadDatasets()}
+          onClick={() => loadDataset(active)}
         />
       </PlaceholderWrapper>
     )
@@ -87,17 +83,25 @@ const Table = () => {
             <PadHeadCell />
           </Header>
         </thead>
-        {filteredGroups.map(group => (
+        {datasets?.filteredGroups?.map(group => (
           <DatasetGroup key={group[0].id} group={group} />
         ))}
       </DatasetsTable>
-      {moreAvailable && (
-        <MoreButton onClick={showMore}>
+      {datasets?.moreAvailable && (
+        <MoreButton onClick={datasets?.showMore}>
           <Translate content="general.showMore" /> &gt;
         </MoreButton>
       )}
     </>
   )
+}
+
+Table.propTypes = {
+  datasets: PropTypes.shape({
+    filteredGroups: PropTypes.array,
+    moreAvailable: PropTypes.bool,
+    showMore: PropTypes.func,
+  }),
 }
 
 export const MoreButton = styled.button`

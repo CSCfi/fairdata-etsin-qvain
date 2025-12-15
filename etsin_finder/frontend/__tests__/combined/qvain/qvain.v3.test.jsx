@@ -65,6 +65,8 @@ const Location = () => {
   return null
 }
 
+let stores
+
 const renderQvain = async (overrides = {}, { initialPath } = {}) => {
   const metaxDataset = { ...dataset, ...overrides }
   const publishedDataset = { ...dataset, ...overrides, state: 'published' }
@@ -94,6 +96,12 @@ const renderQvain = async (overrides = {}, { initialPath } = {}) => {
   mockAdapter
     .onPost(`https://metaxv3:443/v3/datasets/${linkedDatasetDraft.id}/publish`)
     .reply(200, publishedDataset)
+  mockAdapter.onGet(`https://metaxv3:443/v3/auth/user`).reply(200, {
+    name: 'teppo',
+    admin_organizations: [],
+    available_admin_organizations: [{ id: 'org-1', pref_label: { en: 'Organization 1' } }],
+    default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+  })
 
   // When loading an existing dataset, catalog is included in the payload (?expand_catalog=true).
   // When creating new dataset, catalogs need to be loaded separately.
@@ -106,8 +114,17 @@ const renderQvain = async (overrides = {}, { initialPath } = {}) => {
   Env.Flags.setFlag('QVAIN.METAX_V3.FRONTEND', true)
   Env.Flags.setFlag('QVAIN.REMS', true)
   Env.setMetaxV3Host('metaxv3', 443)
-  const stores = buildStores({ Env })
+  stores = buildStores({ Env })
   registerMissingTranslationHandler(stores.Locale)
+  stores.Auth.setUser({
+    name: 'teppo',
+    admin_organizations: [],
+    available_admin_organizations: [{ id: 'org-1', pref_label: { en: 'Organization 1' } }],
+    default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+  })
+
+  stores.Qvain.AdminOrg.selectDefaultAdminOrg()
+  stores.Qvain.AdminOrg.setConfirmationSelected(true)
 
   render(
     <ThemeProvider theme={etsinTheme}>
@@ -424,10 +441,20 @@ describe('Qvain with an opened dataset', () => {
       'actors.0.organization.email',
       'actors.0.organization.external_identifier',
       'actors.0.organization.homepage',
+      'metadata_owner.organization',
+      'metadata_owner.user.username',
     ]
 
     await renderQvain()
-    const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    const confirmationCheckbox = screen.getByRole('checkbox', {
+      name: 'I confirm that the organization has been selected correctly.',
+    })
+    expect(confirmationCheckbox).toBeChecked()
+    const submitButton = await waitFor(() => {
+      const button = screen.getByRole('button', { name: 'Save as draft' })
+      expect(button).not.toBeDisabled()
+      return button
+    })
     await userEvent.click(submitButton) // should submit data to metax
     const submitData = JSON.parse(mockAdapter.history.patch[0].data)
 
@@ -466,7 +493,11 @@ describe('Qvain with an opened dataset', () => {
     const expectedExtra = []
 
     await renderQvain({ data_catalog: 'urn:nbn:fi:att:data-catalog-att' })
-    const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    const submitButton = await waitFor(() => {
+      const button = screen.getByRole('button', { name: 'Save as draft' })
+      expect(button).not.toBeDisabled()
+      return button
+    })
     await userEvent.click(submitButton) // should submit data to metax
     const submitResources = JSON.parse(mockAdapter.history.patch[0].data).remote_resources
     const flatResources = removeMatchingKeys(flatten(dataset.remote_resources), expectedMissing)
@@ -480,7 +511,11 @@ describe('Qvain with an opened dataset', () => {
       const cumulativeSelection = screen.getByText('Cumulative dataset').closest('div')
       const cumulativeButton = within(cumulativeSelection).getByLabelText('Yes.', { exact: false })
       await userEvent.click(cumulativeButton)
-      const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+      const submitButton = await waitFor(() => {
+        const button = screen.getByRole('button', { name: 'Save as draft' })
+        expect(button).not.toBeDisabled()
+        return button
+      })
       await userEvent.click(submitButton)
       const submittedState = JSON.parse(mockAdapter.history.patch[0].data).cumulative_state
       expect(submittedState).toBe(1)
@@ -493,7 +528,11 @@ describe('Qvain with an opened dataset', () => {
         name: 'Turn non-cumulative',
       })
       await userEvent.click(nonCumulativeButton)
-      const submitButton = screen.getByRole('button', { name: 'Save and Publish' })
+      const submitButton = await waitFor(() => {
+        const button = screen.getByRole('button', { name: 'Save and Publish' })
+        expect(button).not.toBeDisabled()
+        return button
+      })
       await userEvent.click(submitButton)
       const submittedState = JSON.parse(mockAdapter.history.patch[0].data).cumulative_state
       expect(submittedState).toBe(2)
@@ -501,7 +540,11 @@ describe('Qvain with an opened dataset', () => {
 
     it('keeps closed cumulative dataset closed', async () => {
       await renderQvain({ cumulative_state: 2, state: 'published' })
-      const submitButton = screen.getByRole('button', { name: 'Save and Publish' })
+      const submitButton = await waitFor(() => {
+        const button = screen.getByRole('button', { name: 'Save and Publish' })
+        expect(button).not.toBeDisabled()
+        return button
+      })
       await userEvent.click(submitButton)
       const submittedState = JSON.parse(mockAdapter.history.patch[0].data).cumulative_state
       expect(submittedState).toBe(2)
@@ -511,7 +554,11 @@ describe('Qvain with an opened dataset', () => {
   describe('when saving draft', () => {
     const saveDraft = async (overrides = {}) => {
       await renderQvain(overrides)
-      const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+      const submitButton = await waitFor(() => {
+        const button = screen.getByRole('button', { name: 'Save as draft' })
+        expect(button).not.toBeDisabled()
+        return button
+      })
       await userEvent.click(submitButton)
     }
 
@@ -539,7 +586,11 @@ describe('Qvain with an opened dataset', () => {
   describe('when publishing', () => {
     const publish = async (overrides = {}, options = {}) => {
       await renderQvain(overrides, options)
-      const submitButton = screen.getByRole('button', { name: 'Save and Publish' })
+      const submitButton = await waitFor(() => {
+        const button = screen.getByRole('button', { name: 'Save and Publish' })
+        expect(button).not.toBeDisabled()
+        return button
+      })
       await userEvent.click(submitButton)
     }
 
@@ -701,7 +752,11 @@ describe('Qvain with an opened dataset', () => {
     await renderQvain({
       access_rights: access_rights_embargo,
     })
-    const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    const submitButton = await waitFor(() => {
+      const button = screen.getByRole('button', { name: 'Save as draft' })
+      expect(button).not.toBeDisabled()
+      return button
+    })
     await userEvent.click(submitButton) // should submit data to metax
     const submitRights = JSON.parse(mockAdapter.history.patch[0].data).access_rights
     const flatRights = removeMatchingKeys(flatten(access_rights_embargo), expectedMissing)
@@ -773,7 +828,11 @@ describe('Qvain with an opened dataset', () => {
     await userEvent.click(within(approvalGroup).getByText(/Automatic/))
 
     // Check values get submitted
-    const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    const submitButton = await waitFor(() => {
+      const button = screen.getByRole('button', { name: 'Save as draft' })
+      expect(button).not.toBeDisabled()
+      return button
+    })
     await userEvent.click(submitButton) // should submit data to metax
     const submitRights = JSON.parse(mockAdapter.history.patch[0].data).access_rights
     expect(submitRights).toEqual(

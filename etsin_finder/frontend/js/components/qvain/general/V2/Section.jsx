@@ -11,13 +11,13 @@ import { SectionTitleAsterisk } from '.'
 
 const SectionContext = createContext()
 
-const Section = ({ sectionName, children }) => (
+const Section = ({ sectionName, children, isGray = false }) => (
   <SectionContext.Provider value={sectionName}>
-    <SectionComponent>{children}</SectionComponent>
+    <SectionComponent isGray={isGray}>{children}</SectionComponent>
   </SectionContext.Provider>
 )
 
-const SectionComponent = observer(({ children }) => {
+const SectionComponent = observer(({ children, isGray }) => {
   const sectionName = useSectionName()
   const {
     Qvain: {
@@ -29,11 +29,16 @@ const SectionComponent = observer(({ children }) => {
     isRequired,
     isExpanded,
     toggleExpanded,
-    showAsterisk
+    showAsterisk,
   } = section
 
   return isRequired ? (
-    <MandatorySection id={`section-${sectionName}`} title={title} showAsterisk={showAsterisk}>
+    <MandatorySection
+      id={`section-${sectionName}`}
+      title={title}
+      showAsterisk={showAsterisk}
+      isGray={isGray}
+    >
       {children}
     </MandatorySection>
   ) : (
@@ -42,6 +47,7 @@ const SectionComponent = observer(({ children }) => {
       title={title}
       isExpanded={isExpanded}
       toggleExpanded={toggleExpanded}
+      isGray={isGray}
     >
       {children}
     </OptionalSection>
@@ -50,10 +56,11 @@ const SectionComponent = observer(({ children }) => {
 
 SectionComponent.propTypes = {
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]).isRequired,
+  isGray: PropTypes.bool,
 }
 
-const MandatorySection = ({ children, title, showAsterisk }) => (
-  <Card>
+const MandatorySection = ({ children, title, showAsterisk, isGray }) => (
+  <Card isGray={isGray}>
     {showAsterisk ? (
       <CustomSectionTitle>
         <Translate content={title} />
@@ -69,8 +76,8 @@ const MandatorySection = ({ children, title, showAsterisk }) => (
   </Card>
 )
 
-const OptionalSection = ({ children, title, isExpanded, toggleExpanded }) => (
-  <Card bottomContent={!isExpanded}>
+const OptionalSection = ({ children, title, isExpanded, toggleExpanded, isGray }) => (
+  <Card bottomContent={!isExpanded} isGray={isGray}>
     <SectionTitle>
       <ExpandCollapse type="button" isExpanded={isExpanded} onClick={toggleExpanded} />
       <Translate content={title} onClick={toggleExpanded} />
@@ -82,12 +89,14 @@ const OptionalSection = ({ children, title, isExpanded, toggleExpanded }) => (
 Section.propTypes = {
   sectionName: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]).isRequired,
+  isGray: PropTypes.bool,
 }
 
 MandatorySection.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]).isRequired,
   showAsterisk: PropTypes.bool.isRequired,
+  isGray: PropTypes.bool,
 }
 
 OptionalSection.propTypes = {
@@ -95,6 +104,7 @@ OptionalSection.propTypes = {
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]).isRequired,
   isExpanded: PropTypes.bool.isRequired,
   toggleExpanded: PropTypes.func.isRequired,
+  isGray: PropTypes.bool,
 }
 
 const Content = styled.div`

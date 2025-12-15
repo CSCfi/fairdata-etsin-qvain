@@ -5,7 +5,7 @@ import ReactModal from 'react-modal'
 
 import { Route, Routes } from 'react-router'
 
-import { screen, render, within, waitForElementToBeRemoved } from '@testing-library/react'
+import { screen, render, within, waitForElementToBeRemoved, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import etsinTheme from '@/styles/theme'
@@ -92,7 +92,12 @@ const renderQvain = async ({ initialPath, overrides = {}, draftOverrides = {} } 
     loggedIn: true,
     homeOrganizationId: 'csc.fi',
     idaProjects: ['testproject'],
+    admin_organizations: [],
+    available_admin_organizations: [{ id: 'org-1', pref_label: { en: 'Organization 1' } }],
+    default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
   })
+  stores.Qvain.AdminOrg.selectDefaultAdminOrg()
+  stores.Qvain.AdminOrg.setConfirmationSelected(true)
   registerMissingTranslationHandler(stores.Locale)
 
   render(
@@ -125,7 +130,11 @@ describe('Qvain with an opened dataset', () => {
     await userEvent.click(within(modal).getByTestId('select-/data/'))
     await userEvent.click(within(modal).getByRole('button', { name: 'Add files' }))
 
-    const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    const submitButton = await waitFor(() => {
+      const button = screen.getByRole('button', { name: 'Save as draft' })
+      expect(button).not.toBeDisabled()
+      return button
+    })
     await userEvent.click(submitButton) // should submit data to metax
     const fileset = JSON.parse(mockAdapter.history.patch[0].data).fileset
     expect(fileset).toEqual({
@@ -156,7 +165,11 @@ describe('Qvain with an opened dataset', () => {
     await userEvent.click(within(modal).getByTestId('select-/data/'))
     await userEvent.click(within(modal).getByRole('button', { name: 'Add files' }))
 
-    const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    const submitButton = await waitFor(() => {
+      const button = screen.getByRole('button', { name: 'Save as draft' })
+      expect(button).not.toBeDisabled()
+      return button
+    })
     await userEvent.click(submitButton) // should submit data to metax
     const fileset = JSON.parse(mockAdapter.history.patch[0].data).fileset
     expect(fileset).toEqual({
@@ -189,7 +202,11 @@ describe('Qvain with an opened dataset', () => {
     await userEvent.click(within(modal).getByTestId('select-/data/'))
     await userEvent.click(within(modal).getByRole('button', { name: 'Add files' }))
 
-    const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    const submitButton = await waitFor(() => {
+      const button = screen.getByRole('button', { name: 'Save as draft' })
+      expect(button).not.toBeDisabled()
+      return button
+    })
     await userEvent.click(submitButton) // should submit data to metax
     const fileset = JSON.parse(mockAdapter.history.patch[0].data).fileset
     expect(fileset).toEqual({
@@ -223,7 +240,11 @@ describe('Qvain with an opened dataset', () => {
     await userEvent.click(within(modal).getByTestId('select-/data/'))
     await userEvent.click(within(modal).getByRole('button', { name: 'Add files' }))
 
-    const submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    const submitButton = await waitFor(() => {
+      const button = screen.getByRole('button', { name: 'Save as draft' })
+      expect(button).not.toBeDisabled()
+      return button
+    })
     await userEvent.click(submitButton) // should submit data to metax
     const fileset = JSON.parse(mockAdapter.history.patch[0].data).fileset
     expect(fileset).toEqual({

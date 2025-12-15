@@ -38,6 +38,12 @@ describe('Qvain.License', () => {
 
   beforeEach(() => {
     stores = buildStores()
+    stores.Auth.setUser({
+      name: 'teppo',
+      admin_organizations: [],
+      available_admin_organizations: [{ id: 'org-1', pref_label: { en: 'Organization 1' } }],
+      default_admin_organization: 'org-1',
+    })
     stores.Qvain.resetQvainStore()
     useStores.mockReturnValue(stores)
   })

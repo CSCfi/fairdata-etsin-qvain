@@ -21,6 +21,7 @@ import organizationMockGet, {
   NotReallyReferenceIdentifier,
   dataset,
 } from '../../__testdata__/qvain.actors.data'
+import AuthClass from '@/stores/domain/auth'
 
 const helper = document.createElement('div')
 ReactModal.setAppElement(helper)
@@ -38,14 +39,23 @@ vi.mock('@/stores/stores', async () => ({
 }))
 
 const Env = new EnvClass()
-const Qvain = new QvainClass(Env)
+const Auth = new AuthClass(Env)
 const Locale = new LocaleClass(Env)
+const Qvain = new QvainClass(Env, Auth, Locale)
 
 const stores = {
   Env,
+  Auth,
   Qvain,
   Locale,
 }
+
+stores.Auth.setUser({
+  name: 'teppo',
+  admin_organizations: [],
+  available_admin_organizations: [{ id: 'org-1', pref_label: { en: 'Organization 1' } }],
+  default_admin_organization: { id: 'org-1' },
+})
 
 beforeEach(() => {
   mockAdapter.reset()
@@ -357,7 +367,7 @@ describe('Qvain.Actors modal', () => {
     await renderModal()
     const { editActor, actors } = stores.Qvain.Actors
     editActor(actors.find(actor => actor.type === ENTITY_TYPE.PERSON))
-    stores.Qvain.setPreservationState(80)
+    stores.Qvain.setOriginal({ preservation_pas_process_running: true })
 
     // Expect disabled inputs:
     // - person/organization radio buttons
@@ -382,7 +392,7 @@ describe('Qvain.Actors modal', () => {
     await renderModal()
     const { editActor, actors } = stores.Qvain.Actors
     editActor(actors.find(actor => actor.type === ENTITY_TYPE.ORGANIZATION))
-    stores.Qvain.setPreservationState(80)
+    stores.Qvain.setOriginal({ preservation_pas_process_running: true })
 
     // Expect disabled inputs:
     // - person/organization radio buttons

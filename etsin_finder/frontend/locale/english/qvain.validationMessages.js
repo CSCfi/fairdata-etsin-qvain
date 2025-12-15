@@ -1,4 +1,10 @@
 const validationMessages = {
+  adminOrg: {
+    confirmationRequired: 'Confirm that the organization has been selected correctly.',
+    adminOrgRequired: 'An admin organization is required for fairdata service.',
+    cannotSaveDraftWithDifferentAdminOrg:
+      'Cannot save draft with different admin organization than the previously published dataset.',
+  },
   types: {
     string: {
       date: 'The value must be a date string.',
