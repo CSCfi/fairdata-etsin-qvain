@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { render, screen, within, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
@@ -22,12 +22,32 @@ import dataset_ida_b from '../../__testdata__/metaxv3/datasets/dataset_ida_b.dat
 
 const common_query = 'publishing_channels=etsin&latest_versions=true&state=published'
 
+const getQueryParam = (key, value) => {
+  return `${key}=${value}`
+}
+
+const getFilteredAggregation = (facet, entry) => {
+  /* Create a deep clone from aggregations_a so that no reference to 
+  aggregations_a exists: */
+  const aggregations = JSON.parse(JSON.stringify(aggregations_a))
+
+  // Filter to include only objects that contain the search word: 
+  const hits = aggregations[facet].hits.filter((object) => {
+    return String(object.value.en).toLowerCase().includes(entry.toLowerCase())
+  })
+
+  // Replace old hits with filtered ones:
+  aggregations[facet].hits = hits
+
+  return aggregations
+}
+
 const mockAdapter = new MockAdapter(axios)
 mockAdapter
   .onGet(`https://metaxv3:443/v3/datasets?limit=20&offset=0&${common_query}`)
   .reply(200, { results: [dataset_ida_a], count: 1 })
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&${common_query}`)
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?language=en&limit=20&offset=0&${common_query}`)
   .reply(200, aggregations_a)
 mockAdapter
   .onGet(
@@ -36,21 +56,25 @@ mockAdapter
   .reply(200, { results: [dataset_ida_a], count: 1 })
 mockAdapter
   .onGet(
-    `https://metaxv3:443/v3/datasets/aggregates?keyword=web-development&limit=20&offset=0&${common_query}`
+    `https://metaxv3:443/v3/datasets/aggregates?language=en&keyword=web-development&limit=20&offset=0&${common_query}`
   )
   .reply(200, aggregations_a)
 mockAdapter
   .onGet(`https://metaxv3:443/v3/datasets?search=test&limit=20&offset=0&${common_query}`)
   .reply(200, { ...dataset_ida_a, count: 0, results: [] })
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?search=test&limit=20&offset=0&${common_query}`)
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?language=en&search=test&limit=20&offset=0&${common_query}`)
   .reply(200, aggregations_a)
 mockAdapter
   .onGet(`https://metaxv3:443/v3/datasets?limit=20&offset=20&${common_query}`)
   .reply(200, { results: [dataset_ida_b], count: 21 })
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=20&${common_query}`)
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?language=en&limit=20&offset=20&${common_query}`)
   .reply(200, aggregations_b)
+mockAdapter
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?language=en&limit=20&offset=0&${common_query}&` +
+    `${getQueryParam('organization_facet_search', 'KONE')}`)
+  .reply(200, getFilteredAggregation('organization', 'KONE'))
 
 mockAdapter.resetHistory()
 
@@ -123,6 +147,72 @@ describe('Etsin search page', () => {
           await userEvent.click(screen.getByText('web-development (1)'))
           expect(mockAdapter.history.get).toHaveLength(4)
           expect(mockAdapter.history.get[2].url).toContain('keyword=web-development')
+        })
+      })
+
+      describe('when typing "KONE" into the Organization facet input', () => {
+        test('the input field text will be "KONE"', async () => {
+          renderEtsin()
+          await userEvent.click(screen.getByText('Organization').closest('button'))
+          const organizationFacet = screen.getByTestId('organization-facet')
+          const input = within(organizationFacet).getByPlaceholderText('Narrow down the list')
+
+          expect(input).toBeInTheDocument()
+          expect(input.value).toBe('')
+
+          fireEvent.change(input, { target: { value: 'KONE' } })
+
+          await waitFor(() => {
+            expect(input.value).toBe('KONE')
+          })
+        })
+      })
+
+      describe('when typing "KONE" into the Organization facet input', () => {
+        test('it filters only the options that contain "KONE" case-insensitively', async () => {
+          renderEtsin()
+          await userEvent.click(screen.getByText('Organization').closest('button'))
+          const organizationFacet = screen.getByTestId('organization-facet')
+
+          const input = within(organizationFacet).getByPlaceholderText('Narrow down the list')
+
+          expect(within(organizationFacet).getByText('Kone Foundation (1)')).toBeInTheDocument()
+          expect(within(organizationFacet).getByText('Test org (1)')).toBeInTheDocument()
+
+          fireEvent.change(input, { target: { value: 'KONE' } })
+
+          await waitFor(() => {
+            expect(within(organizationFacet).getByText('Kone Foundation (1)')).toBeInTheDocument()
+          })
+
+          await waitFor(() => {
+            expect(within(organizationFacet).queryByText('Test org (1)')).not.toBeInTheDocument()
+          })
+        })
+      })
+
+      describe('when typing "KONE" into the Organization facet input', () => {
+        test('it adds a query param accordingly to the request', async () => {
+          renderEtsin()
+          await userEvent.click(screen.getByText('Organization').closest('button'))
+          const organizationFacet = screen.getByTestId('organization-facet')
+          const input = within(organizationFacet).getByPlaceholderText('Narrow down the list')
+
+          expect(mockAdapter.history.get.some((element) => {
+            return element.url.includes('aggregates')
+          })).toBe(true)
+
+          expect(mockAdapter.history.get.some((element) => {
+            return element.url.includes('organization_facet_search')
+          })).toBe(false)
+
+          fireEvent.change(input, { target: { value: 'KONE' } })
+
+          await waitFor(() => {
+            expect(mockAdapter.history.get.some((element) => {
+              return element.url.includes('aggregates') && element.url.includes('organization_facet_search=KONE')
+            })).toBe(true)
+          })
         })
       })
 

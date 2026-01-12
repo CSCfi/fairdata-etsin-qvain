@@ -13,11 +13,18 @@ import { useStores } from '@/stores/stores'
 import FilterItem from './filterItem'
 import { useQuery } from '@/components/etsin/general/useQuery'
 
-const FilterSection = ({ filterName, onlyCurrentLanguage }) => {
+const FilterSection = ({ filterName, onlyCurrentLanguage, showInput }) => {
   const {
     Etsin: {
       // isLoading will trigger update even though it is not strictly used here
-      Search: { getAggregation, getAggregationQueryName, isLoading },
+      Search: {
+        aggregations,
+        getAggregationQueryName,
+        isLoading,
+        fetchAggregationWithDebounce,
+        facetSearchesCleared,
+        setClearFacetSearch
+      },
     },
     Locale: { getValueTranslation, lang },
   } = useStores()
@@ -37,7 +44,7 @@ const FilterSection = ({ filterName, onlyCurrentLanguage }) => {
 
   const titleName = `search.aggregations.${filterName}.title`
   const filter = getAggregationQueryName(filterName)
-  const items = getAggregation(filterName).slice().sort(itemsSort) || []
+  const items = aggregations[filterName]?.hits?.slice().sort(itemsSort) || []
   let shownItems = items
   if (onlyCurrentLanguage) {
     shownItems = shownItems.filter(i => i.value[lang] || i.value.und)
@@ -46,6 +53,7 @@ const FilterSection = ({ filterName, onlyCurrentLanguage }) => {
 
   const [isOpen, setIsOpen] = useState(query.has(filter))
   const [showMoreItems, setShowMoreItems] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     if (!isLoading) {
@@ -58,6 +66,22 @@ const FilterSection = ({ filterName, onlyCurrentLanguage }) => {
     }
   }, [setIsOpen, query, filterName, isLoading, getAggregationQueryName])
 
+  /* If the user presses "Remove filters" button, the facet input 
+  is cleared and all the filter items are retrieved back (which 
+  happens in the ClearFilters component): */
+  useEffect(() => {
+    if (facetSearchesCleared[filterName]) {
+      setSearchTerm('')
+      setClearFacetSearch(filterName, false)
+    }
+  }, [facetSearchesCleared[filterName], setSearchTerm, setClearFacetSearch])
+
+  // Retrieve filters that respond partially or fully to the user input: 
+  const setFacetSearch = (value = '') => {
+    setSearchTerm(value)
+    fetchAggregationWithDebounce(filterName, value)
+  }
+
   const toggleSection = () => {
     setIsOpen(!isOpen)
   }
@@ -67,7 +91,7 @@ const FilterSection = ({ filterName, onlyCurrentLanguage }) => {
   }
 
   return (
-    <Section>
+    <Section data-testid={`${filterName}-facet`}>
       <Translate
         data-testid={`search-filter-${filterName}`}
         component={FilterCategory}
@@ -76,6 +100,20 @@ const FilterSection = ({ filterName, onlyCurrentLanguage }) => {
         content={`search.aggregations.${filterName}.title`}
       />
       <FilterItems className={isOpen ? 'open' : ''} aria-hidden={!isOpen}>
+        {showInput && (
+          <Translate
+            component={Input}
+            id={`${filterName}Input`}
+            value={searchTerm}
+            onChange={(e) => { setFacetSearch(e.target.value) }}
+            autoComplete='off'
+            className={`${query.has(filter) ? 'active' : ''} ${isOpen ? 'open' : ''}`}
+            attributes={{
+              placeholder: `search.facetSearchPlaceholder`,
+              'aria-label': `search.filterSearch.${filterName}`
+            }}
+          />
+        )}
         <Translate component="ul" attributes={{ 'aria-label': titleName }}>
           {shownItems.map(item => (
             <FilterItem
@@ -105,14 +143,46 @@ const FilterSection = ({ filterName, onlyCurrentLanguage }) => {
 FilterSection.propTypes = {
   filterName: PropTypes.string.isRequired,
   onlyCurrentLanguage: PropTypes.bool,
+  showInput: PropTypes.bool
 }
 
 FilterSection.defaultProps = {
   // Enable to ignore items that don't have a translation in current language or "und" language
   onlyCurrentLanguage: false,
+  showInput: false
 }
 
 export default observer(FilterSection)
+
+const Input = styled.input`
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.1s ease;
+  padding: 0 0.6em;
+  border-radius: 4px;
+  width: 100%;
+  color: ${props => props.theme.color.darkgray};
+  margin-bottom: 0.5em;
+  border: 0 solid hsl(0, 0%, 80%);
+  &.open {
+    max-height: 100%;
+    padding: 0.4em 0.6em;
+    border-width: 1px; 
+  }
+  &::placeholder {
+    color: ${props => props.theme.color.gray};
+    font-style: italic;
+  }
+  &:hover {
+    border-color: hsl(0, 0%, 70%);
+  }
+  &:focus {
+    border-color: hsl(0, 0%, 70%);;
+  }
+  &.active {
+    margin-bottom: 1em;
+  }
+`
 
 const ShowHide = styled.span`
   cursor: pointer;

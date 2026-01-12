@@ -1,6 +1,13 @@
 export default {
   name: 'Search',
   searchBar: 'Search bar',
+  filterSearches: {
+    organization: 'Organization facet search bar',
+    creator: 'Creator facet search bar',
+    fieldOfScience: 'Field of science facet search bar',
+    keyword: 'Keyword facet search bar',
+    project: 'Project facet search bar',
+  },
   placeholder: 'Search term',
   sorting: {
     sort: 'Sort',
@@ -74,4 +81,5 @@ export default {
       },
     },
   },
+  facetSearchPlaceholder: 'Narrow down the list',
 }

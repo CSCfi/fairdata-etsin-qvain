@@ -1,6 +1,13 @@
 export default {
   name: 'Haku',
   searchBar: 'Hakukenttä',
+  filterSearches: {
+    organization: 'Organisaatio-fasetin hakukenttä',
+    creator: 'Tekijä-fasetin hakukenttä',
+    fieldOfScience: 'Tieteenala-fasetin hakukenttä',
+    keyword: 'Avainsana-fasetin hakukenttä',
+    project: 'Projekti-fasetin hakukenttä',
+  },
   placeholder: 'Anna hakusana',
   sorting: {
     sort: 'Järjestä',
@@ -74,4 +81,5 @@ export default {
       },
     },
   },
+  facetSearchPlaceholder: 'Rajaa listaa hakusanalla',
 }

@@ -19,7 +19,7 @@ class Etsin {
     this.Access = Access
     this.accessibility = Accessibility
     this.Locale = Locale
-    this.Search = new EtsinSearch(this.Env)
+    this.Search = new EtsinSearch(this.Env, this.Locale, this)
 
     this.EtsinDatasetClass = EtsinDatasetV3
     this.DatasetProcessorClass = DatasetProcessorV3
@@ -40,6 +40,7 @@ class Etsin {
     dataset: [],
     emails: [],
     custom: [],
+    search: [],
     Access: this.Access,
     Locale: this.Locale,
   }
@@ -78,7 +79,7 @@ class Etsin {
       Env: this.Env,
     })
     this.Files = createFilesStore(this.Env)
-    this.Search = new EtsinSearch(this.Env)
+    this.Search = new EtsinSearch(this.Env, this.Locale, this)
 
     this.requests = {
       dataset: [],
@@ -89,6 +90,7 @@ class Etsin {
       dataset: [],
       emails: [],
       custom: [],
+      search: [],
     }
 
     this.isLoading = {

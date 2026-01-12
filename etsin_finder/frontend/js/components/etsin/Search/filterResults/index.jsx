@@ -35,13 +35,13 @@ const FilterResults = () => {
       </span>
       <FilterSection filterName="data_catalog" />
       <FilterSection filterName="access_type" />
-      <FilterSection filterName="organization" onlyCurrentLanguage />
-      <FilterSection filterName="creator" onlyCurrentLanguage />
-      <FilterSection filterName="field_of_science" />
-      <FilterSection filterName="keyword" />
+      <FilterSection filterName="organization" onlyCurrentLanguage showInput />
+      <FilterSection filterName="creator" onlyCurrentLanguage showInput />
+      <FilterSection filterName="field_of_science" showInput />
+      <FilterSection filterName="keyword" showInput />
       <FilterSection filterName="infrastructure" />
       <TemporalSection />
-      <FilterSection filterName="project" onlyCurrentLanguage />
+      <FilterSection filterName="project" onlyCurrentLanguage showInput />
       <FilterSection filterName="file_type" />
     </FilterContainer>
   )

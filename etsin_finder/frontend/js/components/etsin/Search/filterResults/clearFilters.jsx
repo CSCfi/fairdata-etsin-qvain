@@ -11,7 +11,7 @@ const ClearFilters = () => {
     Matomo,
     Accessibility,
     Etsin: {
-      Search: { isLoading, resetTemporal },
+      Search: { isLoading, resetTemporal, resetFacetSearches },
     },
     Locale: { translate },
   } = useStores()
@@ -21,6 +21,7 @@ const ClearFilters = () => {
     Matomo.recordEvent('CLEAR_FILTERS')
     Accessibility.announce(translate('search.filter.filtersCleared'))
     resetTemporal()
+    resetFacetSearches()
     navigate('/datasets')
   }
 

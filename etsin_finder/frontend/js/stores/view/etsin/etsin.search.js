@@ -1,16 +1,21 @@
 import { makeObservable, action, observable, computed, runInAction } from 'mobx'
-import AbortClient from '@/utils/AbortClient'
+import AbortClient, { isAbort } from '@/utils/AbortClient'
+import { debounce } from 'lodash-es'
 
 class EtsinSearch {
-  constructor(Env) {
+  constructor(Env, Locale, Etsin) {
     this.Env = Env
-    makeObservable(this)
+    this.Locale = Locale
+    this.Etsin = Etsin
     this.client = new AbortClient()
+    makeObservable(this)
   }
 
   @observable term = '' // current value of search input
 
   @observable usedTerm = '' // value that was used for current search
+
+  @observable aggregatesUrl = ''
 
   @observable res = null
 
@@ -37,6 +42,14 @@ class EtsinSearch {
   @observable temporalOpen = false
 
   @observable temporalValidationError = null
+
+  @observable facetSearchesCleared = {
+    organization: false,
+    creator: false,
+    field_of_science: false,
+    keyword: false,
+    project: false,
+  }
 
   @computed get count() {
     return this.res?.count || 0
@@ -92,13 +105,15 @@ class EtsinSearch {
     query.set('state', 'published')
 
     const url = `${this.Env.metaxV3Url('datasets')}?${query.toString()}`
-    const aggregatesUrl = `${this.Env.metaxV3Url('aggregates')}?${query.toString()}`
+    this.aggregatesUrl = `${this.Env.metaxV3Url('aggregates')}?language=${
+      this.Locale.lang
+    }&${query.toString()}`
 
     await this.client.abort()
     this.setIsLoading(true)
 
     try {
-      const results = await Promise.all([this.client.get(aggregatesUrl), this.client.get(url)])
+      const results = await Promise.all([this.client.get(this.aggregatesUrl), this.client.get(url)])
 
       runInAction(() => {
         this.setAggregations(results[0].data)
@@ -128,8 +143,72 @@ class EtsinSearch {
     }
   }
 
+  /* The aggregation parameter is not set directly as the value of 
+  aggregations[key], but a new corresponding object is created from it so 
+  that subobject changes are registered: */
   @action.bound setAggregation(key, aggregation) {
-    this.aggregations[key] = { ...aggregation }
+    this.aggregations[key] = {
+      query_parameter: aggregation.query_parameter,
+      hits: [...aggregation.hits],
+    }
+  }
+
+  /* Update the value of the aggregation determined by the facetName 
+  parameter to results that correspond partly or fully to the value of the 
+  term parameter. 
+  */
+  @action.bound
+  async fetchAggregation(facetName, term = '') {
+    try {
+      const url =
+        term.trim() === ''
+          ? this.aggregatesUrl
+          : `${this.aggregatesUrl}&${facetName}_facet_search=${term}`
+
+      const response = await this.client.get(url, { tag: facetName })
+      this.setAggregation(facetName, response.data[facetName])
+    } catch (error) {
+      this.Etsin.errors.search.push(error)
+
+      if (isAbort(error)) {
+        return
+      }
+
+      throw error
+    }
+  }
+
+  fetchDebouncedAggregation = debounce(async (facetName, term) => {
+    await this.fetchAggregation(facetName, term)
+  }, 200)
+
+  @action.bound
+  fetchAggregationWithDebounce(facetName, term) {
+    this.client.abort(facetName)
+    this.fetchDebouncedAggregation(facetName, term)
+  }
+
+  @action.bound setClearFacetSearch(facetName, value) {
+    this.facetSearchesCleared[facetName] = value
+  }
+
+  @action.bound async resetFacetSearches() {
+    try {
+      this.client.abort('all')
+      const result = await this.client.get(this.aggregatesUrl, { tag: 'all' })
+      Object.keys(this.facetSearchesCleared).forEach(facetName => {
+        this.setClearFacetSearch(facetName, true)
+      })
+      this.setAggregations(result.data)
+    } catch (error) {
+      this.Etsin.errors.search.push(error)
+
+      if (isAbort(error)) {
+        return
+      }
+
+      throw error
+    }
   }
 
   @action.bound setTerm(term) {
