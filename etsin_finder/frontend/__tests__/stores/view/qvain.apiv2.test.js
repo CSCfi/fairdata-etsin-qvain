@@ -1,7 +1,7 @@
 /*
  **  Files submit cases frontend tests
  **
- **  Files has 144 theoretical test conditions. Almost half of these cases are inactive or not possible at all.
+ **  Files has 144 theoretical test conditions. Almost half of these cases are inactivxe or not possible at all.
  **  These tests will test all the cases that can be tested.
  **  Tests lean heavily on the documentation found in the link below.
  **  The cases are named after the theoretical number column.
@@ -25,6 +25,8 @@ import {
 } from '../../../js/utils/constants'
 import urls from '../../../js/utils/urls'
 import { configure } from 'mobx'
+
+vi.setConfig({ testTimeout: 1000 })
 
 // first half of the tests mocks qvainFormSchema but the rest of the tests uses actual module
 import {
@@ -124,6 +126,7 @@ const createMockQvain = settings => ({
   canRemoveFiles: true,
   canSelectFiles: true,
   ...settings,
+  isREMSAllowed: false,
 })
 
 const generalPostResponse = {
@@ -346,7 +349,7 @@ describe('create new draft', () => {
   const expectNoError = async dataset => {
     handleSubmitToBackend.mockReturnValue(dataset)
     qvainFormDraftSchema.validate.mockReturnValue(
-      realQvainFormDraftSchema.validate(dataset, { strict: true })
+      realQvainFormDraftSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
 
     try {
@@ -361,7 +364,7 @@ describe('create new draft', () => {
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue(dataset)
     qvainFormDraftSchema.validate.mockReturnValue(
-      realQvainFormDraftSchema.validate(dataset, { strict: true })
+      realQvainFormDraftSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
@@ -485,7 +488,7 @@ describe('publish new dataset', () => {
   const expectNoError = async (dataset, cb) => {
     handleSubmitToBackend.mockReturnValue(dataset)
     qvainFormSchema.validate.mockReturnValue(
-      realQvainFormSchema.validate(dataset, { strict: true })
+      realQvainFormSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
 
     try {
@@ -498,7 +501,7 @@ describe('publish new dataset', () => {
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue(dataset)
     qvainFormSchema.validate.mockReturnValue(
-      realQvainFormSchema.validate(dataset, { strict: true })
+      realQvainFormSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
     await Submit.submitPublish()
     expect(Submit.error?.message).toEqual(error)
@@ -637,7 +640,7 @@ describe('edit existing draft dataset', () => {
   const expectNoError = async dataset => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
     qvainFormDraftSchema.validate.mockReturnValue(
-      realQvainFormDraftSchema.validate(dataset, { strict: true })
+      realQvainFormDraftSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
 
     try {
@@ -650,7 +653,7 @@ describe('edit existing draft dataset', () => {
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
     qvainFormDraftSchema.validate.mockReturnValue(
-      realQvainFormDraftSchema.validate(dataset, { strict: true })
+      realQvainFormDraftSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
@@ -758,7 +761,7 @@ describe('publish existing draft dataset', () => {
   const expectNoError = async dataset => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
     qvainFormSchema.validate.mockReturnValue(
-      realQvainFormSchema.validate(dataset, { strict: true })
+      realQvainFormSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
 
     try {
@@ -771,7 +774,7 @@ describe('publish existing draft dataset', () => {
   const expectError = async (dataset, error) => {
     handleSubmitToBackend.mockReturnValue({ ...preparedDataset, ...dataset })
     qvainFormSchema.validate.mockReturnValue(
-      realQvainFormSchema.validate(dataset, { strict: true })
+      realQvainFormSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
     await Submit.submitPublish()
     expect(Submit.error?.message).toEqual(error)
@@ -891,7 +894,7 @@ describe('save published dataset as draft', () => {
       original: { ...dataset.original, ...preparedDataset.original },
     })
     qvainFormDraftSchema.validate.mockReturnValue(
-      realQvainFormDraftSchema.validate(dataset, { strict: true })
+      realQvainFormDraftSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
 
     try {
@@ -907,7 +910,7 @@ describe('save published dataset as draft', () => {
       original: { ...dataset.original, ...preparedDataset.original },
     })
     qvainFormDraftSchema.validate.mockReturnValue(
-      realQvainFormDraftSchema.validate(dataset, { strict: true })
+      realQvainFormDraftSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
     await Submit.submitDraft()
     expect(Submit.error?.message).toEqual(error)
@@ -1029,7 +1032,7 @@ describe('republish dataset', () => {
       original: { ...dataset.original, ...preparedDataset.original },
     })
     qvainFormSchema.validate.mockReturnValue(
-      realQvainFormSchema.validate(dataset, { strict: true })
+      realQvainFormSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
 
     try {
@@ -1045,7 +1048,7 @@ describe('republish dataset', () => {
       original: { ...dataset.original, ...preparedDataset.original },
     })
     qvainFormSchema.validate.mockReturnValue(
-      realQvainFormSchema.validate(dataset, { strict: true })
+      realQvainFormSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
     await Submit.submitPublish()
     expect(Submit.error?.message).toEqual(error)
@@ -1176,7 +1179,7 @@ describe('publish unpublished dataset', () => {
       original: { ...dataset.original, ...preparedDataset.original },
     })
     qvainFormSchema.validate.mockReturnValue(
-      realQvainFormSchema.validate(dataset, { strict: true })
+      realQvainFormSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
 
     try {
@@ -1192,7 +1195,7 @@ describe('publish unpublished dataset', () => {
       original: { ...dataset.original, ...preparedDataset.original },
     })
     qvainFormSchema.validate.mockReturnValue(
-      realQvainFormSchema.validate(dataset, { strict: true })
+      realQvainFormSchema.validate(dataset, { strict: true, context: { Qvain: mockQvain } })
     )
     await Submit.submitPublish()
     expect(Submit.error?.message).toEqual(error)
@@ -1283,11 +1286,20 @@ describe('publish unpublished dataset', () => {
 })
 
 describe('required fields', () => {
+  let mockQvain
+
+  beforeEach(() => {
+    mockQvain = createMockQvain()
+  })
+
   const expectDraftErrors = (settings, expectedErrors) => {
     const dataset = generateDefaultDatasetForDraft(settings)
     let errors
     try {
-      realQvainFormDraftSchema.validateSync(dataset, { strict: true })
+      realQvainFormDraftSchema.validateSync(dataset, {
+        strict: true,
+        context: { Qvain: mockQvain },
+      })
     } catch (e) {
       errors = e.errors
     }
@@ -1298,7 +1310,7 @@ describe('required fields', () => {
     const dataset = generateDefaultDatasetForPublish(settings)
     let errors
     try {
-      realQvainFormSchema.validateSync(dataset, { strict: true })
+      realQvainFormSchema.validateSync(dataset, { strict: true, context: { Qvain: mockQvain } })
     } catch (e) {
       errors = e.errors
     }

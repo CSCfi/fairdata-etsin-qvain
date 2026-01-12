@@ -823,12 +823,16 @@ describe('Qvain with an opened dataset', () => {
     })
     await userEvent.type(applicationInputFi, 'näin haet')
 
+    // Saving should be disabled until approval type is selected
+    let submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    expect(submitButton).toBeDisabled()
+
     // Select approval type
     const approvalGroup = screen.getByRole('group', { name: /approval type/i })
     await userEvent.click(within(approvalGroup).getByText(/Automatic/))
 
     // Check values get submitted
-    const submitButton = await waitFor(() => {
+    submitButton = await waitFor(() => {
       const button = screen.getByRole('button', { name: 'Save as draft' })
       expect(button).not.toBeDisabled()
       return button

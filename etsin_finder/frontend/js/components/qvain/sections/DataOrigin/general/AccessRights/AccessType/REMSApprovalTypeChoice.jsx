@@ -6,17 +6,18 @@ import { RadioInput, Label, FormField } from '@/components/qvain/general/modal/f
 const REMSApprovalTypeChoice = ({ value, label, disabled = false }) => {
   const {
     Locale: { translate },
-    Qvain: { DataAccess },
+    Qvain: { DataAccess: { remsApprovalType } },
   } = useStores()
 
   const handler = e => {
-    DataAccess.remsApprovalType.set(e.target.value || null)
+    remsApprovalType.set(e.target.value || null)
+    remsApprovalType.validate()
   }
 
   // Use '' in the input to represent null/undefined value
   const checked =
-    DataAccess.remsApprovalType.value === value ||
-    (value === '' && !DataAccess.remsApprovalType.value)
+    remsApprovalType.value === value ||
+    (value === '' && !remsApprovalType.value)
 
   const id = `rems-approval-type-${value || 'disabled'}`
 

@@ -1,9 +1,9 @@
 import * as yup from 'yup'
 
-import SingleValueField from './qvain.singleValueField'
-import MultiLanguageField from './qvain.multiLanguageField'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
 import removeEmpty from '@/utils/removeEmpty'
+import MultiLanguageField from './qvain.multiLanguageField'
+import REMSApprovalTypeField from './qvain.approvalType'
 
 export const dataAccessMultilanguageSchema = yup.object().shape({
   fi: yup
@@ -19,8 +19,7 @@ export const dataAccessMultilanguageSchema = yup.object().shape({
 class DataAccess {
   constructor(Parent) {
     this.Parent = Parent
-    // Use "automatic" as default approval type
-    this.remsApprovalType = new SingleValueField(this, undefined, 'automatic')
+    this.remsApprovalType = new REMSApprovalTypeField({ Qvain: Parent, Parent: this })
     this.applicationInstructions = new MultiLanguageField(this, dataAccessMultilanguageSchema, {
       characterLimit: 1,
     })
@@ -30,6 +29,9 @@ class DataAccess {
     this.reviewerInstructions = new MultiLanguageField(this, dataAccessMultilanguageSchema, {
       characterLimit: 50000,
     })
+
+    this.reset = this.reset.bind(this)
+    this.validate = this.validate.bind(this)
   }
 
   reset() {
@@ -90,7 +92,7 @@ class DataAccess {
   }
 
   shouldShowREMSApprovalType(accessType) {
-    return accessType.url === ACCESS_TYPE_URL.PERMIT
+    return accessType?.url === ACCESS_TYPE_URL.PERMIT
   }
 
   setChanged(value) {

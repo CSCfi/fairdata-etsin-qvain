@@ -95,6 +95,10 @@ const validationMessages = {
     url: 'Virhe rajoituksen peruste -kentän referenssiarvossa.',
     required: 'Rajoituksen peruste on pakollinen tieto jos pääsyoikeus ei ole "Avoin".',
   },
+  approvalType: {
+    string: 'Aineiston luvituksen tyypin pitää olla merkkijono.',
+    required: 'Aineiston luvituksen tyyppi on pakollinen tieto.',
+  },
   license: {
     requiredIfIDA: 'Lisenssi on pakollinen tieto kun tiedoston lähde on IDA.',
     otherUrl: {

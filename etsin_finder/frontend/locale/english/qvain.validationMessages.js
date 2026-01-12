@@ -92,6 +92,10 @@ const validationMessages = {
     url: 'Reference value error in Restriction grounds.',
     required: 'Restriction grounds are required if access type is not "Open".',
   },
+  approvalType: {
+    string: 'Data access approval type must be a string value.',
+    required: 'Data access approval type is required.',
+  },
   license: {
     requiredIfIDA: 'License is required for datasets where File origin is set to IDA.',
     otherUrl: {

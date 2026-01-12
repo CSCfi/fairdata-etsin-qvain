@@ -59,7 +59,7 @@ class SubmitV3 extends Submit {
 
       const dataset = this.prepareDataset()
       try {
-        await schema.validate(dataset, { strict: true })
+        schema.validateSync(dataset, { strict: true, context: { Qvain: this.Qvain } })
         await this.checkDoiCompatibility(dataset)
         if (!this.Qvain.AdminOrg.confirmationSelected) {
           throw new ValidationError(

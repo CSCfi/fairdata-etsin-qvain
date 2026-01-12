@@ -197,7 +197,7 @@ class Submit {
       const { fileActions, metadataActions, newCumulativeState } = this.prepareActions()
 
       try {
-        await schema.validate(dataset, { strict: true })
+        await schema.validate(dataset, { strict: true, context: { Qvain: this.Qvain } })
         await this.checkDoiCompatibility(dataset)
       } catch (error) {
         this.setError(error)
@@ -435,7 +435,11 @@ class Submit {
 
     try {
       try {
-        await this.qvainFormSchema.validate(dataset, { abortEarly: false, strict: true })
+        await this.qvainFormSchema.validate(dataset, {
+          abortEarly: false,
+          strict: true,
+          context: { Qvain: this.Qvain },
+        })
         if (!this.Qvain.AdminOrg.confirmationSelected) {
           throw new ValidationError(
             this.Qvain.Locale.translate('qvain.validationMessages.adminOrg.confirmationRequired')
@@ -454,7 +458,11 @@ class Submit {
       }
 
       try {
-        await this.qvainFormDraftSchema.validate(dataset, { abortEarly: false, strict: true })
+        await this.qvainFormDraftSchema.validate(dataset, {
+          abortEarly: false,
+          strict: true,
+          context: { Qvain: this.Qvain },
+        })
 
         const publishedDataset = this.Qvain.publishedDataset
         if (

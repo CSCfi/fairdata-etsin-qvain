@@ -24,9 +24,10 @@ import { filesSchema, directoriesSchema } from './qvain.files.schemas'
 import { embargoExpDateSchema } from './qvain.embargoExpDate'
 import { actorsSchemaV3 } from './qvain.actors.v3'
 import { dataAccessMultilanguageSchema } from './qvain.dataAccess'
+import { dataAccessTypeSchema } from './qvain.approvalType'
 
 const dataAccessSchemaPartial = {
-  rems_approval_type: yup.string().nullable(),
+  rems_approval_type: dataAccessTypeSchema, // requires Qvain store in the validation context
   data_access_application_instructions: dataAccessMultilanguageSchema,
   data_access_terms: dataAccessMultilanguageSchema,
   data_access_reviewer_instructions: dataAccessMultilanguageSchema,
