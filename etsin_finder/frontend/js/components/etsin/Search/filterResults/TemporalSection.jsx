@@ -7,7 +7,6 @@ import useQuery from '../../general/useQuery'
 import { useNavigate } from 'react-router'
 import { InvertedButton } from '@/components/general/button'
 import { observer } from 'mobx-react'
-import { FacetInput } from '@/components/general/FacetInput'
 import { useEffect } from 'react'
 import { useStores } from '@/stores/stores'
 
@@ -34,12 +33,12 @@ const convertToISODate = (date, endAsYear = false) => {
     return moment(date).format(DateFormats.ISO8601_DATE_FORMAT)
 }
 
-/*If the temporal query value represents the first or the last day of a 
+/* If the temporal query value represents the first or the last day of a 
 year, convert it to the year only. Otherwise, use the original value, as 
 the user likely entered an ISO date. */
 const getTemporalValue = (queryValue) => {
     const monthDayPart = queryValue.substring("YYYY-".length)
-    if (monthDayPart === "01-01" || monthDayPart == "12-31") {
+    if (monthDayPart === "01-01" || monthDayPart === "12-31") {
         return moment(queryValue).format("YYYY")
     }
 
@@ -70,11 +69,11 @@ function TemporalSection() {
     const temporalStartQueryKey = "temporal__start_date"
     const temporalEndQueryKey = "temporal__end_date"
 
-    /*If, at the start of the component lifecycle, the query contains either 
-    of the temporal query params, it indicates that the user has performed a 
-    temporal search using the values of these params. In this case, keep the 
-    facet open and populate the inputs with the values retrieved from the 
-    query.
+    /* If the query contains either of the temporal query params at the start 
+    of the component lifecycle or when the query changes, this indicates that 
+    the user has performed a temporal search using the values of these params. 
+    In this case, keep the facet open and populate the inputs with the values 
+    retrieved from the query.
 
     If a query parameter indicating temporal start or end is an ISO date, use 
     it as-is in the input. If it represents the first day of the year 
@@ -87,6 +86,7 @@ function TemporalSection() {
 
         if (!temporalStartQueryValue && !temporalEndQueryValue) {
             resetTemporal()
+            setTemporalOpen(false)
         } else {
             if (temporalStartQueryValue) {
                 setTemporalStart(getTemporalValue(temporalStartQueryValue))
@@ -106,17 +106,12 @@ function TemporalSection() {
         let validStart = null
         let validEnd = null
 
-        if (!temporalStart || !temporalEnd) {
-            if (!temporalStart && !temporalEnd) {
-                query.delete(temporalStartQueryKey)
-                query.delete(temporalEndQueryKey)
-                navigate(`/datasets?${query.toString()}`)
-                return
-            } else if (!temporalStart) {
-                query.delete(temporalStartQueryKey)
-            } else if (!temporalEnd) {
-                query.delete(temporalEndQueryKey)
-            }
+        if (!temporalStart) {
+            query.delete(temporalStartQueryKey)
+        }
+
+        if (!temporalEnd) {
+            query.delete(temporalEndQueryKey)
         }
 
         if (temporalStart) {
@@ -144,87 +139,159 @@ function TemporalSection() {
             return
         }
 
-        validStart && query.set(temporalStartQueryKey, validStart)
-        validEnd && query.set(temporalEndQueryKey, validEnd)
+        if (validStart) {
+            validStart && query.set(temporalStartQueryKey, validStart)
+        }
+
+        if (validEnd) {
+            validEnd && query.set(temporalEndQueryKey, validEnd)
+        }
 
         navigate(`/datasets?${query.toString()}`)
+    }
+
+    const fetchOnEnter = (key) => {
+        if (key === "Enter") {
+            fetchDatasets()
+        }
     }
 
     return (
         <Section data-testid="temporal">
             <Translate
                 component={FilterCategory}
+                content="search.aggregations.temporal.title"
                 onClick={() => { setTemporalOpen(!temporalOpen) }}
                 aria-expanded={temporalOpen}
-                content="search.aggregations.temporal.title"
             />
-            <TemporalRow className={temporalOpen ? "open" : ""} aria-hidden={!temporalOpen}>
-                <Column>
-                    <Translate component="label" content="search.aggregations.temporal.start" htmlFor="start" />
-                    <Translate
-                        component={FacetInput}
-                        id="start"
-                        attributes={{ placeholder: "search.aggregations.temporal.placeholder" }}
-                        autoComplete="off"
-                        value={temporalStart}
-                        onChange={e => setTemporalStart(e.target.value)} />
-                </Column>
-                <Column>
-                    <Translate component="label" content="search.aggregations.temporal.end" htmlFor="end" />
-                    <Translate
-                        component={FacetInput}
-                        id="end"
-                        attributes={{ placeholder: "search.aggregations.temporal.placeholder" }}
-                        autoComplete="off"
-                        value={temporalEnd}
-                        onChange={e => setTemporalEnd(e.target.value)} />
-                </Column>
-                <Translate component={Button} onClick={fetchDatasets} content="search.aggregations.temporal.button" />
-            </TemporalRow>
-            <ErrorContainer className={temporalOpen ? "open" : ""} aria-hidden={!temporalOpen}>
-                {temporalValidationError && <Translate component={ValidationError} content={temporalValidationError} />}
-            </ErrorContainer>
+            <Grid aria-hidden={!temporalOpen} className={temporalOpen ? "open" : ""}>
+                <Translate
+                    htmlFor="start"
+                    component="label"
+                    content="search.aggregations.temporal.start"
+                    className="start-label"
+                />
+                <Translate
+                    id="start"
+                    component={FacetInput}
+                    value={temporalStart}
+                    onChange={e => setTemporalStart(e.target.value)}
+                    onKeyDown={e => fetchOnEnter(e.key)}
+                    attributes={{
+                        placeholder: "search.aggregations.temporal.placeholder",
+                        "aria-label": "search.filterSearches.temporalStart"
+                    }}
+                    autoComplete="off"
+                    className="start-input"
+                />
+                <Translate
+                    htmlFor="end"
+                    component="label"
+                    content="search.aggregations.temporal.end"
+                    className="end-label"
+                />
+                <Translate
+                    component={FacetInput}
+                    id="end"
+                    value={temporalEnd}
+                    onChange={e => setTemporalEnd(e.target.value)}
+                    onKeyDown={e => fetchOnEnter(e.key)}
+                    attributes={{
+                        placeholder: "search.aggregations.temporal.placeholder",
+                        "aria-label": "search.filterSearches.temporalEnd"
+                    }}
+                    autoComplete="off"
+                    className="end-input"
+                />
+                <Translate
+                    component={Button}
+                    content="search.aggregations.temporal.button"
+                    onClick={fetchDatasets}
+                />
+            </Grid>
+            {temporalValidationError &&
+                <Translate
+                    component={ValidationError}
+                    content={temporalValidationError}
+                    className={temporalOpen ? "open" : ""}
+                />}
         </Section>
     )
 }
 
 // TODO: Animate in the same way as FilterItems in filterSection.jsx
-const TemporalRow = styled.div`
-    display: flex;
+const Grid = styled.div`
+    display: grid;
     justify-content: start;
-    align-items: flex-end;
-    max-height: 0;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto;
+    grid-template-areas: 
+        "start-label end-label ."
+        "start-input end-input button";
+    row-gap: 0.2em;
+    column-gap: 0.5em;
+    height: 0;
     overflow: hidden;
+    padding: 0 1em;
+    > .start-label {
+        grid-area: start-label;
+    }
+    > .end-label {
+        grid-area: end-label;
+    }
+    > .start-input {
+        grid-area: start-input;
+    }
+    > .end-input {
+        grid-area: end-input;
+    }
+    > button {
+        grid-area: button;
+    }
     &.open {
-        max-height: 100%;
+        height: 100%;
         padding: 1em;
     }
 `
 
-const Column = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 0.2em;
-    margin-right: 0.5em;
+const FacetInput = styled.input`
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 5em;
+    min-width: 4em;
+    padding: 0.4em 0.6em;
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 4px;
+    color: ${props => props.theme.color.darkgray};
+    &::placeholder {
+        color: ${props => props.theme.color.gray};
+        font-style: italic;
+    }
+    &:hover {
+        border-color: hsl(0, 0%, 70%);
+    }
+    &:focus {
+        border-color: hsl(0, 0%, 70%);
+  }
+
 `
 
 const Button = styled(InvertedButton)`
     padding: 0.3em 0.6em;
     margin: 0;
-    margin-left: 0.2em
-`
-
-const ErrorContainer = styled.div`
-    max-height: 0;
-    overflow: hidden;
-    &.open {
-        max-height: 100%;
-    }
+    margin-left: 0.2em;
 `
 
 const ValidationError = styled.p`
-    padding: 0 1em;
     color: red;
+    margin: 0 1em;
+    height: 0;
+    overflow: hidden;
+    &.open {
+        height: 100%;
+        margin-bottom: 1em;
+    }
 `
 
 export default observer(TemporalSection)

@@ -7,6 +7,8 @@ export default {
     fieldOfScience: 'Tieteenala-fasetin hakukenttä',
     keyword: 'Avainsana-fasetin hakukenttä',
     project: 'Projekti-fasetin hakukenttä',
+    temporalStart: 'Ajanjakso-fasetin alkamisvuoden syötekenttä',
+    temporalEnd: 'Ajanjakso-fasetin päättymisvuoden syötekenttä',
   },
   placeholder: 'Anna hakusana',
   sorting: {

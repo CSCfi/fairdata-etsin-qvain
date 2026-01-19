@@ -247,7 +247,6 @@ class EtsinSearch {
   @action resetTemporal = () => {
     this.temporalStart = ''
     this.temporalEnd = ''
-    this.temporalOpen = false
     this.temporalValidationError = null
   }
 }

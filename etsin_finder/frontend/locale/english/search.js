@@ -7,6 +7,8 @@ export default {
     fieldOfScience: 'Field of science facet search bar',
     keyword: 'Keyword facet search bar',
     project: 'Project facet search bar',
+    temporalStart: 'Start year input field of the Time Period facet',
+    temporalEnd: 'End year input field of the Time Period facet',
   },
   placeholder: 'Search term',
   sorting: {

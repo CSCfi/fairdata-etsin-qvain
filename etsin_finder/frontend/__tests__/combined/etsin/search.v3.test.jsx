@@ -259,7 +259,7 @@ describe('When the start year is after the end year in the Time Period Facet', (
 })
 
 describe('When the start year is invalid in the Time Period facet', () => {
-  test('it should display the indented validation error', async () => {
+  test('it should display the intended validation error', async () => {
     renderEtsin()
     await userEvent.click(screen.getByText('Time Period').closest('button'))
     const temporalFacet = screen.getByTestId('temporal')
@@ -276,7 +276,7 @@ describe('When the start year is invalid in the Time Period facet', () => {
 })
 
 describe('When the end year is invalid in the Time Period facet', () => {
-  test('it should display the indented validation error', async () => {
+  test('it should display the intended validation error', async () => {
     renderEtsin()
     await userEvent.click(screen.getByText('Time Period').closest('button'))
     const temporalFacet = screen.getByTestId('temporal')
