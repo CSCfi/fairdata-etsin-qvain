@@ -182,6 +182,8 @@ const files = {
       cumulative:
         'You are creating a new version of this dataset. You are allowed to delete files until you publish this version.',
     },
+    addFilesInfoText:
+      'You cannot add files as you are not a member of the project where the files are selected from.',
     newTag: 'To be added',
     removeTag: 'To be removed',
     hideRemoved: 'Hide removed',

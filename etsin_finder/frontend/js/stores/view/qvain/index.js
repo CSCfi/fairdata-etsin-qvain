@@ -701,6 +701,13 @@ class Qvain extends Resources {
     return !!this.original?.preservation_pas_process_running
   }
 
+  @computed
+  get userIsQvainAdmin() {
+    return this.Auth.user.admin_organizations?.some(
+      org => org === this.original?.metadata_owner_admin_org
+    )
+  }
+
   // these two are self-removing-resolve-functions
   // You can call this.promptLooseActors(true/false)
   // and it will resolve promise and then delete resolver from this.promptLooseActors.

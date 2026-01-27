@@ -179,6 +179,8 @@ const files = {
       cumulative:
         'Olet luomassa uutta versiota aineistokuvailusta. Voit poistaa tiedostoja kunnes julkaiset uuden version.',
     },
+    addFilesInfoText:
+      'Et voi lisätä tiedostoja, koska et ole jäsen projektissa, josta tiedostot on valittu.',
     newTag: 'Lisätään',
     removeTag: 'Poistetaan',
     hideRemoved: 'Piilota poistettavat',

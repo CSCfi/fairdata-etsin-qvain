@@ -31,12 +31,14 @@ export const FilePickerBase = () => {
         SelectedItemsView: { toggleHideRemoved, hideRemoved },
         isLoadingProject,
         loadingProjectError,
+        userHasRightsToEditProject,
       },
       canSelectFiles,
       canRemoveFiles,
       isNewVersion,
       isCumulative,
       newCumulativeState,
+      userIsQvainAdmin,
     },
     Locale: { translate },
   } = useStores()
@@ -165,6 +167,11 @@ export const FilePickerBase = () => {
     </>
   )
 
+  const addFilesInfoText =
+    userIsQvainAdmin && !userHasRightsToEditProject ? (
+      <Translate component={InfoText} content="qvain.files.selected.addFilesInfoText" />
+    ) : null
+
   /*Show instruction text related to file editing/deletion restrictions
   if IDA directories/files have been added to the published dataset when
   published and if the dataset is not a new draft created from an existing
@@ -172,21 +179,22 @@ export const FilePickerBase = () => {
 
   Note: The condition for showing the info text also includes
   hasItemsOriginally, because canRemoveFiles returns false when editing a
-  published cumulative dataset that doesn't originally contain file items. */
-  const filesInfoText = (
-    <>
-      {!canRemoveFiles && hasItemsOriginally && (
-        <InfoText>
-          <Translate
-            content={`qvain.files.selected.infoText.${
-              isCumulative ? 'cumulative' : 'noncumulative'
-            }`}
-            unsafe={true}
-          />
-        </InfoText>
-      )}
-    </>
-  )
+  published cumulative dataset that doesn't originally contain file items. 
+  
+  Ignore this Info Text if user is Qvain admin and has no rights to edit project. 
+  In that case we show a info text that explains that the user has no rights to 
+  edit the files because they are not a member of the project.
+  */
+  const filesInfoText =
+    !addFilesInfoText && !canRemoveFiles && hasItemsOriginally ? (
+      <Translate
+         component={InfoText}
+         content={`qvain.files.selected.infoText.${
+           isCumulative ? 'cumulative' : 'noncumulative'
+         }`}
+         unsafe={true}
+       />
+    ) : null
 
   return (
     <FieldGroup>
@@ -194,6 +202,7 @@ export const FilePickerBase = () => {
       {newVersionInfoText}
       {content}
       {filesInfoText}
+      {addFilesInfoText}
       <AddItemsModal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} />
       {error}
       <FormModal />
