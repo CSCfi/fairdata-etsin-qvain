@@ -24,6 +24,7 @@ class QvainDatasets {
       params: {
         pagination: false,
         only_owned_or_shared: true,
+        publishing_channels: 'qvain',
         ordering: '-created',
         latest_versions: true,
         fields: [
@@ -47,6 +48,7 @@ class QvainDatasets {
       params: {
         pagination: false,
         only_admin: true,
+        publishing_channels: 'qvain',
         ordering: '-created',
         latest_versions: true,
         fields: [
