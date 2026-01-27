@@ -27,6 +27,10 @@ class QvainAdminOrg {
     return options
   }
 
+  @computed get adminOrgs() {
+    return this.Auth.user.admin_organizations || []
+  }
+
   @action.bound setSelectedAdminOrg(adminOrg) {
     if (adminOrg?.value === this.selectedAdminOrg?.value) {
       return

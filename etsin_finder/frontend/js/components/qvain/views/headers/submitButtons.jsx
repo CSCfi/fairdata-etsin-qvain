@@ -30,6 +30,11 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
       hasApprovedREMSApplications,
       publishWillChangeREMSLicenses,
       remsApplicationCounts,
+      userIsQvainAdmin,
+      AdminOrg: {
+        selectedAdminOrg,
+        adminOrgs
+      },
     },
     Env: { getQvainUrl },
     QvainDatasets,
@@ -44,8 +49,12 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
   const [draftButtonHover, setDraftButtonHover] = useState(false)
   const [publishButtonHover, setPublishButtonHover] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [showConfirmChangedAdminOrg, setShowConfirmChangedAdminOrg] = useState(false)
 
   const needConfirm = hasApprovedREMSApplications && publishWillChangeREMSLicenses
+  const needConfirmChangedAdminOrg = userIsQvainAdmin 
+  && selectedAdminOrg?.value !== original?.metadata_owner_admin_org 
+  && !adminOrgs?.includes(selectedAdminOrg?.value)
 
   useEffect(() => {
     prevalidate()
@@ -84,6 +93,8 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
       // Change in REMS licenses or terms will invalidate
       // existing applications when the dataset is published
       setShowConfirm(true)
+    } else if (needConfirmChangedAdminOrg) {
+      setShowConfirmChangedAdminOrg(true)
     } else {
       submitPublish(goToDatasetsCallBack)
     }
@@ -163,6 +174,21 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
           <DangerButton onClick={() => submitPublish(goToDatasetsCallBack)}>
             {translate('qvain.submit')}
           </DangerButton>
+        </Buttons>
+      </Modal>
+      <Modal
+        contentLabel="confirm-changed-admin-org"
+        isOpen={showConfirmChangedAdminOrg}
+        onRequestClose={() => setShowConfirmChangedAdminOrg(false)}
+      >
+        <Translate component="p" content="qvain.submitConfirm.changedAdminOrg" />
+        <Buttons>
+        <TableButton onClick={() => setShowConfirmChangedAdminOrg(false)}>
+          {translate('qvain.common.cancel')}
+        </TableButton>
+        <DangerButton onClick={() => submitPublish(goToDatasetsCallBack)}>
+          {translate('qvain.submit')}
+        </DangerButton>
         </Buttons>
       </Modal>
     </div>

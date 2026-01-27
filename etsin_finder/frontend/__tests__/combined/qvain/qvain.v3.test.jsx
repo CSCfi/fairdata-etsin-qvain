@@ -941,4 +941,265 @@ describe('Qvain with an opened dataset', () => {
       })
     )
   })
+
+  it('publish needs confirmation when admin org is changed to org where user has no admin rights', async () => {
+    // Setup: User is QvainAdmin for org-1, but dataset owner is different user
+    // User changes admin org to org-2 which they don't have admin rights to
+    const datasetWithDifferentOwner = {
+      ...dataset,
+      metadata_owner: {
+        ...dataset.metadata_owner,
+        user: { username: 'different_user' }, // Different from current user 'teppo'
+        admin_organization: 'org-1', // Original admin org is org-1 (user has admin rights)
+      },
+    }
+
+    // Mock user with admin rights to org-1 only - set before renderQvain
+    // This needs to override the default mock in renderQvain
+    mockAdapter.onGet(`https://metaxv3:443/v3/auth/user`).reply(200, {
+      name: 'teppo',
+      admin_organizations: ['org-1'], // User has admin rights to org-1
+      available_admin_organizations: [
+        { id: 'org-1', pref_label: { en: 'Organization 1' } },
+        { id: 'org-2', pref_label: { en: 'Organization 2' } },
+        { id: 'org-3', pref_label: { en: 'Organization 3' } },
+      ],
+      default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+    })
+
+    await renderQvain(
+      {
+        ...datasetWithDifferentOwner,
+      },
+      { initialPath: '/dataset/linked-draft-id' }
+    )
+
+    // Update stores.Auth.setUser to match the mock - this needs to happen after renderQvain
+    // but before we interact with admin org
+    stores.Auth.setUser({
+      name: 'teppo',
+      admin_organizations: ['org-1'], // User has admin rights to org-1
+      available_admin_organizations: [
+        { id: 'org-1', pref_label: { en: 'Organization 1' } },
+        { id: 'org-2', pref_label: { en: 'Organization 2' } },
+        { id: 'org-3', pref_label: { en: 'Organization 3' } },
+      ],
+      default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+    })
+
+    // Wait for dataset to be loaded
+    await waitFor(() => {
+      expect(stores.Qvain.original).toBeDefined()
+    })
+    expect(stores.Qvain.original.metadata_owner_admin_org).toBe('org-1')
+    
+    // Re-initialize admin org after user is updated - this should find org-1 in the options
+    stores.Qvain.AdminOrg.selectDefaultAdminOrg()
+    
+    // Wait for admin org to be initialized - it should be set now
+    await waitFor(
+      () => {
+        expect(stores.Qvain.AdminOrg.selectedAdminOrg).toBeDefined()
+      },
+      { timeout: 3000 }
+    )
+    expect(stores.Qvain.AdminOrg.selectedAdminOrg).not.toBeNull()
+
+    // Change admin org to org-2 (user doesn't have admin rights to org-2)
+    // Since we're using a linked draft, the select is disabled, so we set it directly in the store
+    const org2Option = stores.Qvain.AdminOrg.adminOrgOptions.find(org => org.value === 'org-2')
+    expect(org2Option).toBeDefined()
+    stores.Qvain.AdminOrg.setSelectedAdminOrg(org2Option)
+    
+    // Wait for selection to be applied
+    await waitFor(() => {
+      expect(stores.Qvain.AdminOrg.selectedAdminOrg.value).toBe('org-2')
+    })
+
+    // Confirm the selection
+    stores.Qvain.AdminOrg.setConfirmationSelected(true)
+
+    // Wait for confirmation to be applied
+    await waitFor(() => {
+      expect(stores.Qvain.AdminOrg.confirmationSelected).toBe(true)
+    })
+
+    // Click publish button
+    const submitButton = screen.getByRole('button', { name: 'Save and Publish' })
+    await userEvent.click(submitButton)
+
+    // Dataset changes are not published yet, show confirmation dialog instead
+    expect(mockAdapter.history.patch).toHaveLength(0)
+    const modal = screen.getByRole('dialog')
+    within(modal).getByText(
+      "You are changing the organization which has the maintenance rights to this dataset's metadata",
+      {
+        exact: false,
+      }
+    )
+    within(modal).getByText(
+      "As you are the Qvain Admin user for this dataset you will no longer be able to make changes to the dataset's metadata",
+      {
+        exact: false,
+      }
+    )
+
+    // Close dialog and cancel change
+    const cancel = within(modal).getByRole('button', { name: 'Cancel' })
+    await userEvent.click(cancel)
+  })
+
+  it('publish needs confirmation when both admin org change and REMS license change occur', async () => {
+    // Setup: User is QvainAdmin, changes admin org, AND changes REMS license
+    mockAdapter // mock application counts for draft_of dataset
+      .onGet(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-application-counts`)
+      .reply(200, { approved: 12, submitted: 1 }) // has approved applications
+
+    const datasetWithDifferentOwner = {
+      ...dataset,
+      metadata_owner: {
+        ...dataset.metadata_owner,
+        user: { username: 'different_user' }, // Different from current user 'teppo'
+        admin_organization: 'org-1', // Original admin org is org-1
+      },
+      access_rights: {
+        ...dataset.access_rights,
+        access_type: access_type_permit,
+        restriction_grounds: [restriction_grounds_research],
+        rems_approval_type: 'automatic',
+        data_access_application_instructions: { en: 'how to apply', fi: 'näin haet' },
+        data_access_terms: { en: 'terms' },
+        data_access_reviewer_instructions: { en: 'instructions' },
+      },
+    }
+
+    // Mock user with admin rights to org-1 only - set before renderQvain
+    mockAdapter.onGet(`https://metaxv3:443/v3/auth/user`).reply(200, {
+      name: 'teppo',
+      admin_organizations: ['org-1'], // User has admin rights to org-1
+      available_admin_organizations: [
+        { id: 'org-1', pref_label: { en: 'Organization 1' } },
+        { id: 'org-2', pref_label: { en: 'Organization 2' } },
+        { id: 'org-3', pref_label: { en: 'Organization 3' } },
+      ],
+      default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+    })
+
+    await renderQvain(
+      {
+        ...datasetWithDifferentOwner,
+      },
+      { initialPath: '/dataset/linked-draft-id' }
+    )
+
+    // Update stores.Auth.setUser to match the mock - this needs to happen after renderQvain
+    // but before we interact with admin org
+    stores.Auth.setUser({
+      name: 'teppo',
+      admin_organizations: ['org-1'], // User has admin rights to org-1
+      available_admin_organizations: [
+        { id: 'org-1', pref_label: { en: 'Organization 1' } },
+        { id: 'org-2', pref_label: { en: 'Organization 2' } },
+        { id: 'org-3', pref_label: { en: 'Organization 3' } },
+      ],
+      default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+    })
+
+    // Wait for dataset to be loaded
+    await waitFor(() => {
+      expect(stores.Qvain.original).toBeDefined()
+    })
+    expect(stores.Qvain.original.metadata_owner_admin_org).toBe('org-1')
+    
+    // Re-initialize admin org after user is updated - this should find org-1 in the options
+    // Make sure adminOrgOptions has the org before calling selectDefaultAdminOrg
+    await waitFor(() => {
+      expect(stores.Qvain.AdminOrg.adminOrgOptions.length).toBeGreaterThan(0)
+    })
+    expect(stores.Qvain.AdminOrg.adminOrgOptions.find(org => org.value === 'org-1')).toBeDefined()
+    
+    stores.Qvain.AdminOrg.selectDefaultAdminOrg()
+    
+    // Wait for admin org to be initialized - it should be set now
+    await waitFor(
+      () => {
+        expect(stores.Qvain.AdminOrg.selectedAdminOrg).toBeDefined()
+      },
+      { timeout: 3000 }
+    )
+    expect(stores.Qvain.AdminOrg.selectedAdminOrg).not.toBeNull()
+    expect(stores.Qvain.AdminOrg.selectedAdminOrg.value).toBe('org-1')
+
+    // Change admin org to org-2 (user doesn't have admin rights to org-2)
+    // Since we're using a linked draft, the select is disabled, so we set it directly in the store
+    const org2Option = stores.Qvain.AdminOrg.adminOrgOptions.find(org => org.value === 'org-2')
+    expect(org2Option).toBeDefined()
+    stores.Qvain.AdminOrg.setSelectedAdminOrg(org2Option)
+    
+    // Wait for selection to be applied
+    await waitFor(() => {
+      expect(stores.Qvain.AdminOrg.selectedAdminOrg.value).toBe('org-2')
+    })
+
+    // Confirm the admin org selection
+    stores.Qvain.AdminOrg.setConfirmationSelected(true)
+
+    // Wait for confirmation to be applied
+    await waitFor(() => {
+      expect(stores.Qvain.AdminOrg.confirmationSelected).toBe(true)
+    })
+
+    // Wait for data access section to be rendered
+    // First wait for the toggle button to appear (this means the section is rendered)
+    const toggleButton = await screen.findByTestId('toggle-data-access', {}, { timeout: 5000 })
+
+    // Check if fields are already visible (auto-expanded if they have values)
+    let fields
+    try {
+      fields = screen.getByTestId('data-access-fields')
+    } catch {
+      // If not visible, click to expand
+      await userEvent.click(toggleButton)
+      fields = await screen.findByTestId('data-access-fields')
+    }
+
+    // Change REMS terms
+    const termsInput = within(fields).getByLabelText('terms for data access', { exact: false })
+    await userEvent.type(termsInput, ', more terms')
+
+    // Click publish button
+    const submitButton = screen.getByRole('button', { name: 'Save and Publish' })
+    await userEvent.click(submitButton)
+
+    // Dataset changes are not published yet, show confirmation dialog instead
+    // The REMS confirmation should appear first (it's checked first in the code)
+    expect(mockAdapter.history.patch).toHaveLength(0)
+    const remsModal = await screen.findByRole('dialog')
+    within(remsModal).getByText('invalidate the already granted data access rights (12 pcs)', {
+      exact: false,
+    })
+
+    // Close REMS dialog and revert the REMS change so we can test admin org modal
+    const cancel = within(remsModal).getByRole('button', { name: 'Cancel' })
+    await userEvent.click(cancel)
+
+    // Wait for modal to close
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    })
+
+    // Revert the REMS terms change so REMS modal won't appear again
+    await userEvent.clear(termsInput)
+    await userEvent.type(termsInput, 'terms') // Back to original value
+
+    // Now click publish again - should show admin org confirmation
+    await userEvent.click(submitButton)
+    const adminOrgModal = await screen.findByRole('dialog')
+    within(adminOrgModal).getByText(
+      "You are changing the organization which has the maintenance rights to this dataset's metadata",
+      {
+        exact: false,
+      }
+    )
+  })
 })

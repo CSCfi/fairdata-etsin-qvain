@@ -40,7 +40,9 @@ const qvainFinnish = {
   submitConfirm: {
     remsLicenseChange: `HUOM! Muutos <em>lisenssiin</em> tai <em>dataluvituksen myöntämisehtoihin</em>
     mitätöi jo myönnetyt datan pääsyoikeudet (%(count)s kpl). Oletko varma, että haluat muuttaa niitä?`,
-
+    changedAdminOrg: "Olet vaihtamassa organisaatiota, jolla on ylläpito-oikeudet aineistokuvailuun. "+
+    "Koska olet tämän aineiston Qvain Admin, et voi tämän muutoksen jälkeen enää tehdä muutoksia aineiston kuvailutietoihin, "+
+    "eikä aineisto ole sinulle enää näkyvissä Qvaimessa. Oletko varma, että haluat tehdä muutoksen?"
   },
   pasInfo: {
     stateInfo: 'Tämä on PAS-aineisto. Aineiston tila on "%(state)s: %(description)s".',
