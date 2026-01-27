@@ -69,12 +69,18 @@ const FilterSection = ({ filterName, onlyCurrentLanguage, showInput }) => {
   /* If the user presses "Remove filters" button, the facet input 
   is cleared and all the filter items are retrieved back (which 
   happens in the ClearFilters component): */
+  const isCleared = facetSearchesCleared[filterName]
   useEffect(() => {
-    if (facetSearchesCleared[filterName]) {
+    if (isCleared) {
       setSearchTerm('')
       setClearFacetSearch(filterName, false)
     }
-  }, [facetSearchesCleared[filterName], setSearchTerm, setClearFacetSearch])
+  }, [
+    setSearchTerm, 
+    setClearFacetSearch, 
+    filterName,
+    isCleared
+  ])
 
   // Retrieve filters that respond partially or fully to the user input: 
   const setFacetSearch = (value = '') => {

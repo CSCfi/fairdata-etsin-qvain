@@ -70,9 +70,10 @@ const datasetOwner = (dataset, username, adminOrgs) => {
     return <Translate content="qvain.datasets.owner.me" />
   }
 
-  if (adminOrgs?.some(org => org.id === dataset.metadata_owner_admin_org)) {
+  if (adminOrgs?.some(org => org === dataset.metadata_owner_admin_org)) {
     return <span>{dataset.metadata_provider_user}</span>
   }
+
   // shared with user
   return (
     <Translate
