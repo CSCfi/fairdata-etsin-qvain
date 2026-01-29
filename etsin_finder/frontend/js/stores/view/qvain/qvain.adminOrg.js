@@ -62,6 +62,7 @@ class QvainAdminOrg {
   }
   @action.bound reset() {
     this.selectDefaultAdminOrg()
+    this.setConfirmationSelected(false)
   }
 
   @action.bound setConfirmationSelected(confirmationSelected) {

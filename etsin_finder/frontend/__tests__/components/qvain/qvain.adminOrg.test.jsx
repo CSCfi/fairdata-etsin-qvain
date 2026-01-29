@@ -60,7 +60,7 @@ describe('AdminOrgSelector', () => {
     contextRenderer(<AdminOrgSelector />, { stores })
   }
 
-  const selectAdminOrg = async optionLabel => {
+  const selectAdminOrg = async (optionLabel, setConfirmation = false) => {
     // Find the select input by its inputId
     const selectInput = document.getElementById('admin-org-select')
     if (!selectInput) {
@@ -76,6 +76,7 @@ describe('AdminOrgSelector', () => {
     const option = await screen.findByRole('option', { name: optionLabel })
     await userEvent.click(option)
     await flushPromises()
+    await stores.Qvain.AdminOrg.setConfirmationSelected(setConfirmation)
   }
 
   describe('Admin org selection', () => {
@@ -292,6 +293,21 @@ describe('AdminOrgSelector', () => {
         // The selected value should be in the store
         expect(stores.Qvain.AdminOrg.selectedAdminOrg.value).toBe('org-3')
       }
+    })
+
+    it('should reset when resetQvainStore is called', async () => {
+      renderComponent()
+      await flushPromises()
+
+      await selectAdminOrg('Organization 3', true)
+      expect(stores.Qvain.AdminOrg.selectedAdminOrg.value).toBe('org-3')
+      expect(stores.Qvain.AdminOrg.confirmationSelected).toBe(true)
+
+      stores.Qvain.resetQvainStore()
+      await flushPromises()
+
+      expect(stores.Qvain.AdminOrg.selectedAdminOrg.value).toBe('org-1')
+      expect(stores.Qvain.AdminOrg.confirmationSelected).toBe(false)
     })
   })
 })
