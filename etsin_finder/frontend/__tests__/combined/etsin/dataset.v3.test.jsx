@@ -24,7 +24,8 @@ import {
 import {
   approvedApplication,
   approvedApplicationList,
-  remsApplicationBase,
+  automaticREMSApplicationBase,
+  manualREMSApplicationBase,
 } from '@testdata/rems.data'
 
 // Avoid reactmodal warnings
@@ -49,7 +50,12 @@ const getStores = () => {
 
 const renderEtsin = async (
   dataset = dataset_open_a_catalog_expanded,
-  { userLogged = false, tab = undefined, beforeRender = () => {} } = {}
+  {
+    userLogged = false,
+    tab = undefined,
+    remsApplicationBase = automaticREMSApplicationBase,
+    beforeRender = () => { },
+  } = {}
 ) => {
   mockAdapter.reset()
   mockAdapter
@@ -179,11 +185,11 @@ describe('Etsin dataset page', () => {
     const header = within(dialog).getByRole('heading', { name: 'APA' })
     expect(header.nextElementSibling.textContent).toEqual(
       'Kone Foundation, & Henkilö, K. (2023). All Fields Test Dataset. ' +
-        'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
+      'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
     )
   })
 
-  test('renders REMS application', async () => {
+  test('renders REMS application without form', async () => {
     await renderEtsin(dataset_rems, { userLogged: true })
     await userEvent.click(screen.getByTestId('rems-button'))
     const dialog = screen.getByRole('dialog')
@@ -248,6 +254,84 @@ describe('Etsin dataset page', () => {
     )
   })
 
+  test('renders REMS application with form', async () => {
+    await renderEtsin(dataset_rems, {
+      userLogged: true,
+      remsApplicationBase: manualREMSApplicationBase,
+    })
+    await userEvent.click(screen.getByTestId('rems-button'))
+    const dialog = screen.getByRole('dialog')
+    within(dialog).getByRole('heading', { name: 'Apply for Data Access' })
+
+    // List licenses, terms for data access should be first
+    const listItems = within(dialog)
+      .getAllByRole('listitem')
+      .map(e => textValues(e))
+    expect(listItems).toEqual([
+      ['Terms for data access', 'Terms here'],
+      [
+        'Creative Commons Attribution 4.0 International (CC BY 4.0)',
+        'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+      ],
+    ])
+
+    // Submit button should be clickable after accepting terms
+    await userEvent.click(
+      within(dialog).getByRole('checkbox', {
+        name: 'I agree to the terms for data access and the license.',
+      })
+    )
+
+    expect(within(dialog).getByRole('button', { name: 'Submit' })).toBeDisabled()
+
+    const projectDescriptionInput = within(dialog).getByRole('textbox', {
+      name: /description of your research project/i,
+    })
+    const proceduresInput = within(dialog).getByRole('textbox', {
+      name: /procedures to prevent unauthorized access/i,
+    })
+    const otherPersonsInput = within(dialog).getByRole('textbox', { name: /other persons/i })
+
+    await userEvent.type(projectDescriptionInput, 'this is my project')
+    expect(within(dialog).getByRole('button', { name: 'Submit' })).not.toBeDisabled()
+
+    await userEvent.type(proceduresInput, 'this is how i protect the data')
+    await userEvent.type(otherPersonsInput, 'this is who sees the data')
+
+    const clickSubmitPromise = userEvent.click(
+      within(dialog).getByRole('button', { name: 'Submit' })
+    )
+
+    // Mock responses for created application
+    mockAdapter
+      .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-applications`)
+      .reply(200, approvedApplicationList)
+    mockAdapter
+      .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-applications/123`)
+      .reply(200, approvedApplication)
+    await clickSubmitPromise
+
+    // Check that correct application creation request is sent
+    expect(mockAdapter.history.post).toHaveLength(1)
+    const request = mockAdapter.history.post[0]
+    expect(request.url).toBe(
+      'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0/rems-applications'
+    )
+    expect(JSON.parse(request.data)).toEqual({
+      accept_licenses: [4, 1],
+      field_values: [
+        { form: '12', field: 'project_description', value: 'this is my project' },
+        { form: '12', field: 'access_control', value: 'this is how i protect the data' },
+        { form: '12', field: 'other_persons', value: 'this is who sees the data' },
+      ],
+    })
+
+    // Created application should be in a new tab and active
+    const tab = within(dialog).getByRole('tab', { name: 'Application 2025/17' })
+    expect(tab.getAttribute('aria-selected')).toBe('true')
+    expect(within(dialog).getByText('Application created on March 5, 2025')).toBeInTheDocument()
+  })
+
   test('renders closed REMS application', async () => {
     // Mock responses for closed application
     const closedApplication = {
@@ -294,12 +378,12 @@ describe('Etsin dataset page', () => {
   })
 
   test('renders REMS error message', async () => {
-    vi.spyOn(console, 'error').mockImplementation(() => {}) // hide console.error from output
+    vi.spyOn(console, 'error').mockImplementation(() => { }) // hide console.error from output
     await renderEtsin(dataset_rems, { userLogged: true })
 
     mockAdapter
       .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-application-base`)
-      .reply(500, remsApplicationBase)
+      .reply(500, automaticREMSApplicationBase)
 
     await userEvent.click(screen.getByTestId('rems-button'))
     const dialog = screen.getByRole('dialog')

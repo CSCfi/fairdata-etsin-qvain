@@ -6,8 +6,9 @@ import { SaveButton } from '@/components/qvain/general/buttons'
 import { Checkbox } from '@/components/qvain/general/modal/form'
 import { useStores } from '@/utils/stores'
 import REMSLicenseList from './REMSLicenseList'
+import REMSForms from './REMSForms'
 
-const AccessModalContent = () => {
+const NewREMSApplication = () => {
   const {
     Locale: { translate },
     Etsin: {
@@ -19,6 +20,7 @@ const AccessModalContent = () => {
           applicationBaseError,
           applicationBase,
           acceptLicenses,
+          readyForSubmit,
           setAcceptLicenses,
         },
       },
@@ -26,6 +28,7 @@ const AccessModalContent = () => {
   } = useStores()
 
   const licenses = applicationBase?.['application/licenses'] || []
+  const forms = applicationBase?.['application/forms'] || []
   const hasTerms = licenses.filter(l => l.is_data_access_terms).length > 0
   const licenseCount = licenses.filter(l => !l.is_data_access_terms).length
 
@@ -57,6 +60,7 @@ const AccessModalContent = () => {
           />
           <CheckLabel htmlFor="accept-access-terms">{getAcceptLabel()}</CheckLabel>
         </AcceptItem>
+        <REMSForms applicationId={null} forms={forms} />
       </Wrapper>
     )
   }
@@ -70,9 +74,7 @@ const AccessModalContent = () => {
           component={SaveButton}
           data-testid="submit-access-application"
           onClick={createApplication}
-          disabled={
-            isSubmitting || !acceptLicenses || isLoadingApplicationBase || applicationBaseError
-          }
+          disabled={!readyForSubmit}
         >
           {translate('dataset.access_modal.submit')}
         </SaveButton>
@@ -81,7 +83,7 @@ const AccessModalContent = () => {
   )
 }
 
-AccessModalContent.propTypes = {}
+NewREMSApplication.propTypes = {}
 
 const AcceptItem = styled.div`
   margin-top: 1.5rem;
@@ -114,4 +116,4 @@ const ErrorDiv = styled.div`
   background: ${p => p.theme.color.error};
 `
 
-export default observer(AccessModalContent)
+export default observer(NewREMSApplication)

@@ -7,6 +7,7 @@ import { useStores } from '@/utils/stores'
 import PropTypes from 'prop-types'
 import ApplicationState from './REMSApplicationState'
 import REMSLicenseList from './REMSLicenseList'
+import REMSForms from './REMSForms'
 
 const REMSApplication = ({ application }) => {
   const {
@@ -28,9 +29,11 @@ const REMSApplication = ({ application }) => {
   let content = <Loader active />
   if (hasDetails) {
     const licenses = application['application/licenses'] || []
+    const forms = application?.['application/forms'] || []
     content = (
       <Wrapper>
         <REMSLicenseList licenses={licenses} />
+        <REMSForms applicationId={application["application/id"]} forms={forms} readOnly />
       </Wrapper>
     )
   }

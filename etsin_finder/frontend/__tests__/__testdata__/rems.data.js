@@ -1,4 +1,4 @@
-export const remsApplicationBase = {
+export const automaticREMSApplicationBase = {
   'application/licenses': [
     {
       'license/id': 4,
@@ -239,6 +239,93 @@ export const approvedApplication = {
   'application/created': '2025-03-05T14:42:35.126Z',
   'application/state': 'application.state/submitted',
   'application/modified': '2025-03-05T14:43:35.039Z',
+}
+
+// REMS application with form
+export const manualREMSApplicationBase = {
+  'application/licenses': [
+    {
+      'license/id': 4,
+      'license/type': 'text',
+      'license/title': {
+        en: 'Terms for data access',
+        fi: 'Käyttöluvan ehdot',
+      },
+      'license/text': {
+        en: 'Terms here',
+        fi: 'Käyttöluvan ehdot',
+      },
+      is_data_access_terms: true,
+    },
+    {
+      'license/id': 1,
+      'license/type': 'link',
+      'license/title': {
+        en: 'Creative Commons Attribution 4.0 International (CC BY 4.0)',
+        fi: 'Käyttöluvan ehdot',
+      },
+      'license/link': {
+        en: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+        fi: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+      },
+      is_data_access_terms: false,
+    },
+  ],
+  'application/forms': [
+    {
+      'form/internal-name': 'Data access request form',
+      'form/fields': [
+        {
+          'field/title': {
+            fi: 'Projektin kuvaus',
+            en: 'Description of your research project',
+          },
+          'field/type': 'text',
+          'field/id': 'project_description',
+          'field/max-length': null,
+          'field/optional': false,
+        },
+        {
+          'field/title': {
+            fi: 'Toimenpiteet luvattoman pääsyn estämiseksi pyydettyyn dataan',
+            en: 'Procedures to prevent unauthorized access to the requested data',
+          },
+          'field/type': 'text',
+          'field/id': 'access_control',
+          'field/max-length': null,
+          'field/optional': true,
+        },
+        {
+          'field/title': {
+            fi: 'Muut henkilöt joiden oletetaan saavan pääsyn dataan',
+            en: 'Other persons presumed to get access to the requested data',
+          },
+          'field/type': 'text',
+          'field/id': 'other_persons',
+          'field/max-length': null,
+          'field/optional': true,
+        },
+      ],
+      'form/title': 'Data access request form',
+      organization: {
+        'organization/id': 'csc',
+        'organization/short-name': {
+          fi: 'CSC',
+          en: 'CSC',
+        },
+        'organization/name': {
+          fi: 'CSC – TIETEEN TIETOTEKNIIKAN KESKUS OY',
+          en: 'CSC – IT CENTER FOR SCIENCE LTD.',
+        },
+      },
+      'form/errors': null,
+      'form/id': 12,
+      'form/external-title': {
+        fi: 'Datan lupahakemus',
+        en: 'Data access request form',
+      },
+    },
+  ],
 }
 
 // Application list does not have licenses

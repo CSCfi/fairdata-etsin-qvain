@@ -25,8 +25,61 @@ class EtsinDatasetRems {
 
   @observable acceptLicenses = false
 
+  // application id -> form id -> field id -> field value
+  @observable formValues = {}
+
   @action.bound clearApplication() {
     this.acceptLicenses = false
+  }
+
+  @action.bound
+  setFormValue(applicationId, formId, fieldId, value) {
+    this.formValues[applicationId] = this.formValues[applicationId] || {}
+    this.formValues[applicationId][formId] = this.formValues[applicationId][formId] || {}
+    this.formValues[applicationId][formId][fieldId] = value
+  }
+
+  hasAllRequiredFormValues(applicationId) {
+    let application
+    if (applicationId === null) {
+      application = this.applicationBase
+    }
+
+    if (!application) {
+      return false // not supported yet for other than new application
+    }
+
+    const forms = application['application/forms'] || []
+    for (const form of forms) {
+      const formId = form['form/id']
+      const fields = form['form/fields']
+      for (const field of fields) {
+        const fieldId = field['field/id']
+        const optional = field['field/optional']
+        const value = this.formValues[applicationId]?.[formId]?.[fieldId] || ''
+        if (!optional && !value.trim()) {
+          return false
+        }
+      }
+    }
+
+    return true
+  }
+
+  @action.bound
+  loadApplicationFormValues(application) {
+    const id = application['application/id'] || null
+    const forms = application['application/forms'] || []
+    this.formValues[id] = {}
+    for (const form of forms) {
+      const formId = form['form/id']
+      this.formValues[id][formId] = {}
+      const fields = form['form/fields']
+      for (const field of fields) {
+        const fieldId = field['field/id']
+        this.formValues[id][formId][fieldId] = field['field/value'] || ''
+      }
+    }
   }
 
   @action.bound setAcceptLicenses(value) {
@@ -74,6 +127,7 @@ class EtsinDatasetRems {
     try {
       const { data } = await this.promiseManager.add(this.client.get(url), 'application-base')
       this.setApplicationBase(data)
+      this.loadApplicationFormValues(data)
     } catch (e) {
       console.error(e)
       this.setApplicationBaseError(e)
@@ -113,6 +167,7 @@ class EtsinDatasetRems {
         Object.assign(application, data)
         application.hasDetails = true
       })
+      this.loadApplicationFormValues(application)
     } catch (e) {
       console.error(e)
       this.setApplicationsError(e)
@@ -158,17 +213,49 @@ class EtsinDatasetRems {
     return this.promiseManager.count('create-application') > 0
   }
 
+  getFieldValues(applicationId) {
+    // Get form field values list for REMS application.
+    // Use applicationId=null for values of new application.
+    const fieldValues = []
+    for (const form in this.formValues[applicationId]) {
+      const fields = this.formValues[applicationId][form]
+      for (const field in fields) {
+        const value = fields[field]
+        if (value) {
+          fieldValues.push({ form, field, value })
+        }
+      }
+    }
+    return fieldValues
+  }
+
   @action.bound async createApplication() {
     const url = this.Env.metaxV3Url('datasetREMSApplications', this.EtsinDataset.identifier)
     const submit = async () => {
-      const { data } = await this.client.post(url, {
+      const payload = {
         accept_licenses: this.applicationBase['application/licenses'].map(l => l['license/id']),
-      })
+      }
+      const fieldValues = this.getFieldValues(null)
+      if (fieldValues.length > 0) {
+        payload.field_values = fieldValues
+      }
+
+      const { data } = await this.client.post(url, payload)
       this.clearApplication()
       await this.fetchApplications()
       this.tabs.setActive(`app-${data['application-id']}`)
     }
     await this.promiseManager.add(submit(), 'create-application')
+  }
+
+  @computed get readyForSubmit() {
+    return (
+      this.acceptLicenses &&
+      this.hasAllRequiredFormValues(null) &&
+      !this.isSubmitting &&
+      !this.isLoadingApplicationBase &&
+      !this.applicationBaseError
+    )
   }
 }
 

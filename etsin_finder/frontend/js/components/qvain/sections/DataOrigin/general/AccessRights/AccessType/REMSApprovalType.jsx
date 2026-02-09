@@ -10,8 +10,11 @@ import REMSApprovalTypeChoice from './REMSApprovalTypeChoice'
 const REMSApprovalType = () => {
   const {
     Locale: { translate },
-    Qvain: { DataAccess: { remsApprovalType: { validationError, validate } } },
-
+    Qvain: {
+      DataAccess: {
+        remsApprovalType: { validationError, validate },
+      },
+    },
   } = useStores()
 
   return (
