@@ -214,7 +214,9 @@ class Qvain extends Resources {
         // Store catalog object for later use
         const catalog = result.data.data_catalog
         if (catalog) {
-          this.dataCatalogConfigs[catalog.id] = catalog
+          runInAction(() => {
+            this.dataCatalogConfigs[catalog.id] = catalog
+          })
         }
       } else {
         const url = urls.qvain.dataset(identifier)
@@ -682,6 +684,11 @@ class Qvain extends Resources {
       return false
     }
     return !!this.dataCatalogConfig?.rems_enabled
+  }
+
+  @computed
+  get isManualREMSApprovalAllowed() {
+    return !!this.AdminOrg.selectedAdminOrg?.allowManualREMSApproval
   }
 
   @computed get isFairdataCatalog() {

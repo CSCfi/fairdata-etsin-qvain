@@ -10,13 +10,27 @@ export const dataAccessTypeSchema = yup
     // if approval type is required.
     is: Qvain => {
       if (!Qvain) {
-        throw new Error("Qvain missing from validation context")
+        throw new Error('Qvain missing from validation context')
       }
-      return Qvain.isREMSAllowed && Qvain.DataAccess.shouldShowREMSApprovalType(Qvain.AccessType.value)
+      return (
+        Qvain.isREMSAllowed && Qvain.DataAccess.shouldShowREMSApprovalType(Qvain.AccessType.value)
+      )
     },
     then: schema => schema.required('qvain.validationMessages.approvalType.required'),
     otherwise: schema => schema.nullable(),
   })
+  .test(
+    'valid-approval-type',
+    'qvain.validationMessages.approvalType.disallowed',
+    function (value) {
+      // eslint-disable-next-line no-invalid-this
+      const Qvain = this.options.context.Qvain
+      if (value === 'manual' && !Qvain?.isManualREMSApprovalAllowed) {
+        return false
+      }
+      return true
+    }
+  )
 
 class REMSApprovalTypeField extends SingleValueField {
   // SingleValueField that supplies the Qvain store in validation context

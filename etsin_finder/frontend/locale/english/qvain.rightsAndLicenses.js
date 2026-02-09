@@ -58,9 +58,8 @@ const rightsAndLicenses = {
     terms: 'Access policy (terms for data access)',
     remsApprovalType: {
       title: 'Approval type',
-      manual:
-        'Data Access Committee (DAC). User can apply for ' +
-        'permission to access the data, (NOT IN USE YET).',
+      manual: 'Data Access Committee (DAC). User can apply for ' + 'permission to access the data.',
+      manualDisabled: 'Not enabled for the selected maintenance organization.',
       automatic:
         'Automatic. Users get permission to access the data automatically ' +
         'after accepting the licenses and the access policy.',

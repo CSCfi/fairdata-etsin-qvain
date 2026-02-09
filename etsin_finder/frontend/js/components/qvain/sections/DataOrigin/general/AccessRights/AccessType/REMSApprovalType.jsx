@@ -14,8 +14,13 @@ const REMSApprovalType = () => {
       DataAccess: {
         remsApprovalType: { validationError, validate },
       },
+      isManualREMSApprovalAllowed,
     },
   } = useStores()
+
+  const disabledText = isManualREMSApprovalAllowed
+    ? ''
+    : 'qvain.rightsAndLicenses.dataAccess.remsApprovalType.manualDisabled'
 
   return (
     <fieldset onBlur={validate}>
@@ -24,14 +29,11 @@ const REMSApprovalType = () => {
         <Required />
       </TitleSmall>
       <RadioRow data-cy="rems-approval-type">
-        {/* <REMSApprovalTypeChoice
-          value=""
-          label="qvain.rightsAndLicenses.dataAccess.remsApprovalType.disabled"
-        /> */}
         <REMSApprovalTypeChoice
           value="manual"
-          disabled
+          disabled={!isManualREMSApprovalAllowed}
           label="qvain.rightsAndLicenses.dataAccess.remsApprovalType.manual"
+          extra={disabledText}
         />
         <REMSApprovalTypeChoice
           value="automatic"

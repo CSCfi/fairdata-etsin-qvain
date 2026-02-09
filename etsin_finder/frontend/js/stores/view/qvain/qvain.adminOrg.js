@@ -17,6 +17,7 @@ class QvainAdminOrg {
     const options = this.Auth.user.available_admin_organizations.map(org => ({
       value: org.id,
       label: this.Locale.getValueTranslation(org.pref_label),
+      allowManualREMSApproval: org.allow_manual_rems_approval,
     }))
     if (!options.find(org => org.value === this.Auth.user.default_admin_organization?.id)) {
       options.push({
@@ -74,5 +75,4 @@ class QvainAdminOrg {
     this.Qvain.Submit.prevalidate()
   }
 }
-
 export default QvainAdminOrg

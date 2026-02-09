@@ -59,7 +59,8 @@ const rightsAndLicenses = {
       title: 'Luvan tyyppi',
       manual:
         'Data Access Committee (DAC). Käyttäjä voi tehdä hakemuksen ' +
-        'saadakseen pääsyn aineiston dataan, (EI VIELÄ KÄYTÖSSÄ).',
+        'saadakseen pääsyn aineiston dataan.',
+      manualDisabled: 'Ei käytössä valitulle kuvailutietojen ylläpitäjälle.',
       automatic:
         'Automaattinen. Käyttäjät saavat automaattisesti pääsyn aineiston ' +
         'dataan kun ovat hyväksyneet lisenssin ja myöntämisehdot.',

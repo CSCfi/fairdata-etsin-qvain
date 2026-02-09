@@ -95,6 +95,8 @@ const validationMessages = {
   approvalType: {
     string: 'Data access approval type must be a string value.',
     required: 'Data access approval type is required.',
+    disallowed:
+      'Selected data access approval type not enabled for the chosen maintenance organization.',
   },
   license: {
     requiredIfIDA: 'License is required for datasets where File origin is set to IDA.',

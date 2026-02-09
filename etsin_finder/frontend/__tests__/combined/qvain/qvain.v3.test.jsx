@@ -849,6 +849,43 @@ describe('Qvain with an opened dataset', () => {
     )
   })
 
+  it('allows manual REMS approval only when the admin organization permits', async () => {
+    await renderQvain({
+      access_rights: {
+        ...dataset.access_rights,
+        access_type: access_type_permit,
+        restriction_grounds: [restriction_grounds_research],
+      },
+    })
+    const collapseButton = screen.getByTestId('toggle-data-access')
+    await userEvent.click(collapseButton) // should open data access fields
+
+    // Saving should be disabled until approval type is selected
+    let submitButton = screen.getByRole('button', { name: 'Save as draft' })
+    expect(submitButton).toBeDisabled()
+
+    // Select manual approval type. Manual approval requires the admin org to allow it.
+    const approvalGroup = screen.getByRole('group', { name: /approval type/i })
+    expect(within(approvalGroup).getByLabelText(/DAC/)).toBeDisabled()
+    stores.Qvain.AdminOrg.setSelectedAdminOrg({
+      value: 'org-id',
+      label: 'Org Name',
+      allowManualREMSApproval: true,
+    })
+    stores.Qvain.AdminOrg.setConfirmationSelected(true)
+    await userEvent.click(within(approvalGroup).getByLabelText(/DAC/))
+
+    // Check that values get submitted
+    submitButton = await waitFor(() => {
+      const button = screen.getByRole('button', { name: 'Save as draft' })
+      expect(button).not.toBeDisabled()
+      return button
+    })
+    await userEvent.click(submitButton) // should submit data to metax
+    let submitRights = JSON.parse(mockAdapter.history.patch[0].data).access_rights
+    expect(submitRights.rems_approval_type).toEqual('manual')
+  })
+
   it('publish needs confirmation when terms change closes approved applications', async () => {
     mockAdapter // mock application counts for draft_of dataset
       .onGet(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-application-counts`)
@@ -992,10 +1029,10 @@ describe('Qvain with an opened dataset', () => {
       expect(stores.Qvain.original).toBeDefined()
     })
     expect(stores.Qvain.original.metadata_owner_admin_org).toBe('org-1')
-    
+
     // Re-initialize admin org after user is updated - this should find org-1 in the options
     stores.Qvain.AdminOrg.selectDefaultAdminOrg()
-    
+
     // Wait for admin org to be initialized - it should be set now
     await waitFor(
       () => {
@@ -1010,7 +1047,7 @@ describe('Qvain with an opened dataset', () => {
     const org2Option = stores.Qvain.AdminOrg.adminOrgOptions.find(org => org.value === 'org-2')
     expect(org2Option).toBeDefined()
     stores.Qvain.AdminOrg.setSelectedAdminOrg(org2Option)
-    
+
     // Wait for selection to be applied
     await waitFor(() => {
       expect(stores.Qvain.AdminOrg.selectedAdminOrg.value).toBe('org-2')
@@ -1110,16 +1147,16 @@ describe('Qvain with an opened dataset', () => {
       expect(stores.Qvain.original).toBeDefined()
     })
     expect(stores.Qvain.original.metadata_owner_admin_org).toBe('org-1')
-    
+
     // Re-initialize admin org after user is updated - this should find org-1 in the options
     // Make sure adminOrgOptions has the org before calling selectDefaultAdminOrg
     await waitFor(() => {
       expect(stores.Qvain.AdminOrg.adminOrgOptions.length).toBeGreaterThan(0)
     })
     expect(stores.Qvain.AdminOrg.adminOrgOptions.find(org => org.value === 'org-1')).toBeDefined()
-    
+
     stores.Qvain.AdminOrg.selectDefaultAdminOrg()
-    
+
     // Wait for admin org to be initialized - it should be set now
     await waitFor(
       () => {
@@ -1135,7 +1172,7 @@ describe('Qvain with an opened dataset', () => {
     const org2Option = stores.Qvain.AdminOrg.adminOrgOptions.find(org => org.value === 'org-2')
     expect(org2Option).toBeDefined()
     stores.Qvain.AdminOrg.setSelectedAdminOrg(org2Option)
-    
+
     // Wait for selection to be applied
     await waitFor(() => {
       expect(stores.Qvain.AdminOrg.selectedAdminOrg.value).toBe('org-2')

@@ -98,6 +98,8 @@ const validationMessages = {
   approvalType: {
     string: 'Aineiston luvituksen tyypin pitää olla merkkijono.',
     required: 'Aineiston luvituksen tyyppi on pakollinen tieto.',
+    disallowed:
+      'Valittu aineiston luvituksen tyyppi ei ole käytössä valitulle kuvailutietojen ylläpitäjälle.',
   },
   license: {
     requiredIfIDA: 'Lisenssi on pakollinen tieto kun tiedoston lähde on IDA.',

@@ -3,10 +3,12 @@ import PropTypes from 'prop-types'
 import { useStores } from '@/stores/stores'
 import { RadioInput, Label, FormField } from '@/components/qvain/general/modal/form'
 
-const REMSApprovalTypeChoice = ({ value, label, disabled = false }) => {
+const REMSApprovalTypeChoice = ({ value, label, disabled = false, extra = '' }) => {
   const {
     Locale: { translate },
-    Qvain: { DataAccess: { remsApprovalType } },
+    Qvain: {
+      DataAccess: { remsApprovalType },
+    },
   } = useStores()
 
   const handler = e => {
@@ -15,9 +17,7 @@ const REMSApprovalTypeChoice = ({ value, label, disabled = false }) => {
   }
 
   // Use '' in the input to represent null/undefined value
-  const checked =
-    remsApprovalType.value === value ||
-    (value === '' && !remsApprovalType.value)
+  const checked = remsApprovalType.value === value || (value === '' && !remsApprovalType.value)
 
   const id = `rems-approval-type-${value || 'disabled'}`
 
@@ -32,7 +32,10 @@ const REMSApprovalTypeChoice = ({ value, label, disabled = false }) => {
         onChange={handler}
         disabled={disabled}
       />
-      <Label disabled={disabled} htmlFor={id}>{translate(label)}</Label>
+      <Label disabled={disabled} htmlFor={id}>
+        {translate(label)}
+        {extra && ' ' + translate(extra)}
+      </Label>
     </FormField>
   )
 }
@@ -40,6 +43,7 @@ const REMSApprovalTypeChoice = ({ value, label, disabled = false }) => {
 REMSApprovalTypeChoice.propTypes = {
   value: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  extra: PropTypes.string,
   disabled: PropTypes.bool,
 }
 
