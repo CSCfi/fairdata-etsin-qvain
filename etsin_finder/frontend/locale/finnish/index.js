@@ -42,7 +42,7 @@ const finnish = {
       access_denied: 'Hakemus evätty',
       access_granted: 'Käyttölupa myönnetty',
       application_draft: 'Hakemus luonnosvaiheessa',
-      application_submitted: 'Käyttölupaa haettu',
+      application_submitted: 'Odottaa hyväksyntää',
       application_closed: 'Hakemus suljettu',
       application_returned: 'Hakemus tarvitsee muutoksia',
     },

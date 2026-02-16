@@ -11,6 +11,7 @@ import deprecatedDataset from '../../__testdata__/metaxv3/datasets/dataset_ida_c
 import pasUseCopy from '../../__testdata__/metaxv3/datasets/dataset_ida_c_pasUseCopy'
 import pasPreservationCopy from '../../__testdata__/metaxv3/datasets/dataset_ida_c_preservationCopy'
 import Events from '@/components/etsin/Dataset/events'
+import { tableToObjects } from '@helpers'
 
 deprecatedDataset.preservation_dataset_origin_version = {
   preferred_identifier: 'urn:nbn:fi:origin-of-preserved-dataset',
@@ -32,25 +33,6 @@ const versionsToStores = () => {
   for (const version of versions) {
     stores.Etsin.EtsinDataset.set('versions', versions[version])
   }
-}
-
-const tableToObjects = tableElement => {
-  // convert table rows into objects, use table headers as keys
-  const labels = Array.from(tableElement.querySelectorAll('th')).map(th => th.textContent.trim())
-  const rowElements = Array.from(tableElement.querySelectorAll('tbody tr'))
-  const rows = []
-  rowElements.forEach(rowElement => {
-    const row = {}
-    Array.from(rowElement.cells).forEach((td, index) => {
-      const content = Array.from(td.childNodes)
-        .map(v => v.textContent.trim())
-        .filter(v => v)
-        .join('|')
-      row[labels[index]] = content
-    })
-    rows.push(row)
-  })
-  return rows
 }
 
 describe('Events page', () => {

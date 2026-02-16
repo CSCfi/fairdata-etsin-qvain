@@ -78,6 +78,7 @@ const ApplicationState = ({ application }) => {
   return (
     <PopUp
       isOpen={open}
+      below
       popUp={popupContent}
       onRequestClose={() => setOpen(false)}
       align="right"

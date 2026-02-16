@@ -16,7 +16,10 @@ class QvainDatasets {
     this.Env = Env
     this.Auth = Auth
     this.Locale = Locale
-    this.tabs = new Tabs({ ownDatasets: 'qvain.datasets.tabs.own' }, 'ownDatasets')
+    this.tabs = new Tabs(
+      { ownDatasets: 'qvain.datasets.tabs.own' },
+      'ownDatasets'
+    )
     this.ownDatasets = new QvainDatasetList({
       Locale,
       Auth,

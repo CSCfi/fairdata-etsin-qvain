@@ -25,6 +25,7 @@ import Modals from './structural/qvain.modal.v3'
 import AbortClient, { ignoreAbort, isAbort } from '@/utils/AbortClient'
 import urls from '@/utils/urls'
 import removeEmpty from '@/utils/removeEmpty'
+import REMSApplications from './qvain.remsApplications'
 
 class Qvain extends Resources {
   constructor(Env, Auth, Locale, OrgReferences) {
@@ -44,6 +45,7 @@ class Qvain extends Resources {
     this.Lock = new Lock(this, Auth)
     this.Modals = new Modals()
     this.AdminOrg = new QvainAdminOrg(this.Env, this.Auth, this.Locale, this)
+    this.REMSApplications = new REMSApplications(this.Env)
   }
 
   @computed get Submit() {

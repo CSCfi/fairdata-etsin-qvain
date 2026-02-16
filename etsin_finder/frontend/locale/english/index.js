@@ -42,7 +42,7 @@ const english = {
       access_denied: 'Application denied',
       access_granted: 'Access granted',
       application_draft: 'Application in draft state',
-      application_submitted: 'Access request sent',
+      application_submitted: 'Waiting for review',
       application_closed: 'Application closed',
       application_returned: 'Application needs to be amended',
     },

@@ -9,6 +9,7 @@ import DatasetGroup from './datasetGroup'
 import Loader from '../../../general/loader'
 import { InvertedButton } from '../../../general/button'
 import withCustomProps from '@/utils/withCustomProps'
+import { PlaceholderWrapper } from './styled'
 
 const Table = ({ datasets }) => {
   const {
@@ -153,14 +154,6 @@ const TitleCell = styled(HeadCell)`
 
 const DatasetsTable = styled.table`
   font-size: 18px;
-`
-
-const PlaceholderWrapper = styled.div`
-  min-height: 20rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
 `
 
 const ErrorMessage = styled.span`

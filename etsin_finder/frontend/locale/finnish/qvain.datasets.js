@@ -105,6 +105,7 @@ const datasets = {
   tabs: {
     own: 'Omat ja jaetut aineistot',
     admin: 'Qvain admin aineistot',
+    applications: 'Datan luvituksen hakemukset',
   },
   share: {
     title: 'Jaa metadatan muokkausoikeuksia',

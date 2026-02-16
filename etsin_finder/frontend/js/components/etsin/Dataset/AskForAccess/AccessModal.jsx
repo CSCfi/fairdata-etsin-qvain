@@ -56,7 +56,7 @@ const AccessModal = () => {
     <Modal
       isOpen={showModal}
       customStyles={customStyles}
-      contentLabel="Citation Modal"
+      contentLabel="Etsin REMS Application Modal"
       onRequestClose={() => setShowModal(false)}
     >
       <AccessModalTabs />

@@ -3,7 +3,15 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import withCustomProps from '@/utils/withCustomProps'
 
-const PopUp = ({ children, popUp, isOpen, onRequestClose, align = 'left', role }) => {
+const PopUp = ({
+  children,
+  popUp,
+  isOpen,
+  onRequestClose,
+  align = 'left',
+  below = false,
+  role,
+}) => {
   const [isFocused, setIsFocused] = useState(false)
   const popRef = useRef()
   const timeoutId = useRef()
@@ -40,7 +48,7 @@ const PopUp = ({ children, popUp, isOpen, onRequestClose, align = 'left', role }
       onMouseDown={e => e.preventDefault()}
     >
       {isOpen && (
-        <PopContainer>
+        <PopContainer below={below}>
           <Pop
             ref={popRef}
             tabIndex="-1"
@@ -49,10 +57,11 @@ const PopUp = ({ children, popUp, isOpen, onRequestClose, align = 'left', role }
             onFocus={onFocus}
             align={align}
             role={role}
+            below={below}
           >
             {popUp}
           </Pop>
-          <DownTriangle />
+          {below ? <UpTriangle /> : <DownTriangle />}
         </PopContainer>
       )}
       {children}
@@ -79,22 +88,43 @@ const DownTriangle = () => (
   </Svg>
 )
 
+const UpTriangle = () => (
+  <Svg width="40px" height="20px" viewBox="0 0 20 20">
+    <defs>
+      <filter id="dropshadow" height="200%" width="200%">
+        <feOffset dx="0" dy="3" result="offsetblur" />
+        <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+        <feComponentTransfer>
+          <feFuncA type="linear" slope="0.6" />
+        </feComponentTransfer>
+        <feMerge>
+          <feMergeNode />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+    <polygon fill="white" points="0,20 10,10 20,20" style={{ filter: 'url(#dropshadow)' }} />
+  </Svg>
+)
+
 const Relative = styled.span`
-  position: initial;
+  position: relative;
   display: inline-block;
   @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
     position: relative;
   }
 `
 
-const PopContainer = styled.div`
+const PopContainer = withCustomProps(styled.div)`
   position: initial;
   height: 0;
   width: 100%;
   display: flex;
   justify-content: center;
+  position: absolute;
+  top: ${p => (p.below ? '100%' : '0')};
+
   @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
-    position: relative;
     height: initial;
   }
 `
@@ -156,18 +186,17 @@ const Pop = withCustomProps(styled.div)`
   z-index: 1;
   position: absolute;
   top: initial;
-  left: 15px;
+  left: initial;
   background-color: white;
-  width: calc(100vw - 30px);
+  width: calc(100vw - 80px);
   padding: 1em 1.7em;
   box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
-  transform: translateY(calc(-100% - 10px));
+  transform: ${p => (p.below ? 'translateY(8px)' : 'translateY(calc(-100% - 10px))')};
   @media screen and (min-width: ${p => p.theme.breakpoints.sm}) {
     top: 1px;
     left: initial;
     ${p => alignment(p.align)};
-    position: absolute;
     width: initial;
     max-width: 60vw;
   }
@@ -202,6 +231,7 @@ PopUp.propTypes = {
   onRequestClose: PropTypes.func.isRequired,
   align: PropTypes.oneOf(['left', 'left-fit-content', 'right', 'center', 'sidebar']),
   role: PropTypes.string,
+  below: PropTypes.bool,
 }
 
 export default PopUp

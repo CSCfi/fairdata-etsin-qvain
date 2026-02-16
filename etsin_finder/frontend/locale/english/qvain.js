@@ -16,6 +16,7 @@ import sections from './qvain.sections'
 import infrastructure from './qvain.infrastructure'
 import timePeriod from './qvain.timePeriod'
 import adminOrg from './qvain.adminOrg'
+import applications from './qvain.applications'
 
 const qvainEnglish = {
   saveDraft: 'Save as draft',
@@ -40,9 +41,10 @@ const qvainEnglish = {
     remsLicenseChange:
       'Note! Changing either <em>License</em> or <em>Terms for Data Access</em> will invalidate ' +
       'the already granted data access rights (%(count)s pcs). Are you sure you want to change them?',
-    changedAdminOrg: "You are changing the organization which has the maintenance rights to this dataset's metadata. "+
-    "As you are the Qvain Admin user for this dataset you will no longer be able to make changes to the dataset's metadata "+
-    "and it will not be visible for you in Qvain after the change. Are you sure you want to make the change?",
+    changedAdminOrg:
+      "You are changing the organization which has the maintenance rights to this dataset's metadata. " +
+      "As you are the Qvain Admin user for this dataset you will no longer be able to make changes to the dataset's metadata " +
+      'and it will not be visible for you in Qvain after the change. Are you sure you want to make the change?',
   },
   pasInfo: {
     stateInfo: 'This is a DPS dataset. The state of the dataset is "%(state)s: %(description)s".',
@@ -75,7 +77,7 @@ const qvainEnglish = {
     140: 'Available',
   },
   notCSCUser1:
-    'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might '+
+    'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might ' +
     'get this error if your account is not associated with CSC account. Please do the registration in',
   notCSCUserLink: ' CSC Customer Portal',
   notCSCUser2: ' You can register with or without Haka account.',
@@ -158,6 +160,7 @@ const qvainEnglish = {
   infrastructure,
   timePeriod,
   adminOrg,
+  applications,
 }
 
 export default qvainEnglish

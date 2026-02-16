@@ -15,7 +15,7 @@ import Dataset from '@/components/etsin/Dataset'
 import { buildStores } from '@/stores'
 import EnvClass from '@/stores/domain/env'
 
-import { textValues } from '@helpers'
+import { tableToObjects, textValues } from '@helpers'
 import {
   dataset_open_a_catalog_expanded,
   dataset_rems,
@@ -54,7 +54,7 @@ const renderEtsin = async (
     userLogged = false,
     tab = undefined,
     remsApplicationBase = automaticREMSApplicationBase,
-    beforeRender = () => { },
+    beforeRender = () => {},
   } = {}
 ) => {
   mockAdapter.reset()
@@ -185,7 +185,7 @@ describe('Etsin dataset page', () => {
     const header = within(dialog).getByRole('heading', { name: 'APA' })
     expect(header.nextElementSibling.textContent).toEqual(
       'Kone Foundation, & Henkilö, K. (2023). All Fields Test Dataset. ' +
-      'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
+        'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
     )
   })
 
@@ -378,7 +378,7 @@ describe('Etsin dataset page', () => {
   })
 
   test('renders REMS error message', async () => {
-    vi.spyOn(console, 'error').mockImplementation(() => { }) // hide console.error from output
+    vi.spyOn(console, 'error').mockImplementation(() => {}) // hide console.error from output
     await renderEtsin(dataset_rems, { userLogged: true })
 
     mockAdapter
@@ -419,22 +419,6 @@ const spatial_olari = {
 const spatial_autti = {
   id: 'c04c4768-515e-463d-0000-000000000000',
   custom_wkt: ['POINT(27.10814 66.32100)'],
-}
-
-const tableToObjects = tableElement => {
-  // convert table rows into objects, use table headers as keys
-  const labels = Array.from(tableElement.querySelectorAll('th')).map(th => th.textContent.trim())
-  const rowElements = Array.from(tableElement.querySelectorAll('tbody tr'))
-  const rows = []
-  rowElements.forEach(rowElement => {
-    const row = {}
-    Array.from(rowElement.cells).forEach((td, index) => {
-      const content = td.textContent
-      row[labels[index]] = content
-    })
-    rows.push(row)
-  })
-  return rows
 }
 
 describe('Etsin map page', () => {

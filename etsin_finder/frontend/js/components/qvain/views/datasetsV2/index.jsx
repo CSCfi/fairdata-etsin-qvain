@@ -13,13 +13,14 @@ import Table from './table'
 import RemoveModal from './removeModal'
 import ShareModal from './ShareModal'
 import Search from './search'
+import Applications from './Applications'
 
 export const Datasets = () => {
   const navigate = useNavigate()
 
   const {
     Qvain: { resetQvainStore },
-    QvainDatasets: { publishedDataset, setPublishedDataset, currentDatasets },
+    QvainDatasets: { publishedDataset, setPublishedDataset, currentDatasets, tabs },
     Env: { getQvainUrl },
     Matomo: { recordEvent },
   } = useStores()
@@ -58,8 +59,14 @@ export const Datasets = () => {
         </DatasetsHeader>
         <Tabs />
         <DatasetsContent>
-          <Search datasets={currentDatasets} />
-          <Table datasets={currentDatasets} />
+          {tabs.active == 'applications' ? (
+            <Applications />
+          ) : (
+            <>
+              <Search datasets={currentDatasets} />
+              <Table datasets={currentDatasets} />
+            </>
+          )}
         </DatasetsContent>
         <RemoveModal />
         <ShareModal />

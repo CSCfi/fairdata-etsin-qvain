@@ -6,7 +6,7 @@ import { NarrowTextArea, Required } from '@/components/qvain/general/V3'
 import { useStores } from '@/stores/stores'
 import { observer } from 'mobx-react'
 
-const REMSFormField = ({ applicationId, form, field, readOnly = false }) => {
+const REMSFormField = ({ applicationId = null, form, field, readOnly = false }) => {
   const {
     Locale: { getValueTranslation },
     Etsin: {
@@ -50,7 +50,7 @@ const REMSFormField = ({ applicationId, form, field, readOnly = false }) => {
 }
 
 REMSFormField.propTypes = {
-  applicationId: PropTypes.number.isRequired,
+  applicationId: PropTypes.number, // use null when creating new application
   form: PropTypes.object.isRequired,
   field: PropTypes.object.isRequired,
   readOnly: PropTypes.bool,

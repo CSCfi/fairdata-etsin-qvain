@@ -7,14 +7,20 @@ import { Tab, TabRow } from '@/components/general/Tab'
 export const Tabs = () => {
   const {
     QvainDatasets: { tabs, Auth },
+    Env: {
+      Flags: { flagEnabled },
+    },
   } = useStores()
 
   useEffect(() => {
     if (Auth.user.admin_organizations?.length > 0) {
       tabs.addOption('adminDatasets', 'qvain.datasets.tabs.admin')
+      if (flagEnabled('QVAIN.REMS')) {
+        tabs.addOption('applications', 'qvain.datasets.tabs.applications')
+      }
       tabs.setActive('adminDatasets')
     }
-  }, [Auth.user.admin_organizations, tabs])
+  }, [Auth.user.admin_organizations, tabs, flagEnabled])
 
   return (
     <TabRow>

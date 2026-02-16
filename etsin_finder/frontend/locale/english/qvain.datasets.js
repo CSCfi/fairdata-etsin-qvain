@@ -105,6 +105,7 @@ const datasets = {
   tabs: {
     own: 'Owned and shared datasets',
     admin: 'Qvain admin datasets',
+    applications: 'Data access applications',
   },
   share: {
     title: 'Share metadata editing rights',
