@@ -35,6 +35,11 @@ const finnish = {
         'lisenssin tai ehtojen muutoksen johdosta.',
       closedDueToAccessTypeChange:
         'Hakemus peruutettiin aineiston käyttöoikeuksien muutoksen johdosta.',
+      comments: {
+        title: 'Kommentit',
+        comment: 'Kommentti',
+        event: 'Tapahtuma',
+      },
     },
     access_states: {
       require_login: 'Käyttöluvan hakeminen vaatii sisään kirjautumisen',

@@ -8,13 +8,14 @@ import PropTypes from 'prop-types'
 import ApplicationState from './REMSApplicationState'
 import REMSLicenseList from './REMSLicenseList'
 import REMSForms from './REMSForms'
+import REMSComments from './REMSComments'
 
 const REMSApplication = ({ application }) => {
   const {
     Locale: { dateFormat, translate },
     Etsin: {
       EtsinDataset: {
-        rems: { fetchApplicationDetails, getClosedComment, applicationWasApproved },
+        rems: { fetchApplicationDetails },
       },
     },
   } = useStores()
@@ -33,20 +34,9 @@ const REMSApplication = ({ application }) => {
     content = (
       <Wrapper>
         <REMSLicenseList licenses={licenses} />
-        <REMSForms applicationId={application["application/id"]} forms={forms} readOnly />
+        <REMSForms applicationId={application['application/id']} forms={forms} readOnly />
       </Wrapper>
     )
-  }
-
-  let closedComment = getClosedComment(application)
-  if (closedComment === 'Dataset license has changed.') {
-    if (applicationWasApproved(application)) {
-      closedComment = translate('dataset.access_modal.approvedClosedDueToLicenseChange')
-    } else {
-      closedComment = translate('dataset.access_modal.submittedClosedDueToLicenseChange')
-    }
-  } else if (closedComment === 'Dataset is no longer in REMS.') {
-    closedComment = translate('dataset.access_modal.closedDueToAccessTypeChange')
   }
 
   const created = dateFormat(application['application/created'], { format: 'date' })
@@ -56,22 +46,11 @@ const REMSApplication = ({ application }) => {
         <h1>{translate('dataset.access_modal.applicationCreated', { created })}</h1>
         <ApplicationState application={application} />
       </TitleRow>
-      {closedComment && <ClosedComment>{closedComment}</ClosedComment>}
+      <REMSComments application={application} />
       {content}
     </>
   )
 }
-
-const ClosedComment = styled.div`
-  background-color: ${props => props.theme.color.gray};
-  text-align: center;
-  width: 100%;
-  color: white;
-  z-index: 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  position: relative;
-  padding: 0.25em 1em;
-`
 
 REMSApplication.propTypes = {
   application: PropTypes.object.isRequired,

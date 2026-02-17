@@ -35,6 +35,11 @@ const english = {
         'in license / terms for data access.',
       closedDueToAccessTypeChange:
         'The application was cancelled due to changes in dataset access rights.',
+      comments: {
+        title: 'Comments',
+        comment: 'Comment',
+        event: 'Event',
+      },
     },
     access_states: {
       require_login: 'Login to apply for access',
