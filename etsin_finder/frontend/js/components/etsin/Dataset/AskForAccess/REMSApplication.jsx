@@ -3,11 +3,12 @@ import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import Loader from '@/components/general/loader'
+import { SaveButton } from '@/components/qvain/general/buttons'
 import { useStores } from '@/utils/stores'
 import PropTypes from 'prop-types'
 import ApplicationState from './REMSApplicationState'
-import REMSLicenseList from './REMSLicenseList'
 import REMSForms from './REMSForms'
+import REMSLicenseList from './REMSLicenseList'
 import REMSComments from './REMSComments'
 
 const REMSApplication = ({ application }) => {
@@ -15,7 +16,7 @@ const REMSApplication = ({ application }) => {
     Locale: { dateFormat, translate },
     Etsin: {
       EtsinDataset: {
-        rems: { fetchApplicationDetails },
+        rems: { fetchApplicationDetails, isEditable, submitApplication, readyForSubmit },
       },
     },
   } = useStores()
@@ -28,13 +29,19 @@ const REMSApplication = ({ application }) => {
   }, [application, fetchApplicationDetails, hasDetails])
 
   let content = <Loader active />
+  const readOnly = !isEditable(application)
+
   if (hasDetails) {
     const licenses = application['application/licenses'] || []
     const forms = application?.['application/forms'] || []
     content = (
       <Wrapper>
         <REMSLicenseList licenses={licenses} />
-        <REMSForms applicationId={application['application/id']} forms={forms} readOnly />
+        <REMSForms
+          applicationId={application['application/id']}
+          forms={forms}
+          readOnly={readOnly}
+        />
       </Wrapper>
     )
   }
@@ -48,6 +55,18 @@ const REMSApplication = ({ application }) => {
       </TitleRow>
       <REMSComments application={application} />
       {content}
+      {!readOnly && (
+        <Buttons>
+          <SaveButton
+            component={SaveButton}
+            data-testid="submit-access-application"
+            onClick={() => submitApplication(application)}
+            disabled={!readyForSubmit(application)}
+          >
+            {translate('dataset.access_modal.submit')}
+          </SaveButton>
+        </Buttons>
+      )}
     </>
   )
 }
@@ -70,6 +89,12 @@ const TitleRow = styled.div`
 const Wrapper = styled.div`
   overflow-y: auto;
   flex-shrink: 99999;
+`
+
+const Buttons = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
 `
 
 export default observer(REMSApplication)

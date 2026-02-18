@@ -6,6 +6,7 @@ import { useStores } from '@/utils/stores'
 import AccessModalTabs from './AccessModalTabs'
 import NewREMSApplication from './NewREMSApplication'
 import REMSApplication from './REMSApplication'
+import ErrorBoundary from '@/components/general/errorBoundary'
 
 const customStyles = {
   content: {
@@ -59,12 +60,14 @@ const AccessModal = () => {
       contentLabel="Etsin REMS Application Modal"
       onRequestClose={() => setShowModal(false)}
     >
-      <AccessModalTabs />
-      {application ? (
-        <REMSApplication application={application} key={application['application/id']} />
-      ) : (
-        <NewREMSApplication />
-      )}
+      <ErrorBoundary>
+        <AccessModalTabs />
+        {application ? (
+          <REMSApplication application={application} key={application['application/id']} />
+        ) : (
+          <NewREMSApplication />
+        )}
+      </ErrorBoundary>
     </Modal>
   )
 }

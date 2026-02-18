@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash-es'
+
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import axios from 'axios'
@@ -375,6 +377,90 @@ describe('Etsin dataset page', () => {
     expect(
       within(dialog).getByText('cancelled due to changes in license', { exact: false })
     ).toBeInTheDocument()
+  })
+
+  test('allows resubmitting returned REMS application', async () => {
+    // Mock responses for returned application
+    const forms = cloneDeep(manualREMSApplicationBase['application/forms'])
+    forms[0]['form/fields'][0]['field/value'] = 'old value 1'
+    forms[0]['form/fields'][1]['field/value'] = 'old value 2'
+    forms[0]['form/fields'][2]['field/value'] = 'old value 3'
+    const returnedApplication = {
+      ...approvedApplication,
+      'application/forms': forms,
+      'application/state': 'application.state/returned',
+      'application/events': [
+        ...approvedApplication['application/events'],
+        {
+          'event/id': 777,
+          'event/type': 'application.event/returned',
+          'event/time': '2025-11-14T10:55:46.827Z',
+          'event/actor': 'handler',
+          'application/id': 281,
+          'event/actor-attributes': {
+            userid: 'handler',
+            name: 'Handler',
+          },
+          'application/comment': 'Teepä vähän muutoksia.',
+          'event/visibility': 'visibility/public',
+        },
+      ],
+    }
+
+    const beforeRender = () => {
+      mockAdapter
+        .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-applications`)
+        .reply(200, [returnedApplication])
+      mockAdapter
+        .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-applications/123`)
+        .reply(200, returnedApplication)
+      mockAdapter
+        .onPost(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-applications/123/submit`)
+        .reply(200, { success: true, 'application-id': 123 })
+    }
+
+    await renderEtsin(dataset_rems, { userLogged: true, beforeRender })
+    await userEvent.click(screen.getByTestId('rems-button'))
+    const dialog = screen.getByRole('dialog')
+
+    // Open closed application
+    const tab = within(dialog).getByRole('tab', { name: 'Application 2025/17' })
+    await userEvent.click(tab)
+    expect(tab.getAttribute('aria-selected')).toBe('true')
+
+    expect(
+      within(dialog).getByText('Application needs to be amended', { exact: false })
+    ).toBeInTheDocument()
+
+    // Clear old project description
+    const projectDescriptionInput = within(dialog).getByRole('textbox', {
+      name: /description of your research project/i,
+    })
+    await userEvent.clear(projectDescriptionInput)
+
+    // Required field empty -> submit not allowed
+    let submitButton = within(dialog).getByRole('button', { name: 'Submit' })
+    expect(submitButton).toBeDisabled()
+
+    // Type new value in project description
+    await userEvent.type(projectDescriptionInput, 'new description here')
+    expect(submitButton).not.toBeDisabled()
+    await userEvent.click(submitButton)
+
+    // Check that correct application submit request is sent
+    expect(mockAdapter.history.post).toHaveLength(1)
+    const request = mockAdapter.history.post[0]
+    expect(request.url).toBe(
+      'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0/rems-applications/123/submit'
+    )
+    expect(JSON.parse(request.data)).toEqual({
+      accept_licenses: [4, 1, 5],
+      field_values: [
+        { form: '12', field: 'project_description', value: 'new description here' },
+        { form: '12', field: 'access_control', value: 'old value 2' },
+        { form: '12', field: 'other_persons', value: 'old value 3' },
+      ],
+    })
   })
 
   test('renders REMS error message', async () => {

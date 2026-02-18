@@ -35,6 +35,11 @@ const REMSButton = props => {
       buttonContent = 'dataset.access_states.application_draft'
       buttonColor = 'yellow'
       break
+    case 'returned':
+      buttonId = 'rems-button-draft'
+      buttonContent = 'dataset.access_states.application_returned'
+      buttonColor = etsinTheme.color.error
+      break
     case 'submitted':
       buttonId = 'rems-button-submitted'
       buttonContent = 'dataset.access_states.application_submitted'

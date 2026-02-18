@@ -66,6 +66,8 @@ export default {
       `${metaxV3}/v3/datasets/${dataset}/permissions/editors/${username}`,
     datasetREMSApplication: (metaxV3, dataset, application) =>
       `${metaxV3}/v3/datasets/${dataset}/rems-applications/${application}`,
+    datasetREMSApplicationSubmit: (metaxV3, dataset, application) =>
+      `${metaxV3}/v3/datasets/${dataset}/rems-applications/${application}/submit`,
     datasetREMSApplications: (metaxV3, dataset) =>
       `${metaxV3}/v3/datasets/${dataset}/rems-applications`,
     datasetREMSApplicationBase: (metaxV3, dataset) =>

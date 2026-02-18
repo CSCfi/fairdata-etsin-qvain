@@ -13,6 +13,8 @@ class EtsinDatasetRems {
     this.client = new AbortClient()
     this.tabs = new Tabs({}, 'new-application')
     this.setApplications(undefined)
+    this.readyForSubmit = this.readyForSubmit.bind(this)
+    this.hasAllRequiredFormValues = this.hasAllRequiredFormValues.bind(this)
   }
 
   @observable showModal = false
@@ -23,13 +25,15 @@ class EtsinDatasetRems {
 
   @observable applicationBaseError
 
-  @observable acceptLicenses = false
+  // application id -> bool
+  @observable acceptLicenses = {}
 
   // application id -> form id -> field id -> field value
   @observable formValues = {}
 
   @action.bound clearApplication() {
-    this.acceptLicenses = false
+    this.acceptLicenses[null] = false
+    this.formValues[null] = {}
   }
 
   @action.bound
@@ -39,15 +43,11 @@ class EtsinDatasetRems {
     this.formValues[applicationId][formId][fieldId] = value
   }
 
-  hasAllRequiredFormValues(applicationId) {
-    let application
-    if (applicationId === null) {
-      application = this.applicationBase
-    }
-
+  hasAllRequiredFormValues(application) {
     if (!application) {
-      return false // not supported yet for other than new application
+      return false
     }
+    const applicationId = application['application/id']
 
     const forms = application['application/forms'] || []
     for (const form of forms) {
@@ -82,8 +82,8 @@ class EtsinDatasetRems {
     }
   }
 
-  @action.bound setAcceptLicenses(value) {
-    this.acceptLicenses = value
+  @action.bound setAcceptLicenses(applicationId, value) {
+    this.acceptLicenses[applicationId] = value
   }
 
   @action.bound setShowModal(value) {
@@ -100,8 +100,13 @@ class EtsinDatasetRems {
       const entries = Object.fromEntries(applications.map(a => [`app-${a['application/id']}`, a]))
       this.tabs.setOptions({ 'new-application': null, ...entries })
       if (!this.tabs.activeValue) {
-        // Default to "new application" tab when previously selected tab is not available
-        this.tabs.setActive('new-application')
+        // When  previously selected tab is not available,
+        // default to latest application or "new application" tab
+        if (applications.length > 0) {
+          this.tabs.setActive(`app-${applications[0]['application/id']}`)
+        } else {
+          this.tabs.setActive('new-application')
+        }
       }
     } else {
       // Applications not yet loaded
@@ -126,7 +131,7 @@ class EtsinDatasetRems {
     const url = this.Env.metaxV3Url('datasetREMSApplicationBase', this.EtsinDataset.identifier)
     try {
       const { data } = await this.promiseManager.add(this.client.get(url), 'application-base')
-      this.setApplicationBase(data)
+      this.setApplicationBase({ ...data, 'application/id': null })
       this.loadApplicationFormValues(data)
     } catch (e) {
       console.error(e)
@@ -157,10 +162,11 @@ class EtsinDatasetRems {
       return
     }
     try {
+      const applicationId = application['application/id']
       const url = this.Env.metaxV3Url(
         'datasetREMSApplication',
         this.EtsinDataset.identifier,
-        application['application/id']
+        applicationId
       )
       const { data } = await this.promiseManager.add(this.client.get(url), 'applications')
       runInAction(() => {
@@ -168,10 +174,17 @@ class EtsinDatasetRems {
         application.hasDetails = true
       })
       this.loadApplicationFormValues(application)
+      // TODO: Check that licenses have actually been accepted
+      this.setAcceptLicenses(applicationId, true)
     } catch (e) {
       console.error(e)
       this.setApplicationsError(e)
     }
+  }
+
+  isEditable(application) {
+    const state = application['application/state']
+    return state === 'application.state/draft' || state === 'application.state/returned'
   }
 
   applicationWasApproved(application) {
@@ -199,7 +212,10 @@ class EtsinDatasetRems {
   }
 
   @computed get isSubmitting() {
-    return this.promiseManager.count('create-application') > 0
+    return (
+      this.promiseManager.count('create-application') > 0 ||
+      this.promiseManager.count('submit-application') > 0
+    )
   }
 
   getFieldValues(applicationId) {
@@ -218,16 +234,22 @@ class EtsinDatasetRems {
     return fieldValues
   }
 
+  getSubmitPayload(application) {
+    const payload = {
+      accept_licenses: application['application/licenses'].map(l => l['license/id']),
+    }
+    const applicationId = application['application/id']
+    const fieldValues = this.getFieldValues(applicationId)
+    if (fieldValues.length > 0) {
+      payload.field_values = fieldValues
+    }
+    return payload
+  }
+
   @action.bound async createApplication() {
     const url = this.Env.metaxV3Url('datasetREMSApplications', this.EtsinDataset.identifier)
     const submit = async () => {
-      const payload = {
-        accept_licenses: this.applicationBase['application/licenses'].map(l => l['license/id']),
-      }
-      const fieldValues = this.getFieldValues(null)
-      if (fieldValues.length > 0) {
-        payload.field_values = fieldValues
-      }
+      const payload = this.getSubmitPayload(this.applicationBase)
 
       const { data } = await this.client.post(url, payload)
       this.clearApplication()
@@ -237,10 +259,29 @@ class EtsinDatasetRems {
     await this.promiseManager.add(submit(), 'create-application')
   }
 
-  @computed get readyForSubmit() {
-    return (
-      this.acceptLicenses &&
-      this.hasAllRequiredFormValues(null) &&
+  @action.bound async submitApplication(application) {
+    const applicationId = application['application/id']
+    const url = this.Env.metaxV3Url(
+      'datasetREMSApplicationSubmit',
+      this.EtsinDataset.identifier,
+      applicationId
+    )
+    const submit = async () => {
+      const payload = this.getSubmitPayload(application)
+      await this.client.post(url, payload)
+      await this.fetchApplications()
+    }
+    await this.promiseManager.add(submit(), 'create-application')
+  }
+
+  readyForSubmit(application) {
+    if (!application) {
+      return false
+    }
+    const applicationId = application['application/id']
+    return !!(
+      this.acceptLicenses[applicationId] &&
+      this.hasAllRequiredFormValues(application) &&
       !this.isSubmitting &&
       !this.isLoadingApplicationBase &&
       !this.applicationBaseError

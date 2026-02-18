@@ -55,8 +55,8 @@ const NewREMSApplication = () => {
             id="accept-access-terms"
             data-testid="accept-access-terms"
             disabled={isSubmitting}
-            checked={acceptLicenses}
-            onChange={e => setAcceptLicenses(e.target.checked)}
+            checked={acceptLicenses[null]}
+            onChange={e => setAcceptLicenses(null, e.target.checked)}
           />
           <CheckLabel htmlFor="accept-access-terms">{getAcceptLabel()}</CheckLabel>
         </AcceptItem>
@@ -74,7 +74,7 @@ const NewREMSApplication = () => {
           component={SaveButton}
           data-testid="submit-access-application"
           onClick={createApplication}
-          disabled={!readyForSubmit}
+          disabled={!readyForSubmit(applicationBase)}
         >
           {translate('dataset.access_modal.submit')}
         </SaveButton>
