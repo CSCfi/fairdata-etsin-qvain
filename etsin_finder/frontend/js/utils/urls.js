@@ -82,8 +82,13 @@ export default {
     remsApplicationsTodo: metaxV3 => `${metaxV3}/v3/rems/applications/todo`,
     remsApplicationsHandled: metaxV3 => `${metaxV3}/v3/rems/applications/handled`,
     remsApplication: (metaxV3, application) => `${metaxV3}/v3/rems/applications/${application}`,
-    remsApplicationApprove: (metaxV3, application) => `${metaxV3}/v3/rems/applications/${application}/approve`,
-    remsApplicationReject: (metaxV3, application) => `${metaxV3}/v3/rems/applications/${application}/reject`,
-    remsApplicationClose: (metaxV3, application) => `${metaxV3}/v3/rems/applications/${application}/close`,
+    remsApplicationApprove: (metaxV3, application) =>
+      `${metaxV3}/v3/rems/applications/${application}/approve`,
+    remsApplicationReject: (metaxV3, application) =>
+      `${metaxV3}/v3/rems/applications/${application}/reject`,
+    remsApplicationClose: (metaxV3, application) =>
+      `${metaxV3}/v3/rems/applications/${application}/close`,
+    remsApplicationReturn: (metaxV3, application) =>
+      `${metaxV3}/v3/rems/applications/${application}/return`,
   },
 }

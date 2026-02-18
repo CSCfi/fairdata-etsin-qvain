@@ -8,13 +8,14 @@ import { ApplicationSection } from './styled'
 const getActions = application => {
   const reviewAction = { key: 'review', label: 'qvain.applications.actions.approveOrReject' }
   const closeAction = { key: 'close', label: 'qvain.applications.actions.close' }
+  const returnAction = { key: 'return', label: 'qvain.applications.actions.return' }
 
   const state = application['application/state']
   switch (state) {
     case 'application.state/approved':
       return [closeAction]
     case 'application.state/submitted':
-      return [reviewAction, closeAction] // TODO: implement returnAction
+      return [reviewAction, closeAction, returnAction]
   }
   return []
 }
@@ -31,6 +32,7 @@ const ApplicationActions = observer(() => {
         approveApplication,
         rejectApplication,
         closeApplication,
+        returnApplication,
         selectedApplication,
       },
     },
@@ -74,6 +76,17 @@ const ApplicationActions = observer(() => {
           {cancelButton}
           <Button color="error" onClick={closeApplication}>
             {translate('qvain.applications.actions.close')}
+          </Button>
+        </div>
+      )
+    } else if (selectedAction === 'return') {
+      actionDetails = (
+        <div>
+          <h4>{translate('qvain.applications.actions.return')}</h4>
+          {commentForm}
+          {cancelButton}
+          <Button color="error" onClick={returnApplication}>
+            {translate('qvain.applications.actions.return')}
           </Button>
         </div>
       )

@@ -692,6 +692,7 @@ export class ApplicationBuilder {
     approve: new RegExp('https://metaxv3:443/v3/rems/applications/(?<id>[\\d]+)/approve'),
     reject: new RegExp('https://metaxv3:443/v3/rems/applications/(?<id>[\\d]+)/reject'),
     close: new RegExp('https://metaxv3:443/v3/rems/applications/(?<id>[\\d]+)/close'),
+    return: new RegExp('https://metaxv3:443/v3/rems/applications/(?<id>[\\d]+)/return'),
   }
 
   handleGet(request) {
@@ -717,7 +718,7 @@ export class ApplicationBuilder {
 
   handlePost(request) {
     let application, action
-    for (const a of ['approve', 'reject', 'close']) {
+    for (const a of ['approve', 'reject', 'close', 'return']) {
       const match = this.re[a].exec(request.url)
       if (match) {
         application = this.applicationsById[match.groups.id]
@@ -737,6 +738,9 @@ export class ApplicationBuilder {
       return [200, { success: true }]
     } else if (action === 'close') {
       application['application/state'] = 'application.state/closed'
+      return [200, { success: true }]
+    } else if (action === 'return') {
+      application['application/state'] = 'application.state/returned'
       return [200, { success: true }]
     }
     return [500, 'fail']

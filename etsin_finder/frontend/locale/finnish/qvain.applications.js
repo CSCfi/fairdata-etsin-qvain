@@ -36,6 +36,7 @@ const applications = {
     comment: 'Lisää kommentti (näkyy hakijalle)',
     approve: 'Hyväksy',
     reject: 'Hylkää',
+    return: 'Pyydä muutoksia',
     close: 'Sulje hakemus',
   },
 }

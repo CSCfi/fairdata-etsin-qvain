@@ -199,9 +199,9 @@ describe('Qvain REMS applications', () => {
     await userEvent.type(commentForm, 'no longer relevant')
 
     // The confirmation button also says "Close application"
-    const rejectButton = within(dialog).getAllByRole('button', { name: 'Close application' })[1]
+    const confirmButton = within(dialog).getAllByRole('button', { name: 'Close application' })[1]
 
-    await userEvent.click(rejectButton)
+    await userEvent.click(confirmButton)
 
     expect(within(dialog).getByRole('button', { name: 'Application closed' })).toBeInTheDocument()
 
@@ -212,6 +212,39 @@ describe('Qvain REMS applications', () => {
     expect(url).toEqual('https://metaxv3:443/v3/rems/applications/1/close')
     expect(payload).toEqual({
       comment: 'no longer relevant',
+    })
+  })
+
+  it('allows returning applications', async () => {
+    builder.build()
+    await renderApplications()
+    const viewButton = screen.getByRole('button', { name: 'View' })
+    await userEvent.click(viewButton)
+
+    let dialog = screen.getByRole('dialog')
+    expect(within(dialog).getByRole('button', { name: 'Waiting for review' })).toBeInTheDocument()
+
+    const actionButton = within(dialog).getByRole('button', { name: 'Request changes' })
+    await userEvent.click(actionButton)
+
+    const commentForm = within(dialog).getByLabelText(/Add comment/)
+    await userEvent.type(commentForm, 'improve ur application')
+
+    // The confirmation button also says "Request changes"
+    const confirmButton = within(dialog).getAllByRole('button', { name: 'Request changes' })[1]
+    await userEvent.click(confirmButton)
+
+    expect(
+      within(dialog).getByRole('button', { name: 'Application needs to be amended' })
+    ).toBeInTheDocument()
+
+    // Check rejection request
+    expect(mockAdapter.history.post).toHaveLength(1)
+    const url = mockAdapter.history.post[0].url
+    const payload = JSON.parse(mockAdapter.history.post[0].data)
+    expect(url).toEqual('https://metaxv3:443/v3/rems/applications/1/return')
+    expect(payload).toEqual({
+      comment: 'improve ur application',
     })
   })
 })

@@ -36,6 +36,7 @@ const applications = {
     comment: 'Add comment (shown to applicant)',
     approve: 'Approve',
     reject: 'Reject',
+    return: 'Request changes',
     close: 'Close application',
   },
 }

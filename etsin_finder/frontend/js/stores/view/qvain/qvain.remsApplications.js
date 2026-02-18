@@ -87,6 +87,8 @@ class REMSApplications {
       url = this.Env.metaxV3Url('remsApplicationReject', applicationId)
     } else if (action === 'close') {
       url = this.Env.metaxV3Url('remsApplicationClose', applicationId)
+    } else if (action === 'return') {
+      url = this.Env.metaxV3Url('remsApplicationReturn', applicationId)
     } else {
       console.error('Unknown action', action)
     }
@@ -110,6 +112,10 @@ class REMSApplications {
 
   @action.bound closeApplication() {
     return this.applicationAction('close')
+  }
+
+  @action.bound returnApplication() {
+    return this.applicationAction('return')
   }
 
   @action.bound setApplications(applications) {
