@@ -103,11 +103,10 @@ class EtsinSearch {
     query.set('publishing_channels', 'etsin')
     query.set('latest_versions', true)
     query.set('state', 'published')
+    query.set('filter_language', this.Locale.lang)
 
     const url = `${this.Env.metaxV3Url('datasets')}?${query.toString()}`
-    this.aggregatesUrl = `${this.Env.metaxV3Url('aggregates')}?language=${
-      this.Locale.lang
-    }&${query.toString()}`
+    this.aggregatesUrl = `${this.Env.metaxV3Url('aggregates')}?${query.toString()}`
 
     await this.client.abort()
     this.setIsLoading(true)
@@ -143,8 +142,8 @@ class EtsinSearch {
     }
   }
 
-  /* The aggregation parameter is not set directly as the value of 
-  aggregations[key], but a new corresponding object is created from it so 
+  /* The aggregation parameter is not set directly as the value of
+  aggregations[key], but a new corresponding object is created from it so
   that subobject changes are registered: */
   @action.bound setAggregation(key, aggregation) {
     this.aggregations[key] = {
@@ -153,9 +152,9 @@ class EtsinSearch {
     }
   }
 
-  /* Update the value of the aggregation determined by the facetName 
-  parameter to results that correspond partly or fully to the value of the 
-  term parameter. 
+  /* Update the value of the aggregation determined by the facetName
+  parameter to results that correspond partly or fully to the value of the
+  term parameter.
   */
   @action.bound
   async fetchAggregation(facetName, term = '') {

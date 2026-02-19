@@ -20,18 +20,18 @@ import aggregations_b from '../../__testdata__/metaxv3/search/aggregations_b.dat
 import dataset_ida_a from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 import dataset_ida_b from '../../__testdata__/metaxv3/datasets/dataset_ida_b.data'
 
-const common_query = 'publishing_channels=etsin&latest_versions=true&state=published'
+const common_query = 'publishing_channels=etsin&latest_versions=true&state=published&filter_language=en'
 
 const getQueryParam = (key, value) => {
   return `${key}=${value}`
 }
 
 const getFilteredAggregation = (facet, entry) => {
-  /* Create a deep clone from aggregations_a so that no reference to 
+  /* Create a deep clone from aggregations_a so that no reference to
   aggregations_a exists: */
   const aggregations = JSON.parse(JSON.stringify(aggregations_a))
 
-  // Filter to include only objects that contain the search word: 
+  // Filter to include only objects that contain the search word:
   const hits = aggregations[facet].hits.filter((object) => {
     return String(object.value.en).toLowerCase().includes(entry.toLowerCase())
   })
@@ -47,7 +47,7 @@ mockAdapter
   .onGet(`https://metaxv3:443/v3/datasets?limit=20&offset=0&${common_query}`)
   .reply(200, { results: [dataset_ida_a], count: 1 })
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?language=en&limit=20&offset=0&${common_query}`)
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&${common_query}`)
   .reply(200, aggregations_a)
 mockAdapter
   .onGet(
@@ -56,23 +56,23 @@ mockAdapter
   .reply(200, { results: [dataset_ida_a], count: 1 })
 mockAdapter
   .onGet(
-    `https://metaxv3:443/v3/datasets/aggregates?language=en&keyword=web-development&limit=20&offset=0&${common_query}`
+    `https://metaxv3:443/v3/datasets/aggregates?keyword=web-development&limit=20&offset=0&${common_query}`
   )
   .reply(200, aggregations_a)
 mockAdapter
   .onGet(`https://metaxv3:443/v3/datasets?search=test&limit=20&offset=0&${common_query}`)
   .reply(200, { ...dataset_ida_a, count: 0, results: [] })
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?language=en&search=test&limit=20&offset=0&${common_query}`)
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?search=test&limit=20&offset=0&${common_query}`)
   .reply(200, aggregations_a)
 mockAdapter
   .onGet(`https://metaxv3:443/v3/datasets?limit=20&offset=20&${common_query}`)
   .reply(200, { results: [dataset_ida_b], count: 21 })
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?language=en&limit=20&offset=20&${common_query}`)
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=20&${common_query}`)
   .reply(200, aggregations_b)
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?language=en&limit=20&offset=0&${common_query}&` +
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&${common_query}&` +
     `${getQueryParam('organization_facet_search', 'KONE')}`)
   .reply(200, getFilteredAggregation('organization', 'KONE'))
 
