@@ -1,14 +1,14 @@
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import Translate from '@/utils/Translate'
 
-import { Title, Divider } from '@/components/qvain/general/V2'
-
-import License from './License'
-import AccessType from './AccessType'
-import AccessRightsDescription from './Description'
-import ShowDataDetails from './ShowDataDetails'
+import { Divider, Title } from '@/components/qvain/general/V2'
 import { useStores } from '@/stores/stores'
 import { ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
+import Translate from '@/utils/Translate'
+import AccessType from './AccessType'
+import AccessRightsDescription from './Description'
+import License from './License'
+import ShowDataDetails from './ShowDataDetails'
 
 const AccessRights = () => {
   const {
@@ -39,4 +39,4 @@ const FormContainer = styled.div`
   padding-left: 1rem;
 `
 
-export default AccessRights
+export default observer(AccessRights)
