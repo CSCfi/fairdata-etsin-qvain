@@ -33,13 +33,19 @@ const applications = {
     title: 'Toiminnot',
     approveOrReject: 'Hyväksy tai hylkää',
     approveOrRejectLong: 'Hyväksy tai hylkää hakemus',
+    approveOrRejectInfo:
+      'Hakemuksen hyväksyminen sallii hakijalle pääsyn aineiston dataan. ' +
+      'Hylätyn hakemuksen hakija voi halutessaan tehdä uuden hakemuksen.',
     comment: 'Lisää kommentti (näkyy hakijalle)',
     approve: 'Hyväksy',
     reject: 'Hylkää',
+    returnInfo: 'Pyydä käyttäjää tekemään muutoksia hakemukseen ja lähettämään sen uudestaan. ',
     return: 'Pyydä muutoksia',
     close: 'Sulje hakemus',
+    closeInfo:
+      'Tarpeettomaksi jääneen hakemuksen voi sulkea. ' +
+      'Jos aineisto on hyväksytty, sulkeminen myös poistaa sen hyväksynnän.',
   },
 }
-
 
 export default applications

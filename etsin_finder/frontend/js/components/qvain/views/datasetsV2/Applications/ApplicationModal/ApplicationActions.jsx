@@ -4,10 +4,14 @@ import Button from '@/components/etsin/general/button'
 import { NarrowTextArea } from '@/components/qvain/general/V3'
 import { useStores } from '@/stores/stores'
 import { ApplicationSection } from './styled'
+import styled from 'styled-components'
 
 const getActions = application => {
   const reviewAction = { key: 'review', label: 'qvain.applications.actions.approveOrReject' }
-  const closeAction = { key: 'close', label: 'qvain.applications.actions.close' }
+  const closeAction = {
+    key: 'close',
+    label: 'qvain.applications.actions.close',
+  }
   const returnAction = { key: 'return', label: 'qvain.applications.actions.return' }
 
   const state = application['application/state']
@@ -58,6 +62,7 @@ const ApplicationActions = observer(() => {
       actionDetails = (
         <div>
           <h4>{translate('qvain.applications.actions.approveOrRejectLong')}</h4>
+          <ActionInfo>{translate('qvain.applications.actions.approveOrRejectInfo')}</ActionInfo>
           {commentForm}
           {cancelButton}
           <Button color="error" onClick={rejectApplication}>
@@ -72,6 +77,7 @@ const ApplicationActions = observer(() => {
       actionDetails = (
         <div>
           <h4>{translate('qvain.applications.actions.close')}</h4>
+          <ActionInfo>{translate('qvain.applications.actions.closeInfo')}</ActionInfo>
           {commentForm}
           {cancelButton}
           <Button color="error" onClick={closeApplication}>
@@ -83,6 +89,7 @@ const ApplicationActions = observer(() => {
       actionDetails = (
         <div>
           <h4>{translate('qvain.applications.actions.return')}</h4>
+          <ActionInfo>{translate('qvain.applications.actions.returnInfo')}</ActionInfo>
           {commentForm}
           {cancelButton}
           <Button color="error" onClick={returnApplication}>
@@ -110,5 +117,10 @@ const ApplicationActions = observer(() => {
     </ApplicationSection>
   )
 })
+
+const ActionInfo = styled.p`
+  max-width: 40rem;
+  font-size: 0.9rem;
+`
 
 export default ApplicationActions
