@@ -141,6 +141,9 @@ const qvainFinnish = {
     draft: 'Aineistokuvailua ei ole vielä julkaistu',
     changed: 'Aineistokuvailu on julkaistu, mutta se sisältää julkaisemattomia muutoksia',
   },
+  ownerBanner: {
+    adminOrg: 'Muokkaat aineistokuvailua Qvain Admin -oikeuksilla. Alkuperäinen kuvailun tekijä on %(firstName)s %(lastName)s.',
+  },
   sections,
   actors,
   datasets,

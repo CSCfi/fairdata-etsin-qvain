@@ -442,7 +442,7 @@ describe('Qvain with an opened dataset', () => {
       'actors.0.organization.external_identifier',
       'actors.0.organization.homepage',
       'metadata_owner.organization',
-      'metadata_owner.user.username',
+      'metadata_owner.user',
     ]
 
     await renderQvain()

@@ -26,6 +26,7 @@ import FlaggedComponent from '@/components/general/flaggedComponent'
 import ModalManager from '../../general/V3/modal/ModalManager.v3'
 import { useStores } from '@/stores/stores'
 import AdminOrgSelector from '../../sections/AdminOrg'
+import OwnerBanner from '../../sections/OwnerBanner'
 
 export const Dataset = ({ datasetError, datasetErrorTitle, datasetErrorDetails, handleRetry }) => {
   const {
@@ -58,6 +59,7 @@ export const Dataset = ({ datasetError, datasetErrorTitle, datasetErrorDetails, 
       </FlaggedComponent>
       <Separator />
       <AdminOrgSelector />
+      <OwnerBanner />
       <DataOrigin />
       <Description />
       <Actors />

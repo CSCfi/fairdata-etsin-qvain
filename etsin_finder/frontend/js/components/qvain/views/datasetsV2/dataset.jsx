@@ -71,6 +71,9 @@ const datasetOwner = (dataset, username, adminOrgs) => {
   }
 
   if (adminOrgs?.some(org => org === dataset.metadata_owner_admin_org)) {
+    if (dataset.metadata_provider_user_first_name && dataset.metadata_provider_user_last_name) {
+      return <span>{`${dataset.metadata_provider_user_first_name} ${dataset.metadata_provider_user_last_name}`}</span>
+    }
     return <span>{dataset.metadata_provider_user}</span>
   }
 

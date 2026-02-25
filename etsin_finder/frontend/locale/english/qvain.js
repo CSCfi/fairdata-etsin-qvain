@@ -142,6 +142,9 @@ const qvainEnglish = {
     draft: 'Dataset has not yet been published',
     changed: 'Dataset has been published but unpublished changes exist',
   },
+  ownerBanner: {
+    adminOrg: 'You are editing this dataset as an Qvain Admin. Original metadata creator is %(firstName)s %(lastName)s.',
+  },
   sections,
   actors,
   datasets,

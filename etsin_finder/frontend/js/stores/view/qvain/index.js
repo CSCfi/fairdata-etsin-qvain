@@ -199,7 +199,7 @@ class Qvain extends Resources {
       let nextDraftIdentifier, draftOfIdentifier
       if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
         const url = metaxV3Url('dataset', identifier)
-        result = await this.client.get(url, { params: { expand_catalog: true } })
+        result = await this.client.get(url, { params: { expand_catalog: true, expand_user: true } })
         nextDraftIdentifier = result.data.next_draft?.id
         draftOfIdentifier = result.data.draft_of?.id
 

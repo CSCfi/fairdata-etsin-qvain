@@ -30,6 +30,7 @@ class QvainDatasets {
         publishing_channels: 'qvain',
         ordering: '-created',
         latest_versions: true,
+        expand_user: true,
         fields: [
           'created',
           'data_catalog',
@@ -54,6 +55,7 @@ class QvainDatasets {
         publishing_channels: 'qvain',
         ordering: '-created',
         latest_versions: true,
+        expand_user: true,
         fields: [
           'created',
           'data_catalog',

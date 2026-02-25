@@ -246,7 +246,11 @@ class Adapter {
       draft_of: this.relatedDraftV3ToV2(dataset.draft_of),
       next_draft: this.relatedDraftV3ToV2(dataset.next_draft),
       cumulative_state: dataset.cumulative_state,
-      metadata_provider_user: dataset.metadata_owner?.user,
+      metadata_provider_user: dataset.metadata_owner?.user?.username,
+      metadata_provider_user_first_name: dataset.metadata_owner?.user?.first_name,
+      metadata_provider_user_last_name: dataset.metadata_owner?.user?.last_name,
+      metadata_provider_user_organization: dataset.metadata_owner?.user?.organization,
+      metadata_provider_user_admin_organizations: dataset.metadata_owner?.user?.admin_organizations,
       metadata_owner_org: dataset.metadata_owner?.organization,
       metadata_owner_admin_org: dataset.metadata_owner?.admin_organization,
       preservation_state: dataset.preservation?.state,
@@ -259,6 +263,8 @@ class Adapter {
     d.dataset_version_set.forEach(v => {
       v.data_catalog = d.data_catalog // Add missing catalog data to versions
       v.metadata_provider_user = d.metadata_provider_user
+      v.metadata_provider_user_first_name = d.metadata_provider_user_first_name
+      v.metadata_provider_user_last_name = d.metadata_provider_user_last_name
       v.metadata_owner_admin_org = d.metadata_owner_admin_org
       v.sources = d.sources
     })
