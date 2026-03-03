@@ -91,6 +91,9 @@ const DateRow = styled.div`
 `
 
 const CommentList = styled.ul`
+  li {
+    margin-top: 0.5rem;
+  }
   li:not(:last-child) {
     padding-bottom: 0.5rem;
     border-bottom: 1px solid ${p => opacify(-0.8, p.theme.color.primary)};

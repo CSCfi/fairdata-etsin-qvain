@@ -36,6 +36,7 @@ const REMSApplication = ({ application }) => {
     const forms = application?.['application/forms'] || []
     content = (
       <Wrapper>
+        <REMSComments application={application} />
         <REMSLicenseList licenses={licenses} />
         <REMSForms
           applicationId={application['application/id']}
@@ -53,7 +54,6 @@ const REMSApplication = ({ application }) => {
         <h1>{translate('dataset.access_modal.applicationCreated', { created })}</h1>
         <ApplicationState application={application} />
       </TitleRow>
-      <REMSComments application={application} />
       {content}
       {!readOnly && (
         <Buttons>
