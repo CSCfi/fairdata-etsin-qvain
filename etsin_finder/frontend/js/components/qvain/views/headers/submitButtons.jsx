@@ -48,8 +48,12 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
 
   const [draftButtonHover, setDraftButtonHover] = useState(false)
   const [publishButtonHover, setPublishButtonHover] = useState(false)
-  const [showConfirm, setShowConfirm] = useState(false)
-  const [showConfirmChangedAdminOrg, setShowConfirmChangedAdminOrg] = useState(false)
+  const [confirmState, setConfirmState] = useState({
+    isOpen: false,
+    action: null, // 'draft' | 'publish'
+    reasons: [], // ['rems', 'adminOrg']
+    currentReasonIndex: 0,
+  })
 
   const needConfirm = hasApprovedREMSApplications && publishWillChangeREMSLicenses
   const needConfirmChangedAdminOrg = userIsQvainAdmin 
@@ -78,35 +82,96 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
     navigate(getQvainUrl('/'))
   }
 
-  const handleDraftClick = () => {
-    submitDraft()
-
+  const doSubmitDraft = (adminOrgChanged = false) => {
     if (original?.identifier) {
       Matomo.recordEvent(`DRAFT / ${original.identifier}`)
     } else {
       Matomo.recordEvent('DRAFT')
     }
+    submitDraft(adminOrgChanged ? goToDatasetsCallBack : null)
   }
 
-  const handlePublishClick = () => {
-    if (needConfirm) {
-      // Change in REMS licenses or terms will invalidate
-      // existing applications when the dataset is published
-      setShowConfirm(true)
-    } else if (needConfirmChangedAdminOrg) {
-      setShowConfirmChangedAdminOrg(true)
-    } else {
-      submitPublish(goToDatasetsCallBack)
-    }
-
+  const doSubmitPublish = () => {
     if (original?.identifier) {
       Matomo.recordEvent(`PUBLISH / ${original.identifier}`)
     } else {
       Matomo.recordEvent('PUBLISH')
     }
+    submitPublish(goToDatasetsCallBack)
+  }
+
+  const openConfirmModal = (action, reasons) => {
+    setConfirmState({
+      isOpen: true,
+      action,
+      reasons,
+      currentReasonIndex: 0,
+    })
+  }
+
+  const closeConfirmModal = () => {
+    setConfirmState({
+      isOpen: false,
+      action: null,
+      reasons: [],
+      currentReasonIndex: 0,
+    })
+  }
+
+  const handleConfirmAccept = () => {
+    const { currentReasonIndex, reasons, action } = confirmState
+    const hasMoreReasons = currentReasonIndex + 1 < reasons.length
+
+    if (hasMoreReasons) {
+      setConfirmState(prev => ({
+        ...prev,
+        currentReasonIndex: prev.currentReasonIndex + 1,
+      }))
+      return
+    }
+
+    closeConfirmModal()
+
+    if (action === 'draft') {
+      doSubmitDraft(reasons.includes('adminOrg'))
+    } else if (action === 'publish') {
+      doSubmitPublish()
+    }
+  }
+
+  const handleDraftClick = () => {
+    if (needConfirmChangedAdminOrg) {
+      openConfirmModal('draft', ['adminOrg'])
+    } else {
+      doSubmitDraft(false)
+    }
+  }
+
+  const handlePublishClick = () => {
+    const reasons = []
+
+    if (needConfirm) {
+      // Change in REMS licenses or terms will invalidate
+      // existing applications when the dataset is published
+      reasons.push('rems')
+    }
+    if (needConfirmChangedAdminOrg) {
+      reasons.push('adminOrg')
+    }
+
+    if (reasons.length > 0) {
+      openConfirmModal('publish', reasons)
+    } else {
+      doSubmitPublish()
+    }
   }
 
   const approvedCount = remsApplicationCounts?.approved || 0
+  const currentReason = confirmState.reasons[confirmState.currentReasonIndex]
+  const confirmButtonLabel =
+    confirmState.action === 'draft'
+      ? translate('qvain.saveDraft')
+      : translate('qvain.submit')
 
   return (
     <div ref={submitButtonsRef}>
@@ -156,39 +221,28 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
       </TooltipHoverOnSave>
 
       <Modal
-        contentLabel="confirm-publish"
-        isOpen={showConfirm}
-        onRequestClose={() => setShowConfirm(false)}
+        contentLabel="confirm-submit"
+        isOpen={confirmState.isOpen}
+        onRequestClose={closeConfirmModal}
       >
-        <Translate
-          component="p"
-          content="qvain.submitConfirm.remsLicenseChange"
-          with={{ count: approvedCount }}
-          unsafe
-        />
-
+        {currentReason === 'rems' && (
+          <Translate
+            component="p"
+            content="qvain.submitConfirm.remsLicenseChange"
+            with={{ count: approvedCount }}
+            unsafe
+          />
+        )}
+        {currentReason === 'adminOrg' && (
+          <Translate component="p" content="qvain.submitConfirm.changedAdminOrg" />
+        )}
         <Buttons>
-          <TableButton onClick={() => setShowConfirm(false)}>
+          <TableButton onClick={closeConfirmModal}>
             {translate('qvain.common.cancel')}
           </TableButton>
-          <DangerButton onClick={() => submitPublish(goToDatasetsCallBack)}>
-            {translate('qvain.submit')}
+          <DangerButton onClick={handleConfirmAccept}>
+            {confirmButtonLabel}
           </DangerButton>
-        </Buttons>
-      </Modal>
-      <Modal
-        contentLabel="confirm-changed-admin-org"
-        isOpen={showConfirmChangedAdminOrg}
-        onRequestClose={() => setShowConfirmChangedAdminOrg(false)}
-      >
-        <Translate component="p" content="qvain.submitConfirm.changedAdminOrg" />
-        <Buttons>
-        <TableButton onClick={() => setShowConfirmChangedAdminOrg(false)}>
-          {translate('qvain.common.cancel')}
-        </TableButton>
-        <DangerButton onClick={() => submitPublish(goToDatasetsCallBack)}>
-          {translate('qvain.submit')}
-        </DangerButton>
         </Buttons>
       </Modal>
     </div>

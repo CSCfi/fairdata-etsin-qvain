@@ -102,21 +102,28 @@ class Submit {
     return true
   }
 
-  submitDraft = async () => {
+  submitDraft = async cb => {
     switch (this.submitType) {
       case DATASET_STATE.NEW:
         await this.exec(this.createNewDraft, qvainFormDraftSchema)
-        return
+        break
       case DATASET_STATE.DRAFT:
       case DATASET_STATE.UNPUBLISHED_DRAFT:
         await this.exec(this.updateDataset, qvainFormDraftSchema)
-        return
+        break
       case DATASET_STATE.PUBLISHED:
         await this.exec(this.savePublishedAsDraft, qvainFormDraftSchema)
-        return
+        break
       default:
         console.error('Unknown submit status')
         throw new Error('Unknown submit status')
+    }
+    const identifier = this.getResponseIdentifier()
+    if (cb && identifier) {
+      // Wait a bit so setChanged(false) has time to propagated to the Prompt component.
+      // Fixes bug where redirect after publication prompts about unsaved changes.
+      await Promise.delay(0)
+      cb({ identifier, isNew: false })
     }
   }
 
