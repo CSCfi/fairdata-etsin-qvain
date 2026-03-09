@@ -1,5 +1,5 @@
 import Tabs from '@/stores/view/tabs'
-import AbortClient from '@/utils/AbortClient'
+import AbortClient, { ignoreAbort } from '@/utils/AbortClient'
 import PromiseManager from '@/utils/promiseManager'
 import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 
@@ -31,6 +31,7 @@ class REMSApplications {
   @observable loadingApplications = false
 
   @action.bound async fetchApplications() {
+    this.client.abort('fetch-applications')
     const exec = async () => {
       let url
       if (this.filter === 'todo') {
@@ -40,7 +41,7 @@ class REMSApplications {
       } else {
         url = this.Env.metaxV3Url('remsApplications')
       }
-      const resp = await this.client.get(url)
+      const resp = await this.client.get(url, { tag: 'fetch-applications' })
       const data = [...resp.data]
       data.sort((a, b) => b['application/id'] - a['application/id'])
       data.forEach(d => {
@@ -48,7 +49,7 @@ class REMSApplications {
       })
       this.setApplications(data)
     }
-    this.promiseManager.add(exec(), 'fetch-applications')
+    this.promiseManager.add(ignoreAbort(exec), 'fetch-applications')
   }
 
   @computed get isLoadingApplications() {

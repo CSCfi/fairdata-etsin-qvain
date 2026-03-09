@@ -30,7 +30,6 @@ const ApplicationFilters = () => {
 
   const handler = e => {
     a.setFilter(e.target.value)
-    REMSApplications.fetchApplications()
   }
 
   return (

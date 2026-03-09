@@ -23,7 +23,7 @@ const ApplicationTable = () => {
   } = useStores()
 
   useEffect(() => {
-    fetchApplications()
+    fetchApplications() // Fetch applications when filter changes
   }, [filter, fetchApplications])
 
   if (isLoadingApplications) {
