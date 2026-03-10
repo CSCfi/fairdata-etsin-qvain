@@ -1225,12 +1225,22 @@ describe('Qvain with an opened dataset', () => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     })
 
-    // Revert the REMS terms change so REMS modal won't appear again
+    // Revert the REMS terms change so REMS license modal won't appear again
     await userEvent.clear(termsInput)
     await userEvent.type(termsInput, 'terms') // Back to original value
 
-    // Now click publish again - should show admin org confirmation
+    // Now click publish again - should show REMS org confirmation
     await userEvent.click(submitButton)
+    const remsOrgModal = await screen.findByRole('dialog')
+    within(remsOrgModal).getByText(
+      'You are changing the organization that handles data access applications',
+      {
+        exact: false,
+      }
+    )
+    await userEvent.click(within(remsOrgModal).getByRole('button', { name: 'Save and Publish' }))
+
+    // REMS org confirmation done, now should show admin org confirmation
     const adminOrgModal = await screen.findByRole('dialog')
     within(adminOrgModal).getByText(
       "You are changing the organization which has the maintenance rights to this dataset's metadata",

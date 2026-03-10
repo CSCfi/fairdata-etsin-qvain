@@ -41,6 +41,10 @@ const qvainEnglish = {
     remsLicenseChange:
       'Note! Changing either <em>License</em> or <em>Terms for Data Access</em> will invalidate ' +
       'the already granted data access rights (%(count)s pcs). Are you sure you want to change them?',
+    changedREMSOrg:
+      'You are changing the organization that handles data access applications. ' +
+      'This will invalidate the already granted data access rights (%(count)s pcs). ' +
+      'Are you sure you want to change the organization?',
     changedAdminOrg:
       "You are changing the organization which has the maintenance rights to this dataset's metadata. " +
       "As you are the Qvain Admin user for this dataset you will no longer be able to make changes to the dataset's metadata " +
@@ -143,7 +147,8 @@ const qvainEnglish = {
     changed: 'Dataset has been published but unpublished changes exist',
   },
   ownerBanner: {
-    adminOrg: 'You are editing this dataset as an Qvain Admin. Original metadata creator is %(firstName)s %(lastName)s.',
+    adminOrg:
+      'You are editing this dataset as an Qvain Admin. Original metadata creator is %(firstName)s %(lastName)s.',
   },
   sections,
   actors,

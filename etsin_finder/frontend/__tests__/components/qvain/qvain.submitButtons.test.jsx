@@ -1,10 +1,13 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ThemeProvider } from 'styled-components'
+import ReactModal from 'react-modal'
 
 import etsinTheme from '@/styles/theme'
 import SubmitButtons from '@/components/qvain/views/headers/submitButtons'
 import { useStores } from '@/stores/stores'
+
+ReactModal.setAppElement(document.createElement('div'))
 
 vi.mock('@/stores/stores', async () => {
   const actual = await vi.importActual('@/stores/stores')
@@ -113,7 +116,7 @@ describe('SubmitButtons confirmation modal', () => {
     vi.clearAllMocks()
   })
 
-  it('opens confirm modal for REMS changes when publishing and uses publish text', async () => {
+  it('opens confirm modal for REMS license changes when publishing and uses publish text', async () => {
     const stores = createStores({
       Qvain: {
         hasApprovedREMSApplications: true,
@@ -130,6 +133,39 @@ describe('SubmitButtons confirmation modal', () => {
 
     expect(
       screen.getByText('qvain.submitConfirm.remsLicenseChange', { exact: false })
+    ).toBeInTheDocument()
+
+    const dialog = screen.getByRole('dialog', { name: 'confirm-submit' })
+    const confirmButton = within(dialog).getByRole('button', { name: 'Save and Publish' })
+    await user.click(confirmButton)
+
+    expect(stores.Qvain.Submit.submitPublish).toHaveBeenCalledTimes(1)
+    const [callback] = stores.Qvain.Submit.submitPublish.mock.calls[0]
+    expect(typeof callback).toBe('function')
+    expect(stores.Matomo.recordEvent).toHaveBeenCalledWith('PUBLISH / 123')
+  })
+
+  it('opens confirm modal for REMS org changes when publishing', async () => {
+    const stores = createStores({
+      Qvain: {
+        hasApprovedREMSApplications: true,
+        publishWillChangeREMSLicenses: false,
+        userIsQvainAdmin: false,
+        remsApplicationCounts: { approved: 2 },
+        AdminOrg: {
+          selectedAdminOrg: { value: 'org-2' },
+          adminOrgs: [],
+        },
+      },
+    })
+    renderSubmitButtons(stores)
+
+    const user = userEvent.setup()
+    const publishButton = screen.getByRole('button', { name: 'Save and Publish' })
+    await user.click(publishButton)
+
+    expect(
+      screen.getByText('qvain.submitConfirm.changedREMSOrg', { exact: false })
     ).toBeInTheDocument()
 
     const dialog = screen.getByRole('dialog', { name: 'confirm-submit' })
@@ -173,7 +209,7 @@ describe('SubmitButtons confirmation modal', () => {
     expect(stores.Matomo.recordEvent).toHaveBeenCalledWith('DRAFT / 123')
   })
 
-  it('shows REMS confirmation first and then admin org confirmation when both are required for publish', async () => {
+  it('shows REMS confirmations first and then admin org confirmations when all are required for publish', async () => {
     const stores = createStores({
       Qvain: {
         hasApprovedREMSApplications: true,
@@ -202,7 +238,16 @@ describe('SubmitButtons confirmation modal', () => {
     let confirmButton = within(dialog).getByRole('button', { name: 'Save and Publish' })
     await user.click(confirmButton)
 
-    // Second confirmation: admin org change
+    // Second confirmation: REMS license change
+    expect(
+      screen.getByText('qvain.submitConfirm.changedREMSOrg', { exact: false })
+    ).toBeInTheDocument()
+
+    dialog = screen.getByRole('dialog', { name: 'confirm-submit' })
+    confirmButton = within(dialog).getByRole('button', { name: 'Save and Publish' })
+    await user.click(confirmButton)
+
+    // Third confirmation: admin org change
     expect(
       screen.getByText('qvain.submitConfirm.changedAdminOrg', { exact: false })
     ).toBeInTheDocument()
@@ -240,4 +285,3 @@ describe('SubmitButtons confirmation modal', () => {
     expect(stores.Qvain.Submit.submitDraft).not.toHaveBeenCalled()
   })
 })
-

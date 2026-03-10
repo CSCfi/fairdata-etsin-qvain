@@ -31,10 +31,7 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
       publishWillChangeREMSLicenses,
       remsApplicationCounts,
       userIsQvainAdmin,
-      AdminOrg: {
-        selectedAdminOrg,
-        adminOrgs
-      },
+      AdminOrg: { selectedAdminOrg, adminOrgs },
     },
     Env: { getQvainUrl },
     QvainDatasets,
@@ -55,10 +52,11 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
     currentReasonIndex: 0,
   })
 
-  const needConfirm = hasApprovedREMSApplications && publishWillChangeREMSLicenses
-  const needConfirmChangedAdminOrg = userIsQvainAdmin 
-  && selectedAdminOrg?.value !== original?.metadata_owner_admin_org 
-  && !adminOrgs?.includes(selectedAdminOrg?.value)
+  const needConfirmREMSLicense = hasApprovedREMSApplications && publishWillChangeREMSLicenses
+  const adminOrgChanged = selectedAdminOrg?.value !== original?.metadata_owner_admin_org
+  const needConfirmREMSOrg = hasApprovedREMSApplications && adminOrgChanged
+  const needConfirmChangedAdminOrg =
+    userIsQvainAdmin && adminOrgChanged && !adminOrgs?.includes(selectedAdminOrg?.value)
 
   useEffect(() => {
     prevalidate()
@@ -150,10 +148,14 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
   const handlePublishClick = () => {
     const reasons = []
 
-    if (needConfirm) {
+    if (needConfirmREMSLicense) {
       // Change in REMS licenses or terms will invalidate
       // existing applications when the dataset is published
-      reasons.push('rems')
+      reasons.push('remsLicense')
+    }
+    if (needConfirmREMSOrg) {
+      // Change in REMS organization will invalidate existing applications
+      reasons.push('remsOrg')
     }
     if (needConfirmChangedAdminOrg) {
       reasons.push('adminOrg')
@@ -169,9 +171,7 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
   const approvedCount = remsApplicationCounts?.approved || 0
   const currentReason = confirmState.reasons[confirmState.currentReasonIndex]
   const confirmButtonLabel =
-    confirmState.action === 'draft'
-      ? translate('qvain.saveDraft')
-      : translate('qvain.submit')
+    confirmState.action === 'draft' ? translate('qvain.saveDraft') : translate('qvain.submit')
 
   return (
     <div ref={submitButtonsRef}>
@@ -225,7 +225,7 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
         isOpen={confirmState.isOpen}
         onRequestClose={closeConfirmModal}
       >
-        {currentReason === 'rems' && (
+        {currentReason === 'remsLicense' && (
           <Translate
             component="p"
             content="qvain.submitConfirm.remsLicenseChange"
@@ -233,16 +233,19 @@ export const SubmitButtons = ({ submitButtonsRef, idSuffix, disabled: allButtons
             unsafe
           />
         )}
+        {currentReason === 'remsOrg' && (
+          <Translate
+            component="p"
+            content="qvain.submitConfirm.changedREMSOrg"
+            with={{ count: approvedCount }}
+          />
+        )}
         {currentReason === 'adminOrg' && (
           <Translate component="p" content="qvain.submitConfirm.changedAdminOrg" />
         )}
         <Buttons>
-          <TableButton onClick={closeConfirmModal}>
-            {translate('qvain.common.cancel')}
-          </TableButton>
-          <DangerButton onClick={handleConfirmAccept}>
-            {confirmButtonLabel}
-          </DangerButton>
+          <TableButton onClick={closeConfirmModal}>{translate('qvain.common.cancel')}</TableButton>
+          <DangerButton onClick={handleConfirmAccept}>{confirmButtonLabel}</DangerButton>
         </Buttons>
       </Modal>
     </div>
