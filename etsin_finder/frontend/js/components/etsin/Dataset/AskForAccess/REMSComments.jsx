@@ -20,6 +20,8 @@ const translateEventComment = ({ event, wasApproved, translate }) => {
       }
     } else if (comment === 'Dataset is no longer in REMS.') {
       return translate('dataset.access_modal.closedDueToAccessTypeChange')
+    } else if (comment === 'Permission granter organization has changed.') {
+      return translate('dataset.access_modal.closedDueToOrganizationChange')
     }
   }
   return comment
@@ -41,9 +43,10 @@ const REMSComments = ({ application }) => {
   const events = application['application/events'] || []
   for (const event of events) {
     const comment = translateEventComment({ event, wasApproved, translate })
-    const visibility = event['event/visibility']
-    if (!comment || visibility !== 'visibility/public') {
-      continue // no comment or comment not relevant for applicant role
+    const visibility = event['event/visibility'] // visibility is only visible for handlers
+    const isPublic = visibility === undefined || visibility === 'visibility/public'
+    if (!comment || !isPublic) {
+      continue // no comment or comment not public
     }
     const id = event['event/id']
     const type = event['event/type']

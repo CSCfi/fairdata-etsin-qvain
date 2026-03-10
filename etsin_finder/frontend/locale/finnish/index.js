@@ -35,6 +35,8 @@ const finnish = {
         'lisenssin tai ehtojen muutoksen johdosta.',
       closedDueToAccessTypeChange:
         'Hakemus peruutettiin aineiston käyttöoikeuksien muutoksen johdosta.',
+      closedDueToOrganizationChange:
+        'Hakemus peruutettiin käyttöoikeuden myöntävän organisaation vaihtumisen johdosta.',
       comments: {
         title: 'Kommentit',
         comment: 'Kommentti',
