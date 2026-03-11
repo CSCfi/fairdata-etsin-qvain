@@ -1,13 +1,3 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
-
 import { createRef } from 'react'
 import { observable, action, makeObservable, autorun } from 'mobx'
 
@@ -28,6 +18,10 @@ class Accessibility {
   @observable politeAnnouncement = ''
 
   @observable userIsTabbing = false
+
+  @observable currentLocation = null
+
+  @observable previousLocation = null
 
   focusableElement = createRef()
 
@@ -78,9 +72,19 @@ class Accessibility {
       this.toggleTabbing(true)
 
       window.removeEventListener('keydown', this.handleTab)
-       
+
       window.addEventListener('mousedown', this.handleMouseDownOnce)
     }
+  }
+
+  @action.bound
+  setPreviousLocation(location) {
+    this.previousLocation = location
+  }
+
+  @action.bound
+  setCurrentLocation(location) {
+    this.currentLocation = location
   }
 
   @action.bound

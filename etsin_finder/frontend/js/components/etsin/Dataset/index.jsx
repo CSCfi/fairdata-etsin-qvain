@@ -102,7 +102,16 @@ function DatasetView() {
     Etsin: {
       EtsinDataset: { isDraft, draftInfotext },
     },
+    Env: { history: { location }, getEtsinUrl }
   } = useStores()
+
+  const navigateBack = () => {
+    if (Accessibility.previousLocation && location?.key !== "default") {
+      return Accessibility.previousLocation
+    } else {
+      return getEtsinUrl("/datasets")
+    }
+  }
 
   return (
     <div>
@@ -112,7 +121,7 @@ function DatasetView() {
           <div className="col-12">
             <StateInfo />
             <BackButton
-              to="/datasets"
+              to={navigateBack()}
               onClick={() => {
                 Accessibility.announce(
                   Locale.translate('changepage', { page: Locale.translate('nav.datasets') })

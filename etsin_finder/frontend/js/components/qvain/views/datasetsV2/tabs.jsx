@@ -9,6 +9,7 @@ export const Tabs = () => {
     QvainDatasets: { tabs, Auth },
     Env: {
       Flags: { flagEnabled },
+      history: { location }
     },
   } = useStores()
 
@@ -18,7 +19,14 @@ export const Tabs = () => {
       if (flagEnabled('QVAIN.REMS')) {
         tabs.addOption('applications', 'qvain.datasets.tabs.applications')
       }
-      tabs.setActive('adminDatasets')
+
+      if (location?.key === 'default' && tabs.active) {
+        tabs.setActive('adminDatasets')
+      } else if (tabs.active) {
+        tabs.setActive(tabs.active)
+      } else {
+        tabs.setActive('adminDatasets')
+      }
     }
   }, [Auth.user.admin_organizations, tabs, flagEnabled])
 
