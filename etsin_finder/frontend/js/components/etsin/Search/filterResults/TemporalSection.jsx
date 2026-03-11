@@ -36,9 +36,14 @@ const convertToISODate = (date, endAsYear = false) => {
 /* If the temporal query value represents the first or the last day of a 
 year, convert it to the year only. Otherwise, use the original value, as 
 the user likely entered an ISO date. */
-const getTemporalValue = (queryValue) => {
+const getTemporalValue = (queryValue, field) => {
     const monthDayPart = queryValue.substring("YYYY-".length)
-    if (monthDayPart === "01-01" || monthDayPart === "12-31") {
+
+    if (monthDayPart === "01-01" && field === "from") {
+        return moment(queryValue).format("YYYY")
+    }
+
+    if (monthDayPart === "12-31" && field === "to") {
         return moment(queryValue).format("YYYY")
     }
 
@@ -89,11 +94,11 @@ function TemporalSection() {
             setTemporalOpen(false)
         } else {
             if (temporalStartQueryValue) {
-                setTemporalStart(getTemporalValue(temporalStartQueryValue))
+                setTemporalStart(getTemporalValue(temporalStartQueryValue, "from"))
             }
 
             if (temporalEndQueryValue) {
-                setTemporalEnd(getTemporalValue(temporalEndQueryValue))
+                setTemporalEnd(getTemporalValue(temporalEndQueryValue, "to"))
             }
 
             setTemporalOpen(true)
