@@ -28,6 +28,7 @@ default_supported_flags = {
     "QVAIN.MAINTENANCE",
     "ETSIN.REMS",  # Metax V3 REMS
     "QVAIN.REMS",  # Metax V3 REMS
+    "ETSIN.GEOPORTTI_PROTO",
 }
 
 # Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'

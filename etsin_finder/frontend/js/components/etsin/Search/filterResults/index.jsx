@@ -5,6 +5,7 @@ import Translate from '@/utils/Translate'
 import ClearFilters from './clearFilters'
 
 import FilterSection from './filterSection'
+import Map from '../mapSearch/map'
 import { useStores } from '@/stores/stores'
 import TemporalSection from './TemporalSection'
 
@@ -23,6 +24,9 @@ const FilterResults = () => {
     Etsin: {
       Search: { isLoading },
     },
+    Env: {
+      Flags: { flagEnabled },
+    },
   } = useStores()
 
   if (isLoading) return null
@@ -33,6 +37,7 @@ const FilterResults = () => {
       <span id="filterlabel" className="sr-only" aria-hidden>
         <Translate content="search.filter.filters" />
       </span>
+      {flagEnabled('ETSIN.GEOPORTTI_PROTO') && <Map />}
       <FilterSection filterName="data_catalog" />
       <FilterSection filterName="access_type" />
       <FilterSection filterName="organization" onlyCurrentLanguage showInput />

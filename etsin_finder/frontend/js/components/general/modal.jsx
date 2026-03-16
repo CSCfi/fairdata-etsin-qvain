@@ -49,8 +49,8 @@ const Modal = ({
   contentLabel,
   children,
   labelledBy,
-  onAfterOpen = () => {},
-  onRequestClose = () => {},
+  onAfterOpen = () => { },
+  onRequestClose = () => { },
   customStyles = {},
 }) => {
   const [clearError, setClearError] = useState()
@@ -115,6 +115,7 @@ const CloseButton = styled(TransparentButton)`
   position: absolute;
   top: 1em;
   right: 1em;
+  z-index: 1000;
 `
 
 export default Modal

@@ -1,10 +1,12 @@
 import { makeObservable, action, observable, computed, runInAction } from 'mobx'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
+import EtsinMapSearch from './etsin.mapSearch'
 import { debounce } from 'lodash-es'
 
 class EtsinSearch {
   constructor(Env, Locale, Etsin) {
     this.Env = Env
+    this.MapSearch = new EtsinMapSearch()
     this.Locale = Locale
     this.Etsin = Etsin
     this.client = new AbortClient()

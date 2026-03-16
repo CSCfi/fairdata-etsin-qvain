@@ -32,6 +32,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@geoman-io/leaflet-geoman-free": "^2.18.3",
     "@loadable/babel-plugin": "^5.10.0",
     "@loadable/component": "^5.15.2",
     "@vitejs/plugin-react": "^4.5.0",
