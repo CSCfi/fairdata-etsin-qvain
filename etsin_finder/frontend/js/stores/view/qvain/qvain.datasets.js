@@ -56,6 +56,7 @@ class QvainDatasets {
         ordering: '-created',
         latest_versions: true,
         expand_user: true,
+        exclude_owned_or_shared: true,
         fields: [
           'created',
           'data_catalog',

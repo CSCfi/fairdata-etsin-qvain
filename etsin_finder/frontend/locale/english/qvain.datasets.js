@@ -81,7 +81,9 @@ const datasets = {
   remove: {
     confirm: {
       published: {
-        text: 'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
+        text:
+          'Are you sure you want to delete this dataset? Deleting the dataset will remove it from Qvain, ' +
+          'and Etsin Search cannot find it anymore. Landing page for the dataset will NOT be removed.',
         ok: 'Delete',
       },
       draft: {
@@ -103,7 +105,7 @@ const datasets = {
   errorOccurred: 'An error occurred',
   tableHeader: 'Created datasets',
   tabs: {
-    own: 'Owned and shared datasets',
+    own: 'Own and shared datasets',
     admin: 'Qvain admin datasets',
     applications: 'Data access applications',
   },

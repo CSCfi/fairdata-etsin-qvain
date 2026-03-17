@@ -257,6 +257,7 @@ class Adapter {
       // v3 specific preservation fields
       preservation_pas_process_running: dataset.preservation?.pas_process_running,
       preservation_pas_package_created: dataset.preservation?.pas_package_created,
+      user_roles: dataset.user_roles,
     }
 
     d.dataset_version_set = dataset.dataset_versions?.map(this.convertV3ToV2) || []
@@ -267,6 +268,7 @@ class Adapter {
       v.metadata_provider_user_last_name = d.metadata_provider_user_last_name
       v.metadata_owner_admin_org = d.metadata_owner_admin_org
       v.sources = d.sources
+      v.user_roles = d.user_roles
     })
 
     // include v3 fileset object as it is

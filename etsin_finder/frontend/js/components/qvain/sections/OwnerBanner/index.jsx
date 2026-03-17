@@ -12,12 +12,15 @@ const Container = styled(Card)`
 `
 
 export const OwnerBanner = () => {
-  const {Qvain: { original}, Auth: { userName, user } } = useStores()
+  const {Qvain: { original } } = useStores()
 
-  const isOwner = original?.metadata_provider_user === userName
-  const isQvainAdmin = user.admin_organizations?.some(org => org === original?.metadata_owner_admin_org)
+  const userRoles = original?.user_roles
+  const hasOnlyOrganizationAdminRole =
+    Array.isArray(userRoles) &&
+    userRoles.length === 1 &&
+    userRoles[0] === 'organization_admin'
 
-  if (isOwner || !isQvainAdmin) {
+  if (!hasOnlyOrganizationAdminRole) {
     return null
   }
 

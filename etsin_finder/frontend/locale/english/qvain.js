@@ -148,7 +148,7 @@ const qvainEnglish = {
   },
   ownerBanner: {
     adminOrg:
-      'You are editing this dataset as an Qvain Admin. Original metadata creator is %(firstName)s %(lastName)s.',
+      'You are editing this dataset as a Qvain Admin. Original metadata creator is %(firstName)s %(lastName)s.',
   },
   sections,
   actors,
