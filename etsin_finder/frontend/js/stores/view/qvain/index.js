@@ -616,6 +616,11 @@ class Qvain extends Resources {
   }
 
   @computed
+  get isPasRunning() {
+    return !!this.original?.preservation_pas_process_running
+  }
+
+  @computed
   get isNewVersion() {
     return queryParamEnabled(this.Env.history.location, 'new_version')
   }

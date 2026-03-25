@@ -21,6 +21,10 @@ const datasets = {
     published: 'Published',
     changed: 'Unpublished changes',
   },
+  preservation: {
+    label: 'DPS',
+    processing: 'DPS processing'
+  },
   tableRows: {
     id: 'ID',
     title: 'Title',

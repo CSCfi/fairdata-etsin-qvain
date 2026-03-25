@@ -157,6 +157,10 @@ const canCreateNewVersion = (dataset, group) => {
   )
 }
 
+const canDelete = dataset => {
+  return !dataset.preservation_pas_process_running
+}
+
 const hasUnpublishedChanges = dataset => !!dataset.next_draft
 
 export const getDatasetActions = (Stores, dataset, group) => {
@@ -189,7 +193,9 @@ export const getDatasetActionsV2 = (Stores, dataset, group) => {
   if (hasUnpublishedChanges(dataset)) {
     actions.push(getRemoveAction(Stores, dataset, true))
   }
-  actions.push(getRemoveAction(Stores, dataset, false))
+  if (canDelete(dataset)) {
+    actions.push(getRemoveAction(Stores, dataset, false))
+  }
 
   return actions
 }

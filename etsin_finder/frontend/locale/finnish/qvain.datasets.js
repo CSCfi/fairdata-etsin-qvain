@@ -21,6 +21,10 @@ const datasets = {
     published: 'Julkaistu',
     changed: 'Julkaisemattomia muutoksia',
   },
+  preservation: {
+    label: 'PAS',
+    processing: 'PAS käsittelyssä',
+  },
   tableRows: {
     id: 'ID',
     title: 'Otsikko',

@@ -1,7 +1,6 @@
 import { when } from 'mobx'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { zip } from 'lodash-es'
 
 import { within, screen, render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -16,12 +15,13 @@ import { StoresProvider } from '@/stores/stores'
 import { buildStores } from '@/stores'
 import EnvClass from '@/stores/domain/env'
 import DatasetsV2 from '@/components/qvain/views/datasetsV2'
+import { tableToObjects } from '@helpers'
 
 const mockAdapter = new MockAdapter(axios)
 
 let stores, helper, testLocation
 
-beforeEach(() => {
+const setupMockAdapter = datasets => {
   mockAdapter.reset()
   mockAdapter.onGet('https://metaxv3:443/v3/datasets').reply(200, datasets)
   mockAdapter.onGet('https://metaxv3:443/v3/user').reply(200, {
@@ -33,6 +33,10 @@ beforeEach(() => {
     available_admin_organizations: [{ id: 'test.csc.fi', pref_label: { en: 'Test Organization' } }],
     default_admin_organization: { id: 'test.csc.fi' },
   })
+}
+
+beforeEach(() => {
+  setupMockAdapter(datasets)
 })
 
 const getStores = () => {
@@ -143,46 +147,119 @@ describe('DatasetsV3', () => {
     testLocation.pathname.should.eql('/dataset')
   })
 
-  it('should show dataset permissions in modal', async () => {
-    mockAdapter.onGet('https://metaxv3:443/v3/datasets/7/permissions').reply(200, {
-      creators: [
-        {
-          username: 'teppo',
-          first_name: 'Teppo',
-          last_name: 'Testaaja',
-          email: 'teppo@example.com',
+  it('should show label for PAS datasets', async () => {
+    setupMockAdapter([
+      {
+        id: '30942031-abfc-41d1-ae82-d9d3a8f92d8a',
+        data_catalog: 'urn:nbn:fi:att:data-catalog-pas',
+        metadata_owner: {
+          id: 'c183707a-dad5-402f-a3d5-42a9a5ff770f',
+          user: {
+            first_name: 'fd_user3_first',
+            last_name: 'fd_user3_läst',
+            organization: 'csc.fi',
+            username: 'fd_user3',
+            admin_organizations: [],
+          },
+          organization: 'csc.fi',
+          admin_organization: 'csc.fi',
         },
-      ],
-      editors: [
-        {
-          username: 'toinen',
-          first_name: 'Toinen',
-          last_name: 'Tyyppi',
-          email: 'toinen@example.com',
+        persistent_identifier: 'doi:10.82614/f5212244-bde3-4f81-9489-d912bdde234e',
+        state: 'published',
+        title: {
+          en: 'PAS process running',
         },
-      ],
-    })
+        created: '2026-03-24T10:47:59Z',
+        dataset_versions: [
+          {
+            id: '30942031-abfc-41d1-ae82-d9d3a8f92d8a',
+            title: {
+              en: 'PAS process running',
+            },
+            persistent_identifier: 'doi:10.82614/f5212244-bde3-4f81-9489-d912bdde234e',
+            state: 'published',
+            created: '2026-03-24T10:47:59Z',
+            version: 1,
+            preservation: {
+              pas_package_created: false,
+              pas_process_running: true,
+            },
+          },
+        ],
+      },
+      {
+        id: 'e66726f3-1090-4c53-a04c-51502c50d521',
+        data_catalog: 'urn:nbn:fi:att:data-catalog-pas',
+        metadata_owner: {
+          id: 'c183707a-dad5-402f-a3d5-42a9a5ff770f',
+          user: {
+            first_name: 'fd_user3_first',
+            last_name: 'fd_user3_läst',
+            organization: 'csc.fi',
+            username: 'fd_user3',
+            admin_organizations: [],
+          },
+          organization: 'csc.fi',
+          admin_organization: 'csc.fi',
+        },
+        persistent_identifier: 'doi:10.82614/e00b555d-7db3-4043-8c7f-16f8d97b63d2',
+        state: 'published',
+        title: {
+          en: 'Dataset in PAS catalog',
+        },
+        created: '2026-03-24T09:44:31Z',
+        dataset_versions: [
+          {
+            id: 'e66726f3-1090-4c53-a04c-51502c50d521',
+            title: {
+              en: 'Dataset in PAS catalog',
+            },
+            persistent_identifier: 'doi:10.82614/e00b555d-7db3-4043-8c7f-16f8d97b63d2',
+            state: 'published',
+            created: '2026-03-24T09:44:31Z',
+            version: 1,
+            preservation: {
+              pas_package_created: false,
+              pas_process_running: false,
+            },
+          },
+        ],
+      },
+    ])
 
-    await renderDatasets({ showCount: { initial: 1, current: 1, increment: 1 } })
-    // Open editors modal,
-    // the auto-hiding table buttons are aria-bidden so not available by role
-    const editorsBtn = screen.getByText('Editors', { selector: 'button' })
-    await userEvent.click(editorsBtn)
-    const dialog = screen.getByRole('dialog')
-    within(dialog).getByRole('heading', { name: 'Share metadata editing rights' })
+    await renderDatasets()
 
-    // Open members tab
-    const membersBtn = within(dialog).getByRole('tab', { name: /Members/ })
-    await userEvent.click(membersBtn)
+    const rows = tableToObjects(screen.getByRole('table')).map(dataset => [
+      dataset.Title,
+      dataset.Status,
+    ])
 
-    // Check members are listed correctly
-    const getTexts = elems => Array.from(elems).map(elem => elem.textContent)
-    const members = getTexts(document.querySelectorAll('.member-name'))
-    const roles = getTexts(document.querySelectorAll('.member-role'))
-    const membersRoles = zip(Array.from(members), Array.from(roles))
-    expect(membersRoles).toEqual([
-      ['Teppo Testaaja (teppo, teppo@example.com)', 'Creator'],
-      ['Toinen Tyyppi (toinen, toinen@example.com)', 'Editor'],
+    expect(rows).toEqual([
+      ['PAS process running', 'Published, DPS processing'],
+      ['Dataset in PAS catalog', 'Published, DPS'],
+    ])
+
+    const getMoreActions = async button => {
+      // Extract action labels from popup menu
+      await userEvent.click(button)
+      const menu = within(screen.getByRole('table')).getByRole('menu')
+      const actions = Array.from(menu.querySelectorAll('li')).map(li => li.textContent.trim())
+      return actions
+    }
+
+    const moreButtons = screen.getAllByRole('button', { name: 'More' })
+    // PAS process running -> no delete available
+    expect(await getMoreActions(moreButtons[0])).toEqual([
+      'View in Etsin',
+      'Add editors',
+      'Use as template',
+    ])
+    // PAS process not running -> delete available for organization admin
+    expect(await getMoreActions(moreButtons[1])).toEqual([
+      'View in Etsin',
+      'Add editors',
+      'Use as template',
+      'Delete',
     ])
   })
 })

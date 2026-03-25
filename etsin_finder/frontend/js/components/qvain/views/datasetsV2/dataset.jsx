@@ -1,22 +1,22 @@
-import PropTypes from 'prop-types'
-import { observer } from 'mobx-react'
-import styled from 'styled-components'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Translate from '@/utils/Translate'
 import {
-  faChevronRight,
   faChevronDown,
+  faChevronRight,
   faEllipsisH,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons'
-import Translate from '@/utils/Translate'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { observer } from 'mobx-react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
-import { useStores } from '@/stores/stores'
-import formatAge from './formatAge'
-import { getDatasetActionsV2 } from './datasetActions'
 import { Dropdown, DropdownItem } from '@/components/general/dropdown'
-import { DatasetStateTag } from './tags'
+import { useStores } from '@/stores/stores'
 import withCustomProps from '@/utils/withCustomProps'
+import { getDatasetActionsV2 } from './datasetActions'
+import formatAge from './formatAge'
 import { IconButton } from './styled'
+import { DatasetStateTag } from './tags'
 
 const getActionMenuItem = action => {
   const { text, handler, danger, moreIfNarrow } = action
@@ -54,16 +54,6 @@ const getTitle = (getValueTranslation, dataset) => {
   return getValueTranslation(researchDataset.title)
 }
 
-const getDatasetState = dataset => {
-  if (dataset.state === 'published') {
-    if (dataset.next_draft) {
-      return 'changed'
-    }
-    return 'published'
-  }
-  return 'draft'
-}
-
 const datasetOwner = (dataset, username, adminOrgs) => {
   const sources = dataset.sources || [] // sources only used in V2
   if (sources.includes('creator') || dataset.metadata_provider_user === username) {
@@ -72,7 +62,9 @@ const datasetOwner = (dataset, username, adminOrgs) => {
 
   if (adminOrgs?.some(org => org === dataset.metadata_owner_admin_org)) {
     if (dataset.metadata_provider_user_first_name && dataset.metadata_provider_user_last_name) {
-      return <span>{`${dataset.metadata_provider_user_first_name} ${dataset.metadata_provider_user_last_name}`}</span>
+      return (
+        <span>{`${dataset.metadata_provider_user_first_name} ${dataset.metadata_provider_user_last_name}`}</span>
+      )
     }
     return <span>{dataset.metadata_provider_user}</span>
   }
@@ -112,7 +104,7 @@ const Dataset = ({ dataset, group, isExpanded, expandGroup, isLatest, versionNum
         </Title>
       </Cell>
       <Cell className="dataset-state">
-        <DatasetStateTag state={getDatasetState(dataset)} />
+        <DatasetStateTag dataset={dataset} />
       </Cell>
       <Cell className="dataset-owner">
         {datasetOwner(dataset, Auth.userName, Auth.user.admin_organizations)}

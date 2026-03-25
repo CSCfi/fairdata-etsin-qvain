@@ -1,14 +1,14 @@
-import { computed, observable, action, makeObservable, runInAction } from 'mobx'
+import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import PromiseManager from '../../../utils/promiseManager'
 import Modal from './modal'
 
-import { filterGroups } from './qvain.datasets.filters'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
+import { filterGroups } from './qvain.datasets.filters'
 
 import Tabs from '../tabs'
-import ShareV3 from './qvain.datasetsV3.share'
-import Sort from './qvain.datasetsV2.sort'
 import Adapter from './qvain.adapter'
+import Sort from './qvain.datasetsV2.sort'
+import ShareV3 from './qvain.datasetsV3.share'
 
 class QvainDatasets {
   constructor(Env, Auth, Locale) {
@@ -23,6 +23,7 @@ class QvainDatasets {
       ordering: '-created',
       latest_versions: true,
       expand_user: true,
+      extra_version_fields: 'preservation',
       fields: [
         'created',
         'data_catalog',
