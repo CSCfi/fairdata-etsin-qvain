@@ -16,7 +16,12 @@ import Qvain from '@/components/qvain/views/main'
 import { flatten, removeMatchingKeys } from '@/utils/flatten'
 import { failTestsWhenTranslationIsMissing } from '@helpers'
 import DataMemoryRouter from '@helpers/DataMemoryRouter'
-import { access_types as accessTypes } from '@testdata/metaxv3/refs/access_rights.data'
+import {
+  access_types as accessTypes,
+  access_rights_embargo,
+  access_type_permit,
+  restriction_grounds_research,
+} from '@testdata/metaxv3/refs/access_rights.data'
 
 const registerMissingTranslationHandler = failTestsWhenTranslationIsMissing()
 
@@ -29,11 +34,7 @@ vi.mock('lodash-es', async () => {
 })
 
 vi.setConfig({ testTimeout: 25000 })
-import {
-  access_rights_embargo,
-  access_type_permit,
-  restriction_grounds_research,
-} from '@testdata/metaxv3/refs/access_rights.data'
+
 import { dataset_open_a_catalog_expanded as dataset } from '@testdata/metaxv3/datasets/dataset_ida_a.data'
 import {
   data_catalog_ida as idaCatalog,
@@ -766,7 +767,10 @@ describe('Qvain with an opened dataset', () => {
 
   describe('when dataset is in preservation', () => {
     it('renders dataset in read-only mode when PAS process is running', async () => {
-      await renderQvain({ preservation: { pas_process_running: true } })
+      await renderQvain({
+        preservation: { pas_process_running: true },
+        allowed_actions: { update: false },
+      })
       expect(
         screen.getByText(
           'The dataset is being processed by the Digital Preservation Service.' +

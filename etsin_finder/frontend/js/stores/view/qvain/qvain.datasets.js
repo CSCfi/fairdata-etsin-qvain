@@ -16,59 +16,40 @@ class QvainDatasets {
     this.Env = Env
     this.Auth = Auth
     this.Locale = Locale
-    this.tabs = new Tabs(
-      { ownDatasets: 'qvain.datasets.tabs.own' },
-      'ownDatasets'
-    )
+    this.tabs = new Tabs({ ownDatasets: 'qvain.datasets.tabs.own' }, 'ownDatasets')
+    const commonParams = {
+      pagination: false,
+      publishing_channels: 'qvain',
+      ordering: '-created',
+      latest_versions: true,
+      expand_user: true,
+      fields: [
+        'created',
+        'data_catalog',
+        'dataset_versions',
+        'draft_of',
+        'id',
+        'metadata_owner',
+        'next_draft',
+        'persistent_identifier',
+        'state',
+        'title',
+      ].join(','),
+    }
     this.ownDatasets = new QvainDatasetList({
       Locale,
       Auth,
       Env,
-      params: {
-        pagination: false,
-        only_owned_or_shared: true,
-        publishing_channels: 'qvain',
-        ordering: '-created',
-        latest_versions: true,
-        expand_user: true,
-        fields: [
-          'created',
-          'data_catalog',
-          'dataset_versions',
-          'draft_of',
-          'id',
-          'metadata_owner',
-          'next_draft',
-          'persistent_identifier',
-          'state',
-          'title',
-        ].join(','),
-      },
+      params: { ...commonParams, only_owned_or_shared: true },
     })
     this.adminDatasets = new QvainDatasetList({
       Locale,
       Auth,
       Env,
       params: {
-        pagination: false,
+        ...commonParams,
         only_admin: true,
-        publishing_channels: 'qvain',
-        ordering: '-created',
-        latest_versions: true,
-        expand_user: true,
         exclude_owned_or_shared: true,
-        fields: [
-          'created',
-          'data_catalog',
-          'dataset_versions',
-          'draft_of',
-          'id',
-          'metadata_owner',
-          'next_draft',
-          'persistent_identifier',
-          'state',
-          'title',
-        ].join(','),
       },
     })
 

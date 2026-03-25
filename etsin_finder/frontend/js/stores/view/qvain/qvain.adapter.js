@@ -254,6 +254,7 @@ class Adapter {
       metadata_owner_org: dataset.metadata_owner?.organization,
       metadata_owner_admin_org: dataset.metadata_owner?.admin_organization,
       preservation_state: dataset.preservation?.state,
+      allowed_actions: dataset.allowed_actions,
       // v3 specific preservation fields
       preservation_pas_process_running: dataset.preservation?.pas_process_running,
       preservation_pas_package_created: dataset.preservation?.pas_package_created,

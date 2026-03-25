@@ -126,7 +126,7 @@ const dataset_open_a = {
   allowed_actions: {
     download: true,
     rems_status: 'no_application',
-    update: false,
+    update: true,
     file_metadata: true,
   },
 }
@@ -145,7 +145,7 @@ export const dataset_rems = {
   allowed_actions: {
     download: false,
     rems_status: 'no_application',
-    update: false,
+    update: true,
   },
   access_rights: {
     license: [
@@ -187,7 +187,7 @@ export const dataset_requires_login = {
   allowed_actions: {
     download: false,
     rems_status: 'no_application',
-    update: false,
+    update: true,
     file_metadata: false,
   },
   remote_resources: null,

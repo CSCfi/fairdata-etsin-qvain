@@ -199,7 +199,14 @@ class Qvain extends Resources {
       let nextDraftIdentifier, draftOfIdentifier
       if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
         const url = metaxV3Url('dataset', identifier)
-        result = await this.client.get(url, { params: { expand_catalog: true, expand_user: true, include_user_roles: true } })
+        result = await this.client.get(url, {
+          params: {
+            expand_catalog: true,
+            expand_user: true,
+            include_user_roles: true,
+            include_allowed_actions: true,
+          },
+        })
         nextDraftIdentifier = result.data.next_draft?.id
         draftOfIdentifier = result.data.draft_of?.id
 
@@ -702,13 +709,16 @@ class Qvain extends Resources {
 
   @computed
   get readonly() {
+    if (this.isNewDataset) {
+      return false
+    }
     if (this.Env?.Flags.flagEnabled('PERMISSIONS.WRITE_LOCK') && this.Lock?.enabled) {
       if (this.original && !this.Lock?.haveLock) {
         return true
       }
     }
 
-    return !!this.original?.preservation_pas_process_running
+    return !this.original.allowed_actions?.update
   }
 
   @computed

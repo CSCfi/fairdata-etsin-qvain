@@ -1,4 +1,7 @@
 export const dataset = {
+  allowed_actions: {
+    update: true,
+  },
   id: 1,
   identifier: 'f1e245e4-2d0c-4bd9-8f61-cc9a08f47516',
   data_catalog: {
