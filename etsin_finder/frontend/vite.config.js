@@ -1,7 +1,10 @@
+import babel from '@rolldown/plugin-babel'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import EnvironmentPlugin from 'vite-plugin-environment'
 import path from 'path'
+
+import { decoratorPreset } from './common.config'
 
 // Vite config that builds the JS code but not the index.html page.
 // Build produces ./build/.vite/manifest.json that the backend
@@ -17,8 +20,16 @@ export default defineConfig(({ command, mode }) => {
   const isServing = command == 'serve'
 
   return {
-    esbuild: {
+    oxc: {
       target: 'es2022',
+      plugins: {
+        styledComponents: {
+          displayName: true,
+          ssr: true,
+          fileName: true,
+          minify: !isDev,
+        },
+      },
     },
     build: {
       outDir: 'build',
@@ -41,33 +52,9 @@ export default defineConfig(({ command, mode }) => {
       EnvironmentPlugin({
         BUILD: mode,
       }),
-      react({
-        babel: {
-          plugins: [
-            ['@babel/plugin-proposal-decorators', { version: 'legacy' }],
-            ['@babel/plugin-transform-runtime'],
-            [
-              'babel-plugin-styled-components',
-              {
-                // Minify styled components in prod
-                displayName: !isProd,
-                minify: isProd,
-                transpileTemplateLiterals: isProd,
-              },
-            ],
-          ],
-          presets: [
-            [
-              '@babel/preset-env',
-              {
-                modules: false,
-                targets: '> 0.25%, not dead',
-                // needed by legacy decorators
-                include: ['@babel/plugin-transform-class-properties'],
-              },
-            ],
-          ],
-        },
+      react(),
+      babel({
+        presets: [decoratorPreset({ version: 'legacy' })],
       }),
     ],
     server: {

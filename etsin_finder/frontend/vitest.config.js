@@ -1,8 +1,11 @@
-import { loadEnv } from 'vite'
-import { defineConfig } from 'vitest/config'
-import path from 'path'
+import babel from '@rolldown/plugin-babel'
 import react from '@vitejs/plugin-react'
+import path from 'path'
+import { loadEnv } from 'vite'
 import EnvironmentPlugin from 'vite-plugin-environment'
+import { defineConfig } from 'vitest/config'
+
+import { decoratorPreset } from './common.config'
 
 export default defineConfig(({ mode }) => {
   // Create .env file to set env variables
@@ -26,21 +29,16 @@ export default defineConfig(({ mode }) => {
       // Use happy-dom for faster test rendering.
       // Has small differences compared to jsdom in some very specific cases.
       environment: 'happy-dom',
-      setupFiles: ['./__tests__/test-setup.js'],
+      setupFiles: ['./test-setup.js'],
       globals: true, // enable 'test', 'it', 'expect' etc.
     },
     plugins: [
       EnvironmentPlugin({
         BUILD: mode, // should be "test" by default when running tests
       }),
-      react({
-        babel: {
-          plugins: [
-            ['@babel/plugin-proposal-decorators', { version: 'legacy' }],
-            ['@babel/plugin-transform-runtime'],
-            ['@babel/plugin-transform-class-properties'],
-          ],
-        },
+      react(),
+      babel({
+        presets: [decoratorPreset({ version: 'legacy' })],
       }),
     ],
     resolve: {
