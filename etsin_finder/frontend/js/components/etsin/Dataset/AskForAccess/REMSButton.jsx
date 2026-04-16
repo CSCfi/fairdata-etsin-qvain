@@ -11,13 +11,16 @@ const REMSButton = props => {
   const {
     Locale: { translate },
     Auth: { userLogged },
+    Etsin: {
+      EtsinDataset: { isRemoved, isDraft, isDeprecated },
+    },
   } = useStores()
 
   let wrapperTitle
   let buttonContent = 'dataset.access_permission'
   let buttonId = 'rems-button'
   let buttonColor = etsinTheme.color.primary
-  let disabled = false
+  let disabled = isRemoved || isDraft || isDeprecated
 
   let state = props.applicationState
   if (!userLogged) {
