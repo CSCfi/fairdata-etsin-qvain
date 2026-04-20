@@ -10,6 +10,11 @@ export default {
     temporalStart: 'Ajanjakso-fasetin alkamisvuoden syötekenttä',
     temporalEnd: 'Ajanjakso-fasetin päättymisvuoden syötekenttä',
   },
+  mapSearch: {
+    searchButton: 'Hae',
+    tooltip:
+      'Valitse työkalupalkista piirrettävä muoto. Kartan klikkaus aloittaa piirtämisen. Pohjassa pitäminen siirtää karttaa.',
+  },
   placeholder: 'Anna hakusana',
   sorting: {
     sort: 'Järjestä',
@@ -69,6 +74,9 @@ export default {
     },
     data_catalog: {
       title: 'Datakatalogi',
+    },
+    geographicalArea: {
+      title: 'Maantieteellinen alue',
     },
     temporal: {
       title: 'Ajanjakso',

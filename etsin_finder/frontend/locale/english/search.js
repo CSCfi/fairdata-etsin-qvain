@@ -10,6 +10,11 @@ export default {
     temporalStart: 'Start year input field of the Time Period facet',
     temporalEnd: 'End year input field of the Time Period facet',
   },
+  mapSearch: {
+    searchButton: 'Search',
+    tooltip:
+      'Select the shape to draw from the toolbar. Clicking the map starts drawing, while holding moves the map.',
+  },
   placeholder: 'Search term',
   sorting: {
     sort: 'Sort',
@@ -69,6 +74,9 @@ export default {
     },
     data_catalog: {
       title: 'Data Catalog',
+    },
+    geographicalArea: {
+      title: 'Geographical Area',
     },
     temporal: {
       title: 'Time Period',

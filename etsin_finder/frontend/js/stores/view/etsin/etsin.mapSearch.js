@@ -1,5 +1,7 @@
-import { makeObservable, action, observable, computed, toJS } from 'mobx'
+import { makeObservable, action, observable, computed } from 'mobx'
 import AbortClient from '@/utils/AbortClient'
+import WKT from 'terraformer-wkt-parser'
+import { latLng } from 'leaflet'
 
 class EtsinMapSearch {
   constructor() {
@@ -7,7 +9,19 @@ class EtsinMapSearch {
     this.client = new AbortClient()
   }
 
-  @observable layers = null
+  @observable layers = null // GeoJSON layer
+
+  @observable resetLayers = false
+
+  // The map center (an instance of the Leaflet LatLng class):
+  @observable currentCenter = null
+
+  // The map zoom level (an integer):
+  @observable currentZoom = null
+
+  @observable defaultSidebarMapCenterAsArray = [65, 27] // [lat, long]
+
+  @observable defaultSidebarMapZoom = 4
 
   @computed get bounds() {
     if (!this.layers) return null
@@ -61,8 +75,58 @@ class EtsinMapSearch {
     this.layers = layers
   }
 
-  @action search = () => {
-    console.log(toJS(this.layers))
+  @action setResetLayers = bool => {
+    this.resetLayers = bool
+  }
+
+  @action setView = (center, zoom) => {
+    this.currentCenter = center
+    this.currentZoom = zoom
+  }
+
+  @action applyDefaultView = () => {
+    this.currentCenter = latLng(...this.defaultSidebarMapCenterAsArray)
+    this.currentZoom = this.defaultSidebarMapZoom
+  }
+
+  @action search = query => {
+    if (this.layers?.features.length > 0) {
+      this.layers.features.forEach(feature => {
+        /* WKT.convert method transforms a GeoJSON feature object into a 
+        WKT-formatted string. For example 
+        { coordintes: [long, lat], type: "Point" } becomes 'POINT (long lat)'. 
+        Using the replace method on the first occurrence of the space 
+        character, the result is then converted to "POINT(long lat)". */
+        const queryParamValue = WKT.convert(feature.geometry).replace(' ', '')
+        query.append('geolocation', queryParamValue)
+      })
+    }
+  }
+
+  @action retrieve = query => {
+    const geolocation = query.getAll('geolocation')
+
+    if (geolocation.length > 0) {
+      const features = geolocation.map(feature => {
+        /* WKT.parse method parses a WKT-formatted string into 
+        a GeoJSON feature object. For example 'POINT (long lat)' 
+        becomes { coordinates: [long, lat], type: 'Point' }.
+        Before parsing, a space is added before the first 
+        parenthesis to ensure the string is in valid WKT format. */
+        return { geometry: WKT.parse(feature.replace('(', ' (')), type: 'Feature' }
+      })
+
+      this.setLayers({
+        type: 'FeatureCollection',
+        features: features,
+      })
+    } else {
+      /* If the geolocation query parameter is not present, the layers are 
+      set to null and the (sidebar) map view is centered to the default 
+      values. */
+      this.setLayers(null)
+      this.applyDefaultView()
+    }
   }
 }
 

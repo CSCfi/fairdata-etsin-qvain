@@ -11,9 +11,19 @@ const ClearFilters = () => {
     Matomo,
     Accessibility,
     Etsin: {
-      Search: { isLoading, resetTemporal, resetFacetSearches },
+      Search: {
+        isLoading,
+        resetTemporal,
+        resetFacetSearches,
+        MapSearch: {
+          setResetLayers
+        }
+      },
     },
     Locale: { translate },
+    Env: {
+      Flags: { flagEnabled },
+    },
   } = useStores()
   const navigate = useNavigate()
 
@@ -22,6 +32,9 @@ const ClearFilters = () => {
     Accessibility.announce(translate('search.filter.filtersCleared'))
     resetTemporal()
     resetFacetSearches()
+    if (flagEnabled('ETSIN.GEOPORTTI_PROTO')) {
+      setResetLayers(true)
+    }
     navigate('/datasets')
   }
 

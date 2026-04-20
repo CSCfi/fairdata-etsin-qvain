@@ -17,14 +17,29 @@ import EnvClass from '@/stores/domain/env'
 
 import aggregations_a from '../../__testdata__/metaxv3/search/aggregations_a.data'
 import aggregations_b from '../../__testdata__/metaxv3/search/aggregations_b.data'
-import dataset_ida_a from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
+import dataset_ida_a, { dataset_geolocation } from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 import dataset_ida_b from '../../__testdata__/metaxv3/datasets/dataset_ida_b.data'
 
-const common_query = 'publishing_channels=etsin&latest_versions=true&state=published&filter_language=en'
+import L from 'leaflet'
 
-const getQueryParam = (key, value) => {
-  return `${key}=${value}`
+
+// Mock for geoman library and pm-related methods:
+vi.mock('@geoman-io/leaflet-geoman-free', () => ({}))
+
+L.Map.prototype.pm = {
+  addControls: vi.fn(),
+  disableDraw: vi.fn(),
+  getGeomanLayers: vi.fn().mockImplementation(() => {
+    return {
+      _layers: {}
+    }
+  }),
+  Toolbar: {
+    setButtonDisabled: vi.fn(),
+  }
 }
+
+const common_query = 'publishing_channels=etsin&latest_versions=true&state=published&filter_language=en'
 
 const getFilteredAggregation = (facet, entry) => {
   /* Create a deep clone from aggregations_a so that no reference to
@@ -73,8 +88,14 @@ mockAdapter
   .reply(200, aggregations_b)
 mockAdapter
   .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&${common_query}&` +
-    `${getQueryParam('organization_facet_search', 'KONE')}`)
+    `organization_facet_search=KONE`)
   .reply(200, getFilteredAggregation('organization', 'KONE'))
+mockAdapter
+  .onGet(`https://metaxv3:443/v3/datasets?geolocation=POINT%2826.1+61.6%29&limit=20&offset=0&${common_query}`)
+  .reply(200, { results: [dataset_geolocation], count: 1 })
+mockAdapter
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?geolocation=POINT%2826.1+61.6%29&limit=20&offset=0&${common_query}`)
+  .reply(200, aggregations_a)
 
 mockAdapter.resetHistory()
 
@@ -86,13 +107,19 @@ const getStores = () => {
     },
   }
   Env.setMetaxV3Host('metaxv3', 443)
+  Env.Flags.setFlag('ETSIN.GEOPORTTI_PROTO', true)
   const stores = buildStores({ Env })
+
+  // Mock setLayers method:
+  stores.Etsin.Search.MapSearch = {
+    ...stores.Etsin.Search.MapSearch,
+    retrieve: vi.fn()
+  }
 
   return stores
 }
 
-const renderEtsin = (path = '/datasets') => {
-  const stores = getStores()
+const renderEtsin = (path = '/datasets', stores = getStores()) => {
   return render(
     <ThemeProvider theme={etsinTheme}>
       <MemoryRouter initialEntries={[path]}>
@@ -233,6 +260,14 @@ describe('Etsin search page', () => {
       renderEtsin('/datasets?page=2')
       expect(await screen.findByText(dataset_ida_b.title.en)).toBeInTheDocument()
       expect(await screen.findByLabelText('Current page 2')).toBeInTheDocument()
+    })
+  })
+
+  describe('When datasets are queried by geolocation', () => {
+    test('retrieve method is triggered once (the geolocation is applied to the map)', () => {
+      const stores = getStores()
+      renderEtsin('/datasets?geolocation=POINT(26.1 61.6)', stores)
+      expect(stores.Etsin.Search.MapSearch.retrieve).toHaveBeenCalledTimes(1)
     })
   })
 })

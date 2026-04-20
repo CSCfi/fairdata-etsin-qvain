@@ -198,4 +198,28 @@ export const dataset_requires_login = {
   access_rights: access_rights_login,
 }
 
+// Based on dataset_open_a, but with the spatial, remote_resources and
+// projects fields overridden:
+export const dataset_geolocation = {
+  ...dataset_open_a,
+  spatial: [
+    {
+      geolocations: {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [26.1, 61.6],
+            },
+          },
+        ],
+      },
+    },
+  ],
+  remote_resources: [],
+  projects: [],
+}
+
 export default dataset_open_a

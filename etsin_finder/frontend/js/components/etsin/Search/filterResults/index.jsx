@@ -37,7 +37,6 @@ const FilterResults = () => {
       <span id="filterlabel" className="sr-only" aria-hidden>
         <Translate content="search.filter.filters" />
       </span>
-      {flagEnabled('ETSIN.GEOPORTTI_PROTO') && <Map />}
       <FilterSection filterName="data_catalog" />
       <FilterSection filterName="access_type" />
       <FilterSection filterName="organization" onlyCurrentLanguage showInput />
@@ -46,6 +45,7 @@ const FilterResults = () => {
       <FilterSection filterName="keyword" showInput />
       <FilterSection filterName="infrastructure" />
       <TemporalSection />
+      {flagEnabled('ETSIN.GEOPORTTI_PROTO') && <Map />}
       <FilterSection filterName="project" onlyCurrentLanguage showInput />
       <FilterSection filterName="file_type" />
     </FilterContainer>
