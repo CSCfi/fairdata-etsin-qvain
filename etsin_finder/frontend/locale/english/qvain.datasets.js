@@ -6,6 +6,7 @@ const datasets = {
     searchTitle: 'Search from the list (to filter the datasets)',
     placeholder: 'Filter datasets by name',
     searchTitleShort: 'Search datasets',
+    onlyManualApproval: 'Only datasets that require DAC process'
   },
   sort: {
     label: 'Sort by:',

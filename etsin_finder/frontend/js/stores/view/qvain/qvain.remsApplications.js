@@ -20,6 +20,8 @@ class REMSApplications {
 
   @observable filter = 'all'
 
+  @observable searchTerm = ''
+
   @observable applications = []
 
   @observable selectedApplication = null
@@ -29,6 +31,25 @@ class REMSApplications {
   @observable commentText = ''
 
   @observable loadingApplications = false
+
+  @computed get filteredApplications() {
+    let filtered = this.applications
+    const term = this.searchTerm.toLowerCase()
+    if (term) {
+      filtered = this.applications.filter(application => {
+        for (const res of application['application/resources']) {
+          for (const title of Object.values(res['catalogue-item/title'] || {})) {
+            if (title.toLowerCase().includes(term)) {
+              return true
+            }
+          }
+        }
+        return false
+      })
+    }
+
+    return filtered
+  }
 
   @action.bound async fetchApplications() {
     this.client.abort('fetch-applications')
@@ -125,6 +146,10 @@ class REMSApplications {
 
   @action.bound setFilter(value) {
     this.filter = value
+  }
+
+  @action.bound setSearchTerm(value) {
+    this.searchTerm = value
   }
 
   @action.bound setSelectedApplication(application) {

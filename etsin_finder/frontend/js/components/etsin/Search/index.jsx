@@ -70,21 +70,23 @@ function SearchBarHeader() {
 
 function SearchPage() {
   const {
-    Env: { history: { location } },
-    Accessibility
+    Env: {
+      history: { location },
+    },
+    Accessibility,
   } = useStores()
 
-  // Save the state defined by the query so that it is preserved when 
+  // Save the state defined by the query so that it is preserved when
   // returning from the dataset view.
   //
-  // location.pathname example: "/datasets", 
+  // location.pathname example: "/datasets",
   // location.search example: "?facet_access_type=Open&search=kat&page=1",
   useEffect(() => {
     if (Accessibility.currentLocation) {
       Accessibility.setPreviousLocation(Accessibility.currentLocation)
     }
     Accessibility.setCurrentLocation(location.pathname + location.search)
-  }, [location.pathname, location.search])
+  }, [location.pathname, location.search, Accessibility])
 
   return (
     <div className="search-page" data-testid="search-page">

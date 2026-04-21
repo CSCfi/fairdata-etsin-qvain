@@ -2,6 +2,7 @@ import withCustomProps from '@/utils/withCustomProps'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
+import CreatableSelect from 'react-select/creatable'
 import styled, { css } from 'styled-components'
 
 // Styled components common for datasets and applications
@@ -60,6 +61,11 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   margin-right: 0.25rem;
 `
 
+export const Placeholder = styled.span`
+  margin-left: 1rem;
+  color: #333333;
+`
+
 export const PlaceholderWrapper = styled.div`
   min-height: 20rem;
   display: flex;
@@ -67,3 +73,49 @@ export const PlaceholderWrapper = styled.div`
   justify-content: center;
   flex-direction: column;
 `
+
+// Use customized CreatableSelect as input that allows html (e.g. svg icon) in placeholder
+export const SearchInput = ({
+  value,
+  onChange,
+  placeholder,
+  flexGrow = '0',
+  marginLeft = 'auto',
+  ...props
+}) => {
+  const onInputChange = (val, { action }) => {
+    // don't clear input when it loses focus
+    if (action !== 'input-blur' && action !== 'menu-close') {
+      onChange(val)
+    }
+  }
+
+  return (
+    <CreatableSelect
+      components={{ DropdownIndicator: null }}
+      inputValue={value}
+      value={value}
+      onInputChange={onInputChange}
+      placeholder={placeholder}
+      menuIsOpen={false}
+      styles={{
+        container: provided => ({
+          ...provided,
+          flexBasis: '12rem',
+          flexGrow: flexGrow,
+          maxWidth: '18rem',
+          marginLeft,
+        }),
+      }}
+      {...props}
+    />
+  )
+}
+
+SearchInput.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.element.isRequired,
+  marginLeft: PropTypes.string,
+  flexGrow: PropTypes.string,
+}

@@ -6,6 +6,7 @@ const datasets = {
     searchTitle: 'Hakusana ao. listan filtteröimiseksi',
     placeholder: 'Suodata aineiston nimen mukaan',
     searchTitleShort: 'Etsi aineistoja',
+    onlyManualApproval: 'Vain DAC-processia käyttävät aineistot'
   },
   sort: {
     label: 'Järjestys:',

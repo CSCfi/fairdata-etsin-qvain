@@ -9,7 +9,7 @@ export const Tabs = () => {
     QvainDatasets: { tabs, Auth },
     Env: {
       Flags: { flagEnabled },
-      history: { location }
+      history: { location },
     },
   } = useStores()
 
@@ -28,7 +28,7 @@ export const Tabs = () => {
         tabs.setActive('adminDatasets')
       }
     }
-  }, [Auth.user.admin_organizations, tabs, flagEnabled])
+  }, [Auth.user.admin_organizations, tabs, flagEnabled, location?.key])
 
   return (
     <TabRow>

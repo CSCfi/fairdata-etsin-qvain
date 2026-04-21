@@ -52,6 +52,7 @@ class QvainDatasets {
         only_admin: true,
         exclude_owned_or_shared: true,
       },
+      showOnlyManualApprovalToggle: true,
     })
 
     this.shareV3 = new ShareV3(Env, Auth, this)
@@ -177,6 +178,7 @@ class QvainDatasetList {
     this.Env = args.Env
     this.params = args.params
     this.onLoad = args.onLoad
+    this.showOnlyManualApprovalToggle = Boolean(args.showOnlyManualApprovalToggle)
     this.promiseManager = new PromiseManager()
     this.client = new AbortClient()
     this.sort = new Sort(this.Locale)
@@ -196,6 +198,8 @@ class QvainDatasetList {
 
   @observable isFetched = false
 
+  @observable onlyManualApproval = false
+
   @action.bound setSearchTerm(term = '') {
     this.searchTerm = term
   }
@@ -214,14 +218,19 @@ class QvainDatasetList {
     this.searchTerm = ''
     this.isFetched = false
     this.isLoading = false
+    this.onlyManualApproval = false
   }
 
   @action loadDatasets = async () => {
     try {
       this.clearError()
       this.isLoading = true
+      let params = { ...this.params }
+      if (this.onlyManualApproval) {
+        params['access_rights__rems_approval_type'] = 'manual'
+      }
       const response = await this.promiseManager.add(
-        this.client.get(this.Env.metaxV3Url('datasets'), { params: this.params }),
+        this.client.get(this.Env.metaxV3Url('datasets'), { params }),
         'datasets'
       )
       const adapter = new Adapter(this.Auth)
@@ -288,6 +297,13 @@ class QvainDatasetList {
 
   @action.bound setShowCount({ initial, current, increment }) {
     this.showCount = { initial, current, increment }
+  }
+
+  @action.bound setOnlyManualApproval(value) {
+    if (value != this.onlyManualApproval) {
+      this.onlyManualApproval = value
+      this.loadDatasets()
+    }
   }
 
   @action.bound showMore() {

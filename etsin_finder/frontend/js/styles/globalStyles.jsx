@@ -119,13 +119,13 @@ const GlobalStyle = createGlobalStyle`
 
   @media (min-width: 576px) {
     .container {
-      max-width: 540px;
+      max-width: 560px;
     }
   }
 
   @media (min-width: 768px) {
     .container {
-      max-width: 720px;
+      max-width: 740px;
     }
   }
 

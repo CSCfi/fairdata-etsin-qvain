@@ -4,6 +4,9 @@ import styled from 'styled-components'
 
 import Button from '@/components/etsin/general/button'
 import { useStores } from '@/stores/stores'
+import { Placeholder, SearchInput } from '../styled'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 const RadioButton = ({ children, checked = false, ...props }) => {
   return (
@@ -22,19 +25,31 @@ RadioButton.propTypes = {
 const ApplicationFilters = () => {
   const {
     Locale: { translate },
-    Qvain: { REMSApplications },
+    Qvain: {
+      REMSApplications: { filter, setFilter, searchTerm, setSearchTerm },
+    },
   } = useStores()
 
-  const a = REMSApplications
-  const filter = a.filter
-
   const handler = e => {
-    a.setFilter(e.target.value)
+    setFilter(e.target.value)
   }
 
   return (
     <FilterRow>
-      {translate('qvain.applications.filters.title')}
+      <SearchInput
+        inputId="search-applications-input"
+        value={searchTerm}
+        onChange={setSearchTerm}
+        marginLeft="0"
+        flexGrow="1"
+        placeholder={
+          <>
+            <FontAwesomeIcon icon={faSearch} />
+            <Placeholder>{translate('qvain.datasets.search.label')}</Placeholder>
+          </>
+        }
+        attributes={{ 'aria-label': 'qvain.datasets.search.label' }}
+      />
       <RadioButtons>
         <RadioButton name="filter-state" value="all" checked={filter == 'all'} onChange={handler}>
           {translate('qvain.applications.filters.all')}
@@ -55,9 +70,16 @@ const ApplicationFilters = () => {
   )
 }
 
-const RadioButtons = styled.div``
+const RadioButtons = styled.div`
+  display: flex;
+  align-items: stretch;
+  height: 38px;
+`
 
 const StyledRadioButton = styled(Button)`
+  display: flex;
+  align-items: center;
+
   background: white; // ${p => p.theme.color.redText};
   border: 1px solid hsl(0, 0%, 80%);
   color: ${p => p.theme.color.superdarkgray};
@@ -93,7 +115,10 @@ const HiddenRadio = styled.input.attrs({ type: 'radio' })`
 
 const FilterRow = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 `
 
 export default observer(ApplicationFilters)

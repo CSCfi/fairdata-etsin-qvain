@@ -21,18 +21,20 @@ const mockAdapter = new MockAdapter(axios)
 
 let stores, helper, testLocation
 
+const user = {
+  username: 'teppo',
+  first_name: 'Teppo',
+  last_name: 'Testaaja',
+  email: 'teppo@example.com',
+  admin_organizations: ['test.csc.fi'],
+  available_admin_organizations: [{ id: 'test.csc.fi', pref_label: { en: 'Test Organization' } }],
+  default_admin_organization: { id: 'test.csc.fi' },
+}
+
 const setupMockAdapter = datasets => {
   mockAdapter.reset()
   mockAdapter.onGet('https://metaxv3:443/v3/datasets').reply(200, datasets)
-  mockAdapter.onGet('https://metaxv3:443/v3/user').reply(200, {
-    username: 'teppo',
-    first_name: 'Teppo',
-    last_name: 'Testaaja',
-    email: 'teppo@example.com',
-    admin_organizations: ['test.csc.fi'],
-    available_admin_organizations: [{ id: 'test.csc.fi', pref_label: { en: 'Test Organization' } }],
-    default_admin_organization: { id: 'test.csc.fi' },
-  })
+  mockAdapter.onGet('https://metaxv3:443/v3/user').reply(200)
 }
 
 beforeEach(() => {
@@ -46,15 +48,7 @@ const getStores = () => {
   Env.app = 'qvain'
   const _stores = buildStores({ Env })
   _stores.Locale.setLang('en')
-  _stores.Auth.setUser({
-    name: 'teppo',
-    first_name: 'Teppo',
-    last_name: 'Testaaja',
-    email: 'teppo@example.com',
-    admin_organizations: [],
-    available_admin_organizations: [{ id: 'test.csc.fi', pref_label: { en: 'Test Organization' } }],
-    default_admin_organization: { id: 'test.csc.fi' },
-  })
+  _stores.Auth.setUser(user)
   return _stores
 }
 
@@ -261,5 +255,23 @@ describe('DatasetsV3', () => {
       'Use as template',
       'Delete',
     ])
+  })
+
+  it('should show toggle for filtering manual approval datasets on admin datasets tab', async () => {
+    setupMockAdapter(datasets)
+    await renderDatasets()
+    expect(
+      screen.queryByRole('checkbox', { name: 'Only datasets that require DAC process' })
+    ).not.toBeInTheDocument()
+    mockAdapter.resetHistory()
+    await userEvent.click(screen.getByRole('tab', { name: 'Qvain admin datasets' }))
+    expect(mockAdapter.history.get).toHaveLength(1)
+    expect(mockAdapter.history.get[0].params.access_rights__rems_approval_type).toBe(undefined)
+
+    mockAdapter.resetHistory()
+    const toggle = screen.getByRole('checkbox', { name: 'Only datasets that require DAC process' })
+    await userEvent.click(toggle)
+    expect(mockAdapter.history.get).toHaveLength(1)
+    expect(mockAdapter.history.get[0].params.access_rights__rems_approval_type).toBe('manual')
   })
 })

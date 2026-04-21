@@ -14,6 +14,7 @@ import RemoveModal from './removeModal'
 import ShareModal from './ShareModal'
 import Search from './search'
 import Applications from './Applications'
+import ErrorBoundary from '@/components/general/errorBoundary'
 
 export const Datasets = () => {
   const navigate = useNavigate()
@@ -58,16 +59,18 @@ export const Datasets = () => {
           />
         </DatasetsHeader>
         <Tabs />
-        <DatasetsContent>
-          {tabs.active == 'applications' ? (
-            <Applications />
-          ) : (
-            <>
-              <Search datasets={currentDatasets} />
-              <Table datasets={currentDatasets} />
-            </>
-          )}
-        </DatasetsContent>
+        <ErrorBoundary>
+          <DatasetsContent>
+            {tabs.active == 'applications' ? (
+              <Applications />
+            ) : (
+              <>
+                <Search datasets={currentDatasets} />
+                <Table datasets={currentDatasets} />
+              </>
+            )}
+          </DatasetsContent>
+        </ErrorBoundary>
         <RemoveModal />
         <ShareModal />
       </DatasetsContainer>

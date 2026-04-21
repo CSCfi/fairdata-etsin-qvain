@@ -13,7 +13,7 @@ const ApplicationTable = () => {
     Locale: { translate },
     Qvain: {
       REMSApplications: {
-        applications,
+        filteredApplications,
         fetchApplications,
         filter,
         isLoadingApplications,
@@ -34,7 +34,7 @@ const ApplicationTable = () => {
     )
   }
 
-  if (applications.length === 0) {
+  if (filteredApplications.length === 0) {
     return <NotFound>{translate('qvain.applications.notFound')}</NotFound>
   }
 
@@ -50,7 +50,7 @@ const ApplicationTable = () => {
         </tr>
       </thead>
       <tbody>
-        {applications.map(app => (
+        {filteredApplications.map(app => (
           <ApplicationRow key={app['application/external-id']} application={app} />
         ))}
         {selectedApplication && <ApplicationModal />}
