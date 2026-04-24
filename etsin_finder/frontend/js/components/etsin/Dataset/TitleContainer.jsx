@@ -10,7 +10,7 @@ const TitleContainer = () => {
     Etsin: {
       EtsinDataset: { datasetMetadata, preservation, isCumulative, isHarvested, isPas },
     },
-    Locale: { getPreferredLang, getValueTranslation },
+    Locale: { getPreferredLang, getValueTranslation, translate },
   } = useStores()
 
   return (
@@ -23,23 +23,11 @@ const TitleContainer = () => {
           {/* Access type */}
           <AccessRights button />
           {/* PAS */}
-          {preservation.state > 0 && isPas && (
-            <PASLabel>
-              <Translate component="span" content="dataset.fairdataPas" />
-            </PASLabel>
-          )}
+          {preservation && isPas && <PASLabel>{translate('dataset.fairdataPas')}</PASLabel>}
           {/* Cumulative */}
-          {isCumulative && (
-            <Label>
-              <Translate content="dataset.cumulative" />
-            </Label>
-          )}
+          {isCumulative && <Label>{translate('dataset.cumulative')}</Label>}
           {/* Harvested */}
-          {isHarvested && (
-            <Label>
-              <Translate content="dataset.harvested" />
-            </Label>
-          )}
+          {isHarvested && <Label>{translate('dataset.harvested')}</Label>}
         </Tags>
       </Title>
     </Container>

@@ -50,34 +50,11 @@ const qvainFinnish = {
       'eikä aineisto ole sinulle enää näkyvissä Qvaimessa. Oletko varma, että haluat tehdä muutoksen?',
   },
   pasInfo: {
-    stateInfo: 'Tämä on PAS-aineisto. Aineiston tila on "%(state)s: %(description)s".',
-    editable: 'Voit muuttaa kuvauksia muttet lisätä tai poistaa tiedostoja.',
-    readonly: 'Voit katsoa kuvauksia muttet tehdä muutoksia.',
-  },
-  pasInfoV3: {
+    info: 'Tämä on PAS-aineisto.',
     processRunning:
       'Aineistoa prosessoidaan säilytyspalvelussa. Voit katsoa kuvauksia muttet tehdä muutoksia.',
     packageCreated:
       'HUOM! Kuvailutietoihin tehtyjä muutoksia ei viedä säilytyksessä olevaan PAS-pakettiin, vaan ne näkyvät ainoastaan Etsimessä.',
-  },
-  pasState: {
-    0: 'Odottaa tarkastusta',
-    10: 'Rikastaa',
-    20: 'Tarkastaa',
-    30: 'Rikastus katkesi',
-    40: 'Korjaa metatietoja',
-    50: 'Tarkastus katkesi',
-    60: 'Metatieto päivitetty',
-    65: 'Tarkastetaan metatietoja',
-    70: 'Odottaa siirtoa',
-    75: 'Metadata vahvistettu',
-    80: 'Siirto aloitettu',
-    90: 'Paketoi',
-    100: 'Paketointi katkesi',
-    110: 'Siirtää',
-    120: 'OK – säilytyksessä',
-    130: 'Siirto katkesi',
-    140: 'Saatavilla',
   },
   notCSCUser1:
     'Varmistakaa että teillä on voimassaoleva CSC tunnus. Jos yritit kirjautua sisään ulkoisella tunnuksella (kuten Haka) niin saatat saada tämän ' +

@@ -51,34 +51,11 @@ const qvainEnglish = {
       'and it will not be visible for you in Qvain after the change. Are you sure you want to make the change?',
   },
   pasInfo: {
-    stateInfo: 'This is a DPS dataset. The state of the dataset is "%(state)s: %(description)s".',
-    editable: 'You can edit metadata but cannot add or remove any files.',
-    readonly: 'You can view metadata but cannot make any changes.',
-  },
-  pasInfoV3: {
+    info: 'This is a DPS dataset.',
     processRunning:
       'The dataset is being processed by the Digital Preservation Service. You can view metadata but cannot make any changes.',
     packageCreated:
       'NOTE! Changes made to the metadata do NOT affect the version in Digital Preservation but are only visible in Etsin.',
-  },
-  pasState: {
-    0: 'Waits for validation',
-    10: 'Proposed for digital preservation',
-    20: 'Validating',
-    30: 'Enriching failed',
-    40: 'Check metadata',
-    50: 'Validation failed',
-    60: 'Metadata updated',
-    65: 'Validating metadata',
-    70: 'Waits for transfer',
-    75: 'Metadata confirmed',
-    80: 'Transfer started',
-    90: 'Packaging',
-    100: 'Packaging failed',
-    110: 'Transferring',
-    120: 'OK – preserved',
-    130: 'Transfer failed',
-    140: 'Available',
   },
   notCSCUser1:
     'Please make sure that you have a valid CSC account. If you tried to log in with an external account (for example Haka) you might ' +

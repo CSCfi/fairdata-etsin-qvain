@@ -131,7 +131,6 @@ AccessRights.propTypes = {
 }
 
 export default observer(AccessRights)
-export const undecorated = AccessRights
 
 const CustomButton = withCustomProps(styled(Button))`
   margin: 0rem 0.5rem;

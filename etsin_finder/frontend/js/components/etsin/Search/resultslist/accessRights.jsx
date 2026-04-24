@@ -65,7 +65,6 @@ function AccessRights(props) {
 }
 
 export default observer(AccessRights)
-export const undecorated = AccessRights
 
 const Access = withCustomProps(styled.div)`
   padding: 0.2em 0.9em;

@@ -1,17 +1,17 @@
-import { screen } from '@testing-library/react'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 
 import DirectoryForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/directoryForm'
 import FileForm from '@/components/qvain/sections/DataOrigin/general/FilePicker/forms/fileForm'
-import PasState from '@/components/qvain/views/headers/pasState'
 import { Directory, File, Project } from '@/stores/view/common.files.items'
 
 import { contextRenderer } from '@/../__tests__/test-helpers'
-import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import { metaxResponses } from '../../__testdata__/qvainPas.data'
 
 import { buildStores } from '@/stores'
+import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
+import PasState from '@/components/qvain/views/headers/pasState'
+import { screen } from '@testing-library/react'
 
 const getStores = () => {
   const stores = buildStores()
@@ -30,23 +30,25 @@ mockAdapter.onGet().reply(async ({ url }) => {
 
 describe('Qvain.PasState', () => {
   const renderState = stores => {
-    stores.Qvain.Keywords.set(['key', 'word'])
     return contextRenderer(<PasState />, { stores })
   }
 
-  it('shows pas state', async () => {
+  it('shows PAS process running state', async () => {
     const stores = getStores()
     stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
-    stores.Qvain.setPreservationState(80)
+    stores.Qvain.setOriginal({ preservation_pas_process_running: true })
     renderState(stores)
-    expect(screen.getByTestId('pas-state').textContent).toContain('80:')
+    expect(screen.getByTestId('pas-state').textContent).toContain('dataset is being processed')
+  })
 
-    stores.Qvain.setPreservationState(0)
-    stores.Qvain.setDataCatalog(DATA_CATALOG_IDENTIFIER.PAS)
-    await Promise.resolve()
-
-    expect(screen.getByTestId('pas-state').textContent).not.toContain('80:')
-    expect(screen.getByTestId('pas-state').textContent).toContain('0:')
+  it('shows PAS package created state', async () => {
+    const stores = getStores()
+    stores.Qvain.dataCatalog = DATA_CATALOG_IDENTIFIER.IDA
+    stores.Qvain.setOriginal({ preservation_pas_package_created: true })
+    renderState(stores)
+    expect(screen.getByTestId('pas-state').textContent).toContain(
+      'Changes made to the metadata do NOT affect the version in Digital Preservation'
+    )
   })
 })
 
@@ -123,7 +125,6 @@ describe('Qvain.Files', () => {
   it('allows editing of file fields', async () => {
     const stores = getStores()
     stores.Auth.user.idaProjects = ['project_y']
-    stores.Qvain.setPreservationState(0)
     renderFiles(stores)
 
     const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))
@@ -153,7 +154,6 @@ describe('Qvain.Files', () => {
   it('allows editing of directory fields', async () => {
     const stores = getStores()
     stores.Auth.user.idaProjects = ['project_y']
-    stores.Qvain.setPreservationState(100)
     renderFiles(stores, true)
 
     const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))

@@ -2,7 +2,7 @@ import { Link } from 'react-router'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { DATA_CATALOG_IDENTIFIER, ACCESS_TYPE_URL } from '@/utils/constants'
+import { ACCESS_TYPE_URL } from '@/utils/constants'
 import ErrorBoundary from '@/components/general/errorBoundary'
 import ContentBox from '@/components/general/contentBox'
 import FairdataPasDatasetIcon from '@/components/etsin/Dataset/fairdataPasDatasetIcon'
@@ -53,10 +53,9 @@ const SearchListItem = ({ item }) => {
                   {title}
                 </h2>
                 <WrapperDivRight>
-                  {(item.data_catalog === DATA_CATALOG_IDENTIFIER.PAS ||
-                    item.preservation_state === 80) && (
+                  {item.preservation && (
                     <FairdataPasDatasetIcon
-                      preservation_state={item.preservation_state}
+                      preservation={item.preservation}
                       data_catalog_identifier={item.data_catalog}
                     />
                   )}
@@ -90,7 +89,7 @@ SearchListItem.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.object.isRequired,
     access_rights: PropTypes.object,
-    preservation_state: PropTypes.number,
+    preservation: PropTypes.object,
     field_of_science: PropTypes.array,
     description: PropTypes.object,
     data_catalog: PropTypes.string,

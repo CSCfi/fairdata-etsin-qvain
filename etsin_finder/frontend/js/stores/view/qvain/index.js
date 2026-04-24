@@ -95,7 +95,6 @@ class Qvain extends Resources {
     // Reset Files/Directories related data
     this.Files.reset()
     this.dataCatalog = undefined // catalog id
-    this.preservationState = 0
     this.cumulativeState = CUMULATIVE_STATE.NO
     this.newCumulativeState = this.cumulativeState
     this.inEdit = undefined
@@ -452,13 +451,9 @@ class Qvain extends Resources {
 
     const researchDataset = dataset.research_dataset
 
-    // Load preservation state
-    this.preservationState = dataset.preservation_state
-
     // New version should leave some fields with default values
     if (this.isNewVersion) {
       this.deprecated = false
-      this.preservationState = 0
     }
 
     // Load cumulative state
@@ -592,24 +587,15 @@ class Qvain extends Resources {
 
   // PAS
 
-  @observable preservationState = 0
-
-  @action
-  setPreservationState = state => {
-    this.preservationState = state
-    this.changed = true
-  }
-
   @computed
   get isPreserved() {
-    return this.preservationState === 120
+    return !!this.original?.preservation_pas_package_created
   }
 
   @computed
   get isPas() {
     return !!(
       this.dataCatalog === DATA_CATALOG_IDENTIFIER.PAS ||
-      this.preservationState > 0 ||
       this.original?.preservation_pas_process_running ||
       this.original?.preservation_pas_package_created
     )

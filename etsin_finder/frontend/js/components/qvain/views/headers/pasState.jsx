@@ -7,7 +7,7 @@ import { useStores } from '../../utils/stores'
 // If we have a PAS dataset, show information on current state.
 const PasState = () => {
   const {
-    Qvain: { isPas, preservationState, original },
+    Qvain: { isPas, original },
     Locale: { translate },
   } = useStores()
 
@@ -23,19 +23,11 @@ const PasState = () => {
   }
   return (
     <PasInfoText data-testid="pas-state">
-      {preservationState >= 0 && (
-        <Translate
-          content="qvain.pasInfo.stateInfo"
-          with={{
-            state: preservationState,
-            description: translate(`qvain.pasState.${preservationState}`),
-          }}
-        />
-      )}
+      {translate('qvain.pasInfo.info')}
       {key && (
         <>
           <br />
-          <Translate content={`qvain.pasInfoV3.${key}`} />
+          <Translate content={`qvain.pasInfo.${key}`} />
         </>
       )}
     </PasInfoText>
