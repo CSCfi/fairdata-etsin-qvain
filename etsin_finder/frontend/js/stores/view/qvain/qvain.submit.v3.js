@@ -28,6 +28,7 @@ class SubmitV3 extends Submit {
       Adapter: { convertQvainV2ToV3 },
       original,
       Files,
+      isNewVersion,
     } = this.Qvain
 
     const isNew = !original
@@ -78,7 +79,7 @@ class SubmitV3 extends Submit {
       try {
         this.setLoading(true)
         dataset.fileset = Files.actionsToMetax()
-        let v3Dataset = convertQvainV2ToV3(dataset)
+        let v3Dataset = convertQvainV2ToV3(dataset, { isNewVersion })
 
         if (this.Qvain.AccessType.value.url !== ACCESS_TYPE_URL.OPEN) {
           v3Dataset.access_rights.show_file_metadata = this.Qvain.showFileMetadata

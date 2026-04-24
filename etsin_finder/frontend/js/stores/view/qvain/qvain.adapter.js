@@ -375,7 +375,7 @@ class Adapter {
     }
   }
 
-  convertQvainV2ToV3(dataset) {
+  convertQvainV2ToV3(dataset, { isNewVersion = false } = {}) {
     // Convert Qvain front->backend V2 format to Metax V3 format
     const d = {
       id: dataset.original?.id,
@@ -400,8 +400,10 @@ class Adapter {
       bibliographic_citation: dataset.bibliographic_citation,
     }
 
-    // Set generate_pid_on_publish only when there is no existing pid
-    if (!dataset.original?.research_dataset?.preferred_identifier) {
+    // Set generate_pid_on_publish when either:
+    // - there is no existing pid
+    // - a new version is being created
+    if (isNewVersion || !dataset.original?.research_dataset?.preferred_identifier) {
       d.generate_pid_on_publish = dataset.use_doi ? 'DOI' : 'URN'
     }
 
