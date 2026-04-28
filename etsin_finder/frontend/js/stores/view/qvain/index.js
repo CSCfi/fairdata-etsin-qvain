@@ -496,11 +496,20 @@ class Qvain extends Resources {
     ) {
       return
     }
+
     const url = this.Env.metaxV3Url('datasetREMSApplicationCounts', publishedDataset.id)
-    const res = await this.client.get(url)
-    runInAction(() => {
-      this.remsApplicationCounts = res.data
-    })
+    try {
+      const res = await this.client.get(url)
+      runInAction(() => {
+        this.remsApplicationCounts = res.data
+      })
+    } catch (err) {
+      // When an admin changes the admin organization and
+      // loses write access to dataset, we should not throw an error here
+      if (err.response?.status !== 403) {
+        throw err
+      }
+    }
   }
 
   @computed get publishWillChangeREMSLicenses() {
