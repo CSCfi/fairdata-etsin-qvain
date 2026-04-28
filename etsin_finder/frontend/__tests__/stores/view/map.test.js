@@ -53,6 +53,42 @@ const data = {
       'MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35),(30 20, 20 15, 20 25, 30 100)))',
     ],
   },
+  geolocations_multipolygon: {
+    geolocations: {
+      type: 'FeatureCollection',
+      features: [
+        {
+          id: '72137f7c-ec8d-46bf-9dd3-97bd08ef9366',
+          type: 'Feature',
+          geometry: {
+            type: 'MultiPolygon',
+            coordinates: [
+              [
+                [
+                  [19, 59],
+                  [20, 59],
+                  [20, 65],
+                  [19, 65],
+                  [19, 59],
+                ],
+              ],
+              [
+                [
+                  [21, 61],
+                  [22, 61],
+                  [22, 62],
+                  [21, 62],
+                  [21, 61],
+                ],
+              ],
+            ],
+          },
+          bbox: [19, 59, 22, 65],
+          properties: {},
+        },
+      ],
+    },
+  },
   location_name: {
     reference: {
       pref_label: {
@@ -290,6 +326,14 @@ describe('makeGeometry from location name', () => {
   })
 })
 
+describe('makeGeometry from geolocations', () => {
+  it('copies geolocations as-is', async () => {
+    const geometry = await Map.makeGeometry(data.geolocations_multipolygon)
+    expect(geometry).toEqual(data.geolocations_multipolygon.geolocations)
+    expect(geometry).not.toBe(data.geolocations_multipolygon.geolocations) // copy, not same instance
+  })
+})
+
 describe('getLeafletBounds', async () => {
   // Coordinates for Leaflet bounds should reversed (lat, lng)
   test('bounds from WKT point', async () => {
@@ -313,6 +357,14 @@ describe('getLeafletBounds', async () => {
     expect(bounds).toEqual([
       [-10, -30],
       [40, 40],
+    ])
+  })
+
+  test('bounds from geolocations', async () => {
+    const bounds = Map.getLeafletBounds(await Map.makeGeometry(data.geolocations_multipolygon))
+    expect(bounds).toEqual([
+      [59, 19],
+      [65, 22],
     ])
   })
 })

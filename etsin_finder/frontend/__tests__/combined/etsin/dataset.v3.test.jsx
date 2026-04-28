@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash-es'
 
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
@@ -507,6 +507,30 @@ const spatial_autti = {
   custom_wkt: ['POINT(27.10814 66.32100)'],
 }
 
+const spatial_geolocation = {
+  id: 'c04c4768-515e-463d-0000-000000000000',
+  geographic_name: 'Some geolocation',
+  geolocations: {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [27.0, 66.3],
+              [27.2, 66.3],
+              [27.1, 66.5],
+              [27.0, 66.3],
+            ],
+          ],
+        },
+      },
+    ],
+  },
+}
+
 describe('Etsin map page', () => {
   test('renders map table', async () => {
     const dataset = cloneDeep(dataset_open_a_catalog_expanded)
@@ -558,5 +582,16 @@ describe('Etsin map page', () => {
     expect(popup).toHaveTextContent('67.605020° N, 24.145850° E')
     expect(popup).toHaveTextContent('Unioninkatu')
     expect(popup).toHaveTextContent('Random Address in Helsinki')
+  })
+
+  test('renders spatial with geolocations', async () => {
+    const dataset = cloneDeep(dataset_open_a_catalog_expanded)
+    dataset.spatial = [spatial_geolocation]
+
+    await renderEtsin(dataset, { userLogged: false, tab: 'maps' })
+
+    // Wait for polygon to show up as an svg element
+    const overlayPane = document.querySelector('.leaflet-overlay-pane')
+    await waitFor(() => expect(overlayPane.querySelector('svg')).toBeInTheDocument())
   })
 })

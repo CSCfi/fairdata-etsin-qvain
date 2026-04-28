@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 
 export const SpatialPropType = PropTypes.shape({
   wkt: PropTypes.arrayOf(PropTypes.string),
+  geolocations: PropTypes.object,
   reference: PropTypes.shape({
     url: PropTypes.string.isRequired,
   }),

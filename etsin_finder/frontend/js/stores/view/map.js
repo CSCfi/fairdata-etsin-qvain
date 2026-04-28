@@ -1,4 +1,5 @@
 import { wktToGeoJSON } from '@terraformer/wkt'
+import { cloneDeep } from 'lodash-es'
 import bbox from '@turf/bbox'
 import { OpenStreetMapProvider } from 'leaflet-geosearch'
 
@@ -9,6 +10,10 @@ export class Map {
   }
 
   async makeGeometry(spatial) {
+    if (spatial.geolocations?.features.length > 0) {
+      // Create new object for consistency with other methods, no other changes
+      return cloneDeep(spatial.geolocations)
+    }
     if (spatial.wkt?.length > 0) {
       return this.makeGeometryFromWKT(spatial.wkt)
     }
