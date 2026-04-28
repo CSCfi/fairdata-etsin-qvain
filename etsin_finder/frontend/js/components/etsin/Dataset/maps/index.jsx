@@ -1,14 +1,11 @@
 import { useEffect } from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarkerAlt, faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
-import { Popup } from 'react-leaflet'
 import Translate from '@/utils/Translate'
 import { useStores } from '@/utils/stores'
 
-import MyMap from './map'
+import SpatialMap from './SpatialMap'
 import { useParams } from 'react-router'
 
 const Maps = props => {
@@ -18,7 +15,7 @@ const Maps = props => {
     Etsin: {
       EtsinDataset: { datasetMetadata },
     },
-    Locale: { getPreferredLang, getValueTranslation },
+    Locale: { getValueTranslation },
   } = useStores()
 
   const params = useParams()
@@ -108,41 +105,12 @@ const Maps = props => {
 
       {/* The actual map */}
       {datasetMetadata.spatial.map(spatial => {
-        // Map shown only if either map coordinate(s) or map location is defined
         if (spatial.wkt?.length > 0 || spatial.reference?.pref_label) {
           return (
-            <MyMap
+            <SpatialMap
               key={`${spatial.wkt}-${spatial.reference?.url}-${spatial.geographic_name}`}
-              geometry={spatial.wkt}
-              location={spatial.reference?.pref_label}
-            >
-              {/* Map popup, hidden if it contains no information */}
-              {spatial.reference?.pref_label ||
-              spatial.geographic_name ||
-              spatial.full_address ||
-              spatial.altitude_in_meters?.toString() ? (
-                <CustomPopup>
-                  {spatial.reference && (
-                    <h2 lang={getPreferredLang(spatial.reference.pref_label)}>
-                      {getValueTranslation(spatial.reference.pref_label)}
-                    </h2>
-                  )}
-                  {spatial.geographic_name && <h3>{spatial.geographic_name}</h3>}
-                  {spatial.full_address && (
-                    <p>
-                      <FontAwesomeIcon icon={faMapMarkerAlt} />
-                      <i>{spatial.full_address}</i>
-                    </p>
-                  )}
-                  {spatial.altitude_in_meters?.toString() && (
-                    <p>
-                      <FontAwesomeIcon icon={faExpandArrowsAlt} />
-                      Altitude: {spatial.altitude_in_meters}
-                    </p>
-                  )}
-                </CustomPopup>
-              ) : null}
-            </MyMap>
+              spatial={spatial}
+            />
           )
         } // Do not display map if coordinates and location is undefined
         return null
@@ -179,26 +147,6 @@ const Table = styled.table`
       overflow-wrap: break-word;
       padding: 0.75rem;
     }
-  }
-`
-
-const CustomPopup = styled(Popup)`
-  h2,
-  h3 {
-    margin-bottom: 0;
-    line-height: 1.4;
-  }
-  h3 {
-    margin-bottom: 0.3em;
-  }
-  p {
-    margin-bottom: 0;
-  }
-  i {
-    font-style: italic;
-  }
-  svg {
-    margin-right: 0.5em;
   }
 `
 

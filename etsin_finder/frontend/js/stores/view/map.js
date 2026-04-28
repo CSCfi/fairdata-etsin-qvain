@@ -1,66 +1,65 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
-
-import WKT from 'terraformer-wkt-parser'
+import { wktToGeoJSON } from '@terraformer/wkt'
+import bbox from '@turf/bbox'
 import { OpenStreetMapProvider } from 'leaflet-geosearch'
 
 // functions for map component
-class Map {
+export class Map {
   constructor(Locale) {
     this.Locale = Locale
   }
 
-  createBounds = minmax => {
-    const minY = minmax[0]
-    const minX = minmax[1]
-    const maxY = minmax[2]
-    const maxX = minmax[3]
-    // X and Y might be the wrong way around here
-    return [
-      [minX, minY],
-      [maxX, maxY],
-    ]
-  }
-
-  makeGeometry(geometry, location) {
-    if (geometry?.length > 0) {
-      return new Promise(resolve => {
-        resolve(this.makeGeometryFromWKT(geometry))
-      })
+  async makeGeometry(spatial) {
+    if (spatial.wkt?.length > 0) {
+      return this.makeGeometryFromWKT(spatial.wkt)
     }
-    return this.makeGeometryFromPlace(location)
+    return this.makeGeometryFromPlace(spatial.reference.pref_label)
   }
 
-  makeGeometryFromWKT = wkt => {
-    const geometry = []
-    wkt.map(string => {
-      const converted = WKT.parse(string)
-      converted.bounds = this.createBounds(converted.bbox())
-      geometry.push(converted)
-      return true
-    })
-    return geometry
+  makeGeometryFromWKT(wkt) {
+    // Make geometry from array of WKT strings. Coordinates are in (long, lat) order.
+    const geometries = wkt.map(string => wktToGeoJSON(string))
+    if (geometries.length === 1) {
+      return geometries[0]
+    } else {
+      // Multiple geometries, make into collection
+      return {
+        type: 'GeometryCollection',
+        geometries: geometries,
+      }
+    }
   }
 
-  // converts place name to latitude and longitude
-  // coordinate format is [lat, lng]
-  makeGeometryFromPlace = location => {
+  // queries place name and returns rectangle based on its bounds
+  async makeGeometryFromPlace(location) {
     const provider = new OpenStreetMapProvider()
-    return provider
-      .search({ query: this.Locale.getValueTranslation(location) })
-      .then(results => [
-        { type: 'Rectangle', coordinates: [results[0].bounds], bounds: results[0].bounds },
-      ])
-      .catch(err => {
-        console.log(err)
-      })
+    try {
+      const results = await provider.search({ query: this.Locale.getValueTranslation(location) })
+      const [[minLat, minLong], [maxLat, maxLong]] = results[0].bounds
+      const geometry = {
+        type: 'Polygon',
+        coordinates: [
+          [
+            [minLong, minLat],
+            [maxLong, minLat],
+            [maxLong, maxLat],
+            [minLong, maxLat],
+            [minLong, minLat],
+          ],
+        ],
+      }
+      return geometry
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  getLeafletBounds(geometry) {
+    // Return bounds as (lat, long) points as expected by Leaflet
+    const [minLong, minLat, maxLong, maxLat] = bbox(geometry)
+    return [
+      [minLat, minLong],
+      [maxLat, maxLong],
+    ]
   }
 }
 

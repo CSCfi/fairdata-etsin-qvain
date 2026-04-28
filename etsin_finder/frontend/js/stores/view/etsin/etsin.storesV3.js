@@ -116,7 +116,7 @@ class EtsinDatasetV3 {
     return this.dataset?.provenance
   }
 
-  /*Returns those provenances that are PAS creation events. Currently, other 
+  /*Returns those provenances that are PAS creation events. Currently, other
   PAS events are ignored. */
   @computed get pasProvenances() {
     if (!this.hasProvenances) {
@@ -128,7 +128,7 @@ class EtsinDatasetV3 {
     )
   }
 
-  /*Returns all user-entered events, i.e. all other provenances except PAS 
+  /*Returns all user-entered events, i.e. all other provenances except PAS
   events:*/
   @computed get userEnteredProvenances() {
     if (!this.hasProvenances) {
@@ -296,9 +296,9 @@ class EtsinDatasetV3 {
   @computed get hasServiceGeneratedEvents() {
     return Boolean(
       this.pasProvenances.length > 0 ||
-        this.deletedVersions.length > 0 ||
-        this.isDeprecated ||
-        this.isEmbargoExpired
+      this.deletedVersions.length > 0 ||
+      this.isDeprecated ||
+      this.isEmbargoExpired
     )
   }
 
@@ -313,12 +313,12 @@ class EtsinDatasetV3 {
   @computed get hasEventsAndIdentifiers() {
     return Boolean(
       this.hasVersion ||
-        this.hasProvenances ||
-        this.isDeprecated ||
-        this.otherIdentifiers?.length ||
-        this.datasetRelations?.length ||
-        this.preservation?.useCopy?.persistent_identifier ||
-        this.isEmbargoExpired
+      this.hasProvenances ||
+      this.isDeprecated ||
+      this.otherIdentifiers?.length ||
+      this.datasetRelations?.length ||
+      this.preservation?.useCopy?.persistent_identifier ||
+      this.isEmbargoExpired
     )
   }
 
@@ -489,7 +489,11 @@ class EtsinDatasetV3 {
       if (location.reference?.as_wkt && location.reference?.as_wkt !== '') {
         referenceWKT = [location.reference.as_wkt]
       }
-      location.wkt = location.custom_wkt || referenceWKT
+      if (location.custom_wkt?.length > 0) {
+        location.wkt = location.custom_wkt
+      } else {
+        location.wkt = referenceWKT
+      }
       return location
     })
   }

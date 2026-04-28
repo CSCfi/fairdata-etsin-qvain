@@ -1,6 +1,6 @@
 import { makeObservable, action, observable, computed } from 'mobx'
 import AbortClient from '@/utils/AbortClient'
-import WKT from 'terraformer-wkt-parser'
+import { geojsonToWKT, wktToGeoJSON } from '@terraformer/wkt'
 import { latLng } from 'leaflet'
 
 class EtsinMapSearch {
@@ -92,12 +92,12 @@ class EtsinMapSearch {
   @action search = query => {
     if (this.layers?.features.length > 0) {
       this.layers.features.forEach(feature => {
-        /* WKT.convert method transforms a GeoJSON feature object into a 
-        WKT-formatted string. For example 
-        { coordintes: [long, lat], type: "Point" } becomes 'POINT (long lat)'. 
-        Using the replace method on the first occurrence of the space 
+        /* WKT.convert method transforms a GeoJSON feature object into a
+        WKT-formatted string. For example
+        { coordintes: [long, lat], type: "Point" } becomes 'POINT (long lat)'.
+        Using the replace method on the first occurrence of the space
         character, the result is then converted to "POINT(long lat)". */
-        const queryParamValue = WKT.convert(feature.geometry).replace(' ', '')
+        const queryParamValue = geojsonToWKT(feature.geometry).replace(' ', '')
         query.append('geolocation', queryParamValue)
       })
     }
@@ -108,12 +108,12 @@ class EtsinMapSearch {
 
     if (geolocation.length > 0) {
       const features = geolocation.map(feature => {
-        /* WKT.parse method parses a WKT-formatted string into 
-        a GeoJSON feature object. For example 'POINT (long lat)' 
+        /* WKT.parse method parses a WKT-formatted string into
+        a GeoJSON feature object. For example 'POINT (long lat)'
         becomes { coordinates: [long, lat], type: 'Point' }.
-        Before parsing, a space is added before the first 
+        Before parsing, a space is added before the first
         parenthesis to ensure the string is in valid WKT format. */
-        return { geometry: WKT.parse(feature.replace('(', ' (')), type: 'Feature' }
+        return { geometry: wktToGeoJSON(feature.replace('(', ' (')), type: 'Feature' }
       })
 
       this.setLayers({
@@ -121,8 +121,8 @@ class EtsinMapSearch {
         features: features,
       })
     } else {
-      /* If the geolocation query parameter is not present, the layers are 
-      set to null and the (sidebar) map view is centered to the default 
+      /* If the geolocation query parameter is not present, the layers are
+      set to null and the (sidebar) map view is centered to the default
       values. */
       this.setLayers(null)
       this.applyDefaultView()
