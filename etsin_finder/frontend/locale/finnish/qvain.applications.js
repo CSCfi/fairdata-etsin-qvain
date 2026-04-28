@@ -41,9 +41,9 @@ const applications = {
     reject: 'Hylkää',
     returnInfo: 'Pyydä käyttäjää tekemään muutoksia hakemukseen ja lähettämään sen uudestaan. ',
     return: 'Pyydä muutoksia',
-    close: 'Sulje hakemus',
+    close: 'Merkitse suljetuksi',
     closeInfo:
-      'Tarpeettomaksi jääneen hakemuksen voi sulkea. ' +
+      'Tarpeettomaksi jääneen hakemuksen voi merkitä suljetuksi. ' +
       'Jos aineisto on hyväksytty, sulkeminen myös poistaa sen hyväksynnän.',
   },
 }

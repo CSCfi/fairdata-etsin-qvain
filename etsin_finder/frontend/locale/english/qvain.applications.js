@@ -41,9 +41,9 @@ const applications = {
     reject: 'Reject',
     return: 'Request changes',
     returnInfo: 'Request the user to make changes to their application and submit it again. ',
-    close: 'Close application',
+    close: 'Mark as closed',
     closeInfo:
-      'An application can be closed if it is no longer relevant. ' +
+      'An application can be marked as closed if it is no longer relevant. ' +
       'If the application had been approved, closing the application will also remove the approval.',
   },
 }

@@ -192,14 +192,14 @@ describe('Qvain REMS applications', () => {
     let dialog = screen.getByRole('dialog')
     expect(within(dialog).getByRole('button', { name: 'Waiting for review' })).toBeInTheDocument()
 
-    const actionButton = within(dialog).getByRole('button', { name: 'Close application' })
+    const actionButton = within(dialog).getByRole('button', { name: 'Mark as closed' })
     await userEvent.click(actionButton)
 
     const commentForm = within(dialog).getByLabelText(/Add comment/)
     await userEvent.type(commentForm, 'no longer relevant')
 
-    // The confirmation button also says "Close application"
-    const confirmButton = within(dialog).getAllByRole('button', { name: 'Close application' })[1]
+    // The confirmation button also says "Mark as closed"
+    const confirmButton = within(dialog).getAllByRole('button', { name: 'Mark as closed' })[1]
 
     await userEvent.click(confirmButton)
 
