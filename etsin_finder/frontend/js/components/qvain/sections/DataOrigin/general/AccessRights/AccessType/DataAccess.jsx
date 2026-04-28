@@ -7,7 +7,6 @@ import TranslationTab from '@/components/qvain/general/V3/tab/TranslationTab.v3'
 import ValidationError from '@/components/qvain/general/errors/validationError'
 import { useStores } from '@/stores/stores'
 import DataAccessTextArea from './DataAccessTextArea'
-import REMSApprovalType from './REMSApprovalType'
 
 const DataAccess = () => {
   const {
@@ -19,10 +18,7 @@ const DataAccess = () => {
         terms,
         remsApprovalType,
         validationError,
-        shouldShowREMSApprovalType,
       },
-      AccessType: { value: accessType },
-      isREMSAllowed,
     },
     Env: {
       Flags: { flagEnabled },
@@ -32,8 +28,10 @@ const DataAccess = () => {
 
   // Expand if some field has value
   const hasValue = () =>
-    Boolean([applicationInstructions, reviewerInstructions, terms].some(v => v.value.fi || v.value.en) ||
-      remsApprovalType.value)
+    Boolean(
+      [applicationInstructions, reviewerInstructions, terms].some(v => v.value.fi || v.value.en) ||
+      remsApprovalType.value
+    )
   const [isExpanded, setIsExpanded] = useState(hasValue)
 
   if (!flagEnabled('QVAIN.REMS')) {
@@ -80,7 +78,6 @@ const DataAccess = () => {
               field={terms}
             />
           </TranslationTab>
-          {isREMSAllowed && shouldShowREMSApprovalType(accessType) && <REMSApprovalType />}
         </div>
       )}
       {validationError && <ValidationError>{validationError}</ValidationError>}

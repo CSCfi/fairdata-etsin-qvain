@@ -23,7 +23,7 @@ const REMSApprovalType = () => {
     : 'qvain.rightsAndLicenses.dataAccess.remsApprovalType.manualDisabled'
 
   return (
-    <fieldset onBlur={validate}>
+    <FieldSet onBlur={validate}>
       <TitleSmall as="legend">
         {translate('qvain.rightsAndLicenses.dataAccess.remsApprovalType.title')}
         <Required />
@@ -41,9 +41,14 @@ const REMSApprovalType = () => {
         />
       </RadioRow>
       {validationError && <ValidationError>{validationError}</ValidationError>}
-    </fieldset>
+    </FieldSet>
   )
 }
+
+const FieldSet = styled.fieldset`
+  margin-top: 1rem;
+  margin-bottom: -1rem;
+`
 
 const RadioRow = styled(FieldGroup)`
   flex-direction: column;
