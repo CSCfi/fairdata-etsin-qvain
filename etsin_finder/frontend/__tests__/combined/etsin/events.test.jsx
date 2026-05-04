@@ -63,8 +63,7 @@ describe('Events page', () => {
     // get wrappers for sections by title
     sections = sectionElements.reduce((map, section) => {
       const title = section.querySelector('h2').textContent
-      // The query is ':scope > :not(h2)' in jsdom, this one works for happy-dom
-      const content = section.querySelector('> :not(h2)')
+      const content = section.querySelector(':scope > :not(h2)')
       map[title] = content
       return map
     }, {})
