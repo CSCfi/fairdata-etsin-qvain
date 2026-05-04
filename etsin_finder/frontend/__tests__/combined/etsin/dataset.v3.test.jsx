@@ -509,7 +509,7 @@ const spatial_autti = {
 
 describe('Etsin map page', () => {
   test('renders map table', async () => {
-    const dataset = dataset_open_a_catalog_expanded
+    const dataset = cloneDeep(dataset_open_a_catalog_expanded)
     dataset.spatial.push(spatial_olari, spatial_autti)
 
     await renderEtsin(dataset, { userLogged: false, tab: 'maps' })
@@ -541,5 +541,22 @@ describe('Etsin map page', () => {
         'Altitude (m)': '0',
       },
     ])
+  })
+
+  test('renders popup when clicking map marker', async () => {
+    const dataset = dataset_open_a_catalog_expanded
+
+    await renderEtsin(dataset, { userLogged: false, tab: 'maps' })
+
+    // Wait for map marker to show up, click it
+    const markers = document.querySelector('.leaflet-marker-pane')
+    const button = await within(markers).findByRole('button')
+    await userEvent.click(button)
+
+    // Check data in the marker popup
+    const popup = document.querySelector('.leaflet-popup-pane')
+    expect(popup).toHaveTextContent('67.605020° N, 24.145850° E')
+    expect(popup).toHaveTextContent('Unioninkatu')
+    expect(popup).toHaveTextContent('Random Address in Helsinki')
   })
 })

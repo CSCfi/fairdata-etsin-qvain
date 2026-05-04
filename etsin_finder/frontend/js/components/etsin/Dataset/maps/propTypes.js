@@ -6,3 +6,8 @@ export const SpatialPropType = PropTypes.shape({
     url: PropTypes.string.isRequired,
   }),
 })
+
+export const PointPropType = PropTypes.shape({
+  lng: PropTypes.number.isRequired,
+  lat: PropTypes.number.isRequired,
+})

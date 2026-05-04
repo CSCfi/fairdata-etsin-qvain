@@ -2,11 +2,18 @@ import { faExpandArrowsAlt, faMapMarkerAlt } from '@fortawesome/free-solid-svg-i
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Popup } from 'react-leaflet'
 import styled from 'styled-components'
-import { SpatialPropType } from './propTypes'
+import { PointPropType, SpatialPropType } from './propTypes'
 import { useStores } from '@/stores/stores'
 
+function formatCoordinates({ lng, lat }, precision = 6) {
+  const ns = lat >= 0 ? 'N' : 'S'
+  const ew = lng >= 0 ? 'E' : 'W'
+
+  return `${Math.abs(lat).toFixed(precision)}° ${ns}, ${Math.abs(lng).toFixed(precision)}° ${ew}`
+}
+
 // Map popup, hidden if it contains no information
-const MapPopup = ({ spatial }) => {
+const MapPopup = ({ spatial, selectedPoint }) => {
   const {
     Locale: { getValueTranslation, getPreferredLang },
   } = useStores()
@@ -21,8 +28,14 @@ const MapPopup = ({ spatial }) => {
   ) {
     return null
   }
+  let coords = null
+  if (selectedPoint) {
+    coords = formatCoordinates(selectedPoint)
+  }
+
   return (
     <CustomPopup>
+      {coords && <p>{coords}</p>}
       {spatial.reference && (
         <h2 lang={getPreferredLang(spatial.reference.pref_label)}>
           {getValueTranslation(spatial.reference.pref_label)}
@@ -47,6 +60,7 @@ const MapPopup = ({ spatial }) => {
 
 MapPopup.propTypes = {
   spatial: SpatialPropType,
+  selectedPoint: PointPropType,
 }
 
 const CustomPopup = styled(Popup)`

@@ -18,6 +18,7 @@ const markerIcon = leaflet.icon({
 const Layers = ({ spatial }) => {
   const { Map: MapStore } = useStores()
   const [geometry, setGeometry] = useState(null)
+  const [selectedPoint, setSelectedPoint] = useState(null)
 
   const map = useMap()
   const theme = useTheme()
@@ -42,8 +43,14 @@ const Layers = ({ spatial }) => {
       color={theme.color.primary}
       weight="3"
       pointToLayer={(feature, latlng) => leaflet.marker(latlng, { icon: markerIcon })}
+      onEachFeature={(feature, layer) => {
+        layer.on('click', e => {
+          const { lng, lat } = e.latlng
+          setSelectedPoint({ lng, lat })
+        })
+      }}
     >
-      <MapPopup spatial={spatial} />
+      <MapPopup spatial={spatial} selectedPoint={selectedPoint} />
     </GeoJSON>
   )
 }
