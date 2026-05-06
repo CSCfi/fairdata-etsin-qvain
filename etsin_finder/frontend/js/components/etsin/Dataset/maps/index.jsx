@@ -105,7 +105,7 @@ const Maps = props => {
 
       {/* The actual map */}
       {datasetMetadata.spatial.map(spatial => {
-        if (spatial.geolocations?.features.length > 0 || spatial.wkt.length > 0 || spatial.reference?.pref_label) {
+        if (spatial.geolocations?.features.length > 0 || spatial.wkt?.length > 0 || spatial.reference?.pref_label) {
           return (
             <SpatialMap
               key={`${spatial.wkt}-${spatial.reference?.url}-${spatial.geographic_name}`}
