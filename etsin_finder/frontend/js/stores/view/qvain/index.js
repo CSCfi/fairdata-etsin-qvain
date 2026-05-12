@@ -554,8 +554,8 @@ class Qvain extends Resources {
     if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
       v2Dataset = this.Adapter.convertV3ToV2(dataset)
       this.showFileMetadata =
-        dataset.access_rights.show_file_metadata !== null
-          ? dataset.access_rights.show_file_metadata
+        dataset.access_rights?.show_file_metadata != null
+          ? dataset.access_rights?.show_file_metadata
           : false
 
       // Assign draftOf dataset to dataset.draft_of
@@ -579,8 +579,8 @@ class Qvain extends Resources {
       remapActorIdentifiers(dataset) // can't reuse actor ids in new dataset
       v2Dataset = this.Adapter.convertV3ToV2(dataset)
       this.showFileMetadata =
-        dataset.access_rights.show_file_metadata !== null
-          ? dataset.access_rights.show_file_metadata
+        dataset.access_rights?.show_file_metadata != null
+          ? dataset.access_rights?.show_file_metadata
           : false
     }
     this.AdminOrg.selectDefaultAdminOrg()
