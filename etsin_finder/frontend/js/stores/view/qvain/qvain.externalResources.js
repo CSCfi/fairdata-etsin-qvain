@@ -58,12 +58,16 @@ class ExternalResources extends Field {
     await super.validateAndSave()
   }
 
-  @action setUseCategory = useCategory => {
+  @action.bound setUseCategory(useCategory) {
     this.inEdit.useCategory = useCategory
   }
 
-  @action setFileType = fileType => {
+  @action.bound setFileType(fileType) {
     this.inEdit.fileType = fileType
+  }
+
+  @action.bound setTitleTranslation(translation, language) {
+    this.inEdit.title[language] = translation
   }
 
   @computed
@@ -84,7 +88,7 @@ export const FileType = (name, url) => ({
 
 export const ExternalResourceModel = data => ({
   uiid: uuidv4(),
-  title: data.title || '',
+  title: data.title || {},
   accessUrl: data.access_url?.identifier || '',
   downloadUrl: data.download_url?.identifier || '',
   useCategory: data.use_category
@@ -94,7 +98,7 @@ export const ExternalResourceModel = data => ({
 })
 
 export const ExternalResource = ({
-  title = '',
+  title = {},
   accessUrl = '',
   downloadUrl = '',
   useCategory = null,

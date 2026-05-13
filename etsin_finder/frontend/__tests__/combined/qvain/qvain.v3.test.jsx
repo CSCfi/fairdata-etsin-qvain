@@ -706,6 +706,12 @@ describe('Qvain with an opened dataset', () => {
     expect(within(modal).getByLabelText('Title', { exact: false }).value).toEqual(
       'Dataset Remote Resource'
     )
+    const tabFi = within(modal).getByRole('tab', { name: 'Finnish' })
+    await userEvent.click(tabFi)
+    expect(within(modal).getByLabelText('Title', { exact: false }).value).toEqual(
+      'Ulkoinen resurssi'
+    )
+
     expect(within(modal).getByLabelText('Access URL').value).toEqual('https://access.url')
     expect(within(modal).getByLabelText('Download URL').value).toEqual('https://download.url')
 

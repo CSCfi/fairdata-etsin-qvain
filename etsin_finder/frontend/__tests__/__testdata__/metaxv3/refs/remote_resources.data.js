@@ -21,6 +21,7 @@ export const file_type_av = {
 export const remote_resource_a = {
   title: {
     en: 'Dataset Remote Resource',
+    fi: 'Ulkoinen resurssi',
   },
   description: {
     en: 'Description of resource',

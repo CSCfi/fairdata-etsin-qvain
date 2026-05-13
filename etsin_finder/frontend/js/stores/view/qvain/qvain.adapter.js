@@ -145,7 +145,7 @@ class Adapter {
 
   remoteResourceV3ToV2(value) {
     return {
-      title: this.getSingleTranslation(value.title),
+      title: value.title,
       description: this.getSingleTranslation(value.description),
       use_category: this.refdataV3ToV2(value.use_category),
       file_type: this.refdataV3ToV2(value.file_type),
@@ -366,7 +366,7 @@ class Adapter {
 
   remoteResourceV2ToV3(value) {
     return {
-      title: this.removeMissingTranslations({ en: value.title }),
+      title: this.removeMissingTranslations(value.title),
       description: this.removeMissingTranslations({ en: value.description }),
       use_category: this.refdataV2ToV3(value.use_category),
       file_type: this.refdataV2ToV3(value.file_type),

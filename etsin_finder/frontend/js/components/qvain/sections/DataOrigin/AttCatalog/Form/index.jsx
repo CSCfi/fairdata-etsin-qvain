@@ -20,19 +20,28 @@ import {
 import { UseCategory, FileType } from '@/stores/view/qvain/qvain.externalResources'
 import { useStores } from '@/stores/stores'
 import AbortClient from '@/utils/AbortClient'
+import TranslationTab from '@/components/qvain/general/V3/tab/TranslationTab.v3'
 
 export const ExternalFileFormBase = () => {
   const {
+    Locale: { translate, lang },
     Qvain: {
       readonly,
-      ExternalResources: { inEdit: externalResource, setUseCategory, setFileType },
+      ExternalResources: {
+        inEdit: externalResource,
+        setUseCategory,
+        setFileType,
+        setTitleTranslation,
+      },
       ReferenceData: { getOptions },
     },
-    Locale: { lang },
   } = useStores()
 
   const [useCategoryOptions, setUseCategoryOptions] = useState([])
   const [useFileTypeOptions, setFileTypeOptions] = useState([])
+
+  // Title translation tab
+  const [language, setLanguage] = useState(lang)
 
   useEffect(() => {
     const client = new AbortClient()
@@ -52,19 +61,21 @@ export const ExternalFileFormBase = () => {
   return (
     <>
       <FieldGroup>
-        <Title htmlFor="externalResourceTitleInput">
-          <Translate content="qvain.files.external.form.title.label" /> *
-        </Title>
-        <Translate
-          component={FieldInput}
-          type="text"
-          id="externalResourceTitleInput"
-          value={externalResource.title}
-          onChange={action(event => {
-            externalResource.title = event.target.value
-          })}
-          attributes={{ placeholder: 'qvain.files.external.form.title.placeholder' }}
-        />
+        <TranslationTab language={language} setLanguage={setLanguage}>
+          <Title htmlFor="externalResourceTitleInput">
+            {translate('qvain.files.external.form.title.label')}
+          </Title>
+          <FieldInput
+            component={FieldInput}
+            type="text"
+            id="externalResourceTitleInput"
+            value={externalResource.title[language] || ''}
+            onChange={event => {
+              setTitleTranslation(event.target.value, language)
+            }}
+            placeholder={translate('qvain.files.external.form.title.placeholder')}
+          />
+        </TranslationTab>
       </FieldGroup>
       <FieldGroup>
         <Title htmlFor="useCategoryInput">

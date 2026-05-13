@@ -2,8 +2,9 @@ import styled from 'styled-components'
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 
 import IconButton from '../common/iconButton'
+import withCustomProps from '@/utils/withCustomProps'
 
-export const SplitButtonContainer = styled.span`
+export const SplitButtonContainer = withCustomProps(styled.span)`
   width: 9em;
   display: flex;
   align-items: stretch;

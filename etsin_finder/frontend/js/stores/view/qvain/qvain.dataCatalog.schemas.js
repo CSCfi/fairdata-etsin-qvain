@@ -24,7 +24,18 @@ export const dataCatalogDraftSchema = yup.string()
 // EXTERNAL RESOURCES VALIDATION
 
 export const externalResourceTitleSchema = yup
-  .string()
+  .object()
+  .shape({
+    fi: yup
+      .string()
+      .typeError('qvain.validationMessages.title.string')
+      .max(500, 'qvain.validationMessages.title.max'),
+    en: yup
+      .string()
+      .typeError('qvain.validationMessages.title.string')
+      .max(500, 'qvain.validationMessages.title.max'),
+  })
+  .requireTranslation('qvain.validationMessages.externalResources.title.required')
   .required('qvain.validationMessages.externalResources.title.required')
 
 // Use category is one of preset 7 options
