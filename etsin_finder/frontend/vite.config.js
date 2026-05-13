@@ -60,7 +60,7 @@ export default defineConfig(({ command, mode }) => {
     server: {
       port: 8080,
       host: '0.0.0.0',
-      allowedHosts: ['etsin.fd-dev.csc.fi', 'qvain.fd-dev.csc.fi'],
+      allowedHosts: ['.fd-dev.csc.fi'],
       hmr: {
         webSocketServer: 'ws',
         clientPort: 443,

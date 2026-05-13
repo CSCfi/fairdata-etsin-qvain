@@ -26,14 +26,61 @@ from etsin_finder.utils.localization import get_language
 auth_views = Blueprint("auth_views", __name__)
 
 
-def sso_login_url(service):
+LUMI_AIF_ETSIN_APP_COOKIE = "lumi-aif.etsin"
+LUMI_AIF_SSO_SERVICE = "LUMIAIF"
+LUMI_AIF_SSO_REDIRECT_DOMAIN_CONFIG = "SERVER_LUMI_AIF_PORTAL_DOMAIN_NAME"
+LUMI_AIF_SSO_REDIRECT_DEFAULT_DOMAIN = "lumi-aif"
+
+
+def get_lumi_aif_redirect_domain(app_config):
+    """Build Lumi-AIF redirect domain using current environment suffix."""
+    lumi_aif_host = app_config.get(
+        LUMI_AIF_SSO_REDIRECT_DOMAIN_CONFIG, LUMI_AIF_SSO_REDIRECT_DEFAULT_DOMAIN
+    )
+    etsin_domain = app_config.get("SERVER_ETSIN_DOMAIN_NAME", "")
+
+    if "." not in lumi_aif_host and "." in etsin_domain:
+        environment_domain = etsin_domain.split(".", 1)[1]
+        return f"{lumi_aif_host}.{environment_domain}"
+
+    return lumi_aif_host
+
+
+# etsin_app cookie value -> function(app_config) returning SSO redirect host (no scheme).
+ETSIN_SSO_PORTAL_REDIRECT_RESOLVERS = {
+    LUMI_AIF_ETSIN_APP_COOKIE: get_lumi_aif_redirect_domain,
+}
+
+
+def _resolve_etsin_sso_redirect_host(app_config, etsin_app_cookie):
+    """Return portal-specific SSO redirect host for Etsin, or None for default Fairdata Etsin."""
+    if not etsin_app_cookie:
+        return None
+    resolver = ETSIN_SSO_PORTAL_REDIRECT_RESOLVERS.get(etsin_app_cookie)
+    return resolver(app_config) if resolver else None
+
+
+def _sso_service_query_value(service, etsin_app_cookie):
+    """SSO IdP `service` query parameter; may differ from internal service key for Etsin portals."""
+    if service == "ETSIN" and etsin_app_cookie == LUMI_AIF_ETSIN_APP_COOKIE:
+        return LUMI_AIF_SSO_SERVICE
+    return service
+
+
+def sso_login_url(service, etsin_app_cookie=None):
     """Get SSO login url for service"""
     app_config = current_app.config
     login_host = app_config.get("SSO").get("HOST")
     sso_redirect_url = app_config.get(f"SERVER_{service}_DOMAIN_NAME")
+
+    if service == "ETSIN":
+        portal_host = _resolve_etsin_sso_redirect_host(app_config, etsin_app_cookie)
+        if portal_host is not None:
+            sso_redirect_url = portal_host
+
     query = urlencode(
         {
-            "service": service,
+            "service": _sso_service_query_value(service, etsin_app_cookie),
             "redirect_url": f"https://{sso_redirect_url}",
             "language": get_language(),
         }
@@ -42,14 +89,20 @@ def sso_login_url(service):
     return login_url
 
 
-def sso_logout_url(service):
+def sso_logout_url(service, etsin_app_cookie=None):
     """Get SSO logout url for service"""
     app_config = current_app.config
     logout_host = app_config.get("SSO").get("HOST")
     sso_redirect_url = app_config.get(f"SERVER_{service}_DOMAIN_NAME")
+
+    if service == "ETSIN":
+        portal_host = _resolve_etsin_sso_redirect_host(app_config, etsin_app_cookie)
+        if portal_host is not None:
+            sso_redirect_url = portal_host
+
     query = urlencode(
         {
-            "service": service,
+            "service": _sso_service_query_value(service, etsin_app_cookie),
             "redirect_url": f"https://{sso_redirect_url}",
             "language": get_language(),
         }
@@ -74,7 +127,7 @@ def login_etsin():
 
     if sso_is_enabled:
         log.info("SSO is enabled, logging in to Etsin using SSO")
-        login_url = sso_login_url("ETSIN")
+        login_url = sso_login_url("ETSIN", request.cookies.get("etsin_app"))
     elif not sso_is_enabled:
         log.info("SSO is disabled, logging in to Etsin using SAML auth")
         auth = get_saml_auth(request, "_ETSIN")
@@ -127,7 +180,7 @@ def logout_etsin():
 
     if sso_is_enabled:
         log.info("SSO is enabled, logging out from Etsin using SSO")
-        logout_url = sso_logout_url("ETSIN")
+        logout_url = sso_logout_url("ETSIN", request.cookies.get("etsin_app"))
         resp = make_response(redirect(logout_url))
 
         # Delete forced SSO cookie

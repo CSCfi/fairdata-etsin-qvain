@@ -55,6 +55,17 @@ class TestAuth(BaseTest):
                 == "sso_fake_host/login?service=FAKE_SERVICE&redirect_url=https%3A%2F%2Fface_service&language=en"
             )
 
+    def test_sso_login_url_lumi_aif_uses_etsin_environment_domain(self, session_lang_en, app):
+        """Return SSO login URL with Lumi-AIF env-aware redirect domain."""
+        with app.test_request_context():
+            app.config["SERVER_ETSIN_DOMAIN_NAME"] = "etsin.fd-dev.csc.fi"
+            app.config["SERVER_LUMI_AIF_PORTAL_DOMAIN_NAME"] = "lumi-aif"
+            query = sso_login_url("ETSIN", "lumi-aif.etsin")
+            assert (
+                query
+                == "sso_fake_host/login?service=LUMIAIF&redirect_url=https%3A%2F%2Flumi-aif.fd-dev.csc.fi&language=en"
+            )
+
     def test_sso_logout_url(self, session_lang_en, app):
         """Return SSO logout url for service."""
         with app.test_request_context():
@@ -63,6 +74,17 @@ class TestAuth(BaseTest):
             assert (
                 query
                 == "sso_fake_host/logout?service=FAKE_SERVICE&redirect_url=https%3A%2F%2Fface_service&language=en"
+            )
+
+    def test_sso_logout_url_lumi_aif_uses_etsin_environment_domain(self, session_lang_en, app):
+        """Return SSO logout URL with Lumi-AIF env-aware redirect domain."""
+        with app.test_request_context():
+            app.config["SERVER_ETSIN_DOMAIN_NAME"] = "etsin.fd-dev.csc.fi"
+            app.config["SERVER_LUMI_AIF_PORTAL_DOMAIN_NAME"] = "lumi-aif"
+            query = sso_logout_url("ETSIN", "lumi-aif.etsin")
+            assert (
+                query
+                == "sso_fake_host/logout?service=LUMIAIF&redirect_url=https%3A%2F%2Flumi-aif.fd-dev.csc.fi&language=en"
             )
 
     def test_login_etsin_force_sso(self, app, session_lang_en, mocker):
@@ -75,6 +97,21 @@ class TestAuth(BaseTest):
             login_etsin()
             redirect.assert_called_once_with(
                 "sso_fake_host/login?service=ETSIN&redirect_url=https%3A%2F%2Fetsin&language=en"
+            )
+
+    def test_login_etsin_force_sso_lumi_aif_portal(self, app, session_lang_en, mocker):
+        """Return SSO login url for Lumi-AIF portal app."""
+        sso_cookie = http.dump_cookie("sso_authentication", "True")
+        app_cookie = http.dump_cookie("etsin_app", "lumi-aif.etsin")
+        with app.test_request_context(headers={"COOKIE": f"{sso_cookie}; {app_cookie}"}):
+            app.config["SERVER_ETSIN_DOMAIN_NAME"] = "etsin.fd-dev.csc.fi"
+            app.config["SERVER_LUMI_AIF_PORTAL_DOMAIN_NAME"] = "lumi-aif"
+            redirect = mocker.patch(
+                "etsin_finder.views.auth_views.redirect",
+            )
+            login_etsin()
+            redirect.assert_called_once_with(
+                "sso_fake_host/login?service=LUMIAIF&redirect_url=https%3A%2F%2Flumi-aif.fd-dev.csc.fi&language=en"
             )
 
     def test_login_etsin_saml(self, app, session_lang_en, mocker):

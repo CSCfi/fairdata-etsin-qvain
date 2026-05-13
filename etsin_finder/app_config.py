@@ -58,6 +58,7 @@ def _get_test_app_config():
         "SECRET_KEY": "cb1c9f28f16ddd1e41fb47e12d4a73f9ed76d6df93c54f31",
         "SERVER_FAKE_SERVICE_DOMAIN_NAME": "face_service",
         "SERVER_ETSIN_DOMAIN_NAME": "etsin",
+        "SERVER_LUMI_AIF_PORTAL_DOMAIN_NAME": "lumi-aif",
         "SERVER_QVAIN_DOMAIN_NAME": "qvain",
         "SESSION_COOKIE_SAMESITE": "Lax",
         "SESSION_COOKIE_SECURE": True,
