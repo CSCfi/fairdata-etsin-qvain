@@ -655,10 +655,12 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
         return resp, status
 
     def create_dataset_editor_permissions_user(self, cr_id, user, role="editor"):
-        """Get dataset.
+        """Create editor permission for a user on a dataset.
 
         Arguments:
             cr_id (str): The identifier of the dataset.
+            user (str): The user to grant the permission to.
+            role (str): The role to assign. Defaults to "editor".
 
         Returns:
             Metax response.
@@ -670,14 +672,15 @@ class MetaxQvainAPIService(BaseService, ConfigValidationMixin):
             requests.post, req_url, json=data, **self._get_args()
         )
         if not success:
-            log.warning("Failed to get dataset {}".format(cr_id))
+            log.warning(f"Failed to create editor permission for {user} on dataset {cr_id}")
         return resp, status
 
     def delete_dataset_editor_permissions_user(self, cr_id, user):
-        """Get dataset.
+        """Delete editor permission for a user on a dataset.
 
         Arguments:
             cr_id (str): The identifier of the dataset.
+            user (str): The user whose permission to remove.
 
         Returns:
             Metax response.

@@ -179,7 +179,7 @@ class DownloadAPIService(FlaskService, ConfigValidationMixin):
             **args,
         )
         if not success:
-            log.warning(f"Failed to get requests for dataset {dataset}")
+            log.warning(f"Failed to authorize download for dataset {dataset}")
 
         return resp, status
 

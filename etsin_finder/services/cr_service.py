@@ -53,7 +53,7 @@ class MetaxAPIService(FlaskService):
             identifier (str): Catalog record identifier.
 
         Returns:
-            dict: Return the responce from Metax as dict, else None.
+            dict: Return the response from Metax as dict, else None.
 
         """
         url = format_url(self.METAX_GET_CATALOG_RECORD_URL, identifier)
@@ -82,7 +82,7 @@ class MetaxAPIService(FlaskService):
             identifier (str): Catalog record identifier.
 
         Returns:
-            dict: Return the responsce from Metax as dict, else None.
+            dict: Return the response from Metax as dict, else None.
 
         """
         url = format_url(self.METAX_GET_REMOVED_CATALOG_RECORD_URL, identifier)
@@ -112,7 +112,7 @@ def get_catalog_record(cr_id, check_removed_if_not_exist, refresh_cache=False):
 
     Args:
         cr_id (str): Catalog record identifier.
-        check_removed_if_not_exist (bool): Checck if catalog record has been removed if it does not exist.
+        check_removed_if_not_exist (bool): Check if catalog record has been removed if it does not exist.
         refresh_cache (bool, optional): Should the cache be refreshed. Defaults to False.
 
     Returns:
@@ -246,7 +246,7 @@ def get_catalog_record_REMS_identifier(cr):
         cr (dict): A catalog record.
 
     Returns:
-        str: Retruns the REMS identifier for a dataset. If not foyunf then ''.
+        str: Returns the REMS identifier for a dataset. If not found then ''.
 
     """
     return cr.get("rems_identifier", "")
@@ -320,7 +320,7 @@ def _get_cr_from_metax(cr_id, check_removed_if_not_exist):
         check_removed_if_not_exist (bool): -
 
     Returns:
-        dict: Return the responce from Metax as dict, else None.
+        dict: Return the response from Metax as dict, else None.
 
     """
     _metax_api = MetaxAPIService(current_app)

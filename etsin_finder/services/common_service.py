@@ -205,7 +205,7 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
         return resp, status
 
     def get_dataset_editor_permissions_users(self, cr_id):
-        """Get dataset.
+        """Get editor permission users for a dataset.
 
         Arguments:
             cr_id (str): The identifier of the dataset.
@@ -217,7 +217,7 @@ class MetaxCommonAPIService(BaseService, ConfigValidationMixin):
         req_url = format_url(self._METAX_DATASET_EDITOR_PERMISSIONS_USERS, cr_id)
         resp, status, success = make_request(requests.get, req_url, **self._get_args())
         if not success:
-            log.warning("Failed to get dataset {}".format(cr_id))
+            log.warning(f"Failed to get editor permission users for dataset {cr_id}")
         return resp, status
 
     def get_dataset_user_metadata(self, cr_id):
