@@ -146,19 +146,19 @@ describe('Citation styles', () => {
 
     it('should render citation for dataset by a person', () => {
       c(personDataset).should.eq(
-        'Von Sukunimi, E., & Henkilö, T. (2021). Publication title. Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Von Sukunimi, E., & Henkilö, T. (2021). Publication title. Publisher. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should render citation for dataset by an organization', () => {
       c(organizationDataset).should.eq(
-        'Top organization. (2021). Publication title. Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Top organization. (2021). Publication title. Publisher. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should use URL also for capitalized URN:NBN:fi dataset', () => {
       c(capitalizedUrnDataset).should.eq(
-        'Top organization. (2021). Publication title. Publisher. http://urn.fi/urn:nbn:fi:att:d00d'
+        'Top organization. (2021). Publication title. Publisher. https://urn.fi/urn:nbn:fi:att:d00d'
       )
     })
 
@@ -170,20 +170,20 @@ describe('Citation styles', () => {
 
     it('should render citation for first version of dataset', () => {
       c(firstVersionDataset).should.eq(
-        'Top organization. (2021). Publication title (Version 1). Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Top organization. (2021). Publication title (Version 1). Publisher. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should render citation for second version of dataset', () => {
       c(secondVersionDataset).should.eq(
-        'Top organization. (2021). Publication title (Version 2). Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Top organization. (2021). Publication title (Version 2). Publisher. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should use Finnish titles', () => {
       stores.Locale.setLang('fi')
       c(organizationDataset).should.eq(
-        'Pääorganisaatio. (2021). Julkaisun nimi. Julkaisija. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Pääorganisaatio. (2021). Julkaisun nimi. Julkaisija. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
@@ -193,13 +193,13 @@ describe('Citation styles', () => {
           'Kahdeksas, T., Yhdeksäs, T., Kymmenes, T., Yhdestoista, T., Kahdestoista, T., Kolmastoista, T., ' +
           'Neljästoista, T., Viidestoista, T., Kuudestoista, T., Seitsemästoista, T., Kahdeksastoista, T., ' +
           'Yhdeksästoista, T., . . . Kahdeskymmenestoinen, T. ' +
-          '(2021). Publication title. Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
+          '(2021). Publication title. Publisher. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should render citation for dataset published by a suborganization', () => {
       c(publisherSuborganizationDataset).should.eq(
-        'Creator. (2021). Publication title. Top organization, Suborganization. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Creator. (2021). Publication title. Top organization, Suborganization. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
   })
@@ -212,19 +212,19 @@ describe('Citation styles', () => {
 
     it('should render citation for dataset by a person', () => {
       c(personDataset).should.eq(
-        'Von Sukunimi, Etunimi, and Toinen Henkilö. 2021. ”Publication title”. Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Von Sukunimi, Etunimi, and Toinen Henkilö. 2021. ”Publication title”. Publisher. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should render citation for dataset by an organization', () => {
       c(organizationDataset).should.eq(
-        'Top organization. 2021. ”Publication title”. Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Top organization. 2021. ”Publication title”. Publisher. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should use URL also for capitalized URN:NBN:fi dataset', () => {
       c(capitalizedUrnDataset).should.eq(
-        'Top organization. 2021. ”Publication title”. Publisher. http://urn.fi/urn:nbn:fi:att:d00d'
+        'Top organization. 2021. ”Publication title”. Publisher. https://urn.fi/urn:nbn:fi:att:d00d'
       )
     })
 
@@ -236,33 +236,33 @@ describe('Citation styles', () => {
 
     it('should render citation for first version of dataset', () => {
       c(firstVersionDataset).should.eq(
-        'Top organization. 2021. ”Publication title”. Version 1. Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Top organization. 2021. ”Publication title”. Version 1. Publisher. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should render citation for second version of dataset', () => {
       c(secondVersionDataset).should.eq(
-        'Top organization. 2021. ”Publication title”. Version 2. Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Top organization. 2021. ”Publication title”. Version 2. Publisher. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should use Finnish titles', () => {
       stores.Locale.setLang('fi')
       c(organizationDataset).should.eq(
-        'Pääorganisaatio. 2021. ”Julkaisun nimi”. Julkaisija. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Pääorganisaatio. 2021. ”Julkaisun nimi”. Julkaisija. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should use et al for more than 10 creators', () => {
       c(manyCreatorsDataset).should.eq(
         'Eka, Tyyppi, Tyyppi Toka, Tyyppi Kolmas, Tyyppi Neljäs, Tyyppi Viides, Tyyppi Kuudes, ' +
-          'Tyyppi Seitsemäs, et al. 2021. ”Publication title”. Publisher. http://urn.fi/urn:nbn:fi:att:feedc0de'
+          'Tyyppi Seitsemäs, et al. 2021. ”Publication title”. Publisher. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should render citation for dataset published by a suborganization', () => {
       c(publisherSuborganizationDataset).should.eq(
-        'Creator. 2021. ”Publication title”. Top organization, Suborganization. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Creator. 2021. ”Publication title”. Top organization, Suborganization. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
   })
@@ -275,19 +275,19 @@ describe('Citation styles', () => {
 
     it('should render citation for dataset by a person', () => {
       c(personDataset).should.eq(
-        'Von Sukunimi, Etunimi, and Toinen Henkilö. ”Publication title”. Publisher, 2021. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Von Sukunimi, Etunimi, and Toinen Henkilö. ”Publication title”. Publisher, 2021. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should render citation for dataset by an organization', () => {
       c(organizationDataset).should.eq(
-        'Top organization. ”Publication title”. Publisher, 2021. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Top organization. ”Publication title”. Publisher, 2021. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should use URL also for capitalized URN:NBN:fi dataset', () => {
       c(capitalizedUrnDataset).should.eq(
-        'Top organization. ”Publication title”. Publisher, 2021. http://urn.fi/urn:nbn:fi:att:d00d'
+        'Top organization. ”Publication title”. Publisher, 2021. https://urn.fi/urn:nbn:fi:att:d00d'
       )
     })
 
@@ -299,32 +299,32 @@ describe('Citation styles', () => {
 
     it('should render citation for first version of dataset', () => {
       c(firstVersionDataset).should.eq(
-        'Top organization. ”Publication title”. Version 1. Publisher, 2021. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Top organization. ”Publication title”. Version 1. Publisher, 2021. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should render citation for second version of dataset', () => {
       c(secondVersionDataset).should.eq(
-        'Top organization. ”Publication title”. Version 2. Publisher, 2021. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Top organization. ”Publication title”. Version 2. Publisher, 2021. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should use Finnish titles', () => {
       stores.Locale.setLang('fi')
       c(organizationDataset).should.eq(
-        'Pääorganisaatio. ”Julkaisun nimi”. Julkaisija, 2021. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Pääorganisaatio. ”Julkaisun nimi”. Julkaisija, 2021. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should use et al for more than 3 creators', () => {
       c(manyCreatorsDataset).should.eq(
-        'Eka, Tyyppi, et al. ”Publication title”. Publisher, 2021. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Eka, Tyyppi, et al. ”Publication title”. Publisher, 2021. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
 
     it('should render citation for dataset published by a suborganization', () => {
       c(publisherSuborganizationDataset).should.eq(
-        'Creator. ”Publication title”. Top organization, Suborganization, 2021. http://urn.fi/urn:nbn:fi:att:feedc0de'
+        'Creator. ”Publication title”. Top organization, Suborganization, 2021. https://urn.fi/urn:nbn:fi:att:feedc0de'
       )
     })
   })
@@ -337,7 +337,7 @@ describe('Citation styles', () => {
     it('should render citation for dataset by a person', () => {
       c(personDataset).should.eq(
         '@misc{urn:nbn:fi:att:feedc0de,\nauthor = {von Sukunimi, Etunimi and Henkilö, Toinen},\n' +
-          'title = {Publication title},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\n' +
+          'title = {Publication title},\nhowpublished = {\\url{https://urn.fi/urn:nbn:fi:att:feedc0de}},\n' +
           'month = {2},\nyear = {2021},\nnote = {Publisher}\n}'
       )
     })
@@ -345,7 +345,7 @@ describe('Citation styles', () => {
     it('should render citation for dataset by an organization', () => {
       c(organizationDataset).should.eq(
         '@misc{urn:nbn:fi:att:feedc0de,\nauthor = {Top organization},\ntitle = {Publication title},\n' +
-          'howpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\n' +
+          'howpublished = {\\url{https://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\n' +
           'note = {Publisher}\n}'
       )
     })
@@ -353,7 +353,7 @@ describe('Citation styles', () => {
     it('should use URL also for capitalized URN:NBN:fi dataset', () => {
       c(capitalizedUrnDataset).should.eq(
         '@misc{urn:nbn:fi:att:d00d,\nauthor = {Top organization},\ntitle = {Publication title},\n' +
-          'howpublished = {\\url{http://urn.fi/urn:nbn:fi:att:d00d}},\n' +
+          'howpublished = {\\url{https://urn.fi/urn:nbn:fi:att:d00d}},\n' +
           'month = {2},\nyear = {2021},\nnote = {Publisher}\n}'
       )
     })
@@ -371,7 +371,7 @@ describe('Citation styles', () => {
       stores.Locale.setLang('fi')
       c(organizationDataset).should.eq(
         '@misc{urn:nbn:fi:att:feedc0de,\nauthor = {Pääorganisaatio},\ntitle = {Julkaisun nimi},\n' +
-          'howpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\nnote = {Julkaisija}\n}'
+          'howpublished = {\\url{https://urn.fi/urn:nbn:fi:att:feedc0de}},\nmonth = {2},\nyear = {2021},\nnote = {Julkaisija}\n}'
       )
     })
 
@@ -380,7 +380,7 @@ describe('Citation styles', () => {
         '@misc{urn:nbn:fi:att:feedc0de,\nauthor = {Eka, Tyyppi and Toka, Tyyppi and Kolmas, ' +
           'Tyyppi and Neljäs, Tyyppi and Viides, Tyyppi and Kuudes, Tyyppi and Seitsemäs, ' +
           'Tyyppi and Kahdeksas, Tyyppi and Yhdeksäs, Tyyppi and Kymmenes, Tyyppi and others},\n' +
-          'title = {Publication title},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\n' +
+          'title = {Publication title},\nhowpublished = {\\url{https://urn.fi/urn:nbn:fi:att:feedc0de}},\n' +
           'month = {2},\nyear = {2021},\nnote = {Publisher}\n}'
       )
     })
@@ -388,7 +388,7 @@ describe('Citation styles', () => {
     it('should render citation for dataset published by a suborganization', () => {
       c(publisherSuborganizationDataset).should.eq(
         '@misc{urn:nbn:fi:att:feedc0de,\nauthor = {Creator},\ntitle = {Publication title},\n' +
-          'howpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\n' +
+          'howpublished = {\\url{https://urn.fi/urn:nbn:fi:att:feedc0de}},\n' +
           'month = {2},\nyear = {2021},\nnote = {Top organization, Suborganization}\n}'
       )
     })
@@ -396,7 +396,7 @@ describe('Citation styles', () => {
     it('should render citation for draft dataset', () => {
       c(draftDataset).should.eq(
         '@misc{draft,\nauthor = {von Sukunimi, Etunimi and Henkilö, Toinen},\n' +
-          'title = {Publication title},\nhowpublished = {\\url{http://urn.fi/urn:nbn:fi:att:feedc0de}},\n' +
+          'title = {Publication title},\nhowpublished = {\\url{https://urn.fi/urn:nbn:fi:att:feedc0de}},\n' +
           'month = {2},\nyear = {2021},\nnote = {Publisher}\n}'
       )
     })

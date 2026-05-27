@@ -146,25 +146,25 @@ describe('Events page', () => {
     await renderPage()
     tableToObjects(sections['Versions']).should.eql([
       {
-        Identifier: 'http://urn.fi/urn:nbn:fi:att:12345688-4867-47f7-9874-112233445566',
+        Identifier: 'https://urn.fi/urn:nbn:fi:att:12345688-4867-47f7-9874-112233445566',
         Number: '5',
         Title: 'English Title 4',
         Type: 'Older',
       },
       {
-        Identifier: 'http://urn.fi/urn:nbn:fi:att:12345677-4867-47f7-9874-112233445566',
+        Identifier: 'https://urn.fi/urn:nbn:fi:att:12345677-4867-47f7-9874-112233445566',
         Number: '4',
         Title: 'English Title 3',
         Type: 'Older',
       },
       {
-        Identifier: 'http://urn.fi/urn:nbn:fi:att:12345678-4867-47f7-9874-112233445566',
+        Identifier: 'https://urn.fi/urn:nbn:fi:att:12345678-4867-47f7-9874-112233445566',
         Number: '3',
         Title: 'English Title 2',
         Type: 'Older',
       },
       {
-        Identifier: 'http://urn.fi/urn:nbn:fi:att:162e04c5-857b-477c-a452-cd063ee3c44d',
+        Identifier: 'https://urn.fi/urn:nbn:fi:att:162e04c5-857b-477c-a452-cd063ee3c44d',
         Number: '2',
         Title: 'English Title',
         Type: 'Older',

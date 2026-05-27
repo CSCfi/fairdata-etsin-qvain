@@ -8,7 +8,7 @@ describe('idnToLink', () => {
   })
 
   test('should create URN url', () => {
-    idnToLink('urn:nbn:fi:att:d00d').should.eql('http://urn.fi/urn:nbn:fi:att:d00d')
+    idnToLink('urn:nbn:fi:att:d00d').should.eql('https://urn.fi/urn:nbn:fi:att:d00d')
   })
 
   test('should create Reportronic url', () => {
@@ -20,7 +20,7 @@ describe('idnToLink', () => {
   })
 
   test('should create URN url fom capitalized characters', () => {
-    idnToLink('URN:NBN:fi:att:d00d').should.eql('http://urn.fi/urn:nbn:fi:att:d00d')
+    idnToLink('URN:NBN:fi:att:d00d').should.eql('https://urn.fi/urn:nbn:fi:att:d00d')
   })
 
   test('should return HTTP url', () => {

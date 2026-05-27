@@ -1,12 +1,3 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2021 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
 import { useState } from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
@@ -19,9 +10,7 @@ import Modal from '@/components/general/modal'
 import { TransparentLink } from '@/components/general/button'
 
 import { Table, ID, IDLink, Margin } from './common'
-
-const relationIdentifierIsUrl = identifier =>
-  identifier.startsWith('http://') || identifier.startsWith('https://')
+import idnToLink from '@/utils/idnToLink'
 
 const Relations = () => {
   const {
@@ -110,9 +99,9 @@ const Relations = () => {
               {/* Identifier */}
               <td>
                 <span className="sr-only">Identifier:</span>
-                {relationIdentifierIsUrl(single.entity.entity_identifier || '') ? (
+                {idnToLink(single.entity.entity_identifier || '') !== '' ? (
                   <IDLink
-                    href={single.entity.entity_identifier || ''}
+                    href={idnToLink(single.entity.entity_identifier) || ''}
                     rel="noopener noreferrer"
                     target="_blank"
                   >
