@@ -119,11 +119,7 @@ def get_entry_tags(entry_point) -> Optional[List[str]]:
     """Load entry points of the React app from Vite manifest.json."""
     try:
         # See https://vite.dev/guide/backend-integration for build manifest documentation.
-        # Use an absolute path derived from this file location so it works
-        # regardless of the process working directory (host vs docker).
-        repo_root = Path(__file__).resolve().parents[2]
-        manifest_path = repo_root / "frontend" / "build" / ".vite" / "manifest.json"
-        with manifest_path.open() as manifest_file:
+        with open("etsin_finder/frontend/build/.vite/manifest.json") as manifest_file:
             manifest = json.load(manifest_file)
             return render_manifest_tags(
                 manifest, entry_point, prefix="/build/", preload_dynamic_imports=True
