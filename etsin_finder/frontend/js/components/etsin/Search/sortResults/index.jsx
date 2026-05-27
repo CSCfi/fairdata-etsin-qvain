@@ -15,12 +15,10 @@ import { observer } from 'mobx-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSort, faSortAmountUp, faSortAmountDown } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router'
 import Translate from '@/utils/Translate'
-import { useQuery } from '@/components/etsin/general/useQuery'
+import { useQuery, useEtsinSearchNavigate } from '@/components/etsin/general/useQuery'
 
 import { InvertedButton } from '../../general/button'
-import { useStores } from '@/stores/stores'
 
 const RELEVANCE = 'best'
 const DATE_D = '-modified'
@@ -46,7 +44,7 @@ function SortResults() {
   const [isOpen, setOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState(RELEVANCE)
   const query = useQuery()
-  const navigate = useNavigate()
+  const navigateSearch = useEtsinSearchNavigate()
   const listToggle = isOpen ? 'open' : ''
 
   useEffect(() => {
@@ -54,12 +52,6 @@ function SortResults() {
       setSelectedOption(query.get('ordering'))
     }
   }, [query])
-
-  const {
-    Etsin: {
-      Search: { isLoading },
-    },
-  } = useStores()
 
   const handleOrderingClick = item => {
     setSelectedOption(item)
@@ -70,10 +62,8 @@ function SortResults() {
       query.delete('ordering')
     }
     setOpen(false)
-    navigate(`/datasets?${query.toString()}`)
+    navigateSearch(query)
   }
-
-  if (isLoading) return null
 
   return (
     <SortResultsContainer>
@@ -162,6 +152,8 @@ const SelectButton = styled.div`
   align-items: center;
   width: max-content;
   button {
+    background-color: ${p => p.theme.ui.search.sortControl.backgroundColor};
+    font-size: ${p => p.theme.ui.search.sortControl.fontSize};
     position: relative;
     &.open {
       border-radius: 5px;

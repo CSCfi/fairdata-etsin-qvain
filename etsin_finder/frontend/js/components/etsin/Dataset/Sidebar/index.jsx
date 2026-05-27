@@ -2,8 +2,9 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 import { useStores } from '@/stores/stores'
+import LumiAifDataServiceLogoImage from '@/assets/images/LAIF_logo_dark.png'
 
-import { ACCESS_TYPE_URL } from '@/utils/constants'
+import { ACCESS_TYPE_URL, LUMI_AIF_PORTAL_URL } from '@/utils/constants'
 import checkNested from '@/utils/checkNested'
 
 import Agent from '../Agent'
@@ -19,6 +20,8 @@ import VersionChanger from './versionChanger'
 import OtherIdentifiers from './OtherIdentifiers'
 import { includeURNAndDOI } from '@/utils/includeURNAndDOI'
 import ExpandableDatasetInfoItem from '../ExpandableDatasetInfoItem'
+import MaybeExternalLink from '@/components/general/navigation/maybeExternalLink'
+import Image from '@/components/etsin/general/image'
 
 const Sidebar = () => {
   const {
@@ -34,6 +37,8 @@ const Sidebar = () => {
         persistentIdentifier,
         otherIdentifiers,
         actors,
+        remoteResources,
+        resolveDataServiceName,
       },
     },
 
@@ -44,6 +49,27 @@ const Sidebar = () => {
   const catalogPublisherLang = getPreferredLang(catalogPublisher?.name)
   const catalogPublisherHomepage = catalogPublisher?.homepage?.[0]?.url || ''
   const catalogTitle = dataCatalog?.title[catalogPublisherLang]
+  const dataServices = remoteResources
+    ?.map(resource => ({
+      raw: resource?.data_service,
+      name: resolveDataServiceName(resource?.data_service),
+    }))
+    .filter(service => Boolean(service.name))
+  const primaryDataServiceName = dataServices?.[0]?.name
+  const hasLumiAifDataService = dataServices?.some(({ raw, name }) => {
+    const normalizedName = name?.toLowerCase?.()
+    if (normalizedName === 'lumi-aif') {
+      return true
+    }
+
+    if (typeof raw === 'string') {
+      return raw.toLowerCase() === 'lumi-aif' || raw.toLowerCase().includes('lumi-aif')
+    }
+
+    return [raw?.id, raw?.identifier, raw?.url].some(
+      identifier => typeof identifier === 'string' && identifier.toLowerCase().includes('lumi-aif')
+    )
+  })
 
   // Initiate an array with only DOI or URN formatted items:
   const URNandDOIIdentifiers = otherIdentifiers.map(v => v.notation).filter(includeURNAndDOI)
@@ -117,8 +143,12 @@ const Sidebar = () => {
     <SidebarContainer id="sidebar">
       {!isDraft && <VersionChanger />}
       <SidebarArea id="data-catalog-area">
-        {dataCatalog?.logo && (
-          <DatasetInfoItem id="catalog-logo">
+        <DatasetInfoItem
+          id="catalog-publisher"
+          itemTitle="dataset.catalog_publisher"
+          lang={catalogPublisherLang}
+        >
+          {dataCatalog?.logo && (
             <Translate
               component={Logo}
               attributes={{ alt: 'dataset.catalog_alt_text' }}
@@ -126,16 +156,23 @@ const Sidebar = () => {
               file={dataCatalog.logo}
               url={catalogPublisherHomepage}
             />
+          )}
+          {catalogPublisher?.name && (
+            <SidebarInfoText>{getValueTranslation(catalogPublisher.name)}</SidebarInfoText>
+          )}
+        </DatasetInfoItem>
+      </SidebarArea>
+      <SidebarArea id="data-service-area">
+        {primaryDataServiceName && (
+          <DatasetInfoItem id="data-service" itemTitle="dataset.data_service" lang={catalogPublisherLang}>
+            {hasLumiAifDataService && (
+              <LumiAifDataServiceLogoLink to={LUMI_AIF_PORTAL_URL}>
+                <LumiAifDataServiceLogo alt="LUMI-AIF data service logo" file={LumiAifDataServiceLogoImage} />
+              </LumiAifDataServiceLogoLink>
+            )}
+            <SidebarInfoText>{primaryDataServiceName}</SidebarInfoText>
           </DatasetInfoItem>
         )}
-
-        <DatasetInfoItem
-          id="catalog-publisher"
-          itemTitle="dataset.catalog_publisher"
-          lang={catalogPublisherLang}
-        >
-          {catalogPublisher?.name && getValueTranslation(catalogPublisher.name)}
-        </DatasetInfoItem>
       </SidebarArea>
 
       <SidebarArea id="identifier-area">
@@ -317,6 +354,37 @@ const SidebarContainer = styled.div`
 
 const SubjectHeaderLink = styled.a`
   display: block;
+`
+
+const SidebarInfoText = styled.div`
+  margin-top: 0.75rem;
+`
+
+const LumiAifDataServiceLogoLink = styled(MaybeExternalLink).attrs({
+  noPadding: true,
+  noMargin: true,
+})`
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+  margin-top: 0.75rem;
+  background: #fff;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+  transition: none;
+  &:hover,
+  &:focus,
+  &:active {
+    background: #fff;
+    border: 0;
+    box-shadow: none;
+  }
+`
+
+const LumiAifDataServiceLogo = styled(Image)`
+  width: 10rem;
+  max-width: 100%;
 `
 
 export default observer(Sidebar)

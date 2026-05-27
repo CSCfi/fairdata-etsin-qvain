@@ -3,8 +3,7 @@ import { FilterCategory, Section } from './filterSection'
 import styled from 'styled-components'
 import moment from 'moment'
 import DateFormats from '@/components/qvain/utils/date'
-import useQuery from '../../general/useQuery'
-import { useNavigate } from 'react-router'
+import useQuery, { useEtsinSearchNavigate } from '@/components/etsin/general/useQuery'
 import Button from '@/components/general/button'
 import { observer } from 'mobx-react'
 import { useEffect } from 'react'
@@ -69,7 +68,7 @@ function TemporalSection() {
   } = useStores()
 
   const query = useQuery()
-  const navigate = useNavigate()
+  const navigateSearch = useEtsinSearchNavigate()
 
   const temporalStartQueryKey = 'temporal__start_date'
   const temporalEndQueryKey = 'temporal__end_date'
@@ -152,7 +151,7 @@ function TemporalSection() {
       validEnd && query.set(temporalEndQueryKey, validEnd)
     }
 
-    navigate(`/datasets?${query.toString()}`)
+    navigateSearch(query)
   }
 
   const fetchOnEnter = key => {

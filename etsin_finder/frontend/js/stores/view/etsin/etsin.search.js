@@ -108,7 +108,7 @@ class EtsinSearch {
     query.set('filter_language', this.Locale.lang)
 
     const url = `${this.Env.metaxV3Url('datasets')}?${query.toString()}`
-    this.aggregatesUrl = `${this.Env.metaxV3Url('aggregates')}?${query.toString()}`
+    this.aggregatesUrl = `${this.Env.metaxV3Url('aggregates')}?${query.toString()}&expand_data_services=true`
 
     await this.client.abort()
     this.setIsLoading(true)

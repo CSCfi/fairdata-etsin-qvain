@@ -28,6 +28,7 @@ Logo.propTypes = {
 export default Logo
 
 const LogoCont = styled(NavLink)`
+  display: block;
   width: 12em;
 `
 

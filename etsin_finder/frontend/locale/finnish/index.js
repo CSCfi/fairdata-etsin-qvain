@@ -79,6 +79,8 @@ const finnish = {
     access_open: 'Avoin',
     access_rights: 'Saatavuus',
     catalog_publisher: 'Katalogin julkaisija',
+    data_service: 'Datapalvelu',
+    data_services: 'Datapalvelut',
     citation: {
       sidebar: 'Sitaatti / Lähdeviite',
       buttonTitle: 'Kopioi Sitaatti/Lähdeviite',
@@ -124,15 +126,15 @@ const finnish = {
       success: 'Viestin lähettäminen onnistui!',
     },
     contributor: {
-      plrl: 'Muut tekijät',
-      snglr: 'Muu tekijä',
+      other: 'Muut tekijät',
+      one: 'Muu tekijä',
     },
     copy: 'Kopioi',
     copyToClipboard: 'Kopioi leikepöydälle',
     copyToClipboardSuccess: 'Tunniste kopioitu leikepöydälle',
     creator: {
-      plrl: 'Tekijät',
-      snglr: 'Tekijä',
+      other: 'Tekijät',
+      one: 'Tekijä',
     },
     curator: 'Kuraattori',
     data_location: 'Mene haravoituun sijaintiin',
@@ -504,9 +506,10 @@ const finnish = {
   },
   results: {
     resultsFor: 'Tulokset haulle: ',
-    amount: {
-      plrl: '%(amount)s hakutulosta',
-      snglr: '%(amount)s hakutulos',
+    loadingDatasets: 'Ladataan aineistoja',
+    count: {
+      one: '%(count)s hakutulos',
+      other: '%(count)s hakutulosta',
     },
   },
   search,

@@ -14,7 +14,17 @@ import { createGlobalStyle } from 'styled-components'
 import etsinTheme from './theme'
 import Grid from './grid'
 
+const mrEavesFontUrl = `${import.meta.env.BASE_URL}fonts/MrEavesXLModOT/MrEavesXLModOT-Reg.woff2`
+
 const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: 'Mr Eaves XL Mod OT';
+    src: url('${mrEavesFontUrl}') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+  }
+
   /* reset */
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -83,10 +93,11 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
     line-height: 1.5;
     text-align: left;
-    background-color: #fff;
-    font-family: 'Lato', Helvetica, Arial, sans-serif;
+    background-color: ${p => p.theme.color.bgPrimary};
+    font-family: ${p => p.theme.ui.body.fontFamily};
     font-size: 0.92em;
-    color: ${etsinTheme.color.dark};
+    color: ${p => p.theme.color.dark};
+    letter-spacing: ${p => p.theme.ui.body.letterSpacing};
     font-size: 1em;
     @media screen and (min-width: ${etsinTheme.breakpoints.md}) {
       font-size: 1em;
@@ -286,8 +297,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   p, .paragraph {
-    font-family: 'Lato', sans-serif;
-    font-size: 1em;
+    font-family: ${p => p.theme.ui.paragraph.fontFamily};
+    font-size: ${p => p.theme.ui.paragraph.fontSize};
     line-height: calc(1.7 * 1em);
   }
 

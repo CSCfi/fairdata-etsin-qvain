@@ -65,6 +65,7 @@ const NavItem = styled(NavLink)`
   position: relative;
   justify-content: center;
   text-decoration: none;
+  transform: translateY(3px);
   &.active {
     color: ${p => p.theme.color.primary};
     &::after {

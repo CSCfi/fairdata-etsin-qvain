@@ -15,6 +15,6 @@ SidebarArea.defaultProps = {
 }
 
 const Area = styled.dl`
-  background-color: ${p => p.theme.color.bgGreen};
+  background-color: ${p => p.theme.ui.dataset.sidebarArea.backgroundColor};
   padding-bottom: 1.25em;
 `

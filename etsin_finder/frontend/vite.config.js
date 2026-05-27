@@ -25,7 +25,7 @@ export default defineConfig(({ command, mode }) => {
       plugins: {
         styledComponents: {
           displayName: true,
-          ssr: true,
+          ssr: false,
           fileName: true,
           minify: !isDev,
         },

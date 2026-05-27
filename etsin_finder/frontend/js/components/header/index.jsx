@@ -2,6 +2,7 @@
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
+import { LumiAifHeaderBrand } from '@/etsinPortals'
 
 import { FAIRDATA_WEBSITE_URL } from '../../utils/constants'
 import MaybeExternalLink from '../general/navigation/maybeExternalLink'
@@ -13,26 +14,21 @@ import Navi from '../general/navigation/index'
 import MobileNavi from '../general/navigation/mobileNavi'
 import Header, { NaviContainer, Right } from '../general/header'
 import { MobileOnly, DesktopOnly } from '../general/header/mediaHelpers'
-import { Home, Search } from '../../routes'
 import { useStores } from '@/stores/stores'
-
-const routes = [
-  {
-    loadableComponent: Home,
-    label: 'nav.home',
-    path: '/',
-    end: true,
-  },
-  {
-    loadableComponent: Search,
-    label: 'nav.datasets',
-    path: '/datasets',
-    end: false,
-  },
-]
+import { getEtsinNavRoutesForPortal } from '@/etsinPortals/navRoutes'
 
 const QvainLink = styled(MaybeExternalLink)`
   white-space: nowrap;
+`
+
+const BrandLogos = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+`
+
+const EtsinLogoContainer = styled.div`
+  ${p => (p.$lower ? 'margin-top: 0.25rem;' : '')}
 `
 
 const EtsinHeader = () => {
@@ -41,6 +37,7 @@ const EtsinHeader = () => {
     Matomo,
     Locale: { translate, lang, currentLang },
   } = useStores()
+  const routes = getEtsinNavRoutesForPortal(Env.etsinPortal)
   const helpUrl = lang === 'fi' ? FAIRDATA_WEBSITE_URL.ETSIN.FI : FAIRDATA_WEBSITE_URL.ETSIN.EN
 
   const mobileSettingsExtra = (
@@ -55,7 +52,12 @@ const EtsinHeader = () => {
 
   return (
     <Header>
-      <EtsinLogo />
+      <BrandLogos>
+        <EtsinLogoContainer $lower={Env.isLumiAifEtsinPortal}>
+          <EtsinLogo />
+        </EtsinLogoContainer>
+        {Env.isLumiAifEtsinPortal ? <LumiAifHeaderBrand /> : null}
+      </BrandLogos>
       <NaviContainer aria-label="primary">
         <Navi routes={routes} />
       </NaviContainer>

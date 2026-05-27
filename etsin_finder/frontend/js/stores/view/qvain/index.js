@@ -303,6 +303,10 @@ class Qvain extends Resources {
       this.setUseDoi(this.defaultDoi)
     }
 
+    if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.DAAS) {
+      this.setUseDoi(true)
+    }
+
     if (!FILES_DATA_CATALOGS.includes(selectedDataCatalog)) {
       this.Files.reset()
     }
@@ -318,12 +322,16 @@ class Qvain extends Resources {
 
   @action.bound async ensureBasicDataCatalogs() {
     try {
-      // Ensures IDA and ATT catalogs have been loaded to dataCatalogConfigs
+      // Ensures IDA, ATT and DaaS catalogs have been loaded to dataCatalogConfigs
       if (!this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
         return
       }
       const promises = []
-      const catalogIds = [DATA_CATALOG_IDENTIFIER.IDA, DATA_CATALOG_IDENTIFIER.ATT]
+      const catalogIds = [
+        DATA_CATALOG_IDENTIFIER.IDA,
+        DATA_CATALOG_IDENTIFIER.ATT,
+        DATA_CATALOG_IDENTIFIER.DAAS,
+      ]
       for (const catalogId of catalogIds) {
         if (!this.dataCatalogConfigs[catalogId]) {
           promises.push(this.client.get(this.Env.metaxV3Url('dataCatalog', catalogId)))

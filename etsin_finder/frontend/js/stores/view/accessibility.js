@@ -122,6 +122,9 @@ class Accessibility {
     }
 
     const pathname = this.Env.history.location.pathname
+    if (this.Env.etsinPortal.homeRouteIsSearch && pathname === '/') {
+      return 'datasets'
+    }
     for (const [matchLocation, matcher] of etsinLocationMatchers) {
       if (matcher.test(pathname)) {
         location = matchLocation
@@ -132,7 +135,8 @@ class Accessibility {
   }
 
   setEtsinPageTitle(name) {
-    document.title = `${name} - etsin.fairdata.fi`
+    const site = this.Env.etsinPortal.site
+    document.title = `${name} - ${site}`
   }
 
   setQvainPageTitle(name) {

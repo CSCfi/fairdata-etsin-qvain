@@ -26,7 +26,7 @@ import Layout from './layout'
 import '../fairdata-ui/footer.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
-import etsinTheme from './styles/theme'
+import { getThemeByApp } from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
 
 let Env = new EnvClass()
@@ -104,7 +104,7 @@ const App = () => {
   return (
     <div className="app">
       <StoresProvider store={stores}>
-        <ThemeProvider theme={etsinTheme}>
+        <ThemeProvider theme={getThemeByApp(Env.app)}>
           <>
             <GlobalStyle />
             <Layout />

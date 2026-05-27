@@ -1,5 +1,5 @@
+import { DATA_CATALOG_IDENTIFIER, ENTITY_TYPE } from '@/utils/constants'
 import { format, parseISO as parseDateISO } from 'date-fns'
-import { ENTITY_TYPE } from '@/utils/constants'
 
 class Adapter {
   constructor(Auth) {
@@ -148,7 +148,9 @@ class Adapter {
       title: value.title,
       description: this.getSingleTranslation(value.description),
       use_category: this.refdataV3ToV2(value.use_category),
+      data_service: value.data_service,
       file_type: this.refdataV3ToV2(value.file_type),
+      file_size: value.byte_size ?? value.file_size,
       access_url: {
         identifier: value.access_url || undefined,
       },
@@ -211,6 +213,8 @@ class Adapter {
 
   convertV3ToV2(dataset) {
     // Convert Metax V3 object to V2-style input object.
+    const dataCatalogIdentifier = dataset.data_catalog?.id || dataset.data_catalog
+    const isDaas = dataCatalogIdentifier === DATA_CATALOG_IDENTIFIER.DAAS
     const d = {
       sources: this.Auth.userName === dataset.metadata_owner?.user ? ['creator'] : ['project'],
       id: dataset.id,
@@ -232,7 +236,8 @@ class Adapter {
         spatial: this.spatialV3ToV2(dataset.spatial),
         relation: this.relationV3ToV2(dataset.relation),
         temporal: this.temporalV3ToV2(dataset.temporal),
-        remote_resources: this.remoteResourceV3ToV2(dataset.remote_resources),
+        remote_resources: isDaas ? [] : this.remoteResourceV3ToV2(dataset.remote_resources),
+        daas_resources: isDaas ? this.remoteResourceV3ToV2(dataset.remote_resources) : [],
         actors: this.actorV3ToV2(dataset.actors), // needs v3 actors store
         provenance: this.provenanceV3ToV2(dataset.provenance),
         projects: dataset.projects, // shortcut to use projects as is
@@ -369,7 +374,9 @@ class Adapter {
       title: this.removeMissingTranslations(value.title),
       description: this.removeMissingTranslations({ en: value.description }),
       use_category: this.refdataV2ToV3(value.use_category),
+      data_service: value.data_service,
       file_type: this.refdataV2ToV3(value.file_type),
+      byte_size: value.byte_size ?? value.file_size,
       access_url: value.access_url?.identifier,
       download_url: value.download_url?.identifier,
     }
@@ -377,6 +384,7 @@ class Adapter {
 
   convertQvainV2ToV3(dataset, { isNewVersion = false } = {}) {
     // Convert Qvain front->backend V2 format to Metax V3 format
+    const isDaas = dataset.data_catalog === DATA_CATALOG_IDENTIFIER.DAAS
     const d = {
       id: dataset.original?.id,
       data_catalog: dataset.data_catalog,
@@ -393,7 +401,9 @@ class Adapter {
       provenance: this.provenanceV2ToV3(dataset.provenance),
       relation: this.relationV2ToV3(dataset.relation),
       temporal: this.temporalV2ToV3(dataset.temporal),
-      remote_resources: this.remoteResourceV2ToV3(dataset.remote_resources),
+      remote_resources: this.remoteResourceV2ToV3(
+        isDaas ? dataset.daas_resources || dataset.remote_resources : dataset.remote_resources
+      ),
       actors: dataset.actors, // conversion done in actors store
       projects: dataset.projects,
       cumulative_state: dataset.cumulative_state,

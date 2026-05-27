@@ -10,6 +10,7 @@ import { HelpField } from '@/components/qvain/general/modal/form'
 import IdaSvg from '@/assets/images/data-ida.svg'
 import AttSvg from '@/assets/images/data-remote.svg'
 import PasSvg from '@/assets/images/data-pas.svg'
+import DaasSvg from '@/assets/images/Daas-icon.svg'
 import CatalogButton from './CatalogButton'
 import DataCatalogError from './DataCatalogError'
 
@@ -72,6 +73,8 @@ PasDataCatalog.displayName = 'PasDataCatalog'
 
 const BasicDataCatalog = observer(() => {
   const {
+    Auth: { hasRightsToDaas },
+
     Qvain: {
       setDataCatalog,
       isDataCatalogDecided,
@@ -97,6 +100,12 @@ const BasicDataCatalog = observer(() => {
     !isDataCatalogDecided && dataCatalog === DATA_CATALOG_IDENTIFIER.ATT
       ? setDataCatalog(undefined)
       : setDataCatalog(DATA_CATALOG_IDENTIFIER.ATT)
+
+  const daasOnClick = () =>
+    !isDataCatalogDecided && dataCatalog === DATA_CATALOG_IDENTIFIER.DAAS
+      ? setDataCatalog(undefined)
+      : setDataCatalog(DATA_CATALOG_IDENTIFIER.DAAS)
+
 
   if (basicDataCatalogsError) {
     return <DataCatalogError />
@@ -129,6 +138,18 @@ const BasicDataCatalog = observer(() => {
         >
           <Translate content="qvain.sections.dataOrigin.buttons.att.description" />
         </Translate>
+        {hasRightsToDaas && <Translate 
+          id="daas-catalog-btn" 
+          onClick={daasOnClick}
+          component={CatalogButton} 
+          image={DaasSvg} 
+          attributes={{ title: 'qvain.sections.dataOrigin.buttons.daas.title' }} 
+          selected={dataCatalog === DATA_CATALOG_IDENTIFIER.DAAS} 
+          disabled={isDataCatalogDecided && dataCatalog !== DATA_CATALOG_IDENTIFIER.DAAS} 
+          cy="data-source-daas"
+        >
+          <Translate content="qvain.sections.dataOrigin.buttons.daas.description" />
+        </Translate>}
       </ButtonContainer>
       <HelpField>
         <Translate content="qvain.sections.dataOrigin.infoText" />

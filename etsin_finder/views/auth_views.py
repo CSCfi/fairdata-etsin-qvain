@@ -27,7 +27,6 @@ auth_views = Blueprint("auth_views", __name__)
 
 
 LUMI_AIF_ETSIN_APP_COOKIE = "lumi-aif.etsin"
-LUMI_AIF_SSO_SERVICE = "LUMIAIF"
 LUMI_AIF_SSO_REDIRECT_DOMAIN_CONFIG = "SERVER_LUMI_AIF_PORTAL_DOMAIN_NAME"
 LUMI_AIF_SSO_REDIRECT_DEFAULT_DOMAIN = "lumi-aif"
 
@@ -47,6 +46,7 @@ def get_lumi_aif_redirect_domain(app_config):
 
 
 # etsin_app cookie value -> function(app_config) returning SSO redirect host (no scheme).
+# Keep keys in sync with frontend getEtsinPortalConfig / branded Etsin portals.
 ETSIN_SSO_PORTAL_REDIRECT_RESOLVERS = {
     LUMI_AIF_ETSIN_APP_COOKIE: get_lumi_aif_redirect_domain,
 }
@@ -58,13 +58,6 @@ def _resolve_etsin_sso_redirect_host(app_config, etsin_app_cookie):
         return None
     resolver = ETSIN_SSO_PORTAL_REDIRECT_RESOLVERS.get(etsin_app_cookie)
     return resolver(app_config) if resolver else None
-
-
-def _sso_service_query_value(service, etsin_app_cookie):
-    """SSO IdP `service` query parameter; may differ from internal service key for Etsin portals."""
-    if service == "ETSIN" and etsin_app_cookie == LUMI_AIF_ETSIN_APP_COOKIE:
-        return LUMI_AIF_SSO_SERVICE
-    return service
 
 
 def sso_login_url(service, etsin_app_cookie=None):
@@ -80,7 +73,7 @@ def sso_login_url(service, etsin_app_cookie=None):
 
     query = urlencode(
         {
-            "service": _sso_service_query_value(service, etsin_app_cookie),
+            "service": service,
             "redirect_url": f"https://{sso_redirect_url}",
             "language": get_language(),
         }
@@ -102,7 +95,7 @@ def sso_logout_url(service, etsin_app_cookie=None):
 
     query = urlencode(
         {
-            "service": _sso_service_query_value(service, etsin_app_cookie),
+            "service": service,
             "redirect_url": f"https://{sso_redirect_url}",
             "language": get_language(),
         }

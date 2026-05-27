@@ -17,10 +17,11 @@ import {
   optionsToModels,
   getCurrentOption,
 } from '@/components/qvain/utils/select'
-import { UseCategory, FileType } from '@/stores/view/qvain/qvain.externalResources'
+import { UseCategory, FileType, DataService } from '@/stores/view/qvain/qvain.externalResources'
 import { useStores } from '@/stores/stores'
 import AbortClient from '@/utils/AbortClient'
 import TranslationTab from '@/components/qvain/general/V3/tab/TranslationTab.v3'
+import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 
 export const ExternalFileFormBase = () => {
   const {
@@ -31,14 +32,17 @@ export const ExternalFileFormBase = () => {
         inEdit: externalResource,
         setUseCategory,
         setFileType,
+        setDataService,
         setTitleTranslation,
       },
       ReferenceData: { getOptions },
+      dataCatalogConfigs,
     },
   } = useStores()
 
   const [useCategoryOptions, setUseCategoryOptions] = useState([])
-  const [useFileTypeOptions, setFileTypeOptions] = useState([])
+  const [fileTypeOptions, setFileTypeOptions] = useState([])
+  const [dataServiceOptions, setDataServiceOptions] = useState([])
 
   // Title translation tab
   const [language, setLanguage] = useState(lang)
@@ -57,6 +61,13 @@ export const ExternalFileFormBase = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    const attConfig = dataCatalogConfigs[DATA_CATALOG_IDENTIFIER.ATT]
+    const services = attConfig?.data_services || []
+    const opts = services.map(service => DataService(service.pref_label, service.id))
+    setDataServiceOptions(opts)
+  }, [dataCatalogConfigs])
 
   return (
     <>
@@ -106,10 +117,10 @@ export const ExternalFileFormBase = () => {
           component={Select}
           inputId="fileTypeInput"
           name="fileType"
-          options={useFileTypeOptions}
+          options={fileTypeOptions}
           clearable
           isDisabled={readonly}
-          value={getCurrentOption(FileType, useFileTypeOptions, externalResource.fileType)}
+          value={getCurrentOption(FileType, fileTypeOptions, externalResource.fileType)}
           onChange={val => onChange(setFileType)(val)}
           getOptionLabel={getOptionLabel(FileType, lang)}
           getOptionValue={getOptionValue(FileType)}
@@ -119,6 +130,46 @@ export const ExternalFileFormBase = () => {
         />
       </FieldGroup>
 
+      <FieldGroup>
+        <FieldWrapper>
+          <Title htmlFor="fileSizeInput">
+            <Translate content="qvain.files.external.form.fileSize.label" />
+          </Title>
+          <Translate
+            component={FieldInput}
+            type="text"
+            id="fileSizeInput"
+            value={externalResource.fileSize}
+            onChange={action(event => {
+              externalResource.fileSize = event.target.value
+            })}
+            attributes={{ placeholder: 'qvain.files.external.form.fileSize.placeholder' }}
+          />
+        </FieldWrapper>
+        <Translate component={InfoText} content="qvain.files.external.form.fileSize.infoText" />
+      </FieldGroup>
+      {dataServiceOptions.length > 0 && (
+        <FieldGroup>
+          <Title htmlFor="dataServiceInput">
+            <Translate content="qvain.files.daasCatalog.form.dataService.label" />
+          </Title>
+          <Translate
+            component={Select}
+            inputId="dataServiceInput"
+            name="dataService"
+            options={dataServiceOptions}
+            clearable
+            isDisabled={readonly}
+            value={getCurrentOption(DataService, dataServiceOptions, externalResource.dataService)}
+            onChange={val => onChange(setDataService)(val)}
+            getOptionLabel={getOptionLabel(DataService, lang)}
+            getOptionValue={getOptionValue(DataService)}
+            attributes={{
+              placeholder: 'qvain.files.daasCatalog.form.dataService.placeholder',
+            }}
+          />
+        </FieldGroup>
+      )}
       <FieldGroup>
         <FieldWrapper>
           <Title htmlFor="accessUrlInput">

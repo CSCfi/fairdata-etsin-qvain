@@ -40,7 +40,7 @@ const Container = styled.div``
 
 const Title = styled.h1`
   word-break: break-word;
-  color: ${p => p.theme.color.superdarkgray};
+  color: ${p => p.theme.ui.dataset.title.headingColor};
 `
 
 const Tags = styled.span`
@@ -58,11 +58,11 @@ const Tags = styled.span`
 const Label = styled.div`
   display: inline-block;
   letter-spacing: 0;
-  color: ${p => p.theme.color.dark};
+  color: ${p => p.theme.ui.dataset.title.labelColor};
   line-height: 1.6;
   margin-right: 0.5em;
   padding: 0.2em 0.9em;
-  background-color: #e0e0e0;
+  background-color: ${p => p.theme.ui.dataset.title.labelBackground};
   border-radius: 1em;
   max-width: max-content;
 `

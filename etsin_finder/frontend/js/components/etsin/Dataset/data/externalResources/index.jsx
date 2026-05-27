@@ -16,6 +16,7 @@ import { faFile } from '@fortawesome/free-solid-svg-icons'
 import Translate from '@/utils/Translate'
 
 import buildColumns from '@/utils/buildColumns'
+import sizeParse from '@/utils/sizeParse'
 import { useStores } from '@/stores/stores'
 import { Header, HeaderTitle, HeaderStats } from '../common/dataHeader'
 import Info from '../info'
@@ -25,7 +26,7 @@ import withCustomProps from '@/utils/withCustomProps'
 const ExternalResources = () => {
   const {
     Etsin: {
-      EtsinDataset: { remoteResources, inInfo, setInInfo },
+      EtsinDataset: { remoteResources, inInfo, setInInfo, resolveDataServiceName },
     },
     Locale: { getValueTranslation },
   } = useStores()
@@ -34,17 +35,29 @@ const ExternalResources = () => {
     return null
   }
 
+  const normalizeUrl = value => (typeof value === 'string' ? value : value?.identifier)
+  const getResourceName = resource =>
+    getValueTranslation(resource.title) ||
+    normalizeUrl(resource.access_url) ||
+    normalizeUrl(resource.download_url) ||
+    resource.identifier ||
+    '-'
+
   const totalCount = remoteResources.length
-  const accessUrls = new Set(remoteResources.map(resource => resource.access_url).filter(v => v))
-  const hasAccess = accessUrls.size > 0
-  const hasDownload = !!remoteResources.find(resource => resource.download_url)
+  const hasSize = !!remoteResources.some(resource => resource.byte_size ?? resource.file_size)
+  // Hide data service from the remote resources table to reduce visual noise.
+  // (The data service is still available in the dataset info modal.)
+  const hasDataService = false
+  const dataServiceTitle = resolveDataServiceName(inInfo?.data_service)
 
   const infoProps = inInfo && {
     open: true,
-    name: getValueTranslation(inInfo.title),
+    name: getResourceName(inInfo),
     description: inInfo.description ? getValueTranslation(inInfo.description) : null,
-    accessUrl: inInfo.access_url,
-    downloadUrl: inInfo.download_url,
+    size: sizeParse(inInfo.byte_size ?? inInfo.file_size),
+    dataService: dataServiceTitle,
+    accessUrl: normalizeUrl(inInfo.access_url),
+    downloadUrl: normalizeUrl(inInfo.download_url),
     category: getValueTranslation(inInfo.use_category?.pref_label),
     type: inInfo.file_type,
     checksum: inInfo.checksum,
@@ -62,13 +75,13 @@ const ExternalResources = () => {
         </HeaderStats>
       </Header>
       {inInfo && <Info {...infoProps} />}
-      <Grid showAccess={hasAccess} hasDownload={hasDownload}>
+      <Grid hasSize={hasSize} hasDataService={hasDataService}>
         {remoteResources.map(resource => (
           <ResourceItem
-            key={`resource-${resource.identifier}-${getValueTranslation(resource.title)}`}
+            key={`resource-${resource.identifier}-${getResourceName(resource)}`}
             resource={resource}
-            hideAccess={!hasAccess}
-            noButtons={!hasAccess && !hasDownload}
+            hideSize={!hasSize}
+            hideDataService={!hasDataService}
           />
         ))}
       </Grid>
@@ -76,17 +89,21 @@ const ExternalResources = () => {
   )
 }
 
-const gridColumns = ({ showAccess, hasDownload, mobile }) => {
-  const columns = [['name', '1fr']]
-  if (!mobile) {
-    columns.push(['info', 'min-content'])
+const gridColumns = ({ hasSize, hasDataService, mobile }) => {
+  // Make the name column slightly narrower so the actions area remains usable
+  // even when the name contains long URLs.
+  const columns = [['name', 'minmax(8rem, 1fr)']]
+  if (mobile) {
+    columns.push(['actions', 'min-content'])
+    return buildColumns(columns)
   }
-  if (showAccess) {
-    columns.push(['access', '11rem'])
+  if (hasSize) {
+    columns.push(['size', 'minmax(6rem, 8rem)'])
   }
-  if (hasDownload) {
-    columns.push(['download', '7rem'])
+  if (hasDataService) {
+    columns.push(['dataService', 'minmax(8rem, 12rem)'])
   }
+  columns.push(['actions', 'min-content'])
   return buildColumns(columns)
 }
 

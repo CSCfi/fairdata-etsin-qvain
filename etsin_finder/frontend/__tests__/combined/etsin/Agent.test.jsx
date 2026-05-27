@@ -3,9 +3,11 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import etsinTheme from '@/styles/theme'
+import { getThemeByApp } from '@/styles/theme'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
 import Agent from '@/components/etsin/Dataset/Agent'
+import { LUMI_AIF_ETSIN_APP_COOKIE } from '@/utils/lumiAifEtsinSearch'
 
 const stores = buildStores()
 
@@ -56,6 +58,15 @@ const renderAgent = agent =>
     </ThemeProvider>
   )
 
+const renderAgentWithTheme = (agent, theme) =>
+  render(
+    <ThemeProvider theme={theme}>
+      <StoresProvider store={stores}>
+        <Agent agent={agent} />
+      </StoresProvider>
+    </ThemeProvider>
+  )
+
 describe('Agent', () => {
   describe('Person', () => {
     it('should render person pref_label and show tooltip', async () => {
@@ -79,6 +90,21 @@ describe('Agent', () => {
       expect(within(tooltip).getByText('Organization')).toBeInTheDocument()
       expect(within(tooltip).getByText('Organization sub')).toBeInTheDocument()
       expect(within(tooltip).getByText('Organization subsub')).toBeInTheDocument()
+    })
+
+    it('should keep agent link visible and use selected background in LUMI theme', async () => {
+      renderAgentWithTheme(orgAgent, getThemeByApp(LUMI_AIF_ETSIN_APP_COOKIE))
+
+      const link = screen.getByRole('link', { name: 'Some organization' })
+      expect(window.getComputedStyle(link).color).toMatch(
+        /#2c6789|rgb\(44,\s*103,\s*137\)|#025b96|rgb\(2,\s*91,\s*150\)/
+      )
+
+      await userEvent.click(link)
+
+      expect(window.getComputedStyle(link).backgroundColor).toMatch(
+        /#2c6789|rgb\(44,\s*103,\s*137\)/
+      )
     })
   })
 })

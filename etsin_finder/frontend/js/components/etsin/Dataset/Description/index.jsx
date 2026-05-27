@@ -24,6 +24,7 @@ const Description = ({ id }) => {
         identifier,
         isRemoved,
         isHarvested,
+        dataServices,
         fileTypes,
         creators,
         contributors,
@@ -114,6 +115,10 @@ const Description = ({ id }) => {
             {datasetMetadata.description && (
               <CustomMarkdown>{getValueTranslation(datasetMetadata.description)}</CustomMarkdown>
             )}
+          </DatasetInfoItem>
+
+          <DatasetInfoItem itemTitle={'dataset.data_services'}>
+            {formatDatasetInfoArray(dataServices)}
           </DatasetInfoItem>
 
           <DatasetInfoItem itemTitle={'dataset.file_types'}>

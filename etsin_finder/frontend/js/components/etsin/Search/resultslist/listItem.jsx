@@ -75,7 +75,7 @@ const SearchListItem = ({ item }) => {
               )}
             </ErrorBoundary>
             <ErrorBoundary>
-              <p lang={lang}>{shortenDescription()}</p>
+              <p className="description" lang={lang}>{shortenDescription()}</p>
             </ErrorBoundary>
           </ContentBox>
         </Link>
@@ -113,6 +113,7 @@ const ItemHeader = styled.div`
   }
   .title {
     color: ${props => props.theme.color.primary};
+    font-size: ${p => p.theme.ui.search.resultListItemTitle.fontSize};
     margin-bottom: 0.5em;
     margin-right: 1em;
     line-height: 1.5em;
@@ -125,6 +126,9 @@ const WrapperDivRight = styled.div`
 
 const Item = styled.article`
   margin-bottom: 1.3em;
+  .description {
+    font-size: 1em;
+  }
   a {
     color: inherit;
     text-decoration: none;

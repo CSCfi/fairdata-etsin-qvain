@@ -19,9 +19,21 @@ import TitleContainer from './TitleContainer'
 import withCustomProps from '@/utils/withCustomProps'
 
 const BackButton = styled(NavLink)`
-  color: ${props => props.theme.color.primary};
-  padding: 0;
+  background-color: ${p => p.theme.ui.dataset.backButton.backgroundColor};
+  color: ${p => p.theme.ui.dataset.backButton.color};
+  padding: ${p => p.theme.ui.dataset.backButton.padding};
+  border-radius: ${p => p.theme.ui.dataset.backButton.borderRadius};
+  border: ${p => p.theme.ui.dataset.backButton.border};
+  display: inline-flex;
+  align-items: center;
+  font-weight: ${p => p.theme.ui.dataset.backButton.fontWeight};
+  text-decoration: none;
   margin: 0 0 0.5em 0;
+  &:hover,
+  &:focus {
+    background-color: ${p => p.theme.ui.dataset.backButton.hoverBackgroundColor};
+    color: ${p => p.theme.ui.dataset.backButton.hoverColor};
+  }
 `
 
 const Dataset = () => {
@@ -102,21 +114,21 @@ function DatasetView() {
     Etsin: {
       EtsinDataset: { isDraft, draftInfotext },
     },
-    Env: { history: { location }, getEtsinUrl }
+    Env: { history: { location }, getEtsinUrl, etsinSearchPath },
   } = useStores()
 
   const navigateBack = () => {
     if (Accessibility.previousLocation && location?.key !== "default") {
       return Accessibility.previousLocation
     } else {
-      return getEtsinUrl("/datasets")
+      return getEtsinUrl(etsinSearchPath)
     }
   }
 
   return (
     <div>
       <CitationModal />
-      <article className="container regular-row">
+      <DatasetPanel className="container regular-row">
         <div className="row">
           <div className="col-12">
             <StateInfo />
@@ -151,10 +163,18 @@ function DatasetView() {
             </ErrorBoundary>
           </MarginAfter>
         </div>
-      </article>
+      </DatasetPanel>
     </div>
   )
 }
+
+const DatasetPanel = styled.article`
+  background-color: ${p => p.theme.color.white};
+  padding: 1.5rem;
+  margin: 0.75rem auto;
+  width: calc(100% - 1.5rem);
+  border-radius: ${p => p.theme.ui.dataset.panel.borderRadius};
+`
 
 const MarginAfter = styled.div`
   margin: 0.8em 0 1em 0;

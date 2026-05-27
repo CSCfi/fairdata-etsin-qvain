@@ -245,6 +245,73 @@ class EtsinDatasetV3 {
     return null
   }
 
+  @computed get dataCatalogDataServices() {
+    return this.dataCatalog?.data_services || []
+  }
+
+  @computed get dataServiceLabelByIdentifier() {
+    return this.dataCatalogDataServices.reduce((labelByIdentifier, service) => {
+      const label = this.Locale.getValueTranslation(service?.pref_label)
+      if (!label) {
+        return labelByIdentifier
+      }
+
+      const identifier = service.id?.trim()
+      if (identifier) {
+        labelByIdentifier.set(identifier, label)
+      }
+      return labelByIdentifier
+    }, new Map())
+  }
+
+  resolveDataServiceName = dataService => {
+    if (!dataService) {
+      return null
+    }
+
+    if (typeof dataService === 'string') {
+      const normalizedIdentifier = dataService.trim()
+      if (!normalizedIdentifier) {
+        return null
+      }
+
+      return this.dataServiceLabelByIdentifier.get(normalizedIdentifier) || normalizedIdentifier
+    }
+
+    const translatedLabel = this.Locale.getValueTranslation(dataService.pref_label)
+    if (translatedLabel) {
+      return translatedLabel
+    }
+
+    const identifier = dataService?.id
+    if (!identifier) {
+      return null
+    }
+
+    const normalizedIdentifier = identifier.trim()
+    return this.dataServiceLabelByIdentifier.get(normalizedIdentifier) || normalizedIdentifier
+  }
+
+  @computed get dataServices() {
+    if (!this.hasRemoteResources) {
+      return null
+    }
+
+    const services = this.dataset.remote_resources.reduce((serviceSet, resource) => {
+      const dataService = this.resolveDataServiceName(resource?.data_service)
+
+      if (dataService) {
+        serviceSet.add(dataService)
+      }
+
+      return serviceSet
+    }, new Set())
+
+    const dataServices = [...services].sort((a, b) => a.localeCompare(b))
+
+    return dataServices.length ? dataServices : null
+  }
+
   @computed get hasData() {
     if (
       (!this.hasFiles && !this.hasRemoteResources) ||

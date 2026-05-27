@@ -15,6 +15,8 @@ import RouterStore from '@/utils/RouterStore'
 import Flags from './env.flags'
 
 import { getCookieValue } from '@/utils/cookies'
+import { getEtsinPortalConfig } from '@/etsinPortals/registry'
+import { etsinSearchPathname } from '@/utils/lumiAifEtsinSearch'
 import urls from '@/utils/urls'
 
 async function importValuesAsync() {
@@ -101,6 +103,28 @@ class Env {
   @computed
   get isEtsin() {
     return this.app !== 'qvain'
+  }
+
+  /** Branded Etsin portal config derived from etsin_app cookie (default Fairdata Etsin when unknown). */
+  @computed
+  get etsinPortal() {
+    return getEtsinPortalConfig(this.app)
+  }
+
+  @computed
+  get isBrandedEtsinPortal() {
+    return this.etsinPortal.id !== 'default'
+  }
+
+  /** True only for the LUMI-AIF portal (not other future branded portals). */
+  @computed
+  get isLumiAifEtsinPortal() {
+    return this.etsinPortal.id === 'lumi-aif'
+  }
+
+  @computed
+  get etsinSearchPath() {
+    return etsinSearchPathname(this.app)
   }
 
   @computed

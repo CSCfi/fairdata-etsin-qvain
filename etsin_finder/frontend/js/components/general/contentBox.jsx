@@ -16,6 +16,7 @@ const ContentBox = styled.div`
   overflow-x: hidden;
   padding: 1.4em;
   border: 2px solid ${props => props.theme.color.lightgray};
+  background-color: ${p => p.theme.ui.contentBox.backgroundColor};
   word-wrap: break-word;
   word-break: break-word;
   hyphens: auto;

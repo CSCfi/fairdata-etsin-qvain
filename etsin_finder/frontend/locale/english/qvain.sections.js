@@ -23,6 +23,10 @@ const sections = {
           description: 'Dataset is stored in Digital Preservation Service',
         },
       },
+      daas: {
+        title: 'Dataset-as-a-Service',
+        description: 'Choose "Dataset-as-a-Service" if the data is stored in Dataset-as-a-Service',
+      },
     },
     infoText:
       'Note! Once the dataset has been saved (drafted/published), you cannot change the Data Origin any more.',

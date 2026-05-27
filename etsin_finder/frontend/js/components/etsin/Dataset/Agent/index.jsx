@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 
-import etsinTheme from '@/styles/theme'
 import { TransparentLink } from '@/components/etsin/general/button'
 import PopUp from '@/components/etsin/general/popup'
 import PopUpContent from './PopUpContent'
@@ -54,6 +53,7 @@ const Agent = ({ agent, first, inline, popupAlign }) => {
           role="tooltip"
         >
           <InlineTransparentLink
+            className={popUpOpen ? 'active' : ''}
             noMargin
             noPadding
             href="#0"
@@ -70,7 +70,15 @@ const Agent = ({ agent, first, inline, popupAlign }) => {
 
 const InlineTransparentLink = styled(TransparentLink)`
   display: inline;
-  color: ${etsinTheme.color.linkColorUIV2};
+  color: ${p => p.theme.ui.dataset.agent.linkColor};
+  border-radius: 0.2em;
+  padding: 0.1em 0.25em;
+  &.active {
+    background-color: ${p => p.theme.ui.dataset.agent.rowHoverBackground};
+    color: ${p => p.theme.ui.dataset.agent.rowHoverColor};
+    border: ${p => p.theme.ui.dataset.agent.rowHoverBorder};
+    text-decoration: none;
+  }
 `
 
 Agent.defaultProps = {

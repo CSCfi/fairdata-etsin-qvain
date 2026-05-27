@@ -258,6 +258,28 @@ const files = {
       addButton: 'Lisää ulkoinen lähde',
     },
   },
+  daasCatalog: {
+    title: 'Dataset-as-a-service lähteet',
+    noItems: 'Tiedostoja ei ole lisätty',
+    modal: {
+      title: {
+        add: 'Lisää lähde',
+        edit: 'Muokkaa lähdettä',
+      },
+      buttons: {
+        save: 'Lisää lähde',
+        editSave: 'Vahvista muutokset',
+        cancel: 'Peru',
+      },
+      addButton: 'Lisää lähde',
+    },
+    form: {
+      dataService: {
+        label: 'Datapalvelu',
+        placeholder: 'Valitse datapalvelu',
+      },
+    },
+  },
   external: {
     title: 'Ulkoiset tiedostot',
     infoText: `Määritä tiedostolle otsikko, käyttökategoria (alasvetovalikosta),
@@ -287,6 +309,12 @@ const files = {
       fileType: {
         label: 'Tiedostotyyppi',
         placeholder: 'Valitse vaihtoehto',
+      },
+      fileSize: {
+        label: 'Datan koko',
+        placeholder: 'Tiedoston koko tavuina',
+        infoText:
+          'Datakokonaisuuden koko lähdepalvelussa. Voit myös käyttää KB-, MB-, GB-, TB-lyhenteitä.',
       },
       accessUrl: {
         label: 'Sivun URL',

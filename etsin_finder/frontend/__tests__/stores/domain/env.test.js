@@ -65,6 +65,19 @@ describe('Env', () => {
     Env.isEtsin.should.be.true
   })
 
+  test('when accessing computed property etsinSearchPath with default app, should be /datasets', () => {
+    Env.etsinSearchPath.should.eql('/datasets')
+  })
+
+  test('when accessing computed property isLumiAifEtsinPortal with default app, should be false', () => {
+    Env.isLumiAifEtsinPortal.should.be.false
+  })
+
+  test('when default app, isBrandedEtsinPortal is false and etsinPortal is default', () => {
+    Env.isBrandedEtsinPortal.should.be.false
+    Env.etsinPortal.id.should.eql('default')
+  })
+
   test('should set history to new instance of RouterStore', () => {
     expect(Env.history instanceof RouterStore).toBe(true)
   })
@@ -137,6 +150,29 @@ describe('Env', () => {
 
     test('when accessing computed property isQvain, should be true', () => {
       Env.isQvain.should.be.true
+    })
+  })
+
+  describe("given app is set to 'lumi-aif.etsin'", () => {
+    beforeEach(() => {
+      getCookieValue.mockReturnValue('lumi-aif.etsin')
+      Env = new EnvClass()
+    })
+
+    test('when accessing computed property isLumiAifEtsinPortal, should be true', () => {
+      Env.isLumiAifEtsinPortal.should.be.true
+    })
+
+    test('when accessing computed property isBrandedEtsinPortal, should be true', () => {
+      Env.isBrandedEtsinPortal.should.be.true
+    })
+
+    test('when accessing computed property etsinPortal, should be lumi-aif', () => {
+      Env.etsinPortal.id.should.eql('lumi-aif')
+    })
+
+    test('when accessing computed property etsinSearchPath, should be /', () => {
+      Env.etsinSearchPath.should.eql('/')
     })
   })
 

@@ -54,18 +54,74 @@ export const externalResourceFileTypeSchema = yup
   })
   .nullable()
 
+export const externalResourceDataServiceSchema = yup
+  .object()
+  .shape({
+    url: yup.string().required(),
+  })
+  .typeError('qvain.validationMessages.externalResources.dataService.required')
+  .required('qvain.validationMessages.externalResources.dataService.required')
+  .nullable()
+
+const isValidHttpUrl = value => {
+  if (!/^https?:\/\//i.test(value)) {
+    return false
+  }
+  try {
+    const parsed = new URL(value)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+const filePathPattern =
+  /^(file:\/\/|~\/|\.{1,2}[\\/]|[A-Za-z]:[\\/]|\\\\|\/|[^\\/?%*:|"<>]+[\\/]).+/
+
+export const isValidFilePath = value => filePathPattern.test(value)
+
+const urlSchema = message =>
+  yup
+    .string()
+    .test('http-url', message, value => !value || isValidHttpUrl(value))
+
 export const externalResourceAccessUrlSchema = yup
   .string()
-  .url('qvain.validationMessages.externalResources.accessUrl.validFormat')
+  .test(
+    'http-or-file-path',
+    'qvain.validationMessages.externalResources.accessUrl.validFormat',
+    value => !value || isValidHttpUrl(value) || isValidFilePath(value)
+  )
 
 export const externalResourceDownloadUrlSchema = yup
   .string()
-  .url('qvain.validationMessages.externalResources.downloadUrl.validFormat')
+  .test(
+    'http-or-file-path',
+    'qvain.validationMessages.externalResources.downloadUrl.validFormat',
+    value => !value || isValidHttpUrl(value) || isValidFilePath(value)
+  )
+
+export const externalResourceAccessUrlStrictSchema = urlSchema(
+  'qvain.validationMessages.externalResources.accessUrl.validFormat'
+)
+
+export const externalResourceDownloadUrlStrictSchema = urlSchema(
+  'qvain.validationMessages.externalResources.downloadUrl.validFormat'
+)
 
 export const externalResourceSchema = yup.object().shape({
+  title: externalResourceTitleSchema,
+  useCategory: externalResourceUseCategorySchema,
+  accessUrl: externalResourceAccessUrlStrictSchema,
+  downloadUrl: externalResourceDownloadUrlStrictSchema,
+  fileType: externalResourceFileTypeSchema,
+})
+
+export const externalResourceDaasSchema = yup.object().shape({
   title: externalResourceTitleSchema,
   useCategory: externalResourceUseCategorySchema,
   accessUrl: externalResourceAccessUrlSchema,
   downloadUrl: externalResourceDownloadUrlSchema,
   fileType: externalResourceFileTypeSchema,
+  dataService: externalResourceDataServiceSchema,
 })

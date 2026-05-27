@@ -9,71 +9,120 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
+import sizeParse from '@/utils/sizeParse'
 
 import { useStores } from '@/stores/stores'
 import IconButton from '../common/iconButton'
 
-const ResourceItem = ({ resource, hideAccess }) => {
+const normalizeUrl = value => (typeof value === 'string' ? value : value?.identifier)
+
+const isFileUrl = value => typeof value === 'string' && value.startsWith('file://')
+
+const fileUrlToPath = value => {
+  if (!isFileUrl(value)) return null
+
+  try {
+    // `new URL('file:///tmp/a')` => pathname '/tmp/a'
+    const parsed = new URL(value)
+    if (parsed?.pathname) return decodeURIComponent(parsed.pathname)
+  } catch {
+    // Best-effort fallback below
+  }
+
+  // Fallback: strip `file://` prefix.
+  return decodeURIComponent(value.replace(/^file:\/\//, ''))
+}
+
+const MAX_FILE_PATH_PREVIEW_LENGTH = '/home/torvinen/README-or-super-long-file'.length
+const FILE_PATH_SUFFIX_LENGTH = 8
+const FILE_PATH_PREFIX_TRIM_EXTRA = 6
+
+const truncateFilePathPreview = value => {
+  if (typeof value !== 'string') return value
+  if (value.length <= MAX_FILE_PATH_PREVIEW_LENGTH) return value
+
+  const prefixLength =
+    MAX_FILE_PATH_PREVIEW_LENGTH - FILE_PATH_SUFFIX_LENGTH - 3 - FILE_PATH_PREFIX_TRIM_EXTRA
+  if (prefixLength <= 0) {
+    return `${value.slice(0, MAX_FILE_PATH_PREVIEW_LENGTH - 3)}...`
+  }
+
+  return `${value.slice(0, prefixLength)}...${value.slice(-FILE_PATH_SUFFIX_LENGTH)}`
+}
+
+const ResourceItem = ({ resource, hideSize, hideDataService }) => {
   const {
-    Locale: { getValueTranslation },
     Etsin: {
-      EtsinDataset: { setInInfo },
+      EtsinDataset: { setInInfo, resolveDataServiceName },
     },
+    Locale: { getValueTranslation },
   } = useStores()
+  const size = sizeParse(resource.byte_size)
+  const dataService = resolveDataServiceName(resource.data_service)
+  const accessUrl = normalizeUrl(resource.access_url)
+  const downloadUrl = normalizeUrl(resource.download_url)
+  const localFilePath = fileUrlToPath(downloadUrl) || fileUrlToPath(accessUrl)
+  const localFilePathPreview = truncateFilePathPreview(localFilePath)
+  const resourceName =
+    getValueTranslation(resource.title) ||
+    localFilePathPreview ||
+    accessUrl ||
+    downloadUrl ||
+    resource.identifier ||
+    '-'
+  const canDownload = Boolean(downloadUrl) && !isFileUrl(downloadUrl)
+  const canSource = Boolean(accessUrl) && !isFileUrl(accessUrl)
 
   return (
     <Item>
-      <Name title={getValueTranslation(resource.title)}>
+      <Name title={resourceName}>
         <ResourceIcon resource={resource} />
-        {getValueTranslation(resource.title)}
+        {resourceName}
       </Name>
 
-      <InfoColumn>
+      {!hideSize && <SizeColumn>{size || '-'}</SizeColumn>}
+
+      {!hideDataService && <DataServiceColumn>{dataService || '-'}</DataServiceColumn>}
+
+      <ActionsColumn>
+        {canDownload && (
+          <Translate
+            component={InlineDownloadButton}
+            content="dataset.dl.download"
+            href={downloadUrl}
+          />
+        )}
+        {localFilePath && (
+          <FilePathColumn title={localFilePath}>{localFilePathPreview}</FilePathColumn>
+        )}
+        {canSource && (
+          <Translate component={InlineSourceButton} content="dataset.dl.source" href={accessUrl} />
+        )}
         <Translate
-          component={InfoButton}
-          fontSize="11pt"
+          component={InlineInfoButton}
           content="dataset.dl.info"
           onClick={() => setInInfo(resource)}
-          attributes={{
-            'aria-label': `dataset.dl.infoModalButton.external`,
-          }}
+          attributes={{ 'aria-label': `dataset.dl.infoModalButton.external` }}
         />
-      </InfoColumn>
-
-      {resource.access_url && !hideAccess && (
-        <LinkButtonColumn>
-          <Translate
-            component={LinkButton}
-            content="dataset.dl.source"
-            href={resource.access_url}
-          />
-        </LinkButtonColumn>
-      )}
-
-      {resource.download_url && (
-        <DownloadButtonColumn>
-          <Translate
-            component={DownloadButton}
-            content="dataset.dl.download"
-            href={resource.download_url}
-          />
-        </DownloadButtonColumn>
-      )}
+      </ActionsColumn>
     </Item>
   )
 }
 
 ResourceItem.propTypes = {
   resource: PropTypes.object.isRequired,
-  hideAccess: PropTypes.bool,
+  hideSize: PropTypes.bool,
+  hideDataService: PropTypes.bool,
 }
 
 ResourceItem.defaultProps = {
-  hideAccess: false,
+  hideSize: false,
+  hideDataService: false,
 }
 
 export const Name = styled.span`
-  grid-column: 1/2;
+  grid-column: name-start/name-end;
+  min-width: 0;
   white-space: nowrap;
   text-overflow: ellipsis;
   display: block;
@@ -94,43 +143,101 @@ const ResourceButton = styled(IconButton)`
   margin: 0;
 `
 
-const InfoButton = styled(ResourceButton).attrs({
+const SizeColumn = styled.span`
+  grid-column: size-start/size-end;
+  white-space: nowrap;
+`
+
+const DataServiceColumn = styled.span`
+  grid-column: dataService-start/dataService-end;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`
+
+const MenuLinkBase = styled(ResourceButton).attrs({
+  flexGrow: 1,
+  color: '#4f4f4f',
+  invert: true,
+  link: true,
+})`
+  width: 100%;
+  justify-content: flex-start;
+  margin: 0;
+`
+
+const MenuButtonAction = styled(ResourceButton).attrs({
   flexGrow: 1,
   icon: faInfoCircle,
+  color: '#4f4f4f',
   invert: true,
-  color: 'darkgray',
-})``
-
-const InfoColumn = styled.div`
-  grid-column: info-start/info-end;
-  display: flex;
-  align-self: stretch;
+  width: '100%',
+})`
+  justify-content: flex-start;
+  margin: 0;
 `
 
-export const LinkButton = styled(ResourceButton).attrs({
-  flexGrow: 1,
-  icon: faExternalLinkAlt,
-  color: 'darkgray',
-  invert: true,
-  link: true,
-})``
-
-const LinkButtonColumn = styled.div`
-  grid-column: access-start/access-end;
-  display: flex;
-  align-self: stretch;
-`
-
-export const DownloadButton = styled(ResourceButton).attrs({
+const DownloadButton = styled(MenuLinkBase).attrs(p => ({
   flexGrow: 1,
   icon: faDownload,
-  color: 'success',
-  link: true,
+  invert: false,
+  color: p.theme.ui.dataset.remoteResourceLink.color,
+}))``
+
+const InlineDownloadButton = styled(DownloadButton)`
+  height: 1.75rem;
+  min-height: 1.75rem;
+  max-height: 1.75rem;
+  margin-right: 0.25rem;
+`
+
+const SourceButton = styled(MenuLinkBase).attrs({
+  icon: faExternalLinkAlt,
 })``
 
-const DownloadButtonColumn = styled.div`
-  grid-column: download-start/download-end;
+const InlineSourceButton = styled(SourceButton)`
+  height: 1.75rem;
+  min-height: 1.75rem;
+  max-height: 1.75rem;
+  margin-right: 0.25rem;
+`
+
+const InlineInfoButton = styled(MenuButtonAction)`
+  height: 1.75rem;
+  min-height: 1.75rem;
+  max-height: 1.75rem;
+  width: auto;
+  max-width: 6rem;
+  margin-right: 0.25rem;
+`
+
+const FilePathColumn = styled.span`
+  height: 1.75rem;
+  min-height: 1.75rem;
+  max-height: 1.75rem;
   display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  /* OG Etsin has slightly more space for the path than LUMI-AIF. */
+  max-width: ${p => p.theme.ui.dataset.remoteResourceLink.pathMaxWidth};
+  padding-right: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: ${p => p.theme.color.gray};
+`
+
+const ActionsColumn = styled.div`
+  grid-column: actions-start/actions-end;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  gap: 0.25rem;
   align-self: stretch;
 `
 

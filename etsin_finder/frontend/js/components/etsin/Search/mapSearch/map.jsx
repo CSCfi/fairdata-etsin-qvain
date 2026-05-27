@@ -254,7 +254,7 @@ const ExpandMapButton = styled.a`
 `
 
 const SearchButton = styled(Button)`
-    padding: 0.3em 0.6em;
+  padding: 0.3em 0.6em;
 `
 
 export default observer(EtsinMap)

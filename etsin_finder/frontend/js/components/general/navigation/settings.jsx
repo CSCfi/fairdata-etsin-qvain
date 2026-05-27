@@ -42,7 +42,7 @@ Settings.propTypes = {
 const Positioner = styled.div`
   display: none;
   align-items: center;
-  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
+  @media screen and (min-width: 1120px) {
     display: flex;
   }
 `

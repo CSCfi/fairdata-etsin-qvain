@@ -41,6 +41,22 @@ import {
   data_catalog_att as attCatalog,
 } from '@testdata/metaxv3/refs/data_catalogs.data'
 
+const daasCatalog = {
+  id: 'urn:nbn:fi:att:data-catalog-daas',
+  title: { en: 'DaaS catalog', fi: 'DaaS-katalogi' },
+  data_services: [],
+}
+
+const attCatalogWithDataServices = {
+  ...attCatalog,
+  data_services: [
+    {
+      id: 'urn:service:att:1',
+      pref_label: { en: 'ATT Service', fi: 'ATT-palvelu' },
+    },
+  ],
+}
+
 const mockAdapter = new MockAdapter(axios)
 
 // axios mocks
@@ -68,7 +84,7 @@ const Location = () => {
 
 let stores
 
-const renderQvain = async (overrides = {}, { initialPath } = {}) => {
+const renderQvain = async (overrides = {}, { initialPath, catalogOverrides = {} } = {}) => {
   const metaxDataset = { ...dataset, ...overrides }
   const publishedDataset = { ...dataset, ...overrides, state: 'published' }
   const linkedDatasetDraft = {
@@ -104,9 +120,16 @@ const renderQvain = async (overrides = {}, { initialPath } = {}) => {
     default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
   })
 
+  const catalogs = {
+    [idaCatalog.id]: idaCatalog,
+    [attCatalog.id]: attCatalog,
+    [daasCatalog.id]: daasCatalog,
+    ...catalogOverrides,
+  }
+
   // When loading an existing dataset, catalog is included in the payload (?expand_catalog=true).
   // When creating new dataset, catalogs need to be loaded separately.
-  for (const catalog of [idaCatalog, attCatalog]) {
+  for (const catalog of Object.values(catalogs)) {
     mockAdapter.onGet(`https://metaxv3:443/v3/data-catalogs/${catalog.id}`).reply(200, catalog)
   }
 
@@ -721,6 +744,28 @@ describe('Qvain with an opened dataset', () => {
     expect(
       within(within(modal).getByText('File Type').closest('div')).getByText('Audiovisual')
     ).toBeInTheDocument()
+    expect(within(modal).queryByLabelText(/Data service/i)).not.toBeInTheDocument()
+  })
+
+  it('shows optional data service in ATT modal when catalog has data services', async () => {
+    await renderQvain({
+      data_catalog: attCatalogWithDataServices,
+      remote_resources: [],
+    })
+    const section = getSection(/Data Origin/)
+
+    const addButton = within(section).getByText('Add remote resource')
+    await userEvent.click(addButton)
+
+    const modal = screen.getByRole('dialog')
+    await waitFor(() => {
+      expect(within(modal).getByLabelText(/Data service/i)).toBeInTheDocument()
+    })
+
+    const dataSizeInput = within(modal).getByLabelText(/Data size/i)
+    const dataServiceInput = within(modal).getByLabelText(/Data service/i)
+    expect(dataSizeInput.compareDocumentPosition(dataServiceInput) & Node.DOCUMENT_POSITION_FOLLOWING)
+      .toBeTruthy()
   })
 
   it('shows embargo date and restriction grounds', async () => {

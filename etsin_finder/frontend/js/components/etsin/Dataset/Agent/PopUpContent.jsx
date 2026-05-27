@@ -93,14 +93,17 @@ const PopUpContainer = styled.div`
 `
 
 const Name = styled.h4`
-  margin-bottom: 0;
+  margin-bottom: 0.35rem;
   font-size: 1.1em;
   color: ${p => p.theme.color.dark};
   line-height: 1;
 `
 
 const IdentifierLink = styled.a`
+  display: block;
   font-size: 0.9em;
+  margin-top: 0.35rem;
+  line-height: 1.3;
   word-break: break-word;
   color: ${p => p.theme.color.linkColorUIV2};
 `

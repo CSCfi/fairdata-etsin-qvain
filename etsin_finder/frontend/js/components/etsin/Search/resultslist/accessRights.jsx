@@ -68,7 +68,9 @@ export default observer(AccessRights)
 
 const Access = withCustomProps(styled.div)`
   padding: 0.2em 0.9em;
-  background-color: ${p => p.theme.color.lightgray};
+  font-size: ${p => p.theme.ui.search.resultsListAccessRights.fontSize};
+  background-color: ${p => p.theme.ui.search.resultsListAccessRights.linkBackground};
+  color: ${p => p.theme.ui.search.resultsListAccessRights.linkColor};
   border-radius: 1em;
 `
 

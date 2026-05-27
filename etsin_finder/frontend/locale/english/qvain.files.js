@@ -260,6 +260,28 @@ const files = {
       addButton: 'Add remote resource',
     },
   },
+  daasCatalog: {
+    title: 'Dataset-as-a-service resources',
+    noItems: 'None added',
+    modal: {
+      title: {
+        add: 'Add a resource',
+        edit: 'Edit a resource',
+      },
+      buttons: {
+        save: 'Add a resource',
+        editSave: 'Apply changes',
+        cancel: 'Cancel',
+      },
+      addButton: 'Add a resource',
+    },
+    form: {
+      dataService: {
+        label: 'Data Service',
+        placeholder: 'Select data service',
+      },
+    },
+  },
   external: {
     title: 'Remote resources',
     infoText: `Please insert Title, Use Category and URLs for the remote files.
@@ -286,6 +308,12 @@ const files = {
       fileType: {
         label: 'File Type',
         placeholder: 'Select option',
+      },
+      fileSize: {
+        label: 'Data Size',
+        placeholder: 'File size in bytes',
+        infoText:
+          'Total data size in the given source path/url. You can also use KB, MB, GB, or TB abbreviations.',
       },
       accessUrl: {
         label: 'Access URL',

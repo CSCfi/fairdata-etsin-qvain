@@ -79,6 +79,8 @@ const english = {
     access_open: 'Open Access',
     access_rights: 'Access',
     catalog_publisher: 'Catalog publisher',
+    data_service: 'Data Service',
+    data_services: 'Data services',
     citation: {
       sidebar: 'Citation / Reference',
       title: 'Cite dataset',
@@ -124,15 +126,15 @@ const english = {
       success: 'Successfully sent message!',
     },
     contributor: {
-      plrl: 'Contributors',
-      snglr: 'Contributor',
+      other: 'Contributors',
+      one: 'Contributor',
     },
     copy: 'Copy',
     copyToClipboard: 'Copy to clipboard',
     copyToClipboardSuccess: 'Copied identifier to clipboard',
     creator: {
-      plrl: 'Creators',
-      snglr: 'Creator',
+      other: 'Creators',
+      one: 'Creator',
     },
     curator: 'Curator',
     data_location: 'Go to harvested location',
@@ -505,9 +507,10 @@ const english = {
   },
   results: {
     resultsFor: 'Results for query: ',
-    amount: {
-      plrl: '%(amount)s results',
-      snglr: '%(amount)s result',
+    loadingDatasets: 'Loading datasets',
+    count: {
+      one: '%(count)s result',
+      other: '%(count)s results',
     },
   },
   search,

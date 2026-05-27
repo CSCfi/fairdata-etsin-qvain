@@ -8,6 +8,7 @@ import ErrorPage from '@/components/general/errorpage'
 import QvainLandingPage from '@/components/qvain/views/landingPage'
 import { useStores } from '@/utils/stores'
 import LoggedInRoute from './loggedInRoute'
+import { LumiAifDatasetsCanonicalRedirect } from '@/etsinPortals'
 
 const Content = ({ contentRef }) => {
   const {
@@ -43,8 +44,8 @@ const Content = ({ contentRef }) => {
         {separateQvain && <Route path="/qvain" element={<NavigateToQvain />} />}
         {separateQvain && <Route path="/qvain/*" element={<NavigateToQvain />} />}
         {!isQvain && [
-          <Route path="/" key="home" element={<Home />} />,
-          <Route path="/datasets/:query?" key="search" element={<Search />} />,
+          <Route path="/" key="home" element={<EtsinHomeRoute />} />,
+          <Route path="/datasets/:query?" key="search" element={<EtsinSearchRoute />} />,
           <Route path="/dataset/:identifier/*" key="dataset" element={<Dataset />} />,
         ]}
         {maintenance && (
@@ -79,6 +80,27 @@ Content.propTypes = {
 }
 
 export default observer(Content)
+
+const EtsinHomeRoute = observer(() => {
+  const {
+    Env: { etsinPortal },
+  } = useStores()
+  if (etsinPortal.homeRouteIsSearch) {
+    return <Search />
+  }
+  return <Home />
+})
+
+const EtsinSearchRoute = observer(() => {
+  const {
+    Env: { etsinPortal },
+  } = useStores()
+  return etsinPortal.redirectDatasetsToCanonicalSearch ? (
+    <LumiAifDatasetsCanonicalRedirect />
+  ) : (
+    <Search />
+  )
+})
 
 const NavigateToQvain = () => {
   // redirect /qvain to the new qvain app url

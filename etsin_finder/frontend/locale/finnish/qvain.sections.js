@@ -23,6 +23,10 @@ const sections = {
           description: 'Aineisto on pitkäaikaissäilytyksessä (PAS)',
         },
       },
+      daas: {
+        title: 'Dataset-as-a-Service',
+        description: 'Valitse "Dataset-as-a-Service" jos datasi sijaitsee Dataset-as-a-Service palvelussa',
+      },
     },
     infoText: 'Huom! Et voi muuttaa Datalähdettä enää tallennuksen (luonnos/julkaisu) jälkeen.',
     error: {

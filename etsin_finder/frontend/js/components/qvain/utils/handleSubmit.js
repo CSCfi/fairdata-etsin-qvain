@@ -1,6 +1,4 @@
-import { REMOTE_RESOURCES_DATA_CATALOGS, ACCESS_TYPE_URL } from '../../../utils/constants'
-
- 
+import { REMOTE_RESOURCES_DATA_CATALOGS, ACCESS_TYPE_URL, DATA_CATALOG_IDENTIFIER } from '../../../utils/constants'
 const handleSubmitToBackend = Qvain => {
   const title = Qvain.Title.toBackend()
 
@@ -87,6 +85,12 @@ const handleSubmitToBackend = Qvain => {
 
   if (REMOTE_RESOURCES_DATA_CATALOGS.includes(Qvain.dataCatalog)) {
     obj.remote_resources = Qvain.ExternalResources.toBackend()
+  }
+
+  const isDaas = Qvain.dataCatalog === DATA_CATALOG_IDENTIFIER.DAAS
+
+  if (isDaas) {
+    obj.remote_resources = Qvain.DaasResources.toBackend()
   }
 
   obj.cumulative_state = Qvain.original ? Qvain.newCumulativeState : Qvain.cumulativeState

@@ -141,6 +141,9 @@ const validationMessages = {
     useCategory: {
       required: 'Ulkoisen aineiston käyttökategoria on pakollinen tieto.',
     },
+    dataService: {
+      required: 'Datapalvelu on pakollinen tieto DaaS-resurssille.',
+    },
     accessUrl: {
       validFormat: 'Ulkoisen aineiston pitää olla oikeassa URL-formaatissa.',
     },

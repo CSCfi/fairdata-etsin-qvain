@@ -19,6 +19,7 @@ export const DATA_CATALOG_IDENTIFIER = {
   ATT: 'urn:nbn:fi:att:data-catalog-att',
   PAS: 'urn:nbn:fi:att:data-catalog-pas',
   DFT: 'urn:nbn:fi:att:data-catalog-dft',
+  DAAS: 'urn:nbn:fi:att:data-catalog-daas',
 }
 
 export const REMOTE_RESOURCES_DATA_CATALOGS = [DATA_CATALOG_IDENTIFIER.ATT]
@@ -39,6 +40,8 @@ export const FAIRDATA_WEBSITE_URL = {
     EN: 'https://www.fairdata.fi/en/qvain/',
   },
 }
+
+export const LUMI_AIF_PORTAL_URL = 'https://lumi-ai-factory.eu/'
 
 export const LICENSE_URL = {
   CCBY4: 'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
@@ -93,3 +96,5 @@ export const RELATION_TYPE = {
     url: 'http://purl.org/dc/terms/relation',
   },
 }
+
+export const DAAS_CATALOG_SERVICE_USERS = 'daas_catalog_service_users'

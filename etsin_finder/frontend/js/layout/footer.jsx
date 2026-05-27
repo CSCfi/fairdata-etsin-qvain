@@ -116,6 +116,7 @@ const FooterDiv = styled.footer.attrs({
   className: 'fd-footer',
 })`
   padding: 1rem 0 !important;
+  background-color: ${p => p.theme?.ui?.footer?.backgroundColor ?? 'transparent'};
 
   @media screen and (max-width: 992px) {
     span {

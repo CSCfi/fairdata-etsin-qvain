@@ -35,6 +35,7 @@ class Resources {
     this.ActorsV2 = new Actors(this)
     this.ActorsV3 = new ActorsV3(this)
     this.BibliographicCitation = new BibliographicCitation(this)
+    this.DaasResources = new ExternalResources(this)
     this.DataAccess = new DataAccess(this)
     this.DatasetLanguages = new DatasetLanguages(this)
     this.Description = new Description(this)
@@ -55,12 +56,16 @@ class Resources {
     this.SubjectHeadings = new SubjectHeadings(this)
     this.Temporals = new Temporals(this)
     this.Title = new Title(this)
+
+    this.DaasResources.translationsRoot = 'qvain.files.daasCatalog'
+
     this.resources = [
       this.AccessRightsDescription,
       this.AccessType,
       this.Actors,
       this.BibliographicCitation,
       this.Description,
+      this.DaasResources,
       this.DataAccess,
       this.DatasetLanguages,
       this.EmbargoExpDate,

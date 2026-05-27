@@ -32,4 +32,25 @@ describe('Info', () => {
       expect(component).toBeTruthy()
     })
   })
+
+  describe('data service given', () => {
+    it('renders data service after type and before urls', () => {
+      const props = {
+        ...minimalProps,
+        type: 'CSV',
+        dataService: 'LUMI-AIF',
+        accessUrl: 'https://access.example',
+      }
+      contextRenderer(<Info {...props} />)
+
+      const typeCell = screen.getByText('CSV')
+      const dataServiceCell = screen.getByText('LUMI-AIF')
+      const accessUrlCell = screen.getByText('https://access.example')
+
+      expect(typeCell.compareDocumentPosition(dataServiceCell)).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+      expect(dataServiceCell.compareDocumentPosition(accessUrlCell)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING
+      )
+    })
+  })
 })

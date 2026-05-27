@@ -58,7 +58,6 @@ function AccessRights({ button = false, ...props }) {
     <>
       <CustomButton
         onClick={openModal}
-        color="#e0e0e0"
         padding="0.2em 0.9em"
         noMargin
         button={button}
@@ -135,7 +134,14 @@ export default observer(AccessRights)
 const CustomButton = withCustomProps(styled(Button))`
   margin: 0rem 0.5rem;
   border-radius: 1em;
-  color: ${p => p.theme.color.dark};
+  color: ${p => p.theme.ui.dataset.accessRights.buttonColor};
+  border-color: ${p => p.theme.ui.dataset.accessRights.buttonBorder};
+  background-color: ${p => p.theme.ui.dataset.accessRights.buttonBackground};
+  &:hover {
+    background-color: ${p => p.theme.color.medgray};
+    border-color: ${p => p.theme.color.medgray};
+    color: ${p => p.theme.ui.dataset.accessRights.buttonHoverColor};
+  }
 `
 
 const AccessLabel = styled.div`

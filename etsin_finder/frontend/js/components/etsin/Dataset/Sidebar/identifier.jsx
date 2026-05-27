@@ -72,8 +72,9 @@ const IdnSpan = styled.div`
 const IdnLink = styled(Link)`
   && {
     margin-right: 0.25rem;
-    background-color: ${props => props.theme.color.primary};
-    border: ${props => props.theme.color.primary};
+    background-color: ${p =>
+      p.theme.ui.dataset.sidebarIdentifier.copyIconColor || p.theme.color.primary};
+    border: ${p => p.theme.ui.dataset.sidebarIdentifier.copyIconBorder || p.theme.color.primary};
     width: fit-content;
     max-width: 100%;
     color: white;
@@ -98,6 +99,7 @@ const IDN = styled.div`
   padding: 0.4em 1em 0.4em 0.5em;
   text-align: left;
   word-break: break-all;
+  transform: ${p => p.theme.ui.dataset.sidebarIdentifier.copyButtonTransform};
 `
 
 Identifier.propTypes = {

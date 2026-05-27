@@ -31,11 +31,7 @@ const TogglableAgentList = props => {
 
   return (
     <AgentsCont>
-      {agents.length > 1 ? (
-        <Translate content={`dataset.${agentType}.plrl`} />
-      ) : (
-        <Translate content={`dataset.${agentType}.snglr`} />
-      )}
+      <Translate content={`dataset.${agentType}`} with={{count: agents.length}} />
       {': '}
       <InlineUl>
         {/* Show first three */}

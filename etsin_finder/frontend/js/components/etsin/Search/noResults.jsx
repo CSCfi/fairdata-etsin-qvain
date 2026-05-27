@@ -47,6 +47,7 @@ function NoResults() {
 const Wrapper = styled.div`
   text-align: center;
   font-size: 1.1em;
+  color: ${p => p.theme.ui.search.noResultsHint.color};
 `
 
 export default observer(NoResults)

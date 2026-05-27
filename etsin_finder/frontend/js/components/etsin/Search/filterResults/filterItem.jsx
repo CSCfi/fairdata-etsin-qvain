@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import { useNavigate } from 'react-router'
-
 import { useStores } from '@/stores/stores'
-import { useQuery } from '@/components/etsin/general/useQuery'
+import { useQuery, useEtsinSearchNavigate } from '@/components/etsin/general/useQuery'
 
 const quoteValue = value => {
   // Wrap value with quotation marks if needed
@@ -13,13 +11,13 @@ const quoteValue = value => {
   return value
 }
 
-const FilterItem = ({ filter, item, tabIndex }) => {
+const FilterItem = ({ filter, item, tabIndex, disabled }) => {
   const {
     Locale: { getValueTranslation },
   } = useStores()
 
   const query = useQuery()
-  const navigate = useNavigate()
+  const navigateSearch = useEtsinSearchNavigate()
   const values = query.getAll(filter)
 
   const itemValue = quoteValue(getValueTranslation(item.value))
@@ -29,7 +27,7 @@ const FilterItem = ({ filter, item, tabIndex }) => {
     if (isActive) query.delete(filter, itemValue)
     else query.append(filter, itemValue)
 
-    navigate(`/datasets?${query.toString()}`)
+    navigateSearch(query)
   }
 
   return (
@@ -37,6 +35,7 @@ const FilterItem = ({ filter, item, tabIndex }) => {
       <button
         role="switch"
         type="button"
+        disabled={disabled}
         tabIndex={tabIndex}
         className={isActive ? 'active' : undefined}
         aria-checked={isActive}
@@ -59,6 +58,11 @@ FilterItem.propTypes = {
     count: PropTypes.number,
   }).isRequired,
   tabIndex: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+}
+
+FilterItem.defaultProps = {
+  disabled: false,
 }
 
 export default observer(FilterItem)

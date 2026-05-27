@@ -27,13 +27,13 @@ const Results = () => {
 
   return (
     <div className="container">
-      <div className="regular-row">
+      <ContentPanel className="regular-row">
         <NoResults />
         <div>
           <ResultsHeader filterOpen={filterOpen} toggleFilter={toggleFilter} />
           <ResultsView filterOpen={filterOpen} />
         </div>
-      </div>
+      </ContentPanel>
     </div>
   )
 }
@@ -76,14 +76,12 @@ const ResultsView = observer(({ filterOpen }) => {
     },
   } = useStores()
 
-  if (isLoading) return null
-
   return (
     <div>
       <Flex>
         <Filters filterOpen={filterOpen} />
         <ResultsCont>
-          <ResultsList />
+          {isLoading ? <Translate content="results.loadingDatasets" component="p" /> : <ResultsList />}
         </ResultsCont>
       </Flex>
       {!isLoading && <Pagination />}
@@ -180,6 +178,16 @@ const Flex = styled.div`
 
 const Settings = styled.div`
   float: right;
+`
+
+const ContentPanel = styled.div`
+  background-color: ${p => p.theme.ui.search.resultsPanel.backgroundColor};
+  padding: ${p => p.theme.ui.search.resultsPanel.padding};
+  margin: ${p => p.theme.ui.search.resultsPanel.margin};
+  /* Space between the hero search bar and results content */
+  margin-top: ${p => p.theme.ui.search.resultsPanel.marginTop};
+  width: ${p => p.theme.ui.search.resultsPanel.width};
+  border-radius: ${p => p.theme.ui.search.resultsPanel.borderRadius};
 `
 
 Results.defaultProps = {

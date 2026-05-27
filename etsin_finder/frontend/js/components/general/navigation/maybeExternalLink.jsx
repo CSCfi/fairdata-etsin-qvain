@@ -16,6 +16,6 @@ MaybeExternalLink.propTypes = {
   to: PropTypes.string.isRequired,
 }
 
-const CustomNavLink = styled(Link).attrs({ as: NavLink })``
+export const CustomNavLink = styled(Link).attrs({ as: NavLink })``
 
 export default MaybeExternalLink

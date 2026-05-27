@@ -41,7 +41,9 @@ const Content = styled.div`
   flex-grow: 1;
 `
 
-const PrefixButton = styled(Button)`
+const PrefixButton = styled(Button).attrs(p => ({
+  color: p.theme.ui.dataset.citationButton.iconColor || undefined,
+}))`
   display: flex;
   border: none;
   align-items: center;

@@ -10,6 +10,7 @@
 
 import { observable, action, computed, runInAction, makeObservable } from 'mobx'
 import axios from 'axios'
+import { DAAS_CATALOG_SERVICE_USERS } from '@/utils/constants'
 
 class Auth {
   constructor(Env) {
@@ -39,6 +40,10 @@ class Auth {
 
   @computed get userName() {
     return this.user?.name
+  }
+
+  @computed get hasRightsToDaas () {
+    return this.user.groups?.find?.((a) => a === DAAS_CATALOG_SERVICE_USERS)
   }
 
   @action.bound

@@ -7,6 +7,7 @@ import IdaCatalog from './IdaCatalog'
 import AttCatalog from './AttCatalog'
 import PasCatalog from './PasCatalog'
 import AccessRights from './general/AccessRights'
+import DaasCatalog from './DaasCatalog'
 
 const DataOrigin = () => {
   const {
@@ -18,6 +19,7 @@ const DataOrigin = () => {
       <DataCatalog />
       {dataCatalog === DATA_CATALOG_IDENTIFIER.IDA && <IdaCatalog />}
       {dataCatalog === DATA_CATALOG_IDENTIFIER.ATT && <AttCatalog />}
+      {dataCatalog === DATA_CATALOG_IDENTIFIER.DAAS && <DaasCatalog />}
       {isPas && <PasCatalog />}
       <AccessRights />
     </Section>

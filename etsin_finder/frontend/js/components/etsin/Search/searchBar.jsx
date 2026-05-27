@@ -15,10 +15,9 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { observer } from 'mobx-react'
-import { useNavigate } from 'react-router'
 import Translate from '@/utils/Translate'
 
-import { useQuery } from '@/components/etsin/general/useQuery'
+import { useQuery, useEtsinSearchNavigate } from '@/components/etsin/general/useQuery'
 import ErrorBoundary from '@/components/general/errorBoundary'
 import { useStores } from '@/stores/stores'
 import { Input } from '@/components/etsin/general/Input'
@@ -33,7 +32,7 @@ function SearchBar() {
 
   const query = useQuery()
   const search = query.get('search')
-  const navigate = useNavigate()
+  const navigateSearch = useEtsinSearchNavigate()
 
   useEffect(() => {
     Matomo.recordEvent(`SEARCH / ${search}`)
@@ -44,7 +43,7 @@ function SearchBar() {
     e.preventDefault()
     query.set('search', term)
     query.set('page', 1)
-    navigate(`/datasets?${query.toString()}`)
+    navigateSearch(query)
   }
 
   return (

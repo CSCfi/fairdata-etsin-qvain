@@ -12,11 +12,14 @@ import styled from 'styled-components'
 
 import { Dropdown, DropdownItem } from '@/components/general/dropdown'
 import { useStores } from '@/stores/stores'
+import { DATA_CATALOG_IDENTIFIER } from '@/utils/constants'
 import withCustomProps from '@/utils/withCustomProps'
 import { getDatasetActionsV2 } from './datasetActions'
 import formatAge from './formatAge'
 import { IconButton } from './styled'
 import { DatasetStateTag } from './tags'
+
+import DaasSvg from '@/assets/images/Daas-icon.svg'
 
 const getActionMenuItem = action => {
   const { text, handler, danger, moreIfNarrow } = action
@@ -89,6 +92,8 @@ const Dataset = ({ dataset, group, isExpanded, expandGroup, isLatest, versionNum
   const { getValueTranslation } = Locale
 
   const actions = getDatasetActionsV2(Stores, dataset, group)
+  const dataCatalogIdentifier = dataset.data_catalog?.identifier || dataset.data_catalog?.id || dataset.data_catalog
+  const isDaas = dataCatalogIdentifier === DATA_CATALOG_IDENTIFIER.DAAS
   return (
     <StyledDataset
       isLatest={isLatest}
@@ -100,6 +105,7 @@ const Dataset = ({ dataset, group, isExpanded, expandGroup, isLatest, versionNum
         <Title>
           {expandGroup && <ExpandIcon isExpanded={!!isExpanded} />}
           {versionNumber && <VersionNumber number={versionNumber} />}
+          {isDaas && <DaasLogo src={DaasSvg} aria-label="DAAS" data-cy="daas-logo" />}
           <span>{getTitle(getValueTranslation, dataset)}</span>
         </Title>
       </Cell>
@@ -195,6 +201,7 @@ const Title = styled.div`
   word-break: break-word;
   text-align: left;
   display: flex;
+  align-items: center;
   padding-left: 0.5rem;
 `
 
@@ -214,6 +221,14 @@ const StyledVersionNumber = styled.span`
   @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     display: inline;
   }
+`
+
+const DaasLogo = styled.img`
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.5rem;
+  object-fit: contain;
+  flex-shrink: 0;
 `
 
 export default observer(Dataset)

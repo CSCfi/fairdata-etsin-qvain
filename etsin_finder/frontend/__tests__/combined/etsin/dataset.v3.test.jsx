@@ -142,7 +142,22 @@ const getDLValues = () => {
 
 describe('Etsin dataset page', () => {
   test('renders dataset', async () => {
-    const newDataset = dataset_open_a_catalog_expanded
+    const newDataset = cloneDeep(dataset_open_a_catalog_expanded)
+    newDataset.remote_resources = [
+      {
+        ...newDataset.remote_resources[0],
+        data_service: 'urn:service:lumi-aif',
+      },
+    ]
+    newDataset.data_catalog = {
+      ...newDataset.data_catalog,
+      data_services: [
+        {
+          id: 'urn:service:lumi-aif',
+          pref_label: { en: 'LUMI AI Factory' },
+        },
+      ],
+    }
     newDataset.other_identifiers.push(
       { notation: 'urn:nbn:fi:csc-test' },
       { notation: 'doi:10.0000/00-00' },
@@ -159,6 +174,8 @@ describe('Etsin dataset page', () => {
     const values = getDLValues()
     expect(values).toEqual({
       Description: expect.stringContaining('This dataset is used for testing all fields'),
+      'Data services': 'LUMI AI Factory',
+      'Data Service': 'LUMI AI Factory',
       'Data Type': 'Audiovisual',
       'Field of Science': 'Computer and information sciences',
       Keywords:

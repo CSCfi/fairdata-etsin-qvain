@@ -22,14 +22,12 @@ const ResultsAmount = () => {
     },
   } = useStores()
 
-  if (isLoading) return null
-
   return (
     <Translate
       component={Amount}
       aria-live="polite"
-      content={`results.amount.${count === 1 ? 'snglr' : 'plrl'}`}
-      with={{ amount: count }}
+      content={isLoading ? 'results.loadingDatasets' : 'results.count'}
+      with={{ count }}
     />
   )
 }
@@ -38,7 +36,7 @@ const Amount = styled.div`
   p {
     letter-spacing: 1px;
     font-weight: bold;
-    color: ${props => props.theme.color.gray};
+    color: ${p => p.theme.ui.search.resultsAmountPeriod.color};
     font-size: 0.9em;
     margin: auto;
   }

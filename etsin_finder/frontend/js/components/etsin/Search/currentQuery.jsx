@@ -18,10 +18,9 @@ import { useStores } from '@/stores/stores'
 const CurrentQuery = () => {
   const {
     Etsin: {
-      Search: { usedTerm, isLoading },
+      Search: { usedTerm },
     },
   } = useStores()
-  if (isLoading) return null
   if (usedTerm) {
     return (
       <p>

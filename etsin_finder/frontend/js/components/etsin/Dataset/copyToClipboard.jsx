@@ -89,6 +89,7 @@ const IconContent = withCustomProps(styled.div)`
   justify-content: center;
   gap: 0.25em;
   `}
+  transform: ${p => p.theme.ui.dataset.copyButton.transform};
   ${p => p.hide && 'visibility: hidden;'}
 `
 
@@ -101,7 +102,9 @@ const Check = styled(FontAwesomeIcon).attrs({ icon: faCheck })`
   margin: auto;
 `
 
-const IconButton = styled(Button)`
+const IconButton = styled(Button).attrs(p => ({
+  color: p.theme.ui.dataset.copyButton.iconColor || undefined,
+}))`
   height: 100%;
   width: 4em;
   padding: 0.5em 0.5em;
@@ -109,7 +112,10 @@ const IconButton = styled(Button)`
   border-style: none;
   font-size: 0.7em;
   word-break: initial;
-  display: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: normal;
   position: relative;
 
   ${p =>

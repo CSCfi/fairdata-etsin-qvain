@@ -138,6 +138,9 @@ const validationMessages = {
     useCategory: {
       required: 'Remote resource use category is required.',
     },
+    dataService: {
+      required: 'Data service is required for DaaS resources.',
+    },
     accessUrl: {
       validFormat: 'Access URL needs to be of valid URL format.',
     },

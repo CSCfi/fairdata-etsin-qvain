@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 import { useStores } from '@/stores/stores'
+import { resolveDatasetTabsNavLinkBorder } from '@/styles/theme'
 
 const Tabs = props => {
   const {
@@ -98,7 +99,9 @@ const EtsinTabs = styled.ul`
   display: flex;
   flex-wrap: nowrap;
   list-style: none;
-  border-bottom: 0.3rem solid #e0e0e0;
+  margin: 0 1rem 0 1rem;
+  padding-left: 0;
+  border-bottom: 0.3rem solid ${p => p.theme.color.lightgray};
   overflow-x: overlay;
   overflow-y: hidden;
   @media screen and (min-width: ${p => p.theme.breakpoints.md}) {
@@ -108,9 +111,13 @@ const EtsinTabs = styled.ul`
     margin-bottom: -0.25rem;
   }
   .nav-link {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.8rem;
     font-size: 1.1em;
     padding: 0.7rem 2.5rem;
+    border: ${p => resolveDatasetTabsNavLinkBorder(p.theme)};
     border-radius: 0.5rem 0.5rem 0rem 0rem;
     transition: all ease-out 0.3s;
     white-space: nowrap;
@@ -128,12 +135,12 @@ const EtsinTabs = styled.ul`
         transition: ease-out 0s;
       }
     }
-    &.active,
     &:hover,
     &:focus {
       color: black;
     }
     &.active {
+      color: ${p => p.theme.ui.dataset.tabs.navLinkActiveColor};
       background-color: ${props => props.theme.color.primaryLight};
       border-bottom: 0.3rem solid ${props => props.theme.color.primary};
     }

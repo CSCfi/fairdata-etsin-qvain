@@ -33,14 +33,13 @@ const HeaderBar = styled.div`
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
 `
 
-const Positioner = styled.div.attrs({
-  className: 'container',
-})`
+const Positioner = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 15px;
 `
 
 export const NaviContainer = styled.nav`
@@ -49,7 +48,7 @@ export const NaviContainer = styled.nav`
   justify-content: center;
   align-items: center;
   height: 100%;
-  @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
+  @media screen and (min-width: 1120px) {
     display: flex;
     margin: 0 auto;
   }

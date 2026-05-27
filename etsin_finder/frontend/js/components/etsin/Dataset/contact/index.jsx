@@ -23,8 +23,8 @@ const Contact = () => {
 
   const recipients = () => {
     const recipientLabels = {
-      CONTRIBUTOR: 'dataset.contributor.snglr',
-      CREATOR: 'dataset.creator.snglr',
+      CONTRIBUTOR: 'dataset.contributor.one',
+      CREATOR: 'dataset.creator.one',
       CURATOR: 'dataset.curator',
       PUBLISHER: 'dataset.publisher',
       RIGHTS_HOLDER: 'dataset.rights_holder',

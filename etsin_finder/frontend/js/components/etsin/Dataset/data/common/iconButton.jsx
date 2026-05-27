@@ -47,6 +47,11 @@ IconButton.defaultProps = {
 }
 
 const IconButtonText = styled.span`
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+  transform: ${p => p.theme.ui.dataset.iconButton.transform};
   margin-left: auto;
   margin-right: auto;
   font-size: ${p => p.fontSize || 'inherit'};
@@ -58,6 +63,8 @@ const StyledIconButton = styled(Button).attrs(p => ({
 }))`
   display: flex;
   align-items: center;
+  line-height: 1;
+  letter-spacing: normal;
   padding: 0.125rem 0.5rem 0.125rem 0.25rem;
   margin: 0.25rem 0.5rem;
   width: ${p => p.width || 'auto'};
@@ -76,6 +83,8 @@ const StyledIconButtonIcon = styled(FontAwesomeIcon)`
   `
       : 'margin-right: 0.25rem;'}
   width: 0.5rem;
+  transform: ${p => p.theme.ui.dataset.iconButton.iconTransform};
+  vertical-align: middle;
 `
 
 export default IconButton

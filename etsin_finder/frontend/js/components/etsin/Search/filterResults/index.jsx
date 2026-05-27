@@ -5,6 +5,7 @@ import Translate from '@/utils/Translate'
 import ClearFilters from './clearFilters'
 
 import FilterSection from './filterSection'
+import DataCatalogFilterSection from './dataCatalogFilterSection'
 import Map from '../mapSearch/map'
 import { useStores } from '@/stores/stores'
 import TemporalSection from './TemporalSection'
@@ -13,6 +14,7 @@ const FilterContainer = styled.ul`
   padding: 1em;
   margin-bottom: 1em;
   border: 2px solid ${props => props.theme.color.lightgray};
+  background-color: ${p => p.theme.ui.search.filterContainerBg};
   @media (min-width: ${props => props.theme.breakpoints.lg}) {
     padding: 0em;
     border: none;
@@ -21,15 +23,11 @@ const FilterContainer = styled.ul`
 
 const FilterResults = () => {
   const {
-    Etsin: {
-      Search: { isLoading },
-    },
     Env: {
+      etsinPortal,
       Flags: { flagEnabled },
     },
   } = useStores()
-
-  if (isLoading) return null
 
   return (
     <FilterContainer aria-labelledby="filterlabel">
@@ -37,7 +35,7 @@ const FilterResults = () => {
       <span id="filterlabel" className="sr-only" aria-hidden>
         <Translate content="search.filter.filters" />
       </span>
-      <FilterSection filterName="data_catalog" />
+      {!etsinPortal.hideDataCatalogFilterSection && <DataCatalogFilterSection />}
       <FilterSection filterName="access_type" />
       <FilterSection filterName="organization" onlyCurrentLanguage showInput />
       <FilterSection filterName="creator" onlyCurrentLanguage showInput />

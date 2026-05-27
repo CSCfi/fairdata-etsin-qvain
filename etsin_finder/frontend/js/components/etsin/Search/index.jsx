@@ -12,45 +12,43 @@
 
 import { useEffect, useRef } from 'react'
 import { observer } from 'mobx-react'
-import { useNavigate } from 'react-router'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
-import { useQuery } from '@/components/etsin/general/useQuery'
+import { useQuery, useEtsinSearchNavigate } from '@/components/etsin/general/useQuery'
 
 import HeroBanner from '../../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
-import Spinner from '../general/spinner'
 
 const Search = () => {
   const {
     Accessibility: { handleNavigation },
     Etsin: {
-      Search: { submit, isLoading },
+      Search: { submit },
     },
     Locale: { lang },
   } = useStores()
 
   const query = useQuery()
   const prevLang = useRef(lang)
-  const navigate = useNavigate()
+  const navigateSearch = useEtsinSearchNavigate()
 
   useEffect(() => {
     handleNavigation('datasets')
 
     if (lang !== prevLang.current) {
       prevLang.current = lang
-      navigate('/datasets')
+      navigateSearch(new URLSearchParams())
     }
 
     submit(query)
-  }, [query, handleNavigation, submit, prevLang, lang, navigate])
+  }, [query, handleNavigation, submit, prevLang, lang, navigateSearch])
 
   return (
     <div>
       <SearchBarHeader />
-      {isLoading ? <Spinner /> : <SearchPage />}
+      <SearchPage />
     </div>
   )
 }
@@ -79,7 +77,7 @@ function SearchPage() {
   // Save the state defined by the query so that it is preserved when
   // returning from the dataset view.
   //
-  // location.pathname example: "/datasets",
+  // location.pathname example: "/datasets" or "/" (LUMI-AIF portal),
   // location.search example: "?facet_access_type=Open&search=kat&page=1",
   useEffect(() => {
     if (Accessibility.currentLocation) {

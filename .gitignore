@@ -10,24 +10,27 @@ __pycache__
 .coverage
 coverage
 .env
+.cursor/
 
 # Backup files from git merge
 *.orig
 
 # VSCode settings
-*.vscode
+**/*.vscode
 
 # MacOS-related
 *.DS_Store
 
 # NPM/Node-related
-etsin_finder/frontend/coverage
-etsin_finder/frontend/node_modules
-etsin_finder/frontend/npm-debug.log
-etsin_finder/frontend/jsconfig.json
-etsin_finder/frontend/build/
-node_modules/
+**/frontend/coverage
+**/frontend/node_modules
+**/frontend/npm-debug.log
+**/frontend/build/
+**/node_modules/
 package-lock.json
+
+# Vite
+**/.vite
 
 # Docker-related
 app_config

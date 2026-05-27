@@ -12,11 +12,10 @@
 
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
-import { useQuery } from '@/components/etsin/general/useQuery'
+import { useQuery, useEtsinSearchNavigate } from '@/components/etsin/general/useQuery'
 
 import getPages from './getPages'
 import withCustomProps from '@/utils/withCustomProps'
@@ -35,13 +34,13 @@ const Pagination = () => {
   })
 
   const query = useQuery()
-  const navigate = useNavigate()
+  const navigateSearch = useEtsinSearchNavigate()
 
   const changePage = (event, value) => {
     query.set('page', value)
     Accessibility.announce(translate('search.pagination.changepage', { value }))
     Accessibility.resetFocus()
-    navigate(`/datasets?${query.toString()}`)
+    navigateSearch(query)
   }
 
   const getItemPage = item => {

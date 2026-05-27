@@ -60,8 +60,6 @@ const FilterSection = ({ filterName, onlyCurrentLanguage, showInput }) => {
       const f = getAggregationQueryName(filterName)
       if (query.has(f)) {
         setIsOpen(true)
-      } else {
-        setIsOpen(false)
       }
     }
   }, [setIsOpen, query, filterName, isLoading, getAggregationQueryName])
@@ -98,13 +96,14 @@ const FilterSection = ({ filterName, onlyCurrentLanguage, showInput }) => {
 
   return (
     <Section data-testid={`${filterName}-facet`}>
-      <Translate
+      <FilterCategory
         data-testid={`search-filter-${filterName}`}
-        component={FilterCategory}
         onClick={toggleSection}
         aria-expanded={isOpen}
-        content={`search.aggregations.${filterName}.title`}
-      />
+      >
+        <Translate content={`search.aggregations.${filterName}.title`} />
+        {isLoading && <SectionSpinner data-testid={`${filterName}-loading-indicator`} />}
+      </FilterCategory>
       <FilterItems className={isOpen ? 'open' : ''} aria-hidden={!isOpen}>
         {showInput && (
           <Translate
@@ -112,6 +111,7 @@ const FilterSection = ({ filterName, onlyCurrentLanguage, showInput }) => {
             id={`${filterName}Input`}
             value={searchTerm}
             onChange={(e) => { setFacetSearch(e.target.value) }}
+            disabled={isLoading}
             autoComplete='off'
             className={`${query.has(filter) ? 'active' : ''} ${isOpen ? 'open' : ''}`}
             attributes={{
@@ -127,13 +127,14 @@ const FilterSection = ({ filterName, onlyCurrentLanguage, showInput }) => {
               filter={filter}
               item={item}
               tabIndex={isOpen ? '0' : '-1'}
+              disabled={isLoading}
             />
           ))}
         </Translate>
         {displayShowMoreButton && (
           <div>
             <hr />
-            <ShowHide onClick={() => setShowMoreItems(!showMoreItems)}>
+            <ShowHide onClick={() => setShowMoreItems(!showMoreItems)} disabled={isLoading}>
               <FontAwesomeIcon icon={showMoreItems ? faAngleDoubleUp : faAngleDoubleDown} />
               <ShowHideBtn>
                 <Translate content={showMoreItems ? 'search.filter.hide' : 'search.filter.show'} />
@@ -192,6 +193,8 @@ const Input = styled.input`
 
 const ShowHide = styled.span`
   cursor: pointer;
+  opacity: ${p => (p.disabled ? 0.5 : 1)};
+  pointer-events: ${p => (p.disabled ? 'none' : 'auto')};
 `
 
 const ShowHideBtn = styled(TransparentLink)`
@@ -216,8 +219,9 @@ export const FilterCategory = styled.button`
   border: 2px solid ${p => p.theme.color.lightgray};
   border-bottom: none;
   padding: 1em 1.5em;
-  background-color: ${p => p.theme.color.lightgray};
+  background-color: ${p => p.theme.ui.search.filterCategory.backgroundColor};
   font-weight: 700;
+  font-size: ${p => p.theme.ui.search.filterCategory.fontSize};
   transition: all 0.3s ease;
   margin: 0;
   svg {
@@ -237,11 +241,26 @@ export const FilterCategory = styled.button`
   }
 `
 
+const SectionSpinner = styled.span`
+  width: 0.9em;
+  height: 0.9em;
+  border: 2px solid ${p => p.theme.color.dark};
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: filter-spinner 0.8s linear infinite;
+  @keyframes filter-spinner {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`
+
 export const FilterItems = styled.div`
   padding: 0em 1em;
   max-height: 0px;
   overflow: hidden;
   transition: all 0.3s ease;
+  background-color: ${p => p.theme.ui.search.filterItems.backgroundColor};
   ul {
     list-style-type: none;
     margin: 0;
@@ -271,6 +290,7 @@ export const FilterItems = styled.div`
   button {
     background: transparent;
     border: none;
+    font-size: ${p => p.theme.ui.search.filterItems.listButtonFontSize};
     padding: 0.3em 0.8em;
     border-radius: 0.7em;
     margin: 0 0 5px 0;
@@ -279,6 +299,11 @@ export const FilterItems = styled.div`
     &:focus {
       color: ${p => p.theme.color.primary};
       text-decoration: underline;
+    }
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      text-decoration: none;
     }
   }
 `

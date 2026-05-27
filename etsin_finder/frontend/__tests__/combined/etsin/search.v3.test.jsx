@@ -3,6 +3,7 @@ import axios from 'axios'
 import { render, screen, within, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
+import { runInAction } from 'mobx'
 
 // context
 import { ThemeProvider } from 'styled-components'
@@ -17,11 +18,12 @@ import EnvClass from '@/stores/domain/env'
 
 import aggregations_a from '../../__testdata__/metaxv3/search/aggregations_a.data'
 import aggregations_b from '../../__testdata__/metaxv3/search/aggregations_b.data'
-import dataset_ida_a, { dataset_geolocation } from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
+import dataset_ida_a, {
+  dataset_geolocation,
+} from '../../__testdata__/metaxv3/datasets/dataset_ida_a.data'
 import dataset_ida_b from '../../__testdata__/metaxv3/datasets/dataset_ida_b.data'
 
 import L from 'leaflet'
-
 
 // Mock for geoman library and pm-related methods:
 vi.mock('@geoman-io/leaflet-geoman-free', () => ({}))
@@ -31,15 +33,21 @@ L.Map.prototype.pm = {
   disableDraw: vi.fn(),
   getGeomanLayers: vi.fn().mockImplementation(() => {
     return {
-      _layers: {}
+      _layers: {},
     }
   }),
   Toolbar: {
     setButtonDisabled: vi.fn(),
-  }
+  },
 }
 
-const common_query = 'publishing_channels=etsin&latest_versions=true&state=published&filter_language=en'
+const common_query =
+  'publishing_channels=etsin&latest_versions=true&state=published&filter_language=en'
+const common_aggregates_query = `${common_query}&expand_data_services=true`
+
+const getQueryParam = (key, value) => {
+  return `${key}=${value}`
+}
 
 const getFilteredAggregation = (facet, entry) => {
   /* Create a deep clone from aggregations_a so that no reference to
@@ -47,7 +55,7 @@ const getFilteredAggregation = (facet, entry) => {
   const aggregations = JSON.parse(JSON.stringify(aggregations_a))
 
   // Filter to include only objects that contain the search word:
-  const hits = aggregations[facet].hits.filter((object) => {
+  const hits = aggregations[facet].hits.filter(object => {
     return String(object.value.en).toLowerCase().includes(entry.toLowerCase())
   })
 
@@ -62,7 +70,7 @@ mockAdapter
   .onGet(`https://metaxv3:443/v3/datasets?limit=20&offset=0&${common_query}`)
   .reply(200, { results: [dataset_ida_a], count: 1 })
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&${common_query}`)
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&${common_aggregates_query}`)
   .reply(200, aggregations_a)
 mockAdapter
   .onGet(
@@ -71,30 +79,38 @@ mockAdapter
   .reply(200, { results: [dataset_ida_a], count: 1 })
 mockAdapter
   .onGet(
-    `https://metaxv3:443/v3/datasets/aggregates?keyword=web-development&limit=20&offset=0&${common_query}`
+    `https://metaxv3:443/v3/datasets/aggregates?keyword=web-development&limit=20&offset=0&${common_aggregates_query}`
   )
   .reply(200, aggregations_a)
 mockAdapter
   .onGet(`https://metaxv3:443/v3/datasets?search=test&limit=20&offset=0&${common_query}`)
   .reply(200, { ...dataset_ida_a, count: 0, results: [] })
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?search=test&limit=20&offset=0&${common_query}`)
+  .onGet(
+    `https://metaxv3:443/v3/datasets/aggregates?search=test&limit=20&offset=0&${common_aggregates_query}`
+  )
   .reply(200, aggregations_a)
 mockAdapter
   .onGet(`https://metaxv3:443/v3/datasets?limit=20&offset=20&${common_query}`)
   .reply(200, { results: [dataset_ida_b], count: 21 })
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=20&${common_query}`)
+  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=20&${common_aggregates_query}`)
   .reply(200, aggregations_b)
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&${common_query}&` +
-    `organization_facet_search=KONE`)
+  .onGet(
+    `https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&${common_aggregates_query}&` +
+      `${getQueryParam('organization_facet_search', 'KONE')}`
+  )
   .reply(200, getFilteredAggregation('organization', 'KONE'))
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets?geolocation=POINT%2826.1+61.6%29&limit=20&offset=0&${common_query}`)
+  .onGet(
+    `https://metaxv3:443/v3/datasets?geolocation=POINT%2826.1+61.6%29&limit=20&offset=0&${common_query}`
+  )
   .reply(200, { results: [dataset_geolocation], count: 1 })
 mockAdapter
-  .onGet(`https://metaxv3:443/v3/datasets/aggregates?geolocation=POINT%2826.1+61.6%29&limit=20&offset=0&${common_query}`)
+  .onGet(
+    `https://metaxv3:443/v3/datasets/aggregates?geolocation=POINT%2826.1+61.6%29&limit=20&offset=0&${common_aggregates_query}`
+  )
   .reply(200, aggregations_a)
 
 mockAdapter.resetHistory()
@@ -113,7 +129,7 @@ const getStores = () => {
   // Mock setLayers method:
   stores.Etsin.Search.MapSearch = {
     ...stores.Etsin.Search.MapSearch,
-    retrieve: vi.fn()
+    retrieve: vi.fn(),
   }
 
   return stores
@@ -137,6 +153,10 @@ describe('Etsin search page', () => {
   beforeEach(() => {
     mockAdapter.resetHistory()
   })
+
+  const waitInitialResultsLoaded = async () => {
+    await screen.findByText('1 result')
+  }
 
   describe('´given url /datasets', () => {
     test('it shows count of one', async () => {
@@ -162,6 +182,7 @@ describe('Etsin search page', () => {
     describe('when clicking keyword filter section', () => {
       test('it shows keyword aggregation', async () => {
         renderEtsin()
+        await waitInitialResultsLoaded()
         for (const kw of dataset_ida_a.keyword) {
           expect(await screen.findByText(`${kw} (1)`)).toBeInTheDocument()
         }
@@ -170,16 +191,47 @@ describe('Etsin search page', () => {
       describe('when selecting a filter keyword: web-development', () => {
         test('it goes to url /datasets?keyword=web-development', async () => {
           renderEtsin()
+          await waitInitialResultsLoaded()
           await userEvent.click(screen.getByTestId('search-filter-keyword'))
           await userEvent.click(screen.getByText('web-development (1)'))
           expect(mockAdapter.history.get).toHaveLength(4)
           expect(mockAdapter.history.get[2].url).toContain('keyword=web-development')
+        })
+
+        test('it keeps the keyword section expanded after deselecting last active value', async () => {
+          renderEtsin()
+          await waitInitialResultsLoaded()
+
+          const keywordSectionButton = screen.getByTestId('search-filter-keyword')
+          await userEvent.click(keywordSectionButton)
+          await userEvent.click(screen.getByText('web-development (1)'))
+          await userEvent.click(screen.getByText('web-development (1)'))
+
+          await waitFor(() => {
+            expect(keywordSectionButton).toHaveAttribute('aria-expanded', 'true')
+          })
+        })
+
+        test('it keeps the search page mounted while loading next results', async () => {
+          const stores = getStores()
+          renderEtsin('/datasets', stores)
+          await waitInitialResultsLoaded()
+          await userEvent.click(screen.getByTestId('search-filter-keyword'))
+          await userEvent.click(screen.getByText('web-development (1)'))
+
+          runInAction(() => {
+            stores.Etsin.Search.setIsLoading(true)
+          })
+          await waitFor(() => {
+            expect(screen.getByTestId('search-page')).toBeInTheDocument()
+          })
         })
       })
 
       describe('when typing "KONE" into the Organization facet input', () => {
         test('the input field text will be "KONE"', async () => {
           renderEtsin()
+          await waitInitialResultsLoaded()
           await userEvent.click(screen.getByText('Organization').closest('button'))
           const organizationFacet = screen.getByTestId('organization-facet')
           const input = within(organizationFacet).getByPlaceholderText('Narrow down the list')
@@ -198,6 +250,7 @@ describe('Etsin search page', () => {
       describe('when typing "KONE" into the Organization facet input', () => {
         test('it filters only the options that contain "KONE" case-insensitively', async () => {
           renderEtsin()
+          await waitInitialResultsLoaded()
           await userEvent.click(screen.getByText('Organization').closest('button'))
           const organizationFacet = screen.getByTestId('organization-facet')
 
@@ -221,24 +274,34 @@ describe('Etsin search page', () => {
       describe('when typing "KONE" into the Organization facet input', () => {
         test('it adds a query param accordingly to the request', async () => {
           renderEtsin()
+          await waitInitialResultsLoaded()
           await userEvent.click(screen.getByText('Organization').closest('button'))
           const organizationFacet = screen.getByTestId('organization-facet')
           const input = within(organizationFacet).getByPlaceholderText('Narrow down the list')
 
-          expect(mockAdapter.history.get.some((element) => {
-            return element.url.includes('aggregates')
-          })).toBe(true)
+          expect(
+            mockAdapter.history.get.some(element => {
+              return element.url.includes('aggregates')
+            })
+          ).toBe(true)
 
-          expect(mockAdapter.history.get.some((element) => {
-            return element.url.includes('organization_facet_search')
-          })).toBe(false)
+          expect(
+            mockAdapter.history.get.some(element => {
+              return element.url.includes('organization_facet_search')
+            })
+          ).toBe(false)
 
           fireEvent.change(input, { target: { value: 'KONE' } })
 
           await waitFor(() => {
-            expect(mockAdapter.history.get.some((element) => {
-              return element.url.includes('aggregates') && element.url.includes('organization_facet_search=KONE')
-            })).toBe(true)
+            expect(
+              mockAdapter.history.get.some(element => {
+                return (
+                  element.url.includes('aggregates') &&
+                  element.url.includes('organization_facet_search=KONE')
+                )
+              })
+            ).toBe(true)
           })
         })
       })
@@ -246,6 +309,7 @@ describe('Etsin search page', () => {
       describe("when writing 'test' to search bar", () => {
         test('it goes to url /datasets?search=test', async () => {
           renderEtsin()
+          await waitInitialResultsLoaded()
           const searchBar = await screen.findByLabelText('Search bar')
           await userEvent.type(searchBar, 'test{enter}')
           expect(mockAdapter.history.get).toHaveLength(4)
@@ -289,7 +353,9 @@ describe('When the start year is after the end year in the Time Period Facet', (
     fireEvent.change(toInput, { target: { value: '2022' } })
     await userEvent.click(searchButton)
 
-    expect(within(temporalFacet).getByText(/start year cannot be later than end year/)).toBeInTheDocument()
+    expect(
+      within(temporalFacet).getByText(/start year cannot be later than end year/)
+    ).toBeInTheDocument()
   })
 })
 

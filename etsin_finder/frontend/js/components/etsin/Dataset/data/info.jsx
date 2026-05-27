@@ -33,6 +33,7 @@ const Info = ({
   id,
   title,
   size,
+  dataService,
   category,
   type,
   accessUrl,
@@ -81,12 +82,10 @@ const Info = ({
               content={checksumValue || null}
               insertable={checksumAlgorithm || ''}
             />
-            <InfoItem translation="dataset.dl.accessUrl" content={accessUrl} />
-            <InfoItem translation="dataset.dl.downloadUrl" content={downloadUrl} />
           </tbody>
         </InfoTable>
 
-        {(type || title || category || description) && (
+        {(type || title || category || description || dataService || accessUrl || downloadUrl) && (
           <>
             <Translate component={SubHeader} content="dataset.dl.customMetadata" />
             <InfoTable>
@@ -99,6 +98,9 @@ const Info = ({
                     content={getValueTranslation(type?.pref_label) || type}
                   />
                 )}
+                <InfoItem translation="dataset.data_service" content={dataService} />
+                <InfoItem translation="dataset.dl.accessUrl" content={accessUrl} />
+                <InfoItem translation="dataset.dl.downloadUrl" content={downloadUrl} />
                 <InfoItem translation="dataset.dl.category" content={category} />
                 <InfoItem translation="general.description" content={description} />
               </tbody>
@@ -147,6 +149,7 @@ Info.defaultProps = {
   title: undefined,
   category: undefined,
   type: undefined,
+  dataService: null,
   description: undefined,
   id: undefined,
   checksum: null,
@@ -164,6 +167,7 @@ Info.propTypes = {
   id: PropTypes.string,
   title: PropTypes.string,
   size: PropTypes.string,
+  dataService: PropTypes.string,
   category: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   type: PropTypes.oneOfType([PropTypes.string, TypeConcept]),
   description: PropTypes.string,
