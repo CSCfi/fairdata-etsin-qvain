@@ -74,7 +74,7 @@ class ActorsV3 extends Actors {
   }
 
   getOrganizationSearchUrl(parent) {
-    const url = new URL(this.Qvain.Env.metaxV3Url('organizations'))
+    const url = new URL(this.Qvain.Env.metaxUrls.organizations())
     if (parent) {
       url.searchParams.set('parent', parent.uiid)
     }

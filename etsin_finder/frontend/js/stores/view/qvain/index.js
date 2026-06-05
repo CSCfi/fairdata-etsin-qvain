@@ -187,7 +187,7 @@ class Qvain extends Resources {
   @action.bound
   async fetchDataset(identifier, { isTemplate = false, draftOf = null, loading = true } = {}) {
     this.client.abort()
-    const { metaxV3Url } = this.Env
+    const { metaxUrls } = this.Env
     this.datasetLoading = loading
     this.datasetError = null
     let _draftOf = draftOf
@@ -196,7 +196,7 @@ class Qvain extends Resources {
       let result
       let nextDraftIdentifier, draftOfIdentifier
       if (this.Env.Flags.flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
-        const url = metaxV3Url('dataset', identifier)
+        const url = metaxUrls.dataset(identifier)
         result = await this.client.get(url, {
           params: {
             expand_catalog: true,
@@ -211,7 +211,7 @@ class Qvain extends Resources {
         // We need some fields that are not included in draft_of field so
         // we fetch the full draft_of dataset if available.
         if (draftOfIdentifier && !_draftOf) {
-          const draftOfUrl = metaxV3Url('dataset', draftOfIdentifier)
+          const draftOfUrl = metaxUrls.dataset(draftOfIdentifier)
           const draftOfResult = await this.client.get(draftOfUrl, {
             params: { fields: 'id,title,fileset,deprecated,access_rights,metadata_owner' },
           })
@@ -333,7 +333,7 @@ class Qvain extends Resources {
       ]
       for (const catalogId of catalogIds) {
         if (!this.dataCatalogConfigs[catalogId]) {
-          promises.push(this.client.get(this.Env.metaxV3Url('dataCatalog', catalogId)))
+          promises.push(this.client.get(this.Env.metaxUrls.dataCatalog(catalogId)))
         }
       }
 
@@ -504,7 +504,7 @@ class Qvain extends Resources {
       return
     }
 
-    const url = this.Env.metaxV3Url('datasetREMSApplicationCounts', publishedDataset.id)
+    const url = this.Env.metaxUrls.datasetREMSApplicationCounts(publishedDataset.id)
     try {
       const res = await this.client.get(url)
       runInAction(() => {

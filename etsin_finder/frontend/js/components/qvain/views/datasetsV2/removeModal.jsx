@@ -20,7 +20,7 @@ export const RemoveModal = () => {
   const {
     QvainDatasets: { removeModal },
     Env: {
-      metaxV3Url,
+      metaxUrls,
       Flags: { flagEnabled },
     },
     Locale: { translate },
@@ -70,7 +70,7 @@ export const RemoveModal = () => {
       if (dataset.next_draft) {
         let draftUrl
         if (flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
-          draftUrl = metaxV3Url('dataset', dataset.next_draft.identifier)
+          draftUrl = metaxUrls.dataset(dataset.next_draft.identifier)
         } else {
           draftUrl = urls.qvain.dataset(dataset.next_draft.identifier)
         }
@@ -82,7 +82,7 @@ export const RemoveModal = () => {
       if (!onlyChanges) {
         let url
         if (flagEnabled('QVAIN.METAX_V3.FRONTEND')) {
-          url = metaxV3Url('dataset', identifier)
+          url = metaxUrls.dataset(identifier)
         } else {
           url = urls.qvain.dataset(identifier)
         }

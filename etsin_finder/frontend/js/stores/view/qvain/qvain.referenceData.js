@@ -56,7 +56,7 @@ class ReferenceData {
 
   getV3Url(referenceData, { searchText }) {
     const type = this.getV3ReferenceDataType(referenceData)
-    let url = `${this.Env.metaxV3Url('referenceData', type)}`
+    let url = `${this.Env.metaxUrls.referenceData(type)}`
     if (searchText == null) {
       url += '?pagination=false'
     } else {

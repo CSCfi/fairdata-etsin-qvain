@@ -168,7 +168,7 @@ class Share {
       let success = false
       try {
         await this.client.post(
-          this.Env.metaxV3Url('datasetPermissionsEditors', this.datasetIdentifier),
+          this.Env.metaxUrls.datasetPermissionsEditors(this.datasetIdentifier),
           {
             username: user.uid,
             share_message: {
@@ -203,7 +203,7 @@ class Share {
     const fetchPerms = async () => {
       try {
         const resp = await this.client.get(
-          this.Env.metaxV3Url('datasetPermissions', this.datasetIdentifier),
+          this.Env.metaxUrls.datasetPermissions(this.datasetIdentifier),
           {
             timeout,
             tag: 'fetch-permissions',
@@ -260,7 +260,7 @@ class Share {
   }
 
   getRemoveUserUrl(user) {
-    return this.Env.metaxV3Url('datasetPermissionsEditor', this.datasetIdentifier, user.uid)
+    return this.Env.metaxUrls.datasetPermissionsEditor(this.datasetIdentifier, user.uid)
   }
 
   @action.bound

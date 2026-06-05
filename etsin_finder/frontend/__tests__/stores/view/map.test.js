@@ -8,7 +8,7 @@ vi.mock('leaflet-geosearch', async () => {
 })
 
 const stores = buildStores()
-const Map = stores.Map
+const MapUtils = stores.MapUtils
 
 const data = {
   wkt_point: {
@@ -117,7 +117,7 @@ const location_query_result = [
 describe('makeGeometry from wkt string', () => {
   describe('wkt point', () => {
     it('geoJSON with type, coordinates and coordinates in lng,lat', async () => {
-      const geometry = await Map.makeGeometry(data.wkt_point)
+      const geometry = await MapUtils.makeGeometry(data.wkt_point)
       expect(geometry.type).toEqual('Point')
       expect(geometry.coordinates).toEqual([30, 10])
     })
@@ -125,7 +125,7 @@ describe('makeGeometry from wkt string', () => {
 
   describe('wkt linestring', () => {
     it('geoJSON with type, coordinates and coordinates in lng,lat', async () => {
-      const geometry = await Map.makeGeometry(data.wkt_linestring)
+      const geometry = await MapUtils.makeGeometry(data.wkt_linestring)
       expect(geometry.type).toEqual('LineString')
       expect(geometry.coordinates).toEqual([
         [70, 10],
@@ -137,7 +137,7 @@ describe('makeGeometry from wkt string', () => {
 
   describe('wkt polygon', () => {
     it('geoJSON with type, coordinates and coordinates in lng,lat', async () => {
-      const geometry = await Map.makeGeometry(data.wkt_polygon)
+      const geometry = await MapUtils.makeGeometry(data.wkt_polygon)
       expect(geometry.type).toEqual('Polygon')
       expect(geometry.coordinates).toEqual([
         [
@@ -153,7 +153,7 @@ describe('makeGeometry from wkt string', () => {
 
   describe('wkt polygon inside polygon', () => {
     it('geoJSON with type, coordinates and coordinates in lng,lat', async () => {
-      const geometry = await Map.makeGeometry(data.wkt_polygonInPolygon)
+      const geometry = await MapUtils.makeGeometry(data.wkt_polygonInPolygon)
       expect(geometry.type).toEqual('Polygon')
       expect(geometry.coordinates).toEqual([
         [
@@ -175,7 +175,7 @@ describe('makeGeometry from wkt string', () => {
 
   describe('wkt multipoint', () => {
     it('geoJSON with type, coordinates and coordinates in lng,lat', async () => {
-      const geometry = await Map.makeGeometry(data.wkt_multipoint)
+      const geometry = await MapUtils.makeGeometry(data.wkt_multipoint)
       expect(geometry.type).toEqual('MultiPoint')
       expect(geometry.coordinates).toEqual([
         [10, 40],
@@ -188,7 +188,7 @@ describe('makeGeometry from wkt string', () => {
 
   describe('wkt multipoint2', () => {
     it('geoJSON with type, coordinates and coordinates in lng,lat', async () => {
-      const geometry = await Map.makeGeometry(data.wkt_multipoint2)
+      const geometry = await MapUtils.makeGeometry(data.wkt_multipoint2)
       expect(geometry.type).toEqual('MultiPoint')
       expect(geometry.coordinates).toEqual([
         [10, 40],
@@ -201,7 +201,7 @@ describe('makeGeometry from wkt string', () => {
 
   describe('wkt multilinestring', () => {
     it('geoJSON with type, coordinates and coordinates in lng,lat', async () => {
-      const geometry = await Map.makeGeometry(data.wkt_multilinestring)
+      const geometry = await MapUtils.makeGeometry(data.wkt_multilinestring)
       expect(geometry.type).toEqual('MultiLineString')
       expect(geometry.coordinates).toEqual([
         [
@@ -221,7 +221,7 @@ describe('makeGeometry from wkt string', () => {
 
   describe('wkt multipolygon', () => {
     it('geoJSON with type, coordinates and coordinates in lng,lat', async () => {
-      const geometry = await Map.makeGeometry(data.wkt_multipolygon)
+      const geometry = await MapUtils.makeGeometry(data.wkt_multipolygon)
       expect(geometry.type).toEqual('MultiPolygon')
       expect(geometry.coordinates).toEqual([
         [
@@ -247,7 +247,7 @@ describe('makeGeometry from wkt string', () => {
 
   describe('wkt multipolygon2', () => {
     it('geoJSON with type, coordinates and coordinates in lng,lat', async () => {
-      const geometry = await Map.makeGeometry(data.wkt_multipolygon2)
+      const geometry = await MapUtils.makeGeometry(data.wkt_multipolygon2)
       expect(geometry.type).toEqual('MultiPolygon')
       expect(geometry.coordinates).toEqual([
         [
@@ -280,7 +280,7 @@ describe('makeGeometry from wkt string', () => {
 
   describe('wkt point and polygon', () => {
     it('geoJSON with type, coordinates and coordinates in lng,lat', async () => {
-      const geometry = await Map.makeGeometry(data.wkt_point_and_polygon)
+      const geometry = await MapUtils.makeGeometry(data.wkt_point_and_polygon)
       expect(geometry.type).toEqual('GeometryCollection')
       expect(geometry.geometries).toEqual([
         { type: 'Point', coordinates: [-30, -10] },
@@ -308,7 +308,7 @@ describe('makeGeometry from location name', () => {
       search = searchMock
     }
     OpenStreetMapProvider.mockImplementation(MockProvider)
-    const geometry = await Map.makeGeometry(data.location_name)
+    const geometry = await MapUtils.makeGeometry(data.location_name)
 
     expect(searchMock).toHaveBeenCalledWith({ query: 'Luumäki' })
 
@@ -328,7 +328,7 @@ describe('makeGeometry from location name', () => {
 
 describe('makeGeometry from geolocations', () => {
   it('copies geolocations as-is', async () => {
-    const geometry = await Map.makeGeometry(data.geolocations_multipolygon)
+    const geometry = await MapUtils.makeGeometry(data.geolocations_multipolygon)
     expect(geometry).toEqual(data.geolocations_multipolygon.geolocations)
     expect(geometry).not.toBe(data.geolocations_multipolygon.geolocations) // copy, not same instance
   })
@@ -337,7 +337,7 @@ describe('makeGeometry from geolocations', () => {
 describe('getLeafletBounds', async () => {
   // Coordinates for Leaflet bounds should reversed (lat, lng)
   test('bounds from WKT point', async () => {
-    const bounds = Map.getLeafletBounds(await Map.makeGeometry(data.wkt_point))
+    const bounds = MapUtils.getLeafletBounds(await MapUtils.makeGeometry(data.wkt_point))
     expect(bounds).toEqual([
       [10, 30],
       [10, 30],
@@ -345,7 +345,7 @@ describe('getLeafletBounds', async () => {
   })
 
   test('bounds from WKT multipolygon', async () => {
-    const bounds = Map.getLeafletBounds(await Map.makeGeometry(data.wkt_multipolygon2))
+    const bounds = MapUtils.getLeafletBounds(await MapUtils.makeGeometry(data.wkt_multipolygon2))
     expect(bounds).toEqual([
       [5, 10],
       [100, 45],
@@ -353,7 +353,9 @@ describe('getLeafletBounds', async () => {
   })
 
   test('bounds from WKT point and polygon', async () => {
-    const bounds = Map.getLeafletBounds(await Map.makeGeometry(data.wkt_point_and_polygon))
+    const bounds = MapUtils.getLeafletBounds(
+      await MapUtils.makeGeometry(data.wkt_point_and_polygon)
+    )
     expect(bounds).toEqual([
       [-10, -30],
       [40, 40],
@@ -361,7 +363,9 @@ describe('getLeafletBounds', async () => {
   })
 
   test('bounds from geolocations', async () => {
-    const bounds = Map.getLeafletBounds(await Map.makeGeometry(data.geolocations_multipolygon))
+    const bounds = MapUtils.getLeafletBounds(
+      await MapUtils.makeGeometry(data.geolocations_multipolygon)
+    )
     expect(bounds).toEqual([
       [59, 19],
       [65, 22],

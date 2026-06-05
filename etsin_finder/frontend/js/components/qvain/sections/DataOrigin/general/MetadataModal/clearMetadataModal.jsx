@@ -17,7 +17,7 @@ const ClearMetadataModal = () => {
       Files: { applyClearPASMeta },
       original,
     },
-    Env: { metaxV3Url },
+    Env: { metaxUrls },
   } = useStores()
   const [loading, setLoading] = useState(false)
 
@@ -27,7 +27,7 @@ const ClearMetadataModal = () => {
 
     setLoading(true)
     try {
-      const url = metaxV3Url('fileCharacteristics', identifier)
+      const url = metaxUrls.fileCharacteristics(identifier)
       await axios.delete(url, { params: { dataset: crId } })
       applyClearPASMeta({})
       close()

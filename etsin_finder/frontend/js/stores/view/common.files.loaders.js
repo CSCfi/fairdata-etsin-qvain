@@ -31,7 +31,7 @@ const getChildDataUrl = (Files, dir, sort) => {
   // Return URL object for getting basic data on direct children for directory.
   let url = new URL(urls.common.directoryFiles(dir.identifier), document.location.origin)
 
-  url = new URL(Files.Env.metaxV3Url('directories'))
+  url = new URL(Files.Env.metaxUrls.directories())
   url.searchParams.set('storage_service', 'ida')
   url.searchParams.set('csc_project', Files.selectedProject)
   url.searchParams.set('path', dir.identifier || dir.path)
@@ -315,7 +315,7 @@ const fetchChildData = action(({ Files, dir, type, sort }) => {
 const fetchItems = async ({ Files, dir, offset, limit, type, sort, filter = '' }) => {
   const { datasetIdentifier } = Files
 
-  const url = new URL(Files.Env.metaxV3Url('directories'))
+  const url = new URL(Files.Env.metaxUrls.directories())
   url.searchParams.set('path', dir.identifier || dir.path)
   url.searchParams.set('storage_service', 'ida')
   url.searchParams.set('csc_project', Files.selectedProject)

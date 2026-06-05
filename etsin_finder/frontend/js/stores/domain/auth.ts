@@ -91,7 +91,7 @@ class Auth {
     const requestUrl = new URL(requestConfig.url, globalThis.location.href)
     let metaxUrl
     try {
-      metaxUrl = new URL(this.Env.metaxV3Url(''))
+      metaxUrl = new URL(this.Env.metaxUrls.base())
     } catch (error) {
       console.error(`Failed to construct Metax V3 URL, host=${this.Env.metaxV3Host}`)
       throw error
@@ -155,7 +155,7 @@ class Auth {
   @action.bound
   async fetchUserData() {
     try {
-      const res = await axios.get(this.Env.metaxV3Url('user'), {
+      const res = await axios.get(this.Env.metaxUrls.user(), {
         headers: { 'content-type': 'application/json' },
         withCredentials: true,
       })

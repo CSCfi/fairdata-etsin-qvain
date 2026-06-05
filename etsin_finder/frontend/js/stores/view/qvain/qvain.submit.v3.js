@@ -124,13 +124,13 @@ class SubmitV3 extends Submit {
   }
 
   createNewPublished = async dataset => {
-    const url = this.Qvain.Env.metaxV3Url('datasets')
+    const url = this.Qvain.Env.metaxUrls.datasets()
     const { data } = await axios.post(url, { ...dataset, state: 'published' })
     return data
   }
 
   createNewDraft = async dataset => {
-    const url = this.Qvain.Env.metaxV3Url('datasets')
+    const url = this.Qvain.Env.metaxUrls.datasets()
     const { data } = await axios.post(url, dataset)
     return data
   }
@@ -139,7 +139,7 @@ class SubmitV3 extends Submit {
     // Creates new version but does not update it.
     // Would be better if this was turned into a draftFunction
     // that also updates the new version but that needs more refactoring.
-    const url = this.Qvain.Env.metaxV3Url('datasetNewVersion', dataset.id)
+    const url = this.Qvain.Env.metaxUrls.datasetNewVersion(dataset.id)
     const { data } = await axios.post(url)
 
     remapActorIdentifiers(dataset)
@@ -150,19 +150,19 @@ class SubmitV3 extends Submit {
   }
 
   updateDataset = async dataset => {
-    const url = this.Qvain.Env.metaxV3Url('dataset', dataset.id)
+    const url = this.Qvain.Env.metaxUrls.dataset(dataset.id)
     const { data } = await axios.patch(url, dataset)
     return data
   }
 
   publishDataset = async dataset => {
-    const url = this.Qvain.Env.metaxV3Url('datasetPublish', dataset.id)
+    const url = this.Qvain.Env.metaxUrls.datasetPublish(dataset.id)
     const { data } = await axios.post(url)
     return data
   }
 
   savePublishedAsDraft = async dataset => {
-    const url = this.Qvain.Env.metaxV3Url('datasetCreateDraft', dataset.id)
+    const url = this.Qvain.Env.metaxUrls.datasetCreateDraft(dataset.id)
     const res = await axios.post(url)
 
     remapActorIdentifiers(dataset)

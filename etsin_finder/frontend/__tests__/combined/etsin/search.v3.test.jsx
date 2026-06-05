@@ -99,7 +99,7 @@ mockAdapter
 mockAdapter
   .onGet(
     `https://metaxv3:443/v3/datasets/aggregates?limit=20&offset=0&${common_aggregates_query}&` +
-    `organization_facet_search=KONE`
+      `organization_facet_search=KONE`
   )
   .reply(200, getFilteredAggregation('organization', 'KONE'))
 mockAdapter
@@ -241,17 +241,24 @@ describe('Etsin search page', () => {
           await userEvent.click(await screen.findByRole('switch', { name: 'web-development (1)' }))
 
           // Verify that the "web-development" filter has been selected:
-          expect(await screen.findByRole('switch', { name: 'web-development (1)' })).toHaveClass('active')
+          expect(await screen.findByRole('switch', { name: 'web-development (1)' })).toHaveClass(
+            'active'
+          )
 
           // Click the Remove filters button:
           await userEvent.click(await screen.findByRole('button', { name: 'Remove filters' }))
 
           // Verify that the facet is closed:
-          expect(await screen.findByTestId('search-filter-keyword')).toHaveAttribute('aria-expanded', 'false')
+          expect(await screen.findByTestId('search-filter-keyword')).toHaveAttribute(
+            'aria-expanded',
+            'false'
+          )
 
           // Open the facet again and verify that the filter is no longer active:
           await userEvent.click(screen.getByTestId('search-filter-keyword'))
-          expect(screen.getByRole('switch', { name: 'web-development (1)' })).not.toHaveClass('active')
+          expect(screen.getByRole('switch', { name: 'web-development (1)' })).not.toHaveClass(
+            'active'
+          )
         })
 
         test('it keeps the search page mounted while loading next results', async () => {

@@ -81,7 +81,7 @@ class EtsinSearch {
   }
 
   @action.bound async fetchOverallCount() {
-    const url = `${this.Env.metaxV3Url('datasets')}?limit=1&latest_versions=true&state=published`
+    const url = `${this.Env.metaxUrls.datasets()}?limit=1&latest_versions=true&state=published`
     const res = await this.client.get(url)
     runInAction(() => {
       this.overallCount = res.data.count
@@ -108,8 +108,8 @@ class EtsinSearch {
     query.set('state', 'published')
     query.set('filter_language', this.Locale.lang)
 
-    const url = `${this.Env.metaxV3Url('datasets')}?${query.toString()}`
-    this.aggregatesUrl = `${this.Env.metaxV3Url('aggregates')}?${query.toString()}&expand_data_services=true`
+    const url = `${this.Env.metaxUrls.datasets()}?${query.toString()}`
+    this.aggregatesUrl = `${this.Env.metaxUrls.aggregates()}?${query.toString()}&expand_data_services=true`
 
     await this.client.abort()
     this.setIsLoading(true)

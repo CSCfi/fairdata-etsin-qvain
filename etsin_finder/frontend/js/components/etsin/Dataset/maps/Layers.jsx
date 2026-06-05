@@ -16,7 +16,7 @@ const markerIcon = leaflet.icon({
 })
 
 const Layers = ({ spatial }) => {
-  const { Map: MapStore } = useStores()
+  const { MapUtils } = useStores()
   const [geometry, setGeometry] = useState(null)
   const [selectedPoint, setSelectedPoint] = useState(null)
 
@@ -25,13 +25,13 @@ const Layers = ({ spatial }) => {
 
   useEffect(() => {
     const makeGeometry = async () => {
-      const geo = await MapStore.makeGeometry(spatial)
-      const bounds = MapStore.getLeafletBounds(geo)
+      const geo = await MapUtils.makeGeometry(spatial)
+      const bounds = MapUtils.getLeafletBounds(geo)
       map.fitBounds(bounds, { maxZoom: 15 })
       setGeometry(geo)
     }
     makeGeometry()
-  }, [spatial, MapStore, map])
+  }, [spatial, MapUtils, map])
 
   if (!geometry) {
     return null

@@ -294,7 +294,7 @@ describe('Env', () => {
     })
 
     test('should return metaxV3 url for dataset', () => {
-      Env.metaxV3Url('dataset', 'dataset_id').should.be.string(expectedUrl)
+      Env.metaxUrls.dataset('dataset_id').should.be.string(expectedUrl)
     })
   })
 })

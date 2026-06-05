@@ -7,8 +7,13 @@
       "@helpers/*": ["./test-helpers/*"],
       "@testdata/*": ["./__testdata__/*"]
     },
-    // should have same as types as the main tsconfig + "vitest/globals"
-    "types": ["node", "vite/client", "vitest/globals"]
+    "types": [
+      // common types, should be same as the main tsconfig
+      "node",
+      "vite/client",
+      // types specific to tests
+      "vitest/globals"
+    ]
   },
   "include": ["../js", "."], // include all
   "exclude": []

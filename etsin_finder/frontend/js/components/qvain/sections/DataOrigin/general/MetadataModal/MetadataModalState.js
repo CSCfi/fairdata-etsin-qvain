@@ -111,10 +111,10 @@ export default class MetadataModalState {
 
   patchFileCharacteristics(identifier, data) {
     const { original } = this.Stores.Qvain
-    const { metaxV3Url } = this.Stores.Env
+    const { metaxUrls } = this.Stores.Env
     const crId = original?.identifier
 
-    const url = metaxV3Url('fileCharacteristics', identifier)
+    const url = metaxUrls.fileCharacteristics(identifier)
     const request = this.client
       .put(url, this.dataToV3(data), {
         params: { dataset: crId },

@@ -11,7 +11,7 @@ export class DatasetProcessorV3 extends EtsinProcessor {
   // client : AbortClient
 
   @action.bound fetch({ id, resolved, rejected }) {
-    const url = this.Env.metaxV3Url('dataset', id)
+    const url = this.Env.metaxUrls.dataset(id)
     const tag = `dataset-${id}`
     const promise = this.client
       .get(url, {
@@ -32,7 +32,7 @@ export class DatasetProcessorV3 extends EtsinProcessor {
 
   @action.bound
   fetchEmails({ id, resolved, rejected }) {
-    const url = this.Env.metaxV3Url('datasetContact', id)
+    const url = this.Env.metaxUrls.datasetContact(id)
     const tag = `dataset-${id}-emails`
     const promise = this.client
       .get(url, {

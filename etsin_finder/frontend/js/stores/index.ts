@@ -1,19 +1,9 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
-
 import LocaleClass from './view/locale'
 import EnvClass from './domain/env'
 import AuthClass from './domain/auth'
 import DatasetQueryClass from './view/datasetquery'
 import AccessibilityClass from './view/accessibility'
-import MapClass from './view/map'
+import MapClass from './view/mapUtils'
 import QvainClass from './view/qvain'
 import EtsinClass from './view/etsin'
 import QvainDatasetsClass from './view/qvain/qvain.datasets'
@@ -23,7 +13,7 @@ import MatomoClass from './tracking'
 import CrossRefClass from './view/qvain/qvain.crossRef'
 import OrgReferencesClass from './view/qvain/qvain.orgReferences.v3'
 
-export const buildStores = (options = {}) => {
+export const buildStores = (options: { Env?: EnvClass } = {}) => {
   const Env = options.Env || new EnvClass()
   const Auth = new AuthClass(Env)
   const Locale = new LocaleClass(Env)
@@ -35,7 +25,7 @@ export const buildStores = (options = {}) => {
   const Qvain = new QvainClass(Env, Auth, Locale, OrgReferences)
   const DatasetQuery = new DatasetQueryClass(Env, Access)
   const Etsin = new EtsinClass({ Env, Access, Accessibility, Locale })
-  const Map = new MapClass(Locale)
+  const MapUtils = new MapClass(Locale)
   const Matomo = new MatomoClass(Env)
   const CrossRef = new CrossRefClass(Env)
   return {
@@ -47,10 +37,12 @@ export const buildStores = (options = {}) => {
     DatasetQuery,
     Auth,
     Access,
-    Map,
+    MapUtils,
     QvainDatasets,
     SearchFilters,
     Matomo,
     CrossRef,
   }
 }
+
+export type Stores = ReturnType<typeof buildStores>

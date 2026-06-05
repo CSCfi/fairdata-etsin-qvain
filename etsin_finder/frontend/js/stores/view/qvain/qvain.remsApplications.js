@@ -55,11 +55,11 @@ class REMSApplications {
     const exec = async () => {
       let url
       if (this.filter === 'todo') {
-        url = this.Env.metaxV3Url('remsApplicationsTodo')
+        url = this.Env.metaxUrls.remsApplicationsTodo()
       } else if (this.filter === 'handled') {
-        url = this.Env.metaxV3Url('remsApplicationsHandled')
+        url = this.Env.metaxUrls.remsApplicationsHandled()
       } else {
-        url = this.Env.metaxV3Url('remsApplications')
+        url = this.Env.metaxUrls.remsApplications()
       }
       const resp = await this.client.get(url, { tag: 'fetch-applications' })
       const data = [...resp.data]
@@ -85,8 +85,8 @@ class REMSApplications {
     const resource = application['application/resources'][0]
     const resourceExtId = resource['resource/ext-id']
     const datasetId = resourceExtId.split(':')[1]
-    const appUrl = this.Env.metaxV3Url('remsApplication', applicationId)
-    const datasetUrl = this.Env.metaxV3Url('dataset', datasetId)
+    const appUrl = this.Env.metaxUrls.remsApplication(applicationId)
+    const datasetUrl = this.Env.metaxUrls.dataset(datasetId)
     const [appResp, datasetResp] = await Promise.all([
       this.client.get(appUrl),
       this.client.get(datasetUrl),
@@ -103,13 +103,13 @@ class REMSApplications {
     const applicationId = application['application/id']
     let url
     if (action === 'approve') {
-      url = this.Env.metaxV3Url('remsApplicationApprove', applicationId)
+      url = this.Env.metaxUrls.remsApplicationApprove(applicationId)
     } else if (action === 'reject') {
-      url = this.Env.metaxV3Url('remsApplicationReject', applicationId)
+      url = this.Env.metaxUrls.remsApplicationReject(applicationId)
     } else if (action === 'close') {
-      url = this.Env.metaxV3Url('remsApplicationClose', applicationId)
+      url = this.Env.metaxUrls.remsApplicationClose(applicationId)
     } else if (action === 'return') {
-      url = this.Env.metaxV3Url('remsApplicationReturn', applicationId)
+      url = this.Env.metaxUrls.remsApplicationReturn(applicationId)
     } else {
       console.error('Unknown action', action)
     }

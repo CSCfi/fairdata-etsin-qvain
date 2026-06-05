@@ -127,7 +127,7 @@ class EtsinDatasetRems {
     }
     this.clearApplication()
     this.setApplicationBase(undefined)
-    const url = this.Env.metaxV3Url('datasetREMSApplicationBase', this.EtsinDataset.identifier)
+    const url = this.Env.metaxUrls.datasetREMSApplicationBase(this.EtsinDataset.identifier)
     try {
       const { data } = await this.promiseManager.add(this.client.get(url), 'application-base')
       this.setApplicationBase({ ...data, 'application/id': null })
@@ -142,7 +142,7 @@ class EtsinDatasetRems {
     if (this.isLoadingApplications) {
       return
     }
-    const url = this.Env.metaxV3Url('datasetREMSApplications', this.EtsinDataset.identifier)
+    const url = this.Env.metaxUrls.datasetREMSApplications(this.EtsinDataset.identifier)
     try {
       const { data } = await this.promiseManager.add(this.client.get(url), 'applications')
       data.sort((a, b) => b['application/id'] - a['application/id']) // newest application first
@@ -162,8 +162,7 @@ class EtsinDatasetRems {
     }
     try {
       const applicationId = application['application/id']
-      const url = this.Env.metaxV3Url(
-        'datasetREMSApplication',
+      const url = this.Env.metaxUrls.datasetREMSApplication(
         this.EtsinDataset.identifier,
         applicationId
       )
@@ -246,7 +245,7 @@ class EtsinDatasetRems {
   }
 
   @action.bound async createApplication() {
-    const url = this.Env.metaxV3Url('datasetREMSApplications', this.EtsinDataset.identifier)
+    const url = this.Env.metaxUrls.datasetREMSApplications(this.EtsinDataset.identifier)
     const submit = async () => {
       const payload = this.getSubmitPayload(this.applicationBase)
 
@@ -260,8 +259,7 @@ class EtsinDatasetRems {
 
   @action.bound async submitApplication(application) {
     const applicationId = application['application/id']
-    const url = this.Env.metaxV3Url(
-      'datasetREMSApplicationSubmit',
+    const url = this.Env.metaxUrls.datasetREMSApplicationSubmit(
       this.EtsinDataset.identifier,
       applicationId
     )

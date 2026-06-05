@@ -1,13 +1,3 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
-
 import axios from 'axios'
 import { action, computed, observable } from 'mobx'
 import RouterStore from '@/utils/RouterStore'
@@ -18,6 +8,7 @@ import { getCookieValue } from '@/utils/cookies'
 import { getEtsinPortalConfig } from '@/etsinPortals/registry'
 import { etsinSearchPathname } from '@/utils/lumiAifEtsinSearch'
 import urls from '@/utils/urls'
+import { addHostToUrls } from '@/utils/addHostToUrls'
 
 async function importValuesAsync() {
   const response = await axios.get('/api/app_config')
@@ -25,14 +16,19 @@ async function importValuesAsync() {
 }
 
 class Env {
+  Flags: Flags
+  history: RouterStore
+
   constructor() {
     this.Flags = new Flags(this)
     this.history = new RouterStore()
-    this.metaxV3Url = this.metaxV3Url.bind(this)
   }
 
-  metaxV3Url(endpoint, ...args) {
-    return urls.metaxV3[endpoint](`https://${this.metaxV3Host}`, ...args)
+  @observable accessor metaxUrls: typeof urls.metaxV3 = addHostToUrls(urls.metaxV3, '')
+
+  @action.bound
+  updateMetaxUrls() {
+    this.metaxUrls = addHostToUrls(urls.metaxV3, this.metaxV3Host)
   }
 
   @observable accessor metaxV3Host = ''
@@ -66,31 +62,32 @@ class Env {
     this.setAppConfigLoaded(true)
   }
 
-  @action setPackageSizeLimit(limit) {
+  @action setPackageSizeLimit(limit: number) {
     this.packageSizeLimit = limit
   }
 
-  @action setSSOPrefix(prefix) {
+  @action setSSOPrefix(prefix: string) {
     this.ssoPrefix = prefix
   }
 
-  @action setSSOCookieDomain(domain) {
+  @action setSSOCookieDomain(domain: string) {
     this.ssoCookieDomain = domain
   }
 
-  @action setAppConfigLoaded(value) {
+  @action setAppConfigLoaded(value: boolean) {
     this.appConfigLoaded = value
   }
 
-  @action setMetaxV3Host(host, port) {
+  @action setMetaxV3Host(host: string, port: number) {
     this.metaxV3Host = `${host}:${port}`
+    this.updateMetaxUrls()
   }
 
-  @action setEtsinHost(host) {
+  @action setEtsinHost(host: string) {
     this.etsinHost = host
   }
 
-  @action setQvainHost(host) {
+  @action setQvainHost(host: string) {
     this.qvainHost = host
   }
 
@@ -131,7 +128,7 @@ class Env {
     return this.qvainHost !== this.etsinHost
   }
 
-  getEtsinUrl = path => {
+  getEtsinUrl = (path: string) => {
     if (this.isEtsin) {
       return path
     }
@@ -141,7 +138,7 @@ class Env {
     return path
   }
 
-  getQvainUrl = path => {
+  getQvainUrl = (path: string) => {
     if (this.isQvain) {
       return path
     }

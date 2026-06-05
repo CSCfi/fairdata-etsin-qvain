@@ -554,7 +554,7 @@ class EtsinDatasetV3 {
 
   @computed get metadataLink() {
     if (this.identifier) {
-      return this.Env.metaxV3Url('dataset', this.identifier)
+      return this.Env.metaxUrls.dataset(this.identifier)
     }
 
     return null

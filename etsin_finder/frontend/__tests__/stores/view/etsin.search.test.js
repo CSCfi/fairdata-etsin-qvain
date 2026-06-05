@@ -1,9 +1,11 @@
 import EtsinSearch from '@/stores/view/etsin/etsin.search'
+import { addHostToUrls } from '@/utils/addHostToUrls'
+import urls from '@/utils/urls'
 
 describe('EtsinSearch aggregates url', () => {
   it('adds expand_data_services to aggregates request', async () => {
     const Env = {
-      metaxV3Url: endpoint => `https://example.test/${endpoint}`,
+      metaxUrls: addHostToUrls(urls.metaxV3, 'example.test'),
     }
     const Locale = { lang: 'en' }
     const Etsin = { errors: { search: [] } }

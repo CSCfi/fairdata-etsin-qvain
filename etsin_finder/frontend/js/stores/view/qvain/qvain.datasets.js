@@ -173,6 +173,11 @@ class QvainDatasetList {
   constructor(args) {
     this.Locale = args.Locale
     this.Auth = args.Auth
+
+    /**
+     *  @import Env from '@/stores/domain/env'
+     *  @type {Env}
+     */
     this.Env = args.Env
     this.params = args.params
     this.onLoad = args.onLoad
@@ -228,7 +233,7 @@ class QvainDatasetList {
         params['access_rights__rems_approval_type'] = 'manual'
       }
       const response = await this.promiseManager.add(
-        this.client.get(this.Env.metaxV3Url('datasets'), { params }),
+        this.client.get(this.Env.metaxUrls.datasets(), { params }),
         'datasets'
       )
       const adapter = new Adapter(this.Auth)

@@ -24,7 +24,7 @@ class OrgReferences {
   }
 
   getOrganizationSearchUrl(parent) {
-    const url = new URL(this.Env.metaxV3Url('organizations'))
+    const url = new URL(this.Env.metaxUrls.organizations())
     if (parent) {
       url.searchParams.set('parent', parent.id)
     }

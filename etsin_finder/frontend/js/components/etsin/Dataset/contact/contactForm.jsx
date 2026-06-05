@@ -168,7 +168,7 @@ const ContactForm = withFormik({
   },
   handleSubmit: (values, { props, setSubmitting, setStatus, setFieldError }) => {
     setStatus('')
-    const url = props.metaxV3Url('datasetContact', props.datasetID)
+    const url = props.metaxUrls.datasetContact(props.datasetID)
     const payload = {
       subject: values.subject,
       reply_to: values.email,

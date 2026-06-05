@@ -11,7 +11,7 @@ import { useStores } from '@/stores/stores'
 
 const Contact = () => {
   const {
-    Env: { metaxV3Url },
+    Env: { metaxUrls },
     Etsin: {
       EtsinDataset: { identifier, emailInfo, isRems },
     },
@@ -78,7 +78,7 @@ const Contact = () => {
           datasetID={identifier}
           recipientsList={recipients()}
           translations={translate('dataset.contact')}
-          metaxV3Url={metaxV3Url}
+          metaxUrls={metaxUrls}
         />
       </Modal>
       <Splash visible={splashOpen}>
