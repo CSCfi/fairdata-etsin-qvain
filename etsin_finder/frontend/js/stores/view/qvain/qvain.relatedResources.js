@@ -13,11 +13,12 @@ const parseDoiUrl = doi => `https://doi.org/${doi}`
 export const relatedResourceNameSchema = yup.object().shape({
   fi: yup.mixed().when('en', {
     is: val => val.length > 0,
-    then: yup.string().typeError('qvain.validationMessages.publications.nameRequired'),
-    otherwise: yup
-      .string()
-      .typeError('qvain.validationMessages.publications.nameRequired')
-      .required('qvain.validationMessages.publications.nameRequired'),
+    then: () => yup.string().typeError('qvain.validationMessages.publications.nameRequired'),
+    otherwise: () =>
+      yup
+        .string()
+        .typeError('qvain.validationMessages.publications.nameRequired')
+        .required('qvain.validationMessages.publications.nameRequired'),
   }),
   en: yup.string().typeError('qvain.validationMessages.publications.nameRequired'),
 })

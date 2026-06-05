@@ -1,4 +1,4 @@
- 
+
 import { makeObservable, observable, action } from 'mobx'
 import { object, array, string, mixed } from 'yup'
 import { CommonAdapter, ListAdapter } from '../structural/qvain.adapters'
@@ -15,8 +15,8 @@ const titleSchema = object()
   .shape({
     fi: mixed().when('en', {
       is: val => Boolean(val),
-      then: string().typeError('qvain.validationMessages.projects.title.string'),
-      otherwise: string()
+      then: () => string().typeError('qvain.validationMessages.projects.title.string'),
+      otherwise: () => string()
         .typeError('qvain.validationMessages.projects.title.string')
         .required('qvain.validationMessages.projects.title.required'),
     }),
@@ -41,8 +41,8 @@ const accessTypeSchema = object().shape({
 const funderSchema = object().shape({
   access_type: mixed().when('organization', {
     is: val => Object.values(val.pref_label).filter(v => v).length,
-    then: accessTypeSchema.nullable(),
-    otherwise: accessTypeSchema.required(),
+    then: () => accessTypeSchema.nullable(),
+    otherwise: () => accessTypeSchema.required(),
   }),
   organization: object(),
 })

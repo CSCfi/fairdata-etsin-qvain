@@ -61,7 +61,6 @@ export const externalResourceDataServiceSchema = yup
   })
   .typeError('qvain.validationMessages.externalResources.dataService.required')
   .required('qvain.validationMessages.externalResources.dataService.required')
-  .nullable()
 
 const isValidHttpUrl = value => {
   if (!/^https?:\/\//i.test(value)) {

@@ -38,7 +38,7 @@ const accessRightsDraftSchema = yup.object().shape({
   access_type: accessTypeMetaxSchema,
   restriction_grounds: yup.mixed().when('access_type.identifier', {
     is: url => url !== ACCESS_TYPE_URL.OPEN,
-    then: restrictionGroundsMetaxSchema,
+    then: () => restrictionGroundsMetaxSchema,
   }),
   available: embargoExpDateSchema,
   description: accessRightsDescriptionDraftSchema,
@@ -52,7 +52,7 @@ const accessRightsSchema = yup
     access_type: accessTypeMetaxSchema.required('qvain.validationMessages.accessType.required'),
     restriction_grounds: yup.mixed().when('access_type.identifier', {
       is: url => url !== ACCESS_TYPE_URL.OPEN,
-      then: restrictionGroundsMetaxSchema,
+      then: () => restrictionGroundsMetaxSchema,
     }),
     available: embargoExpDateSchema,
     description: accessRightsDescriptionSchema,
@@ -67,8 +67,8 @@ const qvainFormSchemaShape = {
   description: descriptionSchema,
   issued: yup.mixed().when('use_doi', {
     is: true,
-    then: yup.string().date().required('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
-    otherwise: yup.string().date().nullable(),
+    then: () => yup.string().date().required('qvain.validationMessages.issuedDate.requiredIfUseDoi'),
+    otherwise: () => yup.string().date().nullable(),
   }),
   access_rights: accessRightsSchema,
   field_of_science: fieldsOfScienceSchema,

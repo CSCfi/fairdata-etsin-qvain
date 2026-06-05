@@ -16,11 +16,11 @@ export const temporalDateSchema = yup.object().shape({
     .date()
     .when('endDate', {
       is: undefined,
-      then: yup
+      then: () =>  yup
         .string()
         .date()
         .required('qvain.validationMessages.temporalAndSpatial.temporal.dateMissing'),
-      otherwise: yup.string().date(),
+      otherwise: () =>  yup.string().date(),
     }),
   endDate: yup.string().date(),
 })

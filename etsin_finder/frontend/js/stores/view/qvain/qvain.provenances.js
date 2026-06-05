@@ -39,8 +39,8 @@ export const Provenance = ({
 export const provenanceNameSchema = yup.object().shape({
   fi: yup.mixed().when('en', {
     is: val => val.length > 0,
-    then: yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
-    otherwise: yup
+    then: () => yup.string().typeError('qvain.validationMessages.history.provenance.nameRequired'),
+    otherwise: () => yup
       .string()
       .typeError('qvain.validationMessages.history.provenance.nameRequired')
       .required('qvain.validationMessages.history.provenance.nameRequired'),

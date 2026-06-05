@@ -17,9 +17,8 @@ export const licenseQvainSchema = yup
     identifier: yup.string(),
     otherLicenseUrl: yup.string().when('identifier', {
       is: prop => !prop,
-      then: licenseUrlSchema
-        .nullable()
-        .required('qvain.validationMessages.license.otherUrl.required'),
+      then: () =>
+        licenseUrlSchema.nullable().required('qvain.validationMessages.license.otherUrl.required'),
     }),
   })
   .noUnknown()
@@ -30,7 +29,7 @@ const licenseMetaxSchema = yup
     identifier: licenseUrlSchema,
     license: yup.string().when('identifier', {
       is: prop => !prop,
-      then: licenseUrlSchema.required('qvain.validationMessages.license.otherUrl.required'),
+      then: () => licenseUrlSchema.required('qvain.validationMessages.license.otherUrl.required'),
     }),
   })
   .noUnknown()

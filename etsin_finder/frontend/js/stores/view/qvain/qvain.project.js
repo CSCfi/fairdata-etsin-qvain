@@ -34,8 +34,8 @@ export const projectSchema = yup.object().shape({
   details: yup.object().shape({
     titleFi: yup.mixed().when('titleEn', {
       is: val => Boolean(val),
-      then: yup.string().typeError('qvain.validationMessages.projects.title.string'),
-      otherwise: yup
+      then: () => yup.string().typeError('qvain.validationMessages.projects.title.string'),
+      otherwise: () => yup
         .string()
         .typeError('qvain.validationMessages.projects.title.string')
         .required('qvain.validationMessages.projects.title.required'),

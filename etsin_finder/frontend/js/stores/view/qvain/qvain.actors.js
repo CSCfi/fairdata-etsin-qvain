@@ -95,13 +95,14 @@ export const actorOrganizationSchema = yup.object().shape({
     .required('qvain.validationMessages.actors.type.required'),
   organization: yup.mixed().when('type', {
     is: ENTITY_TYPE.PERSON,
-    then: yup.object().required('qvain.validationMessages.actors.organization.required'),
-    otherwise: yup.object('qvain.validationMessages.actors.organization.object').shape({
-      value: yup
-        .string()
-        .typeError('qvain.validationMessages.actors.organization.string')
-        .nullable(),
-    }),
+    then: () => yup.object().required('qvain.validationMessages.actors.organization.required'),
+    otherwise: () =>
+      yup.object('qvain.validationMessages.actors.organization.object').shape({
+        value: yup
+          .string()
+          .typeError('qvain.validationMessages.actors.organization.string')
+          .nullable(),
+      }),
   }),
 })
 
@@ -121,8 +122,8 @@ export const actorSchema = yup.object().shape({
   roles: actorRolesSchema,
   person: yup.object().when('type', {
     is: ENTITY_TYPE.PERSON,
-    then: personSchema.required(),
-    otherwise: yup.object().nullable(),
+    then: () => personSchema.required(),
+    otherwise: () => yup.object().nullable(),
   }),
   organizations: yup
     .array()
@@ -477,7 +478,7 @@ class Actors {
         if (!org.isReference) {
           break
         }
-         
+
         await this.fetchReferenceOrganizations(org)
       }
     })
