@@ -9,6 +9,17 @@ import Translate from '@/utils/Translate'
 import Button from './button'
 import withCustomProps from '@/utils/withCustomProps'
 
+/**
+ * @typedef {{
+ *  children: React.ReactNode
+ *  with?: object
+ *  buttonComponent?: React.ElementType
+ *  buttonProps?: object
+ *  icon?: object
+ *  align: 'left' | 'center' | 'right'
+ * }} DropdownProps
+ * @param {DropdownProps} props
+ */
 export const Dropdown = ({
   children,
   icon = faCaretDown,
@@ -156,6 +167,16 @@ export const Dropdown = ({
   }
 }
 
+Dropdown.propTypes = {
+  children: PropTypes.node.isRequired,
+  buttonContent: PropTypes.node,
+  with: PropTypes.object,
+  buttonComponent: PropTypes.elementType,
+  buttonProps: PropTypes.object,
+  icon: PropTypes.object,
+  align: PropTypes.oneOf(['left', 'center', 'right']),
+}
+
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -196,16 +217,6 @@ const Content = styled.ul`
   box-shadow: 0px 1px 3px 0px ${p => p.theme.color.insetdark};
 `
 
-Dropdown.propTypes = {
-  children: PropTypes.node.isRequired,
-  buttonContent: PropTypes.node,
-  with: PropTypes.object,
-  buttonComponent: PropTypes.elementType,
-  buttonProps: PropTypes.object,
-  icon: PropTypes.object,
-  align: PropTypes.oneOf(['left', 'center', 'right']),
-}
-
 Dropdown.defaultProps = {
   icon: faCaretDown,
   buttonContent: null,
@@ -215,7 +226,7 @@ Dropdown.defaultProps = {
   align: 'center',
 }
 
-export const DropdownItem = ({ onlyNarrow, children, ...props }) => (
+export const DropdownItem = ({ onlyNarrow = false, children, ...props }) => (
   <DropdownItemLi onlyNarrow={onlyNarrow}>
     <DropdownItemButton {...props}>{children}</DropdownItemButton>
   </DropdownItemLi>

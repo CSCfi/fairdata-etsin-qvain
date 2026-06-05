@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import { Navigate } from 'react-router'
 import Translate from '@/utils/Translate'
 import Card from '../../general/card'
-import LoginButton from '../../../general/navigation/loginButton'
+import LoginButton from '../../../general/navigation/LoginButton'
 import { useStores } from '../../utils/stores'
 
 const QvainLogin = ({ redirectPath }) => {

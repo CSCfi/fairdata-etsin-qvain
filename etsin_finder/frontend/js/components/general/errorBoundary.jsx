@@ -19,7 +19,7 @@ export default class ErrorBoundary extends Component {
   }
 
   componentDidMount() {
-    if (import.meta.hot && process.env.NODE_ENV === 'development') {
+    if (import.meta.hot && import.meta.env.MODE === 'development') {
       // Clear error when Hot Module Reload occurs during development
       // so React will render the children again after code changes.
       import.meta.hot.on('vite:afterUpdate', this.clearError)
@@ -27,7 +27,7 @@ export default class ErrorBoundary extends Component {
   }
 
   componentWillUnmount() {
-    if (import.meta.hot && process.env.NODE_ENV === 'development') {
+    if (import.meta.hot && import.meta.env.MODE === 'development') {
       import.meta.hot.off('vite:afterUpdate', this.clearError)
     }
   }

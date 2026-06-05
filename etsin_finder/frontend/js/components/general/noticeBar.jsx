@@ -1,15 +1,3 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -31,6 +19,8 @@ const NoticeBar = ({
   duration = 0,
   className = '',
   onClose = null,
+  border = false,
+  borderColor = '',
 }) => {
   const [open, setOpen] = useState(true)
   const timeout = useRef()
@@ -51,7 +41,16 @@ const NoticeBar = ({
     return null
   }
   return (
-    <Bar z={z} position={position} bg={bg} color={color} open={open} className={className}>
+    <Bar
+      z={z}
+      position={position}
+      bg={bg}
+      color={color}
+      open={open}
+      className={className}
+      border={border}
+      borderColor={borderColor}
+    >
       <NoticeText>{children}</NoticeText>
       {!duration && (
         <CloseButton onClick={handleClose} role="button" aria-pressed={!open}>
@@ -72,6 +71,8 @@ NoticeBar.propTypes = {
   duration: PropTypes.number,
   className: PropTypes.string,
   onClose: PropTypes.func,
+  border: PropTypes.bool,
+  borderColor: PropTypes.string,
 }
 
 const Bar = withCustomProps(styled.div)`
@@ -80,7 +81,7 @@ const Bar = withCustomProps(styled.div)`
   background-color: ${props => checkColor(props.bg)};
   ${p =>
     p.border &&
-    `border: 2px solid ${p.border_color ? checkColor(p.border_color) : 'black'};`} display: flex;
+    `border: 2px solid ${p.borderColor ? checkColor(p.borderColor) : 'black'};`} display: flex;
   color: ${props => checkColor(props.color)};
   justify-content: center;
   align-items: center;

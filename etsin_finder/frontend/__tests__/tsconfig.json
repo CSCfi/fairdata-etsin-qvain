@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["../js/*"],
+      "@helpers": ["./test-helpers"],
+      "@helpers/*": ["./test-helpers/*"],
+      "@testdata/*": ["./__testdata__/*"]
+    },
+    // should have same as types as the main tsconfig + "vitest/globals"
+    "types": ["node", "vite/client", "vitest/globals"]
+  },
+  "include": ["../js", "."], // include all
+  "exclude": []
+}

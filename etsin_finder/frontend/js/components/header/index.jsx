@@ -7,7 +7,7 @@ import { LumiAifHeaderBrand } from '@/etsinPortals'
 import { FAIRDATA_WEBSITE_URL } from '../../utils/constants'
 import MaybeExternalLink from '../general/navigation/maybeExternalLink'
 
-import LoginButton from '../general/navigation/loginButton'
+import LoginButton from '../general/navigation/LoginButton'
 import EtsinLogo from './etsinLogo'
 import Settings from '../general/navigation/settings'
 import Navi from '../general/navigation/index'

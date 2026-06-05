@@ -2,6 +2,7 @@ import { DAAS_CATALOG_SERVICE_USERS } from '@/utils/constants'
 import axios from 'axios'
 import { action, computed, observable, runInAction } from 'mobx'
 import * as yup from 'yup'
+import EnvClass from './env'
 
 const AdminOrganizationSchema = yup.object().shape({
   id: yup.string().required(),
@@ -27,23 +28,27 @@ const UserSchema = yup.object().shape({
   groups: yup.array().of(yup.string().required()).default([]),
 })
 
+export type User = yup.InferType<typeof UserSchema>
+
 class Auth {
-  constructor(Env) {
+  Env: EnvClass
+
+  constructor(Env: EnvClass) {
     this.Env = Env
   }
 
-  @observable accessor interceptors = null
+  @observable accessor interceptors: any
 
   @observable accessor loading = false
 
   @observable accessor initializing = true
 
-  @observable accessor user = UserSchema.validateSync({}) // initialize as unauthenticated user
+  @observable accessor user: User = UserSchema.validateSync({}) // initialize unauthenticated user
 
   @observable accessor loginError = null
 
   @action.bound
-  setLoginError(val) {
+  setLoginError(val = null) {
     this.loginError = val
   }
 
@@ -51,12 +56,12 @@ class Auth {
     return !!this.user?.isAuthenticated
   }
 
-  @computed get userName() {
-    return this.user?.name
+  @computed get userName(): string | null {
+    return this.user.name || null
   }
 
   @computed get hasRightsToDaas() {
-    return this.user.groups?.find?.(a => a === DAAS_CATALOG_SERVICE_USERS)
+    return this.user.groups.find(a => a === DAAS_CATALOG_SERVICE_USERS)
   }
 
   @action.bound
@@ -72,7 +77,7 @@ class Auth {
   }
 
   @action.bound
-  setUser(user) {
+  setUser(user: any) {
     try {
       this.user = UserSchema.validateSync(user)
     } catch (err) {
@@ -81,7 +86,7 @@ class Auth {
     }
   }
 
-  isMetaxV3Request(requestConfig) {
+  isMetaxV3Request(requestConfig: any) {
     // Return true if Axios request config object is a Metax V3 request
     const requestUrl = new URL(requestConfig.url, globalThis.location.href)
     let metaxUrl
@@ -110,7 +115,7 @@ class Auth {
       if (this.isAuthenticated && this.isMetaxV3Request(config)) {
         config.withCredentials = true // enables sending SSO cookies to Metax v3
         // Only write methods need a CSRF token
-        if (['post', 'patch', 'put', 'delete'].includes(config.method)) {
+        if (config.method && ['post', 'patch', 'put', 'delete'].includes(config.method)) {
           config.headers['X-CSRFToken'] = this.user.csrfToken
         }
       }
@@ -121,7 +126,7 @@ class Auth {
     // the original request with updated token
     this.interceptors.response = axios.interceptors.response.use(
       response => response,
-      async error => {
+      async (error: any) => {
         const requestConfig = error.config
         if (this.user.isAuthenticated && this.isMetaxV3Request(requestConfig)) {
           const response = error.response
@@ -170,15 +175,17 @@ class Auth {
       })
       this.setLoginError()
     } catch (err) {
-      const code = err?.response?.data?.code
-      if (code) {
-        this.setLoginError(code)
-        return
-      }
-      const detail = err?.response?.data?.detail
-      if (code) {
-        this.setLoginError(detail)
-        return
+      if (axios.isAxiosError(err)) {
+        const code = err.response?.data?.code
+        if (code) {
+          this.setLoginError(code)
+          return
+        }
+        const detail = err.response?.data?.detail
+        if (code) {
+          this.setLoginError(detail)
+          return
+        }
       }
     }
   }

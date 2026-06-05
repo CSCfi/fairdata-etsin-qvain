@@ -1,15 +1,6 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2020 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
-
 import axios from 'axios'
-import { action, observable, extendObservable, computed, runInAction, when } from 'mobx'
+import { action, observable, computed, runInAction, when } from 'mobx'
+import type Env from './env'
 
 //  Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'
 const lastPartRegex = /\.?[^.]*$/
@@ -23,9 +14,24 @@ const FLAG_SUPPORT = {
   PARTIAL: 'partial',
   NO: undefined,
 }
+type FlagSupport = (typeof FLAG_SUPPORT)[keyof typeof FLAG_SUPPORT]
+
+type FlagValues = { [flagPath: string]: boolean | undefined }
+
+declare global {
+  function applyOverrides(): void
+  function flagEnabled(flagPath: string): boolean
+  function getFlags(): FlagValues
+  function setFlag(flagPath: string, value: boolean): void
+  function cleanupFlags(): void
+  function resetFlags(): void
+}
 
 class Flags {
-  constructor(Env) {
+  Env: Env
+  @observable accessor overrides: FlagValues = {}
+
+  constructor(Env: Env) {
     this.Env = Env
 
     // Global flag helpers for front-end development. The functions do not modify
@@ -36,23 +42,22 @@ class Flags {
     //   flagEnabled: is a flag enabled
     //   resetFlags: reset flags to original values (clears overrides)
     //   cleanupFlags: reset flags that aren't supported
-    extendObservable(this, {
-      overrides: {},
-    })
 
     // Apply existing overrides starting from shortest paths
-    window.applyOverrides = () => {
-      const overridesList = Object.entries(JSON.parse(localStorage.getItem('flagOverrides')) || {})
+    globalThis.applyOverrides = () => {
+      const stored = localStorage.getItem('flagOverrides')
+      const overrides: FlagValues = stored ? JSON.parse(stored) : {}
+      const overridesList = Object.entries(overrides)
       overridesList.sort(([pathA], [pathB]) => pathA.split('.').length - pathB.split('.').length)
       overridesList.forEach(([path, value]) => this.setOverride(path, value))
     }
-    window.applyOverrides()
+    globalThis.applyOverrides()
 
-    window.flagEnabled = this.flagEnabled
+    globalThis.flagEnabled = this.flagEnabled
 
-    window.getFlags = () => JSON.parse(JSON.stringify(this.activeFlags))
+    globalThis.getFlags = () => structuredClone(this.activeFlags)
 
-    window.setFlag = action((flagPath, value) => {
+    globalThis.setFlag = action((flagPath, value) => {
       if (this.supportedFlags && !this.validateFlagPath(flagPath)) {
         console.warn(`unsupported flag: ${flagPath}`)
       }
@@ -65,7 +70,7 @@ class Flags {
       localStorage.setItem('flagOverrides', JSON.stringify(this.overrides))
     })
 
-    window.cleanupFlags = action(() => {
+    globalThis.cleanupFlags = action(() => {
       for (const path of Object.keys(this.overrides)) {
         if (this.supportedFlags && !this.validateFlagPath(path)) {
           delete this.overrides[path]
@@ -74,29 +79,30 @@ class Flags {
       localStorage.setItem('flagOverrides', JSON.stringify(this.overrides))
     })
 
-    window.resetFlags = action(() => {
+    globalThis.resetFlags = action(() => {
       this.overrides = {}
       localStorage.removeItem('flagOverrides')
     })
   }
 
-  @observable accessor flags = {}
+  @observable accessor flags: FlagValues = {}
 
-  @observable accessor supportedFlags = null
+  @observable accessor supportedFlags: { [flagPath: string]: FlagSupport } | undefined = undefined
 
   @observable accessor fetchingSupportedFlags = false
 
-  @action setSupportedFlags(paths) {
-    this.supportedFlags = {}
+  @action setSupportedFlags(paths: string[]) {
+    const supportedFlags: { [flagPath: string]: FlagSupport } = {}
     paths.forEach(flagPath => {
       let partialPath = flagPath
-      this.supportedFlags[partialPath] = FLAG_SUPPORT.FULL
+      supportedFlags[partialPath] = FLAG_SUPPORT.FULL
       partialPath = partialPath.replace(lastPartRegex, '')
       while (partialPath) {
-        this.supportedFlags[partialPath] = this.supportedFlags[partialPath] || FLAG_SUPPORT.PARTIAL
+        supportedFlags[partialPath] = supportedFlags[partialPath] || FLAG_SUPPORT.PARTIAL
         partialPath = partialPath.replace(lastPartRegex, '')
       }
     })
+    this.supportedFlags = supportedFlags
   }
 
   @action async fetchSupportedFlags() {
@@ -116,8 +122,11 @@ class Flags {
     }
   }
 
-  @action validateFlagPath(path) {
-    return this.supportedFlags[path] || FLAG_SUPPORT.undefined
+  @action validateFlagPath(path: string): FlagSupport {
+    if (!this.supportedFlags) {
+      return
+    }
+    return this.supportedFlags[path] || FLAG_SUPPORT.NO
   }
 
   @action async validateFlags() {
@@ -142,14 +151,14 @@ class Flags {
     return ok
   }
 
-  @action setFlags(flags) {
+  @action setFlags(flags: FlagValues) {
     this.flags = flags
-    if (this.overrides && window.applyOverrides) {
-      window.applyOverrides()
+    if (this.overrides && globalThis.applyOverrides) {
+      globalThis.applyOverrides()
     }
   }
 
-  @action setOverride(path, value) {
+  @action setOverride(path: string, value: boolean | undefined) {
     this.overrides[path] = value
     const pathPrefix = `${path}.`
 
@@ -168,7 +177,7 @@ class Flags {
     }
   }
 
-  @action setFlag(path, value) {
+  @action setFlag(path: string, value: boolean) {
     this.flags[path] = value
 
     // child items will use value from parent
@@ -187,11 +196,11 @@ class Flags {
     return this.flags
   }
 
-  flagEnabled = flagPath => {
+  flagEnabled = (flagPath: string) => {
     if (this.supportedFlags && this.validateFlagPath(flagPath) !== FLAG_SUPPORT.FULL) {
       console.warn(`flagEnabled called with unsupported flag: ${flagPath}`)
     }
-    if (process.env.BUILD !== 'test') {
+    if (import.meta.env.MODE !== 'test') {
       if (this.Env?.appConfigLoaded === false) {
         console.warn(`flagEnabled called before app config has been loaded, flag: ${flagPath}`)
       }

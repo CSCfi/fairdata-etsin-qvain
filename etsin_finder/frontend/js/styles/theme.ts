@@ -311,21 +311,6 @@ const etsinTheme = {
   ui: defaultUi,
 }
 
-/** Resolve nav link border for LUMI (uses palette). */
-export function resolveDatasetTabsNavLinkBorder(theme) {
-  if (theme.ui.dataset.tabs.navLinkBorder === '') {
-    return `2px solid ${theme.color.bgSecondary}`
-  }
-  return theme.ui.dataset.tabs.navLinkBorder
-}
-
-export function resolveDatasetContentBorder(theme) {
-  if (theme.ui.dataset.content.border === '') {
-    return `2px solid ${theme.color.bgSecondary}`
-  }
-  return theme.ui.dataset.content.border
-}
-
 // Create new theme by merging changes recursively
 export const lumiAifEtsinTheme = merge(cloneDeep(etsinTheme), {
   color: {
@@ -349,7 +334,25 @@ export const lumiAifEtsinTheme = merge(cloneDeep(etsinTheme), {
   ui: lumiUi,
 })
 
-export const getThemeByApp = app => {
+// Assumes all themes have the same keys
+export type Theme = typeof etsinTheme
+
+/** Resolve nav link border for LUMI (uses palette). */
+export function resolveDatasetTabsNavLinkBorder(theme: Theme) {
+  if (theme.ui.dataset.tabs.navLinkBorder === '') {
+    return `2px solid ${theme.color.bgSecondary}`
+  }
+  return theme.ui.dataset.tabs.navLinkBorder
+}
+
+export function resolveDatasetContentBorder(theme: Theme) {
+  if (theme.ui.dataset.content.border === '') {
+    return `2px solid ${theme.color.bgSecondary}`
+  }
+  return theme.ui.dataset.content.border
+}
+
+export const getThemeByApp = (app: string) => {
   return getEtsinPortalConfig(app).id === 'lumi-aif' ? lumiAifEtsinTheme : etsinTheme
 }
 

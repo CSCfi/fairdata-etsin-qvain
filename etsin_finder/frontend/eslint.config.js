@@ -2,13 +2,12 @@ import { defineConfig } from 'eslint/config'
 import globals from 'globals'
 import eslintJS from '@eslint/js'
 import prettierConfig from 'eslint-config-prettier/flat'
-import babelParser from '@babel/eslint-parser'
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
 import reactPlugin from 'eslint-plugin-react'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import testingLibraryPlugin from 'eslint-plugin-testing-library'
-import babelPlugin from '@babel/eslint-plugin'
 import importPlugin from 'eslint-plugin-import'
+import tseslint from 'typescript-eslint'
 
 // Old version of globals (which some babel stuff still depends on) has a bug
 // where `browsers.AudioWorkletGlobalScope ` has an extra space which causes
@@ -43,6 +42,7 @@ export default defineConfig([
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
   prettierConfig,
+  tseslint.configs.base,
   {
     settings: {
       react: {
@@ -53,22 +53,10 @@ export default defineConfig([
       react: reactPlugin,
       import: importPlugin,
       'react-hooks': reactHooksPlugin,
-      '@babel': babelPlugin,
     },
 
     languageOptions: {
       ecmaVersion: 'latest',
-      parser: babelParser,
-      parserOptions: {
-        requireConfigFile: false,
-        babelOptions: {
-          plugins: [
-            ['@babel/plugin-proposal-decorators', { version: '2023-11' }],
-            ['@babel/plugin-transform-runtime'],
-          ],
-          presets: ['@babel/preset-react'],
-        },
-      },
       globals: {
         ...browserGlobals,
         ...globals.node,

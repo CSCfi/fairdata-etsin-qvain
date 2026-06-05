@@ -27,7 +27,8 @@ coverage
 **/frontend/npm-debug.log
 **/frontend/build/
 **/node_modules/
-package-lock.json
+**/*.tsbuildinfo
+
 
 # Vite
 **/.vite

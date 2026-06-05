@@ -19,7 +19,7 @@ import Translate from '@/utils/Translate'
 
 import DropdownMenu from './dropdownMenu'
 import LangToggle from './langToggle'
-import LoginButton from './loginButton'
+import LoginButton from './LoginButton'
 import { Link } from '../button'
 import { useStores } from '@/stores/stores'
 

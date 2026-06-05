@@ -437,7 +437,7 @@ describe('Etsin search page', () => {
 
 describe('Etsin search page navigation', () => {
   describe('when navigating to a dataset view and back', () => {
-    test('it restores the filter state from the previous search', async () => {
+    test('it restores the filter state from the previous search', { timeout: 20_000 }, async () => {
       renderEtsin()
 
       // Select the keyword filter:

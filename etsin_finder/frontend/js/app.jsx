@@ -23,7 +23,7 @@ import { HelmetProvider } from 'react-helmet-async'
 
 let Env = new EnvClass()
 
-if (import.meta.hot && process.env.NODE_ENV === 'development') {
+if (import.meta.hot && import.meta.env.MODE === 'development') {
   // Keep Env instance across HMR updates to avoid the configuration
   // fetch that would cause the entire app component to reload.
   if (import.meta.hot.data.Env) {
@@ -37,11 +37,11 @@ if (import.meta.hot && process.env.NODE_ENV === 'development') {
 registerLocale('fi', fi)
 registerLocale('en', en)
 
-if (process.env.BUILD === 'test') {
+if (import.meta.env.MODE === 'test') {
   console.log('We are in test')
-} else if (process.env.BUILD === 'development') {
+} else if (import.meta.env.MODE === 'development') {
   console.log('We are in development')
-} else if (process.env.BUILD !== 'production') {
+} else if (import.meta.env.MODE !== 'production') {
   console.log('Looks like we are in development mode!')
 }
 
@@ -60,7 +60,7 @@ const App = () => {
 
   // Load runtime config
   const configure = async () => {
-    if (import.meta.hot && process.env.NODE_ENV === 'development') {
+    if (import.meta.hot && import.meta.env.MODE === 'development') {
       if (Env.appConfigLoaded) {
         // Already configured, no need to configure again
         setInitialized(true)

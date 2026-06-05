@@ -2,7 +2,6 @@ import babel from '@rolldown/plugin-babel'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { loadEnv } from 'vite'
-import EnvironmentPlugin from 'vite-plugin-environment'
 import { defineConfig } from 'vitest/config'
 
 import { decoratorPreset } from './common.config'
@@ -33,9 +32,6 @@ export default defineConfig(({ mode }) => {
       globals: true, // enable 'test', 'it', 'expect' etc.
     },
     plugins: [
-      EnvironmentPlugin({
-        BUILD: mode, // should be "test" by default when running tests
-      }),
       react(),
       babel({
         presets: [decoratorPreset({ version: '2023-11' })],

@@ -4,7 +4,7 @@ import QvainLogo from './qvainLogo'
 import Settings from '../../../general/navigation/settings'
 import Navi from '../../../general/navigation'
 import MobileNavi from '../../../general/navigation/mobileNavi'
-import LoginButton from '../../../general/navigation/loginButton'
+import LoginButton from '../../../general/navigation/LoginButton'
 import { FAIRDATA_WEBSITE_URL } from '../../../../utils/constants'
 import Header, { NaviContainer, Right } from '../../../general/header'
 import { MobileOnly, DesktopOnly } from '../../../general/header/mediaHelpers'
@@ -17,23 +17,21 @@ const QvainHeader = () => {
     Qvain: { original, isNewVersion },
     Locale: { lang },
     Env: {
-      history: {
-        location
-      }
-    }
+      history: { location },
+    },
   } = useStores()
 
   const getLabel = () => {
     const templateIdentifier = queryParam(location, 'template')
 
-    /*If a dataset has a template identifier, it uses an existing dataset 
+    /*If a dataset has a template identifier, it uses an existing dataset
     as a model: */
     if (templateIdentifier) {
       return 'qvain.titleModelBasedDataset'
     }
-    /*If a new version of an existing dataset is created, the condition 
-    below is implemented. The condition must come before the condition that 
-    is reflected to the value of original, since the new version also has 
+    /*If a new version of an existing dataset is created, the condition
+    below is implemented. The condition must come before the condition that
+    is reflected to the value of original, since the new version also has
     original: */
     if (isNewVersion) {
       return 'qvain.titleNewVersion'

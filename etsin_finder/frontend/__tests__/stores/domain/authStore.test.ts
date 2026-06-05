@@ -1,8 +1,9 @@
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
+import { type MockInstance } from 'vitest'
 
-import AuthClass from '../../../js/stores/domain/auth'
-import EnvClass from '../../../js/stores/domain/env'
+import AuthClass from '@/stores/domain/auth'
+import EnvClass from '@/stores/domain/env'
 
 const Auth = new AuthClass(new EnvClass())
 
@@ -19,7 +20,7 @@ const mockUser = {
 
 describe('Auth Store', () => {
   // catch logged errors instead of printing
-  let errorSpy
+  let errorSpy: MockInstance<typeof console.error>
 
   beforeEach(() => {
     errorSpy = vi.spyOn(console, 'error').mockReturnValue()

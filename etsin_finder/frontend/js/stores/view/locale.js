@@ -19,7 +19,7 @@ const languages = ['en', 'fi']
 
 const datasetTitleLanguages = ['en', 'fi', 'sv']
 
-if (import.meta.hot && process.env.NODE_ENV === 'development') {
+if (import.meta.hot && import.meta.env.MODE === 'development') {
   // Accept HMR updates from translations without reloading the Locale module itself.
   import.meta.hot.accept(
     '@/../locale/english',
@@ -106,7 +106,7 @@ class Locale {
     this.dateSeparator = this.dateSeparator.bind(this)
     this.translate = this.translate.bind(this)
 
-    if (process.env.BUILD !== 'production') {
+    if (import.meta.env.MODE !== 'production') {
       window.setLang = lang => this.setLang(lang, { save: true })
       window.toggleLang = () =>
         this.setLang(

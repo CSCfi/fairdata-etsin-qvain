@@ -1,7 +1,6 @@
 import babel from '@rolldown/plugin-babel'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import EnvironmentPlugin from 'vite-plugin-environment'
 import path from 'path'
 
 import { decoratorPreset } from './common.config'
@@ -49,9 +48,6 @@ export default defineConfig(({ command, mode }) => {
     base: isServing ? '/vite/' : '/build/',
     publicDir: 'static',
     plugins: [
-      EnvironmentPlugin({
-        BUILD: mode,
-      }),
       react(),
       babel({
         presets: [decoratorPreset({ version: '2023-11' })],
