@@ -8,19 +8,19 @@ import { useStores } from '../../utils/stores'
 
 const QvainLogin = ({ redirectPath }) => {
   const {
-    Auth: { cscUserLogged, loading },
+    Auth: { isAuthenticated, loading },
   } = useStores()
 
   return (
     <Card className="container">
-      {loading && !cscUserLogged && <p>Loading...</p>}
-      {!loading && !cscUserLogged && (
+      {loading && !isAuthenticated && <p>Loading...</p>}
+      {!loading && !isAuthenticated && (
         <>
           <Translate component="p" content="qvain.notLoggedIn" />
-          <LoginButton loginThroughService="qvain" isLoggedInKey="cscUserLogged" />
+          <LoginButton loginThroughService="qvain" />
         </>
       )}
-      {cscUserLogged && <Navigate to={redirectPath} replace />}
+      {isAuthenticated && <Navigate to={redirectPath} replace />}
     </Card>
   )
 }

@@ -98,3 +98,8 @@ export const RELATION_TYPE = {
 }
 
 export const DAAS_CATALOG_SERVICE_USERS = 'daas_catalog_service_users'
+
+export const LOGINERRORS = {
+  MISSING_FAIRDATA_USER: 'missing_fairdata_user_id',
+  MISSING_ORGANIZATION: 'missing_organization_id',
+}

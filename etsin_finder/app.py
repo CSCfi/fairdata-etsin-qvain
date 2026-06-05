@@ -78,7 +78,6 @@ def add_restful_resources(app):
         Dataset,
         DatasetMetadata,
         RelatedDatasets,
-        User,
         Language,
         Session,
         AppConfig,
@@ -151,7 +150,6 @@ def add_restful_resources(app):
     add_resource(Dataset, "/api/dataset/<id:cr_id>")
     add_resource(DatasetMetadata, "/api/format")
     add_resource(Contact, "/api/email/<id:cr_id>")
-    add_resource(User, "/api/user")
     add_resource(Language, "/api/language")
     add_resource(Session, "/api/session")
     add_resource(AppConfig, "/api/app_config")

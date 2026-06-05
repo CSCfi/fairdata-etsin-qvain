@@ -36,9 +36,13 @@ const stores = {
 
 stores.Auth.setUser({
   name: 'teppo',
-  admin_organizations: ['org-1'],
-  available_admin_organizations: [{ id: 'org-1', pref_label: { en: 'Organization 1' } }],
-  default_admin_organization: { id: 'org-1' },
+  availableAdminOrganizations: [
+    { id: 'org-1', pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' } },
+  ],
+  defaultAdminOrganization: {
+    id: 'org-1',
+    pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' },
+  },
 })
 
 const dataset = {

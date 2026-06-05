@@ -142,9 +142,13 @@ const renderQvain = async (overrides = {}, { initialPath, catalogOverrides = {} 
   registerMissingTranslationHandler(stores.Locale)
   stores.Auth.setUser({
     name: 'teppo',
-    admin_organizations: [],
-    available_admin_organizations: [{ id: 'org-1', pref_label: { en: 'Organization 1' } }],
-    default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+    availableAdminOrganizations: [
+      { id: 'org-1', pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' } },
+    ],
+    defaultAdminOrganization: {
+      id: 'org-1',
+      pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' },
+    },
   })
 
   stores.Qvain.AdminOrg.selectDefaultAdminOrg()
@@ -410,7 +414,7 @@ describe('Qvain with an opened dataset', () => {
     ['Related publications and other material'],
     ['Geographical area'],
     ['Project and funding'],
-  ])('expands optional sections', async sectionName => {
+  ])('expands optional section %s', async sectionName => {
     const section = await renderSection(sectionName)
     expect(within(section).getByRole('button', { name: 'Show less' })).toBeInTheDocument()
   })
@@ -764,8 +768,9 @@ describe('Qvain with an opened dataset', () => {
 
     const dataSizeInput = within(modal).getByLabelText(/Data size/i)
     const dataServiceInput = within(modal).getByLabelText(/Data service/i)
-    expect(dataSizeInput.compareDocumentPosition(dataServiceInput) & Node.DOCUMENT_POSITION_FOLLOWING)
-      .toBeTruthy()
+    expect(
+      dataSizeInput.compareDocumentPosition(dataServiceInput) & Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy()
   })
 
   it('shows embargo date and restriction grounds', async () => {
@@ -1070,13 +1075,16 @@ describe('Qvain with an opened dataset', () => {
     // but before we interact with admin org
     stores.Auth.setUser({
       name: 'teppo',
-      admin_organizations: ['org-1'], // User has admin rights to org-1
-      available_admin_organizations: [
-        { id: 'org-1', pref_label: { en: 'Organization 1' } },
-        { id: 'org-2', pref_label: { en: 'Organization 2' } },
-        { id: 'org-3', pref_label: { en: 'Organization 3' } },
+      adminOrganizations: ['org-1'], // User has admin rights to org-1
+      availableAdminOrganizations: [
+        { id: 'org-1', pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' } },
+        { id: 'org-2', pref_label: { en: 'Organization 2', fi: 'Organisaatio 2' } },
+        { id: 'org-3', pref_label: { en: 'Organization 3', fi: 'Organisaatio 3' } },
       ],
-      default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+      defaultAdminOrganization: {
+        id: 'org-1',
+        pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' },
+      },
     })
 
     // Wait for dataset to be loaded
@@ -1170,11 +1178,14 @@ describe('Qvain with an opened dataset', () => {
       name: 'teppo',
       admin_organizations: ['org-1'], // User has admin rights to org-1
       available_admin_organizations: [
-        { id: 'org-1', pref_label: { en: 'Organization 1' } },
-        { id: 'org-2', pref_label: { en: 'Organization 2' } },
-        { id: 'org-3', pref_label: { en: 'Organization 3' } },
+        { id: 'org-1', pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' } },
+        { id: 'org-2', pref_label: { en: 'Organization 2', fi: 'Organisaatio 2' } },
+        { id: 'org-3', pref_label: { en: 'Organization 3', fi: 'Organisaatio 3' } },
       ],
-      default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+      default_admin_organization: {
+        id: 'org-1',
+        pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' },
+      },
     })
 
     await renderQvain(
@@ -1188,13 +1199,16 @@ describe('Qvain with an opened dataset', () => {
     // but before we interact with admin org
     stores.Auth.setUser({
       name: 'teppo',
-      admin_organizations: ['org-1'], // User has admin rights to org-1
-      available_admin_organizations: [
-        { id: 'org-1', pref_label: { en: 'Organization 1' } },
-        { id: 'org-2', pref_label: { en: 'Organization 2' } },
-        { id: 'org-3', pref_label: { en: 'Organization 3' } },
+      adminOrganizations: ['org-1'], // User has admin rights to org-1
+      availableAdminOrganizations: [
+        { id: 'org-1', pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' } },
+        { id: 'org-2', pref_label: { en: 'Organization 2', fi: 'Organisaatio 2' } },
+        { id: 'org-3', pref_label: { en: 'Organization 3', fi: 'Organisaatio 3' } },
       ],
-      default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+      defaultAdminOrganization: {
+        id: 'org-1',
+        pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' },
+      },
     })
 
     // Wait for dataset to be loaded

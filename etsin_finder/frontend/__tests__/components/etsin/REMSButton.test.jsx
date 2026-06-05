@@ -7,7 +7,7 @@ import { render, screen } from '@testing-library/react'
 
 const getStores = () => ({
   Locale: { translate: v => v },
-  Auth: { userLogged: true },
+  Auth: { isAuthenticated: true },
   Etsin: {
     EtsinDataset: { isRemoved: false, isDraft: false, isDeprecated: false },
   },

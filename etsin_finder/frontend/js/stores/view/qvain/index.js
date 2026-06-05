@@ -731,7 +731,7 @@ class Qvain extends Resources {
 
   @computed
   get userIsQvainAdmin() {
-    return this.Auth.user.admin_organizations?.some(
+    return this.Auth.user.adminOrganizations?.some(
       org => org === this.original?.metadata_owner_admin_org
     )
   }

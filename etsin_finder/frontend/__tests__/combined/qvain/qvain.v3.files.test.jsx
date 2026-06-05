@@ -92,9 +92,14 @@ const renderQvain = async ({ initialPath, overrides = {}, draftOverrides = {} } 
     loggedIn: true,
     homeOrganizationId: 'csc.fi',
     idaProjects: ['testproject'],
-    admin_organizations: [],
-    available_admin_organizations: [{ id: 'org-1', pref_label: { en: 'Organization 1' } }],
-    default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+    adminOrganizations: [],
+    availableAdminOrganizations: [
+      { id: 'org-1', pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' } },
+    ],
+    defaultAdminOrganization: {
+      id: 'org-1',
+      pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' },
+    },
   })
   stores.Qvain.AdminOrg.selectDefaultAdminOrg()
   stores.Qvain.AdminOrg.setConfirmationSelected(true)

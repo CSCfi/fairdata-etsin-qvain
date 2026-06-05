@@ -138,7 +138,7 @@ class Access {
 
   @action
   loginAccess() {
-    if (this.Auth.userLogged) {
+    if (this.Auth.isAuthenticated) {
       this.restrictions = {
         open: true,
         allowDataRemote: true,

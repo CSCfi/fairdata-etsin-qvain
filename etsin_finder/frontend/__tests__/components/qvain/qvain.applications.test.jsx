@@ -32,12 +32,17 @@ const getStores = () => {
   _stores.Locale.setLang('en')
   _stores.Auth.setUser({
     name: 'antti',
-    first_name: 'Antti',
-    last_name: 'Admini',
+    firstName: 'Antti',
+    lastName: 'Admini',
     email: 'antti@example.com',
-    admin_organizations: ['test.csc.fi'],
-    available_admin_organizations: [{ id: 'test.csc.fi', pref_label: { en: 'Test Organization' } }],
-    default_admin_organization: { id: 'test.csc.fi' },
+    adminOrganizations: ['test.csc.fi'],
+    availableAdminOrganizations: [
+      { id: 'test.csc.fi', pref_label: { en: 'Test Organization', fi: 'Testiorganisaatio' } },
+    ],
+    defaultAdminOrganization: {
+      id: 'test.csc.fi',
+      pref_label: { en: 'Test Organization', fi: 'Testiorganisaatio' },
+    },
   })
   return _stores
 }

@@ -11,7 +11,7 @@ const LoggedInRoute = ({ notLoggedIn, children, component, render }) => {
   const { Auth } = useStores()
 
   useEffect(() => {
-    if (!Auth.cscUserLogged) {
+    if (!Auth.isAuthenticated) {
       Auth.checkLogin() // trigger login check
     }
   }, [Auth, location])
@@ -24,7 +24,7 @@ const LoggedInRoute = ({ notLoggedIn, children, component, render }) => {
   }
 
   let output = children
-  if (!Auth.cscUserLogged) {
+  if (!Auth.isAuthenticated) {
     if (notLoggedIn) {
       output = notLoggedIn
     } else {

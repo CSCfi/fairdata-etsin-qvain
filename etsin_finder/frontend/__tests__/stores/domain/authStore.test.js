@@ -11,11 +11,9 @@ const mock = new MockAdapter(axios)
 
 const mockUser = {
   is_authenticated: true,
-  is_authenticated_CSC_user: true,
-  home_organization_id: 'example.com/org',
-  home_organization_name: 'organisaatio',
-  user_ida_projects: ['IDA:project_x', 'IDA:project_y'],
-  user_csc_name: 'Testi Käyttäjä',
+  organization: 'example.com/org',
+  csc_projects: ['project_x', 'project_y'],
+  username: 'test_user',
   admin_organizations: [],
 }
 
@@ -37,46 +35,39 @@ describe('Auth Store', () => {
 
   it('Should be logged in', async () => {
     await Auth.checkLogin()
-    expect(Auth.userLogged).toBe(true)
+    expect(Auth.isAuthenticated).toBe(true)
   })
 
   it('Should have user data', async () => {
     await Auth.checkLogin()
     expect(Auth.user).toEqual(
       expect.objectContaining({
-        name: 'Testi Käyttäjä',
-        loggedIn: true,
+        name: 'test_user',
+        isAuthenticated: true,
         homeOrganizationId: 'example.com/org',
-        idaProjects: ['IDA:project_x', 'IDA:project_y'],
+        idaProjects: ['project_x', 'project_y'],
       })
     )
-  })
-
-  it('Should fail to login without organization id', async () => {
-    const user = { ...mockUser, home_organization_id: undefined }
-    mock.onGet('/api/user').reply(200, user)
-    await Auth.checkLogin()
-    expect(Auth.userLogged).toBe(false)
   })
 
   it('Should logout with logout()', async () => {
     mock.onDelete('/api/session').reply(200)
     await Auth.checkLogin()
-    expect(Auth.userLogged).toBe(true)
+    expect(Auth.isAuthenticated).toBe(true)
     await Auth.logout()
-    expect(Auth.userLogged).toBe(false)
+    expect(Auth.isAuthenticated).toBe(false)
   })
 
   it('Should not logout with logout() error', async () => {
     mock.onDelete('/api/session').reply(401)
     await Auth.checkLogin()
-    expect(Auth.userLogged).toBe(true)
+    expect(Auth.isAuthenticated).toBe(true)
     try {
       await Auth.logout()
     } catch {
       // pass
     }
     expect(errorSpy.mock.calls.length).toBe(1)
-    expect(Auth.userLogged).toBe(true)
+    expect(Auth.isAuthenticated).toBe(true)
   })
 })

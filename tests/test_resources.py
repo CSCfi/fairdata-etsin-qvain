@@ -253,31 +253,3 @@ class TestDatasetResources(BaseTest):
                 "details"
             ]
         )
-
-
-class TestUserResources(BaseTest):
-    """Test User API endpoints"""
-
-    def test_unauthd_get(self, unauthd_client):
-        """
-        Test user API when user not authenticated
-
-        :param unauthd_client:
-        :return:
-        """
-        r = unauthd_client.get("/api/user")
-        assert r.status_code == 200
-        r_json = json.loads(r.get_data())
-        assert "is_authenticated" in r_json and not r_json["is_authenticated"]
-
-    def test_authd_get(self, authd_client):
-        """
-        Test user API when user is authenticated
-
-        :param authd_client:
-        :return:
-        """
-        r = authd_client.get("/api/user")
-        assert r.status_code == 200
-        r_json = json.loads(r.get_data())
-        assert "is_authenticated" in r_json

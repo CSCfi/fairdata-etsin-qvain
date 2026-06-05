@@ -14,12 +14,12 @@ class QvainAdminOrg {
   @observable confirmationSelected = false
 
   @computed get adminOrgOptions() {
-    const options = this.Auth.user.available_admin_organizations.map(org => ({
+    const options = this.Auth.user.availableAdminOrganizations.map(org => ({
       value: org.id,
       label: this.Locale.getValueTranslation(org.pref_label),
       allowManualREMSApproval: org.allow_manual_rems_approval,
     }))
-    if (!options.find(org => org.value === this.Auth.user.default_admin_organization?.id)) {
+    if (!options.find(org => org.value === this.Auth.user.defaultAdminOrganization?.id)) {
       options.push({
         value: 'not-selected',
         label: this.Locale.getValueTranslation({ en: '<Not selected>', fi: '<Ei valittu>' }),
@@ -29,7 +29,7 @@ class QvainAdminOrg {
   }
 
   @computed get adminOrgs() {
-    return this.Auth.user.admin_organizations || []
+    return this.Auth.user.adminOrganizations || []
   }
 
   @action.bound setSelectedAdminOrg(adminOrg) {
@@ -43,11 +43,11 @@ class QvainAdminOrg {
   @action.bound selectDefaultAdminOrg() {
     if (this.Qvain.isNewDataset) {
       let defaultAdminOrg
-      if (this.Auth.user?.default_admin_organization === null) {
+      if (this.Auth.user?.defaultAdminOrganization === null) {
         defaultAdminOrg = this.adminOrgOptions.find(org => org.value === 'not-selected')
       } else {
         defaultAdminOrg = this.adminOrgOptions.find(
-          org => org.value === this.Auth.user?.default_admin_organization?.id
+          org => org.value === this.Auth.user?.defaultAdminOrganization?.id
         )
       }
 

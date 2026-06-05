@@ -26,7 +26,6 @@ import { useLocation } from 'react-router'
 const Login = ({
   margin = '0 0 0 0.4em',
   width,
-  isLoggedInKey = 'userLogged',
   fontSize = 'inherit',
   borderColor = '',
   loginThroughService = '',
@@ -62,7 +61,7 @@ const Login = ({
     window.location = `/logout/${loginThroughService}`
   }
 
-  if (!Auth[isLoggedInKey]) {
+  if (!Auth.isAuthenticated) {
     return (
       <>
         <Cont $width={width} $margin={margin}>
@@ -106,7 +105,6 @@ const Login = ({
 Login.propTypes = {
   margin: PropTypes.string,
   width: PropTypes.string,
-  isLoggedInKey: PropTypes.string,
   fontSize: PropTypes.string,
   borderColor: PropTypes.string,
   loginThroughService: PropTypes.string,

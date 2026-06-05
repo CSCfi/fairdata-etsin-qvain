@@ -92,7 +92,7 @@ const renderQvain = async (overrides = {}, { initialPath } = {}) => {
     .onPost(`https://metaxv3:443/v3/datasets/${linkedDatasetDraft.id}/publish`)
     .reply(200, publishedDataset)
   mockAdapter.onGet(`https://metaxv3:443/v3/auth/user`).reply(200, {
-    name: 'teppo',
+    username: 'teppo',
     admin_organizations: [],
     available_admin_organizations: [
       { id: 'org-1', pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' } },
@@ -116,12 +116,15 @@ const renderQvain = async (overrides = {}, { initialPath } = {}) => {
   registerMissingTranslationHandler(stores.Locale)
   stores.Auth.setUser({
     name: 'teppo',
-    admin_organizations: [],
-    available_admin_organizations: [
+    adminOrganizations: [],
+    availableAdminOrganizations: [
       { id: 'org-1', pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' } },
       { id: 'org-2', pref_label: { en: 'Organization 2', fi: 'Organisaatio 2' } },
     ],
-    default_admin_organization: { id: 'org-1', pref_label: { en: 'Organization 1' } },
+    defaultAdminOrganization: {
+      id: 'org-1',
+      pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' },
+    },
   })
 
   render(

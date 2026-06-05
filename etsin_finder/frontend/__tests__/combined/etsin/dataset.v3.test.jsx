@@ -55,7 +55,7 @@ const getStores = () => {
 const renderEtsin = async (
   dataset = dataset_open_a_catalog_expanded,
   {
-    userLogged = false,
+    isAuthenticated = false,
     tab = undefined,
     remsApplicationBase = automaticREMSApplicationBase,
     beforeRender = () => { },
@@ -76,11 +76,10 @@ const renderEtsin = async (
     .onGet(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-applications`)
     .reply(200, [])
   const stores = getStores()
-  if (userLogged) {
+  if (isAuthenticated) {
     // REMS requires user login
-    stores.Auth.userLogged = true
-    stores.Auth.cscUserLogged = true
     stores.Auth.setUser({
+      isAuthenticated: true,
       name: 'fd_user3',
       firstName: 'fd',
       lastName: 'user',
@@ -269,7 +268,7 @@ describe('Etsin dataset page', () => {
   })
 
   test('renders REMS application without form', async () => {
-    await renderEtsin(dataset_rems, { userLogged: true })
+    await renderEtsin(dataset_rems, { isAuthenticated: true })
     await userEvent.click(screen.getByTestId('rems-button'))
     const dialog = screen.getByRole('dialog')
     within(dialog).getByRole('heading', { name: 'Apply for Data Access' })
@@ -335,7 +334,7 @@ describe('Etsin dataset page', () => {
 
   test('renders REMS application with form', async () => {
     await renderEtsin(dataset_rems, {
-      userLogged: true,
+      isAuthenticated: true,
       remsApplicationBase: manualREMSApplicationBase,
     })
     await userEvent.click(screen.getByTestId('rems-button'))
@@ -443,7 +442,7 @@ describe('Etsin dataset page', () => {
         .reply(200, closedApplication)
     }
 
-    await renderEtsin(dataset_rems, { userLogged: true, beforeRender })
+    await renderEtsin(dataset_rems, { isAuthenticated: true, beforeRender })
     await userEvent.click(screen.getByTestId('rems-button'))
     const dialog = screen.getByRole('dialog')
 
@@ -496,7 +495,7 @@ describe('Etsin dataset page', () => {
         .reply(200, { success: true, 'application-id': 123 })
     }
 
-    await renderEtsin(dataset_rems, { userLogged: true, beforeRender })
+    await renderEtsin(dataset_rems, { isAuthenticated: true, beforeRender })
     await userEvent.click(screen.getByTestId('rems-button'))
     const dialog = screen.getByRole('dialog')
 
@@ -541,8 +540,8 @@ describe('Etsin dataset page', () => {
   })
 
   test('renders REMS error message', async () => {
-    vi.spyOn(console, 'error').mockImplementation(() => { }) // hide console.error from output
-    await renderEtsin(dataset_rems, { userLogged: true })
+    vi.spyOn(console, 'error').mockImplementation(() => {}) // hide console.error from output
+    await renderEtsin(dataset_rems, { isAuthenticated: true })
 
     mockAdapter
       .onGet(`https://metaxv3:443/v3/datasets/${dataset_rems.id}/rems-application-base`)
@@ -613,7 +612,7 @@ describe('Etsin map tab', () => {
     const dataset = cloneDeep(dataset_open_a_catalog_expanded)
     dataset.spatial.push(spatial_olari, spatial_autti)
 
-    await renderEtsin(dataset, { userLogged: false, tab: 'maps' })
+    await renderEtsin(dataset, { isAuthenticated: false, tab: 'maps' })
 
     const mapTableValues = tableToObjects(screen.getByRole('table'))
 
@@ -647,7 +646,7 @@ describe('Etsin map tab', () => {
   test('renders popup when clicking map marker', async () => {
     const dataset = dataset_open_a_catalog_expanded
 
-    await renderEtsin(dataset, { userLogged: false, tab: 'maps' })
+    await renderEtsin(dataset, { isAuthenticated: false, tab: 'maps' })
 
     // Wait for map marker to show up, click it
     const markers = document.querySelector('.leaflet-marker-pane')
@@ -665,7 +664,7 @@ describe('Etsin map tab', () => {
     const dataset = cloneDeep(dataset_open_a_catalog_expanded)
     dataset.spatial = [spatial_geolocation]
 
-    await renderEtsin(dataset, { userLogged: false, tab: 'maps' })
+    await renderEtsin(dataset, { isAuthenticated: false, tab: 'maps' })
 
     // Wait for polygon to show up as an svg element
     const overlayPane = document.querySelector('.leaflet-overlay-pane')

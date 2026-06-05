@@ -14,7 +14,7 @@ export const Tabs = () => {
   } = useStores()
 
   useEffect(() => {
-    if (Auth.user.admin_organizations?.length > 0) {
+    if (Auth.user.adminOrganizations?.length > 0) {
       tabs.addOption('adminDatasets', 'qvain.datasets.tabs.admin')
       if (flagEnabled('QVAIN.REMS')) {
         tabs.addOption('applications', 'qvain.datasets.tabs.applications')
@@ -28,7 +28,7 @@ export const Tabs = () => {
         tabs.setActive('adminDatasets')
       }
     }
-  }, [Auth.user.admin_organizations, tabs, flagEnabled, location?.key])
+  }, [Auth.user.adminOrganizations, tabs, flagEnabled, location?.key])
 
   return (
     <TabRow>

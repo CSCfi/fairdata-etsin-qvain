@@ -175,7 +175,7 @@ describe('Access Store', () => {
   describe('Update for login access', () => {
     describe('User not logged in', () => {
       beforeAll(() => {
-        Auth.userLogged = false
+        Auth.user.isAuthenticated = false
         const restricted_registration = accessRights
         restricted_registration.access_type.url = ACCESS_TYPE_URL.LOGIN
         Access.updateAccess(restricted_registration)
@@ -195,7 +195,7 @@ describe('Access Store', () => {
     })
     describe('User logged in', () => {
       beforeAll(() => {
-        Auth.userLogged = true
+        Auth.user.isAuthenticated = true
         const restricted_registration = accessRights
         restricted_registration.access_type.url = ACCESS_TYPE_URL.LOGIN
         Access.updateAccess(restricted_registration)

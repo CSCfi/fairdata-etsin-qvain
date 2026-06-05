@@ -113,7 +113,7 @@ const Dataset = ({ dataset, group, isExpanded, expandGroup, isLatest, versionNum
         <DatasetStateTag dataset={dataset} />
       </Cell>
       <Cell className="dataset-owner">
-        {datasetOwner(dataset, Auth.userName, Auth.user.admin_organizations)}
+        {datasetOwner(dataset, Auth.userName, Auth.user.adminOrganizations)}
       </Cell>
       <Cell className="dataset-created">{formatAge(Locale, loadTime, dataset.date_created)}</Cell>
       {actions.filter(action => action.icon).map(action => getActionButton(action))}

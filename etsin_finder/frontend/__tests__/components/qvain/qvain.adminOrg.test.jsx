@@ -33,7 +33,7 @@ describe('AdminOrgSelector', () => {
     // Mock available admin orgs
     stores.Auth.setUser({
       ...stores.Auth.user,
-      available_admin_organizations: [
+      availableAdminOrganizations: [
         {
           id: 'org-1',
           pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' },
@@ -47,7 +47,10 @@ describe('AdminOrgSelector', () => {
           pref_label: { en: 'Organization 3', fi: 'Organisaatio 3' },
         },
       ],
-      default_admin_organization: { id: 'org-1' },
+      defaultAdminOrganization: {
+        id: 'org-1',
+        pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' },
+      },
     })
     stores.Qvain.setOriginal(undefined)
   })
@@ -81,7 +84,13 @@ describe('AdminOrgSelector', () => {
 
   describe('Admin org selection', () => {
     it('should initialize with default admin org for new dataset', async () => {
-      stores.Auth.setUser({ ...stores.Auth.user, default_admin_organization: { id: 'org-1' } })
+      stores.Auth.setUser({
+        ...stores.Auth.user,
+        defaultAdminOrganization: {
+          id: 'org-1',
+          pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' },
+        },
+      })
       renderComponent()
       await flushPromises()
 
@@ -251,13 +260,16 @@ describe('AdminOrgSelector', () => {
       // Change available orgs
       stores.Auth.setUser({
         ...stores.Auth.user,
-        available_admin_organizations: [
+        availableAdminOrganizations: [
           {
             id: 'org-4',
             pref_label: { en: 'Organization 4', fi: 'Organisaatio 4' },
           },
         ],
-        default_admin_organization: { id: 'org-4' },
+        defaultAdminOrganization: {
+          id: 'org-4',
+          pref_label: { en: 'Organization 4', fi: 'Organisaatio 4' },
+        },
       })
 
       // Trigger reset by changing availableAdminOrgs (simulating useEffect)

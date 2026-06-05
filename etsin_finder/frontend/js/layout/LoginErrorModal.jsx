@@ -1,21 +1,10 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { useState } from 'react'
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
 
 import Modal from '../components/general/modal'
 import { useStores } from '../stores/stores'
+import { LOGINERRORS } from '@/utils/constants'
 
 const customStyles = {
   content: {
@@ -27,18 +16,21 @@ const customStyles = {
 
 const LoginErrorModal = () => {
   const {
-    Auth: { user, logout },
+    Auth: { isAuthenticated, logout, loginError },
   } = useStores()
 
   const [modalOpen, setModalOpen] = useState(true)
 
+  if (isAuthenticated) {
+    return null
+  }
+
+
   let error
-  if (user.loggedIn) {
-    if (!user.name) {
-      error = 'loginError.missingUserName'
-    } else if (!user.homeOrganizationId) {
-      error = 'loginError.missingOrganization'
-    }
+  if (loginError == LOGINERRORS.MISSING_FAIRDATA_USER) {
+    error = 'loginError.missingUserName'
+  } else if (loginError == LOGINERRORS.MISSING_ORGANIZATION) {
+    error = 'loginError.missingOrganization'
   }
 
   if (!error) {

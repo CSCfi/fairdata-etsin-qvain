@@ -91,7 +91,7 @@ const Dataset = () => {
 
 function DatasetError() {
   const {
-    Auth: { cscUserLogged },
+    Auth: { isAuthenticated },
     Etsin: { errors },
   } = useStores()
   const location = useLocation()
@@ -99,7 +99,7 @@ function DatasetError() {
   // If url has preview (etsin.fairdata.fi?preview=1), the User must be logged in.
   if (location && location.search) {
     const params = new URLSearchParams(location.search)
-    if (params.get('preview') === '1' && !cscUserLogged) {
+    if (params.get('preview') === '1' && !isAuthenticated) {
       return <ErrorPage loginRequired errors={[{ translation: 'error.cscLoginRequired' }]} />
     }
   }

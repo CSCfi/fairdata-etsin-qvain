@@ -1,16 +1,31 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
-
-import { observable, action, computed, runInAction, makeObservable } from 'mobx'
-import axios from 'axios'
 import { DAAS_CATALOG_SERVICE_USERS } from '@/utils/constants'
+import axios from 'axios'
+import { action, computed, makeObservable, observable, runInAction } from 'mobx'
+import * as yup from 'yup'
+
+const AdminOrganizationSchema = yup.object().shape({
+  id: yup.string().required(),
+  pref_label: yup.object().shape({
+    en: yup.string().required(),
+    fi: yup.string().required(),
+  }),
+  other_identifier: yup.string().default(''),
+  allow_manual_rems_approval: yup.boolean().default(false),
+})
+
+const UserSchema = yup.object().shape({
+  isAuthenticated: yup.bool().default(false),
+  name: yup.string().default(null).nullable(),
+  firstName: yup.string().default(null).nullable(),
+  lastName: yup.string().default(null).nullable(),
+  homeOrganizationId: yup.string().default(null).nullable(),
+  idaProjects: yup.array().of(yup.string().required()).default([]),
+  csrfToken: yup.string().default(null).nullable(),
+  adminOrganizations: yup.array().of(yup.string().required()).default([]),
+  availableAdminOrganizations: yup.array().of(AdminOrganizationSchema).default([]),
+  defaultAdminOrganization: AdminOrganizationSchema.nullable().default(null),
+  groups: yup.array().of(yup.string().required()).default([]),
+})
 
 class Auth {
   constructor(Env) {
@@ -20,56 +35,51 @@ class Auth {
 
   @observable interceptors = null
 
-  @observable userLogged = false
-
-  @observable cscUserLogged = false
-
   @observable loading = false
 
   @observable initializing = true
 
-  @observable user = {
-    name: undefined,
-    firstName: undefined,
-    lastName: undefined,
-    loggedIn: false,
-    homeOrganizationId: undefined,
-    idaProjects: [],
-    csrfToken: undefined,
+  @observable user = UserSchema.validateSync({}) // initialize as unauthenticated user
+
+  @observable loginError = null
+
+  @action.bound
+  setLoginError(val) {
+    this.loginError = val
+  }
+
+  @computed get isAuthenticated() {
+    return !!this.user?.isAuthenticated
   }
 
   @computed get userName() {
     return this.user?.name
   }
 
-  @computed get hasRightsToDaas () {
-    return this.user.groups?.find?.((a) => a === DAAS_CATALOG_SERVICE_USERS)
+  @computed get hasRightsToDaas() {
+    return this.user.groups?.find?.(a => a === DAAS_CATALOG_SERVICE_USERS)
   }
 
   @action.bound
-  resetUser = () => {
-    this.user = {
-      name: undefined,
-      firstName: undefined,
-      lastName: undefined,
-      loggedIn: false,
-      homeOrganizationId: undefined,
-      idaProjects: [],
-      csrfToken: undefined,
-    }
+  resetUser() {
+    this.setUser({})
+    this.loginError = null
   }
 
   @action.bound
-  reset = () => {
+  reset() {
     this.resetUser()
-    this.userLogged = false
-    this.cscUserLogged = false
     this.loading = false
   }
 
   @action.bound
   setUser(user) {
-    this.user = user
+    try {
+      this.user = UserSchema.validateSync(user)
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 
   isMetaxV3Request(requestConfig) {
@@ -98,7 +108,7 @@ class Auth {
     // CSRF token for requests to Metax V3
     this.interceptors.request = axios.interceptors.request.use(config => {
       // Use location.href as base to avoid errors for relative URLs here
-      if (this.user.loggedIn && this.isMetaxV3Request(config)) {
+      if (this.isAuthenticated && this.isMetaxV3Request(config)) {
         config.withCredentials = true // enables sending SSO cookies to Metax v3
         // Only write methods need a CSRF token
         if (['post', 'patch', 'put', 'delete'].includes(config.method)) {
@@ -114,7 +124,7 @@ class Auth {
       response => response,
       async error => {
         const requestConfig = error.config
-        if (this.user.loggedIn && this.isMetaxV3Request(requestConfig)) {
+        if (this.user.isAuthenticated && this.isMetaxV3Request(requestConfig)) {
           const response = error.response
           if (response?.status === 403 && response.data?.detail?.startsWith?.('CSRF Failed')) {
             // CSRF error, try updating the token and retry the original request.
@@ -124,93 +134,61 @@ class Auth {
           }
         }
 
-        return Promise.reject(error)
+        throw error
       }
     )
   }
 
   @action.bound
   async updateCsrf() {
-    // Retrieve CSRF token from Metax V3
-    let csrfToken
-    if (this.user.loggedIn) {
-      // load v3 auth info
+    // Update CSRF token from Metax V3, return true if the user still matches.
+    const username = this.user.name
+    await this.fetchUserData()
+    // Requests should be retried only if user has not chaned
+    return this.user.name == username
+  }
+
+  @action.bound
+  async fetchUserData() {
+    try {
       const res = await axios.get(this.Env.metaxV3Url('user'), {
+        headers: { 'content-type': 'application/json' },
         withCredentials: true,
       })
-
-      if (res.data.username === this.user.name) {
-        csrfToken = res.data.metax_csrf_token
+      const data = res.data
+      this.setUser({
+        isAuthenticated: data.is_authenticated,
+        name: data.username,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        homeOrganizationId: data.organization,
+        idaProjects: data.csc_projects,
+        csrfToken: data.metax_csrf_token,
+        adminOrganizations: data.admin_organizations,
+        availableAdminOrganizations: data.available_admin_organizations,
+        defaultAdminOrganization: data.default_admin_organization,
+        groups: data.groups,
+      })
+      this.setLoginError()
+    } catch (err) {
+      const code = err?.response?.data?.code
+      if (code) {
+        this.setLoginError(code)
+        return
       }
-
-      this.setUser({
-        ...this.user,
-        ...res.data,
-      })
+      const detail = err?.response?.data?.detail
+      if (code) {
+        this.setLoginError(detail)
+        return
+      }
     }
-
-    // Update user and return true if token found
-    if (csrfToken) {
-      this.setUser({
-        ...this.user,
-        csrfToken,
-      })
-      return true
-    }
-    return false
   }
 
   @action.bound
   async checkLogin() {
     this.loading = true
     try {
-      const res = await axios.get('/api/user', {
-        headers: { 'content-type': 'application/json', charset: 'utf-8' },
-        withCredentials: true,
-      })
-
-      this.setUser({
-        name: res.data.user_csc_name,
-        firstName: res.data.first_name,
-        lastName: res.data.last_name,
-        loggedIn: res.data.is_authenticated,
-        homeOrganizationId: res.data.home_organization_id,
-        idaProjects: res.data.user_ida_projects,
-        isUsingRems: res.data.is_using_rems,
-      })
-
-      await this.updateCsrf()
-
-      runInAction(() => {
-        // User verified through HAKA or other external verification, but no valid CSC account -> no permission
-        const markAsLoggedOut = () => {
-          this.userLogged = false
-          this.cscUserLogged = false
-        }
-
-        if (res.data.is_authenticated && !res.data.is_authenticated_CSC_user) {
-          markAsLoggedOut()
-          // User verified through CSC account, but no set home organization -> no permission
-        } else if (
-          res.data.is_authenticated &&
-          res.data.is_authenticated_CSC_user &&
-          !res.data.home_organization_id
-        ) {
-          markAsLoggedOut()
-          // User verified through CSC account and has set home organization -> login successful
-        } else if (
-          res.data.is_authenticated &&
-          res.data.is_authenticated_CSC_user &&
-          res.data.home_organization_id
-        ) {
-          this.userLogged = res.data.is_authenticated
-          this.cscUserLogged = res.data.is_authenticated_CSC_user
-
-          // Error handling, if above conditions are not met, user should not be logged in
-        } else {
-          markAsLoggedOut()
-        }
-      })
+      await this.fetchUserData()
     } catch (err) {
       console.log(err)
       throw err
@@ -223,25 +201,15 @@ class Auth {
   }
 
   @action.bound
-  logout() {
-    return new Promise((resolve, reject) => {
-      axios
-        .delete('/api/session')
-        .then(
-          action(res => {
-            this.userLogged = false
-            this.cscUserLogged = false
-
-            // Since the user will be logged out, all user.* variables should be reset to default values.
-            this.resetUser()
-            resolve(res)
-          })
-        )
-        .catch(err => {
-          console.error(err)
-          reject(err)
-        })
-    })
+  async logout() {
+    try {
+      await axios.delete('/api/session')
+      // Since the user will be logged out, all user.* variables should be reset to default values.
+      this.resetUser()
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 }
 

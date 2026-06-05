@@ -12,7 +12,7 @@ Env.Flags.setFlag('ETSIN.REMS', true)
 
 const getStores = () => {
   const stores = buildStores({ Env })
-  stores.Auth.userLogged = true
+  stores.Auth.user.isAuthenticated = true
   return stores
 }
 

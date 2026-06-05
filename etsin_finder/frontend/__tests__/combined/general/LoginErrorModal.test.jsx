@@ -18,28 +18,22 @@ const mockLocation = {
 
 const unauthenticated = {
   is_authenticated: false,
-  is_authenticated_CSC_user: false,
-  home_organization_id: null,
-  home_organization_name: null,
-  user_ida_projects: [],
-  is_using_rems: true,
+  organization: null,
+  csc_projects: [],
 }
 
 const authenticated = {
   is_authenticated: true,
-  is_authenticated_CSC_user: true,
-  home_organization_id: 'csc.fi',
-  home_organization_name: 'CSC - Tieteen tietotekniikan keskus Oy',
-  user_ida_projects: ['test_project'],
-  is_using_rems: false,
-  user_csc_name: 'masa',
+  organization: 'csc.fi',
+  csc_projects: ['test_project'],
+  username: 'masa',
   first_name: 'Matti',
   last_name: 'Tepponen',
 }
 
-const noUserName = { ...authenticated, user_csc_name: null }
+const noUserName = { detail: 'Missing user identifier.', code: 'missing_fairdata_user_id' }
 
-const noOrganizationId = { ...authenticated, home_organization_id: null }
+const noOrganizationId = { detail: 'Missing organization', code: 'missing_organization_id' }
 
 beforeEach(() => {
   mockAdapter.reset()
@@ -81,14 +75,14 @@ describe('Etsin frontpage', () => {
   })
 
   it('should show modal for login with missing username', async () => {
-    mockAdapter.onGet().reply(200, noUserName)
+    mockAdapter.onGet().reply(403, noUserName)
     await renderModal()
     const modal = screen.getByRole('dialog')
     expect(modal).toHaveTextContent('Please make sure that you have a valid CSC account.')
   })
 
   it('should show modal for login with missing home organization', async () => {
-    mockAdapter.onGet().reply(200, noOrganizationId)
+    mockAdapter.onGet().reply(403, noOrganizationId)
     await renderModal()
     const modal = screen.getByRole('dialog')
     expect(modal).toHaveTextContent('your account does not seem to have a home organization')
@@ -96,7 +90,7 @@ describe('Etsin frontpage', () => {
 
   it('should delete session when modal is closed', async () => {
     mockAdapter.onDelete().reply(200, '')
-    mockAdapter.onGet().reply(200, noOrganizationId)
+    mockAdapter.onGet().reply(403, noOrganizationId)
     await renderModal()
     expect(screen.getByRole('dialog')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Close' }))

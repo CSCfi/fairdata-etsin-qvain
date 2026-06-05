@@ -48,10 +48,15 @@ const renderModal = async () => {
   stores = buildStores()
   stores.Auth.setUser({
     name: 'teppo',
-    admin_organizations: [],
-    available_admin_organizations: [{ id: 'test.csc.fi', pref_label: { en: 'Test Organization' } }],
-    default_admin_organization: { id: 'test.csc.fi' },
+    availableAdminOrganizations: [
+      { id: 'org-1', pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' } },
+    ],
+    defaultAdminOrganization: {
+      id: 'org-1',
+      pref_label: { en: 'Organization 1', fi: 'Organisaatio 1' },
+    },
   })
+
   stores.Env.setMetaxV3Host('metaxv3', 443)
   const dataset = { identifier: 'jeejee' }
   stores.QvainDatasets.share.setSearchDelay(0)

@@ -10,7 +10,7 @@ import Translate from '@/utils/Translate'
 const REMSButton = props => {
   const {
     Locale: { translate },
-    Auth: { userLogged },
+    Auth: { isAuthenticated },
     Etsin: {
       EtsinDataset: { isRemoved, isDraft, isDeprecated },
     },
@@ -23,7 +23,7 @@ const REMSButton = props => {
   let disabled = isRemoved || isDraft || isDeprecated
 
   let state = props.applicationState
-  if (!userLogged) {
+  if (!isAuthenticated) {
     disabled = true
     wrapperTitle = 'dataset.access_states.require_login'
     state = 'not_rems_user'

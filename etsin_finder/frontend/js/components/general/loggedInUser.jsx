@@ -6,16 +6,16 @@ import { useStores } from '@/stores/stores'
 
 const LoggedInUser = () => {
   const {
-    Auth: { user, userLogged },
+    Auth: { user, isAuthenticated },
   } = useStores()
-  const { firstName, lastName } = user
+  const { firstName, lastName, name } = user
 
   const User = (
     <UserWrapper>
-      <UserIcon icon={faUser} /> <Name>{firstName || lastName}</Name>
+      <UserIcon icon={faUser} /> <Name>{firstName || lastName || name}</Name>
     </UserWrapper>
   )
-  return userLogged ? User : null
+  return isAuthenticated ? User : null
 }
 
 const UserWrapper = styled.span`

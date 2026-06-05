@@ -325,38 +325,6 @@ class Contact(MethodView):
         return "", 204
 
 
-class User(MethodView):
-    """Saml attributes: https://wiki.eduuni.fi/pages/viewpage.action?spaceKey=cscfairdata&title=Proxy+Attributes."""
-
-    @log_request
-    def get(self):
-        """Get (logged-in) user info.
-
-        Returns:
-            tuple: User info and status code.
-
-        """
-        user_info = {
-            "is_authenticated": authentication.is_authenticated(),
-            "is_authenticated_CSC_user": authentication.is_authenticated_CSC_user(),
-            "home_organization_id": authentication.get_user_home_organization_id(),
-            "home_organization_name": authentication.get_user_home_organization_name(),
-        }
-        csc_user = authentication.get_user_csc_name()
-        first_name = authentication.get_user_firstname()
-        last_name = authentication.get_user_lastname()
-        groups = authentication.get_user_ida_projects() or []
-        user_info["user_ida_projects"] = groups
-
-        if csc_user is not None:
-            user_info["user_csc_name"] = csc_user
-        if first_name:
-            user_info["first_name"] = first_name
-        if last_name:
-            user_info["last_name"] = last_name
-        return user_info, 200
-
-
 class REMSApplyForPermission(MethodView):
     """REMS Apply for permission."""
 
