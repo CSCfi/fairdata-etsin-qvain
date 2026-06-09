@@ -19,8 +19,6 @@ class Accessibility {
 
   @observable userIsTabbing = false
 
-  @observable currentLocation = null
-
   @observable previousLocation = null
 
   focusableElement = createRef()
@@ -80,11 +78,6 @@ class Accessibility {
   @action.bound
   setPreviousLocation(location) {
     this.previousLocation = location
-  }
-
-  @action.bound
-  setCurrentLocation(location) {
-    this.currentLocation = location
   }
 
   @action.bound

@@ -160,7 +160,7 @@ const EtsinMap = () => {
                 isMapLayersSaved={isMapLayersSaved}
                 setIsMapLayersSaved={setIsMapLayersSaved}
               />
-              <MapInstanceSaver setter={setSidebarMapInstance} />
+              <MapInstanceSaver setter={setSidebarMapInstance} setIsMapOpen={setIsMapOpen} />
             </SidebarMapContainer>
           )}
           <Translate
@@ -198,7 +198,7 @@ const EtsinMap = () => {
             isMapLayersSaved={isMapLayersSaved}
             setIsMapLayersSaved={setIsMapLayersSaved}
           />
-          <MapInstanceSaver setter={setExpandedMapInstance} />
+          <MapInstanceSaver setter={setExpandedMapInstance} setIsMapOpen={setIsMapOpen} />
         </LargeMapContainer>
       </Modal>
     </>

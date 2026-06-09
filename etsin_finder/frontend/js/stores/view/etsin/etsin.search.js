@@ -45,6 +45,8 @@ class EtsinSearch {
 
   @observable temporalValidationError = null
 
+  @observable closeFacet = false
+
   @observable facetSearchesCleared = {
     organization: false,
     creator: false,
@@ -189,12 +191,18 @@ class EtsinSearch {
     this.fetchDebouncedAggregation(facetName, term)
   }
 
+  @action.bound
+  setCloseFacet(bool) {
+    this.closeFacet = bool
+  }
+
   @action.bound setClearFacetSearch(facetName, value) {
     this.facetSearchesCleared[facetName] = value
   }
 
   @action.bound async resetFacetSearches() {
     try {
+      this.setCloseFacet(true)
       this.client.abort('all')
       const result = await this.client.get(this.aggregatesUrl, { tag: 'all' })
       Object.keys(this.facetSearchesCleared).forEach(facetName => {

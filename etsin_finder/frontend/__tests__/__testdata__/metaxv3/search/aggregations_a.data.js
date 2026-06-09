@@ -80,7 +80,7 @@ const aggregations = {
     ],
   },
   keyword: {
-    query_parameter: 'keyword',
+    query_parameter: 'facet_keyword',
     hits: [
       {
         value: {

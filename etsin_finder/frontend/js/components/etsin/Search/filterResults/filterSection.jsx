@@ -22,8 +22,10 @@ const FilterSection = ({ filterName, onlyCurrentLanguage, showInput }) => {
         getAggregationQueryName,
         isLoading,
         fetchAggregationWithDebounce,
+        closeFacet,
+        setCloseFacet,
         facetSearchesCleared,
-        setClearFacetSearch
+        setClearFacetSearch,
       },
     },
     Locale: { getValueTranslation, lang },
@@ -64,23 +66,27 @@ const FilterSection = ({ filterName, onlyCurrentLanguage, showInput }) => {
     }
   }, [setIsOpen, query, filterName, isLoading, getAggregationQueryName])
 
-  /* If the user presses "Remove filters" button, the facet input 
-  is cleared and all the filter items are retrieved back (which 
-  happens in the ClearFilters component): */
+  // If the user presses "Remove filters" button, the facet input
+  // is cleared and all the filter items are retrieved back (which
+  // happens in the ClearFilters component):
   const isCleared = facetSearchesCleared[filterName]
   useEffect(() => {
     if (isCleared) {
       setSearchTerm('')
       setClearFacetSearch(filterName, false)
     }
-  }, [
-    setSearchTerm, 
-    setClearFacetSearch, 
-    filterName,
-    isCleared
-  ])
+  }, [setSearchTerm, setClearFacetSearch, filterName, isCleared])
 
-  // Retrieve filters that respond partially or fully to the user input: 
+  // If the user presses "Remove filters" button (in ClearFilters component),
+  // the facet is closed:
+  useEffect(() => {
+    if (closeFacet) {
+      setIsOpen(false)
+      setCloseFacet(false)
+    }
+  }, [closeFacet, setIsOpen, setCloseFacet])
+
+  // Retrieve filters that respond partially or fully to the user input:
   const setFacetSearch = (value = '') => {
     setSearchTerm(value)
     fetchAggregationWithDebounce(filterName, value)
@@ -110,13 +116,15 @@ const FilterSection = ({ filterName, onlyCurrentLanguage, showInput }) => {
             component={Input}
             id={`${filterName}Input`}
             value={searchTerm}
-            onChange={(e) => { setFacetSearch(e.target.value) }}
+            onChange={e => {
+              setFacetSearch(e.target.value)
+            }}
             disabled={isLoading}
-            autoComplete='off'
+            autoComplete="off"
             className={`${query.has(filter) ? 'active' : ''} ${isOpen ? 'open' : ''}`}
             attributes={{
               placeholder: `search.facetSearchPlaceholder`,
-              'aria-label': `search.filterSearch.${filterName}`
+              'aria-label': `search.filterSearch.${filterName}`,
             }}
           />
         )}
@@ -150,13 +158,13 @@ const FilterSection = ({ filterName, onlyCurrentLanguage, showInput }) => {
 FilterSection.propTypes = {
   filterName: PropTypes.string.isRequired,
   onlyCurrentLanguage: PropTypes.bool,
-  showInput: PropTypes.bool
+  showInput: PropTypes.bool,
 }
 
 FilterSection.defaultProps = {
   // Enable to ignore items that don't have a translation in current language or "und" language
   onlyCurrentLanguage: false,
-  showInput: false
+  showInput: false,
 }
 
 export default observer(FilterSection)
@@ -174,7 +182,7 @@ const Input = styled.input`
   &.open {
     max-height: 100%;
     padding: 0.4em 0.6em;
-    border-width: 1px; 
+    border-width: 1px;
   }
   &::placeholder {
     color: ${props => props.theme.color.gray};
@@ -184,7 +192,7 @@ const Input = styled.input`
     border-color: hsl(0, 0%, 70%);
   }
   &:focus {
-    border-color: hsl(0, 0%, 70%);;
+    border-color: hsl(0, 0%, 70%);
   }
   &.active {
     margin-bottom: 1em;

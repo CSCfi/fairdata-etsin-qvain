@@ -114,11 +114,15 @@ function DatasetView() {
     Etsin: {
       EtsinDataset: { isDraft, draftInfotext },
     },
-    Env: { history: { location }, getEtsinUrl, etsinSearchPath },
+    Env: { getEtsinUrl, etsinSearchPath },
   } = useStores()
 
+  const { key } = useLocation()
+
   const navigateBack = () => {
-    if (Accessibility.previousLocation && location?.key !== "default") {
+    // If the dataset landing page is the initial location, the key is
+    // 'default'; otherwise, it is a string:
+    if (Accessibility.previousLocation && key !== 'default') {
       return Accessibility.previousLocation
     } else {
       return getEtsinUrl(etsinSearchPath)

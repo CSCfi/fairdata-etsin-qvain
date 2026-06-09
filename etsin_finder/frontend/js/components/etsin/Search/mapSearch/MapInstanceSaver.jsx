@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { useEffect } from 'react'
 import { useMap } from 'react-leaflet'
 
-function MapInstanceSaver({ setter }) {
+function MapInstanceSaver({ setter, setIsMapOpen }) {
   const {
     Etsin: {
       Search: {
@@ -43,6 +43,7 @@ function MapInstanceSaver({ setter }) {
           map.setView(latLng(...defaultSidebarMapCenterAsArray), defaultSidebarMapZoom, {
             animate: false,
           })
+          setIsMapOpen(false)
         }
 
         // Drawing buttons and drawing functionality are disabled
@@ -76,6 +77,7 @@ function MapInstanceSaver({ setter }) {
     setResetLayers,
     setLayers,
     applyDefaultView,
+    setIsMapOpen,
     defaultSidebarMapCenterAsArray,
     defaultSidebarMapZoom,
   ])
@@ -85,6 +87,7 @@ function MapInstanceSaver({ setter }) {
 
 MapInstanceSaver.propTypes = {
   setter: PropTypes.func.isRequired,
+  setIsMapOpen: PropTypes.func.isRequired,
 }
 
 export default observer(MapInstanceSaver)

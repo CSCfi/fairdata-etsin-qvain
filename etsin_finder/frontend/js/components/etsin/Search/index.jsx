@@ -1,15 +1,3 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { useEffect, useRef } from 'react'
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
@@ -20,6 +8,7 @@ import { useQuery, useEtsinSearchNavigate } from '@/components/etsin/general/use
 import HeroBanner from '../../general/hero'
 import SearchBar from './searchBar'
 import Results from './results'
+import { useLocation } from 'react-router'
 
 const Search = () => {
   const {
@@ -68,11 +57,10 @@ function SearchBarHeader() {
 
 function SearchPage() {
   const {
-    Env: {
-      history: { location },
-    },
-    Accessibility,
+    Accessibility: { setPreviousLocation },
   } = useStores()
+
+  const { pathname, search } = useLocation()
 
   // Save the state defined by the query so that it is preserved when
   // returning from the dataset view.
@@ -80,11 +68,10 @@ function SearchPage() {
   // location.pathname example: "/datasets" or "/" (LUMI-AIF portal),
   // location.search example: "?facet_access_type=Open&search=kat&page=1",
   useEffect(() => {
-    if (Accessibility.currentLocation) {
-      Accessibility.setPreviousLocation(Accessibility.currentLocation)
-    }
-    Accessibility.setCurrentLocation(location.pathname + location.search)
-  }, [location.pathname, location.search, Accessibility])
+    // pathname is always at least "/datasets" or "/" and search is always 
+    // defined (at minimum an empty string):
+    setPreviousLocation(pathname + search)
+  }, [setPreviousLocation, pathname, search])
 
   return (
     <div className="search-page" data-testid="search-page">
