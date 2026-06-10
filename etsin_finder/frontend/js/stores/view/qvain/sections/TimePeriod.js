@@ -1,10 +1,9 @@
-import { makeObservable, override } from 'mobx'
+import { action } from 'mobx'
 import Section from './section'
 
 class TimePeriod extends Section {
   constructor() {
     super({ translationsRoot: 'qvain.sections.timePeriod' })
-    makeObservable(this)
   }
 
   isRequired = false
@@ -12,7 +11,7 @@ class TimePeriod extends Section {
   // used for checking if dataset has items
   metaxFieldName = 'temporal'
 
-  @override expandIfPopulated(dataset) {
+  @action.bound expandIfPopulated(dataset) {
     if (dataset.temporal?.length > 0) {
       this.setExpanded(true)
     } else {

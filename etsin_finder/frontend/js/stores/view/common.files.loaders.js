@@ -1,4 +1,4 @@
-import { observable, action, runInAction, when, makeObservable } from 'mobx'
+import { observable, action, runInAction, when } from 'mobx'
 
 import { isAbort } from '@/utils/AbortClient'
 import urls from '../../utils/urls'
@@ -432,7 +432,6 @@ class ItemLoader {
   fetchType = FetchType.ANY
 
   constructor() {
-    makeObservable(this)
     if (typeof this.filterItem !== 'function') {
       throw new TypeError('Must override filterItem')
     }
@@ -469,7 +468,7 @@ class ItemLoader {
     while (dir.loading) {
       // loop needed to make sure only one is released at a time
       // TODO: use signal from AbortClient in when (needs mobx 6.7.0)
-       
+
       await when(() => !dir.loading)
     }
     runInAction(() => {

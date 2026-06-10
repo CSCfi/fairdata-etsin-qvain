@@ -1,18 +1,17 @@
-import { makeObservable, action, observable, computed } from 'mobx'
+import { action, observable, computed } from 'mobx'
 import axios from 'axios'
 import urls from '@/utils/urls'
 
 class CrossRef {
   constructor(Env) {
     this.Env = Env
-    makeObservable(this)
   }
 
-  @observable prevRequest = undefined
+  @observable accessor prevRequest = undefined
 
-  @observable responseError = undefined
+  @observable accessor responseError = undefined
 
-  @observable term = ''
+  @observable accessor term = ''
 
   @computed get defaultOptions() {
     return []

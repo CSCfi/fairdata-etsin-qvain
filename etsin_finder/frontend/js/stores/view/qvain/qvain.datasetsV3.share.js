@@ -1,4 +1,4 @@
-import { action, computed, reaction, makeObservable, observable, runInAction } from 'mobx'
+import { action, computed, reaction, observable, runInAction } from 'mobx'
 
 import AbortClient, { isAbort } from '@/utils/AbortClient'
 import PromiseManager from '../../../utils/promiseManager'
@@ -26,7 +26,6 @@ class Share {
       { invite: 'qvain.datasets.share.tabs.invite', members: 'qvain.datasets.share.tabs.members' },
       'invite'
     )
-    makeObservable(this)
     this.getTabItemCount = this.getTabItemCount.bind(this)
     this.isUpdatingUserPermission = this.isUpdatingUserPermission.bind(this)
     this.isRemovingUserPermission = this.isRemovingUserPermission.bind(this)
@@ -34,27 +33,27 @@ class Share {
     this.client = new AbortClient()
   }
 
-  @observable searchError = undefined
+  @observable accessor searchError = undefined
 
-  @observable permissionLoadError = undefined
+  @observable accessor permissionLoadError = undefined
 
-  @observable permissionChangeError = undefined
+  @observable accessor permissionChangeError = undefined
 
-  @observable searchResults = []
+  @observable accessor searchResults = []
 
-  @observable selectedUsers = []
+  @observable accessor selectedUsers = []
 
-  @observable inviteMessage = ''
+  @observable accessor inviteMessage = ''
 
-  @observable confirmClose = false
+  @observable accessor confirmClose = false
 
-  @observable userPermissions = []
+  @observable accessor userPermissions = []
 
-  @observable project = undefined
+  @observable accessor project = undefined
 
-  @observable userPermissionToRemove = undefined
+  @observable accessor userPermissionToRemove = undefined
 
-  @observable inviteResults = undefined
+  @observable accessor inviteResults = undefined
 
   @computed get datasetIdentifier() {
     return this.modal.data?.dataset.identifier

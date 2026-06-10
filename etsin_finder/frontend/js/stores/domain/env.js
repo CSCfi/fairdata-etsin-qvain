@@ -9,7 +9,7 @@
  */
 
 import axios from 'axios'
-import { action, computed, makeObservable, observable } from 'mobx'
+import { action, computed, observable } from 'mobx'
 import RouterStore from '@/utils/RouterStore'
 
 import Flags from './env.flags'
@@ -26,7 +26,6 @@ async function importValuesAsync() {
 
 class Env {
   constructor() {
-    makeObservable(this)
     this.Flags = new Flags(this)
     this.history = new RouterStore()
     this.metaxV3Url = this.metaxV3Url.bind(this)
@@ -36,21 +35,21 @@ class Env {
     return urls.metaxV3[endpoint](`https://${this.metaxV3Host}`, ...args)
   }
 
-  @observable metaxV3Host = ''
+  @observable accessor metaxV3Host = ''
 
-  @observable etsinHost = ''
+  @observable accessor etsinHost = ''
 
-  @observable qvainHost = ''
+  @observable accessor qvainHost = ''
 
-  @observable appConfigLoaded = false
+  @observable accessor appConfigLoaded = false
 
-  @observable ssoCookieDomain = ''
+  @observable accessor ssoCookieDomain = ''
 
-  @observable ssoPrefix = ''
+  @observable accessor ssoPrefix = ''
 
-  @observable packageSizeLimit = 0 // max downloadable package size in bytes
+  @observable accessor packageSizeLimit = 0 // max downloadable package size in bytes
 
-  @observable app = getCookieValue('etsin_app')
+  @observable accessor app = getCookieValue('etsin_app')
 
   async fetchAppConfig() {
     const values = await importValuesAsync()

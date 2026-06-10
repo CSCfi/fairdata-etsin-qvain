@@ -1,4 +1,4 @@
-import { makeObservable, action, computed } from 'mobx'
+import { action, computed } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 
 import * as yup from 'yup'
@@ -58,7 +58,6 @@ export const Publication = ({
 class RelatedResources extends Field {
   constructor(Parent) {
     super(Parent, RelatedResource, RelatedResourceModel, 'relatedResources')
-    makeObservable(this)
   }
 
   schema = relatedResourceSchema

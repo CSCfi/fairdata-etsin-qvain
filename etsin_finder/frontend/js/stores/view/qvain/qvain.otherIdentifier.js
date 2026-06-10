@@ -1,4 +1,4 @@
-import { action, makeObservable } from 'mobx'
+import { action } from 'mobx'
 import * as yup from 'yup'
 import ReferenceField from './qvain.referenceField'
 import { touch } from './track'
@@ -15,7 +15,6 @@ class OtherIdentifiers extends ReferenceField {
   constructor(...args) {
     super(...args)
     this.reset()
-    makeObservable(this)
   }
 
   @action fromBackend = dataset => {

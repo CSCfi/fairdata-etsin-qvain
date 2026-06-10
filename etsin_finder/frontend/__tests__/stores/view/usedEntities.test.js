@@ -1,10 +1,9 @@
 import UsedEntities, {
   UsedEntityTemplate,
   UsedEntityModel,
-} from '../../../js/stores/view/qvain/qvain.usedEntities'
-import { makeObservable } from 'mobx'
+} from '@/stores/view/qvain/qvain.usedEntities'
 
-vi.mock('../../../js/stores/view/qvain/qvain.field', () => {
+vi.mock('@/stores/view/qvain/qvain.field', () => {
   class mockField {
     constructor(...args) {
       this.constructorFunction(...args)
@@ -18,7 +17,6 @@ vi.mock('../../../js/stores/view/qvain/qvain.field', () => {
 })
 
 vi.mock('uuid')
-vi.mock('mobx')
 
 describe('UsedEntities', () => {
   let usedEntities
@@ -38,10 +36,6 @@ describe('UsedEntities', () => {
         UsedEntityModel,
         'usedEntities'
       )
-    })
-
-    test('should call makeObservable', () => {
-      expect(makeObservable).toHaveBeenCalledWith(usedEntities)
     })
 
     test('should call fromBackendBase with existingEntities', () => {

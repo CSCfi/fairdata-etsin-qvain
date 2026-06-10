@@ -1,8 +1,7 @@
-import { makeObservable, observable, action, override, runInAction } from 'mobx'
+import { observable, action, runInAction } from 'mobx'
 
 class Section {
   constructor({ parent, translationsRoot = '', fields = {} }) {
-    makeObservable(this)
     runInAction(() => {
       this.translationsRoot = translationsRoot
       this.translations = {
@@ -16,11 +15,11 @@ class Section {
 
   showAsterisk = false
 
-  @observable translations
+  @observable accessor translations
 
-  @observable translationsRoot
+  @observable accessor translationsRoot
 
-  @observable isExpanded = false
+  @observable accessor isExpanded = false
 
   @action.bound toggleExpanded = () => {
     this.isExpanded = !this.isExpanded
@@ -47,7 +46,7 @@ export class SectionWithList extends Section {
     this.listName = listName
   }
 
-  @override getField(fieldName) {
+  @action.bound getField(fieldName) {
     if (!fieldName) {
       return this[this.listName]
     }

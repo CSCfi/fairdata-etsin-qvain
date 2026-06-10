@@ -9,15 +9,7 @@
  */
 
 import axios from 'axios'
-import {
-  action,
-  makeObservable,
-  observable,
-  extendObservable,
-  computed,
-  runInAction,
-  when,
-} from 'mobx'
+import { action, observable, extendObservable, computed, runInAction, when } from 'mobx'
 
 //  Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'
 const lastPartRegex = /\.?[^.]*$/
@@ -34,7 +26,6 @@ const FLAG_SUPPORT = {
 
 class Flags {
   constructor(Env) {
-    makeObservable(this)
     this.Env = Env
 
     // Global flag helpers for front-end development. The functions do not modify
@@ -89,11 +80,11 @@ class Flags {
     })
   }
 
-  @observable flags = {}
+  @observable accessor flags = {}
 
-  @observable supportedFlags = null
+  @observable accessor supportedFlags = null
 
-  @observable fetchingSupportedFlags = false
+  @observable accessor fetchingSupportedFlags = false
 
   @action setSupportedFlags(paths) {
     this.supportedFlags = {}

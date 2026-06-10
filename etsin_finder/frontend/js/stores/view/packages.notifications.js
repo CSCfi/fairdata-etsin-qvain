@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action } from 'mobx'
 import axios from 'axios'
 import urls from '../../utils/urls'
 
@@ -18,12 +18,11 @@ class Notifications {
 
   constructor(Packages) {
     this.Packages = Packages
-    makeObservable(this)
   }
 
-  @observable email = ''
+  @observable accessor email = ''
 
-  @observable emailError = null
+  @observable accessor emailError = null
 
   @action.bound reset() {
     this.email = ''

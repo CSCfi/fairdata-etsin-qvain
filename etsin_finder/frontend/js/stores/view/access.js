@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action } from 'mobx'
 
 import { ACCESS_TYPE_URL } from '../../utils/constants'
 
@@ -23,11 +23,9 @@ export const accessTypes = {
 class Access {
   constructor(Auth) {
     this.Auth = Auth
-    makeObservable(this)
   }
 
-  @observable
-  restrictions = {
+  @observable accessor restrictions = {
     // ?
     open: false,
     // toggles the whole remote resource tab. If it is shown, all is shown

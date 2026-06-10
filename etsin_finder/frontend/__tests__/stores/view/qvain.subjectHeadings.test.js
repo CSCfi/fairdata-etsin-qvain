@@ -1,4 +1,3 @@
-import { makeObservable } from 'mobx'
 import SubjectHeadings, {
   SubjectHeadingModel,
 } from '../../../js/stores/view/qvain/qvain.subjectHeadings'
@@ -17,12 +16,6 @@ vi.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
   return { default: mockReferenceField }
 })
 
-vi.mock('mobx', async () => {
-  return {
-    ...(await vi.importActual('mobx')),
-    makeObservable: vi.fn(),
-  }
-})
 
 describe('SubjectHeadings with args', () => {
   let subjectHeadings
@@ -39,10 +32,6 @@ describe('SubjectHeadings with args', () => {
 
     test('should call ReferenceField super with args', () => {
       expect(subjectHeadings.constructorFunc).toHaveBeenCalledWith(...args)
-    })
-
-    test('should call makeObservable', () => {
-      expect(makeObservable).toHaveBeenCalledWith(subjectHeadings)
     })
   })
 

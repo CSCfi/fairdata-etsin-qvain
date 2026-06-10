@@ -8,7 +8,7 @@
  * @license   MIT
  */
 
-import { observable, computed, action, makeObservable } from 'mobx'
+import { observable, computed, action } from 'mobx'
 import axios from 'axios'
 
 import createFilesStore from './etsin/etsin.files'
@@ -36,18 +36,17 @@ class DatasetQuery {
     this.Files = createFilesStore(Env)
     this.Packages = new Packages(Env)
     this.Access = Access
-    makeObservable(this)
   }
 
-  @observable results = null
+  @observable accessor results = null
 
-  @observable emailInfo = null
+  @observable accessor emailInfo = null
 
-  @observable directories = []
+  @observable accessor directories = []
 
-  @observable error = false
+  @observable accessor error = false
 
-  @observable showCitationModal = false
+  @observable accessor showCitationModal = false
 
   @action setShowCitationModal = value => {
     this.showCitationModal = value

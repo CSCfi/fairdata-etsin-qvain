@@ -1,4 +1,4 @@
-import { action, computed, makeObservable, observable } from 'mobx'
+import { action, computed, observable } from 'mobx'
 import moment from 'moment'
 
 const stateToNumber = dataset => {
@@ -13,7 +13,6 @@ const stateToNumber = dataset => {
 
 class QvainDatasetsV2 {
   constructor(Locale) {
-    makeObservable(this)
     this.Locale = Locale
     this.reset()
   }
@@ -23,9 +22,9 @@ class QvainDatasetsV2 {
     this.reverse = false
   }
 
-  @observable type
+  @observable accessor type
 
-  @observable reverse
+  @observable accessor reverse
 
   @action.bound toggleReverse() {
     this.reverse = !this.reverse

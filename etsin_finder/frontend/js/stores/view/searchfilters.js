@@ -8,18 +8,17 @@
  * @license   MIT
  */
 
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action } from 'mobx'
 
 class SearchFilters {
   constructor() {
-    makeObservable(this)
   }
 
-  @observable fieldOfScienceIsOpen = false
+  @observable accessor fieldOfScienceIsOpen = false
 
-  @observable keywordIsOpen = false
+  @observable accessor keywordIsOpen = false
 
-  @observable projectIsOpen = false
+  @observable accessor projectIsOpen = false
 
   @action toggleFieldOfScience = () => {
     this.fieldOfScienceIsOpen = !this.fieldOfScienceIsOpen

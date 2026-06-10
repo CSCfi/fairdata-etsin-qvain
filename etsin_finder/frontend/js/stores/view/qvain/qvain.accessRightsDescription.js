@@ -1,4 +1,4 @@
-import { makeObservable, action } from 'mobx'
+import { action } from 'mobx'
 import * as yup from 'yup'
 
 import MultiLanguageField from './qvain.multiLanguageField'
@@ -24,7 +24,6 @@ export const accessRightsDescriptionDraftSchema = accessRightsDescriptionSchema.
 class AccessRightsDescription extends MultiLanguageField {
   constructor(Parent) {
     super(Parent, accessRightsDescriptionSchema, { characterLimit: 50000 })
-    makeObservable(this)
   }
 
   @action

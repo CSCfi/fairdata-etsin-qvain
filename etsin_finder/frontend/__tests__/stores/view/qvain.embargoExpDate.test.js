@@ -1,7 +1,6 @@
 import EmbargoExpDate, {
   embargoExpDateSchema,
 } from '../../../js/stores/view/qvain/qvain.embargoExpDate'
-import { makeObservable } from 'mobx'
 
 vi.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
   class mockSingleValueField {
@@ -12,14 +11,7 @@ vi.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
     constructorFunc = vi.fn()
   }
 
-  return {default: mockSingleValueField}
-})
-
-vi.mock('mobx', async () => {
-  return {
-    ...(await vi.importActual('mobx')),
-    makeObservable: vi.fn(),
-  }
+  return { default: mockSingleValueField }
 })
 
 describe('given Parent object', () => {
@@ -36,10 +28,6 @@ describe('given Parent object', () => {
     describe('when constructor is called', () => {
       test('should call super.constructor with Parent and schema', () => {
         expect(embargoExpDate.constructorFunc).toHaveBeenCalledWith(Parent, embargoExpDateSchema)
-      })
-
-      test('should call makeObservable', () => {
-        expect(makeObservable).toHaveBeenCalledWith(embargoExpDate)
       })
     })
 

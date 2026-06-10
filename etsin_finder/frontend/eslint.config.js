@@ -63,9 +63,8 @@ export default defineConfig([
         requireConfigFile: false,
         babelOptions: {
           plugins: [
-            ['@babel/plugin-proposal-decorators', { version: 'legacy' }],
+            ['@babel/plugin-proposal-decorators', { version: '2023-11' }],
             ['@babel/plugin-transform-runtime'],
-            ['@babel/plugin-transform-class-properties'],
           ],
           presets: ['@babel/preset-react'],
         },

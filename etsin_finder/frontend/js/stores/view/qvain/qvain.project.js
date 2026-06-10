@@ -1,4 +1,4 @@
-import { observable, action, toJS, makeObservable } from 'mobx'
+import { observable, action, toJS } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
 import { parseOrganization } from './qvain.project.utils'
@@ -52,7 +52,6 @@ export const projectSchema = yup.object().shape({
 class Projects {
   constructor(Parent) {
     this.Parent = Parent
-    makeObservable(this)
   }
 
   projectSchema = projectSchema
@@ -63,7 +62,7 @@ class Projects {
 
   contributorTypeSchema = contributorTypeSchema
 
-  @observable projects = []
+  @observable accessor projects = []
 
   @action reset = () => {
     this.projects = []

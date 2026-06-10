@@ -1,13 +1,12 @@
-import { computed, observable, action, makeObservable } from 'mobx'
+import { computed, observable, action } from 'mobx'
 
 export default class PromiseManager {
   constructor() {
     this.count = this.count.bind(this)
     this.promisesByTag = this.promisesByTag.bind(this)
-    makeObservable(this)
   }
 
-  @observable promisesWithTags = []
+  @observable accessor promisesWithTags = []
 
   @computed get promises() {
     return this.promisesWithTags.map(({ promise }) => promise)

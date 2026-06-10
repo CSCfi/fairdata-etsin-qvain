@@ -1,5 +1,3 @@
-import { makeObservable } from 'mobx'
-
 import OtherIdentifiers from '@/stores/view/qvain/qvain.otherIdentifier'
 
 vi.mock('@/stores/view/qvain/qvain.referenceField', () => {
@@ -24,12 +22,6 @@ vi.mock('@/stores/view/qvain/qvain.referenceField', () => {
   return { default: mockReferenceField }
 })
 
-vi.mock('mobx', async () => {
-  return {
-    ...(await vi.importActual('mobx')),
-    makeObservable: vi.fn(),
-  }
-})
 
 vi.mock('@/stores/view/qvain/qvain.submit.schemas')
 
@@ -48,10 +40,6 @@ describe('OtherIdentifiers', () => {
   describe('when calling costructor with any args', () => {
     test('should call super.constructor with args', () => {
       expect(otherIdentifiers.constructorFunc).toHaveBeenCalledWith(...args)
-    })
-
-    test('should call makeObservable', () => {
-      expect(makeObservable).toHaveBeenCalledWith(otherIdentifiers)
     })
   })
 

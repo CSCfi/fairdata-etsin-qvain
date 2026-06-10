@@ -1,19 +1,18 @@
-import { observable, action, makeObservable, override } from 'mobx'
+import { observable, action } from 'mobx'
 import { CommonController } from './qvain.controllers'
 
 class ModalController extends CommonController {
   constructor(args) {
     super(args)
-    makeObservable(this)
     this.mandatoryArgs = ['listId', 'controller']
     this.attachMandatoryArgs(args)
   }
 
-  @observable listId
+  @observable accessor listId
 
-  @observable hasChanged = false
+  @observable accessor hasChanged = false
 
-  @override set(args) {
+  @action.bound set(args) {
     this.controller.set(args)
   }
 
@@ -28,15 +27,14 @@ class ModalController extends CommonController {
 
 class Modals {
   constructor() {
-    makeObservable(this)
   }
 
-  @observable modals = []
+  @observable accessor modals = []
 
   @action.bound open(args) {
     if (!args.listId || !args.data || !args.save) {
-      console.error(`Cannot open modal, arguments missing. 
-        Required args: listId, data, save, 
+      console.error(`Cannot open modal, arguments missing.
+        Required args: listId, data, save,
         got: ${Object.entries(args)
           .filter(entries => entries[1])
           .map(entries => entries[0])}`)

@@ -1,5 +1,4 @@
 import * as yup from 'yup'
-import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import Field from './qvain.field'
 import { relatedResourceNameSchema } from './qvain.relatedResources'
@@ -20,7 +19,6 @@ export const UsedEntityTemplate = (
 class UsedEntities extends Field {
   constructor(Qvain, entities = []) {
     super(Qvain, UsedEntityTemplate, UsedEntityModel, 'usedEntities')
-    makeObservable(this)
 
     this.fromBackend({ used_entity: entities }, Qvain)
   }

@@ -54,7 +54,7 @@ export default defineConfig(({ command, mode }) => {
       }),
       react(),
       babel({
-        presets: [decoratorPreset({ version: 'legacy' })],
+        presets: [decoratorPreset({ version: '2023-11' })],
       }),
     ],
     server: {

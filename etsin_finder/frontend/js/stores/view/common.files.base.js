@@ -1,4 +1,4 @@
-import { observable, action, runInAction, computed, makeObservable } from 'mobx'
+import { observable, action, runInAction, computed } from 'mobx'
 
 import { Project } from './common.files.items'
 import PromiseManager from '../../utils/promiseManager'
@@ -14,24 +14,23 @@ class FilesBase {
     this.promiseManager = new PromiseManager()
     this.client = new AbortClient()
     FilesBase.prototype.reset.call(this)
-    makeObservable(this)
   }
 
-  @observable datasetIdentifier = null
+  @observable accessor datasetIdentifier = null
 
-  @observable root = null // project root
+  @observable accessor root = null // project root
 
-  @observable selectedProject = undefined
+  @observable accessor selectedProject = undefined
 
-  @observable projectLocked = false // prevent changing saved project
+  @observable accessor projectLocked = false // prevent changing saved project
 
-  @observable loadingProjectRoot = null
+  @observable accessor loadingProjectRoot = null
 
   cache = {} // used for storing data for items that haven't been fully loaded yet
 
-  @observable initialLoadCount = 200
+  @observable accessor initialLoadCount = 200
 
-  @action async reset() {
+  @action.bound async reset() {
     this.datasetIdentifier = null
     this.root = null
     this.selectedProject = undefined
@@ -140,7 +139,7 @@ class FilesBase {
       dir = dir.directories.find(d => d.name === part)
       if (dir && !dir.loaded) {
         if (i < parts.length - 1 || !skipFinalLoad) {
-           
+
           await this.loadDirectory(dir)
         }
       }

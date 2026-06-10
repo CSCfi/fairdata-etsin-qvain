@@ -1,5 +1,3 @@
-import { makeObservable } from 'mobx'
-
 import Keywords from '../../../js/stores/view/qvain/qvain.keyword'
 
 vi.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
@@ -22,14 +20,6 @@ vi.mock('../../../js/stores/view/qvain/qvain.referenceField', () => {
   }
 
   return { default: mockReferenceField }
-})
-
-vi.mock('mobx', async () => {
-  return {
-    ...(await vi.importActual('mobx')),
-    override: func => func,
-    makeObservable: vi.fn(),
-  }
 })
 
 describe('Keywords with args', () => {
@@ -57,10 +47,6 @@ describe('Keywords with args', () => {
         defaultStorageFactory,
         defaultItem
       )
-    })
-
-    test('should call makeObservable', () => {
-      expect(makeObservable).toHaveBeenCalledWith(keywords)
     })
   })
 

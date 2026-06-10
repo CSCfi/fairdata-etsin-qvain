@@ -2,14 +2,13 @@
   Interface for Etsin processor class.
 
 */
-import { makeObservable, action } from 'mobx'
+import { action } from 'mobx'
 import AbortClient from '@/utils/AbortClient'
 
 class EtsinProcessor {
   constructor(Env) {
     this.Env = Env
     this.client = new AbortClient()
-    makeObservable(this)
   }
 
   @action.bound

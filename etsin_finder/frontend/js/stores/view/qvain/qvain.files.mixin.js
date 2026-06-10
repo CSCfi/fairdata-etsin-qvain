@@ -1,4 +1,4 @@
-import { observable, action, makeObservable, override, computed } from 'mobx'
+import { observable, action, computed } from 'mobx'
 
 import { hasMetadata } from '../common.files.items'
 import { getAction, itemIsSelected } from '../common.files.utils'
@@ -27,7 +27,6 @@ const QvainFilesMixin = superclass =>
 
     constructor(Qvain, Auth) {
       super(Qvain.Env)
-      makeObservable(this)
       this.Qvain = Qvain
       this.Auth = Auth
       this.SelectedItemsView = new SelectedItemsView(this)
@@ -59,11 +58,11 @@ const QvainFilesMixin = superclass =>
 
     directoriesSchema = directoriesSchema
 
-    @observable refreshModalDirectory = undefined
+    @observable accessor refreshModalDirectory = undefined
 
-    @observable inEdit = undefined
+    @observable accessor inEdit = undefined
 
-    @override reset() {
+    @action.bound reset() {
       super.reset.call(this)
       this.SelectedItemsView.reset()
       this.AddItemsView.reset()
@@ -76,7 +75,7 @@ const QvainFilesMixin = superclass =>
       return this.Auth.user.idaProjects.includes(this.selectedProject)
     }
 
-    @override async loadDirectory(dir) {
+    @action.bound async loadDirectory(dir) {
       if (this.userHasRightsToEditProject) {
         return itemLoaderAny.loadDirectory({
           Files: this,

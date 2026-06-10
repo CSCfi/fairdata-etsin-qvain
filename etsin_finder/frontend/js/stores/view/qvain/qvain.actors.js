@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { toJS, observable, action, runInAction, computed, makeObservable } from 'mobx'
+import { toJS, observable, action, runInAction, computed } from 'mobx'
 import * as yup from 'yup'
 
 import { METAX_FAIRDATA_ROOT_URL, ENTITY_TYPE, ROLE } from '../../../utils/constants'
@@ -348,7 +348,6 @@ export const Organization = ({
 class Actors {
   constructor(Qvain) {
     this.Qvain = Qvain
-    makeObservable(this)
     this.reset()
   }
 
@@ -377,15 +376,15 @@ class Actors {
   actorSchema = actorSchema
 
   // Reference organizations by parent
-  @observable referenceOrganizations = {}
+  @observable accessor referenceOrganizations = {}
 
-  @observable referenceOrganizationErrors = {}
+  @observable accessor referenceOrganizationErrors = {}
 
-  @observable loadingReferenceOrganizations = {}
+  @observable accessor loadingReferenceOrganizations = {}
 
-  @observable onSuccessfulCreationCallbacks = []
+  @observable accessor onSuccessfulCreationCallbacks = []
 
-  @observable orphanActors = []
+  @observable accessor orphanActors = []
 
   @action clearReferenceOrganizations = () => {
     this.referenceOrganizations = {}
@@ -569,9 +568,9 @@ class Actors {
     this.mergeActorsOrganizationsWithReferences()
   }
 
-  @observable actors = []
+  @observable accessor actors = []
 
-  @observable actorInEdit = Actor()
+  @observable accessor actorInEdit = Actor()
 
   // Creates a single instance of a actor, only has one role.
 
@@ -823,13 +822,12 @@ export class ActorsRef {
   constructor({ actors, actorsFromBackend = [], roles = [] }) {
     this.actors = actors // instance of the actors class in Stores.Qvain for example
     this.roles = roles
-    makeObservable(this)
     const afbs = actorsFromBackend.map(afb => createActor(afb, roles))
     this.addRefsOnlyToActors(afbs)
     this.setActorsRef(afbs, roles)
   }
 
-  @observable actorsRef = {}
+  @observable accessor actorsRef = {}
 
   @action.bound clone() {
     const ref = new ActorsRef({ actors: this.actors, roles: this.roles })

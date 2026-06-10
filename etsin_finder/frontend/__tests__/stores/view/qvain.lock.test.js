@@ -1,6 +1,6 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { observable, makeObservable, when, action } from 'mobx'
+import { observable, when, action } from 'mobx'
 
 import LockClass from '../../../js/stores/view/qvain/qvain.lock'
 
@@ -11,13 +11,9 @@ class FakeQvainClass {
   // Helper class that allows changing dataset identifier,
   // normally datasetIdentifier is a computed from original.identifier
 
-  constructor() {
-    makeObservable(this, { datasetIdentifier: observable, setDatasetIdentifier: action })
-  }
+  @observable accessor datasetIdentifier = undefined
 
-  datasetIdentifier = undefined
-
-  setDatasetIdentifier(id) {
+  @action setDatasetIdentifier(id) {
     this.datasetIdentifier = id
   }
 }

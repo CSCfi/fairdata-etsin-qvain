@@ -1,4 +1,4 @@
-import { action, observable, computed, makeObservable } from 'mobx'
+import { action, observable, computed } from 'mobx'
 
 class SingleValueField {
   constructor(Parent, Schema = undefined, defaultValue = undefined) {
@@ -6,15 +6,13 @@ class SingleValueField {
     this.defaultValue = defaultValue
     this.Schema = Schema
     this.reset()
-    makeObservable(this)
-    this.set = this.set.bind(this)
   }
 
-  @observable value = this.defaultValue
+  @observable accessor value = this.defaultValue
 
-  @observable validationError = null
+  @observable accessor validationError = null
 
-  @action set(newValue) {
+  @action.bound set(newValue) {
     this.value = newValue
     this.Parent.setChanged(true)
   }
@@ -24,7 +22,7 @@ class SingleValueField {
     this.validationError = undefined
   }
 
-  @action setValidationError = error => {
+  @action.bound setValidationError(error) {
     this.validationError = error
   }
 

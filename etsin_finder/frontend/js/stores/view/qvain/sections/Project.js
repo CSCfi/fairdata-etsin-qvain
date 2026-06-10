@@ -1,10 +1,9 @@
-import { makeObservable, override } from 'mobx'
+import { action } from 'mobx'
 import Section from './section'
 
 class Project extends Section {
   constructor() {
     super({ translationsRoot: 'qvain.sections.projectV2' })
-    makeObservable(this)
   }
 
   isRequired = false
@@ -12,7 +11,7 @@ class Project extends Section {
   // used for checking if dataset has items
   metaxFieldName = 'is_output_of'
 
-  @override expandIfPopulated(dataset) {
+  @action.bound expandIfPopulated(dataset) {
     if (dataset.is_output_of?.length > 0) {
       this.setExpanded(true)
     }

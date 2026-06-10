@@ -1,5 +1,5 @@
 
-import { makeObservable, observable, action } from 'mobx'
+import { observable, action } from 'mobx'
 import { object, array, string, mixed } from 'yup'
 import { CommonAdapter, ListAdapter } from '../structural/qvain.adapters'
 import {
@@ -58,7 +58,6 @@ export class FunderOrganization extends Organization {
 export class FunderAdapter extends CommonAdapter {
   constructor(args) {
     super(args)
-    makeObservable(this)
   }
 
   @action.bound toMetaxV3() {
@@ -78,7 +77,6 @@ export class FunderAdapter extends CommonAdapter {
 export class Funder extends CommonModel {
   constructor() {
     super()
-    makeObservable(this)
 
     this.adapter = new FunderAdapter({ instance: this, Model: Funder })
     this.controller = new CommonController({ instance: this, Model: Funder })
@@ -86,15 +84,14 @@ export class Funder extends CommonModel {
 
   translationPath = 'qvain.project.fields.funding.fields.funder'
 
-  @observable funder_type = null
+  @observable accessor funder_type = null
 
-  @observable organization = new FunderOrganization()
+  @observable accessor organization = new FunderOrganization()
 }
 
 export class FundAdapter extends CommonAdapter {
   constructor(args) {
     super(args)
-    makeObservable(this)
   }
 
   @action.bound toMetaxV3() {
@@ -117,7 +114,6 @@ export class FundAdapter extends CommonAdapter {
 export class Fund extends CommonModel {
   constructor() {
     super()
-    makeObservable(this)
     this.controller = new CommonController({ instance: this })
     this.adapter = new FundAdapter({ instance: this, Model: this })
     this.validationError = {
@@ -132,11 +128,11 @@ export class Fund extends CommonModel {
 
   translationPath = 'qvain.project.fields.funding'
 
-  @observable funding_identifier = ''
+  @observable accessor funding_identifier = ''
 
-  @observable funder = new Funder()
+  @observable accessor funder = new Funder()
 
-  @observable validationError
+  @observable accessor validationError
 }
 
 export class ParticipatingOrganization extends Organization {
@@ -146,7 +142,6 @@ export class ParticipatingOrganization extends Organization {
 class ParticipatingOrganizations extends ListModel {
   constructor() {
     super()
-    makeObservable(this)
 
     this.adapter = new ListAdapter({
       instance: this,
@@ -159,7 +154,7 @@ class ParticipatingOrganizations extends ListModel {
     })
   }
 
-  @observable inEdit
+  @observable accessor inEdit
 
   translationPath = 'qvain.project.fields.participating_organizations'
 }
@@ -167,7 +162,6 @@ class ParticipatingOrganizations extends ListModel {
 class ProjectAdapter extends CommonAdapter {
   constructor(args) {
     super(args)
-    makeObservable(this)
   }
 
   @action.bound fromMetaxV3(data) {
@@ -197,7 +191,6 @@ class ProjectAdapter extends CommonAdapter {
 export class Project extends CommonModel {
   constructor() {
     super()
-    makeObservable(this)
 
     this.getLabel = this.getLabel.bind(this)
 
@@ -218,15 +211,15 @@ export class Project extends CommonModel {
     }
   }
 
-  @observable validationError
+  @observable accessor validationError
 
-  @observable title = { fi: '', en: '' }
+  @observable accessor title = { fi: '', en: '' }
 
-  @observable project_identifier = ''
+  @observable accessor project_identifier = ''
 
-  @observable participating_organizations = new ParticipatingOrganizations()
+  @observable accessor participating_organizations = new ParticipatingOrganizations()
 
-  @observable funding = new Fund()
+  @observable accessor funding = new Fund()
 
   getLabel() {
     return this.title

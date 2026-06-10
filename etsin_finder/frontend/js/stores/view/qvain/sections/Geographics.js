@@ -1,10 +1,9 @@
-import { makeObservable, override } from 'mobx'
+import { action } from 'mobx'
 import Section from './section'
 
 class Geographics extends Section {
   constructor() {
     super({ translationsRoot: 'qvain.sections.geographics' })
-    makeObservable(this)
   }
 
   isRequired = false
@@ -12,7 +11,7 @@ class Geographics extends Section {
   // used for checking if dataset has items
   metaxFieldName = 'spatial'
 
-  @override expandIfPopulated(dataset) {
+  @action.bound expandIfPopulated(dataset) {
     if (dataset.spatial?.length > 0) {
       this.setExpanded(true)
     }

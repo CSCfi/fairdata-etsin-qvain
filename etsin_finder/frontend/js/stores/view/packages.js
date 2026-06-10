@@ -1,4 +1,4 @@
-import { observable, action, makeObservable, runInAction, computed } from 'mobx'
+import { observable, action, runInAction, computed } from 'mobx'
 import urls from '../../utils/urls'
 
 import { DOWNLOAD_API_REQUEST_STATUS } from '../../utils/constants'
@@ -12,7 +12,6 @@ class Packages {
     this.Env = Env
     this.Notifications = new Notifications(this)
     this.client = new AbortClient()
-    makeObservable(this)
   }
 
   initialPollInterval = 1e3
@@ -23,19 +22,19 @@ class Packages {
 
   pollTimeout = null
 
-  @observable loadingDataset = false
+  @observable accessor loadingDataset = false
 
-  @observable error = null
+  @observable accessor error = null
 
-  @observable datasetIdentifier = null
+  @observable accessor datasetIdentifier = null
 
-  @observable packages = {}
+  @observable accessor packages = {}
 
-  @observable packageModalPath = null
+  @observable accessor packageModalPath = null
 
-  @observable manualDownloadUrlGetter = null
+  @observable accessor manualDownloadUrlGetter = null
 
-  @observable statusPromise = null
+  @observable accessor statusPromise = null
 
   @computed get sizeLimit() {
     return this.Env.packageSizeLimit

@@ -1,4 +1,4 @@
-import { makeObservable, computed } from 'mobx'
+import { computed } from 'mobx'
 
 import getApaCitation from './apa'
 import getChicagoCitation from './chicago'
@@ -7,7 +7,6 @@ import getBibtexCitation from './bibtex'
 
 class Cite {
   constructor({ Stores, Locale }) {
-    makeObservable(this)
     this.getTranslation = Locale.getValueTranslation
     this.Stores = Stores // Should be a EtsinDatasetV3 instance
   }

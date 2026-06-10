@@ -1,11 +1,10 @@
 import { createRef } from 'react'
-import { observable, action, makeObservable, autorun } from 'mobx'
+import { observable, action, autorun } from 'mobx'
 
 class Accessibility {
   constructor(Env, Locale) {
     this.Env = Env
     this.Locale = Locale
-    makeObservable(this)
     this.announce = this.announce.bind(this)
     this.resetFocus = this.resetFocus.bind(this)
 
@@ -13,13 +12,13 @@ class Accessibility {
     autorun(() => this.Locale.currentLang && this.handleNavigation())
   }
 
-  @observable assertiveAnnouncement = ''
+  @observable accessor assertiveAnnouncement = ''
 
-  @observable politeAnnouncement = ''
+  @observable accessor politeAnnouncement = ''
 
-  @observable userIsTabbing = false
+  @observable accessor userIsTabbing = false
 
-  @observable previousLocation = null
+  @observable accessor previousLocation = null
 
   focusableElement = createRef()
 

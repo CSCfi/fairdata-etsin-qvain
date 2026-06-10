@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { computed, action, makeObservable, override } from 'mobx'
+import { computed, action } from 'mobx'
 import * as yup from 'yup'
 import Field from './qvain.field'
 
@@ -29,7 +29,6 @@ class Temporals extends Field {
   constructor(Parent) {
     super(Parent, TemporalTemplate, TemporalModel, 'temporals')
     this.Parent = Parent
-    makeObservable(this)
   }
 
   @computed get renderable() {
@@ -40,12 +39,12 @@ class Temporals extends Field {
     }))
   }
 
-  @override reset() {
+  @action.bound reset() {
     super.reset()
     super.create()
   }
 
-  @override clearInEdit() {
+  @action.bound clearInEdit() {
     return this.create()
   }
 

@@ -1,11 +1,10 @@
-import { action, makeObservable } from 'mobx'
+import { action } from 'mobx'
 import { attachMandatoryArgs } from './helpers'
 
 export class CommonAdapter {
   constructor(args) {
     this.clone = this.clone.bind(this)
     this.attachMandatoryArgs(args)
-    makeObservable(this)
     this.init()
   }
 
@@ -31,7 +30,6 @@ export class ListAdapter extends CommonAdapter {
     super(args)
     this.mandatoryArgs = [...this.mandatoryArgs, 'V3FieldName']
     this.attachMandatoryArgs(args)
-    makeObservable(this)
   }
 
   @action.bound fromMetaxV3(data) {

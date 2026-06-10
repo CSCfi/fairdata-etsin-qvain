@@ -1,4 +1,4 @@
-import { makeObservable, override, action } from 'mobx'
+import { action } from 'mobx'
 import Packages from '../../packages'
 import createFilesStore from '../etsin.files'
 import EtsinProcessor from '.'
@@ -6,14 +6,13 @@ import EtsinProcessor from '.'
 class FilesProcessor extends EtsinProcessor {
   constructor(Env) {
     super(Env)
-    makeObservable(this)
     this.Packages = new Packages(Env)
     this.Files = createFilesStore(Env)
     this.filesClient = this.Files.client
     this.packagesClient = this.Packages.client
   }
 
-  @override
+  @action.bound
   fetch({ dataset, resolved, rejected }) {
     if (!dataset.identifier) return null
     this.Packages.clearPackages()

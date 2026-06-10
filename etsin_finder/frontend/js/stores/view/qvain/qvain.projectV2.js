@@ -1,4 +1,4 @@
-import { makeObservable, observable, action, computed, override, runInAction } from 'mobx'
+import { observable, action, computed, runInAction } from 'mobx'
 import * as yup from 'yup'
 import { v4 as uuidv4 } from 'uuid'
 import { cloneDeep } from 'lodash-es'
@@ -142,16 +142,15 @@ const ProjectModel = ({
 class ProjectV2 extends Field {
   constructor(Qvain) {
     super(Qvain, ProjectTemplate, ProjectModel)
-    makeObservable(this)
   }
 
-  @observable orgInEdit = { uiid: uuidv4(), organization: null }
+  @observable accessor orgInEdit = { uiid: uuidv4(), organization: null }
 
-  @observable orgValidationError = null
+  @observable accessor orgValidationError = null
 
-  @observable options = { organizations: {}, funderOrg: {} }
+  @observable accessor options = { organizations: {}, funderOrg: {} }
 
-  @observable translationsRoot = 'qvain.projectV2'
+  @observable accessor translationsRoot = 'qvain.projectV2'
 
   @action.bound fromBackend(dataset, Qvain) {
     if (dataset.is_output_of) {
@@ -180,7 +179,7 @@ class ProjectV2 extends Field {
       return item
     })
 
-  @override create(data) {
+  @action.bound create(data) {
     super.create(data)
     this.setChanged(false)
     this.orgInEdit = { uiid: uuidv4(), organization: null }
@@ -188,14 +187,14 @@ class ProjectV2 extends Field {
     this.orgValidationError = null
   }
 
-  @override edit(uiid) {
+  @action.bound edit(uiid) {
     super.edit(uiid)
     this.orgInEdit = { uiid: uuidv4(), organization: null }
     this.fetchAllOptions()
     this.orgValidationError = null
   }
 
-  @override reset() {
+  @action.bound reset() {
     super.reset()
     this.orgInEdit = { uiid: uuidv4(), organization: null }
     this.orgValidationError = null

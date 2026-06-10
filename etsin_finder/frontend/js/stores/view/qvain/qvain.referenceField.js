@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import { action, observable, computed, makeObservable } from 'mobx'
+import { action, observable, computed } from 'mobx'
 
 export const referenceObjectSchema = yup.object().shape({
   identifier: yup.string().required(),
@@ -10,16 +10,15 @@ class ReferenceField {
     this.Parent = Parent
     this.defaultStorageFactory = defaultStorageFactory
     this.defaultItem = defaultItem
-    makeObservable(this)
   }
 
-  @observable storage
+  @observable accessor storage
 
-  @observable item = this.defaultItem
+  @observable accessor item = this.defaultItem
 
-  @observable itemStr = ''
+  @observable accessor itemStr = ''
 
-  @observable validationError = null
+  @observable accessor validationError = null
 
   @action reset = () => {
     this.storage = this.defaultStorageFactory()

@@ -1,4 +1,4 @@
-import { observable, action, makeObservable, computed } from 'mobx'
+import { observable, action, computed } from 'mobx'
 
 class QvainAdminOrg {
   constructor(Env, Auth, Locale, Qvain) {
@@ -6,12 +6,11 @@ class QvainAdminOrg {
     this.Auth = Auth
     this.Locale = Locale
     this.Qvain = Qvain
-    makeObservable(this)
   }
 
-  @observable selectedAdminOrg
+  @observable accessor selectedAdminOrg
 
-  @observable confirmationSelected = false
+  @observable accessor confirmationSelected = false
 
   @computed get adminOrgOptions() {
     const options = this.Auth.user.availableAdminOrganizations.map(org => ({

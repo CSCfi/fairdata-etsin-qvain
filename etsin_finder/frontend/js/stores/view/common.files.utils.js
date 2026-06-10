@@ -1,4 +1,4 @@
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action } from 'mobx'
 
 // Sorting helper for natural sorting of file/directory names.
 const sortOpts = { numeric: true, sensitivity: 'base' }
@@ -6,12 +6,11 @@ export const sortFunc = (a, b) => a.localeCompare(b, undefined, sortOpts)
 
 export class ChildItemCounter {
   constructor() {
-    makeObservable(this)
   }
 
   // Helper class for counting child items based on paths without
   // having to load the entire directory hierarchy.
-  @observable root = { directories: {}, count: 0 }
+  @observable accessor root = { directories: {}, count: 0 }
 
   @action inc(path) {
     // add child

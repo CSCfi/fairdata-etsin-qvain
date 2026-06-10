@@ -1,27 +1,26 @@
-import { makeObservable, action, observable, computed } from 'mobx'
+import { action, observable, computed } from 'mobx'
 import AbortClient from '@/utils/AbortClient'
 import { geojsonToWKT, wktToGeoJSON } from '@terraformer/wkt'
 import { latLng } from 'leaflet'
 
 class EtsinMapSearch {
   constructor() {
-    makeObservable(this)
     this.client = new AbortClient()
   }
 
-  @observable layers = null // GeoJSON layer
+  @observable accessor layers = null // GeoJSON layer
 
-  @observable resetLayers = false
+  @observable accessor resetLayers = false
 
   // The map center (an instance of the Leaflet LatLng class):
-  @observable currentCenter = null
+  @observable accessor currentCenter = null
 
   // The map zoom level (an integer):
-  @observable currentZoom = null
+  @observable accessor currentZoom = null
 
-  @observable defaultSidebarMapCenterAsArray = [65, 27] // [lat, long]
+  @observable accessor defaultSidebarMapCenterAsArray = [65, 27] // [lat, long]
 
-  @observable defaultSidebarMapZoom = 4
+  @observable accessor defaultSidebarMapZoom = 4
 
   @computed get bounds() {
     if (!this.layers) return null

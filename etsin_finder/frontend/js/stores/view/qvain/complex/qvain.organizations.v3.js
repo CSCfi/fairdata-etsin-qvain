@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import { makeObservable, action, observable, override, computed } from 'mobx'
+import { action, observable, computed } from 'mobx'
 import { CommonAdapter } from '../structural/qvain.adapters'
 import { CommonController } from '../structural/qvain.controllers'
 import { CommonModel } from '../structural/qvain.models'
@@ -50,7 +50,6 @@ export const organizationSectionSchema = yup
 export class OrganizationAdapter extends CommonAdapter {
   constructor(args) {
     super(args)
-    makeObservable(this)
   }
 
   @action.bound fromMetaxV3(data) {
@@ -113,7 +112,6 @@ export class OrganizationAdapter extends CommonAdapter {
 export class OrganizationController extends CommonController {
   constructor(args) {
     super(args)
-    makeObservable(this)
   }
 
   @action.bound setOrganization(data) {
@@ -128,7 +126,7 @@ export class OrganizationController extends CommonController {
     this.instance.subdepartment = data
   }
 
-  @override set({ section, fieldName, value }) {
+  @action.bound set({ section, fieldName, value }) {
     this.instance[section][fieldName] = value
   }
 
@@ -146,7 +144,6 @@ export class OrganizationController extends CommonController {
 export class Organization extends CommonModel {
   constructor() {
     super()
-    makeObservable(this)
 
     this.getLabel = this.getLabel.bind(this)
 
@@ -160,9 +157,9 @@ export class Organization extends CommonModel {
     this.validationError = { organization: '', department: '', subdepartment: '' }
   }
 
-  @observable validationError
+  @observable accessor validationError
 
-  @observable organization = {
+  @observable accessor organization = {
     pref_label: { fi: '', en: '', und: '' },
     url: '',
     email: '',
@@ -170,9 +167,9 @@ export class Organization extends CommonModel {
     isReference: true,
   }
 
-  @observable department = { pref_label: { fi: '', en: '', und: '' }, isReference: true }
+  @observable accessor department = { pref_label: { fi: '', en: '', und: '' }, isReference: true }
 
-  @observable subdepartment = { pref_label: { fi: '', en: '', und: '' }, isReference: true }
+  @observable accessor subdepartment = { pref_label: { fi: '', en: '', und: '' }, isReference: true }
 
   @computed get hasOrganization() {
     return (

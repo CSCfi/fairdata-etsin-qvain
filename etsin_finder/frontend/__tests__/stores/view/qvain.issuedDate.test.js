@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { makeObservable } from 'mobx'
 
 import IssuedDate, { issuedDateSchema } from '../../../js/stores/view/qvain/qvain.issuedDate'
 
@@ -13,13 +12,6 @@ vi.mock('../../../js/stores/view/qvain/qvain.singleValueField', () => {
   }
 
   return { default: mockSingleValueField }
-})
-
-vi.mock('mobx', async () => {
-  return {
-    ...(await vi.importActual('mobx')),
-    makeObservable: vi.fn(),
-  }
 })
 
 describe('given Parent object', () => {
@@ -40,10 +32,6 @@ describe('given Parent object', () => {
           issuedDateSchema,
           moment().format('YYYY-MM-DD')
         )
-      })
-
-      test('should call makeObservable', () => {
-        expect(makeObservable).toHaveBeenCalledWith(issuedDate)
       })
     })
 

@@ -1,12 +1,11 @@
 import Tabs from '@/stores/view/tabs'
 import AbortClient, { ignoreAbort } from '@/utils/AbortClient'
 import PromiseManager from '@/utils/promiseManager'
-import { action, computed, makeObservable, observable, runInAction } from 'mobx'
+import { action, computed, observable, runInAction } from 'mobx'
 
 class REMSApplications {
   constructor(Env) {
     this.Env = Env
-    makeObservable(this)
     this.client = new AbortClient()
     this.promiseManager = new PromiseManager()
     this.tabs = new Tabs(
@@ -18,19 +17,19 @@ class REMSApplications {
     )
   }
 
-  @observable filter = 'all'
+  @observable accessor filter = 'all'
 
-  @observable searchTerm = ''
+  @observable accessor searchTerm = ''
 
-  @observable applications = []
+  @observable accessor applications = []
 
-  @observable selectedApplication = null
+  @observable accessor selectedApplication = null
 
-  @observable selectedAction = null
+  @observable accessor selectedAction = null
 
-  @observable commentText = ''
+  @observable accessor commentText = ''
 
-  @observable loadingApplications = false
+  @observable accessor loadingApplications = false
 
   @computed get filteredApplications() {
     let filtered = this.applications

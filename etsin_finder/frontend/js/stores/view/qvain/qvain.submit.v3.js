@@ -1,4 +1,4 @@
-import { makeObservable, override } from 'mobx'
+import { action } from 'mobx'
 import axios from 'axios'
 import { ValidationError } from 'yup'
 import { qvainFormSchemaV3 } from './qvain.submit.schemas'
@@ -11,7 +11,6 @@ class SubmitV3 extends Submit {
   constructor(Qvain) {
     super()
     this.Qvain = Qvain
-    makeObservable(this)
   }
 
   qvainFormSchema = qvainFormSchemaV3
@@ -20,7 +19,7 @@ class SubmitV3 extends Submit {
     return this.response?.id
   }
 
-  @override async exec(submitFunction, schema = qvainFormSchemaV3) {
+  @action.bound async exec(submitFunction, schema = qvainFormSchemaV3) {
     const {
       OtherIdentifiers: { cleanupBeforeBackend },
       editDataset,

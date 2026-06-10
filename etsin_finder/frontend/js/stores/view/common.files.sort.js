@@ -1,4 +1,4 @@
-import { observable, makeObservable, action, computed } from 'mobx'
+import { observable, action, computed } from 'mobx'
 
 export const DIRECTORY_NAME = 'directory_path'
 export const FILE_NAME = 'file_path'
@@ -17,7 +17,6 @@ const dateOption = { value: { file: FILE_DATE, directory: DIRECTORY_DATE }, opti
 
 class Sort {
   constructor() {
-    makeObservable(this)
   }
 
   @action.bound reset() {
@@ -25,13 +24,13 @@ class Sort {
     this.reverse = false
   }
 
-  @observable currentOption = nameOption
+  @observable accessor currentOption = nameOption
 
-  @observable options = [nameOption, dateOption]
+  @observable accessor options = [nameOption, dateOption]
 
-  @observable reverse = false
+  @observable accessor reverse = false
 
-  @observable hasChanged = false
+  @observable accessor hasChanged = false
 
   @action.bound
   setOption(value) {

@@ -1,4 +1,4 @@
-import { observable, action, makeObservable, override } from 'mobx'
+import { observable, action } from 'mobx'
 
 import { PublicItemsView } from '../common.files.views'
 
@@ -9,19 +9,18 @@ const EtsinFilesMixin = superclass =>
     // File hierarchy for files that are accessible through a public dataset. Does not support editing.
     constructor(Env) {
       super(Env)
-      makeObservable(this)
       this.View = new PublicItemsView(this)
       this.promiseManager = new PromiseManager()
       this.reset()
     }
 
-    @observable inInfo = null
+    @observable accessor inInfo = null
 
-    @observable files = []
+    @observable accessor files = []
 
-    @observable directories = []
+    @observable accessor directories = []
 
-    @override reset() {
+    @action.bound reset() {
       super.reset.call(this)
       this.View.reset()
       this.inInfo = null

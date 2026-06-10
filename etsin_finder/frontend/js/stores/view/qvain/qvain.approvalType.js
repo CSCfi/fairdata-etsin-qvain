@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-import { override } from 'mobx'
+import { action } from 'mobx'
 import SingleValueField from './qvain.singleValueField'
 
 export const dataAccessTypeSchema = yup
@@ -40,7 +40,7 @@ class REMSApprovalTypeField extends SingleValueField {
     this.Qvain = Qvain
   }
 
-  @override
+  @action.bound
   validate() {
     this.Schema.validate(this.value, { strict: true, context: { Qvain: this.Qvain } })
       .then(() => {

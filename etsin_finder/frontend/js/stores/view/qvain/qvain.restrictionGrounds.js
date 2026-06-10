@@ -1,4 +1,4 @@
-import { makeObservable, override } from 'mobx'
+import { action } from 'mobx'
 import * as yup from 'yup'
 import SingleValueField from './qvain.singleValueField'
 import { touch } from './track'
@@ -26,7 +26,6 @@ export const restrictionGroundsMetaxSchema = yup
 class RestrictionGrounds extends SingleValueField {
   constructor(Parent) {
     super(Parent, restrictionGroundsIdentifierSchema)
-    makeObservable(this)
   }
 
   fromBackend = dataset => {
@@ -39,7 +38,7 @@ class RestrictionGrounds extends SingleValueField {
 
   toBackend = () => (this.value ? [{ identifier: this.value.identifier }] : undefined)
 
-  @override validate() {
+  @action.bound validate() {
     if (!this.Schema) return undefined
     return this.Schema.validate(this.value?.identifier || '', { strict: true })
       .then(() => {

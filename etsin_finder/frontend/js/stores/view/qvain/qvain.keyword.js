@@ -1,4 +1,4 @@
-import { override, makeObservable } from 'mobx'
+import { action } from 'mobx'
 import * as yup from 'yup'
 import ReferenceField from './qvain.referenceField'
 
@@ -28,10 +28,9 @@ class Keywords extends ReferenceField {
   constructor(Parent, defaultStorageFactory = () => [], defaultItem = undefined) {
     super(Parent, defaultStorageFactory, defaultItem)
     this.reset()
-    makeObservable(this)
   }
 
-  @override
+  @action.bound
   addItemStr() {
     if (this.itemStr.length > 0) {
       const keywordsInString = this.itemStr.split(',').map(word => word.trim())

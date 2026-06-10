@@ -1,4 +1,4 @@
-import { makeObservable, action, observable, computed, runInAction } from 'mobx'
+import { action, observable, computed, runInAction } from 'mobx'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
 import EtsinMapSearch from './etsin.mapSearch'
 import { debounce } from 'lodash-es'
@@ -10,44 +10,43 @@ class EtsinSearch {
     this.Locale = Locale
     this.Etsin = Etsin
     this.client = new AbortClient()
-    makeObservable(this)
   }
 
-  @observable term = '' // current value of search input
+  @observable accessor term = '' // current value of search input
 
-  @observable usedTerm = '' // value that was used for current search
+  @observable accessor usedTerm = '' // value that was used for current search
 
-  @observable aggregatesUrl = ''
+  @observable accessor aggregatesUrl = ''
 
-  @observable res = null
+  @observable accessor res = null
 
-  @observable isLoading = false
+  @observable accessor isLoading = false
 
-  @observable itemsPerPage = 20
+  @observable accessor itemsPerPage = 20
 
-  @observable currentPage = 1
+  @observable accessor currentPage = 1
 
-  @observable activeFilters = {
+  @observable accessor activeFilters = {
     data_catalog: [],
     access_type: [],
     organization: [],
   }
 
-  @observable aggregations = {}
+  @observable accessor aggregations = {}
 
-  @observable overallCount = null
+  @observable accessor overallCount = null
 
-  @observable temporalStart = ''
+  @observable accessor temporalStart = ''
 
-  @observable temporalEnd = ''
+  @observable accessor temporalEnd = ''
 
-  @observable temporalOpen = false
+  @observable accessor temporalOpen = false
 
-  @observable temporalValidationError = null
+  @observable accessor temporalValidationError = null
 
-  @observable closeFacet = false
+  @observable accessor closeFacet = false
 
-  @observable facetSearchesCleared = {
+  @observable accessor facetSearchesCleared = {
     organization: false,
     creator: false,
     field_of_science: false,

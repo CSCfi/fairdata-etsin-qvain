@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash-es'
-import { observable, action, computed, makeObservable, toJS, runInAction } from 'mobx'
+import { observable, action, computed, toJS, runInAction } from 'mobx'
 import { cumulativeStateSchema, useDoiSchema, dataCatalogSchema } from './qvain.dataCatalog.schemas'
 import {
   ACCESS_TYPE_URL,
@@ -30,7 +30,6 @@ import REMSApplications from './qvain.remsApplications'
 class Qvain extends Resources {
   constructor(Env, Auth, Locale, OrgReferences) {
     super(Env, OrgReferences)
-    makeObservable(this)
     this.OrgReferences = OrgReferences
     this.Env = Env
     this.Auth = Auth
@@ -61,23 +60,23 @@ class Qvain extends Resources {
 
   dataCatalogSchema = dataCatalogSchema
 
-  @observable original = undefined // used if editing, otherwise undefined
+  @observable accessor original = undefined // used if editing, otherwise undefined
 
-  @observable draftOfDataset = undefined // published revision of draft dataset
+  @observable accessor draftOfDataset = undefined // published revision of draft dataset
 
-  @observable changed = false // has dataset been changed
+  @observable accessor changed = false // has dataset been changed
 
-  @observable deprecated = false
+  @observable accessor deprecated = false
 
-  @observable unsupported = null
+  @observable accessor unsupported = null
 
-  @observable dataCatalogConfigs = {} // maps catalog ids to catalog objects
+  @observable accessor dataCatalogConfigs = {} // maps catalog ids to catalog objects
 
-  @observable basicDataCatalogsError = undefined
+  @observable accessor basicDataCatalogsError = undefined
 
-  @observable editorInitialized = false
+  @observable accessor editorInitialized = false
 
-  @observable hasUnpublishedChanges = false
+  @observable accessor hasUnpublishedChanges = false
 
   @action.bound setHasUnpublishedChanges(value) {
     this.hasUnpublishedChanges = value
@@ -144,38 +143,38 @@ class Qvain extends Resources {
 
   // FILE PICKER STATE MANAGEMENT
 
-  @observable dataCatalog = undefined
+  @observable accessor dataCatalog = undefined
 
-  @observable useDoi = false
+  @observable accessor useDoi = false
 
-  @observable defaultDoi = true
+  @observable accessor defaultDoi = true
 
-  @observable cumulativeState = CUMULATIVE_STATE.NO
+  @observable accessor cumulativeState = CUMULATIVE_STATE.NO
 
   // Used for updating cumulative state separately from rest of dataset in v2
-  @observable newCumulativeState = CUMULATIVE_STATE.NO
+  @observable accessor newCumulativeState = CUMULATIVE_STATE.NO
 
-  @observable inEdit = undefined
+  @observable accessor inEdit = undefined
 
-  @observable metadataModalFile = undefined
+  @observable accessor metadataModalFile = undefined
 
-  @observable clearMetadataModalFile = undefined
+  @observable accessor clearMetadataModalFile = undefined
 
-  @observable promptLooseActors = undefined
+  @observable accessor promptLooseActors = undefined
 
-  @observable promptLooseProvenances = undefined
+  @observable accessor promptLooseProvenances = undefined
 
-  @observable provenancesWithNonExistingActors = []
+  @observable accessor provenancesWithNonExistingActors = []
 
-  @observable remsApplicationCounts = undefined
+  @observable accessor remsApplicationCounts = undefined
 
   client = new AbortClient()
 
-  @observable datasetLoading = false
+  @observable accessor datasetLoading = false
 
-  @observable datasetError = null
+  @observable accessor datasetError = null
 
-  @observable showFileMetadata = false
+  @observable accessor showFileMetadata = false
 
   @action.bound setDatasetLoading(value) {
     this.datasetLoading = value

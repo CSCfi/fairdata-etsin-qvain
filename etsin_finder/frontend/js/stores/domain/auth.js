@@ -1,6 +1,6 @@
 import { DAAS_CATALOG_SERVICE_USERS } from '@/utils/constants'
 import axios from 'axios'
-import { action, computed, makeObservable, observable, runInAction } from 'mobx'
+import { action, computed, observable, runInAction } from 'mobx'
 import * as yup from 'yup'
 
 const AdminOrganizationSchema = yup.object().shape({
@@ -30,18 +30,17 @@ const UserSchema = yup.object().shape({
 class Auth {
   constructor(Env) {
     this.Env = Env
-    makeObservable(this)
   }
 
-  @observable interceptors = null
+  @observable accessor interceptors = null
 
-  @observable loading = false
+  @observable accessor loading = false
 
-  @observable initializing = true
+  @observable accessor initializing = true
 
-  @observable user = UserSchema.validateSync({}) // initialize as unauthenticated user
+  @observable accessor user = UserSchema.validateSync({}) // initialize as unauthenticated user
 
-  @observable loginError = null
+  @observable accessor loginError = null
 
   @action.bound
   setLoginError(val) {

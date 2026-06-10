@@ -1,4 +1,4 @@
-import { action, makeObservable } from 'mobx'
+import { action } from 'mobx'
 import { ValidationError } from 'yup'
 
 import { attachMandatoryArgs } from './helpers'
@@ -6,14 +6,13 @@ import { attachMandatoryArgs } from './helpers'
 export class CommonController {
   constructor(args) {
     this.mandatoryArgs = ['instance']
-    makeObservable(this)
 
     this.init()
     this.attachMandatoryArgs(args)
   }
 
   @action.bound init() {
-    // add initial actions of the inherited class by using @override init()
+    // add initial actions of the inherited class by overriding init()
     // in the inherited class's definition
   }
 
@@ -60,7 +59,6 @@ export class CommonController {
 export class ListController extends CommonController {
   constructor(args) {
     super(args)
-    makeObservable(this)
     this.mandatoryArgs = [...this.mandatoryArgs, 'Model']
     this.attachMandatoryArgs(args)
 
@@ -101,7 +99,6 @@ export class ListController extends CommonController {
 export class ListModalController extends CommonController {
   constructor(args) {
     super(args)
-    makeObservable(this)
 
     this.mandatoryArgs = [...this.mandatoryArgs, 'listId', 'Qvain', 'Model']
     this.attachMandatoryArgs(args)

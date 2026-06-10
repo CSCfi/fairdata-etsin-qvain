@@ -1,21 +1,20 @@
-import { action, makeObservable, observable, runInAction } from 'mobx'
+import { action, observable, runInAction } from 'mobx'
 import axios from 'axios'
 
 class OrgReferences {
   constructor(Env) {
     this.Env = Env
-    makeObservable(this)
   }
 
-  @observable data = {
+  @observable accessor data = {
     organizations: {},
   }
 
-  @observable loading = {
+  @observable accessor loading = {
     organizations: {},
   }
 
-  @observable errors = {
+  @observable accessor errors = {
     organizations: {},
   }
 
@@ -49,7 +48,7 @@ class OrgReferences {
 
     delete this.errors.organizations[parentId]
 
-     
+
     const url = this.getOrganizationSearchUrl(parent)
     let orgs
     try {

@@ -1,16 +1,15 @@
-import { action, override, observable, runInAction, makeObservable } from 'mobx'
+import { action, observable, runInAction } from 'mobx'
 import FilesBaseV3 from '../common.files.v3'
 import QvainFilesMixin from './qvain.files.mixin'
 
 class QvainFilesV3 extends QvainFilesMixin(FilesBaseV3) {
   constructor(Env, Auth) {
     super(Env, Auth)
-    makeObservable(this)
   }
 
   // True when dataset been published with files or is a draft from a dataset with files.
   // Only used in V3, undefined in V2.
-  @observable hasPublishedFiles = null
+  @observable accessor hasPublishedFiles = null
 
   @action async checkHasPublishedFiles(dataset) {
     // Determine if dataset or its draft_of has been published with files.
@@ -31,12 +30,12 @@ class QvainFilesV3 extends QvainFilesMixin(FilesBaseV3) {
     })
   }
 
-  @override async openDataset(dataset) {
+  @action.bound async openDataset(dataset) {
     this.hasPublishedFiles = null
     return Promise.all([super.openDataset(dataset), this.checkHasPublishedFiles(dataset)])
   }
 
-  @override reset() {
+  @action.bound reset() {
     this.hasPublishedFiles = null
     super.reset()
   }

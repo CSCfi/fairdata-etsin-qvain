@@ -1,8 +1,4 @@
-import { makeObservable } from 'mobx'
-
 import QvainDatasetsStore from '../../../js/stores/view/qvain/qvain.datasets'
-
-vi.mock('mobx')
 
 describe('Datasets Tabs', () => {
   let tabs
@@ -13,10 +9,6 @@ describe('Datasets Tabs', () => {
   })
 
   describe('when calling constructor', () => {
-    test('should call makeObservable', () => {
-      expect(makeObservable).toHaveBeenCalledWith(tabs)
-    })
-
     it('should have default values', () => {
       tabs.setActive('own')
       tabs.should.include({

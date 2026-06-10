@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { observable, action, makeObservable, override, computed } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import * as yup from 'yup'
 
 import Locations from './qvain.provenances.locations'
@@ -63,25 +63,26 @@ class Provenances extends Field {
       'usedEntities',
       'locations',
     ])
-    makeObservable(this)
     this.Qvain = Qvain
   }
 
-  @observable selectedActor = undefined
+  @observable accessor selectedActor = undefined
 
-  @observable provenancesWithNonExistingActors = []
+  @observable accessor provenancesWithNonExistingActors = []
 
   @action saveAndClearLocations = () => {
     this.selectedActor = undefined
   }
 
-  @override reset() {
+  // override
+  @action.bound reset() {
     super.reset()
     this.selectedActor = undefined
     this.provenancesWithNonExistingActors = []
   }
 
-  @override create() {
+  // override
+  @action.bound create() {
     this.setChanged(false)
     this.editMode = false
     this.inEdit = Provenance({

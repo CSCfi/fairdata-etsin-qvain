@@ -1,9 +1,9 @@
-import { override } from 'mobx'
+import { action } from 'mobx'
 
 import FilesBase from './common.files.base'
 
 class FilesBaseV3 extends FilesBase {
-  @override async openDataset(dataset) {
+  @action.bound async openDataset(dataset) {
     this.reset()
     this.datasetIdentifier = dataset.identifier
     const datasetContent = dataset.dataset || dataset

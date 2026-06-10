@@ -1,5 +1,3 @@
-import { makeObservable } from 'mobx'
-
 import FieldOfSciences from '@/stores/view/qvain/qvain.fieldOfScience'
 
 vi.mock('@/stores/view/qvain/qvain.referenceField', async () => {
@@ -19,13 +17,6 @@ vi.mock('@/stores/view/qvain/qvain.referenceField', async () => {
   return { __esModule: true, default: mockReferenceField, referenceObjectSchema }
 })
 
-vi.mock('mobx', async () => {
-  return {
-    ...(await vi.importActual('mobx')),
-    makeObservable: vi.fn(),
-  }
-})
-
 describe('given any args', () => {
   const someArgs = ['probably Parent', 'maybe some other stuff']
 
@@ -38,10 +29,6 @@ describe('given any args', () => {
     describe('when calling constructor', () => {
       test('should call super.constructor with given args', () => {
         expect(fieldOfSciences.constructorFunc).toHaveBeenCalledWith(...someArgs)
-      })
-
-      test('should call makeObservable', () => {
-        expect(makeObservable).toHaveBeenCalledWith(fieldOfSciences)
       })
 
       describe('when calling fromBackend with dataset', () => {

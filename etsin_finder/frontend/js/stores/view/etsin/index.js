@@ -1,4 +1,4 @@
-import { action, observable, computed, makeObservable } from 'mobx'
+import { action, observable, computed } from 'mobx'
 import { isAbort } from '@/utils/AbortClient'
 import EtsinDatasetV3 from './etsin.storesV3'
 import { DatasetProcessorV3 } from './processor/etsin.dataset'
@@ -28,15 +28,14 @@ class Etsin {
     this.datasetProcessor = new this.DatasetProcessorClass(this.Env)
     this.filesProcessor = new FilesProcessor(this.Env)
 
-    makeObservable(this)
   }
 
-  @observable requests = {
+  @observable accessor requests = {
     dataset: [],
     custom: [],
   }
 
-  @observable errors = {
+  @observable accessor errors = {
     dataset: [],
     emails: [],
     custom: [],
@@ -45,7 +44,7 @@ class Etsin {
     Locale: this.Locale,
   }
 
-  @observable isLoading = {
+  @observable accessor isLoading = {
     dataset: false,
     files: false,
     packages: false,

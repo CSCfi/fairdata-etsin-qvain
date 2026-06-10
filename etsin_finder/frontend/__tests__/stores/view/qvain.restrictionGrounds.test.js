@@ -1,4 +1,3 @@
-import { makeObservable, override } from 'mobx'
 import RestrictionGrounds, {
   restrictionGroundsIdentifierSchema,
 } from '@/stores/view/qvain/qvain.restrictionGrounds'
@@ -23,9 +22,6 @@ vi.mock('@/stores/view/qvain/qvain.singleValueField', () => {
   return { default: mockSingleValueField }
 })
 
-vi.mock('mobx')
-override.mockImplementation(func => func)
-
 describe('RestrictionGrounds', () => {
   let restrictionGrounds
   const Parent = {
@@ -42,10 +38,6 @@ describe('RestrictionGrounds', () => {
         Parent,
         restrictionGroundsIdentifierSchema
       )
-    })
-
-    test('should call makeObservable', () => {
-      expect(makeObservable).toHaveBeenCalledWith(restrictionGrounds)
     })
 
     describe('when calling fromBackend', () => {

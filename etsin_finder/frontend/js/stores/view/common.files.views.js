@@ -1,4 +1,4 @@
-import { observable, action, runInAction, makeObservable, override } from 'mobx'
+import { observable, action, runInAction } from 'mobx'
 import {
   itemLoaderNew,
   itemLoaderExisting,
@@ -21,7 +21,6 @@ export class DirectoryView {
     if (typeof this.getItemLoader !== 'function') {
       throw new TypeError('Must override getItemLoader')
     }
-    makeObservable(this)
   }
 
   @action reset() {
@@ -33,11 +32,11 @@ export class DirectoryView {
 
   // Opening/closing directories
 
-  @observable openState = {}
+  @observable accessor openState = {}
 
-  @observable directoryFilters = {}
+  @observable accessor directoryFilters = {}
 
-  @observable directorySort = {}
+  @observable accessor directorySort = {}
 
   isOpen = dir => !!(this.openState[dir.key] || dir.type === 'project')
 
@@ -137,11 +136,11 @@ export class DirectoryView {
     await setChildrenOpen(this.Files.root)
   }
 
-  @observable defaultShowLimit = 100 // how many items to show
+  @observable accessor defaultShowLimit = 100 // how many items to show
 
-  @observable showLimitIncrement = 200 // how many additional items to show when "show more" is clicked
+  @observable accessor showLimitIncrement = 200 // how many additional items to show when "show more" is clicked
 
-  @observable showLimitState = {}
+  @observable accessor showLimitState = {}
 
   clearShowLimits() {
     this.showLimitState = {}
@@ -214,7 +213,7 @@ export class DirectoryView {
 
   // Selecting items
 
-  @observable checkedState = {}
+  @observable accessor checkedState = {}
 
   isChecked(item) {
     return !!this.checkedState[item.key]
@@ -340,20 +339,19 @@ export class AddItemsView extends DirectoryView {
 export class SelectedItemsView extends DirectoryView {
   constructor(props) {
     super(props)
-    makeObservable(this)
   }
 
-  @observable hideRemoved
+  @observable accessor hideRemoved
 
-  @action toggleHideRemoved = () => {
+  @action.bound toggleHideRemoved() {
     this.hideRemoved = !this.hideRemoved
   }
 
-  @action setHideRemoved = val => {
+  @action.bound setHideRemoved(val) {
     this.hideRemoved = val
   }
 
-  @override reset() {
+  @action.bound reset() {
     super.reset()
     this.hideRemoved = false
   }

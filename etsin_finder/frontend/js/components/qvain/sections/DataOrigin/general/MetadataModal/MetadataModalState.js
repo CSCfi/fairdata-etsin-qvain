@@ -1,13 +1,13 @@
 import getResponseError from '@/components/qvain/utils/responseError'
 import { getPASMeta } from '@/stores/view/common.files.items'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
-import { action, computed, makeObservable, observable, runInAction } from 'mobx'
+import { action, computed, observable, runInAction } from 'mobx'
 
 export default class MetadataModalState {
   client = new AbortClient()
 
   // File characteristics (PAS Metadata)
-  @observable values = {
+  @observable accessor values = {
     fileFormat: undefined,
     formatVersion: undefined,
     encoding: undefined,
@@ -17,23 +17,23 @@ export default class MetadataModalState {
     csvHasHeader: undefined,
   }
 
-  @observable formatFetchStatus = 'loading'
+  @observable accessor formatFetchStatus = 'loading'
 
-  @observable fileChanged = false
+  @observable accessor fileChanged = false
 
-  @observable confirmClose = false
+  @observable accessor confirmClose = false
 
-  @observable response = null
+  @observable accessor response = null
 
-  @observable loading = false
+  @observable accessor loading = false
 
-  @observable formatOptions = []
+  @observable accessor formatOptions = []
 
-  @observable fileFormatVersions = []
+  @observable accessor fileFormatVersions = []
 
-  @observable formatVersionsMap = {} // Maps a file format to supported format versions
+  @observable accessor formatVersionsMap = {} // Maps a file format to supported format versions
 
-  @observable file = null
+  @observable accessor file = null
 
   constructor(Stores) {
     this.setFormatVersion = this.setFormatVersion.bind(this)
@@ -42,7 +42,6 @@ export default class MetadataModalState {
     this.setCsvRecordSeparator = this.setCsvRecordSeparator.bind(this)
     this.setCsvHasHeader = this.setCsvHasHeader.bind(this)
     this.Stores = Stores
-    makeObservable(this)
   }
 
   @action.bound setResponse(response) {

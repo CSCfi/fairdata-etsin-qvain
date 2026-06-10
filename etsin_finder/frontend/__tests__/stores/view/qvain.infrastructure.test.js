@@ -1,5 +1,3 @@
-import { makeObservable } from 'mobx'
-
 import Infrastructures from '@/stores/view/qvain/qvain.infrastructure'
 
 vi.mock('@/stores/view/qvain/qvain.referenceField', () => {
@@ -16,13 +14,6 @@ vi.mock('@/stores/view/qvain/qvain.referenceField', () => {
   return { default: mockReferenceField }
 })
 
-vi.mock('mobx', async () => {
-  return {
-    ...(await vi.importActual('mobx')),
-    makeObservable: vi.fn(),
-  }
-})
-
 describe('given any args', () => {
   const someArgs = ['probably Parent', 'maybe some other stuff']
 
@@ -35,10 +26,6 @@ describe('given any args', () => {
     describe('when calling constructor', () => {
       test('should call super.constructor with given args', () => {
         expect(infrastructures.constructorFunc).toHaveBeenCalledWith(...someArgs)
-      })
-
-      test('should call makeObservable', () => {
-        expect(makeObservable).toHaveBeenCalledWith(infrastructures)
       })
 
       describe('when calling fromBackend with dataset', () => {

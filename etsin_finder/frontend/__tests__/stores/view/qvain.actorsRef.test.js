@@ -1,4 +1,5 @@
-import { ActorsRef, isEqual, actorToMetax } from '../../../js/stores/view/qvain/qvain.actors'
+import { ActorsRef, isEqual, actorToMetax } from '@/stores/view/qvain/qvain.actors'
+import { getOwnNonFunctionValues } from '@/utils/getOwnNonFunctionValues'
 
 describe('ActorsRef', () => {
   describe('given existing actors', () => {
@@ -33,7 +34,9 @@ describe('ActorsRef', () => {
       })
 
       test('should return a copy of actorsRef', () => {
-        returnValue.should.deep.eql(actorsRef)
+        // Omit own functions from comparison to avoid bound functions and
+        // arrow functions from causing comparison to fail.
+        getOwnNonFunctionValues(returnValue).should.deep.eql(getOwnNonFunctionValues(actorsRef))
         returnValue.should.not.equal(actorsRef)
       })
     })

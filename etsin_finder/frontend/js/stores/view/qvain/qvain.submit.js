@@ -1,4 +1,4 @@
-import { makeObservable, observable, action, computed } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import axios from 'axios'
 import { ValidationError } from 'yup'
 import { debounce } from 'lodash-es'
@@ -14,24 +14,23 @@ const isActionsEmpty = actions => actions.files.length === 0 && actions.director
 class Submit {
   constructor(Qvain) {
     this.Qvain = Qvain
-    makeObservable(this)
   }
 
   qvainFormDraftSchema = qvainFormDraftSchema
 
   qvainFormSchema = qvainFormSchema
 
-  @observable isLoading = false
+  @observable accessor isLoading = false
 
-  @observable error = undefined
+  @observable accessor error = undefined
 
-  @observable draftValidationError = []
+  @observable accessor draftValidationError = []
 
-  @observable publishValidationError = []
+  @observable accessor publishValidationError = []
 
-  @observable response = null
+  @observable accessor response = null
 
-  @observable prevalidationDone = false
+  @observable accessor prevalidationDone = false
 
   @action.bound reset() {
     this.prevalidationDone = false

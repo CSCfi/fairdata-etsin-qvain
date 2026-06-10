@@ -1,5 +1,3 @@
-import { makeObservable } from 'mobx'
-
 import {
   RelatedResource,
   RelatedResourceModel,
@@ -7,7 +5,6 @@ import {
 
 import { buildStores } from '@/stores'
 
-vi.mock('mobx')
 const origCer = console.error
 
 describe('RelatedResources', () => {
@@ -58,10 +55,6 @@ describe('RelatedResources', () => {
         Object.keys(expectedProps).forEach(key => {
           expect(relatedResources[key]).to.deep.equal(expectedProps[key])
         })
-      })
-
-      test('should call makeObservable', () => {
-        expect(makeObservable).toHaveBeenCalledWith(relatedResources)
       })
     })
 

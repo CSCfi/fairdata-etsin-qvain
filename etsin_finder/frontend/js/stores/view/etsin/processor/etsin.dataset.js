@@ -1,17 +1,16 @@
-import { action, makeObservable, override } from 'mobx'
+import { action } from 'mobx'
 import EtsinProcessor from '.'
 
 export class DatasetProcessorV3 extends EtsinProcessor {
   constructor(Env) {
     super(Env)
-    makeObservable(this)
   }
 
   // inherited properties
   // Env : domain.Env
   // client : AbortClient
 
-  @override fetch({ id, resolved, rejected }) {
+  @action.bound fetch({ id, resolved, rejected }) {
     const url = this.Env.metaxV3Url('dataset', id)
     const tag = `dataset-${id}`
     const promise = this.client

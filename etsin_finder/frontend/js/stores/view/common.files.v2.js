@@ -1,4 +1,4 @@
-import { observable, action, runInAction, override } from 'mobx'
+import { observable, action, computed, runInAction } from 'mobx'
 
 import urls from '../../utils/urls'
 import { dirIdentifierKey, fileIdentifierKey } from './common.files.items'
@@ -6,22 +6,22 @@ import { isAbort } from '@/utils/AbortClient'
 import FilesBase from './common.files.base'
 
 class FilesBaseV2 extends FilesBase {
-  @observable draftOfHasProject = null
+  @observable accessor draftOfHasProject = null
 
-  @observable loadingProjectInfo = null
+  @observable accessor loadingProjectInfo = null
 
-  @observable loadingMetadata = null
+  @observable accessor loadingMetadata = null
 
-  @observable loadingDraftOfProjects = null
+  @observable accessor loadingDraftOfProjects = null
 
-  @override reset() {
+  @action.bound reset() {
     this.draftOfHasProject = null
     this.loadingProjectInfo = null
     this.loadingMetadata = null
     super.reset()
   }
 
-  @override async openDataset(dataset) {
+  @action.bound async openDataset(dataset) {
     this.reset()
     runInAction(() => {
       if (!this.datasetIdentifier) this.datasetIdentifier = dataset.identifier
@@ -204,7 +204,7 @@ class FilesBaseV2 extends FilesBase {
     return data.identifier
   }
 
-  @override get isLoadingProject() {
+  @computed get isLoadingProject() {
     if (this.loadingProjectInfo && !this.loadingProjectInfo.done) {
       return true
     }
@@ -214,7 +214,7 @@ class FilesBaseV2 extends FilesBase {
     return super.isLoadingProject
   }
 
-  @override get loadingProjectError() {
+  @computed get loadingProjectError() {
     if (this.loadingProjectInfo && this.loadingProjectInfo.error) {
       return this.loadingProjectInfo.error
     }
@@ -224,7 +224,7 @@ class FilesBaseV2 extends FilesBase {
     return super.loading
   }
 
-  @override async retry() {
+  @action.bound async retry() {
     if (this.loadingProjectInfo && this.loadingProjectInfo.error) {
       this.loadingProjectInfo = null
     }

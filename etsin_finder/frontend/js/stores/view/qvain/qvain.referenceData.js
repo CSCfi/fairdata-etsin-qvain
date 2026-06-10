@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action } from 'mobx'
 
 import { METAX_FAIRDATA_ROOT_URL } from '../../../utils/constants'
 
@@ -17,14 +17,13 @@ const extraFields = {
 }
 
 class ReferenceData {
-  @observable cache = {}
+  @observable accessor cache = {}
 
   constructor(Qvain) {
     this.Qvain = Qvain
     this.Env = Qvain.Env
     this.getOptions = this.getOptions.bind(this)
     this.getLocalizedOptions = this.getLocalizedOptions.bind(this)
-    makeObservable(this)
   }
 
   getV3ReferenceDataType(referenceData) {

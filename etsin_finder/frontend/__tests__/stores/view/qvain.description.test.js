@@ -1,5 +1,4 @@
 import Description from '../../../js/stores/view/qvain/qvain.description'
-import { makeObservable } from 'mobx'
 
 vi.mock('../../../js/stores/view/qvain/qvain.multiLanguageField', () => {
   class MultiLanguageField {
@@ -14,13 +13,6 @@ vi.mock('../../../js/stores/view/qvain/qvain.multiLanguageField', () => {
   return { default: MultiLanguageField }
 })
 
-vi.mock('mobx', async () => {
-  return {
-    ...(await vi.importActual('mobx')),
-    makeObservable: vi.fn(),
-  }
-})
-
 describe('Description', () => {
   describe('when calling constructor', () => {
     let description
@@ -32,10 +24,6 @@ describe('Description', () => {
 
     test('should call MultiLanguageField.constructor with parent', () => {
       expect(description.constructorFunc).toHaveBeenCalledWith(Parent)
-    })
-
-    test('should call makeObservable', () => {
-      expect(makeObservable).toHaveBeenCalledWith(description)
     })
 
     describe('when calling fromBackend with dataset', () => {

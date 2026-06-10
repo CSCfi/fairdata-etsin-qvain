@@ -1,4 +1,4 @@
-import { action, makeObservable, override, computed } from 'mobx'
+import { action, computed } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 
 import { externalResourceSchema, externalResourceDaasSchema } from './qvain.dataCatalog.schemas'
@@ -63,7 +63,6 @@ export const formatFileSizeFromBytes = value => {
 class ExternalResources extends Field {
   constructor(Qvain) {
     super(Qvain, ExternalResource, ExternalResourceModel, 'externalResources')
-    makeObservable(this)
     this.reset()
   }
 
@@ -106,16 +105,16 @@ class ExternalResources extends Field {
       },
     }))
 
-  @override
+  @action.bound
   reset() {
     super.reset()
   }
 
-  @override clearInEdit() {
+  @action.bound clearInEdit() {
     super.clearInEdit()
   }
 
-  @override async validateAndSave() {
+  @action.bound async validateAndSave() {
     const schema =
       this.translationsRoot === 'qvain.files.daasCatalog'
         ? externalResourceDaasSchema

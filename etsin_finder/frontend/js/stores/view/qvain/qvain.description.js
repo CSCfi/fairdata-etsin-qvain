@@ -1,4 +1,4 @@
-import { makeObservable, action } from 'mobx'
+import { action } from 'mobx'
 import * as yup from 'yup'
 
 import MultiLanguageField from './qvain.multiLanguageField'
@@ -28,7 +28,6 @@ export const descriptionDraftSchema = descriptionSchemaBase.nullable()
 class Description extends MultiLanguageField {
   constructor(Parent) {
     super(Parent, descriptionSchema, { characterLimit: 50000 })
-    makeObservable(this)
   }
 
   @action

@@ -1,4 +1,4 @@
-import { action, computed, makeObservable, observable, runInAction } from 'mobx'
+import { action, computed, observable, runInAction } from 'mobx'
 import PromiseManager from '../../../utils/promiseManager'
 import Modal from './modal'
 
@@ -12,7 +12,6 @@ import ShareV3 from './qvain.datasetsV3.share'
 
 class QvainDatasets {
   constructor(Env, Auth, Locale) {
-    makeObservable(this)
     this.Env = Env
     this.Auth = Auth
     this.Locale = Locale
@@ -66,11 +65,11 @@ class QvainDatasets {
     return this.shareV3
   }
 
-  @observable _error = null
+  @observable accessor _error = null
 
-  @observable minDatasetsForSearchTool = 5
+  @observable accessor minDatasetsForSearchTool = 5
 
-  @observable publishedDataset = null
+  @observable accessor publishedDataset = null
 
   @action.bound reset() {
     this.ownDatasets.reset()
@@ -172,7 +171,6 @@ export default QvainDatasets
 
 class QvainDatasetList {
   constructor(args) {
-    makeObservable(this)
     this.Locale = args.Locale
     this.Auth = args.Auth
     this.Env = args.Env
@@ -184,21 +182,21 @@ class QvainDatasetList {
     this.sort = new Sort(this.Locale)
   }
 
-  @observable datasets = []
+  @observable accessor datasets = []
 
-  @observable error = null
+  @observable accessor error = null
 
-  @observable showCount = { initial: 10, current: 10, increment: 10 }
+  @observable accessor showCount = { initial: 10, current: 10, increment: 10 }
 
-  @observable loadTime = new Date()
+  @observable accessor loadTime = new Date()
 
-  @observable searchTerm = ''
+  @observable accessor searchTerm = ''
 
-  @observable isLoading = false
+  @observable accessor isLoading = false
 
-  @observable isFetched = false
+  @observable accessor isFetched = false
 
-  @observable onlyManualApproval = false
+  @observable accessor onlyManualApproval = false
 
   @action.bound setSearchTerm(term = '') {
     this.searchTerm = term

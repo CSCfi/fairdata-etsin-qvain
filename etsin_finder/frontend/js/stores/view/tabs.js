@@ -1,20 +1,19 @@
-import { observable, action, makeObservable, computed } from 'mobx'
+import { observable, action, computed } from 'mobx'
 
 class Tabs {
   constructor(options = {}, active = undefined) {
-    this.options = options // tab id -> tab value
-    this.active = active // id of current tab
-    makeObservable(this)
+    this.setOptions(options) // tab id -> tab value
+    this.setActive(active) // id of current tab
   }
 
-  @observable options = {}
+  @observable accessor options = {}
   // options is an object with the following structure:
   // {
   //   'tab-id': translation key,
   // }
 
   // active is the id of the current tab, e.g. 'own' or 'admin'
-  @observable active
+  @observable accessor active
 
   @action.bound setOptions(options) {
     this.options = options

@@ -1,10 +1,8 @@
-import { makeObservable } from 'mobx'
 import Section from './section'
 
 class Infrastructure extends Section {
   constructor() {
     super({ translationsRoot: 'qvain.sections.infrastructure' })
-    makeObservable(this)
   }
 
   isRequired = false

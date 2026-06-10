@@ -1,4 +1,4 @@
-import { makeObservable, action } from 'mobx'
+import { action } from 'mobx'
 import DataOrigin from './sections/DataOrigin'
 import Description from './sections/Description'
 import Actors from './sections/Actors'
@@ -13,7 +13,6 @@ import AdminOrg from './sections/AdminOrg'
 
 class Sections {
   constructor({ parent }) {
-    makeObservable(this)
     this.all = {
       AdminOrg: new AdminOrg(),
       DataOrigin: new DataOrigin(),

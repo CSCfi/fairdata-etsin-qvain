@@ -1,10 +1,9 @@
-import { action, makeObservable } from 'mobx'
+import { action } from 'mobx'
 import SingleValueField from './qvain.singleValueField'
 
 class BibliographicCitation extends SingleValueField {
   constructor(Parent) {
     super(Parent)
-    makeObservable(this)
   }
 
   @action fromBackend = dataset => {

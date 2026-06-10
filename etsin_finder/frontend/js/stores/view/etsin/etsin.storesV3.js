@@ -1,4 +1,4 @@
-import { makeObservable, observable, action, computed } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import {
   DATA_CATALOG_IDENTIFIER,
   ACCESS_TYPE_URL,
@@ -15,20 +15,19 @@ class EtsinDatasetV3 {
     this.Env = Env
     this.citations = new Cite({ Stores: this, Locale })
     this.rems = new EtsinDatasetRems({ EtsinDataset: this, Env })
-    makeObservable(this)
   }
 
-  @observable dataset = null
+  @observable accessor dataset = null
 
-  @observable packages = null
+  @observable accessor packages = null
 
-  @observable files = null
+  @observable accessor files = null
 
-  @observable emailInfo = null
+  @observable accessor emailInfo = null
 
-  @observable showCitationModal = false
+  @observable accessor showCitationModal = false
 
-  @observable inInfo = null
+  @observable accessor inInfo = null
 
   @computed get dataCatalog() {
     return this.dataset?.data_catalog

@@ -1,4 +1,4 @@
-import { computed, makeObservable, override } from 'mobx'
+import { computed, action } from 'mobx'
 import SingleValueField from './qvain.singleValueField'
 import removeEmpty from '@/utils/removeEmpty'
 
@@ -7,10 +7,9 @@ class MultiLanguageField extends SingleValueField {
     super(Parent, Schema, { fi: '', en: '' })
     this.Parent = Parent
     this.characterLimit = characterLimit
-    makeObservable(this)
   }
 
-  @override set(value, lang) {
+  @action.bound set(value, lang) {
     this.value[lang] = value
     this.setValidationError(null)
     this.Parent.setChanged(true)

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { observable, action, when, makeObservable } from 'mobx'
+import { observable, action, when } from 'mobx'
 
 export const isAbort = error => axios.isCancel(error)
 
@@ -44,11 +44,7 @@ class AbortClient {
   // * AbortControllers are associated with tags from tag option (string or array of strings)
   // * AbortClient.abort allows aborting requests by tag
 
-  constructor() {
-    makeObservable(this)
-  }
-
-  @observable controllers = []
+  @observable accessor controllers = []
 
   create(config = {}) {
     // Basic replacement for axios.create(), creates a proxy client with default config.

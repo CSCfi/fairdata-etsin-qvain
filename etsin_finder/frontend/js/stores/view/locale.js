@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { get } from 'lodash-es'
-import { observable, action, computed, makeObservable } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import moment from 'moment'
 import finnish from '@/../locale/finnish'
 import english from '@/../locale/english'
@@ -102,7 +102,6 @@ const defaultMissingTranslationHandler = (key, { locale: lang, ...context }) =>
 class Locale {
   constructor(Env) {
     this.Env = Env
-    makeObservable(this)
     this.dateFormat = this.dateFormat.bind(this)
     this.dateSeparator = this.dateSeparator.bind(this)
     this.translate = this.translate.bind(this)
@@ -127,7 +126,7 @@ class Locale {
     }
   }
 
-  @observable currentLang = 'en' // FIXME: read from session? or something?
+  @observable accessor currentLang = 'en' // FIXME: read from session? or something?
 
   // get current computed (state changes are tracked) language. Convenience function.
   @computed get lang() {
@@ -146,9 +145,9 @@ class Locale {
     return 'fd_language'
   }
 
-  @observable languages = languages
+  @observable accessor languages = languages
 
-  @observable datasetTitleLanguages = datasetTitleLanguages
+  @observable accessor datasetTitleLanguages = datasetTitleLanguages
 
   @action.bound saveLanguage() {
     return axios.post(urls.language(), { language: this.currentLang })

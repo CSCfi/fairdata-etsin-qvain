@@ -7,7 +7,6 @@ export function decoratorPreset(options) {
     preset: () => ({
       plugins: [
         ['@babel/plugin-proposal-decorators', options],
-        ['@babel/plugin-transform-class-properties'],
       ],
     }),
     rolldown: {

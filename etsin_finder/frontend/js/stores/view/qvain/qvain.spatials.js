@@ -1,4 +1,3 @@
-import { makeObservable } from 'mobx'
 import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
 
@@ -47,7 +46,6 @@ export const Spatial = ({
 class Spatials extends Field {
   constructor(Parent, spatials = []) {
     super(Parent, Spatial, SpatialModel, 'spatials')
-    makeObservable(this)
 
     this.fromBackend({ spatial: spatials }, Parent)
   }

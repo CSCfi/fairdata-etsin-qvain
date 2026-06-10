@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 import axios from 'axios'
-import { override, runInAction } from 'mobx'
+import { runInAction, action } from 'mobx'
 import Actors, { Organization, createActor } from './qvain.actors'
 import { ENTITY_TYPE } from '@/utils/constants'
 import symmetricDifference from '@/components/qvain/utils/symmetricDifference'
@@ -15,7 +15,7 @@ export const actorsSchemaV3 = yup.array().of(
 )
 
 class ActorsV3 extends Actors {
-  @override
+  @action.bound
   fromBackend(researchDataset) {
     const datasetActors = researchDataset.actors || []
     const actors = []
@@ -81,7 +81,7 @@ class ActorsV3 extends Actors {
     return url.toString()
   }
 
-  @override async fetchReferenceOrganizations(parent) {
+  @action.bound async fetchReferenceOrganizations(parent) {
     // Fetch child reference organizations of parent organization,
     // or all top-level organizations if no parent is defined.
     if (parent && !parent.isReference) {

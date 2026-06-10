@@ -1,4 +1,4 @@
-import { action, makeObservable, override } from 'mobx'
+import { action } from 'mobx'
 import * as yup from 'yup'
 
 import SingleValueField from './qvain.singleValueField'
@@ -36,7 +36,6 @@ const defaultValue = Model(undefined, ACCESS_TYPE_URL.OPEN)
 class AccessType extends SingleValueField {
   constructor(Parent) {
     super(Parent, accessTypeQvainSchema, defaultValue)
-    makeObservable(this)
   }
 
   @action fromBackend = dataset => {
@@ -45,7 +44,7 @@ class AccessType extends SingleValueField {
     this.value = at ? this.Model({ ...at.pref_label }, at.identifier) : this.defaultValue
   }
 
-  @override
+  @action.bound
   set(newValue) {
     super.set(newValue)
 

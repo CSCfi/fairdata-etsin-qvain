@@ -1,4 +1,4 @@
-import { makeObservable, action } from 'mobx'
+import { action } from 'mobx'
 import * as yup from 'yup'
 import MultiLanguageField from './qvain.multiLanguageField'
 
@@ -20,7 +20,6 @@ export const titleSchema = yup
 class Title extends MultiLanguageField {
   constructor(Parent) {
     super(Parent, titleSchema)
-    makeObservable(this)
   }
 
   schema = titleSchema

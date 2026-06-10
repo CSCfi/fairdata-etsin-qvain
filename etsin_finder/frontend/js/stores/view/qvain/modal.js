@@ -1,11 +1,10 @@
-import { computed, observable, action, makeObservable } from 'mobx'
+import { computed, observable, action } from 'mobx'
 
 class Modal {
   constructor() {
-    makeObservable(this)
   }
 
-  @observable data
+  @observable accessor data
 
   @computed get isOpen() {
     return !!this.data

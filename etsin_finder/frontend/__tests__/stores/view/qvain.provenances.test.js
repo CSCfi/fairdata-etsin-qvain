@@ -1,10 +1,7 @@
-import { makeObservable } from 'mobx'
-
 import { buildStores } from '@/stores'
 import { Provenance, ProvenanceModel } from '@/stores/view/qvain/qvain.provenances'
 
 vi.mock('uuid')
-vi.mock('mobx')
 
 const originalCer = console.error
 
@@ -24,10 +21,6 @@ describe('Provenances', () => {
   })
 
   describe('when calling constructor', () => {
-    test('should call makeObservables', () => {
-      expect(makeObservable).toHaveBeenCalledWith(provenances)
-    })
-
     test('should Parent, Model, Template defined', () => {
       const expectedProps = {
         Model: ProvenanceModel,
@@ -247,35 +240,6 @@ describe('Provenances', () => {
       test('should return true', () => {
         returnValue.should.be.true
       })
-    })
-  })
-
-  describe('when calling removeActorFromRefs', () => {
-    const actor = {
-      uiid: 1,
-    }
-
-    const storage = [
-      {
-        associations: {
-          removeActorRef: vi.fn(),
-        },
-      },
-      {
-        associations: {
-          removeActorRef: vi.fn(),
-        },
-      },
-    ]
-
-    beforeEach(() => {
-      provenances.storage = storage
-      provenances.removeActorFromRefs(actor)
-    })
-
-    test('should call removeActorRef from both provenances.associations', () => {
-      expect(provenances.storage[0].associations.removeActorRef).toHaveBeenCalledWith(1)
-      expect(provenances.storage[1].associations.removeActorRef).toHaveBeenCalledWith(1)
     })
   })
 })

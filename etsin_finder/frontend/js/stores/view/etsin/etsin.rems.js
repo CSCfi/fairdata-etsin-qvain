@@ -1,4 +1,4 @@
-import { action, computed, makeObservable, observable, runInAction } from 'mobx'
+import { action, computed, observable, runInAction } from 'mobx'
 
 import Tabs from '@/stores/view/tabs'
 import AbortClient from '@/utils/AbortClient'
@@ -8,7 +8,6 @@ class EtsinDatasetRems {
   constructor({ EtsinDataset, Env }) {
     this.EtsinDataset = EtsinDataset
     this.Env = Env
-    makeObservable(this)
     this.promiseManager = new PromiseManager()
     this.client = new AbortClient()
     this.tabs = new Tabs({}, 'new-application')
@@ -17,19 +16,19 @@ class EtsinDatasetRems {
     this.hasAllRequiredFormValues = this.hasAllRequiredFormValues.bind(this)
   }
 
-  @observable showModal = false
+  @observable accessor showModal = false
 
-  @observable applicationBase
+  @observable accessor applicationBase
 
-  @observable applications
+  @observable accessor applications
 
-  @observable applicationBaseError
+  @observable accessor applicationBaseError
 
   // application id -> bool
-  @observable acceptLicenses = {}
+  @observable accessor acceptLicenses = {}
 
   // application id -> form id -> field id -> field value
-  @observable formValues = {}
+  @observable accessor formValues = {}
 
   @action.bound clearApplication() {
     this.acceptLicenses[null] = false

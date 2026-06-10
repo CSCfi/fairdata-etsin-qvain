@@ -1,11 +1,10 @@
-import { action, makeObservable } from 'mobx'
+import { action } from 'mobx'
 import ReferenceField from './qvain.referenceField'
 import { touch } from './track'
 
 class SubjectHeadings extends ReferenceField {
   constructor(...args) {
     super(...args)
-    makeObservable(this)
   }
 
   @action

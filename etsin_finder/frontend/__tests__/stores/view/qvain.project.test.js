@@ -1,14 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
-import { makeObservable } from 'mobx'
 import Projects from '../../../js/stores/view/qvain/qvain.project'
-
-vi.mock('mobx', async () => {
-  const actual = await vi.importActual('mobx')
-  return {
-    ...actual,
-    makeObservable: vi.fn(),
-  }
-})
+import { observable } from 'mobx'
 
 vi.mock('uuid')
 
@@ -23,12 +15,6 @@ describe('Projects', () => {
     projects = new Projects(Parent)
   })
 
-  describe('when calling constructor with Parent', () => {
-    test('should call makeObservable', () => {
-      expect(makeObservable).toHaveBeenCalledWith(projects)
-    })
-  })
-
   describe('when calling reset', () => {
     beforeEach(() => {
       projects.projects = 'some data'
@@ -41,9 +27,9 @@ describe('Projects', () => {
   })
 
   describe('when calling setProject with object that is not in projects', () => {
-    const project = {
+    const project = observable({
       id: 1,
-    }
+    })
 
     beforeEach(() => {
       projects.setProject(project)

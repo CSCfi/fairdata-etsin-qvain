@@ -1,10 +1,9 @@
 import * as yup from 'yup'
-import { observable, computed, action, toJS, makeObservable } from 'mobx'
+import { observable, computed, action, toJS } from 'mobx'
 import { cloneDeep } from 'lodash-es'
 
 class Field {
   constructor(Parent, Template, Model, fieldName, references = []) {
-    makeObservable(this)
     this.Template = Template
     this.Model = Model
     this.fieldName = fieldName
@@ -19,15 +18,15 @@ class Field {
     return this.Parent.readonly
   }
 
-  @observable storage = []
+  @observable accessor storage = []
 
-  @observable hasChanged
+  @observable accessor hasChanged
 
-  @observable inEdit
+  @observable accessor inEdit
 
-  @observable editMode
+  @observable accessor editMode
 
-  @observable validationError
+  @observable accessor validationError
 
   @action.bound reset() {
     this.storage = []

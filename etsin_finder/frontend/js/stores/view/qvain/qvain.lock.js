@@ -1,4 +1,4 @@
-import { observable, action, computed, makeObservable, reaction, runInAction } from 'mobx'
+import { observable, action, computed, reaction, runInAction } from 'mobx'
 import PromiseManager from '../../../utils/promiseManager'
 import urls from '../../../utils/urls'
 import AbortClient, { isAbort } from '@/utils/AbortClient'
@@ -7,7 +7,6 @@ class Lock {
   constructor(Qvain, Auth) {
     this.Qvain = Qvain
     this.Auth = Auth
-    makeObservable(this)
     this.promiseManager = new PromiseManager()
     this.poll = this.poll.bind(this)
     this.handleDatasetChange = this.handleDatasetChange.bind(this)
@@ -22,15 +21,15 @@ class Lock {
 
   enabled = false
 
-  @observable lockData = {}
+  @observable accessor lockData = {}
 
-  @observable loading = false
+  @observable accessor loading = false
 
-  @observable isInitialLoad = false
+  @observable accessor isInitialLoad = false
 
   pollTimeoutId = null
 
-  @observable pollingEnabled = false
+  @observable accessor pollingEnabled = false
 
   handleDatasetChange(newIdentifier, oldIdentifier) {
     if (!this.enabled) {
