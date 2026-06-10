@@ -29,6 +29,8 @@ import {
   automaticREMSApplicationBase,
   manualREMSApplicationBase,
 } from '@testdata/rems.data'
+import { HelmetProvider } from 'react-helmet-async'
+import dataset_att_a from '@testdata/metaxv3/datasets/dataset_att_a'
 
 // Avoid reactmodal warnings
 ReactModal.setAppElement(document.createElement('div'))
@@ -56,7 +58,7 @@ const renderEtsin = async (
     userLogged = false,
     tab = undefined,
     remsApplicationBase = automaticREMSApplicationBase,
-    beforeRender = () => {},
+    beforeRender = () => { },
   } = {}
 ) => {
   mockAdapter.reset()
@@ -98,15 +100,17 @@ const renderEtsin = async (
   beforeRender()
 
   render(
-    <ThemeProvider theme={etsinTheme}>
-      <MemoryRouter initialEntries={initialEntries}>
-        <StoresProvider store={stores}>
-          <Routes>
-            <Route path="/dataset/:identifier/*" Component={Dataset} />
-          </Routes>
-        </StoresProvider>
-      </MemoryRouter>
-    </ThemeProvider>
+    <HelmetProvider>
+      <ThemeProvider theme={etsinTheme}>
+        <MemoryRouter initialEntries={initialEntries}>
+          <StoresProvider store={stores}>
+            <Routes>
+              <Route path="/dataset/:identifier/*" Component={Dataset} />
+            </Routes>
+          </StoresProvider>
+        </MemoryRouter>
+      </ThemeProvider>
+    </HelmetProvider>
   )
 
   await screen.findByRole('article')
@@ -204,8 +208,64 @@ describe('Etsin dataset page', () => {
     const header = within(dialog).getByRole('heading', { name: 'APA' })
     expect(header.nextElementSibling.textContent).toEqual(
       'Kone Foundation, & Henkilö, K. (2023). All Fields Test Dataset. ' +
-        'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
+      'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
     )
+  })
+
+  test('renders links supporting signposting for a dataset with a DOI PID', async () => {
+    await renderEtsin()
+    const head = document.head
+    const typeHref = head.querySelector("link[rel='type']").getAttribute('href')
+    const citeAsHref = head.querySelector("link[rel='cite-as']").getAttribute('href')
+    const authorHref = head.querySelector("link[rel='author']").getAttribute('href')
+    const licenseLinks = head.querySelectorAll("link[rel='license']")
+    const licenseHrefs = Array.from(licenseLinks).map(link => link.getAttribute('href'))
+    const metadataLinks = head.querySelectorAll("link[rel='describedby']")
+    const metadataHrefs = Array.from(metadataLinks).map(link => link.getAttribute('href'))
+    const metadataTypes = Array.from(metadataLinks).map(link => link.getAttribute('type'))
+
+    expect(typeHref).toBe('https://schema.org/Dataset')
+    expect(citeAsHref).toBe('https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5')
+    expect(authorHref).toBe('http://uri.suomi.fi/codelist/fairdata/organization/code/02135371')
+    expect(licenseHrefs).toEqual([
+      'http://uri.suomi.fi/codelist/fairdata/license/code/other-open',
+      'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+    ])
+    expect(metadataHrefs).toEqual([
+      'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0',
+      'https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5',
+      'https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5',
+    ])
+    expect(metadataTypes).toEqual([
+      'application/json',
+      'application/ld+json',
+      'application/vnd.datacite.datacite+json',
+    ])
+  })
+
+  test('renders links supporting signposting for a dataset with a URN PID and no author link', async () => {
+    await renderEtsin(dataset_att_a)
+    const head = document.head
+    const typeHref = head.querySelector("link[rel='type']").getAttribute('href')
+    const citeAsHref = head.querySelector("link[rel='cite-as']").getAttribute('href')
+    const author = head.querySelector("link[rel='author']")
+    const licenseLinks = head.querySelectorAll("link[rel='license']")
+    const licenseHrefs = Array.from(licenseLinks).map(link => link.getAttribute('href'))
+    const metadataLinks = head.querySelectorAll("link[rel='describedby']")
+    const metadataHrefs = Array.from(metadataLinks).map(link => link.getAttribute('href'))
+    const metadataTypes = Array.from(metadataLinks).map(link => link.getAttribute('type'))
+
+    expect(typeHref).toBe('https://schema.org/Dataset')
+    expect(citeAsHref).toBe('https://urn.fi/urn:nbn:fi:att:be05442c-1cb6-4fb3-999b-d076d12c7842')
+    expect(author).not.toBeInTheDocument()
+    expect(licenseHrefs).toEqual([
+      'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+      'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-1.0',
+    ])
+    expect(metadataHrefs).toEqual([
+      'https://metaxv3:443/v3/datasets/2356c755-c2cb-4cdc-9db1-380b7d025fd8',
+    ])
+    expect(metadataTypes).toEqual(['application/json'])
   })
 
   test('renders REMS application without form', async () => {
@@ -481,7 +541,7 @@ describe('Etsin dataset page', () => {
   })
 
   test('renders REMS error message', async () => {
-    vi.spyOn(console, 'error').mockImplementation(() => {}) // hide console.error from output
+    vi.spyOn(console, 'error').mockImplementation(() => { }) // hide console.error from output
     await renderEtsin(dataset_rems, { userLogged: true })
 
     mockAdapter
@@ -548,7 +608,7 @@ const spatial_geolocation = {
   },
 }
 
-describe('Etsin map page', () => {
+describe('Etsin map tab', () => {
   test('renders map table', async () => {
     const dataset = cloneDeep(dataset_open_a_catalog_expanded)
     dataset.spatial.push(spatial_olari, spatial_autti)

@@ -27,6 +27,7 @@ import dataset_ida_b from '../../__testdata__/metaxv3/datasets/dataset_ida_b.dat
 import L from 'leaflet'
 import Dataset from '@/components/etsin/Dataset'
 import { cloneDeep } from 'lodash-es'
+import { HelmetProvider } from 'react-helmet-async'
 
 // Mock for geoman library and pm-related methods:
 vi.mock('@geoman-io/leaflet-geoman-free', () => ({}))
@@ -145,16 +146,18 @@ const getStores = () => {
 
 const renderEtsin = (path = '/datasets', stores = getStores()) => {
   return render(
-    <ThemeProvider theme={etsinTheme}>
-      <MemoryRouter initialEntries={[path]}>
-        <StoresProvider store={stores}>
-          <Routes>
-            <Route path="/datasets" Component={Search} />
-            <Route path={`/dataset/:identifier/*`} Component={Dataset} />
-          </Routes>
-        </StoresProvider>
-      </MemoryRouter>
-    </ThemeProvider>
+    <HelmetProvider>
+      <ThemeProvider theme={etsinTheme}>
+        <MemoryRouter initialEntries={[path]}>
+          <StoresProvider store={stores}>
+            <Routes>
+              <Route path="/datasets" Component={Search} />
+              <Route path={`/dataset/:identifier/*`} Component={Dataset} />
+            </Routes>
+          </StoresProvider>
+        </MemoryRouter>
+      </ThemeProvider>
+    </HelmetProvider>
   )
 }
 
@@ -186,6 +189,12 @@ describe('Etsin search page', () => {
       expect(
         await screen.findByText(dataset_ida_a.access_rights.access_type.pref_label.en)
       ).toBeInTheDocument()
+    })
+
+    test('it should not add dataset-specific links supporting signposting to the document head', async () => {
+      renderEtsin()
+      const head = document.head
+      expect(head.querySelector('link[rel="type"]')).not.toBeInTheDocument()
     })
 
     describe('when clicking keyword filter section', () => {

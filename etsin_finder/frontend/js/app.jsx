@@ -1,15 +1,3 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { useState, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { createBrowserRouter, RouterProvider } from 'react-router'
@@ -28,6 +16,10 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import { getThemeByApp } from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
+// NOTE: The react-helmet-async dependency (also used by the HeadLinks
+// component via Helmet and in dataset-related tests) can likely be removed
+// when upgrading to a newer React major version.
+import { HelmetProvider } from 'react-helmet-async'
 
 let Env = new EnvClass()
 
@@ -101,17 +93,21 @@ const App = () => {
     return null
   }
 
+  // Wrap App with HelmetProvider to provide head management support
+  // for the HeadLinks component using react-helmet-async.
   return (
-    <div className="app">
-      <StoresProvider store={stores}>
-        <ThemeProvider theme={getThemeByApp(Env.app)}>
-          <>
-            <GlobalStyle />
-            <Layout />
-          </>
-        </ThemeProvider>
-      </StoresProvider>
-    </div>
+    <HelmetProvider>
+      <div className="app">
+        <StoresProvider store={stores}>
+          <ThemeProvider theme={getThemeByApp(Env.app)}>
+            <>
+              <GlobalStyle />
+              <Layout />
+            </>
+          </ThemeProvider>
+        </StoresProvider>
+      </div>
+    </HelmetProvider>
   )
 }
 

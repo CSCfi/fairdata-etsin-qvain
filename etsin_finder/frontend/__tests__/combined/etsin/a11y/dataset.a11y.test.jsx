@@ -14,6 +14,7 @@ import { StoresProvider } from '@/stores/stores'
 import dataset, { contact } from '../../../__testdata__/metaxv3/datasets/dataset_att_a'
 import Dataset from '@/components/etsin/Dataset'
 import { failTestsWhenTranslationIsMissing } from '../../../test-helpers'
+import { HelmetProvider } from 'react-helmet-async'
 
 vi.setConfig({ testTimeout: 25000 }) // the default 5000ms timeout is not always enough here
 
@@ -53,19 +54,21 @@ describe('Etsin dataset page', () => {
     ReactModal.setAppElement(helper)
 
     render(
-      <StoresProvider store={stores}>
-        <MemoryRouter initialEntries={[path]}>
-          <ThemeProvider theme={etsinTheme}>
-            <main>
-              <label htmlFor="react-select-2-input"> dummy</label>
-              {/* to silence react select falsy test fails */}
-              <Routes>
-                <Route path="/dataset/:identifier/*" Component={Dataset} />
-              </Routes>
-            </main>
-          </ThemeProvider>
-        </MemoryRouter>
-      </StoresProvider>,
+      <HelmetProvider>
+        <StoresProvider store={stores}>
+          <MemoryRouter initialEntries={[path]}>
+            <ThemeProvider theme={etsinTheme}>
+              <main>
+                <label htmlFor="react-select-2-input"> dummy</label>
+                {/* to silence react select falsy test fails */}
+                <Routes>
+                  <Route path="/dataset/:identifier/*" Component={Dataset} />
+                </Routes>
+              </main>
+            </ThemeProvider>
+          </MemoryRouter>
+        </StoresProvider>
+      </HelmetProvider>,
       { attachTo: helper }
     )
     // wait for async tasks to finish

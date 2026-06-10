@@ -6,11 +6,13 @@ import {
 } from '@/utils/constants'
 import Cite from './cite'
 import EtsinDatasetRems from './etsin.rems'
+import idnToLink from '@/utils/idnToLink'
 
 class EtsinDatasetV3 {
   constructor({ Access, Env, Locale }) {
     this.Access = Access
     this.Locale = Locale
+    this.Env = Env
     this.citations = new Cite({ Stores: this, Locale })
     this.rems = new EtsinDatasetRems({ EtsinDataset: this, Env })
     makeObservable(this)
@@ -116,8 +118,8 @@ class EtsinDatasetV3 {
     return this.dataset?.provenance
   }
 
-  /*Returns those provenances that are PAS creation events. Currently, other
-  PAS events are ignored. */
+  // Returns those provenances that are PAS creation events. Currently, other
+  // PAS events are ignored.
   @computed get pasProvenances() {
     if (!this.hasProvenances) {
       return []
@@ -128,8 +130,8 @@ class EtsinDatasetV3 {
     )
   }
 
-  /*Returns all user-entered events, i.e. all other provenances except PAS
-  events:*/
+  // Returns all user-entered events, i.e. all other provenances except PAS
+  // events:
   @computed get userEnteredProvenances() {
     if (!this.hasProvenances) {
       return []
@@ -527,6 +529,33 @@ class EtsinDatasetV3 {
 
     if (this.isDeprecated) {
       return 'tombstone.deprecatedInfo'
+    }
+
+    return null
+  }
+
+  @computed get pidLink() {
+    if (this.dataset?.persistent_identifier) {
+      return idnToLink(this.dataset?.persistent_identifier)
+    }
+
+    return null
+  }
+
+  @computed get doiLink() {
+    if (
+      this.dataset?.persistent_identifier &&
+      this.dataset?.persistent_identifier.startsWith('doi:')
+    ) {
+      return idnToLink(this.dataset?.persistent_identifier)
+    }
+
+    return null
+  }
+
+  @computed get metadataLink() {
+    if (this.identifier) {
+      return this.Env.metaxV3Url('dataset', this.identifier)
     }
 
     return null

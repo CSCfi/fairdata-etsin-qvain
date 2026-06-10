@@ -17,6 +17,7 @@ import StateInfo from './StateInfo'
 import PreservationInfo from './PreservationInfo'
 import TitleContainer from './TitleContainer'
 import withCustomProps from '@/utils/withCustomProps'
+import HeadLinks from './HeadLinks'
 
 const BackButton = styled(NavLink)`
   background-color: ${p => p.theme.ui.dataset.backButton.backgroundColor};
@@ -79,7 +80,13 @@ const Dataset = () => {
   if (!dataset || isLoading.files || isLoading.versions || isLoading.dataset) {
     return <DatasetLoadSpinner />
   }
-  return <DatasetView />
+
+  return (
+    <>
+      <HeadLinks />
+      <DatasetView />
+    </>
+  )
 }
 
 function DatasetError() {
