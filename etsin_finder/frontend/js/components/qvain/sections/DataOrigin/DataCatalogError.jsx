@@ -6,7 +6,7 @@ import {
   ErrorLabel,
   ErrorContent,
 } from '@/components/qvain/general/errors'
-import { Button } from '@/components/general/button'
+import { Button } from '@/components/general/Button'
 import { useStores } from '@/stores/stores'
 
 const DataCatalogError = observer(() => {

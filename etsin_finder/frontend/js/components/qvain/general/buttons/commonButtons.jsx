@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import Button from '../../../general/button'
+import Button from '../../../general/Button'
 
 export const TableButton = styled(Button)`
   padding: 0;

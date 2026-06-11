@@ -4,7 +4,7 @@ import Translate from '@/utils/Translate'
 
 import { useStores } from '../../utils/stores'
 import Loader from '../../../general/loader'
-import Button from '../../../general/button'
+import Button from '../../../general/Button'
 
 const LockNotification = () => {
   const {

@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Translate from '@/utils/Translate'
 
-import { LinkButton } from '../button'
+import { LinkButton } from '../Button'
 import { ItemRow, Items, ItemSpacer, isDirectory } from './items'
 import DefaultLoader from '../loader'
 import FilterRow from './FilterRow'

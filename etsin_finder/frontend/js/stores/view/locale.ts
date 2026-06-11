@@ -8,6 +8,43 @@ import interpolate from '@/utils/interpolate'
 
 import urls from '../../utils/urls'
 import queryParam from '@/utils/queryParam'
+import type Env from '@/stores/domain/env'
+import type { MultiLanguageString } from '@/types/common'
+
+// Used for limiting depth to avoid typescript error about possibly infinite recursion
+type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+// Plural translation value
+type Plural = {
+  one: string
+  other: string
+}
+
+// Convert nested translation object type to dotted paths
+type DottedTranslationKey<T, Depth extends number = 10> = [Depth] extends [never]
+  ? never
+  : T extends object
+    ? {
+        [K in keyof T & string]: T[K] extends string | Plural
+          ? K
+          : `${K}.${DottedTranslationKey<T[K], Prev[Depth]>}`
+      }[keyof T & string]
+    : never
+
+// Convert nested translation object type to array of keys
+type ArrayTranslationKey<T, Depth extends number = 10> = [Depth] extends [never]
+  ? never
+  : T extends object
+    ? {
+        [K in keyof T & string]: T[K] extends string | Plural
+          ? [K]
+          : [K, ...ArrayTranslationKey<T[K], Prev[Depth]>]
+      }[keyof T & string]
+    : never
+
+export type TranslationKey =
+  | DottedTranslationKey<typeof english>
+  | ArrayTranslationKey<typeof english>
 
 const locales = observable({
   en: english,
@@ -15,7 +52,9 @@ const locales = observable({
 })
 const fallbackLocale = 'en'
 
-const languages = ['en', 'fi']
+const languages = ['en', 'fi'] as const
+
+type UILanguage = (typeof languages)[number] // "en" or "fi"
 
 const datasetTitleLanguages = ['en', 'fi', 'sv']
 
@@ -23,13 +62,13 @@ if (import.meta.hot && import.meta.env.MODE === 'development') {
   // Accept HMR updates from translations without reloading the Locale module itself.
   import.meta.hot.accept(
     '@/../locale/english',
-    action(newModule => {
+    action((newModule: any) => {
       locales.en = newModule.default
     })
   )
   import.meta.hot.accept(
     '@/../locale/finnish',
-    action(newModule => {
+    action((newModule: any) => {
       locales.fi = newModule.default
     })
   )
@@ -38,7 +77,7 @@ if (import.meta.hot && import.meta.env.MODE === 'development') {
 const getInitialLanguage = () =>
   languages.find(lang => lang === document.documentElement.lang) || languages[0]
 
-const getDateFormats = shortMonth => ({
+const getDateFormats = (shortMonth: boolean) => ({
   datetime: {
     fi: {
       lang: 'fi-FI',
@@ -48,8 +87,8 @@ const getDateFormats = shortMonth => ({
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        seconds: '2-digit',
-      },
+        second: '2-digit',
+      } satisfies Intl.DateTimeFormatOptions,
     },
     en: {
       lang: 'en-US',
@@ -59,8 +98,8 @@ const getDateFormats = shortMonth => ({
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        seconds: '2-digit',
-      },
+        second: '2-digit',
+      } satisfies Intl.DateTimeFormatOptions,
     },
   },
   date: {
@@ -70,7 +109,7 @@ const getDateFormats = shortMonth => ({
         day: 'numeric',
         month: 'numeric',
         year: 'numeric',
-      },
+      } satisfies Intl.DateTimeFormatOptions,
     },
     en: {
       lang: 'en-US',
@@ -78,13 +117,13 @@ const getDateFormats = shortMonth => ({
         year: 'numeric',
         month: shortMonth ? 'short' : 'long',
         day: 'numeric',
-      },
+      } satisfies Intl.DateTimeFormatOptions,
     },
   },
 })
 
-const getDefaultDateFormat = date => {
-  if (typeof date === 'string' || date instanceof String) {
+const getDefaultDateFormat = (date: Date | string) => {
+  if (typeof date === 'string') {
     if (date.length === 4) {
       return 'year'
     }
@@ -95,29 +134,37 @@ const getDefaultDateFormat = date => {
   return 'datetime'
 }
 
+declare global {
+  function setLang(lang: UILanguage): void
+  function toggleLang(): void
+}
+
 // eslint-disable-next-line no-unused-vars
-const defaultMissingTranslationHandler = (key, { locale: lang, ...context }) =>
-  `missing translation: ${lang}.${key}`
+const defaultMissingTranslationHandler = (
+  key: TranslationKey,
+  { locale: lang }: { locale?: string; context?: any[] } = {}
+) => `missing translation: ${lang}.${key}`
 
 class Locale {
-  constructor(Env) {
+  Env: Env
+  handleMissingTranslation!: typeof defaultMissingTranslationHandler
+
+  constructor(Env: Env) {
     this.Env = Env
     this.dateFormat = this.dateFormat.bind(this)
     this.dateSeparator = this.dateSeparator.bind(this)
     this.translate = this.translate.bind(this)
 
     if (import.meta.env.MODE !== 'production') {
-      window.setLang = lang => this.setLang(lang, { save: true })
-      window.toggleLang = () =>
-        this.setLang(
-          languages.find(l => l !== this.lang),
-          { save: true }
-        )
+      globalThis.setLang = lang => this.setLang(lang, { save: true })
+      globalThis.toggleLang = () =>
+        this.setLang(languages.find(l => l !== this.lang) || 'en', { save: true })
     }
+
     this.setMissingTranslationHandler()
   }
 
-  setMissingTranslationHandler(handler) {
+  setMissingTranslationHandler(handler?: typeof defaultMissingTranslationHandler) {
     // Set function that handles missing translations
     if (handler) {
       this.handleMissingTranslation = handler
@@ -126,7 +173,7 @@ class Locale {
     }
   }
 
-  @observable accessor currentLang = 'en' // FIXME: read from session? or something?
+  @observable accessor currentLang: UILanguage = 'en' // FIXME: read from session?
 
   // get current computed (state changes are tracked) language. Convenience function.
   @computed get lang() {
@@ -154,7 +201,7 @@ class Locale {
   }
 
   @action
-  setLang = (lang, options = {}) => {
+  setLang = (lang: UILanguage, options: { save?: boolean } = {}) => {
     const { save } = options
     if (!languages.includes(lang)) {
       return
@@ -167,30 +214,33 @@ class Locale {
     }
   }
 
-  @action
-  toggleLang = (options = {}) => {
+  @action.bound
+  toggleLang(options: { save?: boolean } = {}) {
     const { save } = options
     const current = this.currentLang
     this.setLang(current === 'fi' ? 'en' : 'fi', { save })
   }
 
-  @action
-  loadLang = () => {
-    const langParamValue = queryParam(this.Env.history.location, 'lang')
-    const isUILang = this.languages.includes(langParamValue)
+  @action.bound
+  loadLang() {
+    const langParamValue: string | null = queryParam(this.Env.history.location, 'lang')
+    if (!langParamValue) {
+      return
+    }
+    const isUILang = this.languages.includes(langParamValue as UILanguage)
 
     if (isUILang) {
       // set and save the language specified by the lang query param:
-      this.setLang(langParamValue, { save: true })
+      this.setLang(langParamValue as UILanguage, { save: true })
     } else {
       // get initial language from document head
-      this.setLang(getInitialLanguage(), false)
+      this.setLang(getInitialLanguage())
     }
   }
 
-  getMatchingLang = values => {
+  getMatchingLang = (values: MultiLanguageString[]) => {
     const defaultLang = this.lang
-    for (const value of values.filter(v => v)) {
+    for (const value of values.filter(Boolean)) {
       if (value[defaultLang]) {
         return defaultLang
       }
@@ -203,9 +253,12 @@ class Locale {
     return defaultLang
   }
 
-  getValueTranslationWithLang = (value, lang = this.lang) => {
+  getValueTranslationWithLang = (
+    value: any,
+    lang = this.lang
+  ): [string | object, string | undefined] => {
     // Get a translation from a multi-language string object, use supplied language by default
-    if (typeof value === 'string' || typeof value === 'undefined') {
+    if (typeof value === 'string' || value === undefined) {
       return [value, undefined]
     }
     if (value[lang]) {
@@ -224,7 +277,7 @@ class Locale {
     return [value.und || '', undefined]
   }
 
-  getValueTranslation = (value, lang = this.lang) =>
+  getValueTranslation = (value?: any, lang = this.lang) =>
     this.getValueTranslationWithLang(value, lang)[0]
 
   @computed get languageTabOrder() {
@@ -235,7 +288,7 @@ class Locale {
     return [this.lang, ...this.datasetTitleLanguages.filter(l => l !== this.lang)]
   }
 
-  getPreferredLang = item => {
+  getPreferredLang = (item?: any) => {
     // Get preferred language for a translation object based on which translations exist, with the following priority:
     // - current language
     // - languages in the order of Locale.languages
@@ -267,7 +320,10 @@ class Locale {
     return undefined
   }
 
-  dateFormat(date, { shortMonth = false, format } = {}) {
+  dateFormat(
+    date: any,
+    { shortMonth = false, format }: { shortMonth?: boolean; format?: string } = {}
+  ) {
     const formats = getDateFormats(shortMonth)
     if (!date) {
       return ''
@@ -288,7 +344,7 @@ class Locale {
     )
   }
 
-  dateSeparator(start, end) {
+  dateSeparator(start?: any, end?: any) {
     if (start || end) {
       if (start === end) {
         return this.dateFormat(start, { format: 'date' })
@@ -300,7 +356,10 @@ class Locale {
     return null
   }
 
-  translate(key, { locale: lang, ...context } = {}) {
+  translate(
+    key: TranslationKey,
+    { locale: lang, ...context }: { locale?: UILanguage } & Record<string, any> = {}
+  ) {
     // Return translation value in current language.
     //
     // Translation key should be a dot-separated path 'key.subkey' or an array ['key', 'subkey'].
@@ -308,9 +367,7 @@ class Locale {
     // Optionally provided context will be used in string interpolation
     // to replace e.g. %(value)s in the translated string with context.value.
     let translation = get(locales[lang || this.currentLang], key)
-    if (translation == null) {
-      translation = get(locales[fallbackLocale], key)
-    }
+    translation ??= get(locales[fallbackLocale], key)
     if (translation && context) {
       translation = interpolate(translation, context)
 

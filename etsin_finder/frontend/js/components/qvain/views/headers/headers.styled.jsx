@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { darken } from 'polished'
 import { Link } from 'react-router'
 
-import { InvertedButton } from '../../../general/button'
+import { InvertedButton } from '../../../general/Button'
 import { StickySubHeader } from '../../general/card'
 import withCustomProps from '@/utils/withCustomProps'
 

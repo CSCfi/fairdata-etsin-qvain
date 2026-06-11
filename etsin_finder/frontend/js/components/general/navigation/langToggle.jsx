@@ -1,20 +1,8 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { TransparentButton, InvertedButton } from '../button'
+import { TransparentButton, InvertedButton } from '../Button'
 import { useStores } from '../../../utils/stores'
 
 const LangToggle = ({ inverted, margin, mobile }) => {

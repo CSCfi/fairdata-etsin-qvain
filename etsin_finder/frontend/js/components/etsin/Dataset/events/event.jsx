@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 import PopUp from '@/components/etsin/general/popup'
-import { TransparentLink } from '@/components/general/button'
+import { TransparentLink } from '@/components/general/Button'
 
 import etsinTheme from '@/styles/theme'
 import { useStores } from '@/stores/stores'

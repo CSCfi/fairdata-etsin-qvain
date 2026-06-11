@@ -9,7 +9,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { Input } from '@/components/qvain/general/modal/form'
 import { FieldGroup, InfoTextLarge, Title } from '@/components/qvain/general/V2'
 import ValidationError from '@/components/qvain/general/errors/validationError'
-import Button from '@/components/general/button'
+import Button from '@/components/general/Button'
 import { useStores } from '@/stores/stores'
 
 const ModalArrayInput = ({ datum, handleBlur, type, Field, error, isRequired }) => {

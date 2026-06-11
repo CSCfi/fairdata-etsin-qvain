@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { InvertedButton, Button } from '@/components/general/button'
+import { InvertedButton, Button } from '@/components/general/Button'
 
 const submitButton = css`
   border: 3px solid ${props => props.theme.color.primary};

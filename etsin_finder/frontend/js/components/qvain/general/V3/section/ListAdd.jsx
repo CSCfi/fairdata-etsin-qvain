@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
-import Button from '@/components/general/button'
+import Button from '@/components/general/Button'
 import withCustomProps from '@/utils/withCustomProps'
 
 const ListAdd = ({ model, alignment }) => {

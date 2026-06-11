@@ -12,7 +12,7 @@ import {
   ErrorContent,
   ErrorButtons,
 } from '@/components/qvain/general/errors'
-import { Button } from '@/components/general/button'
+import { Button } from '@/components/general/Button'
 import { useStores } from '@/stores/stores'
 import SelectedItems from './selectedItems'
 import AddItemsModal from './addItems'
@@ -179,10 +179,10 @@ export const FilePickerBase = () => {
 
   Note: The condition for showing the info text also includes
   hasItemsOriginally, because canRemoveFiles returns false when editing a
-  published cumulative dataset that doesn't originally contain file items. 
-  
-  Ignore this Info Text if user is Qvain admin and has no rights to edit project. 
-  In that case we show a info text that explains that the user has no rights to 
+  published cumulative dataset that doesn't originally contain file items.
+
+  Ignore this Info Text if user is Qvain admin and has no rights to edit project.
+  In that case we show a info text that explains that the user has no rights to
   edit the files because they are not a member of the project.
   */
   const filesInfoText =

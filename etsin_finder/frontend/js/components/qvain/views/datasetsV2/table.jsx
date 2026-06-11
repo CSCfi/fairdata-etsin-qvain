@@ -7,7 +7,7 @@ import Translate from '@/utils/Translate'
 import { useStores } from '../../utils/stores'
 import DatasetGroup from './datasetGroup'
 import Loader from '../../../general/loader'
-import { InvertedButton } from '../../../general/button'
+import { InvertedButton } from '../../../general/Button'
 import withCustomProps from '@/utils/withCustomProps'
 import { PlaceholderWrapper } from './styled'
 

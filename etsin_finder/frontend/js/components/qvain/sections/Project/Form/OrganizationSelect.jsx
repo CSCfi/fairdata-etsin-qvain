@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '@/stores/stores'
-import Button from '@/components/general/button'
+import Button from '@/components/general/Button'
 import { OrgSelectComponent as Select } from './CommonOrgComponents'
 import { InfoText } from '@/components/qvain/general/V2'
 

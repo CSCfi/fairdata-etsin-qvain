@@ -1,15 +1,3 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
@@ -17,8 +5,17 @@ import { opacify, darken } from 'polished'
 import checkColor from '../../styles/styledUtils'
 import withCustomProps from '@/utils/withCustomProps'
 
-// prettier-ignore
-export const Button = withCustomProps(styled.button).attrs(props => ({
+interface ButtonProps {
+  padding?: string
+  margin?: string
+  width?: string
+  noPadding?: boolean
+  noMargin?: boolean
+  thin?: boolean
+  br?: string
+}
+
+export const Button = withCustomProps(styled.button).attrs<ButtonProps>(props => ({
   padding: props.padding ? props.padding : '0.3em 0.6em 0.4em',
   margin: props.margin ? props.margin : '0.25em 0.25em',
   type: props.type || 'button',
@@ -38,8 +35,8 @@ export const Button = withCustomProps(styled.button).attrs(props => ({
   line-height: 1.25;
   transition: 0.15s ease;
   &:hover {
-    background-color: ${props => darken(0.1, (props.color ? checkColor(props.color) : props.theme.color.primary))};
-    border-color: ${props => darken(0.1, (props.color ? checkColor(props.color) : props.theme.color.primary))};
+    background-color: ${props => darken(0.1, props.color ? checkColor(props.color) : props.theme.color.primary)};
+    border-color: ${props => darken(0.1, props.color ? checkColor(props.color) : props.theme.color.primary)};
   }
   &:disabled {
     pointer-events: none;
@@ -49,8 +46,12 @@ export const Button = withCustomProps(styled.button).attrs(props => ({
   }
 `
 
+interface InvertedButtonProps {
+  fill?: boolean
+}
+
 // prettier-ignore
-export const InvertedButton = styled(Button)`
+export const InvertedButton = styled(Button)<InvertedButtonProps>`
   border-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   background-color: ${props => (props.fill ? checkColor(props.fill) : 'transparent')};
   color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
@@ -119,8 +120,16 @@ export const LinkButtonDarkGray = styled(TransparentButton)`
   }
 `
 
-// prettier-ignore
-export const Link = withCustomProps(styled.a).attrs(props => ({
+interface LinkProps {
+  width?: string
+  margin?: string
+  padding?: string
+  noPadding?: boolean
+  noMargin?: boolean
+  thin?: boolean
+}
+
+export const Link = withCustomProps(styled.a).attrs<LinkProps>(props => ({
   padding: props.padding ? props.padding : '0.3em 0.6em 0.4em',
   margin: props.margin ? props.margin : '0.25em 0.25em',
 }))`
@@ -130,7 +139,7 @@ export const Link = withCustomProps(styled.a).attrs(props => ({
   margin: ${props => (props.noMargin ? 0 : props.margin)};
   border: ${props => (props.thin ? '1px' : '2px')} solid ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
   background-color: ${props => (props.color ? checkColor(props.color) : props.theme.color.primary)};
-  color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
+  color: ${props => (props.color === 'white' ? props.theme.color.primary : 'white')};
   border-radius: 0.25em;
   line-height: 1.25;
   transition: 0.15s ease;
@@ -138,7 +147,7 @@ export const Link = withCustomProps(styled.a).attrs(props => ({
   display: block;
   &:hover {
     text-decoration: none;
-    color: ${props => (props.color !== 'white' ? 'white' : props.theme.color.primary)};
+    color: ${props => (props.color === 'white' ? props.theme.color.primary : 'white')};
     background-color: ${props => darken(0.1, props.color ? checkColor(props.color) : props.theme.color.primary)};
     border-color: ${props => darken(0.1, props.color ? checkColor(props.color) : props.theme.color.primary)};
   }

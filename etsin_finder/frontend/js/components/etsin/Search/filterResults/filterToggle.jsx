@@ -14,7 +14,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Translate from '@/utils/Translate'
 
-import { InvertedButton } from '@/components/general/button'
+import { InvertedButton } from '@/components/general/Button'
 import { useStores } from '@/stores/stores'
 
 const Filter = styled.div`

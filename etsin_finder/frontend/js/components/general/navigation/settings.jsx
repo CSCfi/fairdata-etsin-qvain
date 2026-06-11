@@ -1,20 +1,8 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
-import { Link } from '../button'
+import { Link } from '../Button'
 import LangToggle from './langToggle'
 
 const Settings = props => (

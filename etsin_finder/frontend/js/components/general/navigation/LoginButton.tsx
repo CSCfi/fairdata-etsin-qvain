@@ -3,24 +3,25 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
-import Button from '../button'
+import Button from '../Button'
 import Loader from '../loader'
 import LoggedInUser from '../LoggedInUser'
 import { Dropdown, DropdownItem } from '../dropdown'
 import { useStores } from '@/stores/stores'
 import { useLocation, type Location } from 'react-router'
+import type { Color } from '@/styles/theme'
 
 const Login = ({
   margin = '0 0 0 0.4em',
   width,
   fontSize = 'inherit',
-  borderColor = '',
+  borderColor = undefined,
   loginThroughService = '',
 }: {
   margin: string
   width: string
   fontSize: string
-  borderColor: string
+  borderColor?: Color
   loginThroughService: string
 }) => {
   const [loading, setLoading] = useState(false)
@@ -96,7 +97,11 @@ const Cont = styled.div<ContProps>`
   position: relative;
 `
 
-const LoginButton = styled(Button)`
+interface LoginButtonProps {
+  borderColor?: Color
+}
+
+const LoginButton = styled(Button)<LoginButtonProps>`
   white-space: nowrap;
   width: fit-content;
   ${props =>

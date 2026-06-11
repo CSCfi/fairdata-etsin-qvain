@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '../../../utils/stores'
-import Button from '../../../../general/button'
+import Button from '../../../../general/Button'
 import getPersonLabel from './getPersonLabel'
 
 const InviteResults = () => {

@@ -6,7 +6,7 @@ import { FieldGroup, Title } from '@/components/qvain/general/V2'
 import { Paragraph } from '@/components/qvain/general/card'
 import { CUMULATIVE_STATE } from '@/utils/constants'
 import { FormField, RadioInput, Label, HelpField } from '@/components/qvain/general/modal/form'
-import { Button } from '@/components/general/button'
+import { Button } from '@/components/general/Button'
 import { useStores } from '@/stores/stores'
 
 const CumulativeDataset = () => {

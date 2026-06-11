@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { tint } from 'polished'
 import Translate from '@/utils/Translate'
 
-import Button from './button'
+import Button from './Button'
 import withCustomProps from '@/utils/withCustomProps'
 
 /**

@@ -7,7 +7,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { darken } from 'polished'
 import Translate from '@/utils/Translate'
 import checkColor from '../../styles/styledUtils'
-import { TransparentButton } from './button'
+import { TransparentButton } from './Button'
 import withCustomProps from '@/utils/withCustomProps'
 
 const NoticeBar = ({

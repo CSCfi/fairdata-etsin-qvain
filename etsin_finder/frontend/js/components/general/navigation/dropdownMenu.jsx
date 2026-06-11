@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { darken } from 'polished'
 import PropTypes from 'prop-types'
 
-import Button, { TransparentButton } from '../button'
+import Button, { TransparentButton } from '../Button'
 
 const DropdownMenu = ({ children, buttonContent, transparent = false }) => {
   const [open, setOpen] = useState(false)

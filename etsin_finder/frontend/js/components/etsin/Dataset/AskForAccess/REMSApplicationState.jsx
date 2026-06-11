@@ -5,7 +5,7 @@ import styled, { useTheme } from 'styled-components'
 import Translate from '@/utils/Translate'
 import PopUp from '@/components/etsin/general/popup'
 import { useState } from 'react'
-import Button from '@/components/general/button'
+import Button from '@/components/general/Button'
 
 const states = {
   'application.state/draft': {

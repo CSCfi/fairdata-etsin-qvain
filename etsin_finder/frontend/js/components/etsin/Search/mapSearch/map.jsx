@@ -13,7 +13,7 @@ import { faUpRightAndDownLeftFromCenter } from '@fortawesome/free-solid-svg-icon
 import { useStores } from '@/stores/stores'
 
 import Modal from '@/components/general/modal'
-import Button from '@/components/general/button'
+import Button from '@/components/general/Button'
 import useQuery from '../../general/useQuery'
 import { useNavigate } from 'react-router'
 import Translate from '@/utils/Translate'

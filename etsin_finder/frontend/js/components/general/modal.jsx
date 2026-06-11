@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import ErrorBoundary from './errorBoundary'
-import { TransparentButton } from './button'
+import { TransparentButton } from './Button'
 import { useStores } from '@/stores/stores'
 
 const defaultStyles = {

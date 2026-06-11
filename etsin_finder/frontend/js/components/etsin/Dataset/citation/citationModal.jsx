@@ -17,7 +17,7 @@ import Translate from '@/utils/Translate'
 
 import Modal from '@/components/general/modal'
 import { useStores } from '@/utils/stores'
-import CopyToClipboard from '../copyToClipboard'
+import CopyToClipboard from '../CopyToClipboard'
 
 const customStyles = {
   content: {

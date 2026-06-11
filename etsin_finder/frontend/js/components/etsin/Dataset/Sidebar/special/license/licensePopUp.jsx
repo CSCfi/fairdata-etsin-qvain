@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
 import PopUp from '@/components/etsin/general/popup'
-import { LinkButton } from '@/components/general/button'
+import { LinkButton } from '@/components/general/Button'
 import isUrl from '@/utils/isUrl'
 import { useStores } from '@/stores/stores'
 

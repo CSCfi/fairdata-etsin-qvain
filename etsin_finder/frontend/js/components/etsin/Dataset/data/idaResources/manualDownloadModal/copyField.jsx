@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
-import CopyToClipboard from '../../../copyToClipboard'
+import CopyToClipboard from '../../../CopyToClipboard'
 import Loader from '@/components/general/loader'
 
 const Display = styled.input.attrs({

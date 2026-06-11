@@ -43,7 +43,9 @@ export class MapUtils {
   async makeGeometryFromPlace(location: MultiLanguageString) {
     const provider = new OpenStreetMapProvider()
     try {
-      const results = await provider.search({ query: this.Locale.getValueTranslation(location) })
+      const results = await provider.search({
+        query: this.Locale.getValueTranslation(location) as string,
+      })
       const [[minLat, minLong], [maxLat, maxLong]] = results[0].bounds
       const geometry = {
         type: 'Polygon',

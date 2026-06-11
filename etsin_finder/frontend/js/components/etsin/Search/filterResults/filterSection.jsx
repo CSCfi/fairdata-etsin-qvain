@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { mix } from 'polished'
 import Translate from '@/utils/Translate'
 
-import { TransparentLink } from '@/components/general/button'
+import { TransparentLink } from '@/components/general/Button'
 import { useStores } from '@/stores/stores'
 
 import FilterItem from './filterItem'

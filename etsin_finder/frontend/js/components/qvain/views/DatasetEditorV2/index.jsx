@@ -10,7 +10,7 @@ import {
   SubmitButtonsWrapper,
 } from './editor.styled'
 import { ErrorContainer, ErrorLabel, ErrorContent, ErrorButtons } from '../../general/errors'
-import { Button } from '../../../general/button'
+import { Button } from '../../../general/Button'
 import SubmitButtons from '../headers/submitButtons'
 import Unsupported from './Unsupported'
 import DataOrigin from '../../sections/DataOrigin'

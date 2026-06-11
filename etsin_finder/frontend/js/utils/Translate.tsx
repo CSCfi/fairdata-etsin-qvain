@@ -1,9 +1,26 @@
-import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 
 import { useStores } from '@/stores/stores'
+import type { TranslationKey } from '@/stores/view/locale'
 
-const Translate = ({ children, content, attributes, component, with: _with, unsafe, ...props }) => {
+type TranslateProps = {
+  children?: React.ReactNode
+  content?: TranslationKey
+  attributes?: Record<string, any>
+  component?: React.ElementType
+  with?: Record<string, any>
+  unsafe?: boolean
+} & Record<string, any>
+
+const Translate = ({
+  children,
+  content,
+  attributes = {},
+  component = 'span',
+  with: _with = undefined,
+  unsafe = false,
+  ...props
+}: TranslateProps) => {
   const { Locale } = useStores()
 
   let translation
@@ -11,7 +28,7 @@ const Translate = ({ children, content, attributes, component, with: _with, unsa
     translation = Locale.translate(content, { ..._with })
   }
 
-  const translatedAttributes = {}
+  const translatedAttributes: Record<string, any> = {}
   for (const key of Object.keys(attributes)) {
     if (attributes[key]) {
       translatedAttributes[key] = Locale.translate(attributes[key], { ..._with })
@@ -30,24 +47,6 @@ const Translate = ({ children, content, attributes, component, with: _with, unsa
       {translation || children}
     </C>
   )
-}
-
-Translate.propTypes = {
-  component: PropTypes.elementType,
-  unsafe: PropTypes.bool,
-  content: PropTypes.node,
-  attributes: PropTypes.object,
-  with: PropTypes.object, // provide context
-  children: PropTypes.node,
-}
-
-Translate.defaultProps = {
-  component: 'span',
-  unsafe: false,
-  content: undefined,
-  attributes: {},
-  with: undefined,
-  // Omitted children: undefined to fix `hasChildren` helper returning false for Translate component
 }
 
 export default observer(Translate)

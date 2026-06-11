@@ -7,7 +7,7 @@ import etsinTheme from '@/styles/theme'
 import { useStores } from '@/stores/stores'
 
 import Modal from '@/components/general/modal'
-import { TransparentLink } from '@/components/general/button'
+import { TransparentLink } from '@/components/general/Button'
 
 import { Table, ID, IDLink, Margin } from './common'
 import idnToLink from '@/utils/idnToLink'

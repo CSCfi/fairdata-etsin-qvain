@@ -337,6 +337,8 @@ export const lumiAifEtsinTheme = merge(cloneDeep(etsinTheme), {
 // Assumes all themes have the same keys
 export type Theme = typeof etsinTheme
 
+export type Color = keyof Theme['color']
+
 /** Resolve nav link border for LUMI (uses palette). */
 export function resolveDatasetTabsNavLinkBorder(theme: Theme) {
   if (theme.ui.dataset.tabs.navLinkBorder === '') {

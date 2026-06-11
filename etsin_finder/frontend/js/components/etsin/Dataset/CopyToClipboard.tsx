@@ -1,18 +1,5 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClipboard, faCheck } from '@fortawesome/free-solid-svg-icons'
 import Translate from '@/utils/Translate'
@@ -21,23 +8,34 @@ import { Button } from '../general/button'
 import TooltipHover from '@/components/general/tooltipHover'
 import { useStores } from '@/utils/stores'
 import withCustomProps from '@/utils/withCustomProps'
+import type { TranslationKey } from '@/stores/view/locale'
+
+type CopyToClipboardProps = {
+  content?: string
+  label: TranslationKey
+  tooltip: TranslationKey
+  tooltipSuccess: TranslationKey
+  tooltipPosition?: 'top' | 'right' | 'left'
+  horizontal?: boolean
+  disabled?: boolean
+}
 
 const CopyToClipboard = ({
-  content,
+  content = '',
   label,
   tooltip,
   tooltipSuccess,
-  tooltipPosition,
-  horizontal,
-  disabled,
-}) => {
+  tooltipPosition = 'top',
+  horizontal = false,
+  disabled = false,
+}: CopyToClipboardProps) => {
   const Stores = useStores()
   const { lang } = Stores.Locale
   const { announce } = Stores.Accessibility
 
-  const [tooltipText, setTooltipText] = useState('dataset.copyToClipboard')
+  const [tooltipText, setTooltipText] = useState<TranslationKey>('dataset.copyToClipboard')
   const [copiedStatus, setCopiedStatus] = useState(false)
-  const timeoutIndex = useRef()
+  const timeoutIndex = useRef<null | ReturnType<typeof setTimeout>>()
 
   const clearCopyTimeout = () => {
     if (timeoutIndex.current) {
@@ -58,7 +56,6 @@ const CopyToClipboard = ({
     timeoutIndex.current = index
   }
 
-   
   useEffect(() => clearCopyTimeout, [])
 
   // return styled link
@@ -79,7 +76,12 @@ const CopyToClipboard = ({
   )
 }
 
-const IconContent = withCustomProps(styled.div)`
+interface IconContentProps {
+  horizontal?: boolean
+  hide?: boolean
+}
+
+const IconContent = withCustomProps(styled.div<IconContentProps>)`
   ${p =>
     !p.horizontal &&
     `
@@ -102,7 +104,12 @@ const Check = styled(FontAwesomeIcon).attrs({ icon: faCheck })`
   margin: auto;
 `
 
-const IconButton = styled(Button).attrs(p => ({
+interface IconButtonProps {
+  horizontal?: boolean
+  color?: string
+}
+
+const IconButton = styled(Button).attrs<IconButtonProps>(p => ({
   color: p.theme.ui.dataset.copyButton.iconColor || undefined,
 }))`
   height: 100%;
@@ -129,22 +136,5 @@ const IconButton = styled(Button).attrs(p => ({
     }
   `}
 `
-
-CopyToClipboard.propTypes = {
-  content: PropTypes.string,
-  label: PropTypes.string.isRequired,
-  tooltip: PropTypes.string.isRequired,
-  tooltipSuccess: PropTypes.string.isRequired,
-  tooltipPosition: PropTypes.oneOf(['top', 'right', 'left']),
-  horizontal: PropTypes.bool,
-  disabled: PropTypes.bool,
-}
-
-CopyToClipboard.defaultProps = {
-  content: '',
-  tooltipPosition: 'top',
-  horizontal: false,
-  disabled: false,
-}
 
 export default CopyToClipboard

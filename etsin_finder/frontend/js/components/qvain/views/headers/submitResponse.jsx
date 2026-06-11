@@ -6,7 +6,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import Translate from '@/utils/Translate'
 
 import Loader from '../../../general/loader'
-import { LinkButtonDarkGray } from '../../../general/button'
+import { LinkButtonDarkGray } from '../../../general/Button'
 import { useStores } from '../../utils/stores'
 
 const SubmitResponse = ({ response, clearSubmitResponse }) => {
