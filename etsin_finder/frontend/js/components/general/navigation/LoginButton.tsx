@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
 import Button from '../Button'
-import Loader from '../loader'
+import Loader from '../Loader'
 import LoggedInUser from '../LoggedInUser'
 import { Dropdown, DropdownItem } from '../dropdown'
 import { useStores } from '@/stores/stores'

@@ -185,10 +185,29 @@ const finnish = {
         description: `Etsimen lataukset voi käynnistää myös seuraavin komennoin.
         Huomioi että komennot ovat <em>kertakäyttöisiä</em> koska jokainen lataus tulee todentaa erikseen.
         Komennot ovat voimassa 72 tuntia.`,
+        shareV2: `Aineistolle on luotu latausjako seuraavilla tiedoilla:`,
+        descriptionV2: `Etsimen lataukset voi käynnistää seuraavin komennoin.
+        Lisätietoja löytyy
+        `,
+        guideLinkV2: `Aineiston latausoppaasta`,
         error: 'Latauksen valtuuttamisessa tapahtui virhe.',
         copyButton: 'Kopioi',
         copyButtonTooltip: 'Kopioi leikepöydälle',
         copyButtonTooltipSuccess: 'Kopioitu leikepöydälle',
+        fields: {
+          access_id: 'ID',
+          access_token: 'Token',
+          expires: 'Vanhenee',
+          download_url: 'Lataus-URL',
+          curl: 'cURL',
+          wget: 'Wget',
+          rclone_copy: 'Rclone copy',
+          rclone_ls: 'Rclone ls',
+          rclone_mount: 'Rclone mount',
+          windows_mount: 'Windows mount',
+          linux_mount: 'Linux mount',
+          macos_mount: 'macOS mount',
+        },
       },
       packages: {
         createForAll: 'Lataa kaikki',

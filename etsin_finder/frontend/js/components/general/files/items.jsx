@@ -5,7 +5,7 @@ import { tint } from 'polished'
 import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import Translate from '@/utils/Translate'
 
-import { Spinner } from '../loader'
+import { Spinner } from '../Loader'
 import withCustomProps from '@/utils/withCustomProps'
 
 export const isDirectory = item => item.type === 'directory'

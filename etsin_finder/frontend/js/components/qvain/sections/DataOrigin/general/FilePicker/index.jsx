@@ -5,7 +5,7 @@ import Translate from '@/utils/Translate'
 
 import { Title, FieldGroup, InfoText } from '@/components/qvain/general/V2'
 import { Checkbox, Label } from '@/components/qvain/general/modal/form'
-import Loader from '@/components/general/loader'
+import Loader from '@/components/general/Loader'
 import {
   ErrorLabel,
   ErrorContainer,

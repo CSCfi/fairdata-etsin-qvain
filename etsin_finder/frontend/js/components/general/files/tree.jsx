@@ -4,7 +4,7 @@ import Translate from '@/utils/Translate'
 
 import { LinkButton } from '../Button'
 import { ItemRow, Items, ItemSpacer, isDirectory } from './items'
-import DefaultLoader from '../loader'
+import DefaultLoader from '../Loader'
 import FilterRow from './FilterRow'
 
 // propagate properties from parent directories

@@ -9,7 +9,7 @@ import { useStores } from '../../../utils/stores'
 import Tabs from './Tabs'
 import Invite from './Invite'
 import Members from './Members'
-import Loader from '../../../../general/loader'
+import Loader from '../../../../general/Loader'
 import InviteResults from './InviteResults'
 import ConfirmRemove from './ConfirmRemove'
 

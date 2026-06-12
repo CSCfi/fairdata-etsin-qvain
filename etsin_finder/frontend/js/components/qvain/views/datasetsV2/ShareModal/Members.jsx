@@ -5,7 +5,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Translate from '@/utils/Translate'
 
-import Loader from '../../../../general/loader'
+import Loader from '../../../../general/Loader'
 import { useStores } from '../../../utils/stores'
 import { Dropdown, DropdownItem } from '../../../../general/dropdown'
 import { HelpIcon } from '../../../../general/form'

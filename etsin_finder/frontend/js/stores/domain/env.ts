@@ -9,6 +9,7 @@ import { getEtsinPortalConfig } from '@/etsinPortals/registry'
 import { etsinSearchPathname } from '@/utils/lumiAifEtsinSearch'
 import urls from '@/utils/urls'
 import { addHostToUrls } from '@/utils/addHostToUrls'
+import getOS, { type OSOption } from '@/utils/getOS'
 
 async function importValuesAsync() {
   const response = await axios.get('/api/app_config')
@@ -99,6 +100,12 @@ class Env {
   @computed
   get isEtsin() {
     return this.app !== 'qvain'
+  }
+
+  @observable accessor osChoice: OSOption = getOS() // os choice in ui dialogs
+
+  @action.bound setOSChoice(os: OSOption) {
+    this.osChoice = os
   }
 
   /** Branded Etsin portal config derived from etsin_app cookie (default Fairdata Etsin when unknown). */

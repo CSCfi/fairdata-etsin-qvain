@@ -8,7 +8,7 @@ import Translate from '@/utils/Translate'
 
 import { useStores } from '../../../utils/stores'
 import Button from '../../../../general/Button'
-import Loader from '../../../../general/loader'
+import Loader from '../../../../general/Loader'
 import getPersonLabel from './getPersonLabel'
 
 const LoadingMessage = props => (

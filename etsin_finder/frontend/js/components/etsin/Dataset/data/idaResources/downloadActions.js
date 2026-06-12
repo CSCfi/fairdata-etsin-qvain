@@ -6,9 +6,11 @@ import { downloadFile, downloadPackage, authorizeFile, authorizePackage } from '
 // Download button information for file/package
 const actionDefaults = {
   buttonLabel: 'dataset.dl.download',
+  moreAriaLabel: null,
   color: null,
   available: false, // is file/package ready for download
   func: null, // action when button is clicked
+  moreFunc: null, // action when button is clicked
   icon: faDownload,
   pending: false, // is package being generated
   spin: false,

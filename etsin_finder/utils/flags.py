@@ -5,6 +5,7 @@ import re
 from etsin_finder.utils.utils import ensure_app
 
 default_supported_flags = {
+    "DOWNLOAD_SHARES",
     "DOWNLOAD_API_V2.EMAIL.FRONTEND",
     "DOWNLOAD_API_V2.EMAIL.BACKEND",
     "DOWNLOAD_API_V2.OPTIONS",

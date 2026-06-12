@@ -7,7 +7,7 @@ import { opacify } from 'polished'
 import { useStores } from '@/stores/stores'
 import ErrorPage from '@/components/general/errorpage'
 import ErrorBoundary from '@/components/general/errorBoundary'
-import Loader from '@/components/general/loader'
+import Loader from '@/components/general/Loader'
 import Translate from '@/utils/Translate'
 
 import CitationModal from './citation/citationModal'

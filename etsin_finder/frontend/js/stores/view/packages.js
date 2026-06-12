@@ -32,6 +32,7 @@ class Packages {
 
   @observable accessor packageModalPath = null
 
+  /** @type {(() => Promise<any>) | null} */
   @observable accessor manualDownloadUrlGetter = null
 
   @observable accessor statusPromise = null
@@ -199,6 +200,16 @@ class Packages {
       this.statusPromise = this.client.get(statusUrl) // raises error for non-200 status
     }
     return this.statusPromise
+  }
+
+  @action.bound async checkStatusV2() {
+    try {
+      const statusUrl = this.Env.metaxUrls.downloadStatus()
+      await this.client.get(statusUrl) // raises error for non-200 status
+    } catch (err) {
+      console.error(err)
+      this.setError(err)
+    }
   }
 
   async fetch(datasetIdentifier) {

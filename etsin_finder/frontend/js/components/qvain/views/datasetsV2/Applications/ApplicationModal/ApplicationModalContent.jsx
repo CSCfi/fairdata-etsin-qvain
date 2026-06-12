@@ -7,7 +7,7 @@ import ApplicationState from '@/components/etsin/Dataset/AskForAccess/REMSApplic
 import { Tab, TabRow } from '@/components/general/Tab'
 import ApplicationDetails from './ApplicationDetails'
 import ApplicationEvents from './ApplicationEvents'
-import Loader from '@/components/general/loader'
+import Loader from '@/components/general/Loader'
 
 const ApplicationModalContent = observer(() => {
   const {

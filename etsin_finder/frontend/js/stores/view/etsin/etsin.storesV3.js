@@ -17,10 +17,15 @@ class EtsinDatasetV3 {
     this.rems = new EtsinDatasetRems({ EtsinDataset: this, Env })
   }
 
+  /** @type {any} */
   @observable accessor dataset = null
 
   @observable accessor packages = null
 
+  /**
+   * @import {EtsinFiles} from '@/stores/view/etsin.files.ts'
+   * @type {EtsinFiles}
+   */
   @observable accessor files = null
 
   @observable accessor emailInfo = null

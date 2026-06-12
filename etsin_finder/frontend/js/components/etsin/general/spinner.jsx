@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Loader from '@/components/general/loader'
+import Loader from '@/components/general/Loader'
 import withCustomProps from '@/utils/withCustomProps'
 
 export default function Spinner() {

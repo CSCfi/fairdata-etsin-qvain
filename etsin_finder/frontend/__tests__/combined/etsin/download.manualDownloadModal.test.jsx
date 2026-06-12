@@ -71,7 +71,10 @@ describe('Etsin manual download options modal', () => {
     if (wrapper && wrapper.length > 0) {
       wrapper.unmount?.()
     }
-    document.body.removeChild(helper)
+    if (helper) {
+      helper.remove()
+      helper = null
+    }
   })
 
   it('should be open', async () => {
@@ -91,7 +94,9 @@ describe('Etsin manual download options modal', () => {
 
   it('should have wget, cURL and URL fields', async () => {
     await renderModal()
-    const section = screen.getByRole('heading', { name: 'Other download options' }).nextSibling
+    const section = screen.getByRole('heading', {
+      name: 'Other download options',
+    }).nextElementSibling
     const titles = within(section)
       .getAllByRole('heading')
       .map(e => e.textContent)
@@ -100,7 +105,7 @@ describe('Etsin manual download options modal', () => {
 
   it('should copy wget to clipboard', async () => {
     await renderModal()
-    await userEvent.click(screen.getByText('wget').nextSibling.querySelector('button'))
+    await userEvent.click(screen.getByText('wget').nextElementSibling.querySelector('button'))
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
       'wget --content-disposition "https://example.com/download"'
     )
@@ -108,7 +113,7 @@ describe('Etsin manual download options modal', () => {
 
   it('should copy cURL to clipboard', async () => {
     await renderModal()
-    await userEvent.click(screen.getByText('cURL').nextSibling.querySelector('button'))
+    await userEvent.click(screen.getByText('cURL').nextElementSibling.querySelector('button'))
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
       'curl -fOJ "https://example.com/download"'
     )
@@ -116,7 +121,7 @@ describe('Etsin manual download options modal', () => {
 
   it('should copy URL to clipboard', async () => {
     await renderModal()
-    await userEvent.click(screen.getByText('URL').nextSibling.querySelector('button'))
+    await userEvent.click(screen.getByText('URL')?.nextElementSibling.querySelector('button'))
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith('https://example.com/download')
   })
 })

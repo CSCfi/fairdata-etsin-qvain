@@ -2,7 +2,7 @@ import { observer } from 'mobx-react'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
-import Loader from '@/components/general/loader'
+import Loader from '@/components/general/Loader'
 import { SaveButton } from '@/components/qvain/general/buttons'
 import { useStores } from '@/utils/stores'
 import PropTypes from 'prop-types'

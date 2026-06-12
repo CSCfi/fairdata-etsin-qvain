@@ -1,16 +1,7 @@
-/**
- * This file is part of the Etsin service
- *
- * Copyright 2017-2018 Ministry of Education and Culture, Finland
- *
- *
- * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
- * @license   MIT
- */
-
 import { observable, action } from 'mobx'
 
 import { ACCESS_TYPE_URL } from '../../utils/constants'
+import type Auth from '../domain/auth'
 
 export const accessTypes = {
   open: ACCESS_TYPE_URL.OPEN,
@@ -20,12 +11,50 @@ export const accessTypes = {
   restricted: ACCESS_TYPE_URL.RESTRICTED,
 }
 
+interface AccessType {
+  url: string
+}
+
+type ApprovalType = 'manual' | 'automatic'
+
+interface DatasetAccess {
+  available?: string
+  access_type: AccessType
+  rems_approval_type?: ApprovalType
+}
+
+interface AccessDataCatalog {
+  rems_enabled: boolean
+}
+
+type ApplicationState =
+  | 'apply'
+  | 'draft'
+  | 'returned'
+  | 'submitted'
+  | 'approved'
+  | 'rejected'
+  | 'disabled'
+  | null
+
+export interface Restrictions {
+  open: boolean
+  allowDataRemote: boolean
+  allowDataIda: boolean
+  allowDataIdaDownloadButton: boolean
+  showREMSbutton: boolean
+  applicationState?: ApplicationState
+  embargoDate?: Date
+}
+
 class Access {
-  constructor(Auth) {
+  Auth: Auth
+
+  constructor(Auth: Auth) {
     this.Auth = Auth
   }
 
-  @observable accessor restrictions = {
+  @observable accessor restrictions: Restrictions = {
     // ?
     open: false,
     // toggles the whole remote resource tab. If it is shown, all is shown
@@ -37,10 +66,17 @@ class Access {
     // Special button, use case for rems datasets
     showREMSbutton: false,
     // The state of user application for resource in REMS
-    applicationState: null,
+    applicationState: undefined,
+    // Embargo expiration date
+    embargoDate: undefined,
   }
 
-  updateAccess(access, hasPermit, applicationState, dataCatalog) {
+  updateAccess(
+    access: DatasetAccess,
+    hasPermit: boolean,
+    applicationState: ApplicationState,
+    dataCatalog: AccessDataCatalog
+  ) {
     switch (access?.access_type?.url) {
       case accessTypes.open:
         this.open()
@@ -75,27 +111,31 @@ class Access {
   }
 
   @action
-  embargoAccess(av) {
-    const embargoDate = new Date(av)
-    if (embargoDate < new Date()) {
-      this.restrictions = {
-        open: true,
-        allowDataRemote: true,
-        allowDataIda: true,
-        allowDataIdaDownloadButton: true,
-        showREMSbutton: false,
-        applicationState: null,
+  embargoAccess(av: string | undefined) {
+    let embargoDate: Date | undefined
+    if (av) {
+      embargoDate = new Date(av)
+      if (embargoDate < new Date()) {
+        this.restrictions = {
+          open: true,
+          allowDataRemote: true,
+          allowDataIda: true,
+          allowDataIdaDownloadButton: true,
+          showREMSbutton: false,
+          applicationState: null,
+        }
+        return
       }
-    } else {
-      this.restrictions = {
-        open: false,
-        allowDataRemote: true,
-        allowDataIda: true,
-        allowDataIdaDownloadButton: false,
-        showREMSbutton: false,
-        applicationState: null,
-        embargoDate: av,
-      }
+    }
+
+    this.restrictions = {
+      open: false,
+      allowDataRemote: true,
+      allowDataIda: true,
+      allowDataIdaDownloadButton: false,
+      showREMSbutton: false,
+      applicationState: null,
+      embargoDate,
     }
   }
 
@@ -112,7 +152,12 @@ class Access {
   }
 
   @action
-  permitAccess(remsApprovalType, hasPermit, applicationState, dataCatalog) {
+  permitAccess(
+    remsApprovalType: ApprovalType | undefined,
+    hasPermit: boolean,
+    applicationState: ApplicationState,
+    dataCatalog: AccessDataCatalog
+  ) {
     if (hasPermit) {
       this.restrictions = {
         open: false,

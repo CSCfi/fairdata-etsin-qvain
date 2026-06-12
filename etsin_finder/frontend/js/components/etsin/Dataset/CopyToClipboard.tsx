@@ -12,7 +12,7 @@ import type { TranslationKey } from '@/stores/view/locale'
 
 type CopyToClipboardProps = {
   content?: string
-  label: TranslationKey
+  label?: TranslationKey
   tooltip: TranslationKey
   tooltipSuccess: TranslationKey
   tooltipPosition?: 'top' | 'right' | 'left'
@@ -70,7 +70,7 @@ const CopyToClipboard = ({
           <FontAwesomeIcon icon={faClipboard} />
           <Translate content={label} />
         </IconContent>
-        {copiedStatus && <Check icon={faCheck} size={!horizontal ? '2x' : '1x'} />}
+        {copiedStatus && <Check icon={faCheck} size={horizontal ? '1x' : '2x'} />}
       </IconButton>
     </Translate>
   )

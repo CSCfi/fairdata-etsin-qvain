@@ -30,7 +30,7 @@ class FilesBase {
 
   @observable accessor initialLoadCount = 200
 
-  @action.bound async reset() {
+  @action.bound reset() {
     this.datasetIdentifier = null
     this.root = null
     this.selectedProject = undefined
@@ -139,7 +139,6 @@ class FilesBase {
       dir = dir.directories.find(d => d.name === part)
       if (dir && !dir.loaded) {
         if (i < parts.length - 1 || !skipFinalLoad) {
-
           await this.loadDirectory(dir)
         }
       }

@@ -9,7 +9,7 @@ import {
   DangerButton as BaseDangerButton,
   DangerCancelButton as BaseCancelButton,
 } from '../../../general/buttons'
-import Loader from '../../../../general/loader'
+import Loader from '../../../../general/Loader'
 import { Checkbox } from '../../../general/modal/form'
 
 export const ShareModal = () => {

@@ -2,7 +2,7 @@ import { useStores } from '@/stores/stores'
 import { observer } from 'mobx-react'
 import { useEffect } from 'react'
 
-import Loader from '@/components/general/loader'
+import Loader from '@/components/general/Loader'
 import styled from 'styled-components'
 import { PlaceholderWrapper } from '../styled'
 import ApplicationModal from './ApplicationModal'

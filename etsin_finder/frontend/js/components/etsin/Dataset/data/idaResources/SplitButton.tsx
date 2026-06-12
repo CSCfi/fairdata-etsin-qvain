@@ -4,7 +4,11 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import IconButton from '../common/iconButton'
 import withCustomProps from '@/utils/withCustomProps'
 
-export const SplitButtonContainer = withCustomProps(styled.span)`
+type SplitButtonContainerProps = {
+  split?: boolean
+}
+
+export const SplitButtonContainer = withCustomProps(styled.span<SplitButtonContainerProps>)`
   width: 9em;
   display: flex;
   align-items: stretch;

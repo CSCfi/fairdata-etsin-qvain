@@ -1,25 +1,28 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import withCustomProps from '@/utils/withCustomProps'
 
-const Loader = ({ color, size, margin, spinnerSize, active, left }) => {
+interface LoaderProps {
+  left?: boolean
+  margin?: string
+  active: boolean
+  color?: string
+  size?: string
+  spinnerSize?: string
+}
+
+const Loader = ({
+  color = '',
+  size = '2.5em',
+  margin = '0',
+  spinnerSize = '6px',
+  active,
+  left = false,
+}: LoaderProps) => {
   const spinner = <Spinner color={color} size={size} />
 
   if (left) {
     return (
-      <HolderLeft size={size} margin={margin} className={`${active ? 'loader-active' : ''}`}>
+      <HolderLeft margin={margin} className={`${active ? 'loader-active' : ''}`}>
         {spinner}
       </HolderLeft>
     )
@@ -37,7 +40,12 @@ const Loader = ({ color, size, margin, spinnerSize, active, left }) => {
 
 export default Loader
 
-const Holder = withCustomProps(styled.div)`
+type HolderProps = {
+  margin: string
+  spinnerSize?: string
+}
+
+const Holder = withCustomProps(styled.div<HolderProps>)`
   display: none;
   justify-content: center;
   align-items: center;
@@ -53,8 +61,12 @@ const Holder = withCustomProps(styled.div)`
   }
 `
 
-/* prettier-ignore */
-export const Spinner = withCustomProps(styled.div)`
+type SpinnerProps = {
+  size: string
+  spinnerSize?: string
+}
+
+export const Spinner = withCustomProps(styled.div<SpinnerProps>)`
   height: ${p => p.size};
   width: ${p => p.size};
   animation: spinner 0.8s infinite linear;
@@ -75,20 +87,3 @@ const HolderLeft = styled(Holder)`
   justify-content: left;
   padding: 0 0 0 1em;
 `
-
-Loader.defaultProps = {
-  left: false,
-  margin: '0',
-  color: '',
-  size: '2.5em',
-  spinnerSize: '6px',
-}
-
-Loader.propTypes = {
-  left: PropTypes.bool,
-  margin: PropTypes.string,
-  active: PropTypes.bool.isRequired,
-  color: PropTypes.string,
-  size: PropTypes.string,
-  spinnerSize: PropTypes.string,
-}

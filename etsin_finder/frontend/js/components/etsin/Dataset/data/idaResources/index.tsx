@@ -1,24 +1,24 @@
+import Translate from '@/utils/Translate'
+import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons'
+import { observer } from 'mobx-react'
 import { useEffect } from 'react'
 import styled from 'styled-components'
-import { observer } from 'mobx-react'
-import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons'
-import Translate from '@/utils/Translate'
 
+import AskForAccess from '@/components/etsin/Dataset/AskForAccess'
 import FlaggedComponent from '@/components/general/flaggedComponent'
 import TooltipHover from '@/components/general/tooltipHover'
-import sizeParse from '@/utils/sizeParse'
 import { useStores } from '@/stores/stores'
-import AskForAccess from '@/components/etsin/Dataset/AskForAccess'
-
-import { Header, HeaderTitle, HeaderStats, HeaderButton } from '../common/dataHeader'
+import sizeParse from '@/utils/sizeParse'
+import { Header, HeaderButton, HeaderStats, HeaderTitle } from '../common/dataHeader'
 import Info from '../info'
-
-import ErrorMessage from './errorMessage'
 import getDownloadAction from './downloadActions'
-import ManualDownloadModal from './manualDownloadModal'
-import PackageModal from './packageModal'
-import { SplitButtonContainer, MoreButton } from './splitButton'
+import getDownloadActionV2, { type DownloadAction } from './downloadActionsV2'
+import ErrorMessage from './errorMessage'
 import Tree from './fileTree'
+import ManualDownloadModal from './manualDownloadModal'
+import ManualDownloadModalV2 from './ManualDownloadModalV2'
+import PackageModal from './packageModal'
+import { MoreButton, SplitButtonContainer } from './SplitButton'
 
 function IdaResources() {
   const {
@@ -36,24 +36,35 @@ function IdaResources() {
       filesProcessor: { Packages },
       fetchPackages,
       isDownloadPossible,
+      downloadSharesEnabled,
     },
+    Env,
   } = useStores()
 
-  const action = getDownloadAction(identifier, null, Packages, files)
+  let action: DownloadAction
+  if (downloadSharesEnabled) {
+    action = getDownloadActionV2(identifier, null, Packages, files, Env)
+  } else {
+    action = getDownloadAction(identifier, null, Packages, files)
+  }
   const { moreFunc, moreAriaLabel } = action
   const { inInfo, setInInfo, getUseCategoryLabel, getFileTypeLabel } = files
   const fileCount = fileset?.total_files_count || 0
   const totalSize = fileset?.total_files_size || 0
 
   useEffect(() => {
-    fetchPackages()
+    if (downloadSharesEnabled) {
+      Packages.checkStatusV2()
+    } else {
+      fetchPackages()
+    }
   }, [fetchPackages])
 
   if (fileCount === 0) {
     return null
   }
 
-  const translateLabel = label => label?.[lang] || label?.und
+  const translateLabel = (label: any) => label?.[lang] || label?.und
 
   let shapedChecksum
   if (inInfo?.checksum) {
@@ -117,7 +128,7 @@ function IdaResources() {
           <AskForAccess />
           <Translate component={TooltipHover} attributes={{ title: action.tooltip }} showOnClick>
             <FlaggedComponent flag="DOWNLOAD_API_V2.OPTIONS" whenDisabled={downloadButton}>
-              <HeaderButtonSplit split={moreFunc}>
+              <HeaderButtonSplit split={!!moreFunc}>
                 {downloadButton}
                 {moreFunc && (
                   <Translate
@@ -144,10 +155,14 @@ function IdaResources() {
 
       <ErrorMessage />
 
-      {isFileMetadataAllowed && <Tree allowDownload={isDownloadPossible} />}
+      {isFileMetadataAllowed && <Tree />}
       {inInfo && <Info {...infoProps} />}
       <PackageModal Packages={Packages} />
-      <ManualDownloadModal Packages={Packages} />
+      {downloadSharesEnabled ? (
+        <ManualDownloadModalV2 Packages={Packages} />
+      ) : (
+        <ManualDownloadModal Packages={Packages} />
+      )}
     </>
   )
 }

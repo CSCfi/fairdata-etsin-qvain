@@ -5,7 +5,7 @@ import Translate from '@/utils/Translate'
 import { useRenderTree } from '../../../../../general/files/tree'
 import AddItemsTreeItem from './addItemsTreeItem'
 import { useStores } from '../../../../utils/stores'
-import Loader from '../../../../../general/loader'
+import Loader from '../../../../../general/Loader'
 
 const EmptyHelp = () => (
   <Translate component="div" content="qvain.files.addItemsModal.allSelected" />

@@ -3,8 +3,8 @@ import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
 
 import { useStores } from '../../utils/stores'
-import Loader from '../../../general/loader'
 import Button from '../../../general/Button'
+import Loader from '../../../general/Loader'
 
 const LockNotification = () => {
   const {

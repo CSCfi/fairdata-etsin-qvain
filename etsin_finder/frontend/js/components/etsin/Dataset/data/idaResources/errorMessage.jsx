@@ -5,6 +5,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import Translate from '@/utils/Translate'
 import { useStores } from '@/stores/stores'
 import { ACCESS_TYPE_URL } from '@/utils/constants'
+import withCustomProps from '@/utils/withCustomProps'
 
 const ACCESS_DENIED_MESSAGES = {
   EMBARGO: 'dataset.access_rights_description.embargo',
@@ -128,7 +129,7 @@ const Message = styled.div`
   margin: 1rem;
 `
 
-const ErrorDiv = styled.div.attrs({
+const ErrorDiv = withCustomProps(styled.div).attrs({
   className: 'error',
 })`
   display: flex;

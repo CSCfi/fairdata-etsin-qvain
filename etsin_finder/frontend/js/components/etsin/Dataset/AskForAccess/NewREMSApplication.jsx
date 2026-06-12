@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
-import Loader from '@/components/general/loader'
+import Loader from '@/components/general/Loader'
 import { SaveButton } from '@/components/qvain/general/buttons'
 import { Checkbox } from '@/components/qvain/general/modal/form'
 import { useStores } from '@/utils/stores'

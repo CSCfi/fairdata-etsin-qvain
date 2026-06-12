@@ -27,7 +27,6 @@ class Etsin {
     this.EtsinDataset = new this.EtsinDatasetClass({ Access, Locale, Env })
     this.datasetProcessor = new this.DatasetProcessorClass(this.Env)
     this.filesProcessor = new FilesProcessor(this.Env)
-
   }
 
   @observable accessor requests = {
@@ -238,6 +237,12 @@ class Etsin {
 
   @action.bound setLoadingOff(component) {
     this.isLoading[component] = false
+  }
+
+  @computed
+  get downloadSharesEnabled() {
+    // Enable the new share-based download service
+    return this.Env.Flags.flagEnabled('DOWNLOAD_SHARES')
   }
 }
 

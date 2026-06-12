@@ -224,7 +224,7 @@ const Sidebar = () => {
 
       <SidebarArea id="rights-area">
         <DatasetInfoItem id="dataset-license" itemTitle="dataset.license">
-          {accessRights.license?.length && (
+          {accessRights?.license?.length && (
             <List id="rights">
               {accessRights?.license?.map(l => (
                 <ListItem key={l.url}>

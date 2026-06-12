@@ -17,16 +17,18 @@ import {
   Icon,
   NoIcon,
 } from '@/components/general/files/items'
+import getDownloadActionV2 from './downloadActionsV2'
 import getDownloadAction from './downloadActions'
 import IconButton from '../common/iconButton'
 import FlaggedComponent from '@/components/general/flaggedComponent'
-import { MoreButton, SplitButtonContainer } from './splitButton'
+import { MoreButton, SplitButtonContainer } from './SplitButton'
 import TooltipHover from '@/components/general/tooltipHover'
 import { useStores } from '@/stores/stores'
 
 const FileTreeItemBase = ({ treeProps, item, level }) => {
   const {
-    Etsin: { isDownloadPossible },
+    Etsin: { isDownloadPossible, downloadSharesEnabled },
+    Env,
   } = useStores()
 
   const { Files, directoryView, extraProps } = treeProps
@@ -67,7 +69,12 @@ const FileTreeItemBase = ({ treeProps, item, level }) => {
   const haveMetadata = hasMetadata(item)
   const { type } = item
 
-  const action = getDownloadAction(datasetIdentifier, item, Packages, Files)
+  let action
+  if (downloadSharesEnabled) {
+    action = getDownloadActionV2(datasetIdentifier, item, Packages, Files, Env)
+  } else {
+    action = getDownloadAction(datasetIdentifier, item, Packages, Files)
+  }
   const {
     func: downloadFunc,
     moreFunc,

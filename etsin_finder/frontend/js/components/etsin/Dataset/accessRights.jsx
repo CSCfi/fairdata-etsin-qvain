@@ -21,6 +21,10 @@ function AccessRights({ button = false, ...props }) {
 
   const [isModalOpen, setModal] = useState(false)
 
+  if (!accessRights) {
+    return null
+  }
+
   const url = accessRights?.access_type?.url || ACCESS_TYPE_URL.RESTRICTED
   const type = Object.keys(ACCESS_TYPE_URL).find(key => ACCESS_TYPE_URL[key] === url) || 'none'
   const title = `dataset.access_rights_title.${type.toLowerCase()}`

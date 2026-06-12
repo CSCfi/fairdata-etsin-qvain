@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import { opacify } from 'polished'
 import Translate from '@/utils/Translate'
 
-import Loader from '@/components/general/loader'
+import Loader from '@/components/general/Loader'
 import { useStores } from '@/stores/stores'
 
 const RelatedDatasetLoadSpinner = () => (

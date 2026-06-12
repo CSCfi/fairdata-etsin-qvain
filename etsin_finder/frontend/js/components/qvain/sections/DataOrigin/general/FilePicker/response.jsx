@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
 
-import Loader from '../../../../../general/loader'
+import Loader from '../../../../../general/Loader'
 import { TableButton } from '../../../../general/buttons'
 import { useStores } from '../../../../utils/stores'
 

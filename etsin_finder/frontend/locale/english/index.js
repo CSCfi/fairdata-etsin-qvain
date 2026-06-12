@@ -185,10 +185,29 @@ const english = {
         description: `Etsin download can be initiated via the following commands.
         Please note that these are <em>only single use</em>, as every download needs to be authorized separately.
         Commands are valid for 72 hours.`,
+        shareV2: `A download share has been generated with the following details:`,
+        descriptionV2: `Etsin download can be initiated via the following commands.
+        For further information, see
+        `,
+        guideLinkV2: `Dataset Download Guide`,
         error: 'There was an error authorizing download.',
         copyButton: 'Copy',
         copyButtonTooltip: 'Copy to clipboard',
         copyButtonTooltipSuccess: 'Copied to clipboard',
+        fields: {
+          access_id: 'Access ID',
+          access_token: 'Access token',
+          expires: 'Expires',
+          download_url: 'Download URL',
+          curl: 'cURL',
+          wget: 'Wget',
+          rclone_copy: 'Rclone copy',
+          rclone_ls: 'Rclone ls',
+          rclone_mount: 'Rclone mount',
+          windows_mount: 'Windows mount',
+          linux_mount: 'Linux mount',
+          macos_mount: 'macOS mount',
+        },
       },
       packages: {
         createForAll: 'Download all',

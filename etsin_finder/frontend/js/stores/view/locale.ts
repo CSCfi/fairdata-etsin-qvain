@@ -21,30 +21,30 @@ type Plural = {
 }
 
 // Convert nested translation object type to dotted paths
-type DottedTranslationKey<T, Depth extends number = 10> = [Depth] extends [never]
+type StringKey<T, Depth extends number = 10> = [Depth] extends [never]
   ? never
   : T extends object
     ? {
         [K in keyof T & string]: T[K] extends string | Plural
           ? K
-          : `${K}.${DottedTranslationKey<T[K], Prev[Depth]>}`
+          : `${K}.${StringKey<T[K], Prev[Depth]>}`
       }[keyof T & string]
     : never
 
 // Convert nested translation object type to array of keys
-type ArrayTranslationKey<T, Depth extends number = 10> = [Depth] extends [never]
+type ArrayKey<T, Depth extends number = 10> = [Depth] extends [never]
   ? never
   : T extends object
     ? {
         [K in keyof T & string]: T[K] extends string | Plural
           ? [K]
-          : [K, ...ArrayTranslationKey<T[K], Prev[Depth]>]
+          : [K, ...ArrayKey<T[K], Prev[Depth]>]
       }[keyof T & string]
     : never
 
-export type TranslationKey =
-  | DottedTranslationKey<typeof english>
-  | ArrayTranslationKey<typeof english>
+export type StringTranslationKey = StringKey<typeof english>
+export type ArrayTranslationKey = ArrayKey<typeof english>
+export type TranslationKey = StringTranslationKey | ArrayTranslationKey
 
 const locales = observable({
   en: english,
@@ -54,7 +54,7 @@ const fallbackLocale = 'en'
 
 const languages = ['en', 'fi'] as const
 
-type UILanguage = (typeof languages)[number] // "en" or "fi"
+export type UILanguage = (typeof languages)[number] // "en" or "fi"
 
 const datasetTitleLanguages = ['en', 'fi', 'sv']
 

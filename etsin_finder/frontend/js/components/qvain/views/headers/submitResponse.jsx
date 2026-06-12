@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import Translate from '@/utils/Translate'
 
-import Loader from '../../../general/loader'
 import { LinkButtonDarkGray } from '../../../general/Button'
+import Loader from '../../../general/Loader'
 import { useStores } from '../../utils/stores'
 
 const SubmitResponse = ({ response, clearSubmitResponse }) => {

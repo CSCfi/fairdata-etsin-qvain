@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 
 import Button from '@/components/etsin/general/button'
-import Loader from '@/components/general/loader'
+import Loader from '@/components/general/Loader'
 import { useStores } from '@/stores/stores'
 import etsinTheme from '@/styles/theme'
 import Translate from '@/utils/Translate'

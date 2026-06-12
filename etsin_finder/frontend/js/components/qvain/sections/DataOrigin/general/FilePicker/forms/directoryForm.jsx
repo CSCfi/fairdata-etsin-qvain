@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import Loader from '@/components/general/loader'
+import Loader from '@/components/general/Loader'
 import { CancelButton, SaveButton } from '@/components/qvain/general/buttons'
 import { ValidationErrors } from '@/components/qvain/general/errors/validationError'
 import { Checkbox, CustomSelect, Input, Label } from '@/components/qvain/general/modal/form'
