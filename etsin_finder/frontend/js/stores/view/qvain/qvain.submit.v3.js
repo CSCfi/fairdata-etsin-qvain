@@ -89,7 +89,7 @@ class SubmitV3 extends Submit {
         const original = this.Qvain.original
         v3Dataset.metadata_owner = {
           user: original?.metadata_provider_user || this.Qvain.Auth.userName,
-          organization: original?.metadata_owner_org || this.Qvain.Auth.user.organization,
+          organization: original?.metadata_owner_org || this.Qvain.Auth.user.homeOrganizationId,
           admin_organization:
             this.Qvain.AdminOrg?.selectedAdminOrg?.value === 'not-selected'
               ? null
