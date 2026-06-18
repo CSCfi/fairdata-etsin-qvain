@@ -4,14 +4,14 @@ FROM python:3.12
 # set work directory
 WORKDIR /etsin_finder
 
-COPY requirements.txt /etsin_finder/
+COPY test_requirements.txt /etsin_finder/
 
 RUN apt update
 RUN apt-get install libxml2-dev libxmlsec1-dev libxmlsec1-openssl -y
 
 # install dependencies
 RUN pip install --upgrade pip wheel
-RUN pip install -r requirements.txt
+RUN pip install -r test_requirements.txt
 
 # Set work directory
 WORKDIR /
