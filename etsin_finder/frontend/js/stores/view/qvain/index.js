@@ -295,9 +295,9 @@ class Qvain extends Resources {
       this.setUseDoi(false)
     }
 
-    /*When IDA is selected as the catalog, the DOI value is set to the
-    user-selected value. If the user hasn't changed the value, it'll be true
-    by default: */
+    // When IDA is selected as the catalog, the DOI value is set to the
+    // user-selected value. If the user hasn't changed the value, it'll be
+    // true by default when no data origin was originally decided:
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
       this.setUseDoi(this.defaultDoi)
     }
@@ -471,6 +471,9 @@ class Qvain extends Resources {
     // Load DOI
     if (researchDataset?.preferred_identifier?.startsWith('doi') || dataset.use_doi_for_published) {
       this.useDoi = true
+      this.defaultDoi = true
+    } else if (!this.isDataCatalogDecided) {
+      this.useDoi = false
       this.defaultDoi = true
     } else {
       this.useDoi = false

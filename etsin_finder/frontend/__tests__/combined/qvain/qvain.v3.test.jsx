@@ -265,6 +265,85 @@ describe('Qvain with an opened dataset', () => {
     expect(doiSelector).toBeChecked()
   })
 
+  describe('when dataset is a draft', () => {
+    it('with IDA catalog and DOI selected, shows DOI option as checked', async () => {
+      await renderQvain({
+        data_catalog: idaCatalog,
+        remote_resources: [],
+        state: 'draft',
+        generate_pid_on_publish: 'DOI',
+        persistent_identifier: null,
+      })
+
+      const doiSelector = screen.getByLabelText('to have a DOI', { exact: false })
+      expect(doiSelector).toBeChecked()
+    })
+
+    it('with IDA catalog and URN selected, shows DOI option as unchecked', async () => {
+      await renderQvain({
+        data_catalog: idaCatalog,
+        remote_resources: [],
+        state: 'draft',
+        generate_pid_on_publish: 'URN',
+        persistent_identifier: null,
+      })
+
+      const doiSelector = screen.getByLabelText('to have a DOI', { exact: false })
+      expect(doiSelector).not.toBeChecked()
+    })
+
+    it('without data origin, after selecting IDA shows DOI option as checked', async () => {
+      await renderQvain({
+        data_catalog: null,
+        remote_resources: [],
+        state: 'draft',
+        generate_pid_on_publish: 'URN',
+        persistent_identifier: null,
+      })
+
+      const idaButton = screen.getByText('Choose "IDA"', { exact: false }).closest('button')
+
+      // doiSelector:
+      expect(screen.queryByLabelText('to have a DOI', { exact: false })).not.toBeInTheDocument()
+
+      await userEvent.click(idaButton)
+      const doiSelector = screen.getByLabelText('to have a DOI', { exact: false })
+
+      expect(doiSelector).toBeInTheDocument()
+      expect(doiSelector).toBeChecked()
+    })
+  })
+
+  describe('when dataset is a new version', () => {
+    it('shows DOI option as checked when published IDA dataset has DOI', async () => {
+      await renderQvain(
+        {
+          data_catalog: idaCatalog,
+          remote_resources: [],
+          state: 'published',
+          persistent_identifier: 'doi:10.234567/test-123',
+        },
+        { initialPath: `/dataset/${dataset.id}?new_version` }
+      )
+      const doiSelector = screen.getByLabelText('to have a DOI', { exact: false })
+      expect(doiSelector).toBeChecked()
+    })
+
+    it('shows DOI option as unchecked when published IDA dataset has URN', async () => {
+      await renderQvain(
+        {
+          data_catalog: idaCatalog,
+          remote_resources: [],
+          state: 'published',
+          persistent_identifier: 'urn:nbn:fi:att:test-123',
+        },
+        { initialPath: `/dataset/${dataset.id}?new_version` }
+      )
+      const doiSelector = screen.getByLabelText('to have a DOI', { exact: false })
+      expect(doiSelector).not.toBeChecked()
+    })
+  })
+
   it('shows option for show/hide file metadata', async () => {
     await renderQvain({ access_rights: access_rights_embargo })
     const showFileMetadataCheckbox = screen.getByRole('radio', {
@@ -830,7 +909,7 @@ describe('Qvain with an opened dataset', () => {
       expect(
         screen.getByText(
           'The dataset is being processed by the Digital Preservation Service.' +
-            ' You can view metadata but cannot make any changes.'
+          ' You can view metadata but cannot make any changes.'
         )
       ).toBeInTheDocument()
       const input = document.getElementById('titleInput')
