@@ -101,6 +101,11 @@ class EtsinSearch {
       query.delete('page')
     }
 
+    // Remove the lang query parameter from the requests sent to Metax:
+    if (query.has('lang')) {
+      query.delete('lang')
+    }
+
     query.set('limit', this.itemsPerPage)
     query.set('offset', this.offset)
     query.set('publishing_channels', 'etsin')
