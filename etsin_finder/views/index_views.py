@@ -1,10 +1,3 @@
-# This file is part of the Etsin service
-#
-# Copyright 2017-2018 Ministry of Education and Culture, Finland
-#
-# :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-# :license: MIT
-
 """Used for routing traffic from Flask to frontend."""
 
 from typing import List, Optional, Tuple
@@ -13,12 +6,10 @@ from flask import (
     Blueprint,
     make_response,
     render_template,
-    render_template_string,
     request,
     session,
     current_app,
 )
-import requests
 import json
 
 from etsin_finder.utils.abort import abort
@@ -32,9 +23,9 @@ from etsin_finder.auth.authentication_fairdata_sso import (
 )
 from etsin_finder.log import log
 from etsin_finder.utils.localization import get_language, translate
+from etsin_finder.utils.signposting import set_signposting_link_header
 
 index_views = Blueprint("index_views", __name__)
-
 
 @index_views.route("/", defaults={"path": ""})
 @index_views.route("/<path:path>")
@@ -59,6 +50,7 @@ def index(path):
         formatted_shared_domain = "." + shared_domain
         resp.set_cookie("sso_authentication", "true", domain=formatted_shared_domain)
 
+    set_signposting_link_header(path=path, resp=resp)
     return resp
 
 

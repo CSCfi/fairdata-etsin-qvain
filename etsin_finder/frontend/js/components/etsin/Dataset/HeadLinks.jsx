@@ -37,39 +37,39 @@ function HeadLinks() {
           complexity of access rights handling and to avoid excessive growth 
           of the document head. */}
       <Helmet>
-        <link key="type" rel="type" href="https://schema.org/Dataset" />
         {pidLink && <link key="cite-as" rel="cite-as" href={pidLink} />}
+        <link key="type" rel="type" href="https://schema.org/Dataset" />
         {authorUrl && <link key="author" rel="author" href={authorUrl} />}
-        {accessRights?.license?.length > 0 &&
-          accessRights.license.map(l => {
-            if (l.url) {
-              return <link key={l.url} rel="license" href={l.url} />
-            }
-          })}
         {metadataLink && (
           <link
             key="describedby-json"
             rel="describedby"
-            href={metadataLink}
             type="application/json"
+            href={metadataLink}
           />
         )}
         {doiLink && (
           <link
             key="describedby-ld-json"
             rel="describedby"
-            href={doiLink}
             type="application/ld+json"
+            href={doiLink}
           />
         )}
         {doiLink && (
           <link
             key="describedby-datacite-json"
             rel="describedby"
-            href={doiLink}
             type="application/vnd.datacite.datacite+json"
+            href={doiLink}
           />
         )}
+        {accessRights?.license?.length > 0 &&
+          accessRights.license.map(l => {
+            if (l.url) {
+              return <link key={l.url} rel="license" href={l.url} />
+            }
+          })}
       </Helmet>
     </>
   )
