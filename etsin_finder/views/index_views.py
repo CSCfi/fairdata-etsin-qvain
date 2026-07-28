@@ -1,18 +1,18 @@
 """Used for routing traffic from Flask to frontend."""
 
+import json
+import re
 from typing import List, Optional, Tuple
-from pathlib import Path
+
 from flask import (
     Blueprint,
+    current_app,
     make_response,
     render_template,
     request,
     session,
-    current_app,
 )
-import json
 
-from etsin_finder.utils.abort import abort
 from etsin_finder.auth.authentication import is_authenticated
 from etsin_finder.auth.authentication_direct_proxy import (
     is_authenticated_through_direct_proxy,
@@ -22,10 +22,52 @@ from etsin_finder.auth.authentication_fairdata_sso import (
     log_sso_values,
 )
 from etsin_finder.log import log
+from etsin_finder.services.metax_v3_service import MetaxV3APIService
+from etsin_finder.utils.abort import abort
 from etsin_finder.utils.localization import get_language, translate
 from etsin_finder.utils.signposting import set_signposting_link_header
 
 index_views = Blueprint("index_views", __name__)
+
+
+# Matches dataset page paths and captures the dataset UUID.
+# In the first parameter string:
+# - ^dataset/     -> path must start with "dataset/"
+# - ([0-9a-f-]+)  -> capture group 1 => UUID (hexadecimal digits and hyphens
+#                    allowed)
+# - (?:/(?:...))? -> non-capturing groups (?:) => optional subpage suffix:
+#                    /maps, /events or /data
+# - $             -> nothing is allowed after the optional suffix
+# In second parameter:
+# re.IGNORECASE   -> case-insensitive, e.g. /Dataset/ and /MAPS also match
+# Examples: dataset/<UUID> or dataset/<UUID>/maps
+DATASET_PATH_REGEX = re.compile(
+    r"^dataset/([0-9a-f-]+)(?:/:[0-9a-f-]+)?$", re.IGNORECASE
+)
+
+
+def get_etsin_dataset(path) -> dict | None:
+    """Get dataset shown on Etsin dataset page."""
+    # Check whether the path refers to a single dataset:
+    match = DATASET_PATH_REGEX.match(path)
+    if match:
+        # Extract the dataset UUID from the path:
+        dataset_id = match.group(1)
+        try:
+            metax_api = MetaxV3APIService()
+            return metax_api.get_dataset(
+                dataset_id,
+                {
+                    # These should be the same as in Etsin dataset processor in frontend
+                    "include_allowed_actions": "true",
+                    "include_removed": "true",
+                    "expand_catalog": "true",
+                    "include_metrics": "true",
+                },
+            )
+        except Exception as e:
+            log.error(f"Nope {e}")
+
 
 @index_views.route("/", defaults={"path": ""})
 @index_views.route("/<path:path>")
@@ -43,14 +85,16 @@ def index(path):
     sso_enabled_through_url = request.args.get(
         "sso_authentication", default="false", type=str
     )
-    resp = make_response(_render_index_template())
+
+    dataset: dict | None = get_etsin_dataset(path)
+    resp = make_response(_render_index_template(dataset=dataset))
     if sso_enabled_through_url == "true":
         # Force enable SSO cookie for entire domain (Etsin + Qvain)
         shared_domain = current_app.config.get("SESSION_COOKIE_DOMAIN")
         formatted_shared_domain = "." + shared_domain
         resp.set_cookie("sso_authentication", "true", domain=formatted_shared_domain)
 
-    set_signposting_link_header(path=path, resp=resp)
+    set_signposting_link_header(dataset=dataset, resp=resp)
     return resp
 
 
@@ -121,7 +165,9 @@ def get_entry_tags(entry_point) -> Optional[List[str]]:
         return None
 
 
-def _render_index_template(saml_errors=[], slo_success=False, template_string=None):
+def _render_index_template(
+    saml_errors=[], slo_success=False, template_string=None, dataset: dict | None = None
+):
     """Load saml attributes if logged in through old proxy, and log values.
 
     Args:
@@ -164,6 +210,7 @@ def _render_index_template(saml_errors=[], slo_success=False, template_string=No
         "sso_host": sso_host,
         "matomo_url": matomo_url,
         "is_development": is_development,
+        "dataset": dataset,
         # Entry points of the React app
         "entry_tags": entry_tags,
     }

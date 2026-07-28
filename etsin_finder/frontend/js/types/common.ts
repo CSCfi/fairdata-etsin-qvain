@@ -12,3 +12,9 @@ export interface SpatialObject {
   reference: ReferenceData
   wkt?: string[]
 }
+
+declare global {
+  export interface PromiseConstructor {
+    delay(ms: number): Promise<void>
+  }
+}

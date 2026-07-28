@@ -72,6 +72,8 @@ class TestLinkHeader(BaseTest):
         requests_mock.get(
             METAX_DATASET_URL,
             json={
+                "id": DATASET_ID,
+                "state": "published",
                 "persistent_identifier": "doi:10.234567/test-123",
                 "access_rights": {
                     "license": [
@@ -124,6 +126,8 @@ class TestLinkHeader(BaseTest):
         requests_mock.get(
             METAX_DATASET_URL,
             json={
+                "id": DATASET_ID,
+                "state": "published",
                 "persistent_identifier": "urn:nbn:fi:att:test-123",
                 "access_rights": {
                     "license": [
@@ -174,6 +178,8 @@ class TestLinkHeader(BaseTest):
         requests_mock.get(
             METAX_DATASET_URL,
             json={
+                "id": DATASET_ID,
+                "state": "published",
                 "actors": [
                     {
                         "roles": ["creator"],
@@ -218,6 +224,8 @@ class TestLinkHeader(BaseTest):
         requests_mock.get(
             METAX_DATASET_URL,
             json={
+                "id": DATASET_ID,
+                "state": "published",
                 "actors": [
                     {
                         "roles": ["creator"],
@@ -265,6 +273,8 @@ class TestLinkHeader(BaseTest):
         requests_mock.get(
             METAX_DATASET_URL,
             json={
+                "id": DATASET_ID,
+                "state": "published",
                 "access_rights": {
                     "license": [
                         {
@@ -305,6 +315,8 @@ class TestLinkHeader(BaseTest):
         requests_mock.get(
             METAX_DATASET_URL,
             json={
+                "id": DATASET_ID,
+                "state": "published",
                 "access_rights": {
                     "license": [
                         {"in_scheme": "http://uri.suomi.fi/codelist/fairdata/license"},

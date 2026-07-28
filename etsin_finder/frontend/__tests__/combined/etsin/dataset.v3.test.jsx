@@ -37,7 +37,7 @@ ReactModal.setAppElement(document.createElement('div'))
 
 const mockAdapter = new MockAdapter(axios)
 
-const getStores = () => {
+const getStores = ({ extraFlags = [] } = {}) => {
   const Env = new EnvClass()
   Env.history = {
     location: {
@@ -47,6 +47,9 @@ const getStores = () => {
   Env.setMetaxV3Host('metaxv3', 443)
   Env.Flags.setFlag('ETSIN.UI.V2', true)
   Env.Flags.setFlag('ETSIN.REMS', true)
+  for (const flag of extraFlags) {
+    Env.Flags.setFlag(flag, true)
+  }
   const stores = buildStores({ Env })
 
   return stores
@@ -58,7 +61,8 @@ const renderEtsin = async (
     isAuthenticated = false,
     tab = undefined,
     remsApplicationBase = automaticREMSApplicationBase,
-    beforeRender = () => { },
+    beforeRender = () => {},
+    extraFlags = [],
   } = {}
 ) => {
   mockAdapter.reset()
@@ -75,7 +79,7 @@ const renderEtsin = async (
   mockAdapter
     .onGet(`https://metaxv3:443/v3/datasets/${dataset.id}/rems-applications`)
     .reply(200, [])
-  const stores = getStores()
+  const stores = getStores({ extraFlags })
   if (isAuthenticated) {
     // REMS requires user login
     stores.Auth.setUser({
@@ -207,7 +211,7 @@ describe('Etsin dataset page', () => {
     const header = within(dialog).getByRole('heading', { name: 'APA' })
     expect(header.nextElementSibling.textContent).toEqual(
       'Kone Foundation, & Henkilö, K. (2023). All Fields Test Dataset. ' +
-      'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
+        'Test org, Test dept. https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5'
     )
   })
 
@@ -560,6 +564,44 @@ describe('Etsin dataset page', () => {
     expect(screen.getByText('1 file')).toBeInTheDocument()
     expect(screen.getByText('(1000 Bytes)')).toBeInTheDocument()
     expect(screen.getByText('Users have to log in to access the data.')).toBeInTheDocument()
+  })
+})
+
+describe('Initial dataset rendering', () => {
+  const dataset = dataset_open_a_catalog_expanded
+  let initialDataset
+
+  beforeEach(() => {
+    initialDataset = document.createElement('script')
+    initialDataset.type = 'application/json'
+    initialDataset.id = 'initial-dataset'
+    initialDataset.textContent = JSON.stringify(dataset)
+    document.body.appendChild(initialDataset)
+  })
+
+  afterEach(() => {
+    initialDataset.remove()
+  })
+
+  test('uses dataset from #initial-dataset', async () => {
+    await renderEtsin(dataset)
+    screen.getByRole('heading', { name: /All Fields Test Dataset/ })
+    const urls = mockAdapter.history.get.map(v => v.url)
+    expect(urls).not.toContain(
+      'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0'
+    )
+    expect(urls).toContain(
+      'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0/contact'
+    )
+    expect(initialDataset.parentElement).toBe(null) // initial-dataset removed after use
+  })
+
+  test('does not use #initial-dataset', async () => {
+    await renderEtsin(dataset, { extraFlags: ['ETSIN.FORCE_DATASET_FETCH'] })
+    screen.getByRole('heading', { name: /All Fields Test Dataset/ })
+    const urls = mockAdapter.history.get.map(v => v.url)
+    expect(urls).toContain('https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0')
+    expect(initialDataset.parentElement).not.toBe(null) // initial-dataset ignored
   })
 })
 

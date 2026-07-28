@@ -67,6 +67,10 @@
     <script type="module">
       console.error("Error loading app: Entry point not found.");
     </script>
+    {% endif %} {% if dataset %}
+    <script id="initial-dataset" type="application/json">
+      {{ dataset|tojson }}
+    </script>
     {% endif %}
   </head>
 

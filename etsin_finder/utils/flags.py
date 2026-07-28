@@ -23,6 +23,8 @@ default_supported_flags = {
     "ETSIN.REMS",  # Metax V3 REMS
     "QVAIN.REMS",  # Metax V3 REMS
     "ETSIN.GEOPORTTI_PROTO",
+    # Make Etsin fetch dataset from Metax even if backend has already provided it
+    "ETSIN.FORCE_DATASET_FETCH",
 }
 
 # Match last part of dot-separated path (including the period), e.g. '.last' in 'first.second.last'

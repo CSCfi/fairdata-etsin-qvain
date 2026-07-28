@@ -1,18 +1,9 @@
-# This file is part of the Etsin service
-#
-# Copyright 2017-2018 Ministry of Education and Culture, Finland
-#
-# :author: CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-# :license: MIT
-
 """Base functionalities for tests."""
 
-import os
 import jwt
 from werkzeug import http
 import pytest
 import logging
-import jinja2
 
 from etsin_finder.utils.flags import initialize_supported_flags
 from etsin_finder.app import create_app
@@ -24,21 +15,17 @@ from .utils import get_test_catalog_record
 def make_sso_user_cookie(user):
     """Create a sso user cookie for tests."""
     encrypted_session = jwt.encode({"authenticated_user": user}, "fake key")
-    return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session, path=None)
+    return http.dump_cookie(
+        "fd_test_csc_fi_fd_sso_session", encrypted_session, path=None
+    )
 
 
 def make_sso_cookie(cookie):
     """Create a sso user cookie for tests."""
     encrypted_session = jwt.encode(cookie, "fake key")
-    return http.dump_cookie("fd_test_csc_fi_fd_sso_session", encrypted_session, path=None)
-
-
-class FakeLoader(jinja2.BaseLoader):
-    """Fake loader to avoid depending on index.html in tests."""
-
-    def get_source(self, environment, template):
-        """Return dummy template."""
-        return "hello test", None, lambda: False
+    return http.dump_cookie(
+        "fd_test_csc_fi_fd_sso_session", encrypted_session, path=None
+    )
 
 
 class BaseTest:
@@ -52,7 +39,6 @@ class BaseTest:
         :return:
         """
         test_app = create_app(True)
-        test_app.jinja_loader = FakeLoader()
         return test_app
 
     @pytest.fixture
@@ -440,11 +426,11 @@ class BaseTest:
 
             log_warnings = [x.message for x in records if x.levelno == logging.WARNING]
             assert len(warnings) == len(log_warnings)
-            for (expected, logged) in zip(warnings, log_warnings):
+            for expected, logged in zip(warnings, log_warnings):
                 assert expected in logged
 
             log_errors = [x.message for x in records if x.levelno == logging.ERROR]
-            for (expected, logged) in zip(errors, log_errors):
+            for expected, logged in zip(errors, log_errors):
                 assert expected in logged
             assert len(errors) == len(log_errors)
 

@@ -7,21 +7,6 @@ from flask import Response
 from etsin_finder.services.metax_v3_service import MetaxV3APIService
 from etsin_finder.log import log
 
-# Matches dataset page paths and captures the dataset UUID.
-# In the first parameter string:
-# - ^dataset/     -> path must start with "dataset/"
-# - ([0-9a-f-]+)  -> capture group 1 => UUID (hexadecimal digits and hyphens
-#                    allowed)
-# - (?:/(?:...))? -> non-capturing groups (?:) => optional subpage suffix:
-#                    /maps, /events or /data
-# - $             -> nothing is allowed after the optional suffix
-# In second parameter:
-# re.IGNORECASE   -> case-insensitive, e.g. /Dataset/ and /MAPS also match
-# Examples: dataset/<UUID> or dataset/<UUID>/maps
-DATASET_PATH_REGEX = re.compile(
-    r"^dataset/([0-9a-f-]+)(?:/(?:maps|events|data))?$", re.IGNORECASE
-)
-
 
 def _pid_to_url(pid: str) -> str:
     """Validate persisent identifier and convert it into a link"""
@@ -89,38 +74,24 @@ def _form_signposting_link_header(dataset: dict, url: str) -> str:
     return link_header
 
 
-def _add_link_header_to_response(dataset_id: str, resp: Response) -> None:
-    """Fetch dataset from Metax V3 and add a signposting Link header to the response.
+def set_signposting_link_header(dataset: dict, resp: Response) -> None:
+    """Add a signposting Link header to the response.
 
     Args:
-        dataset_id: identifier of the dataset to fetch.
+        dataset: The dataset to link to.
         resp: Response object to which the Link header will be added.
     """
+    if not dataset or dataset["state"] != "published" or dataset.get("deprecated"):
+        return
+
     try:
-        metaxV3API = MetaxV3APIService()
-        dataset_metax_url = metaxV3API.metax_url(
-            "/v3/datasets/{identifier}", identifier=dataset_id
+        metax_v3_api = MetaxV3APIService()
+        dataset_metax_url = metax_v3_api.metax_url(
+            "/v3/datasets/{identifier}", identifier=dataset["id"]
         )
-        dataset = metaxV3API.get_dataset(dataset_id)
-        if dataset:
-            # Add the Link header to the response object:
-            resp.headers["Link"] = _form_signposting_link_header(
-                dataset=dataset, url=dataset_metax_url
-            )
+        # Add the Link header to the response object:
+        resp.headers["Link"] = _form_signposting_link_header(
+            dataset=dataset, url=dataset_metax_url
+        )
     except Exception as e:
         log.error(f"Failed to set Link header: {e}")
-
-
-def set_signposting_link_header(path: str, resp: Response) -> None:
-    """Add a signposting Link header when the path refers to a dataset.
-
-    Args:
-        path: Etsin resource path, e.g. "dataset/<dataset id>".
-        resp: Response object to which the Link header will be added.
-    """
-    # Check whether the path refers to a single dataset:
-    match = DATASET_PATH_REGEX.match(path)
-    if match:
-        # Extract the dataset identifier from the path:
-        dataset_id = match.group(1)
-        _add_link_header_to_response(dataset_id=dataset_id, resp=resp)

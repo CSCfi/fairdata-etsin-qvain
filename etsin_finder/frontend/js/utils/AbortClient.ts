@@ -1,11 +1,11 @@
-import axios from 'axios'
+import axios, { type AxiosRequestConfig } from 'axios'
 
 import { observable, action, when } from 'mobx'
 
-export const isAbort = error => axios.isCancel(error)
+export const isAbort = (error: any) => axios.isCancel(error)
 
 // Call async function, ignore abortion exceptions
-export const ignoreAbort = async fn => {
+export const ignoreAbort = async <T>(fn: () => Promise<T>): Promise<T | undefined> => {
   try {
     return await fn()
   } catch (error) {
@@ -16,7 +16,7 @@ export const ignoreAbort = async fn => {
   return undefined
 }
 
-const ensurePromise = promise => {
+const ensurePromise = (promise: any) => {
   if (typeof promise.then !== 'function') {
     return Promise.resolve(promise)
   }
@@ -36,6 +36,19 @@ const methodToFunc = {
   delete: { func: axios.delete, useData: false },
 }
 
+type ControllerEntry = {
+  abortController: AbortController
+  tags: string[]
+  done: boolean
+}
+
+interface RequestConfig extends AxiosRequestConfig {
+  method: keyof typeof methodToFunc
+  url: string
+  data?: any
+  tag?: string | string[]
+}
+
 class AbortClient {
   // Client for axios with helper utilities for aborting requests.
   //
@@ -44,7 +57,8 @@ class AbortClient {
   // * AbortControllers are associated with tags from tag option (string or array of strings)
   // * AbortClient.abort allows aborting requests by tag
 
-  @observable accessor controllers = []
+  // Use observable.array explicitly since we're using the .replace method
+  @observable accessor controllers = observable.array<ControllerEntry>()
 
   create(config = {}) {
     // Basic replacement for axios.create(), creates a proxy client with default config.
@@ -52,7 +66,7 @@ class AbortClient {
   }
 
   @action.bound
-  createController(tag) {
+  createController(tag: undefined | string | string[]) {
     let tags = tag || []
     if (!Array.isArray(tags)) {
       tags = [tags]
@@ -68,12 +82,12 @@ class AbortClient {
   }
 
   @action.bound
-  clearController(controller) {
+  clearController(controller: ControllerEntry) {
     controller.done = true
     this.controllers.replace(this.controllers.filter(({ done }) => !done))
   }
 
-  async delay(milliseconds, { tag } = {}) {
+  async delay(milliseconds: number, { tag }: { tag?: string | string[] } = {}) {
     // Abortable delay.
     //
     // When aborted, rejects with an axios.Cancel instance
@@ -91,7 +105,7 @@ class AbortClient {
     }
   }
 
-  request({ method, url, data, tag, ...axiosConfig }) {
+  request({ method, url, data, tag, ...axiosConfig }: RequestConfig) {
     const controller = this.createController(tag)
     const { signal } = controller.abortController
     const { func, useData } = methodToFunc[method]
@@ -102,7 +116,7 @@ class AbortClient {
       promise = func(url, { ...axiosConfig, signal })
     }
     return ensurePromise(promise)
-      .catch(error => {
+      .catch((error: any) => {
         if (isAbort(error)) {
           // axios cancel errors are very uninformative by default, this adds more context to them
           error.message = `${error.message || 'aborted'} ${method} ${url}, tag=${tag}`
@@ -112,31 +126,31 @@ class AbortClient {
       .finally(() => this.clearController(controller))
   }
 
-  get(url, options = {}) {
+  get(url: string, options = {}) {
     return this.request({ url, method: 'get', ...options })
   }
 
-  patch(url, data, options = {}) {
+  patch(url: string, data?: any, options = {}) {
     return this.request({ url, data, method: 'patch', ...options })
   }
 
-  put(url, data, options = {}) {
+  put(url: string, data?: any, options = {}) {
     return this.request({ url, data, method: 'put', ...options })
   }
 
-  post(url, data, options = {}) {
+  post(url: string, data?: any, options = {}) {
     return this.request({ url, data, method: 'post', ...options })
   }
 
-  delete(url, options = {}) {
+  delete(url: string, options = {}) {
     return this.request({ url, method: 'delete', ...options })
   }
 
-  async waitForDone(tag = undefined, { abort = false } = {}) {
+  async waitForDone(tag: undefined | string = undefined, { abort = false } = {}) {
     // Wait until requests matching tag are done.
     let controllers = this.controllers
     if (tag) {
-      controllers = controllers.filter(({ tags }) => tags.includes(tag))
+      controllers = observable(controllers.filter(({ tags }) => tags.includes(tag)))
     }
 
     if (abort) {
@@ -147,40 +161,50 @@ class AbortClient {
     }
   }
 
-  async abort(tag = undefined) {
+  async abort(tag: undefined | string = undefined) {
     // Abort all requests matching tag, if any. If tag is undefined, abort all requests.
     return this.waitForDone(tag, { abort: true })
   }
 }
 
 class AbortClientApi {
+  abortClient: AbortClient
+  config: Partial<RequestConfig>
+
   // Simple proxy client that allows making requests with an existing AbortClient but allows a default config.
-  constructor(abortClient, config = {}) {
+  constructor(abortClient: AbortClient, config = {}) {
     this.abortClient = abortClient
     this.config = config
   }
 
-  request(options) {
-    return this.abortClient.request({ ...this.config, ...options })
+  request(options: Partial<RequestConfig>) {
+    const config = { ...this.config, ...options }
+    if (!config.method) {
+      throw new Error('Missing request method')
+    }
+    if (!config.url) {
+      throw new Error('Missing request url')
+    }
+    return this.abortClient.request(config as RequestConfig)
   }
 
-  get(url, options = {}) {
+  get(url: string, options = {}) {
     return this.abortClient.get(url, { ...this.config, ...options })
   }
 
-  patch(url, data, options = {}) {
+  patch(url: string, data?: any, options = {}) {
     return this.abortClient.patch(url, data, { ...this.config, ...options })
   }
 
-  put(url, data, options = {}) {
+  put(url: string, data?: any, options = {}) {
     return this.abortClient.put(url, data, { ...this.config, ...options })
   }
 
-  post(url, data, options = {}) {
+  post(url: string, data?: any, options = {}) {
     return this.abortClient.post(url, data, { ...this.config, ...options })
   }
 
-  delete(url, options = {}) {
+  delete(url: string, options = {}) {
     return this.abortClient.delete(url, { ...this.config, ...options })
   }
 }
