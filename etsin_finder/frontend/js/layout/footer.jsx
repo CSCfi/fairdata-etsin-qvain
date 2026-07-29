@@ -1,19 +1,7 @@
-{
-  /**
-   * This file is part of the Etsin service
-   *
-   * Copyright 2017-2018 Ministry of Education and Culture, Finland
-   *
-   *
-   * @author    CSC - IT Center for Science Ltd., Espoo Finland <servicedesk@csc.fi>
-   * @license   MIT
-   */
-}
-
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 
-import imgEOSC from '@/assets/images/Supporting_EOSC.jpg'
+import imgEOSC from '@/assets/images/supporting_EOSC_node_finland.png'
 
 const Footer = () => {
   const accessibilityPath = 'fairdata'
@@ -129,7 +117,7 @@ const FooterDiv = styled.footer.attrs({
 const Banner = styled.img`
   width: 175px;
   float: right;
-  margin-top: 0.2rem;
+  margin-top: 0.45rem;
 `
 
 const PaddedFlexBox = styled.div.attrs({
