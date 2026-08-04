@@ -105,8 +105,8 @@ function IdaResources() {
     </Translate>
   )
 
-  /*Return the text related to the embargo expiration. The text content
-  depends on whether the expiration has already occured: */
+  // Returns the text related to the embargo expiration. The text content
+  // depends on whether the expiration has already occured:
   const getEmbargoText = () => {
     if (isEmbargoExpired) {
       return 'dataset.embargoDateExpired'
@@ -142,7 +142,7 @@ function IdaResources() {
               </HeaderButtonSplit>
             </FlaggedComponent>
             {/* If embargo date has been defined, its future or past expiration
-          is displayed: */}
+                is displayed: */}
             {embargoDate && (
               <EmbargoDate>
                 <Translate content={getEmbargoText()} />
