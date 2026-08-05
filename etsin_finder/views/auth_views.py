@@ -25,30 +25,46 @@ from etsin_finder.utils.localization import get_language
 
 auth_views = Blueprint("auth_views", __name__)
 
+lumi_aif_config = {
+    "etsin_app_cookie": "lumi-aif.etsin",
+    "sso_redirect_domain_key": "SERVER_LUMI_AIF_PORTAL_DOMAIN_NAME",
+    "sso_redirect_default_value": "lumi-aif"
+}
+
+retriever_config = {
+    "retriever_app_cookie": "retriever",
+    "sso_redirect_domain_key": "SERVER_RETRIEVER_PORTAL_DOMAIN_NAME",
+    "sso_redirect_default_value": "retriever"
+}
+
 
 LUMI_AIF_ETSIN_APP_COOKIE = "lumi-aif.etsin"
 LUMI_AIF_SSO_REDIRECT_DOMAIN_CONFIG = "SERVER_LUMI_AIF_PORTAL_DOMAIN_NAME"
 LUMI_AIF_SSO_REDIRECT_DEFAULT_DOMAIN = "lumi-aif"
 
+RETRIEVER_ETSIN_APP_COOKIE = "retriever"
+RETRIEVER_SSO_REDIRECT_DOMAIN_CONFIG = "SERVER_RETRIEVER_PORTAL_DOMAIN_NAME"
+RETRIEVER_SSO_REDIRECT_DEFAULT_DOMAIN = "retriever"
 
-def get_lumi_aif_redirect_domain(app_config):
-    """Build Lumi-AIF redirect domain using current environment suffix."""
-    lumi_aif_host = app_config.get(
-        LUMI_AIF_SSO_REDIRECT_DOMAIN_CONFIG, LUMI_AIF_SSO_REDIRECT_DEFAULT_DOMAIN
+
+def get_portal_redirect_domain(app_config, domain_config):
+    """Build domain specific redirect url using current environment suffix."""
+    portal_host = app_config.get(
+        domain_config.get("sso_redirect_domain_key"), domain_config.get("sso_redirect_default_value")
     )
     etsin_domain = app_config.get("SERVER_ETSIN_DOMAIN_NAME", "")
 
-    if "." not in lumi_aif_host and "." in etsin_domain:
+    if "." not in portal_host and "." in etsin_domain:
         environment_domain = etsin_domain.split(".", 1)[1]
-        return f"{lumi_aif_host}.{environment_domain}"
+        return f"{portal_host}.{environment_domain}"
 
-    return lumi_aif_host
+    return portal_host
 
-
-# etsin_app cookie value -> function(app_config) returning SSO redirect host (no scheme).
-# Keep keys in sync with frontend getEtsinPortalConfig / branded Etsin portals.
-ETSIN_SSO_PORTAL_REDIRECT_RESOLVERS = {
-    LUMI_AIF_ETSIN_APP_COOKIE: get_lumi_aif_redirect_domain,
+# etsin_app cookie value -> function(app_config) returning SSO redirect host (no scheme)
+# Keep keys in sync with frontend getEtsinPortalConfig / branded Etsin portals
+PORTAL_CONFIGS = {
+    LUMI_AIF_ETSIN_APP_COOKIE: lumi_aif_config,
+    RETRIEVER_ETSIN_APP_COOKIE: retriever_config
 }
 
 
@@ -56,8 +72,8 @@ def _resolve_etsin_sso_redirect_host(app_config, etsin_app_cookie):
     """Return portal-specific SSO redirect host for Etsin, or None for default Fairdata Etsin."""
     if not etsin_app_cookie:
         return None
-    resolver = ETSIN_SSO_PORTAL_REDIRECT_RESOLVERS.get(etsin_app_cookie)
-    return resolver(app_config) if resolver else None
+    portal_config = PORTAL_CONFIGS.get(etsin_app_cookie)
+    return get_portal_redirect_domain(app_config, portal_config) if portal_config else None
 
 
 def sso_login_url(service, etsin_app_cookie=None):

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Route, Routes, Navigate } from 'react-router'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
-import { Home, Search, Dataset, Qvain, QvainDatasetsV2 } from '../routes'
+import { Home, Search, Dataset, Qvain, QvainDatasetsV2, Retriever } from '../routes'
 import ErrorPage from '@/components/general/errorpage'
 
 import QvainLandingPage from '@/components/qvain/views/landingPage'
@@ -13,7 +13,7 @@ import { LumiAifDatasetsCanonicalRedirect } from '@/etsinPortals'
 const Content = ({ contentRef }) => {
   const {
     Auth,
-    Env: { isQvain, separateQvain, getQvainUrl, Flags },
+    Env: { isQvain, isEtsin, isBrandedEtsinPortal, isRetriever, separateQvain, getQvainUrl, Flags },
     Matomo: { changeService },
     Accessibility,
   } = useStores()
@@ -22,10 +22,12 @@ const Content = ({ contentRef }) => {
     Accessibility.handleNavigation()
     if (isQvain) {
       changeService('QVAIN')
-    } else {
+    } else if (isEtsin) {
       changeService('ETSIN')
+    } else if (isRetriever) {
+      changeService('RETRIEVER')
     }
-  }, [Accessibility, isQvain, changeService])
+  }, [Accessibility, isQvain, isRetriever, isEtsin, changeService])
 
   if (Auth.initializing) return null
 
@@ -43,11 +45,14 @@ const Content = ({ contentRef }) => {
       <Routes>
         {separateQvain && <Route path="/qvain" element={<NavigateToQvain />} />}
         {separateQvain && <Route path="/qvain/*" element={<NavigateToQvain />} />}
-        {!isQvain && [
+        {(isEtsin || isBrandedEtsinPortal) && [
           <Route path="/" key="home" element={<EtsinHomeRoute />} />,
           <Route path="/datasets/:query?" key="search" element={<EtsinSearchRoute />} />,
           <Route path="/dataset/:identifier/*" key="dataset" element={<Dataset />} />,
         ]}
+        { isRetriever &&
+           <Route path="/" element={<Retriever />}/>
+        }
         {maintenance && (
           <Route path={getQvainUrl('')}>
             <QvainLandingPage />

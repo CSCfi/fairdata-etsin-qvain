@@ -99,7 +99,12 @@ class Env {
 
   @computed
   get isEtsin() {
-    return this.app !== 'qvain'
+    return this.app === 'etsin'
+  }
+
+  @computed
+  get isRetriever() {
+    return this.app === 'retriever'
   }
 
   @observable accessor osChoice: OSOption = getOS() // os choice in ui dialogs
