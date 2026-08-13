@@ -24,15 +24,15 @@ const QvainHeader = () => {
   const getLabel = () => {
     const templateIdentifier = queryParam(location, 'template')
 
-    /*If a dataset has a template identifier, it uses an existing dataset
-    as a model: */
+    // If a dataset has a template identifier, it uses an existing dataset
+    // as a model:
     if (templateIdentifier) {
       return 'qvain.titleModelBasedDataset'
     }
-    /*If a new version of an existing dataset is created, the condition
-    below is implemented. The condition must come before the condition that
-    is reflected to the value of original, since the new version also has
-    original: */
+    // If a new version of an existing dataset is created, the condition
+    // below is implemented. The condition must come before the condition that
+    // is reflected to the value of original, since the new version also has
+    // original:
     if (isNewVersion) {
       return 'qvain.titleNewVersion'
     }

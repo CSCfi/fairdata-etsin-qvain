@@ -78,6 +78,10 @@ const InlineTransparentLink = styled(TransparentLink)`
     color: ${p => p.theme.ui.dataset.agent.rowHoverColor};
     border: ${p => p.theme.ui.dataset.agent.rowHoverBorder};
     text-decoration: none;
+    &:hover,
+    &:focus {
+      background-color: transparent;
+    }
   }
 `
 

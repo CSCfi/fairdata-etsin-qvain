@@ -10,13 +10,11 @@ import ServiceGeneratedEvents from './ServiceGeneratedEvents'
 const EventList = () => {
   const {
     Etsin: {
-      EtsinDataset: {
-        hasEvents
-      },
+      EtsinDataset: { hasEvents },
     },
   } = useStores()
 
-  //If the dataset has events, the Events table is displayed:
+  // If the dataset has events, the Events table is displayed:
   if (hasEvents) {
     return (
       <Margin>
@@ -45,11 +43,11 @@ const EventList = () => {
             </tr>
           </thead>
           <tbody>
-            {/*If the dataset has user-based events, they are rendered as table 
-            rows with an associated subheading: */}
+            {/* If the dataset has user-based events, they are rendered as 
+                table rows with an associated subheading: */}
             <UserEnteredEvents />
-            {/*If the dataset has service-generated events, they are rendered 
-            as table rows with an associated subheading: */}
+            {/* If the dataset has service-generated events, they are rendered
+                as table rows with an associated subheading: */}
             <ServiceGeneratedEvents />
           </tbody>
         </Table>
@@ -57,7 +55,7 @@ const EventList = () => {
     )
   }
 
-  //Otherwise, the Events table isn't displayed:
+  // Otherwise, the Events table isn't displayed:
   return null
 }
 

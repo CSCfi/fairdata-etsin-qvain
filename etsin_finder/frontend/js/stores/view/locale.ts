@@ -224,9 +224,6 @@ class Locale {
   @action.bound
   loadLang() {
     const langParamValue: string | null = queryParam(this.Env.history.location, 'lang')
-    if (!langParamValue) {
-      return
-    }
     const isUILang = this.languages.includes(langParamValue as UILanguage)
 
     if (isUILang) {

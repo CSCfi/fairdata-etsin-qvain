@@ -1,4 +1,6 @@
-const queryParam = (location, param) => {
+import type { Location } from 'react-router'
+
+const queryParam = (location: Location, param: string): string | null => {
   if (!location?.search) {
     return ''
   }

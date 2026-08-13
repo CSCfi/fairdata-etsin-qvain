@@ -7,15 +7,10 @@ import queryParam from '@/utils/queryParam'
 
 const Header = ({ datasetLoading, datasetError }) => {
   const {
-    Qvain: {
-      original,
-      isNewVersion
-    },
+    Qvain: { original, isNewVersion },
     Env: {
-      history: {
-        location
-      }
-    }
+      history: { location },
+    },
   } = useStores()
 
   const getTitleKey = () => {
@@ -27,15 +22,15 @@ const Header = ({ datasetLoading, datasetError }) => {
     if (datasetError) {
       return 'qvain.titleLoadingFailed'
     }
-    /*If a dataset has a template identifier, it uses an existing dataset 
-    as a model: */
+    // If a dataset has a template identifier, it uses an existing dataset
+    // as a model:
     if (templateIdentifier) {
       return 'qvain.titleModelBasedDataset'
     }
-    /*If a new version of an existing dataset is created, the condition 
-    below is implemented. The condition must come before the condition that 
-    is reflected to the value of original, since the new version also has 
-    original: */
+    // If a new version of an existing dataset is created, the condition
+    // below is implemented. The condition must come before the condition that
+    // is reflected to the value of original, since the new version also has
+    // original:
     if (isNewVersion) {
       return 'qvain.titleNewVersion'
     }
