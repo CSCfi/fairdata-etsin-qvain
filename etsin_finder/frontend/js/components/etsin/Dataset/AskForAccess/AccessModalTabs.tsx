@@ -2,12 +2,14 @@ import { Tab, TabRow } from '@/components/general/Tab'
 import { useStores } from '@/stores/stores'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
+import type Locale from '@/stores/view/locale'
+import type { Application } from '@/stores/view/etsin/etsin.rems'
 
-const getLabel = (translate, id, val) => {
-  if (!val) {
+const getLabel = (translate: Locale['translate'], application: Application) => {
+  if (!application) {
     return translate('dataset.access_modal.createApplication')
   }
-  const externalId = val['application/external-id']
+  const externalId = application['application/external-id']
   return (
     <>
       {translate('dataset.access_modal.application')}
@@ -33,9 +35,9 @@ const AccessModalTabs = () => {
   return (
     <Wrapper>
       <ModalTabRow>
-        {Object.entries(tabs.options).map(([id, value]) => (
+        {Object.entries(tabs.options).map(([id, application]) => (
           <ModalTab key={id} aria-selected={tabs.active === id} onClick={() => tabs.setActive(id)}>
-            {getLabel(translate, id, value)}
+            {getLabel(translate, application)}
           </ModalTab>
         ))}
       </ModalTabRow>

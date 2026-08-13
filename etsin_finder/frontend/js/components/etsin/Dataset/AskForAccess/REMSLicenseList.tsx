@@ -4,8 +4,9 @@ import styled from 'styled-components'
 import { useStores } from '@/utils/stores'
 import REMSLicense from './REMSLicense'
 import PropTypes from 'prop-types'
+import type { ApplicationLicense } from '@/stores/view/etsin/etsin.rems'
 
-const REMSLicenseList = ({ licenses }) => {
+const REMSLicenseList = ({ licenses }: { licenses: ApplicationLicense[] }) => {
   const {
     Locale: { translate },
   } = useStores()
@@ -15,14 +16,15 @@ const REMSLicenseList = ({ licenses }) => {
 
   for (const license of licenses) {
     if (license.is_data_access_terms) terms.push(license)
-    else if (license.licensetype === 'text') textLicenses.push(license)
+    else if (license['license/type'] === 'text') textLicenses.push(license)
     else otherLicenses.push(license)
   }
+
   const hasTerms = terms.length > 0
   const joinedLicenses = [...textLicenses, ...otherLicenses]
   const licenseCount = joinedLicenses.length
 
-  const licenseList = (lics, { isTerms = false } = {}) => (
+  const licenseList = (lics: ApplicationLicense[], { isTerms = false } = {}) => (
     <List>
       {lics.map(l => (
         <ListItem key={l['license/id']}>

@@ -402,9 +402,9 @@ describe('Etsin dataset page', () => {
     expect(JSON.parse(request.data)).toEqual({
       accept_licenses: [4, 1],
       field_values: [
-        { form: '12', field: 'project_description', value: 'this is my project' },
-        { form: '12', field: 'access_control', value: 'this is how i protect the data' },
-        { form: '12', field: 'other_persons', value: 'this is who sees the data' },
+        { form: 12, field: 'project_description', value: 'this is my project' },
+        { form: 12, field: 'access_control', value: 'this is how i protect the data' },
+        { form: 12, field: 'other_persons', value: 'this is who sees the data' },
       ],
     })
 
@@ -536,9 +536,9 @@ describe('Etsin dataset page', () => {
     expect(JSON.parse(request.data)).toEqual({
       accept_licenses: [4, 1, 5],
       field_values: [
-        { form: '12', field: 'project_description', value: 'new description here' },
-        { form: '12', field: 'access_control', value: 'old value 2' },
-        { form: '12', field: 'other_persons', value: 'old value 3' },
+        { form: 12, field: 'project_description', value: 'new description here' },
+        { form: 12, field: 'access_control', value: 'old value 2' },
+        { form: 12, field: 'other_persons', value: 'old value 3' },
       ],
     })
   })

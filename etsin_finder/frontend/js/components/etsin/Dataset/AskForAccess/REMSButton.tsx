@@ -1,13 +1,19 @@
-import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 
-import Button from '@/components/etsin/general/button'
 import Loader from '@/components/general/Loader'
 import { useStores } from '@/stores/stores'
+import type { TranslationKey } from '@/stores/view/locale'
 import etsinTheme from '@/styles/theme'
 import Translate from '@/utils/Translate'
+import Button from '@/components/general/Button'
 
-const REMSButton = props => {
+interface REMSButtonProps {
+  applicationState?: string | null
+  onClick?: () => void
+  loading?: boolean
+}
+
+const REMSButton = ({ applicationState, onClick, loading = false }: REMSButtonProps) => {
   const {
     Locale: { translate },
     Auth: { isAuthenticated },
@@ -16,13 +22,13 @@ const REMSButton = props => {
     },
   } = useStores()
 
-  let wrapperTitle
-  let buttonContent = 'dataset.access_permission'
+  let wrapperTitle: TranslationKey | undefined
+  let buttonContent: TranslationKey = 'dataset.access_permission'
   let buttonId = 'rems-button'
   let buttonColor = etsinTheme.color.primary
   let disabled = isRemoved || isDraft || isDeprecated
 
-  let state = props.applicationState
+  let state = applicationState
   if (!isAuthenticated) {
     disabled = true
     wrapperTitle = 'dataset.access_states.require_login'
@@ -71,13 +77,13 @@ const REMSButton = props => {
     <Button
       id={buttonId}
       data-testid="rems-button"
-      onClick={props.onClick}
+      onClick={onClick}
       disabled={disabled}
       color={buttonColor}
       minWidth="10.5em"
       noMargin
     >
-      {props.loading ? (
+      {loading ? (
         <>
           <Translate content={buttonContent} />
           <Loader color="white" active size="1.2em" />
@@ -95,18 +101,6 @@ const REMSButton = props => {
     )
   }
   return button
-}
-
-REMSButton.propTypes = {
-  applicationState: PropTypes.string,
-  onClick: PropTypes.func,
-  loading: PropTypes.bool,
-}
-
-REMSButton.defaultProps = {
-  loading: false,
-  onClick: undefined,
-  applicationState: undefined,
 }
 
 export default observer(REMSButton)

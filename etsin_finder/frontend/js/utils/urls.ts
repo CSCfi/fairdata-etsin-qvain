@@ -70,9 +70,9 @@ export default {
     datasetPermissionsEditors: (dataset: string) => `/v3/datasets/${dataset}/permissions/editors`,
     datasetPermissionsEditor: (dataset: string, username: string) =>
       `/v3/datasets/${dataset}/permissions/editors/${username}`,
-    datasetREMSApplication: (dataset: string, application: string) =>
+    datasetREMSApplication: (dataset: string, application: number) =>
       `/v3/datasets/${dataset}/rems-applications/${application}`,
-    datasetREMSApplicationSubmit: (dataset: string, application: string) =>
+    datasetREMSApplicationSubmit: (dataset: string, application: number) =>
       `/v3/datasets/${dataset}/rems-applications/${application}/submit`,
     datasetREMSApplications: (dataset: string) => `/v3/datasets/${dataset}/rems-applications`,
     datasetREMSApplicationBase: (dataset: string) =>

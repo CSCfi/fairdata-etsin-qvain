@@ -3,8 +3,15 @@ import styled from 'styled-components'
 
 import { useStores } from '@/stores/stores'
 import CustomMarkdown from '../Description/customMarkdown'
+import type { ApplicationLicense } from '@/stores/view/etsin/etsin.rems'
 
-const REMSLicense = ({ license, isDataAccessTerms = false }) => {
+const REMSLicense = ({
+  license,
+  isDataAccessTerms = false,
+}: {
+  license: ApplicationLicense
+  isDataAccessTerms: boolean
+}) => {
   const {
     Locale: { getValueTranslationWithLang },
   } = useStores()
@@ -18,7 +25,9 @@ const REMSLicense = ({ license, isDataAccessTerms = false }) => {
         <summary className={cls} lang={titleLang}>
           {title}
         </summary>
-        <LicenseMarkdown lang={lang}>{text}</LicenseMarkdown>
+        <div lang={lang}>
+          <LicenseMarkdown>{text}</LicenseMarkdown>
+        </div>
       </details>
     )
   }

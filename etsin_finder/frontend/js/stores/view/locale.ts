@@ -250,10 +250,7 @@ class Locale {
     return defaultLang
   }
 
-  getValueTranslationWithLang = (
-    value: any,
-    lang = this.lang
-  ): [string | object, string | undefined] => {
+  getValueTranslationWithLang = (value: any, lang = this.lang): [string, string | undefined] => {
     // Get a translation from a multi-language string object, use supplied language by default
     if (typeof value === 'string' || value === undefined) {
       return [value, undefined]
@@ -268,7 +265,7 @@ class Locale {
     }
     for (const [l, translation] of Object.entries(value)) {
       if (translation && l !== 'und') {
-        return [translation, l]
+        return [translation as string, l]
       }
     }
     return [value.und || '', undefined]

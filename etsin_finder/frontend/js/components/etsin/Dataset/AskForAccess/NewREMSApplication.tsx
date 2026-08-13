@@ -29,7 +29,7 @@ const NewREMSApplication = () => {
 
   const licenses = applicationBase?.['application/licenses'] || []
   const forms = applicationBase?.['application/forms'] || []
-  const hasTerms = licenses.filter(l => l.is_data_access_terms).length > 0
+  const hasTerms = licenses.some(l => l.is_data_access_terms)
   const licenseCount = licenses.filter(l => !l.is_data_access_terms).length
 
   const getAcceptLabel = () => {
@@ -55,12 +55,12 @@ const NewREMSApplication = () => {
             id="accept-access-terms"
             data-testid="accept-access-terms"
             disabled={isSubmitting}
-            checked={acceptLicenses[null]}
-            onChange={e => setAcceptLicenses(null, e.target.checked)}
+            checked={!!acceptLicenses[-1]}
+            onChange={(e: any) => setAcceptLicenses(-1, e.target.checked)}
           />
           <CheckLabel htmlFor="accept-access-terms">{getAcceptLabel()}</CheckLabel>
         </AcceptItem>
-        <REMSForms applicationId={null} forms={forms} />
+        <REMSForms applicationId={-1} forms={forms} />
       </Wrapper>
     )
   }
@@ -71,7 +71,6 @@ const NewREMSApplication = () => {
       {content}
       <Buttons>
         <SaveButton
-          component={SaveButton}
           data-testid="submit-access-application"
           onClick={createApplication}
           disabled={!readyForSubmit(applicationBase)}
@@ -107,6 +106,7 @@ const Wrapper = styled.div`
   flex-shrink: 99999;
   flex-grow: 1;
 `
+
 const ErrorDiv = styled.div`
   display: flex;
   padding: 1rem;

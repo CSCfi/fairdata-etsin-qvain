@@ -1,4 +1,4 @@
-import axios, { type AxiosRequestConfig } from 'axios'
+import axios, { type AxiosRequestConfig, type AxiosResponse } from 'axios'
 
 import { observable, action, when } from 'mobx'
 
@@ -105,7 +105,7 @@ class AbortClient {
     }
   }
 
-  request({ method, url, data, tag, ...axiosConfig }: RequestConfig) {
+  request({ method, url, data, tag, ...axiosConfig }: RequestConfig): Promise<AxiosResponse<any>> {
     const controller = this.createController(tag)
     const { signal } = controller.abortController
     const { func, useData } = methodToFunc[method]

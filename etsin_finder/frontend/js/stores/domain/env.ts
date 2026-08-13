@@ -50,6 +50,7 @@ class Env {
 
   async fetchAppConfig() {
     const values = await importValuesAsync()
+    console.log(values)
     this.setMetaxV3Host(values.METAX_V3_DOMAIN_NAME, values.METAX_V3_PORT)
     this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
     this.setQvainHost(values.SERVER_QVAIN_DOMAIN_NAME)

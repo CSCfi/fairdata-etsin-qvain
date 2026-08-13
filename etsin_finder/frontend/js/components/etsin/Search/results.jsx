@@ -17,6 +17,7 @@ import NoResults from './noResults'
 import CurrentQuery from './currentQuery'
 
 import { useStores } from '@/stores/stores'
+import Loader from '@/components/general/Loader'
 
 const Results = () => {
   const [filterOpen, setFilterOpen] = useState(false)
@@ -81,7 +82,13 @@ const ResultsView = observer(({ filterOpen }) => {
       <Flex>
         <Filters filterOpen={filterOpen} />
         <ResultsCont>
-          {isLoading ? <Translate content="results.loadingDatasets" component="p" /> : <ResultsList />}
+          {isLoading ? (
+            <LoaderWrapper>
+              <Loader active />
+            </LoaderWrapper>
+          ) : (
+            <ResultsList />
+          )}
         </ResultsCont>
       </Flex>
       {!isLoading && <Pagination />}
@@ -118,6 +125,13 @@ Filters.propTypes = {
 Filters.defaultProps = {
   filterOpen: false,
 }
+
+const LoaderWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 12rem;
+`
 
 const Header = styled.div`
   display: flex;
@@ -165,6 +179,7 @@ const Sidebar = styled.div`
 `
 
 const ResultsCont = styled.div`
+  width: 100%;
   @media screen and (min-width: ${p => p.theme.breakpoints.lg}) {
     width: ${8 / 0.12}%;
     padding: 0 0 0 1em;

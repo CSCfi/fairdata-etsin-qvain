@@ -10,8 +10,9 @@ import ApplicationState from './REMSApplicationState'
 import REMSForms from './REMSForms'
 import REMSLicenseList from './REMSLicenseList'
 import REMSComments from './REMSComments'
+import { type Application } from '@/stores/view/etsin/etsin.rems'
 
-const REMSApplication = ({ application }) => {
+const REMSApplication = ({ application }: { application: Application }) => {
   const {
     Locale: { dateFormat, translate },
     Etsin: {
@@ -58,7 +59,6 @@ const REMSApplication = ({ application }) => {
       {!readOnly && (
         <Buttons>
           <SaveButton
-            component={SaveButton}
             data-testid="submit-access-application"
             onClick={() => submitApplication(application)}
             disabled={!readyForSubmit(application)}

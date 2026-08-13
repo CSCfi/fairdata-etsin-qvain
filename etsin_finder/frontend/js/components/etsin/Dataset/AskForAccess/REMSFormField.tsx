@@ -5,8 +5,21 @@ import { RequiredText } from '@/components/qvain/general/V2'
 import { NarrowTextArea, Required } from '@/components/qvain/general/V3'
 import { useStores } from '@/stores/stores'
 import { observer } from 'mobx-react'
+import type { ApplicationForm, ApplicationFormField } from '@/stores/view/etsin/etsin.rems'
 
-const REMSFormField = ({ applicationId = null, form, field, readOnly = false }) => {
+type REMSFORMFieldProps = {
+  applicationId: number
+  form: ApplicationForm
+  field: ApplicationFormField
+  readOnly: boolean
+}
+
+const REMSFormField = ({
+  applicationId = -1,
+  form,
+  field,
+  readOnly = false,
+}: REMSFORMFieldProps) => {
   const {
     Locale: { getValueTranslation },
     Etsin: {

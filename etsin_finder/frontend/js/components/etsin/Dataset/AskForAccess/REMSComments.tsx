@@ -4,9 +4,18 @@ import styled from 'styled-components'
 
 import { useStores } from '@/stores/stores'
 import { opacify } from 'polished'
-import PropTypes from 'prop-types'
+import type { Application, ApplicationEvent } from '@/stores/view/etsin/etsin.rems'
+import type Locale from '@/stores/view/locale'
 
-const translateEventComment = ({ event, wasApproved, translate }) => {
+const translateEventComment = ({
+  event,
+  wasApproved,
+  translate,
+}: {
+  event: ApplicationEvent
+  wasApproved: boolean
+  translate: Locale['translate']
+}) => {
   let comment = event['application/comment']
 
   // Translate special comment added by Metax.
@@ -27,7 +36,7 @@ const translateEventComment = ({ event, wasApproved, translate }) => {
   return comment
 }
 
-const REMSComments = ({ application }) => {
+const REMSComments = ({ application }: { application: Application }) => {
   const {
     Locale: { translate, dateFormat },
     Etsin: {
@@ -82,10 +91,6 @@ const REMSComments = ({ application }) => {
       <CommentList>{comments}</CommentList>
     </Comments>
   )
-}
-
-REMSComments.propTypes = {
-  application: PropTypes.object.isRequired,
 }
 
 const DateRow = styled.div`

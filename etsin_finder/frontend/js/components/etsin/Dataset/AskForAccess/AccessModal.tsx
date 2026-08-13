@@ -7,6 +7,7 @@ import AccessModalTabs from './AccessModalTabs'
 import NewREMSApplication from './NewREMSApplication'
 import REMSApplication from './REMSApplication'
 import ErrorBoundary from '@/components/general/errorBoundary'
+import styled from 'styled-components'
 
 const customStyles = {
   content: {
@@ -21,16 +22,24 @@ const customStyles = {
 
 const AccessModal = () => {
   const {
+    Locale: { translate },
     Etsin: {
       EtsinDataset: {
         dataset,
-        rems: { setShowModal, showModal, fetchApplicationBase, fetchApplications, tabs },
+        rems: {
+          setShowModal,
+          showModal,
+          fetchApplicationBase,
+          fetchApplications,
+          tabs,
+          applicationsError,
+        },
       },
       fetchData,
     },
   } = useStores()
 
-  const prevShowModal = useRef()
+  const prevShowModal = useRef<boolean>()
 
   useEffect(() => {
     // Fetch applications + application template when modal is opened
@@ -53,6 +62,15 @@ const AccessModal = () => {
   }
 
   const application = tabs.activeValue
+
+  let content
+  if (applicationsError) {
+    content = <ErrorDiv>{translate('dataset.access_modal.loadingFailed')}</ErrorDiv>
+  } else if (application) {
+    content = <REMSApplication application={application} key={application['application/id']} />
+  } else {
+    content = <NewREMSApplication />
+  }
   return (
     <Modal
       isOpen={showModal}
@@ -62,16 +80,21 @@ const AccessModal = () => {
     >
       <ErrorBoundary>
         <AccessModalTabs />
-        {application ? (
-          <REMSApplication application={application} key={application['application/id']} />
-        ) : (
-          <NewREMSApplication />
-        )}
+        {content}
       </ErrorBoundary>
     </Modal>
   )
 }
 
 AccessModal.propTypes = {}
+
+const ErrorDiv = styled.div`
+  display: flex;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.25em;
+  color: white;
+  background: ${p => p.theme.color.error};
+`
 
 export default observer(AccessModal)

@@ -9,6 +9,7 @@ interface ButtonProps {
   padding?: string
   margin?: string
   width?: string
+  minWidth?: string
   noPadding?: boolean
   noMargin?: boolean
   thin?: boolean
@@ -21,6 +22,7 @@ export const Button = withCustomProps(styled.button).attrs<ButtonProps>(props =>
   type: props.type || 'button',
 }))`
   cursor: pointer;
+  min-width: ${props => (props.minWidth ? props.minWidth : '')};
   width: ${props => (props.width ? props.width : '')};
   padding: ${props => (props.noPadding ? 0 : props.padding)};
   margin: ${props => (props.noMargin ? 0 : props.margin)};

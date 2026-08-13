@@ -2,12 +2,19 @@ import { useStores } from '@/stores/stores'
 import PropTypes from 'prop-types'
 import styled, { useTheme } from 'styled-components'
 
-import Translate from '@/utils/Translate'
 import PopUp from '@/components/etsin/general/popup'
 import { useState } from 'react'
 import Button from '@/components/general/Button'
+import type { Application } from '@/stores/view/etsin/etsin.rems'
+import type { TranslationKey } from '@/stores/view/locale'
+import type { Color } from '@/styles/theme'
 
-const states = {
+type StateInfo = {
+  key: TranslationKey
+  color: Color
+}
+
+const states: Record<string, StateInfo> = {
   'application.state/draft': {
     key: 'dataset.access_states.application_draft',
     color: 'yellow',
@@ -38,7 +45,7 @@ const states = {
   },
 }
 
-const ApplicationState = ({ application }) => {
+const ApplicationState = ({ application }: { application: Application }) => {
   const {
     Locale: { translate, dateFormat },
   } = useStores()
@@ -46,7 +53,7 @@ const ApplicationState = ({ application }) => {
   const [open, setOpen] = useState(false)
 
   const state = application['application/state']
-  let key = 'dataset.access_unavailable'
+  let key: TranslationKey = 'dataset.access_states.access_unavailable'
   let color = theme.color.gray
 
   const stateConfig = states[state]
@@ -82,8 +89,6 @@ const ApplicationState = ({ application }) => {
       popUp={popupContent}
       onRequestClose={() => setOpen(false)}
       align="right"
-      text={<Translate content={'qvain.datasets.share.members.projectHelp'} />}
-      fixed
     >
       <Button color={color} onClick={togglePopup}>
         {translate(key)}
