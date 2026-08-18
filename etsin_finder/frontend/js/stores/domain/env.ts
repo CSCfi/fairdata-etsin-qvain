@@ -10,6 +10,7 @@ import { etsinSearchPathname } from '@/utils/lumiAifEtsinSearch'
 import urls from '@/utils/urls'
 import { addHostToUrls } from '@/utils/addHostToUrls'
 import getOS, { type OSOption } from '@/utils/getOS'
+import queryParam from '@/utils/queryParam'
 
 async function importValuesAsync() {
   const response = await axios.get('/api/app_config')
@@ -50,7 +51,6 @@ class Env {
 
   async fetchAppConfig() {
     const values = await importValuesAsync()
-    console.log(values)
     this.setMetaxV3Host(values.METAX_V3_DOMAIN_NAME, values.METAX_V3_PORT)
     this.setEtsinHost(values.SERVER_ETSIN_DOMAIN_NAME)
     this.setQvainHost(values.SERVER_QVAIN_DOMAIN_NAME)
@@ -61,6 +61,15 @@ class Env {
     this.setSSOCookieDomain(values.SSO_COOKIE_DOMAIN)
     this.setSSOPrefix(values.SSO_PREFIX)
     this.setPackageSizeLimit(values.PACKAGE_SIZE_LIMIT)
+
+    // Enable new download service with ?use_download_service_v2=true,
+    // revert to default with ?use_download_service_v2=false
+    const useNewDL = queryParam(this.history.location, 'use_download_service_v2')?.toLowerCase()
+    if (useNewDL === 'true') {
+      globalThis.setFlag('DOWNLOAD_SHARES', true)
+    } else if (useNewDL === 'false') {
+      globalThis.setFlag('DOWNLOAD_SHARES', undefined)
+    }
     this.setAppConfigLoaded(true)
   }
 

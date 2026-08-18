@@ -22,7 +22,7 @@ declare global {
   function applyOverrides(): void
   function flagEnabled(flagPath: string): boolean
   function getFlags(): FlagValues
-  function setFlag(flagPath: string, value: boolean): void
+  function setFlag(flagPath: string, value: boolean | undefined): void
   function cleanupFlags(): void
   function resetFlags(): void
 }
@@ -57,7 +57,7 @@ class Flags {
 
     globalThis.getFlags = () => structuredClone(this.activeFlags)
 
-    globalThis.setFlag = action((flagPath, value) => {
+    globalThis.setFlag = action((flagPath: string, value: boolean | undefined) => {
       if (this.supportedFlags && !this.validateFlagPath(flagPath)) {
         console.warn(`unsupported flag: ${flagPath}`)
       }
@@ -159,20 +159,24 @@ class Flags {
   }
 
   @action setOverride(path: string, value: boolean | undefined) {
-    this.overrides[path] = value
+    if (value != null) {
+      this.overrides[path] = value
+    } else {
+      delete this.overrides[path]
+    }
     const pathPrefix = `${path}.`
 
     // replace child override values with parent
     for (const flagPath of Object.keys(this.overrides)) {
       if (flagPath.startsWith(pathPrefix)) {
-        this.overrides[flagPath] = undefined
+        delete this.overrides[flagPath]
       }
     }
 
     // replace child flag values with override
     for (const flagPath of Object.keys(this.flags)) {
       if (flagPath.startsWith(pathPrefix)) {
-        this.overrides[flagPath] = undefined
+        delete this.overrides[flagPath]
       }
     }
   }
