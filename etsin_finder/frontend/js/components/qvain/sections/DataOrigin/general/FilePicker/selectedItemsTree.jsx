@@ -15,6 +15,7 @@ export function SelectedItemsTree() {
     Item: SelectedItemsTreeItem,
     directoryView: SelectedItemsView,
     moreItemsLevel: 3.5,
+    dataCy: 'selected-items-tree',
   })
 
   const hasItems = root && SelectedItemsView.getItems(root).length > 0

@@ -71,7 +71,7 @@ export const AddItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => 
   const content = isDirectory(item) ? getDirectoryContent() : getFileContent()
 
   return (
-    <ItemRow isOpen={isOpen}>
+    <ItemRow isOpen={isOpen} data-cy={`add-items-row-${item.name}`}>
       <ItemSpacer level={level} />
       {content}
     </ItemRow>

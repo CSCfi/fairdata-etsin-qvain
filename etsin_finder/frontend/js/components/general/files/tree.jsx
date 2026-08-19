@@ -81,6 +81,7 @@ export const useRenderTree = (
     NoProjectHelp = () => null, // component shown when project root fails to load
     moreItemsLevel = 0, // indentation for the "Show All Items" button to account for space taken by buttons
     filterByService = 'ida', // show only items created by specific service
+    dataCy, // stable data-cy attribute for the rendered <Items> container
   },
   extraProps
 ) => {
@@ -105,7 +106,7 @@ export const useRenderTree = (
       return <NoProjectHelp />
     }
 
-    return <Items>{root && drawChildren(treeProps, root)}</Items>
+    return <Items data-cy={dataCy}>{root && drawChildren(treeProps, root)}</Items>
   }
 
   return { renderTree }

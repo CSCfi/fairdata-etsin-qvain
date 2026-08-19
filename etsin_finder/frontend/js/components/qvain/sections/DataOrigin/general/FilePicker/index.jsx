@@ -116,7 +116,7 @@ export const FilePickerBase = () => {
     selectedItems = <Loader active />
   } else if (haveItems) {
     selectedItems = (
-      <Box>
+      <Box data-cy="selected-items-box">
         <SelectedItems />
       </Box>
     )

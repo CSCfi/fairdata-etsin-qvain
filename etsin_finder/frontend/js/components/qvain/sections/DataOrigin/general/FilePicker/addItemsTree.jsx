@@ -42,6 +42,7 @@ const AddItemsTree = () => {
     directoryView: AddItemsView,
     moreItemsLevel: 1,
     Loader: CustomLoader,
+    dataCy: 'add-items-tree',
   })
   return renderTree()
 }

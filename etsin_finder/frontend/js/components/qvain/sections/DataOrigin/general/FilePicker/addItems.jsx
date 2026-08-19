@@ -54,7 +54,7 @@ export const AddFilesModal = ({ isOpen, onRequestClose }) => {
         <Translate component={Title} content="qvain.files.addItemsModal.title" />
         <ProjectSelector disabled={projectChosen} />
       </Header>
-      <TreeWrapper>
+      <TreeWrapper data-cy="add-items-tree-wrapper">
         <AddItemsTree onRequestClose={onRequestClose} />
       </TreeWrapper>
       <Translate component={HelpField} content={getDatasetEditingInfoTranslation()} />

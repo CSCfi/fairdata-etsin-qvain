@@ -93,7 +93,7 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
   const removeAriaLabel = canUndoRemove ? 'undoRemove' : 'remove'
 
   return (
-    <ItemRow isOpen={isOpen}>
+    <ItemRow isOpen={isOpen} data-cy={`selected-items-row-${name}`}>
       <EditDropdown item={item} parentArgs={parentArgs} />
       {canRemove || canUndoRemove ? (
         <Translate
@@ -102,6 +102,7 @@ const SelectedItemsTreeItemBase = ({ treeProps, item, level, parentArgs }) => {
           color={removeColor}
           onClick={removeAction}
           className="remove-item"
+          data-cy={`${removeAriaLabel}-${name}`}
           attributes={{ 'aria-label': `qvain.files.selected.buttons.${removeAriaLabel}` }}
           with={{ name }}
         />
