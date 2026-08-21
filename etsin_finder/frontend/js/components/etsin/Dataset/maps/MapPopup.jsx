@@ -23,7 +23,8 @@ const MapPopup = ({ spatial, selectedPoint }) => {
       spatial.reference?.pref_label ||
       spatial.geographic_name ||
       spatial.full_address ||
-      spatial.altitude_in_meters?.toString()
+      spatial.altitude_in_meters?.toString() ||
+      spatial.geolocations?.features.length > 0
     )
   ) {
     return null

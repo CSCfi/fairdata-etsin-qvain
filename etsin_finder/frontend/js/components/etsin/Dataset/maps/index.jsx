@@ -25,11 +25,10 @@ const Maps = props => {
     Matomo.recordEvent(`MAPS / ${params.identifier}`)
   }, [Accessibility, Matomo, params.identifier])
 
-  /*Values of each spatial record are reviewed. If any of the records contain
-  table data, the hasCellValues variable will be true, rendering the map
-  table. If no record has table data, the table will not be rendered. (See
-  the return part):
-  */
+  // Values of each spatial record are reviewed. If any of the records contain
+  // table data, the hasCellValues variable will be true, rendering the map
+  // table. If no record has table data, the table will not be rendered. (See
+  // the return part):
   const hasCellValues = datasetMetadata.spatial.some(
     spat =>
       spat.geographic_name ||
@@ -62,8 +61,8 @@ const Maps = props => {
           <td>
             {
               // Display if alt exists, otherwise display '-'
-              /*The value is converted to a string since in the case where
-              altitude is 0, it would otherwise evaluate to false: */
+              // The value is converted to a string since in the case where
+              // altitude is 0, it would otherwise evaluate to false:
               spatial.altitude_in_meters?.toString() ? (
                 <span>{spatial.altitude_in_meters}</span>
               ) : (
@@ -105,7 +104,11 @@ const Maps = props => {
 
       {/* The actual map */}
       {datasetMetadata.spatial.map(spatial => {
-        if (spatial.geolocations?.features.length > 0 || spatial.wkt?.length > 0 || spatial.reference?.pref_label) {
+        if (
+          spatial.geolocations?.features.length > 0 ||
+          spatial.wkt?.length > 0 ||
+          spatial.reference?.pref_label
+        ) {
           return (
             <SpatialMap
               key={`${spatial.wkt}-${spatial.reference?.url}-${spatial.geographic_name}`}

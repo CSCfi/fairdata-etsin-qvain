@@ -68,19 +68,22 @@ const Agent = ({ agent, first, inline, popupAlign }) => {
   )
 }
 
+// Most of the styles are applied from the theme -> default Etsin and
+// Lumi-AIF Etsin use different visual designs:
 const InlineTransparentLink = styled(TransparentLink)`
   display: inline;
   color: ${p => p.theme.ui.dataset.agent.linkColor};
-  border-radius: 0.2em;
-  padding: 0.1em 0.25em;
+  border-radius: ${p => p.theme.ui.dataset.agent.linkBorderRadius};
+  padding: ${p => p.theme.ui.dataset.agent.linkPadding};
   &.active {
-    background-color: ${p => p.theme.ui.dataset.agent.rowHoverBackground};
-    color: ${p => p.theme.ui.dataset.agent.rowHoverColor};
-    border: ${p => p.theme.ui.dataset.agent.rowHoverBorder};
+    background-color: ${p => p.theme.ui.dataset.agent.linkActiveBackground};
+    color: ${p => p.theme.ui.dataset.agent.linkActiveColor};
+    border: ${p => p.theme.ui.dataset.agent.linkActiveBorder};
     text-decoration: none;
     &:hover,
     &:focus {
-      background-color: transparent;
+      background-color: ${p => p.theme.ui.dataset.agent.linkActiveHoverBackground};
+      text-decoration: ${p => p.theme.ui.dataset.agent.linkActiveHoverTextDecoration};
     }
   }
 `

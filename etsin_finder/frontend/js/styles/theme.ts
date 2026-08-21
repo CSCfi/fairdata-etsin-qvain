@@ -2,6 +2,7 @@ import { merge, cloneDeep } from 'lodash-es'
 
 import { getEtsinPortalConfig } from '@/etsinPortals/registry'
 import lumiAifSearchHeroImage from '@/assets/images/lumi-aif-search-hero.png'
+import { darken } from 'polished'
 
 /** Original Fairdata light gray; used where LUMI theme overrides `lightgray` but pills need the base tone. */
 export const ETSIN_BASE_LIGHTGRAY = 'rgb(231, 233, 237)'
@@ -128,9 +129,13 @@ const defaultUi = {
     },
     agent: {
       linkColor: '#025B96',
-      rowHoverBackground: 'transparent',
-      rowHoverColor: '#025B96',
-      rowHoverBorder: 'none',
+      linkBorderRadius: '0',
+      linkPadding: '0',
+      linkActiveBackground: 'transparent',
+      linkActiveColor: '#025B96',
+      linkActiveBorder: 'none',
+      linkActiveHoverBackground: 'transparent',
+      linkActiveHoverTextDecoration: 'underline',
     },
   },
 }
@@ -257,9 +262,16 @@ const lumiUi = {
     },
     agent: {
       linkColor: '#2c6789',
-      rowHoverBackground: '#2c6789',
-      rowHoverColor: '#ffffff',
-      rowHoverBorder: '1px solid #2c6789',
+      linkBorderRadius: '0.2em',
+      linkPadding: '0.1em 0.25em',
+      linkActiveBackground: '#2c6789',
+      linkActiveColor: '#ffffff',
+      linkActiveBorder: '1px solid #2c6789',
+      // #2c6789 is Lumi-AIF's primary color (see line 334);
+      // rowActiveHoverBackground is derived the same way as in InvertedLink
+      // (.../etsin/general/button.jsx) when no color prop is passed:
+      linkActiveHoverBackground: darken(0.1, '#2c6789'),
+      linkActiveHoverTextDecoration: 'none',
     },
   },
 }
