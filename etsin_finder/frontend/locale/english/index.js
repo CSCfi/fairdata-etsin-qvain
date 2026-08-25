@@ -178,6 +178,8 @@ const english = {
           'Data downloads are temporarily unavailable due to a maintenance break. More information about maintenance breaks: <a href="https://www.fairdata.fi/en/maintenance/">https://www.fairdata.fi/en/maintenance/</a>',
         unknownError:
           'There was an error using the download service. If the problem persists check our <a href="https://www.fairdata.fi/en/maintenance/">maintenance page</a> for more information.',
+        datasetDownloadNotAvailable:
+          'The dataset is not currently available for download. Please try again later.',
       },
       manualDownload: {
         title: 'Other download options',

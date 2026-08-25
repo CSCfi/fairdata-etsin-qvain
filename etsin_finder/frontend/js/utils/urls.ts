@@ -81,6 +81,7 @@ export default {
       `/v3/datasets/${dataset}/rems-application-counts`,
     downloadAuthorize: () => '/v3/download/authorize',
     downloadStatus: () => '/v3/download/status',
+    downloadDatasetAvailable: (dataset: string) => `/v3/download/available/${dataset}`,
     remsApplications: () => `/v3/rems/applications?roles=handler`,
     remsApplicationsTodo: () => `/v3/rems/applications/todo`,
     remsApplicationsHandled: () => `/v3/rems/applications/handled`,

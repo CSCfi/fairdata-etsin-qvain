@@ -17,7 +17,7 @@ async function importValuesAsync() {
   return response.data
 }
 
-class Env {
+export class Env {
   Flags: Flags
   history: RouterStore
 

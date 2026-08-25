@@ -65,6 +65,7 @@ class Etsin {
     return (
       !this.isLoading.packages &&
       this.EtsinDataset.isDownloadAllowed &&
+      this.EtsinDataset.isDatasetDownloadAvailable &&
       !this.filesProcessor.Packages.error
     )
   }

@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Translate from '@/utils/Translate'
 import { useStores } from '@/stores/stores'
-import { ACCESS_TYPE_URL } from '@/utils/constants'
+import { ACCESS_TYPE_URL, type AccessTypeCode } from '@/utils/constants'
 import withCustomProps from '@/utils/withCustomProps'
+import type { Color } from '@/styles/theme'
+import type { StringTranslationKey } from '@/stores/view/locale'
 
-const ACCESS_DENIED_MESSAGES = {
+const ACCESS_DENIED_MESSAGES: Partial<Record<AccessTypeCode, StringTranslationKey>> = {
   EMBARGO: 'dataset.access_rights_description.embargo',
   LOGIN: 'dataset.access_rights_description.login',
   PERMIT: 'dataset.access_rights_description.permit',
@@ -16,13 +18,15 @@ const ErrorMessage = () => {
   const {
     Etsin: {
       filesProcessor: { Packages },
-      EtsinDataset: { accessRights, isDownloadAllowed },
+      EtsinDataset: { accessRights, isDownloadAllowed, isDatasetDownloadAvailable },
+      downloadSharesEnabled,
     },
+    Locale: { translate },
   } = useStores()
 
   const [showDetails, setShowDetails] = useState(false)
 
-  const { error } = Packages
+  const error: any = Packages.error
 
   const accessType = accessRights?.access_type?.url
 
@@ -30,14 +34,14 @@ const ErrorMessage = () => {
     setShowDetails(false)
   }, [error])
 
-  if (!error && isDownloadAllowed) {
+  if (!error && isDownloadAllowed && isDatasetDownloadAvailable) {
     return null
   }
 
-  let errorColor = null
+  let errorColor: Color | undefined
   let allowDetails = true
 
-  const statusCodeToErrorMessage = status => {
+  const statusCodeToErrorMessage = (status: number) => {
     switch (status) {
       case 500: {
         return 'unknownError'
@@ -51,11 +55,14 @@ const ErrorMessage = () => {
     }
   }
 
-  let summaryTranslation = `dataset.dl.errors.${statusCodeToErrorMessage(error?.response?.status)}`
+  let summaryTranslation: StringTranslationKey | undefined =
+    `dataset.dl.errors.${statusCodeToErrorMessage(error?.response?.status)}`
 
   if (!isDownloadAllowed) {
-    const reason = Object.keys(ACCESS_TYPE_URL).find(key => ACCESS_TYPE_URL[key] === accessType)
-    if (reason in ACCESS_DENIED_MESSAGES) {
+    const reason = Object.entries(ACCESS_TYPE_URL).find(
+      ([, value]) => value === accessType
+    )?.[0] as AccessTypeCode | undefined
+    if (reason && reason in ACCESS_DENIED_MESSAGES) {
       summaryTranslation = ACCESS_DENIED_MESSAGES[reason]
       allowDetails = false
       errorColor = 'primary'
@@ -64,8 +71,15 @@ const ErrorMessage = () => {
     }
   }
 
-  const detailAction = `error.details.${showDetails ? 'hideDetails' : 'showDetails'}`
+  if (downloadSharesEnabled && !isDatasetDownloadAvailable) {
+    summaryTranslation = 'dataset.dl.errors.datasetDownloadNotAvailable'
+    allowDetails = false
+    errorColor = 'primary'
+  }
 
+  const detailAction: StringTranslationKey = showDetails
+    ? 'error.details.hideDetails'
+    : 'error.details.showDetails'
   const message = `${error?.name}: ${error?.message}`
   const response = error?.request?.responseText
   return (
@@ -76,11 +90,9 @@ const ErrorMessage = () => {
           <>
             {showDetails && message && <MessagePart>{message}</MessagePart>}
             {showDetails && response && <MessagePart>{response}</MessagePart>}
-            <Translate
-              component={DetailsButton}
-              content={detailAction}
-              onClick={() => setShowDetails(!showDetails)}
-            />
+            <DetailsButton onClick={() => setShowDetails(!showDetails)}>
+              {translate(detailAction)}
+            </DetailsButton>
           </>
         )}
       </Message>
@@ -110,7 +122,11 @@ const Message = styled.div`
   margin: 1rem;
 `
 
-const ErrorDiv = withCustomProps(styled.div).attrs({
+type ErrorDivProps = {
+  errorColor?: Color
+}
+
+const ErrorDiv = withCustomProps(styled.div).attrs<ErrorDivProps>({
   className: 'error',
 })`
   display: flex;

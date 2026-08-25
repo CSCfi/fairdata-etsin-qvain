@@ -178,6 +178,8 @@ const finnish = {
           'Tiedostojen lataus on väliaikaisesti pois käytöstä huoltokatkon takia. Lisätietoa huoltokatkoista: <a href="https://www.fairdata.fi/huoltokatko/">https://www.fairdata.fi/huoltokatko/</a>',
         unknownError:
           'Latauspalvelun käytössä tapahtui virhe. Jos virhetilanne jatkuu, löydät tarkemmat tiedot <a href="https://www.fairdata.fi/huoltokatko/">huoltokatko</a>-sivultamme.',
+        datasetDownloadNotAvailable:
+          'Aineisto ei ole tällä hetkellä ladattavissa. Ole hyvä ja yritä myöhemmin uudelleen.',
       },
       manualDownload: {
         title: 'Muut latausvaihtoehdot',

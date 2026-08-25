@@ -13,7 +13,7 @@ import { Header, HeaderButton, HeaderStats, HeaderTitle } from '../common/dataHe
 import Info from '../info'
 import getDownloadAction from './downloadActions'
 import getDownloadActionV2, { type DownloadAction } from './downloadActionsV2'
-import ErrorMessage from './errorMessage'
+import ErrorMessage from './ErrorMessage'
 import Tree from './fileTree'
 import ManualDownloadModal from './manualDownloadModal'
 import ManualDownloadModalV2 from './ManualDownloadModalV2'

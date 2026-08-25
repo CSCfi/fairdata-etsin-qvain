@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, runInAction } from 'mobx'
 import {
   DATA_CATALOG_IDENTIFIER,
   ACCESS_TYPE_URL,
@@ -7,14 +7,22 @@ import {
 import Cite from './cite'
 import EtsinDatasetRems from './etsin.rems'
 import idnToLink from '@/utils/idnToLink'
+import AbortClient from '@/utils/AbortClient'
 
 class EtsinDatasetV3 {
+  /**
+   * @import {Env} from '@/stores/domain/env.ts'
+   * @type {Env}
+   */
+  Env
+
   constructor({ Access, Env, Locale }) {
     this.Access = Access
     this.Locale = Locale
     this.Env = Env
     this.citations = new Cite({ Stores: this, Locale })
     this.rems = new EtsinDatasetRems({ EtsinDataset: this, Env })
+    this.client = new AbortClient()
   }
 
   /** @type {any} */
@@ -397,6 +405,41 @@ class EtsinDatasetV3 {
 
   @computed get hasMapData() {
     return Boolean(this.datasetMetadata?.spatial.length)
+  }
+
+  /** @type {boolean | any } */
+  @observable accessor downloadAvailable = null
+
+  /** @type {boolean  } */
+  @observable accessor fetchingIsDownloadAvailable = false
+
+  @action.bound
+  async fetchIsDownloadAvailable() {
+    this.fetchingIsDownloadAvailable = true
+    try {
+      await this.client.get(this.Env.metaxUrls.downloadDatasetAvailable(this.identifier))
+      runInAction(() => {
+        this.downloadAvailable = true
+      })
+    } catch {
+      runInAction(() => {
+        this.downloadAvailable = false
+      })
+    }
+  }
+
+  /**
+   * Check if download service has a share available for the dataset.
+   */
+  @computed get isDatasetDownloadAvailable() {
+    if (this.Env.Flags.flagEnabled('DOWNLOAD_SHARES')) {
+      return true // assume true for old download service
+    }
+
+    if (!this.fetchingIsDownloadAvailable) {
+      this.fetchIsDownloadAvailable()
+    }
+    return this.downloadAvailable
   }
 
   @computed get isDownloadAllowed() {
