@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event'
 
 import etsinTheme from '@/styles/theme'
 import { StoresProvider } from '@/stores/stores'
-import LoginErrorModal from '@/layout/LoginErrorModal'
+import LoginErrorModal from '@/Layout/LoginErrorModal'
 import { buildStores } from '@/stores'
 
 const mockAdapter = new MockAdapter(axios)

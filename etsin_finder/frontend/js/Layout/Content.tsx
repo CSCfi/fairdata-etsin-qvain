@@ -1,16 +1,15 @@
-import { useEffect } from 'react'
+import { useEffect, type Ref } from 'react'
 import { Route, Routes, Navigate } from 'react-router'
 import { observer } from 'mobx-react'
-import PropTypes from 'prop-types'
 import { Home, Search, Dataset, Qvain, QvainDatasetsV2, Retriever } from '../routes'
 import ErrorPage from '@/components/general/errorpage'
 
 import QvainLandingPage from '@/components/qvain/views/landingPage'
 import { useStores } from '@/utils/stores'
-import LoggedInRoute from './loggedInRoute'
+import LoggedInRoute from './LoggedInRoute'
 import { LumiAifDatasetsCanonicalRedirect } from '@/etsinPortals'
 
-const Content = ({ contentRef }) => {
+const Content = ({ contentRef }: { contentRef: Ref<HTMLElement> }) => {
   const {
     Auth,
     Env: { isQvain, isEtsin, isBrandedEtsinPortal, isRetriever, separateQvain, getQvainUrl, Flags },
@@ -41,7 +40,7 @@ const Content = ({ contentRef }) => {
 
   return (
     <main className="content">
-      <span ref={contentRef} tabIndex="-1" />
+      <span ref={contentRef} tabIndex={-1} />
       <Routes>
         {separateQvain && <Route path="/qvain" element={<NavigateToQvain />} />}
         {separateQvain && <Route path="/qvain/*" element={<NavigateToQvain />} />}
@@ -50,9 +49,7 @@ const Content = ({ contentRef }) => {
           <Route path="/datasets/:query?" key="search" element={<EtsinSearchRoute />} />,
           <Route path="/dataset/:identifier/*" key="dataset" element={<Dataset />} />,
         ]}
-        { isRetriever &&
-           <Route path="/" element={<Retriever />}/>
-        }
+        {isRetriever && <Route path="/" element={<Retriever />} />}
         {maintenance && (
           <Route path={getQvainUrl('')}>
             <QvainLandingPage />
@@ -74,14 +71,10 @@ const Content = ({ contentRef }) => {
             </LoggedInRoute>
           }
         />
-        <Route path="*" element={<ErrorPage error={{ type: 'error' }} />} />
+        <Route path="*" element={<ErrorPage errors={[{ translation: 'error.notFound' }]} />} />
       </Routes>
     </main>
   )
-}
-
-Content.propTypes = {
-  contentRef: PropTypes.object.isRequired,
 }
 
 export default observer(Content)

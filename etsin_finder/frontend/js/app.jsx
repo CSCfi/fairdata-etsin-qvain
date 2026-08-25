@@ -9,7 +9,7 @@ import { fi, enGB as en } from 'date-fns/locale'
 import EnvClass from '@/stores/domain/env'
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
-import Layout from './layout'
+import Layout from './Layout'
 
 import '../fairdata-ui/footer.css'
 import 'react-datepicker/dist/react-datepicker.css'

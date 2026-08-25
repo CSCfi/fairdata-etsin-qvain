@@ -5,6 +5,7 @@ import Translate from '@/utils/Translate'
 import Modal from '../components/general/modal'
 import { useStores } from '../stores/stores'
 import { LOGINERRORS } from '@/utils/constants'
+import type { StringTranslationKey } from '@/stores/view/locale'
 
 const customStyles = {
   content: {
@@ -25,8 +26,7 @@ const LoginErrorModal = () => {
     return null
   }
 
-
-  let error
+  let error: StringTranslationKey | undefined
   if (loginError == LOGINERRORS.MISSING_FAIRDATA_USER) {
     error = 'loginError.missingUserName'
   } else if (loginError == LOGINERRORS.MISSING_ORGANIZATION) {

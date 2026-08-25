@@ -3,7 +3,7 @@ import { render } from '@testing-library/react'
 
 import { buildStores } from '@/stores'
 import { StoresProvider } from '@/stores/stores'
-import Footer from '../../../../js/layout/footer'
+import Footer from '../../../../js/Layout/Footer'
 
 describe('Footer', () => {
   it('should be accessible', async () => {

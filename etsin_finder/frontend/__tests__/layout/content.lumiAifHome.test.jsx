@@ -9,7 +9,7 @@ import { createRef } from 'react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import { ThemeProvider } from 'styled-components'
 
-import Content from '@/layout/content'
+import Content from '@/Layout/Content'
 import { buildStores } from '@/stores'
 import EnvClass from '@/stores/domain/env'
 import { StoresProvider } from '@/stores/stores'

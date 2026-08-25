@@ -1,27 +1,31 @@
 import { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import Translate from '@/utils/Translate'
 
 import HeroBanner from '@/components/general/hero'
 import { useStores } from '@/stores/stores'
+import type { StringTranslationKey } from '@/stores/view/locale'
 
-function Error({ translation }) {
+type ErrorProps = {
+  translation: StringTranslationKey
+}
+
+function ErrorSection({ translation = 'error.undefined' }: Readonly<ErrorProps>) {
+  const {
+    Locale: { translate },
+  } = useStores()
   return (
     <section className="container text-center" aria-live="polite">
-      <Translate content={translation} component="h1" />
+      <h1>{translate(translation)}</h1>
     </section>
   )
 }
 
-Error.propTypes = {
-  translation: PropTypes.string,
+type ErrorPageProps = {
+  errors: ErrorProps[]
+  loginRequired: boolean
 }
 
-Error.defaultProps = {
-  translation: 'error.undefined',
-}
-
-function ErrorPage({ errors, loginRequired }) {
+function ErrorPage({ errors, loginRequired = false }: Readonly<ErrorPageProps>) {
   const {
     Accessibility: { handleNavigation },
   } = useStores()
@@ -39,7 +43,7 @@ function ErrorPage({ errors, loginRequired }) {
   return (
     <HeroBanner className="hero-primary hero.full">
       {errors.map(error => (
-        <Error key={error.translation} translation={error.translation} />
+        <ErrorSection key={error.translation} translation={error.translation} />
       ))}
     </HeroBanner>
   )

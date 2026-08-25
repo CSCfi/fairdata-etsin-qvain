@@ -5,20 +5,22 @@ import ErrorBoundary from '../components/general/errorBoundary'
 import AnnounceAndReset from '../components/general/announceAndReset'
 import SkipToContent from '../components/general/skipToContent'
 import Header from '../components/header'
-import Footer from './footer'
-import Content from './content'
+import Footer from './Footer'
+import Content from './Content'
 import QvainHeader from '../components/qvain/general/header'
 import { useStores } from '../stores/stores'
 import LoginErrorModal from './LoginErrorModal'
 
 const Layout = () => {
-  const content = useRef()
+  const content = useRef<HTMLElement>(null)
   const {
     Env: { isQvain },
   } = useStores()
 
   const focusContent = () => {
-    content.current.focus()
+    if (content.current) {
+      content.current.focus()
+    }
   }
 
   return (
