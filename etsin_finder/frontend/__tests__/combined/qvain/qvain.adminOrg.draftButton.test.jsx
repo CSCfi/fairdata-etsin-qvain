@@ -61,7 +61,7 @@ const renderQvain = async (overrides = {}, { initialPath } = {}) => {
     metadata_owner: {
       ...dataset.metadata_owner,
       admin_organization: 'org-1',
-      ...(overrides.metadata_owner || {}),
+      ...overrides.metadata_owner,
     },
   }
   const publishedDataset = { ...metaxDataset, state: 'published' }

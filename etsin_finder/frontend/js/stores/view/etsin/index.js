@@ -182,7 +182,7 @@ class Etsin {
       })
     )
 
-    const promises = [...this.requests.dataset.map(r => r.promise)]
+    const promises = this.requests.dataset.map(r => r.promise)
     return Promise.all(promises).finally(() => {
       this.setLoadingOff('dataset')
     })

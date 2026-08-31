@@ -34,7 +34,7 @@ vi.mock('@/utils/Translate', () => ({
 const createStores = (overrides = {}) => {
   const matomo = {
     recordEvent: vi.fn(),
-    ...(overrides.Matomo || {}),
+    ...overrides.Matomo,
   }
 
   const qvainDefaults = {
@@ -46,12 +46,12 @@ const createStores = (overrides = {}) => {
       prevalidate: vi.fn(),
       isDraftButtonDisabled: false,
       isPublishButtonDisabled: false,
-      ...(overrides.Qvain?.Submit || {}),
+      ...overrides.Qvain?.Submit,
     },
     original: {
       identifier: '123',
       metadata_owner_admin_org: 'org-1',
-      ...(overrides.Qvain?.original || {}),
+      ...overrides.Qvain?.original,
     },
     readonly: false,
     hasApprovedREMSApplications: false,
@@ -61,21 +61,21 @@ const createStores = (overrides = {}) => {
     AdminOrg: {
       selectedAdminOrg: { value: 'org-1' },
       adminOrgs: [],
-      ...(overrides.Qvain?.AdminOrg || {}),
+      ...overrides.Qvain?.AdminOrg,
     },
-    ...(overrides.Qvain || {}),
+    ...overrides.Qvain,
   }
 
   const stores = {
     Qvain: qvainDefaults,
     Env: {
       getQvainUrl: path => path,
-      ...(overrides.Env || {}),
+      ...overrides.Env,
     },
     QvainDatasets: {
       publishedDataset: null,
       setPublishedDataset: vi.fn(),
-      ...(overrides.QvainDatasets || {}),
+      ...overrides.QvainDatasets,
     },
     Matomo: matomo,
     Locale: {
@@ -93,9 +93,9 @@ const createStores = (overrides = {}) => {
             return key
         }
       },
-      ...(overrides.Locale || {}),
+      ...overrides.Locale,
     },
-    ...(overrides.rest || {}),
+    ...overrides.rest,
   }
 
   return stores

@@ -34,7 +34,7 @@ stores.DatasetQuery.getData()
 vi.stubGlobal('navigator', { clipboard: { writeText: vi.fn() } })
 
 describe('Etsin manual download options modal', () => {
-  let wrapper, helper
+  let helper
 
   const successUrlGetter = () => ({
     url: 'https://example.com/download',
@@ -68,9 +68,6 @@ describe('Etsin manual download options modal', () => {
   }
 
   afterEach(() => {
-    if (wrapper && wrapper.length > 0) {
-      wrapper.unmount?.()
-    }
     if (helper) {
       helper.remove()
       helper = null

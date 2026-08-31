@@ -14,7 +14,6 @@ import { decoratorPreset } from './common.config'
 // Any files in ./static are copied to ./build.
 
 export default defineConfig(({ command, mode }) => {
-  const isProd = mode == 'production'
   const isDev = mode == 'development'
   const isServing = command == 'serve'
 

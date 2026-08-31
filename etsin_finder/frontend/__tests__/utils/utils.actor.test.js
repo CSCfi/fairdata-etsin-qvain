@@ -1,7 +1,7 @@
 import actorFunc from '../../js/components/qvain/utils/actor'
 
 describe('Utils: actor', () => {
-  let returnValue, actor, language
+  let returnValue, actor
 
   describe('when calling with actor that has other than array as label', () => {
     beforeEach(() => {
@@ -9,7 +9,7 @@ describe('Utils: actor', () => {
         label: 'label',
       }
 
-      returnValue = actorFunc(actor, language)
+      returnValue = actorFunc(actor, undefined)
     })
 
     test('should return actor.label', () => {

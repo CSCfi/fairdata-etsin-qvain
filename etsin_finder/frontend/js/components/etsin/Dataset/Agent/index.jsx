@@ -34,7 +34,7 @@ const Agent = ({ agent, first, inline, popupAlign }) => {
   if (agent.person) {
     names = [nameTranslation]
   } else {
-    names = [...orgs.map(org => org.pref_label).map(orgName => getValueTranslation(orgName))]
+    names = orgs.map(org => org.pref_label).map(orgName => getValueTranslation(orgName))
   }
 
   return (
