@@ -432,7 +432,7 @@ class EtsinDatasetV3 {
    * Check if download service has a share available for the dataset.
    */
   @computed get isDatasetDownloadAvailable() {
-    if (this.Env.Flags.flagEnabled('DOWNLOAD_SHARES')) {
+    if (!this.Env.Flags.flagEnabled('DOWNLOAD_SHARES')) {
       return true // assume true for old download service
     }
 
