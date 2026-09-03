@@ -32,15 +32,14 @@ index_views = Blueprint("index_views", __name__)
 
 # Matches dataset page paths and captures the dataset UUID.
 # In the first parameter string:
-# - ^dataset/     -> path must start with "dataset/"
-# - ([0-9a-f-]+)  -> capture group 1 => UUID (hexadecimal digits and hyphens
-#                    allowed)
-# - (?:/(?:...))? -> non-capturing groups (?:) => optional subpage suffix:
-#                    /maps, /events or /data
-# - $             -> nothing is allowed after the optional suffix
+# - ^dataset/         -> path must start with "dataset/"
+# - ([0-9a-f-]+)      -> capture group 1 => UUID (hexadecimal digits and
+#                        hyphens allowed)
+# - (?:/:[0-9a-f-]+)? -> non-capturing group (?:) => optional subpage suffix
+#                        for example /:abc-123
+# - $                 -> nothing is allowed after the optional suffix
 # In second parameter:
-# re.IGNORECASE   -> case-insensitive, e.g. /Dataset/ and /MAPS also match
-# Examples: dataset/<UUID> or dataset/<UUID>/maps
+# re.IGNORECASE       -> case-insensitive, e.g. /Dataset/<UUID> also matches
 DATASET_PATH_REGEX = re.compile(
     r"^dataset/([0-9a-f-]+)(?:/:[0-9a-f-]+)?$", re.IGNORECASE
 )
@@ -114,9 +113,9 @@ def collect_manifest_chunks(
         chunk = manifest.get(chunk_name)
 
         if is_entry:
-            module_chunks.append(f'{prefix}{chunk["file"]}')
+            module_chunks.append(f"{prefix}{chunk['file']}")
         else:
-            preload_chunks.append(f'{prefix}{chunk["file"]}')
+            preload_chunks.append(f"{prefix}{chunk['file']}")
 
         # Collect css
         for css in chunk.get("css", []):

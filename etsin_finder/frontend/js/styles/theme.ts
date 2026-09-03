@@ -268,7 +268,7 @@ const lumiUi = {
       linkActiveColor: '#ffffff',
       linkActiveBorder: '1px solid #2c6789',
       // #2c6789 is Lumi-AIF's primary color (see line 334);
-      // rowActiveHoverBackground is derived the same way as in InvertedLink
+      // linkActiveHoverBackground is derived the same way as in InvertedLink
       // (.../etsin/general/button.jsx) when no color prop is passed:
       linkActiveHoverBackground: darken(0.1, '#2c6789'),
       linkActiveHoverTextDecoration: 'none',
