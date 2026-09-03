@@ -18,9 +18,9 @@ const Login = ({
   borderColor = undefined,
   loginThroughService = '',
 }: {
-  margin: string
-  width: string
-  fontSize: string
+  margin?: string
+  width?: string
+  fontSize?: string
   borderColor?: Color
   loginThroughService: string
 }) => {

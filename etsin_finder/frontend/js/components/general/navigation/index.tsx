@@ -1,11 +1,17 @@
 import { NavLink } from 'react-router'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import PropTypes from 'prop-types'
 import Translate from '@/utils/Translate'
 import { useStores } from '../../../utils/stores'
+import type { RouteDetails } from '@/etsinPortals/navRoutes'
+import type { TranslationKey } from '@/stores/view/locale'
 
-const Navi = ({ routes }) => {
+
+type NaviProps = {
+  routes: RouteDetails[]
+}
+
+function Navi ({ routes }: NaviProps) {
   const {
     Accessibility: { announce },
     Locale: { translate },
@@ -17,28 +23,15 @@ const Navi = ({ routes }) => {
       end={route.end}
       to={route.path}
       onPointerOver={() => {
-        if (route.loadableComponent) {
-          route.loadableComponent.preload()
-        }
+          route.loadableComponent?.preload()
       }}
       onClick={() => {
-        announce(translate('changepage', { page: translate(route.label) }))
+        announce(translate('changepage', { page: translate(route.label as TranslationKey) }))
       }}
     >
-      <Translate content={route.label} />
+      <Translate content={route.label as TranslationKey} />
     </NavItem>
   ))
-}
-
-Navi.propTypes = {
-  routes: PropTypes.arrayOf(
-    PropTypes.shape({
-      loadableComponent: PropTypes.elementType,
-      label: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
-      end: PropTypes.bool,
-    })
-  ).isRequired,
 }
 
 export default observer(Navi)

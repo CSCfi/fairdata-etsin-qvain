@@ -41,6 +41,10 @@ export const FAIRDATA_WEBSITE_URL = {
     FI: 'https://www.fairdata.fi/qvain/',
     EN: 'https://www.fairdata.fi/en/qvain/',
   },
+  LUMIAIF: {
+    FI: 'https://docs.lumi-supercomputer.eu/laif/data/daas-guide/',
+    EN: 'https://docs.lumi-supercomputer.eu/laif/data/daas-guide/',
+  }
 }
 
 export const LUMI_AIF_PORTAL_URL = 'https://lumi-ai-factory.eu/'

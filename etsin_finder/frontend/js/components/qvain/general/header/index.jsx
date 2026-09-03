@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import QvainLogo from './qvainLogo'
 import Settings from '../../../general/navigation/settings'
 import Navi from '../../../general/navigation'
-import MobileNavi from '../../../general/navigation/mobileNavi'
+import MobileNavi from '../../../general/navigation/MobileNavi'
 import LoginButton from '../../../general/navigation/LoginButton'
 import { FAIRDATA_WEBSITE_URL } from '../../../../utils/constants'
 import Header, { NaviContainer, Right } from '../../../general/header'
@@ -48,12 +48,14 @@ const QvainHeader = () => {
       label: 'qvain.nav.home',
       path: '/',
       end: true,
+      help: 'QVAIN'
     },
     {
       loadableComponent: Qvain,
       label: getLabel(),
       path: '/dataset',
       end: false,
+      help: 'QVAIN'
     },
   ]
 

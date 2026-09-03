@@ -1,4 +1,4 @@
-
+import React from "react"
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import Translate from '@/utils/Translate'
@@ -11,7 +11,7 @@ import LoginButton from '../general/navigation/LoginButton'
 import EtsinLogo from './etsinLogo'
 import Settings from '../general/navigation/settings'
 import Navi from '../general/navigation/index'
-import MobileNavi from '../general/navigation/mobileNavi'
+import MobileNavi from '../general/navigation/MobileNavi'
 import Header, { NaviContainer, Right } from '../general/header'
 import { MobileOnly, DesktopOnly } from '../general/header/mediaHelpers'
 import { useStores } from '@/stores/stores'
@@ -27,8 +27,8 @@ const BrandLogos = styled.div`
   gap: 0.75rem;
 `
 
-const EtsinLogoContainer = styled.div`
-  ${p => (p.$lower ? 'margin-top: 0.25rem;' : '')}
+const EtsinLogoContainer = styled.div<{$lower : boolean}>`
+  ${(p) => (p.$lower ? 'margin-top: 0.25rem;' : '')}
 `
 
 const EtsinHeader = () => {
@@ -38,9 +38,9 @@ const EtsinHeader = () => {
     Locale: { translate, lang, currentLang },
   } = useStores()
   const routes = getEtsinNavRoutesForPortal(Env.etsinPortal)
-  const helpUrl = lang === 'fi' ? FAIRDATA_WEBSITE_URL.ETSIN.FI : FAIRDATA_WEBSITE_URL.ETSIN.EN
+  const helpUrl = lang === 'fi' ? FAIRDATA_WEBSITE_URL[routes[0].help].FI : FAIRDATA_WEBSITE_URL[routes[0].help].EN
 
-  const mobileSettingsExtra = (
+  const mobileSettingsExtra : React.ReactElement = (
     <QvainLink to={Env.getQvainUrl('')}>
       <Translate content="nav.addDataset" />
     </QvainLink>
@@ -62,7 +62,7 @@ const EtsinHeader = () => {
         <Navi routes={routes} />
       </NaviContainer>
       <Right>
-        <Settings helpUrl={helpUrl} loginThroughService="etsin">
+        <Settings helpUrl={helpUrl}>
           <MaybeExternalLink to={Env.getQvainUrl('')} onClick={registerMatomo}>
             <Translate content="nav.addDataset" />
           </MaybeExternalLink>

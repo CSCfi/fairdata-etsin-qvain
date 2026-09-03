@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import { NavLink } from 'react-router'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -11,7 +10,18 @@ import LoginButton from './LoginButton'
 import { Link } from '../Button'
 import { useStores } from '@/stores/stores'
 
-const MobileNavi = ({ helpUrl, naviRoutes, children, loginThroughService }) => {
+import type { RouteDetails } from '@/etsinPortals/navRoutes'
+import type { ReactNode } from 'react'
+import type { TranslationKey } from '@/stores/view/locale'
+
+type MobileNaviProps = {
+  helpUrl: string,
+  naviRoutes: RouteDetails[],
+  children: ReactNode
+  loginThroughService: string
+}
+
+const MobileNavi = ({ helpUrl, naviRoutes, children, loginThroughService }: MobileNaviProps) => {
   const {
     Accessibility,
     Locale: { translate },
@@ -21,7 +31,6 @@ const MobileNavi = ({ helpUrl, naviRoutes, children, loginThroughService }) => {
       <DropdownMenu
         transparent
         buttonContent={<FontAwesomeIcon title="Menu" icon={faBars} size="lg" />}
-        transparentButton
       >
         {naviRoutes.map(route => (
           <NavItem
@@ -34,17 +43,16 @@ const MobileNavi = ({ helpUrl, naviRoutes, children, loginThroughService }) => {
               }
             }}
             onClick={() => {
-              Accessibility.announce(translate('changepage', { page: translate(route.label) }))
+              Accessibility.announce(translate('changepage', { page: translate(route.label as TranslationKey) }))
             }}
           >
-            <Translate content={route.label} />
+            <Translate content={route.label as TranslationKey} />
           </NavItem>
         ))}
       </DropdownMenu>
       <DropdownMenu
         transparent
         buttonContent={<FontAwesomeIcon title="Settings" icon={faCog} size="lg" />}
-        transparentButton
       >
         <CustomContainer>
           <Row>
@@ -68,28 +76,9 @@ const LoginContainer = styled.div`
   align-items: center;
 `
 
-MobileNavi.propTypes = {
-  helpUrl: PropTypes.string,
-  naviRoutes: PropTypes.arrayOf(
-    PropTypes.shape({
-      loadableComponent: PropTypes.elementType,
-      label: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
-      end: PropTypes.bool,
-    })
-  ),
-  children: PropTypes.node,
-  loginThroughService: PropTypes.string,
-}
+
 
 export default MobileNavi
-
-MobileNavi.defaultProps = {
-  helpUrl: undefined,
-  naviRoutes: [],
-  children: null,
-  loginThroughService: '',
-}
 
 const MobileItems = styled.div`
   display: inline-flex;
