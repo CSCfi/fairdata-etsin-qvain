@@ -290,8 +290,12 @@ class Qvain extends Resources {
     this.dataCatalog = selectedDataCatalog
     this.setChanged(true)
 
-    // Remove useDoi if dataCatalog is ATT
-    if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT) {
+    // ATT and DaaS datasets always use URN identifiers, so DOI is not
+    // applicable:
+    if (
+      selectedDataCatalog === DATA_CATALOG_IDENTIFIER.ATT ||
+      selectedDataCatalog === DATA_CATALOG_IDENTIFIER.DAAS
+    ) {
       this.setUseDoi(false)
     }
 
@@ -300,10 +304,6 @@ class Qvain extends Resources {
     // true by default when no data origin was originally decided:
     if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.IDA) {
       this.setUseDoi(this.defaultDoi)
-    }
-
-    if (selectedDataCatalog === DATA_CATALOG_IDENTIFIER.DAAS) {
-      this.setUseDoi(true)
     }
 
     if (!FILES_DATA_CATALOGS.includes(selectedDataCatalog)) {
