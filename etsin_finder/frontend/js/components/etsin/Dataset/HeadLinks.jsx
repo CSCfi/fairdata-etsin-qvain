@@ -4,6 +4,7 @@
 import { Helmet } from 'react-helmet-async'
 import { useStores } from '@/stores/stores'
 import { observer } from 'mobx-react'
+import { orcidToUrl } from '@/utils/orcidToUrl'
 
 function HeadLinks() {
   const {
@@ -13,16 +14,17 @@ function HeadLinks() {
   } = useStores()
 
   const getAuthorUrl = () => {
-    // Finds the first creator that has an organization with a defined URL.
+    // Finds the first creator person that has an ORCID identifier.
     // Only the first matching creator is used to keep the document head
     // lightweight, in accordance with the Signposting FAIR documentation
     // (https://signposting.org/FAIR/).
-    const firstCreatorWithOrgUrl = creators?.find(creator => creator.organization?.url)
-
-    // Returns the organization URL of the first matching creator, or null
-    // if none is found.
-    if (firstCreatorWithOrgUrl) {
-      return firstCreatorWithOrgUrl.organization.url
+    if (creators?.length > 0) {
+      for (const creator of creators) {
+        const orcidUrl = orcidToUrl(creator?.person?.external_identifier)
+        if (orcidUrl !== '') {
+          return orcidUrl
+        }
+      }
     }
 
     return null
@@ -38,7 +40,8 @@ function HeadLinks() {
           of the document head. */}
       <Helmet>
         {pidLink && <link key="cite-as" rel="cite-as" href={pidLink} />}
-        <link key="type" rel="type" href="https://schema.org/Dataset" />
+        <link key="type-1" rel="type" href="https://schema.org/Dataset" />
+        <link key="type-2" rel="type" href="https://schema.org/AboutPage" />
         {authorUrl && <link key="author" rel="author" href={authorUrl} />}
         {metadataLink && (
           <link

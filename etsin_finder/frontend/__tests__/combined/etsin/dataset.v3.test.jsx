@@ -215,60 +215,66 @@ describe('Etsin dataset page', () => {
     )
   })
 
-  test('renders links supporting signposting for a dataset with a DOI PID', async () => {
-    await renderEtsin()
-    const head = document.head
-    const typeHref = head.querySelector("link[rel='type']").getAttribute('href')
-    const citeAsHref = head.querySelector("link[rel='cite-as']").getAttribute('href')
-    const authorHref = head.querySelector("link[rel='author']").getAttribute('href')
-    const licenseLinks = head.querySelectorAll("link[rel='license']")
-    const licenseHrefs = Array.from(licenseLinks).map(link => link.getAttribute('href'))
-    const metadataLinks = head.querySelectorAll("link[rel='describedby']")
-    const metadataHrefs = Array.from(metadataLinks).map(link => link.getAttribute('href'))
-    const metadataTypes = Array.from(metadataLinks).map(link => link.getAttribute('type'))
+  describe('signposting support', () => {
+    test('renders links for a dataset with a DOI PID', async () => {
+      const dataset = cloneDeep(dataset_open_a_catalog_expanded)
+      dataset.actors[1].person.external_identifier = 'https://orcid.org/0009-0000-0000-000X'
+      await renderEtsin(dataset)
+      const head = document.head
+      const typeLinks = head.querySelectorAll("link[rel='type']")
+      const typeHrefs = Array.from(typeLinks).map(link => link.getAttribute('href'))
+      const citeAsHref = head.querySelector("link[rel='cite-as']").getAttribute('href')
+      const authorHref = head.querySelector("link[rel='author']")?.getAttribute('href')
+      const licenseLinks = head.querySelectorAll("link[rel='license']")
+      const licenseHrefs = Array.from(licenseLinks).map(link => link.getAttribute('href'))
+      const metadataLinks = head.querySelectorAll("link[rel='describedby']")
+      const metadataHrefs = Array.from(metadataLinks).map(link => link.getAttribute('href'))
+      const metadataTypes = Array.from(metadataLinks).map(link => link.getAttribute('type'))
 
-    expect(typeHref).toBe('https://schema.org/Dataset')
-    expect(citeAsHref).toBe('https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5')
-    expect(authorHref).toBe('http://uri.suomi.fi/codelist/fairdata/organization/code/02135371')
-    expect(licenseHrefs).toEqual([
-      'http://uri.suomi.fi/codelist/fairdata/license/code/other-open',
-      'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
-    ])
-    expect(metadataHrefs).toEqual([
-      'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0',
-      'https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5',
-      'https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5',
-    ])
-    expect(metadataTypes).toEqual([
-      'application/json',
-      'application/ld+json',
-      'application/vnd.datacite.datacite+json',
-    ])
-  })
+      expect(typeHrefs).toEqual(['https://schema.org/Dataset', 'https://schema.org/AboutPage'])
+      expect(citeAsHref).toBe('https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5')
+      expect(authorHref).toBe('https://orcid.org/0009-0000-0000-000X')
+      expect(licenseHrefs).toEqual([
+        'http://uri.suomi.fi/codelist/fairdata/license/code/other-open',
+        'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+      ])
+      expect(metadataHrefs).toEqual([
+        'https://metaxv3:443/v3/datasets/4eb1c1ac-b2a7-4e45-8c63-099b0e7ab4b0',
+        'https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5',
+        'https://doi.org/10.23729/ee43f42b-e455-4849-9d70-7e3a52b307f5',
+      ])
+      expect(metadataTypes).toEqual([
+        'application/json',
+        'application/ld+json',
+        'application/vnd.datacite.datacite+json',
+      ])
+    })
 
-  test('renders links supporting signposting for a dataset with a URN PID and no author link', async () => {
-    await renderEtsin(dataset_att_a)
-    const head = document.head
-    const typeHref = head.querySelector("link[rel='type']").getAttribute('href')
-    const citeAsHref = head.querySelector("link[rel='cite-as']").getAttribute('href')
-    const author = head.querySelector("link[rel='author']")
-    const licenseLinks = head.querySelectorAll("link[rel='license']")
-    const licenseHrefs = Array.from(licenseLinks).map(link => link.getAttribute('href'))
-    const metadataLinks = head.querySelectorAll("link[rel='describedby']")
-    const metadataHrefs = Array.from(metadataLinks).map(link => link.getAttribute('href'))
-    const metadataTypes = Array.from(metadataLinks).map(link => link.getAttribute('type'))
+    test('renders links for a dataset with a URN PID and no author link', async () => {
+      await renderEtsin(dataset_att_a)
+      const head = document.head
+      const typeLinks = head.querySelectorAll("link[rel='type']")
+      const typeHrefs = Array.from(typeLinks).map(link => link.getAttribute('href'))
+      const citeAsHref = head.querySelector("link[rel='cite-as']").getAttribute('href')
+      const author = head.querySelector("link[rel='author']")
+      const licenseLinks = head.querySelectorAll("link[rel='license']")
+      const licenseHrefs = Array.from(licenseLinks).map(link => link.getAttribute('href'))
+      const metadataLinks = head.querySelectorAll("link[rel='describedby']")
+      const metadataHrefs = Array.from(metadataLinks).map(link => link.getAttribute('href'))
+      const metadataTypes = Array.from(metadataLinks).map(link => link.getAttribute('type'))
 
-    expect(typeHref).toBe('https://schema.org/Dataset')
-    expect(citeAsHref).toBe('https://urn.fi/urn:nbn:fi:att:be05442c-1cb6-4fb3-999b-d076d12c7842')
-    expect(author).not.toBeInTheDocument()
-    expect(licenseHrefs).toEqual([
-      'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
-      'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-1.0',
-    ])
-    expect(metadataHrefs).toEqual([
-      'https://metaxv3:443/v3/datasets/2356c755-c2cb-4cdc-9db1-380b7d025fd8',
-    ])
-    expect(metadataTypes).toEqual(['application/json'])
+      expect(typeHrefs).toEqual(['https://schema.org/Dataset', 'https://schema.org/AboutPage'])
+      expect(citeAsHref).toBe('https://urn.fi/urn:nbn:fi:att:be05442c-1cb6-4fb3-999b-d076d12c7842')
+      expect(author).not.toBeInTheDocument()
+      expect(licenseHrefs).toEqual([
+        'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-4.0',
+        'http://uri.suomi.fi/codelist/fairdata/license/code/CC-BY-1.0',
+      ])
+      expect(metadataHrefs).toEqual([
+        'https://metaxv3:443/v3/datasets/2356c755-c2cb-4cdc-9db1-380b7d025fd8',
+      ])
+      expect(metadataTypes).toEqual(['application/json'])
+    })
   })
 
   test('renders REMS application without form', async () => {
